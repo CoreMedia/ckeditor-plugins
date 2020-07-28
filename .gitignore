@@ -1,0 +1,25 @@
+# jetbrains apps
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# osx
+.DS_Store
+
+# emacs
+*~
+
+# folders
+target/
+node/
+node_modules/
+config/
+
+# logs and configs
+.cmconfig.json
+.npm-debug.log*
+
+# generated files
+API.md
+package-lock.json
