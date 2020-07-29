@@ -15,6 +15,7 @@ target/
 node/
 node_modules/
 config/
+build/
 
 # logs and configs
 .cmconfig.json
