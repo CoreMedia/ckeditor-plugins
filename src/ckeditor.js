@@ -31,39 +31,57 @@ import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript.js';
 import Table from '@ckeditor/ckeditor5-table/src/table.js';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
+import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
 
-class Editor extends ClassicEditor {}
+class CoreMediaRichTextDataProcessor extends HtmlDataProcessor {
+  toData(viewFragment) {
+    console.log("CoreMediaRichTextDataProcessor.toData called: ", {viewFragment:viewFragment});
+    return super.toData(viewFragment);
+  }
+  toView(data) {
+    console.log("CoreMediaRichTextDataProcessor.toView called: ", {data:data});
+    return super.toView(data);
+  }
+}
+
+function CoreMediaRichText(editor) {
+  editor.data.processor = new CoreMediaRichTextDataProcessor(editor.editing.view.document);
+}
+
+class Editor extends ClassicEditor {
+}
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
-	Alignment,
-	Autosave,
-	BlockQuote,
-	Bold,
-	CKFinder,
-	CKFinderUploadAdapter,
-	Essentials,
-	Heading,
-	Image,
-	ImageUpload,
-	Indent,
-	Italic,
-	Link,
-	List,
-	Paragraph,
-	PasteFromOffice,
-	RemoveFormat,
-	SpecialCharacters,
-	SpecialCharactersArrows,
-	SpecialCharactersCurrency,
-	SpecialCharactersEssentials,
-	SpecialCharactersText,
-	Strikethrough,
-	Subscript,
-	Superscript,
-	Table,
-	TableToolbar,
-	Underline
+  Alignment,
+  Autosave,
+  BlockQuote,
+  Bold,
+  CKFinder,
+  CKFinderUploadAdapter,
+  CoreMediaRichText,
+  Essentials,
+  Heading,
+  Image,
+  ImageUpload,
+  Indent,
+  Italic,
+  Link,
+  List,
+  Paragraph,
+  PasteFromOffice,
+  RemoveFormat,
+  SpecialCharacters,
+  SpecialCharactersArrows,
+  SpecialCharactersCurrency,
+  SpecialCharactersEssentials,
+  SpecialCharactersText,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  Table,
+  TableToolbar,
+  Underline
 ];
 
 Editor.defaultConfig = {
@@ -111,7 +129,7 @@ Editor.defaultConfig = {
   licenseKey: '',
   autosave: {
     waitingTime: 5000, // in ms
-    save( editor ) {
+    save(editor) {
       return saveData("autosave", editor.getData());
     }
   },
