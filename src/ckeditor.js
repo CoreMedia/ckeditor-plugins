@@ -66,4 +66,49 @@ Editor.builtinPlugins = [
 	Underline
 ];
 
+Editor.defaultConfig = {
+  toolbar: {
+    items: [
+      'undo',
+      'redo',
+      '|',
+      'heading',
+      '|',
+      'bold',
+      'italic',
+      'blockQuote',
+      'underline',
+      'strikethrough',
+      'superscript',
+      'subscript',
+      'removeFormat',
+      '|',
+      'link',
+      'CKFinder',
+      'imageUpload',
+      '|',
+      'alignment',
+      '|',
+      'insertTable',
+      '|',
+      'numberedList',
+      'bulletedList',
+      '|',
+      'indent',
+      'outdent',
+      '|',
+      'specialCharacters'
+    ]
+  },
+  language: 'en',
+  table: {
+    contentToolbar: [
+      'tableColumn',
+      'tableRow',
+      'mergeTableCells'
+    ]
+  },
+  licenseKey: '',
+};
+
 export default Editor;

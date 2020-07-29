@@ -114,56 +114,9 @@
 </footer>
 <script src="../build/ckeditor.js"></script>
 <script>ClassicEditor
-  .create(document.querySelector('.editor'), {
-
-    toolbar: {
-      items: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'bold',
-        'italic',
-        'blockQuote',
-        'underline',
-        'strikethrough',
-        'superscript',
-        'subscript',
-        'removeFormat',
-        '|',
-        'link',
-        'CKFinder',
-        'imageUpload',
-        '|',
-        'alignment',
-        '|',
-        'insertTable',
-        '|',
-        'numberedList',
-        'bulletedList',
-        '|',
-        'indent',
-        'outdent',
-        '|',
-        'specialCharacters'
-      ]
-    },
-    language: 'en',
-    table: {
-      contentToolbar: [
-        'tableColumn',
-        'tableRow',
-        'mergeTableCells'
-      ]
-    },
-    licenseKey: '',
-
-  })
+  .create(document.querySelector('.editor'), {})
   .then(editor => {
     window.editor = editor;
-
-
   })
   .catch(error => {
     console.error('Oops, something gone wrong!');
