@@ -138,5 +138,5 @@ Editor.defaultConfig = {
 export default Editor;
 
 function saveData(source, data) {
-  console.log("Saving data triggered by " + source, data);
+  console.log("Saving data triggered by " + source, {data: data});
 }
