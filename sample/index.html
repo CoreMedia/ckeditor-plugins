@@ -31,6 +31,9 @@
       <h2>CKEditor 5 online builder demo - ClassicEditor build</h2>
     </div>
   </div>
+  <div>
+    <button id="submit" type="submit">Check-In</button>
+  </div>
   <div class="centered">
     <div class="row row-editor">
       <div class="editor">
@@ -124,6 +127,14 @@
     console.warn('Build id: 5wjig8uekahr-dq36hnvshpds');
     console.error(error);
   });
+
+  function saveData(source, data) {
+    console.log("Saving data triggered by " + source, data);
+  }
+
+  document.querySelector( '#submit' ).addEventListener( 'click', () => {
+    saveData("check-in", editor.getData());
+  } );
 </script>
 </body>
 </html>
