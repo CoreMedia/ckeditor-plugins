@@ -109,6 +109,16 @@ Editor.defaultConfig = {
     ]
   },
   licenseKey: '',
+  autosave: {
+    waitingTime: 5000, // in ms
+    save( editor ) {
+      return saveData("autosave", editor.getData());
+    }
+  },
 };
 
 export default Editor;
+
+function saveData(source, data) {
+  console.log("Saving data triggered by " + source, data);
+}
