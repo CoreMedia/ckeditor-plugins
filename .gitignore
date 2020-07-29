@@ -24,3 +24,4 @@ build/
 # generated files
 API.md
 package-lock.json
+yarn.lock
