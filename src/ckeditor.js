@@ -133,6 +133,46 @@ Editor.defaultConfig = {
       return saveData("autosave", editor.getData());
     }
   },
+  // see https://github.com/ckeditor/ckeditor5/issues/4829
+  // https://ckeditor.com/docs/ckeditor5/latest/features/link.html#adding-attributes-to-links-using-the-ui-manual-decorators
+  link: {
+    decorators: {
+      // Adds toggle button, if a click triggers a download or opens a page.
+      toggleDownloadable: {
+        mode: 'manual',
+        label: 'Downloadable',
+        attributes: {
+          download: 'file'
+        }
+      },
+      // Automatically adds class-attribute "link--external" for any external URL.
+      isExternal: {
+        mode: 'automatic',
+        callback: url => /^(https?:)?\/\//.test( url ),
+        attributes: {
+          class: 'link--external'
+        }
+      },
+      // Automatically adds class-attribute "link--internal" for any internal URL.
+      isInternal: {
+        mode: 'automatic',
+        callback: url => /^(coremedia:)?\/\//.test( url ),
+        attributes: {
+          class: 'link--internal'
+        }
+      },
+      // Adds toggle button, if click is opened in a new tab or not.
+      openInNewTab: {
+        mode: 'manual',
+        label: 'Open in a new tab',
+        defaultValue: true,
+        attributes: {
+          target: '_blank',
+          rel: 'noopener noreferrer'
+        }
+      }
+    }
+  }
 };
 
 export default Editor;
