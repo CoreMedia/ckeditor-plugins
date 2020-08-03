@@ -220,6 +220,14 @@
       </div>
     </div>
   </div>
+  <div class="centered">
+    <div class="row">
+      <button id="submit-empty" type="submit">Check-In</button>
+    </div>
+    <div class="row row-editor">
+      <div class="editor-empty"></div>
+    </div>
+  </div>
 </main>
 <footer>
   <p><a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener noreferrer">CKEditor 5</a>
@@ -253,6 +261,21 @@
     window.editorAux = editor;
     document.querySelector( '#submit-main' ).addEventListener( 'click', () => {
       saveData("check-in", editorAux.getData());
+    } );
+  })
+  .catch(error => {
+    console.error('Oops, something gone wrong!');
+    console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:');
+    console.warn('Build id: 5wjig8uekahr-dq36hnvshpds');
+    console.error(error);
+  });
+
+  ClassicEditor
+  .create(document.querySelector('.editor-empty'), {})
+  .then(editor => {
+    window.editorEmpty = editor;
+    document.querySelector( '#submit-empty' ).addEventListener( 'click', () => {
+      saveData("check-in", editorEmpty.getData());
     } );
   })
   .catch(error => {
