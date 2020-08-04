@@ -87,6 +87,7 @@ Editor.builtinPlugins = [
 ];
 
 Editor.defaultConfig = {
+  placeholder: 'Type your text here...',
   toolbar: {
     items: [
       'undo',
