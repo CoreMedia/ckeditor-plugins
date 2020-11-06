@@ -1,0 +1,15 @@
+{
+  "name": "@coremedia/ckeditor5",
+  "version": "1.0.0",
+  "description": "Plugins required or recommended to use CKEditor 5 within CoreMedia Studio.",
+  "main": "index.js",
+  "repository": "https://github.com/CoreMedia/evaluation-ckeditor5.git",
+  "author": "Mark Michaelis <mark.michaelis@coremedia.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@ckeditor/ckeditor5-core": "^23.1.0",
+    "@ckeditor/ckeditor5-engine": "^23.1.0",
+    "@ckeditor/ckeditor5-ui": "^23.1.0"
+  }
+}

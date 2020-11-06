@@ -1,0 +1,14 @@
+# jetbrains apps
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# osx
+.DS_Store
+
+# emacs
+*~
+
+# folders
+node_modules/
