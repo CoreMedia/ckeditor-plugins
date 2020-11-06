@@ -22,3 +22,4 @@ previous
 
 * [Getting Started | Yarn](https://classic.yarnpkg.com/en/docs/getting-started/)
 * [The Yarn Workflow | Yarn](https://classic.yarnpkg.com/en/docs/yarn-workflow)
+* [Workspaces in Yarn | Yarn Blog](https://classic.yarnpkg.com/blog/2017/08/02/introducing-workspaces/)
