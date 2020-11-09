@@ -2,11 +2,35 @@
   "name": "@coremedia/ckeditor5",
   "version": "1.0.0",
   "description": "Plugins required or recommended to use CKEditor 5 within CoreMedia Studio.",
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor 5",
+    "wysiwyg",
+    "rich text",
+    "editor",
+    "html",
+    "contentEditable",
+    "editing",
+    "operational transformation",
+    "coremedia",
+    "coremedia cms",
+    "coremedia studio"
+  ],
   "main": "index.js",
-  "repository": "https://github.com/CoreMedia/evaluation-ckeditor5.git",
+  "repository": {
+    "url": "https://github.com/CoreMedia/evaluation-ckeditor5",
+    "type": "git"
+  },
   "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "bootstrap": "yarn install",
+    "clean": "rm -rf ./node_modules && rm -rf ./external/*/node_modules",
+    "reset": "rm -rf ./node_modules && yarn run bootstrap",
+    "reinstall": "yarn run clean && yarn run bootstrap"
+  }
 }

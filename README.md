@@ -14,9 +14,28 @@ previous
 
 ### CKEditor
 
-* [Development tools - CKEditor 5 Documentation](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)
-* [Creating a simple plugin - CKEditor 5 Documentation](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/creating-simple-plugin.html)
-* [Installing plugins - CKEditor 5 Documentation](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/installing-plugins.html)
+* [ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5)
+
+#### CKEditor Documentation
+
+* [Development tools](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)
+* [Creating a simple plugin](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/creating-simple-plugin.html)
+* [Installing plugins](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/installing-plugins.html)
+
+#### CKEditor Issues
+
+* [Typings for TypeScript · Issue #504 · ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5/issues/504)
+
+#### CKEditor TypeScript
+
+* Example: [DMITRYTISHKIN/ckeditor-plugin](https://github.com/DMITRYTISHKIN/ckeditor-plugin)
+* Example (Full CKEditor): [matepapp/nextjs-aws-amplify: Proof of concept combining the serverless powers of NextJS and AWS Amplify](https://github.com/matepapp/nextjs-aws-amplify)
+
+### TypeScript
+
+* [TypeScript: How to set up TypeScript](https://www.typescriptlang.org/download)
+* [DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions.](https://github.com/DefinitelyTyped/DefinitelyTyped)
+* [Using a JavaScript library (without type declarations) in a TypeScript project. | by Steve Ruiz | Medium](https://medium.com/@steveruiz/using-a-javascript-library-without-type-declarations-in-a-typescript-project-3643490015f3)
 
 ### Yarn
 

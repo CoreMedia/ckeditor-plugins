@@ -12,3 +12,9 @@
 
 # folders
 node_modules/
+
+# Temporary Output
+
+*.log
+*.out
+*.err
