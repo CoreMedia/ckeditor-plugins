@@ -1,0 +1,18 @@
+{
+  "extends": "../../config/base",
+  "compilerOptions": {
+    "baseUrl": "../../",
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
+    "paths": {
+      "@ckeditor/*": [
+        "./types/ckeditor__*"
+      ],
+      "@coremedia/*": [
+        "./packages/*"
+      ]
+    }
+  }
+}

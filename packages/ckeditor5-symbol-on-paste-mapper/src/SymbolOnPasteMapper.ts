@@ -1,10 +1,20 @@
-import {Plugin} from "@ckeditor/ckeditor5-core";
+import {editor, Plugin} from "@ckeditor/ckeditor5-core";
 import {PasteFromOffice, PasteFromOfficeClipboardEventData} from "@ckeditor/ckeditor5-paste-from-office";
 import {Clipboard} from "@ckeditor/ckeditor5-clipboard";
+import {coremedia} from "@coremedia/coremedia-utils/src";
 
 class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: "SymbolFontMapper";
+  // TODO[cke] Copied from PasteFromOffice... should be some set of constants
+  //   which tell, if there is any font to consider for replacement.
   static readonly msWordMatch = /<meta\s*name="?generator"?\s*content="?microsoft\s*word\s*\d+"?\/?>/i;
+  // TODO[cke] Would be great adding context information (editor/sourceElement-id or similar)
+  //    to get the actual editor we write log entries for.
+  private readonly logger = coremedia.getLogger(SymbolOnPasteMapper.pluginName);
+
+  constructor(ed: editor.Editor) {
+    super(ed);
+  }
 
   static get requires() {
     return [
@@ -12,7 +22,6 @@ class SymbolOnPasteMapper extends Plugin {
       PasteFromOffice
     ];
   }
-
 
   init(): Promise<void> | null {
     const editor = this.editor;
@@ -22,9 +31,9 @@ class SymbolOnPasteMapper extends Plugin {
     if (clipboard instanceof Clipboard) {
       clipboard.on(
         'inputTransformation',
-        (evt:any, data:PasteFromOfficeClipboardEventData) => {
+        (evt: any, data: PasteFromOfficeClipboardEventData) => {
           if (!data.isTransformedWithPasteFromOffice) {
-            // TODO[cke] Log, that there is nothing to do.
+            this.logger.debug("Nothing to do.")
             return;
           }
 
@@ -37,7 +46,7 @@ class SymbolOnPasteMapper extends Plugin {
         }
       )
     } else {
-      // TODO[cke] How to log errors in CKEditor?
+      this.logger.error("Unexpected Clipboard plugin.");
     }
     return null;
   }

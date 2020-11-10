@@ -2,7 +2,8 @@
 
 This repository contains the results of our preparation steps for
 replacing CKEditor 4 which reaches EOL soon. While `archive/` contains
-previous
+previous evaluation efforts, the root-folder represents the current
+evaluation process.
 
 ## Command Line Reference
 
@@ -17,6 +18,17 @@ yarn add the-dependency
 ```text
 yarn add the-development-dependency --dev
 ```
+
+## CKEditor Research
+
+### Logging
+
+* CKEditor does not provide any logging facade itself. It uses the Console log
+    directly, e.g., via `console.error()` or `console.log()`.
+* For CKEditor 4 plugins in CoreMedia Workspace we used a custom class
+    `CKEDITOR.coremedia.Logger` to provide logging abilities. This used
+    the Console log in the end as well, but provided some abstraction and
+    better control, if certain types of logging are enabled or not.
 
 ## Related JIRA Issues
 

@@ -1,13 +1,8 @@
 {
-  "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
+  "name": "@coremedia/coremedia-utils",
   "version": "1.0.0",
-  "description": "CKEditor 5 plugin which maps characters in Symbol font to their corresponding Unicode alternatives.",
+  "description": "Several utilities for CoreMedia Plugins.",
   "keywords": [
-    "ckeditor",
-    "ckeditor5",
-    "ckeditor 5",
-    "ckeditor5-feature",
-    "ckeditor5-plugin",
     "coremedia"
   ],
   "include": [
@@ -19,11 +14,6 @@
   "types": "dist/index.d.ts",
   "private": true,
   "dependencies": {
-    "@coremedia/coremedia-utils": "1.0.0",
-    "@ckeditor/ckeditor5-core": "^23.1.0",
-    "@ckeditor/ckeditor5-engine": "^23.1.0",
-    "@ckeditor/ckeditor5-paste-from-office": "^23.1.0",
-    "@ckeditor/ckeditor5-ui": "^23.1.0",
     "webpack": "^5.4.0"
   },
   "engines": {
@@ -41,7 +31,7 @@
     "webpack-cli": "^4.2.0"
   },
   "scripts": {
-    "clean": "rm -rf ./node_modules",
+    "clean": "exit 0",
     "build": "webpack --mode=production",
     "test": "exit 0",
     "lint": "eslint --fix \"src/**\"",
