@@ -4,6 +4,19 @@ This repository contains the results of our preparation steps for
 replacing CKEditor 4 which reaches EOL soon. While `archive/` contains
 previous
 
+## Command Line Reference
+
+### Add Dependency
+
+```text
+yarn add the-dependency
+```
+
+### Add Development Dependency
+
+```text
+yarn add the-development-dependency --dev
+```
 
 ## Related JIRA Issues
 
@@ -11,6 +24,10 @@ previous
 * [\[CMS-13587\] Evaluate the future of Studio-RichText-Editing: CKEditor 5 or what?](https://jira.coremedia.com/browse/CMS-13587)
 
 ## See Also
+
+### CoreMedia Know How
+
+* [CoreMedia/coremedia-headless-client-react-pwa](https://github.com/CoreMedia/coremedia-headless-client-react-pwa)
 
 ### CKEditor
 
@@ -36,6 +53,7 @@ previous
 * [TypeScript: How to set up TypeScript](https://www.typescriptlang.org/download)
 * [DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions.](https://github.com/DefinitelyTyped/DefinitelyTyped)
 * [Using a JavaScript library (without type declarations) in a TypeScript project. | by Steve Ruiz | Medium](https://medium.com/@steveruiz/using-a-javascript-library-without-type-declarations-in-a-typescript-project-3643490015f3)
+* [TypeScript: TSConfig Reference - Docs on every TSConfig option](https://www.typescriptlang.org/tsconfig)
 
 ### Yarn
 

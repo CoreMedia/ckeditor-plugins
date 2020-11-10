@@ -10,19 +10,40 @@
     "ckeditor5-plugin",
     "coremedia"
   ],
-  "main": "index.js",
+  "include": [
+    "src/**/*",
+    "tests/**/*"
+  ],
+  "main": "dist/index.js",
+  "main:src": "src/index.ts",
+  "types": "dist/index.d.ts",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-core": "^23.1.0",
     "@ckeditor/ckeditor5-engine": "^23.1.0",
     "@ckeditor/ckeditor5-paste-from-office": "^23.1.0",
-    "@ckeditor/ckeditor5-ui": "^23.1.0"
+    "@ckeditor/ckeditor5-ui": "^23.1.0",
+    "webpack": "^5.4.0"
   },
   "engines": {
     "node": ">=12.0.0",
     "npm": ">=5.7.1"
   },
   "devDependencies": {
-    "typescript": "^4.0.5"
+    "@typescript-eslint/eslint-plugin": "^4.7.0",
+    "@typescript-eslint/parser": "^4.7.0",
+    "eslint": "^7.13.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.5",
+    "webpack-cli": "^4.2.0"
+  },
+  "scripts": {
+    "clean": "rm -rf ./node_modules",
+    "build": "webpack --mode=production",
+    "test": "exit 0",
+    "lint": "eslint --fix \"src/**\"",
+    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""
   }
 }

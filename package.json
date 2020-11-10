@@ -29,8 +29,10 @@
   ],
   "scripts": {
     "bootstrap": "yarn install",
-    "clean": "rm -rf ./node_modules && rm -rf ./external/*/node_modules",
-    "reset": "rm -rf ./node_modules && yarn run bootstrap",
-    "reinstall": "yarn run clean && yarn run bootstrap"
+    "clean": "rm -rf ./node_modules && yarn workspaces run clean",
+    "build": "yarn workspaces run build",
+    "test": "yarn workspaces run test",
+    "lint": "yarn workspaces run lint",
+    "prettier": "yarn workspaces run prettier"
   }
 }

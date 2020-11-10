@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "CommonJS",
+    "target": "ES6",
+    "lib": [
+      "ES6",
+      "DOM",
+      "ES2015.Promise"
+    ],
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+    "newLine": "LF"
+  }
+}

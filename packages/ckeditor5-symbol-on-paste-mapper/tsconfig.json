@@ -1,27 +1,17 @@
 {
+  "extends": "../../config/base",
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "lib": [
-      "es6",
-      "dom",
-      "es2015.promise"
-    ],
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "baseUrl": "../..",
+    "baseUrl": "../../",
     "typeRoots": [
       "./types",
       "./node_modules/@types"
     ],
-    "types": [],
-    "noEmit": true,
-    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@ckeditor/*": [
-        "types/ckeditor__*"
+        "./types/ckeditor__*"
+      ],
+      "@coremedia/*": [
+        "./packages/*"
       ]
     }
   }
