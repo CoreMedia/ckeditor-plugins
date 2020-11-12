@@ -17,7 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
     "newLine": "LF",
-    "rootDir": "./src",
+    "typeRoots": ["../../types/*"],
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
