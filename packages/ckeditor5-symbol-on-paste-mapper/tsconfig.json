@@ -11,6 +11,7 @@
       "ES2015.Promise"
     ],
     "outDir": "dist",
+    "rootDir": "./src",
     "strict": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
