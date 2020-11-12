@@ -31,7 +31,7 @@
   },
   "scripts": {
     "clean": "exit 0",
-    "build": "webpack --mode=production",
+    "build": "tsc",
     "test": "exit 0",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""
