@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@coremedia/coremedia-utils": "1.0.0",
     "@ckeditor/ckeditor5-clipboard": "^23.1.0",
     "@ckeditor/ckeditor5-core": "^23.1.0",
     "@ckeditor/ckeditor5-engine": "^23.1.0",

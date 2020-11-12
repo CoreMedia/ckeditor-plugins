@@ -15,17 +15,6 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
-    "newLine": "LF",
-    "paths": {
-      "@ckeditor/ckeditor5-core/*": [
-        "types/ckeditor__ckeditor5-core/*"
-      ],
-      "@ckeditor/ckeditor5-paste-from-office/*": [
-        "types/ckeditor__ckeditor5-paste-from-office/*"
-      ],
-      "@ckeditor/ckeditor5-clipboard/*": [
-        "types/ckeditor__ckeditor5-clipboard/*"
-      ]
-    }
+    "newLine": "LF"
   }
 }
