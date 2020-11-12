@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/coremedia-utils": "1.0.0",
+    "@babel/plugin-transform-typescript": "^7.12.1",
     "@ckeditor/ckeditor5-clipboard": "^23.1.0",
     "@ckeditor/ckeditor5-core": "^23.1.0",
     "@ckeditor/ckeditor5-engine": "^23.1.0",
     "@ckeditor/ckeditor5-paste-from-office": "^23.1.0",
     "@ckeditor/ckeditor5-ui": "^23.1.0",
+    "@coremedia/coremedia-utils": "1.0.0",
     "@types/webpack": "^4.41.24",
     "babel-loader": "^8.2.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
@@ -44,8 +45,8 @@
     "prettier": "^2.1.2"
   },
   "scripts": {
-    "buildwp": "webpack --mode=production",
-    "build": "tsc",
+    "build": "webpack --mode=production",
+    "buildtsc": "tsc",
     "test": "exit 0",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""

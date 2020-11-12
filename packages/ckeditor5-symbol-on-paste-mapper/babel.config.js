@@ -1,6 +1,6 @@
 module.exports = {
   "plugins": [
-    ["@babel/plugin-transform-typescript", {"allowDeclareFields": true}],
+    ["@babel/plugin-transform-typescript", {"allowDeclareFields": true, "allowNamespaces": true}],
     ["@babel/plugin-transform-parameters", {"loose": true}],
     ["@babel/plugin-transform-computed-properties", {"loose": true}],
     ["@babel/plugin-transform-shorthand-properties", {"loose": true}],
