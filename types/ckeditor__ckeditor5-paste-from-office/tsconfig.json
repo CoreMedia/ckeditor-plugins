@@ -7,24 +7,21 @@
       "dom",
       "es2015.promise"
     ],
+    "baseUrl": ".",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "baseUrl": "../",
-    "typeRoots": [
-      "../"
-    ],
-    "types": [],
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
+    "rootDir": "./src",
     "paths": {
-      "@ckeditor/*": [
-        "ckeditor__*"
+      "@ckeditor/ckeditor5-clipboard/*": [
+        "../ckeditor__ckeditor5-clipboard/*"
+      ],
+      "@ckeditor/ckeditor5-core/*": [
+        "../ckeditor__ckeditor5-core/*"
       ]
     }
-  },
-  "files": [
-    "index.d.ts"
-  ]
+  }
 }

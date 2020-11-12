@@ -13,6 +13,8 @@
 # folders
 node_modules/
 
+dist/
+
 # Temporary Output
 
 *.log

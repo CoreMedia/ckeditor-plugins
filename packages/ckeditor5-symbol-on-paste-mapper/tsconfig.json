@@ -1,17 +1,37 @@
 {
-  "extends": "../../config/base",
+  "extends": "../../tsconfig",
   "compilerOptions": {
-    "baseUrl": "../../",
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types"
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "lib": [
+      "ES6",
+      "DOM",
+      "ES2015.Promise"
     ],
+    "outDir": "dist",
+    "strict": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+    "newLine": "LF",
+    "rootDir": "./src",
     "paths": {
-      "@ckeditor/*": [
-        "./types/ckeditor__*"
+      "@ckeditor/ckeditor5-core/*": [
+        "../../types/ckeditor__ckeditor5-core/*"
       ],
-      "@coremedia/*": [
-        "./packages/*"
+      "@ckeditor/ckeditor5-paste-from-office/*": [
+        "../../types/ckeditor__ckeditor5-paste-from-office/*"
+      ],
+      "@ckeditor/ckeditor5-clipboard/*": [
+        "../../types/ckeditor__ckeditor5-clipboard/*"
+      ],
+      "@ckeditor/ckeditor5-engine/*": [
+        "../../types/ckeditor__ckeditor5-engine/*"
+      ],
+      "@ckeditor/ckeditor5-utils/*": [
+        "../../types/ckeditor__ckeditor5-utils/*"
       ]
     }
   }

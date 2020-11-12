@@ -1,6 +1,6 @@
-import {Plugin} from "@ckeditor/ckeditor5-core";
-import {PasteFromOffice, PasteFromOfficeClipboardEventData} from "@ckeditor/ckeditor5-paste-from-office";
-import {Clipboard} from "@ckeditor/ckeditor5-clipboard";
+import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import PasteFromOffice, {PasteFromOfficeClipboardEventData} from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
+import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 
 class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: "SymbolFontMapper";

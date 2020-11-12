@@ -1,0 +1,17 @@
+{
+  "name": "first-poc-plugin",
+  "version": "1.0.0",
+  "description": "First try with a separate plugin",
+  "author": "CoreMedia",
+  "license": "MIT",
+  "peerDependencies": {
+    "@ckeditor/ckeditor5-core": ">=15.0.0",
+    "@ckeditor/ckeditor5-ui": ">=15.0.0"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "typescript": "^4.0.5"
+  }
+}

@@ -25,6 +25,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
+    "types/*",
     "packages/*"
   ],
   "scripts": {
@@ -34,5 +35,8 @@
     "test": "yarn workspaces run test",
     "lint": "yarn workspaces run lint",
     "prettier": "yarn workspaces run prettier"
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-utils": "latest"
   }
 }

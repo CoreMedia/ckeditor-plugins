@@ -33,6 +33,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table.js';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
+import InsertImage from "first-poc-plugin/dist/insert-image";
 
 class CoreMediaRichTextDataProcessor extends HtmlDataProcessor {
   toData(viewFragment) {
@@ -68,6 +69,7 @@ Editor.builtinPlugins = [
   ImageUpload,
   Indent,
   Italic,
+  InsertImage,
   Link,
   List,
   Paragraph,

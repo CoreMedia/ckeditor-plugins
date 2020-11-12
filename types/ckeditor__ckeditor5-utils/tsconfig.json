@@ -11,20 +11,8 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "baseUrl": "../",
-    "typeRoots": [
-      "../"
-    ],
-    "types": [],
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@ckeditor/*": [
-        "ckeditor__*"
-      ]
-    }
-  },
-  "files": [
-    "index.d.ts"
-  ]
+    "rootDir": "./src"
+  }
 }

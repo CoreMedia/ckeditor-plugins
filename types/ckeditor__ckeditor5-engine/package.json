@@ -1,0 +1,17 @@
+{
+  "name": "@types/ckeditor__ckeditor5-engine",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "@ckeditor/ckeditor5-core": "^23.1.0",
+    "@ckeditor/ckeditor5-engine": "^23.1.0",
+    "@ckeditor/ckeditor5-clipboard": "^23.1.0",
+    "@ckeditor/ckeditor5-paste-from-office": "^23.1.0",
+    "@ckeditor/ckeditor5-ui": "^23.1.0"
+  },
+
+  "scripts": {
+    "build": "exit 0"
+  }
+}

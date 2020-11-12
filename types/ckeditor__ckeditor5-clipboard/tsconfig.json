@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig",
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
@@ -7,24 +8,27 @@
       "dom",
       "es2015.promise"
     ],
+    "baseUrl": ".",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "baseUrl": "../",
-    "typeRoots": [
-      "../"
-    ],
-    "types": [],
+    "rootDir": "./src",
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@ckeditor/*": [
-        "ckeditor__*"
+      "@ckeditor/ckeditor5-core/*": [
+        "../ckeditor__ckeditor5-core/*"
+      ],
+      "@ckeditor/ckeditor5-paste-from-office/*": [
+        "../ckeditor__ckeditor5-paste-from-office/*"
+      ],
+      "@ckeditor/ckeditor5-clipboard/*": [
+        "../ckeditor__ckeditor5-clipboard/*"
+      ],
+      "@ckeditor/ckeditor5-engine/*": [
+        "../ckeditor__ckeditor5-engine/*"
       ]
     }
-  },
-  "files": [
-    "index.d.ts"
-  ]
+  }
 }
