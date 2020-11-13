@@ -2,7 +2,8 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import PasteFromOffice, {PasteFromOfficeClipboardEventData} from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
-import {coremedia} from "@coremedia/coremedia-utils/src";
+import {coremedia} from "@coremedia/coremedia-utils";
+import Logger = coremedia.Logger;
 
 class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: "SymbolFontMapper";
@@ -11,7 +12,7 @@ class SymbolOnPasteMapper extends Plugin {
   static readonly msWordMatch = /<meta\s*name="?generator"?\s*content="?microsoft\s*word\s*\d+"?\/?>/i;
   // TODO[cke] Would be great adding context information (editor/sourceElement-id or similar)
   //    to get the actual editor we write log entries for.
-  private readonly logger = coremedia.getLogger(SymbolOnPasteMapper.pluginName);
+  private readonly logger:Logger = coremedia.getLogger(SymbolOnPasteMapper.pluginName);
 
   constructor(ed: Editor) {
     super(ed);
