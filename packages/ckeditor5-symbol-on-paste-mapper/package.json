@@ -44,7 +44,7 @@
     "prettier": "^2.1.2"
   },
   "scripts": {
-    "build": "webpack --mode=production",
+    "build": "webpack --mode production",
     "buildtsc": "tsc",
     "test": "exit 0",
     "lint": "eslint --fix \"src/**\"",
