@@ -1,5 +1,4 @@
 const path = require('path');
-const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
   entry: path.resolve(__dirname, 'src', 'SymbolOnPasteMapper.ts'),
