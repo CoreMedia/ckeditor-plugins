@@ -1,4 +1,5 @@
 import Logger from "./Logger";
+import LoggerImpl from "./LoggerImpl";
 import { LogLevel } from "./LogLevel";
 
 export default class LoggerProvider {
@@ -12,7 +13,7 @@ export default class LoggerProvider {
     let loggerName: string | undefined = (!!name && !!contextName) ? contextName + ":" + name : name;
     let logLevel: LogLevel = LoggerProvider.getLoggerLevel(name);
 
-    return new Logger(loggerName, logLevel);
+    return new LoggerImpl(loggerName, logLevel);
   }
 
   /**

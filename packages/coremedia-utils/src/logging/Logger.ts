@@ -1,59 +1,20 @@
-import {LogLevel} from "./LogLevel";
+export default interface Logger {
+  isDebugEnabled(): boolean;
 
-export default class Logger {
-  private readonly name: string | undefined;
-  private readonly logLevel: LogLevel;
+  debug(...data: any[]): void;
 
-  constructor(name: string | undefined, logLevel: LogLevel) {
-    this.name = name;
-    this.logLevel = logLevel;
-  }
+  isInfoEnabled(): boolean;
+  info(...data: any[]): void;
 
-  private addContext(data: any[]): any[] {
-    if (name === undefined) {
-      return data;
-    }
-    let contextualData: any[] = [this.name + ':'];
-    return contextualData.concat(data);
-  }
+  isWarnEnabled(): boolean;
 
-  isDebugEnabled(): boolean {
-    return this.logLevel <= LogLevel.DEBUG;
-  }
+  warn(...data: any[]): void;
 
-  debug(...data: any[]): void {
-    this.isDebugEnabled() && console.debug(this.addContext(data));
-  }
+  isErrorEnabled(): boolean;
 
-  isInfoEnabled(): boolean {
-    return this.logLevel <= LogLevel.INFO;
-  }
+  error(...data: any[]): void;
 
-  info(...data: any[]): void {
-    this.isInfoEnabled() && console.info(this.addContext(data));
-  }
+  isEnabled(): boolean;
 
-  isWarnEnabled(): boolean {
-    return this.logLevel <= LogLevel.WARN;
-  }
-
-  warn(...data: any[]): void {
-    this.isWarnEnabled() && console.warn(this.addContext(data));
-  }
-
-  isErrorEnabled(): boolean {
-    return this.logLevel <= LogLevel.ERROR;
-  }
-
-  error(...data: any[]): void {
-    this.isErrorEnabled() && console.error(this.addContext(data));
-  }
-
-  isEnabled(): boolean {
-    return this.logLevel === LogLevel.NONE;
-  }
-
-  log(...data: any[]): void {
-    this.isEnabled() && console.log(this.addContext(data));
-  }
+  log(...data: any[]): void;
 }
