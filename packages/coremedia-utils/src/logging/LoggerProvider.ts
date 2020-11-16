@@ -1,82 +1,16 @@
-/**
- * This namespace provides some utility methods.
- */
-export namespace coremedia {
-  export class Logger {
-    private readonly name: string | undefined;
-    private readonly logLevel: Level;
+import Logger from "./Logger";
+import { LogLevel } from "./LogLevel";
 
-    constructor(name: string | undefined, logLevel: Level) {
-      this.name = name;
-      this.logLevel = logLevel;
-    }
+export default class LoggerProvider {
+  static defaultLogLevel: LogLevel = LogLevel.INFO;
+  static defaultRootLogLevel: LogLevel = LogLevel.WARN;
+  static rootLoggerName: string = "ckdebug";
+  static hashParamRegExp: RegExp = /([^=]*)=(.*)/;
 
-    private addContext(data: any[]): any[] {
-      if (name === undefined) {
-        return data;
-      }
-      let contextualData: any[] = [this.name + ':'];
-      return contextualData.concat(data);
-    }
-
-    isDebugEnabled(): boolean {
-      return this.logLevel <= Level.DEBUG;
-    }
-
-    debug(...data: any[]): void {
-      this.isDebugEnabled() && console.debug(this.addContext(data));
-    }
-
-    isInfoEnabled(): boolean {
-      return this.logLevel <= Level.INFO;
-    }
-
-    info(...data: any[]): void {
-      this.isInfoEnabled() && console.info(this.addContext(data));
-    }
-
-    isWarnEnabled(): boolean {
-      return this.logLevel <= Level.WARN;
-    }
-
-    warn(...data: any[]): void {
-      this.isWarnEnabled() && console.warn(this.addContext(data));
-    }
-
-    isErrorEnabled(): boolean {
-      return this.logLevel <= Level.ERROR;
-    }
-
-    error(...data: any[]): void {
-      this.isErrorEnabled() && console.error(this.addContext(data));
-    }
-
-    isEnabled(): boolean {
-      return this.logLevel === Level.NONE;
-    }
-
-    log(...data: any[]): void {
-      this.isEnabled() && console.log(this.addContext(data));
-    }
-  }
-
-  enum Level {
-    DEBUG,
-    INFO,
-    WARN,
-    ERROR,
-    NONE
-  }
-
-  const defaultLogLevel: Level = Level.INFO;
-  const defaultRootLogLevel: Level = Level.WARN;
-  const rootLoggerName: string = "ckdebug";
-  const hashParamRegExp: RegExp = /([^=]*)=(.*)/;
-
-  export function getLogger(name: string | undefined, ...context: any[]): Logger {
+  static getLogger(name: string | undefined, ...context: any[]): Logger {
     let contextName: string = context.join(".");
     let loggerName: string | undefined = (!!name && !!contextName) ? contextName + ":" + name : name;
-    let logLevel: Level = getLoggerLevel(name);
+    let logLevel: LogLevel = LoggerProvider.getLoggerLevel(name);
 
     return new Logger(loggerName, logLevel);
   }
@@ -90,15 +24,15 @@ export namespace coremedia {
    * switching by name will not be available, thus,  only <code>ckdebug</code> can be used.
    * @private
    */
-  function getLoggerLevel(name: string | undefined): Level {
-    let logLevelParam: string | boolean = getHashParam(name);
-    let rootLogLevel: string | boolean = getHashParam(rootLoggerName);
-    let logLevel: Level = defaultRootLogLevel;
+  static getLoggerLevel(name: string | undefined): LogLevel {
+    let logLevelParam: string | boolean = LoggerProvider.getHashParam(name);
+    let rootLogLevel: string | boolean = LoggerProvider.getHashParam(LoggerProvider.rootLoggerName);
+    let logLevel: LogLevel = LoggerProvider.defaultRootLogLevel;
 
     if (!!logLevelParam) {
-      logLevel = toLogLevel(logLevelParam);
+      logLevel = LoggerProvider.toLogLevel(logLevelParam);
     } else if (!!rootLogLevel) {
-      logLevel = toLogLevel(rootLogLevel);
+      logLevel = LoggerProvider.toLogLevel(rootLogLevel);
     }
 
     return logLevel;
@@ -122,34 +56,34 @@ export namespace coremedia {
    * @return the corresponding level
    * @private
    */
-  function toLogLevel(nameOrSwitch: string | boolean): Level {
+  static toLogLevel(nameOrSwitch: string | boolean): LogLevel {
     if (typeof nameOrSwitch === 'boolean') {
-      return nameOrSwitch ? defaultLogLevel : Level.NONE;
+      return nameOrSwitch ? LoggerProvider.defaultLogLevel : LogLevel.NONE;
     }
     switch ((<string>name).toLowerCase()) {
       case 'verbose': {
         // Fallback for older CKEditor versions released with CoreMedia CMS.
-        return Level.DEBUG;
+        return LogLevel.DEBUG;
       }
       case 'none': {
-        return Level.NONE;
+        return LogLevel.NONE;
       }
       case 'debug': {
-        return Level.DEBUG;
+        return LogLevel.DEBUG;
       }
       case 'info': {
-        return Level.INFO;
+        return LogLevel.INFO;
       }
       case 'warn': {
-        return Level.WARN;
+        return LogLevel.WARN;
       }
       case 'error': {
-        return Level.ERROR;
+        return LogLevel.ERROR;
       }
       default: {
         // Log-Level change requested, thus, we assume that you want at least
         // info logging.
-        return defaultLogLevel;
+        return LoggerProvider.defaultLogLevel;
       }
     }
   }
@@ -161,7 +95,7 @@ export namespace coremedia {
    * @returns {string/boolean} false iff. hash parameter is not set; true iff. the hash parameter is given without
    * arguments; string value otherwise
    */
-  export function getHashParam(key: string | undefined): string | boolean {
+  static getHashParam(key: string | undefined): string | boolean {
     if (key === undefined) {
       return false;
     }
@@ -174,7 +108,7 @@ export namespace coremedia {
         if (key === hashParam) {
           return true;
         }
-        const paramMatch: RegExpExecArray | null = hashParamRegExp.exec(hashParam);
+        const paramMatch: RegExpExecArray | null = LoggerProvider.hashParamRegExp.exec(hashParam);
         if (paramMatch) {
           if (paramMatch[1] === key) {
             // Map empty String to truthy value.
