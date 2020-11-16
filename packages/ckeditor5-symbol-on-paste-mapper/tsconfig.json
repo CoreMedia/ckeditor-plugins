@@ -10,7 +10,7 @@
       "DOM",
       "ES2015.Promise"
     ],
-    "outDir": "dist",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "sourceMap": true,
