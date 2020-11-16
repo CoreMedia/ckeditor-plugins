@@ -4,7 +4,7 @@ import PasteFromOffice, {PasteFromOfficeClipboardEventData} from "@ckeditor/cked
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import {coremedia} from "@coremedia/coremedia-utils";
 
-class SymbolOnPasteMapper extends Plugin {
+export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: "SymbolFontMapper";
   // TODO[cke] Copied from PasteFromOffice... should be some set of constants
   //   which tell, if there is any font to consider for replacement.
