@@ -9,6 +9,8 @@ import Element from "@ckeditor/ckeditor5-engine/src/view/element"
 import Text from "@ckeditor/ckeditor5-engine/src/view/text"
 import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
 import SymbFontMapper from './fontMapper/SymbFontMapper';
+import FontMapperProvider from "./fontMapper/FontMapperProvider";
+import FontMapper from "./fontMapper/FontMapper";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string =  "SymbolOnPasteMapper";
@@ -62,13 +64,16 @@ export default class SymbolOnPasteMapper extends Plugin {
     let children:Iterable<Node> = content.getChildren();
     for (const child of children) {
       if (child instanceof Element) {
-        if (this.hasFontFamilySymbol(child)) {
-          let element: Element = upcastWriter.clone(child, true);
-          let childIndex: number = content.getChildIndex(child);
-          element._removeStyle("font-family");
-          this.replaceText(element);
-          content._removeChildren(childIndex, 1);
-          content._insertChild(childIndex, element);
+        if (child.hasStyle("font-family")) {
+          let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
+          if (fontMapper) {
+            let element: Element = upcastWriter.clone(child, true);
+            let childIndex: number = content.getChildIndex(child);
+            element._removeStyle("font-family");
+            this.replaceText(fontMapper, element);
+            content._removeChildren(childIndex, 1);
+            content._insertChild(childIndex, element);
+          }
         } else {
           this.treatElementChildren(upcastWriter, child as Element);
         }
@@ -84,26 +89,29 @@ export default class SymbolOnPasteMapper extends Plugin {
         continue;
       }
 
-      if (this.hasFontFamilySymbol(child)) {
-        let childIndex = element.getChildIndex(child);
-        let clone: Element = upcastWriter.clone(child, true);
-        clone._removeStyle("font-family");
-        this.replaceText(clone);
-        element._removeChildren(childIndex, 1);
-        element._insertChild(childIndex, clone);
+      if (child.hasStyle("font-family")) {
+        let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
+        if (fontMapper) {
+          let childIndex = element.getChildIndex(child);
+          let clone: Element = upcastWriter.clone(child, true);
+          clone._removeStyle("font-family");
+          this.replaceText(fontMapper, clone);
+          element._removeChildren(childIndex, 1);
+          element._insertChild(childIndex, clone);
+        }
       } else {
         this.treatElementChildren(upcastWriter, child);
       }
     }
   }
 
-  private static replaceText(element: Element): void {
+  private static replaceText(fontMapper: FontMapper, element: Element): void {
     let textElement: Text | null = this.findTextElement(element);
     if (!textElement) {
       return;
     }
     let oldTextData: string = textElement._textData;
-    textElement._textData = new SymbFontMapper().toEscapedHtml(oldTextData);
+    textElement._textData = fontMapper.toEscapedHtml(oldTextData);
   }
 
   private static findTextElement(element: Element): Text |  null {
@@ -119,15 +127,10 @@ export default class SymbolOnPasteMapper extends Plugin {
     return null;
   }
 
-  private static hasFontFamilySymbol(element: Element): boolean {
+  private static hasFontFamily(element: Element): boolean {
     let hasStyleFontFamily: boolean = element.hasStyle("font-family");
-    if (!hasStyleFontFamily) {
-      return false;
-    }
+    return hasStyleFontFamily;
 
-    let style:string = element.getStyle("font-family");
-
-    return style.toLocaleLowerCase().indexOf("symbol") !== -1;
   }
 
 // ainit() {

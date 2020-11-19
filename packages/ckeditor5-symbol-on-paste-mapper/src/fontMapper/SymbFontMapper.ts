@@ -208,4 +208,8 @@ export default class SymbFontMapper implements FontMapper {
     let utf8charCode = data.charCodeAt(0);
     return utf8charCode & 0xFF;
   }
+
+  matches(fontFamilyStyle: string): boolean {
+    return fontFamilyStyle.toLocaleLowerCase().indexOf("symbol") !== -1;
+  }
 }
