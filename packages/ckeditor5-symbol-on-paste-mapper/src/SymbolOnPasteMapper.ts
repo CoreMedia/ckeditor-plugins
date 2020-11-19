@@ -74,10 +74,32 @@ export default class SymbolOnPasteMapper extends Plugin {
           this.replaceText(element);
           content._removeChildren(childIndex, 1);
           content._insertChild(childIndex, element);
+        } else {
+          this.treatElementChildren(upcastWriter, child as Element);
         }
       }
     }
     return content;
+  }
+
+  private static treatElementChildren(upcastWriter: UpcastWriter, element: Element): void {
+    let children: Iterable<Node> = element.getChildren();
+    for (const child of children) {
+      if (!(child instanceof Element)) {
+        continue;
+      }
+
+      if (this.hasFontFamilySymbol(child)) {
+        let childIndex = element.getChildIndex(child);
+        let clone: Element = upcastWriter.clone(child, true);
+        clone._removeStyle("font-family");
+        this.replaceText(clone);
+        element._removeChildren(childIndex, 1);
+        element._insertChild(childIndex, clone);
+      } else {
+        this.treatElementChildren(upcastWriter, child);
+      }
+    }
   }
 
   private static replaceText(element: Element): void {
