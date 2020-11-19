@@ -58,15 +58,13 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   private static processInputTransformationEvent(content: DocumentFragment): DocumentFragment {
-    let upcastWriter: UpcastWriter = new UpcastWriter(content.document);
-
     let children:Iterable<Node> = content.getChildren();
     for (const child of children) {
       if (child instanceof Element) {
         if (child.hasStyle("font-family")) {
           let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
           if (fontMapper) {
-            let element: Element = upcastWriter.clone(child, true);
+            let element: Element = new UpcastWriter(content.document).clone(child, true);
             let childIndex: number = content.getChildIndex(child);
             element._removeStyle("font-family");
             this.replaceText(fontMapper, element);
@@ -74,14 +72,14 @@ export default class SymbolOnPasteMapper extends Plugin {
             content._insertChild(childIndex, element);
           }
         } else {
-          this.treatElementChildren(upcastWriter, child as Element);
+          this.treatElementChildren(child as Element);
         }
       }
     }
     return content;
   }
 
-  private static treatElementChildren(upcastWriter: UpcastWriter, element: Element): void {
+  private static treatElementChildren(element: Element): void {
     let children: Iterable<Node> = element.getChildren();
     for (const child of children) {
       if (!(child instanceof Element)) {
@@ -92,14 +90,14 @@ export default class SymbolOnPasteMapper extends Plugin {
         let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
         if (fontMapper) {
           let childIndex = element.getChildIndex(child);
-          let clone: Element = upcastWriter.clone(child, true);
+          let clone: Element = new UpcastWriter(child.document).clone(child, true);
           clone._removeStyle("font-family");
           this.replaceText(fontMapper, clone);
           element._removeChildren(childIndex, 1);
           element._insertChild(childIndex, clone);
         }
       } else {
-        this.treatElementChildren(upcastWriter, child);
+        this.treatElementChildren(child);
       }
     }
   }

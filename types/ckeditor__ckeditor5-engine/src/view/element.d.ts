@@ -2,6 +2,8 @@ import Node from "./node"
 import Item from "./item";
 
 export default class Element extends Node {
+  readonly document: Document;
+
   getStyle(styleName: string): string;
   hasStyle(styleName: string): boolean;
   _removeStyle(styleName: string): void;
