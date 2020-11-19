@@ -292,7 +292,7 @@ export default class SymbolOnPasteMapper extends Plugin {
           return this.decodeHtmlEntities(htmlReplacement);
         }
       }
-      return value;
+      return String.fromCharCode(textChar);
     });
     console.info(replaced.join());
     return replaced.join();
