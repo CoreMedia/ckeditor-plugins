@@ -64,12 +64,11 @@ export default class SymbolOnPasteMapper extends Plugin {
         if (child.hasStyle("font-family")) {
           let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
           if (fontMapper) {
-            let element: Element = new UpcastWriter(content.document).clone(child, true);
+            let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, child);
+
             let childIndex: number = content.getChildIndex(child);
-            element._removeStyle("font-family");
-            this.replaceText(fontMapper, element);
             content._removeChildren(childIndex, 1);
-            content._insertChild(childIndex, element);
+            content._insertChild(childIndex, elementClone);
           }
         } else {
           this.treatElementChildren(child as Element);
@@ -89,12 +88,11 @@ export default class SymbolOnPasteMapper extends Plugin {
       if (child.hasStyle("font-family")) {
         let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
         if (fontMapper) {
+          let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, element);
+
           let childIndex = element.getChildIndex(child);
-          let clone: Element = new UpcastWriter(child.document).clone(child, true);
-          clone._removeStyle("font-family");
-          this.replaceText(fontMapper, clone);
           element._removeChildren(childIndex, 1);
-          element._insertChild(childIndex, clone);
+          element._insertChild(childIndex, elementClone);
         }
       } else {
         this.treatElementChildren(child);
@@ -122,5 +120,12 @@ export default class SymbolOnPasteMapper extends Plugin {
       }
     }
     return null;
+  }
+
+  private static createElementCloneWithReplacedText(fontMapper: FontMapper, element: Element) {
+    let clone: Element = new UpcastWriter(element.document).clone(element, true);
+    clone._removeStyle("font-family");
+    this.replaceText(fontMapper, clone);
+    return clone;
   }
 }
