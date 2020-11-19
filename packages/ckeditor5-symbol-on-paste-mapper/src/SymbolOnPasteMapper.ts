@@ -8,7 +8,6 @@ import Node from "@ckeditor/ckeditor5-engine/src/view/node"
 import Element from "@ckeditor/ckeditor5-engine/src/view/element"
 import Text from "@ckeditor/ckeditor5-engine/src/view/text"
 import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
-import SymbFontMapper from './fontMapper/SymbFontMapper';
 import FontMapperProvider from "./fontMapper/FontMapperProvider";
 import FontMapper from "./fontMapper/FontMapper";
 
@@ -126,38 +125,4 @@ export default class SymbolOnPasteMapper extends Plugin {
     }
     return null;
   }
-
-  private static hasFontFamily(element: Element): boolean {
-    let hasStyleFontFamily: boolean = element.hasStyle("font-family");
-    return hasStyleFontFamily;
-
-  }
-
-// ainit() {
-  //   const editor = this.editor;
-  //   const viewDocument = editor.editing.view.document;
-  //   const normalizers = [];
-  //
-  //   normalizers.push( new MSWordNormalizer( viewDocument ) );
-  //   normalizers.push( new GoogleDocsNormalizer( viewDocument ) );
-  //
-  //   editor.plugins.get( 'Clipboard' ).on(
-  //     'inputTransformation',
-  //     ( evt, data ) => {
-  //       if ( data.isTransformedWithPasteFromOffice ) {
-  //         return;
-  //       }
-  //
-  //       const htmlString = data.dataTransfer.getData( 'text/html' );
-  //       const activeNormalizer = normalizers.find( normalizer => normalizer.isActive( htmlString ) );
-  //
-  //       if ( activeNormalizer ) {
-  //         activeNormalizer.execute( data );
-  //
-  //         data.isTransformedWithPasteFromOffice = true;
-  //       }
-  //     },
-  //     { priority: 'high' }
-  //   );
-  // }
 }
