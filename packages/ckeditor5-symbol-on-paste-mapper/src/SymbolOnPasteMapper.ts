@@ -69,9 +69,11 @@ export default class SymbolOnPasteMapper extends Plugin {
             let childIndex: number = content.getChildIndex(child);
             content._removeChildren(childIndex, 1);
             content._insertChild(childIndex, elementClone);
+          } else {
+            this.treatElementChildren(child);
           }
         } else {
-          this.treatElementChildren(child as Element);
+          this.treatElementChildren(child);
         }
       }
     }
@@ -93,6 +95,9 @@ export default class SymbolOnPasteMapper extends Plugin {
           let childIndex = element.getChildIndex(child);
           element._removeChildren(childIndex, 1);
           element._insertChild(childIndex, elementClone);
+        }
+        else {
+          this.treatElementChildren(child);
         }
       } else {
         this.treatElementChildren(child);
