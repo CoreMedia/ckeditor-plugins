@@ -57,7 +57,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     return null;
   }
 
-  private static processInputTransformationEvent(content: DocumentFragment): DocumentFragment {
+  private static processInputTransformationEvent(content: DocumentFragment | Element): DocumentFragment {
     let children:Iterable<Node> = content.getChildren();
     for (const child of children) {
       if (child instanceof Element) {
@@ -70,39 +70,14 @@ export default class SymbolOnPasteMapper extends Plugin {
             content._removeChildren(childIndex, 1);
             content._insertChild(childIndex, elementClone);
           } else {
-            this.treatElementChildren(child);
+            this.processInputTransformationEvent(child);
           }
         } else {
-          this.treatElementChildren(child);
+          this.processInputTransformationEvent(child);
         }
       }
     }
     return content;
-  }
-
-  private static treatElementChildren(element: Element): void {
-    let children: Iterable<Node> = element.getChildren();
-    for (const child of children) {
-      if (!(child instanceof Element)) {
-        continue;
-      }
-
-      if (child.hasStyle("font-family")) {
-        let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
-        if (fontMapper) {
-          let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, element);
-
-          let childIndex = element.getChildIndex(child);
-          element._removeChildren(childIndex, 1);
-          element._insertChild(childIndex, elementClone);
-        }
-        else {
-          this.treatElementChildren(child);
-        }
-      } else {
-        this.treatElementChildren(child);
-      }
-    }
   }
 
   private static replaceText(fontMapper: FontMapper, element: Element): void {
