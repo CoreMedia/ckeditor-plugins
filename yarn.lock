@@ -1011,6 +1011,11 @@
     "@ckeditor/ckeditor5-core" "^23.1.0"
     "@ckeditor/ckeditor5-utils" "^23.1.0"
 
+"@ckeditor/ckeditor5-inspector@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-inspector/-/ckeditor5-inspector-2.2.1.tgz#898f5b216307c1e9a7dd8297eef171ccc96c35f4"
+  integrity sha512-soaBCqTSakHiwPGjFgopD1jSHytiqSca3Ja0sHn/gpCLdwdnDkmzmnWgyu0VdxeXm0Rt/V9F6W6aBuVQUFcyuw==
+
 "@ckeditor/ckeditor5-link@^23.1.0":
   version "23.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-link/-/ckeditor5-link-23.1.0.tgz#80913271ee86bde80145315b94bb854109571306"
