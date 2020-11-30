@@ -89,6 +89,13 @@ export default class SymbolOnPasteMapper extends Plugin {
     return this.createElementCloneWithReplacedText(fontMapper, element);
   }
 
+  private static createElementCloneWithReplacedText(fontMapper: FontMapper, element: Element) {
+    let clone: Element = new UpcastWriter(element.document).clone(element, true);
+    clone._removeStyle("font-family");
+    this.replaceText(fontMapper, clone);
+    return clone;
+  }
+
   private static replaceText(fontMapper: FontMapper, element: Element): void {
     let textElement: Text | null = this.findTextElement(element);
     if (!textElement) {
@@ -111,10 +118,4 @@ export default class SymbolOnPasteMapper extends Plugin {
     return null;
   }
 
-  private static createElementCloneWithReplacedText(fontMapper: FontMapper, element: Element) {
-    let clone: Element = new UpcastWriter(element.document).clone(element, true);
-    clone._removeStyle("font-family");
-    this.replaceText(fontMapper, clone);
-    return clone;
-  }
 }
