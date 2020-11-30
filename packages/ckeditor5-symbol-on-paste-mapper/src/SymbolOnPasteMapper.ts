@@ -63,22 +63,30 @@ export default class SymbolOnPasteMapper extends Plugin {
       .map(value => value as Element);
 
     for (const child of childrenElements) {
-      if (child.hasStyle("font-family")) {
-        let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
-        if (fontMapper) {
-          let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, child);
-
-          let childIndex: number = htmlElement.getChildIndex(child);
-          htmlElement._removeChildren(childIndex, 1);
-          htmlElement._insertChild(childIndex, elementClone);
-        } else {
-          this.processInputTransformationEvent(child);
-        }
+      let replacementElement: Element | null = this.evaluateReplacement(child);
+      if (replacementElement) {
+        let childIndex: number = htmlElement.getChildIndex(child);
+        htmlElement._removeChildren(childIndex, 1);
+        htmlElement._insertChild(childIndex, replacementElement);
       } else {
         this.processInputTransformationEvent(child);
       }
     }
     return htmlElement;
+  }
+
+  private static evaluateReplacement(element: Element): Element | null {
+    if (!element.hasStyle("font-family")) {
+      return null;
+    }
+
+    let fontFamilyStyle: string = element.getStyle("font-family");
+    let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(fontFamilyStyle);
+    if (!fontMapper) {
+      return null;
+    }
+
+    return this.createElementCloneWithReplacedText(fontMapper, element);
   }
 
   private static replaceText(fontMapper: FontMapper, element: Element): void {
