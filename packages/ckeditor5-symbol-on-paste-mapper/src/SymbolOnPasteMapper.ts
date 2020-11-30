@@ -58,23 +58,24 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   private static processInputTransformationEvent(htmlElement: DocumentFragment | Element): DocumentFragment {
-    let children:Iterable<Node> = htmlElement.getChildren();
-    for (const child of children) {
-      if (child instanceof Element) {
-        if (child.hasStyle("font-family")) {
-          let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
-          if (fontMapper) {
-            let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, child);
+    let childrenElements: Array<Element> = Array.from<Node>(htmlElement.getChildren())
+      .filter(value => value instanceof Element)
+      .map(value => value as Element);
 
-            let childIndex: number = htmlElement.getChildIndex(child);
-            htmlElement._removeChildren(childIndex, 1);
-            htmlElement._insertChild(childIndex, elementClone);
-          } else {
-            this.processInputTransformationEvent(child);
-          }
+    for (const child of childrenElements) {
+      if (child.hasStyle("font-family")) {
+        let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(child.getStyle("font-family"));
+        if (fontMapper) {
+          let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, child);
+
+          let childIndex: number = htmlElement.getChildIndex(child);
+          htmlElement._removeChildren(childIndex, 1);
+          htmlElement._insertChild(childIndex, elementClone);
         } else {
           this.processInputTransformationEvent(child);
         }
+      } else {
+        this.processInputTransformationEvent(child);
       }
     }
     return htmlElement;
