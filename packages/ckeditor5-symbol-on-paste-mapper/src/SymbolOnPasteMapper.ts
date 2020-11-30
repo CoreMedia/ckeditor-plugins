@@ -13,9 +13,6 @@ import FontMapper from "./fontMapper/FontMapper";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string =  "SymbolOnPasteMapper";
-  // TODO[cke] Copied from PasteFromOffice... should be some set of constants
-  //   which tell, if there is any font to consider for replacement.
-  static readonly msWordMatch: RegExp = /<meta\s*name="?generator"?\s*content="?microsoft\s*word\s*\d+"?\/?>/i;
   // TODO[cke] Would be great adding context information (editor/sourceElement-id or similar)
   //    to get the actual editor we write log entries for.
   private readonly logger:Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
