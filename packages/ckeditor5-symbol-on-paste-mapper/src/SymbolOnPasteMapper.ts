@@ -44,7 +44,7 @@ export default class SymbolOnPasteMapper extends Plugin {
             return;
           }
 
-          data.content = SymbolOnPasteMapper.processInputTransformationEvent(eventContent);
+          data.content = SymbolOnPasteMapper.replaceFontFamilies(eventContent);
         },
         {
           // Must be less than priority in PasteFromOffice.
@@ -57,7 +57,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     return null;
   }
 
-  private static processInputTransformationEvent(htmlElement: DocumentFragment | Element): DocumentFragment {
+  private static replaceFontFamilies(htmlElement: DocumentFragment | Element): DocumentFragment {
     let childrenElements: Array<Element> = Array.from<Node>(htmlElement.getChildren())
       .filter(value => value instanceof Element)
       .map(value => value as Element);
@@ -69,7 +69,7 @@ export default class SymbolOnPasteMapper extends Plugin {
         htmlElement._removeChildren(childIndex, 1);
         htmlElement._insertChild(childIndex, replacementElement);
       } else {
-        this.processInputTransformationEvent(child);
+        this.replaceFontFamilies(child);
       }
     }
     return htmlElement;
