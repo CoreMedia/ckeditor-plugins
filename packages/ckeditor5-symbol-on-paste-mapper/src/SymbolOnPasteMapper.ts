@@ -20,6 +20,8 @@ export default class SymbolOnPasteMapper extends Plugin {
   //    to get the actual editor we write log entries for.
   private readonly logger:Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
 
+  private readonly CLIPBOARD_EVENT_NAME: string = "inputTransformation";
+
   constructor(ed: Editor) {
     super(ed);
   }
@@ -35,14 +37,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     this.logger.info("SymbolOnPastePlugin initialized");
     let clipboard = editor.plugins.get('Clipboard');
     if (clipboard instanceof Clipboard) {
-      clipboard.on(
-        'inputTransformation',
-        SymbolOnPasteMapper.handleClipboardInputTransformationEvent,
-        {
-          // Must be less than priority in PasteFromOffice.
-          priority: 'normal'
-        }
-      )
+      clipboard.on(this.CLIPBOARD_EVENT_NAME, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
     } else {
       this.logger.error("Unexpected Clipboard plugin.");
     }
