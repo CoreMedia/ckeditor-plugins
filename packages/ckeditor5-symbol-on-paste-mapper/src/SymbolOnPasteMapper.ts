@@ -37,15 +37,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     if (clipboard instanceof Clipboard) {
       clipboard.on(
         'inputTransformation',
-        (eventInfo: any, data: any) => {
-          let pastedContent: string = data.dataTransfer.getData("text/html");
-          let eventContent: DocumentFragment = data.content;
-          if (!pastedContent) {
-            return;
-          }
-
-          data.content = SymbolOnPasteMapper.replaceFontFamilies(eventContent);
-        },
+        SymbolOnPasteMapper.handleClipboardInputTransformationEvent,
         {
           // Must be less than priority in PasteFromOffice.
           priority: 'normal'
@@ -55,6 +47,16 @@ export default class SymbolOnPasteMapper extends Plugin {
       this.logger.error("Unexpected Clipboard plugin.");
     }
     return null;
+  }
+
+  private static handleClipboardInputTransformationEvent(eventInfo: any, data: any): void {
+    let pastedContent: string = data.dataTransfer.getData("text/html");
+    let eventContent: DocumentFragment = data.content;
+    if (!pastedContent) {
+      return;
+    }
+
+    data.content = SymbolOnPasteMapper.replaceFontFamilies(eventContent);
   }
 
   private static replaceFontFamilies(htmlElement: DocumentFragment | Element): DocumentFragment {
