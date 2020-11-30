@@ -39,12 +39,12 @@ export default class SymbolOnPasteMapper extends Plugin {
         'inputTransformation',
         (eventInfo: any, data: any) => {
           let pastedContent: string = data.dataTransfer.getData("text/html");
-          let content: DocumentFragment = data.content;
+          let eventContent: DocumentFragment = data.content;
           if (!pastedContent) {
             return;
           }
 
-          data.content = SymbolOnPasteMapper.processInputTransformationEvent(content);
+          data.content = SymbolOnPasteMapper.processInputTransformationEvent(eventContent);
         },
         {
           // Must be less than priority in PasteFromOffice.
@@ -57,8 +57,8 @@ export default class SymbolOnPasteMapper extends Plugin {
     return null;
   }
 
-  private static processInputTransformationEvent(content: DocumentFragment | Element): DocumentFragment {
-    let children:Iterable<Node> = content.getChildren();
+  private static processInputTransformationEvent(htmlElement: DocumentFragment | Element): DocumentFragment {
+    let children:Iterable<Node> = htmlElement.getChildren();
     for (const child of children) {
       if (child instanceof Element) {
         if (child.hasStyle("font-family")) {
@@ -66,9 +66,9 @@ export default class SymbolOnPasteMapper extends Plugin {
           if (fontMapper) {
             let elementClone: Element = this.createElementCloneWithReplacedText(fontMapper, child);
 
-            let childIndex: number = content.getChildIndex(child);
-            content._removeChildren(childIndex, 1);
-            content._insertChild(childIndex, elementClone);
+            let childIndex: number = htmlElement.getChildIndex(child);
+            htmlElement._removeChildren(childIndex, 1);
+            htmlElement._insertChild(childIndex, elementClone);
           } else {
             this.processInputTransformationEvent(child);
           }
@@ -77,7 +77,7 @@ export default class SymbolOnPasteMapper extends Plugin {
         }
       }
     }
-    return content;
+    return htmlElement;
   }
 
   private static replaceText(fontMapper: FontMapper, element: Element): void {
