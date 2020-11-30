@@ -73,38 +73,4 @@
 		</p>
 	</footer>
 	<script src="../dist/ckeditor.js"></script>
-	<script>ClassicEditor
-			.create( document.querySelector( '.editor' ), {
-
-				toolbar: {
-					items: [
-						'|',
-						'|',
-						'|',
-						'undo',
-						'redo'
-					]
-				},
-				language: 'en',
-				licenseKey: '',
-
-			} )
-			.then( editor => {
-				window.editor = editor;
-
-
-
-
-
-
-
-
-			} )
-			.catch( error => {
-				console.error( 'Oops, something went wrong!' );
-				console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-				console.warn( 'Build id: xsn00cyoixgq-bpc7n3wajavw' );
-				console.error( error );
-			} );
-	</script>
 </body>
