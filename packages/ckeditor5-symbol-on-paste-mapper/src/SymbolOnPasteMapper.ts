@@ -17,7 +17,9 @@ export default class SymbolOnPasteMapper extends Plugin {
   //    to get the actual editor we write log entries for.
   private readonly logger:Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
 
-  private readonly CLIPBOARD_EVENT_NAME: string = "inputTransformation";
+  private static readonly styleNameFontFamily = "font-family";
+  private static readonly supportedDataFormat: string = "text/html";
+  private static readonly clipboardEventName: string = "inputTransformation";
 
   constructor(ed: Editor) {
     super(ed);
@@ -34,15 +36,16 @@ export default class SymbolOnPasteMapper extends Plugin {
     this.logger.info("SymbolOnPastePlugin initialized");
     let clipboard = editor.plugins.get('Clipboard');
     if (clipboard instanceof Clipboard) {
-      clipboard.on(this.CLIPBOARD_EVENT_NAME, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
+      clipboard.on(SymbolOnPasteMapper.clipboardEventName, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
     } else {
       this.logger.error("Unexpected Clipboard plugin.");
     }
     return null;
   }
 
+
   private static handleClipboardInputTransformationEvent(eventInfo: any, data: any): void {
-    let pastedContent: string = data.dataTransfer.getData("text/html");
+    let pastedContent: string = data.dataTransfer.getData(this.supportedDataFormat);
     let eventContent: DocumentFragment = data.content;
     if (!pastedContent) {
       return;
@@ -69,12 +72,13 @@ export default class SymbolOnPasteMapper extends Plugin {
     return htmlElement;
   }
 
+
   private static evaluateReplacement(element: Element): Element | null {
-    if (!element.hasStyle("font-family")) {
+    if (!element.hasStyle(this.styleNameFontFamily)) {
       return null;
     }
 
-    let fontFamilyStyle: string = element.getStyle("font-family");
+    let fontFamilyStyle: string = element.getStyle(this.styleNameFontFamily);
     let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(fontFamilyStyle);
     if (!fontMapper) {
       return null;
@@ -85,7 +89,7 @@ export default class SymbolOnPasteMapper extends Plugin {
 
   private static createElementCloneWithReplacedText(fontMapper: FontMapper, element: Element) {
     let clone: Element = new UpcastWriter(element.document).clone(element, true);
-    clone._removeStyle("font-family");
+    clone._removeStyle(this.styleNameFontFamily);
     this.replaceText(fontMapper, clone);
     return clone;
   }
