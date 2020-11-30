@@ -20,6 +20,7 @@ export default class SymbolOnPasteMapper extends Plugin {
   private static readonly styleNameFontFamily = "font-family";
   private static readonly supportedDataFormat: string = "text/html";
   private static readonly clipboardEventName: string = "inputTransformation";
+  private static readonly pluginNameClipboard: string = "Clipboard";
 
   constructor(ed: Editor) {
     super(ed);
@@ -34,7 +35,8 @@ export default class SymbolOnPasteMapper extends Plugin {
   init(): Promise<void> | null {
     const editor = this.editor;
     this.logger.info("SymbolOnPastePlugin initialized");
-    let clipboard = editor.plugins.get('Clipboard');
+
+    let clipboard = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
     if (clipboard instanceof Clipboard) {
       clipboard.on(SymbolOnPasteMapper.clipboardEventName, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
     } else {
@@ -45,7 +47,7 @@ export default class SymbolOnPasteMapper extends Plugin {
 
 
   private static handleClipboardInputTransformationEvent(eventInfo: any, data: any): void {
-    let pastedContent: string = data.dataTransfer.getData(this.supportedDataFormat);
+    let pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);
     let eventContent: DocumentFragment = data.content;
     if (!pastedContent) {
       return;
@@ -74,11 +76,11 @@ export default class SymbolOnPasteMapper extends Plugin {
 
 
   private static evaluateReplacement(element: Element): Element | null {
-    if (!element.hasStyle(this.styleNameFontFamily)) {
+    if (!element.hasStyle(SymbolOnPasteMapper.styleNameFontFamily)) {
       return null;
     }
 
-    let fontFamilyStyle: string = element.getStyle(this.styleNameFontFamily);
+    let fontFamilyStyle: string = element.getStyle(SymbolOnPasteMapper.styleNameFontFamily);
     let fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(fontFamilyStyle);
     if (!fontMapper) {
       return null;
@@ -89,7 +91,7 @@ export default class SymbolOnPasteMapper extends Plugin {
 
   private static createElementCloneWithReplacedText(fontMapper: FontMapper, element: Element) {
     let clone: Element = new UpcastWriter(element.document).clone(element, true);
-    clone._removeStyle(this.styleNameFontFamily);
+    clone._removeStyle(SymbolOnPasteMapper.styleNameFontFamily);
     this.replaceText(fontMapper, clone);
     return clone;
   }
