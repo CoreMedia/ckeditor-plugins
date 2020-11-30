@@ -36,7 +36,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     const editor = this.editor;
     this.logger.info("SymbolOnPastePlugin initialized");
 
-    let clipboard = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
+    let clipboard: Plugin | undefined = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
     if (clipboard instanceof Clipboard) {
       clipboard.on(SymbolOnPasteMapper.clipboardEventName, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
     } else {
