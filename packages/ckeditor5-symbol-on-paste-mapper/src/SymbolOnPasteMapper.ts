@@ -10,6 +10,7 @@ import Text from "@ckeditor/ckeditor5-engine/src/view/text"
 import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
 import FontMapperProvider from "./fontMapper/FontMapperProvider";
 import FontMapper from "./fontMapper/FontMapper";
+import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string =  "SymbolOnPasteMapper";
@@ -46,7 +47,7 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
 
-  private static handleClipboardInputTransformationEvent(eventInfo: any, data: any): void {
+  private static handleClipboardInputTransformationEvent(eventInfo: any, data: ClipboardEventData): void {
     let pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);
     let eventContent: DocumentFragment = data.content;
     if (!pastedContent) {
