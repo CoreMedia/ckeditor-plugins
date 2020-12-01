@@ -1,6 +1,6 @@
 import FontMapper from "./FontMapper"
 
-export default class SymbFontMapper implements FontMapper {
+export default class SymbolFontMapper implements FontMapper {
   /**
    * Helper element for decoding HTML entities like &amp;quot; which are contained in the MS Word clipboard
    * content. For processing in here we require the real characters instead of their HTML entities.
@@ -182,11 +182,11 @@ export default class SymbFontMapper implements FontMapper {
   toEscapedHtml(toMap:string): string {
     const chars: Array<any> = [...toMap];
     const replaced: Array<any> = chars.map((value) => {
-      const textChar: number = SymbFontMapper.unpack(value);
-      if (SymbFontMapper.map.has(textChar)) {
-        let htmlReplacement: string | undefined = SymbFontMapper.map.get(textChar);
+      const textChar: number = SymbolFontMapper.unpack(value);
+      if (SymbolFontMapper.map.has(textChar)) {
+        let htmlReplacement: string | undefined = SymbolFontMapper.map.get(textChar);
         if (htmlReplacement) {
-          return SymbFontMapper.decodeHtmlEntities(htmlReplacement);
+          return SymbolFontMapper.decodeHtmlEntities(htmlReplacement);
         }
       }
       return String.fromCharCode(textChar);

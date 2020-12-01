@@ -1,8 +1,8 @@
 import FontMapper from "./FontMapper";
-import SymbFontMapper from "./SymbFontMapper";
+import SymbolFontMapper from "./SymbolFontMapper";
 
 export default class FontMapperProvider {
-  static mapper: Array<FontMapper> = [new SymbFontMapper()];
+  static mapper: Array<FontMapper> = [new SymbolFontMapper()];
 
   static getFontMapper(fontFamilyStyle: string): FontMapper | null {
     for (const fontMapper of FontMapperProvider.mapper) {
