@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import LoggerProvider from "@coremedia/coremedia-utils/dist/logging/LoggerProvider";
-import Logger from "@coremedia/coremedia-utils/dist/logging/Logger";
+import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment"
 import Node from "@ckeditor/ckeditor5-engine/src/view/node"
 import Element from "@ckeditor/ckeditor5-engine/src/view/element"
@@ -11,6 +11,7 @@ import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
 import FontMapperProvider from "./fontMapper/FontMapperProvider";
 import FontMapper from "./fontMapper/FontMapper";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
+import FontMapperPluginConfig from "./FontMapperPluginConfig";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string =  "SymbolOnPasteMapper";
@@ -34,8 +35,10 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   init(): Promise<void> | null {
+    this.logger.info("Initializing FontMapper Plugin");
     const editor = this.editor;
-    this.logger.info("SymbolOnPastePlugin initialized");
+    let fontMapperPluginConfig: FontMapperPluginConfig = editor.config.get('fontMapperPlugin') as FontMapperPluginConfig;
+    this.applyPluginConfig(fontMapperPluginConfig);
 
     let clipboard: Plugin | undefined = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
     if (clipboard instanceof Clipboard) {
@@ -46,6 +49,18 @@ export default class SymbolOnPasteMapper extends Plugin {
     return null;
   }
 
+  private applyPluginConfig(config:FontMapperPluginConfig): void {
+    if (!config) {
+      this.logger.debug("Configuration: No additional configuration found");
+      return;
+    }
+    this.logger.debug("Configuration: Additional configuration will be applied");
+    let fontMapper: Array<FontMapper> = config.fontMapper;
+    if (fontMapper) {
+      this.logger.debug("Configuration: New FontMapper are configured, will replace the default ones");
+      FontMapperProvider.replaceFontMapper(fontMapper);
+    }
+  }
 
   private static handleClipboardInputTransformationEvent(eventInfo: any, data: ClipboardEventData): void {
     let pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);

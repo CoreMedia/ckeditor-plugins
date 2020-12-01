@@ -6,10 +6,12 @@ import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import PluginCollection from "../plugincollection";
 import Plugin from "../plugin";
+import Config from "@ckeditor/ckeditor5-utils/src/config";
 
 export default class Editor implements Emitter, Observable {
   readonly editing: EditingController;
   readonly plugins: PluginCollection<Plugin<any>>;
+  readonly config: Config;
 
   constructor(config?: object);
 

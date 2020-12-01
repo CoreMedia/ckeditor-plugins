@@ -12,4 +12,11 @@ export default class FontMapperProvider {
     }
     return null;
   }
+
+  static replaceFontMapper(newMappers: Array<FontMapper>): void {
+    FontMapperProvider.mapper = [];
+    for (const newMapper of newMappers) {
+      FontMapperProvider.mapper.push(newMapper);
+    }
+  }
 }
