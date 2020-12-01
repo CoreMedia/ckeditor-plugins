@@ -11,9 +11,9 @@
 *~
 
 # folders
-node_modules/
-
+coverage/
 dist/
+node_modules/
 
 # Temporary Output
 
