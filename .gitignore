@@ -10,8 +10,15 @@
 # emacs
 *~
 
-# folders
+### ----------------------------------------------------------------------------
+### Folders
+### ----------------------------------------------------------------------------
+
+# Coverage Data for example by JEST
 coverage/
+# Build folder used by CKEditor Tooling, especially test-scripts.
+build/
+# Folder we defined to contain the built artifacts.
 dist/
 node_modules/
 

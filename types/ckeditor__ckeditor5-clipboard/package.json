@@ -8,6 +8,10 @@
     "@ckeditor/ckeditor5-engine": "^23.1.0"
   },
   "scripts": {
-    "build": "exit 0"
+    "build": "exit 0",
+    "test": "exit 0",
+    "manual": "exit 0",
+    "lint": "exit 0",
+    "prettier": "exit 0"
   }
 }

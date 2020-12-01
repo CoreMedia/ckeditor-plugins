@@ -17,7 +17,7 @@
     "webpack-cli": "^4.1.0"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=10.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
@@ -31,6 +31,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.10.4",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-typescript": "^7.10.4",
+    "@ckeditor/ckeditor5-dev-tests": "^23.6.1",
     "@types/ckeditor__ckeditor5-clipboard": "1.0.0",
     "@types/ckeditor__ckeditor5-core": "1.0.0",
     "@types/ckeditor__ckeditor5-engine": "1.0.0",
@@ -46,7 +47,8 @@
   "scripts": {
     "buildwp": "webpack --mode production",
     "build": "tsc",
-    "test": "exit 0",
+    "test": "node --max_old_space_size=4096 ./node_modules/.bin/ckeditor5-dev-tests",
+    "manual": "node --max_old_space_size=4096 ./node_modules/.bin/ckeditor5-dev-tests-manual",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""
   }

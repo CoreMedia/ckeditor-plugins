@@ -35,6 +35,7 @@
     "clean": "rm -rf ./node_modules && yarn workspaces run clean",
     "build": "yarn workspaces run build",
     "test": "yarn workspaces run test",
+    "manual": "yarn workspaces run manual",
     "lint": "yarn workspaces run lint",
     "prettier": "yarn workspaces run prettier"
   },
