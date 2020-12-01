@@ -7,6 +7,7 @@
     "typeRoots": [
       "../../types/*"
     ],
+    // TODO[cke] Why do we need to add this in a module, not related to CKEditor?
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"

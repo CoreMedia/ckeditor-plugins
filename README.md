@@ -7,6 +7,20 @@ evaluation process.
 
 ## Command Line Reference
 
+### Install Dependencies
+
+```
+yarn bootstrap
+```
+
+### Build Artifacts
+
+```
+yarn build
+```
+
+You will find an editor, which is ready to test in [app/sample](app/sample/index.html).
+
 ### Add Dependency
 
 ```text
@@ -34,6 +48,17 @@ yarn add the-development-dependency --dev
 
 * [\[CMS-18463\] \[CKEditor 5\] Warm laufen](https://jira.coremedia.com/browse/CMS-18463)
 * [\[CMS-13587\] Evaluate the future of Studio-RichText-Editing: CKEditor 5 or what?](https://jira.coremedia.com/browse/CMS-13587)
+
+## Testing Research
+
+### Links
+
+* [Jest · 🃏 Delightful JavaScript Testing](https://jestjs.io/)
+    * [Getting Started · Jest](https://jestjs.io/docs/en/getting-started.html)
+* [kulshekhar/ts-jest: TypeScript preprocessor with sourcemap support for Jest](https://github.com/kulshekhar/ts-jest)
+    * [mtiller/ts-jest-sample: A sample repo leveraging TypeScript, jest and ts-jest (with code coverage and debugging)](https://github.com/mtiller/ts-jest-sample)
+* [ckeditor5-dev/packages/ckeditor5-dev-tests at master · ckeditor/ckeditor5-dev](https://github.com/ckeditor/ckeditor5-dev/tree/master/packages/ckeditor5-dev-tests)
+* [ckeditor5-dev/README.md at master · ckeditor/ckeditor5-dev](https://github.com/ckeditor/ckeditor5-dev/blob/master/packages/ckeditor5-dev-tests/bin/intellijkarmarunner/README.md)
 
 ## See Also
 
@@ -66,6 +91,7 @@ yarn add the-development-dependency --dev
 * [DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions.](https://github.com/DefinitelyTyped/DefinitelyTyped)
 * [Using a JavaScript library (without type declarations) in a TypeScript project. | by Steve Ruiz | Medium](https://medium.com/@steveruiz/using-a-javascript-library-without-type-declarations-in-a-typescript-project-3643490015f3)
 * [TypeScript: TSConfig Reference - Docs on every TSConfig option](https://www.typescriptlang.org/tsconfig)
+* [Smarter way to organize “import” statements using “index.ts” file(s) in Angular | by Balram Chavan | Medium](https://medium.com/@balramchavan/smarter-way-to-organize-import-statements-using-index-ts-file-s-in-angular-c685e9d645b7)
 
 ### Yarn
 
