@@ -21,6 +21,26 @@ yarn build
 
 You will find an editor, which is ready to test in [app/sample](app/sample/index.html).
 
+### Run Tests
+
+```
+yarn test
+```
+
+If this fails on Windows, please have a look at the Troubleshooting section.
+
+To run tests with headless Chrome use:
+
+```
+yarn test --browsers=ChromeHeadless
+```
+
+To generate a coverage report:
+
+```
+yarn test --coverage
+```
+
 ### Add Dependency
 
 ```text
@@ -55,6 +75,12 @@ Workaround for now: Call tests directly e.g. via:
 ./node_modules/.bin/ckeditor5-dev-tests.cmd --files=symbol-on-paste-mapper
 ```
 
+Or to use headless Chrome:
+
+```text
+./node_modules/.bin/ckeditor5-dev-tests.cmd --files=symbol-on-paste-mapper --browsers=ChromeHeadless
+```
+
 ## CKEditor Research
 
 ### Logging
@@ -81,6 +107,7 @@ Workaround for now: Call tests directly e.g. via:
     * [mtiller/ts-jest-sample: A sample repo leveraging TypeScript, jest and ts-jest (with code coverage and debugging)](https://github.com/mtiller/ts-jest-sample)
 * [ckeditor5-dev/packages/ckeditor5-dev-tests at master · ckeditor/ckeditor5-dev](https://github.com/ckeditor/ckeditor5-dev/tree/master/packages/ckeditor5-dev-tests)
 * [ckeditor5-dev/README.md at master · ckeditor/ckeditor5-dev](https://github.com/ckeditor/ckeditor5-dev/blob/master/packages/ckeditor5-dev-tests/bin/intellijkarmarunner/README.md)
+* Karma: [Automated testing with Headless Chrome  |  Web  |  Google Developers](https://developers.google.com/web/updates/2017/06/headless-karma-mocha-chai)
 
 ## See Also
 
