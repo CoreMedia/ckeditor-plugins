@@ -33,6 +33,28 @@ yarn add the-dependency
 yarn add the-development-dependency --dev
 ```
 
+### Troubleshooting
+
+#### SyntaxError on Windows Running yarn test
+
+```text
+basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+          ^^^^^^^
+
+SyntaxError: missing ) after argument list
+```
+
+This seems to be related to:
+
+* [Unable to run tests in development Environment on Windows. · Issue #686 · ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5/issues/686)
+
+Although it looks as if it should be fixed (in 2017) still observing this issue.
+Workaround for now: Call tests directly e.g. via:
+
+```
+./node_modules/.bin/ckeditor5-dev-tests.cmd --files=symbol-on-paste-mapper
+```
+
 ## CKEditor Research
 
 ### Logging
