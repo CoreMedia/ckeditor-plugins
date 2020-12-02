@@ -35,7 +35,8 @@
     "clean": "rm -rf ./node_modules && yarn workspaces run clean",
     "build": "yarn workspaces run build",
     "test": "yarn workspaces run test",
-    "manual": "yarn workspaces run manual",
+    "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
+    "test:manual": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test-manual.js",
     "lint": "yarn workspaces run lint",
     "prettier": "yarn workspaces run prettier"
   },
