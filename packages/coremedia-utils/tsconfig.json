@@ -25,5 +25,10 @@
         "../../types/ckeditor__ckeditor5-utils/*"
       ]
     }
-  }
+  },
+  "exclude": [
+    "__tests__/**/*",
+    "dist",
+    "node_modules"
+  ]
 }
