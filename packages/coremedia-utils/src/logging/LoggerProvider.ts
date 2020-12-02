@@ -61,7 +61,7 @@ export default class LoggerProvider {
     if (typeof nameOrSwitch === 'boolean') {
       return nameOrSwitch ? LoggerProvider.defaultLogLevel : LogLevel.NONE;
     }
-    switch ((<string>name).toLowerCase()) {
+    switch ((<string>nameOrSwitch).toLowerCase()) {
       case 'verbose': {
         // Fallback for older CKEditor versions released with CoreMedia CMS.
         return LogLevel.DEBUG;
