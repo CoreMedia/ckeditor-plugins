@@ -35,3 +35,6 @@ jobs:
 
       - name: Build Workspace (Packages and App)
         run: yarn workspaces run build
+
+      - name: Unit Test Workspace
+        run: yarn workspaces run test
