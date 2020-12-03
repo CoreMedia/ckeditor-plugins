@@ -1,7 +1,7 @@
-import {LogLevel} from "./LogLevel";
+import { LogLevel } from "./LogLevel";
 import Logger from "./Logger";
 
-export default class LoggerImpl implements Logger{
+export default class LoggerImpl implements Logger {
   private readonly name: string | undefined;
   private readonly logLevel: LogLevel;
 
@@ -14,7 +14,7 @@ export default class LoggerImpl implements Logger{
     if (name === undefined) {
       return data;
     }
-    let contextualData: any[] = [this.name + ':'];
+    const contextualData: any[] = [this.name + ":"];
     return contextualData.concat(data);
   }
 

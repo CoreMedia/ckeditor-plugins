@@ -5,13 +5,13 @@ import { LogLevel } from "./LogLevel";
 export default class LoggerProvider {
   static defaultLogLevel: LogLevel = LogLevel.INFO;
   static defaultRootLogLevel: LogLevel = LogLevel.WARN;
-  static rootLoggerName: string = "ckdebug";
-  static hashParamRegExp: RegExp = /([^=]*)=(.*)/;
+  static rootLoggerName = "ckdebug";
+  static hashParamRegExp = /([^=]*)=(.*)/;
 
   static getLogger(name: string | undefined, ...context: any[]): Logger {
-    let contextName: string = context.join(".");
-    let loggerName: string | undefined = (!!name && !!contextName) ? contextName + ":" + name : name;
-    let logLevel: LogLevel = LoggerProvider.getLoggerLevel(name);
+    const contextName: string = context.join(".");
+    const loggerName: string | undefined = !!name && !!contextName ? contextName + ":" + name : name;
+    const logLevel: LogLevel = LoggerProvider.getLoggerLevel(name);
 
     return new LoggerImpl(loggerName, logLevel);
   }
@@ -26,8 +26,8 @@ export default class LoggerProvider {
    * @private
    */
   static getLoggerLevel(name: string | undefined): LogLevel {
-    let logLevelParam: string | boolean = LoggerProvider.getHashParam(name);
-    let rootLogLevel: string | boolean = LoggerProvider.getHashParam(LoggerProvider.rootLoggerName);
+    const logLevelParam: string | boolean = LoggerProvider.getHashParam(name);
+    const rootLogLevel: string | boolean = LoggerProvider.getHashParam(LoggerProvider.rootLoggerName);
     let logLevel: LogLevel = LoggerProvider.defaultRootLogLevel;
 
     if (!!logLevelParam) {
@@ -58,27 +58,27 @@ export default class LoggerProvider {
    * @private
    */
   static toLogLevel(nameOrSwitch: string | boolean): LogLevel {
-    if (typeof nameOrSwitch === 'boolean') {
+    if (typeof nameOrSwitch === "boolean") {
       return nameOrSwitch ? LoggerProvider.defaultLogLevel : LogLevel.NONE;
     }
     switch ((<string>nameOrSwitch).toLowerCase()) {
-      case 'verbose': {
+      case "verbose": {
         // Fallback for older CKEditor versions released with CoreMedia CMS.
         return LogLevel.DEBUG;
       }
-      case 'none': {
+      case "none": {
         return LogLevel.NONE;
       }
-      case 'debug': {
+      case "debug": {
         return LogLevel.DEBUG;
       }
-      case 'info': {
+      case "info": {
         return LogLevel.INFO;
       }
-      case 'warn': {
+      case "warn": {
         return LogLevel.WARN;
       }
-      case 'error': {
+      case "error": {
         return LogLevel.ERROR;
       }
       default: {
