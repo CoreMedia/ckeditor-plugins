@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.0",
+    "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
@@ -28,8 +28,10 @@
     "@babel/plugin-transform-computed-properties": "^7.10.4",
     "@babel/plugin-transform-parameters": "^7.10.5",
     "@babel/plugin-transform-shorthand-properties": "^7.10.4",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-typescript": "^7.10.4",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-typescript": "^7.12.7",
+    "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.1",
     "@ckeditor/ckeditor5-dev-tests": "^23.6.1",
     "@ckeditor/ckeditor5-editor-classic": "^23.1.0",
     "@ckeditor/ckeditor5-essentials": "^23.1.0",
@@ -50,17 +52,19 @@
     "@types/ckeditor__ckeditor5-engine": "1.0.0",
     "@types/ckeditor__ckeditor5-paste-from-office": "1.0.0",
     "@types/ckeditor__ckeditor5-utils": "1.0.0",
+    "@types/jest": "^26.0.15",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
     "eslint": "^7.13.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "jest": "^26.6.3"
   },
   "scripts": {
     "buildwp": "webpack --mode production",
     "build": "tsc",
-    "test": "exit 0",
+    "test": "jest",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""
   }
