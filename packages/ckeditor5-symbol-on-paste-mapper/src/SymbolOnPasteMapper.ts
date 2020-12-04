@@ -60,6 +60,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     }
   }
 
+  // noinspection JSUnusedLocalSymbols
   private static handleClipboardInputTransformationEvent(eventInfo: any, data: ClipboardEventData): void {
     const pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);
     const eventContent: DocumentFragment = data.content;
@@ -122,7 +123,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     const children: Iterable<Node> = element.getChildren();
     for (const child of children) {
       if (child instanceof Text) {
-        return child as Text;
+        return child;
       }
       if (child instanceof Element) {
         return this.findTextElement(child);
