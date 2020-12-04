@@ -15,8 +15,6 @@ import FontMapperPluginConfig from "./FontMapperPluginConfig";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string = "SymbolOnPasteMapper";
-  // TODO[cke] Would be great adding context information (editor/sourceElement-id or similar)
-  //    to get the actual editor we write log entries for.
   private readonly logger: Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
 
   private static readonly styleNameFontFamily = "font-family";
