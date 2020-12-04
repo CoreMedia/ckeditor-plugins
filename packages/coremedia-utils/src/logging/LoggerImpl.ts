@@ -51,7 +51,7 @@ export default class LoggerImpl implements Logger {
   }
 
   isEnabled(): boolean {
-    return this.logLevel === LogLevel.NONE;
+    return this.logLevel !== LogLevel.NONE;
   }
 
   log(...data: any[]): void {

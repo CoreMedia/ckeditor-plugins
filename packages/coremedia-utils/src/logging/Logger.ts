@@ -66,7 +66,8 @@ export default interface Logger {
   isEnabled(): boolean;
 
   /**
-   * Logs the given data at if logging is enabled.
+   * Logs the given data at if logging is enabled. Thus, unless the log level
+   * is set to <em>none</em>, this will be logged.
    *
    * @param data data to log, such as a message and some objects.
    */
