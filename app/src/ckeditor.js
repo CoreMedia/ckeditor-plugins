@@ -21,6 +21,17 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/dist/SymbolOnPasteMapper.js';
 
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const inspectorFlag = 'inspector';
+const wantsInspector = urlParams.has(inspectorFlag) ? 'false' !== urlParams.get(inspectorFlag) : false;
+const inspectorToggle = document.getElementById(inspectorFlag);
+
+if (wantsInspector) {
+  inspectorToggle.setAttribute('href', '?inspector=false');
+  inspectorToggle.textContent = 'Close Inspector';
+}
+
 ClassicEditor.create(document.querySelector( '.editor' ), {
   licenseKey: '',
   placeholder: 'Type your text here...',
@@ -76,7 +87,9 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
   },
   language: 'en'
 }).then(editor => {
-  CKEditorInspector.attach( editor );
+  if (wantsInspector) {
+    CKEditorInspector.attach( editor );
+  }
 }).catch( error => {
   console.error( error );
 });
