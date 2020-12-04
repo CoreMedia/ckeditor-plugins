@@ -1,13 +1,42 @@
 import Logger from "./Logger";
 import LoggerImpl from "./LoggerImpl";
-import { LogLevel } from "./LogLevel";
+import {LogLevel} from "./LogLevel";
 
+/**
+ * <p>
+ * Used to retrieve a named logger instance.
+ * </p>
+ * <p>
+ * Loggers can be triggered by hash-parameters. To control the log level of
+ * all loggers (also known as root logger), you may use the hash parameter
+ * <code>ckdebug</code> and for more verbose output <code>ckdebug=verbose</code>.
+ * In addition to that, you can control the output of any logger using
+ * <code>loggerName=level</code>.
+ * </p>
+ * <p><strong>Example:</strong></p>
+ * <pre>
+ * private readonly logger: Logger =
+ *   LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
+ * </pre>
+ */
 export default class LoggerProvider {
+  private static readonly _verbose = "verbose";
+  private static readonly _none = "none";
+  private static readonly _debug = "debug";
+  private static readonly _info = "info";
+  private static readonly _warn = "warn";
+  private static readonly _error = "error";
+
   static defaultLogLevel: LogLevel = LogLevel.INFO;
   static defaultRootLogLevel: LogLevel = LogLevel.WARN;
   static rootLoggerName = "ckdebug";
   static hashParamRegExp = /([^=]*)=(.*)/;
 
+  /**
+   * Retrieve logger for the given name.
+   * @param name
+   * @param context
+   */
   static getLogger(name: string | undefined, ...context: any[]): Logger {
     const contextName: string = context.join(".");
     const loggerName: string | undefined = !!name && !!contextName ? contextName + ":" + name : name;
@@ -54,31 +83,31 @@ export default class LoggerProvider {
    * </p>
    *
    * @param nameOrSwitch log-level name
-   * @return the corresponding level
+   * @returns the corresponding level
    * @private
    */
   static toLogLevel(nameOrSwitch: string | boolean): LogLevel {
     if (typeof nameOrSwitch === "boolean") {
       return nameOrSwitch ? LoggerProvider.defaultLogLevel : LogLevel.NONE;
     }
-    switch ((<string>nameOrSwitch).toLowerCase()) {
-      case "verbose": {
+    switch (nameOrSwitch.toLowerCase()) {
+      case this._verbose: {
         // Fallback for older CKEditor versions released with CoreMedia CMS.
         return LogLevel.DEBUG;
       }
-      case "none": {
+      case this._none: {
         return LogLevel.NONE;
       }
-      case "debug": {
+      case this._debug: {
         return LogLevel.DEBUG;
       }
-      case "info": {
+      case this._info: {
         return LogLevel.INFO;
       }
-      case "warn": {
+      case this._warn: {
         return LogLevel.WARN;
       }
-      case "error": {
+      case this._error: {
         return LogLevel.ERROR;
       }
       default: {

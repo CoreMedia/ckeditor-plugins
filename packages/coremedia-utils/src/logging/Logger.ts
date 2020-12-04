@@ -1,7 +1,17 @@
 /**
  * Used to log at given levels.
  */
+import {LogLevel} from "./LogLevel";
+
 export default interface Logger {
+  /**
+   * Check if logging of given level or below is enabled.
+   *
+   * @param logLevel level to validate
+   * @returns <code>true</code>, if logging at given level (or below) is enabled; <code>false</code> otherwise.
+   */
+  isEnabled(logLevel: LogLevel): boolean;
+
   /**
    * Check, if debug logging is enabled.
    *
@@ -63,7 +73,7 @@ export default interface Logger {
    *
    * @returns <code>true</code>, if logging is enabled; <code>false</code> otherwise.
    */
-  isEnabled(): boolean;
+  isAnyEnabled(): boolean;
 
   /**
    * Logs the given data at if logging is enabled. Thus, unless the log level

@@ -1,4 +1,4 @@
-import { LogLevel } from "./LogLevel";
+import {LogLevel} from "./LogLevel";
 import Logger from "./Logger";
 
 export default class LoggerImpl implements Logger {
@@ -10,51 +10,56 @@ export default class LoggerImpl implements Logger {
     this.logLevel = logLevel;
   }
 
-  private addContext(data: any[]): any[] {
-    if (name === undefined) {
-      return data;
-    }
-    const contextualData: any[] = [this.name + ":"];
-    return contextualData.concat(data);
+  private out(logFn: (...data: any[]) => void, data: any[]): void {
+    const level = logFn.name.toUpperCase();
+    const contextPrefix = !!this.name ? ` ${this.name}:` : '';
+    const prefix = `[${level}]${contextPrefix}`
+    const prefixData: any[] = [prefix];
+    const prefixedData: any[] = prefixData.concat(data);
+    logFn.apply(null, prefixedData);
+  }
+
+  isEnabled(logLevel: LogLevel): boolean {
+    return this.logLevel <= logLevel;
   }
 
   isDebugEnabled(): boolean {
-    return this.logLevel <= LogLevel.DEBUG;
+    return this.isEnabled(LogLevel.DEBUG);
   }
 
   debug(...data: any[]): void {
-    this.isDebugEnabled() && console.debug(this.addContext(data));
+    this.isDebugEnabled() && this.out(console.debug, data);
   }
 
   isInfoEnabled(): boolean {
-    return this.logLevel <= LogLevel.INFO;
+    return this.isEnabled(LogLevel.INFO);
   }
 
   info(...data: any[]): void {
-    this.isInfoEnabled() && console.info(this.addContext(data));
+    this.isInfoEnabled() && this.out(console.info, data);
   }
 
   isWarnEnabled(): boolean {
-    return this.logLevel <= LogLevel.WARN;
+    return this.isEnabled(LogLevel.WARN);
   }
 
   warn(...data: any[]): void {
-    this.isWarnEnabled() && console.warn(this.addContext(data));
+    this.isWarnEnabled() && this.out(console.warn, data);
   }
 
   isErrorEnabled(): boolean {
-    return this.logLevel <= LogLevel.ERROR;
+    return this.isEnabled(LogLevel.ERROR);
   }
 
   error(...data: any[]): void {
-    this.isErrorEnabled() && console.error(this.addContext(data));
+    this.isErrorEnabled() && this.out(console.error, data);
   }
 
-  isEnabled(): boolean {
+  isAnyEnabled(): boolean {
     return this.logLevel !== LogLevel.NONE;
   }
 
   log(...data: any[]): void {
-    this.isEnabled() && console.log(this.addContext(data));
+    this.isAnyEnabled() && this.out(console.log, data);
   }
 }
