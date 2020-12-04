@@ -15,8 +15,8 @@ export default class SymbolFontMapper implements FontMapper {
     [39, "&#x22d;"],
     [45, "&minus;"],
     [60, "&lt;"],
-    [62, "&g;"],
-    [64, "&ong;"],
+    [62, "&gt;"],
+    [64, "&cong;"],
 
     // Alphabetic (Uppercase)
     [65, "&Alpha;"],
