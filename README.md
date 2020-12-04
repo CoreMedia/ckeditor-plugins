@@ -27,19 +27,37 @@ You will find an editor, which is ready to test in [app/sample](app/sample/index
 yarn test
 ```
 
-If this fails on Windows, please have a look at the Troubleshooting section.
+Per definition, this only runs unit tests based on JEST.
+
+```
+yarn test:integration
+```
+
+This is a sketch, how we may ues CKEditor tooling for integration tests with
+CKEditor. These tests require to start a browser.
 
 To run tests with headless Chrome use:
 
 ```
-yarn test --browsers=ChromeHeadless
+yarn test:integration --browsers=ChromeHeadless
 ```
 
 To generate a coverage report:
 
 ```
-yarn test --coverage
+yarn test:integration --coverage
 ```
+
+```
+yarn test:manual
+```
+
+This will run one example of a manual test, as CKEditor does it. If we want
+to continue with this, we would have to find a way to style the editor
+appropriately (i.e., to apply the lark theme).
+
+Current suggestion is, to skip integration and guided manual tests and instead
+completely rely on manual tests for each release, based in the example application.
 
 ### Add Dependency
 
@@ -51,34 +69,6 @@ yarn add the-dependency
 
 ```text
 yarn add the-development-dependency --dev
-```
-
-### Troubleshooting
-
-#### SyntaxError on Windows Running yarn test
-
-```text
-basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-          ^^^^^^^
-
-SyntaxError: missing ) after argument list
-```
-
-This seems to be related to:
-
-* [Unable to run tests in development Environment on Windows. · Issue #686 · ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5/issues/686)
-
-Although it looks as if it should be fixed (in 2017) still observing this issue.
-Workaround for now: Call tests directly e.g. via:
-
-```
-./node_modules/.bin/ckeditor5-dev-tests.cmd --files=symbol-on-paste-mapper
-```
-
-Or to use headless Chrome:
-
-```text
-./node_modules/.bin/ckeditor5-dev-tests.cmd --files=symbol-on-paste-mapper --browsers=ChromeHeadless
 ```
 
 ## CKEditor Research
