@@ -1,0 +1,20 @@
+{
+  "name": "@coremedia/ckeditor5-coremedia-richtext-1-dataprocessor",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "buildwp": "webpack --mode production",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint --fix \"src/**\"",
+    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@ckeditor/ckeditor5-engine": "^24.0.0",
+    "@coremedia/coremedia-utils": "1.0.0"
+  }
+}

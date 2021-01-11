@@ -7,6 +7,9 @@ an XML format, which provides a subset of XHTML features.
 It grants conversion of CoreMedia RichText 1.0 to the CKEditor data model
 as well as conversion from CKEditor data model to CoreMedia RichText.
 
+To perform this transformation, this plugin provides a
+[CKEditor 5 DataProcessor](https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_dataprocessor_dataprocessor-DataProcessor.html).
+
 ## Limitations
 
 As CoreMedia RichText 1.0 only provides a subset of HTML elements and attributes
@@ -35,3 +38,7 @@ Note, that for any transformation, you have to adapt the CoreMedia delivery as
 well, so that when delivering CoreMedia RichText 1.0 within your webpage, the
 color attribute is either re-transformed to a style attribute, or, possibly
 better for a consistent site appearance, added as CSS style class.
+
+## See Also
+
+* [ckeditor5/gfmdataprocessor.js at master · ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5/blob/master/packages/ckeditor5-markdown-gfm/src/gfmdataprocessor.js)
