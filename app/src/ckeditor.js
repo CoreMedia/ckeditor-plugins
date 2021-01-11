@@ -21,7 +21,7 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/dist/SymbolOnPasteMapper.js';
-import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext-1-dataprocessor/dist/CMRichText.js';
+import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/dist/CoreMediaRichText.js';
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);

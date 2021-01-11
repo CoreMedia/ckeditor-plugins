@@ -26,7 +26,7 @@
     "@ckeditor/ckeditor5-theme-lark": "^24.0.0",
     "@ckeditor/ckeditor5-ui": "^24.0.0",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.0",
-    "@coremedia/ckeditor5-coremedia-richtext-1-dataprocessor": "1.0.0"
+    "@coremedia/ckeditor5-coremedia-richtext": "1.0.0"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^24.0.0",

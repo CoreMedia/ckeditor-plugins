@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-richtext-1-dataprocessor",
+  "name": "@coremedia/ckeditor5-coremedia-richtext",
   "version": "1.0.0",
   "private": true,
   "engines": {

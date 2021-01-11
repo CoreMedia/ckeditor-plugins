@@ -1,9 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src', 'CMRichTextDataProcessor.ts'),
+  entry: path.resolve(__dirname, 'src', 'CoreMediaRichText.ts'),
   output: {
-    filename: 'cm-richtext-dataprocessor.js',
+    filename: 'cormedia-richtext.js',
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {

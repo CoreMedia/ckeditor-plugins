@@ -7,10 +7,10 @@ import html2RichText from "./html2richtext/html2richtext";
 import richText2Html from "./richtext2html/richtext2html";
 import Logger from "@coremedia/coremedia-utils/dist/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/dist/logging/LoggerProvider";
-import CMRichText from "./CMRichText";
+import CoreMediaRichText from "./CoreMediaRichText";
 
-export default class CMRichTextDataProcessor implements DataProcessor {
-  private readonly logger: Logger = LoggerProvider.getLogger(CMRichText.pluginName);
+export default class RichTextDataProcessor implements DataProcessor {
+  private readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
   private delegate: HtmlDataProcessor;
 
   constructor(document: Document) {
