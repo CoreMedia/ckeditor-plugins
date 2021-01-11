@@ -41,6 +41,6 @@
     "prettier": "yarn workspaces run prettier"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-utils": "latest"
+    "@ckeditor/ckeditor5-utils": "^24.0.0"
   }
 }
