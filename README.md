@@ -13,6 +13,12 @@ evaluation process.
 yarn bootstrap
 ```
 
+### Update Dependencies
+
+```
+yarn upgrade
+```
+
 ### Build Artifacts
 
 ```
