@@ -10,7 +10,8 @@
     "build": "tsc",
     "test": "jest",
     "lint": "eslint --fix \"src/**\"",
-    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\""
+    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
+    "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {},
   "dependencies": {

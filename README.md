@@ -77,6 +77,16 @@ yarn add the-dependency
 yarn add the-development-dependency --dev
 ```
 
+### Upgrade All Dependencies
+
+To update all dependencies in `package.json` to their latest version:
+
+```text
+yarn global add npm-check-updates
+yarn npm-check-updates
+yarn install
+```
+
 ## CKEditor Research
 
 ### Logging
