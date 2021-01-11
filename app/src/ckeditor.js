@@ -1,4 +1,5 @@
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment.js';
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave.js';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
@@ -38,6 +39,7 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
   placeholder: 'Type your text here...',
   plugins: [
     Alignment,
+    Autosave,
     BlockQuote,
     Bold,
     Essentials,
@@ -87,7 +89,13 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
       'outdent',
     ]
   },
-  language: 'en'
+  language: 'en',
+  autosave: {
+    waitingTime: 5000, // in ms
+    save(editor) {
+      return saveData("autosave", editor.getData());
+    }
+  },
 }).then(editor => {
   if (wantsInspector) {
     CKEditorInspector.attach( editor );
@@ -95,3 +103,7 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
 }).catch( error => {
   console.error( error );
 });
+
+function saveData(source, data) {
+  console.log("Saving data triggered by " + source, {data: data});
+}

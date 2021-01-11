@@ -883,6 +883,15 @@
     "@ckeditor/ckeditor5-core" "^24.0.0"
     "@ckeditor/ckeditor5-ui" "^24.0.0"
 
+"@ckeditor/ckeditor5-autosave@^24.0.0":
+  version "24.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-autosave/-/ckeditor5-autosave-24.0.0.tgz#5836b8de82904dbc61fe5e921d09f0eb5b3b0f26"
+  integrity sha512-VASSOlFaRao50F9o27gjN5MdGZW4PtV5av/I641VH3q4FdCK/65RtcD/kdfGX/7piYyoWcWI3cn9nQ2H3SjNCA==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^24.0.0"
+    "@ckeditor/ckeditor5-utils" "^24.0.0"
+    lodash-es "^4.17.15"
+
 "@ckeditor/ckeditor5-basic-styles@^24.0.0":
   version "24.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-basic-styles/-/ckeditor5-basic-styles-24.0.0.tgz#4ec398c3ae832db2ecdaffb0eb8ac2a4bb963293"
