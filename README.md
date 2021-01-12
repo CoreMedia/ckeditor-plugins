@@ -87,6 +87,16 @@ yarn npm-check-updates
 yarn install
 ```
 
+### Upgrade Yarn
+
+To upgrade `yarn` call:
+
+```text
+yarn policies set-version
+```
+
+For more information see: [yarn policies | Yarn](https://classic.yarnpkg.com/en/docs/cli/policies/).
+
 ## CKEditor Research
 
 ### Logging
