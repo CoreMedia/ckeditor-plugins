@@ -1,3 +1,3 @@
-export default function html2RichText(html: unknown): unknown {
+export default function html2RichText(html: string): string {
   return html;
 }

@@ -1,5 +1,6 @@
 import DataProcessor from "./dataprocessor";
 import Document from "../view/document";
+import Node from "../view/node";
 import DocumentFragment from "../view/documentfragment";
 import {MatcherPattern} from "../view/matcher";
 
@@ -11,7 +12,7 @@ export default class HtmlDataProcessor implements DataProcessor {
 
   registerRawContentMatcher(pattern: MatcherPattern): void;
 
-  toData(fragment: DocumentFragment): any;
+  toData(viewFragment: DocumentFragment): string;
 
-  toView(data: any): DocumentFragment;
+  toView(data: string): Node | DocumentFragment | null;
 }
