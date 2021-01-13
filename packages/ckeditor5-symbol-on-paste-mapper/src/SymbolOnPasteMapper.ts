@@ -61,7 +61,7 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   // noinspection JSUnusedLocalSymbols
-  private static handleClipboardInputTransformationEvent(eventInfo: any, data: ClipboardEventData): void {
+  private static handleClipboardInputTransformationEvent(eventInfo: never, data: ClipboardEventData): void {
     const pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);
     const eventContent: DocumentFragment = data.content;
     if (!pastedContent) {
@@ -94,7 +94,7 @@ export default class SymbolOnPasteMapper extends Plugin {
       return null;
     }
 
-    const fontFamilyStyle: string = element.getStyle(SymbolOnPasteMapper.styleNameFontFamily);
+    const fontFamilyStyle: string | undefined = element.getStyle(SymbolOnPasteMapper.styleNameFontFamily);
     const fontMapper: FontMapper | null = FontMapperProvider.getFontMapper(fontFamilyStyle);
     if (!fontMapper) {
       return null;

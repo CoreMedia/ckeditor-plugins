@@ -1,7 +1,10 @@
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 
+/**
+ * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_model-Model.html">Class Model (engine/model/model~Model) - CKEditor 5 API docs</a>
+ */
 export default class Model implements Emitter, Observable {
   on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
 }

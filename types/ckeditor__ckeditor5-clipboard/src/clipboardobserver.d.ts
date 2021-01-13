@@ -6,6 +6,9 @@ import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragme
  */
 export default class ClipboardEventData extends DomEventData {
   readonly dataTransfer: DataTransfer;
+  // TODO[cke] This is not part of the public API (and not even private).
+  //   If required, document, where this property originates from. And:
+  //   Is this really a CK-DocumentFragment? Or is it a standard DocumentFragment?
   content: DocumentFragment;
 }
 

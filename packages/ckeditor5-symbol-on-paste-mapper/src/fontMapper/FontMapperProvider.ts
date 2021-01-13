@@ -4,7 +4,10 @@ import SymbolFontMapper from "./SymbolFontMapper";
 export default class FontMapperProvider {
   static mapper: Array<FontMapper> = [new SymbolFontMapper()];
 
-  static getFontMapper(fontFamilyStyle: string): FontMapper | null {
+  static getFontMapper(fontFamilyStyle: string | undefined): FontMapper | null {
+    if (!fontFamilyStyle) {
+      return null;
+    }
     for (const fontMapper of FontMapperProvider.mapper) {
       if (fontMapper.matches(fontFamilyStyle)) {
         return fontMapper;

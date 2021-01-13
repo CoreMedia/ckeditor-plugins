@@ -3,7 +3,7 @@ import DataController from "@ckeditor/ckeditor5-engine/src/controller/datacontro
 
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin"
 import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import PluginCollection from "../plugincollection";
 import Plugin from "../plugin";
