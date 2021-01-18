@@ -1,15 +1,16 @@
 import LoggerProvider from "../../src/logging/LoggerProvider";
+import "@types/jest";
 
-const mockFunctionName: string = 'MOCKCONSTRUCTOR';
-const loggerName: string = 'loggerName';
-const someMessage: string = "I'm logging stuff";
-const contextPrefix: string = `[${mockFunctionName}] ${loggerName}:`;
+const mockFunctionName = "MOCKCONSTRUCTOR";
+const loggerName = "loggerName";
+const someMessage = "I'm logging stuff";
+const contextPrefix = `[${mockFunctionName}] ${loggerName}:`;
 
 beforeEach(() => {
   setupConsoleMocks();
 });
 
-test('should log nothing when log level is none', () => {
+test("should log nothing when log level is none", () => {
   window.location.hash = `#${loggerName}=none`;
 
   logToAll();
@@ -21,7 +22,7 @@ test('should log nothing when log level is none', () => {
   expect(console.log).toHaveBeenCalledTimes(0);
 });
 
-test('should log everything when log level is debug', () => {
+test("should log everything when log level is debug", () => {
   window.location.hash = `#${loggerName}=debug`;
 
   logToAll();
@@ -33,7 +34,7 @@ test('should log everything when log level is debug', () => {
   expect(console.log).toHaveBeenCalledTimes(1);
 });
 
-test('should log everything above and including level info when log level is info', () => {
+test("should log everything above and including level info when log level is info", () => {
   window.location.hash = `#${loggerName}=info`;
 
   logToAll();
@@ -45,7 +46,7 @@ test('should log everything above and including level info when log level is inf
   expect(console.log).toHaveBeenCalledTimes(1);
 });
 
-test('should default to info logging for no log level provided', () => {
+test("should default to info logging for no log level provided", () => {
   window.location.hash = `#${loggerName}`;
 
   logToAll();
@@ -57,7 +58,7 @@ test('should default to info logging for no log level provided', () => {
   expect(console.log).toHaveBeenCalledTimes(1);
 });
 
-test('should log everything above and including level warn when log level is warn', () => {
+test("should log everything above and including level warn when log level is warn", () => {
   window.location.hash = `#${loggerName}=warn`;
 
   logToAll();
@@ -69,7 +70,7 @@ test('should log everything above and including level warn when log level is war
   expect(console.log).toHaveBeenCalledTimes(1);
 });
 
-test('should log everything above and including level error when log level is error', () => {
+test("should log everything above and including level error when log level is error", () => {
   window.location.hash = `#${loggerName}=error`;
 
   logToAll();
@@ -81,7 +82,7 @@ test('should log everything above and including level error when log level is er
   expect(console.log).toHaveBeenCalledTimes(1);
 });
 
-test('should log on debug when log level is debug', () => {
+test("should log on debug when log level is debug", () => {
   window.location.hash = `#${loggerName}=debug`;
 
   LoggerProvider.getLogger("loggerName").debug(someMessage);
@@ -89,7 +90,7 @@ test('should log on debug when log level is debug', () => {
   expect(console.debug).toHaveBeenCalledWith(contextPrefix, someMessage);
 });
 
-test('should log on info when log level is info', () => {
+test("should log on info when log level is info", () => {
   window.location.hash = `#${loggerName}=info`;
 
   LoggerProvider.getLogger("loggerName").info(someMessage);
@@ -97,7 +98,7 @@ test('should log on info when log level is info', () => {
   expect(console.info).toHaveBeenCalledWith(contextPrefix, someMessage);
 });
 
-test('should log on warn when log level is warn', () => {
+test("should log on warn when log level is warn", () => {
   window.location.hash = `#${loggerName}=warn`;
 
   LoggerProvider.getLogger("loggerName").warn(someMessage);
@@ -105,7 +106,7 @@ test('should log on warn when log level is warn', () => {
   expect(console.warn).toHaveBeenCalledWith(contextPrefix, someMessage);
 });
 
-test('should log on error when log level is error', () => {
+test("should log on error when log level is error", () => {
   window.location.hash = `#${loggerName}=error`;
 
   LoggerProvider.getLogger("loggerName").error(someMessage);
@@ -113,7 +114,7 @@ test('should log on error when log level is error', () => {
   expect(console.error).toHaveBeenCalledWith(contextPrefix, someMessage);
 });
 
-test('should log on debug when root logger is on debug', () => {
+test("should log on debug when root logger is on debug", () => {
   window.location.hash = "#ckdebug=debug";
 
   LoggerProvider.getLogger("loggerName").debug(someMessage);
@@ -121,7 +122,7 @@ test('should log on debug when root logger is on debug', () => {
   expect(console.debug).toHaveBeenCalledTimes(1);
 });
 
-test('Backwards compatibility: Should accept verbose as alias for debug', () => {
+test("Backwards compatibility: Should accept verbose as alias for debug", () => {
   window.location.hash = "#ckdebug=verbose";
 
   LoggerProvider.getLogger("loggerName").debug(someMessage);
@@ -129,7 +130,7 @@ test('Backwards compatibility: Should accept verbose as alias for debug', () => 
   expect(console.debug).toHaveBeenCalledTimes(1);
 });
 
-test('should log on all but debug when root logger is enabled without explicit level', () => {
+test("should log on all but debug when root logger is enabled without explicit level", () => {
   window.location.hash = "#ckdebug";
 
   logToAll();
@@ -141,7 +142,7 @@ test('should log on all but debug when root logger is enabled without explicit l
   expect(console.log).toHaveBeenCalledTimes(1);
 });
 
-test('should log on logger name level when logger name and ckdebug are specified', () => {
+test("should log on logger name level when logger name and ckdebug are specified", () => {
   window.location.hash = "#ckdebug=debug&loggerName=info";
 
   LoggerProvider.getLogger("loggerName").info(someMessage);
