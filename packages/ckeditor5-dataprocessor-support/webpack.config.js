@@ -1,7 +1,7 @@
 import path from "path";
 
 module.exports = {
-  entry: path.resolve(__dirname, "src", "index.ts"),
+  entry: path.resolve(__dirname, "src", "dataprocessor/index.ts"),
   output: {
     filename: "dataprocessor-support.js",
     path: path.resolve(__dirname, "dist"),
