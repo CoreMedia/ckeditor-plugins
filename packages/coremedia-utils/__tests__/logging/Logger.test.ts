@@ -1,5 +1,6 @@
 import LoggerProvider from "../../src/logging/LoggerProvider";
-import "@types/jest";
+// TODO[cke] Works in IDE, but not from console build. What's wrong here?
+//import "@types/jest";
 
 const mockFunctionName = "MOCKCONSTRUCTOR";
 const loggerName = "loggerName";
