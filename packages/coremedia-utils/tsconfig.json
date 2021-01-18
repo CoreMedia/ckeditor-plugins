@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
     "typeRoots": [
       "../../types/*"
     ],
@@ -26,8 +25,11 @@
       ]
     }
   },
+  "include": [
+    "src/**/*.ts",
+    "__tests__/**/*.test.ts"
+  ],
   "exclude": [
-    "__tests__/**/*",
     "dist",
     "node_modules"
   ]

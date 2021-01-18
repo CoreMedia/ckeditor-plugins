@@ -11,7 +11,6 @@
       "ES2015.Promise"
     ],
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
@@ -36,8 +35,11 @@
       ]
     }
   },
+  "include": [
+    "src/**/*.ts",
+    "__tests__/**/*.test.ts"
+  ],
   "exclude": [
-    "__tests__/**/*",
     "dist",
     "node_modules"
   ]

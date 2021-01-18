@@ -63,7 +63,7 @@
   },
   "scripts": {
     "buildwp": "webpack --mode production",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
