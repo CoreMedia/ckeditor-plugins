@@ -28,6 +28,15 @@ export default class MutableElement {
   private _attributes: Attributes = {};
 
   /**
+   * Constructor.
+   *
+   * @param delegate the original element to wrap
+   */
+  constructor(delegate: Element) {
+    this._delegate = delegate;
+  }
+
+  /**
    * Persists the changes, as requested.
    *
    * @return the original element, the replaced element, or the first element of the children, attached to the original parent; `null` when replaced by children, but no children existed.
@@ -103,15 +112,6 @@ export default class MutableElement {
       parentElement.removeChild(this._delegate);
     }
     return newElement;
-  }
-
-  /**
-   * Constructor.
-   *
-   * @param delegate the original element to wrap
-   */
-  constructor(delegate: Element) {
-    this._delegate = delegate;
   }
 
   /**
