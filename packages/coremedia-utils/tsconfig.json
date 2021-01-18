@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "outDir": "./dist",
     "typeRoots": [
-      "../../types/*"
+      "../../types/*",
+      "node_modules/@types"
     ],
     // TODO[cke] Why do we need to add this in a module, not related to CKEditor?
     "paths": {

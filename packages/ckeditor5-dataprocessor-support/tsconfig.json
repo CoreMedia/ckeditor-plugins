@@ -11,12 +11,10 @@
       "ES2015.Promise"
     ],
     "outDir": "./dist",
-    "strict": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "removeComments": true,
-    "newLine": "LF",
-    "typeRoots": ["../../types/*"],
+    "typeRoots": [
+      "../../types/*",
+      "node_modules/@types"
+    ],
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
