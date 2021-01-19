@@ -39,15 +39,17 @@ export default class MutableElement {
   /**
    * Persists the changes, as requested.
    *
-   * @return the original element, the replaced element, or the first element of the children, attached to the original parent; `null` when replaced by children, but no children existed.
+   * @return the original element, the replaced element, or the first node of
+   * the children, attached to the original parent; `null` when replaced by
+   * children, but no children existed.
    */
-  persist(): Element | null {
+  persist(): Element | ChildNode | null {
     const newName = this._name;
-    if (newName === undefined) {
-      return this.persistAttributes();
-    }
     if (newName === null) {
       return this.persistDeletion();
+    }
+    if (newName === undefined || newName.toLowerCase() === this._delegate.tagName.toLowerCase()) {
+      return this.persistAttributes();
     }
     if (this.replaceByChildren) {
       return this.persistReplaceByChildren();
@@ -75,22 +77,20 @@ export default class MutableElement {
     return null;
   }
 
-  private persistReplaceByChildren(): Element | null {
+  private persistReplaceByChildren(): ChildNode | null {
     const parentElement = this._delegate.parentElement;
     if (!parentElement) {
       // Cannot apply. Assume, that the element shall just vanish.
       return null;
     }
-    const childrenToMove = this._delegate.children;
-    let firstChild: Element | null = null;
-    for (let i = 0; i < childrenToMove.length; i++) {
-      const child = childrenToMove.item(i);
-      if (!!child) {
-        // Will also remove it from original parent.
-        parentElement.insertBefore(child, this._delegate);
-        if (!firstChild) {
-          firstChild = child;
-        }
+    const childrenToMove = this._delegate.childNodes;
+    let firstChild: ChildNode | null = null;
+    while (childrenToMove.length > 0) {
+      const child = childrenToMove[0];
+      // Will also remove it from original parent.
+      parentElement.insertBefore(child, this._delegate);
+      if (!firstChild) {
+        firstChild = child;
       }
     }
     parentElement.removeChild(this._delegate);
@@ -99,6 +99,7 @@ export default class MutableElement {
 
   private persistReplaceBy(newName: string): Element {
     const newElement = this._delegate.ownerDocument.createElement(newName);
+
     const attributesToCopy = this.attributes;
     Object.keys(attributesToCopy).forEach((key: string) => {
       const value = attributesToCopy[key];
@@ -106,6 +107,13 @@ export default class MutableElement {
         newElement.setAttribute(key, value);
       }
     });
+
+    const childrenToMove = this._delegate.childNodes;
+    while (childrenToMove.length > 0) {
+      // Will also remove it from original parent.
+      newElement.append(childrenToMove[0]);
+    }
+
     const parentElement = this._delegate.parentElement;
     if (!!parentElement) {
       parentElement.insertBefore(newElement, this._delegate);
@@ -171,20 +179,6 @@ export default class MutableElement {
    */
   set remove(b: boolean) {
     this._name = b ? null : undefined;
-  }
-
-  /**
-   * Access parent element.
-   */
-  get parent(): HTMLElement | null {
-    return this._delegate.parentElement;
-  }
-
-  /**
-   * Access children of element.
-   */
-  get children(): HTMLCollection {
-    return this._delegate.children;
   }
 
   /**
