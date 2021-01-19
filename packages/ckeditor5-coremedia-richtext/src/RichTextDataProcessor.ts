@@ -5,9 +5,9 @@ import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataproc
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import html2RichText from "./html2richtext/html2richtext";
 import richText2Html from "./richtext2html/richtext2html";
-import Logger from "@coremedia/coremedia-utils/dist/logging/Logger";
-import LoggerProvider from "@coremedia/coremedia-utils/dist/logging/LoggerProvider";
-import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/dist/dataprocessor/MutableElement";
+import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/src/logging/LoggerProvider";
+import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/MutableElement";
 import CoreMediaRichText from "./CoreMediaRichText";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
