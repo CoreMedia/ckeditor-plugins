@@ -26,8 +26,10 @@
   "private": true,
   "workspaces": [
     "types/*",
-    "packages/ckeditor5-*",
-    "packages/coremedia-*",
+    "packages/coremedia-utils",
+    "packages/ckeditor5-dataprocessor-support",
+    "packages/ckeditor5-symbol-on-paste-mapper",
+    "packages/ckeditor5-coremedia-richtext",
     "app/"
   ],
   "scripts": {
