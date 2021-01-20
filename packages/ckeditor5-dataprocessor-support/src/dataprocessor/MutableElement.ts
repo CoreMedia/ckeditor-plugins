@@ -49,18 +49,20 @@ export default class MutableElement {
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
     for (const rule of rules) {
       if (!!rule) {
+        const result = rule(this);
         // false positive inspection: We need to distinguish void from false!
         // noinspection PointlessBooleanExpressionJS
-        if (rule(this) === false) {
+        if (result === false) {
           this.remove = true;
         }
-      }
-      const continueOrContinueWith = this.persist();
-      if (continueOrContinueWith instanceof Node) {
-        return continueOrContinueWith;
-      }
-      if (!continueOrContinueWith) {
-        break;
+
+        const continueOrContinueWith = this.persist();
+        if (continueOrContinueWith instanceof Node) {
+          return continueOrContinueWith;
+        }
+        if (!continueOrContinueWith) {
+          break;
+        }
       }
     }
     return null;
@@ -99,13 +101,13 @@ export default class MutableElement {
   }
 
   private persistDeletion(): false {
-    this._delegate.parentElement?.removeChild(this._delegate);
+    this._delegate.parentNode?.removeChild(this._delegate);
     return false;
   }
 
   private persistReplaceByChildren(): ChildNode | false {
-    const parentElement = this._delegate.parentElement;
-    if (!parentElement) {
+    const parentNode = this._delegate.parentNode;
+    if (!parentNode) {
       // Cannot apply. Assume, that the element shall just vanish.
       return false;
     }
@@ -114,12 +116,12 @@ export default class MutableElement {
     while (childrenToMove.length > 0) {
       const child = childrenToMove[0];
       // Will also remove it from original parent.
-      parentElement.insertBefore(child, this._delegate);
+      parentNode.insertBefore(child, this._delegate);
       if (!firstChild) {
         firstChild = child;
       }
     }
-    parentElement.removeChild(this._delegate);
+    parentNode.removeChild(this._delegate);
     return firstChild || false;
   }
 
@@ -140,10 +142,10 @@ export default class MutableElement {
       newElement.append(childrenToMove[0]);
     }
 
-    const parentElement = this._delegate.parentElement;
-    if (!!parentElement) {
-      parentElement.insertBefore(newElement, this._delegate);
-      parentElement.removeChild(this._delegate);
+    const parentNode = this._delegate.parentNode;
+    if (!!parentNode) {
+      parentNode.insertBefore(newElement, this._delegate);
+      parentNode.removeChild(this._delegate);
     }
     return newElement;
   }

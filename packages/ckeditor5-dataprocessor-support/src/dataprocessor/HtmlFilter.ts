@@ -65,7 +65,7 @@ export default class HtmlFilter {
 
   private applyToChildNodes(parent: Node, startFrom?: Node): void {
     const childNodes: ChildNode[] = Array.from(parent.childNodes);
-    let doFilter = !!startFrom;
+    let doFilter = !startFrom;
     for (const childNode of childNodes) {
       doFilter = doFilter || childNode.isSameNode(startFrom || null);
       if (doFilter) {
