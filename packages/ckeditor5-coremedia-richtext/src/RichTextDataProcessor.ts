@@ -7,21 +7,14 @@ import html2RichText from "./html2richtext/html2richtext";
 import richText2Html from "./richtext2html/richtext2html";
 import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/src/logging/LoggerProvider";
-import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/MutableElement";
+import MutableElement, {
+  ElementFilterResult,
+} from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/MutableElement";
 import CoreMediaRichText from "./CoreMediaRichText";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import RichTextHtmlWriter from "./RichTextHtmlWriter";
-
-type ElementFilterFunctionResult = MutableElement | Element | boolean;
-type ElementFilterFunction = (el: MutableElement) => ElementFilterFunctionResult;
-type TextFilterFunctionResult = Text | string | boolean;
-type TextFilterFunction = (text: string | null, textNode: Text) => TextFilterFunctionResult;
-
-interface FilterRuleSet {
-  elements?: { [key: string]: ElementFilterFunction };
-  text?: TextFilterFunction;
-}
+import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/HtmlFilter";
 
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
@@ -52,22 +45,11 @@ export default class RichTextDataProcessor implements DataProcessor {
    */
   private readonly toDataFilterRules: FilterRuleSet = {
     elements: {
-      h2: function (el: MutableElement): ElementFilterFunctionResult {
-        return false;
+      h2: (): ElementFilterResult => false,
+      a: (el: MutableElement): ElementFilterResult => {
+        el.attributes["style"] = "great";
+        delete el.attributes["href"];
       },
-      a: function (el: MutableElement): ElementFilterFunctionResult {
-        const attributes = el.attributes;
-
-        attributes["style"] = "great";
-        delete attributes["href"];
-
-        // TODO[cke] Do we want to enforce return value? Would be different to
-        //  original behavior. Possibly have return type void as alternative?
-        return el;
-      },
-    },
-    text: function (text: string | null, textNode: Text): TextFilterFunctionResult {
-      return false;
     },
   };
 
@@ -90,46 +72,8 @@ export default class RichTextDataProcessor implements DataProcessor {
       dom: domFragment,
     });
 
-    const nodeIterator: NodeIterator = document.createNodeIterator(
-      domFragment,
-      NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT
-    );
-
-    let currentNode: Node | null;
-    while ((currentNode = nodeIterator.nextNode())) {
-      console.log("currentNode", currentNode);
-      if (currentNode instanceof Element && this.toDataFilterRules.elements) {
-        const filterRule: ElementFilterFunction = this.toDataFilterRules.elements[currentNode.nodeName.toLowerCase()];
-        if (!!filterRule) {
-          const result: ElementFilterFunctionResult = filterRule(new MutableElement(currentNode));
-          if (!result) {
-            const parentNode: (Node & ParentNode) | null = currentNode.parentNode;
-            if (!!parentNode) {
-              parentNode.removeChild(currentNode);
-            }
-          } else {
-            if (result instanceof Element) {
-              const parentNode: (Node & ParentNode) | null = currentNode.parentNode;
-              if (!!parentNode) {
-                parentNode.insertBefore(result, currentNode);
-                parentNode.removeChild(currentNode);
-              }
-            } else if (result instanceof MutableElement) {
-              result.persist();
-            }
-          }
-        }
-      } else if (currentNode instanceof Text && this.toDataFilterRules.text) {
-        const filterRule: TextFilterFunction = this.toDataFilterRules.text;
-        const result: TextFilterFunctionResult = filterRule(currentNode.textContent, currentNode);
-        if (result === false) {
-          const parentNode: (Node & ParentNode) | null = currentNode.parentNode;
-          if (!!parentNode) {
-            parentNode.removeChild(currentNode);
-          }
-        }
-      }
-    }
+    const htmlFilter = new HtmlFilter(this.toDataFilterRules);
+    htmlFilter.applyTo(domFragment);
 
     const html: string = this.htmlWriter.getHtml(domFragment);
     return this.htmlToRichText(html);

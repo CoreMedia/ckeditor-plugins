@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES6",
+    "declaration": true,
+    "declarationMap": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": [
       "ES6",
       "DOM",
       "ES2015.Promise"
     ],
-    "strict": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "newLine": "LF",
     "removeComments": true,
-    "newLine": "LF"
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES6"
   }
 }

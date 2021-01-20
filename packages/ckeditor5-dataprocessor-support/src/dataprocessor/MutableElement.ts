@@ -4,6 +4,9 @@ export interface Attributes {
   [index: string]: AttributeValue;
 }
 
+export type ElementFilterResult = void | boolean;
+export type ElementFilterRule = (el: MutableElement) => ElementFilterResult;
+
 /**
  * A wrapper for a given element, which allows to store changes to be applied
  * to the DOM structure later on.
@@ -37,13 +40,39 @@ export default class MutableElement {
   }
 
   /**
+   * Apply given rules. If any of the rules will invalidate this element either
+   * by deletion or by replacing it, no further rules will be applied.
+   *
+   * @param rules rules to apply in given order
+   * @return a node, if filtering should be restarted from this node; `null` otherwise.
+   */
+  applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
+    for (const rule of rules) {
+      if (!!rule) {
+        // false positive inspection: We need to distinguish void from false!
+        // noinspection PointlessBooleanExpressionJS
+        if (rule(this) === false) {
+          this.remove = true;
+        }
+      }
+      const continueOrContinueWith = this.persist();
+      if (continueOrContinueWith instanceof Node) {
+        return continueOrContinueWith;
+      }
+      if (!continueOrContinueWith) {
+        break;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Persists the changes, as requested.
    *
-   * @return the original element, the replaced element, or the first node of
-   * the children, attached to the original parent; `null` when replaced by
-   * children, but no children existed.
+   * @return a node from where a restart is required; or a boolean flag if
+   * filtering shall be continued for this element.
    */
-  persist(): Element | ChildNode | null {
+  persist(): Node | boolean {
     const newName = this._name;
     if (newName === null) {
       return this.persistDeletion();
@@ -57,7 +86,7 @@ export default class MutableElement {
     return this.persistReplaceBy(newName);
   }
 
-  private persistAttributes(): Element {
+  private persistAttributes(): true {
     Object.keys(this._attributes).forEach((key: string) => {
       const value: AttributeValue = this._attributes[key];
       if (value === null) {
@@ -66,22 +95,19 @@ export default class MutableElement {
         this._delegate.setAttribute(key, value);
       }
     });
-    return this._delegate;
+    return true;
   }
 
-  private persistDeletion(): null {
-    const parentElement = this._delegate.parentElement;
-    if (!!parentElement) {
-      parentElement.removeChild(this._delegate);
-    }
-    return null;
+  private persistDeletion(): false {
+    this._delegate.parentElement?.removeChild(this._delegate);
+    return false;
   }
 
-  private persistReplaceByChildren(): ChildNode | null {
+  private persistReplaceByChildren(): ChildNode | false {
     const parentElement = this._delegate.parentElement;
     if (!parentElement) {
       // Cannot apply. Assume, that the element shall just vanish.
-      return null;
+      return false;
     }
     const childrenToMove = this._delegate.childNodes;
     let firstChild: ChildNode | null = null;
@@ -94,7 +120,7 @@ export default class MutableElement {
       }
     }
     parentElement.removeChild(this._delegate);
-    return firstChild;
+    return firstChild || false;
   }
 
   private persistReplaceBy(newName: string): Element {

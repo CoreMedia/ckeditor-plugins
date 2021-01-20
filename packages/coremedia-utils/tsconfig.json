@@ -3,6 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist",
+    "lib": [
+      "ES6",
+      "DOM",
+      "ES2015.Promise"
+    ],
     "typeRoots": [
       "../../types/*",
       "node_modules/@types"

@@ -62,7 +62,7 @@ test("should wrap DOM element", () => {
 test("should not do anything on persist without modifications", () => {
   const htmlDivElement = window.document.createElement("div");
   const mutableElement = new MutableElement(htmlDivElement);
-  expect(mutableElement.persist()).toStrictEqual(htmlDivElement);
+  expect(mutableElement.persist()).toStrictEqual(true);
 });
 
 /* ----------------------------------------------[ persist(): Attributes ]--- */
@@ -74,9 +74,8 @@ test("should add attributes to attributes of existing element", () => {
 
   expect(mutableElement.attributes).toHaveProperty("new:attr", "someValue");
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual("someValue");
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("someValue");
 });
 
 test("should overwrite attributes of existing element", () => {
@@ -87,9 +86,8 @@ test("should overwrite attributes of existing element", () => {
 
   expect(mutableElement.attributes).toHaveProperty("overwrite:attr", "newValue");
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("newValue");
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
 });
 
 test("should overwrite attributes of existing element in loop", () => {
@@ -103,9 +101,8 @@ test("should overwrite attributes of existing element in loop", () => {
 
   expect(mutableElement.attributes).toHaveProperty("overwrite:attr", "newValue");
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("newValue");
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
 });
 
 test("should overwrite attributes of existing element in loop respecting already added", () => {
@@ -121,10 +118,9 @@ test("should overwrite attributes of existing element in loop respecting already
 
   expect(mutableElement.attributes).toHaveProperty("overwrite:attr", "newValue");
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("newValue");
-  expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual("newValue");
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
+  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("newValue");
 });
 
 test("should delete attributes of existing element", () => {
@@ -135,9 +131,8 @@ test("should delete attributes of existing element", () => {
 
   expect(mutableElement.attributes).toHaveProperty("delete:attr", null);
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("delete:attr")).toStrictEqual(null);
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
 });
 
 test("should delete attributes of existing element in loop", () => {
@@ -151,9 +146,8 @@ test("should delete attributes of existing element in loop", () => {
 
   expect(mutableElement.attributes).toHaveProperty("delete:attr", null);
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("delete:attr")).toStrictEqual(null);
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
 });
 
 test("should delete attributes of existing element in loop respecting added ones", () => {
@@ -169,10 +163,9 @@ test("should delete attributes of existing element in loop respecting added ones
 
   expect(mutableElement.attributes).toHaveProperty("delete:attr", null);
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("delete:attr")).toStrictEqual(null);
-  expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual(null);
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
+  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual(null);
 });
 
 test("should modify attributes of existing element", () => {
@@ -194,11 +187,10 @@ test("should modify attributes of existing element", () => {
   expect(mutableElement.attributes["overwrite:attr"]).toStrictEqual("newValue");
   expect(mutableElement.attributes["delete:attr"]).toStrictEqual(null);
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual("someValue");
-  expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("newValue");
-  expect((<Element>persistedElement).getAttribute("delete:attr")).toStrictEqual(null);
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("someValue");
+  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
+  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
 });
 
 test("should modify attributes of existing element; special case: new name set is equal to existing name", () => {
@@ -220,12 +212,11 @@ test("should modify attributes of existing element; special case: new name set i
   mutableElement.attributes["overwrite:attr"] = "newValue";
   mutableElement.attributes["delete:attr"] = null;
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(htmlDivElement);
-  expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual("someValue");
-  expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("newValue");
-  expect((<Element>persistedElement).getAttribute("delete:attr")).toStrictEqual(null);
-  expect(persistedElement?.childNodes[0]).toStrictEqual(elementText);
+  expect(mutableElement.persist()).toStrictEqual(true);
+  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("someValue");
+  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
+  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
+  expect(htmlDivElement.childNodes[0]).toStrictEqual(elementText);
 });
 
 /* ------------------------------------------[ persist(): Remove Element ]--- */
@@ -274,8 +265,7 @@ test.each<NamePatchChildrenTuple>([
   expect(mutableElement.replace).toStrictEqual(false);
   expect(mutableElement.remove).toStrictEqual(true);
 
-  const persistedElement = mutableElement.persist();
-  expect(persistedElement).toStrictEqual(null);
+  expect(mutableElement.persist()).toStrictEqual(false);
   expect(parentElement.childNodes.length).toStrictEqual(0);
   expect(element.childNodes.length).toStrictEqual(children.length);
 });
@@ -337,16 +327,16 @@ test.each<NamePatchChildrenTuple>([
   expect(mutableElement.replace).toStrictEqual(false);
   expect(mutableElement.remove).toStrictEqual(false);
 
-  const persistedElement = mutableElement.persist();
+  const persistResult = mutableElement.persist();
   expect(element.childElementCount).toStrictEqual(0);
   expect(parentElement.childNodes.length).toStrictEqual(children.length + 2);
   if (children.length > 0) {
-    expect(persistedElement).toStrictEqual(children[0]);
+    expect(persistResult).toStrictEqual(children[0]);
     expect(parentElement.childNodes[0]).toStrictEqual(beforeElement);
     expect(parentElement.childNodes[1]).toStrictEqual(children[0]);
     expect(parentElement.childNodes[parentElement.childNodes.length - 1]).toStrictEqual(afterElement);
   } else {
-    expect(persistedElement).toStrictEqual(null);
+    expect(persistResult).toStrictEqual(false);
   }
   expect(element.parentNode).toStrictEqual(null);
   expect(element.childNodes.length).toStrictEqual(0);
@@ -388,10 +378,11 @@ test("should replace by element of given name, transferring child-nodes as well 
   const persistedElement = mutableElement.persist();
 
   expect(persistedElement).not.toStrictEqual(element);
-  expect(persistedElement?.nodeName.toLowerCase()).toStrictEqual("strong");
-  expect(persistedElement?.childNodes.length).toStrictEqual(1);
-  expect(persistedElement?.childNodes[0]).toStrictEqual(elementText);
-  expect(persistedElement?.parentNode).toStrictEqual(parentElement);
+  expect(persistedElement).toBeInstanceOf(Element);
+  expect((<Element>persistedElement).nodeName.toLowerCase()).toStrictEqual("strong");
+  expect((<Element>persistedElement).childNodes.length).toStrictEqual(1);
+  expect((<Element>persistedElement).childNodes[0]).toStrictEqual(elementText);
+  expect((<Element>persistedElement).parentNode).toStrictEqual(parentElement);
 
   expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual("new");
   expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("overwritten");

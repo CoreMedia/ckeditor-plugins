@@ -1,20 +1,7 @@
 {
-  "extends": "../../tsconfig",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
     "baseUrl": ".",
-    "lib": [
-      "ES6",
-      "DOM",
-      "ES2015.Promise"
-    ],
     "outDir": "./dist",
-    "typeRoots": [
-      "../../types/*",
-      "node_modules/@types"
-    ],
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
@@ -31,15 +18,20 @@
       "@ckeditor/ckeditor5-utils/*": [
         "../../types/ckeditor__ckeditor5-utils/*"
       ]
-    }
+    },
+    "typeRoots": [
+      "../../types/*",
+      "node_modules/@types"
+    ]
   },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "extends": "../../tsconfig",
   "include": [
     "src/**/*.ts",
     "__tests__/**/*.test.ts",
     "../../node_modules/@types/jest/index.d.ts"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
   ]
 }
