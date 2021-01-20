@@ -19,6 +19,10 @@ module.exports = {
 
   entry: path.resolve(__dirname, 'src', 'ckeditor.js'),
 
+  resolve: {
+    extensions: ['.ts', '.js', '.json']
+  },
+
   output: {
     // The name under which the editor will be exported.
     library: 'ClassicEditor',
@@ -58,6 +62,11 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.svg$/,
         use: ['raw-loader']
