@@ -32,6 +32,26 @@ export default class HtmlFilter {
     this.applyToChildNodes(root);
   }
 
+  private applyToChildNodes(parent: Node, startFrom?: Node): void {
+    const childNodes: ChildNode[] = Array.from(parent.childNodes);
+    let doFilter = !startFrom;
+    for (const childNode of childNodes) {
+      doFilter = doFilter || childNode.isSameNode(startFrom || null);
+      if (doFilter) {
+        /*
+         * If `abort` is signalled, we assume, that the processing got restarted
+         * in another way. This typically happens, when an element got replaced:
+         * `applyToCurrent` restarted processing with the new element, thus
+         * we skip processing with the now outdated element and thus, outdated
+         * node structure.
+         */
+        if (!this.applyToCurrent(parent, childNode)) {
+          break;
+        }
+      }
+    }
+  }
+
   /**
    * Applies rules to the current node and all of its child nodes.
    *
@@ -61,18 +81,5 @@ export default class HtmlFilter {
       }
     }
     return true;
-  }
-
-  private applyToChildNodes(parent: Node, startFrom?: Node): void {
-    const childNodes: ChildNode[] = Array.from(parent.childNodes);
-    let doFilter = !startFrom;
-    for (const childNode of childNodes) {
-      doFilter = doFilter || childNode.isSameNode(startFrom || null);
-      if (doFilter) {
-        if (!this.applyToCurrent(parent, childNode)) {
-          break;
-        }
-      }
-    }
   }
 }
