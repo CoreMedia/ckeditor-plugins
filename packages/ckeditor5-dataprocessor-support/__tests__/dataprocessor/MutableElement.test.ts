@@ -1,39 +1,5 @@
-import MutableElement from "../../src/dataprocessor/MutableElement";
-// TODO[cke] Works in IDE, but not from console build. What's wrong here?
-//import "@types/jest";
-
-enum ChildType {
-  Text,
-  Element,
-}
-
-type NamePatchChildrenTuple = [string, (me: MutableElement) => void, ChildType[]?];
-
-/**
- * Creates child nodes of the given types.
- *
- * @param childTypes types of children
- * @param children array to store created children in
- * @param element element to attach created child notes to
- */
-function createChildren(childTypes: ChildType[] | undefined | null, children: Node[], element: HTMLDivElement) {
-  if (!!childTypes) {
-    childTypes.forEach((v, k) => {
-      let child: ChildNode;
-      switch (v) {
-        case ChildType.Text:
-          child = window.document.createTextNode("child " + k);
-          break;
-        case ChildType.Element:
-          child = window.document.createElement("span");
-          child.appendChild(window.document.createTextNode("nested child " + k));
-          break;
-      }
-      children.push(child);
-      element.appendChild(child);
-    });
-  }
-}
+import MutableElement, { ElementFilterRule } from "../../src/dataprocessor/MutableElement";
+import "jest-xml-matcher";
 
 /*
  * =============================================================================
@@ -52,347 +18,412 @@ test("should wrap DOM element", () => {
 /*
  * =============================================================================
  *
- * Persisting
+ * applyRules()
  *
  * =============================================================================
  */
 
-/* ---------------------------------------------------[ persist(): No-Op ]--- */
-
-test("should not do anything on persist without modifications", () => {
-  const htmlDivElement = window.document.createElement("div");
-  const mutableElement = new MutableElement(htmlDivElement);
-  expect(mutableElement.persist()).toStrictEqual(true);
-});
-
-/* ----------------------------------------------[ persist(): Attributes ]--- */
-
-test("should add attributes to attributes of existing element", () => {
-  const htmlDivElement = window.document.createElement("div");
-  const mutableElement = new MutableElement(htmlDivElement);
-  mutableElement.attributes["new:attr"] = "someValue";
-
-  expect(mutableElement.attributes).toHaveProperty("new:attr", "someValue");
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("someValue");
-});
-
-test("should overwrite attributes of existing element", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("overwrite:attr", "oldValue");
-  const mutableElement = new MutableElement(htmlDivElement);
-  mutableElement.attributes["overwrite:attr"] = "newValue";
-
-  expect(mutableElement.attributes).toHaveProperty("overwrite:attr", "newValue");
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
-});
-
-test("should overwrite attributes of existing element in loop", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("overwrite:attr", "oldValue");
-  const mutableElement = new MutableElement(htmlDivElement);
-
-  Object.keys(mutableElement.attributes).forEach((key) => {
-    mutableElement.attributes[key] = "newValue";
-  });
-
-  expect(mutableElement.attributes).toHaveProperty("overwrite:attr", "newValue");
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
-});
-
-test("should overwrite attributes of existing element in loop respecting already added", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("overwrite:attr", "oldValue");
-  const mutableElement = new MutableElement(htmlDivElement);
-
-  mutableElement.attributes["new:attr"] = "previousNew";
-
-  Object.keys(mutableElement.attributes).forEach((key) => {
-    mutableElement.attributes[key] = "newValue";
-  });
-
-  expect(mutableElement.attributes).toHaveProperty("overwrite:attr", "newValue");
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
-  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("newValue");
-});
-
-test("should delete attributes of existing element", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("delete:attr", "oldValue");
-  const mutableElement = new MutableElement(htmlDivElement);
-  mutableElement.attributes["delete:attr"] = null;
-
-  expect(mutableElement.attributes).toHaveProperty("delete:attr", null);
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
-});
-
-test("should delete attributes of existing element in loop", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("delete:attr", "oldValue");
-  const mutableElement = new MutableElement(htmlDivElement);
-
-  Object.keys(mutableElement.attributes).forEach((key) => {
-    delete mutableElement.attributes[key];
-  });
-
-  expect(mutableElement.attributes).toHaveProperty("delete:attr", null);
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
-});
-
-test("should delete attributes of existing element in loop respecting added ones", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("delete:attr", "oldValue");
-  const mutableElement = new MutableElement(htmlDivElement);
-
-  mutableElement.attributes["new:attr"] = "new";
-
-  Object.keys(mutableElement.attributes).forEach((key) => {
-    delete mutableElement.attributes[key];
-  });
-
-  expect(mutableElement.attributes).toHaveProperty("delete:attr", null);
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
-  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual(null);
-});
-
-test("should modify attributes of existing element", () => {
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("overwrite:attr", "oldValue");
-  htmlDivElement.setAttribute("delete:attr", "oldValue");
-
-  const mutableElement = new MutableElement(htmlDivElement);
-
-  expect(mutableElement.attributes["new:attr"]).toStrictEqual(null);
-  expect(mutableElement.attributes["overwrite:attr"]).toStrictEqual("oldValue");
-  expect(mutableElement.attributes["delete:attr"]).toStrictEqual("oldValue");
-
-  mutableElement.attributes["new:attr"] = "someValue";
-  mutableElement.attributes["overwrite:attr"] = "newValue";
-  mutableElement.attributes["delete:attr"] = null;
-
-  expect(mutableElement.attributes["new:attr"]).toStrictEqual("someValue");
-  expect(mutableElement.attributes["overwrite:attr"]).toStrictEqual("newValue");
-  expect(mutableElement.attributes["delete:attr"]).toStrictEqual(null);
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("someValue");
-  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
-  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
-});
-
-test("should modify attributes of existing element; special case: new name set is equal to existing name", () => {
-  /*
-   * DevNote: This test cannot distinguish, if a shortcut path has been taken,
-   * i.e., if only the attributes got adjusted or a new element of the same
-   * name got created. As we cannot be sure, additional checks exists for child
-   * elements for example, so that any of the paths fulfill the contract.
-   */
-  const htmlDivElement = window.document.createElement("div");
-  htmlDivElement.setAttribute("overwrite:attr", "oldValue");
-  htmlDivElement.setAttribute("delete:attr", "oldValue");
-  const elementText = window.document.createTextNode("the Element");
-  htmlDivElement.append(elementText);
-
-  const mutableElement = new MutableElement(htmlDivElement);
-  mutableElement.name = htmlDivElement.tagName;
-  mutableElement.attributes["new:attr"] = "someValue";
-  mutableElement.attributes["overwrite:attr"] = "newValue";
-  mutableElement.attributes["delete:attr"] = null;
-
-  expect(mutableElement.persist()).toStrictEqual(true);
-  expect(htmlDivElement.getAttribute("new:attr")).toStrictEqual("someValue");
-  expect(htmlDivElement.getAttribute("overwrite:attr")).toStrictEqual("newValue");
-  expect(htmlDivElement.getAttribute("delete:attr")).toStrictEqual(null);
-  expect(htmlDivElement.childNodes[0]).toStrictEqual(elementText);
-});
-
-/* ------------------------------------------[ persist(): Remove Element ]--- */
-
-test.each<NamePatchChildrenTuple>([
-  [
-    "me.name = null",
-    function (me: MutableElement): void {
-      me.name = null;
-    },
-    [ChildType.Element, ChildType.Element],
-  ],
-  [
-    "me.remove = true",
-    function (me: MutableElement): void {
-      me.remove = true;
-    },
-    [ChildType.Element, ChildType.Element],
-  ],
-  [
-    "me.remove = true; overrides me.replaceByChildren = true",
-    function (me: MutableElement): void {
-      me.replaceByChildren = true;
-      me.remove = true;
-    },
-    [ChildType.Element, ChildType.Element],
-  ],
-])("(%#) should delete including children on: %p", (name, mutableElementAction, childTypes) => {
-  const parentElement = window.document.createElement("div");
-  parentElement.setAttribute("class", "parent");
-  const element = window.document.createElement("div");
-  element.setAttribute("class", "element");
-  parentElement.appendChild(element);
-  const children: Node[] = [];
-  createChildren(childTypes, children, element);
-
-  const mutableElement = new MutableElement(element);
-
-  expect(mutableElement.replaceByChildren).toStrictEqual(false);
-  expect(mutableElement.replace).toStrictEqual(false);
-  expect(mutableElement.remove).toStrictEqual(false);
-
-  mutableElementAction(mutableElement);
-
-  expect(mutableElement.replaceByChildren).toStrictEqual(false);
-  expect(mutableElement.replace).toStrictEqual(false);
-  expect(mutableElement.remove).toStrictEqual(true);
-
-  expect(mutableElement.persist()).toStrictEqual(false);
-  expect(parentElement.childNodes.length).toStrictEqual(0);
-  expect(element.childNodes.length).toStrictEqual(children.length);
-});
-
-/* -----------------------------[ persist(): Replace Element by Children ]--- */
-
-test.each<NamePatchChildrenTuple>([
-  [
-    "me.name = ''",
-    function (me: MutableElement): void {
-      me.name = "";
-    },
-    [ChildType.Text, ChildType.Element],
-  ],
-  [
-    "me.replaceByChildren = true",
-    function (me: MutableElement): void {
-      me.replaceByChildren = true;
-    },
-    [ChildType.Element, ChildType.Text],
-  ],
-  [
-    "me.replaceByChildren = true; overrides me.remove = true",
-    function (me: MutableElement): void {
-      me.remove = true;
-      me.replaceByChildren = true;
-    },
-    [ChildType.Text, ChildType.Text],
-  ],
-  [
-    "me.replaceByChildren = true; similar to me.remove for no children",
-    function (me: MutableElement): void {
-      me.replaceByChildren = true;
-    },
-    [],
-  ],
-])("(%#) should replace by children children on: %p", (name, mutableElementAction, childTypes) => {
-  const parentElement = window.document.createElement("div");
-  parentElement.setAttribute("class", "parent");
-  const beforeElement = window.document.createTextNode("before");
-  const afterElement = window.document.createTextNode("after");
-  const element = window.document.createElement("div");
-  element.setAttribute("class", "element");
-
-  parentElement.append(beforeElement, element, afterElement);
-
-  const children: Node[] = [];
-  createChildren(childTypes, children, element);
-
-  const mutableElement = new MutableElement(element);
-
-  expect(mutableElement.replaceByChildren).toStrictEqual(false);
-  expect(mutableElement.replace).toStrictEqual(false);
-  expect(mutableElement.remove).toStrictEqual(false);
-
-  mutableElementAction(mutableElement);
-
-  expect(mutableElement.replaceByChildren).toStrictEqual(true);
-  expect(mutableElement.replace).toStrictEqual(false);
-  expect(mutableElement.remove).toStrictEqual(false);
-
-  const persistResult = mutableElement.persist();
-  expect(element.childElementCount).toStrictEqual(0);
-  expect(parentElement.childNodes.length).toStrictEqual(children.length + 2);
-  if (children.length > 0) {
-    expect(persistResult).toStrictEqual(children[0]);
-    expect(parentElement.childNodes[0]).toStrictEqual(beforeElement);
-    expect(parentElement.childNodes[1]).toStrictEqual(children[0]);
-    expect(parentElement.childNodes[parentElement.childNodes.length - 1]).toStrictEqual(afterElement);
-  } else {
-    expect(persistResult).toStrictEqual(false);
+type ApplyRulesData = [
+  string,
+  {
+    rules: (ElementFilterRule | undefined)[];
+    from: string;
+    to: string;
+    restart?: string;
   }
-  expect(element.parentNode).toStrictEqual(null);
-  expect(element.childNodes.length).toStrictEqual(0);
-});
+];
 
-/* --------------------------------------[ persist(): Replace By Element ]--- */
+describe("applyRules()", () => {
+  test.each<ApplyRulesData>([
+    [
+      "should do nothing on empty rule set",
+      {
+        rules: [],
+        from: "<parent><el>Element</el></parent>",
+        to: "<parent><el>Element</el></parent>",
+      },
+    ],
+    [
+      "should do nothing on only undefined rule sets",
+      {
+        rules: [undefined, undefined],
+        from: "<parent><el>Element</el></parent>",
+        to: "<parent><el>Element</el></parent>",
+      },
+    ],
+    [
+      "should do nothing for same-name",
+      {
+        rules: [
+          (me: MutableElement) => {
+            me.name = "el";
+          },
+        ],
+        from: "<parent><el>Element</el></parent>",
+        to: "<parent><el>Element</el></parent>",
+      },
+    ],
+    [
+      "should do nothing for same-name (ignoring case)",
+      {
+        rules: [
+          (me: MutableElement) => {
+            me.name = "eL";
+          },
+        ],
+        from: "<parent><el>Element</el></parent>",
+        to: "<parent><el>Element</el></parent>",
+      },
+    ],
+    [
+      "should remove by return value `false`",
+      {
+        rules: [() => false],
+        from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
+        to: "<parent>Lorem  Ipsum</parent>",
+      },
+    ],
+    [
+      "should remove by me.name = null",
+      {
+        rules: [
+          (me: MutableElement) => {
+            me.name = null;
+          },
+        ],
+        from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
+        to: "<parent>Lorem  Ipsum</parent>",
+      },
+    ],
+    [
+      "should remove by me.remove = true",
+      {
+        rules: [(me) => (me.remove = true)],
+        from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
+        to: "<parent>Lorem  Ipsum</parent>",
+      },
+    ],
+    [
+      "should replace by children by me.name = ''",
+      {
+        rules: [
+          (me) => {
+            me.name = "";
+          },
+        ],
+        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
+        to: "<parent>Lorem <c1>Child 1</c1><c2>Child 1</c2> Ipsum</parent>",
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace by children by me.replaceByChildren = true",
+      {
+        rules: [
+          (me) => {
+            me.replaceByChildren = true;
+          },
+        ],
+        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
+        to: "<parent>Lorem <c1>Child 1</c1><c2>Child 1</c2> Ipsum</parent>",
+        restart: "//c1",
+      },
+    ],
+    [
+      "should add new attributes (map-like)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["new"] = "new value";
+          },
+        ],
+        // If we ever see this fail because of attribute order, please remove
+        // the 'old' attribute completely.
+        from: '<parent>Lorem <el old="old value">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el old="old value" new="new value">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should add new attributes (property-like)",
+      {
+        rules: [
+          (me) => {
+            me.attributes.new = "new value";
+          },
+        ],
+        // If we ever see this fail because of attribute order, please remove
+        // the 'old' attribute completely.
+        from: '<parent>Lorem <el old="old value">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el old="old value" new="new value">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should remove attribute on attr = null",
+      {
+        rules: [
+          (me) => {
+            me.attributes["old"] = null;
+          },
+        ],
+        from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el other="other">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should remove attribute on delete attr (map-like)",
+      {
+        rules: [
+          (me) => {
+            delete me.attributes["old"];
+          },
+        ],
+        from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el other="other">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should remove attribute on delete attr (property-like)",
+      {
+        rules: [
+          (me) => {
+            delete me.attributes.old;
+          },
+        ],
+        from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el other="other">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should remove all attributes in loop",
+      {
+        rules: [
+          (me) => {
+            Object.keys(me.attributes).forEach((key) => {
+              delete me.attributes[key];
+            });
+          },
+        ],
+        from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
+        to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
+        restart: "//c1",
+      },
+    ],
+    [
+      "should remove all attributes in loop (including previously added)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["new"] = "new value";
+            Object.keys(me.attributes).forEach((key) => {
+              delete me.attributes[key];
+            });
+          },
+        ],
+        from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
+        to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace attribute value (map-like)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["attr"] = "prefixed:" + me.attributes["attr"];
+          },
+        ],
+        // If we ever see this fail because of attribute order, please remove
+        // the 'old' attribute completely.
+        from: '<parent>Lorem <el attr="value" other="other">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el attr="prefixed:value" other="other">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace attribute value (property-like)",
+      {
+        rules: [
+          (me) => {
+            me.attributes.attr = "prefixed:" + me.attributes.attr;
+          },
+        ],
+        // If we ever see this fail because of attribute order, please remove
+        // the 'old' attribute completely.
+        from: '<parent>Lorem <el attr="value" other="other">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el attr="prefixed:value" other="other">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace all attributes in loop",
+      {
+        rules: [
+          (me) => {
+            Object.keys(me.attributes).forEach((key) => {
+              me.attributes[key] = "prefixed:" + me.attributes[key];
+            });
+          },
+        ],
+        from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace all attributes in loop (including previously added)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["new"] = "new value";
+            Object.keys(me.attributes).forEach((key) => {
+              me.attributes[key] = "prefixed:" + me.attributes[key];
+            });
+          },
+        ],
+        from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
+        to:
+          '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace all attributes in loop (including previously added, using getOwnPropertyDescriptor)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["new"] = "new value";
+            for (const key in me.attributes) {
+              if (me.attributes.hasOwnProperty(key)) {
+                const descriptor = Object.getOwnPropertyDescriptor(me.attributes, key);
+                if (!!descriptor) {
+                  // False positive? Checks assume, that descriptor may be undefined here. But how?
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  descriptor.set("prefixed:" + descriptor.get());
+                }
+              }
+            }
+          },
+        ],
+        from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
+        to:
+          '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should be able to detect attribute existence by in operator",
+      {
+        rules: [
+          (me) => {
+            me.attributes["added"] = "";
+            ["added", "existing", "not:existing"].forEach(v => {
+              const existing: boolean = (v in me.attributes);
+              me.attributes[v] = String(existing);
+            });
+          },
+        ],
+        from: '<parent>Lorem <el existing="">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el existing="true" added="true" not:existing="false">Ipsum</el> Dolor</parent>',
+        restart: "//c1",
+      },
+    ],
+    [
+      "should replace by new element",
+      {
+        rules: [
+          (me) => {
+            me.name = "new";
+          },
+        ],
+        from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
+        to: '<parent>Lorem <new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
+        restart: "//new",
+      },
+    ],
+    [
+      "should replace by prefixed element",
+      {
+        rules: [
+          (me) => {
+            me.name = "prefixed:" + me.name;
+          },
+        ],
+        from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
+        to: '<parent>Lorem <prefixed:el attr="value"><c1>Child 1</c1><c2>Child 1</c2></prefixed:el> Ipsum</parent>',
+        restart: "//prefixed:el",
+      },
+    ],
+    [
+      "should replace by new element with new attribute",
+      {
+        rules: [
+          (me) => {
+            me.name = "new";
+            me.attributes["attr"] = "value";
+          },
+        ],
+        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
+        to: '<parent>Lorem <new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
+        restart: "//new",
+      },
+    ],
+    [
+      "should replace by new element with new attribute (no matter of order)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["attr"] = "value";
+            me.name = "new";
+          },
+        ],
+        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
+        to: '<parent>Lorem <new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
+        restart: "//new",
+      },
+    ],
+    [
+      "should not execute subsequent rules after replacing by new element",
+      {
+        rules: [
+          (me) => {
+            me.attributes["attr"] = "new value";
+          },
+          (me) => {
+            me.name = "new";
+          },
+          (me) => {
+            me.attributes["attr"] = "skipped";
+          },
+        ],
+        from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
+        to: '<parent>Lorem <new attr="new value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
+        restart: "//new",
+      },
+    ],
+  ])("(%#) %s", (name, testData) => {
+    document.body.innerHTML = testData.from.trim();
+    const element: Element = <Element>(
+      document.evaluate("//el", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+    );
 
-test("should replace by element of given name, transferring child-nodes as well as attributes", () => {
-  const parentElement = window.document.createElement("div");
-  parentElement.setAttribute("class", "parent");
-  const beforeElement = window.document.createTextNode("before");
-  const afterElement = window.document.createTextNode("after");
-  const element = window.document.createElement("span");
-  const elementText = window.document.createTextNode("the Element");
-  element.append(elementText);
-  element.setAttribute("overwrite:attr", "overwrite");
-  element.setAttribute("delete:attr", "delete");
+    const mutableElement = new MutableElement(element);
+    const result = mutableElement.applyRules(...testData.rules);
 
-  parentElement.append(beforeElement, element, afterElement);
+    expect(document.body.innerHTML).toEqualXML(testData.to);
 
-  const mutableElement = new MutableElement(element);
+    let restartFrom: Node | null = null;
+    if (testData.restart) {
+      restartFrom = <Node>(
+        document.evaluate(testData.restart, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+      );
+    }
 
-  expect(mutableElement.name?.toLowerCase()).toStrictEqual(element.tagName.toLowerCase());
-  expect(mutableElement.replaceByChildren).toStrictEqual(false);
-  expect(mutableElement.replace).toStrictEqual(false);
-  expect(mutableElement.remove).toStrictEqual(false);
-
-  mutableElement.name = "strong";
-
-  expect(mutableElement.name?.toLowerCase()).toStrictEqual("strong");
-  expect(mutableElement.replaceByChildren).toStrictEqual(false);
-  expect(mutableElement.replace).toStrictEqual(true);
-  expect(mutableElement.remove).toStrictEqual(false);
-
-  mutableElement.attributes["new:attr"] = "new";
-  mutableElement.attributes["overwrite:attr"] = "overwritten";
-  mutableElement.attributes["delete:attr"] = null;
-
-  const persistedElement = mutableElement.persist();
-
-  expect(persistedElement).not.toStrictEqual(element);
-  expect(persistedElement).toBeInstanceOf(Element);
-  expect((<Element>persistedElement).nodeName.toLowerCase()).toStrictEqual("strong");
-  expect((<Element>persistedElement).childNodes.length).toStrictEqual(1);
-  expect((<Element>persistedElement).childNodes[0]).toStrictEqual(elementText);
-  expect((<Element>persistedElement).parentNode).toStrictEqual(parentElement);
-
-  expect((<Element>persistedElement).getAttribute("new:attr")).toStrictEqual("new");
-  expect((<Element>persistedElement).getAttribute("overwrite:attr")).toStrictEqual("overwritten");
-  expect((<Element>persistedElement).getAttribute("delete:attr")).toStrictEqual(null);
-
-  expect(parentElement.childNodes.length).toStrictEqual(3);
-  expect(parentElement.childNodes[0]).toStrictEqual(beforeElement);
-  expect(parentElement.childNodes[1]).toStrictEqual(persistedElement);
-  expect(parentElement.childNodes[2]).toStrictEqual(afterElement);
-
-  expect(element.parentNode).toStrictEqual(null);
-  expect(element.childNodes.length).toStrictEqual(0);
+    expect(result).toStrictEqual(restartFrom);
+  });
 });

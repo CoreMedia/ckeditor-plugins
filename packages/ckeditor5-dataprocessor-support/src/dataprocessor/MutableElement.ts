@@ -74,7 +74,7 @@ export default class MutableElement {
    * @return a node from where a restart is required; or a boolean flag if
    * filtering shall be continued for this element.
    */
-  persist(): Node | boolean {
+  private persist(): Node | boolean {
     const newName = this._name;
     if (newName === null) {
       return this.persistDeletion();
@@ -322,7 +322,7 @@ export default class MutableElement {
           return Reflect.get(target, p) !== null;
         }
         if (typeof p === "string") {
-          return element.hasAttribute(p) !== null;
+          return element.hasAttribute(p);
         }
         return false;
       },
