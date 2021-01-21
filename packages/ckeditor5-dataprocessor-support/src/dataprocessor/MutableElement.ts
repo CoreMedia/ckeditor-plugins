@@ -6,6 +6,7 @@ export interface Attributes {
 
 export type ElementFilterResult = void | boolean;
 export type ElementFilterRule = (el: MutableElement) => ElementFilterResult;
+export type ChildPredicate = (child: ChildNode, index: number, array: ChildNode[]) => boolean;
 
 /**
  * A wrapper for a given element, which allows to store changes to be applied
@@ -37,6 +38,33 @@ export default class MutableElement {
    */
   constructor(delegate: Element) {
     this._delegate = delegate;
+  }
+
+  get parent(): (Node & ParentNode) | null {
+    return this._delegate.parentNode;
+  }
+
+  /**
+   * The nodes that are direct children of this element.
+   */
+  get children(): ChildNode[] {
+    return Array.from(this._delegate.childNodes);
+  }
+
+  public getFirst(condition: string | ChildPredicate): ChildNode | undefined {
+    const childNodes = this.children;
+    if (!condition) {
+      return childNodes.length ? childNodes[0] : undefined;
+    }
+    let predicate: ChildPredicate;
+    if (typeof condition === "function") {
+      predicate = condition;
+    } else {
+      predicate = (child) => {
+        return child.nodeName.toLowerCase() === condition.toLowerCase();
+      };
+    }
+    return childNodes.find(predicate);
   }
 
   /**

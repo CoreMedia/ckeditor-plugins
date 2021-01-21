@@ -7,9 +7,6 @@ import html2RichText from "./html2richtext/html2richtext";
 import richText2Html from "./richtext2html/richtext2html";
 import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/src/logging/LoggerProvider";
-import MutableElement, {
-  ElementFilterResult,
-} from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/MutableElement";
 import CoreMediaRichText from "./CoreMediaRichText";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
@@ -45,10 +42,67 @@ export default class RichTextDataProcessor implements DataProcessor {
    */
   private readonly toDataFilterRules: FilterRuleSet = {
     elements: {
-      h2: (): ElementFilterResult => false,
-      a: (el: MutableElement): ElementFilterResult => {
-        el.attributes["style"] = "great";
-        delete el.attributes["href"];
+      ol: function (element) {
+        // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
+        if (element.children.length === 0 || !element.getFirst("li")) {
+          return false;
+        }
+      },
+      ul: function (element) {
+        // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
+        if (element.children.length === 0 || !element.getFirst("li")) {
+          return false;
+        }
+      },
+      h1: function (element) {
+        element.name = "p";
+        element.attributes["class"] = "p--heading-1";
+      },
+      h2: function (element) {
+        element.name = "p";
+        element.attributes["class"] = "p--heading-2";
+      },
+      h3: function (element) {
+        element.name = "p";
+        element.attributes["class"] = "p--heading-3";
+      },
+      h4: function (element) {
+        element.name = "p";
+        element.attributes["class"] = "p--heading-4";
+      },
+      h5: function (element) {
+        element.name = "p";
+        element.attributes["class"] = "p--heading-5";
+      },
+      h6: function (element) {
+        element.name = "p";
+        element.attributes["class"] = "p--heading-6";
+      },
+      b: function (element) {
+        element.name = "strong";
+      },
+      i: function (element) {
+        element.name = "em";
+      },
+      u: function (element) {
+        element.name = "span";
+        element.attributes["class"] = "underline";
+      },
+      strike: function (element) {
+        element.name = "span";
+        element.attributes["class"] = "strike";
+      },
+      th: function (element) {
+        element.name = "td";
+      },
+      span: function (element) {
+        if (!element.attributes["class"]) {
+          // drop element, but not children
+          element.name = "";
+        }
+      },
+      "xdiff:span": function (element) {
+        element.name = "";
       },
     },
   };
