@@ -214,7 +214,7 @@ export default class MutableElement {
    * If the name got changed, will return this changed name instead.
    */
   get name(): string | null {
-    return this._name || this._delegate.tagName;
+    return this._name?.toLowerCase() || this._delegate.tagName.toLowerCase();
   }
 
   /**
@@ -226,7 +226,9 @@ export default class MutableElement {
    * the element by its children; `null` signals to remove the element completely.
    */
   set name(newName: string | null) {
-    this._name = newName;
+    // must not be simplified, because of different meaning for falsy
+    // values '', undefined and null.
+    this._name = newName === null ? null : newName.toLowerCase();
   }
 
   /**

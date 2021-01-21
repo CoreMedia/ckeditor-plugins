@@ -1,4 +1,4 @@
-import MutableElement, { ElementFilterRule } from "../../src/dataprocessor/MutableElement";
+import { MutableElement, ElementFilterRule } from "../../src/dataprocessor";
 import "jest-xml-matcher";
 
 /*
@@ -33,7 +33,7 @@ type ApplyRulesData = [
   }
 ];
 
-describe("applyRules()", () => {
+describe("MutableElement.applyRules()", () => {
   test.each<ApplyRulesData>([
     [
       "should do nothing on empty rule set",
@@ -322,8 +322,8 @@ describe("applyRules()", () => {
         rules: [
           (me) => {
             me.attributes["added"] = "";
-            ["added", "existing", "not:existing"].forEach(v => {
-              const existing: boolean = (v in me.attributes);
+            ["added", "existing", "not:existing"].forEach((v) => {
+              const existing: boolean = v in me.attributes;
               me.attributes[v] = String(existing);
             });
           },
