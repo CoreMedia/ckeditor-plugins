@@ -31,3 +31,4 @@ node_modules/
 *.log
 *.out
 *.err
+tmp/
