@@ -1,5 +1,7 @@
 import ViewDocument from "./document";
+import ViewDocumentFragment from "./documentfragment";
 import ViewElement from "./element";
+import ViewNode from "./node";
 
 /**
  * View upcast writer. It provides a set of methods used to manipulate non-semantic view trees.
@@ -18,4 +20,13 @@ export default class UpcastWriter {
    * @returns {ViewElement} Clone of this element.
    */
   clone(element: ViewElement, deep?: boolean): ViewElement;
+
+  /**
+   * Creates a new `DocumentFragment` instance.
+   *
+   * @param children [Node|Iterable<Node>]
+   * A list of nodes to be inserted into the created document fragment.
+   * @returns [DocumentFragment] The created document fragment.
+   */
+  createDocumentFragment( children?: ViewNode | Iterable<ViewNode> ): ViewDocumentFragment;
 }

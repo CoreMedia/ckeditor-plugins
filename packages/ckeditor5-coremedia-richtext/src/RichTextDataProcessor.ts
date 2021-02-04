@@ -44,15 +44,11 @@ export default class RichTextDataProcessor implements DataProcessor {
     elements: {
       ol: function (element) {
         // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-        if (element.children.length === 0 || !element.getFirst("li")) {
-          return false;
-        }
+        return !(element.children.length === 0 || !element.getFirst("li"));
       },
       ul: function (element) {
         // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-        if (element.children.length === 0 || !element.getFirst("li")) {
-          return false;
-        }
+        return !(element.children.length === 0 || !element.getFirst("li"));
       },
       h1: function (element) {
         element.name = "p";
