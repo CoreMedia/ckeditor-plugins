@@ -8,9 +8,8 @@ module.exports = {
     ["@babel/plugin-transform-for-of", {"assumeArray": true}],
     ["@babel/plugin-proposal-class-properties", {}],
   ],
-  "presets": [["@babel/preset-env", {
-    "targets": {
-      "node": true
-    }
-  }]]
+  "presets": [
+    ["@babel/preset-env", {targets: {node: "current"}}],
+    "@babel/preset-typescript",
+  ]
 };

@@ -1,6 +1,10 @@
 {
   "extends": "./tsconfig",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true
+  },
   "exclude": [
-    "__tests__/**/*.test.ts"
+    "__tests__/**/*.ts"
   ]
 }

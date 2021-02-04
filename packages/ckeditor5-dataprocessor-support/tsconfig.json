@@ -31,7 +31,7 @@
   "extends": "../../tsconfig",
   "include": [
     "src/**/*.ts",
-    "__tests__/**/*.test.ts",
+    "__tests__/**/*.ts",
     "../../node_modules/@types/jest/index.d.ts"
   ]
 }
