@@ -43,7 +43,6 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "test": "exit 0",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

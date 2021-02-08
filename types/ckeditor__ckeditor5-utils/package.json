@@ -11,10 +11,6 @@
     "@ckeditor/ckeditor5-ui": "^24.0.0"
   },
   "scripts": {
-    "build": "exit 0",
-    "test": "exit 0",
-    "lint": "exit 0",
-    "prettier": "exit 0",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

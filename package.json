@@ -34,16 +34,17 @@
   ],
   "scripts": {
     "bootstrap": "yarn install",
-    "clean": "rm -rf ./node_modules && yarn workspaces run clean",
-    "build": "yarn workspaces run build",
-    "test": "yarn workspaces run test",
+    "clean": "rimraf ./dist && rimraf ./node_modules",
+    "build": "lerna run build",
+    "test": "lerna run test",
     "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
     "test:manual": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test-manual.js",
-    "lint": "yarn workspaces run lint",
-    "prettier": "yarn workspaces run prettier",
-    "npm-check-updates": "yarn workspaces run npm-check-updates"
+    "lint": "lerna run lint",
+    "prettier": "lerna run prettier",
+    "npm-check-updates": "lerna run npm-check-updates"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-utils": "^24.0.0"
+    "lerna": "^3.22.1",
+    "rimraf": "^3.0.2"
   }
 }
