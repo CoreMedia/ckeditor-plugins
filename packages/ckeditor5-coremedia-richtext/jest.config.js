@@ -1,5 +1,12 @@
+const babelConfig = require("./babel.config.js");
+
 module.exports = {
-  preset: 'ts-jest',
-  // jsdom is default; required to access window, document, et al.
   testEnvironment: 'jsdom',
+  moduleFileExtensions: ["js", "ts", "d.ts"],
+  transform: {
+    "^.+\\.[jt]sx?$": ["babel-jest", babelConfig],
+  },
+  transformIgnorePatterns: [
+    "node_modules/(?!@ckeditor|lodash-es)"
+  ],
 };
