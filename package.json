@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "bootstrap": "yarn install",
-    "clean": "rimraf ./dist && rimraf ./node_modules",
+    "clean": "lerna run clean && rimraf ./dist",
     "build": "lerna run build",
     "test": "lerna run test",
     "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
