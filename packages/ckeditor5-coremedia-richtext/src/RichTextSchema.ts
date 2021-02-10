@@ -618,12 +618,13 @@ export default class RichTextSchema {
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
+      this.logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
       return false;
     }
     const elementSpecification = ELEMENTS[elementName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      this.logger.debug(`Element ${elementName} not specified and thus, not allowed at current parent.`);
+      this.logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
       return false;
     }
     if (!elementSpecification.parentElementNames) {
@@ -631,12 +632,12 @@ export default class RichTextSchema {
     }
     const parentName = element.parent?.nodeName.toLowerCase();
     if (!parentName) {
-      this.logger.debug(`No need to check parent, as no parent available for element ${elementName}.`);
+      this.logger.debug(`No need to check parent, as no parent available for element <${elementName}>.`);
       return true;
     }
     const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(parentName) >= 0;
     if (!isAllowedAtParent) {
-      this.logger.debug(`Element ${elementName} not allowed at parent ${parentName}.`);
+      this.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
     return isAllowedAtParent;
   }
@@ -667,11 +668,11 @@ export default class RichTextSchema {
 
   private deleteNotAllowedAttributes(element: MutableElement, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
-    const notAllowedAttributes = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
+    const notAllowedAttributes: string[] = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
 
-    if (!!notAllowedAttributes) {
-      this.logger.warn(
-        "Unsupported attributes found at element. Attributes will be removed prior to storing to server.",
+    if (notAllowedAttributes.length > 0) {
+      this.logger.debug(
+        `${notAllowedAttributes.length} unsupported attribute(s) found at <${element.name}>. Attribute(s) will be removed prior to storing to server.`,
         {
           element: element,
           attributes: notAllowedAttributes,
@@ -696,11 +697,13 @@ export default class RichTextSchema {
           const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY;
           const suggestedValue = invalidValueHandler(attributeValue, this.strictness);
           if (suggestedValue === undefined) {
-            this.logger.warn(`Removing attribute ${attributeName} as its value "${attributeValue}" is invalid.`);
+            this.logger.debug(
+              `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
+            );
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
-            this.logger.info(
-              `Adjusting attribute ${attributeName}: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`
+            this.logger.debug(
+              `Adjusting attribute ${attributeName} for <${element.name}>: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`
             );
             element.attributes[attributeName] = suggestedValue;
           }
@@ -724,8 +727,8 @@ export default class RichTextSchema {
       const handler = specification.onMissingAttribute ?? NOTHING_TODO_ON_MISSING_ATTRIBUTE;
       const suggestedValue = handler();
       if (suggestedValue !== undefined) {
-        this.logger.info(
-          `Adjusting attribute ${attributeName}: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`
+        this.logger.debug(
+          `Adjusting attribute ${attributeName} for <${element.name}>: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`
         );
         element.attributes[attributeName] = suggestedValue;
       }
