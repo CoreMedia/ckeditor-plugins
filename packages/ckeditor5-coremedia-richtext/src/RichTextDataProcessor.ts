@@ -126,6 +126,14 @@ export default class RichTextDataProcessor implements DataProcessor {
     this.domConverter.registerRawContentMatcher(pattern);
   }
 
+  /**
+   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note, that in order
+   * to trigger data processor for empty text as well, you have to set the
+   * option `trim: 'none'` on `CKEditor.getData()`.
+   *
+   * @param viewFragment fragment from view model to process
+   * @return CoreMedia RichText 1.0 XML as string
+   */
   toData(viewFragment: ViewDocumentFragment): string {
     const startTimestamp = performance.now();
 

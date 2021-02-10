@@ -93,7 +93,15 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
   autosave: {
     waitingTime: 5000, // in ms
     save(editor) {
-      return saveData("autosave", editor.getData());
+      console.log("Save triggered...");
+      const start = performance.now();
+      const data = editor.getData({
+        // set to none, to trigger data-processing for empty text, too
+        // possible values: empty, none (default: empty)
+        trim: 'empty',
+      });
+      saveData("autosave", data);
+      console.log(`Saved data within ${performance.now() - start} ms.`);
     }
   },
 }).then(editor => {
