@@ -12,6 +12,7 @@ import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import RichTextHtmlWriter from "./RichTextHtmlWriter";
 import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/HtmlFilter";
+import RichTextSchema, { Strictness } from "./RichTextSchema";
 
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
@@ -24,6 +25,8 @@ export default class RichTextDataProcessor implements DataProcessor {
    *   What is the input type?
    *   Possibly look-up filter-behavior by CKEditor 4. I think, <null> as return value is meant to delete this node.
    */
+
+  private readonly richTextSchema: RichTextSchema = new RichTextSchema(Strictness.STRICT);
 
   /**
    * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
@@ -42,62 +45,71 @@ export default class RichTextDataProcessor implements DataProcessor {
    */
   private readonly toDataFilterRules: FilterRuleSet = {
     elements: {
-      ol: function (element) {
+      $: (element) => {
+        if (!this.richTextSchema.isAllowedAtParent(element)) {
+          // Element is not allowed in CoreMedia Richtext or at least not attached to the given parent:
+          // Remove it and attach its children to the parent.
+          element.replaceByChildren = true;
+        } else {
+          this.richTextSchema.adjustAttributes(element);
+        }
+      },
+      ol: (element) => {
         // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
         return !(element.children.length === 0 || !element.getFirst("li"));
       },
-      ul: function (element) {
+      ul: (element) => {
         // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
         return !(element.children.length === 0 || !element.getFirst("li"));
       },
-      h1: function (element) {
+      h1: (element) => {
         element.name = "p";
         element.attributes["class"] = "p--heading-1";
       },
-      h2: function (element) {
+      h2: (element) => {
         element.name = "p";
         element.attributes["class"] = "p--heading-2";
       },
-      h3: function (element) {
+      h3: (element) => {
         element.name = "p";
         element.attributes["class"] = "p--heading-3";
       },
-      h4: function (element) {
+      h4: (element) => {
         element.name = "p";
         element.attributes["class"] = "p--heading-4";
       },
-      h5: function (element) {
+      h5: (element) => {
         element.name = "p";
         element.attributes["class"] = "p--heading-5";
       },
-      h6: function (element) {
+      h6: (element) => {
         element.name = "p";
         element.attributes["class"] = "p--heading-6";
       },
-      b: function (element) {
+      b: (element) => {
         element.name = "strong";
       },
-      i: function (element) {
+      i: (element) => {
         element.name = "em";
       },
-      u: function (element) {
+      u: (element) => {
         element.name = "span";
         element.attributes["class"] = "underline";
       },
-      strike: function (element) {
+      strike: (element) => {
         element.name = "span";
         element.attributes["class"] = "strike";
       },
-      th: function (element) {
+      th: (element) => {
         element.name = "td";
       },
-      span: function (element) {
+      span: (element) => {
         if (!element.attributes["class"]) {
           // drop element, but not children
           element.name = "";
         }
       },
-      "xdiff:span": function (element) {
+      "xdiff:span": (element) => {
         element.name = "";
       },
     },
@@ -135,19 +147,23 @@ export default class RichTextDataProcessor implements DataProcessor {
   }
 
   private htmlToRichText(html: string): string {
+    const startTimestamp = performance.now();
     const richText: string = html2RichText(html);
     this.logger.debug("Transformed HTML to RichText:", {
       in: html,
       out: richText,
+      milliseconds: performance.now() - startTimestamp,
     });
     return richText;
   }
 
   private richTextToHtml(data: string): string {
+    const startTimestamp = performance.now();
     const html: string = richText2Html(data);
     this.logger.debug("Transformed RichText to HTML:", {
       in: data,
       out: html,
+      milliseconds: performance.now() - startTimestamp,
     });
     return html;
   }
