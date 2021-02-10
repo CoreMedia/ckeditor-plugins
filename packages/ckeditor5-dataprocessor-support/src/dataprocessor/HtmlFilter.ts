@@ -34,6 +34,14 @@ export default class HtmlFilter {
 
   private applyToChildNodes(parent: Node, startFrom?: Node): void {
     const childNodes: ChildNode[] = Array.from(parent.childNodes);
+    /*
+     * doFilter:
+     *   This controls the "restart from" feature. If we want to restart from
+     *   a given node, we don't want to start filtering the child nodes, until
+     *   we have reached the desired node. Thus, if `startFrom` is set, we
+     *   will start to loop without filtering until we have found the desired
+     *   node.
+     */
     let doFilter = !startFrom;
     for (const childNode of childNodes) {
       doFilter = doFilter || childNode.isSameNode(startFrom || null);
