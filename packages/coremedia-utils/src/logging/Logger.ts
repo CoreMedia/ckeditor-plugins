@@ -1,7 +1,7 @@
 /**
  * Used to log at given levels.
  */
-import {LogLevel} from "./LogLevel";
+import { LogLevel } from "./LogLevel";
 
 export default interface Logger {
   /**
