@@ -84,7 +84,7 @@ export default class MutableElement {
           this.remove = true;
         }
 
-        const continueOrContinueWith = this.persist();
+        const continueOrContinueWith = this.persistInternal();
         if (continueOrContinueWith instanceof Node) {
           return continueOrContinueWith;
         }
@@ -97,12 +97,19 @@ export default class MutableElement {
   }
 
   /**
+   * Persist changes in DOM applied to this element.
+   */
+  persist(): void {
+    this.persistInternal();
+  }
+
+  /**
    * Persists the changes, as requested.
    *
    * @return a node from where a restart is required; or a boolean flag if
    * filtering shall be continued for this element.
    */
-  private persist(): Node | boolean {
+  private persistInternal(): Node | boolean {
     const newName = this._name;
     if (newName === null) {
       return this.persistDeletion();
@@ -116,8 +123,14 @@ export default class MutableElement {
     return this.persistReplaceBy(newName);
   }
 
-  private persistAttributes(): true {
-    Object.keys(this._attributes).forEach((key: string) => {
+  private persistAttributes(): true | Element {
+    const attributeNames = Object.keys(this._attributes);
+    if (attributeNames.indexOf("xmlns") >= 0) {
+      // We cannot just set attributes. We need to create a new element with
+      // the given namespace.
+      return this.persistReplaceBy(this._delegate.tagName.toLowerCase(), this._attributes["xmlns"]);
+    }
+    attributeNames.forEach((key: string) => {
       const value: AttributeValue = this._attributes[key];
       if (value === null) {
         this._delegate.removeAttribute(key);
@@ -153,16 +166,31 @@ export default class MutableElement {
     return firstChild || false;
   }
 
-  private persistReplaceBy(newName: string): Element {
-    const newElement = this._delegate.ownerDocument.createElement(newName);
+  private persistReplaceBy(newName: string, namespace?: string | null): Element {
+    if (!namespace && !!this.attributes["xmlns"]) {
+      return this.persistReplaceBy(newName, this.attributes["xmlns"]);
+    }
+    let newElement: Element;
+    if (namespace) {
+      newElement = this._delegate.ownerDocument.createElementNS(namespace, newName);
+    } else {
+      newElement = this._delegate.ownerDocument.createElement(newName);
+    }
+    this.replaceByElement(newElement);
+    return newElement;
+  }
 
+  private replaceByElement(newElement: Element): void {
     const attributesToCopy = this.attributes;
-    Object.keys(attributesToCopy).forEach((key: string) => {
-      const value = attributesToCopy[key];
-      if (value !== null) {
-        newElement.setAttribute(key, value);
-      }
-    });
+    Object.keys(attributesToCopy)
+      // Must not set namespace as attribute.
+      .filter((key) => key !== "xmlns")
+      .forEach((key: string) => {
+        const value = attributesToCopy[key];
+        if (value !== null) {
+          newElement.setAttribute(key, value);
+        }
+      });
 
     const childrenToMove = this._delegate.childNodes;
     while (childrenToMove.length > 0) {
@@ -172,10 +200,8 @@ export default class MutableElement {
 
     const parentNode = this._delegate.parentNode;
     if (!!parentNode) {
-      parentNode.insertBefore(newElement, this._delegate);
-      parentNode.removeChild(this._delegate);
+      parentNode.replaceChild(newElement, this._delegate);
     }
-    return newElement;
   }
 
   /**

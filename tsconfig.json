@@ -10,6 +10,8 @@
     "moduleResolution": "Node",
     "newLine": "LF",
     "removeComments": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES6"

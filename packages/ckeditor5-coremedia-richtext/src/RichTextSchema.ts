@@ -176,7 +176,7 @@ const URI_PATTERN = new RegExp(
  * @see <a href="https://stackoverflow.com/questions/3962543/how-can-i-validate-a-culture-code-with-a-regular-expression/3962783#3962783">regex - How can I validate a culture code with a regular expression? - Stack Overflow</a>
  * @see <a href="https://tools.ietf.org/html/bcp47">BCP 47 - Tags for Identifying Languages</a>
  */
-const LANGUAGE_PATTERN = /[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*/;
+const LANGUAGE_PATTERN = /^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$/;
 
 const CDATA: AttributeValueValidator = () => true;
 
@@ -234,14 +234,14 @@ const ATTRIBUTE_GROUP_I18N: Attributes = {
 const ATTRIBUTE_GROUP_ATTR: Attributes = { ...ATTRIBUTE_GROUP_COREATTRS, ...ATTRIBUTE_GROUP_I18N };
 
 const ATTRIBUTE_GROUP_CELLHALIGN: Attributes = {
-  class: {
+  align: {
     valueValidator: (v) => ["left", "center", "right"].indexOf(v) >= 0,
     onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
   },
 };
 
 const ATTRIBUTE_GROUP_CELLVALIGN: Attributes = {
-  class: {
+  valign: {
     valueValidator: (v) => ["top", "middle", "bottom", "baseline"].indexOf(v) >= 0,
     onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
   },
@@ -352,8 +352,12 @@ const ELEMENTS: Elements = {
     attributeList: {
       xmlns: {
         valueValidator: (s) => COREMEDIA_RICHTEXT_1_0_NAMESPACE === s,
-        onInvalidValue: () => COREMEDIA_RICHTEXT_1_0_NAMESPACE,
-        onMissingAttribute: () => COREMEDIA_RICHTEXT_1_0_NAMESPACE,
+        onInvalidValue: () => {
+          return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
+        },
+        onMissingAttribute: () => {
+          return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
+        },
       },
       "xmlns:xlink": {
         valueValidator: (s) => XLINK_NAMESPACE === s,
@@ -449,7 +453,7 @@ const ELEMENTS: Elements = {
     mayBeEmpty: true,
     mayContainText: false,
     nestedElementNames: [],
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_COREATTRS },
   },
   em: {
     ...MODEL_GROUP_INLINE,
@@ -477,6 +481,7 @@ const ELEMENTS: Elements = {
       alt: {
         valueValidator: TEXT,
         onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onMissingAttribute: () => "",
       },
       height: {
         valueValidator: LENGTH,
@@ -645,6 +650,9 @@ export default class RichTextSchema {
   /**
    * Final clean-up of attributes. This method is meant as "last resort"
    * providing a valid CoreMedia RichText DTD.
+   *
+   * Note, that changes are only applied to the mutable element. It is required
+   * to persist these changes to propagate it to the wrapped delegate element.
    *
    * @param element element to process
    */
