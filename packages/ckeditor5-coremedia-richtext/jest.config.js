@@ -1,12 +1,3 @@
-const babelConfig = require("./babel.config.js");
+const jestConfig = require("../../shared-jest.config.js");
 
-module.exports = {
-  testEnvironment: 'jsdom',
-  moduleFileExtensions: ["js", "ts", "d.ts"],
-  transform: {
-    "^.+\\.[jt]sx?$": ["babel-jest", babelConfig],
-  },
-  transformIgnorePatterns: [
-    "node_modules/(?!@ckeditor|lodash-es)"
-  ],
-};
+module.exports = { ...jestConfig};
