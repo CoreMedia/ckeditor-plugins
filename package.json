@@ -30,7 +30,7 @@
     "packages/ckeditor5-dataprocessor-support",
     "packages/ckeditor5-symbol-on-paste-mapper",
     "packages/ckeditor5-coremedia-richtext",
-    "app/"
+    "app"
   ],
   "scripts": {
     "bootstrap": "yarn install",
