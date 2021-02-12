@@ -22,12 +22,15 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/dist/SymbolOnPasteMapper.js';
 import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/dist/CoreMediaRichText.js';
+import { setupPreview, updatePreview } from './preview'
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const inspectorFlag = 'inspector';
 const wantsInspector = urlParams.has(inspectorFlag) ? 'false' !== urlParams.get(inspectorFlag) : false;
 const inspectorToggle = document.getElementById(inspectorFlag);
+
+setupPreview();
 
 if (wantsInspector) {
   inspectorToggle.setAttribute('href', '?inspector=false');
@@ -114,4 +117,5 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
 
 function saveData(source, data) {
   console.log("Saving data triggered by " + source, {data: data});
+  updatePreview(data)
 }

@@ -13,6 +13,15 @@
 	--ck-sample-editor-min-height: 400px;
 }
 
+/* --------- PREVIEW STYLES  ---------------------------------------------------------------------------------------- */
+.preview {
+  background-color: white;
+  margin-left: 3em;
+  padding: 2em;
+  border: 1px solid #c4c4c4;
+  white-space: pre-wrap;
+}
+
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
 .editor__editable,

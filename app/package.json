@@ -23,8 +23,9 @@
     "@ckeditor/ckeditor5-table": "^24.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^24.0.0",
     "@ckeditor/ckeditor5-ui": "^24.0.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "1.0.0",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.0",
-    "@coremedia/ckeditor5-coremedia-richtext": "1.0.0"
+    "xml-formatter": "^2.4.0"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^24.0.0",
@@ -34,13 +35,13 @@
     "postcss": "^8.2.4",
     "postcss-loader": "^4.1.0",
     "raw-loader": "^4.0.2",
+    "rimraf": "^3.0.2",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.1.1",
     "ts-loader": "^8.0.14",
     "typescript": "^4.1.3",
     "webpack": "^5.12.3",
-    "webpack-cli": "^4.3.1",
-    "rimraf": "^3.0.2"
+    "webpack-cli": "^4.3.1"
   },
   "scripts": {
     "clean": "rimraf ./dist",
