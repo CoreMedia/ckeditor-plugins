@@ -44,6 +44,10 @@ export default class MutableElement {
     return this._delegate.parentNode;
   }
 
+  get parentElement(): HTMLElement | null {
+    return this._delegate.parentElement;
+  }
+
   /**
    * The nodes that are direct children of this element.
    */

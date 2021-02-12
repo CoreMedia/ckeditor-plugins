@@ -11,6 +11,13 @@ import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/src/logging/LoggerProvider";
 import CoreMediaRichText from "./CoreMediaRichText";
 
+/*
+ * TODO[cke]
+ *   * provide method adjustElement() which first calls to adjust parent, and then (if parent not adjusted), fix attributes
+ *   * Replace call in dataprocessor by this new method.
+ *   * Check, if we could provide a quick check to validate a complete DOM
+ *   * Change RichTextWriter to generate XML rather than HTML using DOMSerializer.
+ */
 /**
  * Strictness for Schema validation.
  */
@@ -576,40 +583,49 @@ const ELEMENTS: Elements = {
 };
 
 /**
- * Initializes property `parentElementNames` derived from the existing
- * relationship parent to child. Thus, add a reverse mapping for easier
- * lookup.
- *
- * @param elements element schema to process
- */
-function initParentElementNames(elements: Elements): void {
-  Object.keys(elements).forEach((elementName) => {
-    const nestedElementNames: string[] = elements[elementName].nestedElementNames;
-    nestedElementNames.forEach((nested) => {
-      if (elements.hasOwnProperty(nested)) {
-        const nestedElementSpecification = elements[nested];
-        const newParents: string[] = nestedElementSpecification.parentElementNames ?? [];
-        if (newParents.indexOf(elementName) < 0) {
-          newParents.push(elementName);
-        }
-        nestedElementSpecification.parentElementNames = newParents;
-      } else {
-        throw new Error(`Nested Element <${nested}> of element <${elementName}> not available in schema definition.`);
-      }
-    });
-  });
-}
-
-/**
  * Representation of CoreMedia RichText 1.0 Schema.
  */
 export default class RichTextSchema {
-  private readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
+  private static readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
   private readonly strictness: Strictness;
 
   constructor(strictness: Strictness) {
     this.strictness = strictness;
-    initParentElementNames(ELEMENTS);
+    RichTextSchema.initParentElementNames(ELEMENTS);
+  }
+
+  /**
+   * Initializes property `parentElementNames` derived from the existing
+   * relationship parent to child. Thus, add a reverse mapping for easier
+   * lookup.
+   *
+   * @param elements element schema to process
+   */
+  private static initParentElementNames(elements: Elements): void {
+    Object.keys(elements).forEach((elementName) => {
+      const nestedElementNames: string[] = elements[elementName].nestedElementNames;
+      nestedElementNames.forEach((nested) => {
+        if (elements.hasOwnProperty(nested)) {
+          const nestedElementSpecification = elements[nested];
+          const newParents: string[] = nestedElementSpecification.parentElementNames ?? [];
+          if (newParents.indexOf(elementName) < 0) {
+            newParents.push(elementName);
+          }
+          nestedElementSpecification.parentElementNames = newParents;
+        } else {
+          throw new Error(`Nested Element <${nested}> of element <${elementName}> not available in schema definition.`);
+        }
+      });
+    });
+    if (RichTextSchema.logger.isDebugEnabled()) {
+      RichTextSchema.logger.debug("Initialized child-parent relationship.");
+      Object.keys(elements).forEach((elementName) => {
+        RichTextSchema.logger.debug(
+          `    Initialized <${elementName}> to be child of:`,
+          elements[elementName].parentElementNames
+        );
+      });
+    }
   }
 
   /**
@@ -623,33 +639,58 @@ export default class RichTextSchema {
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
-      this.logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
+      RichTextSchema.logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
       return false;
     }
+
     const elementSpecification = ELEMENTS[elementName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      this.logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
+      RichTextSchema.logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
       return false;
     }
-    if (!elementSpecification.parentElementNames) {
-      throw new Error("Parent element names in specification not initialized.");
-    }
-    const parentName = element.parent?.nodeName.toLowerCase();
-    if (!parentName) {
-      this.logger.debug(`No need to check parent, as no parent available for element <${elementName}>.`);
+
+    const parentName = element.parentElement?.tagName.toLowerCase();
+    const isAtRoot = !element.parentElement;
+
+    if (isAtRoot) {
+      if (!!elementSpecification.parentElementNames) {
+        RichTextSchema.logger.debug(`Element <${elementName}> not allowed at root.`);
+        return false;
+      }
       return true;
+    } else if (!elementSpecification.parentElementNames) {
+      RichTextSchema.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      return false;
     }
-    const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(parentName) >= 0;
+
+    const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(<string>parentName) >= 0;
     if (!isAllowedAtParent) {
-      this.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      RichTextSchema.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
     return isAllowedAtParent;
   }
 
   /**
-   * Final clean-up of attributes. This method is meant as "last resort"
-   * providing a valid CoreMedia RichText DTD.
+   * Final clean-up of hierarchy.
+   * This method is meant as "last resort" providing a valid CoreMedia RichText
+   * DTD.
+   *
+   * Note, that changes are only applied to the mutable element. It is required
+   * to persist these changes to propagate it to the wrapped delegate element.
+   *
+   * @param element
+   */
+  adjustHierarchy(element: MutableElement): void {
+    if (!this.isAllowedAtParent(element)) {
+      element.replaceByChildren = true;
+    }
+  }
+
+  /**
+   * Final clean-up of attributes.
+   * This method is meant as "last resort" providing a valid CoreMedia RichText
+   * DTD.
    *
    * Note, that changes are only applied to the mutable element. It is required
    * to persist these changes to propagate it to the wrapped delegate element.
@@ -679,7 +720,7 @@ export default class RichTextSchema {
     const notAllowedAttributes: string[] = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
 
     if (notAllowedAttributes.length > 0) {
-      this.logger.debug(
+      RichTextSchema.logger.debug(
         `${notAllowedAttributes.length} unsupported attribute(s) found at <${element.name}>. Attribute(s) will be removed prior to storing to server.`,
         {
           element: element,
@@ -705,12 +746,12 @@ export default class RichTextSchema {
           const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY;
           const suggestedValue = invalidValueHandler(attributeValue, this.strictness);
           if (suggestedValue === undefined) {
-            this.logger.debug(
+            RichTextSchema.logger.debug(
               `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
             );
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
-            this.logger.debug(
+            RichTextSchema.logger.debug(
               `Adjusting attribute ${attributeName} for <${element.name}>: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`
             );
             element.attributes[attributeName] = suggestedValue;
@@ -735,7 +776,7 @@ export default class RichTextSchema {
       const handler = specification.onMissingAttribute ?? NOTHING_TODO_ON_MISSING_ATTRIBUTE;
       const suggestedValue = handler();
       if (suggestedValue !== undefined) {
-        this.logger.debug(
+        RichTextSchema.logger.debug(
           `Adjusting attribute ${attributeName} for <${element.name}>: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`
         );
         element.attributes[attributeName] = suggestedValue;

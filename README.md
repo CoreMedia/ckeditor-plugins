@@ -150,14 +150,6 @@ For more information see: [yarn policies | Yarn](https://classic.yarnpkg.com/en/
 * Example: [DMITRYTISHKIN/ckeditor-plugin](https://github.com/DMITRYTISHKIN/ckeditor-plugin)
 * Example (Full CKEditor): [matepapp/nextjs-aws-amplify: Proof of concept combining the serverless powers of NextJS and AWS Amplify](https://github.com/matepapp/nextjs-aws-amplify)
 
-### TypeScript
-
-* [TypeScript: How to set up TypeScript](https://www.typescriptlang.org/download)
-* [DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions.](https://github.com/DefinitelyTyped/DefinitelyTyped)
-* [Using a JavaScript library (without type declarations) in a TypeScript project. | by Steve Ruiz | Medium](https://medium.com/@steveruiz/using-a-javascript-library-without-type-declarations-in-a-typescript-project-3643490015f3)
-* [TypeScript: TSConfig Reference - Docs on every TSConfig option](https://www.typescriptlang.org/tsconfig)
-* [Smarter way to organize “import” statements using “index.ts” file(s) in Angular | by Balram Chavan | Medium](https://medium.com/@balramchavan/smarter-way-to-organize-import-statements-using-index-ts-file-s-in-angular-c685e9d645b7)
-
 ### Yarn
 
 * [Getting Started | Yarn](https://classic.yarnpkg.com/en/docs/getting-started/)
