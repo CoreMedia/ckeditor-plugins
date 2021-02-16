@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./dist",
+    "baseUrl": "..",
+    "outDir": "../dist",
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
@@ -25,13 +25,13 @@
     ]
   },
   "exclude": [
-    "dist",
+    "../dist",
     "node_modules"
   ],
-  "extends": "../../tsconfig",
+  "extends": "../../../tsconfig.json",
   "include": [
     "src/**/*.ts",
     "__tests__/**/*.ts",
-    "../../node_modules/@types/jest/index.d.ts"
+    "../../../node_modules/@types/jest/index.d.ts"
   ]
 }

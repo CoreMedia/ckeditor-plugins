@@ -617,10 +617,10 @@ export default class RichTextSchema {
         }
       });
     });
-    if (RichTextSchema.logger.isDebugEnabled()) {
-      RichTextSchema.logger.debug("Initialized child-parent relationship.");
+    if (logger.isDebugEnabled()) {
+      logger.debug("Initialized child-parent relationship.");
       Object.keys(elements).forEach((elementName) => {
-        RichTextSchema.logger.debug(
+        logger.debug(
           `    Initialized <${elementName}> to be child of:`,
           elements[elementName].parentElementNames
         );
@@ -639,14 +639,14 @@ export default class RichTextSchema {
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
-      RichTextSchema.logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
+      logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
       return false;
     }
 
     const elementSpecification = ELEMENTS[elementName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      RichTextSchema.logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
+      logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
       return false;
     }
 
@@ -655,18 +655,18 @@ export default class RichTextSchema {
 
     if (isAtRoot) {
       if (!!elementSpecification.parentElementNames) {
-        RichTextSchema.logger.debug(`Element <${elementName}> not allowed at root.`);
+        logger.debug(`Element <${elementName}> not allowed at root.`);
         return false;
       }
       return true;
     } else if (!elementSpecification.parentElementNames) {
-      RichTextSchema.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
       return false;
     }
 
     const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(<string>parentName) >= 0;
     if (!isAllowedAtParent) {
-      RichTextSchema.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
     return isAllowedAtParent;
   }
@@ -720,7 +720,7 @@ export default class RichTextSchema {
     const notAllowedAttributes: string[] = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
 
     if (notAllowedAttributes.length > 0) {
-      RichTextSchema.logger.debug(
+      logger.debug(
         `${notAllowedAttributes.length} unsupported attribute(s) found at <${element.name}>. Attribute(s) will be removed prior to storing to server.`,
         {
           element: element,
@@ -746,12 +746,12 @@ export default class RichTextSchema {
           const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY;
           const suggestedValue = invalidValueHandler(attributeValue, this.strictness);
           if (suggestedValue === undefined) {
-            RichTextSchema.logger.debug(
+            logger.debug(
               `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
             );
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
-            RichTextSchema.logger.debug(
+            logger.debug(
               `Adjusting attribute ${attributeName} for <${element.name}>: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`
             );
             element.attributes[attributeName] = suggestedValue;
@@ -776,7 +776,7 @@ export default class RichTextSchema {
       const handler = specification.onMissingAttribute ?? NOTHING_TODO_ON_MISSING_ATTRIBUTE;
       const suggestedValue = handler();
       if (suggestedValue !== undefined) {
-        RichTextSchema.logger.debug(
+        logger.debug(
           `Adjusting attribute ${attributeName} for <${element.name}>: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`
         );
         element.attributes[attributeName] = suggestedValue;

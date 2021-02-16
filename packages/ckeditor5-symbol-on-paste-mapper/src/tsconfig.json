@@ -1,16 +1,16 @@
 {
-  "extends": "../../tsconfig",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "baseUrl": ".",
+    "baseUrl": "..",
     "lib": [
       "ES6",
       "DOM",
       "ES2015.Promise"
     ],
-    "outDir": "./dist",
+    "outDir": "../dist",
     "strict": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
@@ -41,10 +41,10 @@
   "include": [
     "src/**/*.ts",
     "__tests__/**/*.ts",
-    "../../node_modules/@types/jest/index.d.ts"
+    "../../../node_modules/@types/jest/index.d.ts"
   ],
   "exclude": [
-    "dist",
+    "../dist",
     "node_modules"
   ]
 }
