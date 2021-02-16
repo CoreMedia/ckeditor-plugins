@@ -16,7 +16,17 @@
     "webpack-cli": "^4.3.1"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=14.0.0"
+  },
+  "exports": {
+    "./": "./dist/"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/*"
+      ]
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -63,7 +73,7 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "build": "tsc --build src/tsconfig.build.json && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "clean": "rimraf ./dist",
     "test": "jest",
     "lint": "eslint --fix \"src/**\"",

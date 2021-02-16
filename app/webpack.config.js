@@ -21,7 +21,7 @@ module.exports = {
   entry: path.resolve(__dirname, 'src', 'ckeditor.js'),
 
   resolve: {
-    extensions: ['.ts', '.js', '.json']
+    extensions: ['.js', '.json']
   },
 
   output: {
@@ -63,11 +63,6 @@ module.exports = {
 
   module: {
     rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
       {
         test: /\.svg$/,
         use: ['raw-loader']

@@ -1,7 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import LoggerProvider from "@coremedia/coremedia-utils/src/logging/LoggerProvider";
-import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import RichTextDataProcessor from "./RichTextDataProcessor";
 
 export default class CoreMediaRichText extends Plugin {

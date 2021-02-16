@@ -5,13 +5,13 @@ import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataproc
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import html2RichText from "./html2richtext/html2richtext";
 import richText2Html from "./richtext2html/richtext2html";
-import Logger from "@coremedia/coremedia-utils/src/logging/Logger";
-import LoggerProvider from "@coremedia/coremedia-utils/src/logging/LoggerProvider";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import CoreMediaRichText from "./CoreMediaRichText";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import RichTextHtmlWriter from "./RichTextHtmlWriter";
-import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor/HtmlFilter";
+import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 
 export default class RichTextDataProcessor implements DataProcessor {

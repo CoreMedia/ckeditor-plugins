@@ -1,25 +1,11 @@
 {
-  "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "baseUrl": "..",
-    "lib": [
-      "ES6",
-      "DOM",
-      "ES2015.Promise"
-    ],
+    "baseUrl": ".",
+    "rootDir": ".",
     "outDir": "../dist",
-    "strict": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "removeComments": true,
-    "newLine": "LF",
-    "typeRoots": [
-      "../../types/*",
-      "node_modules/@types"
-    ],
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
@@ -38,13 +24,8 @@
       ]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "__tests__/**/*.ts",
-    "../../../node_modules/@types/jest/index.d.ts"
-  ],
-  "exclude": [
-    "../dist",
-    "node_modules"
-  ]
+  "references": [{
+    "path": "../../coremedia-utils/src"
+  }],
+  "extends": "../../../tsconfig.json",
 }

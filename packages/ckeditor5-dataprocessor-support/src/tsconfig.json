@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": "..",
+    "baseUrl": ".",
+    "rootDir": ".",
     "outDir": "../dist",
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
     "paths": {
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
@@ -19,19 +23,9 @@
         "../../types/ckeditor__ckeditor5-utils/*"
       ]
     },
-    "typeRoots": [
-      "../../types/*",
-      "node_modules/@types"
-    ]
   },
-  "exclude": [
-    "../dist",
-    "node_modules"
-  ],
+  "references": [{
+    "path": "../../coremedia-utils/src"
+  }],
   "extends": "../../../tsconfig.json",
-  "include": [
-    "src/**/*.ts",
-    "__tests__/**/*.ts",
-    "../../../node_modules/@types/jest/index.d.ts"
-  ]
 }

@@ -1,6 +1,6 @@
 import "jest-xml-matcher";
 import RichTextSchema, { Strictness } from "../src/RichTextSchema";
-import { MutableElement } from "@coremedia/ckeditor5-dataprocessor-support/src/dataprocessor";
+import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
 
 type CommentableTestData = {
   /**
@@ -787,7 +787,7 @@ describe("RichTextSchema.adjustAttributes", () => {
     ],
   ];
 
-  const strictnessKeys = Object.keys(Strictness).filter(x => !(parseInt(x) >= 0));
+  const strictnessKeys = Object.keys(Strictness).filter((x) => !(parseInt(x) >= 0));
 
   describe.each<TransformAttributesTestFixture>(testFixtures)(
     "(%#) %s",
@@ -797,7 +797,12 @@ describe("RichTextSchema.adjustAttributes", () => {
 
         test(`${name} (mode: ${strictnessKeys[strictness]})`, () => {
           const xmlDocument: Document = parser.parseFromString(testData.input.trim(), "text/xml");
-          const xPathResult = xmlDocument.evaluate(testData.xpath, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE);
+          const xPathResult = xmlDocument.evaluate(
+            testData.xpath,
+            xmlDocument,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE
+          );
           const element: Element = <Element>xPathResult.singleNodeValue;
           const mutableElement = new MutableElement(element);
 
@@ -818,7 +823,8 @@ describe("RichTextSchema.adjustAttributes", () => {
           expect(actualXml).toEqualXML(testData.expected);
         });
       }
-    });
+    }
+  );
 });
 
 /*
