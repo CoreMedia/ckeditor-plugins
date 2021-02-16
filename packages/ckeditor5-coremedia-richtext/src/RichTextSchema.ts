@@ -586,7 +586,9 @@ const ELEMENTS: Elements = {
  * Representation of CoreMedia RichText 1.0 Schema.
  */
 export default class RichTextSchema {
-  private static readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
+  // TODO this results in a cyclic dependency:
+  // private static readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
+  private static readonly logger: Logger = LoggerProvider.getLogger("CoreMediaRichText");
   private readonly strictness: Strictness;
 
   constructor(strictness: Strictness) {
