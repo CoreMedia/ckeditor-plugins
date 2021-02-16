@@ -31,6 +31,7 @@
     "@ckeditor/ckeditor5-dev-utils": "^24.0.0",
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^24.0.0",
     "@ckeditor/ckeditor5-inspector": "^2.2.1",
+    "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^5.0.1",
     "postcss": "^8.2.4",
     "postcss-loader": "^4.1.0",

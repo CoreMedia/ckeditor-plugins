@@ -12,6 +12,7 @@ const webpack = require('webpack');
 const {bundler, styles} = require('@ckeditor/ckeditor5-dev-utils');
 const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const CircularDependencyPlugin = require("circular-dependency-plugin");
 
 module.exports = {
   devtool: 'eval-cheap-module-source-map',
@@ -58,7 +59,11 @@ module.exports = {
     new webpack.BannerPlugin({
       banner: bundler.getLicenseBanner(),
       raw: true
-    })
+    }),
+    new CircularDependencyPlugin({
+      exclude: /node_modules/,
+      failOnError: true,
+    }),
   ],
 
   module: {
