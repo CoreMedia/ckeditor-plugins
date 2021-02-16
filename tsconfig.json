@@ -18,11 +18,6 @@
     "composite": true,
     "incremental": true,
     "types": [
-      "@ckeditor/ckeditor5-clipboard",
-      "@ckeditor/ckeditor5-core",
-      "@ckeditor/ckeditor5-engine",
-      "@ckeditor/ckeditor5-paste-from-office",
-      "@ckeditor/ckeditor5-utils",
       "jest"
     ]
   }
