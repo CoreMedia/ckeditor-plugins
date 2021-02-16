@@ -9,4 +9,5 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!@ckeditor|lodash-es)"
   ],
+  resolver: "../../enhanced-resolve.js"
 };

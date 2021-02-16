@@ -5,13 +5,6 @@
   "keywords": [
     "coremedia"
   ],
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ],
-  "main": "dist/index.js",
-  "main:src": "src/index.ts",
-  "types": "dist/index.d.ts",
   "private": true,
   "dependencies": {
     "webpack": "^5.12.3",
