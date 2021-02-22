@@ -13,9 +13,10 @@ import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter"
 import RichTextHtmlWriter from "./RichTextHtmlWriter";
 import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
 import RichTextSchema, { Strictness } from "./RichTextSchema";
+import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 
 export default class RichTextDataProcessor implements DataProcessor {
-  private readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
+  private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   private readonly delegate: HtmlDataProcessor;
   private readonly domConverter: DomConverter;
   private readonly htmlWriter: HtmlWriter;
