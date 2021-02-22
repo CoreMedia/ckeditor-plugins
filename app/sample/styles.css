@@ -20,6 +20,7 @@
   padding: 2em;
   border: 1px solid #c4c4c4;
   white-space: pre-wrap;
+  font-family: Monaco,Menlo,Consolas,"Roboto Mono","Courier New","Ubuntu Mono",monospace;
 }
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
