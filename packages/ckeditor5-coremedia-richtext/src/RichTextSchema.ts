@@ -238,7 +238,7 @@ const ATTRIBUTE_GROUP_I18N: Attributes = {
   },
 };
 
-const ATTRIBUTE_GROUP_ATTR: Attributes = { ...ATTRIBUTE_GROUP_COREATTRS, ...ATTRIBUTE_GROUP_I18N };
+const ATTRIBUTE_GROUP_ATTRS: Attributes = { ...ATTRIBUTE_GROUP_COREATTRS, ...ATTRIBUTE_GROUP_I18N };
 
 const ATTRIBUTE_GROUP_CELLHALIGN: Attributes = {
   align: {
@@ -376,30 +376,30 @@ const ELEMENTS: Elements = {
   /* -----------------------------------------------------[ Paragraphs ]----- */
   p: {
     ...MODEL_GROUP_INLINE,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   /* ----------------------------------------------------------[ Lists ]----- */
   ul: {
     mayBeEmpty: false,
     mayContainText: false,
     nestedElementNames: ["li"],
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   ol: {
     mayBeEmpty: false,
     mayContainText: false,
     nestedElementNames: ["li"],
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   li: {
     ...MODEL_GROUP_FLOW,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   /* ----------------------------------------------[ Preformatted Text ]----- */
   pre: {
     ...MODEL_GROUP_PRE_CONTENT,
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       "xml:space": {
         valueValidator: (s) => "preserve" === s,
         onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
@@ -410,7 +410,7 @@ const ELEMENTS: Elements = {
   blockquote: {
     ...MODEL_GROUP_BLOCK,
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       cite: {
         valueValidator: URI,
         onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
@@ -421,7 +421,7 @@ const ELEMENTS: Elements = {
   a: {
     ...MODEL_GROUP_A_CONTENT,
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       "xlink:type": {
         valueValidator: (s) => "simple" === s,
         onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
@@ -454,7 +454,7 @@ const ELEMENTS: Elements = {
   /* ------------------------------------------------[ Inline Elements ]----- */
   span: {
     ...MODEL_GROUP_INLINE,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   br: {
     mayBeEmpty: true,
@@ -464,19 +464,19 @@ const ELEMENTS: Elements = {
   },
   em: {
     ...MODEL_GROUP_INLINE,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   strong: {
     ...MODEL_GROUP_INLINE,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   sub: {
     ...MODEL_GROUP_INLINE,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   sup: {
     ...MODEL_GROUP_INLINE,
-    attributeList: { ...ATTRIBUTE_GROUP_ATTR },
+    attributeList: { ...ATTRIBUTE_GROUP_ATTRS },
   },
   /* ---------------------------------------------------------[ Images ]----- */
   img: {
@@ -484,7 +484,7 @@ const ELEMENTS: Elements = {
     mayContainText: false,
     nestedElementNames: [],
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       alt: {
         valueValidator: TEXT,
         onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
@@ -533,7 +533,7 @@ const ELEMENTS: Elements = {
     mayContainText: false,
     nestedElementNames: ["tbody", "tr"],
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       summary: {
         valueValidator: TEXT,
         onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
@@ -545,7 +545,7 @@ const ELEMENTS: Elements = {
     mayContainText: false,
     nestedElementNames: ["tr"],
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       ...ATTRIBUTE_GROUP_CELLHALIGN,
       ...ATTRIBUTE_GROUP_CELLVALIGN,
     },
@@ -555,7 +555,7 @@ const ELEMENTS: Elements = {
     mayContainText: false,
     nestedElementNames: ["td"],
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       ...ATTRIBUTE_GROUP_CELLHALIGN,
       ...ATTRIBUTE_GROUP_CELLVALIGN,
     },
@@ -563,7 +563,7 @@ const ELEMENTS: Elements = {
   td: {
     ...MODEL_GROUP_FLOW,
     attributeList: {
-      ...ATTRIBUTE_GROUP_ATTR,
+      ...ATTRIBUTE_GROUP_ATTRS,
       ...ATTRIBUTE_GROUP_CELLHALIGN,
       ...ATTRIBUTE_GROUP_CELLVALIGN,
       abbr: {
