@@ -3,17 +3,21 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import html2RichText from "./html2richtext/html2richtext";
 import richText2Html from "./richtext2html/richtext2html";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
-import CoreMediaRichText from "./CoreMediaRichText";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import RichTextHtmlWriter from "./RichTextHtmlWriter";
 import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
+import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
+
+const strike: ElementFilterRule = (element) => {
+  element.name = "span";
+  element.attributes["class"] = "strike";
+};
 
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -97,10 +101,9 @@ export default class RichTextDataProcessor implements DataProcessor {
         element.name = "span";
         element.attributes["class"] = "underline";
       },
-      strike: (element) => {
-        element.name = "span";
-        element.attributes["class"] = "strike";
-      },
+      del: strike,
+      s: strike,
+      strike: strike,
       th: (element) => {
         element.name = "td";
       },
