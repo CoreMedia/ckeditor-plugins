@@ -11,10 +11,10 @@ const setupPreview = () => {
 
 const updatePreview = (data) => {
   const preview = getPreviewPanel();
-  const formattedXml = format(data, {
+  const formattedXml = !!data ? format(data, {
     indentation: '   ',
     collapseContent: false
-  });
+  }) : "empty";
   preview.innerText = formattedXml;
 }
 
