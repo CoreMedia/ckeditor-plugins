@@ -101,9 +101,24 @@ export default class RichTextDataProcessor implements DataProcessor {
         element.name = "span";
         element.attributes["class"] = "underline";
       },
+      br: (element) => {
+        // Remove obsolete BR, if only element on block level element.
+        // TODO[cke] May be dangerous as we cannot provide a reverse mapping. Possibly remove, as it is a left-over from CKEditor 4.
+        const parent = element.parentElement;
+        return !(parent && parent.children.length === 1 && ["td", "p", "div"].indexOf(parent.name || ""));
+      },
       del: strike,
       s: strike,
       strike: strike,
+      div: (element) => {
+        // We are not applied to root-div. Thus, we have a nested div here, which
+        // is not allowed in CoreMedia RichText 1.0.
+        element.name = "p";
+      },
+      td: (element) => {
+        // TODO[cke]: In CKEditor 4 we did some clean-up here. This may be dangerous, as we cannot provide a reverse mapping.
+        //   The general question: Do we want to add filtering for clean-up here?
+      },
       th: (element) => {
         element.name = "td";
       },
