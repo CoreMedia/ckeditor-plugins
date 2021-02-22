@@ -12,8 +12,22 @@ export const BEFORE_ELEMENT = "^";
 export const AFTER_ELEMENT = "$";
 
 /**
+ * <p>
  * This filter implements a similar behavior as the HTML filter introduced
  * with CKEditor 4.
+ * </p>
+ * <p><strong>Findings on CKEditor 4 Filtering</strong></p>
+ * <p>
+ * <strong>Element, then Children:</strong> Filtering is done in that way, that
+ * first the element itself is processed. Afterwards, its children. This means,
+ * that for example an element cannot determine if it is empty, when subsequent
+ * filtering may remove child elements.
+ * </p>
+ * <p>
+ * <strong>$-Rule after Children:</strong> Only the $ rule is applied last to
+ * an element, i.e. it is ensured, that all children were processed. This is
+ * the only valid location to judge on empty/non-empty.
+ * </p>
  *
  * @see <a href="https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_htmlParser_filter.html">Class Filter (CKEDITOR.htmlParser.filter) - CKEditor 4 API docs</a>
  * @see <a href="https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_htmlParser_node.html">Class Node (CKEDITOR.htmlParser.node) - CKEditor 4 API docs</a>
