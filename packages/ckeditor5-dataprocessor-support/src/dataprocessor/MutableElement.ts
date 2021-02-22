@@ -44,8 +44,12 @@ export default class MutableElement {
     return this._delegate.parentNode;
   }
 
-  get parentElement(): HTMLElement | null {
-    return this._delegate.parentElement;
+  get parentElement(): MutableElement | null {
+    const parentElement = this._delegate.parentElement;
+    if (!parentElement) {
+      return null;
+    }
+    return new MutableElement(parentElement);
   }
 
   /**
@@ -53,6 +57,10 @@ export default class MutableElement {
    */
   get children(): ChildNode[] {
     return Array.from(this._delegate.childNodes);
+  }
+
+  get childElements(): MutableElement[] {
+    return Array.from(this._delegate.children).map(e => new MutableElement(e));
   }
 
   public getFirst(condition: string | ChildPredicate): ChildNode | undefined {
