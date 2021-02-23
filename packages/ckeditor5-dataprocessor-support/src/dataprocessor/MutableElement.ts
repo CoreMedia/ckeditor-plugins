@@ -1,3 +1,5 @@
+import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
+
 export type AttributeValue = string | null;
 
 export interface Attributes {
@@ -30,14 +32,17 @@ export default class MutableElement {
    * Overrides for attribute values.
    */
   private _attributes: Attributes = {};
+  private _namespaces: Namespaces;
 
   /**
    * Constructor.
    *
    * @param delegate the original element to wrap
+   * @param namespaces the namespaces to take into account
    */
-  constructor(delegate: Element) {
+  constructor(delegate: Element, namespaces: Namespaces = DEFAULT_NAMESPACES) {
     this._delegate = delegate;
+    this._namespaces = namespaces;
   }
 
   get parent(): (Node & ParentNode) | null {
@@ -123,7 +128,6 @@ export default class MutableElement {
    */
   private persistInternal(): Node | boolean {
     const newName = this._name;
-    // TODO[cke]: To be continued............. we need to change the element's namespace at minimum!
     if (newName === null) {
       return this.persistDeletion();
     }
@@ -137,21 +141,66 @@ export default class MutableElement {
   }
 
   private persistAttributes(): true | Element {
-    const attributeNames = Object.keys(this._attributes);
-    if (attributeNames.indexOf("xmlns") >= 0) {
+    const elementNamespaceAttribute: string | null = this._attributes["xmlns"];
+    if (!!elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
-      return this.persistReplaceBy(this._delegate.tagName.toLowerCase(), this._attributes["xmlns"]);
+      return this.persistReplaceBy(this._delegate.tagName.toLowerCase(), elementNamespaceAttribute);
     }
-    attributeNames.forEach((key: string) => {
-      const value: AttributeValue = this._attributes[key];
-      if (value === null) {
-        this._delegate.removeAttribute(key);
-      } else {
-        this._delegate.setAttribute(key, value);
-      }
-    });
+    /*
+     * We don't have an extra namespace-attribute set during filtering. Nevertheless,
+     * the namespace of this element may be different from owner-document. If it is
+     * different, we need to create a new element as well.
+     */
+    const ownerNamespaceURI = this._delegate.ownerDocument.documentElement.namespaceURI;
+    if (this._delegate.namespaceURI !== ownerNamespaceURI) {
+      return this.persistReplaceBy(this._delegate.tagName.toLowerCase(), ownerNamespaceURI);
+    }
+    this.applyAttributes(this._delegate, this._attributes);
     return true;
+  }
+
+  // TODO[cke] Document and Refactor/Simplify
+  private applyAttributes(targetElement: Element, attributes: Attributes) {
+    const ownerDocument = targetElement.ownerDocument;
+    const attributeNames = Object.keys(attributes);
+    attributeNames
+      // Must not set namespace as attribute.
+      .filter((key) => key !== "xmlns")
+      .forEach((key: string) => {
+        const value: AttributeValue = attributes[key];
+        // TODO[cke] Failed using ES2018 named group access here. Can you get it to work?
+        const pattern = /^(?<prefix>\w+):(?<localName>.*)$/;
+        // TODO[cke] Desired ES2018 pattern: const { groups: { prefix, localName } } = ...
+        const match: RegExpExecArray | null = pattern.exec(key);
+        if (!match) {
+          if (value === null) {
+            targetElement.removeAttributeNS(null, key);
+          } else {
+            targetElement.setAttributeNS(null, key, value);
+          }
+        } else {
+          const prefix = match[1];
+          const uri = this._namespaces[prefix]?.uri || null;
+          if (value === null) {
+            if (uri) {
+              targetElement.removeAttributeNS(uri, key);
+              // Also remove attribute, if not namespace aware.
+              targetElement.removeAttribute(key);
+            } else {
+              targetElement.removeAttribute(key);
+            }
+          } else {
+            if (uri) {
+              targetElement.setAttributeNS(uri, key, value);
+              // Publish Namespace to root element.
+              ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES["xmlns"].uri, `xmlns:${prefix}`, uri);
+            } else {
+              targetElement.setAttribute(key, value);
+            }
+          }
+        }
+      });
   }
 
   private persistDeletion(): false {
@@ -184,26 +233,18 @@ export default class MutableElement {
       return this.persistReplaceBy(newName, this.attributes["xmlns"]);
     }
     let newElement: Element;
+    const ownerDocument = this._delegate.ownerDocument;
     if (namespace) {
-      newElement = this._delegate.ownerDocument.createElementNS(namespace, newName);
+      newElement = ownerDocument.createElementNS(namespace, newName);
     } else {
-      newElement = this._delegate.ownerDocument.createElement(newName);
+      newElement = ownerDocument.createElementNS(ownerDocument.documentElement.namespaceURI, newName);
     }
     this.replaceByElement(newElement);
     return newElement;
   }
 
   private replaceByElement(newElement: Element): void {
-    const attributesToCopy = this.attributes;
-    Object.keys(attributesToCopy)
-      // Must not set namespace as attribute.
-      .filter((key) => key !== "xmlns")
-      .forEach((key: string) => {
-        const value = attributesToCopy[key];
-        if (value !== null) {
-          newElement.setAttribute(key, value);
-        }
-      });
+    this.applyAttributes(newElement, this.attributes);
 
     const childrenToMove = this._delegate.childNodes;
     while (childrenToMove.length > 0) {

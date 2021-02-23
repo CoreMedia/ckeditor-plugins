@@ -141,7 +141,6 @@ describe("MutableElement.applyRules()", () => {
         // the 'old' attribute completely.
         from: '<parent>Lorem <el old="old value">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el old="old value" new="new value">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -156,7 +155,78 @@ describe("MutableElement.applyRules()", () => {
         // the 'old' attribute completely.
         from: '<parent>Lorem <el old="old value">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el old="old value" new="new value">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
+      },
+    ],
+    [
+      "should respect added xlink namespace attributes",
+      {
+        rules: [
+          (me) => {
+            me.attributes["xlink:href"] = "https://example.org/";
+          },
+        ],
+        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "should respect added xml namespace attributes",
+      {
+        rules: [
+          (me) => {
+            me.attributes["xml:lang"] = "en-US";
+          },
+        ],
+        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el xml:lang="en-US">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "should respect xlink namespace when deleting attributes",
+      {
+        rules: [
+          (me) => {
+            me.attributes["xlink:href"] = null;
+          },
+        ],
+        from: '<parent>Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "should respect xml namespace when deleting attributes",
+      {
+        rules: [
+          (me) => {
+            me.attributes["xml:lang"] = null;
+          },
+        ],
+        from: '<parent>Lorem <el xml:lang="en-US">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "should blindly add attributes of unknown namespace prefix (decision, which may be vetoed)",
+      {
+        rules: [
+          (me) => {
+            me.attributes["unknown:namespace"] = "value";
+          },
+        ],
+        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el unknown:namespace="value">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "should be able removing attributes with unregistered namespace prefix",
+      {
+        rules: [
+          (me) => {
+            me.attributes["unknown:namespace"] = null;
+          },
+        ],
+        from: '<parent>Lorem <el unknown:namespace="value">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
       },
     ],
     [
@@ -169,7 +239,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el other="other">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -182,7 +251,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el other="other">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -195,7 +263,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el other="other">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -210,7 +277,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
         to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
-        restart: "//c1",
       },
     ],
     [
@@ -226,7 +292,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
         to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
-        restart: "//c1",
       },
     ],
     [
@@ -241,7 +306,6 @@ describe("MutableElement.applyRules()", () => {
         // the 'old' attribute completely.
         from: '<parent>Lorem <el attr="value" other="other">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el attr="prefixed:value" other="other">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -256,7 +320,6 @@ describe("MutableElement.applyRules()", () => {
         // the 'old' attribute completely.
         from: '<parent>Lorem <el attr="value" other="other">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el attr="prefixed:value" other="other">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -271,7 +334,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -288,7 +350,6 @@ describe("MutableElement.applyRules()", () => {
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
         to:
           '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -313,7 +374,6 @@ describe("MutableElement.applyRules()", () => {
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
         to:
           '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
       },
     ],
     [
@@ -322,15 +382,14 @@ describe("MutableElement.applyRules()", () => {
         rules: [
           (me) => {
             me.attributes["added"] = "";
-            ["added", "existing", "not:existing"].forEach((v) => {
+            ["added", "existing", "not_existing"].forEach((v) => {
               const existing: boolean = v in me.attributes;
               me.attributes[v] = String(existing);
             });
           },
         ],
         from: '<parent>Lorem <el existing="">Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el existing="true" added="true" not:existing="false">Ipsum</el> Dolor</parent>',
-        restart: "//c1",
+        to: '<parent>Lorem <el existing="true" added="true" not_existing="false">Ipsum</el> Dolor</parent>',
       },
     ],
     [

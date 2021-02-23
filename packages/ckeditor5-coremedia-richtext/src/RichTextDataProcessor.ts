@@ -167,14 +167,20 @@ export default class RichTextDataProcessor implements DataProcessor {
     const htmlFilter = new HtmlFilter(this.toDataFilterRules);
 
     const COREMEDIA_RICHTEXT_NAMESPACE = "http://www.coremedia.com/2003/richtext-1.0";
-    const XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
 
     const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE, "div");
+    // TODO[cke] Possibly provide config option OmitProcessingInstruction or (similar to C#) OmitXmlDeclaration)
+    const pi = doc.createProcessingInstruction('xml', 'version="1.0" encoding="utf-8"');
+    doc.insertBefore(pi, doc.firstChild);
+
     const container = doc.documentElement;
-    container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", XLINK_NAMESPACE);
+    // TODO[cke] In CKEditor 4 we ALWAYS added the XLINK Namespace, even if no links were contained.
+    //   We may require to reintroduce it, possibly by "legacy behavior" configuration option.
+    //container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", XLINK_NAMESPACE);
     container.appendChild(domFragment);
 
     htmlFilter.applyTo(container);
+
 
     const html: string = new XMLSerializer().serializeToString(doc);
     this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
