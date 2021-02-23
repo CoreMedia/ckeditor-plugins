@@ -34,7 +34,7 @@ jobs:
         run: yarn install
 
       - name: Build Workspace (Packages and App)
-        run: yarn workspaces run build
+        run: yarn run build
 
       - name: Unit Test Workspace
-        run: yarn workspaces run test
+        run: yarn run test
