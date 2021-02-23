@@ -51,6 +51,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   private readonly toDataFilterRules: FilterRuleSet = {
     elements: {
       $: (element) => {
+        // TODO[cke] Move to RichTextSchema
         if (!this.richTextSchema.isAllowedAtParent(element)) {
           // Element is not allowed in CoreMedia Richtext or at least not attached to the given parent:
           // Remove it and attach its children to the parent.
@@ -168,15 +169,14 @@ export default class RichTextDataProcessor implements DataProcessor {
     const COREMEDIA_RICHTEXT_NAMESPACE = "http://www.coremedia.com/2003/richtext-1.0";
     const XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
 
-    const doc: Document = document.implementation.createHTMLDocument();
-    const container: HTMLDivElement = doc.createElement("div");
-    container.setAttribute("xmlns", COREMEDIA_RICHTEXT_NAMESPACE);
-    container.setAttribute("xmlns:xlink", XLINK_NAMESPACE);
+    const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE, "div");
+    const container = doc.documentElement;
+    container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", XLINK_NAMESPACE);
     container.appendChild(domFragment);
 
     htmlFilter.applyTo(container);
 
-    const html: string = this.htmlWriter.getHtml(container);
+    const html: string = new XMLSerializer().serializeToString(doc);
     this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: viewFragment,
       out: html,

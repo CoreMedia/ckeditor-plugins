@@ -1,4 +1,3 @@
-import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 
 const COREMEDIA_RICHTEXT_PREAMBLE = '<?xml version="1.0" encoding="utf-8"?>';

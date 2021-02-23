@@ -123,6 +123,7 @@ export default class MutableElement {
    */
   private persistInternal(): Node | boolean {
     const newName = this._name;
+    // TODO[cke]: To be continued............. we need to change the element's namespace at minimum!
     if (newName === null) {
       return this.persistDeletion();
     }

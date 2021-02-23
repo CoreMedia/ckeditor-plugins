@@ -9,7 +9,6 @@
 import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
-import CoreMediaRichText from "./CoreMediaRichText";
 
 /*
  * TODO[cke]
@@ -652,7 +651,7 @@ export default class RichTextSchema {
       return false;
     }
 
-    const parentName = element.parentElement?.tagName.toLowerCase();
+    const parentName = element.parentElement?.name;
     const isAtRoot = !element.parentElement;
 
     if (isAtRoot) {
