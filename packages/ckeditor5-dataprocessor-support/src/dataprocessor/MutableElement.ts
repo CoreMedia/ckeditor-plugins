@@ -26,12 +26,26 @@ export default class MutableElement {
    * The default value `undefined` signals, to keep the element as is.
    *
    * A value of `null` signals to remove the element.
+   * @private
    */
   private _name: string | null | undefined = undefined;
   /**
    * Overrides for attribute values.
+   * @private
    */
   private _attributes: Attributes = {};
+  /**
+   * A set of well-known namespaces. Any prefix detected during processing
+   * will trigger the corresponding namespace declaration to be added to
+   * the owner document.
+   *
+   * Note, that this behavior is different to CoreMedia's Data Processing for
+   * CKEditor 4. In the previous implementation we always added the
+   * xlink-namespace, no matter if used or not. And we did not add any other
+   * namespace, possibly used by other elements.
+   *
+   * @private
+   */
   private _namespaces: Namespaces;
 
   /**
@@ -45,10 +59,18 @@ export default class MutableElement {
     this._namespaces = namespaces;
   }
 
+  /**
+   * Access to the parent node of this element.
+   */
   get parent(): (Node & ParentNode) | null {
     return this._delegate.parentNode;
   }
 
+  /**
+   * Access to the parent element of this element. The element is wrapped
+   * by `MutableElement`. Note, that if used for modification purpose, it is
+   * task of the caller persisting changes.
+   */
   get parentElement(): MutableElement | null {
     const parentElement = this._delegate.parentElement;
     if (!parentElement) {
@@ -64,11 +86,12 @@ export default class MutableElement {
     return Array.from(this._delegate.childNodes);
   }
 
-  get childElements(): MutableElement[] {
-    return Array.from(this._delegate.children).map(e => new MutableElement(e));
-  }
-
-  public getFirst(condition: string | ChildPredicate): ChildNode | undefined {
+  /**
+   * Get first (matching) child node of the given element.
+   * @param condition string: the node name to match (ignoring case), predicate:
+   * the predicate to apply.
+   */
+  public getFirst(condition?: string | ChildPredicate): ChildNode | undefined {
     const childNodes = this.children;
     if (!condition) {
       return childNodes.length ? childNodes[0] : undefined;
@@ -114,13 +137,6 @@ export default class MutableElement {
   }
 
   /**
-   * Persist changes in DOM applied to this element.
-   */
-  persist(): void {
-    this.persistInternal();
-  }
-
-  /**
    * Persists the changes, as requested.
    *
    * @return a node from where a restart is required; or a boolean flag if
@@ -140,6 +156,20 @@ export default class MutableElement {
     return this.persistReplaceBy(newName);
   }
 
+  /**
+   * The main purpose of this method is to persist changes to attributes.
+   * Nevertheless, this method may forward to `persistReplaceBy` if either
+   * a namespace change has been explicitly requested (by `xmlns` attribute)
+   * or if the namespace of the current element does not match the namespace
+   * of the owning document.
+   *
+   * The latter one is typically the case when transforming e.g. from HTML
+   * to CoreMedia RichText, where elements have the HTML namespace
+   * `http://www.w3.org/1999/xhtml` and must be adapted to the corresponding
+   * XML namespace.
+   *
+   * @private
+   */
   private persistAttributes(): true | Element {
     const elementNamespaceAttribute: string | null = this._attributes["xmlns"];
     if (!!elementNamespaceAttribute) {
@@ -160,10 +190,47 @@ export default class MutableElement {
     return true;
   }
 
-  // TODO[cke] Document and Refactor/Simplify
-  private applyAttributes(targetElement: Element, attributes: Attributes) {
+  /**
+   * Applies the given attributes to the given element. This mapping ignores
+   * a possibly given `xmlns` attribute, as it must be handled separately
+   * (by creating a new element with given namespace).
+   *
+   * @param targetElement the element to apply attributes to
+   * @param attributes set of attributes to apply
+   * @private
+   */
+  private applyAttributes(targetElement: Element, attributes: Attributes): void {
     const ownerDocument = targetElement.ownerDocument;
     const attributeNames = Object.keys(attributes);
+
+    function handleAttributeWithoutNamespacePrefix(key: string, value: string | null) {
+      if (value === null) {
+        targetElement.removeAttributeNS(null, key);
+      } else {
+        targetElement.setAttributeNS(null, key, value);
+      }
+    }
+
+    function handleAttributeWithNamespacePrefix(uri: string | undefined, prefix: string, key: string, value: string | null) {
+      if (value === null) {
+        if (uri) {
+          targetElement.removeAttributeNS(uri, key);
+          // Also remove attribute, if not namespace aware.
+          targetElement.removeAttribute(key);
+        } else {
+          targetElement.removeAttribute(key);
+        }
+      } else {
+        if (uri) {
+          targetElement.setAttributeNS(uri, key, value);
+          // Publish Namespace to root element.
+          ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES["xmlns"].uri, `xmlns:${prefix}`, uri);
+        } else {
+          targetElement.setAttribute(key, value);
+        }
+      }
+    }
+
     attributeNames
       // Must not set namespace as attribute.
       .filter((key) => key !== "xmlns")
@@ -174,40 +241,31 @@ export default class MutableElement {
         // TODO[cke] Desired ES2018 pattern: const { groups: { prefix, localName } } = ...
         const match: RegExpExecArray | null = pattern.exec(key);
         if (!match) {
-          if (value === null) {
-            targetElement.removeAttributeNS(null, key);
-          } else {
-            targetElement.setAttributeNS(null, key, value);
-          }
+          handleAttributeWithoutNamespacePrefix(key, value);
         } else {
           const prefix = match[1];
-          const uri = this._namespaces[prefix]?.uri || null;
-          if (value === null) {
-            if (uri) {
-              targetElement.removeAttributeNS(uri, key);
-              // Also remove attribute, if not namespace aware.
-              targetElement.removeAttribute(key);
-            } else {
-              targetElement.removeAttribute(key);
-            }
-          } else {
-            if (uri) {
-              targetElement.setAttributeNS(uri, key, value);
-              // Publish Namespace to root element.
-              ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES["xmlns"].uri, `xmlns:${prefix}`, uri);
-            } else {
-              targetElement.setAttribute(key, value);
-            }
-          }
+          const uri = this._namespaces[prefix]?.uri;
+          handleAttributeWithNamespacePrefix(uri, prefix, key, value);
         }
       });
   }
 
+  /**
+   * Will remove this element from its parent, if parent exists.
+   * @return always `false` which signals, that no more filters shall be applied to this element.
+   * @private
+   */
   private persistDeletion(): false {
     this._delegate.parentNode?.removeChild(this._delegate);
     return false;
   }
 
+  /**
+   * Replaces this element by its children.
+   * @return `ChildNode` if children existed, representing the first child node; `false` if no children existed,
+   * to signal, that this element must not be processed by subsequent filters.
+   * @private
+   */
   private persistReplaceByChildren(): ChildNode | false {
     const parentNode = this._delegate.parentNode;
     if (!parentNode) {
@@ -228,6 +286,16 @@ export default class MutableElement {
     return firstChild || false;
   }
 
+  /**
+   * Replaces the current element by a new one of given name. Will either
+   * create an element of the given namespace or of the same namespace as
+   * the owner document.
+   *
+   * @param newName new element name
+   * @param namespace optional namespace URI
+   * @return newly created element, for which filtering should be re-applied.
+   * @private
+   */
   private persistReplaceBy(newName: string, namespace?: string | null): Element {
     if (!namespace && !!this.attributes["xmlns"]) {
       return this.persistReplaceBy(newName, this.attributes["xmlns"]);
