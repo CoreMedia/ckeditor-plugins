@@ -136,6 +136,10 @@ export default class MutableElement {
     return null;
   }
 
+  persist(): void {
+    this.persistInternal();
+  }
+
   /**
    * Persists the changes, as requested.
    *
