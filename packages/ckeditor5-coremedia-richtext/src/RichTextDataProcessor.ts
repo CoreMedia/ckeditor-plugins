@@ -54,9 +54,10 @@ export default class RichTextDataProcessor implements DataProcessor {
           // Element is not allowed in CoreMedia Richtext or at least not attached to the given parent:
           // Remove it and attach its children to the parent.
           element.replaceByChildren = true;
-        } else {
-          this.richTextSchema.adjustAttributes(element);
         }
+      },
+      "$$": (element) => {
+        this.richTextSchema.adjustAttributes(element);
       },
       ol: (element) => {
         // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
@@ -120,8 +121,17 @@ export default class RichTextDataProcessor implements DataProcessor {
       },
       th: (element) => {
         element.name = "td";
+        element.attributes["class"] = "td--heading";
+      },
+      tbody: (element) => {
+        // If there are more elements at parent than just this tbody, tbody must
+        // be removed. Typical scenario: Unknown element <thead> got removed, leaving
+        // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
+        // all nested trs up one level and remove the tbody element.
+        element.replaceByChildren = (element.parentElement?.children.length || 0) > 1;
       },
       span: (element) => {
+        // TODO[cke] Another clean-up operation which may be dangerous.
         if (!element.attributes["class"]) {
           // drop element, but not children
           element.name = "";
