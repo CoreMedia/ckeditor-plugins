@@ -4,6 +4,24 @@ import "jest-xml-matcher";
 /*
  * =============================================================================
  *
+ * Helper Functions
+ *
+ * =============================================================================
+ */
+
+function requireValidXml(xmlString: string): Document {
+  const parser = new DOMParser();
+  const xmlDocument = parser.parseFromString(xmlString, "text/xml");
+  const xPathResult: XPathResult = xmlDocument.evaluate("/parsererror/text()", xmlDocument, null, XPathResult.STRING_TYPE);
+  if (xPathResult.stringValue) {
+    throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
+  }
+  return xmlDocument;
+}
+
+/*
+ * =============================================================================
+ *
  * Wrapping
  *
  * =============================================================================
@@ -26,6 +44,7 @@ test("should wrap DOM element", () => {
 type ApplyRulesData = [
   string,
   {
+    comment?: string,
     rules: (ElementFilterRule | undefined)[];
     from: string;
     to: string;
@@ -34,6 +53,7 @@ type ApplyRulesData = [
 ];
 
 describe("MutableElement.applyRules()", () => {
+  // noinspection XmlUnusedNamespaceDeclaration
   test.each<ApplyRulesData>([
     [
       "should do nothing on empty rule set",
@@ -158,7 +178,7 @@ describe("MutableElement.applyRules()", () => {
       },
     ],
     [
-      "should respect added xlink namespace attributes",
+      "should respect added xlink namespace attributes and add namespace to document element",
       {
         rules: [
           (me) => {
@@ -166,11 +186,11 @@ describe("MutableElement.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
+        to: '<parent xmlns:xlink="http://www.w3.org/1999/xlink">Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
       },
     ],
     [
-      "should respect added xml namespace attributes",
+      "should respect added xml namespace attributes and add namespace to document element",
       {
         rules: [
           (me) => {
@@ -184,13 +204,14 @@ describe("MutableElement.applyRules()", () => {
     [
       "should respect xlink namespace when deleting attributes",
       {
+        comment: "In this simple approach, we cannot remove unused namespace declarations. If we do better in the future, don't hesitate adapting the expectations.",
         rules: [
           (me) => {
             me.attributes["xlink:href"] = null;
           },
         ],
-        from: '<parent>Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        from: '<parent xmlns:xlink="http://www.w3.org/1999/xlink">Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
+        to: '<parent xmlns:xlink="http://www.w3.org/1999/xlink">Lorem <el>Ipsum</el> Dolor</parent>',
       },
     ],
     [
@@ -202,30 +223,6 @@ describe("MutableElement.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el xml:lang="en-US">Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
-      },
-    ],
-    [
-      "should blindly add attributes of unknown namespace prefix (decision, which may be vetoed)",
-      {
-        rules: [
-          (me) => {
-            me.attributes["unknown:namespace"] = "value";
-          },
-        ],
-        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el unknown:namespace="value">Ipsum</el> Dolor</parent>',
-      },
-    ],
-    [
-      "should be able removing attributes with unregistered namespace prefix",
-      {
-        rules: [
-          (me) => {
-            me.attributes["unknown:namespace"] = null;
-          },
-        ],
-        from: '<parent>Lorem <el unknown:namespace="value">Ipsum</el> Dolor</parent>',
         to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
       },
     ],
@@ -406,19 +403,6 @@ describe("MutableElement.applyRules()", () => {
       },
     ],
     [
-      "should replace by prefixed element",
-      {
-        rules: [
-          (me) => {
-            me.name = "prefixed:" + me.name;
-          },
-        ],
-        from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
-        to: '<parent>Lorem <prefixed:el attr="value"><c1>Child 1</c1><c2>Child 1</c2></prefixed:el> Ipsum</parent>',
-        restart: "//prefixed:el",
-      },
-    ],
-    [
       "should replace by new element with new attribute",
       {
         rules: [
@@ -466,23 +450,33 @@ describe("MutableElement.applyRules()", () => {
       },
     ],
   ])("(%#) %s", (name, testData) => {
-    document.body.innerHTML = testData.from.trim();
-    const element: Element = <Element>(
-      document.evaluate("//el", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+    const serializer = new XMLSerializer();
+    const xpath = "//el";
+
+    const xmlDocument: Document = requireValidXml(testData.from);
+    const xmlExpectedDocument: Document = requireValidXml(testData.to);
+
+    const xmlElement: Element = <Element>(
+      xmlDocument.evaluate(xpath, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
     );
 
-    const mutableElement = new MutableElement(element);
-    const result = mutableElement.applyRules(...testData.rules);
-
-    expect(document.body.innerHTML).toEqualXML(testData.to);
-
-    let restartFrom: Node | null = null;
-    if (testData.restart) {
-      restartFrom = <Node>(
-        document.evaluate(testData.restart, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
-      );
+    if (!xmlElement) {
+      throw new Error(`Test Setup Issue: Unable resolving XPath '${xpath}' to element under test in: ${testData.from}`);
+    }
+    if (testData.restart && !xmlExpectedDocument.evaluate(testData.restart, xmlExpectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue) {
+      throw new Error(`Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`);
     }
 
-    expect(result).toStrictEqual(restartFrom);
+    const me = new MutableElement(xmlElement);
+    const appliedRulesResult = me.applyRules(...testData.rules);
+    expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to)
+
+    if (testData.restart) {
+      const expectedRestart = xmlDocument.evaluate(testData.restart, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;
+      expect(appliedRulesResult).toStrictEqual(expectedRestart);
+    } else {
+      // We don't expect any restart node to be returned.
+      expect(appliedRulesResult).not.toBeInstanceOf(Node);
+    }
   });
 });
