@@ -192,6 +192,7 @@ describe("MutableElement.applyRules()", () => {
     [
       "should respect added xml namespace attributes and add namespace to document element",
       {
+        comment: "While Chrome respects the xmlns:xml attribute in XMLSerializer, it is not respected (yet) in JEST. If this behavior changes, you may have to adapt the expected XML.",
         rules: [
           (me) => {
             me.attributes["xml:lang"] = "en-US";
