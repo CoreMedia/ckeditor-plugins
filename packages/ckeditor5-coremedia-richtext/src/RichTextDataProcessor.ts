@@ -133,10 +133,13 @@ export default class RichTextDataProcessor implements DataProcessor {
     },
   };
 
+  private readonly toDataFilter: HtmlFilter;
+
   constructor(document: ViewDocument) {
     this.delegate = new HtmlDataProcessor(document);
     this.domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
     this.richTextXmlWriter = new RichTextXmlWriter();
+    this.toDataFilter = new HtmlFilter(this.toDataFilterRules);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -155,7 +158,10 @@ export default class RichTextDataProcessor implements DataProcessor {
   toData(viewFragment: ViewDocumentFragment): string {
     const startTimestamp = performance.now();
 
-    const domFragment: Node | DocumentFragment = this.domConverter.viewToDom(viewFragment, document);
+    const richTextDocument = RichTextDataProcessor.createCoreMediaRichTextDocument();
+    // We use the RichTextDocument at this early stage, so that all created elements
+    // already have the required namespace. This eases subsequent processing.
+    const domFragment: Node | DocumentFragment = this.domConverter.viewToDom(viewFragment, richTextDocument);
     let fragmentAsString: string = "uninitialized";
 
     if (this.logger.isDebugEnabled()) {
@@ -167,11 +173,14 @@ export default class RichTextDataProcessor implements DataProcessor {
         domAsString: fragmentAsString,
       });
     }
-    const doc = this.toCoreMediaRichTextXml(domFragment);
+
+    richTextDocument.documentElement.appendChild(domFragment);
+
+    const doc = this.toCoreMediaRichTextXml(richTextDocument);
     const xml: string = this.richTextXmlWriter.getXml(doc);
 
     if (this.logger.isDebugEnabled()) {
-      this.logger.debug(`Transformed HTML (namespace: ${domFragment.ownerDocument?.documentElement.namespaceURI}) to RichText (namespace: ${doc.documentElement.namespaceURI}) within ${performance.now() - startTimestamp} ms:`, {
+      this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
         in: fragmentAsString,
         out: xml,
       });
@@ -186,25 +195,26 @@ export default class RichTextDataProcessor implements DataProcessor {
   }
 
   /**
-   * Visible for testing.
-   * @param domFragment fragment to transform
-   * @return CoreMedia RichText XML Document
+   * Transforms the given document to valid CoreMedia RichText. It is expected,
+   * that the document already got created with corresponding namespace.
+   *
+   * Visible for testing only.
+   *
+   * @param document the yet unprocessed document
    */
-  toCoreMediaRichTextXml(domFragment: Node | DocumentFragment): Document {
-    const htmlFilter = new HtmlFilter(this.toDataFilterRules);
-
-    const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
-    // TODO[cke] Possibly provide config option OmitProcessingInstruction or (similar to C#) OmitXmlDeclaration)
-    const pi = doc.createProcessingInstruction('xml', 'version="1.0" encoding="utf-8"');
-    doc.insertBefore(pi, doc.firstChild);
-
-    const container = doc.documentElement;
+  toCoreMediaRichTextXml(document: Document): Document {
     // TODO[cke] In CKEditor 4 we ALWAYS added the XLINK Namespace, even if no links were contained.
     //   We may require to reintroduce it, possibly by "legacy behavior" configuration option.
     //container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", XLINK_NAMESPACE);
-    container.appendChild(domFragment);
 
-    htmlFilter.applyTo(container);
+    this.toDataFilter.applyTo(document.documentElement);
+    return document;
+  }
+
+  private static createCoreMediaRichTextDocument(): Document {
+    const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
+    const pi = doc.createProcessingInstruction("xml", 'version="1.0" encoding="utf-8"');
+    doc.insertBefore(pi, doc.firstChild);
     return doc;
   }
 
