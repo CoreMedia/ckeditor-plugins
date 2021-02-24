@@ -7,11 +7,10 @@ import richText2Html from "./richtext2html/richtext2html";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
-import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
-import RichTextHtmlWriter from "./RichTextHtmlWriter";
+import RichTextXmlWriter from "./RichTextXmlWriter";
 import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
 import RichTextSchema, { Strictness } from "./RichTextSchema";
-import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
+import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
 
 const strike: ElementFilterRule = (element) => {
@@ -23,7 +22,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   private readonly delegate: HtmlDataProcessor;
   private readonly domConverter: DomConverter;
-  private readonly htmlWriter: HtmlWriter;
+  private readonly richTextXmlWriter: RichTextXmlWriter;
   /*
    * Todo:
    *   How to stream document-fragments?
@@ -51,7 +50,6 @@ export default class RichTextDataProcessor implements DataProcessor {
   private readonly toDataFilterRules: FilterRuleSet = {
     elements: {
       $: (element) => {
-        // TODO[cke] Move to RichTextSchema
         if (!this.richTextSchema.isAllowedAtParent(element)) {
           // Element is not allowed in CoreMedia Richtext or at least not attached to the given parent:
           // Remove it and attach its children to the parent.
@@ -138,7 +136,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   constructor(document: ViewDocument) {
     this.delegate = new HtmlDataProcessor(document);
     this.domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
-    this.htmlWriter = new RichTextHtmlWriter();
+    this.richTextXmlWriter = new RichTextXmlWriter();
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -166,9 +164,7 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     const htmlFilter = new HtmlFilter(this.toDataFilterRules);
 
-    const COREMEDIA_RICHTEXT_NAMESPACE = "http://www.coremedia.com/2003/richtext-1.0";
-
-    const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE, "div");
+    const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
     // TODO[cke] Possibly provide config option OmitProcessingInstruction or (similar to C#) OmitXmlDeclaration)
     const pi = doc.createProcessingInstruction('xml', 'version="1.0" encoding="utf-8"');
     doc.insertBefore(pi, doc.firstChild);
@@ -181,9 +177,9 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     htmlFilter.applyTo(container);
 
+    const html: string = this.richTextXmlWriter.getXml(doc);
 
-    const html: string = new XMLSerializer().serializeToString(doc);
-    this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
+    this.logger.debug(`Transformed HTML (namespace: ${domFragment.ownerDocument?.documentElement.namespaceURI}) to RichText (namespace: ${container.namespaceURI}) within ${performance.now() - startTimestamp} ms:`, {
       in: viewFragment,
       out: html,
     });
