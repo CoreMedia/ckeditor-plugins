@@ -156,19 +156,33 @@ export default class RichTextDataProcessor implements DataProcessor {
     const startTimestamp = performance.now();
 
     const domFragment: Node | DocumentFragment = this.domConverter.viewToDom(viewFragment, document);
+    let fragmentAsString: string = "uninitialized";
 
-    this.logger.debug("toData: ViewFragment converted to DOM.", {
-      view: viewFragment,
-      dom: domFragment,
-    });
+    if (this.logger.isDebugEnabled()) {
+      fragmentAsString = this.fragmentToString(domFragment);
+
+      this.logger.debug("toData: ViewFragment converted to DOM.", {
+        view: viewFragment,
+        dom: domFragment,
+        domAsString: fragmentAsString,
+      });
+    }
     const doc = this.toCoreMediaRichTextXml(domFragment);
-    const html: string = this.richTextXmlWriter.getXml(doc);
+    const xml: string = this.richTextXmlWriter.getXml(doc);
 
-    this.logger.debug(`Transformed HTML (namespace: ${domFragment.ownerDocument?.documentElement.namespaceURI}) to RichText (namespace: ${doc.documentElement.namespaceURI}) within ${performance.now() - startTimestamp} ms:`, {
-      in: viewFragment,
-      out: html,
-    });
-    return html;
+    if (this.logger.isDebugEnabled()) {
+      this.logger.debug(`Transformed HTML (namespace: ${domFragment.ownerDocument?.documentElement.namespaceURI}) to RichText (namespace: ${doc.documentElement.namespaceURI}) within ${performance.now() - startTimestamp} ms:`, {
+        in: fragmentAsString,
+        out: xml,
+      });
+    }
+    return xml;
+  }
+
+  private fragmentToString(domFragment: Node | DocumentFragment): string {
+    return Array.from(domFragment.childNodes)
+      .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
+      .reduce((result, s) => (result || "") + (s || "")) || "";
   }
 
   /**
