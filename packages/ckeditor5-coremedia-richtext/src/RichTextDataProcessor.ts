@@ -161,7 +161,22 @@ export default class RichTextDataProcessor implements DataProcessor {
       view: viewFragment,
       dom: domFragment,
     });
+    const doc = this.toCoreMediaRichTextXml(domFragment);
+    const html: string = this.richTextXmlWriter.getXml(doc);
 
+    this.logger.debug(`Transformed HTML (namespace: ${domFragment.ownerDocument?.documentElement.namespaceURI}) to RichText (namespace: ${doc.documentElement.namespaceURI}) within ${performance.now() - startTimestamp} ms:`, {
+      in: viewFragment,
+      out: html,
+    });
+    return html;
+  }
+
+  /**
+   * Visible for testing.
+   * @param domFragment fragment to transform
+   * @return CoreMedia RichText XML Document
+   */
+  toCoreMediaRichTextXml(domFragment: Node | DocumentFragment): Document {
     const htmlFilter = new HtmlFilter(this.toDataFilterRules);
 
     const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
@@ -176,14 +191,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     container.appendChild(domFragment);
 
     htmlFilter.applyTo(container);
-
-    const html: string = this.richTextXmlWriter.getXml(doc);
-
-    this.logger.debug(`Transformed HTML (namespace: ${domFragment.ownerDocument?.documentElement.namespaceURI}) to RichText (namespace: ${container.namespaceURI}) within ${performance.now() - startTimestamp} ms:`, {
-      in: viewFragment,
-      out: html,
-    });
-    return html;
+    return doc;
   }
 
   toView(data: string): ViewDocumentFragment | null {
