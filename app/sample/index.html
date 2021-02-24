@@ -76,9 +76,47 @@
             This plugin will transform HTML in CKEditor to CoreMedia RichText 1.0
             and vice versa. Here are some elements, which require special notice:
           </p>
-          <ul>
-            <li>Transform HTML &lt;br&gt;<br>to &lt;br/&gt;.</li>
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><pre>&lt;br&gt;</pre></td>
+                <td><pre>&lt;br/&gt;</pre></td>
+                <td>Lorem<br>Ipsum</td>
+              </tr>
+              <tr>
+                <td><pre>&lt;h1&gt;</pre></td>
+                <td><pre>&lt;p class="p--heading-1"&gt;</pre></td>
+                <td><h1>Lorem Ipsum</h1></td>
+              </tr>
+              <tr>
+                <td><pre>&lt;h6&gt;</pre></td>
+                <td><pre>&lt;p class="p--heading-6"&gt;</pre></td>
+                <td><h6>Lorem Ipsum</h6></td>
+              </tr>
+              <tr>
+                <td><pre>&lt;u&gt;</pre></td>
+                <td><pre>&lt;span class="underline"&gt;</pre></td>
+                <td>Lorem <u>Ipsum</u> Dolor</td>
+              </tr>
+              <tr>
+                <td><pre>&lt;s&gt;</pre></td>
+                <td><pre>&lt;span class="strike"&gt;</pre></td>
+                <td>Lorem <s>Ipsum</s> Dolor</td>
+              </tr>
+              <tr>
+                <td><pre>&lt;div&gt;</pre></td>
+                <td><pre>&lt;p&gt;</pre></td>
+                <td><div>Lorem</div><div>Ipsum</div></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div id="preview" class="column50 preview" hidden></div>
