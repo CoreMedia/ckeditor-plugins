@@ -60,6 +60,13 @@ export default class MutableElement {
   }
 
   /**
+   * Access owner document.
+   */
+  get ownerDocument(): Document {
+    return this._delegate.ownerDocument;
+  }
+
+  /**
    * Access to the parent node of this element.
    */
   get parent(): (Node & ParentNode) | null {
@@ -276,17 +283,14 @@ export default class MutableElement {
       // Cannot apply. Assume, that the element shall just vanish.
       return false;
     }
-    const childrenToMove = this._delegate.childNodes;
-    let firstChild: ChildNode | null = null;
-    while (childrenToMove.length > 0) {
-      const child = childrenToMove[0];
-      // Will also remove it from original parent.
-      parentNode.insertBefore(child, this._delegate);
-      if (!firstChild) {
-        firstChild = child;
-      }
-    }
-    parentNode.removeChild(this._delegate);
+
+    const range = this.ownerDocument.createRange();
+    range.selectNodeContents(this._delegate);
+    const fragment = range.extractContents();
+    const firstChild: ChildNode | null = fragment.firstChild;
+
+    parentNode.replaceChild(fragment, this._delegate);
+
     return firstChild || false;
   }
 
@@ -305,7 +309,7 @@ export default class MutableElement {
       return this.persistReplaceBy(newName, this.attributes["xmlns"]);
     }
     let newElement: Element;
-    const ownerDocument = this._delegate.ownerDocument;
+    const ownerDocument = this.ownerDocument;
     if (namespace) {
       newElement = ownerDocument.createElementNS(namespace, newName);
     } else {

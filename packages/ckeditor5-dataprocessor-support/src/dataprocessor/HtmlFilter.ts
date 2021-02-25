@@ -54,10 +54,9 @@ export default class HtmlFilter {
 
   private applyToChildNodes(parent: Node): void {
     this.logger.debug(`Applying filter to child nodes of ${parent.nodeName}.`, { parent: parent });
-    const childNodes: ChildNode[] = Array.from(parent.childNodes);
-
-    for (const childNode of childNodes) {
-      this.applyToCurrent(parent, childNode);
+    let next: Node | null = parent.firstChild;
+    while (next) {
+      next = this.applyToCurrent(parent, next);
     }
   }
 
@@ -66,15 +65,24 @@ export default class HtmlFilter {
    *
    * @param parent parent of node
    * @param currentNode current node to process
+   * @return next sibling node to process
    * @private
    */
-  private applyToCurrent(parent: Node, currentNode: Node): void {
+  private applyToCurrent(parent: Node, currentNode: Node): Node | null {
     this.logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent: parent, currentNode: currentNode });
+
+    let next = currentNode.nextSibling;
+
     if (currentNode instanceof Element && this.ruleSet.elements) {
       const beforeRule: ElementFilterRule | undefined = this.ruleSet.elements[BEFORE_ELEMENT];
       const filterRule: ElementFilterRule | undefined = this.ruleSet.elements[currentNode.nodeName.toLowerCase()];
-      // We need to handle the children prior to the last rule. This provides the
-      // opportunity, that the last rule may decide on a now possibly empty node.
+      /*
+       * We need to handle the children prior to the last rule. This provides the
+       * opportunity, that the last rule may decide on a now possibly empty node.
+       *
+       * We may re-use `currentNode` here, as the rule will not be executed, if any
+       * rule before replaces `currentNode` by a new node.
+      */
       const handleChildrenRule: ElementFilterRule = () => {
         this.applyToChildNodes(currentNode);
       };
@@ -85,9 +93,23 @@ export default class HtmlFilter {
 
       const newCurrent = mutableElement.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
 
-      if (newCurrent) {
-        this.applyToCurrent(parent, newCurrent);
+      if (this.logger.isDebugEnabled()) {
+        if (newCurrent) {
+          this.logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
+            parent: parent,
+            replacedNode: currentNode,
+            next: newCurrent
+          });
+        } else {
+          this.logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
+            parent: parent,
+            currentNode: currentNode,
+            next: currentNode.nextSibling
+          });
+        }
       }
+      return newCurrent || next;
     }
+    return next;
   }
 }
