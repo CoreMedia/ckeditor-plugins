@@ -10,6 +10,7 @@ type CommentableTestData = {
 };
 
 type DisableableTestCase = {
+  // TODO[cke] Remove here, as unused, replace by test.skip instead if it is disabled.
   /**
    * If set to `true` or non-empty string this test will be ignored.
    * A string will be printed as message.
