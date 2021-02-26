@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
-  "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^24.0.0",
-    "@ckeditor/ckeditor5-engine": "^24.0.0",
-    "@ckeditor/ckeditor5-clipboard": "^24.0.0",
-    "@ckeditor/ckeditor5-paste-from-office": "^24.0.0",
-    "@ckeditor/ckeditor5-ui": "^24.0.0"
+  "dependencies": {
+    "@types/ckeditor__ckeditor5-core": "^1.0.0",
+    "@types/ckeditor__ckeditor5-engine": "^1.0.0",
+    "@types/ckeditor__ckeditor5-clipboard": "^1.0.0",
+    "@types/ckeditor__ckeditor5-paste-from-office": "^1.0.0"
   },
 
+  "devDependencies": {
+    "@jangaroo/publish":"1.0.0"
+  },
   "scripts": {
+    "publish": "jangaroo-publish ./",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

@@ -34,6 +34,7 @@
   ],
   "scripts": {
     "bootstrap": "yarn install",
+    "publish": "lerna run publish",
     "clean": "lerna run clean && rimraf ./dist",
     "build": "lerna run build",
     "test": "lerna run test",
