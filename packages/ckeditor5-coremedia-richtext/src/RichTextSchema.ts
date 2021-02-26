@@ -10,13 +10,6 @@ import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/dataproce
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 
-/*
- * TODO[cke]
- *   * provide method adjustElement() which first calls to adjust parent, and then (if parent not adjusted), fix attributes
- *   * Replace call in dataprocessor by this new method.
- *   * Check, if we could provide a quick check to validate a complete DOM
- *   * Change RichTextWriter to generate XML rather than HTML using DOMSerializer.
- */
 /**
  * Strictness for Schema validation.
  */
@@ -585,9 +578,7 @@ const ELEMENTS: Elements = {
  * Representation of CoreMedia RichText 1.0 Schema.
  */
 export default class RichTextSchema {
-  // TODO this results in a cyclic dependency:
-  // private static readonly logger: Logger = LoggerProvider.getLogger(CoreMediaRichText.pluginName);
-  private static readonly logger: Logger = LoggerProvider.getLogger("CoreMediaRichText");
+  private static readonly logger: Logger = LoggerProvider.getLogger("RichTextSchema");
   private readonly strictness: Strictness;
 
   constructor(strictness: Strictness) {
@@ -685,6 +676,12 @@ export default class RichTextSchema {
   adjustHierarchy(element: MutableElement): void {
     if (!this.isAllowedAtParent(element)) {
       element.replaceByChildren = true;
+    }
+
+    const elementName = element.name;
+    const elementSpecification = ELEMENTS[elementName?.toLowerCase() || ""];
+    if (elementSpecification?.mayBeEmpty === false && element.isEmpty()) {
+      element.remove = true;
     }
   }
 
