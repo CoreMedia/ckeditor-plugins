@@ -18,130 +18,183 @@ const strike: ElementFilterRule = (element) => {
   element.attributes["class"] = "strike";
 };
 
+export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
+  elements: {
+    ol: (element) => {
+      // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
+      return !(element.children.length === 0 || !element.getFirst("li"));
+    },
+    ul: (element) => {
+      // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
+      return !(element.children.length === 0 || !element.getFirst("li"));
+    },
+    h1: (element) => {
+      element.name = "p";
+      element.attributes["class"] = "p--heading-1";
+    },
+    h2: (element) => {
+      element.name = "p";
+      element.attributes["class"] = "p--heading-2";
+    },
+    h3: (element) => {
+      element.name = "p";
+      element.attributes["class"] = "p--heading-3";
+    },
+    h4: (element) => {
+      element.name = "p";
+      element.attributes["class"] = "p--heading-4";
+    },
+    h5: (element) => {
+      element.name = "p";
+      element.attributes["class"] = "p--heading-5";
+    },
+    h6: (element) => {
+      element.name = "p";
+      element.attributes["class"] = "p--heading-6";
+    },
+    b: (element) => {
+      element.name = "strong";
+    },
+    i: (element) => {
+      element.name = "em";
+    },
+    u: (element) => {
+      element.name = "span";
+      element.attributes["class"] = "underline";
+    },
+    br: (element) => {
+      // Remove obsolete BR, if only element on block level element.
+      const parent = element.parentElement;
+      const parentName = parent?.name || "";
+      if (!parent || parentName === "div") {
+        // somehow, a top-level <br> has been introduced, which is not valid:
+        return false;
+      }
+      // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
+      // block level elements should be respected too, though. Change it, if you think so.
+      if (["td", "p"].indexOf(parentName) >= 0) {
+        return !element.isLastNode;
+      }
+      return true;
+    },
+    del: strike,
+    s: strike,
+    strike: strike,
+    div: (element) => {
+      // We are not applied to root-div. Thus, we have a nested div here, which
+      // is not allowed in CoreMedia RichText 1.0.
+      element.name = "p";
+    },
+    td: (element) => {
+      return !element.isEmpty((el, idx, children) => {
+        // Only filter, if there is only one child. While it may be argued, if this
+        // is useful, this is the behavior as we had it for CKEditor 4.
+        if (children.length !== 1) {
+          return true;
+        }
+        if (el.childNodes.length > 1) {
+          return true;
+        }
+        // Ignore, if only one br exists.
+        if (el.nodeName.toLowerCase() === "br") {
+          return false;
+        }
+        if (el.nodeName.toLowerCase() !== "p") {
+          return true;
+        }
+        // Only respect p-element, if it is considered non-empty.
+        // Because of the check above, we already know, that, the element
+        // has at maximum one child.
+        return el.hasChildNodes() && el.firstChild?.nodeName.toLowerCase() !== "br";
+      });
+    },
+    th: (element) => {
+      element.name = "td";
+      // TODO[cke] In CKEditor 4 we did not add such a class. May be remove or make configurable.
+      element.attributes["class"] = "td--heading";
+    },
+    /*
+     * tr/tables rules:
+     * ----------------
+     *
+     * In CKEditor 4 we also had to handle tr and table which may have been
+     * emptied during the process. This behavior moved to the after-children
+     * behavior, which checks for elements which must not be empty but now
+     * are empty.
+     */
+    tbody: (element) => {
+      // If there are more elements at parent than just this tbody, tbody must
+      // be removed. Typical scenario: Unknown element <thead> got removed, leaving
+      // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
+      // all nested trs up one level and remove the tbody element.
+      element.replaceByChildren = (element.parentElement?.children.length || 0) > 1;
+    },
+    /*
+     * TODO[cke] img/a handling
+     *   We don't handle img and a yet, as we don't support internal links or
+     *   embedded images yet. Prior to that, we have to find a solution how
+     *   to handle updates from CKEditor to src/href attribute which need to
+     *   be mapped to xlink:href for CoreMedia RichText 1.0.
+     *   The deletion of invalid attributes src/href are handled by after-children
+     *   rule implicitly.
+     */
+    span: (element) => {
+      if (!element.attributes["class"]) {
+        // drop element, but not children
+        element.replaceByChildren = true;
+      }
+    },
+    "xdiff:span": (element) => {
+      element.name = "";
+    },
+  },
+};
+
+/**
+ * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
+ * execution: (see especially <code>core/htmlparser/element.js</code>)
+ *
+ * <ul>
+ * <li>If an element name changes, filtering will be restarted at that node.</li>
+ * <li>If a new element is returned, it will replace the current one and processing will be restarted for that node.</li>
+ * <li>If false is returned, the element and all its children will be removed.</li>
+ * <li>If element name changes to empty, only the element itself will be removed and the children appended to the parent</li>
+ * <li>An element is processed first, then its attributes and afterwards its children (if any)</li>
+ * <li>Text nodes only support to be changed or removed... but not to be wrapped into some other element.</li>
+ * <li><code>$</code> and <code>$$</code> are so called generic element rules which are applied after element
+ * processing. <code>$</code> is applied prior to filtering the children, while <code>$$</code> is applied
+ * after the element and all its children have been processed.
+ * The opposite handler is <code>'^'</code> which would be applied before all other element handlers.</li>
+ * </ul>
+ */
+export function createToDataFilterRules(strictness: Strictness = Strictness.STRICT): FilterRuleSet {
+  const richTextSchema = new RichTextSchema(strictness);
+  return {
+    ...BASE_TO_DATA_FILTER_RULES,
+    elements: {
+      ...BASE_TO_DATA_FILTER_RULES.elements,
+      $: (element) => {
+        richTextSchema.adjustHierarchy(element);
+      },
+      "$$": (element) => {
+        // The hierarchy may have changed after processing children. Thus, we
+        // need to check again.
+        richTextSchema.adjustHierarchy(element);
+        // We only expect the element to be possibly removed. replaceByChildren
+        // should have been triggered by "before-children" rule.
+        if (!element.remove) {
+          richTextSchema.adjustAttributes(element);
+        }
+      },
+    }
+  };
+}
+
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   private readonly delegate: HtmlDataProcessor;
   private readonly domConverter: DomConverter;
   private readonly richTextXmlWriter: RichTextXmlWriter;
-  /*
-   * Todo:
-   *   How to stream document-fragments?
-   *   What is the input type?
-   *   Possibly look-up filter-behavior by CKEditor 4. I think, <null> as return value is meant to delete this node.
-   */
-
-  private readonly richTextSchema: RichTextSchema = new RichTextSchema(Strictness.STRICT);
-
-  /**
-   * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
-   * execution: (see especially <code>core/htmlparser/element.js</code>)
-   *
-   * <ul>
-   * <li>If an element name changes, filtering will be restarted at that node.</li>
-   * <li>If a new element is returned, it will replace the current one and processing will be restarted for that node.</li>
-   * <li>If false is returned, the element and all its children will be removed.</li>
-   * <li>If element name changes to empty, only the element itself will be removed and the children appended to the parent</li>
-   * <li>An element is processed first, then its attributes and afterwards its children (if any)</li>
-   * <li>Text nodes only support to be changed or removed... but not to be wrapped into some other element.</li>
-   * <li><code>$</code> is a so called generic element rule which is applied after element processing.
-   * The opposite handler is <code>'^'</code> which would be applied before all other element handlers.</li>
-   * </ul>
-   */
-  private readonly toDataFilterRules: FilterRuleSet = {
-    elements: {
-      $: (element) => {
-        if (!this.richTextSchema.isAllowedAtParent(element)) {
-          // Element is not allowed in CoreMedia Richtext or at least not attached to the given parent:
-          // Remove it and attach its children to the parent.
-          element.replaceByChildren = true;
-        }
-      },
-      "$$": (element) => {
-        this.richTextSchema.adjustAttributes(element);
-      },
-      ol: (element) => {
-        // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-        return !(element.children.length === 0 || !element.getFirst("li"));
-      },
-      ul: (element) => {
-        // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-        return !(element.children.length === 0 || !element.getFirst("li"));
-      },
-      h1: (element) => {
-        element.name = "p";
-        element.attributes["class"] = "p--heading-1";
-      },
-      h2: (element) => {
-        element.name = "p";
-        element.attributes["class"] = "p--heading-2";
-      },
-      h3: (element) => {
-        element.name = "p";
-        element.attributes["class"] = "p--heading-3";
-      },
-      h4: (element) => {
-        element.name = "p";
-        element.attributes["class"] = "p--heading-4";
-      },
-      h5: (element) => {
-        element.name = "p";
-        element.attributes["class"] = "p--heading-5";
-      },
-      h6: (element) => {
-        element.name = "p";
-        element.attributes["class"] = "p--heading-6";
-      },
-      b: (element) => {
-        element.name = "strong";
-      },
-      i: (element) => {
-        element.name = "em";
-      },
-      u: (element) => {
-        element.name = "span";
-        element.attributes["class"] = "underline";
-      },
-      br: (element) => {
-        // Remove obsolete BR, if only element on block level element.
-        // TODO[cke] May be dangerous as we cannot provide a reverse mapping. Possibly remove, as it is a left-over from CKEditor 4.
-        const parent = element.parentElement;
-        return !(parent && parent.children.length === 1 && ["td", "p", "div"].indexOf(parent.name || ""));
-      },
-      del: strike,
-      s: strike,
-      strike: strike,
-      div: (element) => {
-        // We are not applied to root-div. Thus, we have a nested div here, which
-        // is not allowed in CoreMedia RichText 1.0.
-        element.name = "p";
-      },
-      td: (element) => {
-        // TODO[cke]: In CKEditor 4 we did some clean-up here. This may be dangerous, as we cannot provide a reverse mapping.
-        //   The general question: Do we want to add filtering for clean-up here?
-      },
-      th: (element) => {
-        element.name = "td";
-        element.attributes["class"] = "td--heading";
-      },
-      tbody: (element) => {
-        // If there are more elements at parent than just this tbody, tbody must
-        // be removed. Typical scenario: Unknown element <thead> got removed, leaving
-        // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
-        // all nested trs up one level and remove the tbody element.
-        element.replaceByChildren = (element.parentElement?.children.length || 0) > 1;
-      },
-      span: (element) => {
-        // TODO[cke] Another clean-up operation which may be dangerous.
-        if (!element.attributes["class"]) {
-          // drop element, but not children
-          element.name = "";
-        }
-      },
-      "xdiff:span": (element) => {
-        element.name = "";
-      },
-    },
-  };
 
   private readonly toDataFilter: HtmlFilter;
 
@@ -149,7 +202,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     this.delegate = new HtmlDataProcessor(document);
     this.domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
     this.richTextXmlWriter = new RichTextXmlWriter();
-    this.toDataFilter = new HtmlFilter(this.toDataFilterRules);
+    this.toDataFilter = new HtmlFilter(createToDataFilterRules());
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -172,15 +225,15 @@ export default class RichTextDataProcessor implements DataProcessor {
     // We use the RichTextDocument at this early stage, so that all created elements
     // already have the required namespace. This eases subsequent processing.
     const domFragment: Node | DocumentFragment = this.domConverter.viewToDom(viewFragment, richTextDocument);
-    let fragmentAsString: string = "uninitialized";
+    let fragmentAsStringForDebugging: string = "uninitialized";
 
     if (this.logger.isDebugEnabled()) {
-      fragmentAsString = this.fragmentToString(domFragment);
+      fragmentAsStringForDebugging = this.fragmentToString(domFragment);
 
       this.logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: domFragment,
-        domAsString: fragmentAsString,
+        domAsString: fragmentAsStringForDebugging,
       });
     }
 
@@ -191,7 +244,7 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     if (this.logger.isDebugEnabled()) {
       this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
-        in: fragmentAsString,
+        in: fragmentAsStringForDebugging,
         out: xml,
       });
     }
@@ -221,7 +274,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     return document;
   }
 
-  private static createCoreMediaRichTextDocument(): Document {
+  static createCoreMediaRichTextDocument(): Document {
     const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
     const pi = doc.createProcessingInstruction("xml", 'version="1.0" encoding="utf-8"');
     doc.insertBefore(pi, doc.firstChild);
