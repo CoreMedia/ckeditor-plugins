@@ -30,6 +30,11 @@ export default class MutableElement {
    */
   private _name: string | null | undefined = undefined;
   /**
+   * Signals, that children should be cleared.
+   * @private
+   */
+  private _clearChildren: boolean = false;
+  /**
    * Overrides for attribute values.
    * @private
    */
@@ -90,6 +95,9 @@ export default class MutableElement {
    * The nodes that are direct children of this element.
    */
   get children(): ChildNode[] {
+    if (this._clearChildren) {
+      return [];
+    }
     return Array.from(this._delegate.childNodes);
   }
 
@@ -112,6 +120,27 @@ export default class MutableElement {
       };
     }
     return childNodes.find(predicate);
+  }
+
+  /**
+   * Signals, if this is the last node in parent. Always `false` if no
+   * parent exists.
+   */
+  get isLastNode(): boolean {
+    return !this._delegate.nextSibling;
+  }
+
+  /**
+   * Signals, if this element is empty.
+   */
+  public isEmpty(considerChildNode: (el:ChildNode, index: number, array: ChildNode[]) => boolean = () => true): boolean {
+    if (this._clearChildren || !this._delegate.hasChildNodes()) {
+      return true;
+    }
+    const consideredChildNodesLength = Array.from(this._delegate.childNodes)
+      .filter(considerChildNode)
+      .length;
+    return consideredChildNodesLength === 0;
   }
 
   /**
@@ -155,6 +184,9 @@ export default class MutableElement {
    */
   private persistInternal(): Node | boolean {
     const newName = this._name;
+    if (this._clearChildren) {
+      this._delegate.innerHTML = "";
+    }
     if (newName === null) {
       return this.persistDeletion();
     }
@@ -339,6 +371,21 @@ export default class MutableElement {
    */
   get element(): Element {
     return this._delegate;
+  }
+
+  /**
+   * If children shall be removed.
+   */
+  get clearChildren(): boolean {
+    return this._clearChildren;
+  }
+
+  /**
+   * Set to `true` to remove children.
+   * @param value `true` to remove children, `false` (default) if not.
+   */
+  set clearChildren(value: boolean) {
+    this._clearChildren = value;
   }
 
   /**
