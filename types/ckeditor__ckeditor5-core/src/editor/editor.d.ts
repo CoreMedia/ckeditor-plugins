@@ -15,6 +15,9 @@ export default class Editor implements Emitter, Observable {
   readonly editing: EditingController;
   readonly plugins: PluginCollection<Plugin<any>>;
 
+  static builtinPlugins: Array<Plugin<any>>;
+  static defaultConfig: object;
+
   constructor(config?: object);
 
   on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
