@@ -1,3 +1,3 @@
 export default interface Config {
-  get(name:String): any;
+  get(name:string): unknown;
 }
