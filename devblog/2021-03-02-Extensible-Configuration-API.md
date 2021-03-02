@@ -1,5 +1,5 @@
 Extensible Configuration API
---------------------------------------------------------------------------------
+================================================================================
 
 In the [previous post](2021-03-01-RichTextDataProcessor-Configuration-API.md)
 we sketched a possible scenario how to provide a configurable filtering API.
