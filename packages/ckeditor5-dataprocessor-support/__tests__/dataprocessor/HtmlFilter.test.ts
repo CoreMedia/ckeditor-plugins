@@ -38,7 +38,7 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            el: (me) => (me.replaceByChildren = true),
+            el: (params) => (params.el.replaceByChildren = true),
           },
         },
         from: "<parent>Lorem <el>Ipsum</el> Dolor <el>Sit</el></parent>",
@@ -50,7 +50,7 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            el: (me) => (me.replaceByChildren = true),
+            el: (params) => (params.el.replaceByChildren = true),
           },
         },
         from: "<parent>Lorem <el>Ipsum <el>Dolor</el> Sit</el></parent>",
@@ -62,9 +62,9 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            el: (me) => {
-              me.name = "replacement";
-              me.attributes.was = "el";
+            el: (params) => {
+              params.el.name = "replacement";
+              params.el.attributes.was = "el";
             },
           },
         },
@@ -78,9 +78,9 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            el: (me) => {
-              me.name = "replacement";
-              me.attributes.was = "el";
+            el: (params) => {
+              params.el.name = "replacement";
+              params.el.attributes.was = "el";
             },
           },
         },
@@ -94,17 +94,17 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            el: (me) => {
-              me.name = "stage1";
-              me.attributes.was = "el";
+            el: (params) => {
+              params.el.name = "stage1";
+              params.el.attributes.was = "el";
             },
-            stage1: (me) => {
-              me.name = "stage2";
-              me.attributes.was = "stage1";
+            stage1: (params) => {
+              params.el.name = "stage2";
+              params.el.attributes.was = "stage1";
             },
-            stage2: (me) => {
-              me.name = "replacement";
-              me.attributes.was = "stage2";
+            stage2: (params) => {
+              params.el.name = "replacement";
+              params.el.attributes.was = "stage2";
             },
           },
         },
@@ -118,11 +118,11 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            "^": (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}before`;
+            "^": (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}before`;
             },
-            el: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}el`;
+            el: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}el`;
             },
           },
         },
@@ -135,11 +135,11 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            $: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}after`;
+            $: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}after`;
             },
-            el: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}el`;
+            el: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}el`;
             },
           },
         },
@@ -152,14 +152,14 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            "^": (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}before`;
+            "^": (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}before`;
             },
-            $: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}after`;
+            $: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}after`;
             },
-            el: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}el`;
+            el: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}el`;
             },
           },
         },
@@ -172,18 +172,18 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            "^": (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}before`;
+            "^": (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}before`;
             },
-            $: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}after`;
+            $: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}after`;
             },
-            el: (me) => {
-              me.name = "replacement";
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}el`;
+            el: (params) => {
+              params.el.name = "replacement";
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}el`;
             },
-            replacement: (me) => {
-              me.attributes.name = `${me.attributes.name ? me.attributes.name + "-" : ""}replacement`;
+            replacement: (params) => {
+              params.el.attributes.name = `${params.el.attributes.name ? params.el.attributes.name + "-" : ""}replacement`;
             },
           },
         },

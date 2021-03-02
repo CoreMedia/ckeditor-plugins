@@ -1,20 +1,58 @@
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
+import Config from "@ckeditor/ckeditor5-utils/src/config";
 
+/**
+ * Possible attribute values to assign. `null` represents a deleted property.
+ */
 export type AttributeValue = string | null;
 
+/**
+ * The attributes of an element.
+ */
 export interface Attributes {
   [index: string]: AttributeValue;
 }
 
+/**
+ * Result type for element filters. Typical filters are `void`. A return value
+ * of `false` is a shortcut for `element.remove = true`. A return value of
+ * `true` is actually ignored and expect to express _keep element_.
+ */
 export type ElementFilterResult = void | boolean;
-export type ElementFilterRule = (el: MutableElement) => ElementFilterResult;
+
+/**
+ * Named parameters to be passed to element filters. For overriding filter rules
+ * a typical pattern to start with is:
+ *
+ * <pre>
+ * params.parent && params.parent(args);
+ * </pre>
+ */
+export interface ElementFilterParams {
+  /**
+   * The element to process.
+   */
+  el: MutableElement,
+  /**
+   * A parent mapping to respect (or to ignore, thus override).
+   */
+  parentRule?: ElementFilterRule,
+  /**
+   * CKEditor Configuration.
+   */
+  config?: Config,
+}
+export type ElementFilterRule = (params: ElementFilterParams) => ElementFilterResult;
+/**
+ * Predicate to select children.
+ */
 export type ChildPredicate = (child: ChildNode, index: number, array: ChildNode[]) => boolean;
 
 /**
  * A wrapper for a given element, which allows to store changes to be applied
  * to the DOM structure later on.
  */
-export default class MutableElement {
+export default class MutableElement implements ElementFilterParams {
   private readonly _delegate: Element;
   /**
    * If the name is set to empty string, the element itself is removed,
@@ -38,7 +76,7 @@ export default class MutableElement {
    * Overrides for attribute values.
    * @private
    */
-  private _attributes: Attributes = {};
+  private readonly _attributes: Attributes = {};
   /**
    * A set of well-known namespaces. Any prefix detected during processing
    * will trigger the corresponding namespace declaration to be added to
@@ -51,18 +89,43 @@ export default class MutableElement {
    *
    * @private
    */
-  private _namespaces: Namespaces;
+  private readonly _namespaces: Namespaces;
+  private readonly _config: Config | undefined;
 
   /**
    * Constructor.
    *
    * @param delegate the original element to wrap
+   * @param config? CKEditor configuration
    * @param namespaces the namespaces to take into account
    */
-  constructor(delegate: Element, namespaces: Namespaces = DEFAULT_NAMESPACES) {
+  constructor(delegate: Element, config?: Config, namespaces: Namespaces = DEFAULT_NAMESPACES) {
     this._delegate = delegate;
     this._namespaces = namespaces;
+    this._config = config;
   }
+
+  /**
+   * Access to CKEditor config.
+   */
+  get config(): Config | undefined {
+    return this._config;
+  }
+
+  /**
+   * Convenience, so that this element can be itself re-used as rule for
+   * nested calls.
+   */
+  get el(): MutableElement {
+    return this;
+  }
+
+  /**
+   * Nothing to do. The method just exists, so that it fulfills the interface.
+   */
+  parentRule(): ElementFilterResult {
+  }
+
 
   /**
    * Access owner document.
@@ -88,7 +151,7 @@ export default class MutableElement {
     if (!parentElement) {
       return null;
     }
-    return new MutableElement(parentElement);
+    return new MutableElement(parentElement, this._config, this._namespaces);
   }
 
   /**

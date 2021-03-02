@@ -13,58 +13,58 @@ import RichTextSchema, { Strictness } from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
 
-const strike: ElementFilterRule = (element) => {
-  element.name = "span";
-  element.attributes["class"] = "strike";
+const strike: ElementFilterRule = (params) => {
+  params.el.name = "span";
+  params.el.attributes["class"] = "strike";
 };
 
 export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
   elements: {
-    ol: (element) => {
+    ol: (params) => {
       // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-      return !(element.children.length === 0 || !element.getFirst("li"));
+      return !(params.el.children.length === 0 || !params.el.getFirst("li"));
     },
-    ul: (element) => {
+    ul: (params) => {
       // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-      return !(element.children.length === 0 || !element.getFirst("li"));
+      return !(params.el.children.length === 0 || !params.el.getFirst("li"));
     },
-    h1: (element) => {
-      element.name = "p";
-      element.attributes["class"] = "p--heading-1";
+    h1: (params) => {
+      params.el.name = "p";
+      params.el.attributes["class"] = "p--heading-1";
     },
-    h2: (element) => {
-      element.name = "p";
-      element.attributes["class"] = "p--heading-2";
+    h2: (params) => {
+      params.el.name = "p";
+      params.el.attributes["class"] = "p--heading-2";
     },
-    h3: (element) => {
-      element.name = "p";
-      element.attributes["class"] = "p--heading-3";
+    h3: (params) => {
+      params.el.name = "p";
+      params.el.attributes["class"] = "p--heading-3";
     },
-    h4: (element) => {
-      element.name = "p";
-      element.attributes["class"] = "p--heading-4";
+    h4: (params) => {
+      params.el.name = "p";
+      params.el.attributes["class"] = "p--heading-4";
     },
-    h5: (element) => {
-      element.name = "p";
-      element.attributes["class"] = "p--heading-5";
+    h5: (params) => {
+      params.el.name = "p";
+      params.el.attributes["class"] = "p--heading-5";
     },
-    h6: (element) => {
-      element.name = "p";
-      element.attributes["class"] = "p--heading-6";
+    h6: (params) => {
+      params.el.name = "p";
+      params.el.attributes["class"] = "p--heading-6";
     },
-    b: (element) => {
-      element.name = "strong";
+    b: (params) => {
+      params.el.name = "strong";
     },
-    i: (element) => {
-      element.name = "em";
+    i: (params) => {
+      params.el.name = "em";
     },
-    u: (element) => {
-      element.name = "span";
-      element.attributes["class"] = "underline";
+    u: (params) => {
+      params.el.name = "span";
+      params.el.attributes["class"] = "underline";
     },
-    br: (element) => {
-      // Remove obsolete BR, if only element on block level element.
-      const parent = element.parentElement;
+    br: (params) => {
+      // Remove obsolete BR, if only element on block level params.el.
+      const parent = params.el.parentElement;
       const parentName = parent?.name || "";
       if (!parent || parentName === "div") {
         // somehow, a top-level <br> has been introduced, which is not valid:
@@ -73,20 +73,20 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
       // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
       // block level elements should be respected too, though. Change it, if you think so.
       if (["td", "p"].indexOf(parentName) >= 0) {
-        return !element.isLastNode;
+        return !params.el.isLastNode;
       }
       return true;
     },
     del: strike,
     s: strike,
     strike: strike,
-    div: (element) => {
+    div: (params) => {
       // We are not applied to root-div. Thus, we have a nested div here, which
       // is not allowed in CoreMedia RichText 1.0.
-      element.name = "p";
+      params.el.name = "p";
     },
-    td: (element) => {
-      return !element.isEmpty((el, idx, children) => {
+    td: (params) => {
+      return !params.el.isEmpty((el, idx, children) => {
         // Only filter, if there is only one child. While it may be argued, if this
         // is useful, this is the behavior as we had it for CKEditor 4.
         if (children.length !== 1) {
@@ -108,10 +108,10 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
         return el.hasChildNodes() && el.firstChild?.nodeName.toLowerCase() !== "br";
       });
     },
-    th: (element) => {
-      element.name = "td";
+    th: (params) => {
+      params.el.name = "td";
       // TODO[cke] In CKEditor 4 we did not add such a class. May be remove or make configurable.
-      element.attributes["class"] = "td--heading";
+      params.el.attributes["class"] = "td--heading";
     },
     /*
      * tr/tables rules:
@@ -122,12 +122,12 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
      * behavior, which checks for elements which must not be empty but now
      * are empty.
      */
-    tbody: (element) => {
+    tbody: (params) => {
       // If there are more elements at parent than just this tbody, tbody must
       // be removed. Typical scenario: Unknown element <thead> got removed, leaving
       // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
-      // all nested trs up one level and remove the tbody element.
-      element.replaceByChildren = (element.parentElement?.children.length || 0) > 1;
+      // all nested trs up one level and remove the tbody params.el.
+      params.el.replaceByChildren = (params.el.parentElement?.children.length || 0) > 1;
     },
     /*
      * TODO[cke] img/a handling
@@ -138,21 +138,21 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
      *   The deletion of invalid attributes src/href are handled by after-children
      *   rule implicitly.
      */
-    span: (element) => {
-      if (!element.attributes["class"]) {
+    span: (params) => {
+      if (!params.el.attributes["class"]) {
         // drop element, but not children
-        element.replaceByChildren = true;
+        params.el.replaceByChildren = true;
       }
     },
-    "xdiff:span": (element) => {
-      element.name = "";
+    "xdiff:span": (params) => {
+      params.el.name = "";
     },
   },
 };
 
 /**
  * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
- * execution: (see especially <code>core/htmlparser/element.js</code>)
+ * execution: (see especially <code>core/htmlparser/params.el.js</code>)
  *
  * <ul>
  * <li>If an element name changes, filtering will be restarted at that node.</li>
@@ -160,7 +160,7 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
  * <li>If false is returned, the element and all its children will be removed.</li>
  * <li>If element name changes to empty, only the element itself will be removed and the children appended to the parent</li>
  * <li>An element is processed first, then its attributes and afterwards its children (if any)</li>
- * <li>Text nodes only support to be changed or removed... but not to be wrapped into some other element.</li>
+ * <li>Text nodes only support to be changed or removed... but not to be wrapped into some other params.el.</li>
  * <li><code>$</code> and <code>$$</code> are so called generic element rules which are applied after element
  * processing. <code>$</code> is applied prior to filtering the children, while <code>$$</code> is applied
  * after the element and all its children have been processed.
@@ -173,17 +173,17 @@ export function createToDataFilterRules(strictness: Strictness = Strictness.STRI
     ...BASE_TO_DATA_FILTER_RULES,
     elements: {
       ...BASE_TO_DATA_FILTER_RULES.elements,
-      $: (element) => {
-        richTextSchema.adjustHierarchy(element);
+      $: (params) => {
+        richTextSchema.adjustHierarchy(params.el);
       },
-      "$$": (element) => {
+      "$$": (params) => {
         // The hierarchy may have changed after processing children. Thus, we
         // need to check again.
-        richTextSchema.adjustHierarchy(element);
+        richTextSchema.adjustHierarchy(params.el);
         // We only expect the element to be possibly removed. replaceByChildren
         // should have been triggered by "before-children" rule.
-        if (!element.remove) {
-          richTextSchema.adjustAttributes(element);
+        if (!params.el.remove) {
+          richTextSchema.adjustAttributes(params.el);
         }
       },
     }

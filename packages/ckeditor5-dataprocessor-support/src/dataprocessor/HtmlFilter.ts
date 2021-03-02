@@ -1,9 +1,15 @@
 import MutableElement, { ElementFilterRule } from "./MutableElement";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import Config from "@ckeditor/ckeditor5-utils/src/config";
 
 export type TextFilterFunctionResult = Text | string | boolean | void;
 export type TextFilterFunction = (text: string | null, textNode: Text) => TextFilterFunctionResult;
+
+export enum FilterMode {
+  toData,
+  toView
+}
 
 export interface FilterRuleSet {
   elements?: { [key: string]: ElementFilterRule };
@@ -38,10 +44,12 @@ export const AFTER_ELEMENT_AND_CHILDREN = "$$";
 export default class HtmlFilter {
   private readonly logger: Logger = LoggerProvider.getLogger("HtmlFilter");
 
-  private readonly ruleSet: FilterRuleSet;
+  private readonly _ruleSet: FilterRuleSet;
+  private readonly _config: Config | undefined;
 
-  constructor(ruleSet: FilterRuleSet) {
-    this.ruleSet = ruleSet;
+  constructor(ruleSet: FilterRuleSet, config?: Config) {
+    this._ruleSet = ruleSet;
+    this._config = config;
   }
 
   public applyTo(root: Node): void {
@@ -73,9 +81,9 @@ export default class HtmlFilter {
 
     let next = currentNode.nextSibling;
 
-    if (currentNode instanceof Element && this.ruleSet.elements) {
-      const beforeRule: ElementFilterRule | undefined = this.ruleSet.elements[BEFORE_ELEMENT];
-      const filterRule: ElementFilterRule | undefined = this.ruleSet.elements[currentNode.nodeName.toLowerCase()];
+    if (currentNode instanceof Element && this._ruleSet.elements) {
+      const beforeRule: ElementFilterRule | undefined = this._ruleSet.elements[BEFORE_ELEMENT];
+      const filterRule: ElementFilterRule | undefined = this._ruleSet.elements[currentNode.nodeName.toLowerCase()];
       /*
        * We need to handle the children prior to the last rule. This provides the
        * opportunity, that the last rule may decide on a now possibly empty node.
@@ -86,10 +94,10 @@ export default class HtmlFilter {
       const handleChildrenRule: ElementFilterRule = () => {
         this.applyToChildNodes(currentNode);
       };
-      const afterRule: ElementFilterRule | undefined = this.ruleSet.elements[AFTER_ELEMENT];
-      const afterChildrenRule: ElementFilterRule | undefined = this.ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
+      const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
+      const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
 
-      const mutableElement = new MutableElement(currentNode);
+      const mutableElement = new MutableElement(currentNode, this._config);
 
       const newCurrent = mutableElement.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
 
