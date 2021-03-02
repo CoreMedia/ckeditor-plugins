@@ -1,4 +1,5 @@
 import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
+import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
@@ -12,6 +13,7 @@ import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-su
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
+import { getConfig } from "./Config";
 
 const strike: ElementFilterRule = (params) => {
   params.el.name = "span";
@@ -192,22 +194,26 @@ export function createToDataFilterRules(strictness: Strictness = Strictness.STRI
 
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
-  private readonly delegate: HtmlDataProcessor;
-  private readonly domConverter: DomConverter;
-  private readonly richTextXmlWriter: RichTextXmlWriter;
+  private readonly _delegate: HtmlDataProcessor;
+  private readonly _domConverter: DomConverter;
+  private readonly _richTextXmlWriter: RichTextXmlWriter;
 
-  private readonly toDataFilter: HtmlFilter;
+  private readonly _toDataFilter: HtmlFilter;
+  private _config: CKEditorConfig | undefined;
 
-  constructor(document: ViewDocument) {
-    this.delegate = new HtmlDataProcessor(document);
-    this.domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
-    this.richTextXmlWriter = new RichTextXmlWriter();
-    this.toDataFilter = new HtmlFilter(createToDataFilterRules());
+  constructor(document: ViewDocument, config?: CKEditorConfig) {
+    this._config = config;
+    this._delegate = new HtmlDataProcessor(document);
+    this._domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
+    this._richTextXmlWriter = new RichTextXmlWriter();
+
+    const richTextConfig = getConfig(config);
+    this._toDataFilter = new HtmlFilter(createToDataFilterRules(richTextConfig.strictness), config);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
-    this.delegate.registerRawContentMatcher(pattern);
-    this.domConverter.registerRawContentMatcher(pattern);
+    this._delegate.registerRawContentMatcher(pattern);
+    this._domConverter.registerRawContentMatcher(pattern);
   }
 
   /**
@@ -224,7 +230,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     const richTextDocument = RichTextDataProcessor.createCoreMediaRichTextDocument();
     // We use the RichTextDocument at this early stage, so that all created elements
     // already have the required namespace. This eases subsequent processing.
-    const domFragment: Node | DocumentFragment = this.domConverter.viewToDom(viewFragment, richTextDocument);
+    const domFragment: Node | DocumentFragment = this._domConverter.viewToDom(viewFragment, richTextDocument);
     let fragmentAsStringForDebugging: string = "uninitialized";
 
     if (this.logger.isDebugEnabled()) {
@@ -240,7 +246,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     richTextDocument.documentElement.appendChild(domFragment);
 
     const doc = this.toCoreMediaRichTextXml(richTextDocument);
-    const xml: string = this.richTextXmlWriter.getXml(doc);
+    const xml: string = this._richTextXmlWriter.getXml(doc);
 
     if (this.logger.isDebugEnabled()) {
       this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
@@ -270,7 +276,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     //   We may require to reintroduce it, possibly by "legacy behavior" configuration option.
     //container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", XLINK_NAMESPACE);
 
-    this.toDataFilter.applyTo(document.documentElement);
+    this._toDataFilter.applyTo(document.documentElement);
     return document;
   }
 
@@ -283,7 +289,7 @@ export default class RichTextDataProcessor implements DataProcessor {
 
   toView(data: string): ViewDocumentFragment | null {
     const html: string = this.richTextToHtml(data);
-    return this.delegate.toView(html);
+    return this._delegate.toView(html);
   }
 
   private richTextToHtml(data: string): string {

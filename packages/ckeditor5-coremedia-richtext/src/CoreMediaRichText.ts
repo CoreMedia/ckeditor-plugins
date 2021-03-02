@@ -11,7 +11,7 @@ export default class CoreMediaRichText extends Plugin {
 
   constructor(editor: Editor) {
     super(editor);
-    editor.data.processor = new RichTextDataProcessor(editor.data.viewDocument);
+    editor.data.processor = new RichTextDataProcessor(editor.data.viewDocument, editor.config);
   }
 
   init(): Promise<void> | null {
