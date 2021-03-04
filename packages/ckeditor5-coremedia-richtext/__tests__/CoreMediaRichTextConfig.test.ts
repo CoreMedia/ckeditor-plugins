@@ -1,7 +1,12 @@
 import "jest-xml-matcher";
 import { Strictness } from "../src/RichTextSchema";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
-import { createToDataFilterRules } from "../src/RichTextDataProcessor";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { getConfig } from "../src/CoreMediaRichTextConfig";
+
+jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+
+const MOCK_EDITOR = new Editor();
 
 type CommentableTestData = {
   /**
@@ -324,7 +329,8 @@ describe("Default Data Filter Rules", () => {
       const { disabled, strictness, input, expected } = testData;
 
       for (const currentStrictness of strictness) {
-        const filter = new HtmlFilter(createToDataFilterRules(currentStrictness));
+        const { toData } = getConfig();
+        const filter = new HtmlFilter(toData, MOCK_EDITOR);
 
         const testCaseName = `${name} (mode: ${strictnessKeys[currentStrictness]})`;
         const testCase = () => {

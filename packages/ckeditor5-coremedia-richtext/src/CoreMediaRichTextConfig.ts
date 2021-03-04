@@ -1,11 +1,15 @@
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
-import { FilterRuleSetConfiguration, ToDataAndViewConfiguration, parseFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/Rules";
 import {
-  FilterRuleSet,
-  ElementsFilterRuleSet
+  FilterRuleSetConfiguration,
+  parseFilterRuleSetConfiguration,
+  ToDataAndViewConfiguration
+} from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/Rules";
+import {
+  ElementsFilterRuleSet,
+  FilterRuleSet
 } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
-import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
+import { ElementFilterRule, ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -97,21 +101,45 @@ const strike: ToDataAndViewConfiguration = {
   toView: replaceElementAndClassBy("span", "strike", "s"),
 };
 
+const defaultSchema = new RichTextSchema(Strictness.STRICT);
+
+function getSchema(params: ElementFilterParams): RichTextSchema {
+  const dataProcessor: any = params.editor?.data?.processor || {};
+  return dataProcessor["richTextSchema"] as RichTextSchema ?? defaultSchema;
+}
+
+/**
+ * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
+ * execution: (see especially <code>core/htmlparser/params.el.js</code>)
+ *
+ * <ul>
+ * <li>If an element name changes, filtering will be restarted at that node.</li>
+ * <li>If a new element is returned, it will replace the current one and processing will be restarted for that node.</li>
+ * <li>If false is returned, the element and all its children will be removed.</li>
+ * <li>If element name changes to empty, only the element itself will be removed and the children appended to the parent</li>
+ * <li>An element is processed first, then its attributes and afterwards its children (if any)</li>
+ * <li>Text nodes only support to be changed or removed... but not to be wrapped into some other params.el.</li>
+ * <li><code>$</code> and <code>$$</code> are so called generic element rules which are applied after element
+ * processing. <code>$</code> is applied prior to filtering the children, while <code>$$</code> is applied
+ * after the element and all its children have been processed.
+ * The opposite handler is <code>'^'</code> which would be applied before all other element handlers.</li>
+ * </ul>
+ */
+// TODO[cke] Review and move these rules, e. g. to configuration class documentation.
 const defaultRules: FilterRuleSetConfiguration = {
   elements: {
     $: (params) => {
-      const schema: RichTextSchema | undefined = (params.editor.data.processor as any)["richTextSchema"] as RichTextSchema;
-      schema?.adjustHierarchy(params.el);
+      getSchema(params).adjustHierarchy(params.el);
     },
     "$$": (params) => {
-      const schema: RichTextSchema | undefined = (params.editor.data.processor as any)["richTextSchema"] as RichTextSchema;
+      const schema = getSchema(params);
       // The hierarchy may have changed after processing children. Thus, we
       // need to check again.
-      schema?.adjustHierarchy(params.el);
+      schema.adjustHierarchy(params.el);
       // We only expect the element to be possibly removed. replaceByChildren
       // should have been triggered by "before-children" rule.
       if (!params.el.remove) {
-        schema?.adjustAttributes(params.el);
+        schema.adjustAttributes(params.el);
       }
     },
     ol: removeInvalidList,
