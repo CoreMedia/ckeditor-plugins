@@ -1,18 +1,23 @@
 import MutableElement, { ElementFilterRule } from "./MutableElement";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 export type TextFilterFunctionResult = Text | string | boolean | void;
-export type TextFilterFunction = (text: string | null, textNode: Text) => TextFilterFunctionResult;
-
+export interface TextFilterFunction {
+  (text: string | null, textNode: Text): TextFilterFunctionResult;
+}
 export enum FilterMode {
   toData,
   toView
 }
 
+export interface ElementsFilterRuleSet {
+  [key: string]: ElementFilterRule;
+}
+
 export interface FilterRuleSet {
-  elements?: { [key: string]: ElementFilterRule };
+  elements?: ElementsFilterRuleSet;
   text?: TextFilterFunction;
 }
 
@@ -45,11 +50,11 @@ export default class HtmlFilter {
   private readonly logger: Logger = LoggerProvider.getLogger("HtmlFilter");
 
   private readonly _ruleSet: FilterRuleSet;
-  private readonly _config: Config | undefined;
+  private readonly _editor: Editor;
 
-  constructor(ruleSet: FilterRuleSet, config?: Config) {
+  constructor(ruleSet: FilterRuleSet, editor: Editor) {
     this._ruleSet = ruleSet;
-    this._config = config;
+    this._editor = editor;
   }
 
   public applyTo(root: Node): void {
@@ -97,7 +102,7 @@ export default class HtmlFilter {
       const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
       const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
 
-      const mutableElement = new MutableElement(currentNode, this._config);
+      const mutableElement = new MutableElement(currentNode, this._editor);
 
       const newCurrent = mutableElement.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
 

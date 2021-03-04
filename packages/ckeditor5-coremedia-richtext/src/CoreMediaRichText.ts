@@ -11,11 +11,16 @@ export default class CoreMediaRichText extends Plugin {
 
   constructor(editor: Editor) {
     super(editor);
-    editor.data.processor = new RichTextDataProcessor(editor.data.viewDocument, editor.config);
   }
 
   init(): Promise<void> | null {
     this.logger.info("Initializing", CoreMediaRichText.pluginName);
+    this.editor.data.processor = new RichTextDataProcessor(this.editor);
+    return null;
+  }
+
+  afterInit(): Promise<void> | null {
+    this.logger.info("Initialized", CoreMediaRichText.pluginName);
     return null;
   }
 }

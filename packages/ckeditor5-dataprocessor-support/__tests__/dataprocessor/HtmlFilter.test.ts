@@ -1,5 +1,10 @@
 import "jest-xml-matcher";
 import { HtmlFilter, FilterRuleSet } from "../../src/dataprocessor";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+
+jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+
+const MOCK_EDITOR = new Editor();
 
 type ApplyToData = [
   string,
@@ -25,7 +30,9 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
       {
         rules: {
           elements: {
-            el: () => false,
+            el: (params) => {
+              params.el.remove = true;
+            },
           },
         },
         from: "<parent>Lorem <el>Ipsum</el> Dolor <el>Sit</el></parent>",
@@ -194,7 +201,7 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
   ])("(%#) %s", (name, testData) => {
     document.body.innerHTML = testData.from.trim();
     const root: Node = <Node>document.body.firstChild;
-    const filter = new HtmlFilter(testData.rules);
+    const filter = new HtmlFilter(testData.rules, MOCK_EDITOR);
 
     filter.applyTo(root);
 

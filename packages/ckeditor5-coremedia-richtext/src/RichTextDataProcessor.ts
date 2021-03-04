@@ -1,5 +1,4 @@
 import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
-import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
@@ -13,7 +12,8 @@ import HtmlFilter, { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-su
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
-import { getConfig } from "./Config";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { getConfig } from "./CoreMediaRichTextConfig";
 
 const strike: ElementFilterRule = (params) => {
   params.el.name = "span";
@@ -24,11 +24,11 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
   elements: {
     ol: (params) => {
       // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-      return !(params.el.children.length === 0 || !params.el.getFirst("li"));
+      params.el.remove = params.el.children.length === 0 || !params.el.getFirst("li");
     },
     ul: (params) => {
       // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-      return !(params.el.children.length === 0 || !params.el.getFirst("li"));
+      params.el.remove = params.el.children.length === 0 || !params.el.getFirst("li");
     },
     h1: (params) => {
       params.el.name = "p";
@@ -68,16 +68,16 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
       // Remove obsolete BR, if only element on block level params.el.
       const parent = params.el.parentElement;
       const parentName = parent?.name || "";
+      let remove: boolean = false;
       if (!parent || parentName === "div") {
         // somehow, a top-level <br> has been introduced, which is not valid:
-        return false;
+        remove = true;
+      } else if (["td", "p"].indexOf(parentName) >= 0) {
+        // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
+        // block level elements should be respected too, though. Change it, if you think so.
+        remove = params.el.isLastNode;
       }
-      // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
-      // block level elements should be respected too, though. Change it, if you think so.
-      if (["td", "p"].indexOf(parentName) >= 0) {
-        return !params.el.isLastNode;
-      }
-      return true;
+      params.el.remove = remove;
     },
     del: strike,
     s: strike,
@@ -88,7 +88,7 @@ export const BASE_TO_DATA_FILTER_RULES: FilterRuleSet = {
       params.el.name = "p";
     },
     td: (params) => {
-      return !params.el.isEmpty((el, idx, children) => {
+      params.el.remove = params.el.isEmpty((el, idx, children) => {
         // Only filter, if there is only one child. While it may be argued, if this
         // is useful, this is the behavior as we had it for CKEditor 4.
         if (children.length !== 1) {
@@ -199,21 +199,34 @@ export default class RichTextDataProcessor implements DataProcessor {
   private readonly _richTextXmlWriter: RichTextXmlWriter;
 
   private readonly _toDataFilter: HtmlFilter;
-  private _config: CKEditorConfig | undefined;
 
-  constructor(document: ViewDocument, config?: CKEditorConfig) {
-    this._config = config;
+  private readonly _richTextSchema: RichTextSchema;
+
+  constructor(editor: Editor) {
+    const document: ViewDocument = editor.data.viewDocument;
+
+    const {
+      schema,
+      toData,
+      toView
+    } = getConfig(editor.config);
+
     this._delegate = new HtmlDataProcessor(document);
     this._domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
     this._richTextXmlWriter = new RichTextXmlWriter();
 
-    const richTextConfig = getConfig(config);
-    this._toDataFilter = new HtmlFilter(createToDataFilterRules(richTextConfig.strictness), config);
+    this._richTextSchema = schema;
+
+    this._toDataFilter = new HtmlFilter(toData, editor);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
     this._delegate.registerRawContentMatcher(pattern);
     this._domConverter.registerRawContentMatcher(pattern);
+  }
+
+  get richTextSchema(): RichTextSchema {
+    return this._richTextSchema;
   }
 
   /**

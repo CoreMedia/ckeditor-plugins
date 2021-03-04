@@ -14,5 +14,7 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 
   init?(): null | Promise<T>;
 
+  afterInit?(): null | Promise<T>;
+
   on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
 }

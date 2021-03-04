@@ -1,5 +1,10 @@
 import { MutableElement, ElementFilterRule, ElementFilterParams } from "../../src/dataprocessor";
 import "jest-xml-matcher";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+
+jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+
+const MOCK_EDITOR = new Editor();
 
 /*
  * =============================================================================
@@ -29,7 +34,7 @@ function requireValidXml(xmlString: string): Document {
 
 test("should wrap DOM element", () => {
   const htmlDivElement = window.document.createElement("div");
-  const mutableElement = new MutableElement(htmlDivElement);
+  const mutableElement = new MutableElement(htmlDivElement, MOCK_EDITOR);
   expect(mutableElement.element).toStrictEqual(htmlDivElement);
 });
 
@@ -93,14 +98,6 @@ describe("MutableElement.applyRules()", () => {
         ],
         from: "<parent><el>Element</el></parent>",
         to: "<parent><el>Element</el></parent>",
-      },
-    ],
-    [
-      "should remove by return value `false`",
-      {
-        rules: [() => false],
-        from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
-        to: "<parent>Lorem  Ipsum</parent>",
       },
     ],
     [
@@ -468,7 +465,7 @@ describe("MutableElement.applyRules()", () => {
       throw new Error(`Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`);
     }
 
-    const me = new MutableElement(xmlElement);
+    const me = new MutableElement(xmlElement, MOCK_EDITOR);
     const appliedRulesResult = me.applyRules(...testData.rules);
     expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to)
 

@@ -1,5 +1,5 @@
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 /**
  * Possible attribute values to assign. `null` represents a deleted property.
@@ -14,13 +14,6 @@ export interface Attributes {
 }
 
 /**
- * Result type for element filters. Typical filters are `void`. A return value
- * of `false` is a shortcut for `element.remove = true`. A return value of
- * `true` is actually ignored and expect to express _keep element_.
- */
-export type ElementFilterResult = void | boolean;
-
-/**
  * Named parameters to be passed to element filters. For overriding filter rules
  * a typical pattern to start with is:
  *
@@ -32,21 +25,43 @@ export interface ElementFilterParams {
   /**
    * The element to process.
    */
-  el: MutableElement,
+  readonly el: MutableElement,
   /**
    * A parent mapping to respect (or to ignore, thus override).
+   * It is required, so that it is easier to trigger a call to the
+   * parent rule. Just add it as empty function, if there is no parent.
    */
-  parentRule?: ElementFilterRule,
+  readonly parentRule: ElementFilterRule,
   /**
    * CKEditor Configuration.
    */
-  config?: Config,
+  readonly editor: Editor,
 }
-export type ElementFilterRule = (params: ElementFilterParams) => ElementFilterResult;
+
+/**
+ * Function interface: `(params: ElementFilterParams) => ElementFilterResult`.
+ */
+export interface ElementFilterRule {
+  (params: ElementFilterParams): void;
+}
+
 /**
  * Predicate to select children.
  */
-export type ChildPredicate = (child: ChildNode, index: number, array: ChildNode[]) => boolean;
+export interface ChildPredicate {
+  /**
+   * <p>
+   * <strong>As function declaration:</strong>
+   * </p>
+   * <pre>
+   * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
+   * </pre>
+   * @param child the child node to validate
+   * @param index child node index
+   * @param array list of all sibling child nodes (including the child itself)
+   */
+  (child: ChildNode, index: number, array: ChildNode[]): boolean;
+}
 
 /**
  * A wrapper for a given element, which allows to store changes to be applied
@@ -90,42 +105,24 @@ export default class MutableElement implements ElementFilterParams {
    * @private
    */
   private readonly _namespaces: Namespaces;
-  private readonly _config: Config | undefined;
+
+  public readonly editor: Editor;
+  public readonly el: MutableElement = this;
+  public readonly parentRule: ElementFilterRule = () => {
+  };
 
   /**
    * Constructor.
    *
    * @param delegate the original element to wrap
-   * @param config? CKEditor configuration
+   * @param editor CKEditor instance
    * @param namespaces the namespaces to take into account
    */
-  constructor(delegate: Element, config?: Config, namespaces: Namespaces = DEFAULT_NAMESPACES) {
+  constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES) {
     this._delegate = delegate;
     this._namespaces = namespaces;
-    this._config = config;
+    this.editor = editor;
   }
-
-  /**
-   * Access to CKEditor config.
-   */
-  get config(): Config | undefined {
-    return this._config;
-  }
-
-  /**
-   * Convenience, so that this element can be itself re-used as rule for
-   * nested calls.
-   */
-  get el(): MutableElement {
-    return this;
-  }
-
-  /**
-   * Nothing to do. The method just exists, so that it fulfills the interface.
-   */
-  parentRule(): ElementFilterResult {
-  }
-
 
   /**
    * Access owner document.
@@ -151,7 +148,7 @@ export default class MutableElement implements ElementFilterParams {
     if (!parentElement) {
       return null;
     }
-    return new MutableElement(parentElement, this._config, this._namespaces);
+    return new MutableElement(parentElement, this.editor, this._namespaces);
   }
 
   /**
@@ -196,7 +193,7 @@ export default class MutableElement implements ElementFilterParams {
   /**
    * Signals, if this element is empty.
    */
-  public isEmpty(considerChildNode: (el:ChildNode, index: number, array: ChildNode[]) => boolean = () => true): boolean {
+  public isEmpty(considerChildNode: (el: ChildNode, index: number, array: ChildNode[]) => boolean = () => true): boolean {
     if (this._clearChildren || !this._delegate.hasChildNodes()) {
       return true;
     }
@@ -216,12 +213,7 @@ export default class MutableElement implements ElementFilterParams {
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
     for (const rule of rules) {
       if (!!rule) {
-        const result = rule(this);
-        // false positive inspection: We need to distinguish void from false!
-        // noinspection PointlessBooleanExpressionJS
-        if (result === false) {
-          this.remove = true;
-        }
+        rule(this);
 
         const continueOrContinueWith = this.persistInternal();
         if (continueOrContinueWith instanceof Node) {
