@@ -19,10 +19,14 @@ import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
 import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
-import { setupPreview, updatePreview } from './preview'
+import CoreMediaRichTextConfig, {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
+import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
+
+import {setupPreview, updatePreview} from './preview'
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -37,7 +41,7 @@ if (wantsInspector) {
   inspectorToggle.textContent = 'Close Inspector';
 }
 
-ClassicEditor.create(document.querySelector( '.editor' ), {
+ClassicEditor.create(document.querySelector('.editor'), {
   licenseKey: '',
   placeholder: 'Type your text here...',
   plugins: [
@@ -47,6 +51,7 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
     Bold,
     Essentials,
     Heading,
+    Highlight,
     Indent,
     Italic,
     Link,
@@ -90,6 +95,8 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
       '|',
       'indent',
       'outdent',
+      '|',
+      'highlight',
     ]
   },
   language: 'en',
@@ -107,12 +114,40 @@ ClassicEditor.create(document.querySelector( '.editor' ), {
       console.log(`Saved data within ${performance.now() - start} ms.`);
     }
   },
+  [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
+    strictness: Strictness.STRICT,
+    rules: {
+      elements: {
+        // Highlight Plugin Support
+        mark: {
+          toData: (params) => {
+            const originalClass = params.el.attributes["class"];
+            params.el.attributes["class"] = `mark--${originalClass}`;
+            params.el.name = "span";
+          },
+          toView: {
+            span: (params) => {
+              const originalClass = params.el.attributes["class"] || "";
+              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
+              //    can be italics, but also marked.
+              const pattern = /^mark--(\S*)$/;
+              const match = pattern.exec(originalClass);
+              if (match) {
+                params.el.name = "mark";
+                params.el.attributes["class"] = match[1];
+              }
+            },
+          },
+        },
+      },
+    },
+  },
 }).then(editor => {
   if (wantsInspector) {
-    CKEditorInspector.attach( editor );
+    CKEditorInspector.attach(editor);
   }
-}).catch( error => {
-  console.error( error );
+}).catch(error => {
+  console.error(error);
 });
 
 function saveData(source, data) {

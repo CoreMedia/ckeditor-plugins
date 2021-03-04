@@ -1050,6 +1050,14 @@
     "@ckeditor/ckeditor5-ui" "^24.0.0"
     "@ckeditor/ckeditor5-utils" "^24.0.0"
 
+"@ckeditor/ckeditor5-highlight@^24.0.0":
+  version "24.0.0"
+  resolved "https://nexus.pandora-ci-03.coremedia.vm/repository/coremedia-npm/@ckeditor/ckeditor5-highlight/-/ckeditor5-highlight-24.0.0.tgz#da1483c79aaa16172c4d1e6d97b1b102533b45df"
+  integrity sha512-blSR6DQgywQFSzn8k4vxYx8zk6xdP9uSrpDkqdgFLg4+tGmCbWk+SnPiY38+JsMeRf+KBAHmqqtDWyS+HHBy9w==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^24.0.0"
+    "@ckeditor/ckeditor5-ui" "^24.0.0"
+
 "@ckeditor/ckeditor5-image@^24.0.0":
   version "24.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-image/-/ckeditor5-image-24.0.0.tgz#64d638ad1b0055a50f5b1aeb6856b48abb749629"
