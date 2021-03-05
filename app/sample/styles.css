@@ -16,13 +16,12 @@
 /* --------- PREVIEW STYLES  ---------------------------------------------------------------------------------------- */
 .preview {
   background-color: white;
-  margin-left: 3em;
-  padding: 2em;
+  padding: 2px 2em;
   border: 1px solid #c4c4c4;
   white-space: pre-wrap;
   font-family: Monaco,Menlo,Consolas,"Roboto Mono","Courier New","Ubuntu Mono",monospace;
-  overflow: scroll;
-  max-height: 80vh;
+  overflow-y: scroll;
+  max-height: 200px;
 }
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
@@ -53,6 +52,7 @@ main .ck-editor[role='application'] .ck.ck-content,
 	/* To enable toolbar wrapping. */
 	width: 100%;
 	overflow-x: hidden;
+  max-height: 50vh;
 }
 
 /* Because of sidebar `position: relative`, Edge is overriding the outline of a focused editor. */

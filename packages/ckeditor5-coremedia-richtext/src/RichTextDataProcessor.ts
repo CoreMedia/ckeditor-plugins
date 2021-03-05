@@ -3,7 +3,6 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import richText2Html from "./richtext2html/richtext2html";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
@@ -13,16 +12,22 @@ import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "./CoreMediaRichTextConfig";
+import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
+import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   private readonly _delegate: HtmlDataProcessor;
   private readonly _domConverter: DomConverter;
   private readonly _richTextXmlWriter: RichTextXmlWriter;
+  private readonly _htmlWriter: HtmlWriter;
 
   private readonly _toDataFilter: HtmlFilter;
+  private readonly _toViewFilter: HtmlFilter;
 
   private readonly _richTextSchema: RichTextSchema;
+
+  private readonly _domParser: DOMParser;
 
   constructor(editor: Editor) {
     const document: ViewDocument = editor.data.viewDocument;
@@ -36,10 +41,13 @@ export default class RichTextDataProcessor implements DataProcessor {
     this._delegate = new HtmlDataProcessor(document);
     this._domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
     this._richTextXmlWriter = new RichTextXmlWriter();
+    this._htmlWriter = new BasicHtmlWriter();
+    this._domParser = new DOMParser();
 
     this._richTextSchema = schema;
 
     this._toDataFilter = new HtmlFilter(toData, editor);
+    this._toViewFilter = new HtmlFilter(toView, editor);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -123,18 +131,24 @@ export default class RichTextDataProcessor implements DataProcessor {
   }
 
   toView(data: string): ViewDocumentFragment | null {
-    const html: string = this.richTextToHtml(data);
+    const startTimestamp = performance.now();
+
+    const dataDocument = this._domParser.parseFromString(data, "text/xml");
+    this._toViewFilter.applyTo(dataDocument.documentElement);
+    const documentFragment = dataDocument.createDocumentFragment();
+    const nodes: Node[] = Array.from(dataDocument.documentElement.childNodes);
+    documentFragment.append(...nodes);
+
+    const html: string = this._htmlWriter.getHtml(documentFragment);
+
+    if (this.logger.isDebugEnabled()) {
+      this.logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
+        in: data,
+        out: html,
+      });
+    }
+
     return this._delegate.toView(html);
   }
 
-  private richTextToHtml(data: string): string {
-    const startTimestamp = performance.now();
-    const html: string = richText2Html(data);
-    this.logger.debug("Transformed RichText to HTML:", {
-      in: data,
-      out: html,
-      milliseconds: performance.now() - startTimestamp,
-    });
-    return html;
-  }
 }

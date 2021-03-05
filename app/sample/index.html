@@ -29,7 +29,6 @@
   <div class="message">
     <div class="centered">
       <h2>CKEditor 5: CoreMedia Plugin Showcase</h2>
-      <button id="previewButton">Show XML Preview</button>
     </div>
   </div>
   <div class="centered">
@@ -38,89 +37,54 @@
         <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
         <!-- The data inside are given in data-format of CKEditor, which is CoreMedia RichText 1.0. -->
         <div class="editor" style="display:none;">
-          <h2>CKEditor 5: CoreMedia Plugin Showcase</h2>
-          <p>
-            This example instance of CKEditor 5
-            serves as a showcase for plugins provided by CoreMedia. Most of these
-            plugins are mandatory to use CKEditor 5 as editor within CoreMedia Studio.
-            Others are required to edit CoreMedia RichText, and then again others
-            provide more additional functionality.
-          </p>
-          <h3>Mandatory Plugins for CoreMedia Studio</h3>
-          <p>
-            Not existing yet, but they will for example provide hooks to
-            synchronize CoreMedia Studio and CKEditor.
-          </p>
-          <h3>Required Plugins for CoreMedia Richtext</h3>
-          <p>
-            These plugins are required to edit CoreMedia Richtext within
-            CoreMedia Studio. They will especially convert HTML to CoreMedia
-            Richtext and vice versa.
-          </p>
-          <h3>Optional Plugins</h3>
-          <p>
-            There are a bunch of plugins which are used by our customers to
-            further extend the functionality of CKEditor. You don't need to add
-            them in order to use CKEditor within CoreMedia Studio or as
-            CoreMedia Richtext editor.
-          </p>
-          <h4>SymbolOnPasteMapper</h4>
-          <p>
-            The initial and main purpose of this plugin is to replace characters
-            pasted from Microsoft Word with font _Symbol_ to their corresponding
-            Unicode characters. This refers to older versions of Microsoft Word,
-            typically. Nowadays, Microsoft Word itself often inserts Unicode
-            characters directly.
-          </p>
-          <h4>CoreMedia RichText</h4>
-          <p>
-            This plugin will transform HTML in CKEditor to CoreMedia RichText 1.0
-            and vice versa. Here are some elements, which require special notice:
-          </p>
-          <table>
-            <thead>
-              <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Example</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><pre>&lt;br&gt;</pre></td>
-                <td><pre>&lt;br/&gt;</pre></td>
-                <td>Lorem<br>Ipsum</td>
-              </tr>
-              <tr>
-                <td><pre>&lt;h1&gt;</pre></td>
-                <td><pre>&lt;p class="p--heading-1"&gt;</pre></td>
-                <td><h1>Lorem Ipsum</h1></td>
-              </tr>
-              <tr>
-                <td><pre>&lt;h6&gt;</pre></td>
-                <td><pre>&lt;p class="p--heading-6"&gt;</pre></td>
-                <td><h6>Lorem Ipsum</h6></td>
-              </tr>
-              <tr>
-                <td><pre>&lt;u&gt;</pre></td>
-                <td><pre>&lt;span class="underline"&gt;</pre></td>
-                <td>Lorem <u>Ipsum</u> Dolor</td>
-              </tr>
-              <tr>
-                <td><pre>&lt;s&gt;</pre></td>
-                <td><pre>&lt;span class="strike"&gt;</pre></td>
-                <td>Lorem <s>Ipsum</s> Dolor</td>
-              </tr>
-              <tr>
-                <td><pre>&lt;div&gt;</pre></td>
-                <td><pre>&lt;p&gt;</pre></td>
-                <td><div>Lorem</div><div>Ipsum</div></td>
-              </tr>
-            </tbody>
-          </table>
+          <div xmlns="http://www.coremedia.com/2003/richtext-1.0">
+            <p class="p--heading-1">CKEditor 5: CoreMedia Plugin Showcase</p>
+            <p>
+              This example instance of CKEditor 5 serves as a showcase for plugins provided by
+              CoreMedia. Most of these plugins are mandatory to use CKEditor 5 as editor
+              within CoreMedia Studio. Others are required to edit CoreMedia RichText, and
+              then again others provide more additional functionality.
+            </p>
+            <p class="p--heading-2">Required Plugins for CoreMedia Studio</p>
+            <p>
+              Not existing yet, but they will for example provide hooks to synchronize
+              CoreMedia Studio and CKEditor.
+            </p>
+            <p class="p--heading-2">Required Plugins for CoreMedia Richtext</p>
+            <p>
+              These plugins are required to edit CoreMedia Richtext within CoreMedia Studio.
+              They will especially convert HTML to CoreMedia Richtext and vice versa.
+            </p>
+            <p class="p--heading-3">CoreMedia RichText</p>
+            <p>
+              This plugin will transform HTML in CKEditor to CoreMedia RichText 1.0 and vice
+              versa.
+            </p>
+            <p>
+              Extension point exists, so that you may configure support for
+              plugins, which add additional HTML, unknown by CoreMedia RichText 1.0.
+              This holds true for the <span class="mark--marker-green">Highlight plugin</span>, for example.
+            </p>
+            <p class="p--heading-2">Optional Plugins</p>
+            <p>
+              There are a bunch of plugins which are used by our customers to further extend
+              the functionality of CKEditor. You don't need to add them in order to use
+              CKEditor within CoreMedia Studio or as CoreMedia Richtext editor.
+            </p>
+            <p class="p--heading-3">SymbolOnPasteMapper</p>
+            <p>
+              The initial and main purpose of this plugin is to replace characters pasted from
+              Microsoft Word with font _Symbol_ to their corresponding Unicode characters.
+              This refers to older versions of Microsoft Word, typically. Nowadays, Microsoft
+              Word itself often inserts Unicode characters directly.
+            </p>
+          </div>
         </div>
+        <div>
+          <button id="previewButton">Show XML Preview</button>
+        </div>
+        <div id="preview" class="column50 preview" hidden></div>
       </div>
-      <div id="preview" class="column50 preview" hidden></div>
     </div>
   </div>
 </main>
