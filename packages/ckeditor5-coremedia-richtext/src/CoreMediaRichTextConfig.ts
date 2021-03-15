@@ -213,7 +213,7 @@ const defaultRules: FilterRuleSetConfiguration = {
         return el.hasChildNodes() && el.firstChild?.nodeName.toLowerCase() !== "br";
       });
     },
-    th: replaceByElementAndClassBackAndForth("th", "td--heading", "td"),
+    th: replaceByElementAndClassBackAndForth("th", "td", "td--heading"),
     /*
      * tr/tables rules:
      * ----------------

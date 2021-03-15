@@ -90,6 +90,73 @@ describe("Default Data Filter Rules", () => {
       },
     ],
   ];
+  const tableFixtures: DataFilterTestFixture[] = [
+    [
+      "TABLE#1: Empty table should be removed, as it is invalid.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table/></div>`,
+        expected: `<div xmlns="${ns_richtext}"/>`,
+      },
+    ],
+    [
+      "TABLE#2: thead should be transformed as being part of table body (not tbody...).",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#3: tbody should be kept as is.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+      },
+    ],
+    [
+      "TABLE#4: tbody should be removed, if contents need to be merged with previous thead section.",
+      {
+        comment: "This is a compromise due to processing order. As thead and its contents will be transformed first, there is no straightforward way to merge it with tbody.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr><tr><td>Body</td></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#5: th should be transformed to td with class.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><th>Head</th></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td class="td--heading">Head</td></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#6: Should remove figure around table. By default CKEditor 5 adds a figure around table.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><figure><table><tr><td>Body</td></tr></table></figure></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td>Body</td></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#7: Should remove empty tbody, and thus empty table.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tbody/></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"/>`,
+      },
+    ],
+    [
+      "TABLE#8: Should remove empty tr, and thus empty tbody, and thus empty table.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tbody><tr/></tbody></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"/>`,
+      },
+    ],
+  ];
   const listFixtures: DataFilterTestFixture[] =
     flatten(["ul", "ol"].map(el => {
       const key = el.toUpperCase();
@@ -276,6 +343,7 @@ describe("Default Data Filter Rules", () => {
     [
       "CLEANUP#6: Remove irrelevant <span>.",
       {
+        comment: "This has been a design decision around 2011 or before. As the span does not violate RichText DTD we may argue about it.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         input: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
         expected: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
@@ -304,6 +372,7 @@ describe("Default Data Filter Rules", () => {
   ];
   const testFixtures: DataFilterTestFixture[] = [
     ...uncategorizedFixtures,
+    ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,
     ...defaultBlockFixtures,
