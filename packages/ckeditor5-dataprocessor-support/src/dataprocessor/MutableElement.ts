@@ -33,7 +33,7 @@ export interface ElementFilterParams {
    */
   readonly parentRule: ElementFilterRule,
   /**
-   * CKEditor Configuration.
+   * CKEditor instance, for example to access configuration.
    */
   readonly editor: Editor,
 }
