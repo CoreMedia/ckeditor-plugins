@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "clean": "rimraf ./dist",
+    "publish": "jangaroo-publish ./dist",
     "test": "jest",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
@@ -25,6 +26,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
+    "@jangaroo/publish":"1.0.0",
     "@types/jest": "^26.0.20",
     "@types/jest-each": "^24.3.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -43,13 +45,6 @@
   },
   "exports": {
     "./": "./dist/"
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./src/*"
-      ]
-    }
   },
   "dependencies": {
     "@ckeditor/ckeditor5-engine": "^24.0.0",

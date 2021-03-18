@@ -21,6 +21,12 @@
       ],
       "@ckeditor/ckeditor5-utils/*": [
         "../../types/ckeditor__ckeditor5-utils/*"
+      ],
+      "@coremedia/coremedia-utils/*": [
+        "../../coremedia-utils/src/*"
+      ],
+      "@coremedia/ckeditor5-dataprocessor-support/*": [
+        "../../ckeditor5-dataprocessor-support/src/*"
       ]
     }
   },
