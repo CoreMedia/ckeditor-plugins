@@ -6,6 +6,14 @@ import { getConfig } from "../src/CoreMediaRichTextConfig";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
+/**
+ * Will be checked for "startsWith" for a given Data Driven Testname. Meant
+ * to be used for debugging purpose. Example:
+ *
+ * `TEST_SELECTOR = "TABLE#3"`
+ */
+const TEST_SELECTOR = "";
+
 const MOCK_EDITOR = new Editor();
 
 type CommentableTestData = {
@@ -396,6 +404,11 @@ describe("Default Data Filter Rules", () => {
     "(%#) %s",
     (name: string, testData: DataFilterRulesTestData) => {
       const { disabled, strictness, input, expected } = testData;
+
+      if (TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
+        test.todo(`${name} (disabled by test selector for debugging purpose)`);
+        return;
+      }
 
       for (const currentStrictness of strictness) {
         const { toData } = getConfig();
