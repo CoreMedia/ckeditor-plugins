@@ -206,6 +206,122 @@ export default class NodeProxy<T extends Node> {
       this._state = NodeState.KEEP;
     }
   }
+
+  /**
+   * Persists the applied changes to the DOM.
+   *
+   * @return {PersistResponse} which signals, how to continue persisting other nodes
+   */
+  public persistToDom(): PersistResponse {
+    switch (this.state) {
+      case NodeState.KEEP:
+        return this.persistKeep();
+      case NodeState.REMOVE_RECURSIVELY:
+        return this.persistRemoveRecursively();
+      case NodeState.REMOVE_SELF:
+        return this.persistRemoveSelf();
+      default:
+        throw new Error(`Unknown node state ${this.state}.`);
+    }
+  }
+
+  /**
+   * Helper function for return value, which signals "restart from".
+   * @param node node to restart from
+   * @protected
+   */
+  protected restartFrom(node: Node | null | undefined): PersistResponse {
+    return {
+      ...RESPONSE_ABORT,
+      restartFrom: node || undefined,
+    };
+  }
+  /**
+   * Persists, to keep the current node. May be overwritten for example to
+   * apply additional changes to the node like changing attributes of an
+   * element.
+   *
+   * @protected
+   */
+  protected persistKeep(): PersistResponse {
+    return RESPONSE_CONTINUE;
+  }
+
+  /**
+   * Persists the deletion of this node and all its child nodes.
+   *
+   * @protected
+   */
+  protected persistRemoveRecursively(): PersistResponse {
+    this.delegate.parentNode?.removeChild(this.delegate);
+    return RESPONSE_ABORT;
+  }
+
+  /**
+   * Persists, that only the very node itself shall be removed.
+   * The default implementation will replace the node with its child nodes.
+   *
+   * @protected
+   */
+  protected persistRemoveSelf(): PersistResponse {
+    const parentNode = this.delegate.parentNode;
+    if (!parentNode || this.empty) {
+      // No special handling for children required; let's just remove ourselves.
+      return this.persistRemoveRecursively();
+    }
+
+    const ownerDocument = this.ownerDocument;
+    let firstChild: ChildNode | null;
+
+    if (!ownerDocument) {
+      let currentChild: ChildNode | null;
+      do {
+        currentChild = this.delegate.firstChild;
+        currentChild && parentNode.insertBefore(currentChild, this.delegate);
+      } while (!!currentChild);
+      firstChild = this.delegate.previousSibling;
+      parentNode.removeChild(this.delegate);
+    } else {
+      const range = ownerDocument.createRange();
+      range.selectNodeContents(this.delegate);
+      const fragment = range.extractContents();
+      firstChild = fragment.firstChild;
+
+      parentNode.replaceChild(fragment, this.delegate);
+    }
+
+    return this.restartFrom(firstChild);
+  }
+
+}
+
+/**
+ * Signals to abort handling the current node during data processing.
+ * May be enriched with the node to restart from via object destruction.
+ */
+export const RESPONSE_ABORT = { abort: true };
+/**
+ * Signals, that data processing for current node should be continued.
+ */
+export const RESPONSE_CONTINUE = { abort: false };
+
+/**
+ * Response when persisting node changes.
+ */
+export interface PersistResponse {
+  /**
+   * Node to possibly restart from. Typically used, when a node got replaced.
+   * `undefined` signals, that processing may just continue with next nodes.
+   * Typically, if `restartFrom` is set, `abort` is set to `true`.
+   */
+  restartFrom?: Node;
+  /**
+   * Signals if further rules should/may be applied to this node. Typically
+   * `true`, if processing should continue with different node. `true` is
+   * also returned, when the current node just got deleted, as it does not make
+   * sense to continue processing this node.
+   */
+  abort: boolean;
 }
 
 /**

@@ -1,6 +1,6 @@
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import NodeProxy, { NodeState } from "./NodeProxy";
+import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**
  * Possible attribute values to assign. `null` represents a deleted property.
@@ -135,11 +135,13 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
       if (!!rule) {
         rule(this);
 
-        const continueOrContinueWith = this.persistInternal();
-        if (continueOrContinueWith instanceof Node) {
-          return continueOrContinueWith;
+        const response = this.persistToDom();
+        if (response.restartFrom) {
+          // Implies (or should imply) response.abort === true
+          return response.restartFrom;
         }
-        if (!continueOrContinueWith) {
+        if (response.abort) {
+          // Processing requested not to continue applying rules to this node.
           break;
         }
       }
@@ -148,29 +150,24 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
   }
 
   persist(): void {
-    this.persistInternal();
+    this.persistToDom();
   }
 
   /**
-   * Persists the changes, as requested.
+   * Node should be kept, but may require to apply attribute changes or
+   * to replace the element by a new one.
    *
-   * @return a node from where a restart is required; or a boolean flag if
-   * filtering shall be continued for this element.
+   * @protected
    */
-  private persistInternal(): Node | boolean {
-    switch (this.state) {
-      case NodeState.KEEP:
-        if (this.name === this.realName) {
-          return this.persistAttributes();
-        }
-        return this.persistReplaceBy(this.name);
-      case NodeState.REMOVE_RECURSIVELY:
-        return this.persistDeletion();
-      case NodeState.REMOVE_SELF:
-        return this.persistReplaceByChildren();
-      default:
-        throw new Error(`Unknown node state ${this.state}.`);
+  protected persistKeep(): PersistResponse {
+    const response = super.persistKeep();
+    if (response.abort) {
+      return response;
     }
+    if (this.name === this.realName) {
+      return this.persistAttributes();
+    }
+    return this.persistReplaceBy(this.name);
   }
 
   public get namespaceURI(): string | null {
@@ -191,7 +188,7 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
    *
    * @private
    */
-  private persistAttributes(): true | Element {
+  private persistAttributes(): PersistResponse {
     const elementNamespaceAttribute: string | null = this._attributes["xmlns"];
     if (!!elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
@@ -208,7 +205,7 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
       return this.persistReplaceBy(this.realName, ownerNamespaceURI);
     }
     this.applyAttributes(this.delegate, this._attributes);
-    return true;
+    return RESPONSE_CONTINUE;
   }
 
   /**
@@ -272,39 +269,6 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
   }
 
   /**
-   * Will remove this element from its parent, if parent exists.
-   * @return always `false` which signals, that no more filters shall be applied to this element.
-   * @private
-   */
-  private persistDeletion(): false {
-    this.delegate.parentNode?.removeChild(this.delegate);
-    return false;
-  }
-
-  /**
-   * Replaces this element by its children.
-   * @return `ChildNode` if children existed, representing the first child node; `false` if no children existed,
-   * to signal, that this element must not be processed by subsequent filters.
-   * @private
-   */
-  private persistReplaceByChildren(): ChildNode | false {
-    const parentNode = this.delegate.parentNode;
-    if (!parentNode) {
-      // Cannot apply. Assume, that the element shall just vanish.
-      return false;
-    }
-
-    const range = this.ownerDocument.createRange();
-    range.selectNodeContents(this.delegate);
-    const fragment = range.extractContents();
-    const firstChild: ChildNode | null = fragment.firstChild;
-
-    parentNode.replaceChild(fragment, this.delegate);
-
-    return firstChild || false;
-  }
-
-  /**
    * Replaces the current element by a new one of given name. Will either
    * create an element of the given namespace or of the same namespace as
    * the owner document.
@@ -314,7 +278,7 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
    * @return newly created element, for which filtering should be re-applied.
    * @private
    */
-  private persistReplaceBy(newName: string, namespace?: string | null): Element {
+  private persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {
     if (!namespace && !!this.attributes["xmlns"]) {
       return this.persistReplaceBy(newName, this.attributes["xmlns"]);
     }
@@ -326,7 +290,7 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
       newElement = ownerDocument.createElementNS(ownerDocument.documentElement.namespaceURI, newName);
     }
     this.replaceByElement(newElement);
-    return newElement;
+    return this.restartFrom(newElement);
   }
 
   private replaceByElement(newElement: Element): void {
