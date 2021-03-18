@@ -35,7 +35,7 @@ export interface ParsedConfig {
 
 // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
 const removeInvalidList: ElementFilterRule = (params) => {
-  params.el.remove = params.el.children.length === 0 || !params.el.getFirst("li");
+  params.el.remove = params.el.empty || !params.el.findFirst("li");
 };
 
 const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
@@ -180,7 +180,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       } else if (["td", "p"].indexOf(parentName) >= 0) {
         // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
         // block level elements should be respected too, though. Change it, if you think so.
-        remove = params.el.isLastNode;
+        remove = params.el.lastNode;
       }
       params.el.remove = remove;
     },
@@ -228,7 +228,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       // be removed. Typical scenario: Unknown element <thead> got removed, leaving
       // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
       // all nested trs up one level and remove the tbody params.el.
-      params.el.replaceByChildren = (params.el.parentElement?.children.length || 0) > 1;
+      params.el.replaceByChildren = !params.el.singleton;
     },
     /*
      * TODO[cke] img/a handling

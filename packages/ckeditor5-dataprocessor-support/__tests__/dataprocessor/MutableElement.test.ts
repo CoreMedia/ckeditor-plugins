@@ -101,36 +101,11 @@ describe("MutableElement.applyRules()", () => {
       },
     ],
     [
-      "should remove by me.name = null",
-      {
-        rules: [
-          (params: ElementFilterParams) => {
-            params.el.name = null;
-          },
-        ],
-        from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
-        to: "<parent>Lorem  Ipsum</parent>",
-      },
-    ],
-    [
       "should remove by me.remove = true",
       {
         rules: [(me) => (me.el.remove = true)],
         from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
         to: "<parent>Lorem  Ipsum</parent>",
-      },
-    ],
-    [
-      "should replace by children by me.name = ''",
-      {
-        rules: [
-          (me) => {
-            me.el.name = "";
-          },
-        ],
-        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
-        to: "<parent>Lorem <c1>Child 1</c1><c2>Child 1</c2> Ipsum</parent>",
-        restart: "//c1",
       },
     ],
     [

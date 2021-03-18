@@ -1,5 +1,6 @@
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import NodeProxy, { NodeState } from "./NodeProxy";
 
 /**
  * Possible attribute values to assign. `null` represents a deleted property.
@@ -46,47 +47,16 @@ export interface ElementFilterRule {
 }
 
 /**
- * Predicate to select children.
- */
-export interface ChildPredicate {
-  /**
-   * <p>
-   * <strong>As function declaration:</strong>
-   * </p>
-   * <pre>
-   * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
-   * </pre>
-   * @param child the child node to validate
-   * @param index child node index
-   * @param array list of all sibling child nodes (including the child itself)
-   */
-  (child: ChildNode, index: number, array: ChildNode[]): boolean;
-}
-
-/**
  * A wrapper for a given element, which allows to store changes to be applied
  * to the DOM structure later on.
  */
-export default class MutableElement implements ElementFilterParams {
-  private readonly _delegate: Element;
+export default class MutableElement extends NodeProxy<Element> implements ElementFilterParams {
   /**
-   * If the name is set to empty string, the element itself is removed,
-   * but its children added to the element's parent. If the name is set
-   * and different to the original tag-name, the original element will
-   * be replaced with the new element having the same attributes and
-   * children as the element before.
-   *
-   * The default value `undefined` signals, to keep the element as is.
-   *
-   * A value of `null` signals to remove the element.
+   * Signals either a possibly new name for this element, or that the name
+   * should not be changed (which is `undefined`).
    * @private
    */
-  private _name: string | null | undefined = undefined;
-  /**
-   * Signals, that children should be cleared.
-   * @private
-   */
-  private _clearChildren: boolean = false;
+  private _name: string | undefined = undefined;
   /**
    * Overrides for attribute values.
    * @private
@@ -119,7 +89,7 @@ export default class MutableElement implements ElementFilterParams {
    * @param namespaces the namespaces to take into account
    */
   constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES) {
-    this._delegate = delegate;
+    super(delegate);
     this._namespaces = namespaces;
     this.editor = editor;
   }
@@ -127,15 +97,17 @@ export default class MutableElement implements ElementFilterParams {
   /**
    * Access owner document.
    */
+  // Override, as we know, that it is non-null here.
   get ownerDocument(): Document {
-    return this._delegate.ownerDocument;
+    return this.delegate.ownerDocument;
   }
 
   /**
    * Access to the parent node of this element.
+   * @deprecated Use parentNode instead
    */
   get parent(): (Node & ParentNode) | null {
-    return this._delegate.parentNode;
+    return this.parentNode?.delegate || null;
   }
 
   /**
@@ -144,63 +116,11 @@ export default class MutableElement implements ElementFilterParams {
    * task of the caller persisting changes.
    */
   get parentElement(): MutableElement | null {
-    const parentElement = this._delegate.parentElement;
+    const parentElement = this.delegate.parentElement;
     if (!parentElement) {
       return null;
     }
     return new MutableElement(parentElement, this.editor, this._namespaces);
-  }
-
-  /**
-   * The nodes that are direct children of this element.
-   */
-  get children(): ChildNode[] {
-    if (this._clearChildren) {
-      return [];
-    }
-    return Array.from(this._delegate.childNodes);
-  }
-
-  /**
-   * Get first (matching) child node of the given element.
-   * @param condition string: the node name to match (ignoring case), predicate:
-   * the predicate to apply.
-   */
-  public getFirst(condition?: string | ChildPredicate): ChildNode | undefined {
-    const childNodes = this.children;
-    if (!condition) {
-      return childNodes.length ? childNodes[0] : undefined;
-    }
-    let predicate: ChildPredicate;
-    if (typeof condition === "function") {
-      predicate = condition;
-    } else {
-      predicate = (child) => {
-        return child.nodeName.toLowerCase() === condition.toLowerCase();
-      };
-    }
-    return childNodes.find(predicate);
-  }
-
-  /**
-   * Signals, if this is the last node in parent. Always `false` if no
-   * parent exists.
-   */
-  get isLastNode(): boolean {
-    return !this._delegate.nextSibling;
-  }
-
-  /**
-   * Signals, if this element is empty.
-   */
-  public isEmpty(considerChildNode: (el: ChildNode, index: number, array: ChildNode[]) => boolean = () => true): boolean {
-    if (this._clearChildren || !this._delegate.hasChildNodes()) {
-      return true;
-    }
-    const consideredChildNodesLength = Array.from(this._delegate.childNodes)
-      .filter(considerChildNode)
-      .length;
-    return consideredChildNodesLength === 0;
   }
 
   /**
@@ -238,20 +158,23 @@ export default class MutableElement implements ElementFilterParams {
    * filtering shall be continued for this element.
    */
   private persistInternal(): Node | boolean {
-    const newName = this._name;
-    if (this._clearChildren) {
-      this._delegate.innerHTML = "";
+    switch (this.state) {
+      case NodeState.KEEP:
+        if (this.name === this.realName) {
+          return this.persistAttributes();
+        }
+        return this.persistReplaceBy(this.name);
+      case NodeState.REMOVE_RECURSIVELY:
+        return this.persistDeletion();
+      case NodeState.REMOVE_SELF:
+        return this.persistReplaceByChildren();
+      default:
+        throw new Error(`Unknown node state ${this.state}.`);
     }
-    if (newName === null) {
-      return this.persistDeletion();
-    }
-    if (newName === undefined || newName.toLowerCase() === this._delegate.tagName.toLowerCase()) {
-      return this.persistAttributes();
-    }
-    if (this.replaceByChildren) {
-      return this.persistReplaceByChildren();
-    }
-    return this.persistReplaceBy(newName);
+  }
+
+  public get namespaceURI(): string | null {
+    return this.delegate.namespaceURI;
   }
 
   /**
@@ -273,18 +196,18 @@ export default class MutableElement implements ElementFilterParams {
     if (!!elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
-      return this.persistReplaceBy(this._delegate.tagName.toLowerCase(), elementNamespaceAttribute);
+      return this.persistReplaceBy(this.realName, elementNamespaceAttribute);
     }
     /*
      * We don't have an extra namespace-attribute set during filtering. Nevertheless,
      * the namespace of this element may be different from owner-document. If it is
      * different, we need to create a new element as well.
      */
-    const ownerNamespaceURI = this._delegate.ownerDocument.documentElement.namespaceURI;
-    if (this._delegate.namespaceURI !== ownerNamespaceURI) {
-      return this.persistReplaceBy(this._delegate.tagName.toLowerCase(), ownerNamespaceURI);
+    const ownerNamespaceURI = this.ownerDocument.documentElement.namespaceURI;
+    if (this.namespaceURI !== ownerNamespaceURI) {
+      return this.persistReplaceBy(this.realName, ownerNamespaceURI);
     }
-    this.applyAttributes(this._delegate, this._attributes);
+    this.applyAttributes(this.delegate, this._attributes);
     return true;
   }
 
@@ -354,7 +277,7 @@ export default class MutableElement implements ElementFilterParams {
    * @private
    */
   private persistDeletion(): false {
-    this._delegate.parentNode?.removeChild(this._delegate);
+    this.delegate.parentNode?.removeChild(this.delegate);
     return false;
   }
 
@@ -365,18 +288,18 @@ export default class MutableElement implements ElementFilterParams {
    * @private
    */
   private persistReplaceByChildren(): ChildNode | false {
-    const parentNode = this._delegate.parentNode;
+    const parentNode = this.delegate.parentNode;
     if (!parentNode) {
       // Cannot apply. Assume, that the element shall just vanish.
       return false;
     }
 
     const range = this.ownerDocument.createRange();
-    range.selectNodeContents(this._delegate);
+    range.selectNodeContents(this.delegate);
     const fragment = range.extractContents();
     const firstChild: ChildNode | null = fragment.firstChild;
 
-    parentNode.replaceChild(fragment, this._delegate);
+    parentNode.replaceChild(fragment, this.delegate);
 
     return firstChild || false;
   }
@@ -409,15 +332,15 @@ export default class MutableElement implements ElementFilterParams {
   private replaceByElement(newElement: Element): void {
     this.applyAttributes(newElement, this.attributes);
 
-    const childrenToMove = this._delegate.childNodes;
+    const childrenToMove = this.delegate.childNodes;
     while (childrenToMove.length > 0) {
       // Will also remove it from original parent.
       newElement.append(childrenToMove[0]);
     }
 
-    const parentNode = this._delegate.parentNode;
+    const parentNode = this.delegate.parentNode;
     if (!!parentNode) {
-      parentNode.replaceChild(newElement, this._delegate);
+      parentNode.replaceChild(newElement, this.delegate);
     }
   }
 
@@ -425,82 +348,15 @@ export default class MutableElement implements ElementFilterParams {
    * Get direct access to the delegate element.
    */
   get element(): Element {
-    return this._delegate;
-  }
-
-  /**
-   * If children shall be removed.
-   */
-  get clearChildren(): boolean {
-    return this._clearChildren;
-  }
-
-  /**
-   * Set to `true` to remove children.
-   * @param value `true` to remove children, `false` (default) if not.
-   */
-  set clearChildren(value: boolean) {
-    this._clearChildren = value;
-  }
-
-  /**
-   * Signals, if this mutable element represents a state, where the element
-   * shall be removed, while attaching the children to the parent node.
-   */
-  get replaceByChildren(): boolean {
-    return this._name === "";
-  }
-
-  /**
-   * Sets, if this mutable element represents a state, where the element
-   * shall be removed, while attaching the children to the parent node.
-   *
-   * Convenience: If `true`, the name of this mutable element will be set
-   * to empty. Thus, if you change the name afterwards, this state will
-   * be reset.
-   *
-   * @param b `true` to mark as <em>replace with children</em>; `false` otherwise.
-   */
-  set replaceByChildren(b: boolean) {
-    this._name = b ? "" : undefined;
-  }
-
-  /**
-   * Signals, if this element shall be replaced with a new element of
-   * different name.
-   */
-  get replace(): boolean {
-    return !!this._name && this._name.toLowerCase() !== this._delegate.tagName.toLowerCase();
-  }
-
-  /**
-   * Signals, if this mutable element represents a state, where the element
-   * shall be removed, including all its children.
-   */
-  get remove(): boolean {
-    return this._name === null;
-  }
-
-  /**
-   * Sets, if this mutable element represents a state, where the element
-   * shall be removed, including all its children.
-   *
-   * Convenience: If `true`, the name of this mutable element will be set
-   * to `null`. Thus, if you change the name afterwards, this state will
-   * be reset.
-   *
-   * @param b `true` to mark as <em>to remove</em>; `false` otherwise.
-   */
-  set remove(b: boolean) {
-    this._name = b ? null : undefined;
+    return this.delegate;
   }
 
   /**
    * Retrieve the name of the element.
    * If the name got changed, will return this changed name instead.
    */
-  get name(): string | null {
-    return this._name?.toLowerCase() || this._delegate.tagName.toLowerCase();
+  public get name(): string {
+    return this._name || super.name;
   }
 
   /**
@@ -508,13 +364,10 @@ export default class MutableElement implements ElementFilterParams {
    * name signals, that in the end the delegate element shall be replaced by
    * the new element.
    *
-   * @param newName new name for the element; case does not matter; empty string will signal to replace
-   * the element by its children; `null` signals to remove the element completely.
+   * @param newName new name for the element; case does not matter.
    */
-  set name(newName: string | null) {
-    // must not be simplified, because of different meaning for falsy
-    // values '', undefined and null.
-    this._name = newName === null ? null : newName.toLowerCase();
+  public set name(newName: string) {
+    this._name = newName.toLowerCase();
   }
 
   /**
@@ -527,7 +380,7 @@ export default class MutableElement implements ElementFilterParams {
    * remove the attribute from the element.
    */
   get attributes(): Attributes {
-    const element: Element = this._delegate;
+    const element: Element = this.delegate;
     return new Proxy(this._attributes, {
       defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
         return Reflect.defineProperty(target, p, attributes);
