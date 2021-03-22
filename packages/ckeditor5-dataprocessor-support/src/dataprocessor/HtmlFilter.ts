@@ -1,25 +1,27 @@
 import MutableElement, { ElementFilterRule } from "./MutableElement";
+import TextProxy, { TextFilterRule } from "./TextProxy";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
-export type TextFilterFunctionResult = Text | string | boolean | void;
-export interface TextFilterFunction {
-  (text: string | null, textNode: Text): TextFilterFunctionResult;
-}
 export enum FilterMode {
   toData,
   toView
 }
 
-export interface ElementsFilterRuleSet {
+export interface ElementFilterRulesByName {
   [key: string]: ElementFilterRule;
 }
 
-export interface FilterRuleSet {
-  elements?: ElementsFilterRuleSet;
-  text?: TextFilterFunction;
+export interface ElementFilterRuleSet {
+  elements?: ElementFilterRulesByName;
 }
+
+export interface TextFilterRuleSet {
+  text?: TextFilterRule,
+}
+
+export type FilterRuleSet = ElementFilterRuleSet & TextFilterRuleSet;
 
 export const BEFORE_ELEMENT = "^";
 export const AFTER_ELEMENT = "$";
@@ -85,44 +87,54 @@ export default class HtmlFilter {
     this.logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent: parent, currentNode: currentNode });
 
     let next = currentNode.nextSibling;
+    let newCurrentSupplier: () => Node | null = () => null;
 
-    if (currentNode instanceof Element && this._ruleSet.elements) {
-      const beforeRule: ElementFilterRule | undefined = this._ruleSet.elements[BEFORE_ELEMENT];
-      const filterRule: ElementFilterRule | undefined = this._ruleSet.elements[currentNode.nodeName.toLowerCase()];
-      /*
-       * We need to handle the children prior to the last rule. This provides the
-       * opportunity, that the last rule may decide on a now possibly empty node.
-       *
-       * We may re-use `currentNode` here, as the rule will not be executed, if any
-       * rule before replaces `currentNode` by a new node.
-      */
-      const handleChildrenRule: ElementFilterRule = () => {
-        this.applyToChildNodes(currentNode);
-      };
-      const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
-      const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
+    if (currentNode instanceof Element) {
+      if (this._ruleSet.elements) {
+        const beforeRule: ElementFilterRule | undefined = this._ruleSet.elements[BEFORE_ELEMENT];
+        const filterRule: ElementFilterRule | undefined = this._ruleSet.elements[currentNode.nodeName.toLowerCase()];
+        /*
+         * We need to handle the children prior to the last rule. This provides the
+         * opportunity, that the last rule may decide on a now possibly empty node.
+         *
+         * We may re-use `currentNode` here, as the rule will not be executed, if any
+         * rule before replaces `currentNode` by a new node.
+        */
+        const handleChildrenRule: ElementFilterRule = () => {
+          this.applyToChildNodes(currentNode);
+        };
+        const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
+        const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
 
-      const mutableElement = new MutableElement(currentNode, this._editor);
+        const proxy = new MutableElement(currentNode, this._editor);
 
-      const newCurrent = mutableElement.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
-
-      if (this.logger.isDebugEnabled()) {
-        if (newCurrent) {
-          this.logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
-            parent: parent,
-            replacedNode: currentNode,
-            next: newCurrent
-          });
-        } else {
-          this.logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
-            parent: parent,
-            currentNode: currentNode,
-            next: currentNode.nextSibling
-          });
-        }
+        newCurrentSupplier = () => proxy.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
       }
-      return newCurrent || next;
+    } else if (currentNode instanceof Text) {
+      if (this._ruleSet.text) {
+        const proxy = new TextProxy(currentNode, this._editor);
+        newCurrentSupplier = () => proxy.applyRules(this._ruleSet.text);
+      }
     }
-    return next;
+
+    const newCurrent = newCurrentSupplier();
+
+    if (this.logger.isDebugEnabled()) {
+      if (newCurrent) {
+        this.logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
+          parent: parent,
+          replacedNode: currentNode,
+          next: newCurrent
+        });
+      } else {
+        this.logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
+          parent: parent,
+          currentNode: currentNode,
+          next: currentNode.nextSibling
+        });
+      }
+    }
+
+    return newCurrent || next;
   }
 }

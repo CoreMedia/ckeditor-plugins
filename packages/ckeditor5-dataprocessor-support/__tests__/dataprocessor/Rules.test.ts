@@ -1,11 +1,7 @@
 import "jest-xml-matcher";
 import {
-  parseFilterRuleSetConfiguration,
-  ToDataAndView,
-  ElementsFilterRuleSet,
-  FilterRuleSet,
+  parseFilterRuleSetConfigurations,
   ElementFilterRule,
-  ElementFilterParams,
   FilterRuleSetConfiguration,
   HtmlFilter,
 } from "../../src/dataprocessor";
@@ -48,19 +44,18 @@ type WithDefaultsTestData = {
 }
 
 const replaceByChildren: ElementFilterRule = (p) => {
-  p.el.replaceByChildren = true
+  p.node.replaceByChildren = true
 };
 
 describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
   test("Should accept empty configuration.", () => {
-    const toDataAndView = parseFilterRuleSetConfiguration({});
+    const toDataAndView = parseFilterRuleSetConfigurations({});
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
 
-  test("Invariant: Should accept empty configuration, as well as previous result.", () => {
-    const previousResult = parseFilterRuleSetConfiguration({});
-    const toDataAndView = parseFilterRuleSetConfiguration({}, previousResult.toData, previousResult.toView);
+  test("Invariant: Should accept empty custom configuration and empty default.", () => {
+    const toDataAndView = parseFilterRuleSetConfigurations({}, {});
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
@@ -134,11 +129,11 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el: {
               toData: (p) => {
-                p.el.name = "data";
+                p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  p.el.name = "el";
+                  p.node.name = "el";
                 },
               }
             },
@@ -156,12 +151,12 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el: {
               toData: (p) => {
-                p.el.attributes["dataattr"] = p.el.attributes["viewattr"];
-                delete p.el.attributes["viewattr"];
+                p.node.attributes["dataattr"] = p.node.attributes["viewattr"];
+                delete p.node.attributes["viewattr"];
               },
               toView: (p) => {
-                p.el.attributes["viewattr"] = p.el.attributes["dataattr"];
-                delete p.el.attributes["dataattr"];
+                p.node.attributes["viewattr"] = p.node.attributes["dataattr"];
+                delete p.node.attributes["dataattr"];
               },
             },
           }
@@ -179,13 +174,13 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el: {
               toData: (p) => {
-                p.el.attributes["type"] = p.el.name;
-                p.el.name = "data";
+                p.node.attributes["type"] = p.node.name;
+                p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  p.el.name = p.el.attributes["type"];
-                  delete p.el.attributes["type"];
+                  p.node.name = p.node.attributes["type"] || "missing-name";
+                  delete p.node.attributes["type"];
                 },
               },
             },
@@ -204,28 +199,28 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el1: {
               toData: (p) => {
-                p.el.attributes["type"] = p.el.name;
-                p.el.name = "data";
+                p.node.attributes["type"] = p.node.name;
+                p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  if (p.el.attributes["type"] === "el1") {
-                    p.el.name = p.el.attributes["type"];
-                    delete p.el.attributes["type"];
+                  if (p.node.attributes["type"] === "el1") {
+                    p.node.name = p.node.attributes["type"];
+                    delete p.node.attributes["type"];
                   }
                 },
               },
             },
             el2: {
               toData: (p) => {
-                p.el.attributes["type"] = p.el.name;
-                p.el.name = "data";
+                p.node.attributes["type"] = p.node.name;
+                p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  if (p.el.attributes["type"] === "el2") {
-                    p.el.name = p.el.attributes["type"];
-                    delete p.el.attributes["type"];
+                  if (p.node.attributes["type"] === "el2") {
+                    p.node.name = p.node.attributes["type"];
+                    delete p.node.attributes["type"];
                   }
                 },
               },
@@ -243,7 +238,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const config: FilterRuleSetConfiguration = testData.config;
 
-    const { toData, toView } = parseFilterRuleSetConfiguration(config);
+    const { toData, toView } = parseFilterRuleSetConfigurations(config);
 
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
@@ -285,7 +280,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
         default: {
           elements: {
             el: (p) => {
-              p.el.attributes["label"] = "data";
+              p.node.attributes["label"] = "data";
             },
           }
         },
@@ -293,7 +288,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
           elements: {
             el: (p) => {
               p.parentRule(p);
-              p.el.name = "data";
+              p.node.name = "data";
             },
           }
         },
@@ -310,8 +305,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     const defaultConfig: FilterRuleSetConfiguration = testData.default;
     const config: FilterRuleSetConfiguration = testData.config;
 
-    const { toData: toDataDefault, toView: toViewDefault } = parseFilterRuleSetConfiguration(defaultConfig);
-    const { toData, toView } = parseFilterRuleSetConfiguration(config, toDataDefault, toViewDefault);
+    const { toData, toView } = parseFilterRuleSetConfigurations(config, defaultConfig);
 
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);

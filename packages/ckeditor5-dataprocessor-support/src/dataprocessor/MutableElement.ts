@@ -24,23 +24,25 @@ export interface Attributes {
  */
 export interface ElementFilterParams {
   /**
-   * The element to process.
+   * The node to process.
    */
-  readonly el: MutableElement,
+  readonly node: MutableElement;
+
   /**
    * A parent mapping to respect (or to ignore, thus override).
    * It is required, so that it is easier to trigger a call to the
    * parent rule. Just add it as empty function, if there is no parent.
    */
-  readonly parentRule: ElementFilterRule,
+  readonly parentRule: ElementFilterRule;
+
   /**
    * CKEditor instance, for example to access configuration.
    */
-  readonly editor: Editor,
+  readonly editor: Editor;
 }
 
 /**
- * Function interface: `(params: ElementFilterParams) => ElementFilterResult`.
+ * Function interface: `(params: ElementFilterParams) => void`.
  */
 export interface ElementFilterRule {
   (params: ElementFilterParams): void;
@@ -77,7 +79,7 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
   private readonly _namespaces: Namespaces;
 
   public readonly editor: Editor;
-  public readonly el: MutableElement = this;
+  public readonly node: MutableElement = this;
   public readonly parentRule: ElementFilterRule = () => {
   };
 
@@ -159,8 +161,8 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
    *
    * @protected
    */
-  protected persistKeep(): PersistResponse {
-    const response = super.persistKeep();
+  protected persistKeepOrReplace(): PersistResponse {
+    const response = super.persistKeepOrReplace();
     if (response.abort) {
       return response;
     }

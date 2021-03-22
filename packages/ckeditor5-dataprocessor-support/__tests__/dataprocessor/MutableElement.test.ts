@@ -81,7 +81,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (params: ElementFilterParams) => {
-            params.el.name = "el";
+            params.node.name = "el";
           },
         ],
         from: "<parent><el>Element</el></parent>",
@@ -93,7 +93,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (params: ElementFilterParams) => {
-            params.el.name = "eL";
+            params.node.name = "eL";
           },
         ],
         from: "<parent><el>Element</el></parent>",
@@ -103,7 +103,7 @@ describe("MutableElement.applyRules()", () => {
     [
       "should remove by me.remove = true",
       {
-        rules: [(me) => (me.el.remove = true)],
+        rules: [(me) => (me.node.remove = true)],
         from: "<parent>Lorem <el>Element</el> Ipsum</parent>",
         to: "<parent>Lorem  Ipsum</parent>",
       },
@@ -113,7 +113,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.replaceByChildren = true;
+            me.node.replaceByChildren = true;
           },
         ],
         from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
@@ -126,7 +126,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["new"] = "new value";
+            me.node.attributes["new"] = "new value";
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -140,7 +140,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes.new = "new value";
+            me.node.attributes.new = "new value";
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -154,7 +154,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["xlink:href"] = "https://example.org/";
+            me.node.attributes["xlink:href"] = "https://example.org/";
           },
         ],
         from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
@@ -167,7 +167,7 @@ describe("MutableElement.applyRules()", () => {
         comment: "While Chrome respects the xmlns:xml attribute in XMLSerializer, it is not respected (yet) in JEST. If this behavior changes, you may have to adapt the expected XML.",
         rules: [
           (me) => {
-            me.el.attributes["xml:lang"] = "en-US";
+            me.node.attributes["xml:lang"] = "en-US";
           },
         ],
         from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
@@ -180,7 +180,7 @@ describe("MutableElement.applyRules()", () => {
         comment: "In this simple approach, we cannot remove unused namespace declarations. If we do better in the future, don't hesitate adapting the expectations.",
         rules: [
           (me) => {
-            me.el.attributes["xlink:href"] = null;
+            me.node.attributes["xlink:href"] = null;
           },
         ],
         from: '<parent xmlns:xlink="http://www.w3.org/1999/xlink">Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
@@ -192,7 +192,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["xml:lang"] = null;
+            me.node.attributes["xml:lang"] = null;
           },
         ],
         from: '<parent>Lorem <el xml:lang="en-US">Ipsum</el> Dolor</parent>',
@@ -204,7 +204,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["old"] = null;
+            me.node.attributes["old"] = null;
           },
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
@@ -216,7 +216,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            delete me.el.attributes["old"];
+            delete me.node.attributes["old"];
           },
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
@@ -228,7 +228,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            delete me.el.attributes.old;
+            delete me.node.attributes.old;
           },
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
@@ -240,8 +240,8 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            Object.keys(me.el.attributes).forEach((key) => {
-              delete me.el.attributes[key];
+            Object.keys(me.node.attributes).forEach((key) => {
+              delete me.node.attributes[key];
             });
           },
         ],
@@ -254,9 +254,9 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["new"] = "new value";
-            Object.keys(me.el.attributes).forEach((key) => {
-              delete me.el.attributes[key];
+            me.node.attributes["new"] = "new value";
+            Object.keys(me.node.attributes).forEach((key) => {
+              delete me.node.attributes[key];
             });
           },
         ],
@@ -269,7 +269,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["attr"] = "prefixed:" + me.el.attributes["attr"];
+            me.node.attributes["attr"] = "prefixed:" + me.node.attributes["attr"];
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -283,7 +283,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes.attr = "prefixed:" + me.el.attributes.attr;
+            me.node.attributes.attr = "prefixed:" + me.node.attributes.attr;
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -297,8 +297,8 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            Object.keys(me.el.attributes).forEach((key) => {
-              me.el.attributes[key] = "prefixed:" + me.el.attributes[key];
+            Object.keys(me.node.attributes).forEach((key) => {
+              me.node.attributes[key] = "prefixed:" + me.node.attributes[key];
             });
           },
         ],
@@ -311,9 +311,9 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["new"] = "new value";
-            Object.keys(me.el.attributes).forEach((key) => {
-              me.el.attributes[key] = "prefixed:" + me.el.attributes[key];
+            me.node.attributes["new"] = "new value";
+            Object.keys(me.node.attributes).forEach((key) => {
+              me.node.attributes[key] = "prefixed:" + me.node.attributes[key];
             });
           },
         ],
@@ -327,10 +327,10 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["new"] = "new value";
-            for (const key in me.el.attributes) {
-              if (me.el.attributes.hasOwnProperty(key)) {
-                const descriptor = Object.getOwnPropertyDescriptor(me.el.attributes, key);
+            me.node.attributes["new"] = "new value";
+            for (const key in me.node.attributes) {
+              if (me.node.attributes.hasOwnProperty(key)) {
+                const descriptor = Object.getOwnPropertyDescriptor(me.node.attributes, key);
                 if (!!descriptor) {
                   // False positive? Checks assume, that descriptor may be undefined here. But how?
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -351,10 +351,10 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["added"] = "";
+            me.node.attributes["added"] = "";
             ["added", "existing", "not_existing"].forEach((v) => {
-              const existing: boolean = v in me.el.attributes;
-              me.el.attributes[v] = String(existing);
+              const existing: boolean = v in me.node.attributes;
+              me.node.attributes[v] = String(existing);
             });
           },
         ],
@@ -367,7 +367,7 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.name = "new";
+            me.node.name = "new";
           },
         ],
         from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
@@ -380,8 +380,8 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.name = "new";
-            me.el.attributes["attr"] = "value";
+            me.node.name = "new";
+            me.node.attributes["attr"] = "value";
           },
         ],
         from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
@@ -394,8 +394,8 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["attr"] = "value";
-            me.el.name = "new";
+            me.node.attributes["attr"] = "value";
+            me.node.name = "new";
           },
         ],
         from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
@@ -408,13 +408,13 @@ describe("MutableElement.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.el.attributes["attr"] = "new value";
+            me.node.attributes["attr"] = "new value";
           },
           (me) => {
-            me.el.name = "new";
+            me.node.name = "new";
           },
           (me) => {
-            me.el.attributes["attr"] = "skipped";
+            me.node.attributes["attr"] = "skipped";
           },
         ],
         from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',

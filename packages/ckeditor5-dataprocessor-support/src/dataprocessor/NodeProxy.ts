@@ -2,8 +2,8 @@
  * A wrapper for DOM nodes, to store changes to be applied to the DOM structure
  * later on.
  */
-export default class NodeProxy<T extends Node> {
-  private readonly _delegate: T;
+export default class NodeProxy<N extends Node> {
+  private readonly _delegate: N;
   /**
    * Flag to signal if this instance is meant to be mutable. Typically, you
    * don't want to make nested instances to be mutable, as the framework will
@@ -16,14 +16,14 @@ export default class NodeProxy<T extends Node> {
    * Represents the state the node should take when persisting to DOM.
    * @private
    */
-  private _state: NodeState = NodeState.KEEP;
+  private _state: NodeState = NodeState.KEEP_OR_REPLACE;
 
   /**
    * Constructor.
    * @param delegate delegate to wrap
    * @param mutable signals, if this representation is mutable or not
    */
-  constructor(delegate: T, mutable: boolean = true) {
+  constructor(delegate: N, mutable: boolean = true) {
     this._delegate = delegate;
     this._mutable = mutable;
   }
@@ -69,7 +69,7 @@ export default class NodeProxy<T extends Node> {
   /**
    * Returns the wrapped delegate.
    */
-  public get delegate(): T {
+  public get delegate(): N {
     return this._delegate;
   }
 
@@ -168,7 +168,7 @@ export default class NodeProxy<T extends Node> {
    * (replacing it by its children).
    */
   public get remove(): boolean {
-    return this.state !== NodeState.KEEP;
+    return this.state !== NodeState.KEEP_OR_REPLACE;
   }
 
   /**
@@ -180,7 +180,7 @@ export default class NodeProxy<T extends Node> {
     if (remove) {
       this._state = NodeState.REMOVE_RECURSIVELY;
     } else {
-      this._state = NodeState.KEEP;
+      this._state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -203,7 +203,7 @@ export default class NodeProxy<T extends Node> {
     if (replace) {
       this._state = NodeState.REMOVE_SELF;
     } else {
-      this._state = NodeState.KEEP;
+      this._state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -214,8 +214,8 @@ export default class NodeProxy<T extends Node> {
    */
   public persistToDom(): PersistResponse {
     switch (this.state) {
-      case NodeState.KEEP:
-        return this.persistKeep();
+      case NodeState.KEEP_OR_REPLACE:
+        return this.persistKeepOrReplace();
       case NodeState.REMOVE_RECURSIVELY:
         return this.persistRemoveRecursively();
       case NodeState.REMOVE_SELF:
@@ -236,6 +236,7 @@ export default class NodeProxy<T extends Node> {
       restartFrom: node || undefined,
     };
   }
+
   /**
    * Persists, to keep the current node. May be overwritten for example to
    * apply additional changes to the node like changing attributes of an
@@ -243,7 +244,7 @@ export default class NodeProxy<T extends Node> {
    *
    * @protected
    */
-  protected persistKeep(): PersistResponse {
+  protected persistKeepOrReplace(): PersistResponse {
     return RESPONSE_CONTINUE;
   }
 
@@ -348,9 +349,9 @@ export interface ChildPredicate {
  */
 export enum NodeState {
   /**
-   * Keep the node.
+   * Keep the node or replace it at the very same position.
    */
-  KEEP,
+  KEEP_OR_REPLACE,
   /**
    * Remove the node and all its children.
    */

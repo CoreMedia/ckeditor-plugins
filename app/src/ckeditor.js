@@ -99,13 +99,13 @@ ClassicEditor.create(document.querySelector('.editor'), {
   },
   heading: {
     options: [
-      { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-      { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-      { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-      { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-      { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-      { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' },
+      {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+      {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+      {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+      {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'},
+      {model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4'},
+      {model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5'},
+      {model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6'},
     ]
   },
   table: {
@@ -137,20 +137,20 @@ ClassicEditor.create(document.querySelector('.editor'), {
         // Highlight Plugin Support
         mark: {
           toData: (params) => {
-            const originalClass = params.el.attributes["class"];
-            params.el.attributes["class"] = `mark--${originalClass}`;
-            params.el.name = "span";
+            const originalClass = params.node.attributes["class"];
+            params.node.attributes["class"] = `mark--${originalClass}`;
+            params.node.name = "span";
           },
           toView: {
             span: (params) => {
-              const originalClass = params.el.attributes["class"] || "";
+              const originalClass = params.node.attributes["class"] || "";
               // TODO[cke] Would be really nice having "class list" access instead here, so that an element
               //    can be italics, but also marked.
               const pattern = /^mark--(\S*)$/;
               const match = pattern.exec(originalClass);
               if (match) {
-                params.el.name = "mark";
-                params.el.attributes["class"] = match[1];
+                params.node.name = "mark";
+                params.node.attributes["class"] = match[1];
               }
             },
           },

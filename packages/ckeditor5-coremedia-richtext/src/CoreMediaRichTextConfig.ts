@@ -2,11 +2,11 @@ import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import {
   FilterRuleSetConfiguration,
-  parseFilterRuleSetConfiguration,
-  ToDataAndViewConfiguration
+  parseFilterRuleSetConfigurations,
+  ToDataAndViewElementConfiguration
 } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/Rules";
 import {
-  ElementsFilterRuleSet,
+  ElementFilterRulesByName,
   FilterRuleSet
 } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
 import { ElementFilterRule, ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
@@ -35,25 +35,25 @@ export interface ParsedConfig {
 
 // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
 const removeInvalidList: ElementFilterRule = (params) => {
-  params.el.remove = params.el.empty || !params.el.findFirst("li");
+  params.node.remove = params.node.empty || !params.node.findFirst("li");
 };
 
 const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
 const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
 
 const headingToParagraph: ElementFilterRule = (params) => {
-  const match = HEADING_NUMBER_PATTERN.exec(params.el.name || "");
+  const match = HEADING_NUMBER_PATTERN.exec(params.node.name || "");
   if (!match) {
     // Some other rule may have already changed the name. Nothing to do.
     return;
   }
   const headingLevel = match[1];
-  params.el.name = "p";
-  params.el.attributes["class"] = `p--heading-${headingLevel}`;
+  params.node.name = "p";
+  params.node.attributes["class"] = `p--heading-${headingLevel}`;
 };
 
 const paragraphToHeading: ElementFilterRule = (params) => {
-  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(params.el.attributes["class"] || "");
+  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(params.node.attributes["class"] || "");
   if (!match) {
     // Cannot determine number. Perhaps someone already removed the class.
     return;
@@ -63,39 +63,39 @@ const paragraphToHeading: ElementFilterRule = (params) => {
     // Someone "messed" with our classes. Just do nothing.
     return;
   }
-  params.el.name = `h${headingLevel}`;
-  delete params.el.attributes["class"];
+  params.node.name = `h${headingLevel}`;
+  delete params.node.attributes["class"];
 };
 
 function replaceBy(name: string, className?: string): ElementFilterRule {
   return (params) => {
-    params.el.name = name;
+    params.node.name = name;
     if (className) {
-      params.el.attributes["class"] = className;
+      params.node.attributes["class"] = className;
     }
   }
 }
 
-function replaceElementAndClassBy(originalName: string, className: string, newName: string): ElementsFilterRuleSet {
+function replaceElementAndClassBy(originalName: string, className: string, newName: string): ElementFilterRulesByName {
   return {
     [originalName]: (params) => {
-      if (params.el.attributes["class"] !== className) {
+      if (params.node.attributes["class"] !== className) {
         return;
       }
-      delete params.el.attributes["class"];
-      params.el.name = newName;
+      delete params.node.attributes["class"];
+      params.node.name = newName;
     },
   };
 }
 
-function replaceByElementAndClassBackAndForth(viewName: string, dataName: string, dataClassName: string): ToDataAndViewConfiguration {
+function replaceByElementAndClassBackAndForth(viewName: string, dataName: string, dataClassName: string): ToDataAndViewElementConfiguration {
   return {
     toData: replaceBy(dataName, dataClassName),
     toView: replaceElementAndClassBy(dataName, dataClassName, viewName),
   }
 }
 
-const strike: ToDataAndViewConfiguration = {
+const strike: ToDataAndViewElementConfiguration = {
   toData: replaceBy("span", "strike"),
   // The default CKEditor 5 representation of strikethrough is `<s>`.
   toView: replaceElementAndClassBy("span", "strike", "s"),
@@ -129,17 +129,17 @@ function getSchema(params: ElementFilterParams): RichTextSchema {
 const defaultRules: FilterRuleSetConfiguration = {
   elements: {
     $: (params) => {
-      getSchema(params).adjustHierarchy(params.el);
+      getSchema(params).adjustHierarchy(params.node);
     },
     "$$": (params) => {
       const schema = getSchema(params);
       // The hierarchy may have changed after processing children. Thus, we
       // need to check again.
-      schema.adjustHierarchy(params.el);
+      schema.adjustHierarchy(params.node);
       // We only expect the element to be possibly removed. replaceByChildren
       // should have been triggered by "before-children" rule.
-      if (!params.el.remove) {
-        schema.adjustAttributes(params.el);
+      if (!params.node.remove) {
+        schema.adjustAttributes(params.node);
       }
     },
     ol: removeInvalidList,
@@ -171,7 +171,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     u: replaceByElementAndClassBackAndForth("u", "span", "underline"),
     br: (params) => {
       // Remove obsolete BR, if only element on block level params.el.
-      const parent = params.el.parentElement;
+      const parent = params.node.parentElement;
       const parentName = parent?.name || "";
       let remove: boolean = false;
       if (!parent || parentName === "div") {
@@ -180,9 +180,9 @@ const defaultRules: FilterRuleSetConfiguration = {
       } else if (["td", "p"].indexOf(parentName) >= 0) {
         // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
         // block level elements should be respected too, though. Change it, if you think so.
-        remove = params.el.lastNode;
+        remove = params.node.lastNode;
       }
-      params.el.remove = remove;
+      params.node.remove = remove;
     },
     del: strike,
     s: strike,
@@ -191,7 +191,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
     td: (params) => {
-      params.el.remove = params.el.isEmpty((el, idx, children) => {
+      params.node.remove = params.node.isEmpty((el, idx, children) => {
         // Only filter, if there is only one child. While it may be argued, if this
         // is useful, this is the behavior as we had it for CKEditor 4.
         if (children.length !== 1) {
@@ -228,7 +228,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       // be removed. Typical scenario: Unknown element <thead> got removed, leaving
       // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
       // all nested trs up one level and remove the tbody params.el.
-      params.el.replaceByChildren = !params.el.singleton;
+      params.node.replaceByChildren = !params.node.singleton;
     },
     /*
      * TODO[cke] img/a handling
@@ -240,13 +240,13 @@ const defaultRules: FilterRuleSetConfiguration = {
      *   rule implicitly.
      */
     span: (params) => {
-      if (!params.el.attributes["class"]) {
+      if (!params.node.attributes["class"]) {
         // drop element, but not children
-        params.el.replaceByChildren = true;
+        params.node.replaceByChildren = true;
       }
     },
     "xdiff:span": (params) => {
-      params.el.replaceByChildren = true;
+      params.node.replaceByChildren = true;
     },
   }
 };
@@ -254,8 +254,7 @@ const defaultRules: FilterRuleSetConfiguration = {
 export function getConfig(config?: CKEditorConfig): ParsedConfig {
   const customConfig: CoreMediaRichTextConfig = <CoreMediaRichTextConfig>config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) || {};
 
-  const { toData: toDataDefault, toView: toViewDefault } = parseFilterRuleSetConfiguration(defaultRules);
-  const { toData, toView } = parseFilterRuleSetConfiguration(customConfig.rules, toDataDefault, toViewDefault);
+  const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
 
   const schema = new RichTextSchema(customConfig.strictness || Strictness.STRICT);
 
