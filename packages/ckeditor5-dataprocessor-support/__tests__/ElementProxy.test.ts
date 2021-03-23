@@ -41,6 +41,51 @@ test("should wrap DOM element", () => {
 /*
  * =============================================================================
  *
+ * Mutability Handling
+ *
+ * =============================================================================
+ */
+describe("Should Respecting (Im-)Mutable State", () => {
+  const htmlDivElement = window.document.createElement("div");
+  htmlDivElement.setAttribute("class", "testClass");
+  const immutableElement = new ElementProxy(htmlDivElement, MOCK_EDITOR, {}, false);
+
+  test("should not be able to delete element", () => {
+    expect(() => immutableElement.remove = true).toThrowError();
+  });
+
+  test("should not be able to replace element by children", () => {
+    expect(() => immutableElement.replaceByChildren = true).toThrowError();
+  });
+
+  test("should not be able to change name", () => {
+    const previousValue = immutableElement.name;
+    expect(() => immutableElement.name = "test").toThrowError();
+    expect(previousValue).toStrictEqual(previousValue);
+  });
+
+  test("should not be able to change attribute value", () => {
+    const previousValue = immutableElement.attributes["class"];
+    expect(() => immutableElement.attributes["class"] = "test").toThrowError();
+    expect(previousValue).toStrictEqual(previousValue);
+  });
+
+  test("should not be able to add attribute", () => {
+    const previousValue = immutableElement.attributes["id"];
+    expect(() => immutableElement.attributes["id"] = "test").toThrowError();
+    expect(previousValue).toStrictEqual(previousValue);
+  });
+
+  test("should not be able to delete attribute", () => {
+    const previousValue = immutableElement.attributes["class"];
+    expect(() => delete immutableElement.attributes["class"]).toThrowError();
+    expect(previousValue).toStrictEqual(previousValue);
+  });
+});
+
+/*
+ * =============================================================================
+ *
  * applyRules()
  *
  * =============================================================================
@@ -57,7 +102,7 @@ type ApplyRulesData = [
   }
 ];
 
-describe("MutableElement.applyRules()", () => {
+describe("ElementProxy.applyRules()", () => {
   // noinspection XmlUnusedNamespaceDeclaration
   test.each<ApplyRulesData>([
     [

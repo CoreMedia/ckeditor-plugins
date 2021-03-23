@@ -89,9 +89,10 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * @param delegate the original element to wrap
    * @param editor CKEditor instance
    * @param namespaces the namespaces to take into account
+   * @param mutable signals, if this proxy should be mutable
    */
-  constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES) {
-    super(delegate);
+  constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable: boolean = true) {
+    super(delegate, mutable);
     this._namespaces = namespaces;
     this.editor = editor;
   }
@@ -105,14 +106,6 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
   }
 
   /**
-   * Access to the parent node of this element.
-   * @deprecated Use parentNode instead
-   */
-  get parent(): (Node & ParentNode) | null {
-    return this.parentNode?.delegate || null;
-  }
-
-  /**
    * Access to the parent element of this element. The element is wrapped
    * by `MutableElement`. Note, that if used for modification purpose, it is
    * task of the caller persisting changes.
@@ -122,7 +115,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
     if (!parentElement) {
       return null;
     }
-    return new ElementProxy(parentElement, this.editor, this._namespaces);
+    return new ElementProxy(parentElement, this.editor, this._namespaces, false);
   }
 
   /**
