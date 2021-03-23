@@ -1,4 +1,4 @@
-import MutableElement, { ElementFilterRule } from "./MutableElement";
+import ElementProxy, { ElementFilterRule } from "./ElementProxy";
 import TextProxy, { TextFilterRule } from "./TextProxy";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
@@ -106,7 +106,7 @@ export default class HtmlFilter {
         const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
         const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
 
-        const proxy = new MutableElement(currentNode, this._editor);
+        const proxy = new ElementProxy(currentNode, this._editor);
 
         newCurrentSupplier = () => proxy.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
       }

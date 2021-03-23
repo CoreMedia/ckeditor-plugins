@@ -1,5 +1,5 @@
 import { ElementFilterRulesByName, FilterRuleSet } from "./HtmlFilter";
-import { ElementFilterParams, ElementFilterRule } from "./MutableElement";
+import { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
 import { TextFilterParams, TextFilterRule } from "./TextProxy";
 
 /**

@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-engine": "^24.0.0",
-    "@coremedia/ckeditor5-dataprocessor-support": "1.0.0",
+    "@coremedia/ckeditor5-dataprocessor-support": "^1.0.0",
     "@coremedia/coremedia-utils": "^1.0.0"
   }
 }

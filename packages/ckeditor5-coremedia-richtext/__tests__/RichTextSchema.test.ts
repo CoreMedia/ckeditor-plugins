@@ -1,6 +1,6 @@
 import "jest-xml-matcher";
 import RichTextSchema, { Strictness } from "../src/RichTextSchema";
-import { MutableElement } from "@coremedia/ckeditor5-dataprocessor-support/index";
+import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support/index";
 
 type CommentableTestData = {
   /**
@@ -805,7 +805,7 @@ describe("RichTextSchema.adjustAttributes", () => {
             XPathResult.FIRST_ORDERED_NODE_TYPE
           );
           const element: Element = <Element>xPathResult.singleNodeValue;
-          const mutableElement = new MutableElement(element);
+          const mutableElement = new ElementProxy(element);
 
           if (element === null) {
             throw new Error(
@@ -1511,7 +1511,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
     let element: Element | null;
     while ((element = <Element | null>xPathResult.iterateNext())) {
       validatedAtLeastOnce = true;
-      const mutableElement = new MutableElement(element);
+      const mutableElement = new ElementProxy(element);
       test(`<${element?.parentElement?.tagName ?? "#document"}>, ${
         testData.expected ? "allowed" : "forbidden"
       }: Validating <${element?.tagName}> if allowed as child of <${

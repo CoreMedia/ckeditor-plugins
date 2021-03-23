@@ -6,7 +6,7 @@
  * =============================================================================
  */
 
-import { MutableElement } from "@coremedia/ckeditor5-dataprocessor-support/index";
+import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 
@@ -627,7 +627,7 @@ export default class RichTextSchema {
    * @return `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
    * for removal (name is empty or null) or if the given element is not allowed at parent.
    */
-  isAllowedAtParent(element: MutableElement): boolean {
+  isAllowedAtParent(element: ElementProxy): boolean {
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
@@ -673,7 +673,7 @@ export default class RichTextSchema {
    *
    * @param element
    */
-  adjustHierarchy(element: MutableElement): void {
+  adjustHierarchy(element: ElementProxy): void {
     if (!this.isAllowedAtParent(element)) {
       element.replaceByChildren = true;
     }
@@ -695,7 +695,7 @@ export default class RichTextSchema {
    *
    * @param element element to process
    */
-  adjustAttributes(element: MutableElement): void {
+  adjustAttributes(element: ElementProxy): void {
     const elementName = element.name;
     if (!elementName) {
       // Nothing to do, we are about to be removed.
@@ -713,7 +713,7 @@ export default class RichTextSchema {
     this.setDefaultForMissingRequiredAttributes(element, specifiedAttributes, attributeSpecifications);
   }
 
-  private deleteNotAllowedAttributes(element: MutableElement, specifiedAttributes: string[]) {
+  private deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
     const notAllowedAttributes: string[] = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
 
@@ -729,7 +729,7 @@ export default class RichTextSchema {
     }
   }
 
-  private fixOrDeleteAttributesHavingInvalidValues(element: MutableElement, attributeSpecifications: Attributes) {
+  private fixOrDeleteAttributesHavingInvalidValues(element: ElementProxy, attributeSpecifications: Attributes) {
     const allowedActualAttributes = Object.keys(element.attributes);
 
     allowedActualAttributes.forEach((attributeName) => {
@@ -760,7 +760,7 @@ export default class RichTextSchema {
   }
 
   private setDefaultForMissingRequiredAttributes(
-    element: MutableElement,
+    element: ElementProxy,
     specifiedAttributes: string[],
     attributeSpecifications: Attributes
   ) {

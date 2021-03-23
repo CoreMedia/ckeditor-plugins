@@ -26,7 +26,7 @@ export interface ElementFilterParams {
   /**
    * The node to process.
    */
-  readonly node: MutableElement;
+  readonly node: ElementProxy;
 
   /**
    * A parent mapping to respect (or to ignore, thus override).
@@ -52,7 +52,7 @@ export interface ElementFilterRule {
  * A wrapper for a given element, which allows to store changes to be applied
  * to the DOM structure later on.
  */
-export default class MutableElement extends NodeProxy<Element> implements ElementFilterParams {
+export default class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
    * Signals either a possibly new name for this element, or that the name
    * should not be changed (which is `undefined`).
@@ -79,7 +79,7 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
   private readonly _namespaces: Namespaces;
 
   public readonly editor: Editor;
-  public readonly node: MutableElement = this;
+  public readonly node: ElementProxy = this;
   public readonly parentRule: ElementFilterRule = () => {
   };
 
@@ -117,12 +117,12 @@ export default class MutableElement extends NodeProxy<Element> implements Elemen
    * by `MutableElement`. Note, that if used for modification purpose, it is
    * task of the caller persisting changes.
    */
-  get parentElement(): MutableElement | null {
+  get parentElement(): ElementProxy | null {
     const parentElement = this.delegate.parentElement;
     if (!parentElement) {
       return null;
     }
-    return new MutableElement(parentElement, this.editor, this._namespaces);
+    return new ElementProxy(parentElement, this.editor, this._namespaces);
   }
 
   /**
