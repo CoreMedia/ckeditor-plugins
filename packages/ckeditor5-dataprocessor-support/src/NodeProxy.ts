@@ -2,7 +2,7 @@
  * A wrapper for DOM nodes, to store changes to be applied to the DOM structure
  * later on.
  */
-export default class NodeProxy<N extends Node> {
+export default class NodeProxy<N extends Node = Node> {
   private readonly _delegate: N;
   /**
    * Flag to signal if this instance is meant to be mutable. Typically, you
@@ -34,6 +34,7 @@ export default class NodeProxy<N extends Node> {
    *
    * @param node node to wrap
    * @param mutable signals, if this representation is mutable or not
+   * @return NodeProxy for given node; `null` for falsy values
    */
   public static wrap<N extends Node>(node: N | undefined | null, mutable: boolean = true): NodeProxy<N> | null {
     if (!!node) {
