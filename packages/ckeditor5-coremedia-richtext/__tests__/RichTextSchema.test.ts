@@ -1,6 +1,6 @@
 import "jest-xml-matcher";
 import RichTextSchema, { Strictness } from "../src/RichTextSchema";
-import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
+import { MutableElement } from "@coremedia/ckeditor5-dataprocessor-support/index";
 
 type CommentableTestData = {
   /**

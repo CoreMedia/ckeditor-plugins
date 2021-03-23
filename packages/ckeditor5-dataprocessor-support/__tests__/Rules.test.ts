@@ -4,7 +4,7 @@ import {
   ElementFilterRule,
   FilterRuleSetConfiguration,
   HtmlFilter,
-} from "../../src/dataprocessor";
+} from "../src";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");

@@ -7,7 +7,7 @@ import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import RichTextXmlWriter from "./RichTextXmlWriter";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
+import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";

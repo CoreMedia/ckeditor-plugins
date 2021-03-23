@@ -1,4 +1,4 @@
-import { MutableElement, ElementFilterRule, ElementFilterParams } from "../../src/dataprocessor";
+import { MutableElement, ElementFilterRule, ElementFilterParams } from "../src";
 import "jest-xml-matcher";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 

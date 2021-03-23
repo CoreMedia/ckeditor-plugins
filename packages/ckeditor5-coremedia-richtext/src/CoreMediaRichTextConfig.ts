@@ -3,13 +3,12 @@ import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import {
   FilterRuleSetConfiguration,
   parseFilterRuleSetConfigurations,
-  ToDataAndViewElementConfiguration
-} from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/Rules";
-import {
+  ToDataAndViewElementConfiguration,
   ElementFilterRulesByName,
-  FilterRuleSet
-} from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/HtmlFilter";
-import { ElementFilterRule, ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
+  FilterRuleSet,
+  ElementFilterRule,
+  ElementFilterParams
+} from "@coremedia/ckeditor5-dataprocessor-support/index";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 

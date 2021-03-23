@@ -6,7 +6,7 @@
  * =============================================================================
  */
 
-import MutableElement from "@coremedia/ckeditor5-dataprocessor-support/dataprocessor/MutableElement";
+import { MutableElement } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 
