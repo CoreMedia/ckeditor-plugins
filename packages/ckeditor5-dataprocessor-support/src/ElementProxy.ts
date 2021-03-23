@@ -333,6 +333,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * @param newName new name for the element; case does not matter.
    */
   public set name(newName: string) {
+    this.requireMutable();
     this._name = newName.toLowerCase();
   }
 
@@ -347,6 +348,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    */
   get attributes(): Attributes {
     const element: Element = this.delegate;
+    const self = this;
     return new Proxy(this._attributes, {
       defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
         return Reflect.defineProperty(target, p, attributes);
@@ -385,6 +387,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
             },
 
             set(v: unknown): void {
+              self.requireMutable();
               Reflect.set(target, attrName, v);
             },
           };
@@ -400,6 +403,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
             },
 
             set(v: unknown): void {
+              self.requireMutable();
               Reflect.set(target, attrName, v);
             },
           };
@@ -412,12 +416,14 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
        * `null` is the same as deleting it.
        */
       set(target: Attributes, p: PropertyKey, value: unknown): boolean {
+        self.requireMutable();
         return Reflect.set(target, p, value);
       },
       /**
        * Deletes the property. Thus, if existing, marks it as <em>to-be-deleted</em>.
        */
       deleteProperty(target: Attributes, p: PropertyKey): boolean {
+        self.requireMutable();
         return Reflect.set(target, p, null);
       },
       /**
