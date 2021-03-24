@@ -54,7 +54,10 @@ const serializer = new XMLSerializer();
 const strictnessKeys = Object.keys(Strictness).filter((x) => !(parseInt(x) >= 0));
 const whitespace = " \t\n";
 const text = `Lorem${whitespace}Ipsum`;
+const attr_class = "alpha";
+const attr_link_external = "https://example.org/"
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";
+const ns_xlink = "http://www.w3.org/1999/xlink";
 const ns_xhtml = "http://www.w3.org/1999/xhtml";
 const ns_xdiff = "http://www.coremedia.com/2015/xdiff";
 
@@ -98,6 +101,186 @@ describe("Default Data Filter Rules", () => {
       },
     ],
   ];
+  const textFixtures: DataFilterTestFixture[] = [
+    [
+      "TEXT#1: Should remove text at root DIV.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}">${text}</div>`,
+        expected: `<div xmlns="${ns_richtext}"/>`,
+      },
+    ],
+    [
+      "TEXT#2: Should keep text at P.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+      },
+    ],
+    [
+      "TEXT#3: Should remove text at UL (and remove empty UL).",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><ul>${text}</ul></div>`,
+        expected: `<div xmlns="${ns_richtext}"/>`,
+      },
+    ],
+    [
+      "TEXT#4: Should remove text at OL (and remove empty OL).",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><ol>${text}</ol></div>`,
+        expected: `<div xmlns="${ns_richtext}"/>`,
+      },
+    ],
+    [
+      "TEXT#5: Should keep text at LI.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><ol><li>${text}</li></ol></div>`,
+        expected: `<div xmlns="${ns_richtext}"><ol><li>${text}</li></ol></div>`,
+      },
+    ],
+    [
+      "TEXT#6: Should keep text at PRE.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><pre>${text}</pre></div>`,
+        expected: `<div xmlns="${ns_richtext}"><pre>${text}</pre></div>`,
+      },
+    ],
+    [
+      "TEXT#7: Should remove text at BLOCKQUOTE.",
+      {
+        comment: "CoreMedia RichText DTD requires blockquotes to contain for example <p> as nested element. As CKEditor by default adds a paragraph to blockquotes, we don't need any 'fix' such as surrounding the text by a paragraph.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><blockquote>${text}</blockquote></div>`,
+        expected: `<div xmlns="${ns_richtext}"><blockquote/></div>`,
+      },
+    ],
+    [
+      "TEXT#8: Should keep text at A.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+        expected: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+      },
+    ],
+    [
+      "TEXT#9: Should keep text at SPAN.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p><span class="${attr_class}">${text}</span></p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p><span class="${attr_class}">${text}</span></p></div>`,
+      },
+    ],
+    [
+      "TEXT#10: Should remove text at BR.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p>${text}<br>${text}</br>${text}</p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
+      },
+    ],
+    [
+      "TEXT#11: Should keep text at EM.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p><em>${text}</em></p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p><em>${text}</em></p></div>`,
+      },
+    ],
+    [
+      "TEXT#12: Should keep text at STRONG.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p><strong>${text}</strong></p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p><strong>${text}</strong></p></div>`,
+      },
+    ],
+    [
+      "TEXT#13: Should keep text at SUB.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p><sub>${text}</sub></p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p><sub>${text}</sub></p></div>`,
+      },
+    ],
+    [
+      "TEXT#14: Should keep text at SUP.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p><sup>${text}</sup></p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p><sup>${text}</sup></p></div>`,
+      },
+    ],
+    [
+      "TEXT#15: Should remove text at IMG.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><img alt="" xlink:href="${attr_link_external}">${text}</img></p></div>`,
+        expected: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><img alt="" xlink:href="${attr_link_external}"/></p></div>`,
+      },
+    ],
+    [
+      "TEXT#16: Should remove text at TABLE.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table>${text}<tr><td>${text}</td></tr>${text}</table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+      },
+    ],
+    [
+      "TEXT#17: Should remove text at TBODY.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tbody>${text}<tr><td>${text}</td></tr>${text}</tbody></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
+      },
+    ],
+    [
+      "TEXT#18: Should remove text at TR.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr>${text}<td>${text}</td>${text}</tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+      },
+    ],
+    [
+      "TEXT#19: Should keep text at TD.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+      },
+    ],
+  ];
+
+  const textEntityFixtures: DataFilterTestFixture[] = [
+    "&nbsp;",
+    "&cent;",
+    "&plusmn;",
+    "&Alpha;",
+    "&piv;",
+    "&bull;",
+    "&hellip;",
+    "&trade;",
+    "&harr;",
+    "&sum;",
+    "&loz;",
+    // Pile of Poo, testers favorite character
+    "&#128169;",
+  ].map(
+    (entity, index) => [
+      `TEXT/ENTITY#${(index+1)}: Entity should be resolved to plain character: ${entity}`,
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
+        expected: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
+      }
+    ],
+  );
   const tableFixtures: DataFilterTestFixture[] = [
     [
       "TABLE#1: Empty table should be removed, as it is invalid.",
@@ -164,6 +347,57 @@ describe("Default Data Filter Rules", () => {
         expected: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
+    [
+      "TABLE#9: Should keep empty td.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#10: Should keep td with several children.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#11: Should remove singleton br in td.",
+      {
+        comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#12: Should remove singleton p in td.",
+      {
+        comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#13: Should remove singleton p in td if it only contains br.",
+      {
+        comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+      },
+    ],
+    [
+      "TABLE#14: Should not remove singleton p in td if it contains text.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
+      },
+    ],
   ];
   const listFixtures: DataFilterTestFixture[] =
     flatten(["ul", "ol"].map(el => {
@@ -189,8 +423,8 @@ describe("Default Data Filter Rules", () => {
           `${key}#3: Should keep class attribute.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el} class="alpha"><li>${text}</li></${el}></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el} class="alpha"><li>${text}</li></${el}></div>`,
+            input: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
+            expected: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
           },
         ],
       ];
@@ -244,8 +478,8 @@ describe("Default Data Filter Rules", () => {
           `${key}#3: Should keep class attribute.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el} class="alpha"/></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el} class="alpha"/></div>`,
+            input: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
+            expected: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
           },
         ],
       ];
@@ -380,6 +614,8 @@ describe("Default Data Filter Rules", () => {
   ];
   const testFixtures: DataFilterTestFixture[] = [
     ...uncategorizedFixtures,
+    ...textFixtures,
+    ...textEntityFixtures,
     ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,
@@ -417,6 +653,11 @@ describe("Default Data Filter Rules", () => {
         const testCaseName = `${name} (mode: ${strictnessKeys[currentStrictness]})`;
         const testCase = () => {
           const xmlDocument: Document = parser.parseFromString(input, "text/xml");
+
+          if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+            throw new Error(`Failed parsing XML: ${input}: ${xmlDocument.documentElement.outerHTML}`)
+          }
+
           filter.applyTo(xmlDocument.documentElement);
           const actualXml = serializer.serializeToString(xmlDocument.documentElement);
           expect(actualXml).toEqualXML(expected);
@@ -433,3 +674,22 @@ describe("Default Data Filter Rules", () => {
     }
   )
 });
+
+/**
+ * Decodes all entities to plain characters.
+ */
+function decodeEntity(str: string): string {
+  const ENTITY_ELEMENT = document.createElement("div");
+  ENTITY_ELEMENT.innerHTML = str;
+  return <string>ENTITY_ELEMENT.textContent;
+}
+
+/**
+ * Encodes all given characters to a decimal entity representation.
+ */
+function encodeString(str: string): string {
+  const text: string = decodeEntity(str);
+  // Takes care of Unicode characters. https://mathiasbynens.be/notes/javascript-unicode
+  const chars: string[] = [...text];
+  return chars.map((c) => `&#${c.codePointAt(0)};`).join('');
+}
