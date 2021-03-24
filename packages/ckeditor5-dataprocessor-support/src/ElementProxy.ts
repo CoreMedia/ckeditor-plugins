@@ -3,52 +3,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**
- * Possible attribute values to assign. `null` represents a deleted property.
- */
-export type AttributeValue = string | null;
-
-/**
- * The attributes of an element.
- */
-export interface Attributes {
-  [index: string]: AttributeValue;
-}
-
-/**
- * Named parameters to be passed to element filters. For overriding filter rules
- * a typical pattern to start with is:
- *
- * <pre>
- * params.parent && params.parent(args);
- * </pre>
- */
-export interface ElementFilterParams {
-  /**
-   * The node to process.
-   */
-  readonly node: ElementProxy;
-
-  /**
-   * A parent mapping to respect (or to ignore, thus override).
-   * It is required, so that it is easier to trigger a call to the
-   * parent rule. Just add it as empty function, if there is no parent.
-   */
-  readonly parentRule: ElementFilterRule;
-
-  /**
-   * CKEditor instance, for example to access configuration.
-   */
-  readonly editor: Editor;
-}
-
-/**
- * Function interface: `(params: ElementFilterParams) => void`.
- */
-export interface ElementFilterRule {
-  (params: ElementFilterParams): void;
-}
-
-/**
  * A wrapper for a given element, which allows to store changes to be applied
  * to the DOM structure later on.
  */
@@ -103,19 +57,6 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
   // Override, as we know, that it is non-null here.
   get ownerDocument(): Document {
     return this.delegate.ownerDocument;
-  }
-
-  /**
-   * Access to the parent element of this element. The element is wrapped
-   * by `MutableElement`. Note, that if used for modification purpose, it is
-   * task of the caller persisting changes.
-   */
-  get parentElement(): ElementProxy | null {
-    const parentElement = this.delegate.parentElement;
-    if (!parentElement) {
-      return null;
-    }
-    return new ElementProxy(parentElement, this.editor, this._namespaces, false);
   }
 
   /**
@@ -446,4 +387,50 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
       },
     });
   }
+}
+
+/**
+ * Possible attribute values to assign. `null` represents a deleted property.
+ */
+export type AttributeValue = string | null;
+
+/**
+ * The attributes of an element.
+ */
+export interface Attributes {
+  [index: string]: AttributeValue;
+}
+
+/**
+ * Named parameters to be passed to element filters. For overriding filter rules
+ * a typical pattern to start with is:
+ *
+ * <pre>
+ * params.parent && params.parent(args);
+ * </pre>
+ */
+export interface ElementFilterParams {
+  /**
+   * The node to process.
+   */
+  readonly node: ElementProxy;
+
+  /**
+   * A parent mapping to respect (or to ignore, thus override).
+   * It is required, so that it is easier to trigger a call to the
+   * parent rule. Just add it as empty function, if there is no parent.
+   */
+  readonly parentRule: ElementFilterRule;
+
+  /**
+   * CKEditor instance, for example to access configuration.
+   */
+  readonly editor: Editor;
+}
+
+/**
+ * Function interface: `(params: ElementFilterParams) => void`.
+ */
+export interface ElementFilterRule {
+  (params: ElementFilterParams): void;
 }
