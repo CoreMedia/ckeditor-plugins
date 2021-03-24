@@ -82,10 +82,17 @@ export default class NodeProxy<N extends Node = Node> {
   }
 
   /**
-   * Access to the parent node of this element.
+   * Access to the parent node of this node.
    */
   public get parentNode(): NodeProxy<Node & ParentNode> | null {
     return NodeProxy.wrap<Node & ParentNode>(this.delegate.parentNode, false);
+  }
+
+  /**
+   * Access to the parent element of this node.
+   */
+  public get parentElement(): NodeProxy<HTMLElement> | null {
+    return NodeProxy.wrap<HTMLElement>(this.delegate.parentElement, false);
   }
 
   /**
