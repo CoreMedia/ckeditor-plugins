@@ -244,8 +244,8 @@ describe("Default Data Filter Rules", () => {
           `${key}#3: Should keep class attribute.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el} class="alpha">${text}</${el}></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el} class="alpha">${text}</${el}></div>`,
+            input: `<div xmlns="${ns_richtext}"><${el} class="alpha"/></div>`,
+            expected: `<div xmlns="${ns_richtext}"><${el} class="alpha"/></div>`,
           },
         ],
       ];
