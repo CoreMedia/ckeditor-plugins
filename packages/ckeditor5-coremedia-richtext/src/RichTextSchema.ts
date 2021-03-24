@@ -6,7 +6,7 @@
  * =============================================================================
  */
 
-import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support/index";
+import { ElementProxy, TextProxy } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 
@@ -104,11 +104,13 @@ interface Attributes {
 interface ModelGroup {
   /**
    * Signals if this element is valid without any contents.
+   * Defaults to `false` if unset.
    */
   mayBeEmpty?: boolean;
   /**
    * Signals if this very element may contain text nodes. This
    * is not applied to child elements.
+   * Defaults to `false` if unset.
    */
   mayContainText?: boolean;
   /**
@@ -620,6 +622,28 @@ export default class RichTextSchema {
     }
   }
 
+  isTextAllowedAtParent(text: TextProxy): boolean {
+    const parentName = text.parentElement?.name;
+    if (!parentName) {
+      RichTextSchema.logger.debug(`Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`, text);
+      return false;
+    }
+
+    const elementSpecification = ELEMENTS[parentName];
+    if (!elementSpecification) {
+      // Element not specified. Not allowed at all.
+      RichTextSchema.logger.debug(`Element <${parentName}> not specified and thus, not allowed as parent of text-node.`);
+      return false;
+    }
+
+    const isAllowed = elementSpecification.mayContainText || false;
+
+    if (!isAllowed) {
+      RichTextSchema.logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
+    }
+    return isAllowed;
+  }
+
   /**
    * Checks, if the given element is known to be valid at current parent.
    *
@@ -627,7 +651,7 @@ export default class RichTextSchema {
    * @return `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
    * for removal (name is empty or null) or if the given element is not allowed at parent.
    */
-  isAllowedAtParent(element: ElementProxy): boolean {
+  isElementAllowedAtParent(element: ElementProxy): boolean {
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
@@ -674,8 +698,9 @@ export default class RichTextSchema {
    * @param element
    */
   adjustHierarchy(element: ElementProxy): void {
-    if (!this.isAllowedAtParent(element)) {
+    if (!this.isElementAllowedAtParent(element)) {
       element.replaceByChildren = true;
+      return;
     }
 
     const elementName = element.name;

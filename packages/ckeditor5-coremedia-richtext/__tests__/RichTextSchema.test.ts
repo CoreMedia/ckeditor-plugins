@@ -1517,7 +1517,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
       }: Validating <${element?.tagName}> if allowed as child of <${
         element?.parentElement?.tagName ?? "#document"
       }>, expected response: ${testData.expected}.`, () => {
-        expect(schema.isAllowedAtParent(mutableElement)).toStrictEqual(testData.expected);
+        expect(schema.isElementAllowedAtParent(mutableElement)).toStrictEqual(testData.expected);
       });
     }
 

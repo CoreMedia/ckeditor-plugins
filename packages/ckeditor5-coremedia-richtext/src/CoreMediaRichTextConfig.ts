@@ -7,7 +7,8 @@ import {
   ElementFilterRulesByName,
   FilterRuleSet,
   ElementFilterRule,
-  ElementFilterParams
+  ElementFilterParams,
+  TextFilterParams
 } from "@coremedia/ckeditor5-dataprocessor-support/index";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
@@ -102,7 +103,7 @@ const strike: ToDataAndViewElementConfiguration = {
 
 const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
-function getSchema(params: ElementFilterParams): RichTextSchema {
+function getSchema(params: ElementFilterParams | TextFilterParams): RichTextSchema {
   const dataProcessor: any = params.editor?.data?.processor || {};
   return dataProcessor["richTextSchema"] as RichTextSchema ?? defaultSchema;
 }
@@ -126,6 +127,13 @@ function getSchema(params: ElementFilterParams): RichTextSchema {
  */
 // TODO[cke] Review and move these rules, e. g. to configuration class documentation.
 const defaultRules: FilterRuleSetConfiguration = {
+  text: (params) => {
+    if (!getSchema(params).isTextAllowedAtParent(params.node)) {
+      params.node.remove = true;
+    } else {
+      params.node.decodeHtmlEntities();
+    }
+  },
   elements: {
     $: (params) => {
       getSchema(params).adjustHierarchy(params.node);
