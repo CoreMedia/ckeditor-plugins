@@ -276,12 +276,14 @@ export default class NodeProxy<N extends Node = Node> {
     let firstChild: ChildNode | null;
 
     if (!ownerDocument) {
+      firstChild = this.delegate.firstChild;
+
       let currentChild: ChildNode | null;
       do {
         currentChild = this.delegate.firstChild;
         currentChild && parentNode.insertBefore(currentChild, this.delegate);
       } while (!!currentChild);
-      firstChild = this.delegate.previousSibling;
+
       parentNode.removeChild(this.delegate);
     } else {
       const range = ownerDocument.createRange();
@@ -295,6 +297,9 @@ export default class NodeProxy<N extends Node = Node> {
     return this.restartFrom(firstChild);
   }
 
+  toString(): string {
+    return `NodeProxy(${this.name}${this.name === this.realName ? "" : `(was: ${this.realName})`})`;
+  }
 }
 
 /**
