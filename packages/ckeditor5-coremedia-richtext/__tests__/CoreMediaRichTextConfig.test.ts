@@ -567,23 +567,34 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "CLEANUP#4: Remove <td> if it only contains <br>, along with any must-not-be-empty parents (tr and table)",
+      "CLEANUP#4: Remove singleton <br> in <td>",
       {
+        comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         input: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
-      "CLEANUP#5: Remove <td> if it only contains <br>, along with any must-not-be-empty parents (tr, tbody and table)",
+      "CLEANUP#5: Remove singleton <p> in <td>",
       {
+        comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><br/></td></tr></tbody></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
-      "CLEANUP#6: Remove irrelevant <span>.",
+      "CLEANUP#6: Remove singleton <p> only containing <br> in <td>",
+      {
+        comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        input: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
+        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+      },
+    ],
+    [
+      "CLEANUP#7: Remove irrelevant <span>.",
       {
         comment: "This has been a design decision around 2011 or before. As the span does not violate RichText DTD we may argue about it.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],

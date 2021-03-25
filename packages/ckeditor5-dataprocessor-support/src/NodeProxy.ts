@@ -182,6 +182,10 @@ export default class NodeProxy<N extends Node = Node> {
   /**
    * Signals, if this mutable element represents a state, where the element
    * shall be removed, including all its children.
+   * <p>
+   * It is important to note, that setting this modifies the
+   * {@link NodeProxy#state}, thus setting this overrides any other decisions
+   * upon the state of the node.
    */
   public set remove(remove: boolean) {
     this.requireMutable();
@@ -193,7 +197,34 @@ export default class NodeProxy<N extends Node = Node> {
   }
 
   /**
-   * Signals, if this mutable element represents a state, where the element
+   * Signals, if this node represents a state, where the children of the node
+   * should be removed.
+   */
+  public get removeChildren(): boolean {
+    return this.state == NodeState.REMOVE_CHILDREN;
+  }
+
+  /**
+   * Sets, if this node represents a state, where the children of the node
+   * shall be removed.
+   * <p>
+   * It is important to note, that setting this modifies the
+   * {@link NodeProxy#state}, thus setting this overrides any other decisions
+   * upon the state of the node.
+   *
+   * @param remove `true` to mark as <em>remove children</em>; `false` otherwise.
+   */
+  public set removeChildren(remove: boolean) {
+    this.requireMutable();
+    if (remove) {
+      this._state = NodeState.REMOVE_CHILDREN;
+    } else {
+      this._state = NodeState.KEEP_OR_REPLACE;
+    }
+  }
+
+  /**
+   * Signals, if this node represents a state, where the node
    * shall be removed, while attaching the children to the parent node.
    */
   public get replaceByChildren(): boolean {
@@ -203,6 +234,10 @@ export default class NodeProxy<N extends Node = Node> {
   /**
    * Sets, if this node represents a state, where the node
    * shall be removed, while attaching the children to the parent node.
+   * <p>
+   * It is important to note, that setting this modifies the
+   * {@link NodeProxy#state}, thus setting this overrides any other decisions
+   * upon the state of the node.
    *
    * @param replace `true` to mark as <em>replace with children</em>; `false` otherwise.
    */
@@ -228,6 +263,8 @@ export default class NodeProxy<N extends Node = Node> {
         return this.persistRemoveRecursively();
       case NodeState.REMOVE_SELF:
         return this.persistRemoveSelf();
+      case NodeState.REMOVE_CHILDREN:
+        return this.persistRemoveChildren();
       default:
         throw new Error(`Unknown node state ${this.state}.`);
     }
@@ -304,6 +341,18 @@ export default class NodeProxy<N extends Node = Node> {
     return this.restartFrom(firstChild);
   }
 
+  /**
+   * Persists removal of all child nodes.
+   * @protected
+   */
+  protected persistRemoveChildren(): PersistResponse {
+    while (this.delegate.firstChild) {
+      this.delegate.removeChild(this.delegate.firstChild);
+    }
+
+    return RESPONSE_CONTINUE;
+  }
+
   toString(): string {
     return `NodeProxy(${this.name}${this.name === this.realName ? "" : `(was: ${this.realName})`})`;
   }
@@ -372,5 +421,9 @@ export enum NodeState {
   /**
    * Only remove the node, replacing it by its children.
    */
-  REMOVE_SELF
+  REMOVE_SELF,
+  /**
+   * Remove all child nodes of the current node.
+   */
+  REMOVE_CHILDREN,
 }

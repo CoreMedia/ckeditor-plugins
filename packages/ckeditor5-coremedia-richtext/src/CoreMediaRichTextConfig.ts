@@ -198,7 +198,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
     td: (params) => {
-      params.node.remove = params.node.isEmpty((el, idx, children) => {
+      params.node.removeChildren = params.node.isEmpty((el, idx, children) => {
         // Only filter, if there is only one child. While it may be argued, if this
         // is useful, this is the behavior as we had it for CKEditor 4.
         if (children.length !== 1) {
