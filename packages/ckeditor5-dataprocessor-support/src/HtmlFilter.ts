@@ -22,8 +22,20 @@ export interface TextFilterRuleSet {
 
 export type FilterRuleSet = ElementFilterRuleSet & TextFilterRuleSet;
 
+/**
+ * Special purpose element token for a rule applied before the element
+ * itself.
+ */
 export const BEFORE_ELEMENT = "^";
+/**
+ * Special purpose element token for a rule applied directly after the
+ * element has been processed.
+ */
 export const AFTER_ELEMENT = "$";
+/**
+ * Special purpose element token for a rule applied after the element and
+ * all its children have been processed.
+ */
 export const AFTER_ELEMENT_AND_CHILDREN = "$$";
 
 /**
@@ -42,6 +54,12 @@ export const AFTER_ELEMENT_AND_CHILDREN = "$$";
  * <strong>$-Rule after Children:</strong> Only the $ rule is applied last to
  * an element, i.e. it is ensured, that all children were processed. This is
  * the only valid location to judge on empty/non-empty.
+ * </p>
+ * <p>
+ * In contrast to CKEditor 4, this filter introduces two levels of
+ * post-processing: `$` rule is applied right after any element, while
+ * `$$` denotes a rule processed after the element and all its children
+ * have been processed.
  * </p>
  *
  * @see <a href="https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_htmlParser_filter.html">Class Filter (CKEDITOR.htmlParser.filter) - CKEditor 4 API docs</a>
