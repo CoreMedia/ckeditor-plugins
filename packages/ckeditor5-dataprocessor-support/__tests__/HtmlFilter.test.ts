@@ -15,7 +15,7 @@ type ApplyToData = [
   }
 ];
 
-describe("HtmlFilter.applyTo(); Element Rules", () => {
+describe("HtmlFilter.applyTo()", () => {
   test.each<ApplyToData>([
     [
       "should do nothing on empty rules",
@@ -196,6 +196,16 @@ describe("HtmlFilter.applyTo(); Element Rules", () => {
         },
         from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
         to: '<parent>Lorem <replacement name="before-el-before-replacement-after">Ipsum</replacement> Dolor</parent>',
+      },
+    ],
+    [
+      "should apply text rules",
+      {
+        rules: {
+          text: (params) => params.node.textContent = params.node.textContent.split("").reverse().join(""),
+        },
+        from: "<parent>Lorem Ipsum Dolor</parent>",
+        to: "<parent>roloD muspI meroL</parent>",
       },
     ],
   ])("(%#) %s", (name, testData) => {
