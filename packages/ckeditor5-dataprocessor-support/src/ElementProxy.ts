@@ -329,6 +329,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
         if (typeof attrName === "string") {
           return element.getAttribute(attrName);
         }
+        // Should be unreachable as we only support attributes keyed by strings.
         return null;
       },
       /**
@@ -402,6 +403,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
         if (typeof p === "string") {
           return element.hasAttribute(p);
         }
+        // Should be unreachable as we only support attributes keyed by strings.
         return false;
       },
       /**
