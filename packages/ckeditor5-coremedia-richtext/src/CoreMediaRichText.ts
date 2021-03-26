@@ -1,7 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
-import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
 import RichTextDataProcessor from "./RichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 

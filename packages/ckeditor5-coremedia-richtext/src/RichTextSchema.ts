@@ -7,8 +7,7 @@
  */
 
 import { ElementProxy, TextProxy } from "@coremedia/ckeditor5-dataprocessor-support/index";
-import Logger from "@coremedia/coremedia-utils/logging/Logger";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
 
 /**
  * Strictness for Schema validation.

@@ -1,8 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
-import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import Node from "@ckeditor/ckeditor5-engine/src/view/node";
 import Element from "@ckeditor/ckeditor5-engine/src/view/element";
