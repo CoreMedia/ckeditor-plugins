@@ -19,16 +19,57 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    */
   private _text: string | undefined;
 
+  /**
+   * <p>
+   * Represents the editor instance. May be used to access configuration options
+   * for example.
+   * </p>
+   * <p>
+   * Mimics `TextFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
   public readonly editor: Editor;
+  /**
+   * <p>
+   * Represents the node instance. For `TextProxy` this is just the
+   * proxy class itself.
+   * </p>
+   * <p>
+   * Mimics `TextFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
   public readonly node: TextProxy = this;
+  /**
+   * <p>
+   * Represents the parent rule. No-Operation rule for `TextProxy`.
+   * </p>
+   * <p>
+   * Mimics `TextFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
   public readonly parentRule: TextFilterRule = () => {
   };
 
+  /**
+   * Constructor.
+   *
+   * @param delegate the original text node to wrap
+   * @param editor CKEditor instance
+   * @param mutable signals, if this proxy should be mutable; trying to modify
+   * an immutable proxy will raise an error.
+   */
   constructor(delegate: Text, editor: Editor, mutable: boolean = true) {
     super(delegate, mutable);
     this.editor = editor;
   }
 
+  /**
+   * Apply given rules. If any of the rules will invalidate this node either
+   * by deletion or by replacing it, no further rules will be applied.
+   *
+   * @param rules rules to apply in given order
+   * @return a node, if filtering should be restarted from this node; `null` otherwise.
+   */
   public applyRules(...rules: (TextFilterRule | undefined)[]): Node | null {
     for (const rule of rules) {
       if (!!rule) {
@@ -79,8 +120,10 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * @see <a href="https://stackoverflow.com/questions/5796718/html-entity-decode">javascript - HTML Entity Decode - Stack Overflow</a>
    */
   public decodeHtmlEntities(): void {
+    // noinspection InnerHTMLJS
     this.decodeElement.innerHTML = this.textContent;
     const newText = this.decodeElement.textContent;
+    // noinspection InnerHTMLJS
     this.decodeElement.innerHTML = "";
 
     // Prevent possible cycles, if re-applying rules because of a recreated

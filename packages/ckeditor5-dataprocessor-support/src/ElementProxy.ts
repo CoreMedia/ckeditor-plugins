@@ -32,8 +32,34 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    */
   private readonly _namespaces: Namespaces;
 
+  /**
+   * <p>
+   * Represents the editor instance. May be used to access configuration options
+   * for example.
+   * </p>
+   * <p>
+   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
   public readonly editor: Editor;
+  /**
+   * <p>
+   * Represents the node instance. For `ElementProxy` this is just the
+   * proxy class itself.
+   * </p>
+   * <p>
+   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
   public readonly node: ElementProxy = this;
+  /**
+   * <p>
+   * Represents the parent rule. No-Operation rule for `ElementProxy`.
+   * </p>
+   * <p>
+   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
   public readonly parentRule: ElementFilterRule = () => {
   };
 
@@ -43,7 +69,8 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * @param delegate the original element to wrap
    * @param editor CKEditor instance
    * @param namespaces the namespaces to take into account
-   * @param mutable signals, if this proxy should be mutable
+   * @param mutable signals, if this proxy should be mutable; trying to modify
+   * an immutable proxy will raise an error.
    */
   constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable: boolean = true) {
     super(delegate, mutable);
@@ -106,21 +133,26 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
     return this.persistReplaceBy(this.name);
   }
 
+  /**
+   * Get namespace URI of current element.
+   */
   public get namespaceURI(): string | null {
     return this.delegate.namespaceURI;
   }
 
   /**
+   * <p>
    * The main purpose of this method is to persist changes to attributes.
    * Nevertheless, this method may forward to `persistReplaceBy` if either
    * a namespace change has been explicitly requested (by `xmlns` attribute)
    * or if the namespace of the current element does not match the namespace
    * of the owning document.
-   *
+   * </p><p>
    * The latter one is typically the case when transforming e.g. from HTML
    * to CoreMedia RichText, where elements have the HTML namespace
    * `http://www.w3.org/1999/xhtml` and must be adapted to the corresponding
    * XML namespace.
+   * </p>
    *
    * @private
    */
@@ -132,9 +164,10 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
       return this.persistReplaceBy(this.realName, elementNamespaceAttribute);
     }
     /*
-     * We don't have an extra namespace-attribute set during filtering. Nevertheless,
-     * the namespace of this element may be different from owner-document. If it is
-     * different, we need to create a new element as well.
+     * We don't have an extra namespace-attribute set during filtering.
+     * Nevertheless, the namespace of this element may be different from
+     * owner-document. If it is different, we need to create a new element as
+     * well.
      */
     const ownerNamespaceURI = this.ownerDocument.documentElement.namespaceURI;
     if (this.namespaceURI !== ownerNamespaceURI) {
@@ -190,9 +223,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
       .filter((key) => key !== "xmlns")
       .forEach((key: string) => {
         const value: AttributeValue = attributes[key];
-        // TODO[cke] Failed using ES2018 named group access here. Can you get it to work?
         const pattern = /^(?<prefix>\w+):(?<localName>.*)$/;
-        // TODO[cke] Desired ES2018 pattern: const { groups: { prefix, localName } } = ...
         const match: RegExpExecArray | null = pattern.exec(key);
         if (!match) {
           handleAttributeWithoutNamespacePrefix(key, value);
