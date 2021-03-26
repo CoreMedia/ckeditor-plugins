@@ -95,6 +95,11 @@ function replaceByElementAndClassBackAndForth(viewName: string, dataName: string
   }
 }
 
+/**
+ * Rule to transform several representations of strikeout-state. As CKEditor
+ * represents strikeout as `<s>` by default, all of them will be re-transformed
+ * to `<s>` on toView mapping.
+ */
 const strike: ToDataAndViewElementConfiguration = {
   toData: replaceBy("span", "strike"),
   // The default CKEditor 5 representation of strikethrough is `<s>`.
@@ -199,18 +204,24 @@ const defaultRules: FilterRuleSetConfiguration = {
     div: replaceBy("p"),
     td: (params) => {
       params.node.removeChildren = params.node.isEmpty((el, idx, children) => {
+        // !Reverted logic! `true` signals, that the element should be considered,
+        //   when judging on "is empty".
+
         // Only filter, if there is only one child. While it may be argued, if this
         // is useful, this is the behavior as we had it for CKEditor 4.
         if (children.length !== 1) {
           return true;
         }
+        // If the element has more than one child node, the following rules don't apply.
         if (el.childNodes.length > 1) {
           return true;
         }
+
         // Ignore, if only one br exists.
         if (el.nodeName.toLowerCase() === "br") {
           return false;
         }
+        // Next gate: Further analysis only required, if current element is <p>
         if (el.nodeName.toLowerCase() !== "p") {
           return true;
         }

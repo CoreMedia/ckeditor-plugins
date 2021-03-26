@@ -16,6 +16,11 @@ const TEST_SELECTOR = "";
 
 const MOCK_EDITOR = new Editor();
 
+const LAST_RESORT = "This is a last-resort fix, prior to sending data to the " +
+  "server. It's actually almost an indicator of missing explicit data " +
+  "processing. That's why `toView` will not be able to restore the original " +
+  "result.";
+
 type CommentableTestData = {
   /**
    * Some comment which may help understanding the test case better.
@@ -40,13 +45,28 @@ type StrictnessAwareTestData = {
 
 type XmlInputTestData = {
   /**
-   * Input.
+   * Input. This is actually HTML, but already embedded in CoreMedia RichText
+   * DIV, as this is the pre-processing done by RichTextDataProcessor.
    */
-  input: string;
+  inputFromView: string;
 };
 
 type ExpectTransformationTestData = {
-  expected: string;
+  /**
+   * Expected result of mapping input to data.
+   */
+  expectedData: string;
+  /**
+   * <p>
+   * Optional: Expected result of mapping generated data back to view.
+   * This still contains the RichText Namespace DIV, as this will be
+   * removed later in processing.
+   * </p>
+   * <p>
+   * If just "true", it will expect the same result as original input.
+   * </p>
+   */
+  expectedView?: string | boolean;
 };
 
 const parser = new DOMParser();
@@ -80,24 +100,26 @@ describe("Default Data Filter Rules", () => {
       {
         disabled: "Disabled for demonstration purpose only.",
         strictness: [Strictness.STRICT],
-        input: `<div xmlns="${ns_richtext}"/>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"/>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "EMPTY#1: Should not modify empty RichText.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"/>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"/>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
+        expectedView: true,
       },
     ],
     [
       "DIV#1: Should replace nested DIVs by P.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><div>${text}</div></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><div>${text}</div></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
       },
     ],
   ];
@@ -105,154 +127,173 @@ describe("Default Data Filter Rules", () => {
     [
       "TEXT#1: Should remove text at root DIV.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}">${text}</div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}">${text}</div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "TEXT#2: Should keep text at P.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#3: Should remove text at UL (and remove empty UL).",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><ul>${text}</ul></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><ul>${text}</ul></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "TEXT#4: Should remove text at OL (and remove empty OL).",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><ol>${text}</ol></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><ol>${text}</ol></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "TEXT#5: Should keep text at LI.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><ol><li>${text}</li></ol></div>`,
-        expected: `<div xmlns="${ns_richtext}"><ol><li>${text}</li></ol></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><ol><li>${text}</li></ol></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><ol><li>${text}</li></ol></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#6: Should keep text at PRE.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><pre>${text}</pre></div>`,
-        expected: `<div xmlns="${ns_richtext}"><pre>${text}</pre></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><pre>${text}</pre></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><pre>${text}</pre></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#7: Should remove text at BLOCKQUOTE.",
       {
-        comment: "CoreMedia RichText DTD requires blockquotes to contain for example <p> as nested element. As CKEditor by default adds a paragraph to blockquotes, we don't need any 'fix' such as surrounding the text by a paragraph.",
+        comment: `${LAST_RESORT} CoreMedia RichText DTD requires blockquotes to contain for example <p> as nested element. As CKEditor by default adds a paragraph to blockquotes, we don't need any 'fix' such as surrounding the text by a paragraph.`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><blockquote>${text}</blockquote></div>`,
-        expected: `<div xmlns="${ns_richtext}"><blockquote/></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><blockquote>${text}</blockquote></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><blockquote/></div>`,
       },
     ],
     [
       "TEXT#8: Should keep text at A.",
       {
+        // TODO[cke] Will need to be adapted, once we officially support links.
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
-        expected: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#9: Should keep text at SPAN.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p><span class="${attr_class}">${text}</span></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p><span class="${attr_class}">${text}</span></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p><span class="${attr_class}">${text}</span></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><span class="${attr_class}">${text}</span></p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#10: Should remove text at BR.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p>${text}<br>${text}</br>${text}</p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br>${text}</br>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
       },
     ],
     [
       "TEXT#11: Should keep text at EM.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p><em>${text}</em></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p><em>${text}</em></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p><i>${text}</i></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><em>${text}</em></p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#12: Should keep text at STRONG.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p><strong>${text}</strong></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p><strong>${text}</strong></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p><strong>${text}</strong></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><strong>${text}</strong></p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#13: Should keep text at SUB.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p><sub>${text}</sub></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p><sub>${text}</sub></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p><sub>${text}</sub></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><sub>${text}</sub></p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#14: Should keep text at SUP.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p><sup>${text}</sup></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p><sup>${text}</sup></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p><sup>${text}</sup></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><sup>${text}</sup></p></div>`,
+        expectedView: true,
       },
     ],
     [
       "TEXT#15: Should remove text at IMG.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><img alt="" xlink:href="${attr_link_external}">${text}</img></p></div>`,
-        expected: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><img alt="" xlink:href="${attr_link_external}"/></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><img alt="" xlink:href="${attr_link_external}">${text}</img></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><img alt="" xlink:href="${attr_link_external}"/></p></div>`,
       },
     ],
     [
       "TEXT#16: Should remove text at TABLE.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table>${text}<tr><td>${text}</td></tr>${text}</table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table>${text}<tr><td>${text}</td></tr>${text}</table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
       },
     ],
     [
       "TEXT#17: Should remove text at TBODY.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tbody>${text}<tr><td>${text}</td></tr>${text}</tbody></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody>${text}<tr><td>${text}</td></tr>${text}</tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
       },
     ],
     [
       "TEXT#18: Should remove text at TR.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr>${text}<td>${text}</td>${text}</tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr>${text}<td>${text}</td>${text}</tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
       },
     ],
     [
       "TEXT#19: Should keep text at TD.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        expectedView: true,
       },
     ],
   ];
@@ -275,9 +316,11 @@ describe("Default Data Filter Rules", () => {
     (entity, index) => [
       `TEXT/ENTITY#${(index+1)}: Entity should be resolved to plain character: ${entity}`,
       {
+        comment: "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
       }
     ],
   );
@@ -285,25 +328,28 @@ describe("Default Data Filter Rules", () => {
     [
       "TABLE#1: Empty table should be removed, as it is invalid.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table/></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table/></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "TABLE#2: thead should be transformed as being part of table body (not tbody...).",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr></table></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr></table></div>`,
       },
     ],
     [
       "TABLE#3: tbody should be kept as is.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+        expectedView: true,
       },
     ],
     [
@@ -311,56 +357,63 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a compromise due to processing order. As thead and its contents will be transformed first, there is no straightforward way to merge it with tbody.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead><tbody><tr><td>Body</td></tr></tbody></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr><tr><td>Body</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr><tr><td>Body</td></tr></table></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr><tr><td>Body</td></tr></table></div>`,
       },
     ],
     [
       "TABLE#5: th should be transformed to td with class.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><th>Head</th></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td class="td--heading">Head</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><th>Head</th></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td class="td--heading">Head</td></tr></table></div>`,
+        expectedView: true,
       },
     ],
     [
       "TABLE#6: Should remove figure around table. By default CKEditor 5 adds a figure around table.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><figure><table><tr><td>Body</td></tr></table></figure></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>Body</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><figure><table><tr><td>Body</td></tr></table></figure></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>Body</td></tr></table></div>`,
       },
     ],
     [
       "TABLE#7: Should remove empty tbody, and thus empty table.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tbody/></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody/></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "TABLE#8: Should remove empty tr, and thus empty tbody, and thus empty table.",
       {
+        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tbody><tr/></tbody></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr/></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "TABLE#9: Should keep empty td.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        expectedView: true,
       },
     ],
     [
       "TABLE#10: Should keep td with several children.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
+        expectedView: true,
       },
     ],
     [
@@ -368,8 +421,9 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
@@ -377,8 +431,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
@@ -386,16 +440,17 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
       "TABLE#14: Should not remove singleton p in td if it contains text.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
+        expectedView: true,
       },
     ],
   ];
@@ -406,25 +461,28 @@ describe("Default Data Filter Rules", () => {
         [
           `${key}#1: Should remove if empty, as empty <${el}> not allowed by DTD.`,
           {
+            comment: `${LAST_RESORT}`,
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el}>${whitespace}</${el}></div>`,
-            expected: `<div xmlns="${ns_richtext}"/>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el}>${whitespace}</${el}></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"/>`,
           },
         ],
         [
           `${key}#2: Should keep if valid.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el}><li>${text}</li></${el}></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el}><li>${text}</li></${el}></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el}><li>${text}</li></${el}></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><${el}><li>${text}</li></${el}></div>`,
+            expectedView: true,
           },
         ],
         [
           `${key}#3: Should keep class attribute.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
+            expectedView: true,
           },
         ],
       ];
@@ -440,16 +498,35 @@ describe("Default Data Filter Rules", () => {
           `${key}#1: Should transform to empty <p> if empty.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el}/></div>`,
-            expected: `<div xmlns="${ns_richtext}"><p class="${expectedClass}"/></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el}/></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p class="${expectedClass}"/></div>`,
+            expectedView: true,
           },
         ],
         [
           `${key}#2: Should transform to <p> with class attribute.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el}>${text}</${el}></div>`,
-            expected: `<div xmlns="${ns_richtext}"><p class="${expectedClass}">${text}</p></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el}>${text}</${el}></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p class="${expectedClass}">${text}</p></div>`,
+            expectedView: true,
+          },
+        ],
+      ];
+    }));
+  const invalidHeadingFixtures: DataFilterTestFixture[] =
+    flatten([0, 7].map(level => {
+      const key = `INVALID_H${level}`;
+      const invalidHeadingClass = `p--heading-${level}`;
+
+      return [
+        [
+          `${key}#1: Should not handle invalid heading class.`,
+          {
+            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+            inputFromView: `<div xmlns="${ns_richtext}"><p class="${invalidHeadingClass}">${text}</p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p class="${invalidHeadingClass}">${text}</p></div>`,
+            expectedView: true,
           },
         ],
       ];
@@ -462,77 +539,114 @@ describe("Default Data Filter Rules", () => {
           `${key}#1: Should keep if empty.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el}/></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el}/></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el}/></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><${el}/></div>`,
+            expectedView: true,
           },
         ],
         [
           `${key}#2: Should adapt namespace if required.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el} xmlns="${ns_xhtml}"/></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el}/></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el} xmlns="${ns_xhtml}"/></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><${el}/></div>`,
           },
         ],
         [
           `${key}#3: Should keep class attribute.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
-            expected: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
+            expectedView: true,
           },
         ],
       ];
     }));
   const replaceInlineSimpleFixtures: DataFilterTestFixture[] =
-    flatten([["b", "strong"], ["i", "em"]].map(([from, to]) => {
-      const key = from.toUpperCase();
+    flatten([
+      {
+        view: "b",
+        data: "strong",
+        bijective: false,
+      },
+      {
+        view: "i",
+        data: "em",
+        bijective: true,
+      },
+    ]
+      .map(({view, data, bijective}) => {
+      const key = view.toUpperCase();
       return [
         [
-          `${key}#1: Should replace <${from}> by <${to}>.`,
+          `${key}#1: View: <${view}> ${bijective?'<':''}-> Data: <${data}>.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><p><${from}>${text}</${from}></p></div>`,
-            expected: `<div xmlns="${ns_richtext}"><p><${to}>${text}</${to}></p></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+            expectedView: bijective,
           },
         ],
         [
-          `${key}#2: Should keep <${to}> when transformed.`,
+          `${key}#2: Should keep <${data}> when transformed.`,
           {
             strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><p><${to}>${text}</${to}></p></div>`,
-            expected: `<div xmlns="${ns_richtext}"><p><${to}>${text}</${to}></p></div>`,
+            inputFromView: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
           },
         ],
       ];
     }));
   const replaceInlineBySpanFixtures: DataFilterTestFixture[] =
-    flatten([
-      ["u", "underline"],
-      ["strike", "strike"],
-      ["s", "strike"],
-      ["del", "strike"],
-    ].map(([from, toClass]) => {
-      const key = from.toUpperCase();
-      return [
-        [
-          `${key}#1: Should replace <${from}> by <span class="${toClass}">.`,
-          {
-            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><p><${from}>${text}</${from}></p></div>`,
-            expected: `<div xmlns="${ns_richtext}"><p><span class="${toClass}">${text}</span></p></div>`,
-          },
-        ],
-        [
-          `${key}#2: Should keep <span class="${toClass}> when transformed.`,
-          {
-            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            input: `<div xmlns="${ns_richtext}"><p><span class="${toClass}">${text}</span></p></div>`,
-            expected: `<div xmlns="${ns_richtext}"><p><span class="${toClass}">${text}</span></p></div>`,
-          },
-        ],
-      ];
-    }));
+    flatten(
+      [
+        {
+          view: "u",
+          dataClass: "underline",
+          bijective: true,
+        },
+        {
+          view: "strike",
+          dataClass: "strike",
+          bijective: false,
+        },
+        {
+          view: "s",
+          dataClass: "strike",
+          bijective: true,
+        },
+        {
+          view: "del",
+          dataClass: "strike",
+          bijective: false,
+        },
+      ].map(({view, dataClass, bijective}) => {
+        // bijective: Typically false for "alias" mappings.
+        // The mapping which corresponds to the default representation in
+        // CKEditor should be bijective (i.e. = true).
+        const key = view.toUpperCase();
+        return [
+          [
+            `${key}#1: View: <${view}> ${bijective?'<':''}-> Data: by <span class="${dataClass}">.`,
+            {
+              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+              inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
+              expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
+              expectedView: bijective,
+            },
+          ],
+          [
+            `${key}#2: Should keep <span class="${dataClass}"> when transformed.`,
+            {
+              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+              inputFromView: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
+              expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
+            },
+          ],
+        ];
+      })
+    );
   /*
    * In CKEditor 4 data-processing we did some clean-up of elements. While this
    * was most likely dealing with shortcomings of CKEditor 4, we want to ensure
@@ -546,24 +660,24 @@ describe("Default Data Filter Rules", () => {
       "CLEANUP#1: Remove top-level <br> tag.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><br/></div>`,
-        expected: `<div xmlns="${ns_richtext}"/>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><br/></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"/>`,
       },
     ],
     [
       "CLEANUP#2: Remove trailing <br> tag in <td>.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td>${text}<br/></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}<br/></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
       },
     ],
     [
       "CLEANUP#3: Remove trailing <br> tag in <p>.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p>${text}<br/></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br/></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
       },
     ],
     [
@@ -571,8 +685,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
@@ -580,8 +694,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
@@ -589,8 +703,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
-        expected: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
       },
     ],
     [
@@ -598,8 +712,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This has been a design decision around 2011 or before. As the span does not violate RichText DTD we may argue about it.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
-        expected: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
       },
     ],
   ];
@@ -618,8 +732,8 @@ describe("Default Data Filter Rules", () => {
       "XDIFF#1: Should remove invalid <xdiff:span> tag, but keep children.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        input: `<div xmlns="${ns_richtext}" xmlns:xdiff="${ns_xdiff}"><p><xdiff:span xdiff:class="diff-html-removed">${text}</xdiff:span></p></div>`,
-        expected: `<div xmlns="${ns_richtext}" xmlns:xdiff="${ns_xdiff}"><p>${text}</p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xdiff="${ns_xdiff}"><p><xdiff:span xdiff:class="diff-html-removed">${text}</xdiff:span></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xdiff="${ns_xdiff}"><p>${text}</p></div>`,
       },
     ],
   ];
@@ -630,6 +744,7 @@ describe("Default Data Filter Rules", () => {
     ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,
+    ...invalidHeadingFixtures,
     ...defaultBlockFixtures,
     ...replaceInlineSimpleFixtures,
     ...replaceInlineBySpanFixtures,
@@ -650,7 +765,7 @@ describe("Default Data Filter Rules", () => {
   describe.each<DataFilterTestFixture>(testFixtures)(
     "(%#) %s",
     (name: string, testData: DataFilterRulesTestData) => {
-      const { disabled, strictness, input, expected } = testData;
+      const { disabled, strictness, inputFromView, expectedData, expectedView } = testData;
 
       if (TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
         test.todo(`${name} (disabled by test selector for debugging purpose)`);
@@ -658,28 +773,47 @@ describe("Default Data Filter Rules", () => {
       }
 
       for (const currentStrictness of strictness) {
-        const { toData } = getConfig();
-        const filter = new HtmlFilter(toData, MOCK_EDITOR);
+        const { toData, toView } = getConfig();
+        const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
+        const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
 
         const testCaseName = `${name} (mode: ${strictnessKeys[currentStrictness]})`;
-        const testCase = () => {
-          const xmlDocument: Document = parser.parseFromString(input, "text/xml");
+        const toDataTestCase = () => {
+          const xmlDocument: Document = parser.parseFromString(inputFromView, "text/xml");
 
           if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
-            throw new Error(`Failed parsing XML: ${input}: ${xmlDocument.documentElement.outerHTML}`)
+            throw new Error(`Failed parsing XML: ${inputFromView}: ${xmlDocument.documentElement.outerHTML}`)
           }
 
-          filter.applyTo(xmlDocument.documentElement);
+          toDataFilter.applyTo(xmlDocument.documentElement);
           const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-          expect(actualXml).toEqualXML(expected);
+          expect(actualXml).toEqualXML(expectedData);
+        };
+
+        const toViewTestCase = () => {
+          if (!!expectedView) {
+            // If `true` expect bijective mapping.
+            const expectedViewXml = expectedView === true ? inputFromView : expectedView;
+            const xmlDocument: Document = parser.parseFromString(expectedData, "text/xml");
+
+            if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+              throw new Error(`Failed parsing XML: ${expectedData}: ${xmlDocument.documentElement.outerHTML}`)
+            }
+
+            toViewFilter.applyTo(xmlDocument.documentElement);
+            const actualXml = serializer.serializeToString(xmlDocument.documentElement);
+            expect(actualXml).toEqualXML(expectedViewXml);
+          }
         };
 
         if (disabled) {
           const disabledMessage = typeof disabled === "string" ? ` (${disabled})` : "";
           const disabledName = `${testCaseName}${disabledMessage}`;
-          test.skip(disabledName, testCase);
+          test.skip(`toData: ${disabledName}`, toDataTestCase);
+          !!expectedView && test.skip(`toView: ${disabledName}`, toViewTestCase);
         } else {
-          test(testCaseName, testCase);
+          test(`toData: ${testCaseName}`, toDataTestCase);
+          !!expectedView && test(`toView: ${testCaseName}`, toViewTestCase);
         }
       }
     }
