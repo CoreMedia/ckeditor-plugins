@@ -129,6 +129,27 @@ describe("Immutable NodeProxy", () => {
         expectException: true,
       },
     ],
+    [
+      "IMMUTABLE#3.1: Reading Property `removeChildren` should be possible.",
+      {
+        action: (p) => p.removeChildren,
+        expectException: false,
+      },
+    ],
+    [
+      "IMMUTABLE#3.2: Setting Property `removeChildren` should NOT be possible.",
+      {
+        action: (p) => p.removeChildren = true,
+        expectException: true,
+      },
+    ],
+    [
+      "IMMUTABLE#3.3: Setting Property `removeChildren` of parentNode should NOT be possible.",
+      {
+        action: (p) => p.parentNode ? p.parentNode.removeChildren = true : undefined,
+        expectException: true,
+      },
+    ],
   ];
 
   let immutableProxy: NodeProxy;
@@ -198,6 +219,19 @@ describe("NodeProxy.parentNode", () => {
     "(%#) Should provide expected parentNode for %s: %s",
     (childNode, parentNode) => {
       expect(new NodeProxy(childNode).parentNode?.delegate).toStrictEqual(parentNode);
+    });
+});
+
+describe("NodeProxy.parentElement", () => {
+  const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
+  const documentRootNode = document.getRootNode();
+  const rootNode = <Node>documentRootNode.firstChild;
+  const childNode = <Node>rootNode.firstChild;
+
+  test.each([[childNode, rootNode], [rootNode, undefined]])(
+    "(%#) Should provide expected parentElement for %s: %s",
+    (childNode, parentNode) => {
+      expect(new NodeProxy(childNode).parentElement?.delegate).toStrictEqual(parentNode);
     });
 });
 
@@ -388,12 +422,42 @@ describe("NodeProxy.persistToDom", () => {
       },
     ],
     [
-      "PERSIST#5: Should be able to veto replacement by children.",
+      "PERSIST#5: Should remove node instead on replace children if having no children.",
+      {
+        nodeXPath: "//pair1",
+        action: (node) => node.replaceByChildren = true,
+        expectedDom: "<parent><child><pair2/><pair3/></child></parent>",
+        expectedAbort: true,
+      },
+    ],
+    [
+      "PERSIST#6: Should be able to veto replacement by children.",
       {
         nodeXPath: "//child",
         action: (node) => {
           node.replaceByChildren = true;
           node.replaceByChildren = false;
+        },
+        expectedDom: "<parent><child><pair1/><pair2/><pair3/></child></parent>",
+        expectedAbort: false,
+      },
+    ],
+    [
+      "PERSIST#7: Should remove children if requested.",
+      {
+        nodeXPath: "//child",
+        action: (node) => node.removeChildren = true,
+        expectedDom: "<parent><child/></parent>",
+        expectedAbort: false,
+      },
+    ],
+    [
+      "PERSIST#8: Should be able to veto removal of children.",
+      {
+        nodeXPath: "//child",
+        action: (node) => {
+          node.removeChildren = true;
+          node.removeChildren = false;
         },
         expectedDom: "<parent><child><pair1/><pair2/><pair3/></child></parent>",
         expectedAbort: false,

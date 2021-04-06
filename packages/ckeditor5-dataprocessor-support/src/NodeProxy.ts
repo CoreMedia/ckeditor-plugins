@@ -201,7 +201,7 @@ export default class NodeProxy<N extends Node = Node> {
    * should be removed.
    */
   public get removeChildren(): boolean {
-    return this.state == NodeState.REMOVE_CHILDREN;
+    return this.state === NodeState.REMOVE_CHILDREN;
   }
 
   /**
