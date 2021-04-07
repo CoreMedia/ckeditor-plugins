@@ -78,9 +78,8 @@ export default class HtmlFilter {
 
   public applyTo(root: Node): void {
     this.logger.debug(`Applying filter to root node ${root.nodeName}.`, { root: root });
-    // TODO[cke] Provide a root-filter just as CKEditor 4?
-    //   If yes, this must not replace the root node, or we need to pass
-    //   the new root back.
+    // In CKEditor 4 we had an extra filter for the root node. If we want to introduce
+    // this again, we should do it here.
     this.applyToChildNodes(root);
   }
 
@@ -107,25 +106,28 @@ export default class HtmlFilter {
     let newCurrentSupplier: () => Node | null = () => null;
 
     if (currentNode instanceof Element) {
+      const proxy = new ElementProxy(currentNode, this._editor);
+      /*
+       * We need to handle the children prior to the last rule. This provides the
+       * opportunity, that the last rule may decide on a now possibly empty node.
+       *
+       * We may re-use `currentNode` here, as the rule will not be executed, if any
+       * rule before replaces `currentNode` by a new node.
+      */
+      const handleChildrenRule: ElementFilterRule = (p) => {
+        this.applyToChildNodes(p.node.delegate);
+      };
+
       if (this._ruleSet.elements) {
         const beforeRule: ElementFilterRule | undefined = this._ruleSet.elements[BEFORE_ELEMENT];
         const filterRule: ElementFilterRule | undefined = this._ruleSet.elements[currentNode.nodeName.toLowerCase()];
-        /*
-         * We need to handle the children prior to the last rule. This provides the
-         * opportunity, that the last rule may decide on a now possibly empty node.
-         *
-         * We may re-use `currentNode` here, as the rule will not be executed, if any
-         * rule before replaces `currentNode` by a new node.
-        */
-        const handleChildrenRule: ElementFilterRule = () => {
-          this.applyToChildNodes(currentNode);
-        };
         const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
         const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
 
-        const proxy = new ElementProxy(currentNode, this._editor);
-
         newCurrentSupplier = () => proxy.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
+      } else {
+        // No element rules? We need to at least handle the children.
+        newCurrentSupplier = () => proxy.applyRules(handleChildrenRule);
       }
     } else if (currentNode instanceof Text) {
       if (this._ruleSet.text) {
