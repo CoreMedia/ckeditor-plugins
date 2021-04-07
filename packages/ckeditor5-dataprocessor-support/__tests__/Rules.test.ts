@@ -6,8 +6,17 @@ import {
   HtmlFilter,
 } from "../src";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { TextFilterRule } from "../dist";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+
+/**
+ * Will be checked for "startsWith" for a given Data Driven Testname. Meant
+ * to be used for debugging purpose. Example:
+ *
+ * `TEST_SELECTOR = "TABLE#3"`
+ */
+const TEST_SELECTOR = "";
 
 const MOCK_EDITOR = new Editor();
 
@@ -21,7 +30,7 @@ type CommentableTestData = {
   comment?: string;
 };
 
-type DisableableTestCase = {
+type DisablableTestCase = {
   /**
    * If set to `true` or non-empty string this test will be ignored.
    * A string will be printed as message.
@@ -43,8 +52,12 @@ type WithDefaultsTestData = {
   default: FilterRuleSetConfiguration,
 }
 
-const replaceByChildren: ElementFilterRule = (p) => {
-  p.node.replaceByChildren = true
+const replaceElementByChildren: ElementFilterRule = (p) => {
+  p.node.replaceByChildren = true;
+};
+
+const reverseText: TextFilterRule = (p) => {
+  p.node.textContent = p.node.textContent.split("").reverse().join("");
 };
 
 describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
@@ -64,7 +77,7 @@ describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
 
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No Defaults)", () => {
   type TestData = CommentableTestData &
-    DisableableTestCase &
+    DisablableTestCase &
     ParseFilterRuleSetConfigurationTestData;
   type TestFixture = [string, TestData];
   const testFixtures: TestFixture[] = [
@@ -78,11 +91,11 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
       },
     ],
     [
-      "#toDataOnly: Should handle toData-only-rules.",
+      "#toDataOnly: Should handle toData-only-rules (elements).",
       {
         config: {
           elements: {
-            el: replaceByChildren,
+            el: replaceElementByChildren,
           }
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
@@ -91,13 +104,24 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
       },
     ],
     [
-      "#toViewOnly: Should handle toView-only-rules (Object Setup).",
+      "#toDataOnly: Should handle toData-only-rules (text).",
+      {
+        config: {
+          text: reverseText,
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: "<root> meroL<el>muspI</el>roloD </root>",
+        view: "<root> meroL<el>muspI</el>roloD </root>",
+      },
+    ],
+    [
+      "#toViewOnly: Should handle toView-only-rules (elements, Object Setup).",
       {
         config: {
           elements: {
             el: {
               toView: {
-                el: replaceByChildren,
+                el: replaceElementByChildren,
               },
             },
           }
@@ -108,18 +132,45 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
       },
     ],
     [
-      "#toViewOnly: Should handle toView-only-rules (Function Setup).",
+      "#toViewOnly: Should handle toView-only-rules (elements, Function Setup).",
       {
         config: {
           elements: {
             el: {
-              toView: replaceByChildren,
+              toView: replaceElementByChildren,
             },
           }
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         view: "<root>Lorem Ipsum Dolor</root>",
+      },
+    ],
+    [
+      "#toViewOnly: Should handle toView-only-rules (text).",
+      {
+        config: {
+          text: {
+            toView: reverseText,
+          },
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        view: "<root> meroL<el>muspI</el>roloD </root>",
+      },
+    ],
+    [
+      "#textMapping: Should transform elements back and forth.",
+      {
+        config: {
+          text: {
+            toData: reverseText,
+            toView: reverseText,
+          },
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: "<root> meroL<el>muspI</el>roloD </root>",
+        view: "<root>Lorem <el>Ipsum</el> Dolor</root>",
       },
     ],
     [
@@ -234,7 +285,13 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
     ],
   ];
 
-  test.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
+  describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
+
+    if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
+      test.todo(`${name} (disabled by test selector for debugging purpose)`);
+      return;
+    }
+
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const config: FilterRuleSetConfiguration = testData.config;
 
@@ -246,20 +303,26 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
     toDataFilter.applyTo(from.documentElement);
 
     const dataXml: string = serializer.serializeToString(from.documentElement);
-    expect(dataXml).toEqualXML(testData.data);
+
+    test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
+      expect(dataXml).toEqualXML(testData.data);
+    });
 
     const data: Document = parser.parseFromString(dataXml, "text/xml");
 
     toViewFilter.applyTo(data.documentElement);
 
     const viewXml: string = serializer.serializeToString(data.documentElement);
-    expect(viewXml).toEqualXML(testData.view);
+
+    test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
+      expect(viewXml).toEqualXML(testData.view);
+    });
   });
 });
 
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having Defaults)", () => {
   type TestData = CommentableTestData &
-    DisableableTestCase &
+    DisablableTestCase &
     ParseFilterRuleSetConfigurationTestData &
     WithDefaultsTestData;
   type TestFixture = [string, TestData];
@@ -275,7 +338,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
       },
     ],
     [
-      "#toDataOnly: Should handle nested toData-only-rules.",
+      "#toDataOnly/elements: Should handle nested toData-only-rules.",
       {
         default: {
           elements: {
@@ -297,10 +360,113 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
         view: `<root>Lorem <data label="data">Ipsum</data> Dolor</root>`,
       },
     ],
-    // TODO "VETO" Example
+    [
+      "#toDataOnly/elements: Should be able to ignore parent rule.",
+      {
+        default: {
+          elements: {
+            el: (p) => {
+              p.node.attributes["label"] = "data";
+            },
+          }
+        },
+        config: {
+          elements: {
+            el: (p) => {
+              p.node.name = "data";
+            },
+          }
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: `<root>Lorem <data>Ipsum</data> Dolor</root>`,
+        view: `<root>Lorem <data>Ipsum</data> Dolor</root>`,
+      },
+    ],
+    [
+      "#toDataOnly/text: Should handle nested toData-only-rules (default, then override).",
+      {
+        default: {
+          text: reverseText,
+        },
+        config: {
+          text: (p) => {
+            p.parentRule(p);
+            p.node.textContent = p.node.textContent.split(/[aeiou]/i).join("[V]");
+          },
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: `<root> m[V]r[V]L<el>m[V]sp[V]</el>r[V]l[V]D </root>`,
+        view: `<root> m[V]r[V]L<el>m[V]sp[V]</el>r[V]l[V]D </root>`,
+      },
+    ],
+    [
+      "#toDataOnly/text: Should handle nested toData-only-rules (override, then default).",
+      {
+        default: {
+          text: reverseText,
+        },
+        config: {
+          text: (p) => {
+            p.node.textContent = p.node.textContent.split(/[aeiou]/i).join("[V]");
+            p.parentRule(p);
+          },
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: `<root> m]V[r]V[L<el>m]V[sp]V[</el>r]V[l]V[D </root>`,
+        view: `<root> m]V[r]V[L<el>m]V[sp]V[</el>r]V[l]V[D </root>`,
+      },
+    ],
+    [
+      "#fullExample: Should apply all rules from default, override and elements as well as texts.",
+      {
+        default: {
+          text: {
+            toData: reverseText,
+            toView: reverseText,
+          },
+          elements: {
+            el: {
+              toData: (p) => p.node.name = "data",
+              toView: {
+                data: (p) => p.node.name = "view",
+              },
+            },
+          }
+        },
+        config: {
+          text: (p) => {
+            p.parentRule(p);
+            p.node.textContent = p.node.textContent.split(/[aeiou]/i).join("V");
+          },
+          elements: {
+            el: {
+              toData: (p) => {
+                p.parentRule(p);
+                p.node.attributes["as"] = "data";
+              },
+              toView: {
+                data: (p) => {
+                  p.parentRule(p);
+                  p.node.attributes["as"] = "view";
+                },
+              },
+            },
+          }
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: `<root> mVrVL<data as="data">mVspV</data>rVlVD </root>`,
+        view: `<root>LVrVm <view as="view">VpsVm</view> DVlVr</root>`,
+      },
+    ],
   ];
 
-  test.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
+  describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
+
+    if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
+      test.todo(`${name} (disabled by test selector for debugging purpose)`);
+      return;
+    }
+
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const defaultConfig: FilterRuleSetConfiguration = testData.default;
     const config: FilterRuleSetConfiguration = testData.config;
@@ -313,13 +479,19 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     toDataFilter.applyTo(from.documentElement);
 
     const dataXml: string = serializer.serializeToString(from.documentElement);
-    expect(dataXml).toEqualXML(testData.data);
+
+    test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
+      expect(dataXml).toEqualXML(testData.data);
+    });
 
     const data: Document = parser.parseFromString(dataXml, "text/xml");
 
     toViewFilter.applyTo(data.documentElement);
 
     const viewXml: string = serializer.serializeToString(data.documentElement);
-    expect(viewXml).toEqualXML(testData.view);
+
+    test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
+      expect(viewXml).toEqualXML(testData.view);
+    });
   });
 });
