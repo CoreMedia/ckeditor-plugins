@@ -3,16 +3,17 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
+import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import RichTextSchema from "./RichTextSchema";
-import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
+import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "./CoreMediaRichTextConfig";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
+import ToDataProcessor from "./ToDataProcessor";
 
 export default class RichTextDataProcessor implements DataProcessor {
   private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -21,7 +22,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   private readonly _richTextXmlWriter: RichTextXmlWriter;
   private readonly _htmlWriter: HtmlWriter;
 
-  private readonly _toDataFilter: HtmlFilter;
+  private readonly _toDataProcessor: ToDataProcessor;
   private readonly _toViewFilter: HtmlFilter;
 
   private readonly _richTextSchema: RichTextSchema;
@@ -45,8 +46,8 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     this._richTextSchema = schema;
 
-    this._toDataFilter = new HtmlFilter(toData, editor);
     this._toViewFilter = new HtmlFilter(toView, editor);
+    this._toDataProcessor = new ToDataProcessor(new HtmlFilter(toData, editor));
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -54,7 +55,15 @@ export default class RichTextDataProcessor implements DataProcessor {
     this._domConverter.registerRawContentMatcher(pattern);
   }
 
+  /**
+   * Exposes the richtext schema indirectly to the filters. It will be accessed
+   * via the data processor property of the editor.
+   */
   get richTextSchema(): RichTextSchema {
+    // For testing purpose: CoreMediaRichTextConfig contains a fallback, which
+    // is to use the RichTextSchema with Strict mode. This should be sufficient
+    // for testing, so that it should not be necessary to mock this call during
+    // tests.
     return this._richTextSchema;
   }
 
@@ -69,7 +78,27 @@ export default class RichTextDataProcessor implements DataProcessor {
   toData(viewFragment: ViewDocumentFragment): string {
     const startTimestamp = performance.now();
 
-    const richTextDocument = RichTextDataProcessor.createCoreMediaRichTextDocument();
+    const { richTextDocument, domFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
+    const xml = this.toDataInternal(domFragment, richTextDocument);
+    this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
+      in: fragmentAsStringForDebugging,
+      out: xml,
+    });
+
+    return xml;
+  }
+
+  /**
+   * Prepares toData transformation.
+   *
+   * @param viewFragment view fragment to transform
+   * @return `richTextDocument` the (empty) document which shall receive the transformed data;
+   * `domFragment` the view DOM structure to transform;
+   * `fragmentAsStringForDebugging` some representation of `domFragment` to be used for debugging - it will only
+   * be initialized, if debug logging is turned on.
+   */
+  initToData(viewFragment: ViewDocumentFragment): { richTextDocument: Document, domFragment: Node | DocumentFragment, fragmentAsStringForDebugging: string } {
+    const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
     // We use the RichTextDocument at this early stage, so that all created elements
     // already have the required namespace. This eases subsequent processing.
     const domFragment: Node | DocumentFragment = this._domConverter.viewToDom(viewFragment, richTextDocument);
@@ -84,49 +113,36 @@ export default class RichTextDataProcessor implements DataProcessor {
         domAsString: fragmentAsStringForDebugging,
       });
     }
-
-    richTextDocument.documentElement.appendChild(domFragment);
-
-    const doc = this.toCoreMediaRichTextXml(richTextDocument);
-    const xml: string = this._richTextXmlWriter.getXml(doc);
-
-    if (this.logger.isDebugEnabled()) {
-      this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
-        in: fragmentAsStringForDebugging,
-        out: xml,
-      });
-    }
-    return xml;
+    return {
+      richTextDocument: richTextDocument,
+      domFragment: domFragment,
+      fragmentAsStringForDebugging: fragmentAsStringForDebugging,
+    };
   }
 
+  /**
+   * Internal `toData` transformation, especially meant for testing purpose.
+   *
+   * @param fromView the fragment created from view
+   * @param targetDocument the target document which will get the elements added
+   * and will be transformed according to the rules
+   * @return the transformed CoreMedia RichText XML
+   */
+  toDataInternal(fromView: Node | DocumentFragment,
+                 targetDocument?: Document): string {
+    const dataDocument = this._toDataProcessor.toData(fromView, targetDocument);
+    return this._richTextXmlWriter.getXml(dataDocument);
+  }
+
+  /**
+   * Transform a fragment into an HTML string for debugging purpose.
+   * @param domFragment fragment to transform
+   * @private
+   */
   private fragmentToString(domFragment: Node | DocumentFragment): string {
     return Array.from(domFragment.childNodes)
       .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
       .reduce((result, s) => (result || "") + (s || "")) || "";
-  }
-
-  /**
-   * Transforms the given document to valid CoreMedia RichText. It is expected,
-   * that the document already got created with corresponding namespace.
-   *
-   * Visible for testing only.
-   *
-   * @param document the yet unprocessed document
-   */
-  toCoreMediaRichTextXml(document: Document): Document {
-    // TODO[cke] In CKEditor 4 we ALWAYS added the XLINK Namespace, even if no links were contained.
-    //   We may require to reintroduce it, possibly by "legacy behavior" configuration option.
-    //container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", XLINK_NAMESPACE);
-
-    this._toDataFilter.applyTo(document.documentElement);
-    return document;
-  }
-
-  static createCoreMediaRichTextDocument(): Document {
-    const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
-    const pi = doc.createProcessingInstruction("xml", 'version="1.0" encoding="utf-8"');
-    doc.insertBefore(pi, doc.firstChild);
-    return doc;
   }
 
   toView(data: string): ViewDocumentFragment | null {
@@ -160,7 +176,7 @@ export default class RichTextDataProcessor implements DataProcessor {
  *
  * @param xml XML to parse.
  */
-export function declareCoreMediaRichText10Entities(xml: string):string {
+export function declareCoreMediaRichText10Entities(xml: string): string {
   if (!xml) {
     return xml;
   }
@@ -173,7 +189,8 @@ export function declareCoreMediaRichText10Entities(xml: string):string {
   return `${preamble}<!DOCTYPE div [${COREMEDIA_RICHTEXT_1_0_DTD}]>${remainingXml}`;
 }
 
-export const COREMEDIA_RICHTEXT_1_0_DTD=`
+// noinspection SpellCheckingInspection
+export const COREMEDIA_RICHTEXT_1_0_DTD = `
   <!ENTITY nbsp   "&#160;">
   <!ENTITY iexcl  "&#161;">
   <!ENTITY cent   "&#162;">
