@@ -71,31 +71,29 @@ The following modes exist:
 
 * **`STRICT` enforces completely valid CoreMedia RichText 1.0.**
 
-    In addition to `LOOSE` it will check for _meant to be_, such as a
-    type called `Number` which states to be numbers only, but regarding the
-    schema allows any (unchecked) character data. For `STRICT`
-    non-numbers will be rated invalid.
+  In addition to `LOOSE` it will check for _meant to be_, such as a type
+  called `Number` which states to be numbers only, but regarding the schema
+  allows any (unchecked) character data. For `STRICT`
+  non-numbers will be rated invalid.
 
 * **`LOOSE` will only check, what the scheme will detect.**
 
-    Given the example about numbers for `STRICT` mode, `LOOSE` will cause to
-    accept any character data.
+  Given the example about numbers for `STRICT` mode, `LOOSE` will cause to
+  accept any character data.
 
-    This is the safest mode to use, when dealing with legacy contents, as
-    for example number attributes may contain non-numbers and still passed
-    the DTD validation.
+  This is the safest mode to use, when dealing with legacy contents, as for
+  example number attributes may contain non-numbers and still passed the DTD
+  validation.
 
 * **`LEGACY` simulates the CKEditor 4 RichText Data Processing Behavior.**
 
-    For CKEditor 4 the CoreMedia RichText data processing did not check
-    for valid attribute values. It only checked for valid and required
-    attribute names.
+  For CKEditor 4 the CoreMedia RichText data processing did not check for valid
+  attribute values. It only checked for valid and required attribute names.
 
-    If your extensions towards CKEditor 4 requires this behavior, you may
-    enable this legacy mode. Note though, that the generated XML may be
-    invalid regarding CoreMedia RichText 1.0 DTD. Most likely, you used
-    this approach storing data into a content property having a different
-    grammar.
+  If your extensions towards CKEditor 4 requires this behavior, you may enable
+  this legacy mode. Note though, that the generated XML may be invalid regarding
+  CoreMedia RichText 1.0 DTD. Most likely, you used this approach storing data
+  into a content property having a different grammar.
 
 #### Example Configuration
 
@@ -111,15 +109,15 @@ ClassicEditor.create(document.querySelector('.editor'), {
 }
 ```
 
-### Data Processing Rules
+### Data Processing Rules for Elements
 
 As soon as you add a plugin, which supports an additional markup, you most
 likely need to adapt data processing, i.e., transformation between CKEditor's
 HTML and CoreMedia RichText 1.0.
 
-The [Highlight Plugin][highlight] for example adds a [`<mark>`][mark] element
-to HTML, which is not supported by CoreMedia RichText 1.0. You now have to
-model two mappings:
+The [Highlight Plugin][highlight] for example adds a [`<mark>`][mark] element to
+HTML, which is not supported by CoreMedia RichText 1.0. You now have to model
+two mappings:
 
 1. **toData:** from HTML to CoreMedia RichText 1.0, and
 2. **toView:** from CoreMedia RichText 1.0 to HTML.
@@ -129,13 +127,13 @@ mapping:
 
 1. **toData:**
 
-    * from: `<mark class="marker-green">highlighted</mark>`
-    * to: `<span class="mark--marker-green">highlighted</span>`
+* from: `<mark class="marker-green">highlighted</mark>`
+* to: `<span class="mark--marker-green">highlighted</span>`
 
 2. **toView:**
 
-    * from: `<span class="mark--marker-green">highlighted</span>`
-    * to: `<mark class="marker-green">highlighted</mark>`
+* from: `<span class="mark--marker-green">highlighted</span>`
+* to: `<mark class="marker-green">highlighted</mark>`
 
 As configuration:
 
@@ -167,7 +165,8 @@ ClassicEditor.create(document.querySelector('.editor'), {
           },
         },
       },
-    }  },
+    }
+  },
 }
 ```
 
@@ -191,7 +190,8 @@ mark: {
     params.node.attributes["class"] = `mark--${originalClass}`;
     params.node.name = "span";
   },
-},
+}
+,
 ```
 
 You define a mapping function, which receives `ElementFilterParams` as input.
@@ -200,18 +200,18 @@ The interface knows the following properties:
 * **node:** Access to the DOM node to map, represented as `ElementProxy`.
 
 * **parentRule:** A possibly existing parent rule. Especially, when dealing with
-    elements, which are already mapped by default (such as heading elements),
-    you may (or may not) call the parent rule:
+  elements, which are already mapped by default (such as heading elements), you
+  may (or may not) call the parent rule:
 
     ```javascript
     params.parentRule(params);
     ```
 
-    If not calling this rule, it will just override any possibly existing
-    default configuration.
+  If not calling this rule, it will just override any possibly existing default
+  configuration.
 
 * **editor:** The CKEditor instance. This may be used, for example, to access
-    the configuration of this CKEditor instance.
+  the configuration of this CKEditor instance.
 
 The `toView` handling is slightly more challenging to implement. This is,
 because it is typical, that there are multiple element mappings for `<span>`
@@ -231,7 +231,8 @@ toView: {
       params.node.attributes["class"] = match[1];
     }
   },
-},
+}
+,
 ```
 
 As you see, it is checked, if the "marker" class is actually set, and if the
@@ -239,13 +240,43 @@ rule should feel responsible.
 
 Again, you may call `params.parentRule(params);`. But, in contrast to the
 `toData` mapping you cannot block all transformations of `<span>` elements
-originating from CoreMedia RichText. This is because configuration parsing
-is context-sensitive:
+originating from CoreMedia RichText. This is because configuration parsing is
+context-sensitive:
 
 > The parent rule will only contain those `toView` mappings, which registered
 > before as part of the `toData` mapping of the `<mark>` element.
 
 All other mappings `toView` for `<span>` are handled independent of this rule.
 
+### Data Processing Rules for Text
+
+Similar to elements you may also add data processing rules for text nodes with a
+similar configuration.
+
+```typescript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    rules: {
+      elements: { /* ... */ },
+      text: {
+        toData: (params) => {
+          params.parentRule(params);
+          params.node.textContent = "data";
+        },
+        toView: (params) => {
+          params.parentRule(params);
+          params.node.textContent = "view";
+        },
+      },
+    },
+  }
+});
+```
+
 [highlight]: <https://ckeditor.com/docs/ckeditor5/latest/features/highlight.html> "Highlight - CKEditor 5 Documentation"
+
 [mark]: <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark> "<mark>: The Mark Text element - HTML: HyperText Markup Language | MDN"
