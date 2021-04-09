@@ -186,6 +186,20 @@ export default class NodeProxy<N extends Node = Node> {
    * It is important to note, that setting this modifies the
    * {@link NodeProxy#state}, thus setting this overrides any other decisions
    * upon the state of the node.
+   * <p>
+   * <strong>Duplicate Spaces:</strong> If you apply this modification, it may
+   * end up having duplicate space characters in your DOM. For example if
+   * removing the `<el>` element (and all its children) in this scenario:
+   * <pre>
+   * <parent>Lorem <el>Ipsum</el> Dolor</parent>
+   * </pre>
+   * you will end up having:
+   * <pre>
+   * <parent>Lorem  Dolor</parent>
+   * </pre>
+   * with two white space characters in the middle. You may want to detect such
+   * states, and remove the duplicate space. You shouldn't do this, though, if
+   * you are within a space preserving context such as `<pre>`.
    */
   public set remove(remove: boolean) {
     this.requireMutable();
