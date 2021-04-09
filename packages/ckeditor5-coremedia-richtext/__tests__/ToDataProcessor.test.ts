@@ -26,9 +26,12 @@ const FIBONACCI_INDEX_FROM = 1;
  * <li>8 = 34</li>
  * <li>9 = 55</li>
  * <li>10 = 89</li>
+ * <li>11 = 144</li>
+ * <li>12 = 233</li>
+ * <li>13 = 377</li>
  * </ol>
  */
-const FIBONACCI_INDEX_TO = 1;
+const FIBONACCI_INDEX_TO = 2;
 
 // https://medium.com/developers-writing/fibonacci-sequence-algorithm-in-javascript-b253dc7e320e
 function fib(idx: number, memo?: Map<number, number>): number {
@@ -112,6 +115,13 @@ function wrapView(xml: string): string {
 function median(sequence: number[]): number {
   sequence.sort();
   return sequence[Math.ceil(sequence.length / 2)];
+}
+
+// https://stackoverflow.com/questions/7343890/standard-deviation-javascript
+function standardDeviation (sequence: number[]): number {
+  const n = sequence.length
+  const mean = sequence.reduce((a, b) => a + b) / n;
+  return Math.sqrt(sequence.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 }
 
 const blockquoteFixtures: string[] = [
@@ -295,10 +305,11 @@ describe("RichTextDataProcessor.toData", () => {
       }
 
       const actualTime = median(measuredMilliseconds);
+      const stddev = standardDeviation(measuredMilliseconds);
       const minTime = Math.min(...measuredMilliseconds);
       const maxTime = Math.max(...measuredMilliseconds);
 
-      console.log(`${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(1)} ms vs. allowed ${maximumMilliseconds.toFixed(1)} ms. (min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`);
+      console.log(`${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(1)} ms vs. allowed ${maximumMilliseconds > 0 ? maximumMilliseconds.toFixed(1) : "<unlimited>"} ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`);
 
       if (maximumMilliseconds >= 0) {
         // Otherwise we just measure.
