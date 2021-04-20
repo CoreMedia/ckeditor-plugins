@@ -1,6 +1,6 @@
 # CKEditor 5: DataProcessor Support
 
-In CKEditor 4 a central part of the mapping architecture where HTML filters and
+In CKEditor 4 a central part of the mapping architecture were HTML filters and
 data filters
 (see
 [Class HtmlDataProcessor (CKEDITOR.htmlDataProcessor)](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_htmlDataProcessor.html)
