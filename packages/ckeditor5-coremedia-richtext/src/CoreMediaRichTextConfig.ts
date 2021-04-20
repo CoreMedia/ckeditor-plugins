@@ -277,8 +277,8 @@ export function getConfig(config?: CKEditorConfig): ParsedConfig {
   const schema = new RichTextSchema(customConfig.strictness || Strictness.STRICT);
 
   return {
-    toData: toData,
-    toView: toView,
-    schema: schema,
+    toData,
+    toView,
+    schema,
   };
 }
