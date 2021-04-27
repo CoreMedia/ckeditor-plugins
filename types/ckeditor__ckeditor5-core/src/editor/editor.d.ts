@@ -10,6 +10,7 @@ import Plugin from "../plugin";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import CommandCollection from "../commandcollection";
+import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 
 export default class Editor implements Emitter, Observable {
   readonly commands: CommandCollection;
@@ -18,6 +19,7 @@ export default class Editor implements Emitter, Observable {
   readonly editing: EditingController;
   isReadOnly: boolean;
   readonly locale: Locale;
+  readonly model: Model;
   readonly plugins: PluginCollection<Plugin<any>>;
 
   static builtinPlugins: Array<Plugin<any>>;

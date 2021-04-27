@@ -381,6 +381,11 @@ See Also
     An example implementation customizing link UI for internal links with
     custom protocol.
 
+* [How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow][so:cke5:target]
+
+    A good step-by-step guide describing the model-view design for `target`
+    attributes. Skips the UI-part, though.
+
 <!-- ======================================================== [ References ] -->
 
 [cke5:docs:link:feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/link.html> "Link - CKEditor 5 Documentation"
@@ -389,6 +394,7 @@ See Also
 [cke5:issues:6436]: <https://github.com/ckeditor/ckeditor5/issues/6436> "Link Decorators: NoFollow not being added, creates 2 separate links · Issue #6436 · ckeditor/ckeditor5"
 [mdn:xlink:show]: <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/xlink:show> "xlink:show - SVG: Scalable Vector Graphics | MDN"
 [mdn:xlink]: <https://developer.mozilla.org/en-US/docs/Glossary/XLink> "XLink - MDN Web Docs Glossary: Definitions of Web-related terms | MDN"
+[so:cke5:target]: <https://stackoverflow.com/questions/51303892/how-to-add-target-attribute-to-a-tag-in-ckeditor5> "How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow"
 [rexlink]: <https://github.com/basecondition/ckeditor5-rexlink> "basecondition/ckeditor5-rexlink: This ckeditor5 plugin provide for redaxo internal- and media-links"
 [w3:xlink]: <https://www.w3.org/TR/xlink/> "XML Linking Language (XLink) Version 1.1"
 [w3:IRI]: <https://www.w3.org/TR/leiri/> "Legacy extended IRIs for XML resource identification"
