@@ -30,6 +30,7 @@
     "packages/ckeditor5-dataprocessor-support",
     "packages/ckeditor5-symbol-on-paste-mapper",
     "packages/ckeditor5-coremedia-richtext",
+    "packages/ckeditor5-link",
     "app"
   ],
   "scripts": {

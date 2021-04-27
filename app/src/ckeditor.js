@@ -8,6 +8,7 @@ import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
@@ -25,6 +26,7 @@ import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-m
 import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
 import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
 import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
+import LinkBehaviors from "@coremedia/ckeditor5-link/LinkBehaviors";
 
 import {setupPreview, updatePreview} from './preview'
 
@@ -54,7 +56,9 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Highlight,
     Indent,
     Italic,
+    AutoLink,
     Link,
+    LinkBehaviors,
     List,
     Paragraph,
     PasteFromOffice,
@@ -108,6 +112,45 @@ ClassicEditor.create(document.querySelector('.editor'), {
       {model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6'},
     ]
   },
+  link: {
+    defaultProtocol: 'https://',
+    decorators: {
+      targetNew: {
+        mode: 'manual',
+        label: 'Open in New Window',
+        defaultValue: true,
+        attributes: {
+          target: '_blank',
+          "xlink:show": 'new',
+        },
+      },
+      targetCurrent: {
+        mode: 'manual',
+        label: 'Open in Current Window',
+        attributes: {
+          target: '_top',
+          "xlink:show": 'replace',
+        },
+      },
+      embed: {
+        mode: 'manual',
+        label: 'Show Embedded',
+        attributes: {
+          target: 'embed',
+          "xlink:show": 'embed',
+        },
+      },
+      targetOther: {
+        mode: 'manual',
+        label: 'Other',
+        attributes: {
+          target: 'other',
+          "xlink:show": 'other',
+          "xlink:role": 'custom',
+        },
+      },
+    },
+  },
   table: {
     contentToolbar: [
       'tableColumn',
@@ -117,7 +160,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
   },
   language: 'en',
   autosave: {
-    waitingTime: 5000, // in ms
+    waitingTime: 2000, // in ms
     save(editor) {
       console.log("Save triggered...");
       const start = performance.now();
@@ -166,6 +209,8 @@ ClassicEditor.create(document.querySelector('.editor'), {
   if (wantsInspector) {
     CKEditorInspector.attach(editor);
   }
+  window['editor'] = editor;
+  console.log("Exposed editor instance as `editor`:", editor);
 }).catch(error => {
   console.error(error);
 });

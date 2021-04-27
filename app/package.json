@@ -25,6 +25,7 @@
     "@ckeditor/ckeditor5-theme-lark": "^24.0.0",
     "@ckeditor/ckeditor5-ui": "^24.0.0",
     "@coremedia/ckeditor5-coremedia-richtext": "1.0.0",
+    "@coremedia/ckeditor5-link": "1.0.0",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.0",
     "xml-formatter": "^2.4.0"
   },
