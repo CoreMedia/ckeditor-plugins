@@ -3,6 +3,8 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import ModelElement from "../model/element";
 import ViewElement from "../view/element";
 import { UpcastConversionApi } from "./upcastdispatcher";
+import { MatcherPattern } from "../view/matcher";
+import Element from "../view/element";
 
 /**
  * Upcast conversion helper functions.
@@ -30,8 +32,11 @@ export default class UpcastHelpers extends ConversionHelpers {
   }): UpcastHelpers;
 
   elementToAttribute(config: {
-    model: string | Object,
-    view: any,
+    model: string | {
+      key: string,
+      value: string | ((viewElement: Element, conversionApi: UpcastConversionApi) => string | null),
+    },
+    view: MatcherPattern,
     converterPriority?: PriorityString,
   }): UpcastHelpers;
 

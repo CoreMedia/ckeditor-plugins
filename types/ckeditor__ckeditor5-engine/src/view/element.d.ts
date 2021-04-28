@@ -8,42 +8,54 @@ import { Item } from "./item";
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_element-Element.html">Class Element (engine/view/element~Element) - CKEditor 5 API docs</a>
  */
 export default class Element extends ViewNode {
-  readonly document: ViewDocument;
+  get childCount(): number;
 
-  /**
-   * Returns style value for the given property mae.
-   * If the style does not exist `undefined` is returned.
-   *
-   * @param {String} property
-   * @returns {String|undefined}
-   */
+  get document(): ViewDocument;
+
+  get isEmpty(): boolean;
+
+  get isAllowedInsideAttributeElement(): boolean;
+
+  constructor(document: ViewDocument, name: string, attrs: any, children: Node | Iterable<Node>);
+
+  findAncestor(...patterns: any[]): Element;
+
+  getAttribute(key: string): string | undefined;
+
+  getAttributeKeys(): Iterable<string>;
+
+  getAttributes(): Iterable<any>;
+
+  getChild(index: number): ViewNode;
+
+  getChildIndex(node: ViewNode): number | -1;
+
+  getChildren(): Iterable<ViewNode>;
+
+  getClassNames(): Iterable<string>;
+
+  getCustomProperties(): Iterable<any>;
+
+  getCustomProperty(key: string | Symbol): any;
+
+  getIdentity(): string;
+
+  getNormalizedStyle(property: string): Object | string | undefined;
+
   getStyle(property: string): string | undefined;
 
-  /**
-   * Returns true if style keys are present.
-   * If more then one style property is provided - returns true only when all properties are present.
-   *
-   * @param {...String} property
-   */
+  getStyleNames(): Iterable<string>;
+
+  hasAttribute(key: string): boolean;
+
   hasStyle(...property: string[]): boolean;
+
+  is(type: string, name?: string): boolean;
+
+  isSimilar(otherElement: Element): boolean;
 
   // TODO[cke] This is a protected method! Do we really need to use it?
   _removeStyle(styleName: string | Array<string>): void;
-
-  /**
-   * Gets child nodes iterator.
-   *
-   * @returns {Iterable.<ViewNode>} Child nodes iterator.
-   */
-  getChildren(): Iterable<ViewNode>;
-
-  /**
-   * Gets index of the given child node. Returns `-1` if child node is not found.
-   *
-   * @param {ViewNode} node Child node.
-   * @returns {number} Index of the child node.
-   */
-  getChildIndex(node: ViewNode): number;
 
   // TODO[cke] This is a protected method! Do we really need to use it?
   _insertChild(index: number, items: Item | Iterable<Item>): number;
