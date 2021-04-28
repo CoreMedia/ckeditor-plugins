@@ -116,42 +116,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
   },
   link: {
     defaultProtocol: 'https://',
-    decorators: {
-      targetNew: {
-        mode: 'manual',
-        label: 'Open in New Window',
-        defaultValue: true,
-        attributes: {
-          target: '_blank',
-          "xlink:show": 'new',
-        },
-      },
-      targetCurrent: {
-        mode: 'manual',
-        label: 'Open in Current Window',
-        attributes: {
-          target: '_top',
-          "xlink:show": 'replace',
-        },
-      },
-      embed: {
-        mode: 'manual',
-        label: 'Show Embedded',
-        attributes: {
-          target: 'embed',
-          "xlink:show": 'embed',
-        },
-      },
-      targetOther: {
-        mode: 'manual',
-        label: 'Other',
-        attributes: {
-          target: 'other',
-          "xlink:show": 'other',
-          "xlink:role": 'custom',
-        },
-      },
-    },
   },
   table: {
     contentToolbar: [
