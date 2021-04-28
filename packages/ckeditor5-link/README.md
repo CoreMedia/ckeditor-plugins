@@ -233,7 +233,7 @@ in the following way:
     defined as standard value of `target` but is dedicated to the representation
     as `xlink:show`  within CoreMedia RichText 1.0.
 
-* **`_none`:** Represented as `xlink:show="none"`. Just as `_embed_` this is not
+* **`_none`:** Represented as `xlink:show="none"`. Just as `_embed` this is not
     defined as standard value of `target` but is dedicated to the representation
     as `xlink:show`  within CoreMedia RichText 1.0.
 
@@ -241,14 +241,14 @@ in the following way:
 
 **Special Cases:**
 
-* **`_role_`_any string_:** Special artificial state which is suggested to behave
+* **`_role_<any string>`:** Special artificial state, which is suggested to behave
     similar to _any other string_. It will be represented as
     `xlink:role=any string` without any `xlink:show` attribute. This state is
     required for data consistency, as it is completely valid according to the
     CoreMedia RichText 1.0 DTD only having an `xlink:role` attribute without
     `xlink:show`.
 
-* **`_other`:** Special artificial state which will be stored as
+* **`_other`:** Special artificial state, which will be stored as
    `xlink:show="other"` from CoreMedia RichText 1.0 which comes without
    corresponding `xlink:role` attribute.
 
