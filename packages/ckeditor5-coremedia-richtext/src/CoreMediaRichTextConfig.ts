@@ -154,6 +154,118 @@ const defaultRules: FilterRuleSetConfiguration = {
         schema.adjustAttributes(params.node);
       }
     },
+    a: {
+      toData: (params) => {
+        const href = params.node.attributes["href"];
+        const value = params.node.attributes["target"];
+        // Just ensure, that even no empty target is written.
+        delete params.node.attributes["target"];
+        delete params.node.attributes["href"];
+        if (!href) {
+          // Invalid state: We have an a-element without href which is not
+          // supported by CoreMedia RichText DTD.
+          params.node.replaceByChildren = true;
+          return;
+        }
+        if (!value) {
+          return;
+        }
+        const newAttrs: {
+          show?: string,
+          role?: string,
+        } = {};
+        switch (value.toLowerCase()) {
+          case "_top":
+            newAttrs.show = "replace";
+            break;
+          case "_blank":
+            newAttrs.show = "new";
+            break;
+          case "_embed":
+            newAttrs.show = "embed";
+            break;
+          case "_none":
+            newAttrs.show = "none";
+            break;
+          case "_other":
+            // artificial state, which should not happen (but may happen due to UAPI calls).
+            newAttrs.show = "other";
+            break;
+          default:
+            const roleExpression = /^_role_(.*)/;
+            const roleMatchResult = value.match(roleExpression);
+            if (!!roleMatchResult) {
+              // artificial state, which should not happen (but may happen due to UAPI calls).
+              newAttrs.role = roleMatchResult[0];
+            } else {
+              newAttrs.show = "other";
+              newAttrs.role = value;
+            }
+        }
+        params.node.attributes[href] = href;
+        if (!!newAttrs.show) {
+          params.node.attributes["xlink:show"] = newAttrs.show;
+        }
+        if (!!newAttrs.role) {
+          params.node.attributes["xlink:role"] = newAttrs.role;
+        }
+      },
+      toView: (params) => {
+        const href = params.node.attributes["xlink:href"];
+        const show = params.node.attributes["xlink:show"];
+        const role = params.node.attributes["xlink:role"];
+
+        delete params.node.attributes["xlink:href"];
+        delete params.node.attributes["xlink:show"];
+        delete params.node.attributes["xlink:role"];
+
+        params.node.attributes["href"] = href;
+
+        let target: string = "";
+
+        if (!show) {
+          if (!role) {
+            // No attribute to add. We just don't have any link behavior set.
+            return;
+          }
+          // artificial state, which should not happen (but may happen due to UAPI calls).
+          target = `_role_${role}`;
+        } else {
+          let roleIgnored: boolean = !!role;
+          switch (show.toLowerCase()) {
+            case "replace":
+              target = "_top";
+              break;
+            case "new":
+              target = "_blank";
+              break;
+            case "embed":
+              target = "_embed";
+              break;
+            case "none":
+              target = "_none";
+              break;
+            case "other":
+              if (!role) {
+                target = "_other";
+              } else {
+                target = role;
+                roleIgnored = false;
+              }
+              break;
+            default:
+              console.warn(`Invalid value for xlink:show="${show}". No target attribute will be generated. Node:`, params.node);
+          }
+          if (roleIgnored) {
+            console.warn(`Invalid xlink:role="${role}" for xlink:show="${show}". Role will be ignored. Node:`, params.node);
+          }
+        }
+
+        if (!!target) {
+          params.node.attributes["target"] = target;
+        }
+      },
+    },
     ol: removeInvalidList,
     ul: removeInvalidList,
     p: {
