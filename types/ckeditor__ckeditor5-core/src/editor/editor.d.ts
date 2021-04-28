@@ -11,16 +11,26 @@ import Config from "@ckeditor/ckeditor5-utils/src/config";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import CommandCollection from "../commandcollection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
+import Conversion from "@ckeditor/ckeditor5-engine/src/conversion/conversion";
 
 export default class Editor implements Emitter, Observable {
-  readonly commands: CommandCollection;
-  readonly config: Config;
-  readonly data: DataController;
-  readonly editing: EditingController;
-  isReadOnly: boolean;
-  readonly locale: Locale;
-  readonly model: Model;
-  readonly plugins: PluginCollection<Plugin<any>>;
+  get commands(): CommandCollection;
+
+  get config(): Config;
+
+  get conversion(): Conversion;
+
+  get data(): DataController;
+
+  get editing(): EditingController;
+
+  get isReadOnly(): boolean;
+
+  get locale(): Locale;
+
+  get model(): Model;
+
+  get plugins(): PluginCollection<Plugin<any>>;
 
   static builtinPlugins: Array<Plugin<any>>;
   static defaultConfig: object;
