@@ -11,6 +11,7 @@ import FontMapperProvider from "./fontMapper/FontMapperProvider";
 import FontMapper from "./fontMapper/FontMapper";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import FontMapperPluginConfig from "./FontMapperPluginConfig";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string = "SymbolOnPasteMapper";
@@ -60,7 +61,7 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   // noinspection JSUnusedLocalSymbols
-  private static handleClipboardInputTransformationEvent(eventInfo: never, data: ClipboardEventData): void {
+  private static handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardEventData): void {
     const pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);
     const eventContent: DocumentFragment = data.content;
     if (!pastedContent) {

@@ -1,4 +1,4 @@
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import ViewDocument from "./document"
@@ -16,9 +16,9 @@ export default class View implements Emitter, Observable {
    */
   readonly document: ViewDocument;
 
-  on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
-  once(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   set(name: string | Object, value?: any): void;
 

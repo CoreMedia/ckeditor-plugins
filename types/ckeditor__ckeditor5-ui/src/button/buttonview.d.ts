@@ -1,7 +1,7 @@
 import View from '../view/view';
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 
 /**
@@ -29,9 +29,9 @@ export default class ButtonView extends View implements Emitter, Observable {
 
   focus(): void;
 
-  on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
-  once(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   set(name: string | Object, value?: any): void;
 

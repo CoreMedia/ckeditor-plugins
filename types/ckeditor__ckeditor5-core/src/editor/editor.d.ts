@@ -1,7 +1,7 @@
 import EditingController from "@ckeditor/ckeditor5-engine/src/controller/editingcontroller";
 import DataController from "@ckeditor/ckeditor5-engine/src/controller/datacontroller";
 
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin"
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
@@ -37,9 +37,9 @@ export default class Editor implements Emitter, Observable {
 
   constructor(config?: object);
 
-  on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
-  once(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   set(name: string | Object, value?: any): void;
 

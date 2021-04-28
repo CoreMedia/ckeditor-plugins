@@ -1,4 +1,4 @@
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import ViewDocumentFragment from "../view/documentfragment";
 import ViewElement from "../view/element";
 import Writer from "../model/writer";
@@ -18,9 +18,9 @@ export default class UpcastDispatcher implements Emitter {
 
   convert(viewItem: ViewDocumentFragment | ViewElement, writer: Writer, context?: SchemaContextDefinition): DocumentFragment;
 
-  on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
-  once(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 }
 
 /**

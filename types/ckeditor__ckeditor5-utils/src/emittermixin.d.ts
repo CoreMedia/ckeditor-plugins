@@ -2,6 +2,9 @@
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_emittermixin-Emitter.html">Interface Emitter (utils/emittermixin~Emitter) - CKEditor 5 API docs</a>
  */
 import { PriorityString } from "./priorities";
+import EventInfo from "./eventinfo";
+
+export type CallbackFunction = (evt: EventInfo, ...args: any[]) => void;
 
 export default interface Emitter {
   /**
@@ -14,7 +17,8 @@ export default interface Emitter {
    * the priority value the sooner the callback will be fired. Events having the same priority are called in the
    * order they were added.
    */
-  on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
   /**
    * Registers a callback function to be executed on the next time the event is fired only. This is similar to
    * calling {@link #on} followed by {@link #off} in the callback.
@@ -26,5 +30,5 @@ export default interface Emitter {
    * the priority value the sooner the callback will be fired. Events having the same priority are called in the
    * order they were added.
    */
-  once(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
+  once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 }

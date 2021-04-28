@@ -13,6 +13,4 @@ export default interface Observable extends Emitter {
   bind(...bindProperties: any[]): BindReturnValue;
 
   set(name: string | Object, value?: any): void;
-
-  on(event: string, callback: Function, options?: { priority: PriorityString | number }): void;
 }
