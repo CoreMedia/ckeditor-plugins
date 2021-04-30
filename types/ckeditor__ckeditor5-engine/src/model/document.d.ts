@@ -38,7 +38,7 @@ export default class Document implements Emitter {
 
   getRootNames(): string[];
 
-  registerPostFixer(postFixer: (writer: Writer) => void): void;
+  registerPostFixer(postFixer: (writer: Writer) => void | boolean): void;
 
   toJSON(): Object;
 

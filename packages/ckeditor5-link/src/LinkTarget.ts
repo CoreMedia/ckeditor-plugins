@@ -2,10 +2,8 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
-import UnlinkCommand from "@ckeditor/ckeditor5-link/src/unlinkcommand";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import AttributeOperation from "@ckeditor/ckeditor5-engine/src/model/operation/attributeoperation";
-import Operation from "@ckeditor/ckeditor5-engine/src/model/operation/operation";
+import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 
 export const PLUGIN_NAME = "CoreMediaLinkTarget";
 export const LINK_TARGET_MODEL = "linkTarget";
@@ -33,6 +31,7 @@ export default class LinkTarget extends Plugin {
 
     const editor: Editor = this.editor;
     const model = editor.model;
+    const document = model.document;
 
     // Allow link attribute on all inline nodes.
     model.schema.extend(this.TEXT_NAME, { allowAttributes: LINK_TARGET_MODEL });
@@ -65,12 +64,7 @@ export default class LinkTarget extends Plugin {
       converterPriority: "low",
     });
 
-    model.on("applyOperation",
-      (evt: EventInfo, [operation]) => {
-        if (isRemoveLinkHrefAttribute(operation)) {
-          console.error("Need to remove linkTarget, too!");
-        }
-      });
+    document.registerPostFixer(fixZombieLinkTargetsAfterLinkHrefRemoval);
 
     this.logger.info(`Initialized ${LinkTarget.pluginName} within ${performance.now() - startTimestamp} ms.`);
 
@@ -78,8 +72,45 @@ export default class LinkTarget extends Plugin {
   }
 }
 
-function isRemoveLinkHrefAttribute(operation: unknown): boolean {
-  return operation instanceof AttributeOperation
-    && operation.key === "linkHref"
-    && operation.type === "removeAttribute";
+function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
+  const changes: DiffItemAttribute[] = writer.model.document.differ
+    .getChanges()
+    .filter(isRemoveLinkAttributeDiffItem)
+    .map((c) => <DiffItemAttribute>c);
+  const linkHrefChanges: DiffItemAttribute[] = changes.filter((di) => di.attributeKey === "linkHref");
+
+  // We need to check, if we haven't added required changes yet, because this
+  // post-fixer will be called again in this process (as we return `true` on change.
+  if (changes.length < linkHrefChanges.length * 2) {
+    /*
+     * We have not applied all required attribute removals for linkTarget yet.
+     * Instead of checking for the uncovered ranges, yet, we just add corresponding
+     * removeAttribute calls again.
+     *
+     * It is considered a corner-case unlikely to happen, that someone else despite
+     * us added a removal of linkTarget attributes.
+     */
+    linkHrefChanges.forEach((di) => writer.removeAttribute(LINK_TARGET_MODEL, di.range));
+
+    // True: Re-trigger post-fix mechanism, so others can get aware of our changes.
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Checks, if this diff item represents a change regarding removal of
+ * linkHref or linkTarget attribute.
+ *
+ * @param diffItem item to check
+ */
+function isRemoveLinkAttributeDiffItem(diffItem: DiffItem): boolean {
+  if (diffItem.type !== "attribute") {
+    return false;
+  }
+  const diffItemAttribute: DiffItemAttribute = <DiffItemAttribute>diffItem;
+  return (
+    (diffItemAttribute.attributeKey === "linkHref" || diffItemAttribute.attributeKey === LINK_TARGET_MODEL) &&
+    !diffItemAttribute.attributeNewValue
+  );
 }
