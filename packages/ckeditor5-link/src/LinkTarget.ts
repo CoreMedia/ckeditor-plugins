@@ -3,7 +3,9 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import UnlinkCommand from "@ckeditor/ckeditor5-link/src/unlinkcommand";
-import EventInfo from "@types/ckeditor__ckeditor5-utils/src/eventinfo";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import AttributeOperation from "@ckeditor/ckeditor5-engine/src/model/operation/attributeoperation";
+import Operation from "@ckeditor/ckeditor5-engine/src/model/operation/operation";
 
 export const PLUGIN_NAME = "CoreMediaLinkTarget";
 export const LINK_TARGET_MODEL = "linkTarget";
@@ -20,7 +22,7 @@ export default class LinkTarget extends Plugin {
   private readonly logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
   private readonly TEXT_NAME = "$text";
 
-  static get requires(): Array<new(editor: Editor) => Plugin> {
+  static get requires(): Array<new (editor: Editor) => Plugin> {
     return [LinkEditing];
   }
 
@@ -63,14 +65,21 @@ export default class LinkTarget extends Plugin {
       converterPriority: "low",
     });
 
-    const unlinkCommand: UnlinkCommand | undefined= editor.commands.get("unlink");
-
-    unlinkCommand?.on("execute", () => {
-      // TODO[cke] Remove linkTarget attribute
-    });
+    model.on("applyOperation",
+      (evt: EventInfo, [operation]) => {
+        if (isRemoveLinkHrefAttribute(operation)) {
+          console.error("Need to remove linkTarget, too!");
+        }
+      });
 
     this.logger.info(`Initialized ${LinkTarget.pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
   }
+}
+
+function isRemoveLinkHrefAttribute(operation: unknown): boolean {
+  return operation instanceof AttributeOperation
+    && operation.key === "linkHref"
+    && operation.type === "removeAttribute";
 }
