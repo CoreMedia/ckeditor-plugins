@@ -7,8 +7,8 @@ import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/mode
 
 export const PLUGIN_NAME = "CoreMediaLinkTarget";
 export const LINK_TARGET_MODEL = "linkTarget";
+export const LINK_TARGET_VIEW = "target";
 
-const LINK_TARGET_VIEW = "target";
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
  * as `target` attribute in view.
@@ -24,6 +24,10 @@ export default class LinkTarget extends Plugin {
     return [LinkEditing];
   }
 
+  /**
+   * Defines `linkTarget` model-attribute which is represented on downcast
+   * (to data and for editing) as `target` attribute.
+   */
   init(): Promise<void> | null {
     const startTimestamp = performance.now();
 
@@ -36,6 +40,7 @@ export default class LinkTarget extends Plugin {
     // Allow link attribute on all inline nodes.
     model.schema.extend(this.TEXT_NAME, { allowAttributes: LINK_TARGET_MODEL });
 
+    // Downcast: Model -> Output (Data & Editing)
     // Create element with target attribute. Element will be merged with
     // a-Element created by Link plugin.
     editor.conversion.for("downcast").attributeToElement({
@@ -48,6 +53,7 @@ export default class LinkTarget extends Plugin {
       converterPriority: "low",
     });
 
+    // Upcast: Input (Data & Editing) -> Model
     // Take the view target-attribute of a-element and transform it to
     // linkTarget attribute in model.
     editor.conversion.for("upcast").elementToAttribute({
@@ -72,6 +78,19 @@ export default class LinkTarget extends Plugin {
   }
 }
 
+/**
+ * This function ensures, that no `linkTarget` attribute is kept, when the editor
+ * actually asked to remove a link by `UnlinkCommand. This function is meant
+ * to be used as so-called <em>>post-fixer</em>, which is, to fix a now considered
+ * invalid state of the model.
+ *
+ * Having a post-fixer instead of a listener to the execution of the
+ * Unlink-Command not only correctly handles the undo/redo-state, it is also
+ * independent for any other possibly custom actions dealing with the `linkHref`
+ * attribute.
+ *
+ * @param writer
+ */
 function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
   const changes: DiffItemAttribute[] = writer.model.document.differ
     .getChanges()
@@ -79,8 +98,14 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
     .map((c) => <DiffItemAttribute>c);
   const linkHrefChanges: DiffItemAttribute[] = changes.filter((di) => di.attributeKey === "linkHref");
 
-  // We need to check, if we haven't added required changes yet, because this
-  // post-fixer will be called again in this process (as we return `true` on change.
+  /*
+   * We need to check, if we haven't added required changes yet, because this
+   * post-fixer will be called again in this process (as we return `true` on change.
+   *
+   * This check may be too naive, as it doesn't check, if a given range is possibly
+   * already covered by corresponding `linkTarget` removal. If we require more
+   * sophisticated checks here, ranges must be compared.
+   */
   if (changes.length < linkHrefChanges.length * 2) {
     /*
      * We have not applied all required attribute removals for linkTarget yet.
@@ -100,7 +125,9 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
 
 /**
  * Checks, if this diff item represents a change regarding removal of
- * linkHref or linkTarget attribute.
+ * linkHref or linkTarget attribute. We require both attribute changes in order
+ * to see, if all removals of `linkHref` are represented by corresponding
+ * removals of `linkTarget` in next stage.
  *
  * @param diffItem item to check
  */
