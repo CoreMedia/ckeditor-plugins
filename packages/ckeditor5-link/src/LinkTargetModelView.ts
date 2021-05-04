@@ -3,6 +3,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
+import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 
 export const LINK_TARGET_MODEL = "linkTarget";
 export const LINK_TARGET_VIEW = "target";
@@ -86,21 +87,20 @@ export default class LinkTargetModelView extends Plugin {
  * @param writer
  */
 function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
-  const changes: DiffItemAttribute[] = writer.model.document.differ
+  const model = writer.model;
+  const changes: DiffItemAttribute[] = model.document.differ
     .getChanges()
     .filter(isRemoveLinkAttributeDiffItem)
     .map((c) => <DiffItemAttribute>c);
   const linkHrefChanges: DiffItemAttribute[] = changes.filter((di) => di.attributeKey === "linkHref");
+  const linkHrefRanges: Range[] = linkHrefChanges.map((di) => di.range);
 
   /*
    * We need to check, if we haven't added required changes yet, because this
-   * post-fixer will be called again in this process (as we return `true` on change.
-   *
-   * This check may be too naive, as it doesn't check, if a given range is possibly
-   * already covered by corresponding `linkTarget` removal. If we require more
-   * sophisticated checks here, ranges must be compared.
+   * post-fixer will be called again in this process (as we return `true` on change).
    */
-  if (changes.length < linkHrefChanges.length * 2) {
+  if (changes.length <= linkHrefChanges.length) {
+    const operationsBefore = writer.batch.operations.length;
     /*
      * We have not applied all required attribute removals for linkTarget yet.
      * Instead of checking for the uncovered ranges, yet, we just add corresponding
@@ -109,7 +109,15 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
      * It is considered a corner-case unlikely to happen, that someone else despite
      * us added a removal of linkTarget attributes.
      */
-    linkHrefChanges.forEach((di) => writer.removeAttribute(LINK_TARGET_MODEL, di.range));
+    linkHrefRanges.forEach((r) => writer.removeAttribute(LINK_TARGET_MODEL, r));
+
+    const operationsAfter = writer.batch.operations.length;
+
+    if (operationsBefore === operationsAfter) {
+      // There was no linkTarget attribute to remove. Thus, we signal, that nothing
+      // has changed.
+      return false;
+    }
 
     // True: Re-trigger post-fix mechanism, so others can get aware of our changes.
     return true;

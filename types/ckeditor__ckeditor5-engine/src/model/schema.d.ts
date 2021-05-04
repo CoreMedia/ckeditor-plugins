@@ -5,6 +5,7 @@ import Node from "./node";
 import Position from "./position";
 import Element from "./element";
 import { Item } from "./item";
+import Range from "./range";
 
 
 /**
@@ -36,6 +37,8 @@ export default class Schema implements Emitter, Observable {
   getAttributeProperties(attributeName: string): AttributeProperties;
 
   getDefinition(item: Item | SchemaContextItem | string): SchemaCompiledItemDefinition;
+
+  getValidRanges(ranges: Array<Range>, attribute: string): Iterable<Range>;
 
   register(itemName: string, definition: SchemaItemDefinition): void;
 
