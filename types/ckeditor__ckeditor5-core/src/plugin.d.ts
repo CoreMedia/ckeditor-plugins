@@ -12,7 +12,16 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 
   constructor(editor: Editor);
 
+  destroy?(): null | Promise<any>;
+
   init?(): null | Promise<T>;
+
+  listenTo(
+    emitter: Emitter,
+    event: string,
+    callback: CallbackFunction,
+    options?: { priority?: number | PriorityString },
+  ): void;
 
   afterInit?(): null | Promise<T>;
 

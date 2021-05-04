@@ -1,4 +1,4 @@
-import View from '../view/view';
+import View from '../view';
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";

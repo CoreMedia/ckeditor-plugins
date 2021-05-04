@@ -1,4 +1,4 @@
-import View from "@ckeditor/ckeditor5-ui/src/view/view";
+import View from "@ckeditor/ckeditor5-ui/src/view";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import LinkCommand from "../linkcommand";

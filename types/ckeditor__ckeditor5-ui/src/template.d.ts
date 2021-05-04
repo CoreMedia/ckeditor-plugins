@@ -1,7 +1,7 @@
 /**
  * A basic Template class.
  */
-import View from "./view/view";
+import View from "./view";
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 

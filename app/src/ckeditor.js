@@ -26,7 +26,6 @@ import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-m
 import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
 import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
 import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
-import LinkBehaviors from "@coremedia/ckeditor5-link/LinkBehaviors";
 import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
 
 import {setupPreview, updatePreview} from './preview'
@@ -59,7 +58,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Italic,
     AutoLink,
     Link,
-    LinkBehaviors,
     LinkTarget,
     List,
     Paragraph,
