@@ -116,6 +116,15 @@ ClassicEditor.create(document.querySelector('.editor'), {
   },
   link: {
     defaultProtocol: 'https://',
+    disabled_decorators: {
+      hasTitle: {
+        mode: 'manual',
+        label: 'Title',
+        attributes: {
+          title: 'Example how standard-decorators of the link-plugin works. To enable/disable, just rename decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
+        },
+      }
+    },
   },
   table: {
     contentToolbar: [
