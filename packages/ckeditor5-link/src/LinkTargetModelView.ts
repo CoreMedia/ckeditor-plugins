@@ -3,7 +3,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 
 export const LINK_TARGET_MODEL = "linkTarget";
 export const LINK_TARGET_VIEW = "target";
