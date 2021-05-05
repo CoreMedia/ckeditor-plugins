@@ -90,56 +90,44 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
   const model = writer.model;
   const changes: DiffItemAttribute[] = model.document.differ
     .getChanges()
-    .filter(isRemoveLinkAttributeDiffItem)
+    .filter(isRemoveLinkHrefAttributeDiffItem)
     .map((c) => <DiffItemAttribute>c);
-  const linkHrefChanges: DiffItemAttribute[] = changes.filter((di) => di.attributeKey === "linkHref");
-  const linkHrefRanges: Range[] = linkHrefChanges.map((di) => di.range);
+
+  // Workaround for missing feature ckeditor/ckeditor5#9627
+  const operationsBefore = writer.batch.operations.length;
+  /*
+   * We have not applied all required attribute removals for linkTarget yet.
+   * Instead of checking for the uncovered ranges, yet, we just add corresponding
+   * removeAttribute calls again.
+   */
+  changes.forEach((diffItem) => writer.removeAttribute(LINK_TARGET_MODEL, diffItem.range));
+
+  const operationsAfter = writer.batch.operations.length;
 
   /*
-   * We need to check, if we haven't added required changes yet, because this
-   * post-fixer will be called again in this process (as we return `true` on change).
+   * If there were no (more) linkTarget attributes to remove, `removeAttribute`
+   * would not have added any more operations.
    */
-  if (changes.length <= linkHrefChanges.length) {
-    const operationsBefore = writer.batch.operations.length;
-    /*
-     * We have not applied all required attribute removals for linkTarget yet.
-     * Instead of checking for the uncovered ranges, yet, we just add corresponding
-     * removeAttribute calls again.
-     *
-     * It is considered a corner-case unlikely to happen, that someone else despite
-     * us added a removal of linkTarget attributes.
-     */
-    linkHrefRanges.forEach((r) => writer.removeAttribute(LINK_TARGET_MODEL, r));
-
-    const operationsAfter = writer.batch.operations.length;
-
-    if (operationsBefore === operationsAfter) {
-      // There was no linkTarget attribute to remove. Thus, we signal, that nothing
-      // has changed.
-      return false;
-    }
-
-    // True: Re-trigger post-fix mechanism, so others can get aware of our changes.
-    return true;
+  if (operationsBefore === operationsAfter) {
+    // We did not change anything... signal, that post-fix operation does not
+    // need to be re-triggered.
+    return false;
   }
-  return false;
+
+  // True: Re-trigger post-fix mechanism, so others can get aware of our changes.
+  return true;
 }
 
 /**
  * Checks, if this diff item represents a change regarding removal of
- * linkHref or linkTarget attribute. We require both attribute changes in order
- * to see, if all removals of `linkHref` are represented by corresponding
- * removals of `linkTarget` in next stage.
+ * linkHref.
  *
  * @param diffItem item to check
  */
-function isRemoveLinkAttributeDiffItem(diffItem: DiffItem): boolean {
+function isRemoveLinkHrefAttributeDiffItem(diffItem: DiffItem): boolean {
   if (diffItem.type !== "attribute") {
     return false;
   }
   const diffItemAttribute: DiffItemAttribute = <DiffItemAttribute>diffItem;
-  return (
-    (diffItemAttribute.attributeKey === "linkHref" || diffItemAttribute.attributeKey === LINK_TARGET_MODEL) &&
-    !diffItemAttribute.attributeNewValue
-  );
+  return diffItemAttribute.attributeKey === "linkHref" && !diffItemAttribute.attributeNewValue;
 }
