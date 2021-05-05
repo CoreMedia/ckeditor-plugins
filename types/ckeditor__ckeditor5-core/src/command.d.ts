@@ -9,14 +9,20 @@ import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emitter
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 
 export default class Command implements Emitter, Observable {
+  value?: unknown;
   readonly editor: Editor;
-  readonly isEnabled: boolean;
+  isEnabled: boolean;
 
   constructor(editor: Editor);
+
   refresh(): void;
+
   forceDisabled(id: string): void;
+
   clearForceDisabled(id: string): void;
-  execute(): void;
+
+  execute(...args: any[]): void;
+
   destroy(): void;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;

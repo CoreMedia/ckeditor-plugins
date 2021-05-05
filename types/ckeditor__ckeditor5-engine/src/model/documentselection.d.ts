@@ -40,7 +40,7 @@ export default class DocumentSelection implements Emitter {
 
   getAttributeKeys(): Iterable<string>;
 
-  getAttributes(): Iterable<any>;
+  getAttributes(): ([string, string])[];
 
   getFirstPosition(): Position | null;
 

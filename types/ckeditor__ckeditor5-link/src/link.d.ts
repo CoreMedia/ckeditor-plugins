@@ -16,3 +16,6 @@ export default class Link extends Plugin {
     AutoLink
   ];
 }
+
+export interface LinkDecoratorDefinition {
+}

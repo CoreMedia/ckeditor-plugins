@@ -20,7 +20,7 @@ export default class Schema implements Emitter, Observable {
 
   addChildCheck(callback: (context: SchemaContext, childDefinition: SchemaCompiledItemDefinition) => boolean | undefined): void;
 
-  checkAttribute(context: SchemaContextDefinition, attributeName: string): void;
+  checkAttribute(context: SchemaContextDefinition, attributeName: string): boolean;
 
   checkAttributeInSelection(selection: any, attribute: string): boolean;
 
@@ -38,7 +38,7 @@ export default class Schema implements Emitter, Observable {
 
   getDefinition(item: Item | SchemaContextItem | string): SchemaCompiledItemDefinition;
 
-  getValidRanges(ranges: Array<Range>, attribute: string): Iterable<Range>;
+  getValidRanges(ranges: Iterable<Range>, attribute: string): Iterable<Range>;
 
   register(itemName: string, definition: SchemaItemDefinition): void;
 

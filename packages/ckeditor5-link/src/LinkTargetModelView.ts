@@ -3,9 +3,8 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
-
-export const LINK_TARGET_MODEL = "linkTarget";
-export const LINK_TARGET_VIEW = "target";
+import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
+import LinkTargetCommand from "./LinkTargetCommand";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -66,6 +65,8 @@ export default class LinkTargetModelView extends Plugin {
 
     document.registerPostFixer(fixZombieLinkTargetsAfterLinkHrefRemoval);
 
+    editor.commands.add("linkTarget", new LinkTargetCommand(editor));
+
     this.logger.debug(`Initialized ${LinkTargetModelView.pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
@@ -87,10 +88,11 @@ export default class LinkTargetModelView extends Plugin {
  */
 function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
   const model = writer.model;
-  const changes: DiffItemAttribute[] = model.document.differ
+  const ranges = model.document.differ
     .getChanges()
     .filter(isRemoveLinkHrefAttributeDiffItem)
-    .map((c) => <DiffItemAttribute>c);
+    .map((c) => (<DiffItemAttribute>c).range);
+  const validRanges = Array.from(model.schema.getValidRanges(ranges, LINK_TARGET_MODEL));
 
   // Workaround for missing feature ckeditor/ckeditor5#9627
   const operationsBefore = writer.batch.operations.length;
@@ -99,7 +101,7 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
    * Instead of checking for the uncovered ranges, yet, we just add corresponding
    * removeAttribute calls again.
    */
-  changes.forEach((diffItem) => writer.removeAttribute(LINK_TARGET_MODEL, diffItem.range));
+  validRanges.forEach((range) => writer.removeAttribute(LINK_TARGET_MODEL, range));
 
   const operationsAfter = writer.batch.operations.length;
 
