@@ -54,18 +54,26 @@ export default class LinkTargetUI extends Plugin {
     // @ts-ignore
     extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
 
-    /*
-        this.listenTo(
-          formView,
-          "submit",
-          () => {
-            /!* TODO[cke] Write value to model?!? *!/
-          },
-          {
-            priority: "high",
-          }
-        );
-    */
+    this.listenTo(
+      formView,
+      "submit",
+      () => {
+        const { value } = <HTMLInputElement>extension.targetInputView.fieldView.element;
+        editor.execute("linkTarget", value);
+      },
+      /*
+       * We need a higher listener priority here than for `LinkCommand`.
+       * This is because we want to listen to any changes to the model
+       * triggered by LinkCommand.
+       *
+       * This is actually a workaround regarding a corresponding extension
+       * point to the link command.
+       */
+      {
+        priority: "high",
+      }
+    );
+
     return extension;
   }
 

@@ -21,7 +21,7 @@ export default class Command implements Emitter, Observable {
 
   clearForceDisabled(id: string): void;
 
-  execute(...args: any[]): void;
+  execute(...args: any[]): any;
 
   destroy(): void;
 

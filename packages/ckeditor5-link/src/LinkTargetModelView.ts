@@ -108,15 +108,11 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
   /*
    * If there were no (more) linkTarget attributes to remove, `removeAttribute`
    * would not have added any more operations.
+   *
+   * We take this to signal, if a re-run of other post-fixers (including this
+   * one) is required (= true) or not (= false).
    */
-  if (operationsBefore === operationsAfter) {
-    // We did not change anything... signal, that post-fix operation does not
-    // need to be re-triggered.
-    return false;
-  }
-
-  // True: Re-trigger post-fix mechanism, so others can get aware of our changes.
-  return true;
+  return operationsBefore !== operationsAfter;
 }
 
 /**

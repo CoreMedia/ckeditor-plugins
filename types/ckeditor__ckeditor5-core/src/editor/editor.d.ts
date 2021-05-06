@@ -37,6 +37,8 @@ export default class Editor implements Emitter, Observable {
 
   constructor(config?: object);
 
+  execute(...args: any[]): any;
+
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
