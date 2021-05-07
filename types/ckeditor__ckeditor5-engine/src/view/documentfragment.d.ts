@@ -20,7 +20,7 @@ export default class DocumentFragment {
    *
    * @returns {Iterable.<ViewNode>} Child nodes iterator.
    */
-  getChildren(): Iterable<ViewNode>;
+  getChildren(): IterableIterator<ViewNode>;
 
   // TODO[cke] This is a protected method! Do we really need to use it?
   _insertChild(index: number, items: Item | Iterable<Item>): number;

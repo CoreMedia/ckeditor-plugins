@@ -32,9 +32,9 @@ export default class Node {
 
   getAttribute(key: string): any | undefined;
 
-  getAttributeKeys(): string[];
+  getAttributeKeys(): IterableIterator<string>;
 
-  getAttributes(): Iterable<any>;
+  getAttributes(): IterableIterator<[string, string | number | boolean]>;
 
   getCommonAncestor(node: Node, options?: { includeSelf: boolean }): Element | DocumentFragment | null;
 

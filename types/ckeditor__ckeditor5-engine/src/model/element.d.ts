@@ -18,13 +18,13 @@ export default class Element extends Node {
     includeSelf: boolean,
   }): Element | null;
 
-  getChild(index: number): Node;
+  getChild(index: number): Element | Text;
 
   getChildIndex(node: Node): number;
 
   getChildStartOffset(node: Node): number;
 
-  getChildren(): Iterable<Node>;
+  getChildren(): IterableIterator<Element | Text>;
 
   getNodeByPath(relativePath: number[]): Node;
 

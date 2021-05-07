@@ -29,9 +29,9 @@ export default class Selection implements Emitter {
 
   getAttribute(key: string): any | undefined;
 
-  getAttributeKeys(): Iterable<string>;
+  getAttributeKeys(): IterableIterator<string>;
 
-  getAttributes(): Iterable<any>;
+  getAttributes(): IterableIterator<[string, string | boolean | number]>;
 
   getFirstPosition(): Position | null;
 

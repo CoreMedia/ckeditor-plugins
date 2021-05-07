@@ -29,11 +29,11 @@ export default class TextProxy {
     parentFirst: boolean;
   }): any[];
 
-  getAttribute(key: string): any | undefined;
+  getAttribute(key: string): string | number | boolean;
 
-  getAttributeKeys(): Iterable<string>;
+  getAttributeKeys(): ReturnType<Text['getAttributeKeys']>;
 
-  getAttributes(): Iterable<any>;
+  getAttributes(): ReturnType<Text['getAttributes']>;
 
   getPath(): number[];
 

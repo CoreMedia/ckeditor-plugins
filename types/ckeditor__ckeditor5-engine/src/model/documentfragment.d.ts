@@ -19,7 +19,7 @@ export default class DocumentFragment {
 
   get root(): this;
 
-  [Symbol.iterator](): Iterable<Node>;
+  [Symbol.iterator](): Iterable<Element|Text>;
 
   getChild(index: number): Node | null;
 
@@ -27,7 +27,7 @@ export default class DocumentFragment {
 
   getChildStartOffset(node: Node): number | null;
 
-  getChildren(): Iterable<Node>;
+  getChildren(): IterableIterator<Element|Text>;
 
   getNodeByPath(relativePath: number[]): Node | DocumentFragment;
 

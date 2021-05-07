@@ -3,9 +3,11 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import first from "@ckeditor/ckeditor5-utils/src/first";
 import { isImageAllowed } from "@ckeditor/ckeditor5-link/src/utils";
 import { LINK_TARGET_MODEL } from "./Constants";
-import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
+import { DiffItem, DiffItemAttribute, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Selection from "@ckeditor/ckeditor5-engine/src/model/selection";
 
 /**
  * Extension to `LinkCommand` which takes care of setting the `linkTarget`
@@ -94,15 +96,12 @@ export default class LinkTargetCommand extends Command {
 
     const target = this.nextTarget;
     const model = writer.model;
-    const ranges = model.document.differ
-      .getChanges()
-      .filter(isChangeOrSetLinkHrefAttributeDiffItem)
-      .map((c) => (<DiffItemAttribute>c).range);
-    const validRanges = Array.from(model.schema.getValidRanges(ranges, LINK_TARGET_MODEL));
+    const linkHrefRangeCandidates = model.document.differ.getChanges().map((di) => toLinkHrefRange(writer, di));
+    const linkHrefRanges = linkHrefRangeCandidates.filter((v) => !!v) as Range[];
+    const validRanges = Array.from(model.schema.getValidRanges(linkHrefRanges, LINK_TARGET_MODEL));
 
     /*
      * Todo[cke]
-     *   * We need to listen to DiffItemInsert, if the link got added without selected text.
      *   * We need to be aware of changes only to the target, which means, that we will get
      *     no diff-item from LinkCommand. This means, that we have to determine the ranges on
      *     ourselves.
@@ -124,15 +123,39 @@ export default class LinkTargetCommand extends Command {
 }
 
 /**
- * Checks, if this diff item represents a change regarding addition or
- * change of linkHref.
+ * Return affected range if a `DiffItem` comes with a `linkHref` attribute set
+ * or changed.
  *
- * @param diffItem item to check
+ * @param writer writer instance
+ * @param diffItem item to check for `linkHref` attribute
+ * @return affected range, or `null` if the item is not related to a `linkHref` change
  */
-function isChangeOrSetLinkHrefAttributeDiffItem(diffItem: DiffItem): boolean {
-  if (diffItem.type !== "attribute") {
-    return false;
+function toLinkHrefRange(writer: Writer, diffItem: DiffItem): Range | null {
+  if (diffItem.type === "attribute") {
+    const diffItemAttribute: DiffItemAttribute = <DiffItemAttribute>diffItem;
+    if (diffItemAttribute.attributeKey !== "linkHref") {
+      return null;
+    }
+    return diffItemAttribute.range;
+  } else if (diffItem.type === "insert") {
+    const diffItemInsert: DiffItemInsert = <DiffItemInsert>diffItem;
+    if (diffItemInsert.name !== "$text") {
+      // Only "createText" events are relevant to us. This is triggered,
+      // when a link got added in a collapsed selection. The text is then
+      // the same as the added linkHref attribute.
+      return null;
+    }
+    // Now let's see, if a linkHref attribute got added.
+    // If yes, this is the range we want to add the target attribute to.
+    const start = diffItemInsert.position;
+    const end = start.getShiftedBy(diffItemInsert.length);
+    const range = writer.createRange(start, end);
+    const selection: Selection = writer.createSelection(range);
+    const selectedContent = writer.model.getSelectedContent(selection);
+    const linkHref = selectedContent.getChild(0)?.getAttribute("linkHref");
+    if (!!linkHref) {
+      return range;
+    }
   }
-  const diffItemAttribute: DiffItemAttribute = <DiffItemAttribute>diffItem;
-  return diffItemAttribute.attributeKey === "linkHref" && !!diffItemAttribute.attributeNewValue;
+  return null;
 }

@@ -30,11 +30,11 @@ export default class Element extends ViewNode {
 
   getChildIndex(node: ViewNode): number | -1;
 
-  getChildren(): Iterable<ViewNode>;
+  getChildren(): IterableIterator<ViewNode>;
 
-  getClassNames(): Iterable<string>;
+  getClassNames(): IterableIterator<string>;
 
-  getCustomProperties(): Iterable<any>;
+  getCustomProperties(): Generator<[string, any]>;
 
   getCustomProperty(key: string | Symbol): any;
 

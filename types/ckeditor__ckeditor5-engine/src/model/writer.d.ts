@@ -7,7 +7,7 @@ import Node from "./node";
 import Batch from "./batch";
 import Model from "./model";
 import Range from "./range";
-import { Selectable } from "./selection";
+import Selection, { Selectable } from "./selection";
 import { Marker } from "./markercollection";
 
 type Offset = number | "end" | "before" | "after";
@@ -61,7 +61,7 @@ export default class Writer {
 
   createSelection(selectable: Selectable, placeOrOffset?: Place | Offset, options?: {
     backward?: boolean;
-  }): any;
+  }): Selection;
 
   createText(data: string, attributes?: Object): Text;
 

@@ -6,6 +6,7 @@ import { Marker } from "./markercollection";
 import Document from "./document";
 import Element from "./element";
 import Range from "./range";
+import Selection from "./selection";
 
 /**
  * `DocumentSelection` is a special selection which is used as the
@@ -38,9 +39,9 @@ export default class DocumentSelection implements Emitter {
 
   getAttribute(key: string): any | undefined;
 
-  getAttributeKeys(): Iterable<string>;
+  getAttributeKeys(): IterableIterator<string>;
 
-  getAttributes(): ([string, string])[];
+  getAttributes(): IterableIterator<[string, string | number | boolean]>;
 
   getFirstPosition(): Position | null;
 
@@ -52,7 +53,7 @@ export default class DocumentSelection implements Emitter {
 
   getRanges(): Iterable<Range>;
 
-  getSelectedBlocks(): Iterable<Element>;
+  getSelectedBlocks(): ReturnType<Selection['getSelectedBlocks']>;
 
   getSelectedElement(): Element | null;
 
