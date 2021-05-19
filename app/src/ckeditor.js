@@ -29,6 +29,7 @@ import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema
 import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
 
 import {setupPreview, updatePreview} from './preview'
+import {initExamples} from './example-data'
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -42,6 +43,8 @@ if (wantsInspector) {
   inspectorToggle.setAttribute('href', '?inspector=false');
   inspectorToggle.textContent = 'Close Inspector';
 }
+
+let editor;
 
 ClassicEditor.create(document.querySelector('.editor'), {
   licenseKey: '',
@@ -178,12 +181,14 @@ ClassicEditor.create(document.querySelector('.editor'), {
       },
     },
   },
-}).then(editor => {
+}).then(newEditor => {
   if (wantsInspector) {
-    CKEditorInspector.attach(editor);
+    CKEditorInspector.attach(newEditor);
   }
-  window['editor'] = editor;
-  console.log("Exposed editor instance as `editor`:", editor);
+  initExamples(newEditor);
+  editor = newEditor;
+  window['editor'] = newEditor;
+  console.log("Exposed editor instance as `editor`.");
 }).catch(error => {
   console.error(error);
 });

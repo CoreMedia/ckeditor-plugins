@@ -23,6 +23,7 @@
       </ul>
     </nav>
   </div>
+  <div id="examples"></div>
 </header>
 
 <main>
@@ -37,96 +38,20 @@
         <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
         <!-- The data inside are given in data-format of CKEditor, which is CoreMedia RichText 1.0. -->
         <div class="editor" style="display:none;">
-          <div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <div xmlns="http://www.coremedia.com/2003/richtext-1.0">
             <p class="p--heading-1">CKEditor 5: CoreMedia Plugin Showcase</p>
             <p>
               This example instance of CKEditor 5 serves as a showcase for plugins provided by
               CoreMedia. Most of these plugins are mandatory to use CKEditor 5 as editor
               within CoreMedia Studio. Others are required to edit CoreMedia RichText, and
-              then again others provide more additional functionality.
+              then again others provide more additional functionality. For details
+              see corresponding documentation.
             </p>
-            <p class="p--heading-2">Required Plugins for CoreMedia Studio</p>
+            <p class="p--heading-2">Example Data</p>
             <p>
-              Not existing yet, but they will for example provide hooks to synchronize
-              CoreMedia Studio and CKEditor.
-            </p>
-            <p class="p--heading-2">Required Plugins for CoreMedia Richtext</p>
-            <p>
-              These plugins are required to edit CoreMedia Richtext within CoreMedia Studio.
-              They will especially convert HTML to CoreMedia Richtext and vice versa.
-            </p>
-            <p class="p--heading-3">CoreMedia RichText</p>
-            <p>
-              This plugin will transform HTML in CKEditor to CoreMedia RichText 1.0 and vice
-              versa.
-            </p>
-            <p>
-              Extension point exists, so that you may configure support for
-              plugins, which add additional HTML, unknown by &ldquo;CoreMedia RichText&nbsp;1.0&rdquo;.
-              This holds true for the <span class="mark--marker-green">Highlight plugin</span>, for example.
-            </p>
-            <p class="p--heading-4">Link-Target Mapping</p>
-            <p>
-              CoreMedia RichText represents the HTML target attribute as attributes
-              xlink:show and xlink:role. Some examples for default transformations
-              provided by CoreMedia RichText Plugin:
-            </p>
-            <table>
-              <tr>
-                <td class="td--heading">show</td>
-                <td class="td--heading">role</td>
-                <td class="td--heading">target</td>
-                <td class="td--heading">Example</td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><a xlink:href="https://example.org/">Link</a></td>
-              </tr>
-              <tr>
-                <td>replace</td>
-                <td></td>
-                <td>_top</td>
-                <td><a xlink:href="https://example.org/" xlink:show="replace">Link</a></td>
-              </tr>
-              <tr>
-                <td>new</td>
-                <td></td>
-                <td>_blank</td>
-                <td><a xlink:href="https://example.org/" xlink:show="new">Link</a></td>
-              </tr>
-              <tr>
-                <td>embed</td>
-                <td></td>
-                <td>_embed</td>
-                <td><a xlink:href="https://example.org/" xlink:show="embed">Link</a></td>
-              </tr>
-              <tr>
-                <td>none</td>
-                <td></td>
-                <td>_none</td>
-                <td><a xlink:href="https://example.org/" xlink:show="none">Link</a></td>
-              </tr>
-              <tr>
-                <td>other</td>
-                <td>someTarget</td>
-                <td>someTarget</td>
-                <td><a xlink:href="https://example.org/" xlink:show="other" xlink:role="someTarget">Link</a></td>
-              </tr>
-            </table>
-            <p class="p--heading-2">Optional Plugins</p>
-            <p>
-              There are a bunch of plugins which are used by our customers to further extend
-              the functionality of CKEditor. You don't need to add them in order to use
-              CKEditor within CoreMedia Studio or as CoreMedia Richtext editor.
-            </p>
-            <p class="p--heading-3">SymbolOnPasteMapper</p>
-            <p>
-              The initial and main purpose of this plugin is to replace characters pasted from
-              Microsoft Word with font _Symbol_ to their corresponding Unicode characters.
-              This refers to older versions of Microsoft Word, typically. Nowadays, Microsoft
-              Word itself often inserts Unicode characters directly.
+              For testing several use-cases you will see buttons at the top which
+              load different data-sets for testing and for experimenting with
+              this CKEditor instance and its plugins.
             </p>
           </div>
         </div>
