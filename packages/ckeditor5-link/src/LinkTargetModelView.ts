@@ -126,5 +126,12 @@ function isRemoveLinkHrefAttributeDiffItem(diffItem: DiffItem): boolean {
     return false;
   }
   const diffItemAttribute: DiffItemAttribute = <DiffItemAttribute>diffItem;
-  return diffItemAttribute.attributeKey === "linkHref" && !diffItemAttribute.attributeNewValue;
+  // We must not simply check for 'falsy' here, as an empty string does not
+  // represent a deletion of the attribute, but signals (you guessed it), that
+  // the attribute got set to an empty string.
+  // Note, that any change in here, may collide with the post-fixing behavior
+  // in `LinkTargetCommand.
+  const isDeleteAttribute =
+    diffItemAttribute.attributeNewValue === null || diffItemAttribute.attributeNewValue === undefined;
+  return isDeleteAttribute && diffItemAttribute.attributeKey === "linkHref";
 }

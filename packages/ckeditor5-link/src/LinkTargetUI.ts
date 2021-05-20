@@ -58,8 +58,9 @@ export default class LinkTargetUI extends Plugin {
       formView,
       "submit",
       () => {
-        const { value } = <HTMLInputElement>extension.targetInputView.fieldView.element;
-        editor.execute("linkTarget", value);
+        const { value: target } = <HTMLInputElement>extension.targetInputView.fieldView.element;
+        const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
+        editor.execute("linkTarget", target, href);
       },
       /*
        * We need a higher listener priority here than for `LinkCommand`.

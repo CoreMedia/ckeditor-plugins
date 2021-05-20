@@ -48,7 +48,13 @@ export default class LinkTargetCommand extends Command {
     }
   }
 
-  execute(target: string | "" | null): void {
+  /**
+   * Execute LinkTargetCommand.
+   * @param target target to apply
+   * @param href href for reference from dialog; used to distinguish some
+   * behaviors triggered by `LinkCommand`.
+   */
+  execute(target: string | "" | null, href: string | "" | null): void {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
 
@@ -56,6 +62,28 @@ export default class LinkTargetCommand extends Command {
       this.logger.warn("Cannot execute: Required LinkCommand not available.");
       return;
     }
+
+    /*
+     * TODO[cke] Special case: HREF Emptied... We may even clear our href
+     *    attribute. In this case, the anchor remains, but href is removed.
+     *    Testing with current code will run into deadlock.
+     *    General idea how to continue: Deal with the last special case, that
+     *    href did not change, but see if target got changed. And of course
+     *    fix the deadlock.
+     */
+    const model = editor.model;
+    /*
+     * TODO[cke] New approach. Instead of relying on the differ within the
+     *    postfixer, we are going to store the original selection state
+     *    to apply changes. We cannot currently guess, why for an empty
+     *    href and having target set, we don't get a full range on changes
+     *    but only each character of the current link as range, which again
+     *    currently causes an infinite loop.
+     *    The challenge: The selection is reset to a new position by
+     *    LinkCommand, so that we cannot rely on the selection once we
+     *    run _after_ LinkCommand (as post-fixer).
+     */
+    const selection = model.document.selection;
 
     this.nextTarget = target;
     /*
@@ -89,6 +117,11 @@ export default class LinkTargetCommand extends Command {
    * @return `true`, if changes got applied; `false` otherwise
    */
   private updateTargetOnLinkHref(writer: Writer): boolean {
+    // Note on parallel changes: You may observe infinite iterations when this
+    // post-fixer clashes with the post-fixer for `linkHref` removal in
+    // `LinkTargetModelView`. So, be aware, that both post-fixers may run on
+    // the very same event and should not influence each other.
+
     if (!this.postFixEnabled) {
       // We are currently not active (not working on LinkCommand). Let's just return.
       return false;
@@ -96,7 +129,9 @@ export default class LinkTargetCommand extends Command {
 
     const target = this.nextTarget;
     const model = writer.model;
-    const linkHrefRangeCandidates = model.document.differ.getChanges().map((di) => toLinkHrefRange(writer, di));
+    const document = model.document;
+    const selection = document.selection;
+    const linkHrefRangeCandidates = document.differ.getChanges().map((di) => toLinkHrefRange(writer, di));
     const linkHrefRanges = linkHrefRangeCandidates.filter((v) => !!v) as Range[];
     const validRanges = Array.from(model.schema.getValidRanges(linkHrefRanges, LINK_TARGET_MODEL));
 
@@ -105,6 +140,18 @@ export default class LinkTargetCommand extends Command {
      *   * We need to be aware of changes only to the target, which means, that we will get
      *     no diff-item from LinkCommand. This means, that we have to determine the ranges on
      *     ourselves.
+     *
+     *   Findings on behavior when linkHref did not change:
+     *
+     *     Collapsed Behavior:
+     *
+     *     • If any manual decorators got changed, we will have a change, but it is not related to linkHref.
+     *     • If we are right within a link and we hit "submit" the cursor will jump to the end of the selection, no matter if linkHref changed or not.
+     *
+     *     Non-Collapsed Behavior:
+     *     • Only attributes will be set without selection change.
+     *
+     *   Thus, we need to distinguish collapsed vs. non-collapsed on ourselves.
      */
 
     // Workaround for missing feature ckeditor/ckeditor5#9627
@@ -117,6 +164,23 @@ export default class LinkTargetCommand extends Command {
     }
 
     const operationsAfter = writer.batch.operations.length;
+
+    if (selection.isCollapsed) {
+      // Nothing is selected (thus, we just edited at cursor position).
+      // As a result, LinkCommand jumped to the end of the selection and
+      // we should signal to stop adding `linkTarget` attributes when
+      // we continue typing.
+      writer.removeSelectionAttribute(LINK_TARGET_MODEL);
+    }
+
+    console.log("updateTargetOnLinkHref", {
+      target: target,
+      linkHrefRangeCandidates: linkHrefRangeCandidates,
+      linkHrefRanges: linkHrefRanges,
+      validRanges: validRanges,
+      operationsBefore: operationsBefore,
+      operationsAfter: operationsAfter,
+    });
 
     return operationsBefore !== operationsAfter;
   }
