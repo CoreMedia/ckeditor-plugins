@@ -36,4 +36,6 @@ export default class ButtonView extends View implements Emitter, Observable {
   set(name: string | Object, value?: any): void;
 
   bind(...bindProperties: any[]): BindReturnValue;
+
+  off(event: string, callback?: CallbackFunction): void;
 }

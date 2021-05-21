@@ -46,6 +46,8 @@ export default class Schema implements Emitter, Observable {
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
+  off(event: string, callback?: CallbackFunction): void;
+
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   set(name: string | Object, value?: any): void;

@@ -2,9 +2,10 @@
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
     "lib": [
-      "ES6",
-      "DOM",
-      "ES2015.Promise"
+      "dom",
+      "dom.iterable",
+      "es5",
+      "esnext"
     ],
     "module": "commonJS",
     "moduleResolution": "Node",

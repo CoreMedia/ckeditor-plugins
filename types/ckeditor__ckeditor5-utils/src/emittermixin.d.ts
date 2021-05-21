@@ -19,6 +19,8 @@ export default interface Emitter {
    */
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
+  off(event: string, callback?: CallbackFunction): void;
+
   /**
    * Registers a callback function to be executed on the next time the event is fired only. This is similar to
    * calling {@link #on} followed by {@link #off} in the callback.

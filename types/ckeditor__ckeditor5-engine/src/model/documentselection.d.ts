@@ -68,4 +68,6 @@ export default class DocumentSelection implements Emitter {
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  off(event: string, callback?: CallbackFunction): void;
 }

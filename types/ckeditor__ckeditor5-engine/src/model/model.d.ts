@@ -84,5 +84,7 @@ export default class Model implements Emitter, Observable {
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
+  off(event: string, callback?: CallbackFunction): void;
+
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 }
