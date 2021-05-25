@@ -10,6 +10,24 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DocumentSelection from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
+import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+
+/**
+ * Signals to delete a target.
+ */
+type DeletedTarget = "" | null | undefined;
+/**
+ * Possible types a target could take, where falsy values signal to remove
+ * the target. In contrast to `linkHref` we do not keep an empty string as
+ * `linkTarget`.
+ */
+type Target = string | DeletedTarget;
+/**
+ * Possible values `linkHref` attribute could take. In contrast to
+ * `linkTarget` only `null` represents a deleted attribute, while an
+ * empty string will be stored as empty `linkHref` in model.
+ */
+type Href = string | "" | null;
 
 /**
  * Extension to `LinkCommand` which takes care of setting the `linkTarget`
@@ -20,20 +38,40 @@ import Model from "@ckeditor/ckeditor5-engine/src/model/model";
  * `href` attribute.
  */
 export default class LinkTargetCommand extends Command {
+  private readonly logger: Logger = LoggerProvider.getLogger("LinkTargetCommand");
+
   /**
    * The changes to apply on post-fix. We are using post-fix here to prevent
    * multiple entries in undo-history.
    * @private
    */
   private readonly _next: {
+    /**
+     * If post-fix is to be applied. Will synchronize with `LinkCommand`.
+     */
     enabled: boolean;
-    target: string | "" | null;
+    /**
+     * That target to set. Falsy values will be handled as _remove target_.
+     */
+    target: Target;
+    /**
+     * Ranges to apply target to.
+     */
     ranges: Range[];
   } = {
     enabled: false,
     target: null,
     ranges: [],
   };
+  /**
+   * Callback to listen to `removeSelectionAttribute` triggered by
+   * `LinkCommand`. It will ensure, that `linkTarget` is removed from
+   * selection attributes as well, when `linkHref` is removed.
+   * @param path path from `EventInfo`
+   * @param attributeKeys attribute keys for which selection attributes just
+   * changed. As this event is triggered after the change got applied, we can
+   * retrieve the actual new attribute values from the selection.
+   */
   private readonly _changeAttributeCallback = (
     { path }: EventInfo,
     { attributeKeys }: { attributeKeys: string[] }
@@ -52,6 +90,18 @@ export default class LinkTargetCommand extends Command {
     selection.on("change:attribute", this._changeAttributeCallback);
   }
 
+  /**
+   * Used as callback to listen to `removeSelectionAttribute` triggered by
+   * `LinkCommand`. It will ensure, that `linkTarget` is removed from
+   * selection attributes as well, when `linkHref` is removed.
+   *
+   * @param model model to apply additional modifications
+   * @param path path from `EventInfo`
+   * @param attributeKeys attribute keys for which selection attributes just
+   * changed. As this event is triggered after the change got applied, we can
+   * retrieve the actual new attribute values from the selection.
+   * @private
+   */
   private _changedAttribute(model: Model, path: unknown[], attributeKeys: string[]) {
     const pathLength = path.length;
 
@@ -68,12 +118,20 @@ export default class LinkTargetCommand extends Command {
     }
   }
 
+  /**
+   * Reset next tracking to default value, which especially disabled the
+   * post-fixer temporarily.
+   * @private
+   */
   private _resetNext(): void {
     this._next.enabled = false;
     this._next.target = null;
     this._next.ranges = [];
   }
 
+  /**
+   * Refresh `linkTarget` from currently selected element.
+   */
   refresh(): void {
     // This implementation is strongly related to the LinkCommand implementation
     // of CKEditor Link Plugin. It may make sense, to review the code from time
@@ -93,12 +151,18 @@ export default class LinkTargetCommand extends Command {
   }
 
   /**
-   * Execute LinkTargetCommand.
+   * Execute LinkTargetCommand. In contrast to normal commands, this does not
+   * apply a change directly. Instead, it listens to changes as applied by
+   * `LinkCommand` to apply changes for `linkTarget` as well.
+   *
+   * On command execution, the value and ranges will be stored which will
+   * later be used to set (or remove) the `linkTarget` attribute.
+   *
    * @param target target to apply
    * @param href href for reference from dialog; used to distinguish some
    * behaviors triggered by `LinkCommand`.
    */
-  execute(target: string | "" | null, href: string | "" | null): void {
+  execute(target: Target, href: Href): void {
     const editor = this.editor;
     const linkCommand = editor.commands.get(LINK_COMMAND_NAME);
 
@@ -130,7 +194,7 @@ export default class LinkTargetCommand extends Command {
    * it should be checked, if the corresponding implementation changed in
    * a way, that requires to adapt the following code.
    */
-  private _handleExpandedSelection(writer: Writer, target: string | "" | null) {
+  private _handleExpandedSelection(writer: Writer, target: Target): void {
     const editor = this.editor;
     const model = editor.model;
     const selection = model.document.selection;
@@ -168,20 +232,24 @@ export default class LinkTargetCommand extends Command {
    */
   private _handleCollapsedSelection(
     writer: Writer,
-    target: string | "" | null,
-    href: string | "" | null,
+    target: Target,
+    href: Href,
     linkCommand: Command | undefined
-  ) {
+  ): void {
     const editor = this.editor;
     const model = editor.model;
     const selection = model.document.selection;
-    // LinkCommand does not check for possible null value, so don't we.
-    const position: Position = <Position>selection.getFirstPosition();
+    const position: Position | null = selection.getFirstPosition();
 
     const hasLinkTarget = selection.hasAttribute(LINK_TARGET_MODEL);
     const hasLinkHref = selection.hasAttribute("linkHref");
 
     if (hasLinkTarget || hasLinkHref) {
+      if (!position) {
+        this.logger.warn("Unable to apply `linkTarget` attribute as selection does not provide a first position.");
+        return;
+      }
+
       const referenceAttribute = hasLinkTarget ? LINK_TARGET_MODEL : "linkHref";
       /*
        * We have to determine the range based on either linkTarget or
@@ -239,7 +307,7 @@ export default class LinkTargetCommand extends Command {
    * from the given range or set.
    * @private
    */
-  private _setOrRemoveAttribute(writer: Writer, target: string | "" | null, range: Range) {
+  private static _setOrRemoveAttribute(writer: Writer, target: Target, range: Range): void {
     // If we empty the target, we just want to remove it.
     if (!target) {
       // May remove `linkTarget` attribute, where there isn't any. But
@@ -293,11 +361,6 @@ export default class LinkTargetCommand extends Command {
    * @return `true`, if changes got applied; `false` otherwise
    */
   private _updateTargetOnLinkHref(writer: Writer): boolean {
-    // Note on parallel changes: You may observe infinite iterations when this
-    // post-fixer clashes with the post-fixer for `linkHref` removal in
-    // `LinkTargetModelView`. So, be aware, that both post-fixers may run on
-    // the very same event and should not influence each other.
-
     if (!this._next.enabled) {
       // We are currently not active (not working on LinkCommand). Let's just return.
       return false;
@@ -306,11 +369,13 @@ export default class LinkTargetCommand extends Command {
     const operationsBefore = writer.batch.operations.length;
 
     for (const range of this._next.ranges) {
-      this._setOrRemoveAttribute(writer, this._next.target, range);
+      LinkTargetCommand._setOrRemoveAttribute(writer, this._next.target, range);
     }
 
     const operationsAfter = writer.batch.operations.length;
 
+    // We applied our changes, nothing more to add. Prevents infinite recursions
+    // implicitly.
     this._resetNext();
 
     return operationsBefore !== operationsAfter;
