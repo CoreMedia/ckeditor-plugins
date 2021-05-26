@@ -415,9 +415,9 @@ describe("ElementProxy.applyRules()", () => {
             me.node.name = "new";
           },
         ],
-        from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
-        to: '<parent>Lorem <new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
-        restart: "//new",
+        from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
+        to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
+        restart: "//after",
       },
     ],
     [
@@ -429,9 +429,9 @@ describe("ElementProxy.applyRules()", () => {
             me.node.attributes["attr"] = "value";
           },
         ],
-        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
-        to: '<parent>Lorem <new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
-        restart: "//new",
+        from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
+        to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
+        restart: "//after",
       },
     ],
     [
@@ -443,28 +443,28 @@ describe("ElementProxy.applyRules()", () => {
             me.node.name = "new";
           },
         ],
-        from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
-        to: '<parent>Lorem <new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
-        restart: "//new",
+        from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
+        to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
+        restart: "//after",
       },
     ],
     [
-      "should not execute subsequent rules after replacing by new element",
+      "should execute subsequent rules even after replacing by new element",
       {
         rules: [
           (me) => {
-            me.node.attributes["attr"] = "new value";
+            me.node.attributes["attr"] = `before-${me.node.attributes["attr"]}`;
           },
           (me) => {
             me.node.name = "new";
           },
           (me) => {
-            me.node.attributes["attr"] = "skipped";
+            me.node.attributes["attr"] = `${me.node.attributes["attr"]}-after`;
           },
         ],
-        from: '<parent>Lorem <el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>',
-        to: '<parent>Lorem <new attr="new value"><c1>Child 1</c1><c2>Child 1</c2></new> Ipsum</parent>',
-        restart: "//new",
+        from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
+        to: '<parent><before>Lorem </before><new attr="before-value-after"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
+        restart: "//after",
       },
     ],
   ])("(%#) %s", (name, testData) => {

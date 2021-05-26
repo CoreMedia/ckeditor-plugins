@@ -483,9 +483,9 @@ describe("NodeProxy.persistToDom", () => {
         expectedRestartFrom = <Node>document.evaluate(data.expectedRestartFromXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;
       }
       data.action(proxy);
-      const { restartFrom, abort } = proxy.persistToDom();
+      const { continueWith, abort } = proxy.persistToDom();
 
-      expect(restartFrom).toStrictEqual(expectedRestartFrom);
+      expect(continueWith).toStrictEqual(expectedRestartFrom);
       expect(abort).toStrictEqual(data.expectedAbort);
 
       const newDom = SERIALIZER.serializeToString(document);

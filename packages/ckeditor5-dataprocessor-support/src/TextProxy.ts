@@ -77,9 +77,9 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
       }
 
       const response = this.persistToDom();
-      if (response.restartFrom) {
+      if (response.continueWith) {
         // Implies (or should imply) response.abort === true
-        return response.restartFrom;
+        return response.continueWith;
       }
       if (response.abort) {
         // Processing requested not to continue applying rules to this node.

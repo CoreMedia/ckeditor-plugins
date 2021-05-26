@@ -8,6 +8,13 @@ import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
  */
 export default class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
+   * During processing, we may change our identity. This overrides the previous
+   * delegate.
+   * @private
+   */
+  private _replacement?: Element;
+
+  /**
    * Signals either a possibly new name for this element, or that the name
    * should not be changed (which is `undefined`).
    * @private
@@ -78,6 +85,10 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
     this.editor = editor;
   }
 
+  get delegate(): Element {
+    return this._replacement || super.delegate;
+  }
+
   /**
    * Access owner document.
    */
@@ -88,20 +99,20 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
 
   /**
    * Apply given rules. If any of the rules will invalidate this element either
-   * by deletion or by replacing it, no further rules will be applied.
+   * by deletion, no further rules will be applied.
    *
    * @param rules rules to apply in given order
-   * @return a node, if filtering should be restarted from this node; `null` otherwise.
+   * @return a node, if filtering should be continued from this node; `null` for default as next node.
    */
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
+    let result: Node | null = null;
     for (const rule of rules) {
       if (!!rule) {
         rule(this);
 
         const response = this.persistToDom();
-        if (response.restartFrom) {
-          // Implies (or should imply) response.abort === true
-          return response.restartFrom;
+        if (!!response.continueWith) {
+          result = response.continueWith || result;
         }
         if (response.abort) {
           // Processing requested not to continue applying rules to this node.
@@ -109,7 +120,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
         }
       }
     }
-    return null;
+    return result;
   }
 
   persist(): void {
@@ -257,7 +268,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
       newElement = ownerDocument.createElementNS(ownerDocument.documentElement.namespaceURI, newName);
     }
     this.replaceByElement(newElement);
-    return this.restartFrom(newElement);
+    return this.continueFrom(newElement.nextSibling);
   }
 
   private replaceByElement(newElement: Element): void {
@@ -273,6 +284,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
     if (!!parentNode) {
       parentNode.replaceChild(newElement, this.delegate);
     }
+    this._replacement = newElement;
   }
 
   /**
@@ -312,7 +324,6 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * remove the attribute from the element.
    */
   get attributes(): Attributes {
-    const element: Element = this.delegate;
     const self = this;
     return new Proxy(this._attributes, {
       defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
@@ -327,7 +338,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
           return Reflect.get(target, attrName, receiver);
         }
         if (typeof attrName === "string") {
-          return element.getAttribute(attrName);
+          return self.delegate.getAttribute(attrName);
         }
         // Should be unreachable as we only support attributes keyed by strings.
         return null;
@@ -359,13 +370,13 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
           };
         }
         // Fallback to original attributes.
-        if (typeof attrName === "string" && element.hasAttribute(attrName)) {
+        if (typeof attrName === "string" && self.delegate.hasAttribute(attrName)) {
           return {
             configurable: true,
             enumerable: true,
 
             get(): string | null {
-              return element.getAttribute(attrName);
+              return self.delegate.getAttribute(attrName);
             },
 
             set(v: unknown): void {
@@ -401,7 +412,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
           return Reflect.get(target, p) !== null;
         }
         if (typeof p === "string") {
-          return element.hasAttribute(p);
+          return self.delegate.hasAttribute(p);
         }
         // Should be unreachable as we only support attributes keyed by strings.
         return false;
@@ -412,7 +423,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
        */
       ownKeys(target: Attributes): PropertyKey[] {
         const targetKeys: PropertyKey[] = Reflect.ownKeys(target);
-        const elementAttrs: PropertyKey[] = element.getAttributeNames();
+        const elementAttrs: PropertyKey[] = self.delegate.getAttributeNames();
         // Join distinct keys, skip forcibly deleted.
         return elementAttrs
           .concat(targetKeys.filter((k: PropertyKey) => elementAttrs.indexOf(k) < 0))

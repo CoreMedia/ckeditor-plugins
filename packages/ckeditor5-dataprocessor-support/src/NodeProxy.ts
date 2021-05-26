@@ -285,6 +285,20 @@ export default class NodeProxy<N extends Node = Node> {
   }
 
   /**
+   * Helper function for return value, which signals to continue with
+   * another node, but to do not abort current processing. This is
+   * typically used, if a node just changed its identity.
+   * @param node node to continue with
+   * @protected
+   */
+  protected continueFrom(node: Node | null | undefined): PersistResponse {
+    return {
+      ...RESPONSE_CONTINUE,
+      continueWith: node || undefined,
+    };
+  }
+
+  /**
    * Helper function for return value, which signals "restart from".
    * @param node node to restart from
    * @protected
@@ -292,7 +306,7 @@ export default class NodeProxy<N extends Node = Node> {
   protected restartFrom(node: Node | null | undefined): PersistResponse {
     return {
       ...RESPONSE_ABORT,
-      restartFrom: node || undefined,
+      continueWith: node || undefined,
     };
   }
 
@@ -387,11 +401,10 @@ export const RESPONSE_CONTINUE = { abort: false };
  */
 export interface PersistResponse {
   /**
-   * Node to possibly restart from. Typically used, when a node got replaced.
+   * Node to possibly continue from. Typically used, when a node got replaced.
    * `undefined` signals, that processing may just continue with next nodes.
-   * Typically, if `restartFrom` is set, `abort` is set to `true`.
    */
-  restartFrom?: Node;
+  continueWith?: Node;
   /**
    * Signals if further rules should/may be applied to this node. Typically
    * `true`, if processing should continue with different node. `true` is

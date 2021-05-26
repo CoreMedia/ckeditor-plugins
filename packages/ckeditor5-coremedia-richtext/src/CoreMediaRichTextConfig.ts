@@ -92,7 +92,7 @@ function replaceByElementAndClassBackAndForth(viewName: string, dataName: string
   return {
     toData: replaceBy(dataName, dataClassName),
     toView: replaceElementAndClassBy(dataName, dataClassName, viewName),
-  }
+  };
 }
 
 /**
@@ -161,6 +161,8 @@ const defaultRules: FilterRuleSetConfiguration = {
         // Just ensure, that even no empty target is written.
         delete params.node.attributes["target"];
         delete params.node.attributes["href"];
+        console.warn("TODO, a.toData", { href: href, target: target });
+
         if (href !== "" && !href) {
           // Invalid state: We have an a-element without href which is not
           // supported by CoreMedia RichText DTD.
@@ -209,6 +211,11 @@ const defaultRules: FilterRuleSetConfiguration = {
         if (!!newAttrs.role) {
           params.node.attributes["xlink:role"] = newAttrs.role;
         }
+        console.warn("TODO, a.toData", {
+          href: href,
+          show: params.node.attributes["xlink:show"],
+          role: params.node.attributes["xlink:role"],
+        });
       },
       toView: (params) => {
         const href = params.node.attributes["xlink:href"];

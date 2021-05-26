@@ -1,3 +1,5 @@
+// noinspection InnerHTMLJS
+
 import "jest-xml-matcher";
 import { HtmlFilter, FilterRuleSet } from "../src";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
@@ -6,9 +8,18 @@ jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
 const MOCK_EDITOR = new Editor();
 
+/**
+ * Will be checked for "startsWith" for a given Data Driven Testname. Meant
+ * to be used for debugging purpose. Example:
+ *
+ * `TEST_SELECTOR = "APPLY#3"`
+ */
+const TEST_SELECTOR = "";
+
 type ApplyToData = [
   string,
   {
+    comment?: string;
     rules: FilterRuleSet;
     from: string;
     to: string;
@@ -16,9 +27,9 @@ type ApplyToData = [
 ];
 
 describe("HtmlFilter.applyTo()", () => {
-  test.each<ApplyToData>([
+  describe.each<ApplyToData>([
     [
-      "should do nothing on empty rules",
+      "APPLY#1: should do nothing on empty rules",
       {
         rules: {},
         from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
@@ -26,7 +37,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should remove elements and their children",
+      "APPLY#2: should remove elements and their children",
       {
         rules: {
           elements: {
@@ -41,7 +52,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should replace elements by their children",
+      "APPLY#3: should replace elements by their children",
       {
         rules: {
           elements: {
@@ -53,7 +64,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should replace elements by their children (nested)",
+      "APPLY#4: should replace elements by their children (nested)",
       {
         rules: {
           elements: {
@@ -65,7 +76,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should replace elements",
+      "APPLY#5: should replace elements",
       {
         rules: {
           elements: {
@@ -81,7 +92,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should replace elements (nested)",
+      "APPLY#6: should replace elements (nested)",
       {
         rules: {
           elements: {
@@ -97,31 +108,28 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should restart after replacement",
+      "APPLY#7: should not restart from scratch after replacement",
       {
+        comment: "We have to assume that a new node got created 'as it should be'.",
         rules: {
           elements: {
             el: (params) => {
-              params.node.name = "stage1";
+              params.node.name = "replacement";
               params.node.attributes.was = "el";
             },
-            stage1: (params) => {
-              params.node.name = "stage2";
-              params.node.attributes.was = "stage1";
-            },
-            stage2: (params) => {
-              params.node.name = "replacement";
-              params.node.attributes.was = "stage2";
+            replacement: (params) => {
+              params.node.name = "invalid";
+              params.node.attributes.was = "replacement";
             },
           },
         },
         from: "<parent>Lorem <el>Ipsum <el>Dolor</el> Sit</el></parent>",
         to:
-          '<parent>Lorem <replacement was="stage2">Ipsum <replacement was="stage2">Dolor</replacement> Sit</replacement></parent>',
+          '<parent>Lorem <replacement was="el">Ipsum <replacement was="el">Dolor</replacement> Sit</replacement></parent>',
       },
     ],
     [
-      "should respect before-handler",
+      "APPLY#8: should respect before-handler",
       {
         rules: {
           elements: {
@@ -138,7 +146,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should respect after-handler",
+      "APPLY#9: should respect after-handler",
       {
         rules: {
           elements: {
@@ -155,7 +163,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should respect before and after-handler",
+      "APPLY#10: should respect before and after-handler",
       {
         rules: {
           elements: {
@@ -175,7 +183,7 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "should restart processing on element change",
+      "APPLY#11: should continue with new identity on element change",
       {
         rules: {
           elements: {
@@ -190,16 +198,17 @@ describe("HtmlFilter.applyTo()", () => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
             replacement: (params) => {
+              // This should not be triggered.
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}replacement`;
             },
           },
         },
         from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
-        to: '<parent>Lorem <replacement name="before-el-before-replacement-after">Ipsum</replacement> Dolor</parent>',
+        to: '<parent>Lorem <replacement name="before-el-after">Ipsum</replacement> Dolor</parent>',
       },
     ],
     [
-      "should apply text rules",
+      "APPLY#12: should apply text rules",
       {
         rules: {
           text: (params) => params.node.textContent = params.node.textContent.split("").reverse().join(""),
@@ -209,12 +218,19 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
   ])("(%#) %s", (name, testData) => {
-    document.body.innerHTML = testData.from.trim();
-    const root: Node = <Node>document.body.firstChild;
-    const filter = new HtmlFilter(testData.rules, MOCK_EDITOR);
+    if (TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
+      test.todo(`${name} (disabled by test selector for debugging purpose)`);
+      return;
+    }
 
-    filter.applyTo(root);
+    test(name, () => {
+      document.body.innerHTML = testData.from.trim();
+      const root: Node = <Node>document.body.firstChild;
+      const filter = new HtmlFilter(testData.rules, MOCK_EDITOR);
 
-    expect(document.body.innerHTML).toEqualXML(testData.to);
+      filter.applyTo(root);
+
+      expect(document.body.innerHTML).toEqualXML(testData.to);
+    });
   });
 });
