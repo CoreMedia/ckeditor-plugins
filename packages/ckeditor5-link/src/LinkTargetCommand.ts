@@ -176,10 +176,6 @@ export default class LinkTargetCommand extends Command {
         this._handleExpandedSelection(writer, target);
       }
     });
-
-    linkCommand?.once("execute", () => {
-      this._resetNext();
-    });
   }
 
   /**
@@ -198,22 +194,28 @@ export default class LinkTargetCommand extends Command {
     const editor = this.editor;
     const model = editor.model;
     const selection = model.document.selection;
-    const ranges = model.schema.getValidRanges(selection.getRanges(), LINK_TARGET_MODEL);
+    const ranges = [...model.schema.getValidRanges(selection.getRanges(), LINK_TARGET_MODEL)];
     const allowedRanges = [];
     for (const element of selection.getSelectedBlocks()) {
       if (model.schema.checkAttribute(element, LINK_TARGET_MODEL)) {
         allowedRanges.push(writer.createRangeOn(element));
       }
     }
-    const rangesToUpdate = allowedRanges.slice();
+
+    const rangesToUpdate = [...allowedRanges];
+
     for (const range of ranges) {
       if (LinkTargetCommand._isRangeToUpdate(range, allowedRanges)) {
         rangesToUpdate.push(range);
       }
     }
-    this._next.enabled = true;
+    this._next.enabled = rangesToUpdate.length > 0;
     this._next.target = target;
     this._next.ranges = rangesToUpdate;
+
+    this.logger.debug("Recorded linkTarget update for next document post-fix for expanded selection.", {
+      ...this._next,
+    });
   }
 
   /**
@@ -266,6 +268,10 @@ export default class LinkTargetCommand extends Command {
       this._next.enabled = true;
       this._next.target = target;
       this._next.ranges = [linkRange];
+
+      this.logger.debug("Recorded linkTarget update for next document post-fix for collapsed selection.", {
+        ...this._next,
+      });
     } else if (!!target) {
       /*
        * Only set the target, if it is not empty. We already know at this
@@ -365,6 +371,8 @@ export default class LinkTargetCommand extends Command {
       // We are currently not active (not working on LinkCommand). Let's just return.
       return false;
     }
+
+    this.logger.debug("Post-fix triggered to update linkTarget.", { ...this._next });
 
     const operationsBefore = writer.batch.operations.length;
 
