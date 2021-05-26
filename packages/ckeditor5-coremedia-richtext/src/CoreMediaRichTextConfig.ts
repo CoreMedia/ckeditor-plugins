@@ -157,24 +157,24 @@ const defaultRules: FilterRuleSetConfiguration = {
     a: {
       toData: (params) => {
         const href = params.node.attributes["href"];
-        const value = params.node.attributes["target"];
+        const target = params.node.attributes["target"] || "";
         // Just ensure, that even no empty target is written.
         delete params.node.attributes["target"];
         delete params.node.attributes["href"];
-        if (!href) {
+        if (href !== "" && !href) {
           // Invalid state: We have an a-element without href which is not
           // supported by CoreMedia RichText DTD.
           params.node.replaceByChildren = true;
-          return;
-        }
-        if (!value) {
           return;
         }
         const newAttrs: {
           show?: string,
           role?: string,
         } = {};
-        switch (value.toLowerCase()) {
+        switch (target.toLowerCase()) {
+          case "":
+            // Ignoring empty target.
+            break;
           case "_top":
             newAttrs.show = "replace";
             break;
@@ -193,16 +193,16 @@ const defaultRules: FilterRuleSetConfiguration = {
             break;
           default:
             const roleExpression = /^_role_(.*)/;
-            const roleMatchResult = value.match(roleExpression);
+            const roleMatchResult = target.match(roleExpression);
             if (!!roleMatchResult) {
               // artificial state, which should not happen (but may happen due to UAPI calls).
-              newAttrs.role = roleMatchResult[0];
+              newAttrs.role = roleMatchResult[1];
             } else {
               newAttrs.show = "other";
-              newAttrs.role = value;
+              newAttrs.role = target;
             }
         }
-        params.node.attributes[href] = href;
+        params.node.attributes["xlink:href"] = href;
         if (!!newAttrs.show) {
           params.node.attributes["xlink:show"] = newAttrs.show;
         }
@@ -221,7 +221,7 @@ const defaultRules: FilterRuleSetConfiguration = {
 
         params.node.attributes["href"] = href;
 
-        let target: string = "";
+        let target = "";
 
         if (!show) {
           if (!role) {

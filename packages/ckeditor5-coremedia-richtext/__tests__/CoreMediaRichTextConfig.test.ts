@@ -123,6 +123,7 @@ describe("Default Data Filter Rules", () => {
       },
     ],
   ];
+  // noinspection XmlUnusedNamespaceDeclaration
   const textFixtures: DataFilterTestFixture[] = [
     [
       "TEXT#1: Should remove text at root DIV.",
@@ -190,9 +191,8 @@ describe("Default Data Filter Rules", () => {
     [
       "TEXT#8: Should keep text at A.",
       {
-        // TODO[cke] Will need to be adapted, once we officially support links.
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}">${text}</a></p></div>`,
         expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
         expectedView: true,
       },
@@ -294,6 +294,113 @@ describe("Default Data Filter Rules", () => {
         inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
         expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
         expectedView: true,
+      },
+    ],
+  ];
+
+  // XmlUnusedNamespaceDeclaration: We need to provide xmlns:xlink for view as well, as within this
+  // test the namespaces of the root element are not touched. Thus, if transforming data back to
+  // view, the xlink-namespace will still exist.
+  // noinspection XmlUnusedNamespaceDeclaration
+  const anchorFixtures: DataFilterTestFixture[] = [
+    [
+      "ANCHOR#1: Should transform href to xlink:href.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#2: Should transform free-form target to {xlink:show: other, xlink:role: specific}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="specific">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other" xlink:role="specific">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#3: Should transform target _blank to {xlink:show: new, xlink:role: unset}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_blank">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="new">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#4: Should transform target _self to {xlink:show: other, xlink:role: _self}.",
+      {
+        comment: "xlink:show does not provide a valid replacement for `_self`. We may just remove any target information, as `_self` is the default anyway. But this will break bijective mapping for example on copy & paste.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_self">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other" xlink:role="_self">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#5: Should transform target _parent to {xlink:show: other, xlink:role: _parent}.",
+      {
+        comment: "xlink:show does not provide a valid replacement for `_parent`. Thus, we store it as 'other'.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_parent">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other" xlink:role="_parent">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#6: Should transform target _top to {xlink:show: replace, xlink:role: unset}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_top">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="replace">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#7: Should transform artificial target _embed to {xlink:show: embed, xlink:role: unset}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_embed">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="embed">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#8: Should transform artificial target _none to {xlink:show: none, xlink:role: unset}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_none">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="none">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#9: Should transform artificial target _other to {xlink:show: other, xlink:role: unset}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_other">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#10: Should transform artificial target _role_some to {xlink:show: unset, xlink:role: some}.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_role_some">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:role="some">${text}</a></p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "ANCHOR#11: Should ignore empty targets.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="">${text}</a></p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
       },
     ],
   ];
@@ -740,6 +847,7 @@ describe("Default Data Filter Rules", () => {
   const testFixtures: DataFilterTestFixture[] = [
     ...uncategorizedFixtures,
     ...textFixtures,
+    ...anchorFixtures,
     ...textEntityFixtures,
     ...tableFixtures,
     ...listFixtures,
