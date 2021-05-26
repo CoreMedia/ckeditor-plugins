@@ -161,7 +161,6 @@ const defaultRules: FilterRuleSetConfiguration = {
         // Just ensure, that even no empty target is written.
         delete params.node.attributes["target"];
         delete params.node.attributes["href"];
-        console.warn("TODO, a.toData", { href: href, target: target });
 
         if (href !== "" && !href) {
           // Invalid state: We have an a-element without href which is not
@@ -211,11 +210,6 @@ const defaultRules: FilterRuleSetConfiguration = {
         if (!!newAttrs.role) {
           params.node.attributes["xlink:role"] = newAttrs.role;
         }
-        console.warn("TODO, a.toData", {
-          href: href,
-          show: params.node.attributes["xlink:show"],
-          role: params.node.attributes["xlink:role"],
-        });
       },
       toView: (params) => {
         const href = params.node.attributes["xlink:href"];
@@ -261,10 +255,16 @@ const defaultRules: FilterRuleSetConfiguration = {
               }
               break;
             default:
-              console.warn(`Invalid value for xlink:show="${show}". No target attribute will be generated. Node:`, params.node);
+              console.warn(
+                `Invalid value for xlink:show="${show}". No target attribute will be generated. Node:`,
+                params.node
+              );
           }
           if (roleIgnored) {
-            console.warn(`Invalid xlink:role="${role}" for xlink:show="${show}". Role will be ignored. Node:`, params.node);
+            console.warn(
+              `Invalid xlink:role="${role}" for xlink:show="${show}". Role will be ignored. Node:`,
+              params.node
+            );
           }
         }
 
