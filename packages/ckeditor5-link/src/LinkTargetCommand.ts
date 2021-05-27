@@ -11,6 +11,7 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DocumentSelection from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Text from "@ckeditor/ckeditor5-engine/src/model/text";
 
 /**
  * Signals to delete a target.
@@ -28,6 +29,26 @@ type Target = string | DeletedTarget;
  * empty string will be stored as empty `linkHref` in model.
  */
 type Href = string | "" | null;
+/**
+ * Next target value to set in post-fixer.
+ */
+type NextTarget = {
+  /**
+   * If post-fix is to be applied. Will synchronize with `LinkCommand`.
+   */
+  enabled: boolean;
+  /**
+   * That target to set. Falsy values will be handled as _remove target_.
+   */
+  target: Target;
+  /**
+   * Ranges to apply target to.
+   */
+  ranges: Range[];
+};
+type InsertContentCallback = (eventInfo: EventInfo, params: Array<unknown>) => void;
+
+type ChangeAttributeCallback = ({ path }: EventInfo, { attributeKeys }: { attributeKeys: string[] }) => void;
 
 /**
  * Extension to `LinkCommand` which takes care of setting the `linkTarget`
@@ -45,24 +66,12 @@ export default class LinkTargetCommand extends Command {
    * multiple entries in undo-history.
    * @private
    */
-  private readonly _next: {
-    /**
-     * If post-fix is to be applied. Will synchronize with `LinkCommand`.
-     */
-    enabled: boolean;
-    /**
-     * That target to set. Falsy values will be handled as _remove target_.
-     */
-    target: Target;
-    /**
-     * Ranges to apply target to.
-     */
-    ranges: Range[];
-  } = {
+  private readonly _next: NextTarget = {
     enabled: false,
     target: null,
     ranges: [],
   };
+
   /**
    * Callback to listen to `removeSelectionAttribute` triggered by
    * `LinkCommand`. It will ensure, that `linkTarget` is removed from
@@ -72,13 +81,20 @@ export default class LinkTargetCommand extends Command {
    * changed. As this event is triggered after the change got applied, we can
    * retrieve the actual new attribute values from the selection.
    */
-  private readonly _changeAttributeCallback = (
+  private readonly _changeAttributeCallback: ChangeAttributeCallback = (
     { path }: EventInfo,
     { attributeKeys }: { attributeKeys: string[] }
   ): void => {
     this._changedAttribute(this.editor.model, path, attributeKeys);
   };
 
+  private _insertContentCallback: undefined | InsertContentCallback;
+
+  /**
+   * Constructor.
+   *
+   * @param editor the editor this command is bound to
+   */
   constructor(editor: Editor) {
     super(editor);
 
@@ -119,14 +135,38 @@ export default class LinkTargetCommand extends Command {
   }
 
   /**
-   * Reset next tracking to default value, which especially disabled the
-   * post-fixer temporarily.
+   * Reset next tracking to default value, which especially disables the
+   * post-fixer temporarily. Also removes any temporarily existing callbacks.
+   *
    * @private
    */
-  private _resetNext(): void {
+  private _reset(): void {
     this._next.enabled = false;
     this._next.target = null;
     this._next.ranges = [];
+
+    if (this._insertContentCallback) {
+      const editor = this.editor;
+      const model = editor.model;
+      model.off("insertContent", this._insertContentCallback);
+    }
+  }
+
+  /**
+   * Set the next target to apply.
+   *
+   * @param target target to set
+   * @param ranges ranges to set target for
+   * @private
+   */
+  private _setNext(target: Target, ...ranges: Range[]): void {
+    this._next.target = target;
+    this._next.ranges = ranges;
+    this._next.enabled = ranges.length > 0;
+
+    this.logger.debug("Recorded linkTarget update for next document post-fix for expanded selection.", {
+      ...this._next,
+    });
   }
 
   /**
@@ -169,20 +209,16 @@ export default class LinkTargetCommand extends Command {
     const model = editor.model;
     const selection = model.document.selection;
 
-    model.change((writer) => {
-      if (selection.isCollapsed) {
-        this._handleCollapsedSelection(writer, target, href, linkCommand);
-      } else {
-        this._handleExpandedSelection(writer, target);
-      }
-    });
+    if (selection.isCollapsed) {
+      this._handleCollapsedSelection(target, href);
+    } else {
+      this._handleExpandedSelection(target);
+    }
 
     linkCommand?.once("execute", () => {
       // LinkCommand may not have made any changes (if href had not been
       // changed). Ensure that we check for this after command execution.
-      if (this._next.enabled) {
-        model.change((writer) => this._updateTargetOnLinkHref(writer));
-      }
+      model.change((writer) => this._updateTargetOnLinkHref(writer));
     });
   }
 
@@ -198,32 +234,29 @@ export default class LinkTargetCommand extends Command {
    * it should be checked, if the corresponding implementation changed in
    * a way, that requires to adapt the following code.
    */
-  private _handleExpandedSelection(writer: Writer, target: Target): void {
+  private _handleExpandedSelection(target: Target): void {
     const editor = this.editor;
     const model = editor.model;
     const selection = model.document.selection;
     const ranges = [...model.schema.getValidRanges(selection.getRanges(), LINK_TARGET_MODEL)];
-    const allowedRanges = [];
-    for (const element of selection.getSelectedBlocks()) {
-      if (model.schema.checkAttribute(element, LINK_TARGET_MODEL)) {
-        allowedRanges.push(writer.createRangeOn(element));
-      }
-    }
+    const allowedRanges: Range[] = [];
 
-    const rangesToUpdate = [...allowedRanges];
+    model.change((writer) => {
+      for (const element of selection.getSelectedBlocks()) {
+        if (model.schema.checkAttribute(element, LINK_TARGET_MODEL)) {
+          allowedRanges.push(writer.createRangeOn(element));
+        }
+      }
+    });
+
+    const rangesToUpdate: Range[] = [...allowedRanges];
 
     for (const range of ranges) {
       if (LinkTargetCommand._isRangeToUpdate(range, allowedRanges)) {
         rangesToUpdate.push(range);
       }
     }
-    this._next.enabled = rangesToUpdate.length > 0;
-    this._next.target = target;
-    this._next.ranges = rangesToUpdate;
-
-    this.logger.debug("Recorded linkTarget update for next document post-fix for expanded selection.", {
-      ...this._next,
-    });
+    this._setNext(target, ...rangesToUpdate);
   }
 
   /**
@@ -240,12 +273,7 @@ export default class LinkTargetCommand extends Command {
    * a way, that requires to adapt the following code.
    * @private
    */
-  private _handleCollapsedSelection(
-    writer: Writer,
-    target: Target,
-    href: Href,
-    linkCommand: Command | undefined
-  ): void {
+  private _handleCollapsedSelection(target: Target, href: Href): void {
     const editor = this.editor;
     const model = editor.model;
     const selection = model.document.selection;
@@ -273,47 +301,38 @@ export default class LinkTargetCommand extends Command {
         selection.getAttribute(referenceAttribute),
         model
       );
-      this._next.enabled = true;
-      this._next.target = target;
-      this._next.ranges = [linkRange];
-
-      this.logger.debug("Recorded linkTarget update for next document post-fix for collapsed selection.", {
-        ...this._next,
-      });
-    } else if (!!target) {
-      /*
-       * Only set the target, if it is not empty. We already know at this
-       * point, that the current selection has no `linkHref` attribute
-       * set, which leaves two possible states we need to handle:
-       *
-       *
-       * TL;DR: Always call `writer.removeSelectionAttribute` after
-       * execution of link-command, but only set the attribute if
-       * linkHref is not empty.
-       *
-       * linkHref !== ''
-       *
-       *     This will cause `LinkCommand` to add a text containing linkHref.
-       *     As `LinkCommand` link command will take over the attributes from
-       *     the selection, we can add the target to the selection (because
-       *     this will/must run before `LinkCommand`). Doing so, requires
-       *     to manually trigger `writer.removeSelectionAttribute` after
-       *     `LinkCommand` got executed.
-       *
-       * linkHref == ''
-       *
-       *     `LinkCommand` won't create any text and won't apply any
-       *     attributes. Thus, we must not add `linkTarget` attribute,
-       *     as there would be no UI to editor this orphaned `LinkTarget`.
-       *     But just as `LinkCommand` we should ensure to call
-       *     `writer.removeSelectionAttribute`.
-       */
-      if (!!href && !!linkCommand) {
-        // This will tell link-command that it should take these
-        // attributes when creating the text.
-        writer.setSelectionAttribute(LINK_TARGET_MODEL, target);
-      }
+      this._setNext(target, linkRange);
+    } else if (!!target && !!href) {
+      this._registerInsertContentCallback(target);
     }
+  }
+
+  /**
+   * Registers a callback for `insertContent` expecting, that `LinkCommand`
+   * will insert some text which consists of the `linkHref` attribute value
+   * along with an attribute `linkHref` (and decorators).
+   *
+   * If this is triggered, the callback will ensure, that the created text
+   * is handled on post-fixing to apply the given target attribute.
+   *
+   * @param target target attribute to apply
+   * @private
+   */
+  private _registerInsertContentCallback(target: Target): void {
+    this._insertContentCallback = this._createInsertContentCallback(target);
+    this.editor.model.once("insertContent", this._insertContentCallback);
+  }
+
+  private _createInsertContentCallback(target: Target): InsertContentCallback {
+    return (eventInfo: EventInfo, params: Array<unknown>) => {
+      const range = <Range>eventInfo.return;
+      if (range && params.length > 0) {
+        const firstParam = params[0];
+        if (firstParam instanceof Text && !!firstParam.getAttribute(LINK_HREF_MODEL)) {
+          this._setNext(target, range);
+        }
+      }
+    };
   }
 
   /**
@@ -356,7 +375,7 @@ export default class LinkTargetCommand extends Command {
 
   destroy(): void {
     super.destroy();
-    this._resetNext();
+    this._reset();
 
     const editor = this.editor;
     const model = editor.model;
@@ -392,7 +411,7 @@ export default class LinkTargetCommand extends Command {
 
     // We applied our changes, nothing more to add. Prevents infinite recursions
     // implicitly.
-    this._resetNext();
+    this._reset();
 
     return operationsBefore !== operationsAfter;
   }
