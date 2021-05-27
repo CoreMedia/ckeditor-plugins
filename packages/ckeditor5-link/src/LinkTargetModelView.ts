@@ -7,6 +7,14 @@ import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./LinkTargetCommand";
 
 /**
+ * Same priority as used for link-downcasting (href and decorators).
+ * It is important, that this is the very same priority as for href
+ * attributes, as otherwise `<a>` elements won't merge when transformed
+ * to data.
+ */
+const LINK_ATTRIBUTE_PRIORITY = 5;
+
+/**
  * Adds an attribute `linkTarget` to the model, which will be represented
  * as `target` attribute in view.
  *
@@ -39,9 +47,16 @@ export default class LinkTargetModelView extends Plugin {
     editor.conversion.for("downcast").attributeToElement({
       model: LINK_TARGET_MODEL,
       view: (modelAttributeValue, { writer }) => {
-        return writer.createAttributeElement("a", {
-          target: modelAttributeValue,
-        });
+        const element = writer.createAttributeElement(
+          "a",
+          {
+            target: modelAttributeValue,
+          },
+          { priority: LINK_ATTRIBUTE_PRIORITY }
+        );
+        // Signal Link-Plugin, that this is a link, too.
+        writer.setCustomProperty("link", true, element);
+        return element;
       },
       converterPriority: "low",
     });
