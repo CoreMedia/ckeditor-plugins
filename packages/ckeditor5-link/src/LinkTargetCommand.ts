@@ -176,6 +176,14 @@ export default class LinkTargetCommand extends Command {
         this._handleExpandedSelection(writer, target);
       }
     });
+
+    linkCommand?.once("execute", () => {
+      // LinkCommand may not have made any changes (if href had not been
+      // changed). Ensure that we check for this after command execution.
+      if (this._next.enabled) {
+        model.change((writer) => this._updateTargetOnLinkHref(writer));
+      }
+    });
   }
 
   /**
