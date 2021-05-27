@@ -5,6 +5,8 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./LinkTargetCommand";
+import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeelement";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
@@ -13,6 +15,10 @@ import LinkTargetCommand from "./LinkTargetCommand";
  * to data.
  */
 const LINK_ATTRIBUTE_PRIORITY = 5;
+/**
+ * Must be the same name as used for custom property in CKEditor's Link Plugin.
+ */
+const LINK_CUSTOM_PROPERTY = "link";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -46,18 +52,7 @@ export default class LinkTargetModelView extends Plugin {
     // a-Element created by Link plugin.
     editor.conversion.for("downcast").attributeToElement({
       model: LINK_TARGET_MODEL,
-      view: (modelAttributeValue, { writer }) => {
-        const element = writer.createAttributeElement(
-          "a",
-          {
-            target: modelAttributeValue,
-          },
-          { priority: LINK_ATTRIBUTE_PRIORITY }
-        );
-        // Signal Link-Plugin, that this is a link, too.
-        writer.setCustomProperty("link", true, element);
-        return element;
-      },
+      view: downcastTarget,
       converterPriority: "low",
     });
 
@@ -128,6 +123,28 @@ function fixZombieLinkTargetsAfterLinkHrefRemoval(writer: Writer): boolean {
    * one) is required (= true) or not (= false).
    */
   return operationsBefore !== operationsAfter;
+}
+
+/**
+ * Downcast `linkTarget` attribute (downcast: Model -> Output (Data & Editing)).
+ * Creates element with target attribute. Element will be merged with
+ * a-Element created by Link plugin (requires that both share the same
+ * priority).
+ *
+ * @param modelAttributeValue target value
+ * @param writer writer from conversion API
+ */
+function downcastTarget(modelAttributeValue: never, { writer }: DowncastConversionApi): AttributeElement {
+  const element = writer.createAttributeElement(
+    "a",
+    {
+      target: modelAttributeValue,
+    },
+    { priority: LINK_ATTRIBUTE_PRIORITY }
+  );
+  // Signal Link-Plugin, that this is a link, too.
+  writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);
+  return element;
 }
 
 /**
