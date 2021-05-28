@@ -156,21 +156,6 @@ const COREMEDIA_RICHTEXT_1_0_NAMESPACE = "http://www.coremedia.com/2003/richtext
 const XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
 
 /**
- * Validates a given URI.
- *
- * @see <a href="https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url">Check if a JavaScript string is a URL - Stack Overflow</a>
- */
-const URI_PATTERN = new RegExp(
-  "^(https?:\\/\\/)?" + // protocol
-  "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-  "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-  "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-  "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-  "(\\#[-a-z\\d_]*)?$", // fragment locator
-  "i"
-);
-
-/**
  * Pattern for validating language tags.
  *
  * @see <a href="https://stackoverflow.com/questions/3962543/how-can-i-validate-a-culture-code-with-a-regular-expression/3962783#3962783">regex - How can I validate a culture code with a regular expression? - Stack Overflow</a>
@@ -190,8 +175,12 @@ const LANGUAGE: AttributeValueValidator = (v, s) => (s === Strictness.STRICT) ? 
 const NUMBER: AttributeValueValidator = (v, s) => (s === Strictness.STRICT) ? /^\d+$/.test(v) : true;
 /**
  * a Uniform Resource Identifier, see [RFC2396]
+ *
+ * Note: While we may validate a URI to some extend, we experienced CKEditor
+ * not doing much validation here and thus, `href` may be any string. Because
+ * of this we don't apply strict checking here, even if requested by configuration.
  */
-const URI: AttributeValueValidator = (v, s) => (s === Strictness.STRICT) ? URI_PATTERN.test(v) : true;
+const URI: AttributeValueValidator = () => true;
 /**
  * used for titles etc.
  */
