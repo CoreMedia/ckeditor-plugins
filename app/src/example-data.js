@@ -1,5 +1,3 @@
-import {setData} from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-
 const exampleData = {
   "Hello": `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Hello World!</p></div>`,
   "Empty": `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"/>`,
@@ -57,6 +55,7 @@ const initExamples = (editor) => {
   const examplesDiv = document.getElementById("examples");
   for (let exampleKey in exampleData) {
     const button = document.createElement("button");
+    // noinspection InnerHTMLJS
     button.innerHTML = exampleKey;
     button.addEventListener("click", () => {
       setExampleData(editor, exampleKey);
