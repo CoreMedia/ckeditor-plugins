@@ -4,6 +4,8 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import LinkCommand from "../linkcommand";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
+import Template from "@ckeditor/ckeditor5-ui/src/template";
+import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
 
 type DecoratorSwitchesStates = {
   [decorator: string]: boolean,
@@ -16,6 +18,8 @@ export default class LinkFormView extends View {
   cancelButtonView: ButtonView;
   saveButtonView: ButtonView;
   urlInputView: LabeledFieldView;
+  template:Template;
+  children:ViewCollection;
 
   constructor(locale: Locale, linkCommand: LinkCommand);
 

@@ -2,6 +2,7 @@ import View from '../view';
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 
 /**
@@ -24,6 +25,12 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
  */
 export default class ButtonView extends View implements Emitter, Observable {
   constructor(locale?: Locale);
+
+  icon:string;
+
+  withText:boolean;
+
+  children:ViewCollection;
 
   render(): void;
 

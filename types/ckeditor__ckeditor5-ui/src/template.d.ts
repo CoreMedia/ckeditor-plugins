@@ -7,6 +7,9 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 
 export default class Template implements Emitter {
   constructor(def: any);
+
+  attributes: object;
+
   render(): HTMLElement|Text;
   apply(node: Node): any;
   revert(node: Node): void;

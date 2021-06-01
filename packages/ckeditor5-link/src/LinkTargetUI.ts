@@ -4,6 +4,11 @@ import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkFormViewExtension from "./ui/LinkFormViewExtension";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
+import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
+import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+// @ts-ignore
+import ToolbarView from "@ckeditor/ckeditor5-ui/src/toolbar/ToolbarView";
+import View from "@ckeditor/ckeditor5-ui/src/view";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -53,6 +58,8 @@ export default class LinkTargetUI extends Plugin {
     // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
     // @ts-ignore
     extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
+    this._customizeFormView(formView);
+    this._customizeToolbarButtons(formView);
 
     this.listenTo(
       formView,
@@ -76,6 +83,46 @@ export default class LinkTargetUI extends Plugin {
     );
 
     return extension;
+  }
+
+  private _customizeToolbarButtons(formView: LinkFormView): void {
+    this._customizeButton(formView.cancelButtonView);
+    this._customizeButton(formView.saveButtonView);
+  }
+
+  private _customizeFormView(formView: LinkFormView): void {
+    const LINK_FORM_VERTICAL_CLS = "ck-link-form_layout-vertical";
+    const CK_VERTICAL_CLS = "ck-vertical-form";
+    const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
+    const CM_PRIMARY_BUTTON_CLS = "cm-ck-button-primary";
+
+    // always add vertical css classes to the formView
+    this._addClassToTemplate(formView, LINK_FORM_VERTICAL_CLS);
+    this._addClassToTemplate(formView, CK_VERTICAL_CLS);
+    this._addClassToTemplate(formView, CM_FORM_VIEW_CLS);
+
+    // change the order of the buttons
+    formView.children.remove(formView.saveButtonView);
+    formView.children.remove(formView.cancelButtonView);
+
+    this._addClassToTemplate(formView.saveButtonView, CM_PRIMARY_BUTTON_CLS);
+    formView.children.add(formView.cancelButtonView);
+    formView.children.add(formView.saveButtonView);
+  }
+
+  private _customizeButton(button: ButtonView): void {
+    // The icon view is the first child of the viewCollection:
+    const iconView = button.children.first;
+    button.children.remove(iconView);
+    button.withText = true;
+  }
+
+  private _addClassToTemplate(view: View, className: string): void {
+    // @ts-ignore
+    const classes: string[] = view.template.attributes.class;
+    if (!classes.includes(className)) {
+      classes.push(className);
+    }
   }
 
   destroy(): Promise<never> | null {
