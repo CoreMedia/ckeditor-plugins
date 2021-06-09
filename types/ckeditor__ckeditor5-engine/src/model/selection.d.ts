@@ -4,6 +4,8 @@ import DocumentSelection from "./documentselection";
 import Element from "./element";
 import { Item } from "./item";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 /**
  * Selection is a set of {@link module:engine/model/range~Range ranges}.
@@ -68,6 +70,10 @@ export default class Selection implements Emitter {
   off(event: string, callback?: CallbackFunction): void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }
 
 /**

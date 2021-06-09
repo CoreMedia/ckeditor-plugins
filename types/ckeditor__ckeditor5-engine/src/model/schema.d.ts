@@ -7,6 +7,7 @@ import Element from "./element";
 import { Item } from "./item";
 import Range from "./range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 
 /**
@@ -54,6 +55,8 @@ export default class Schema implements Emitter, Observable {
   set(name: string | Object, value?: any): void;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }
 
 export class SchemaContext {

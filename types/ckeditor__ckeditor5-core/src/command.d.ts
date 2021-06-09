@@ -8,6 +8,7 @@ import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/obser
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 export default class Command implements Emitter, Observable {
   value?: unknown;
@@ -37,4 +38,6 @@ export default class Command implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

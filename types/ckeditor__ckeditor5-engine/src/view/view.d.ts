@@ -3,6 +3,7 @@ import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/obser
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import ViewDocument from "./document"
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "./observer/domeventdata";
 
 /**
  * Editor's view controller class. Its main responsibility is DOM - View
@@ -28,4 +29,6 @@ export default class View implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

@@ -4,6 +4,7 @@ import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emitter
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Template from "./template";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_ui_view-View.html">Class View (ui/view~View) - CKEditor 5 API docs</a>
@@ -35,4 +36,6 @@ export default class View implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

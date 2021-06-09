@@ -7,6 +7,8 @@ import Document from "./document";
 import Element from "./element";
 import Range from "./range";
 import Selection from "./selection";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 /**
  * `DocumentSelection` is a special selection which is used as the
@@ -70,4 +72,8 @@ export default class DocumentSelection implements Emitter {
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   off(event: string, callback?: CallbackFunction): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

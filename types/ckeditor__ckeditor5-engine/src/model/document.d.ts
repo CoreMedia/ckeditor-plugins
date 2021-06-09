@@ -8,6 +8,7 @@ import History from "./history";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import DocumentSelection from "./documentselection";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 /**
  * Data model's document. It contains the model's structure, its selection and the history of changes.
@@ -50,4 +51,6 @@ export default class Document implements Emitter {
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

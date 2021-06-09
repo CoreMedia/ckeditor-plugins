@@ -5,6 +5,8 @@ import Writer from "../model/writer";
 import Schema, { SchemaContextDefinition } from "../model/schema";
 import DocumentFragment from "../model/documentfragment";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 /**
  * Upcast dispatcher is a central point of the view-to-model conversion
@@ -23,6 +25,10 @@ export default class UpcastDispatcher implements Emitter {
   off(event: string, callback?: CallbackFunction): void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }
 
 /**

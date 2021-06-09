@@ -13,6 +13,7 @@ import CommandCollection from "../commandcollection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Conversion from "@ckeditor/ckeditor5-engine/src/conversion/conversion";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 // TODO[typing]
 type EditorConfig = any;
@@ -55,4 +56,6 @@ export default abstract class Editor implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

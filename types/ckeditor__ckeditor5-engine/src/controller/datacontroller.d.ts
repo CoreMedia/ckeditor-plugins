@@ -4,6 +4,7 @@ import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/obser
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 import DataProcessor from "../dataprocessor/dataprocessor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 /**
  * Controller for the data pipeline.
@@ -25,4 +26,6 @@ export default class DataController implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }

@@ -4,6 +4,7 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import Editor from "./editor/editor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 export default abstract class Plugin<T = void> implements Emitter, Observable {
   readonly editor: Editor;
@@ -37,4 +38,6 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }
