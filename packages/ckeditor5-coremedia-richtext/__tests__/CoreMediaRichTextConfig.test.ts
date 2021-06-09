@@ -646,6 +646,15 @@ describe("Default Data Filter Rules", () => {
         expectedView: true,
       },
     ],
+    [
+      "TABLE#15: th should be transformed to td with class and continue with normal tds.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><th>Head</th></tr><tr><td>Data</td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td class="td--heading">Head</td></tr><tr><td>Data</td></tr></table></div>`,
+        expectedView: true,
+      },
+    ],
   ];
   const listFixtures: DataFilterTestFixture[] =
     flatten(["ul", "ol"].map(el => {
