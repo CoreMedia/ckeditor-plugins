@@ -4,7 +4,7 @@ import LinkFormView from "./ui/linkformview";
 import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import EventInfo from "@types/ckeditor__ckeditor5-utils/src/eventinfo";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 /**
