@@ -10,7 +10,7 @@ import {
   ToDataAndViewElementConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
-import { headingToParagraph, paragraphToHeading } from "./rules/Heading";
+import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
@@ -109,12 +109,7 @@ const defaultRules: FilterRuleSetConfiguration = {
         p: paragraphToHeading,
       },
     },
-    h1: headingToParagraph,
-    h2: headingToParagraph,
-    h3: headingToParagraph,
-    h4: headingToParagraph,
-    h5: headingToParagraph,
-    h6: headingToParagraph,
+    ...headingRules,
     // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
     b: replaceBy("strong"),
     i: {

@@ -1,4 +1,5 @@
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 
 export const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
 export const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
@@ -37,4 +38,13 @@ export const paragraphToHeading: ElementFilterRule = ({ node }) => {
   }
   node.name = `h${headingLevel}`;
   delete node.attributes["class"];
+};
+
+export const headingRules: ElementsFilterRuleSetConfiguration = {
+  h1: headingToParagraph,
+  h2: headingToParagraph,
+  h3: headingToParagraph,
+  h4: headingToParagraph,
+  h5: headingToParagraph,
+  h6: headingToParagraph,
 };
