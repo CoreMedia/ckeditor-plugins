@@ -7,6 +7,7 @@ import Editor from "./editor/editor";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 export default class Command implements Emitter, Observable {
   value?: unknown;
@@ -34,4 +35,6 @@ export default class Command implements Emitter, Observable {
   set(name: string | Object, value?: any): void;
 
   bind(...bindProperties: any[]): BindReturnValue;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }

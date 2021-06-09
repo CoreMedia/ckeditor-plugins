@@ -3,6 +3,7 @@ import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emitter
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 import DataProcessor from "../dataprocessor/dataprocessor";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * Controller for the data pipeline.
@@ -22,4 +23,6 @@ export default class DataController implements Emitter, Observable {
   set(name: string | Object, value?: any): void;
 
   bind(...bindProperties: any[]): BindReturnValue;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }

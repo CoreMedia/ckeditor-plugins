@@ -4,6 +4,7 @@ import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/obser
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * The button view class.
@@ -45,4 +46,6 @@ export default class ButtonView extends View implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   off(event: string, callback?: CallbackFunction): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }

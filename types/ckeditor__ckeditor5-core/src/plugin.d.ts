@@ -3,6 +3,7 @@ import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/obser
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import Editor from "./editor/editor";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 export default abstract class Plugin<T = void> implements Emitter, Observable {
   readonly editor: Editor;
@@ -34,4 +35,6 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
   set(name: string | Object, value?: any): void;
 
   bind(...bindProperties: any[]): BindReturnValue;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }

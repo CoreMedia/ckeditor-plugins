@@ -6,6 +6,7 @@ import Position from "./position";
 import Element from "./element";
 import { Item } from "./item";
 import Range from "./range";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 
 /**
@@ -51,6 +52,8 @@ export default class Schema implements Emitter, Observable {
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   set(name: string | Object, value?: any): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }
 
 export class SchemaContext {

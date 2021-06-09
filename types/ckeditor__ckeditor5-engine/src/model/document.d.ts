@@ -7,6 +7,7 @@ import RootElement from "./rootelement";
 import History from "./history";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import DocumentSelection from "./documentselection";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * Data model's document. It contains the model's structure, its selection and the history of changes.
@@ -47,4 +48,6 @@ export default class Document implements Emitter {
   off(event: string, callback?: CallbackFunction): void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }

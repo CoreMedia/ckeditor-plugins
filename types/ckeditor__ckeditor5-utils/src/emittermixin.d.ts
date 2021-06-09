@@ -1,11 +1,11 @@
-/**
- * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_emittermixin-Emitter.html">Interface Emitter (utils/emittermixin~Emitter) - CKEditor 5 API docs</a>
- */
 import { PriorityString } from "./priorities";
 import EventInfo from "./eventinfo";
 
 export type CallbackFunction = (evt: EventInfo, ...args: any[]) => void;
 
+/**
+ * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_emittermixin-Emitter.html">Interface Emitter (utils/emittermixin~Emitter) - CKEditor 5 API docs</a>
+ */
 export default interface Emitter {
   /**
    * Registers a callback function to be executed when an event is fired.
@@ -33,4 +33,5 @@ export default interface Emitter {
    * order they were added.
    */
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }

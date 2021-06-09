@@ -14,6 +14,7 @@ import Range from "./range";
 import Selection, { Selectable } from "./selection";
 import DocumentSelection from "./documentselection";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * Editor's data model.
@@ -87,4 +88,6 @@ export default class Model implements Emitter, Observable {
   off(event: string, callback?: CallbackFunction): void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 }
