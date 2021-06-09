@@ -1352,13 +1352,6 @@
     tar-fs "^2.1.1"
     yargs "^16.1.0"
 
-"@jangaroo/publish@1.0.0":
-  version "1.0.0"
-  resolved "https://nexus.pandora-ci-03.coremedia.vm/repository/coremedia-npm/@jangaroo/publish/-/publish-1.0.0.tgz#53595d34bd45921c445d0cfa51f3081ebbcbdc5d"
-  integrity sha512-xhlQpNauZY2C3IdNXcm9Q1DLsHTJPOlEyzA/UPo4olOEIoBCDsjcv+OARJujI9dSJaJEVodqJozt6TUBKYGl3Q==
-  dependencies:
-    json5 "^2.1.3"
-
 "@jangaroo/publish@^1.0.0-alpha":
   version "1.0.0-alpha.15"
   resolved "https://nexus.pandora-ci-03.coremedia.vm/repository/coremedia-npm/@jangaroo/publish/-/publish-1.0.0-alpha.15.tgz#af54eb72bdedec32163c263e2b5656a9e3e820b4"
