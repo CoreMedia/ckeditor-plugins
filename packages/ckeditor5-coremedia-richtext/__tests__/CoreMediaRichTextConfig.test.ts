@@ -1,5 +1,6 @@
 import "jest-xml-matcher";
 import { Strictness } from "../src/RichTextSchema";
+// @ts-ignore
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
@@ -75,10 +76,12 @@ const strictnessKeys = Object.keys(Strictness).filter((x) => !(parseInt(x) >= 0)
 const whitespace = " \t\n";
 const text = `Lorem${whitespace}Ipsum`;
 const attr_class = "alpha";
-const attr_link_external = "https://example.org/"
+const attr_link_external = "https://example.org/";
+// noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";
 const ns_xlink = "http://www.w3.org/1999/xlink";
 const ns_xhtml = "http://www.w3.org/1999/xhtml";
+// noinspection HttpUrlsUsage
 const ns_xdiff = "http://www.coremedia.com/2015/xdiff";
 
 function flatten<T>(arr: T[][]): T[] {
@@ -86,6 +89,7 @@ function flatten<T>(arr: T[][]): T[] {
   return empty.concat.apply(empty, arr);
 }
 
+// noinspection JSNonASCIINames
 describe("Default Data Filter Rules", () => {
   type DataFilterRulesTestData = CommentableTestData &
     DisableableTestCase &
@@ -298,112 +302,194 @@ describe("Default Data Filter Rules", () => {
     ],
   ];
 
-  // XmlUnusedNamespaceDeclaration: We need to provide xmlns:xlink for view as well, as within this
-  // test the namespaces of the root element are not touched. Thus, if transforming data back to
-  // view, the xlink-namespace will still exist.
-  // noinspection XmlUnusedNamespaceDeclaration
-  const anchorFixtures: DataFilterTestFixture[] = [
-    [
-      "ANCHOR#1: Should transform href to xlink:href.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#2: Should transform free-form target to {xlink:show: other, xlink:role: specific}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="specific">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other" xlink:role="specific">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#3: Should transform target _blank to {xlink:show: new, xlink:role: unset}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_blank">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="new">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#4: Should transform target _self to {xlink:show: other, xlink:role: _self}.",
-      {
-        comment: "xlink:show does not provide a valid replacement for `_self`. We may just remove any target information, as `_self` is the default anyway. But this will break bijective mapping for example on copy & paste.",
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_self">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other" xlink:role="_self">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#5: Should transform target _parent to {xlink:show: other, xlink:role: _parent}.",
-      {
-        comment: "xlink:show does not provide a valid replacement for `_parent`. Thus, we store it as 'other'.",
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_parent">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other" xlink:role="_parent">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#6: Should transform target _top to {xlink:show: replace, xlink:role: unset}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_top">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="replace">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#7: Should transform artificial target _embed to {xlink:show: embed, xlink:role: unset}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_embed">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="embed">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#8: Should transform artificial target _none to {xlink:show: none, xlink:role: unset}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_none">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="none">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#9: Should transform artificial target _other to {xlink:show: other, xlink:role: unset}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_other">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="other">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#10: Should transform artificial target _role_some to {xlink:show: unset, xlink:role: some}.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_role_some">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:role="some">${text}</a></p></div>`,
-        expectedView: true,
-      },
-    ],
-    [
-      "ANCHOR#11: Should ignore empty targets.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="">${text}</a></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}">${text}</a></p></div>`,
-      },
-    ],
-  ];
+  type XLinkBehavior = {
+    show?: string,
+    role?: string,
+  };
+  type XlinkBehaviorDefinition = XLinkBehavior & {
+    comment?: string,
+    non_bijective?: boolean;
+  };
+  /**
+   * Represents an empty target attribute.
+   */
+  type ExpectedTargetToXlinkShowAndRole = {
+    [target: string]: XlinkBehaviorDefinition,
+  };
+  // noinspection NonAsciiCharacters
+  const specialCharacterTargets: ExpectedTargetToXlinkShowAndRole = {
+    "äöü": {
+      comment: "Special Characters in target: Umlauts",
+      show: "other",
+      role: "äöü",
+    },
+    "&quot;": {
+      comment: "Special Character in target: Double-Quote",
+      show: "other",
+      role: "&quot;",
+    },
+    "'": {
+      comment: "Special Character in target: Single-Quote",
+      show: "other",
+      role: "'",
+    },
+    "&lt;": {
+      comment: "Special Character in target: Less-Than.",
+      show: "other",
+      role: "&lt;",
+    },
+    "&gt;": {
+      comment: "Special Character in target: Greater-Than.",
+      show: "other",
+      role: "&gt;",
+    },
+  };
+  const standardHtmlTargets: ExpectedTargetToXlinkShowAndRole = {
+    "_blank": {
+      comment: "Decision: Map _blank to xlink:show=new as it was for CKEditor 4.",
+      show: "new",
+    },
+    "_self": {
+      comment: "Decision: Map _self to xlink:show=replace as it was for CKEditor 4.",
+      show: "replace",
+    },
+    "_parent": {
+      comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_parent instead.",
+      show: "other",
+      role: "_parent",
+    },
+    "_top": {
+      comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_top instead.",
+      show: "other",
+      role: "_top",
+    },
+    "some target": {
+      comment: "Some standard use-case: A named target got specified.",
+      show: "other",
+      role: "some target",
+    },
+  };
+  /**
+   * XLink States, which have no equivalent in well-known target attributes but
+   * must be represented in some way. We have chosen to prefix them with underscores,
+   * so that they feel like those well-known target names. This should provide nearly
+   * no collision with targets found from external sources.
+   */
+  const artificialXlinkShowStates: ExpectedTargetToXlinkShowAndRole = {
+    "_embed": {
+      comment: "Chosen to represent xlink:show='embed'",
+      show: "embed",
+    },
+    "_none": {
+      comment: "Chosen to represent xlink:show='none'",
+      show: "none",
+    },
+  };
+  /**
+   * Combinations, which may be modelled in CoreMedia RichText, but are unexpected
+   * from clients such as CoreMedia Studio. Nevertheless, tools may decide to generate
+   * these states, and we must ensure to represent them in model and view.
+   */
+  const artificialXlinkAttributeCombinations: ExpectedTargetToXlinkShowAndRole = {
+    "_blank_some_target": {
+      show: "new",
+      role: "some_target",
+    },
+    "_self_some_target": {
+      show: "replace",
+      role: "some_target",
+    },
+    "_embed_some_target": {
+      show: "embed",
+      role: "some_target",
+    },
+    "_none_some_target": {
+      show: "none",
+      role: "some_target",
+    },
+    "_role_some_target": {
+      comment: "Here we have an xlink:role without xlink:show in RichText.",
+      role: "some_target",
+    },
+    "_other": {
+      comment: "Here we have an xlink:show='other' without expected xlink:role.",
+      show: "other",
+    },
+  };
+  /**
+   * Manual targets from external sources, which may be given trying to "hack"
+   * into the mapping.
+   */
+  const penetrationTargets: ExpectedTargetToXlinkShowAndRole = {
+    "_blank_": {
+      show: "other",
+      role: "_blank_",
+    },
+    "_self_": {
+      show: "other",
+      role: "_self_",
+    },
+    "_embed_": {
+      show: "other",
+      role: "_embed_",
+    },
+    "_none_": {
+      show: "other",
+      role: "_none_",
+    },
+    "_role_": {
+      show: "other",
+      role: "_role_",
+    },
+  };
+  /**
+   * Represents no target attribute.
+   */
+  const NO_TARGET = "NoTarget";
+  const expectedTargetToXlinkShowAndRole: ExpectedTargetToXlinkShowAndRole = {
+    // TODO[cke]: Using [NO_TARGET] fails currently to compile in Babel. An update may help.
+    NoTarget: {
+      comment: "For no target, no xlink:show/xlink:role attributes should be added.",
+    },
+    "": {
+      comment: "We assume empty targets to be non-existing. As the state disappears, it is not bijective as other mappings.",
+      non_bijective: true,
+    },
+    "_role": {
+      comment: "If artificial _role doesn't come with a role, assume to take it as target.",
+      show: "other",
+      role: "_role",
+    },
+    ...specialCharacterTargets,
+    ...standardHtmlTargets,
+    ...artificialXlinkShowStates,
+    ...artificialXlinkAttributeCombinations,
+    ...penetrationTargets,
+  };
+  const anchorFixtures: DataFilterTestFixture[] =
+    Object.entries(expectedTargetToXlinkShowAndRole)
+      .map(([target, { show, role, comment, non_bijective }], index) => {
+        let name: string = `ANCHOR#${index}: Should map ${target === NO_TARGET ? "no target":`target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective?" and vice versa":""}.`;
+        let viewTarget: string = `${target === NO_TARGET ? "" : ` target="${target}"`}`;
+        let dataShow: string = !show ? "" : ` xlink:show="${show}"`;
+        let dataRole: string = !role ? "" : ` xlink:role="${role}"`;
+        // noinspection XmlUnusedNamespaceDeclaration
+        let inputFromView: string = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}"${viewTarget}>${text}</a></p></div>`;
+        let expectedData: string = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}"${dataShow}${dataRole}>${text}</a></p></div>`;
+        const testData: DataFilterRulesTestData = {
+          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+          inputFromView: inputFromView,
+          expectedData: expectedData,
+        };
+        if (!non_bijective) {
+          testData.expectedView = true;
+        }
+        if (!!comment) {
+          testData.comment = comment;
+        }
+
+        return [name, testData];
+      });
 
   const textEntityFixtures: DataFilterTestFixture[] = [
     "&nbsp;",
@@ -421,7 +507,7 @@ describe("Default Data Filter Rules", () => {
     "&#128169;",
   ].map(
     (entity, index) => [
-      `TEXT/ENTITY#${(index+1)}: Entity should be resolved to plain character: ${entity}`,
+      `TEXT/ENTITY#${(index + 1)}: Entity should be resolved to plain character: ${entity}`,
       {
         comment: "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
@@ -683,28 +769,28 @@ describe("Default Data Filter Rules", () => {
         bijective: true,
       },
     ]
-      .map(({view, data, bijective}) => {
-      const key = view.toUpperCase();
-      return [
-        [
-          `${key}#1: View: <${view}> ${bijective?'<':''}-> Data: <${data}>.`,
-          {
-            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
-            expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-            expectedView: bijective,
-          },
-        ],
-        [
-          `${key}#2: Should keep <${data}> when transformed.`,
-          {
-            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-            inputFromView: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-            expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-          },
-        ],
-      ];
-    }));
+      .map(({ view, data, bijective }) => {
+        const key = view.toUpperCase();
+        return [
+          [
+            `${key}#1: View: <${view}> ${bijective ? '<' : ''}-> Data: <${data}>.`,
+            {
+              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+              inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
+              expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+              expectedView: bijective,
+            },
+          ],
+          [
+            `${key}#2: Should keep <${data}> when transformed.`,
+            {
+              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+              inputFromView: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+              expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+            },
+          ],
+        ];
+      }));
   const replaceInlineBySpanFixtures: DataFilterTestFixture[] =
     flatten(
       [
@@ -728,14 +814,14 @@ describe("Default Data Filter Rules", () => {
           dataClass: "strike",
           bijective: false,
         },
-      ].map(({view, dataClass, bijective}) => {
+      ].map(({ view, dataClass, bijective }) => {
         // bijective: Typically false for "alias" mappings.
         // The mapping which corresponds to the default representation in
         // CKEditor should be bijective (i.e. = true).
         const key = view.toUpperCase();
         return [
           [
-            `${key}#1: View: <${view}> ${bijective?'<':''}-> Data: by <span class="${dataClass}">.`,
+            `${key}#1: View: <${view}> ${bijective ? '<' : ''}-> Data: by <span class="${dataClass}">.`,
             {
               strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
               inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
@@ -834,6 +920,7 @@ describe("Default Data Filter Rules", () => {
    * needs to be added for testing purpose only, as there is no "namespace
    * cleanup feature".
    */
+  // noinspection XmlUnusedNamespaceDeclaration
   const xdiffFixtures: DataFilterTestFixture[] = [
     [
       "XDIFF#1: Should remove invalid <xdiff:span> tag, but keep children.",
@@ -933,6 +1020,7 @@ describe("Default Data Filter Rules", () => {
  */
 function decodeEntity(str: string): string {
   const ENTITY_ELEMENT = document.createElement("div");
+  // noinspection InnerHTMLJS
   ENTITY_ELEMENT.innerHTML = str;
   return <string>ENTITY_ELEMENT.textContent;
 }

@@ -1,15 +1,17 @@
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import {
+  ElementFilterParams,
+  ElementFilterRule,
+  FilterRuleSet,
   FilterRuleSetConfiguration,
   parseFilterRuleSetConfigurations,
+  TextFilterParams,
   ToDataAndViewElementConfiguration,
-  ElementFilterRulesByName,
-  FilterRuleSet,
-  ElementFilterRule,
-  ElementFilterParams,
-  TextFilterParams
 } from "@coremedia/ckeditor5-dataprocessor-support/index";
+import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
+import { headingToParagraph, paragraphToHeading } from "./rules/Heading";
+import { handleAnchor } from "./rules/Anchor";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -29,71 +31,14 @@ export default interface CoreMediaRichTextConfig {
  */
 export interface ParsedConfig {
   readonly schema: RichTextSchema;
-  readonly toData: FilterRuleSet,
-  readonly toView: FilterRuleSet,
+  readonly toData: FilterRuleSet;
+  readonly toView: FilterRuleSet;
 }
 
 // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
 const removeInvalidList: ElementFilterRule = (params) => {
   params.node.remove = params.node.empty || !params.node.findFirst("li");
 };
-
-const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
-const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
-
-const headingToParagraph: ElementFilterRule = (params) => {
-  const match = HEADING_NUMBER_PATTERN.exec(params.node.name || "");
-  if (!match) {
-    // Some other rule may have already changed the name. Nothing to do.
-    return;
-  }
-  const headingLevel = match[1];
-  params.node.name = "p";
-  params.node.attributes["class"] = `p--heading-${headingLevel}`;
-};
-
-const paragraphToHeading: ElementFilterRule = (params) => {
-  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(params.node.attributes["class"] || "");
-  if (!match) {
-    // Cannot determine number. Perhaps someone already removed the class.
-    return;
-  }
-  const headingLevel: number = +match[1];
-  if (headingLevel < 1 || headingLevel > 6) {
-    // Someone "messed" with our classes. Just do nothing.
-    return;
-  }
-  params.node.name = `h${headingLevel}`;
-  delete params.node.attributes["class"];
-};
-
-function replaceBy(name: string, className?: string): ElementFilterRule {
-  return (params) => {
-    params.node.name = name;
-    if (className) {
-      params.node.attributes["class"] = className;
-    }
-  }
-}
-
-function replaceElementAndClassBy(originalName: string, className: string, newName: string): ElementFilterRulesByName {
-  return {
-    [originalName]: (params) => {
-      if (params.node.attributes["class"] !== className) {
-        return;
-      }
-      delete params.node.attributes["class"];
-      params.node.name = newName;
-    },
-  };
-}
-
-function replaceByElementAndClassBackAndForth(viewName: string, dataName: string, dataClassName: string): ToDataAndViewElementConfiguration {
-  return {
-    toData: replaceBy(dataName, dataClassName),
-    toView: replaceElementAndClassBy(dataName, dataClassName, viewName),
-  };
-}
 
 /**
  * Rule to transform several representations of strikeout-state. As CKEditor
@@ -154,125 +99,7 @@ const defaultRules: FilterRuleSetConfiguration = {
         schema.adjustAttributes(params.node);
       }
     },
-    a: {
-      toData: (params) => {
-        const href = params.node.attributes["href"];
-        const target = params.node.attributes["target"] || "";
-        // Just ensure, that even no empty target is written.
-        delete params.node.attributes["target"];
-        delete params.node.attributes["href"];
-
-        if (href !== "" && !href) {
-          // Invalid state: We have an a-element without href which is not
-          // supported by CoreMedia RichText DTD.
-          params.node.replaceByChildren = true;
-          return;
-        }
-        const newAttrs: {
-          show?: string,
-          role?: string,
-        } = {};
-        switch (target.toLowerCase()) {
-          case "":
-            // Ignoring empty target.
-            break;
-          case "_top":
-            newAttrs.show = "replace";
-            break;
-          case "_blank":
-            newAttrs.show = "new";
-            break;
-          case "_embed":
-            newAttrs.show = "embed";
-            break;
-          case "_none":
-            newAttrs.show = "none";
-            break;
-          case "_other":
-            // artificial state, which should not happen (but may happen due to UAPI calls).
-            newAttrs.show = "other";
-            break;
-          default:
-            const roleExpression = /^_role_(.*)/;
-            const roleMatchResult = target.match(roleExpression);
-            if (!!roleMatchResult) {
-              // artificial state, which should not happen (but may happen due to UAPI calls).
-              newAttrs.role = roleMatchResult[1];
-            } else {
-              newAttrs.show = "other";
-              newAttrs.role = target;
-            }
-        }
-        params.node.attributes["xlink:href"] = href;
-        if (!!newAttrs.show) {
-          params.node.attributes["xlink:show"] = newAttrs.show;
-        }
-        if (!!newAttrs.role) {
-          params.node.attributes["xlink:role"] = newAttrs.role;
-        }
-      },
-      toView: (params) => {
-        const href = params.node.attributes["xlink:href"];
-        const show = params.node.attributes["xlink:show"];
-        const role = params.node.attributes["xlink:role"];
-
-        delete params.node.attributes["xlink:href"];
-        delete params.node.attributes["xlink:show"];
-        delete params.node.attributes["xlink:role"];
-
-        params.node.attributes["href"] = href;
-
-        let target = "";
-
-        if (!show) {
-          if (!role) {
-            // No attribute to add. We just don't have any link behavior set.
-            return;
-          }
-          // artificial state, which should not happen (but may happen due to UAPI calls).
-          target = `_role_${role}`;
-        } else {
-          let roleIgnored: boolean = !!role;
-          switch (show.toLowerCase()) {
-            case "replace":
-              target = "_top";
-              break;
-            case "new":
-              target = "_blank";
-              break;
-            case "embed":
-              target = "_embed";
-              break;
-            case "none":
-              target = "_none";
-              break;
-            case "other":
-              if (!role) {
-                target = "_other";
-              } else {
-                target = role;
-                roleIgnored = false;
-              }
-              break;
-            default:
-              console.warn(
-                `Invalid value for xlink:show="${show}". No target attribute will be generated. Node:`,
-                params.node
-              );
-          }
-          if (roleIgnored) {
-            console.warn(
-              `Invalid xlink:role="${role}" for xlink:show="${show}". Role will be ignored. Node:`,
-              params.node
-            );
-          }
-        }
-
-        if (!!target) {
-          params.node.attributes["target"] = target;
-        }
-      },
-    },
+    a: handleAnchor,
     ol: removeInvalidList,
     ul: removeInvalidList,
     p: {
@@ -304,7 +131,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       // Remove obsolete BR, if only element on block level params.el.
       const parent = params.node.parentElement;
       const parentName = parent?.name || "";
-      let remove: boolean = false;
+      let remove = false;
       if (!parent || parentName === "div") {
         // somehow, a top-level <br> has been introduced, which is not valid:
         remove = true;
@@ -367,15 +194,6 @@ const defaultRules: FilterRuleSetConfiguration = {
       // all nested trs up one level and remove the tbody params.el.
       params.node.replaceByChildren = !params.node.singleton;
     },
-    /*
-     * TODO[cke] img/a handling
-     *   We don't handle img and a yet, as we don't support internal links or
-     *   embedded images yet. Prior to that, we have to find a solution how
-     *   to handle updates from CKEditor to src/href attribute which need to
-     *   be mapped to xlink:href for CoreMedia RichText 1.0.
-     *   The deletion of invalid attributes src/href are handled by after-children
-     *   rule implicitly.
-     */
     span: (params) => {
       if (!params.node.attributes["class"]) {
         // drop element, but not children
@@ -385,11 +203,12 @@ const defaultRules: FilterRuleSetConfiguration = {
     "xdiff:span": (params) => {
       params.node.replaceByChildren = true;
     },
-  }
+  },
 };
 
 export function getConfig(config?: CKEditorConfig): ParsedConfig {
-  const customConfig: CoreMediaRichTextConfig = <CoreMediaRichTextConfig>config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) || {};
+  const customConfig: CoreMediaRichTextConfig =
+    <CoreMediaRichTextConfig>config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) || {};
 
   const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
 
