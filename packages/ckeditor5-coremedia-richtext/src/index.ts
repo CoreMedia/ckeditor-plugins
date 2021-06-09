@@ -19,3 +19,5 @@ export { headingToParagraph } from "./rules/Heading";
 export { HEADING_BY_CLASS_NUMBER_PATTERN } from "./rules/Heading";
 export { HEADING_NUMBER_PATTERN } from "./rules/Heading";
 export { handleAnchor } from "./rules/Anchor";
+export { getSchema } from "./rules/Schema";
+export { defaultSchema } from "./rules/Schema";

@@ -1,18 +1,17 @@
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import {
-  ElementFilterParams,
   ElementFilterRule,
   FilterRuleSet,
   FilterRuleSetConfiguration,
   parseFilterRuleSetConfigurations,
-  TextFilterParams,
   ToDataAndViewElementConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support/index";
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
+import { getSchema, schemaRules } from "./rules/Schema";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -52,13 +51,6 @@ const strike: ToDataAndViewElementConfiguration = {
   toView: replaceElementAndClassBy("span", "strike", "s"),
 };
 
-const defaultSchema = new RichTextSchema(Strictness.STRICT);
-
-function getSchema(params: ElementFilterParams | TextFilterParams): RichTextSchema {
-  const dataProcessor: any = params.editor?.data?.processor || {};
-  return dataProcessor["richTextSchema"] as RichTextSchema ?? defaultSchema;
-}
-
 /**
  * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
  * execution: (see especially <code>core/htmlparser/params.el.js</code>)
@@ -86,20 +78,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     }
   },
   elements: {
-    $: (params) => {
-      getSchema(params).adjustHierarchy(params.node);
-    },
-    "$$": (params) => {
-      const schema = getSchema(params);
-      // The hierarchy may have changed after processing children. Thus, we
-      // need to check again.
-      schema.adjustHierarchy(params.node);
-      // We only expect the element to be possibly removed. replaceByChildren
-      // should have been triggered by "before-children" rule.
-      if (!params.node.remove) {
-        schema.adjustAttributes(params.node);
-      }
-    },
+    ...schemaRules,
     a: handleAnchor,
     ol: removeInvalidList,
     ul: removeInvalidList,
