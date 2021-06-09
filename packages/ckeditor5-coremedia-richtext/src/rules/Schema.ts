@@ -5,8 +5,8 @@ import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-datapro
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
-export function getSchema(params: ElementFilterParams | TextFilterParams): RichTextSchema {
-  const dataProcessor: any = params.editor?.data?.processor || {};
+export function getSchema({ editor }: ElementFilterParams | TextFilterParams): RichTextSchema {
+  const dataProcessor: any = editor?.data?.processor || {};
   return dataProcessor["richTextSchema"] as RichTextSchema ?? defaultSchema;
 }
 
