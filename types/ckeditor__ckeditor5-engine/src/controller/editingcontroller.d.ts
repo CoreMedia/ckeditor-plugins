@@ -5,6 +5,7 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 import Model from "../model/model";
 import DowncastDispatcher from "../conversion/downcastdispatcher";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "../view/observer/domeventdata";
 
 // TODO[typing]
 type Mapper = any;
@@ -35,4 +36,6 @@ export default class EditingController implements Emitter, Observable {
   bind(...bindProperties: any[]): BindReturnValue;
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 }
