@@ -2,12 +2,12 @@ import View from "../view";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import LabelView from "../label/labelview";
 
-export type ViewCreator = (view: LabeledFieldView, labelViewUid: string, statusViewUid: string) => View;
+export type ViewCreator<T extends View> = (view: LabeledFieldView<T>, labelViewUid: string, statusViewUid: string) => T;
 
-export default class LabeledFieldView extends View {
+export default class LabeledFieldView<T extends View> extends View {
   class: string;
   errorText: string | null;
-  fieldView: View;
+  fieldView: T;
   infoText: string | null;
   readonly isEmpty: boolean;
   isEnabled: boolean;
@@ -18,7 +18,7 @@ export default class LabeledFieldView extends View {
   statusView: View;
 
 
-  constructor(locale: Locale, viewCreator: ViewCreator);
+  constructor(locale: Locale, viewCreator: ViewCreator<T>);
 
   focus(): void;
 }

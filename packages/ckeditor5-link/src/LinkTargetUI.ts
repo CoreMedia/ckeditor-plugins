@@ -6,9 +6,10 @@ import LinkFormViewExtension from "./ui/LinkFormViewExtension";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-// @ts-ignore
-import ToolbarView from "@ckeditor/ckeditor5-ui/src/toolbar/ToolbarView";
 import View from "@ckeditor/ckeditor5-ui/src/view";
+
+import "./theme/linkform.css";
+import "./theme/footerbutton.css";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -54,10 +55,10 @@ export default class LinkTargetUI extends Plugin {
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
     const extension = new LinkFormViewExtension(formView);
-    extension.targetInputView.fieldView.bind("value").to(linkTargetCommand, "value");
+    extension.linkBehaviorView.fieldView.bind("value").to(linkTargetCommand, "value");
     // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
     // @ts-ignore
-    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
+    extension.linkBehaviorView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
     this._customizeFormView(formView);
     this._customizeToolbarButtons(formView);
 
@@ -67,7 +68,9 @@ export default class LinkTargetUI extends Plugin {
       () => {
         const { value: target } = <HTMLInputElement>extension.targetInputView.fieldView.element;
         const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-        editor.execute("linkTarget", target, href);
+        // @ts-ignore
+        const linkBehavior: string = extension.linkBehaviorView.linkBehavior;
+        editor.execute("linkTarget", linkBehavior, target, href);
       },
       /*
        * We need a higher listener priority here than for `LinkCommand`.
@@ -91,21 +94,20 @@ export default class LinkTargetUI extends Plugin {
   }
 
   private _customizeFormView(formView: LinkFormView): void {
-    const LINK_FORM_VERTICAL_CLS = "ck-link-form_layout-vertical";
-    const CK_VERTICAL_CLS = "ck-vertical-form";
+    const CM_LINK_FORM_CLS = "cm-ck-link-form";
     const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
-    const CM_PRIMARY_BUTTON_CLS = "cm-ck-button-primary";
+    const CM_PRIMARY_BUTTON_CLS = "cm-ck-footer-button-primary";
+    const CM_FOOTER_BUTTON_CLS = "cm-ck-footer-button";
 
     // always add vertical css classes to the formView
-    this._addClassToTemplate(formView, LINK_FORM_VERTICAL_CLS);
-    this._addClassToTemplate(formView, CK_VERTICAL_CLS);
-    this._addClassToTemplate(formView, CM_FORM_VIEW_CLS);
+    this._addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
 
     // change the order of the buttons
     formView.children.remove(formView.saveButtonView);
     formView.children.remove(formView.cancelButtonView);
 
-    this._addClassToTemplate(formView.saveButtonView, CM_PRIMARY_BUTTON_CLS);
+    this._addClassToTemplate(formView.saveButtonView, [CM_FOOTER_BUTTON_CLS, CM_PRIMARY_BUTTON_CLS]);
+    this._addClassToTemplate(formView.cancelButtonView, CM_FOOTER_BUTTON_CLS);
     formView.children.add(formView.cancelButtonView);
     formView.children.add(formView.saveButtonView);
   }
@@ -117,12 +119,18 @@ export default class LinkTargetUI extends Plugin {
     button.withText = true;
   }
 
-  private _addClassToTemplate(view: View, className: string): void {
+  private _addClassToTemplate(view: View, classNames: string[] | string): void {
     // @ts-ignore
     const classes: string[] = view.template.attributes.class;
-    if (!classes.includes(className)) {
-      classes.push(className);
+
+    if (!Array.isArray(classNames)) {
+      classNames = [classNames];
     }
+    classNames.forEach((className) => {
+      if (!classes.includes(className)) {
+        classes.push(className);
+      }
+    });
   }
 
   destroy(): Promise<never> | null {

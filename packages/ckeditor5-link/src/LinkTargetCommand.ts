@@ -198,11 +198,12 @@ export default class LinkTargetCommand extends Command {
    * On command execution, the value and ranges will be stored which will
    * later be used to set (or remove) the `linkTarget` attribute.
    *
+   * @param linkBehavior link behavior to apply
    * @param target target to apply
    * @param href href for reference from dialog; used to distinguish some
    * behaviors triggered by `LinkCommand`.
    */
-  execute(target: Target, href: Href): void {
+  execute(linkBehavior: string, target: Target, href: Href): void {
     const editor = this.editor;
     const linkCommand = editor.commands.get(LINK_COMMAND_NAME);
 

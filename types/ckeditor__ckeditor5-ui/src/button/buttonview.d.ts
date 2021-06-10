@@ -28,9 +28,9 @@ import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventd
 export default class ButtonView extends View implements Emitter, Observable {
   constructor(locale?: Locale);
 
-  icon:string;
+  icon?:string;
 
-  withText:boolean;
+  withText?:boolean;
 
   children:ViewCollection;
 

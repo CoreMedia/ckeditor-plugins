@@ -6,6 +6,7 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import Template from "@ckeditor/ckeditor5-ui/src/template";
 import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
+import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 
 type DecoratorSwitchesStates = {
   [decorator: string]: boolean,
@@ -17,7 +18,7 @@ type DecoratorSwitchesStates = {
 export default class LinkFormView extends View {
   cancelButtonView: ButtonView;
   saveButtonView: ButtonView;
-  urlInputView: LabeledFieldView;
+  urlInputView: LabeledFieldView<InputTextView>;
   template:Template;
   children:ViewCollection;
 
