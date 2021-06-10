@@ -55,10 +55,10 @@ export default class LinkTargetUI extends Plugin {
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
     const extension = new LinkFormViewExtension(formView);
-    extension.linkBehaviorView.fieldView.bind("value").to(linkTargetCommand, "value");
+    extension.targetInputView.fieldView.bind("value").to(linkTargetCommand, "value");
     // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
     // @ts-ignore
-    extension.linkBehaviorView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
+    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
     this._customizeFormView(formView);
     this._customizeToolbarButtons(formView);
 
