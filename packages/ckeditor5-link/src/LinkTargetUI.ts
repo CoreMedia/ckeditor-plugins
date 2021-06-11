@@ -7,6 +7,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
+import { linkTargetToUiValues, uiValuesToLinkTarget} from "./utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
@@ -55,7 +56,14 @@ export default class LinkTargetUI extends Plugin {
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
     const extension = new LinkFormViewExtension(formView);
-    extension.targetInputView.fieldView.bind("value").to(linkTargetCommand, "value");
+    extension.targetInputView
+      .bind("hiddenTarget")
+      .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).target);
+
+    extension.linkBehaviorView
+      .bind("linkBehavior")
+      .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).linkBehavior);
+
     // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
     // @ts-ignore
     extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
@@ -70,7 +78,8 @@ export default class LinkTargetUI extends Plugin {
         const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
         // @ts-ignore
         const linkBehavior: string = extension.linkBehaviorView.linkBehavior;
-        editor.execute("linkTarget", linkBehavior, target, href);
+        const linkTarget = uiValuesToLinkTarget(linkBehavior, target);
+        editor.execute("linkTarget", linkTarget, href);
       },
       /*
        * We need a higher listener priority here than for `LinkCommand`.

@@ -13,6 +13,7 @@ import Model from "@ckeditor/ckeditor5-ui/src/model";
 //@ts-ignore
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
+import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../utils";
 
 /**
  * Extends the LinkFormView of the CKEditor Link Plugin by additional form
@@ -30,6 +31,10 @@ export default class LinkFormViewExtension {
 
     this.targetInputView = this._createTargetInput();
     this.linkBehaviorView = this._createLinkBehaviorField();
+
+    this.targetInputView
+      .bind("isEnabled")
+      .to(this.linkBehaviorView, "linkBehavior", (value: string) => value === LINK_BEHAVIOR.OPEN_IN_FRAME);
 
     linkFormView.once("render", () => this.render());
   }
@@ -56,6 +61,20 @@ export default class LinkFormViewExtension {
     const t = this.locale.t;
     const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
     labeledInput.label = t("Link Target");
+    labeledInput.set({
+      hiddenTarget: "",
+    });
+
+    labeledInput.fieldView
+      .bind("value")
+      .to(labeledInput, "hiddenTarget", labeledInput, "isEnabled", (value: string, isEnabled: boolean) => {
+        return isEnabled ? value : "";
+      });
+
+    labeledInput.fieldView.on("input", (evt: any) => {
+      //@ts-ignore
+      labeledInput.hiddenTarget = evt.source.element.value;
+    });
     return labeledInput;
   }
 
@@ -63,13 +82,11 @@ export default class LinkFormViewExtension {
     const locale = this.locale;
     const t = locale.t;
 
-    const linkBehaviorLabels = LinkFormViewExtension._getLinkBehaviorLabels(t);
+    const linkBehaviorLabels = getLinkBehaviorLabels(t);
     const linkBehaviorDropdown = new LabeledFieldView(locale, createLabeledDropdown);
     linkBehaviorDropdown.set({
       label: t("Link Behavior"),
-      class: "ck-table-form__border-style",
-      linkBehavior: "openInNewWindow",
-      copiedTarget: "",
+      linkBehavior: LINK_BEHAVIOR.DEFAULT,
     });
 
     linkBehaviorDropdown.fieldView.buttonView.set({
@@ -79,24 +96,7 @@ export default class LinkFormViewExtension {
     });
 
     linkBehaviorDropdown.fieldView.buttonView.bind("label").to(linkBehaviorDropdown, "linkBehavior", (value: any) => {
-      return linkBehaviorLabels[value ? value : "openInNewWindow"];
-    });
-
-    this.targetInputView.bind("isEnabled").to(linkBehaviorDropdown, "linkBehavior", (value: any) => {
-      const enabled = value === "openInFrame";
-      if (enabled) {
-        if (this.targetInputView.fieldView.element) {
-          //@ts-ignore
-          this.targetInputView.fieldView.element.value = linkBehaviorDropdown.copiedTarget;
-        }
-      } else {
-        if (this.targetInputView.fieldView.element) {
-          //@ts-ignore
-          linkBehaviorDropdown.copiedTarget = this.targetInputView.fieldView.element.value;
-          this.targetInputView.fieldView.element.value = "";
-        }
-      }
-      return enabled;
+      return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_NEW_TAB];
     });
 
     linkBehaviorDropdown.fieldView.on("execute", (evt: any) => {
@@ -105,24 +105,15 @@ export default class LinkFormViewExtension {
     });
 
     linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: any) => !value);
-
+    linkBehaviorDropdown.fieldView.bind("value").to(linkBehaviorDropdown, "linkBehavior");
     addListToDropdown(linkBehaviorDropdown.fieldView, this._getLinkBehaviorDefinitions(this));
 
     return linkBehaviorDropdown;
   }
 
-  private static _getLinkBehaviorLabels = (t: any): { [key: string]: string } => {
-    return {
-      openInNewWindow: t("Open in New Window"),
-      openInCurrentWindow: t("Open in Current Window"),
-      showEmbedded: t("Show Embedded"),
-      openInFrame: t("Open in Frame"),
-    };
-  };
-
   private _getLinkBehaviorDefinitions = (view: any) => {
     const itemDefinitions = new Collection();
-    const linkBehaviorLabels = LinkFormViewExtension._getLinkBehaviorLabels(view.locale.t);
+    const linkBehaviorLabels = getLinkBehaviorLabels(view.locale.t);
 
     for (const linkBehaviorKey in linkBehaviorLabels) {
       const definition = {
