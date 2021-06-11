@@ -33,38 +33,75 @@ inspector open.
 * **LT#G4: No Undo on Unchanged:** If the dialog has been submitted without
     any changes being applied, no undo entry should be generated.
 
-### LT#001: Create Link With Target
+**Terms:**
 
-1. Place the cursor at any position having nothing selected.
+* **Collapsed Selection:** A selection always exists. It is either expanded
+    or collapsed. If it is collapsed, it means that start and end position of
+    the selection are the same — which again means, that only the cursor is
+    placed somewhere and _nothing got selected_ from a user's perspective.
 
-2. Press link-button in toolbar.
+* **Expanded Selection:** This is what user's would expect a selection to be,
+    i.e., you marked some text with different start and end position of the
+    selection.
 
-3. Repeat for all following combinations and submit to compare to expected
-   results observed in CKEditor's Inspector:
+### LT#001: Editing Existing Links
 
-    | Link             | Target    | Expected `linkHref` | Expected `linkTarget` | Comment               |
-    | ---------------- | --------- | ------------------- | --------------------- | --------------------- |
-    | `https://e.org/` | `example` | `https://e.org/`    | `example`             | Standard Use-Case     |
-    | `https://e.org/` | _empty_   | `https://e.org/`    | _unset_               | LT#G2                 |
-    | _empty_          | _empty_   | _unset_             | _unset_               | No-Operation Use-Case |
-    | _empty_          | `example` | _unset_             | _unset_               | LT#G1                 |
+Testing binding of `LinkTargetCommand` to model and mapping into the UI.
 
-4. **Extended Test for LT#G1:** If a target got set, continue typing after the
-    link got set. The additional text must have neither `linkHref` set (default
-    behavior of `LinkCommand`) nor `linkTarget`.
+1. Load the Link Target Example into the example application.
 
-The cursor position should jump to the end of the added text (behavior of
-`LinkCommand` which we should not break).
+2. Place your cursor at any of the links.
 
-### LT#002: Add Link to Selection
+3. Open the link editor (e.g., via Ctrl+K or Cmd+K).
 
-Similar to LT#001, but instead of having no text selected (i.e. a so-called
-_collapsed selection_), select some text and apply the same changes regarding
-link/target combinations. The behavior should be similar to the above scenario.
+4. See, if the expected state is represented in the editing UI.
+
+5. See Inspector if the expected targets match.
+
+6. _Optional:_ Open XML Preview if the expected `xlink:show`, `xlink:role` got generated.
+
+    This mapping is part of the CoreMedia RichText plugin and not part of the
+    CoreMedia Link Plugin — and is covered by unit tests. Nevertheless, you
+    may want to have a manual view at this mapping once.
+
+### LT#002: Create Link With Target
+
+Testing special path in CKEditor's `LinkCommand` for collapsed selection, when
+the cursor position is not within an already existing link: It will write the
+URL as text, while also applying the `linkHref` attribute. If a `linkTarget`
+got specified, this newly written text must get the corresponding value set
+in model.
+
+1. Load the Link Target Examples for reference of expected attribute values.
+
+2. Place the cursor at any position having nothing selected.
+
+3. Press link-button in toolbar.
+
+4. Set some link behavior without setting a link. Confirm.
+
+5. No link should have been generated, no undo step should have been generated.
+
+6. Press link-button again.
+
+7. Choose some random link and some link behavior. Confirm.
+
+8. Link text should have been written to CKEditor with corresponding
+   link behavior. See inspector and XML output for expected results.
+
+9. Undo the previous action. All attributes set should have been removed.
+
+### LT#003: Add Link to Selection
+
+Similar to LT#002 but having an expanded selection: select some text and apply
+changes regarding link/target combinations.
 
 The selection should remain.
 
-### LT#003: Edit Link With Target (No Selection; Collapsed)
+### LT#004: Edit Link With Target (No Selection; Collapsed)
+
+Testing especially a challenging path in `LinkTargetCommand` when the URL has
+not been changed, as this triggers no changes we could listen to.
 
 1. Place the cursor into an existing link (with and without target previously set).
 
@@ -97,14 +134,18 @@ The selection should remain.
 ### LT#004: Edit Link With Target (Link Selected)
 
 This is expected to behave the same way as
-_LT#003: Edit Link With Target (No Selection; Collapsed)_. Just select
-the whole link and 
+_LT#004: Edit Link With Target (No Selection; Collapsed)_. Just select
+the whole link and apply some changes from above — not necessarily the whole
+set of combinations.
 
 ### LT#005: Edit Link With Target (Partial Link Selected)
 
-Test-cases missing yet. In general, it is about only selecting a part of an
-existing link and adapting its setting. The behavior should be similar to
-the `LinkCommand`, i.e. regarding the `linkHref` attribute.
+Having an existing link with our without target, select some part of the link.
+Set some target behavior.
+
+In the result the previous single text node with linkHref attribute should have
+been split into several parts (two to three depending on your selection). Only
+the selected part got the target attribute updated.
 
 ### LT#006: Unlink
 
@@ -112,7 +153,7 @@ Unlinking should always also remove the `linkTarget` attribute.
 
 ### LT#007 Undo &amp; Redo
 
-See LT#G3: Repeat or enhance the tests above by undo &amp; redo, i.e. ensure,
+See LT#G3: Repeat or enhance the tests above by undo &amp; redo, i.e., ensure,
 that all performed editing actions can be undone and redone with one single
 undo/redo step.
 
@@ -145,7 +186,7 @@ upcoming phase.
 
 4. Press link-button in toolbar.
 
-The `linkTarget` field/state should be empty (or default), i.e. previously
+The `linkTarget` field/state should be empty (or default), i.e., previously
 entered target should have been cleared.
 
 **Possible Design Change:** This expectation is open to design changes, as

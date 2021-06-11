@@ -1,4 +1,4 @@
-Link Target Design
+Link Feature Extension Design
 ================================================================================
 
 CKEditor 24.x (to 27.x and most likely upcoming) provides a rather sparse
