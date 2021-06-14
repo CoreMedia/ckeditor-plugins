@@ -22,7 +22,7 @@ type EditingKeystrokeHandler = any;
 // TODO[typing]
 type LoadedPlugins = any;
 
-export default abstract class Editor implements Emitter, Observable {
+export default class Editor implements Emitter, Observable {
   readonly commands: CommandCollection;
   readonly config: Config;
   readonly conversion: Conversion;
