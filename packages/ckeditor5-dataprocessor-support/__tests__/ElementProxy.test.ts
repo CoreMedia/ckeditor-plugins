@@ -4,6 +4,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
+// @ts-ignore
 const MOCK_EDITOR = new Editor();
 
 /*
