@@ -683,7 +683,7 @@ export default class RichTextSchema {
    * Note, that changes are only applied to the mutable element. It is required
    * to persist these changes to propagate it to the wrapped delegate element.
    *
-   * @param element
+   * @param element element to process
    */
   adjustHierarchy(element: ElementProxy): void {
     if (!this.isElementAllowedAtParent(element)) {
