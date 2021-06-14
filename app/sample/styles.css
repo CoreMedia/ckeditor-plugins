@@ -21,7 +21,9 @@
   white-space: pre-wrap;
   font-family: Monaco,Menlo,Consolas,"Roboto Mono","Courier New","Ubuntu Mono",monospace;
   overflow-y: scroll;
-  max-height: 200px;
+  max-height: 50vh;
+  flex: 50%;
+  margin-left: 10px;
 }
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
@@ -50,15 +52,19 @@ main .ck-editor[role='application'] .ck.ck-content,
 
 .ck.ck-editor {
 	/* To enable toolbar wrapping. */
-	width: 100%;
 	overflow-x: hidden;
-  max-height: 50vh;
+  flex: 50%;
 }
 
 /* Because of sidebar `position: relative`, Edge is overriding the outline of a focused editor. */
 .ck.ck-editor__editable {
 	position: relative;
+  max-height: 50vh;
 	z-index: 10;
+}
+
+.row-editor {
+  display: flex;
 }
 
 /* --------- DECOUPLED (DOCUMENT) BUILD. ---------------------------------------------*/
@@ -415,12 +421,7 @@ main .message h2 {
 }
 
 .row {
-	display: flex;
 	position: relative;
-}
-
-.row > .column50 {
-  flex: 50%;
 }
 
 .btn {
