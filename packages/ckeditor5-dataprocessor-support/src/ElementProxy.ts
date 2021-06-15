@@ -421,17 +421,19 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
        * Provides all existing attributes names, skipping those, which got
        * marked for deletion.
        */
-      ownKeys(target: Attributes): PropertyKey[] {
-        const targetKeys: PropertyKey[] = Reflect.ownKeys(target);
-        const elementAttrs: PropertyKey[] = self.delegate.getAttributeNames();
+      ownKeys(target: Attributes): OwnPropertyKey[] {
+        const targetKeys: OwnPropertyKey[] = Reflect.ownKeys(target);
+        const elementAttrs: OwnPropertyKey[] = self.delegate.getAttributeNames();
         // Join distinct keys, skip forcibly deleted.
         return elementAttrs
-          .concat(targetKeys.filter((k: PropertyKey) => elementAttrs.indexOf(k) < 0))
-          .filter((k: PropertyKey) => !Reflect.has(target, k) || Reflect.get(target, k) !== undefined);
+          .concat(targetKeys.filter((k: OwnPropertyKey) => elementAttrs.indexOf(k) < 0))
+          .filter((k: OwnPropertyKey) => !Reflect.has(target, k) || Reflect.get(target, k) !== undefined);
       },
     });
   }
 }
+
+type OwnPropertyKey = string | symbol;
 
 /**
  * Possible attribute values to assign. `null` represents a deleted property.
