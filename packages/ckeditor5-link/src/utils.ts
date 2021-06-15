@@ -15,6 +15,14 @@ export const linkTargetToUiValues = (linkTarget: string): { target: string; link
     };
   }
 
+  if (!linkTarget.includes("_")) {
+    // no "_" found. return string as target and open in frame
+    return {
+      target: linkTarget,
+      linkBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+    };
+  }
+
   const [linkBehavior, target] = linkTarget.split("_").filter((el) => el !== "");
 
   /*
