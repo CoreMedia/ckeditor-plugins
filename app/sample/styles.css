@@ -51,8 +51,6 @@ main .ck-editor[role='application'] .ck.ck-content,
 }
 
 .ck.ck-editor {
-	/* To enable toolbar wrapping. */
-	overflow-x: hidden;
   flex: 50%;
 }
 
