@@ -86,7 +86,7 @@ export default class LinkFormViewExtension {
     const linkBehaviorDropdown = new LabeledFieldView(locale, createLabeledDropdown);
     linkBehaviorDropdown.set({
       label: t("Link Behavior"),
-      linkBehavior: LINK_BEHAVIOR.DEFAULT,
+      linkBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
     });
 
     linkBehaviorDropdown.fieldView.buttonView.set({
@@ -96,7 +96,7 @@ export default class LinkFormViewExtension {
     });
 
     linkBehaviorDropdown.fieldView.buttonView.bind("label").to(linkBehaviorDropdown, "linkBehavior", (value: any) => {
-      return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_NEW_TAB];
+      return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB];
     });
 
     linkBehaviorDropdown.fieldView.on("execute", (evt: any) => {

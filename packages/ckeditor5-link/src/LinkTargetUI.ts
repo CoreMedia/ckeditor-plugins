@@ -7,7 +7,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
-import { linkTargetToUiValues, uiValuesToLinkTarget} from "./utils";
+import { linkTargetToUiValues, uiValuesToLinkTarget } from "./utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
