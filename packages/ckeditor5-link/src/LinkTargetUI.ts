@@ -7,7 +7,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
-import { linkTargetToUiValues, uiValuesToLinkTarget } from "./utils";
+import { LINK_BEHAVIOR, linkTargetToUiValues, uiValuesToLinkTarget } from "./utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
@@ -60,9 +60,15 @@ export default class LinkTargetUI extends Plugin {
       .bind("hiddenTarget")
       .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).target);
 
+    /*
+     * Also listen to the url input field to be able to differentiate between new links (with default link behavior)
+     * and already existing links with no linkBehavior set
+     */
     extension.linkBehaviorView
       .bind("linkBehavior")
-      .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).linkBehavior);
+      .to(linkTargetCommand, "value", formView.urlInputView.fieldView, "value", (value: string, url: string) =>
+        url ? linkTargetToUiValues(value).linkBehavior : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB
+      );
 
     // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
     // @ts-ignore
