@@ -49,26 +49,26 @@ describe("NodeProxy.wrap", () => {
   });
 
   test("Should wrap given node.", () => {
-    const proxy = NodeProxy.wrap(rootNode);
+    const proxy = NodeProxy.proxy(rootNode);
     expect(proxy?.delegate).toStrictEqual(rootNode);
   });
 
   test("Should default to mutable state.", () => {
-    const proxy = NodeProxy.wrap(rootNode);
+    const proxy = NodeProxy.proxy(rootNode);
     expect(proxy?.mutable).toStrictEqual(true);
   });
 
   test.each([[true], [false]])(
     "Should respect mutable state %p",
     (mutable: boolean) => {
-      const proxy = NodeProxy.wrap(rootNode, mutable);
+      const proxy = NodeProxy.proxy(rootNode, mutable);
       expect(proxy?.mutable).toStrictEqual(mutable);
     }
   );
 
   test.each([[undefined], [null]])("Should return null when wrapping falsy values like %p.",
     (value) => {
-      const proxy = NodeProxy.wrap(value);
+      const proxy = NodeProxy.proxy(value);
       expect(proxy).toStrictEqual(null);
     });
 });

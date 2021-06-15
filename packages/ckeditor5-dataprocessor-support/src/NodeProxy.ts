@@ -36,7 +36,7 @@ export default class NodeProxy<N extends Node = Node> {
    * @param mutable signals, if this representation is mutable or not
    * @return NodeProxy for given node; `null` for falsy values
    */
-  public static wrap<N extends Node>(node: N | undefined | null, mutable: boolean = true): NodeProxy<N> | null {
+  public static proxy<T extends Node>(node: T | undefined | null, mutable: boolean = true): NodeProxy<T> | null {
     if (!!node) {
       return new NodeProxy(node, mutable);
     }
@@ -85,14 +85,14 @@ export default class NodeProxy<N extends Node = Node> {
    * Access to the parent node of this node.
    */
   public get parentNode(): NodeProxy<Node & ParentNode> | null {
-    return NodeProxy.wrap<Node & ParentNode>(this.delegate.parentNode, false);
+    return NodeProxy.proxy<Node & ParentNode>(this.delegate.parentNode, false);
   }
 
   /**
    * Access to the parent element of this node.
    */
   public get parentElement(): NodeProxy<HTMLElement> | null {
-    return NodeProxy.wrap<HTMLElement>(this.delegate.parentElement, false);
+    return NodeProxy.proxy<HTMLElement>(this.delegate.parentElement, false);
   }
 
   /**
@@ -157,7 +157,7 @@ export default class NodeProxy<N extends Node = Node> {
    */
   public findFirst(condition?: string | ChildPredicate): NodeProxy<ChildNode> | null {
     if (!condition) {
-      return NodeProxy.wrap(this.delegate.firstChild, false);
+      return NodeProxy.proxy(this.delegate.firstChild, false);
     }
     let predicate: ChildPredicate;
     if (typeof condition === "function") {
@@ -167,7 +167,7 @@ export default class NodeProxy<N extends Node = Node> {
         return child.nodeName.toLowerCase() === condition.toLowerCase();
       }
     }
-    return NodeProxy.wrap(Array.from(this.delegate.childNodes).find(predicate, false));
+    return NodeProxy.proxy(Array.from(this.delegate.childNodes).find(predicate, false));
   }
 
   /**
@@ -382,7 +382,8 @@ export default class NodeProxy<N extends Node = Node> {
   }
 
   toString(): string {
-    return `NodeProxy(${this.name}${this.name === this.realName ? "" : `(was: ${this.realName})`})`;
+    const realNameHint = this.name === this.realName ? "" : `(was: ${this.realName})`;
+    return `NodeProxy(${this.name}${realNameHint})`;
   }
 }
 
