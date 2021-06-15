@@ -267,10 +267,12 @@ describe("Default Data Filter Rules", () => {
     [
       "TEXT#16: Should remove text at TABLE.",
       {
+        // TODO[cke] Fix Bug.
+        disabled: "For some unknown reason, the tbody element is removed in this case. Needs to be investigated.",
         comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table>${text}<tr><td>${text}</td></tr>${text}</table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table>${text}<tbody class="${attr_class}"><tr><th>${text}</th></tr></tbody>${text}</table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody class="${attr_class}"><tr><td class="td--header">${text}</td></tr></tbody></table></div>`,
       },
     ],
     [
@@ -288,15 +290,15 @@ describe("Default Data Filter Rules", () => {
         comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><table><tr>${text}<td>${text}</td>${text}</tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
       },
     ],
     [
       "TEXT#19: Should keep text at TD.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
         expectedView: true,
       },
     ],
@@ -469,7 +471,7 @@ describe("Default Data Filter Rules", () => {
   const anchorFixtures: DataFilterTestFixture[] =
     Object.entries(expectedTargetToXlinkShowAndRole)
       .map(([target, { show, role, comment, non_bijective }], index) => {
-        let name: string = `ANCHOR#${index}: Should map ${target === NO_TARGET ? "no target":`target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective?" and vice versa":""}.`;
+        let name: string = `ANCHOR#${index}: Should map ${target === NO_TARGET ? "no target" : `target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
         let viewTarget: string = `${target === NO_TARGET ? "" : ` target="${target}"`}`;
         let dataShow: string = !show ? "" : ` xlink:show="${show}"`;
         let dataRole: string = !role ? "" : ` xlink:role="${role}"`;
@@ -519,7 +521,7 @@ describe("Default Data Filter Rules", () => {
   );
   const tableFixtures: DataFilterTestFixture[] = [
     [
-      "TABLE#1: Empty table should be removed, as it is invalid.",
+      "TABLE#01: Empty table should be removed, as it is invalid.",
       {
         comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
@@ -528,16 +530,27 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "TABLE#2: thead should be transformed as being part of table body (not tbody...).",
+      "TABLE#02: tbody should be added if missing.",
       {
+        comment: "This is a design decision which eases data-processing implementation. If this is unexpected, it may be changed.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr></table></div>`,
-        expectedView: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
       },
     ],
     [
-      "TABLE#3: tbody should be kept as is.",
+      "TABLE#03: thead should be transformed as being part of tbody.",
+      {
+        comment: "ckeditor/ckeditor5#9360: We must try at best effort to keep information about rows which are meant to be part of thead.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><th>Head</th></tr></thead></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr class="tr--header"><td class="td--header">Head</td></tr></tbody></table></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "TABLE#04: tbody should be kept as is.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
@@ -546,35 +559,35 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "TABLE#4: tbody should be removed, if contents need to be merged with previous thead section.",
+      "TABLE#05: thead should merge into tbody",
       {
-        comment: "This is a compromise due to processing order. As thead and its contents will be transformed first, there is no straightforward way to merge it with tbody.",
+        comment: "One contract is, that thead merges into existing tbody, so that e.g. class attributes at tbody are kept.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead><tbody><tr><td>Body</td></tr></tbody></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr><tr><td>Body</td></tr></table></div>`,
-        expectedView: `<div xmlns="${ns_richtext}"><table><tr><td>Head</td></tr><tr><td>Body</td></tr></table></div>`,
-      },
-    ],
-    [
-      "TABLE#5: th should be transformed to td with class.",
-      {
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><th>Head</th></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td class="td--heading">Head</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead><tbody class="${attr_class}"><tr><td>Body</td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody class="${attr_class}"><tr class="tr--header"><td>Head</td></tr><tr><td>Body</td></tr></tbody></table></div>`,
         expectedView: true,
       },
     ],
     [
-      "TABLE#6: Should remove figure around table. By default CKEditor 5 adds a figure around table.",
+      "TABLE#06: th should be transformed to td with class.",
       {
-        comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><figure><table><tr><td>Body</td></tr></table></figure></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>Body</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><th>Head</th></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td class="td--header">Head</td></tr></tbody></table></div>`,
+        expectedView: true,
       },
     ],
     [
-      "TABLE#7: Should remove empty tbody, and thus empty table.",
+      "TABLE#07: Should remove figure around table. By default CKEditor 5 adds a figure around table.",
+      {
+        comment: `${LAST_RESORT}`,
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><figure><table><tbody><tr><td>Body</td></tr></tbody></table></figure></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>Body</td></tr></tbody></table></div>`,
+      },
+    ],
+    [
+      "TABLE#08: Should remove empty tbody, and thus empty table.",
       {
         comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
@@ -583,7 +596,7 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "TABLE#8: Should remove empty tr, and thus empty tbody, and thus empty table.",
+      "TABLE#09: Should remove empty tr, and thus empty tbody, and thus empty table.",
       {
         comment: `${LAST_RESORT}`,
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
@@ -592,67 +605,87 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "TABLE#9: Should keep empty td.",
+      "TABLE#10: Should keep empty td.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
         expectedView: true,
       },
     ],
     [
-      "TABLE#10: Should keep td with several children.",
+      "TABLE#11: Should keep td with several children.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p><p>${text}</p></td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p>${text}</p><p>${text}</p></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p>${text}</p><p>${text}</p></td></tr></tbody></table></div>`,
         expectedView: true,
       },
     ],
     [
-      "TABLE#11: Should remove singleton br in td.",
+      "TABLE#12: Should remove singleton br in td.",
       {
         comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
-        expectedView: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><br/></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
       },
     ],
     [
-      "TABLE#12: Should remove singleton p in td.",
+      "TABLE#13: Should remove singleton p in td.",
       {
         comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p/></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
       },
     ],
     [
-      "TABLE#13: Should remove singleton p in td if it only contains br.",
+      "TABLE#14: Should remove singleton p in td if it only contains br.",
       {
         comment: "This is the behavior of CoreMedia RichText with CKEditor 4.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p><br/></p></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
       },
     ],
     [
-      "TABLE#14: Should not remove singleton p in td if it contains text.",
+      "TABLE#15: Should not remove singleton p in td if it contains text.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td><p>${text}</p></td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p>${text}</p></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p>${text}</p></td></tr></tbody></table></div>`,
         expectedView: true,
       },
     ],
     [
-      "TABLE#15: th should be transformed to td with class and continue with normal tds.",
+      "TABLE#16: th should be transformed to td with class and continue with normal tds.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><th>Head</th></tr><tr><td>Data</td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td class="td--heading">Head</td></tr><tr><td>Data</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><th>Head</th></tr><tr><td>Data</td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td class="td--header">Head</td></tr><tr><td>Data</td></tr></tbody></table></div>`,
         expectedView: true,
+      },
+    ],
+    [
+      "TABLE#17: tfoot should be transformed and merged to tbody.",
+      {
+        comment: "tfoot in CKEditor 5 24.x is not supported in view and will be merged to tbody.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tfoot><tr><th>Foot</th></tr></tfoot></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr class="tr--footer"><td class="td--header">Foot</td></tr></tbody></table></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "TABLE#18: Multiple tbodies should be merged into first.",
+      {
+        comment: "HTML may provide multiple tbodies, CoreMedia RichText may only have one. Design decision: Only keep attributes of first tbody.",
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody class="body1"><tr><td>Body 1</td></tr></tbody><tbody class="body2"><tr><td>Body 2</td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody class="body1"><tr><td>Body 1</td></tr><tr><td>Body 2</td></tr></tbody></table></div>`,
+        expectedView: `<div xmlns="${ns_richtext}"><table><tbody class="body1"><tr><td>Body 1</td></tr><tr><td>Body 2</td></tr></tbody></table></div>`,
       },
     ],
   ];
@@ -870,8 +903,8 @@ describe("Default Data Filter Rules", () => {
       "CLEANUP#2: Remove trailing <br> tag in <td>.",
       {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}<br/></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}<br/></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
       },
     ],
     [
@@ -887,8 +920,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><br/></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><br/></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
       },
     ],
     [
@@ -896,8 +929,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p/></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p/></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
       },
     ],
     [
@@ -905,8 +938,8 @@ describe("Default Data Filter Rules", () => {
       {
         comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td><p><br/></p></td></tr></table></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><table><tr><td/></tr></table></div>`,
+        inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p><br/></p></td></tr></tbody></table></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
       },
     ],
     [

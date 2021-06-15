@@ -22,7 +22,7 @@ function createLink(show, role) {
 }
 
 function createLinkTableHeading() {
-  return `<tr><td class="td--heading">xlink:show</td><td class="td--heading">xlink:role</td><td class="td--heading">target</td><td class="td--heading">Link</td><td class="td--heading">Comment</td></tr>`;
+  return `<tr class="tr--header"><td class="td--header">xlink:show</td><td class="td--header">xlink:role</td><td class="td--header">target</td><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
 }
 
 function createLinkTableRow({comment, show, role, target}) {
