@@ -5,6 +5,11 @@ module.exports = {
   // passWithNoTests: true,
   testEnvironment: 'jsdom',
   moduleFileExtensions: ["js", "ts", "d.ts"],
+  // see https://jestjs.io/docs/webpack#handling-static-assets
+  "moduleNameMapper": {
+    "\\.(css|less)$": require.resolve("./__mocks__/styleMock.js"),
+    "\\.(gif|ttf|eot|svg)$": require.resolve("./__mocks__/fileMock.js"),
+  },
   transform: {
     "^.+\\.[jt]sx?$": ["babel-jest", babelConfig],
   },
