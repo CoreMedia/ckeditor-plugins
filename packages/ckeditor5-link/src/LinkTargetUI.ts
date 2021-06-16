@@ -74,7 +74,7 @@ export default class LinkTargetUI extends Plugin {
     // @ts-ignore
     extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
     this._customizeFormView(formView);
-    this._customizeToolbarButtons(formView);
+    LinkTargetUI._customizeToolbarButtons(formView);
 
     this.listenTo(
       formView,
@@ -103,9 +103,9 @@ export default class LinkTargetUI extends Plugin {
     return extension;
   }
 
-  private _customizeToolbarButtons(formView: LinkFormView): void {
-    this._customizeButton(formView.cancelButtonView);
-    this._customizeButton(formView.saveButtonView);
+  private static _customizeToolbarButtons(formView: LinkFormView): void {
+    LinkTargetUI._customizeButton(formView.cancelButtonView);
+    LinkTargetUI._customizeButton(formView.saveButtonView);
   }
 
   private _customizeFormView(formView: LinkFormView): void {
@@ -127,7 +127,7 @@ export default class LinkTargetUI extends Plugin {
     formView.children.add(formView.saveButtonView);
   }
 
-  private _customizeButton(button: ButtonView): void {
+  private static _customizeButton(button: ButtonView): void {
     // The icon view is the first child of the viewCollection:
     const iconView = button.children.first;
     button.children.remove(iconView);
