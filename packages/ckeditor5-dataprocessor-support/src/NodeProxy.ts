@@ -69,6 +69,14 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Returns the wrapped delegate.
+   *
+   * This delegate should not be used for directly manipulating the DOM, as
+   * nested rules may not veto applied changes.
+   *
+   * If a manipulation is done, it must be ensured, that previously run rules
+   * on this node may be rerun. It is generally considered safe to do manipulation
+   * to child elements, as these are processed after this very node, so that
+   * all applicable rules have a chance to modify these nodes again.
    */
   public get delegate(): N {
     return this._delegate;
