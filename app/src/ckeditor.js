@@ -189,6 +189,12 @@ ClassicEditor.create(document.querySelector('.editor'), {
   editor = newEditor;
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");
+
+  let undoCommand = newEditor.commands.get("undo");
+  if (!!undoCommand) {
+    newEditor['resetUndo'] = () => undoCommand.clearStack();
+    console.log("Registered `editor.resetUndo()` to clear undo history.");
+  }
 }).catch(error => {
   console.error(error);
 });
