@@ -9,7 +9,7 @@ module.exports = {
     "^.+\\.[jt]sx?$": ["babel-jest", babelConfig],
   },
   transformIgnorePatterns: [
-    "node_modules/(?!@ckeditor|lodash-es)"
+    "node_modules/(?!@ckeditor|lodash-es|ckeditor5)"
   ],
   resolver: "../../enhanced-resolve.js"
 };
