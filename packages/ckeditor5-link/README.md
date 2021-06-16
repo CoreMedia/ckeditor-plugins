@@ -86,7 +86,7 @@ data-processing is as follows:
 | `xlink:show` | `xlink:role` | `target`    |
 | ------------ | ------------ | ----------- |
 | `new`        |              | `_blank`    |
-| `replace`    |              | `_self`     |
+| `replace`    |              | `_top`      |
 | `embed`      |              | `_embed`    |
 | `none`       |              | `_none`     |
 | `other`      | `frameName`  | `frameName` |
@@ -102,7 +102,7 @@ mapped with `xlink:show="other"`:
 | `xlink:show` | `xlink:role` | `target`    |
 | ------------ | ------------ | ----------- |
 | `other`      | `_parent`    | `_parent`   |
-| `other`      | `_top`       | `_top`      |
+| `other`      | `_self`      | `_self`     |
 
 Mappings in data processing should ensure, that more artificial states
 (from CoreMedia CMS) perspective are also represented meaningfully.
@@ -118,7 +118,7 @@ In more detail the following artificial states are recognized:
 | `xlink:show` | `xlink:role` | `target`           |
 | ------------ | ------------ | ------------------ |
 | `new`        | `frameName`  | `_blank_frameName` |
-| `replace`    | `frameName`  | `_self_frameName`  |
+| `replace`    | `frameName`  | `_top_frameName`   |
 | `embed`      | `frameName`  | `_embed_frameName` |
 | `none`       | `frameName`  | `_none_frameName`  |
 | `other`      |              | `_other`           |

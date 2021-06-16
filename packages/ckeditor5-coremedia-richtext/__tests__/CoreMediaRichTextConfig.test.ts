@@ -352,8 +352,9 @@ describe("Default Data Filter Rules", () => {
       show: "new",
     },
     "_self": {
-      comment: "Decision: Map _self to xlink:show=replace as it was for CKEditor 4.",
-      show: "replace",
+      comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_self instead.",
+      show: "other",
+      role: "_self",
     },
     "_parent": {
       comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_parent instead.",
@@ -361,9 +362,8 @@ describe("Default Data Filter Rules", () => {
       role: "_parent",
     },
     "_top": {
-      comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_top instead.",
-      show: "other",
-      role: "_top",
+      comment: "Decision: Map _top to xlink:show=replace.",
+      show: "replace",
     },
     "some target": {
       comment: "Some standard use-case: A named target got specified.",
@@ -397,7 +397,7 @@ describe("Default Data Filter Rules", () => {
       show: "new",
       role: "some_target",
     },
-    "_self_some_target": {
+    "_top_some_target": {
       show: "replace",
       role: "some_target",
     },
@@ -427,9 +427,9 @@ describe("Default Data Filter Rules", () => {
       show: "other",
       role: "_blank_",
     },
-    "_self_": {
+    "_top_": {
       show: "other",
-      role: "_self_",
+      role: "_top_",
     },
     "_embed_": {
       show: "other",

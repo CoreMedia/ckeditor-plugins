@@ -42,7 +42,7 @@ function targetToXLinkAttributes({ attributes }: ElementProxy): void {
     // for a given show attribute (like "replace").
     let handleRole = !!suggestedRole;
     switch (suggestedShow.toLowerCase()) {
-      case "_self":
+      case "_top":
         newAttrs.show = "replace";
         break;
       case "_blank":
@@ -121,7 +121,7 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
     let handleRole = !!role;
     switch (show.toLowerCase()) {
       case "replace":
-        target = "_self";
+        target = "_top";
         break;
       case "new":
         target = "_blank";
@@ -148,10 +148,7 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
             node
           );
         } else {
-          console.warn(
-            `Invalid value for xlink:show="${show}". No target attribute will be generated. Node:`,
-            node
-          );
+          console.warn(`Invalid value for xlink:show="${show}". No target attribute will be generated. Node:`, node);
         }
     }
     if (handleRole) {
