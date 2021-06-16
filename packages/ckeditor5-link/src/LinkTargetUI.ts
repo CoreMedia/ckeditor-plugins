@@ -55,6 +55,8 @@ export default class LinkTargetUI extends Plugin {
     const linkCommand = editor.commands.get("link");
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
+    //@ts-ignore
+    const actionsView = linkUI.actionsView;
     const extension = new LinkFormViewExtension(formView);
     extension.targetInputView
       .bind("hiddenTarget")
@@ -99,6 +101,21 @@ export default class LinkTargetUI extends Plugin {
         priority: "high",
       }
     );
+
+    /*
+     * Workaround to reset the values of linkBehavior and target fields if modal is canceled and reopened after
+     * changes have been made
+     */
+    this.listenTo(actionsView, "edit", () => {
+      if (linkTargetCommand === undefined) {
+        return;
+      }
+      // remove linkBehavior and target values from actionsView
+      const commandValues = linkTargetToUiValues(<string>linkTargetCommand.value);
+      //@ts-ignore
+      extension.linkBehaviorView.linkBehavior = commandValues.linkBehavior || "";
+      extension.targetInputView.fieldView.element.value = commandValues.target || "";
+    });
 
     return extension;
   }
