@@ -1,4 +1,4 @@
-const babelConfig = require("./shared-babel.config.js");
+const babelConfig = require("../../shared-babel.config.js");
 
 module.exports = {
   // https://github.com/facebook/jest/issues/8896
@@ -11,5 +11,5 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!@ckeditor|lodash-es|ckeditor5)"
   ],
-  resolver: "../../enhanced-resolve.js"
+  resolver: require.resolve("./enhanced-resolve.js"),
 };

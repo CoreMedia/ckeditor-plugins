@@ -1,0 +1,13 @@
+{
+  "name": "@coremedia-internal/jest-test-helpers",
+  "version": "1.0.0",
+  "description": "Jest test helpers.",
+  "private": true,
+  "dependencies": {
+    "enhanced-resolve": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=5.7.1"
+  }
+}

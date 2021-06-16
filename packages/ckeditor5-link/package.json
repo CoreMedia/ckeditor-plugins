@@ -31,6 +31,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
+    "@coremedia-internal/jest-test-helpers": "^1.0.0",
     "copyfiles": "^2.4.1",
     "@jangaroo/publish":"^1.0.0-alpha",
     "@types/jest": "^26.0.20",
