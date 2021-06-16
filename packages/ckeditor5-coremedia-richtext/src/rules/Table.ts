@@ -78,33 +78,7 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
   },
 };
 
-/**
- * In Data Processing we don't have higher order elements such as
- * `HTMLTableSectionElement`. Instead, we are going to simulate, as if we had
- * a similar API.
- */
-class TableSectionWrapper {
-  private readonly _delegate: Element;
-
-  constructor(delegate: Element) {
-    this._delegate = delegate;
-  }
-
-  get delegate(): Element {
-    return this._delegate;
-  }
-
-  get rows(): Element[] {
-    return [...this.delegate.getElementsByTagName("tr")];
-  }
-}
-
-/**
- * In Data Processing we don't have higher order elements such as
- * `HTMLTableElement`. Instead, we are going to simulate, as if we had
- * a similar API.
- */
-class TableWrapper {
+class ElementWrapper {
   private readonly _delegate: Element;
 
   constructor(delegate: Element) {
@@ -121,6 +95,32 @@ class TableWrapper {
 
   getDirectElementsByTagName(tagName: string): Element[] {
     return [...this.delegate.querySelectorAll(tagName)].filter((e) => this.delegate.isSameNode(e.parentElement));
+  }
+}
+
+/**
+ * In Data Processing we don't have higher order elements such as
+ * `HTMLTableSectionElement`. Instead, we are going to simulate, as if we had
+ * a similar API.
+ */
+class TableSectionWrapper extends ElementWrapper {
+  constructor(delegate: Element) {
+    super(delegate);
+  }
+
+  get rows(): Element[] {
+    return this.getDirectElementsByTagName("tr");
+  }
+}
+
+/**
+ * In Data Processing we don't have higher order elements such as
+ * `HTMLTableElement`. Instead, we are going to simulate, as if we had
+ * a similar API.
+ */
+class TableWrapper extends ElementWrapper {
+  constructor(delegate: Element) {
+    super(delegate);
   }
 
   getDirectElementsInSectionsByTagName(tagName: string): Element[] {
