@@ -134,8 +134,14 @@ export default class LinkTargetUI extends Plugin {
     const CM_PRIMARY_BUTTON_CLS = "cm-ck-footer-button-primary";
     const CM_FOOTER_BUTTON_CLS = "cm-ck-footer-button";
 
+    // ck editor default classes, that need to be removed
+    // these classes will only appear if manual decorators are enabled
+    const CK_LINK_FORM_LAYOUT_VERTICAL_CLS = "ck-link-form_layout-vertical";
+    const CK_VERTICAL_FORM_CLS = "ck-vertical-form";
+
     // always add vertical css classes to the formView
     this._addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
+    this._removeClassFromTemplate(formView, [CK_LINK_FORM_LAYOUT_VERTICAL_CLS, CK_VERTICAL_FORM_CLS]);
 
     // change the order of the buttons
     formView.children.remove(formView.saveButtonView);
@@ -157,13 +163,26 @@ export default class LinkTargetUI extends Plugin {
   private _addClassToTemplate(view: View, classNames: string[] | string): void {
     // @ts-ignore
     const classes: string[] = view.template.attributes.class;
-
     if (!Array.isArray(classNames)) {
       classNames = [classNames];
     }
     classNames.forEach((className) => {
       if (!classes.includes(className)) {
         classes.push(className);
+      }
+    });
+  }
+
+  private _removeClassFromTemplate(view: View, classNames: string[] | string): void {
+    // @ts-ignore
+    const classes: string[] = view.template.attributes.class;
+    if (!Array.isArray(classNames)) {
+      classNames = [classNames];
+    }
+    classNames.forEach((className) => {
+      const index = classes.indexOf(className);
+      if (index > -1) {
+        classes.splice(index, 1);
       }
     });
   }
