@@ -112,11 +112,12 @@ export default class LinkTargetUI extends Plugin {
       if (linkTargetCommand === undefined) {
         return;
       }
-      // remove linkBehavior and target values from actionsView
-      const commandValues = linkTargetToUiValues(<string>linkTargetCommand.value);
+      const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
       //@ts-ignore
-      extension.linkBehaviorView.linkBehavior = commandValues.linkBehavior || "";
-      extension.targetInputView.fieldView.element.value = commandValues.target || "";
+      extension.linkBehaviorView.linkBehavior = linkBehavior || "";
+      extension.targetInputView.fieldView.element.value = target || "";
+      //@ts-ignore
+      extension.targetInputView.hiddenTarget = target || "";
     });
 
     return extension;
