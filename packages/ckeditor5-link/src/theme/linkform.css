@@ -7,8 +7,8 @@
   min-width: var(--ck-input-text-width);
 }
 
-.ck.cm-ck-link-form-view .ck-list,
-.ck.cm-ck-link-form-view .ck-labeled-field-view {
+.ck.cm-ck-link-form-view > .ck-list,
+.ck.cm-ck-link-form-view > .ck-labeled-field-view {
   margin: var(--ck-spacing-large) var(--ck-spacing-large) var(--ck-spacing-small) !important;
 }
 
