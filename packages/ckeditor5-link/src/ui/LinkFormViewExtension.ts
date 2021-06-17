@@ -60,6 +60,12 @@ export default class LinkFormViewExtension {
     const t = this.locale.t;
     const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
     labeledInput.label = t("Link Target");
+    /*
+     * Define observable attribute `hiddenTarget`. This attribute holds the
+     * original target, while being in a state, where the target field is
+     * disabled. This allows editors to toggle from "Open in Frame" to another
+     * behavior back and forth, while any target set originally is remembered.
+     */
     labeledInput.set({
       hiddenTarget: "",
     });
