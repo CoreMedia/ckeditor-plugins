@@ -103,10 +103,14 @@ export default class LinkTargetUI extends Plugin {
     );
 
     /*
-     * Workaround to reset the values of linkBehavior and target fields if modal is canceled and reopened after
-     * changes have been made
+     * Workaround to reset the values of linkBehavior and target fields if modal
+     * is canceled and reopened after changes have been made. See related issues:
+     * ckeditor/ckeditor5-link#78 (now: ckeditor/ckeditor5#4765) and
+     * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
      */
-    this.listenTo(actionsView, "edit", () => {
+    //@ts-ignore
+    linkUI.decorate("_addFormView");
+    this.listenTo(linkUI, "_addFormView", () => {
       if (linkTargetCommand === undefined) {
         return;
       }
