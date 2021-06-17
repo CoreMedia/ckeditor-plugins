@@ -55,8 +55,6 @@ export default class LinkTargetUI extends Plugin {
     const linkCommand = editor.commands.get("link");
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
-    //@ts-ignore
-    const actionsView = linkUI.actionsView;
     const extension = new LinkFormViewExtension(formView);
     extension.targetInputView
       .bind("hiddenTarget")
