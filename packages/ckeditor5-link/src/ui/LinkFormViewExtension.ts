@@ -40,7 +40,6 @@ export default class LinkFormViewExtension {
   }
 
   render(): void {
-    // TODO[cke] Do we require a switch, if LinkTarget Plugin is enabled or not?
     this.linkFormView.registerChild(this.linkBehaviorView);
     this.linkFormView.registerChild(this.targetInputView);
     if (!this.targetInputView.isRendered) {
