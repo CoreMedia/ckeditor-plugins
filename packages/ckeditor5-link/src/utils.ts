@@ -56,7 +56,18 @@ const _targetToLinkBehavior = (target: string) => {
   }
 };
 
-export const uiValuesToLinkTarget = (linkBehavior: string, target: string): string => {
+/**
+ * Transforms UI-state to a model value to be stored in `linkTarget`.
+ *
+ * The target is ignored by intention, if a behavior got selected, which
+ * is not expected to come with a custom target. As a result, if such state
+ * got loaded from CMS, it is _auto-repaired_ on save by removing the
+ * unexpected target identifier.
+ *
+ * @param linkBehavior selected link behavior from drop-down
+ * @param target specified target
+ */
+export const uiValuesToLinkTarget = (linkBehavior: string, target?: string): string => {
   switch (linkBehavior) {
     case LINK_BEHAVIOR.DEFAULT:
       return "";
@@ -67,9 +78,13 @@ export const uiValuesToLinkTarget = (linkBehavior: string, target: string): stri
     case LINK_BEHAVIOR.SHOW_EMBEDDED:
       return "_embed";
     case LINK_BEHAVIOR.OPEN_IN_FRAME:
-      return target ? target : "_other";
+      // This state is expected to have a target set to truthy value, which is
+      // than taken as is as value for `linkTarget`. To represent a state, where
+      // no explicit target has been given, an artificial keyword `_other`
+      // is representing this state.
+      return !target ? "_other" : target;
     default:
-      throw new Error("unsupported linkBehavior set");
+      throw new Error(`Unsupported linkBehavior: ${linkBehavior}`);
   }
 };
 
