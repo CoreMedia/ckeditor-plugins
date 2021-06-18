@@ -8,6 +8,9 @@ export const LINK_BEHAVIOR = {
   OPEN_IN_FRAME: "openInFrame",
 };
 
+const UnsupportedShow = Symbol("Unsupported Show");
+type UnsupportedShowType = typeof UnsupportedShow;
+
 /**
  * Transforms value of `linkTarget` from model in a way, that we can represent
  * it in the UI, having a drop-down for behavior-selection and a text-field
@@ -24,7 +27,10 @@ export const linkTargetToUiValues = (linkTarget?: string): { target: string; lin
     };
   }
 
-  if (!linkTarget.includes("_")) {
+  const modelMatcher = /^(?<show>_[^_]+)(?:_(?<role>.*))?$/;
+  const matchResult: RegExpExecArray | null = modelMatcher.exec(linkTarget);
+
+  if (!matchResult) {
     // no "_" found. return string as target and open in frame
     return {
       target: linkTarget,
@@ -32,35 +38,66 @@ export const linkTargetToUiValues = (linkTarget?: string): { target: string; lin
     };
   }
 
-  const ignoreEmpty = (el: string) => !!el;
-  const [linkBehavior, target] = linkTarget.split("_").filter(ignoreEmpty);
+  /**
+   * Not yet value for `xlink:show` but may be transformed to such a value
+   * by mapping.
+   */
+  const show = matchResult[1];
+  const role = matchResult[2];
+
+  const linkBehavior = _showToLinkBehavior(show);
+
+  if (linkBehavior === UnsupportedShow) {
+    return {
+      target: linkTarget,
+      linkBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+    };
+  }
 
   /*
-   * We represent any other state as plain text in target field, assuming that customers don't want/need them,
-   * but we must still be robust for contents from different editing applications.
+   * "_other" is only supported as full-match (as it represents a state, where
+   * xlink:role has not been set). Thus, if any role is set, we must take it as
+   * full target value and not stripping `_other` from the target value.
    */
-  let specialTarget = undefined;
-  if (linkBehavior === "top" || linkBehavior === "parent" || linkBehavior === "none") {
-    specialTarget = linkTarget;
+  if (linkBehavior === "_other") {
+    if (!!role) {
+      // Misused "_other" placeholder (denoting xlink:show=other without expected role.
+      // In this case, we assume, that it is a completely custom target.
+      return {
+        target: linkTarget,
+        linkBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      };
+    }
+    return {
+      target: "",
+      linkBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+    };
   }
+
   return {
-    target: specialTarget ? specialTarget : target || "",
-    linkBehavior: _targetToLinkBehavior("_" + linkBehavior),
+    target: role || "",
+    linkBehavior: linkBehavior,
   };
 };
 
-const _targetToLinkBehavior = (target: string) => {
-  switch (target) {
-    case "":
-      return LINK_BEHAVIOR.DEFAULT;
+const _showToLinkBehavior = (show: string): string | UnsupportedShowType => {
+  switch (show) {
     case "_blank":
       return LINK_BEHAVIOR.OPEN_IN_NEW_TAB;
     case "_self":
       return LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
     case "_embed":
       return LINK_BEHAVIOR.SHOW_EMBEDDED;
-    default:
+    case "_role":
+      // Artificial state, where model only denotes role but no show parameter.
+      // We "repair" this to be "open in frame" with the given role.
       return LINK_BEHAVIOR.OPEN_IN_FRAME;
+    case "_other":
+      // Artificial state, where model only denotes xlink:show=other but
+      // without an expected role.
+      return LINK_BEHAVIOR.OPEN_IN_FRAME;
+    default:
+      return UnsupportedShow;
   }
 };
 
