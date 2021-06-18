@@ -30,7 +30,7 @@ export const linkTargetToUiValues = (linkTarget: string): { target: string; link
    * but we must still be robust for contents from different editing applications.
    */
   let specialTarget = undefined;
-  if (linkBehavior === "self" || linkBehavior === "parent" || linkBehavior === "none") {
+  if (linkBehavior === "top" || linkBehavior === "parent" || linkBehavior === "none") {
     specialTarget = linkTarget;
   }
   return {
@@ -45,7 +45,7 @@ const _targetToLinkBehavior = (target: string) => {
       return LINK_BEHAVIOR.DEFAULT;
     case "_blank":
       return LINK_BEHAVIOR.OPEN_IN_NEW_TAB;
-    case "_top":
+    case "_self":
       return LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
     case "_embed":
       return LINK_BEHAVIOR.SHOW_EMBEDDED;
@@ -61,7 +61,7 @@ export const uiValuesToLinkTarget = (linkBehavior: string, target: string): stri
     case LINK_BEHAVIOR.OPEN_IN_NEW_TAB:
       return "_blank";
     case LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB:
-      return "_top";
+      return "_self";
     case LINK_BEHAVIOR.SHOW_EMBEDDED:
       return "_embed";
     case LINK_BEHAVIOR.OPEN_IN_FRAME:

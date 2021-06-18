@@ -45,6 +45,34 @@ function createLinkScenario(title, scenarios) {
 }
 
 function externalLinkTargetExamples() {
+  /**
+   * The mapping we agreed upon for `xlink:show` to some target value.
+   * `other` is skipped here, as it is used for special meaning, which is,
+   * that the `xlink:show` is ignored but `xlink:role` will take over representing
+   * the `target` attribute.
+   */
+  const show = {
+    /**
+     * Open in new tab. Nothing to argue about.
+     */
+    new: "_blank",
+    /**
+     * May be either `_top` or `_self`. In CoreMedia CAE context we decided to
+     * map `replace` to `_self` as this is, what is documented for example
+     * at MDN.
+     */
+    replace: "_self",
+    /**
+     * Artificial mapping, we require, as there is no such `target` to represent
+     * embedding links.
+     */
+    embed: "_embed",
+    /**
+     * Artificial mapping, we require, as there is no such `target` to represent
+     * explicitly unspecified link behavior.
+     */
+    none: "_none",
+  };
   const standardScenarios = [
     {
       comment: "Only href, no target.",
@@ -57,14 +85,14 @@ function externalLinkTargetExamples() {
     {
       show: "new",
       role: null,
-      target: "_blank",
+      target: show.new,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
     },
     {
       show: "replace",
       role: null,
-      target: "_top",
+      target: show.replace,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
     },
@@ -72,7 +100,7 @@ function externalLinkTargetExamples() {
       comment: "artificial reserved word for 'target'.",
       show: "embed",
       role: null,
-      target: "_embed",
+      target: show.embed,
       uiBehavior: "Show Embedded",
       uiTarget: null,
     },
@@ -88,9 +116,9 @@ function externalLinkTargetExamples() {
       comment: "artificial reserved word for 'target' to reflect this XLink-state",
       show: "none",
       role: null,
-      target: "_none",
+      target: show.none,
       uiBehavior: "Open in Frame",
-      uiTarget: "_none",
+      uiTarget: show.none,
     },
     {
       comment: "Open in Frame; normal state for a named target.",
@@ -114,7 +142,7 @@ function externalLinkTargetExamples() {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
       show: "new",
       role: SOME_TARGET,
-      target: `_blank_${SOME_TARGET}`,
+      target: `${show.new}_${SOME_TARGET}`,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
     },
@@ -122,7 +150,7 @@ function externalLinkTargetExamples() {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
       show: "replace",
       role: SOME_TARGET,
-      target: `_top_${SOME_TARGET}`,
+      target: `${show.replace}_${SOME_TARGET}`,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
     },
@@ -130,7 +158,7 @@ function externalLinkTargetExamples() {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
       show: "embed",
       role: SOME_TARGET,
-      target: `_embed_${SOME_TARGET}`,
+      target: `${show.embed}_${SOME_TARGET}`,
       uiBehavior: "Show Embedded",
       uiTarget: null,
     },
@@ -138,23 +166,23 @@ function externalLinkTargetExamples() {
       comment: "artificial state with unexpected role attribute; will not be repaired",
       show: "none",
       role: SOME_TARGET,
-      target: `_none_${SOME_TARGET}`,
+      target: `${show.none}_${SOME_TARGET}`,
       uiBehavior: "Open in Frame",
-      uiTarget: `_none_${SOME_TARGET}`,
+      uiTarget: `${show.none}_${SOME_TARGET}`,
     },
   ];
   const reservedTargetScenarios = [
     {
       show: "replace",
       role: null,
-      target: "_top",
+      target: show.replace,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
     },
     {
       show: "new",
       role: null,
-      target: "_blank",
+      target: show.new,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
     },
@@ -169,13 +197,14 @@ function externalLinkTargetExamples() {
     {
       comment: "artificial regarding xlink-attributes",
       show: "other",
-      role: "_self",
-      target: "_self",
+      role: "_top",
+      target: "_top",
       uiBehavior: "Open in Frame",
-      uiTarget: "_self",
+      uiTarget: "_top",
     },
   ];
-  const cornerCaseScenarios = [
+  let cornerCaseScenarios;
+  cornerCaseScenarios = [
     {
       comment: "Trying to misuse reserved word _role. Repaired on save by removing xlink:role.",
       show: "other",
@@ -193,36 +222,36 @@ function externalLinkTargetExamples() {
       uiTarget: "",
     },
     {
-      comment: "Trying to misuse artificial handling of _blank_[role] with empty role. Repaired on save by removing xlink:role.",
+      comment: `Trying to misuse artificial handling of ${show.new}_[role] with empty role. Repaired on save by removing xlink:role.`,
       show: "other",
-      role: "_blank_",
-      target: "_blank_",
+      role: `${show.new}_`,
+      target: `${show.new}_`,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
     },
     {
-      comment: "Trying to misuse artificial handling of _top_[role] with empty role. Repaired on save by removing xlink:role.",
+      comment: `Trying to misuse artificial handling of ${show.replace}_[role] with empty role. Repaired on save by removing xlink:role.`,
       show: "other",
-      role: "_top_",
-      target: "_top_",
+      role: `${show.replace}_`,
+      target: `${show.replace}_`,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
     },
     {
-      comment: "Trying to misuse artificial handling of _embed_[role] with empty role. Repaired on save by removing xlink:role.",
+      comment: `Trying to misuse artificial handling of ${show.embed}_[role] with empty role. Repaired on save by removing xlink:role.`,
       show: "other",
-      role: "_embed_",
-      target: `_embed_`,
+      role: `${show.embed}_`,
+      target: `${show.embed}_`,
       uiBehavior: "Show Embedded",
       uiTarget: null,
     },
     {
-      comment: "Trying to misuse artificial handling of _none_[role] with empty role. Not repaired on save, stored as is.",
+      comment: `Trying to misuse artificial handling of ${show.none}_[role] with empty role. Not repaired on save, stored as is.`,
       show: "other",
-      role: "_none_",
-      target: "_none_",
+      role: `${show.none}_`,
+      target: `${show.none}_`,
       uiBehavior: "Open in Frame",
-      uiTarget: "_none_",
+      uiTarget: `${show.none}_`,
     },
   ];
   const scenarios = [

@@ -42,7 +42,7 @@ function targetToXLinkAttributes({ attributes }: ElementProxy): void {
     // for a given show attribute (like "replace").
     let handleRole = !!suggestedRole;
     switch (suggestedShow.toLowerCase()) {
-      case "_top":
+      case "_self":
         newAttrs.show = "replace";
         break;
       case "_blank":
@@ -121,7 +121,7 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
     let handleRole = !!role;
     switch (show.toLowerCase()) {
       case "replace":
-        target = "_top";
+        target = "_self";
         break;
       case "new":
         target = "_blank";

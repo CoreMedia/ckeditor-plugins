@@ -318,6 +318,34 @@ describe("Default Data Filter Rules", () => {
   type ExpectedTargetToXlinkShowAndRole = {
     [target: string]: XlinkBehaviorDefinition,
   };
+  /**
+   * The mapping we agreed upon for `xlink:show` to some target value.
+   * `other` is skipped here, as it is used for special meaning, which is,
+   * that the `xlink:show` is ignored but `xlink:role` will take over representing
+   * the `target` attribute.
+   */
+  const show = {
+    /**
+     * Open in new tab. Nothing to argue about.
+     */
+    new: "_blank",
+    /**
+     * May be either `_top` or `_self`. In CoreMedia CAE context we decided to
+     * map `replace` to `_self` as this is, what is documented for example
+     * at MDN.
+     */
+    replace: "_self",
+    /**
+     * Artificial mapping, we require, as there is no such `target` to represent
+     * embedding links.
+     */
+    embed: "_embed",
+    /**
+     * Artificial mapping, we require, as there is no such `target` to represent
+     * explicitly unspecified link behavior.
+     */
+    none: "_none",
+  };
   // noinspection NonAsciiCharacters
   const specialCharacterTargets: ExpectedTargetToXlinkShowAndRole = {
     "äöü": {
@@ -347,22 +375,22 @@ describe("Default Data Filter Rules", () => {
     },
   };
   const standardHtmlTargets: ExpectedTargetToXlinkShowAndRole = {
-    "_blank": {
-      comment: "Decision: Map _blank to xlink:show=new as it was for CKEditor 4.",
+    [show.new]: {
+      comment: `Decision: Map ${show.new} to xlink:show=new as it was for CKEditor 4.`,
       show: "new",
     },
-    "_self": {
-      comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_self instead.",
+    "_top": {
+      comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_top instead.",
       show: "other",
-      role: "_self",
+      role: "_top",
     },
     "_parent": {
       comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_parent instead.",
       show: "other",
       role: "_parent",
     },
-    "_top": {
-      comment: "Decision: Map _top to xlink:show=replace.",
+    [show.replace]: {
+      comment: `Decision: Map ${show.replace} to xlink:show=replace.`,
       show: "replace",
     },
     "some target": {
@@ -378,11 +406,11 @@ describe("Default Data Filter Rules", () => {
    * no collision with targets found from external sources.
    */
   const artificialXlinkShowStates: ExpectedTargetToXlinkShowAndRole = {
-    "_embed": {
+    [show.embed]: {
       comment: "Chosen to represent xlink:show='embed'",
       show: "embed",
     },
-    "_none": {
+    [show.none]: {
       comment: "Chosen to represent xlink:show='none'",
       show: "none",
     },
@@ -393,19 +421,19 @@ describe("Default Data Filter Rules", () => {
    * these states, and we must ensure to represent them in model and view.
    */
   const artificialXlinkAttributeCombinations: ExpectedTargetToXlinkShowAndRole = {
-    "_blank_some_target": {
+    [`${show.new}_some_target`]: {
       show: "new",
       role: "some_target",
     },
-    "_top_some_target": {
+    [`${show.replace}_some_target`]: {
       show: "replace",
       role: "some_target",
     },
-    "_embed_some_target": {
+    [`${show.embed}_some_target`]: {
       show: "embed",
       role: "some_target",
     },
-    "_none_some_target": {
+    [`${show.none}_some_target`]: {
       show: "none",
       role: "some_target",
     },
@@ -423,21 +451,21 @@ describe("Default Data Filter Rules", () => {
    * into the mapping.
    */
   const penetrationTargets: ExpectedTargetToXlinkShowAndRole = {
-    "_blank_": {
+    [`${show.new}_`]: {
       show: "other",
-      role: "_blank_",
+      role: `${show.new}_`,
     },
-    "_top_": {
+    [`${show.replace}_`]: {
       show: "other",
-      role: "_top_",
+      role: `${show.replace}_`,
     },
-    "_embed_": {
+    [`${show.embed}_`]: {
       show: "other",
-      role: "_embed_",
+      role: `${show.embed}_`,
     },
-    "_none_": {
+    [`${show.none}_`]: {
       show: "other",
-      role: "_none_",
+      role: `${show.none}_`,
     },
     "_role_": {
       show: "other",
@@ -447,7 +475,7 @@ describe("Default Data Filter Rules", () => {
   /**
    * Represents no target attribute.
    */
-  const NO_TARGET = "NoTarget";
+  const noTarget = "NoTarget";
   const expectedTargetToXlinkShowAndRole: ExpectedTargetToXlinkShowAndRole = {
     // TODO[cke]: Using [NO_TARGET] fails currently to compile in Babel. An update may help.
     NoTarget: {
@@ -471,8 +499,8 @@ describe("Default Data Filter Rules", () => {
   const anchorFixtures: DataFilterTestFixture[] =
     Object.entries(expectedTargetToXlinkShowAndRole)
       .map(([target, { show, role, comment, non_bijective }], index) => {
-        let name: string = `ANCHOR#${index}: Should map ${target === NO_TARGET ? "no target" : `target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
-        let viewTarget: string = `${target === NO_TARGET ? "" : ` target="${target}"`}`;
+        let name: string = `ANCHOR#${index}: Should map ${target === noTarget ? "no target" : `target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
+        let viewTarget: string = `${target === noTarget ? "" : ` target="${target}"`}`;
         let dataShow: string = !show ? "" : ` xlink:show="${show}"`;
         let dataRole: string = !role ? "" : ` xlink:role="${role}"`;
         // noinspection XmlUnusedNamespaceDeclaration
