@@ -1,3 +1,5 @@
+import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
+
 export const LINK_BEHAVIOR = {
   DEFAULT: "default",
   OPEN_IN_NEW_TAB: "openInNewTab",
@@ -71,7 +73,15 @@ export const uiValuesToLinkTarget = (linkBehavior: string, target: string): stri
   }
 };
 
-export const getLinkBehaviorLabels = (t: any): { [key: string]: string } => {
+/**
+ * Provides a mapping from selectable link behaviors (drop-down) to their
+ * localized label.
+ *
+ * @param t translate function
+ */
+export const getLinkBehaviorLabels = (
+  t: (message: string | Message, values?: string | number | (string | number)[]) => string
+): { [key: string]: string } => {
   return {
     [LINK_BEHAVIOR.OPEN_IN_NEW_TAB]: t("Open in New Tab"),
     [LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB]: t("Open in Current Tab"),

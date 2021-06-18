@@ -16,5 +16,5 @@ export default class Locale {
   readonly uiLanguageDirection: string;
   readonly contentLanguageDirection: string;
 
-  t(message: string|Message, ...values: (string|number)[]): any;
+  t(message: string|Message, values?: string|number|(string|number)[]): string;
 }
