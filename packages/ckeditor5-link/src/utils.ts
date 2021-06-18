@@ -8,7 +8,14 @@ export const LINK_BEHAVIOR = {
   OPEN_IN_FRAME: "openInFrame",
 };
 
-export const linkTargetToUiValues = (linkTarget: string): { target: string; linkBehavior: string } => {
+/**
+ * Transforms value of `linkTarget` from model in a way, that we can represent
+ * it in the UI, having a drop-down for behavior-selection and a text-field
+ * for any custom target.
+ *
+ * @param linkTarget value from model to transform
+ */
+export const linkTargetToUiValues = (linkTarget?: string): { target: string; linkBehavior: string } => {
   // no linkTarget, return default state
   if (!linkTarget) {
     return {
@@ -25,7 +32,8 @@ export const linkTargetToUiValues = (linkTarget: string): { target: string; link
     };
   }
 
-  const [linkBehavior, target] = linkTarget.split("_").filter((el) => el !== "");
+  const ignoreEmpty = (el: string) => !!el;
+  const [linkBehavior, target] = linkTarget.split("_").filter(ignoreEmpty);
 
   /*
    * We represent any other state as plain text in target field, assuming that customers don't want/need them,
