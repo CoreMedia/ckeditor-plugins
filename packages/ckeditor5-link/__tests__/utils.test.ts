@@ -1,5 +1,152 @@
-import { LINK_BEHAVIOR } from "../src/utils";
-import { getLinkBehaviorLabels, uiValuesToLinkTarget } from "../dist/utils";
+import { LINK_BEHAVIOR, getLinkBehaviorLabels, linkTargetToUiValues, uiValuesToLinkTarget } from "../src/utils";
+
+describe("linkTargetToUiValues", () => {
+  describe.each<{ linkTarget: string, uiTarget: string, uiBehavior: string }>([
+    {
+      linkTarget: "",
+      uiBehavior: LINK_BEHAVIOR.DEFAULT,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "someTarget",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "someTarget",
+    },
+    {
+      linkTarget: "some_target",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "some_target",
+    },
+    {
+      linkTarget: "some_other_target",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "some_other_target",
+    },
+    {
+      linkTarget: "_top",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "_top",
+    },
+    {
+      linkTarget: "_parent",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "_parent",
+    },
+    {
+      linkTarget: "_none",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "_none",
+    },
+    {
+      linkTarget: "_top_",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "_top_",
+    },
+    {
+      linkTarget: "_parent_",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "_parent_",
+    },
+    {
+      linkTarget: "_none_",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "_none_",
+    },
+    {
+      linkTarget: "_blank",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_NEW_TAB,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_self",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_embed",
+      uiBehavior: LINK_BEHAVIOR.SHOW_EMBEDDED,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_other",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_blank_",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_NEW_TAB,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_self_",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_embed_",
+      uiBehavior: LINK_BEHAVIOR.SHOW_EMBEDDED,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_other_",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "",
+    },
+    {
+      linkTarget: "_blank_someTarget",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_NEW_TAB,
+      uiTarget: "someTarget",
+    },
+    {
+      linkTarget: "_self_someTarget",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
+      uiTarget: "someTarget",
+    },
+    {
+      linkTarget: "_embed_someTarget",
+      uiBehavior: LINK_BEHAVIOR.SHOW_EMBEDDED,
+      uiTarget: "someTarget",
+    },
+    {
+      linkTarget: "_blank_some_target",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_NEW_TAB,
+      uiTarget: "some_target",
+    },
+    {
+      linkTarget: "_self_some_target",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
+      uiTarget: "some_target",
+    },
+    {
+      linkTarget: "_embed_some_target",
+      uiBehavior: LINK_BEHAVIOR.SHOW_EMBEDDED,
+      uiTarget: "some_target",
+    },
+    {
+      linkTarget: "_role_someTarget",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "someTarget",
+    },
+    {
+      linkTarget: "_role_some_target",
+      uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
+      uiTarget: "some_target",
+    },
+  ])("[$#] should transform model value '$linkTarget' to target='$uiTarget' and behavior='$uiBehavior'",
+    ({
+       linkTarget,
+       uiTarget,
+       uiBehavior
+     }) => {
+      const { target: actualTarget, linkBehavior: actualBehavior } = linkTargetToUiValues(linkTarget);
+      test(`UI Target: Expecting '${uiTarget}' to be extracted from '${linkTarget}'`, () => {
+        expect(actualTarget).toBe(uiTarget);
+      });
+      test(`UI Behavior: Expecting '${uiBehavior}' to be extracted from '${linkTarget}'`, () => {
+        expect(actualBehavior).toBe(uiBehavior);
+      });
+    });
+});
 
 describe("uiValuesToLinkTarget", () => {
   /**
@@ -9,7 +156,7 @@ describe("uiValuesToLinkTarget", () => {
   const someTarget = "someTarget";
   const ExpectError = Symbol("ExpectError");
 
-  test.each<{uiBehavior: string, uiTarget?: string, modelValue: string | typeof ExpectError}>([
+  test.each<{ uiBehavior: string, uiTarget?: string, modelValue: string | typeof ExpectError }>([
     {
       uiBehavior: LINK_BEHAVIOR.DEFAULT,
       modelValue: "",
@@ -64,7 +211,11 @@ describe("uiValuesToLinkTarget", () => {
       uiBehavior: "unknown",
       modelValue: ExpectError,
     },
-  ])("[$#] Should transform UI values $uiBehavior and $uiTarget to $modelValue", ({uiBehavior, uiTarget, modelValue}) => {
+  ])("[$#] Should transform UI values $uiBehavior and $uiTarget to $modelValue", ({
+                                                                                    uiBehavior,
+                                                                                    uiTarget,
+                                                                                    modelValue
+                                                                                  }) => {
     if (modelValue === ExpectError) {
       expect(() => uiValuesToLinkTarget(uiBehavior, uiTarget)).toThrow();
     } else {
@@ -97,7 +248,7 @@ describe("getLinkBehaviorLabels", () => {
       label: "Unspecified",
     },
   ])("[$#] should provide mapping for $behavior to $label", ({ behavior, label }) => {
-    const map = getLinkBehaviorLabels((s: string) => s);
+    const map = getLinkBehaviorLabels((message) => <string>message);
     const actualLabel = map[behavior];
     expect(actualLabel).toBe(label);
   });
