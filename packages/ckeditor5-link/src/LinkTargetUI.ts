@@ -116,7 +116,6 @@ export default class LinkTargetUI extends Plugin {
       const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
       //@ts-ignore
       extension.linkBehaviorView.linkBehavior = href ? linkBehavior || "" : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
-      extension.targetInputView.fieldView.element.value = target || "";
       //@ts-ignore
       extension.targetInputView.hiddenTarget = target || "";
     });
