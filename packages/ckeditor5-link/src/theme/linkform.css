@@ -12,6 +12,12 @@
   margin: var(--ck-spacing-large) var(--ck-spacing-large) var(--ck-spacing-small) !important;
 }
 
+@media screen and (max-width: 600px) {
+  .ck.cm-ck-link-form-view.ck-responsive-form {
+    padding: var(--ck-spacing-large);
+  }
+}
+
 /*
  * dropdown button
  */
