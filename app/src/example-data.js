@@ -79,7 +79,7 @@ function externalLinkTargetExamples() {
       show: null,
       role: null,
       target: null,
-      uiBehavior: "Unspecified",
+      uiBehavior: "Open in Current Tab",
       uiTarget: null,
     },
     {

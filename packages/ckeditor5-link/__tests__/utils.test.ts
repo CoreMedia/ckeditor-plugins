@@ -3,11 +3,6 @@ import { LINK_BEHAVIOR, getLinkBehaviorLabels, linkTargetToUiValues, uiValuesToL
 describe("linkTargetToUiValues", () => {
   describe.each<{ linkTarget: string, uiTarget: string, uiBehavior: string }>([
     {
-      linkTarget: "",
-      uiBehavior: LINK_BEHAVIOR.UNSPECIFIED,
-      uiTarget: "",
-    },
-    {
       linkTarget: "someTarget",
       uiBehavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
       uiTarget: "someTarget",
@@ -158,15 +153,6 @@ describe("uiValuesToLinkTarget", () => {
 
   test.each<{ uiBehavior: string, uiTarget?: string, modelValue: string | typeof ExpectError }>([
     {
-      uiBehavior: LINK_BEHAVIOR.UNSPECIFIED,
-      modelValue: "",
-    },
-    {
-      uiBehavior: LINK_BEHAVIOR.UNSPECIFIED,
-      uiTarget: ignorableTarget,
-      modelValue: "",
-    },
-    {
       uiBehavior: LINK_BEHAVIOR.OPEN_IN_NEW_TAB,
       modelValue: "_blank",
     },
@@ -242,10 +228,6 @@ describe("getLinkBehaviorLabels", () => {
     {
       behavior: LINK_BEHAVIOR.OPEN_IN_FRAME,
       label: "Open in Frame",
-    },
-    {
-      behavior: LINK_BEHAVIOR.UNSPECIFIED,
-      label: "Unspecified",
     },
   ])("[$#] should provide mapping for $behavior to $label", ({ behavior, label }) => {
     const map = getLinkBehaviorLabels((message) => <string>message);

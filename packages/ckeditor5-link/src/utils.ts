@@ -1,7 +1,6 @@
 import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
 
 export const LINK_BEHAVIOR = {
-  UNSPECIFIED: "unspecified",
   OPEN_IN_NEW_TAB: "openInNewTab",
   OPEN_IN_CURRENT_TAB: "openInCurrentTab",
   SHOW_EMBEDDED: "showEmbedded",
@@ -19,11 +18,11 @@ type UnsupportedShowType = typeof UnsupportedShow;
  * @param linkTarget value from model to transform
  */
 export const linkTargetToUiValues = (linkTarget?: string): { target: string; linkBehavior: string } => {
-  // no linkTarget, link in unspecified
+  // no linkTarget, link is unspecified and will be "repaired"
   if (!linkTarget) {
     return {
       target: "",
-      linkBehavior: LINK_BEHAVIOR.UNSPECIFIED,
+      linkBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
     };
   }
 
@@ -114,8 +113,6 @@ const _showToLinkBehavior = (show: string): string | UnsupportedShowType => {
  */
 export const uiValuesToLinkTarget = (linkBehavior: string, target?: string): string => {
   switch (linkBehavior) {
-    case LINK_BEHAVIOR.UNSPECIFIED:
-      return "";
     case LINK_BEHAVIOR.OPEN_IN_NEW_TAB:
       return "_blank";
     case LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB:
@@ -146,7 +143,6 @@ export const getLinkBehaviorLabels = (
     [LINK_BEHAVIOR.OPEN_IN_NEW_TAB]: t("Open in New Tab"),
     [LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB]: t("Open in Current Tab"),
     [LINK_BEHAVIOR.SHOW_EMBEDDED]: t("Show Embedded"),
-    [LINK_BEHAVIOR.OPEN_IN_FRAME]: t("Open in Frame"),
-    [LINK_BEHAVIOR.UNSPECIFIED]: t("Unspecified"),
+    [LINK_BEHAVIOR.OPEN_IN_FRAME]: t("Open in Frame")
   };
 };
