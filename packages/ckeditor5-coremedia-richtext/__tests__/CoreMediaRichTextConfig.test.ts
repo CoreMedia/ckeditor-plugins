@@ -496,7 +496,7 @@ describe("Default Data Filter Rules", () => {
     ...artificialXlinkAttributeCombinations,
     ...penetrationTargets,
   };
-  const anchorFixtures: DataFilterTestFixture[] =
+  const linkBehaviorFixtures: DataFilterTestFixture[] =
     Object.entries(expectedTargetToXlinkShowAndRole)
       .map(([target, { show, role, comment, non_bijective }], index) => {
         let name: string = `ANCHOR#${index}: Should map ${target === noTarget ? "no target" : `target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
@@ -1004,7 +1004,7 @@ describe("Default Data Filter Rules", () => {
   const testFixtures: DataFilterTestFixture[] = [
     ...uncategorizedFixtures,
     ...textFixtures,
-    ...anchorFixtures,
+    ...linkBehaviorFixtures,
     ...textEntityFixtures,
     ...tableFixtures,
     ...listFixtures,
