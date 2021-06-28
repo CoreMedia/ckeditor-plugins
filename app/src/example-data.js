@@ -2,24 +2,25 @@ const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
 const EXAMPLE_URL = "https://example.org/";
+const EXAMPLE_CONTENT_DOCUMENT = "content/123";
 const LINK_TEXT = "Link";
 const UNSET = "—";
 
-function createLink(show, role) {
+function createLink(show, role, href = EXAMPLE_URL) {
   if (!show) {
     if (!role) {
       // noinspection HtmlUnknownAttribute
-      return `<a xlink:href="${EXAMPLE_URL}">${LINK_TEXT}</a>`
+      return `<a xlink:href="${href}">${LINK_TEXT}</a>`
     }
     // noinspection HtmlUnknownAttribute
-    return `<a xlink:href="${EXAMPLE_URL}" xlink:role="${role}">${LINK_TEXT}</a>`
+    return `<a xlink:href="${href}" xlink:role="${role}">${LINK_TEXT}</a>`
   }
   if (!role) {
     // noinspection HtmlUnknownAttribute
-    return `<a xlink:href="${EXAMPLE_URL}" xlink:show="${show}">${LINK_TEXT}</a>`
+    return `<a xlink:href="${href}" xlink:show="${show}">${LINK_TEXT}</a>`
   }
   // noinspection HtmlUnknownAttribute
-  return `<a xlink:href="${EXAMPLE_URL}" xlink:show="${show}" xlink:role="${role}">${LINK_TEXT}</a>`
+  return `<a xlink:href="${href}" xlink:show="${show}" xlink:role="${role}">${LINK_TEXT}</a>`
 }
 
 function renderUiTarget(uiTarget) {
@@ -33,8 +34,8 @@ function createLinkTableHeading() {
   return `<tr class="tr--header"><td class="td--header">xlink:show</td><td class="td--header">xlink:role</td><td class="td--header">target</td><td class="td--header">UI Behavior</td><td class="td--header">UI Target</td><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
 }
 
-function createLinkTableRow({comment, show, role, target, uiBehavior, uiTarget}) {
-  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiBehavior || UNSET}</td><td>${renderUiTarget(uiTarget)}</td><td>${createLink(show, role)}</td><td>${comment || ""}</td></tr>`;
+function createLinkTableRow({comment, show, role, target, uiBehavior, uiTarget, contentLink}) {
+  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiBehavior || UNSET}</td><td>${renderUiTarget(uiTarget)}</td><td>${createLink(show, role, !!contentLink ? EXAMPLE_CONTENT_DOCUMENT : EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
 }
 
 function createLinkScenario(title, scenarios) {
@@ -45,6 +46,14 @@ function createLinkScenario(title, scenarios) {
 }
 
 function externalLinkTargetExamples() {
+  return linkTargetExamples(false);
+}
+
+function contentLinkExamples() {
+  return linkTargetExamples(true);
+}
+
+function linkTargetExamples(contentLink) {
   /**
    * The mapping we agreed upon for `xlink:show` to some target value.
    * `other` is skipped here, as it is used for special meaning, which is,
@@ -81,6 +90,7 @@ function externalLinkTargetExamples() {
       target: null,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       show: "new",
@@ -88,6 +98,7 @@ function externalLinkTargetExamples() {
       target: show.new,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       show: "replace",
@@ -95,6 +106,7 @@ function externalLinkTargetExamples() {
       target: show.replace,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: "artificial reserved word for 'target'.",
@@ -103,6 +115,7 @@ function externalLinkTargetExamples() {
       target: show.embed,
       uiBehavior: "Show Embedded",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: "artificial state, as a 'role' would have been expected.",
@@ -111,6 +124,7 @@ function externalLinkTargetExamples() {
       target: "_other",
       uiBehavior: "Open in Frame",
       uiTarget: "",
+      contentLink: contentLink,
     },
     {
       comment: "artificial reserved word for 'target' to reflect this XLink-state",
@@ -119,6 +133,7 @@ function externalLinkTargetExamples() {
       target: show.none,
       uiBehavior: "Open in Frame",
       uiTarget: show.none,
+      contentLink: contentLink,
     },
     {
       comment: "Open in Frame; normal state for a named target.",
@@ -127,6 +142,7 @@ function externalLinkTargetExamples() {
       target: SOME_TARGET,
       uiBehavior: "Open in Frame",
       uiTarget: "somewhere",
+      contentLink: contentLink,
     },
   ];
   const artificialRichTextScenarios = [
@@ -137,6 +153,7 @@ function externalLinkTargetExamples() {
       target: `_role_${SOME_TARGET}`,
       uiBehavior: "Open in Frame",
       uiTarget: SOME_TARGET,
+      contentLink: contentLink,
     },
     {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
@@ -145,6 +162,7 @@ function externalLinkTargetExamples() {
       target: `${show.new}_${SOME_TARGET}`,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
@@ -153,6 +171,7 @@ function externalLinkTargetExamples() {
       target: `${show.replace}_${SOME_TARGET}`,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
@@ -161,6 +180,7 @@ function externalLinkTargetExamples() {
       target: `${show.embed}_${SOME_TARGET}`,
       uiBehavior: "Show Embedded",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: "artificial state with unexpected role attribute; will not be repaired",
@@ -169,6 +189,7 @@ function externalLinkTargetExamples() {
       target: `${show.none}_${SOME_TARGET}`,
       uiBehavior: "Open in Frame",
       uiTarget: `${show.none}_${SOME_TARGET}`,
+      contentLink: contentLink,
     },
   ];
   const reservedTargetScenarios = [
@@ -178,6 +199,7 @@ function externalLinkTargetExamples() {
       target: show.replace,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       show: "new",
@@ -185,6 +207,7 @@ function externalLinkTargetExamples() {
       target: show.new,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: "artificial regarding xlink-attributes",
@@ -193,6 +216,7 @@ function externalLinkTargetExamples() {
       target: "_parent",
       uiBehavior: "Open in Frame",
       uiTarget: "_parent",
+      contentLink: contentLink,
     },
     {
       comment: "artificial regarding xlink-attributes",
@@ -201,6 +225,7 @@ function externalLinkTargetExamples() {
       target: "_top",
       uiBehavior: "Open in Frame",
       uiTarget: "_top",
+      contentLink: contentLink,
     },
   ];
   let cornerCaseScenarios;
@@ -212,6 +237,7 @@ function externalLinkTargetExamples() {
       target: "_role",
       uiBehavior: "Open in Frame",
       uiTarget: "",
+      contentLink: contentLink,
     },
     {
       comment: "Trying to misuse reserved word _role. Repaired on save by removing xlink:role.",
@@ -220,6 +246,7 @@ function externalLinkTargetExamples() {
       target: "_role_",
       uiBehavior: "Open in Frame",
       uiTarget: "",
+      contentLink: contentLink,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.new}_[role] with empty role. Repaired on save by removing xlink:role.`,
@@ -228,6 +255,7 @@ function externalLinkTargetExamples() {
       target: `${show.new}_`,
       uiBehavior: "Open in New Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.replace}_[role] with empty role. Repaired on save by removing xlink:role.`,
@@ -236,6 +264,7 @@ function externalLinkTargetExamples() {
       target: `${show.replace}_`,
       uiBehavior: "Open in Current Tab",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.embed}_[role] with empty role. Repaired on save by removing xlink:role.`,
@@ -244,6 +273,7 @@ function externalLinkTargetExamples() {
       target: `${show.embed}_`,
       uiBehavior: "Show Embedded",
       uiTarget: null,
+      contentLink: contentLink,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.none}_[role] with empty role. Not repaired on save, stored as is.`,
@@ -252,6 +282,7 @@ function externalLinkTargetExamples() {
       target: `${show.none}_`,
       uiBehavior: "Open in Frame",
       uiTarget: `${show.none}_`,
+      contentLink: contentLink,
     },
   ];
   const scenarios = [
@@ -267,6 +298,7 @@ const exampleData = {
   "Hello": `<div xmlns="${CM_RICHTEXT}"><p>Hello World!</p></div>`,
   "Empty": `<div xmlns="${CM_RICHTEXT}"/>`,
   "Links (Targets)": externalLinkTargetExamples(),
+  "Content Links": contentLinkExamples(),
 };
 
 const setExampleData = (editor, exampleKey) => {
