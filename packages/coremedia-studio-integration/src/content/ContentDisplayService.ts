@@ -4,9 +4,9 @@
  */
 import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
+import { ServiceObject } from "@coremedia/studio-apps-service-agent";
 
-// TODO[cke] Extend ServiceObject from @coremedia/studio-apps-service-agent
-interface ContentDisplayService {
+interface ContentDisplayService extends ServiceObject {
   /**
    * Retrieve the display hint for the content itself. This typically contains
    * the content name and possibly some CSS to apply depending on the content

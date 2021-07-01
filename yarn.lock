@@ -1273,6 +1273,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@coremedia/studio-apps-service-agent@^0.0.28":
+  version "0.0.28"
+  resolved "https://nexus.pandora-ci-03.coremedia.vm/repository/coremedia-npm/@coremedia/studio-apps-service-agent/-/studio-apps-service-agent-0.0.28.tgz#0b5257e3aad26ca0d3bf74acf4bdca58c01413d9"
+  integrity sha512-uh6hdyL0itGNN0dUhzMPdqpzQjXhodq+0ErMOa2Z9p/Kcb7IPR+4eRbnPFJFDOZX9P5vtCqnkG7qbRVmJSeQmw==
+
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
