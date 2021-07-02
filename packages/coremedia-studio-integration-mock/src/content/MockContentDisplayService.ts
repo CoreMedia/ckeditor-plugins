@@ -1,77 +1,201 @@
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import { DisplayHint } from "@coremedia/coremedia-studio-integration/dist/content/ContentDisplayService";
-import { Observable } from "rxjs";
+import { Observable, Subscriber, TeardownLogic } from "rxjs";
 import { UriPath } from "@coremedia/coremedia-studio-integration/dist/content/UriPath";
 import { numericId } from "@coremedia/coremedia-studio-integration/src/content/UriPath";
 
-const ROOT_FOLDER_URI_PATH = "content/1";
-
-const CHECKED_OUT_HINT: DisplayHint = {
-  name: "checked out",
-  classes: ["icon", "icon--checked-out"],
-};
-
-// https://stackoverflow.com/questions/63746463/how-to-create-enum-values-as-type-interface-in-typescript
-const MockState = {
-  CHECKED_OUT: CHECKED_OUT_HINT,
-} as const;
-
-type MockStateObject = typeof MockState;
-type MockState = MockStateObject[keyof MockStateObject];
-
-const FIRST_DELAY_MS = 100;
+/**
+ * By default delay the appearance of data in the UI a little bit.
+ */
+const MAX_FIRST_DELAY_MS = 100;
+/**
+ * If states shall change, it will be done with this fixed
+ * interval (in milliseconds).
+ */
 const CHANGE_DELAY_MS = 30000;
 
+/**
+ * Calculate the first delay; adds some randomness.
+ */
+const firstDelayMs = (): number => {
+  return Math.random() * MAX_FIRST_DELAY_MS;
+};
+
+/**
+ * Create the initial display.
+ * @param subscriber subscriber to inform
+ * @param initial initial display
+ */
+const initDisplay = (subscriber: Subscriber<DisplayHint>, initial: DisplayHint): void => {
+  setTimeout(() => {
+    subscriber.next(initial);
+  }, firstDelayMs());
+};
+
+/**
+ * Sets up toggling behavior of display state.
+ * @param subscriber subscriber to inform on changes
+ * @param firstState first state to enter
+ * @param otherStates other states to follow
+ * @return TeardownLogic function to stop the timer on unsubscribe
+ */
+const initToggle = (
+  subscriber: Subscriber<DisplayHint>,
+  firstState: DisplayHint,
+  ...otherStates: DisplayHint[]
+): TeardownLogic => {
+  const states = [firstState, ...otherStates];
+  const maxState = states.length;
+  let currentState = 0;
+
+  const timerId = setInterval(() => {
+    subscriber.next(states[currentState]);
+    currentState = (currentState + 1) % maxState;
+  }, CHANGE_DELAY_MS);
+  // Unsubscribe function
+  return () => {
+    clearInterval(timerId);
+  };
+};
+
+/**
+ * Creates an observable for the given mode.
+ *
+ * @param mode mode to respect.
+ * @param truthyState state if mode is {@code true}; first state while toggling
+ * @param falsyState state if mode is {@code false}; second state while toggling
+ */
+const createObservable = (
+  mode: ConfigState | undefined,
+  truthyState: DisplayHint,
+  falsyState: DisplayHint
+): Observable<DisplayHint> => {
+  return new Observable<DisplayHint>((subscriber) => {
+    if (!mode) {
+      return initDisplay(subscriber, falsyState);
+    }
+    if (mode === true) {
+      return initDisplay(subscriber, truthyState);
+    }
+    // Mode is changing
+    initDisplay(subscriber, falsyState);
+    return initToggle(subscriber, truthyState, falsyState);
+  });
+};
+
+/**
+ * Mock Display Service for use in example app. The display of contents
+ * is controlled by their ID which has some magic parts. The content ID
+ * (represented as URI path) is expected to be as follows:
+ *
+ * ```
+ * content/
+ *   <some numbers>
+ *   <checkedIn: 0|1|2>
+ *   <name: 0|2>
+ *   <unreadable: 0|1|2>
+ *   <checkedIn: 0|1|2>
+ *   <folderType: 0|1>
+ * ```
+ *
+ * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
+ *
+ * **name:** 0 = some name, 2 = changing name
+ *
+ * **unreadable:** 0 = readable, 1 = unreadable, 2 = changing
+ *
+ * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
+ *
+ * **folderType:** 0 = document, 1 = folder
+ *
+ * If any of these is unmatched, the default state will be chosen, which is:
+ * checked out, some name, readable, document.
+ */
 class MockContentDisplayService implements ContentDisplayService {
   getName(): string {
     return "contentDisplayService";
   }
 
-  /*
-  * TODO: TypeScript COP!!!!!
-   */
-
   getDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
-    const names = [`Content (0) #${numericId(uriPath)}`, `Content (1) #${numericId(uriPath)}`];
-    const styleClasses = ["content--0", "content--1"];
+    const id = numericId(uriPath);
 
-    // https://rxjs-dev.firebaseapp.com/guide/observable
-    // Provide "constant name changing
-    return new Observable<DisplayHint>((subscriber) => {
-      setTimeout(() => {
-        subscriber.next({
-          name: names[0],
-          classes: [styleClasses[0]],
-        });
-      }, FIRST_DELAY_MS);
+    // true or changing
+    if (!!config.unreadable) {
+      return createObservable(
+        config.unreadable,
+        {
+          name: `Unreadable #${id}`,
+          classes: [],
+        },
+        {
+          name: `Content #${id}`,
+          classes: ["content--0"],
+        }
+      );
+    }
 
-      if (config.name === changing$) {
-        let state = true;
-        const timerId = setInterval(() => {
-          subscriber.next({
-            name: names[state ? 1 : 0],
-            classes: [styleClasses[state ? 1 : 0]],
-          });
-          state = !state;
-        }, CHANGE_DELAY_MS);
-        // Unsubscribe function
-        return () => {
-          clearInterval(timerId);
-        };
+    return createObservable(
+      config.name,
+      {
+        name: `Lorem #${id}`,
+        classes: [],
+      },
+      {
+        name: `Ipsum #${id}`,
+        classes: ["content--0"],
       }
-    });
+    );
   }
 
   getStateDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
-    return new Observable<DisplayHint>();
+    const config = parseContentConfig(uriPath);
+    const checkedInState: DisplayHint = {
+      name: "Checked In",
+      classes: ["icon--checked-in"],
+    };
+    const checkedOutState: DisplayHint = {
+      name: "Checked Out",
+      classes: ["icon--checked-out"],
+    };
+    const unreadableState: DisplayHint = {
+      name: "",
+      classes: [],
+    };
+
+    if (!!config.unreadable) {
+      const falsyState = !!config.checkedIn ? checkedInState : checkedOutState;
+      return createObservable(config.unreadable, unreadableState, falsyState);
+    }
+
+    return createObservable(config.checkedIn, checkedInState, checkedOutState);
   }
 
   getTypeDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
-    return new Observable<DisplayHint>();
+    const config = parseContentConfig(uriPath);
+    const folderState: DisplayHint = {
+      name: "Folder",
+      classes: ["icon--folder"],
+    };
+    const documentState: DisplayHint = {
+      name: "Document",
+      classes: ["icon--document"],
+    };
+    const unreadableState: DisplayHint = {
+      name: "Unreadable",
+      classes: ["icon--lock"],
+    };
+    if (!!config.unreadable) {
+      const falsyState = !!config.isFolder ? folderState : documentState;
+      return createObservable(config.isFolder, unreadableState, falsyState);
+    }
+    return createObservable(config.isFolder, folderState, documentState);
   }
 }
 
+/**
+ * Represents a toggling state.
+ */
 const changing$ = Symbol("changing");
 type ConfigState = boolean | typeof changing$;
 
@@ -94,6 +218,11 @@ interface CreateContentConfig {
   isFolder?: boolean;
 }
 
+/**
+ * Provides an identifier within the content ID to configure behavior.
+ *
+ * @param state
+ */
 const stateToIdentifier = (state: ConfigState | undefined): number => {
   if (state === changing$) {
     return 2;
@@ -134,7 +263,10 @@ const createContentUriPath = ({ name, unreadable, checkedIn, isFolder }: CreateC
     return Math.floor(Math.random() * 99);
   }
 
-  return `content/${randomPrefix()}${stateToIdentifier(name)}${stateToIdentifier(unreadable)}${stateToIdentifier(checkedIn)}${stateToIdentifier(isFolder)}`;
+  return `content/${randomPrefix()}${stateToIdentifier(name)}${stateToIdentifier(unreadable)}${stateToIdentifier(
+    checkedIn
+  )}${stateToIdentifier(isFolder)}`;
 };
 
 export default MockContentDisplayService;
+export { createContentUriPath };
