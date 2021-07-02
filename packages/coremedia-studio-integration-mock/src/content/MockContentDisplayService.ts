@@ -1,8 +1,8 @@
-import ContentDisplayService from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
-import { DisplayHint } from "@coremedia/coremedia-studio-integration/dist/content/ContentDisplayService";
+import ContentDisplayService, {
+  DisplayHint,
+} from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";
-import { UriPath } from "@coremedia/coremedia-studio-integration/dist/content/UriPath";
-import { numericId } from "@coremedia/coremedia-studio-integration/src/content/UriPath";
+import { UriPath, numericId } from "@coremedia/coremedia-studio-integration/src/content/UriPath";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
