@@ -37,20 +37,20 @@
     "app"
   ],
   "scripts": {
-    "bootstrap": "yarn install",
-    "publish": "lerna run publish",
-    "clean": "lerna run clean && rimraf ./dist",
-    "build": "lerna run build",
-    "jest": "lerna run jest",
-    "jest:coverage": "lerna run jest:coverage",
+    "bootstrap": "pnpm install",
+    "publish": "pnpm -r publish",
+    "clean": "pnpm -r clean && rimraf ./dist",
+    "build": "pnpm -r build",
+    "jest": "pnpm -r jest",
+    "jest:coverage": "pnpm -r jest:coverage",
     "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
     "test:manual": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test-manual.js",
-    "lint": "lerna run lint",
-    "prettier": "lerna run prettier",
-    "npm-check-updates": "lerna run npm-check-updates"
+    "lint": "pnpm -r lint",
+    "prettier": "pnpm -r prettier",
+    "npm-check-updates": "pnpm -r npm-check-updates"
   },
   "devDependencies": {
-    "lerna": "^3.22.1",
+    "pnpm": "^6.9.1",
     "rimraf": "^3.0.2"
   }
 }
