@@ -7,7 +7,14 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
-import { LINK_BEHAVIOR, linkTargetToUiValues, uiValuesToLinkTarget } from "./utils";
+import {
+  addClassToTemplate,
+  LINK_BEHAVIOR,
+  linkTargetToUiValues,
+  removeClassFromTemplate,
+  uiValuesToLinkTarget,
+  updateVisibility,
+} from "./utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
@@ -56,6 +63,7 @@ export default class LinkTargetUI extends Plugin {
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
     const extension = new LinkFormViewExtension(formView);
+    this._customizeUrlInputView(formView, extension.internalLinkView);
     extension.targetInputView
       .bind("hiddenTarget")
       .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).target);
@@ -123,6 +131,10 @@ export default class LinkTargetUI extends Plugin {
     return extension;
   }
 
+  private _customizeUrlInputView(linkFormView: LinkFormView, internalLinkView: View): void {
+    linkFormView.urlInputView.label = "Url";
+  }
+
   private static _customizeToolbarButtons(formView: LinkFormView): void {
     LinkTargetUI._customizeButton(formView.cancelButtonView);
     LinkTargetUI._customizeButton(formView.saveButtonView);
@@ -140,15 +152,15 @@ export default class LinkTargetUI extends Plugin {
     const CK_VERTICAL_FORM_CLS = "ck-vertical-form";
 
     // always add vertical css classes to the formView
-    this._addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
-    this._removeClassFromTemplate(formView, [CK_LINK_FORM_LAYOUT_VERTICAL_CLS, CK_VERTICAL_FORM_CLS]);
+    addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
+    removeClassFromTemplate(formView, [CK_LINK_FORM_LAYOUT_VERTICAL_CLS, CK_VERTICAL_FORM_CLS]);
 
     // change the order of the buttons
     formView.children.remove(formView.saveButtonView);
     formView.children.remove(formView.cancelButtonView);
 
-    this._addClassToTemplate(formView.saveButtonView, [CM_FOOTER_BUTTON_CLS, CM_PRIMARY_BUTTON_CLS]);
-    this._addClassToTemplate(formView.cancelButtonView, CM_FOOTER_BUTTON_CLS);
+    addClassToTemplate(formView.saveButtonView, [CM_FOOTER_BUTTON_CLS, CM_PRIMARY_BUTTON_CLS]);
+    addClassToTemplate(formView.cancelButtonView, CM_FOOTER_BUTTON_CLS);
     formView.children.add(formView.cancelButtonView);
     formView.children.add(formView.saveButtonView);
   }
@@ -158,33 +170,6 @@ export default class LinkTargetUI extends Plugin {
     const iconView = button.children.first;
     button.children.remove(iconView);
     button.withText = true;
-  }
-
-  private _addClassToTemplate(view: View, classNames: string[] | string): void {
-    // @ts-ignore
-    const classes: string[] = view.template.attributes.class;
-    if (!Array.isArray(classNames)) {
-      classNames = [classNames];
-    }
-    classNames.forEach((className) => {
-      if (!classes.includes(className)) {
-        classes.push(className);
-      }
-    });
-  }
-
-  private _removeClassFromTemplate(view: View, classNames: string[] | string): void {
-    // @ts-ignore
-    const classes: string[] = view.template.attributes.class;
-    if (!Array.isArray(classNames)) {
-      classNames = [classNames];
-    }
-    classNames.forEach((className) => {
-      const index = classes.indexOf(className);
-      if (index > -1) {
-        classes.splice(index, 1);
-      }
-    });
   }
 
   destroy(): Promise<never> | null {

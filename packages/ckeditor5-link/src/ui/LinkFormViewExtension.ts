@@ -3,6 +3,8 @@ import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfie
 //@ts-ignore
 import DropdownView from "@ckeditor/ckeditor5-ui/src/dropdown/dropdownview";
 //@ts-ignore
+import ToolbarView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarview";
+//@ts-ignore
 import { createDropdown, addListToDropdown } from "@ckeditor/ckeditor5-ui/src/dropdown/utils";
 import { createLabeledInputText, createLabeledDropdown } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
@@ -13,7 +15,11 @@ import Model from "@ckeditor/ckeditor5-ui/src/model";
 //@ts-ignore
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
-import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../utils";
+import { getLinkBehaviorLabels, LINK_BEHAVIOR, updateVisibility } from "../utils";
+//@ts-ignore
+import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import ContentView from "./ContentView";
+import createInternalLinkView from "./InternalLinkView";
 
 /**
  * Extends the LinkFormView of the CKEditor Link Plugin by additional form
@@ -22,13 +28,14 @@ import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../utils";
 export default class LinkFormViewExtension {
   readonly locale: Locale;
   readonly linkFormView: LinkFormView;
+  readonly internalLinkView: LabeledFieldView<ContentView>;
   readonly linkBehaviorView: LabeledFieldView<InputTextView>;
   readonly targetInputView: LabeledFieldView<DropdownView>;
 
   constructor(linkFormView: LinkFormView) {
     this.linkFormView = linkFormView;
     this.locale = linkFormView.locale;
-
+    this.internalLinkView = createInternalLinkView(this.locale, linkFormView);
     this.targetInputView = this._createTargetInput();
     this.linkBehaviorView = this._createLinkBehaviorField();
 
@@ -40,16 +47,32 @@ export default class LinkFormViewExtension {
   }
 
   render(): void {
-    this.linkFormView.registerChild(this.linkBehaviorView);
-    this.linkFormView.registerChild(this.targetInputView);
-    if (!this.targetInputView.isRendered) {
-      this.targetInputView.render();
+    // TODO this is just rendered to perform a drop test
+    const dropTestButton = new ButtonView(this.locale);
+    dropTestButton.set({
+      label: "Drop Content",
+      tooltip: true,
+      withText: true,
+    });
+    dropTestButton.on("execute", () => {
+      // remove focus first since this would interfere with setting classes manually (focus/unfocus also changes classList)
+      this.linkFormView.urlInputView.set({ isFocused: false });
+      updateVisibility(this.internalLinkView, true);
+      updateVisibility(this.linkFormView.urlInputView, false);
+    });
+    this.renderAfter(dropTestButton, this.linkFormView.urlInputView);
+
+    this.renderAfter(this.targetInputView, this.linkFormView.urlInputView);
+    this.renderAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
+    this.renderAfter(this.internalLinkView, this.linkFormView.urlInputView);
+  }
+
+  private renderAfter(view: View, after: View) {
+    this.linkFormView.registerChild(view);
+    if (!view.isRendered) {
+      view.render();
     }
-    if (!this.linkBehaviorView.isRendered) {
-      this.linkBehaviorView.render();
-    }
-    this.insertAfter(this.targetInputView, this.linkFormView.urlInputView);
-    this.insertAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
+    this.insertAfter(view, after);
   }
 
   private insertAfter(newView: View, refChild: View): void {
@@ -59,7 +82,7 @@ export default class LinkFormViewExtension {
   private _createTargetInput(): LabeledFieldView<InputTextView> {
     const t = this.locale.t;
     const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
-    labeledInput.label = t("Link Target");
+    labeledInput.label = t("Target");
     /*
      * Define observable attribute `hiddenTarget`. This attribute holds the
      * original target, while being in a state, where the target field is
@@ -90,7 +113,7 @@ export default class LinkFormViewExtension {
     const linkBehaviorLabels = getLinkBehaviorLabels(t);
     const linkBehaviorDropdown = new LabeledFieldView(locale, createLabeledDropdown);
     linkBehaviorDropdown.set({
-      label: t("Link Behavior"),
+      label: t("Behavior"),
       linkBehavior: LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB,
     });
 

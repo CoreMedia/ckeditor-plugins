@@ -1,0 +1,14 @@
+.ck.cm-ck-link-form-view .cm-ck-content-field-view {
+  display: flex;
+  border: 1px solid var(--ck-color-input-disabled-border);
+  border-radius: var(--ck-border-radius);;
+}
+
+.cm-ck-content-field-view > .cm-ck-item-button{
+  flex: 1;
+}
+
+.cm-ck-content-field-view > .ck.ck-button{
+  border: none;
+  min-height: calc(var(--ck-ui-component-min-height) -2px);
+}

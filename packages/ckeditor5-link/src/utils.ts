@@ -1,4 +1,5 @@
 import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
+import View from "@ckeditor/ckeditor5-ui/src/view";
 
 export const LINK_BEHAVIOR = {
   OPEN_IN_NEW_TAB: "openInNewTab",
@@ -143,6 +144,102 @@ export const getLinkBehaviorLabels = (
     [LINK_BEHAVIOR.OPEN_IN_NEW_TAB]: t("Open in New Tab"),
     [LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB]: t("Open in Current Tab"),
     [LINK_BEHAVIOR.SHOW_EMBEDDED]: t("Show Embedded"),
-    [LINK_BEHAVIOR.OPEN_IN_FRAME]: t("Open in Frame")
+    [LINK_BEHAVIOR.OPEN_IN_FRAME]: t("Open in Frame"),
   };
+};
+
+/**
+ * Adds a CSS class, or an array of CSS classes to a view template.
+ * Only works if done prior to rendering the view.
+ *
+ * @param view the view with the element the class should be added to
+ * @param classNames a classname or an array of classname strings
+ */
+export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
+  // @ts-ignore
+  const classes: string[] = view.template.attributes.class;
+  if (!Array.isArray(classNames)) {
+    classNames = [classNames];
+  }
+  classNames.forEach((className) => {
+    if (!classes.includes(className)) {
+      classes.push(className);
+    }
+  });
+};
+
+/**
+ * Removes a CSS class, or an array of CSS classes from a view template.
+ * Only works if done prior to rendering the view.
+ *
+ * @param view the view with the element the class should be removed from
+ * @param classNames a classname or an array of classname strings
+ */
+export const removeClassFromTemplate = (view: View, classNames: string[] | string): void => {
+  // @ts-ignore
+  const classes: string[] = view.template.attributes.class;
+  if (!Array.isArray(classNames)) {
+    classNames = [classNames];
+  }
+  classNames.forEach((className) => {
+    const index = classes.indexOf(className);
+    if (index > -1) {
+      classes.splice(index, 1);
+    }
+  });
+};
+
+/**
+ * Adds a CSS class, or an array of CSS classes to a view's element.
+ * Only works if the view has already been rendered.
+ *
+ * @param view the view with the element the class should be added to
+ * @param classNames a classname or an array of classname strings
+ */
+export const addClass = (view: View, classNames: string[] | string): void => {
+  if (!view.element) {
+    return;
+  }
+
+  if (!Array.isArray(classNames)) {
+    classNames = [classNames];
+  }
+  view.element.classList.add(classNames.join());
+};
+
+/**
+ * Removes a CSS class, or an array of CSS classes from a view's element.
+ * Only works if the view has already been rendered.
+ *
+ * @param view the view with the element the class should be removed from
+ * @param classNames a classname or an array of classname strings
+ */
+export const removeClass = (view: View, classNames: string[] | string): void => {
+  if (!view.element) {
+    return;
+  }
+
+  if (!Array.isArray(classNames)) {
+    classNames = [classNames];
+  }
+  view.element.classList.remove(classNames.join());
+};
+
+/**
+ * Adds or removes the "ck-cm-hidden" class to a view's element or to the view's template if
+ * the view is not rendered yet.
+ *
+ * @param view the view with the element the class should be added to or removed from
+ * @param visible false to add the class, false to add it
+ */
+export const updateVisibility = (view: View, visible: boolean): void => {
+  const hiddenCls = "ck-cm-hidden";
+  if (!view.element) {
+    // Not rendered yet
+    if (!visible) {
+      addClassToTemplate(view, [hiddenCls]);
+    }
+  } else {
+    visible ? view.element.classList.remove(hiddenCls) : view.element.classList.add(hiddenCls);
+  }
 };

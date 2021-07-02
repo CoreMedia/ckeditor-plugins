@@ -15,6 +15,8 @@ export default class View implements Emitter, Observable {
   readonly locale: Locale;
   template: Template;
 
+  bindTemplate:any;
+
   constructor(locale?: Locale);
 
   render(): void;
@@ -24,6 +26,8 @@ export default class View implements Emitter, Observable {
   deregisterChild(children: View | View[]): void;
 
   registerChild(children: View | View[]): void;
+
+  setTemplate(definition: any): void;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 

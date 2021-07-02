@@ -1,3 +1,7 @@
+:root {
+  --ck-spacing-very-large: calc(var(--ck-spacing-unit)*2);
+}
+
 /*
  * link field with vertical layout
  */
@@ -8,8 +12,9 @@
 }
 
 .ck.cm-ck-link-form-view > .ck-list,
+.ck.cm-ck-link-form-view > .cm-ck-drop-area-field-view,
 .ck.cm-ck-link-form-view > .ck-labeled-field-view {
-  margin: var(--ck-spacing-large) var(--ck-spacing-large) var(--ck-spacing-small) !important;
+  margin: var(--ck-spacing-large) var(--ck-spacing-large) var(--ck-spacing-very-large) !important;
 }
 
 @media screen and (max-width: 600px) {
@@ -31,4 +36,28 @@
 
 .ck.cm-ck-link-form-view .ck.ck-dropdown .ck-dropdown__button:not(:focus) {
   border: 1px solid var(--ck-color-base-border);
+}
+
+/*
+ * remove sophisticated label styling and simply add labels on top of inputs
+ */
+
+.ck.cm-ck-link-form-view .ck.ck-labeled-field-view > .ck.ck-labeled-field-view__input-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.ck.cm-ck-link-form-view .ck.ck-labeled-field-view > .ck.ck-labeled-field-view__input-wrapper > .ck.ck-label {
+  position: inherit;
+  transform: none !important;
+  text-transform: uppercase;
+  margin-bottom: var(--ck-spacing-small);
+  padding-left: 0;
+}
+
+/*
+ * hidden components
+ */
+.ck.cm-ck-link-form-view .ck.ck-cm-hidden {
+  display: none;
 }
