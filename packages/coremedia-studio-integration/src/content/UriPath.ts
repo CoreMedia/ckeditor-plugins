@@ -15,6 +15,18 @@ type UriPath = string;
 type ModelUri = string;
 
 /**
+ * Returns the numeric ID from an URI path.
+ * @param uriPath URI path to return numeric ID from
+ */
+const numericId = (uriPath: UriPath): number => {
+  const match = CONTENT_URI_PATH_REGEXP.exec(uriPath);
+  if (!match) {
+    return -1;
+  }
+  return parseInt(match[1]);
+};
+
+/**
  * Requires a Content URI Path, which can be handled by CoreMedia Studio to
  * represent a content. In case of the CKEditor model representation using a
  * colon within the content identifier, this is magically transformed to
@@ -82,6 +94,7 @@ export {
   CONTENT_CKE_MODEL_URI_REGEXP,
   CONTENT_URI_PATH_PREFIX,
   CONTENT_URI_PATH_REGEXP,
+  numericId,
   requireContentUriPath,
   requireContentCkeModelUri,
   UriPath,

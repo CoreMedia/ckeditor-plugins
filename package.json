@@ -28,6 +28,7 @@
     "types/*",
     "packages/coremedia-utils",
     "packages/coremedia-studio-integration",
+    "packages/coremedia-studio-integration-mock",
     "packages/ckeditor5-dataprocessor-support",
     "packages/ckeditor5-symbol-on-paste-mapper",
     "packages/ckeditor5-coremedia-richtext",
