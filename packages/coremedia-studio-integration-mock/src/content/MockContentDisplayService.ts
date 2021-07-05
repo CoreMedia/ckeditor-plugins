@@ -20,6 +20,21 @@ const MAX_FIRST_DELAY_MS = 100;
 const CHANGE_DELAY_MS = 30000;
 
 /**
+ * Part of an unreadable content's name (along with its ID).
+ */
+const CONTENT_NAME_UNREADABLE = "Unreadable";
+/**
+ * Content name, if name state is truthy (either explicitly
+ * or while name toggling mock).
+ */
+const CONTENT_NAME_TRUTHY = "Lorem";
+/**
+ * Content name, if name state is falsy (either explicitly
+ * or while name toggling mock).
+ */
+const CONTENT_NAME_FALSY = "Ipsum";
+
+/**
  * Calculate the first delay; adds some randomness.
  */
 const firstDelayMs = (): number => {
@@ -97,7 +112,7 @@ const createObservable = (
  * content/
  *   <some numbers>
  *   <checkedIn: 0|1|2>
- *   <name: 0|2>
+ *   <name: 0|1|2>
  *   <unreadable: 0|1|2>
  *   <checkedIn: 0|1|2>
  *   <folderType: 0|1>
@@ -124,17 +139,18 @@ class MockContentDisplayService implements ContentDisplayService {
   getDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const id = numericId(uriPath);
+    const typeName = config.isFolder ? "Folder" : "Document";
 
     // true or changing
     if (!!config.unreadable) {
       return createObservable(
         config.unreadable,
         {
-          name: `Unreadable #${id}`,
+          name: `${CONTENT_NAME_UNREADABLE} ${typeName} #${id}`,
           classes: [],
         },
         {
-          name: `Content #${id}`,
+          name: `${typeName} #${id}`,
           classes: ["content--0"],
         }
       );
@@ -143,11 +159,11 @@ class MockContentDisplayService implements ContentDisplayService {
     return createObservable(
       config.name,
       {
-        name: `Lorem #${id}`,
-        classes: [],
+        name: `${CONTENT_NAME_TRUTHY} ${typeName} #${id}`,
+        classes: ["content--1"],
       },
       {
-        name: `Ipsum #${id}`,
+        name: `${CONTENT_NAME_FALSY} ${typeName} #${id}`,
         classes: ["content--0"],
       }
     );
@@ -208,7 +224,7 @@ interface CreateContentConfig {
   /**
    * If the name shall change over time.
    */
-  name?: false | typeof changing$;
+  name?: ConfigState;
   /**
    * Shall the content be readable or unreadable. Defaults to readable.
    */
@@ -248,18 +264,25 @@ const identifierToState = (identifier: number) => {
 };
 
 const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
-  const configPattern = /^content\/\d+(?<namechange>[02])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-1])/;
+  const configPattern = /^content\/\d+(?<namechange>[0-2])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-9])$/;
   const match = configPattern.exec(uriPath);
 
   if (!match) {
-    // All defaults
-    return {};
+    const uriPathPattern = /^content\/(?<id>\d+)$/;
+    const uriPathMatch = uriPathPattern.exec(uriPath);
+    const isFolder = uriPathMatch && (parseInt(uriPathMatch[1]) % 2) === 1;
+    // (Nearly) all defaults
+    return {
+      isFolder: isFolder,
+    };
   }
   return {
-    name: match[1] === "0" ? false : changing$,
+    name: identifierToState(parseInt(match[1])),
     unreadable: identifierToState(parseInt(match[2])),
     checkedIn: identifierToState(parseInt(match[3])),
-    isFolder: match[4] === "1",
+    // in contrast to other flags, we simulate the default CMS here, which is,
+    // that even numbers are for documents, while odd numbers are for folders.
+    isFolder: parseInt(match[4]) % 2 === 1,
   };
 };
 
@@ -274,4 +297,9 @@ const createContentUriPath = ({ name, unreadable, checkedIn, isFolder }: CreateC
 };
 
 export default MockContentDisplayService;
-export { createContentUriPath };
+export {
+  CONTENT_NAME_UNREADABLE,
+  CONTENT_NAME_TRUTHY,
+  CONTENT_NAME_FALSY,
+  createContentUriPath,
+};
