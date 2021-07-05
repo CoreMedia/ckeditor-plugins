@@ -2,7 +2,12 @@ import ContentDisplayService, {
   DisplayHint,
 } from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";
-import { UriPath, numericId } from "@coremedia/coremedia-studio-integration/src/content/UriPath";
+// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
+//@ts-ignore
+import { numericId } from "@coremedia/coremedia-studio-integration/content/UriPath";
+// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
+//@ts-ignore
+import { UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
