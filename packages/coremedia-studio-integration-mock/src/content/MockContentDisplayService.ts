@@ -37,30 +37,37 @@ const CONTENT_NAME_FALSY = "Ipsum";
 /**
  * Calculate the first delay; adds some randomness.
  */
-const firstDelayMs = (): number => {
-  return Math.random() * MAX_FIRST_DELAY_MS;
+const firstDelayMs = (maxFirstDelayMs: number): number => {
+  return Math.random() * maxFirstDelayMs;
 };
 
 /**
  * Create the initial display.
  * @param subscriber subscriber to inform
+ * @param maxFirstDelayMs delay for first display
  * @param initial initial display
  */
-const initDisplay = (subscriber: Subscriber<DisplayHint>, initial: DisplayHint): void => {
+const initDisplay = (
+  subscriber: Subscriber<DisplayHint>,
+  { maxFirstDelayMs }: MockServiceConfig,
+  initial: DisplayHint
+): void => {
   setTimeout(() => {
     subscriber.next(initial);
-  }, firstDelayMs());
+  }, firstDelayMs(maxFirstDelayMs || MAX_FIRST_DELAY_MS));
 };
 
 /**
  * Sets up toggling behavior of display state.
  * @param subscriber subscriber to inform on changes
+ * @param changeDelayMs the change delay in milliseconds
  * @param firstState first state to enter
  * @param otherStates other states to follow
  * @return TeardownLogic function to stop the timer on unsubscribe
  */
 const initToggle = (
   subscriber: Subscriber<DisplayHint>,
+  { changeDelayMs }: MockServiceConfig,
   firstState: DisplayHint,
   ...otherStates: DisplayHint[]
 ): TeardownLogic => {
@@ -71,7 +78,7 @@ const initToggle = (
   const timerId = setInterval(() => {
     subscriber.next(states[currentState]);
     currentState = (currentState + 1) % maxState;
-  }, CHANGE_DELAY_MS);
+  }, changeDelayMs || CHANGE_DELAY_MS);
   // Unsubscribe function
   return () => {
     clearInterval(timerId);
@@ -84,24 +91,42 @@ const initToggle = (
  * @param mode mode to respect.
  * @param truthyState state if mode is {@code true}; first state while toggling
  * @param falsyState state if mode is {@code false}; second state while toggling
+ * @param config configuration for observable behavior
  */
 const createObservable = (
   mode: ConfigState | undefined,
   truthyState: DisplayHint,
-  falsyState: DisplayHint
+  falsyState: DisplayHint,
+  config: MockServiceConfig
 ): Observable<DisplayHint> => {
   return new Observable<DisplayHint>((subscriber) => {
     if (!mode) {
-      return initDisplay(subscriber, falsyState);
+      return initDisplay(subscriber, config, falsyState);
     }
     if (mode === true) {
-      return initDisplay(subscriber, truthyState);
+      return initDisplay(subscriber, config, truthyState);
     }
     // Mode is changing
-    initDisplay(subscriber, falsyState);
-    return initToggle(subscriber, truthyState, falsyState);
+    initDisplay(subscriber, config, falsyState);
+    return initToggle(subscriber, config, truthyState, falsyState);
   });
 };
+
+/**
+ * Configuration for Mock Service, especially meant for testing purpose.
+ */
+interface MockServiceConfig {
+  /**
+   * The maximum first delay for first value to provide.
+   * Defaults to 100 ms.
+   */
+  maxFirstDelayMs?: number;
+  /**
+   * The (fixed) delay between changes (if a state change got configured).
+   * Defaults to 30,000 ms = 30 s.
+   */
+  changeDelayMs?: number;
+}
 
 /**
  * Mock Display Service for use in example app. The display of contents
@@ -132,6 +157,12 @@ const createObservable = (
  * checked out, some name, readable, document.
  */
 class MockContentDisplayService implements ContentDisplayService {
+  readonly #config: MockServiceConfig;
+
+  constructor(config?: MockServiceConfig) {
+    this.#config = !config ? {} : { ...config };
+  }
+
   getName(): string {
     return "contentDisplayService";
   }
@@ -152,7 +183,8 @@ class MockContentDisplayService implements ContentDisplayService {
         {
           name: `${typeName} #${id}`,
           classes: ["content--0"],
-        }
+        },
+        this.#config
       );
     }
 
@@ -165,7 +197,8 @@ class MockContentDisplayService implements ContentDisplayService {
       {
         name: `${CONTENT_NAME_FALSY} ${typeName} #${id}`,
         classes: ["content--0"],
-      }
+      },
+      this.#config
     );
   }
 
@@ -186,10 +219,10 @@ class MockContentDisplayService implements ContentDisplayService {
 
     if (!!config.unreadable) {
       const falsyState = !!config.checkedIn ? checkedInState : checkedOutState;
-      return createObservable(config.unreadable, unreadableState, falsyState);
+      return createObservable(config.unreadable, unreadableState, falsyState, this.#config);
     }
 
-    return createObservable(config.checkedIn, checkedInState, checkedOutState);
+    return createObservable(config.checkedIn, checkedInState, checkedOutState, this.#config);
   }
 
   getTypeDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
@@ -208,9 +241,9 @@ class MockContentDisplayService implements ContentDisplayService {
     };
     if (!!config.unreadable) {
       const falsyState = !!config.isFolder ? folderState : documentState;
-      return createObservable(config.isFolder, unreadableState, falsyState);
+      return createObservable(config.isFolder, unreadableState, falsyState, this.#config);
     }
-    return createObservable(config.isFolder, folderState, documentState);
+    return createObservable(config.isFolder, folderState, documentState, this.#config);
   }
 }
 
@@ -270,10 +303,10 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   if (!match) {
     const uriPathPattern = /^content\/(?<id>\d+)$/;
     const uriPathMatch = uriPathPattern.exec(uriPath);
-    const isFolder = uriPathMatch && (parseInt(uriPathMatch[1]) % 2) === 1;
+    const isFolder = uriPathMatch && parseInt(uriPathMatch[1]) % 2 === 1;
     // (Nearly) all defaults
     return {
-      isFolder: isFolder,
+      isFolder: !!isFolder,
     };
   }
   return {
@@ -297,9 +330,4 @@ const createContentUriPath = ({ name, unreadable, checkedIn, isFolder }: CreateC
 };
 
 export default MockContentDisplayService;
-export {
-  CONTENT_NAME_UNREADABLE,
-  CONTENT_NAME_TRUTHY,
-  CONTENT_NAME_FALSY,
-  createContentUriPath,
-};
+export { CONTENT_NAME_UNREADABLE, CONTENT_NAME_TRUTHY, CONTENT_NAME_FALSY, createContentUriPath };
