@@ -35,6 +35,35 @@ const CONTENT_NAME_TRUTHY = "Lorem";
 const CONTENT_NAME_FALSY = "Ipsum";
 
 /**
+ * Configuration for Mock Service, especially meant for testing purpose.
+ */
+interface MockServiceConfig {
+  /**
+   * The maximum first delay for first value to provide.
+   * Defaults to 100 ms.
+   *
+   * For `0` (zero) or less, no timeout will be applied. For not-changing mode
+   * this means, that only one state will be reached before `complete` is
+   * triggered.
+   */
+  maxFirstDelayMs?: number;
+  /**
+   * The (fixed) delay between changes (if a state change got configured).
+   * Defaults to 30,000 ms = 30 s.
+   *
+   * If the change delay is `0` (zero) or less, there will be no delay, but
+   * only the truthy state and falsy state will be triggered once. In total,
+   * including the initial state, you may expect the following order of states:
+   *
+   * 1. Falsy State (Initial)
+   * 2. Truthy State
+   * 3. Falsy State
+   * 4. `complete`
+   */
+  changeDelayMs?: number;
+}
+
+/**
  * Calculate the first delay; adds some randomness.
  */
 const firstDelayMs = (maxFirstDelayMs: number): number => {
@@ -43,18 +72,33 @@ const firstDelayMs = (maxFirstDelayMs: number): number => {
 
 /**
  * Create the initial display.
+ *
  * @param subscriber subscriber to inform
+ * @param toggling {@code true} to signal toggling mode, {@code false} for not toggling,
+ * i.e. on first value reached, `complete` will be triggered.
  * @param maxFirstDelayMs delay for first display
  * @param initial initial display
  */
 const initDisplay = (
   subscriber: Subscriber<DisplayHint>,
+  toggling: boolean,
   { maxFirstDelayMs }: MockServiceConfig,
-  initial: DisplayHint
-): void => {
-  setTimeout(() => {
+  initial: DisplayHint): void => {
+  const delayMs: number = maxFirstDelayMs === undefined ? MAX_FIRST_DELAY_MS : maxFirstDelayMs;
+  if (delayMs < 1) {
+    // Immediate trigger.
     subscriber.next(initial);
-  }, firstDelayMs(maxFirstDelayMs || MAX_FIRST_DELAY_MS));
+    if (!toggling) {
+      subscriber.complete();
+    }
+  } else {
+    setTimeout(() => {
+      subscriber.next(initial);
+      if (!toggling) {
+        subscriber.complete();
+      }
+    }, firstDelayMs(delayMs));
+  }
 };
 
 /**
@@ -73,6 +117,13 @@ const initToggle = (
 ): TeardownLogic => {
   const states = [firstState, ...otherStates];
   const maxState = states.length;
+  const delayMs: number = changeDelayMs === undefined ? CHANGE_DELAY_MS : changeDelayMs;
+
+  if (delayMs < 1) {
+    states.forEach((s) => subscriber.next(s));
+    subscriber.complete();
+  }
+
   let currentState = 0;
 
   const timerId = setInterval(() => {
@@ -101,32 +152,16 @@ const createObservable = (
 ): Observable<DisplayHint> => {
   return new Observable<DisplayHint>((subscriber) => {
     if (!mode) {
-      return initDisplay(subscriber, config, falsyState);
+      return initDisplay(subscriber, false, config, falsyState);
     }
     if (mode === true) {
-      return initDisplay(subscriber, config, truthyState);
+      return initDisplay(subscriber, false, config, truthyState);
     }
     // Mode is changing
-    initDisplay(subscriber, config, falsyState);
+    initDisplay(subscriber, true, config, falsyState);
     return initToggle(subscriber, config, truthyState, falsyState);
   });
 };
-
-/**
- * Configuration for Mock Service, especially meant for testing purpose.
- */
-interface MockServiceConfig {
-  /**
-   * The maximum first delay for first value to provide.
-   * Defaults to 100 ms.
-   */
-  maxFirstDelayMs?: number;
-  /**
-   * The (fixed) delay between changes (if a state change got configured).
-   * Defaults to 30,000 ms = 30 s.
-   */
-  changeDelayMs?: number;
-}
 
 /**
  * Mock Display Service for use in example app. The display of contents
@@ -136,22 +171,21 @@ interface MockServiceConfig {
  * ```
  * content/
  *   <some numbers>
- *   <checkedIn: 0|1|2>
  *   <name: 0|1|2>
  *   <unreadable: 0|1|2>
  *   <checkedIn: 0|1|2>
- *   <folderType: 0|1>
+ *   <folderType: 0-9>
  * ```
  *
  * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
  *
- * **name:** 0 = some name, 2 = changing name
+ * **name:** 0 = some name, 1 = some other name, 2 = changing name
  *
  * **unreadable:** 0 = readable, 1 = unreadable, 2 = changing
  *
  * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
  *
- * **folderType:** 0 = document, 1 = folder
+ * **folderType:** even number = document, odd number = folder
  *
  * If any of these is unmatched, the default state will be chosen, which is:
  * checked out, some name, readable, document.
@@ -216,13 +250,19 @@ class MockContentDisplayService implements ContentDisplayService {
       name: "",
       classes: [],
     };
+    let state = config.checkedIn;
+
+    if (config.isFolder) {
+      // force checked-in state: Folders cannot be checked-out.
+      state = true;
+    }
 
     if (!!config.unreadable) {
-      const falsyState = !!config.checkedIn ? checkedInState : checkedOutState;
+      const falsyState = !!state ? checkedInState : checkedOutState;
       return createObservable(config.unreadable, unreadableState, falsyState, this.#config);
     }
 
-    return createObservable(config.checkedIn, checkedInState, checkedOutState, this.#config);
+    return createObservable(state, checkedInState, checkedOutState, this.#config);
   }
 
   getTypeDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
