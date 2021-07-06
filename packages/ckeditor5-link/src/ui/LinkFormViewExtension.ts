@@ -20,6 +20,7 @@ import { getLinkBehaviorLabels, LINK_BEHAVIOR, updateVisibility } from "../utils
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import ContentView from "./ContentView";
 import createInternalLinkView from "./InternalLinkView";
+import { extractContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 
 /**
  * Extends the LinkFormView of the CKEditor Link Plugin by additional form
@@ -34,6 +35,13 @@ export default class LinkFormViewExtension {
 
   constructor(linkFormView: LinkFormView) {
     this.linkFormView = linkFormView;
+    this.linkFormView.urlInputView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
+      if (contentCkeModelUri === null) {
+        return;
+      }
+      (dragEvent.target as HTMLInputElement).value = contentCkeModelUri;
+    });
     this.locale = linkFormView.locale;
     this.internalLinkView = createInternalLinkView(this.locale, linkFormView);
     this.targetInputView = this._createTargetInput();
@@ -61,7 +69,6 @@ export default class LinkFormViewExtension {
       updateVisibility(this.linkFormView.urlInputView, false);
     });
     this.renderAfter(dropTestButton, this.linkFormView.urlInputView);
-
     this.renderAfter(this.targetInputView, this.linkFormView.urlInputView);
     this.renderAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
     this.renderAfter(this.internalLinkView, this.linkFormView.urlInputView);
