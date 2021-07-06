@@ -1,7 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import MockContentDisplayService from "./content/MockContentDisplayService";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/src";
+import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 

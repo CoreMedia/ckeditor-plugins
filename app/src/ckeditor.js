@@ -30,6 +30,9 @@ import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
+import MockContentDisplayService
+  from "../../packages/coremedia-studio-integration-mock/dist/content/MockContentDisplayService";
+import MockStudioIntegration from "../../packages/coremedia-studio-integration-mock/dist/MockStudioIntegration";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -73,7 +76,8 @@ ClassicEditor.create(document.querySelector('.editor'), {
     TableToolbar,
     Underline,
     CoreMediaSymbolOnPasteMapper,
-    CoreMediaRichText
+    CoreMediaRichText,
+    MockStudioIntegration
   ],
   toolbar: {
     items: [

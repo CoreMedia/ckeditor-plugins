@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-studio-integration-mock",
-  "version": "28.0.0",
+  "version": "28.0.2",
   "private": true,
   "engines": {
     "node": ">=14.0.0"
