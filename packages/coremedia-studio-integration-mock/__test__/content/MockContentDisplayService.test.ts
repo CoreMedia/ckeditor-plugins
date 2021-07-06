@@ -6,6 +6,24 @@ import MockContentDisplayService, {
 } from "../../src/content/MockContentDisplayService";
 import { UriPath } from "@coremedia/coremedia-studio-integration/dist/content/UriPath";
 import { Observable } from "rxjs";
+import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
+//@ts-ignore
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+
+const MOCK_SERVICE_TEST_CONFIG = {
+  maxFirstDelayMs: 0,
+  changeDelayMs: 0
+};
+
+describe("serviceAgent Integration", () => {
+  const service = new MockContentDisplayService();
+  serviceAgent.registerService(service);
+
+  test("Should be able to retrieve mock service.", () => {
+    expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toBe(service);
+  });
+});
 
 /**
  * Test modes especially meant for debugging or known issues.
@@ -64,10 +82,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
   /**
    * Immediate service, i.e. without timeouts.
    */
-  const service: ContentDisplayService = new MockContentDisplayService({
-    maxFirstDelayMs: 0,
-    changeDelayMs: 0
-  });
+  const service: ContentDisplayService = new MockContentDisplayService(MOCK_SERVICE_TEST_CONFIG);
 
   const testEachDisplayHint = (serviceFn: (uriPath: UriPath) => Observable<DisplayHint>, testCases: TestData[]): void => {
     describe.each<TestData>(testCases)('[$#] $name - Input: $uriPath',

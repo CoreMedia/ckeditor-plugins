@@ -8,6 +8,9 @@ import { numericId } from "@coremedia/coremedia-studio-integration/content/UriPa
 // TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
 //@ts-ignore
 import { UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
+// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
+//@ts-ignore
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
@@ -191,11 +194,6 @@ const createObservable = (
  * checked out, some name, readable, document.
  */
 class MockContentDisplayService implements ContentDisplayService {
-  /**
-   * Name of this mock service.
-   */
-  static NAME = "mockContentDisplayService";
-
   readonly #config: MockServiceConfig;
 
   constructor(config?: MockServiceConfig) {
@@ -203,7 +201,7 @@ class MockContentDisplayService implements ContentDisplayService {
   }
 
   getName(): string {
-    return MockContentDisplayService.NAME;
+    return new ContentDisplayServiceDescriptor().name;
   }
 
   getDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
