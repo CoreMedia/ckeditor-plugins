@@ -320,4 +320,74 @@ describe("Unit Tests: MockContentDisplayService", () => {
 
     testEachDisplayHint(MockContentDisplayService.prototype.getStateDisplayHint, testCases);
   });
+
+  describe("getTypeDisplayHint", () => {
+    const expectedFolderState: DisplayHint = {
+      name: `Folder`,
+      classes: ["icon--folder"],
+    };
+    const expectedDocumentState: DisplayHint = {
+      name: `Document`,
+      classes: ["icon--document"],
+    };
+    const expectedUnreadableState: DisplayHint = {
+      name: "Unreadable",
+      classes: ["icon--lock"],
+    };
+
+    const numbers = [...Array(10).keys()];
+    const typeTestCases: TestData[] = numbers.map((no) => {
+      if (no % 2 === 0) {
+        return {
+          name: "Should signal document type.",
+          uriPath: `content/888000${no}`,
+          expected: expectedDocumentState,
+        };
+      } else {
+        return {
+          name: "Should signal folder type.",
+          uriPath: `content/888000${no}`,
+          expected: expectedFolderState,
+        };
+      }
+    });
+
+    const unreadableCases: TestData[] = [
+      {
+        name: "Should provide unreadable type hint for document.",
+        uriPath: `content/8880${1 /* unreadable */}0${0 /* document */}`,
+        expected: expectedUnreadableState,
+      },
+      {
+        name: "Should provide unreadable type hint for folder.",
+        uriPath: `content/8880${1 /* unreadable */}0${1 /* folder */}`,
+        expected: expectedUnreadableState,
+      },
+      {
+        name: "Should provide a sequence of readable/unreadable changes for folder type.",
+        uriPath: `content/7770${2 /* toggle readable */}0${1 /* folder */}`,
+        expected: [
+          expectedFolderState,
+          expectedUnreadableState,
+          expectedFolderState,
+        ],
+      },
+      {
+        name: "Should provide a sequence of readable/unreadable changes for document type.",
+        uriPath: `content/7770${2 /* toggle readable */}0${0 /* document */}`,
+        expected: [
+          expectedDocumentState,
+          expectedUnreadableState,
+          expectedDocumentState,
+        ],
+      },
+    ];
+
+    const testCases: TestData[] = [
+      ...typeTestCases,
+      ...unreadableCases,
+    ];
+
+    testEachDisplayHint(MockContentDisplayService.prototype.getStateDisplayHint, testCases);
+  });
 });
