@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "noEmit": true,
+    "paths": {
+    }
+  },
+  "references": [{
+    "path": "../src"
+  }],
+  "extends": "../../../tsconfig.json",
+}

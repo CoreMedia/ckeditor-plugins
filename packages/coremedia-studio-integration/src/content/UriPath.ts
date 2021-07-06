@@ -43,10 +43,15 @@ const requireContentUriPath = (str: string): UriPath => {
   const contentDataUriMatch: RegExpExecArray | null = CONTENT_CKE_MODEL_URI_REGEXP.exec(str);
 
   if (!contentDataUriMatch) {
-    throw new InvalidUriPathError(`Invalid Content URI path or cannot convert to URI path: '${str}'.`)
-  } else {
-    return `${CONTENT_CKE_MODEL_URI_PREFIX}${contentDataUriMatch[1]}`;
+    throw new InvalidUriPathError(`Invalid Content URI path or cannot convert to URI path: '${str}'.`);
   }
+
+  const contentId: string = contentDataUriMatch[1];
+  if (!contentId) {
+    throw new InvalidUriPathError(`Invalid Content URI path or cannot convert to URI path: '${str}'.`);
+  }
+
+  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
 };
 
 /**
@@ -65,10 +70,13 @@ const requireContentCkeModelUri = (str: string): ModelUri => {
   const contentDataUriMatch: RegExpExecArray | null = CONTENT_URI_PATH_REGEXP.exec(str);
 
   if (!contentDataUriMatch) {
-    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${str}'.`)
-  } else {
-    return `${CONTENT_URI_PATH_PREFIX}${contentDataUriMatch[1]}`;
+    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${str}'.`);
   }
+  const contentId: string = contentDataUriMatch[1];
+  if (!contentId) {
+    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${str}'.`);
+  }
+  return `${CONTENT_CKE_MODEL_URI_PREFIX}${contentId}`;
 };
 
 class InvalidUriPathError extends Error {
