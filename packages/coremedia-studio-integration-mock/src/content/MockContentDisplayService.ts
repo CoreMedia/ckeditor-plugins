@@ -191,6 +191,11 @@ const createObservable = (
  * checked out, some name, readable, document.
  */
 class MockContentDisplayService implements ContentDisplayService {
+  /**
+   * Name of this mock service.
+   */
+  static NAME = "mockContentDisplayService";
+
   readonly #config: MockServiceConfig;
 
   constructor(config?: MockServiceConfig) {
@@ -198,7 +203,7 @@ class MockContentDisplayService implements ContentDisplayService {
   }
 
   getName(): string {
-    return "contentDisplayService";
+    return MockContentDisplayService.NAME;
   }
 
   getDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
