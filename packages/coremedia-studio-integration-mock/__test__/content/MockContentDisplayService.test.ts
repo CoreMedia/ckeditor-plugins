@@ -16,15 +16,6 @@ const MOCK_SERVICE_TEST_CONFIG = {
   changeDelayMs: 0
 };
 
-describe("serviceAgent Integration", () => {
-  const service = new MockContentDisplayService();
-  serviceAgent.registerService(service);
-
-  test("Should be able to retrieve mock service.", () => {
-    expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toBe(service);
-  });
-});
-
 /**
  * Test modes especially meant for debugging or known issues.
  */
@@ -78,6 +69,16 @@ const modalTest = ({ skip, only }: TestMode): jest.It => {
 };
 
 describe("Unit Tests: MockContentDisplayService", () => {
+
+  describe("serviceAgent Integration", () => {
+    const service = new MockContentDisplayService();
+    serviceAgent.registerService(service);
+
+    test("Should be able to retrieve mock service.", () => {
+      expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toBe(service);
+    });
+  });
+
   type TestData = UriPath2DisplayHint & TestMode & Named;
   /**
    * Immediate service, i.e. without timeouts.
@@ -111,7 +112,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       });
   };
 
-  describe("getDisplayHint", () => {
+  describe("observe_name", () => {
     /**
      * Tests for display name behavior.
      */
@@ -218,10 +219,10 @@ describe("Unit Tests: MockContentDisplayService", () => {
       ...unreadableCases,
     ];
 
-    testEachDisplayHint(MockContentDisplayService.prototype.getDisplayHint, testCases);
+    testEachDisplayHint(MockContentDisplayService.prototype.observe_name, testCases);
   });
 
-  describe("getStateDisplayHint", () => {
+  describe("observe_state", () => {
     const expectedCheckedOutState: DisplayHint = {
       name: `Checked Out`,
       classes: ["icon--checked-out"],
@@ -333,10 +334,10 @@ describe("Unit Tests: MockContentDisplayService", () => {
       ...unreadableCases,
     ];
 
-    testEachDisplayHint(MockContentDisplayService.prototype.getStateDisplayHint, testCases);
+    testEachDisplayHint(MockContentDisplayService.prototype.observe_state, testCases);
   });
 
-  describe("getTypeDisplayHint", () => {
+  describe("observe_type", () => {
     const expectedFolderState: DisplayHint = {
       name: `Folder`,
       classes: ["icon--folder"],
@@ -403,6 +404,6 @@ describe("Unit Tests: MockContentDisplayService", () => {
       ...unreadableCases,
     ];
 
-    testEachDisplayHint(MockContentDisplayService.prototype.getStateDisplayHint, testCases);
+    testEachDisplayHint(MockContentDisplayService.prototype.observe_type, testCases);
   });
 });

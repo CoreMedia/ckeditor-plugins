@@ -204,7 +204,7 @@ class MockContentDisplayService implements ContentDisplayService {
     return new ContentDisplayServiceDescriptor().name;
   }
 
-  getDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
+  observe_name(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const id = numericId(uriPath);
     const typeName = config.isFolder ? "Folder" : "Document";
@@ -239,7 +239,7 @@ class MockContentDisplayService implements ContentDisplayService {
     );
   }
 
-  getStateDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
+  observe_state(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const checkedInState: DisplayHint = {
       name: "Checked In",
@@ -268,7 +268,7 @@ class MockContentDisplayService implements ContentDisplayService {
     return createObservable(state, checkedInState, checkedOutState, this.#config);
   }
 
-  getTypeDisplayHint(uriPath: UriPath): Observable<DisplayHint> {
+  observe_type(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const folderState: DisplayHint = {
       name: "Folder",

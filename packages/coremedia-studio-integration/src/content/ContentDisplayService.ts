@@ -6,6 +6,21 @@ import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
 import { ServiceObject } from "@coremedia/studio-apps-service-agent";
 
+/**
+ * Service to provide information how to display a content within CKEditor.
+ * It is meant to be used also for drag & drop operations, where the dropped
+ * content name shall be written into CKEditor's text area.
+ *
+ * The service has to be registered globally by `serviceAgent` and may then
+ * retrieved by its descriptor, for example:
+ *
+ * ```
+ * const descriptor = new ContentDisplayServiceDescriptor();
+ * serviceAgent
+ *   .fetchService<ContentDisplayService>(descriptor)
+ *     .then((service: ContentDisplayService) => {});
+ * ```
+ */
 interface ContentDisplayService extends ServiceObject {
   /**
    * Retrieve the display hint for the content itself. This typically contains
@@ -22,7 +37,7 @@ interface ContentDisplayService extends ServiceObject {
    *
    * @param uriPath URI path of the content, such as `content/120`
    */
-  getDisplayHint(uriPath: UriPath): Observable<DisplayHint>;
+  observe_name(uriPath: UriPath): Observable<DisplayHint>;
 
   /**
    * Retrieve a display hint for the content type. This typically contains
@@ -41,7 +56,7 @@ interface ContentDisplayService extends ServiceObject {
    *
    * @param uriPath URI path of the content, such as `content/120`
    */
-  getTypeDisplayHint(uriPath: UriPath): Observable<DisplayHint>;
+  observe_type(uriPath: UriPath): Observable<DisplayHint>;
 
   /**
    * Retrieve a display hint for the content state. This is typically a
@@ -52,7 +67,7 @@ interface ContentDisplayService extends ServiceObject {
    *
    * @param uriPath URI path of the content, such as `content/120`
    */
-  getStateDisplayHint(uriPath: UriPath): Observable<DisplayHint>;
+  observe_state(uriPath: UriPath): Observable<DisplayHint>;
 }
 
 /**
