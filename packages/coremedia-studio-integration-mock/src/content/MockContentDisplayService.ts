@@ -359,6 +359,7 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   };
 };
 
+// TODO[cke] If unused, remove; otherwise, add unit tests
 const createContentUriPath = ({ name, unreadable, checkedIn, isFolder }: CreateContentConfig): UriPath => {
   function randomPrefix(): number {
     return Math.floor(Math.random() * 99);

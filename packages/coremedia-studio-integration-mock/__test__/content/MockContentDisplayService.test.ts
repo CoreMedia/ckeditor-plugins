@@ -1,9 +1,9 @@
-import ContentDisplayService from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
+import ContentDisplayService, { DisplayHint } from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import MockContentDisplayService, {
-  CONTENT_NAME_FALSY, CONTENT_NAME_TRUTHY, CONTENT_NAME_UNREADABLE,
-  createContentUriPath
+  CONTENT_NAME_FALSY,
+  CONTENT_NAME_TRUTHY,
+  CONTENT_NAME_UNREADABLE
 } from "../../src/content/MockContentDisplayService";
-import { DisplayHint } from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import { UriPath } from "@coremedia/coremedia-studio-integration/dist/content/UriPath";
 import { Observable } from "rxjs";
 
