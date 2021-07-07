@@ -1,16 +1,12 @@
-import ContentDisplayService, {
-  DisplayHint,
-} from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
+import ContentDisplayService, { DisplayHint, } from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";
 // TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
 //@ts-ignore
-import { numericId } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 // TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
 //@ts-ignore
-import { UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
-//@ts-ignore
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor
+  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
@@ -36,6 +32,23 @@ const CONTENT_NAME_TRUTHY = "Lorem";
  * or while name toggling mock).
  */
 const CONTENT_NAME_FALSY = "Ipsum";
+
+/**
+ * Ids which start with this number, will trigger some evil behavior
+ * meant to try challenge escaping et al.
+ */
+const EVIL_CONTENT_ID_PREFIX = "666";
+/**
+ * Evil form (1st) of some content name.
+ */
+// <iframe src="javascript:alert('Buh!')" width="1px" height="1px">
+const EVIL_CONTENT_NAME_TRUTHY = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;
+/**
+ * Evil form (2nd) of some content name.
+ * Arabic: Year
+ * Chinese: Year
+ */
+const EVIL_CONTENT_NAME_FALSY = "&lt; عام &amp; 年 &gt;";
 
 /**
  * Configuration for Mock Service, especially meant for testing purpose.
@@ -208,33 +221,36 @@ class MockContentDisplayService implements ContentDisplayService {
     const config = parseContentConfig(uriPath);
     const id = numericId(uriPath);
     const typeName = config.isFolder ? "Folder" : "Document";
+    const unreadableState: DisplayHint = {
+      name: `${CONTENT_NAME_UNREADABLE} ${typeName} #${id}`,
+      classes: [],
+    };
+    const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
+    const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+
+    const truthyState: DisplayHint = {
+      name: `${CONTENT_NAME_TRUTHY} ${typeName} #${id}`,
+      classes: ["content--1"],
+    };
+    const falsyState: DisplayHint = {
+      name: `${CONTENT_NAME_FALSY} ${typeName} #${id}`,
+      classes: ["content--0"],
+    };
 
     // true or changing
     if (!!config.unreadable) {
       return createObservable(
         config.unreadable,
-        {
-          name: `${CONTENT_NAME_UNREADABLE} ${typeName} #${id}`,
-          classes: [],
-        },
-        {
-          name: `${typeName} #${id}`,
-          classes: ["content--0"],
-        },
+        unreadableState,
+        !!config.name ? truthyState : falsyState,
         this.#config
       );
     }
 
     return createObservable(
       config.name,
-      {
-        name: `${CONTENT_NAME_TRUTHY} ${typeName} #${id}`,
-        classes: ["content--1"],
-      },
-      {
-        name: `${CONTENT_NAME_FALSY} ${typeName} #${id}`,
-        classes: ["content--0"],
-      },
+      truthyState,
+      falsyState,
       this.#config
     );
   }
@@ -302,6 +318,11 @@ interface CreateContentConfig {
    */
   name?: ConfigState;
   /**
+   * If some evil states should be simulated or not. This applies especially
+   * to cross-site-scripting attacks (XSS).
+   */
+  evil?: boolean;
+  /**
    * Shall the content be readable or unreadable. Defaults to readable.
    */
   unreadable?: ConfigState;
@@ -340,32 +361,37 @@ const identifierToState = (identifier: number) => {
 };
 
 const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
-  const configPattern = /^content\/\d+(?<namechange>[0-2])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-9])$/;
+  const configPattern = /^content\/(?<prefix>\d+)(?<namechange>[0-2])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-9])$/;
   const match = configPattern.exec(uriPath);
 
   if (!match) {
     const uriPathPattern = /^content\/(?<id>\d+)$/;
     const uriPathMatch = uriPathPattern.exec(uriPath);
-    const isFolder = uriPathMatch && parseInt(uriPathMatch[1]) % 2 === 1;
+    const numericIdPart = uriPathMatch[1];
+    const numericId = parseInt(numericIdPart);
+    const isFolder = uriPathMatch && numericId % 2 === 1;
     // (Nearly) all defaults
     return {
+      evil: numericIdPart.startsWith("666"),
       isFolder: !!isFolder,
     };
   }
   return {
-    name: identifierToState(parseInt(match[1])),
-    unreadable: identifierToState(parseInt(match[2])),
-    checkedIn: identifierToState(parseInt(match[3])),
+    name: identifierToState(parseInt(match[2])),
+    evil: match[1].startsWith("666"),
+    unreadable: identifierToState(parseInt(match[3])),
+    checkedIn: identifierToState(parseInt(match[4])),
     // in contrast to other flags, we simulate the default CMS here, which is,
     // that even numbers are for documents, while odd numbers are for folders.
-    isFolder: parseInt(match[4]) % 2 === 1,
+    isFolder: parseInt(match[5]) % 2 === 1,
   };
 };
 
 // TODO[cke] If unused, remove; otherwise, add unit tests
-const createContentUriPath = ({ name, unreadable, checkedIn, isFolder }: CreateContentConfig): UriPath => {
+const createContentUriPath = ({ name, evil, unreadable, checkedIn, isFolder }: CreateContentConfig): UriPath => {
   function randomPrefix(): number {
-    return Math.floor(Math.random() * 99);
+    const base = evil ? 66600 : 0;
+    return evil + Math.floor(Math.random() * 99);
   }
 
   return `content/${randomPrefix()}${stateToIdentifier(name)}${stateToIdentifier(unreadable)}${stateToIdentifier(
@@ -374,4 +400,11 @@ const createContentUriPath = ({ name, unreadable, checkedIn, isFolder }: CreateC
 };
 
 export default MockContentDisplayService;
-export { CONTENT_NAME_UNREADABLE, CONTENT_NAME_TRUTHY, CONTENT_NAME_FALSY, createContentUriPath };
+export {
+  CONTENT_NAME_UNREADABLE,
+  CONTENT_NAME_TRUTHY,
+  CONTENT_NAME_FALSY,
+  EVIL_CONTENT_NAME_TRUTHY,
+  EVIL_CONTENT_NAME_FALSY,
+  createContentUriPath
+};

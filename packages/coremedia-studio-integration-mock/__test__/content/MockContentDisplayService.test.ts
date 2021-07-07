@@ -2,6 +2,8 @@ import ContentDisplayService, { DisplayHint } from "@coremedia/coremedia-studio-
 import MockContentDisplayService, {
   CONTENT_NAME_FALSY,
   CONTENT_NAME_TRUTHY,
+  EVIL_CONTENT_NAME_FALSY,
+  EVIL_CONTENT_NAME_TRUTHY,
   CONTENT_NAME_UNREADABLE
 } from "../../src/content/MockContentDisplayService";
 import { UriPath } from "@coremedia/coremedia-studio-integration/dist/content/UriPath";
@@ -9,7 +11,8 @@ import { Observable } from "rxjs";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 // TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
 //@ts-ignore
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor
+  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 
 const MOCK_SERVICE_TEST_CONFIG = {
   maxFirstDelayMs: 0,
@@ -113,9 +116,6 @@ describe("Unit Tests: MockContentDisplayService", () => {
   };
 
   describe("observe_name", () => {
-    /**
-     * Tests for display name behavior.
-     */
     const nameCases: TestData[] = [
       {
         name: "Should provide first name.",
@@ -147,6 +147,43 @@ describe("Unit Tests: MockContentDisplayService", () => {
           },
           {
             name: `${CONTENT_NAME_FALSY} Document #5552002`,
+            classes: ["content--0"],
+          },
+        ],
+      },
+    ];
+
+    const evilCases: TestData[] = [
+      {
+        name: "Should provide first name.",
+        uriPath: `content/666${0 /* first name */}002`,
+        expected: {
+          name: `${EVIL_CONTENT_NAME_FALSY} Document #6660002`,
+          classes: ["content--0"],
+        }
+      },
+      {
+        name: "Should provide second name.",
+        uriPath: `content/666${1 /* second name */}002`,
+        expected: {
+          name: `${EVIL_CONTENT_NAME_TRUTHY} Document #6661002`,
+          classes: ["content--1"],
+        }
+      },
+      {
+        name: "Should provide a sequence of name changes.",
+        uriPath: `content/666${2 /* changing names */}002`,
+        expected: [
+          {
+            name: `${EVIL_CONTENT_NAME_FALSY} Document #6662002`,
+            classes: ["content--0"],
+          },
+          {
+            name: `${EVIL_CONTENT_NAME_TRUTHY} Document #6662002`,
+            classes: ["content--1"],
+          },
+          {
+            name: `${EVIL_CONTENT_NAME_FALSY} Document #6662002`,
             classes: ["content--0"],
           },
         ],
@@ -215,6 +252,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
 
     const testCases: TestData[] = [
       ...nameCases,
+      ...evilCases,
       ...unmatchedCases,
       ...unreadableCases,
     ];
