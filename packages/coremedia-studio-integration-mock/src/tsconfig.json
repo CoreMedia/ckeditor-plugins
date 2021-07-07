@@ -30,6 +30,9 @@
       ],
       "@coremedia/coremedia-utils/*": [
         "../node_modules/@coremedia/coremedia-utils/src/*"
+      ],
+      "@coremedia/coremedia-studio-integration/*": [
+        "../node_modules/@coremedia/coremedia-studio-integration/src/*"
       ]
     },
   },

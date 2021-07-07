@@ -1,12 +1,9 @@
-import ContentDisplayService, { DisplayHint, } from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
+import ContentDisplayService, {
+  DisplayHint,
+} from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";
-// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
-//@ts-ignore
 import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
-import ContentDisplayServiceDescriptor
-//@ts-ignore
-  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
@@ -99,7 +96,8 @@ const initDisplay = (
   subscriber: Subscriber<DisplayHint>,
   toggling: boolean,
   { maxFirstDelayMs }: MockServiceConfig,
-  initial: DisplayHint): void => {
+  initial: DisplayHint
+): void => {
   const delayMs: number = maxFirstDelayMs === undefined ? MAX_FIRST_DELAY_MS : maxFirstDelayMs;
   if (delayMs < 1) {
     // Immediate trigger.
@@ -267,12 +265,7 @@ class MockContentDisplayService implements ContentDisplayService {
       );
     }
 
-    return createObservable(
-      config.name,
-      truthyState,
-      falsyState,
-      this.#config
-    );
+    return createObservable(config.name, truthyState, falsyState, this.#config);
   }
 
   /**
@@ -425,7 +418,8 @@ const identifierToState = (identifier: number) => {
  * @param uriPath URI path which by magic contains some configuration
  */
 const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
-  const configPattern = /^content\/(?<prefix>\d+)(?<namechange>[0-2])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-9])$/;
+  const configPattern =
+    /^content\/(?<prefix>\d+)(?<namechange>[0-2])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-9])$/;
   const match = configPattern.exec(uriPath);
 
   if (!match) {
