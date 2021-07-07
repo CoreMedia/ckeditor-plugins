@@ -1,6 +1,5 @@
 import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
 import View from "@ckeditor/ckeditor5-ui/src/view";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 export const LINK_BEHAVIOR = {
   OPEN_IN_NEW_TAB: "openInNewTab",
