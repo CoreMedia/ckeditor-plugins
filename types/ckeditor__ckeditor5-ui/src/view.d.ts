@@ -39,6 +39,8 @@ export default class View implements Emitter, Observable {
 
   bind(...bindProperties: any[]): BindReturnValue;
 
+  unbind(unbindProperties?: string): void;
+
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;

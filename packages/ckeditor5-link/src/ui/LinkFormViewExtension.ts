@@ -15,11 +15,12 @@ import Model from "@ckeditor/ckeditor5-ui/src/model";
 //@ts-ignore
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
-import { getLinkBehaviorLabels, LINK_BEHAVIOR, updateVisibility } from "../utils";
+import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../utils";
 //@ts-ignore
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import ContentView from "./ContentView";
 import createInternalLinkView from "./InternalLinkView";
+import Command from "@ckeditor/ckeditor5-core/src/command";
 import { extractContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 
 /**
@@ -33,7 +34,7 @@ export default class LinkFormViewExtension {
   readonly linkBehaviorView: LabeledFieldView<InputTextView>;
   readonly targetInputView: LabeledFieldView<DropdownView>;
 
-  constructor(linkFormView: LinkFormView) {
+  constructor(linkFormView: LinkFormView, linkCommand: Command | undefined) {
     this.linkFormView = linkFormView;
     this.linkFormView.urlInputView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
@@ -43,7 +44,7 @@ export default class LinkFormViewExtension {
       (dragEvent.target as HTMLInputElement).value = contentCkeModelUri;
     });
     this.locale = linkFormView.locale;
-    this.internalLinkView = createInternalLinkView(this.locale, linkFormView);
+    this.internalLinkView = createInternalLinkView(this.locale, linkFormView, linkCommand);
     this.targetInputView = this._createTargetInput();
     this.linkBehaviorView = this._createLinkBehaviorField();
 
@@ -63,10 +64,9 @@ export default class LinkFormViewExtension {
       withText: true,
     });
     dropTestButton.on("execute", () => {
-      // remove focus first since this would interfere with setting classes manually (focus/unfocus also changes classList)
-      this.linkFormView.urlInputView.set({ isFocused: false });
-      updateVisibility(this.internalLinkView, true);
-      updateVisibility(this.linkFormView.urlInputView, false);
+      this.internalLinkView.fieldView.set({
+        value: "content:12345",
+      });
     });
     this.renderAfter(dropTestButton, this.linkFormView.urlInputView);
     this.renderAfter(this.targetInputView, this.linkFormView.urlInputView);

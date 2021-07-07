@@ -94,9 +94,8 @@ export default class ContentView extends View {
     internalLinkButton.iconView = new IconView(locale);
 
     internalLinkButton.bind("label").to(this, "value", (value: string) => {
-      // TODO use the service agent here to update the label, icon and open in tab action
-      console.log("value changed, update label!");
-      return "Albini Dress ";
+      // TODO[serviceagent] add service agent here
+      return value;
     });
 
     return internalLinkButton;

@@ -1,5 +1,6 @@
 import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
 import View from "@ckeditor/ckeditor5-ui/src/view";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 export const LINK_BEHAVIOR = {
   OPEN_IN_NEW_TAB: "openInNewTab",
@@ -226,20 +227,28 @@ export const removeClass = (view: View, classNames: string[] | string): void => 
 };
 
 /**
- * Adds or removes the "ck-cm-hidden" class to a view's element or to the view's template if
- * the view is not rendered yet.
+ * Adds or removes "cm-ck-link-form-view--show-internal-link" to the form view's element or to the form view's
+ * template if the view is not rendered yet. This affects whether the internal or external link field is shown.
  *
  * @param view the view with the element the class should be added to or removed from
- * @param visible false to add the class, false to add it
+ * @param show true to display the internal link field, false to display the external link field (default).
  */
-export const updateVisibility = (view: View, visible: boolean): void => {
-  const hiddenCls = "ck-cm-hidden";
-  if (!view.element) {
-    // Not rendered yet
-    if (!visible) {
-      addClassToTemplate(view, [hiddenCls]);
+export const showInternalLinkField = (view: View, show: boolean): void => {
+  const showInternalLinkFieldClass = "cm-ck-link-form-view--show-internal-link";
+
+  // already rendered. remove class from element
+  if (view.element) {
+    if (show) {
+      addClass(view, showInternalLinkFieldClass);
+    } else {
+      removeClass(view, showInternalLinkFieldClass);
     }
+  }
+
+  // also remove class from template (for the next time the view gets rendered)
+  if (show) {
+    addClassToTemplate(view, showInternalLinkFieldClass);
   } else {
-    visible ? view.element.classList.remove(hiddenCls) : view.element.classList.add(hiddenCls);
+    removeClassFromTemplate(view, showInternalLinkFieldClass);
   }
 };

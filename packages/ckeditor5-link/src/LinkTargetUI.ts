@@ -13,11 +13,11 @@ import {
   linkTargetToUiValues,
   removeClassFromTemplate,
   uiValuesToLinkTarget,
-  updateVisibility,
 } from "./utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -62,7 +62,7 @@ export default class LinkTargetUI extends Plugin {
     const linkCommand = editor.commands.get("link");
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
-    const extension = new LinkFormViewExtension(formView);
+    const extension = new LinkFormViewExtension(formView, linkCommand);
     this._customizeUrlInputView(formView, extension.internalLinkView);
     extension.targetInputView
       .bind("hiddenTarget")
@@ -114,8 +114,12 @@ export default class LinkTargetUI extends Plugin {
      * ckeditor/ckeditor5-link#78 (now: ckeditor/ckeditor5#4765) and
      * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
      */
-    //@ts-ignore
-    linkUI.decorate("_addFormView");
+
+    if (!(linkUI as any)["_events"] || !(linkUI as any)["_events"].hasOwnProperty("_addFormView")) {
+      //@ts-ignore
+      linkUI.decorate("_addFormView");
+    }
+
     this.listenTo(linkUI, "_addFormView", () => {
       if (linkTargetCommand === undefined) {
         return;
@@ -128,11 +132,22 @@ export default class LinkTargetUI extends Plugin {
       extension.targetInputView.hiddenTarget = target || "";
     });
 
+    this.listenTo(linkUI, "_addFormView", () => {
+      const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
+
+      extension.internalLinkView.fieldView.set({
+        value: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
+      });
+    });
+
     return extension;
   }
 
   private _customizeUrlInputView(linkFormView: LinkFormView, internalLinkView: View): void {
-    linkFormView.urlInputView.label = "Url";
+    linkFormView.urlInputView.set({
+      label: "Url",
+      class: ["ck-cm-external-link-field"],
+    });
   }
 
   private static _customizeToolbarButtons(formView: LinkFormView): void {

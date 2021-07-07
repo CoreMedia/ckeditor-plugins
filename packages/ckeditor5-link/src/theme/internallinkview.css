@@ -12,3 +12,16 @@
   border: none;
   min-height: calc(var(--ck-ui-component-min-height) -2px);
 }
+
+
+.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-internal-link .ck-cm-external-link-field {
+  display: none;
+}
+
+.ck.cm-ck-link-form-view .ck-cm-internal-link-field {
+  display: none;
+}
+
+.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-internal-link .ck-cm-internal-link-field {
+  display: block;
+}
