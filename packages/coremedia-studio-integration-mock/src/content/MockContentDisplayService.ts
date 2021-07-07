@@ -193,6 +193,10 @@ const createObservable = (
  *   <folderType: 0-9>
  * ```
  *
+ * **prefix:** _some numbers_ is any set of numbers as prefix (may be empty).
+ * If you set `666` as start of the prefix, it will trigger some evil behavior,
+ * which is meant to test cross-site-scripting attacks.
+ *
  * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
  *
  * **name:** 0 = some name, 1 = some other name, 2 = changing name
@@ -209,14 +213,30 @@ const createObservable = (
 class MockContentDisplayService implements ContentDisplayService {
   readonly #config: MockServiceConfig;
 
+  /**
+   * Constructor with some configuration options for the mock service.
+   *
+   * @param config
+   */
   constructor(config?: MockServiceConfig) {
     this.#config = !config ? {} : { ...config };
   }
 
+  /**
+   * The name of the service.
+   */
   getName(): string {
     return new ContentDisplayServiceDescriptor().name;
   }
 
+  /**
+   * Provides a name which is either static (one of two) or changing over time
+   * (between two names). For unreadable contents, an unreadable placeholder
+   * is returned. For unreadable-toggle behavior, it toggled between unreadable
+   * and one of the two names. This overrides name-toggle behavior.
+   *
+   * @param uriPath URI path to create mock for
+   */
   observe_name(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const id = numericId(uriPath);
@@ -255,6 +275,16 @@ class MockContentDisplayService implements ContentDisplayService {
     );
   }
 
+  /**
+   * Provides a hint for content state (checked-in, checked-out, published, ...)
+   * but only for checked-in and checked-out. In case of toggle-behavior the
+   * state changes from checked-out to checked-in back and forth.
+   *
+   * In case of unreadable content, a possibly configured toggle-behavior for
+   * unreadable overrides toggle-behavior for state.
+   *
+   * @param uriPath URI path to create mock state for
+   */
   observe_state(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const checkedInState: DisplayHint = {
@@ -284,6 +314,13 @@ class MockContentDisplayService implements ContentDisplayService {
     return createObservable(state, checkedInState, checkedOutState, this.#config);
   }
 
+  /**
+   * Provides a hint for the content type. In this basic mock, only folder type
+   * and document type are distinguished. Toggle behavior is only available for
+   * unreadable flag.
+   *
+   * @param uriPath URI path to create mock type for
+   */
   observe_type(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
     const folderState: DisplayHint = {
@@ -360,6 +397,33 @@ const identifierToState = (identifier: number) => {
   }
 };
 
+/**
+ * Parses the "configuration" as provided by ID. For details, see documentation
+ * of {@link MockContentDisplayService}.
+ *
+ * In general, the (especially) trailing numbers trigger a specific behavior.
+ *
+ * Examples:
+ *
+ * ```
+ * content/90000 - first name, readable, checked-out and a document
+ * content/91000 - second name, readable, checked-out and a document
+ * content/92000 - toggling name, readable, checked-out and a document
+ *
+ * content/90100 - first name, unreadable, checked-out and a document
+ * content/90010 - first name, unreadable, checked-in and a document
+ * ```
+ *
+ * There is also an evil mode, triggered by a prefix `666` in the numeric ID.
+ * This is especially dedicated to cross-site-scripting attacks. Thus,
+ * `content/666000` will provide some name containing HTML which is trying to
+ * escape "the box" and do harm to the editors.
+ *
+ * For any unmatched uriPath, a default behavior is assumed. Thus, you any
+ * numeric ID will trigger some state.
+ *
+ * @param uriPath URI path which by magic contains some configuration
+ */
 const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   const configPattern = /^content\/(?<prefix>\d+)(?<namechange>[0-2])(?<unreadable>[0-2])(?<checkedin>[0-2])(?<isfolder>[0-9])$/;
   const match = configPattern.exec(uriPath);
