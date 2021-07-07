@@ -4,8 +4,8 @@ import { Observable, Subscriber, TeardownLogic } from "rxjs";
 //@ts-ignore
 import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 // TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
-//@ts-ignore
 import ContentDisplayServiceDescriptor
+//@ts-ignore
   from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 
 /**
@@ -431,13 +431,16 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   if (!match) {
     const uriPathPattern = /^content\/(?<id>\d+)$/;
     const uriPathMatch = uriPathPattern.exec(uriPath);
+    if (!uriPathMatch) {
+      throw new Error("Invalid URI path.");
+    }
     const numericIdPart = uriPathMatch[1];
     const numericId = parseInt(numericIdPart);
     const isFolder = uriPathMatch && numericId % 2 === 1;
     // (Nearly) all defaults
     return {
       evil: numericIdPart.startsWith("666"),
-      isFolder: !!isFolder,
+      isFolder: isFolder,
     };
   }
   return {
@@ -455,7 +458,7 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
 const createContentUriPath = ({ name, evil, unreadable, checkedIn, isFolder }: CreateContentConfig): UriPath => {
   function randomPrefix(): number {
     const base = evil ? 66600 : 0;
-    return evil + Math.floor(Math.random() * 99);
+    return base + Math.floor(Math.random() * 99);
   }
 
   return `content/${randomPrefix()}${stateToIdentifier(name)}${stateToIdentifier(unreadable)}${stateToIdentifier(
@@ -470,5 +473,5 @@ export {
   CONTENT_NAME_FALSY,
   EVIL_CONTENT_NAME_TRUTHY,
   EVIL_CONTENT_NAME_FALSY,
-  createContentUriPath
+  createContentUriPath,
 };
