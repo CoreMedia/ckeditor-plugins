@@ -38,6 +38,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext': ^28.0.0
       '@coremedia/ckeditor5-link': ^28.0.0
       '@coremedia/ckeditor5-symbol-on-paste-mapper': ^28.0.0
+      '@coremedia/coremedia-studio-integration-mock': ^28.0.2
       circular-dependency-plugin: ^5.2.2
       css-loader: ^5.0.1
       postcss: ^8.2.4
@@ -75,6 +76,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-link': link:../packages/ckeditor5-link
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
+      '@coremedia/coremedia-studio-integration-mock': link:../packages/coremedia-studio-integration-mock
       xml-formatter: 2.4.0
     devDependencies:
       '@ckeditor/ckeditor5-dev-utils': 24.4.2_webpack@5.42.0
