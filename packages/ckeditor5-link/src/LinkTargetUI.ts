@@ -6,7 +6,6 @@ import LinkFormViewExtension from "./ui/LinkFormViewExtension";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import View from "@ckeditor/ckeditor5-ui/src/view";
 import {
   addClassToTemplate,
   LINK_BEHAVIOR,
@@ -17,7 +16,6 @@ import {
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -62,8 +60,8 @@ export default class LinkTargetUI extends Plugin {
     const linkCommand = editor.commands.get("link");
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
-    const extension = new LinkFormViewExtension(formView, linkCommand);
-    this._customizeUrlInputView(formView, extension.internalLinkView);
+    const extension = new LinkFormViewExtension(formView);
+    this._customizeUrlInputView(formView);
     extension.targetInputView
       .bind("hiddenTarget")
       .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).target);
@@ -132,18 +130,10 @@ export default class LinkTargetUI extends Plugin {
       extension.targetInputView.hiddenTarget = target || "";
     });
 
-    this.listenTo(linkUI, "_addFormView", () => {
-      const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-
-      extension.internalLinkView.fieldView.set({
-        value: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
-      });
-    });
-
     return extension;
   }
 
-  private _customizeUrlInputView(linkFormView: LinkFormView, internalLinkView: View): void {
+  private _customizeUrlInputView(linkFormView: LinkFormView): void {
     linkFormView.urlInputView.set({
       label: "Url",
       class: ["ck-cm-external-link-field"],
