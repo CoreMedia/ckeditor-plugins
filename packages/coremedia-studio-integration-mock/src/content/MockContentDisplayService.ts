@@ -1,9 +1,11 @@
-import ContentDisplayService, {
-  DisplayHint,
-} from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
-import { Observable, Subscriber, TeardownLogic } from "rxjs";
+import ContentDisplayService from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
+import { combineLatest, Observable, OperatorFunction, Subscriber, TeardownLogic } from "rxjs";
+import { map } from "rxjs/operators";
 import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor
+  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
+import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
@@ -228,6 +230,59 @@ class MockContentDisplayService implements ContentDisplayService {
   }
 
   /**
+   * Provides a one-time name, depending on the configuration in URI path.
+   * For unreadable contents the promise is rejected.
+   */
+  name(uriPath: UriPath): Promise<string> {
+    const config = parseContentConfig(uriPath);
+    const unreadable = !!config.unreadable;
+    const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
+    const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+
+    if (unreadable) {
+      return Promise.reject(`Content ${uriPath} is unreadable.`);
+    }
+    return Promise.resolve(!config.name ? falsyName : truthyName);
+  }
+
+  /**
+   * Combines the observables for name, type and state into one.
+   * @param uriPath
+   */
+  observe_asLink(uriPath: UriPath): Observable<ContentAsLink> {
+    const nameSubscription = this.observe_name(uriPath);
+    const typeSubscription = this.observe_type(uriPath);
+    const stateSubscription = this.observe_state(uriPath);
+    const toContentAsLink: OperatorFunction<readonly [DisplayHint, DisplayHint, DisplayHint], ContentAsLink> =
+      map<readonly [DisplayHint, DisplayHint, DisplayHint], ContentAsLink>(([n, t, s]: readonly [DisplayHint, DisplayHint, DisplayHint]): ContentAsLink => {
+        const content = {
+          content: {
+            name: n.name,
+            classes: n.classes,
+          },
+        };
+        const type = {
+          type: {
+            name: t.name,
+            classes: t.classes,
+          },
+        };
+        const state = {
+          state: {
+            name: s.name,
+            classes: s.classes,
+          },
+        };
+        return {
+          ...content,
+          ...type,
+          ...state,
+        };
+      });
+    return combineLatest([nameSubscription, typeSubscription, stateSubscription]).pipe(toContentAsLink);
+  }
+
+  /**
    * Provides a name which is either static (one of two) or changing over time
    * (between two names). For unreadable contents, an unreadable placeholder
    * is returned. For unreadable-toggle behavior, it toggled between unreadable
@@ -247,11 +302,11 @@ class MockContentDisplayService implements ContentDisplayService {
     const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
 
     const truthyState: DisplayHint = {
-      name: `${CONTENT_NAME_TRUTHY} ${typeName} #${id}`,
+      name: `${truthyName} ${typeName} #${id}`,
       classes: ["content--1"],
     };
     const falsyState: DisplayHint = {
-      name: `${CONTENT_NAME_FALSY} ${typeName} #${id}`,
+      name: `${falsyName} ${typeName} #${id}`,
       classes: ["content--0"],
     };
 
@@ -330,7 +385,7 @@ class MockContentDisplayService implements ContentDisplayService {
     };
     if (!!config.unreadable) {
       const falsyState = !!config.isFolder ? folderState : documentState;
-      return createObservable(config.isFolder, unreadableState, falsyState, this.#config);
+      return createObservable(config.unreadable, unreadableState, falsyState, this.#config);
     }
     return createObservable(config.isFolder, folderState, documentState, this.#config);
   }
@@ -433,7 +488,7 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
     const isFolder = uriPathMatch && numericId % 2 === 1;
     // (Nearly) all defaults
     return {
-      evil: numericIdPart.startsWith("666"),
+      evil: numericIdPart.startsWith(EVIL_CONTENT_ID_PREFIX),
       isFolder: isFolder,
     };
   }

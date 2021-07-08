@@ -1,23 +1,36 @@
-import ContentDisplayService, { DisplayHint } from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
+import ContentDisplayService from "@coremedia/coremedia-studio-integration/src/content/ContentDisplayService";
 import MockContentDisplayService, {
   CONTENT_NAME_FALSY,
   CONTENT_NAME_TRUTHY,
+  CONTENT_NAME_UNREADABLE,
   EVIL_CONTENT_NAME_FALSY,
-  EVIL_CONTENT_NAME_TRUTHY,
-  CONTENT_NAME_UNREADABLE
+  EVIL_CONTENT_NAME_TRUTHY
 } from "../../src/content/MockContentDisplayService";
-import { UriPath } from "@coremedia/coremedia-studio-integration/dist/content/UriPath";
+import { UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import { Observable } from "rxjs";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 // TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
 //@ts-ignore
 import ContentDisplayServiceDescriptor
   from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
+import ContentAsLink from "@coremedia/coremedia-studio-integration/dist/content/ContentAsLink";
 
 const MOCK_SERVICE_TEST_CONFIG = {
   maxFirstDelayMs: 0,
   changeDelayMs: 0
 };
+
+const CHECKED_OUT = "Checked Out";
+const CHECKED_OUT_ICON = "icon--checked-out";
+const CHECKED_IN = "Checked In";
+const CHECKED_IN_ICON = "icon--checked-in";
+const FOLDER_TYPE = "Folder";
+const FOLDER_ICON = "icon--folder";
+const DOCUMENT_TYPE = "Document";
+const DOCUMENT_ICON = "icon--document";
+const UNREADABLE_TYPE = "Unreadable";
+const UNREADABLE_ICON = "icon--lock";
 
 /**
  * Test modes especially meant for debugging or known issues.
@@ -56,6 +69,19 @@ interface UriPath2DisplayHint {
   expected: DisplayHint | DisplayHint[];
 }
 
+interface UriPath2ContentAsLink {
+  /**
+   * The URI path which _contains_ the configuration as part of its magic
+   * numeric ID. This will be the input to the service.
+   */
+  uriPath: string;
+  /**
+   * Expected states to take before _complete_ is triggered (in case of the
+   * immediate mode with all-zero timeouts/intervals).
+   */
+  expected: ContentAsLink | ContentAsLink[];
+}
+
 /**
  * Supports modal test execution for debugging or known issues. Provides
  * the actual test function to use.
@@ -82,41 +108,211 @@ describe("Unit Tests: MockContentDisplayService", () => {
     });
   });
 
-  type TestData = UriPath2DisplayHint & TestMode & Named;
+  type DisplayHintTestData = UriPath2DisplayHint & TestMode & Named;
+  type ContentAsLinkTestData = UriPath2ContentAsLink & TestMode & Named;
+
   /**
    * Immediate service, i.e. without timeouts.
    */
   const service: ContentDisplayService = new MockContentDisplayService(MOCK_SERVICE_TEST_CONFIG);
 
-  const testEachDisplayHint = (serviceFn: (uriPath: UriPath) => Observable<DisplayHint>, testCases: TestData[]): void => {
-    describe.each<TestData>(testCases)('[$#] $name - Input: $uriPath',
-      ({ name, uriPath, expected, ...config }: TestData) => {
+  const testEachDisplayHint = (serviceFn: (uriPath: UriPath) => Observable<DisplayHint>, testCases: DisplayHintTestData[]): void => {
+    describe.each<DisplayHintTestData>(testCases)('[$#] $name - Input: $uriPath',
+      ({ name, uriPath, expected, ...config }: DisplayHintTestData) => {
         const testFn = modalTest(config);
         const expectedHints: DisplayHint[] = (<DisplayHint[]>[]).concat(expected);
+        const recordedHints: DisplayHint[] = [];
 
         testFn(`Async Test for: ${name}`, (done) => {
+          expect.assertions(1 + 3 * expectedHints.length);
           serviceFn.call(service, uriPath).subscribe({
-            next: ({ name, classes }: DisplayHint) => {
-              // We should still have some states defined. Otherwise, we got more
-              // states than we expected.
-              expect(expectedHints.length).toBeGreaterThan(0);
-
-              const current = expectedHints.shift();
-
-              expect(name).toBe(current?.name);
-              expect(classes?.sort()).toEqual(current?.classes?.sort() || []);
-            },
+            next: (received: DisplayHint) => recordedHints.push(received),
             error: (error: unknown) => {
-              throw error;
+              done(error);
             },
-            complete: () => done(),
+            complete: () => {
+              expect(recordedHints).toHaveLength(expectedHints.length);
+              recordedHints.forEach(({ name, classes }: DisplayHint) => {
+                // We should still have some states defined. Otherwise, we got more
+                // states than we expected.
+                expect(expectedHints.length).toBeGreaterThan(0);
+
+                const current = expectedHints.shift();
+
+                expect(name).toBe(current?.name);
+                expect(classes?.sort()).toEqual(current?.classes?.sort() || []);
+              });
+              done();
+            },
           });
         });
       });
   };
 
+  const testEachContentAsLink = (serviceFn: (uriPath: UriPath) => Observable<ContentAsLink>, testCases: ContentAsLinkTestData[]): void => {
+    describe.each<ContentAsLinkTestData>(testCases)('[$#] $name - Input: $uriPath',
+      ({ name, uriPath, expected, ...config }: ContentAsLinkTestData) => {
+        const testFn = modalTest(config);
+        const expectedHints: ContentAsLink[] = (<ContentAsLink[]>[]).concat(expected);
+        const recordedHints: ContentAsLink[] = [];
+
+        testFn(`Async Test for: ${name}`, (done) => {
+          expect.assertions(1 + 7 * expectedHints.length);
+          serviceFn.call(service, uriPath).subscribe({
+            next: (received: ContentAsLink) => recordedHints.push(received),
+            error: (error: unknown) => {
+              done(error);
+            },
+            complete: () => {
+              expect(recordedHints).toHaveLength(expectedHints.length);
+              recordedHints.forEach(({ content, type, state }: ContentAsLink) => {
+                // We should still have some states defined. Otherwise, we got more
+                // states than we expected.
+                expect(expectedHints.length).toBeGreaterThan(0);
+
+                const current = expectedHints.shift();
+
+                expect(content.name).toBe(current?.content.name);
+                expect(type.name).toBe(current?.type.name);
+                expect(state.name).toBe(current?.state.name);
+                expect(content.classes?.sort()).toEqual(current?.content.classes?.sort() || []);
+                expect(type.classes?.sort()).toEqual(current?.type.classes?.sort() || []);
+                expect(state.classes?.sort()).toEqual(current?.state.classes?.sort() || []);
+              });
+              done();
+            },
+          });
+        });
+      });
+  };
+
+  describe("name", () => {
+
+    test.each`
+    uriPath              | expected
+    ${"content/80000"}   | ${CONTENT_NAME_FALSY}
+    ${"content/81000"}   | ${CONTENT_NAME_TRUTHY}
+    ${"content/82000"}   | ${CONTENT_NAME_TRUTHY}
+    ${"content/6660000"} | ${EVIL_CONTENT_NAME_FALSY}
+    ${"content/6661000"} | ${EVIL_CONTENT_NAME_TRUTHY}
+    ${"content/6662000"} | ${EVIL_CONTENT_NAME_TRUTHY}
+    `("[$#] URI path $uriPath should resolve to name: $expected", ({ uriPath, expected }) => {
+      expect.assertions(1);
+      expect(service.name(uriPath)).resolves.toBe(expected);
+    });
+
+    test.each`
+    uriPath
+    ${"content/80100"}
+    ${"content/81200"}
+    ${"content/6660100"}
+    ${"content/6661200"}
+    `("[$#] URI path $uriPath should reject promise, as it is unreadable", ({ uriPath }) => {
+      expect.assertions(1);
+      expect(service.name(uriPath)).rejects.toContain(uriPath);
+    });
+
+  });
+
+  describe("observe_asLink", () => {
+    const falsyContentStatic = {
+      classes: ["content--0"],
+    };
+    const truthyContentStatic = {
+      classes: ["content--1"],
+    };
+    const falsyType = {
+      type: {
+        name: DOCUMENT_TYPE,
+        classes: [DOCUMENT_ICON],
+      },
+    };
+    const truthyType = {
+      type: {
+        name: FOLDER_TYPE,
+        classes: [FOLDER_ICON],
+      },
+    };
+    const falsyState = {
+      state: {
+        name: CHECKED_OUT,
+        classes: [CHECKED_OUT_ICON],
+      },
+    };
+    /*
+     * Pitfall: For toggle mode, ensure that you toggle only one state, as you
+     * may get unpredictable results, otherwise.
+     *
+     * The tests in here are not as "deep" as for the internal observables. It
+     * is just meant to ensure, that the combination (which is actually part
+     * of RxJS) works as expected.
+     */
+    const testCases: ContentAsLinkTestData[] = [
+      {
+        name: "Should provide first name with all others as default.",
+        uriPath: `content/444${0 /* first name */}${0 /* readable */}${0 /* checked out */}${2 /* document */}`,
+        expected: {
+          content: {
+            name: `${CONTENT_NAME_FALSY} Document #4440002`,
+            ...falsyContentStatic,
+          },
+          ...falsyType,
+          ...falsyState,
+        }
+      },
+      {
+        /* TODO[cke] Does not work yet. As it seems, we get a result when first observable returns already, instead of waiting until all provided their results. */
+        skip: true,
+        name: "Should provide second name with all others as default, despite that it should be a folder now.",
+        uriPath: `content/444${1 /* first name */}${0 /* readable */}${0 /* checked out */}${1 /* folder */}`,
+        expected: {
+          content: {
+            name: `${CONTENT_NAME_TRUTHY} Document #4441001`,
+            ...truthyContentStatic,
+          },
+          ...truthyType,
+          ...falsyState,
+        }
+      },
+      {
+        /* TODO[cke] Does not work yet. Only provides one result, most likely, when the first observable completes. */
+        skip: true,
+        name: "Should toggle name with all others as default.",
+        uriPath: `content/444${2 /* first name */}${0 /* readable */}${0 /* checked out */}${2 /* document */}`,
+        expected: [
+          {
+            content: {
+              name: `${CONTENT_NAME_FALSY} Document #4442002`,
+              ...falsyContentStatic,
+            },
+            ...falsyType,
+            ...falsyState,
+          },
+          {
+            content: {
+              name: `${CONTENT_NAME_TRUTHY} Document #4442002`,
+              ...truthyContentStatic,
+            },
+            ...falsyType,
+            ...falsyState,
+          },
+          {
+            content: {
+              name: `${CONTENT_NAME_FALSY} Document #4442002`,
+              ...falsyContentStatic,
+            },
+            ...falsyType,
+            ...falsyState,
+          },
+        ]
+      },
+    ];
+
+    testEachContentAsLink(MockContentDisplayService.prototype.observe_asLink, testCases);
+  });
+
   describe("observe_name", () => {
-    const nameCases: TestData[] = [
+    const nameCases: DisplayHintTestData[] = [
       {
         name: "Should provide first name.",
         uriPath: `content/555${0 /* first name */}002`,
@@ -153,7 +349,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
     ];
 
-    const evilCases: TestData[] = [
+    const evilCases: DisplayHintTestData[] = [
       {
         name: "Should provide first name.",
         uriPath: `content/666${0 /* first name */}002`,
@@ -194,7 +390,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
      * Test cases for URI paths, which don't match the "magic pattern" to trigger
      * some configured state or state-change.
      */
-    const unmatchedCases: TestData[] = [
+    const unmatchedCases: DisplayHintTestData[] = [
       {
         name: "Should use falsy defaults, but detect that this is a document.",
         uriPath: "content/0",
@@ -213,44 +409,44 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
     ];
 
-    const unreadableCases: TestData[] = [
+    const unreadableCases: DisplayHintTestData[] = [
       {
         name: "Should provide a readable name.",
-        uriPath: `content/6660${0 /* readable */}02`,
+        uriPath: `content/7770${0 /* readable */}02`,
         expected: {
-          name: `${CONTENT_NAME_FALSY} Document #6660002`,
+          name: `${CONTENT_NAME_FALSY} Document #7770002`,
           classes: ["content--0"],
         }
       },
       {
         name: "Should provide an unreadable name.",
-        uriPath: `content/6660${1 /* unreadable */}02`,
+        uriPath: `content/7770${1 /* unreadable */}02`,
         expected: {
-          name: `${CONTENT_NAME_UNREADABLE} Document #6660102`,
+          name: `${CONTENT_NAME_UNREADABLE} Document #7770102`,
           classes: [],
         }
       },
       {
         name: "Should provide a sequence of readable/unreadable changes.",
-        uriPath: `content/6660${2 /* changing state */}02`,
+        uriPath: `content/7770${2 /* changing state */}02`,
         expected: [
           {
-            name: `${CONTENT_NAME_FALSY} Document #6660202`,
+            name: `${CONTENT_NAME_FALSY} Document #7770202`,
             classes: ["content--0"],
           },
           {
-            name: `${CONTENT_NAME_UNREADABLE} Document #6660202`,
+            name: `${CONTENT_NAME_UNREADABLE} Document #7770202`,
             classes: [],
           },
           {
-            name: `${CONTENT_NAME_FALSY} Document #6660202`,
+            name: `${CONTENT_NAME_FALSY} Document #7770202`,
             classes: ["content--0"],
           },
         ],
       },
     ];
 
-    const testCases: TestData[] = [
+    const testCases: DisplayHintTestData[] = [
       ...nameCases,
       ...evilCases,
       ...unmatchedCases,
@@ -262,12 +458,12 @@ describe("Unit Tests: MockContentDisplayService", () => {
 
   describe("observe_state", () => {
     const expectedCheckedOutState: DisplayHint = {
-      name: `Checked Out`,
-      classes: ["icon--checked-out"],
+      name: CHECKED_OUT,
+      classes: [CHECKED_OUT_ICON],
     };
     const expectedCheckedInState: DisplayHint = {
-      name: `Checked In`,
-      classes: ["icon--checked-in"],
+      name: CHECKED_IN,
+      classes: [CHECKED_IN_ICON],
     };
     const expectedUnreadableState: DisplayHint = {
       name: "",
@@ -277,7 +473,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     /**
      * Tests for display content state.
      */
-    const contentStateCases: TestData[] = [
+    const contentStateCases: DisplayHintTestData[] = [
       {
         name: "Should signal checked-out state.",
         uriPath: `content/77700${0 /* checked out */}2`,
@@ -299,7 +495,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
     ];
 
-    const cornerCases: TestData[] = [
+    const cornerCases: DisplayHintTestData[] = [
       {
         name: "Should never signal checked-out state for folders.",
         uriPath: `content/77700${0 /* checked out */}1`,
@@ -311,7 +507,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
      * Test cases for URI paths, which don't match the "magic pattern" to trigger
      * some configured state or state-change.
      */
-    const unmatchedCases: TestData[] = [
+    const unmatchedCases: DisplayHintTestData[] = [
       {
         name: "Should use falsy defaults, i.e. should be checked out by default for documents.",
         uriPath: "content/0",
@@ -324,7 +520,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
     ];
 
-    const unreadableCases: TestData[] = [
+    const unreadableCases: DisplayHintTestData[] = [
       {
         name: "Should provide readable checked-out state.",
         uriPath: `content/7770${0 /* readable */}${0 /* checked out */}2`,
@@ -332,7 +528,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
       {
         name: "Should provide readable checked-in state.",
-        uriPath: `content/7770${0 /* readable */}${0 /* checked in */}2`,
+        uriPath: `content/7770${0 /* readable */}${1 /* checked in */}2`,
         expected: expectedCheckedInState,
       },
       {
@@ -342,7 +538,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
       {
         name: "Should provide unreadable checked-in state.",
-        uriPath: `content/7770${1 /* unreadable */}${0 /* checked in */}2`,
+        uriPath: `content/7770${1 /* unreadable */}${1 /* checked in */}2`,
         expected: expectedUnreadableState,
       },
       {
@@ -365,7 +561,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
     ];
 
-    const testCases: TestData[] = [
+    const testCases: DisplayHintTestData[] = [
       ...contentStateCases,
       ...cornerCases,
       ...unmatchedCases,
@@ -377,20 +573,20 @@ describe("Unit Tests: MockContentDisplayService", () => {
 
   describe("observe_type", () => {
     const expectedFolderState: DisplayHint = {
-      name: `Folder`,
-      classes: ["icon--folder"],
+      name: FOLDER_TYPE,
+      classes: [FOLDER_ICON],
     };
     const expectedDocumentState: DisplayHint = {
-      name: `Document`,
-      classes: ["icon--document"],
+      name: DOCUMENT_TYPE,
+      classes: [DOCUMENT_ICON],
     };
     const expectedUnreadableState: DisplayHint = {
-      name: "Unreadable",
-      classes: ["icon--lock"],
+      name: UNREADABLE_TYPE,
+      classes: [UNREADABLE_ICON],
     };
 
     const numbers = [...Array(10).keys()];
-    const typeTestCases: TestData[] = numbers.map((no) => {
+    const typeTestCases: DisplayHintTestData[] = numbers.map((no) => {
       if (no % 2 === 0) {
         return {
           name: "Should signal document type.",
@@ -406,7 +602,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       }
     });
 
-    const unreadableCases: TestData[] = [
+    const unreadableCases: DisplayHintTestData[] = [
       {
         name: "Should provide unreadable type hint for document.",
         uriPath: `content/8880${1 /* unreadable */}0${0 /* document */}`,
@@ -437,7 +633,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
       },
     ];
 
-    const testCases: TestData[] = [
+    const testCases: DisplayHintTestData[] = [
       ...typeTestCases,
       ...unreadableCases,
     ];
