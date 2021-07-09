@@ -135,12 +135,26 @@ const initToggle = (
   const maxState = states.length;
   const delayMs: number = changeDelayMs === undefined ? CHANGE_DELAY_MS : changeDelayMs;
 
-  if (delayMs < 1) {
-    states.forEach((s) => subscriber.next(s));
-    subscriber.complete();
-  }
-
   let currentState = 0;
+
+  if (delayMs < 1) {
+    /*
+     * Still using some timeout, as combined observables can hardly be tested
+     * otherwise. Nevertheless, we stop after we have replayed all states.
+     *
+     * A better approach would be: Send next value only, if first one got
+     * received by "outer" subscriber of a combined observable. The approach
+     * here may cause flaky tests, and thus, should be handled with care.
+     */
+    const fixedIterations = setInterval(() => {
+      if (currentState >= maxState) {
+        clearInterval(fixedIterations);
+        subscriber.complete();
+      }
+      subscriber.next(states[currentState]);
+      currentState++;
+    }, 1);
+  }
 
   const timerId = setInterval(() => {
     subscriber.next(states[currentState]);
@@ -253,8 +267,11 @@ class MockContentDisplayService implements ContentDisplayService {
     const nameSubscription = this.observe_name(uriPath);
     const typeSubscription = this.observe_type(uriPath);
     const stateSubscription = this.observe_state(uriPath);
-    const toContentAsLink: OperatorFunction<readonly [DisplayHint, DisplayHint, DisplayHint], ContentAsLink> =
-      map<readonly [DisplayHint, DisplayHint, DisplayHint], ContentAsLink>(([n, t, s]: readonly [DisplayHint, DisplayHint, DisplayHint]): ContentAsLink => {
+
+    type Hints = readonly [DisplayHint, DisplayHint, DisplayHint];
+
+    const toContentAsLink: OperatorFunction<Hints, ContentAsLink> = map<Hints, ContentAsLink>(
+      ([n, t, s]: Hints): ContentAsLink => {
         const content = {
           content: {
             name: n.name,
@@ -278,7 +295,9 @@ class MockContentDisplayService implements ContentDisplayService {
           ...type,
           ...state,
         };
-      });
+      }
+    );
+
     return combineLatest([nameSubscription, typeSubscription, stateSubscription]).pipe(toContentAsLink);
   }
 

@@ -6,15 +6,13 @@ import MockContentDisplayService, {
   EVIL_CONTENT_NAME_FALSY,
   EVIL_CONTENT_NAME_TRUTHY
 } from "../../src/content/MockContentDisplayService";
-import { UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import UriPath from "@coremedia/coremedia-studio-integration/content/UriPath";
 import { Observable } from "rxjs";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-// TODO[cke] Import does not work in IntelliJ Idea (it requires src/ in path).
-//@ts-ignore
 import ContentDisplayServiceDescriptor
   from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
-import ContentAsLink from "@coremedia/coremedia-studio-integration/dist/content/ContentAsLink";
+import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
 
 const MOCK_SERVICE_TEST_CONFIG = {
   maxFirstDelayMs: 0,
@@ -239,6 +237,12 @@ describe("Unit Tests: MockContentDisplayService", () => {
         classes: [CHECKED_OUT_ICON],
       },
     };
+    const truthyState = {
+      state: {
+        name: CHECKED_IN,
+        classes: [CHECKED_IN_ICON],
+      },
+    };
     /*
      * Pitfall: For toggle mode, ensure that you toggle only one state, as you
      * may get unpredictable results, otherwise.
@@ -261,22 +265,18 @@ describe("Unit Tests: MockContentDisplayService", () => {
         }
       },
       {
-        /* TODO[cke] Does not work yet. As it seems, we get a result when first observable returns already, instead of waiting until all provided their results. */
-        skip: true,
         name: "Should provide second name with all others as default, despite that it should be a folder now.",
-        uriPath: `content/444${1 /* first name */}${0 /* readable */}${0 /* checked out */}${1 /* folder */}`,
+        uriPath: `content/444${1 /* first name */}${0 /* readable */}${0 /* checked out, ignored for folder */}${1 /* folder */}`,
         expected: {
           content: {
-            name: `${CONTENT_NAME_TRUTHY} Document #4441001`,
+            name: `${CONTENT_NAME_TRUTHY} Folder #4441001`,
             ...truthyContentStatic,
           },
           ...truthyType,
-          ...falsyState,
+          ...truthyState,
         }
       },
       {
-        /* TODO[cke] Does not work yet. Only provides one result, most likely, when the first observable completes. */
-        skip: true,
         name: "Should toggle name with all others as default.",
         uriPath: `content/444${2 /* first name */}${0 /* readable */}${0 /* checked out */}${2 /* document */}`,
         expected: [
