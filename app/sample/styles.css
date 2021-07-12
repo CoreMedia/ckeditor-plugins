@@ -33,6 +33,10 @@
   display: none;
 }
 
+#drag-examples.hidden {
+  display: none;
+}
+
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
 .editor__editable,
