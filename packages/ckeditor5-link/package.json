@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
-    "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme && copyfiles -u 3 src/contentlink/theme/* src/contentlink/theme/**/* dist/contentlink/theme",
+    "postbuild": "copyfiles -u 3 src/linktarget/theme/* src/linktarget/theme/**/* dist/linktarget/theme && copyfiles -u 3 src/contentlink/theme/* src/contentlink/theme/**/* dist/contentlink/theme",
     "clean": "rimraf ./dist",
     "publish": "jangaroo publish ./dist",
     "jest": "jest --passWithNoTests",

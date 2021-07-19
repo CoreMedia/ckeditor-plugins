@@ -15,7 +15,7 @@ import Model from "@ckeditor/ckeditor5-ui/src/model";
 //@ts-ignore
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
-import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../utils";
+import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../../utils";
 //@ts-ignore
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 

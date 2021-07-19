@@ -12,7 +12,7 @@ import {
   linkTargetToUiValues,
   removeClassFromTemplate,
   uiValuesToLinkTarget,
-} from "./utils";
+} from "../utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";

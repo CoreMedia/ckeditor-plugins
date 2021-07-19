@@ -1,9 +1,9 @@
-export * from "./Constants";
-export * from "./LinkTarget";
+export * from "./linktarget/Constants";
+export * from "./linktarget/LinkTarget";
 export * from "./contentlink/ContentLinks";
-export { default as LinkTarget } from "./LinkTarget";
+export { default as LinkTarget } from "./linktarget/LinkTarget";
 export { default as ContentLinks } from "contentlink/ContentLinks";
-export * from "./LinkTargetModelView";
-export { default as LinkTargetModelView } from "./LinkTargetModelView";
-export * from "./LinkTargetUI";
-export { default as LinkTargetUI } from "./LinkTargetUI";
+export * from "./linktarget/LinkTargetModelView";
+export { default as LinkTargetModelView } from "./linktarget/LinkTargetModelView";
+export * from "./linktarget/LinkTargetUI";
+export { default as LinkTargetUI } from "./linktarget/LinkTargetUI";

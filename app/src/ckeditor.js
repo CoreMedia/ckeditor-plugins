@@ -26,7 +26,7 @@ import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-m
 import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
 import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
 import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
-import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
+import LinkTarget from "@coremedia/ckeditor5-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
 
 import {setupPreview, updatePreview} from './preview'
