@@ -2,7 +2,7 @@ import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfie
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import ContentView from "./ContentView";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
-import "../../theme/internallinkview.css";
+import "../theme/internallinkview.css";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
