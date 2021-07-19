@@ -27,6 +27,7 @@ import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMedia
 import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
 import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
 import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
+import ContentLinks from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
@@ -65,6 +66,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     AutoLink,
     Link,
     LinkTarget,
+    ContentLinks,
     List,
     Paragraph,
     PasteFromOffice,
