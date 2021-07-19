@@ -28,6 +28,7 @@
     "@coremedia/ckeditor5-link": "^28.0.0",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "^28.0.0",
     "@coremedia/coremedia-studio-integration-mock": "^28.0.2",
+    "@coremedia/studio-apps-service-agent": "^0.0.28",
     "xml-formatter": "^2.4.0"
   },
   "devDependencies": {

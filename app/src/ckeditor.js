@@ -31,8 +31,6 @@ import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
 import {initDDExamples} from "./dragExamples";
-import MockContentDisplayService
-  from "../../packages/coremedia-studio-integration-mock/dist/content/MockContentDisplayService";
 import MockStudioIntegration from "../../packages/coremedia-studio-integration-mock/dist/MockStudioIntegration";
 
 const queryString = window.location.search;
@@ -42,7 +40,7 @@ const wantsInspector = urlParams.has(inspectorFlag) ? 'false' !== urlParams.get(
 const inspectorToggle = document.getElementById(inspectorFlag);
 
 setupPreview();
-initDDExamples();
+initDDExamples(MockStudioIntegration.getServiceAgent());
 
 if (wantsInspector) {
   inspectorToggle.setAttribute('href', '?inspector=false');

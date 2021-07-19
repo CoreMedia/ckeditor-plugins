@@ -1,38 +1,38 @@
-const getShowDragDropExamplesButton = () => {
-  return document.getElementById("dragExamplesButton");
-}
-
-const getDragDropExamplesContainer = () => {
-  return document.getElementById("drag-examples");
-}
+let newWin = null;
+let serviceAgent = null;
 
 const renderDragExamplesButton = () => {
   const dragDropExamples = document.querySelector("#dragExamplesButton");
   dragDropExamples.addEventListener("click", () => {
-    const dragDropExamplesContainer = getDragDropExamplesContainer();
-    dragDropExamplesContainer.hidden = !dragDropExamplesContainer.hidden;
-    if (dragDropExamplesContainer.hidden) {
-      // remove preview-mode
-      dragDropExamples.textContent = "Show drag & drop examples";
-      dragDropExamplesContainer.classList.add("hidden");
+    newWin = window.open("about:blank", "drag-examples", "width=400,height=200");
+    newWin.document.writeln("<div id='drag-examples'>");
+    newWin.document.writeln(" <div class='drag-example' data-cmuripath='content/12345' draggable='true'>Valid Content id: content/12345</div>");
+    newWin.document.writeln("</div>");
 
-    } else {
-      // set preview-mode
-      dragDropExamples.textContent = "Hide drag & drop examples";
-      dragDropExamplesContainer.classList.remove("hidden");
+    let dragExamples = newWin.document.getElementsByClassName("drag-example");
+    for (const dragExample of dragExamples) {
+      dragExample.addEventListener('dragstart', setDragData);
     }
   });
 }
 
-renderDragExamplesButton();
-
-const fetchDragExamples = () => {
-
+/**
+ * Set the drag data stored in the attribute data-cmuripath to the dragEvent.dataTransfer and to the dragDropService in studio.
+ *
+ * @param dragEvent
+ */
+function setDragData(dragEvent) {
+  let contentId = dragEvent.target.getAttribute("data-cmuripath");
+  serviceAgent.fetchService('dragDropService').then((dragDropService) => {
+    dragDropService.dragData = "{\"contents\": [{\"$Ref\": \""+contentId+"\"}]}";
+  });
+  dragEvent.dataTransfer.setData('cm/uri-list', "[{\"$Ref\": \""+contentId+"\"}]");
 }
 
-const initDDExamples = () => {
-  const dragExamples = fetchDragExamples();
-  //addDragDropListener(dragExamples);
+renderDragExamplesButton();
+
+const initDDExamples = (serviceAgentTry) => {
+  serviceAgent = serviceAgentTry;
 }
 
 export {initDDExamples};
