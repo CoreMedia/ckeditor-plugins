@@ -37,7 +37,7 @@
     },
   },
   "references": [{
-    "path": "../../coremedia-utils/src"
+    "path": ["../../coremedia-utils/src", "../../coremedia-studio-integration/src"]
   }],
   "extends": "../../../tsconfig.json",
 }

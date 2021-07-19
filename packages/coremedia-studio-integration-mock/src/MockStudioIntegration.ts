@@ -1,7 +1,10 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import MockContentDisplayService from "./content/MockContentDisplayService";
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import MockRichtextConfigurationService from "./content/MockRichtextConfigurationService";
+
+import { ServiceAgent, serviceAgent } from "@coremedia/studio-apps-service-agent";
 import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
+import MockDragDropService from "./content/MockDragDropService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -17,14 +20,24 @@ class MockStudioIntegration extends Plugin {
 
     this.#logger.info(`Initializing ${MockStudioIntegration.pluginName}...`);
 
-    const service = new MockContentDisplayService();
-    serviceAgent.registerService(service);
+    const contentDisplayService = new MockContentDisplayService();
+    serviceAgent.registerService(contentDisplayService);
+
+    const richtextConfigurationService = new MockRichtextConfigurationService();
+    serviceAgent.registerService(richtextConfigurationService);
+
+    const dragDropService = new MockDragDropService();
+    serviceAgent.registerService(dragDropService);
 
     this.#logger.info(
       `Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
 
     return null;
+  }
+
+  static getServiceAgent(): ServiceAgent {
+    return serviceAgent;
   }
 }
 

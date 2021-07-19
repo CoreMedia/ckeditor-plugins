@@ -18,7 +18,6 @@ import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../utils";
 //@ts-ignore
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import { extractContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 
 /**
  * Extends the LinkFormView of the CKEditor Link Plugin by additional form
@@ -32,13 +31,6 @@ export default class LinkFormViewExtension {
 
   constructor(linkFormView: LinkFormView) {
     this.linkFormView = linkFormView;
-    this.linkFormView.urlInputView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
-      if (contentCkeModelUri === null) {
-        return;
-      }
-      (dragEvent.target as HTMLInputElement).value = contentCkeModelUri;
-    });
     this.locale = linkFormView.locale;
     this.targetInputView = this._createTargetInput();
     this.linkBehaviorView = this._createLinkBehaviorField();

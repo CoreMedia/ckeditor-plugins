@@ -8,6 +8,13 @@ import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integr
 import createInternalLinkView from "./ui/InternalLinkView";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import ContentView from "./ui/ContentView";
+import {
+  extractContentCkeModelUri,
+  receiveUriPathFromDragData,
+} from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
+import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/content/RichtextConfigurationService";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -36,14 +43,68 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
+  private static _onDropOnInternalLinkField(
+    dragEvent: DragEvent,
+    internalLinksView: LabeledFieldView<ContentView>
+  ): void {
+    const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
+    if (contentCkeModelUri === null) {
+      return;
+    }
+    internalLinksView.fieldView.set("value", contentCkeModelUri);
+  }
+
+  private static _onDropOnExternalLinkField(dragEvent: DragEvent): void {
+    const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
+    if (contentCkeModelUri === null) {
+      return;
+    }
+    (dragEvent.target as HTMLInputElement).value = contentCkeModelUri;
+  }
+
+  private static _onDragOver(dragEvent: DragEvent): void {
+    dragEvent.preventDefault();
+    const contentUriPath: string | null = receiveUriPathFromDragData();
+    if (!dragEvent.dataTransfer) {
+      return;
+    }
+
+    if (!contentUriPath) {
+      dragEvent.dataTransfer.dropEffect = "none";
+      return;
+    }
+
+    const service = serviceAgent.getService<RichtextConfigurationService>("mockRichtextConfigurationService");
+    if (!service || !contentUriPath) {
+      return;
+    }
+
+    service.observe_hasLinkableType(contentUriPath).subscribe((isLinkable) => {
+      if (dragEvent.dataTransfer === null) {
+        return;
+      }
+      if (isLinkable) {
+        dragEvent.dataTransfer.dropEffect = "copy";
+        return;
+      }
+      dragEvent.dataTransfer.dropEffect = "none";
+    });
+  }
+
   private _extendFormView(linkUI: LinkUI): void {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
     const formView = linkUI.formView;
+    formView.urlInputView.on("change:value", (evt: EventInfo) => {
+      const newValue = evt.source.value;
+      if (!newValue) {
+        return;
+      }
+
+    });
     const internalLinkView = createInternalLinkView(this.editor.locale, formView, linkCommand);
 
     formView.once("render", () => this._render(internalLinkView, formView));
-
     /*
      * Workaround to reset the values of linkBehavior and target fields if modal
      * is canceled and reopened after changes have been made. See related issues:
@@ -65,11 +126,24 @@ export default class ContentLinks extends Plugin {
     });
   }
 
+  private addDragAndDropListeners(internalLinksView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    //internal link field
+    internalLinksView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinks._onDropOnInternalLinkField(dragEvent, internalLinksView);
+    });
+    internalLinksView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
+
+    //external link field
+    formView.urlInputView.fieldView.element.addEventListener("drop", ContentLinks._onDropOnExternalLinkField);
+    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
+  }
+
   private _render(internalLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
     formView.registerChild(internalLinkView);
     if (!internalLinkView.isRendered) {
       internalLinkView.render();
     }
     formView.element.insertBefore(internalLinkView.element, formView.urlInputView.element.nextSibling);
+    this.addDragAndDropListeners(internalLinkView, formView);
   }
 }
