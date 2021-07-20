@@ -1,6 +1,9 @@
 import type { ServiceObject } from "@coremedia/studio-apps-service-agent";
 
 /**
+ * TODO: interface is copied from Studio and means we have a circular dependency as ckeditor provides interfaces but also now studio provides interfaces for ckeditor. We have to take a decision how to resolve this.
+ *
+ *
  * Provides the {@link DragDropService.dragData} and {@link DragDropService.dragGroups} of the current
  * drag operation.
  *
