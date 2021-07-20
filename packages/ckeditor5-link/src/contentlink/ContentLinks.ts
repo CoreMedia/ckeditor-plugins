@@ -49,6 +49,7 @@ export default class ContentLinks extends Plugin {
     contentLinkView: LabeledFieldView<ContentView>
   ): void {
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
+    dragEvent.preventDefault();
     if (contentCkeModelUri !== null) {
       ContentLinks.setDataAndSwitchToContentLink(formView, contentLinkView, contentCkeModelUri);
       return;
