@@ -1,7 +1,7 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
-import LinkTargetCommand from "../src/LinkTargetCommand";
+import LinkTargetCommand from "../src/linktarget/LinkTargetCommand";
 import DataApiMixin from "@ckeditor/ckeditor5-core/src/editor/utils/dataapimixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 
