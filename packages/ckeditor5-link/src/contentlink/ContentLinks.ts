@@ -120,7 +120,7 @@ export default class ContentLinks extends Plugin {
     const formView = linkUI.formView;
     const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
 
-    formView.once("render", () => this._render(contentLinkView, formView));
+    formView.once("render", () => ContentLinks._render(contentLinkView, formView));
     /*
      * Workaround to reset the values of linkBehavior and target fields if modal
      * is canceled and reopened after changes have been made. See related issues:
@@ -142,7 +142,7 @@ export default class ContentLinks extends Plugin {
     });
   }
 
-  private addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+  private static addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
     });
@@ -154,12 +154,12 @@ export default class ContentLinks extends Plugin {
     formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
   }
 
-  private _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+  private static _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
     formView.registerChild(contentLinkView);
     if (!contentLinkView.isRendered) {
       contentLinkView.render();
     }
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
-    this.addDragAndDropListeners(contentLinkView, formView);
+    ContentLinks.addDragAndDropListeners(contentLinkView, formView);
   }
 }
