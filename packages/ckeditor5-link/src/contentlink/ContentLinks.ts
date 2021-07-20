@@ -14,7 +14,7 @@ import {
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/content/RichtextConfigurationService";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { showContentLinkField } from "./ContentLinkViewUtils";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -43,26 +43,48 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
-  private static _onDropOnContentLinkField(
+  private static _onDropOnLinkField(
     dragEvent: DragEvent,
+    formView: LinkFormView,
     contentLinkView: LabeledFieldView<ContentView>
   ): void {
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
-    if (contentCkeModelUri === null) {
+    if (contentCkeModelUri !== null) {
+      ContentLinks.setDataAndSwitchToContentLink(formView, contentLinkView, contentCkeModelUri);
       return;
     }
-    contentLinkView.fieldView.set("value", contentCkeModelUri);
-  }
-
-  private static _onDropOnExternalLinkField(dragEvent: DragEvent): void {
-    const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
-    if (contentCkeModelUri === null) {
+    if (dragEvent.dataTransfer === null) {
       return;
     }
-    (dragEvent.target as HTMLInputElement).value = contentCkeModelUri;
+
+    const data: string = dragEvent.dataTransfer.getData("text/plain");
+    if (data) {
+      ContentLinks.setDataAndSwitchToExternalLink(formView, contentLinkView, data);
+    }
+    return;
   }
 
-  private static _onDragOver(dragEvent: DragEvent): void {
+  private static setDataAndSwitchToExternalLink(
+    formView: LinkFormView,
+    contentLinkView: LabeledFieldView<ContentView>,
+    data: string
+  ): void {
+    formView.urlInputView.fieldView.set("value", data);
+    contentLinkView.fieldView.set("value", null);
+    showContentLinkField(formView, false);
+  }
+
+  private static setDataAndSwitchToContentLink(
+    formView: LinkFormView,
+    contentLinkView: LabeledFieldView<ContentView>,
+    data: string
+  ): void {
+    formView.urlInputView.fieldView.set("value", null);
+    contentLinkView.fieldView.set("value", data);
+    showContentLinkField(formView, true);
+  }
+
+  private static _onDragOverLinkField(dragEvent: DragEvent): void {
     dragEvent.preventDefault();
     const contentUriPath: string | null = receiveUriPathFromDragData();
     if (!dragEvent.dataTransfer) {
@@ -95,13 +117,6 @@ export default class ContentLinks extends Plugin {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
     const formView = linkUI.formView;
-    formView.urlInputView.on("change:value", (evt: EventInfo) => {
-      const newValue = evt.source.value;
-      if (!newValue) {
-        return;
-      }
-
-    });
     const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
 
     formView.once("render", () => this._render(contentLinkView, formView));
@@ -128,12 +143,14 @@ export default class ContentLinks extends Plugin {
 
   private addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinks._onDropOnContentLinkField(dragEvent, contentLinkView);
+      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
     });
-    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
+    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
 
-    formView.urlInputView.fieldView.element.addEventListener("drop", ContentLinks._onDropOnExternalLinkField);
-    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
+    formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
+    });
+    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
   }
 
   private _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {

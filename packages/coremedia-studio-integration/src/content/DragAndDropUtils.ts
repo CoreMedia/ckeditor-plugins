@@ -31,7 +31,12 @@ const extractContentUriPath = (dragEvent: DragEvent): string | null => {
   if (!dataAsJson) {
     return null;
   }
-  const parse: Array<Record<string, string>> = JSON.parse(dataAsJson);
+
+  const parse: Array<Record<string, string>> | null = silentParseDataFromDragEvent(dataAsJson);
+  if (parse === null) {
+    return null;
+  }
+
   if (parse.length !== 1) {
     return null;
   }
@@ -46,8 +51,13 @@ const receiveUriPathFromDragData = (): string | null => {
     return null;
   }
   const dragDataJson: string = dragDropService.dragData;
-  const parse: CMDragData = JSON.parse(dragDataJson);
-  const contents: Array<CMBeanReference> = parse.contents;
+
+  const dragData: CMDragData | null = silentParseDataFromDragDropService(dragDataJson);
+  if (!dragData) {
+    return null;
+  }
+
+  const contents: Array<CMBeanReference> = dragData.contents;
   if (contents.length !== 1) {
     return null;
   }
@@ -55,4 +65,26 @@ const receiveUriPathFromDragData = (): string | null => {
   return contents[0].$Ref;
 };
 
-export { extractContentCkeModelUri, extractContentUriPath, receiveUriPathFromDragData };
+const silentParseDataFromDragEvent = (data: string): Array<Record<string, string>> | null => {
+  try {
+    return JSON.parse(data);
+  } catch (e: unknown) {
+    return null;
+  }
+};
+
+const silentParseDataFromDragDropService = (data: string): CMDragData | null => {
+  try {
+    return JSON.parse(data) as CMDragData;
+  } catch (e: unknown) {
+    return null;
+  }
+};
+
+export {
+  extractContentCkeModelUri,
+  extractContentUriPath,
+  receiveUriPathFromDragData,
+  silentParseDataFromDragDropService,
+  silentParseDataFromDragEvent,
+};
