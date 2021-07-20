@@ -14,14 +14,14 @@
 }
 
 
-.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-internal-link .ck-cm-external-link-field {
+.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-external-link-field {
   display: none;
 }
 
-.ck.cm-ck-link-form-view .ck-cm-internal-link-field {
+.ck.cm-ck-link-form-view .ck-cm-content-link-field {
   display: none;
 }
 
-.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-internal-link .ck-cm-internal-link-field {
+.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-content-link-field {
   display: block;
 }

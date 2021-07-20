@@ -79,11 +79,11 @@ export default class ContentView extends View {
   }
 
   _createItemView(locale: Locale): ButtonView {
-    const internalLinkButton = new ButtonView(locale);
+    const contentLinkButton = new ButtonView(locale);
     // TODO in case we want to display an icon class, we also need an element with these classes:
     // cm-core-icons cm-core-icons--create-content  cm-core-icons--100
 
-    internalLinkButton.set({
+    contentLinkButton.set({
       label: "Albini Dress",
       class: ["cm-ck-item-button"],
       icon: link,
@@ -91,14 +91,14 @@ export default class ContentView extends View {
       withText: true,
     });
 
-    internalLinkButton.iconView = new IconView(locale);
+    contentLinkButton.iconView = new IconView(locale);
 
-    internalLinkButton.bind("label").to(this, "value", (value: string) => {
+    contentLinkButton.bind("label").to(this, "value", (value: string) => {
       // TODO[serviceagent] add service agent here
       return value;
     });
 
-    return internalLinkButton;
+    return contentLinkButton;
   }
 
   _createButtonView(locale: Locale): ButtonView {

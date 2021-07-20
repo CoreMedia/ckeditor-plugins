@@ -5,7 +5,7 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import createInternalLinkView from "./ui/InternalLinkView";
+import createContentLinkView from "./ui/ContentLinkViewFactory";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import ContentView from "./ui/ContentView";
 import {
@@ -43,15 +43,15 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
-  private static _onDropOnInternalLinkField(
+  private static _onDropOnContentLinkField(
     dragEvent: DragEvent,
-    internalLinksView: LabeledFieldView<ContentView>
+    contentLinkView: LabeledFieldView<ContentView>
   ): void {
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
     if (contentCkeModelUri === null) {
       return;
     }
-    internalLinksView.fieldView.set("value", contentCkeModelUri);
+    contentLinkView.fieldView.set("value", contentCkeModelUri);
   }
 
   private static _onDropOnExternalLinkField(dragEvent: DragEvent): void {
@@ -102,9 +102,9 @@ export default class ContentLinks extends Plugin {
       }
 
     });
-    const internalLinkView = createInternalLinkView(this.editor.locale, formView, linkCommand);
+    const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
 
-    formView.once("render", () => this._render(internalLinkView, formView));
+    formView.once("render", () => this._render(contentLinkView, formView));
     /*
      * Workaround to reset the values of linkBehavior and target fields if modal
      * is canceled and reopened after changes have been made. See related issues:
@@ -120,30 +120,28 @@ export default class ContentLinks extends Plugin {
     this.listenTo(linkUI, "_addFormView", () => {
       const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
 
-      internalLinkView.fieldView.set({
+      contentLinkView.fieldView.set({
         value: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
       });
     });
   }
 
-  private addDragAndDropListeners(internalLinksView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
-    //internal link field
-    internalLinksView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinks._onDropOnInternalLinkField(dragEvent, internalLinksView);
+  private addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinks._onDropOnContentLinkField(dragEvent, contentLinkView);
     });
-    internalLinksView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
+    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
 
-    //external link field
     formView.urlInputView.fieldView.element.addEventListener("drop", ContentLinks._onDropOnExternalLinkField);
     formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOver);
   }
 
-  private _render(internalLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
-    formView.registerChild(internalLinkView);
-    if (!internalLinkView.isRendered) {
-      internalLinkView.render();
+  private _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    formView.registerChild(contentLinkView);
+    if (!contentLinkView.isRendered) {
+      contentLinkView.render();
     }
-    formView.element.insertBefore(internalLinkView.element, formView.urlInputView.element.nextSibling);
-    this.addDragAndDropListeners(internalLinkView, formView);
+    formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
+    this.addDragAndDropListeners(contentLinkView, formView);
   }
 }
