@@ -4,10 +4,9 @@ import { Observable } from "rxjs";
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
    * A content id is linkable if
-   * <ul>
-   * <li>it is not a folder (even number)</li>
-   * <li>it is not dividable by 4. This represents any content which is not linkable.</li>
-   * </ul>
+   * * it is not a folder (even number)
+   * * it is not dividable by 4. This represents any content which is not linkable.
+   *
    * @param uripath an uripath in the format 'content/content-id'
    */
   hasLinkableType(uripath: string): Promise<boolean> {
