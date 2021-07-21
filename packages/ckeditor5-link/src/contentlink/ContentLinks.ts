@@ -45,6 +45,59 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
+  private _extendFormView(linkUI: LinkUI): void {
+    const editor = this.editor;
+    const linkCommand = editor.commands.get("link");
+    const formView = linkUI.formView;
+    const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
+
+    formView.once("render", () => ContentLinks._render(contentLinkView, formView));
+    /*
+     * Workaround to reset the values of linkBehavior and target fields if modal
+     * is canceled and reopened after changes have been made. See related issues:
+     * ckeditor/ckeditor5-link#78 (now: ckeditor/ckeditor5#4765) and
+     * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
+     */
+
+    if (!(linkUI as any)["_events"] || !(linkUI as any)["_events"].hasOwnProperty("_addFormView")) {
+      //@ts-ignore
+      linkUI.decorate("_addFormView");
+    }
+
+    this.listenTo(linkUI, "_addFormView", () => {
+      const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
+
+      contentLinkView.fieldView.set({
+        value: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
+      });
+    });
+  }
+
+  private static _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    ContentLinks.logger.debug("Rendering ContentView and register listeners");
+    formView.registerChild(contentLinkView);
+    ContentLinks.logger.debug("Is ContentView already rendered: " + contentLinkView.isRendered);
+    if (!contentLinkView.isRendered) {
+      contentLinkView.render();
+    }
+    formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
+    ContentLinks.addDragAndDropListeners(contentLinkView, formView);
+  }
+
+  private static addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    ContentLinks.logger.debug("Adding drag and drop listeners to formView and contentLinkView");
+    contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
+    });
+    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
+
+    formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
+    });
+    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
+    ContentLinks.logger.debug("Finished adding drag and drop listeners.");
+  }
+
   private static _onDropOnLinkField(
     dragEvent: DragEvent,
     formView: LinkFormView,
@@ -135,56 +188,4 @@ export default class ContentLinks extends Plugin {
     });
   }
 
-  private _extendFormView(linkUI: LinkUI): void {
-    const editor = this.editor;
-    const linkCommand = editor.commands.get("link");
-    const formView = linkUI.formView;
-    const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
-
-    formView.once("render", () => ContentLinks._render(contentLinkView, formView));
-    /*
-     * Workaround to reset the values of linkBehavior and target fields if modal
-     * is canceled and reopened after changes have been made. See related issues:
-     * ckeditor/ckeditor5-link#78 (now: ckeditor/ckeditor5#4765) and
-     * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
-     */
-
-    if (!(linkUI as any)["_events"] || !(linkUI as any)["_events"].hasOwnProperty("_addFormView")) {
-      //@ts-ignore
-      linkUI.decorate("_addFormView");
-    }
-
-    this.listenTo(linkUI, "_addFormView", () => {
-      const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-
-      contentLinkView.fieldView.set({
-        value: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
-      });
-    });
-  }
-
-  private static addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
-    ContentLinks.logger.debug("Adding drag and drop listeners to formView and contentLinkView");
-    contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
-    });
-    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
-
-    formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
-    });
-    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
-    ContentLinks.logger.debug("Finished adding drag and drop listeners.");
-  }
-
-  private static _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
-    ContentLinks.logger.debug("Rendering ContentView and register listeners");
-    formView.registerChild(contentLinkView);
-    ContentLinks.logger.debug("Is ContentView already rendered: " + contentLinkView.isRendered);
-    if (!contentLinkView.isRendered) {
-      contentLinkView.render();
-    }
-    formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
-    ContentLinks.addDragAndDropListeners(contentLinkView, formView);
-  }
 }
