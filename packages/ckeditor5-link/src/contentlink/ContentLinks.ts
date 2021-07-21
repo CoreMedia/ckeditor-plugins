@@ -23,7 +23,7 @@ import { showContentLinkField } from "./ContentLinkViewUtils";
  */
 export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
-  private readonly logger: Logger = LoggerProvider.getLogger(ContentLinks.pluginName);
+  private static readonly logger: Logger = LoggerProvider.getLogger(ContentLinks.pluginName);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [LinkUI, LinkEditing];
@@ -32,14 +32,16 @@ export default class ContentLinks extends Plugin {
   init(): Promise<void> | null {
     const startTimestamp = performance.now();
 
-    this.logger.debug(`Initializing ${ContentLinks.pluginName}...`);
+    ContentLinks.logger.debug(`Initializing ${ContentLinks.pluginName}...`);
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
     this._extendFormView(linkUI);
 
-    this.logger.debug(`Initialized ${ContentLinks.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    ContentLinks.logger.debug(
+      `Initialized ${ContentLinks.pluginName} within ${performance.now() - startTimestamp} ms.`
+    );
     return null;
   }
 
@@ -85,20 +87,35 @@ export default class ContentLinks extends Plugin {
     showContentLinkField(formView, true);
   }
 
+  /**
+   * On dragover we have to decide if a drop is allowed here or not.
+   * A drop must be allowed if it is any URL (for external links) or if it is a content which is allowed to drop.
+   * A content is allowed to drop if the DragDropService has any data and if the given content from DragDropService is
+   * a CMLinkable.
+   *
+   * @param dragEvent the drag event.
+   * @private
+   */
   private static _onDragOverLinkField(dragEvent: DragEvent): void {
     dragEvent.preventDefault();
-    const contentUriPath: string | null = receiveUriPathFromDragData();
     if (!dragEvent.dataTransfer) {
       return;
     }
 
+    const contentUriPath: string | null = receiveUriPathFromDragData();
     if (!contentUriPath) {
-      dragEvent.dataTransfer.dropEffect = "none";
+      ContentLinks.logger.debug(
+        "DragOverEvent: No uri received from DragDropService, assume that is any text (like an url) and allow it"
+      );
+      dragEvent.dataTransfer.dropEffect = "copy";
       return;
     }
 
+    ContentLinks.logger.debug("DragOverEvent: Received uri path from DragDropService: " + contentUriPath);
+    dragEvent.dataTransfer.dropEffect = "none";
     const service = serviceAgent.getService<RichtextConfigurationService>("mockRichtextConfigurationService");
-    if (!service || !contentUriPath) {
+    if (!service) {
+      ContentLinks.logger.warn("No RichtextConfigurationService found, can't evaluate properly if drop is allowed");
       return;
     }
 
@@ -107,9 +124,13 @@ export default class ContentLinks extends Plugin {
         return;
       }
       if (isLinkable) {
+        ContentLinks.logger.debug("DragOverEvent: Received content uri is a linkable and drop is allowed");
         dragEvent.dataTransfer.dropEffect = "copy";
         return;
       }
+      ContentLinks.logger.debug(
+        "DragOverEvent: Received content uri is NOT linkable and drop is therefore NOT allowed"
+      );
       dragEvent.dataTransfer.dropEffect = "none";
     });
   }
@@ -143,6 +164,7 @@ export default class ContentLinks extends Plugin {
   }
 
   private static addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    ContentLinks.logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
     });
@@ -152,10 +174,13 @@ export default class ContentLinks extends Plugin {
       ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
     });
     formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
+    ContentLinks.logger.debug("Finished adding drag and drop listeners.");
   }
 
   private static _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+    ContentLinks.logger.debug("Rendering ContentView and register listeners");
     formView.registerChild(contentLinkView);
+    ContentLinks.logger.debug("Is ContentView already rendered: " + contentLinkView.isRendered);
     if (!contentLinkView.isRendered) {
       contentLinkView.render();
     }
