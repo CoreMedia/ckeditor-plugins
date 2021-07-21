@@ -1,5 +1,4 @@
 import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/src/content/RichtextConfigurationService";
-import { Observable } from "rxjs";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
