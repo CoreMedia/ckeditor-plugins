@@ -59,12 +59,12 @@ export default class ContentView extends View {
     /**
      * An instance of the item view that displays the content's information.
      */
-    this._itemView = this._createItemView(locale);
+    this._itemView = this.#createItemView(locale);
 
     /**
      * An instance of the cancel button allowing the user to dismiss the content.
      */
-    this._buttonView = this._createButtonView(locale);
+    this._buttonView = this.#createButtonView(locale);
 
     this.setTemplate({
       tag: "div",
@@ -78,7 +78,7 @@ export default class ContentView extends View {
     });
   }
 
-  _createItemView(locale: Locale): ButtonView {
+  #createItemView(locale: Locale): ButtonView {
     const contentLinkButton = new ButtonView(locale);
     // TODO in case we want to display an icon class, we also need an element with these classes:
     // cm-core-icons cm-core-icons--create-content  cm-core-icons--100
@@ -101,7 +101,7 @@ export default class ContentView extends View {
     return contentLinkButton;
   }
 
-  _createButtonView(locale: Locale): ButtonView {
+  #createButtonView(locale: Locale): ButtonView {
     const cancelButton = new ButtonView(locale);
     cancelButton.set({
       label: "x",

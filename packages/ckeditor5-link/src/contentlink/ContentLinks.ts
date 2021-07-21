@@ -37,7 +37,7 @@ export default class ContentLinks extends Plugin {
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
-    this._extendFormView(linkUI);
+    this.#extendFormView(linkUI);
 
     ContentLinks.logger.debug(
       `Initialized ${ContentLinks.pluginName} within ${performance.now() - startTimestamp} ms.`
@@ -45,13 +45,13 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
-  private _extendFormView(linkUI: LinkUI): void {
+  #extendFormView(linkUI: LinkUI): void {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
     const formView = linkUI.formView;
     const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
 
-    formView.once("render", () => ContentLinks._render(contentLinkView, formView));
+    formView.once("render", () => ContentLinks.#render(contentLinkView, formView));
     /*
      * Workaround to reset the values of linkBehavior and target fields if modal
      * is canceled and reopened after changes have been made. See related issues:
@@ -73,7 +73,7 @@ export default class ContentLinks extends Plugin {
     });
   }
 
-  private static _render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+  static #render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
     ContentLinks.logger.debug("Rendering ContentView and register listeners");
     formView.registerChild(contentLinkView);
     ContentLinks.logger.debug("Is ContentView already rendered: " + contentLinkView.isRendered);
@@ -81,24 +81,24 @@ export default class ContentLinks extends Plugin {
       contentLinkView.render();
     }
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
-    ContentLinks.addDragAndDropListeners(contentLinkView, formView);
+    ContentLinks.#addDragAndDropListeners(contentLinkView, formView);
   }
 
-  private static addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+  static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
     ContentLinks.logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
+      ContentLinks.#onDropOnLinkField(dragEvent, formView, contentLinkView);
     });
-    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
+    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinks.#onDragOverLinkField);
 
     formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinks._onDropOnLinkField(dragEvent, formView, contentLinkView);
+      ContentLinks.#onDropOnLinkField(dragEvent, formView, contentLinkView);
     });
-    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks._onDragOverLinkField);
+    formView.urlInputView.fieldView.element.addEventListener("dragover", ContentLinks.#onDragOverLinkField);
     ContentLinks.logger.debug("Finished adding drag and drop listeners.");
   }
 
-  private static _onDropOnLinkField(
+  static #onDropOnLinkField(
     dragEvent: DragEvent,
     formView: LinkFormView,
     contentLinkView: LabeledFieldView<ContentView>
@@ -106,7 +106,7 @@ export default class ContentLinks extends Plugin {
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
     dragEvent.preventDefault();
     if (contentCkeModelUri !== null) {
-      ContentLinks.setDataAndSwitchToContentLink(formView, contentLinkView, contentCkeModelUri);
+      ContentLinks.#setDataAndSwitchToContentLink(formView, contentLinkView, contentCkeModelUri);
       return;
     }
     if (dragEvent.dataTransfer === null) {
@@ -115,12 +115,12 @@ export default class ContentLinks extends Plugin {
 
     const data: string = dragEvent.dataTransfer.getData("text/plain");
     if (data) {
-      ContentLinks.setDataAndSwitchToExternalLink(formView, contentLinkView, data);
+      ContentLinks.#setDataAndSwitchToExternalLink(formView, contentLinkView, data);
     }
     return;
   }
 
-  private static setDataAndSwitchToExternalLink(
+  static #setDataAndSwitchToExternalLink(
     formView: LinkFormView,
     contentLinkView: LabeledFieldView<ContentView>,
     data: string
@@ -130,7 +130,7 @@ export default class ContentLinks extends Plugin {
     showContentLinkField(formView, false);
   }
 
-  private static setDataAndSwitchToContentLink(
+  static #setDataAndSwitchToContentLink(
     formView: LinkFormView,
     contentLinkView: LabeledFieldView<ContentView>,
     data: string
@@ -149,7 +149,7 @@ export default class ContentLinks extends Plugin {
    * @param dragEvent the drag event.
    * @private
    */
-  private static _onDragOverLinkField(dragEvent: DragEvent): void {
+  static #onDragOverLinkField(dragEvent: DragEvent): void {
     dragEvent.preventDefault();
     if (!dragEvent.dataTransfer) {
       return;
