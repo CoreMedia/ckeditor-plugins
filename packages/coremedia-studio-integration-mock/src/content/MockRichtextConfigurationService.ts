@@ -2,15 +2,41 @@ import RichtextConfigurationService from "@coremedia/coremedia-studio-integratio
 import { Observable } from "rxjs";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
-  observe_hasLinkableType(uripath: string): Observable<boolean> {
-    return new Observable<boolean>((subscriber) => {
-      return subscriber.next(true);
+  /**
+   * A content id is linkable if
+   * <ul>
+   * <li>it is not a folder (even number)</li>
+   * <li>it is not dividable by 4. This represents any content which is not linkable.</li>
+   * </ul>
+   * @param uripath an uripath in the format 'content/content-id'
+   */
+  hasLinkableType(uripath: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      if (!uripath.startsWith("content/")) {
+        resolve(false);
+        return;
+      }
+      const contentIdString: string = uripath.replace("content/", "");
+      const contentId: number = parseInt(contentIdString);
+      if (contentId % 4 === 0) {
+        //not linkable content
+        resolve(false);
+        return;
+      }
+
+      if (contentId % 2 === 0) {
+        //linkable content
+        resolve(true);
+      } else {
+        //folder
+        resolve(false);
+      }
     });
   }
 
-  observe_isEmbeddableType(uripath: string): Observable<boolean> {
-    return new Observable<boolean>((subscriber) => {
-      return subscriber.next(true);
+  isEmbeddableType(uripath: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      resolve(true);
     });
   }
 

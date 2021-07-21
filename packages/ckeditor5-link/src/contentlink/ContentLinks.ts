@@ -172,7 +172,7 @@ export default class ContentLinks extends Plugin {
       return;
     }
 
-    service.observe_hasLinkableType(contentUriPath).subscribe((isLinkable) => {
+    service.hasLinkableType(contentUriPath).then((isLinkable) => {
       if (dragEvent.dataTransfer === null) {
         return;
       }
@@ -187,5 +187,4 @@ export default class ContentLinks extends Plugin {
       dragEvent.dataTransfer.dropEffect = "none";
     });
   }
-
 }
