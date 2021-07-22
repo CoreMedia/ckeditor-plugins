@@ -33,6 +33,6 @@ div.ck-body-wrapper {
 .cm-core-icons.icon--document::before {
   content: "DC";
 }
-.cm-core-icons.icon-lock::before {
+.cm-core-icons.icon--lock::before {
   content: "LO";
 }
