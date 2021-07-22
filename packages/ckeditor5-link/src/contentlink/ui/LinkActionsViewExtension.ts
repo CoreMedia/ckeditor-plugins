@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/src";
+import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -40,6 +40,23 @@ class LinkActionsViewExtension extends Plugin {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
     const actionsView: LinkActionsView = linkUI.actionsView;
+    actionsView.once("render", () => LinkActionsViewExtension.#render(actionsView));
+  }
+
+  static #render(actionsView: LinkActionsView): void {
+    LinkActionsViewExtension.#renderPreviewButton(actionsView);
+  }
+
+  static #renderPreviewButton(actionsView: LinkActionsView): void {
+    const previewButtonView = actionsView.previewButtonView;
+    previewButtonView.on("execute", (eventInfo) => {
+      console.log("Clicked preview button.", { eventInfo: eventInfo });
+      // Are we an internal link? Use open tab instead.
+      // Can we listen and prevent further execution?
+      // Do we need to de-register on destroy?
+      // Can we actually listen to execute? It seems LinkActionsView prevents default
+      // events as defined in https://github.com/ckeditor/ckeditor5/blob/287e04574d7b662d8d051cd12975e5ef871ff6df/packages/ckeditor5-ui/src/button/buttonview.js#L153-L170
+    });
   }
 }
 
