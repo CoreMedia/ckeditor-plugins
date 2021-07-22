@@ -1,7 +1,12 @@
 .ck.cm-ck-link-form-view .cm-ck-content-field-view {
   display: flex;
   border: 1px solid var(--ck-color-input-disabled-border);
-  border-radius: var(--ck-border-radius);;
+  border-radius: var(--ck-border-radius);
+  cursor: pointer;
+}
+
+.ck.cm-ck-link-form-view .cm-ck-content-field-view * {
+  cursor: pointer;
 }
 
 .cm-ck-content-field-view > .cm-ck-item-button{
@@ -41,6 +46,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  user-select: none;
 }
 
 .ck.cm-ck-link-form-view {
