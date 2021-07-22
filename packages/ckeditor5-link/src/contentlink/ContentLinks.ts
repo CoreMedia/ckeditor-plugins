@@ -15,6 +15,7 @@ import {
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/content/RichtextConfigurationService";
 import { showContentLinkField } from "./ContentLinkViewUtils";
+import LinkActionsViewExtension from "./ui/LinkActionsViewExtension";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -26,7 +27,7 @@ export default class ContentLinks extends Plugin {
   private static readonly logger: Logger = LoggerProvider.getLogger(ContentLinks.pluginName);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI, LinkEditing];
+    return [LinkUI, LinkEditing, LinkActionsViewExtension];
   }
 
   init(): Promise<void> | null {
