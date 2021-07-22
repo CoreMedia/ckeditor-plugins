@@ -1,9 +1,6 @@
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import IconView from "@ckeditor/ckeditor5-ui/src/icon/iconview";
-//@ts-ignore
-import link from "@ckeditor/ckeditor5-link/theme/icons/link.svg";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
 import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";

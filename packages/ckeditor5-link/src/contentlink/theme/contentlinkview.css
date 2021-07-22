@@ -31,9 +31,19 @@
 .cm-ck-content-item {
   align-items: center;
   flex: 1;
+  /*we need to set the min-width because flexbox sets the min-width to auto*/
+  min-width: 0;
   display: flex;
 }
 
 .cm-ck-content-item > .cm-ck-content-item__title {
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ck.cm-ck-link-form-view {
+  /*we need to set a width to make ellipsis work in the ContentView*/
+  width: calc(var(--ck-input-text-width) + 46px);
 }
