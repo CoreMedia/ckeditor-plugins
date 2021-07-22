@@ -15,7 +15,7 @@ const MAX_FIRST_DELAY_MS = 100;
  * If states shall change, it will be done with this fixed
  * interval (in milliseconds).
  */
-const CHANGE_DELAY_MS = 30000;
+const CHANGE_DELAY_MS = 10000;
 
 /**
  * Part of an unreadable content's name (along with its ID).

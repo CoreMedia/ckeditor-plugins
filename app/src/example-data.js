@@ -45,12 +45,108 @@ function createLinkScenario(title, scenarios) {
   return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
 }
 
+function createContentLinkTableHeading() {
+  return `<tr class="tr--header"><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
+}
+
+function createContentLinkTableRow({comment, id}) {
+  return `<tr><td>${createLink("", "", "content:" + id)}</td><td>${comment || ""}</td></tr>`;
+}
+
+function createContentLinkScenario(title, scenarios) {
+  const scenarioTitle = `<h1>${title}</h1>`;
+  const scenarioHeader = createContentLinkTableHeading();
+  const scenarioRows = scenarios.map(createContentLinkTableRow).join("");
+  return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
+}
+
 function externalLinkTargetExamples() {
   return linkTargetExamples(false);
 }
 
 function contentLinkExamples() {
-  return linkTargetExamples(true);
+  const standardScenarios = [
+    {
+      comment: "Folder 1",
+      id: 10001,
+    },
+    {
+      comment: "Folder 2",
+      id: 11001,
+    },
+    {
+      comment: "Document 1",
+      id: 10000,
+    },
+    {
+      comment: "Document 2",
+      id: 11000,
+    },
+  ];
+  const nameChangeScenarios = [
+    {
+      comment: "Folder (changing names)",
+      id: 12001,
+    },
+    {
+      comment: "Document (changing names)",
+      id: 12000,
+    },
+  ];
+  const unreadableScenarios = [
+    {
+      comment: "Folder 1 (unreadable)",
+      id: 10101,
+    },
+    {
+      comment: "Folder 2 (unreadable/readable toggle)",
+      id: 11201,
+    },
+    {
+      comment: "Document 1 (unreadable)",
+      id: 10100,
+    },
+    {
+      comment: "Document 2 (unreadable/readable toggle)",
+      id: 11200,
+    },
+  ];
+  const stateScenarios = [
+    {
+      comment: "Document 1 (checked-in)",
+      id: 10010,
+    },
+    {
+      comment: "Document 2 (checked-out)",
+      id: 11000,
+    },
+    {
+      comment: "Document (being edited; toggles checked-out/-in)",
+      id: 10020,
+    },
+  ];
+  const xssScenarios = [
+    {
+      comment: "Document 1",
+      id: 6660000,
+    },
+    {
+      comment: "Document 2",
+      id: 6661000,
+    },
+    {
+      comment: "Document (toggling name)",
+      id: 6662000,
+    },
+  ];
+  const scenarios = [
+    createContentLinkScenario("Standard Links", standardScenarios),
+    createContentLinkScenario("Name Change Scenarios", nameChangeScenarios),
+    createContentLinkScenario("Unreadable Scenarios", unreadableScenarios),
+    createContentLinkScenario("Content State Scenarios", stateScenarios),
+    createContentLinkScenario("XSS Scenarios", xssScenarios),
+  ].join("");
+  return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
 }
 
 function linkTargetExamples(contentLink) {
