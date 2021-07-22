@@ -11,25 +11,28 @@ div.ck-body-wrapper {
 }
 
 .cm-core-icons::before {
-  content: "_";
+  display: block;
+  text-align: center;
+  line-height: 16px;
+  font-weight: lighter;
   width: 16px;
   height: 16px;
-  border: 1px solid var(--ck-color-base-border);
+  font-size: 10px;
+  background-color: #eee;
 }
 
-.cm-core-icons.icon-checked-in::before {
-  content: "i";
+.cm-core-icons.icon--checked-in::before {
+  content: "CI";
 }
-
-.cm-core-icons.icon-checked-out::before {
-  content: "o";
+.cm-core-icons.icon--checked-out::before {
+  content: "CO";
 }
 .cm-core-icons.icon--folder::before {
-  content: "f";
+  content: "FD";
 }
 .cm-core-icons.icon--document::before {
-  content: "d";
+  content: "DC";
 }
 .cm-core-icons.icon-lock::before {
-  content: "l";
+  content: "LO";
 }
