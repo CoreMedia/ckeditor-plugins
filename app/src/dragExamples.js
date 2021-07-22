@@ -7,6 +7,7 @@ const renderDragExamplesButton = () => {
     newWin = window.open("about:blank", "drag-examples", "width=400,height=200");
     newWin.document.writeln("<div id='drag-examples'>");
     newWin.document.writeln(" <div class='drag-example' data-cmuripath='content/2' draggable='true'>Linkable Content id: content/2</div>");
+    newWin.document.writeln(" <div class='drag-example' data-cmuripath='content/5552002' draggable='true'>Linkable Content id: content/5552002</div>");
     newWin.document.writeln(" <div class='drag-example' data-cmuripath='content/4' draggable='true'>Not linkable Content id: content/4</div>");
     newWin.document.writeln(" <div class='drag-example' data-cmuripath='content/1' draggable='true'>Folder Content id: content/1</div>");
     newWin.document.writeln(" <div class='drag-example' draggable='true'>https://www.any-plain-text-url.com</div>");

@@ -4,15 +4,22 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import IconView from "@ckeditor/ckeditor5-ui/src/icon/iconview";
 //@ts-ignore
 import link from "@ckeditor/ckeditor5-link/theme/icons/link.svg";
+import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { Subscription } from "rxjs";
+import { CONTENT_CKE_MODEL_URI_REGEXP, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import ContentAsLink from "@coremedia/coremedia-studio-integration/dist/content/ContentAsLink";
 
 /**
  * A ContentView that renders a custom template, containing of 2 different components.
- * The itemView displays the information of a content item and the cancelButton renders a button
- * that can be used to remove the displayed content.
+ * The first element displays the information of a content item (containing title and icons of the content)
+ * and the buttonView renders a button that can be used to remove the displayed content.
  */
 export default class ContentView extends View {
-  readonly _itemView: ButtonView;
   readonly _buttonView: ButtonView;
+
+  private _contentSubscription: Subscription | undefined = undefined;
 
   constructor(locale: Locale) {
     super(locale);
@@ -20,13 +27,40 @@ export default class ContentView extends View {
     const bind = this.bindTemplate;
 
     /**
-     * The value of the content.
+     * The value of the content uri path.
      *
      * @observable
      * @member {String} #value
      * @default undefined
      */
     this.set("value", undefined);
+
+    /**
+     * The title of the content.
+     *
+     * @observable
+     * @member {String} #title
+     * @default undefined
+     */
+    this.set("title", undefined);
+
+    /**
+     * The css class of the type icon element.
+     *
+     * @observable
+     * @member {String} #typeClass
+     * @default undefined
+     */
+    this.set("typeClass", undefined);
+
+    /**
+     * The css class of the status icon element.
+     *
+     * @observable
+     * @member {String} #statusClass
+     * @default undefined
+     */
+    this.set("statusClass", undefined);
 
     /**
      * Controls whether the input view is in read-only mode.
@@ -57,11 +91,6 @@ export default class ContentView extends View {
     this.set("ariaDescribedById");
 
     /**
-     * An instance of the item view that displays the content's information.
-     */
-    this._itemView = this.#createItemView(locale);
-
-    /**
      * An instance of the cancel button allowing the user to dismiss the content.
      */
     this._buttonView = this.#createButtonView(locale);
@@ -74,31 +103,69 @@ export default class ContentView extends View {
         "aria-invalid": bind.if("hasError", true),
         "aria-describedby": bind.to("ariaDescribedById"),
       },
-      children: [this._itemView, this._buttonView],
+      children: [
+        {
+          tag: "div",
+          attributes: {
+            class: ["cm-ck-content-item"],
+          },
+          children: [
+            {
+              tag: "span",
+              attributes: {
+                class: ["cm-core-icons", bind.to("typeClass")],
+              },
+            },
+            {
+              tag: "span",
+              attributes: {
+                class: ["cm-ck-content-item__title"],
+              },
+              children: [{ text: bind.to("title") }],
+            },
+            {
+              tag: "span",
+              attributes: {
+                class: ["cm-core-icons", bind.to("statusClass")],
+              },
+            },
+          ],
+        },
+        this._buttonView,
+      ],
+    });
+
+    this.on("change:value", (evt) => {
+      // unsubscribe the currently running subscription
+      if (this._contentSubscription) {
+        this._contentSubscription.unsubscribe();
+      }
+
+      const value = evt.source.value;
+      if (CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
+        this.#subscribeToContent(value.replace(":", "/"));
+      }
     });
   }
 
-  #createItemView(locale: Locale): ButtonView {
-    const contentLinkButton = new ButtonView(locale);
-    // TODO in case we want to display an icon class, we also need an element with these classes:
-    // cm-core-icons cm-core-icons--create-content  cm-core-icons--100
-
-    contentLinkButton.set({
-      label: "Albini Dress",
-      class: ["cm-ck-item-button"],
-      icon: link,
-      tooltip: true,
-      withText: true,
-    });
-
-    contentLinkButton.iconView = new IconView(locale);
-
-    contentLinkButton.bind("label").to(this, "value", (value: string) => {
-      // TODO[serviceagent] add service agent here
-      return value;
-    });
-
-    return contentLinkButton;
+  #subscribeToContent(uriPath: UriPath): void {
+    serviceAgent
+      .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
+      .then((contentDisplayService: ContentDisplayService): void => {
+        // save the subscription to be able to unsubscribe later
+        this._contentSubscription = contentDisplayService.observe_asLink(uriPath).subscribe({
+          next: (received: ContentAsLink) => {
+            this.set({
+              title: received.content.name,
+              typeClass: received.type.classes?.join(" "),
+              statusClass: received.state.classes?.join(" "),
+            });
+          },
+        });
+      })
+      .catch((): void => {
+        console.warn("ContentDisplayService not available.");
+      });
   }
 
   #createButtonView(locale: Locale): ButtonView {
@@ -111,5 +178,13 @@ export default class ContentView extends View {
     });
 
     return cancelButton;
+  }
+
+  destroy(): Promise<never> | null {
+    if (this._contentSubscription) {
+      this._contentSubscription.unsubscribe();
+    }
+    super.destroy();
+    return null;
   }
 }

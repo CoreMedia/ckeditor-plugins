@@ -6,7 +6,7 @@ import "../theme/contentlinkview.css";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import {showContentLinkField} from "../ContentLinkViewUtils";
+import { showContentLinkField } from "../ContentLinkViewUtils";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.

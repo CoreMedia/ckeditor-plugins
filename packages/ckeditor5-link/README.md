@@ -36,11 +36,11 @@ will just add it to the plugins to extend the link dialog automatically.
 
 ```javascript
 ClassicEditor
-    .create( document.querySelector( '#editor' ), {
+    .create(document.querySelector('#editor'), {
         plugins: [
-          // ...
-          Link,
-          LinkTarget
+            // ...
+            Link,
+            CoreMediaStudioEssentials
         ],
         toolbar: {
             items: [
@@ -51,9 +51,9 @@ ClassicEditor
         link: {
             // Configuration of CKEditor's link feature
         }
-    } )
-    .then( ... )
-    .catch( ... );
+    })
+    .then(...)
+    .catch(...);
 ```
 
 **⚠ Clashes with target-behavior of CKEditor 5 Link Feature**

@@ -25,3 +25,15 @@
 .ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-content-link-field {
   display: block;
 }
+
+/*ContentView content item styles*/
+
+.cm-ck-content-item {
+  align-items: center;
+  flex: 1;
+  display: flex;
+}
+
+.cm-ck-content-item > .cm-ck-content-item__title {
+  flex: 1;
+}
