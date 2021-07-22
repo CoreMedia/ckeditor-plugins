@@ -11,9 +11,9 @@ import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
  * * provide `onClick` handler to open a content in a new Studio tab
  *     (rather than opening an external URL in a new browser tab).
  */
-class LinkActionsViewExtension extends Plugin {
-  static readonly pluginName: string = "LinkActionsViewExtension";
-  static readonly #logger: Logger = LoggerProvider.getLogger(LinkActionsViewExtension.pluginName);
+class ContentLinkActionsViewExtension extends Plugin {
+  static readonly pluginName: string = "ContentLinkActionsViewExtension";
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [LinkUI];
@@ -22,15 +22,15 @@ class LinkActionsViewExtension extends Plugin {
   init(): Promise<void> | null {
     const startTimestamp = performance.now();
 
-    LinkActionsViewExtension.#logger.debug(`Initializing ${LinkActionsViewExtension.pluginName}...`);
+    ContentLinkActionsViewExtension.#logger.debug(`Initializing ${ContentLinkActionsViewExtension.pluginName}...`);
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
     this.#extendView(linkUI);
 
-    LinkActionsViewExtension.#logger.debug(
-      `Initialized ${LinkActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
+    ContentLinkActionsViewExtension.#logger.debug(
+      `Initialized ${ContentLinkActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
 
     return null;
@@ -40,11 +40,11 @@ class LinkActionsViewExtension extends Plugin {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
     const actionsView: LinkActionsView = linkUI.actionsView;
-    actionsView.once("render", () => LinkActionsViewExtension.#render(actionsView));
+    actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView));
   }
 
   static #render(actionsView: LinkActionsView): void {
-    LinkActionsViewExtension.#renderPreviewButton(actionsView);
+    ContentLinkActionsViewExtension.#renderPreviewButton(actionsView);
   }
 
   static #renderPreviewButton(actionsView: LinkActionsView): void {
@@ -60,4 +60,4 @@ class LinkActionsViewExtension extends Plugin {
   }
 }
 
-export default LinkActionsViewExtension;
+export default ContentLinkActionsViewExtension;
