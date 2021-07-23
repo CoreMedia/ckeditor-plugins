@@ -31,7 +31,6 @@ import ContentLinks from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
-import {initDDExamples} from "./dragExamples";
 import MockStudioIntegration from "../../packages/coremedia-studio-integration-mock/dist/MockStudioIntegration";
 
 const queryString = window.location.search;
@@ -40,8 +39,17 @@ const inspectorFlag = 'inspector';
 const wantsInspector = urlParams.has(inspectorFlag) ? 'false' !== urlParams.get(inspectorFlag) : false;
 const inspectorToggle = document.getElementById(inspectorFlag);
 
+// set serviceAgent, for DnD Examples to access
+window.serviceAgent = MockStudioIntegration.getServiceAgent();
+
+// setup dnd IFrame
+const dndButton = document.querySelector("#dragExamplesButton");
+const dndFrame = document.querySelector("#dragExamplesIFrame");
+dndButton.addEventListener("click", () => {
+  dndFrame.hidden = !dndFrame.hidden;
+});
+
 setupPreview();
-initDDExamples(MockStudioIntegration.getServiceAgent());
 
 if (wantsInspector) {
   inspectorToggle.setAttribute('href', '?inspector=false');
