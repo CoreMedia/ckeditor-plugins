@@ -5,6 +5,7 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Template from "./template";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
+import TemplateDefinition from "./template/templatedefinition";
 
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_ui_view-View.html">Class View (ui/view~View) - CKEditor 5 API docs</a>
@@ -24,6 +25,8 @@ export default class View implements Emitter, Observable {
   destroy(): void;
 
   deregisterChild(children: View | View[]): void;
+
+  extendTemplate(definition: TemplateDefinition):void;
 
   registerChild(children: View | View[]): void;
 

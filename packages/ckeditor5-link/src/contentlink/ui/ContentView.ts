@@ -7,6 +7,7 @@ import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integra
 import { Subscription } from "rxjs";
 import { CONTENT_CKE_MODEL_URI_REGEXP, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import ContentAsLink from "@coremedia/coremedia-studio-integration/dist/content/ContentAsLink";
+import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 
 /**
  * A ContentView that renders a custom template, containing of 2 different components.
@@ -18,19 +19,10 @@ export default class ContentView extends View {
 
   private _contentSubscription: Subscription | undefined = undefined;
 
-  constructor(locale: Locale) {
+  constructor(locale: Locale, linkUI: LinkUI) {
     super(locale);
 
     const bind = this.bindTemplate;
-
-    /**
-     * The value of the content uri path.
-     *
-     * @observable
-     * @member {String} #value
-     * @default undefined
-     */
-    this.set("value", undefined);
 
     /**
      * The title of the content.
@@ -95,7 +87,7 @@ export default class ContentView extends View {
     this.setTemplate({
       tag: "div",
       attributes: {
-        class: ["ck", "cm-ck-content-field-view", bind.if("hasError", "ck-error")],
+        class: ["ck", "ck-cm-content-link-view", bind.if("hasError", "ck-error")],
         id: bind.to("id"),
         "aria-invalid": bind.if("hasError", true),
         "aria-describedby": bind.to("ariaDescribedById"),
@@ -132,13 +124,13 @@ export default class ContentView extends View {
       ],
     });
 
-    this.on("change:value", (evt) => {
+    linkUI.on("change:contentUriPath", (evt) => {
       // unsubscribe the currently running subscription
       if (this._contentSubscription) {
         this._contentSubscription.unsubscribe();
       }
 
-      const value = evt.source.value;
+      const value = evt.source.contentUriPath;
       if (CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
         this.#subscribeToContent(value.replace(":", "/"));
       }

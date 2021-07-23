@@ -1,34 +1,23 @@
-.ck.cm-ck-link-form-view .cm-ck-content-field-view {
+@import "contentlinkvisibility.css";
+
+.ck.cm-ck-link-form-view .ck-cm-content-link-view {
   display: flex;
   border: 1px solid var(--ck-color-input-disabled-border);
   border-radius: var(--ck-border-radius);
   cursor: pointer;
 }
 
-.ck.cm-ck-link-form-view .cm-ck-content-field-view * {
+.ck.cm-ck-link-form-view .ck-cm-content-link-view * {
   cursor: pointer;
 }
 
-.cm-ck-content-field-view > .cm-ck-item-button{
+.ck-cm-content-link-view > .cm-ck-item-button{
   flex: 1;
 }
 
-.cm-ck-content-field-view > .ck.ck-button{
+.ck-cm-content-link-view > .ck.ck-button{
   border: none;
   min-height: calc(var(--ck-ui-component-min-height) -2px);
-}
-
-
-.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-external-link-field {
-  display: none;
-}
-
-.ck.cm-ck-link-form-view .ck-cm-content-link-field {
-  display: none;
-}
-
-.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-content-link-field {
-  display: block;
 }
 
 /*ContentView content item styles*/
@@ -52,4 +41,9 @@
 .ck.cm-ck-link-form-view {
   /*we need to set a width to make ellipsis work in the ContentView*/
   width: calc(var(--ck-input-text-width) + 46px);
+}
+
+/* content view button */
+.ck-button.cm-ck-button--underlined .ck.ck-button__label{
+  text-decoration: underline;
 }

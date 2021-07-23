@@ -1,0 +1,23 @@
+.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-external-link-field {
+  display: none;
+}
+
+.ck.cm-ck-link-form-view .ck-cm-content-link-field {
+  display: none;
+}
+
+.ck.cm-ck-link-form-view.cm-ck-link-form-view--show-content-link .ck-cm-content-link-field {
+  display: block;
+}
+
+.ck.ck-cm-link-actions-view.cm-ck-link-form-view--show-content-link .ck-cm-link-actions-preview {
+  display: none;
+}
+
+.ck.ck-cm-link-actions-view .ck-cm-content-link-view {
+  display: none;
+}
+
+.ck.ck-cm-link-actions-view.cm-ck-link-form-view--show-content-link .ck-cm-content-link-view {
+  display: inline-flex;
+}

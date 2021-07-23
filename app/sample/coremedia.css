@@ -21,6 +21,9 @@ div.ck-body-wrapper {
   background-color: #eee;
 }
 
+.cm-core-icons.cm-core-icons--remove::before {
+  content: "x";
+}
 .cm-core-icons.icon--checked-in::before {
   content: "CI";
 }

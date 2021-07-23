@@ -16,6 +16,7 @@ import {
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
+import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -62,6 +63,8 @@ export default class LinkTargetUI extends Plugin {
     const formView = linkUI.formView;
     const extension = new LinkFormViewExtension(formView);
     this._customizeUrlInputView(formView);
+    this._customizeActionsView(linkUI.actionsView);
+
     extension.targetInputView
       .bind("hiddenTarget")
       .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).target);
@@ -138,6 +141,13 @@ export default class LinkTargetUI extends Plugin {
       label: "Url",
       class: ["ck-cm-external-link-field"],
     });
+  }
+
+  private _customizeActionsView(actionsView: LinkActionsView): void {
+    const CM_FORM_VIEW_CLS = "ck-cm-link-actions-view";
+    const CM_PREVIEW_BUTTON_VIEW_CLS = "ck-cm-link-actions-preview";
+    addClassToTemplate(actionsView, [CM_FORM_VIEW_CLS]);
+    addClassToTemplate(actionsView.previewButtonView, [CM_PREVIEW_BUTTON_VIEW_CLS]);
   }
 
   private static _customizeToolbarButtons(formView: LinkFormView): void {

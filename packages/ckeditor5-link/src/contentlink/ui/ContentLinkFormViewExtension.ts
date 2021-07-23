@@ -6,7 +6,6 @@ import createContentLinkView from "./ContentLinkViewFactory";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import ContentView from "./ContentView";
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import {
   extractContentCkeModelUri,
   receiveUriPathFromDragData,
@@ -48,12 +47,10 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   #extendView(linkUI: LinkUI): void {
-    const editor = this.editor;
-    const linkCommand = editor.commands.get("link");
     const formView = linkUI.formView;
-    const contentLinkView = createContentLinkView(this.editor.locale, formView, linkCommand);
+    const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
 
-    formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, formView));
+    formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
     /*
      * Workaround to reset the values of linkBehavior and target fields if modal
      * is canceled and reopened after changes have been made. See related issues:
@@ -69,13 +66,34 @@ class ContentLinkFormViewExtension extends Plugin {
     this.listenTo(linkUI, "_addFormView", () => {
       const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
 
-      contentLinkView.fieldView.set({
-        value: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
+      linkUI.set({
+        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
       });
+    });
+
+    /*
+     * We need to update the visibility of the inputs when the value of the content link changes
+     * If the value was removed: show external link field, otherwise show the content link field
+     */
+    linkUI.on("change:contentUriPath", (evt) => {
+      const value = evt.source.contentUriPath;
+      // content link value has changed. set urlInputView accordingly
+      // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
+      // re-trigger a set of utlInputView here
+      if (value !== null) {
+        formView.urlInputView.fieldView.set({
+          value: value || "",
+        });
+      }
+
+      // set visibility of url and content field
+      showContentLinkField(formView, value);
+      showContentLinkField(linkUI.actionsView, value);
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+  static #render(contentLinkView: LabeledFieldView<ContentView>, linkUI: LinkUI): void {
+    const formView = linkUI.formView;
     ContentLinkFormViewExtension.#logger.debug("Rendering ContentView and register listeners");
     formView.registerChild(contentLinkView);
     ContentLinkFormViewExtension.#logger.debug("Is ContentView already rendered: " + contentLinkView.isRendered);
@@ -83,20 +101,20 @@ class ContentLinkFormViewExtension extends Plugin {
       contentLinkView.render();
     }
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
-    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, formView);
+    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, formView: LinkFormView): void {
+  static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, linkUI: LinkUI): void {
     ContentLinkFormViewExtension.#logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, formView, contentLinkView);
+      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
     contentLinkView.fieldView.element.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
 
-    formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, formView, contentLinkView);
+    linkUI.formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
-    formView.urlInputView.fieldView.element.addEventListener(
+    linkUI.formView.urlInputView.fieldView.element.addEventListener(
       "dragover",
       ContentLinkFormViewExtension.#onDragOverLinkField
     );
@@ -105,13 +123,12 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static #onDropOnLinkField(
     dragEvent: DragEvent,
-    formView: LinkFormView,
-    contentLinkView: LabeledFieldView<ContentView>
+    linkUI: LinkUI,
   ): void {
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
     dragEvent.preventDefault();
     if (contentCkeModelUri !== null) {
-      ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(formView, contentLinkView, contentCkeModelUri);
+      ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, contentCkeModelUri);
       return;
     }
     if (dragEvent.dataTransfer === null) {
@@ -120,29 +137,29 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const data: string = dragEvent.dataTransfer.getData("text/plain");
     if (data) {
-      ContentLinkFormViewExtension.#setDataAndSwitchToExternalLink(formView, contentLinkView, data);
+      ContentLinkFormViewExtension.#setDataAndSwitchToExternalLink(linkUI, data);
     }
     return;
   }
 
   static #setDataAndSwitchToExternalLink(
-    formView: LinkFormView,
-    contentLinkView: LabeledFieldView<ContentView>,
+    linkUI: LinkUI,
     data: string
   ): void {
-    formView.urlInputView.fieldView.set("value", data);
-    contentLinkView.fieldView.set("value", null);
-    showContentLinkField(formView, false);
+    linkUI.formView.urlInputView.fieldView.set("value", data);
+    linkUI.set("contentUriPath", null);
+    showContentLinkField(linkUI.formView, false);
+    showContentLinkField(linkUI.actionsView, false);
   }
 
   static #setDataAndSwitchToContentLink(
-    formView: LinkFormView,
-    contentLinkView: LabeledFieldView<ContentView>,
+    linkUI: LinkUI,
     data: string
   ): void {
-    formView.urlInputView.fieldView.set("value", null);
-    contentLinkView.fieldView.set("value", data);
-    showContentLinkField(formView, true);
+    linkUI.formView.urlInputView.fieldView.set("value", null);
+    linkUI.set("contentUriPath", data);
+    showContentLinkField(linkUI.formView, true);
+    showContentLinkField(linkUI.actionsView, true);
   }
 
   /**
