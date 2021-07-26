@@ -20,9 +20,7 @@ div.ck-body-wrapper {
   background-color: #eee;
 }
 
-.cm-core-icons.cm-core-icons--remove::before {
-  content: "x";
-}
+
 .cm-core-icons.icon--checked-in::before {
   content: "CI";
 }
@@ -37,4 +35,21 @@ div.ck-body-wrapper {
 }
 .cm-core-icons.icon--lock::before {
   content: "LO";
+}
+
+.cm-core-icons.cm-core-icons--remove:hover {
+  color: black;
+}
+
+.cm-core-icons.cm-core-icons--remove::before {
+  content: "x";
+  margin-right: 0;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: transparent;
+}
+
+.cm-ck-cancel-button {
+  min-width: auto !important;
+  margin-right: -4px !important;
 }

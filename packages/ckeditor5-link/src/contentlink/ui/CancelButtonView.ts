@@ -14,7 +14,7 @@ export default class CancelButtonView extends ButtonView {
 
     this.extendTemplate({
       attributes: {
-        class: ["ck-cm-cancel-button"],
+        class: ["cm-ck-cancel-button"],
       },
     });
 
