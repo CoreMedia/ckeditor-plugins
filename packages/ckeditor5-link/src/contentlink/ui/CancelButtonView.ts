@@ -7,6 +7,8 @@ import CoreMediaIconView from "./CoreMediaIconView";
  */
 export default class CancelButtonView extends ButtonView {
   readonly _cancelIcon: CoreMediaIconView;
+  static readonly iconId = "cancelButtonIcon";
+
   constructor(locale: Locale) {
     super(locale);
 
@@ -18,8 +20,9 @@ export default class CancelButtonView extends ButtonView {
 
     this._cancelIcon = new CoreMediaIconView();
     this._cancelIcon.set({
+      id: CancelButtonView.iconId,
       iconClass: "cm-core-icons--remove",
-    })
+    });
     this.children.add(this._cancelIcon);
   }
 }

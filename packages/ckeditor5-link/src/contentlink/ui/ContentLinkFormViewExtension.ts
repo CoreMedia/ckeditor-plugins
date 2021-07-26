@@ -5,7 +5,6 @@ import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import createContentLinkView from "./ContentLinkViewFactory";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
-import ContentView from "./ContentView";
 import {
   extractContentCkeModelUri,
   receiveUriPathFromDragData,
@@ -13,6 +12,7 @@ import {
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/content/RichtextConfigurationService";
+import ContentLinkView from "./ContentLinkView";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -84,11 +84,11 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView<ContentView>, linkUI: LinkUI): void {
+  static #render(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
     const formView = linkUI.formView;
-    ContentLinkFormViewExtension.#logger.debug("Rendering ContentView and register listeners");
+    ContentLinkFormViewExtension.#logger.debug("Rendering ContentLinkView and register listeners");
     formView.registerChild(contentLinkView);
-    ContentLinkFormViewExtension.#logger.debug("Is ContentView already rendered: " + contentLinkView.isRendered);
+    ContentLinkFormViewExtension.#logger.debug("Is ContentLinkView already rendered: " + contentLinkView.isRendered);
     if (!contentLinkView.isRendered) {
       contentLinkView.render();
     }
@@ -96,7 +96,7 @@ class ContentLinkFormViewExtension extends Plugin {
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentView>, linkUI: LinkUI): void {
+  static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
     ContentLinkFormViewExtension.#logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);

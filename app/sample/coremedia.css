@@ -6,17 +6,16 @@ div.ck-body-wrapper {
 /*Example data for the icons, displayed in the ContentView*/
 
 .cm-core-icons {
-  width: 24px !important;
-  padding: 4px !important;
 }
 
 .cm-core-icons::before {
   display: block;
-  text-align: center;
-  line-height: 16px;
-  font-weight: lighter;
   width: 16px;
-  height: 16px;
+  height: 15px;
+  margin: 4px;
+  text-align: center;
+  line-height: 15px;
+  font-weight: lighter;
   font-size: 10px;
   background-color: #eee;
 }

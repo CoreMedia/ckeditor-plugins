@@ -23,9 +23,19 @@ export default class CoreMediaIconView extends View {
      */
     this.set("iconClass", undefined);
 
+    /**
+     * The id of the icon element.
+     *
+     * @observable
+     * @member {String} #id
+     * @default ""
+     */
+    this.set("id", "");
+
     this.setTemplate({
       tag: "span",
       attributes: {
+        id: bind.to("id"),
         class: ["cm-core-icons", bind.to("iconClass")],
       },
     });

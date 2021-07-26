@@ -64,7 +64,25 @@ export default class ContentLinkView extends ButtonView {
 
     this.extendTemplate({
       attributes: {
-        class: ["ck-cm-content-link-view", bind.if("underlined", "cm-ck-button--underlined")],
+        class: ["cm-ck-content-link-view", bind.if("underlined", "cm-ck-button--underlined")],
+      },
+      on: {
+        click: bind.to((evt: MouseEvent) => {
+          evt.preventDefault();
+          const el: Element = <Element>evt.target;
+          if (el?.id === CancelButtonView.iconId) {
+            this.fire("cancelClick");
+          } else {
+            this.fire("contentClick");
+          }
+        }),
+        dblclick: bind.to((evt: Event) => {
+          evt.preventDefault();
+          const el: Element = <Element>evt.target;
+          if (!(el?.id === CancelButtonView.iconId)) {
+            this.fire("doubleClick");
+          }
+        }),
       },
     });
 

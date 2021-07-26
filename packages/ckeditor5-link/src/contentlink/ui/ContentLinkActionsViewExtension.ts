@@ -77,9 +77,9 @@ class ContentLinkActionsViewExtension extends Plugin {
       underlined: true,
     });
     contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
-    //TODO
-    contentLinkView.on("execute", (event) => {
-      console.log("this should open the content in a new tab");
+
+    contentLinkView.on("contentClick", () => {
+      console.log("open content");
     });
 
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));

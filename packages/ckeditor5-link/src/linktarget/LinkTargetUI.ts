@@ -139,13 +139,13 @@ export default class LinkTargetUI extends Plugin {
   private _customizeUrlInputView(linkFormView: LinkFormView): void {
     linkFormView.urlInputView.set({
       label: "Url",
-      class: ["ck-cm-external-link-field"],
+      class: ["cm-ck-external-link-field"],
     });
   }
 
   private _customizeActionsView(actionsView: LinkActionsView): void {
-    const CM_FORM_VIEW_CLS = "ck-cm-link-actions-view";
-    const CM_PREVIEW_BUTTON_VIEW_CLS = "ck-cm-link-actions-preview";
+    const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
+    const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
     addClassToTemplate(actionsView, [CM_FORM_VIEW_CLS]);
     addClassToTemplate(actionsView.previewButtonView, [CM_PREVIEW_BUTTON_VIEW_CLS]);
   }

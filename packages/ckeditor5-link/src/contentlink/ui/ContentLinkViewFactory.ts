@@ -1,8 +1,8 @@
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import ContentView from "./ContentView";
 import "../theme/contentlinkview.css";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import ContentLinkView from "./ContentLinkView";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -13,19 +13,30 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
  * @param locale the editor's locale
  * @param linkUI the linkUI plugin
  */
-const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView<ContentView> => {
-  const contentLinkView: LabeledFieldView<ContentView> = new LabeledFieldView(
+const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView<ContentLinkView> => {
+  const contentLinkView: LabeledFieldView<ContentLinkView> = new LabeledFieldView(
     locale,
-    (labeledFieldView, viewUid, statusUid) => new ContentView(locale, linkUI)
+    (labeledFieldView, viewUid, statusUid) =>
+      new ContentLinkView(locale, linkUI, {
+        renderTypeIcon: true,
+        renderStatusIcon: true,
+        renderCancelButton: true,
+      })
   );
 
   contentLinkView.set({
     label: "Url",
     isEmpty: false,
-    class: "ck-cm-content-link-field",
+    class: "cm-ck-content-link-view-wrapper",
   });
 
-  contentLinkView.fieldView._buttonView.on("execute", () => {
+  contentLinkView.fieldView.bind("uriPath").to(linkUI.formView, "contentUriPath");
+
+  contentLinkView.fieldView.on("doubleClick", () => {
+    console.log("open content");
+  });
+
+  contentLinkView.fieldView.on("cancelClick", () => {
     linkUI.formView.set({
       contentUriPath: undefined,
     });

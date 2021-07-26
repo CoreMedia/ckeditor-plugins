@@ -1,36 +1,18 @@
 @import "contentlinkvisibility.css";
 
-.ck.cm-ck-link-form-view .ck-cm-content-link-view {
+.ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
   border: 1px solid var(--ck-color-input-disabled-border);
   border-radius: var(--ck-border-radius);
-  cursor: pointer;
 }
 
-.ck.cm-ck-link-form-view .ck-cm-content-link-view * {
-  cursor: pointer;
+/* content link view label when underlined */
+.cm-ck-content-link-view.cm-ck-button--underlined > .ck.ck-button__label {
+  text-decoration: underline;
 }
 
-.ck-cm-content-link-view > .cm-ck-item-button{
-  flex: 1;
-}
-
-.ck-cm-content-link-view > .ck.ck-button{
-  border: none;
-  min-height: calc(var(--ck-ui-component-min-height) -2px);
-}
-
-/*ContentView content item styles*/
-
-.cm-ck-content-item {
-  align-items: center;
-  flex: 1;
-  /*we need to set the min-width because flexbox sets the min-width to auto*/
-  min-width: 0;
-  display: flex;
-}
-
-.cm-ck-content-item > .cm-ck-content-item__title {
+/* content view label */
+.cm-ck-content-link-view > .ck.ck-button__label {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -38,12 +20,22 @@
   user-select: none;
 }
 
-.ck.cm-ck-link-form-view {
-  /*we need to set a width to make ellipsis work in the ContentView*/
-  width: calc(var(--ck-input-text-width) + 46px);
+/* content link view inner button */
+.cm-ck-content-link-view > .ck.ck-button{
+  border: none;
+  min-height: calc(var(--ck-ui-component-min-height) -2px);
 }
 
-/* content view button */
-.ck-button.cm-ck-button--underlined .ck.ck-button__label{
-  text-decoration: underline;
+
+/* we need to set a width to make ellipsis work for content link views */
+.ck.cm-ck-link-form-view {
+  width: calc(var(--ck-input-text-width) + 46px);
+}
+.cm-ck-link-actions-view .cm-ck-content-link-view {
+  width: var(--ck-input-text-width);
+}
+
+.cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {
+  min-height: 100%;
+  padding: 0;
 }
