@@ -4,7 +4,7 @@ const addDnDListeners = () => {
     dragExample.addEventListener('dragstart', setDragData);
     dragExample.addEventListener('dragend', removeDropData);
   }
-}
+};
 
 /**
  * Set the drag data stored in the attribute data-cmuripath to the dragEvent.dataTransfer and to the dragDropService in studio.
@@ -15,9 +15,9 @@ function setDragData(dragEvent) {
   let contentId = dragEvent.target.getAttribute("data-cmuripath");
   if (contentId) {
     parent.serviceAgent.fetchService('dragDropService').then((dragDropService) => {
-      dragDropService.dragData = "{\"contents\": [{\"$Ref\": \""+contentId+"\"}]}";
+      dragDropService.dragData = `{"contents": [{"$Ref": "${contentId}"}]}`;
     });
-    dragEvent.dataTransfer.setData('cm/uri-list', "[{\"$Ref\": \""+contentId+"\"}]");
+    dragEvent.dataTransfer.setData('cm/uri-list', `[{"$Ref": "${contentId}"}]`);
     return;
   }
   dragEvent.dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
