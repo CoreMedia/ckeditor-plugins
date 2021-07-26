@@ -28,10 +28,10 @@ import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-rich
 import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
 import LinkTarget from "@coremedia/ckeditor5-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
+import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/MockStudioIntegration";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
-import MockStudioIntegration from "../../packages/coremedia-studio-integration-mock/dist/MockStudioIntegration";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
