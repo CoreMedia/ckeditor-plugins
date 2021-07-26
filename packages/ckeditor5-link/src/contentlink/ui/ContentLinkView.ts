@@ -127,6 +127,7 @@ export default class ContentLinkView extends ButtonView {
             });
             this.set({
               label: received.content.name,
+              tooltip: received.content.name,
             });
           },
         });
