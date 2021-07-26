@@ -62,6 +62,14 @@ export default class ContentLinkView extends ButtonView {
       this.children.add(this._typeIcon);
     }
 
+    /*We need these, but will only add them in the render phase to make them appear behind all other children*/
+    if (this.renderOptions?.renderStatusIcon) {
+      this._statusIcon = new CoreMediaIconView();
+    }
+    if (this.renderOptions?.renderCancelButton) {
+      this._cancelButton = new CancelButtonView(this.locale);
+    }
+
     this.extendTemplate({
       attributes: {
         class: ["cm-ck-content-link-view", bind.if("underlined", "cm-ck-button--underlined")],
@@ -102,12 +110,10 @@ export default class ContentLinkView extends ButtonView {
   render() {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
-      this._statusIcon = new CoreMediaIconView();
       this.children.add(this._statusIcon);
     }
 
     if (this.renderOptions?.renderCancelButton) {
-      this._cancelButton = new CancelButtonView(this.locale);
       this.children.add(this._cancelButton);
     }
   }
