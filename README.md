@@ -30,7 +30,7 @@ pnpm install
 To build the workspace use:
 
 ```text
-npm run build
+pnpm run build
 ```
 
 ### Test
@@ -38,7 +38,7 @@ npm run build
 To run tests use:
 
 ```text
-npm run jest
+pnpm run jest
 ```
 
 ### Troubleshooting
