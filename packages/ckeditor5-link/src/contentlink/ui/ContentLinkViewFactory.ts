@@ -26,7 +26,10 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
   });
 
   contentLinkView.fieldView._buttonView.on("execute", () => {
-    linkUI.set({
+    linkUI.formView.set({
+      contentUriPath: undefined,
+    });
+    linkUI.actionsView.set({
       contentUriPath: undefined,
     });
   });

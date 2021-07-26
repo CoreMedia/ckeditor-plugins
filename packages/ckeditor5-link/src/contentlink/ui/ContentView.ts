@@ -124,7 +124,7 @@ export default class ContentView extends View {
       ],
     });
 
-    linkUI.on("change:contentUriPath", (evt) => {
+    linkUI.formView.on("change:contentUriPath", (evt) => {
       // unsubscribe the currently running subscription
       if (this._contentSubscription) {
         this._contentSubscription.unsubscribe();

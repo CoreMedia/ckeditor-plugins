@@ -4,6 +4,8 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import ContentLinkView from "./ContentLinkView";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import { showContentLinkField } from "../ContentLinkViewUtils";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -27,6 +29,35 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
+    const linkCommand = editor.commands.get("link");
+
+    linkUI.actionsView.set({
+      contentUriPath: undefined,
+    });
+
+    linkUI.actionsView.bind("contentUriPath").to(linkCommand, "value", (value: string) => {
+      return CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
+    });
+
+    /*
+     * We need to update the visibility of the inputs when the value of the content link changes
+     * If the value was removed: show external link field, otherwise show the content link field
+     */
+    linkUI.actionsView.on("change:contentUriPath", (evt) => {
+      const value = evt.source.contentUriPath;
+      // content link value has changed. set urlInputView accordingly
+      // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
+      // re-trigger a set of utlInputView here
+      if (value !== null) {
+        linkUI.formView.urlInputView.fieldView.set({
+          value: value || "",
+        });
+      }
+
+      // set visibility of url and content field
+      showContentLinkField(linkUI.formView, value);
+      showContentLinkField(linkUI.actionsView, value);
+    });
 
     this.#extendView(linkUI);
 
@@ -45,11 +76,12 @@ class ContentLinkActionsViewExtension extends Plugin {
     contentLinkView.set({
       underlined: true,
     });
-    contentLinkView.bind("uriPath").to(linkUI, "contentUriPath");
+    contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
     //TODO
     contentLinkView.on("execute", (event) => {
       console.log("this should open the content in a new tab");
-    })
+    });
+
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));
   }
 

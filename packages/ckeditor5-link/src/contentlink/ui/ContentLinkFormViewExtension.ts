@@ -36,6 +36,15 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
+    const linkCommand = editor.commands.get("link");
+
+    linkUI.formView.set({
+      contentUriPath: undefined,
+    });
+
+    linkUI.formView.bind("contentUriPath").to(linkCommand, "value", (value: string) => {
+      return CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
+    });
 
     this.#extendView(linkUI);
 
@@ -66,29 +75,12 @@ class ContentLinkFormViewExtension extends Plugin {
     this.listenTo(linkUI, "_addFormView", () => {
       const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
 
-      linkUI.set({
+      linkUI.actionsView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
       });
-    });
-
-    /*
-     * We need to update the visibility of the inputs when the value of the content link changes
-     * If the value was removed: show external link field, otherwise show the content link field
-     */
-    linkUI.on("change:contentUriPath", (evt) => {
-      const value = evt.source.contentUriPath;
-      // content link value has changed. set urlInputView accordingly
-      // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
-      // re-trigger a set of utlInputView here
-      if (value !== null) {
-        formView.urlInputView.fieldView.set({
-          value: value || "",
-        });
-      }
-
-      // set visibility of url and content field
-      showContentLinkField(formView, value);
-      showContentLinkField(linkUI.actionsView, value);
+      linkUI.formView.set({
+        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
+      });
     });
   }
 
@@ -147,7 +139,8 @@ class ContentLinkFormViewExtension extends Plugin {
     data: string
   ): void {
     linkUI.formView.urlInputView.fieldView.set("value", data);
-    linkUI.set("contentUriPath", null);
+    linkUI.formView.set("contentUriPath", null);
+    linkUI.actionsView.set("contentUriPath", null);
     showContentLinkField(linkUI.formView, false);
     showContentLinkField(linkUI.actionsView, false);
   }
@@ -157,7 +150,8 @@ class ContentLinkFormViewExtension extends Plugin {
     data: string
   ): void {
     linkUI.formView.urlInputView.fieldView.set("value", null);
-    linkUI.set("contentUriPath", data);
+    linkUI.formView.set("contentUriPath", data);
+    linkUI.actionsView.set("contentUriPath", data);
     showContentLinkField(linkUI.formView, true);
     showContentLinkField(linkUI.actionsView, true);
   }
