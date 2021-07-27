@@ -33,30 +33,10 @@ import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
 
-const initLanguage = () => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const languageFlag = 'lang';
-  const language = urlParams.get(languageFlag)?.toLowerCase() || 'en';
-  const languageToggle = document.getElementById(languageFlag);
-  let label, hrefLang;
-  if (language === "de") {
-    label = "EN";
-    hrefLang = "en";
-  } else {
-    label = "DE";
-    hrefLang = "de";
-  }
-  languageToggle.setAttribute("href", `.?lang=${hrefLang}`);
-  languageToggle.textContent = label;
-  return language;
-};
-
 // set serviceAgent, for DnD Examples to access
 window.serviceAgent = MockStudioIntegration.getServiceAgent();
 
-const editorLanguage = initLanguage();
-loadTranslations(editorLanguage);
+const editorLanguage = document.currentScript.dataset.lang || "en";
 
 // setup dnd IFrame
 const dndButton = document.querySelector("#dragExamplesButton");

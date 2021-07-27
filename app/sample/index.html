@@ -73,7 +73,7 @@
   </p>
 </footer>
 <script>
-  function loadTranslations(locale) {
+  const loadTranslations = (locale) => {
     if (locale === "en") {
       console.log("Default locale. No need to load further resources.");
     } else {
@@ -81,8 +81,40 @@
       scriptEl.src = "../dist/translations/" + locale + ".js";
       document.body.appendChild(scriptEl);
     }
-  }
+  };
+
+  const loadCKEditor = (locale) => {
+    const scriptEl = document.createElement("script");
+    scriptEl.src = "../dist/ckeditor.js";
+    scriptEl.dataset["lang"] = locale;
+    document.body.appendChild(scriptEl);
+  };
+
+  const initLanguage = () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const languageFlag = 'lang';
+    const language = urlParams.get(languageFlag)?.toLowerCase() || 'en';
+    const languageToggle = document.getElementById(languageFlag);
+    let label, hrefLang;
+    if (language === "de") {
+      label = "EN";
+      hrefLang = "en";
+    } else {
+      label = "DE";
+      hrefLang = "de";
+    }
+    languageToggle.setAttribute("href", `.?lang=${hrefLang}`);
+    languageToggle.textContent = label;
+    return language;
+  };
+
+  const lang = initLanguage();
+  loadCKEditor(lang);
+  loadTranslations(lang);
 </script>
-<script src="../dist/ckeditor.js"></script>
+<!--
+<script src="../dist/ckeditor.js" data-lang=""></script>
+-->
 </body>
 </html>
