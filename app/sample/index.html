@@ -20,6 +20,7 @@
         </li>
         <li><a href="https://ckeditor.com/" target="_blank" rel="noopener noreferrer">Website</a></li>
         <li><a href=".?#ckdebug=verbose" rel="noopener noreferrer" id="debug">Debug Logging</a></li>
+        <li>Language: <a href=".?lang=de" rel="noopener noreferrer" id="lang" title="Switch language of editor (not this page).">DE</a></li>
       </ul>
     </nav>
   </div>
@@ -71,6 +72,17 @@
     <a href="https://www.coremedia.com/" target="_blank" rel="noopener">CoreMedia</a>
   </p>
 </footer>
+<script>
+  function loadTranslations(locale) {
+    if (locale === "en") {
+      console.log("Default locale. No need to load further resources.");
+    } else {
+      const scriptEl = document.createElement("script");
+      scriptEl.src = "../dist/translations/" + locale + ".js";
+      document.body.appendChild(scriptEl);
+    }
+  }
+</script>
 <script src="../dist/ckeditor.js"></script>
 </body>
 </html>
