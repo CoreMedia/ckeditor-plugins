@@ -14,6 +14,7 @@ import ContentLinkView from "./ContentLinkView";
  * @param linkUI the linkUI plugin
  */
 const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView<ContentLinkView> => {
+  const { t } = locale;
   const contentLinkView: LabeledFieldView<ContentLinkView> = new LabeledFieldView(
     locale,
     (labeledFieldView, viewUid, statusUid) =>
@@ -25,7 +26,7 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
   );
 
   contentLinkView.set({
-    label: "Link",
+    label: t("Link"),
     isEmpty: false,
     class: "cm-ck-content-link-view-wrapper",
   });
