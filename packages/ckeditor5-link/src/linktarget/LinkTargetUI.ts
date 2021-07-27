@@ -142,6 +142,9 @@ export default class LinkTargetUI extends Plugin {
       label: "Link",
       class: ["cm-ck-external-link-field"],
     });
+    linkFormView.urlInputView.fieldView.set({
+      placeholder: "URL angeben oder Inhalt hierher ziehen",
+    });
   }
 
   static #customizeActionsView(actionsView: LinkActionsView): void {

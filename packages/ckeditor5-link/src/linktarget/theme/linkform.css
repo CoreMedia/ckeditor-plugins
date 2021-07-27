@@ -55,9 +55,6 @@
   padding-left: 0;
 }
 
-/*
- * hidden components
- */
-.ck.cm-ck-link-form-view .ck.ck-cm-hidden {
-  display: none;
+.ck-input::placeholder {
+  font-style: italic;
 }
