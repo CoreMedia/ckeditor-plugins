@@ -23,9 +23,10 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   init(): Promise<void> | null {
+    const logger = ContentLinkActionsViewExtension.#logger;
     const startTimestamp = performance.now();
 
-    ContentLinkActionsViewExtension.#logger.debug(`Initializing ${ContentLinkActionsViewExtension.pluginName}...`);
+    logger.debug(`Initializing ${ContentLinkActionsViewExtension.pluginName}...`);
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
@@ -61,7 +62,7 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     this.#extendView(linkUI);
 
-    ContentLinkActionsViewExtension.#logger.debug(
+    logger.debug(
       `Initialized ${ContentLinkActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
 
