@@ -74,7 +74,7 @@ class ContentLinkActionsViewExtension extends Plugin {
       renderTypeIcon: true,
     });
     contentLinkView.set({
-      underlined: true,
+      renderAsTextLink: true,
     });
     contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
 

@@ -6,11 +6,6 @@
   border-radius: var(--ck-border-radius);
 }
 
-/* content link view label when underlined */
-.cm-ck-content-link-view.cm-ck-button--underlined > .ck.ck-button__label {
-  text-decoration: underline;
-}
-
 /* content view label */
 .cm-ck-content-link-view > .ck.ck-button__label {
   flex: 1;
@@ -27,7 +22,6 @@
 }
 
 
-
 /*
  * ACTIONS VIEW
  */
@@ -36,11 +30,6 @@
 .ck .cm-ck-link-actions-view .cm-ck-content-link-view {
   max-width: var(--ck-input-text-width);
   margin-left: 0 !important;
-  padding-left: 0;
-}
-
-.cm-ck-link-actions-view .ck.ck-button.cm-ck-content-link-view:not(.ck-disabled):hover {
-  background: transparent;
 }
 
 /*
@@ -49,7 +38,7 @@
 
 /* we need to set a width to make ellipsis work for content link views */
 .ck.cm-ck-link-form-view {
-  width: calc(var(--ck-input-text-width) + 46px);
+  width: calc(var(--ck-input-text-width) + 46px + 30px);
 }
 
 .cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {

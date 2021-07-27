@@ -47,13 +47,13 @@ export default class ContentLinkView extends ButtonView {
     this.set("uriPath", undefined);
 
     /**
-     * Defines whether the label should be underlined
+     * Renders the link as a simple text link
      *
      * @observable
-     * @member {Boolean} #underlined
+     * @member {Boolean} #renderAsTextLink
      * @default false
      */
-    this.set("underlined", false);
+    this.set("renderAsTextLink", false);
 
     this.withText = true;
 
@@ -72,7 +72,11 @@ export default class ContentLinkView extends ButtonView {
 
     this.extendTemplate({
       attributes: {
-        class: ["cm-ck-content-link-view", bind.if("underlined", "cm-ck-button--underlined")],
+        class: [
+          "cm-ck-content-link-view",
+          bind.if("underlined", "cm-ck-button--underlined"),
+          bind.if("renderAsTextLink", "ck-link-actions__preview"),
+        ],
       },
       on: {
         click: bind.to((evt: MouseEvent) => {
