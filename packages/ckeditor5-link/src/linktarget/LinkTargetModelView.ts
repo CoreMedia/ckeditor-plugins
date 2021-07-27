@@ -28,7 +28,7 @@ const LINK_CUSTOM_PROPERTY = "link";
  */
 export default class LinkTargetModelView extends Plugin {
   static readonly pluginName: string = "LinkTargetModelView";
-  private readonly logger: Logger = LoggerProvider.getLogger(LinkTargetModelView.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetModelView.pluginName);
   private readonly TEXT_NAME = "$text";
 
   /**
@@ -36,9 +36,10 @@ export default class LinkTargetModelView extends Plugin {
    * (to data and for editing) as `target` attribute.
    */
   init(): Promise<void> | null {
+    const logger = LinkTargetModelView.#logger;
     const startTimestamp = performance.now();
 
-    this.logger.debug(`Initializing ${LinkTargetModelView.pluginName}...`);
+    logger.debug(`Initializing ${LinkTargetModelView.pluginName}...`);
 
     const editor: Editor = this.editor;
     const model = editor.model;
@@ -77,7 +78,7 @@ export default class LinkTargetModelView extends Plugin {
 
     editor.commands.add("linkTarget", new LinkTargetCommand(editor));
 
-    this.logger.debug(`Initialized ${LinkTargetModelView.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    logger.debug(`Initialized ${LinkTargetModelView.pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
   }

@@ -26,7 +26,7 @@ import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
  */
 export default class LinkTargetUI extends Plugin {
   static readonly pluginName: string = "LinkTargetUI";
-  private readonly logger: Logger = LoggerProvider.getLogger(LinkTargetUI.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetUI.pluginName);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [LinkUI, LinkEditing];
@@ -35,16 +35,17 @@ export default class LinkTargetUI extends Plugin {
   private formExtension?: LinkFormViewExtension;
 
   init(): Promise<void> | null {
+    const logger = LinkTargetUI.#logger;
     const startTimestamp = performance.now();
 
-    this.logger.debug(`Initializing ${LinkTargetUI.pluginName}...`);
+    logger.debug(`Initializing ${LinkTargetUI.pluginName}...`);
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
     this.formExtension = this._extendFormView(linkUI);
 
-    this.logger.debug(`Initialized ${LinkTargetUI.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    logger.debug(`Initialized ${LinkTargetUI.pluginName} within ${performance.now() - startTimestamp} ms.`);
     return null;
   }
 
@@ -62,8 +63,8 @@ export default class LinkTargetUI extends Plugin {
     const linkTargetCommand = editor.commands.get("linkTarget");
     const formView = linkUI.formView;
     const extension = new LinkFormViewExtension(formView);
-    this._customizeUrlInputView(formView);
-    this._customizeActionsView(linkUI.actionsView);
+    LinkTargetUI.#customizeUrlInputView(formView);
+    LinkTargetUI.#customizeActionsView(linkUI.actionsView);
 
     extension.targetInputView
       .bind("hiddenTarget")
@@ -82,7 +83,7 @@ export default class LinkTargetUI extends Plugin {
     // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
     // @ts-ignore
     extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
-    this._customizeFormView(formView);
+    LinkTargetUI._customizeFormView(formView);
     LinkTargetUI._customizeToolbarButtons(formView);
 
     this.listenTo(
@@ -136,14 +137,14 @@ export default class LinkTargetUI extends Plugin {
     return extension;
   }
 
-  private _customizeUrlInputView(linkFormView: LinkFormView): void {
+  static #customizeUrlInputView(linkFormView: LinkFormView): void {
     linkFormView.urlInputView.set({
       label: "Link",
       class: ["cm-ck-external-link-field"],
     });
   }
 
-  private _customizeActionsView(actionsView: LinkActionsView): void {
+  static #customizeActionsView(actionsView: LinkActionsView): void {
     const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
     const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
     addClassToTemplate(actionsView, [CM_FORM_VIEW_CLS]);
@@ -155,7 +156,7 @@ export default class LinkTargetUI extends Plugin {
     LinkTargetUI._customizeButton(formView.saveButtonView);
   }
 
-  private _customizeFormView(formView: LinkFormView): void {
+  private static _customizeFormView(formView: LinkFormView): void {
     const CM_LINK_FORM_CLS = "cm-ck-link-form";
     const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
     const CM_PRIMARY_BUTTON_CLS = "cm-ck-footer-button-primary";

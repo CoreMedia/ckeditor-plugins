@@ -3,11 +3,6 @@ import TextProxy, { TextFilterRule } from "./TextProxy";
 import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
-export enum FilterMode {
-  toData,
-  toView
-}
-
 export interface ElementFilterRulesByName {
   [key: string]: ElementFilterRule;
 }
@@ -66,7 +61,7 @@ export const AFTER_ELEMENT_AND_CHILDREN = "$$";
  * @see <a href="https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_htmlParser_node.html">Class Node (CKEDITOR.htmlParser.node) - CKEditor 4 API docs</a>
  */
 export default class HtmlFilter {
-  private readonly logger: Logger = LoggerProvider.getLogger("HtmlFilter");
+  static readonly #logger: Logger = LoggerProvider.getLogger("HtmlFilter");
 
   private readonly _ruleSet: FilterRuleSet;
   private readonly _editor: Editor;
@@ -77,14 +72,18 @@ export default class HtmlFilter {
   }
 
   public applyTo(root: Node): void {
-    this.logger.debug(`Applying filter to root node ${root.nodeName}.`, { root: root });
+    const logger = HtmlFilter.#logger;
+
+    logger.debug(`Applying filter to root node ${root.nodeName}.`, { root: root });
     // In CKEditor 4 we had an extra filter for the root node. If we want to introduce
     // this again, we should do it here.
     this.applyToChildNodes(root);
   }
 
   private applyToChildNodes(parent: Node): void {
-    this.logger.debug(`Applying filter to child nodes of ${parent.nodeName}.`, { parent: parent });
+    const logger = HtmlFilter.#logger;
+
+    logger.debug(`Applying filter to child nodes of ${parent.nodeName}.`, { parent: parent });
     let next: Node | null = parent.firstChild;
     while (next) {
       next = this.applyToCurrent(parent, next);
@@ -100,7 +99,9 @@ export default class HtmlFilter {
    * @private
    */
   private applyToCurrent(parent: Node, currentNode: Node): Node | null {
-    this.logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent: parent, currentNode: currentNode });
+    const logger = HtmlFilter.#logger;
+
+    logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent: parent, currentNode: currentNode });
 
     let next = currentNode.nextSibling;
     let newCurrentSupplier: () => Node | null = () => null;
@@ -138,15 +139,15 @@ export default class HtmlFilter {
 
     const newCurrent = newCurrentSupplier();
 
-    if (this.logger.isDebugEnabled()) {
+    if (logger.isDebugEnabled()) {
       if (newCurrent) {
-        this.logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
+        logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
           parent: parent,
           replacedNode: currentNode,
           next: newCurrent
         });
       } else {
-        this.logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
+        logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
           parent: parent,
           currentNode: currentNode,
           next: currentNode.nextSibling

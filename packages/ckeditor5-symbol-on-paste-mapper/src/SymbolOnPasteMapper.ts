@@ -15,7 +15,7 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string = "SymbolOnPasteMapper";
-  private readonly logger: Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
 
   private static readonly styleNameFontFamily = "font-family";
   private static readonly supportedDataFormat: string = "text/html";
@@ -31,31 +31,35 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   init(): Promise<void> | null {
-    this.logger.info("Initializing FontMapper Plugin");
+    const logger = SymbolOnPasteMapper.#logger;
+
+    logger.info("Initializing FontMapper Plugin");
     const editor = this.editor;
     const fontMapperPluginConfig: FontMapperPluginConfig = editor.config.get(
       "fontMapperPlugin"
     ) as FontMapperPluginConfig;
-    this.applyPluginConfig(fontMapperPluginConfig);
+    SymbolOnPasteMapper.#applyPluginConfig(fontMapperPluginConfig);
 
     const clipboard: Plugin | undefined = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
     if (clipboard instanceof Clipboard) {
       clipboard.on(SymbolOnPasteMapper.clipboardEventName, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
     } else {
-      this.logger.error("Unexpected Clipboard plugin.");
+      logger.error("Unexpected Clipboard plugin.");
     }
     return null;
   }
 
-  private applyPluginConfig(config: FontMapperPluginConfig): void {
+  static #applyPluginConfig(config: FontMapperPluginConfig): void {
+    const logger = SymbolOnPasteMapper.#logger;
+
     if (!config) {
-      this.logger.debug("Configuration: No additional configuration found");
+      logger.debug("Configuration: No additional configuration found");
       return;
     }
-    this.logger.debug("Configuration: Additional configuration will be applied");
+    logger.debug("Configuration: Additional configuration will be applied");
     const fontMapper: Array<FontMapper> = config.fontMapper;
     if (fontMapper) {
-      this.logger.debug("Configuration: New FontMapper are configured, will replace the default ones");
+      logger.debug("Configuration: New FontMapper are configured, will replace the default ones");
       FontMapperProvider.replaceFontMapper(fontMapper);
     }
   }

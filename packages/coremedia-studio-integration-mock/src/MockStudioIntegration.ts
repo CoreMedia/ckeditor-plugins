@@ -13,12 +13,14 @@ const PLUGIN_NAME = "MockStudioIntegration";
  */
 class MockStudioIntegration extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
-  readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
+  static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
   init(): Promise<void> | null {
+    const logger = MockStudioIntegration.#logger;
+
     const startTimestamp = performance.now();
 
-    this.#logger.info(`Initializing ${MockStudioIntegration.pluginName}...`);
+    logger.info(`Initializing ${MockStudioIntegration.pluginName}...`);
 
     const contentDisplayService = new MockContentDisplayService();
     serviceAgent.registerService(contentDisplayService);
@@ -29,7 +31,7 @@ class MockStudioIntegration extends Plugin {
     const dragDropService = new MockDragDropService();
     serviceAgent.registerService(dragDropService);
 
-    this.#logger.info(
+    logger.info(
       `Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
 

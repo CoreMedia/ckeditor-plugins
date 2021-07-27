@@ -59,7 +59,7 @@ type ChangeAttributeCallback = ({ path }: EventInfo, { attributeKeys }: { attrib
  * `href` attribute.
  */
 export default class LinkTargetCommand extends Command {
-  private readonly logger: Logger = LoggerProvider.getLogger("LinkTargetCommand");
+  static readonly #logger: Logger = LoggerProvider.getLogger("LinkTargetCommand");
 
   /**
    * The changes to apply on post-fix. We are using post-fix here to prevent
@@ -160,11 +160,13 @@ export default class LinkTargetCommand extends Command {
    * @private
    */
   private _setNext(target: Target, ...ranges: Range[]): void {
+    const logger = LinkTargetCommand.#logger;
+
     this._next.target = target;
     this._next.ranges = ranges;
     this._next.enabled = ranges.length > 0;
 
-    this.logger.debug("Recorded linkTarget update for next document post-fix for expanded selection.", {
+    logger.debug("Recorded linkTarget update for next document post-fix for expanded selection.", {
       ...this._next,
     });
   }
@@ -274,6 +276,8 @@ export default class LinkTargetCommand extends Command {
    * @private
    */
   private _handleCollapsedSelection(target: Target, href: Href): void {
+    const logger = LinkTargetCommand.#logger;
+
     const editor = this.editor;
     const model = editor.model;
     const selection = model.document.selection;
@@ -284,7 +288,7 @@ export default class LinkTargetCommand extends Command {
 
     if (hasLinkTarget || hasLinkHref) {
       if (!position) {
-        this.logger.warn("Unable to apply `linkTarget` attribute as selection does not provide a first position.");
+        logger.warn("Unable to apply `linkTarget` attribute as selection does not provide a first position.");
         return;
       }
 
@@ -394,12 +398,14 @@ export default class LinkTargetCommand extends Command {
    * @return `true`, if changes got applied; `false` otherwise
    */
   private _updateTargetOnLinkHref(writer: Writer): boolean {
+    const logger = LinkTargetCommand.#logger;
+
     if (!this._next.enabled) {
       // We are currently not active (not working on LinkCommand). Let's just return.
       return false;
     }
 
-    this.logger.debug("Post-fix triggered to update linkTarget.", { ...this._next });
+    logger.debug("Post-fix triggered to update linkTarget.", { ...this._next });
 
     const operationsBefore = writer.batch.operations.length;
 
