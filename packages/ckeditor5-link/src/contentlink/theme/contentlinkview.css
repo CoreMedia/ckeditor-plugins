@@ -34,8 +34,13 @@
 
 /* we need to set a width to make ellipsis work for content link views */
 .ck .cm-ck-link-actions-view .cm-ck-content-link-view {
-  width: var(--ck-input-text-width);
-  margin-left: 0;
+  max-width: var(--ck-input-text-width);
+  margin-left: 0 !important;
+  padding-left: 0;
+}
+
+.cm-ck-link-actions-view .ck.ck-button.cm-ck-content-link-view:not(.ck-disabled):hover {
+  background: transparent;
 }
 
 /*
