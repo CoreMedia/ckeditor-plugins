@@ -43,7 +43,7 @@ export default class LinkTargetUI extends Plugin {
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
-    this.formExtension = this._extendFormView(linkUI);
+    this.formExtension = this.#extendFormView(linkUI);
 
     logger.debug(`Initialized ${LinkTargetUI.pluginName} within ${performance.now() - startTimestamp} ms.`);
     return null;
@@ -57,7 +57,7 @@ export default class LinkTargetUI extends Plugin {
    * * We may need to move the addition of linkTarget attribute to a command
    *   which is then executed.
    */
-  private _extendFormView(linkUI: LinkUI): LinkFormViewExtension {
+  #extendFormView(linkUI: LinkUI): LinkFormViewExtension {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link");
     const linkTargetCommand = editor.commands.get("linkTarget");
@@ -84,7 +84,7 @@ export default class LinkTargetUI extends Plugin {
     // @ts-ignore
     extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
     LinkTargetUI._customizeFormView(formView);
-    LinkTargetUI._customizeToolbarButtons(formView);
+    LinkTargetUI.#customizeToolbarButtons(formView);
 
     this.listenTo(
       formView,
@@ -154,9 +154,9 @@ export default class LinkTargetUI extends Plugin {
     addClassToTemplate(actionsView.previewButtonView, [CM_PREVIEW_BUTTON_VIEW_CLS]);
   }
 
-  private static _customizeToolbarButtons(formView: LinkFormView): void {
-    LinkTargetUI._customizeButton(formView.cancelButtonView);
-    LinkTargetUI._customizeButton(formView.saveButtonView);
+  static #customizeToolbarButtons(formView: LinkFormView): void {
+    LinkTargetUI.#customizeButton(formView.cancelButtonView);
+    LinkTargetUI.#customizeButton(formView.saveButtonView);
   }
 
   private static _customizeFormView(formView: LinkFormView): void {
@@ -184,7 +184,7 @@ export default class LinkTargetUI extends Plugin {
     formView.children.add(formView.saveButtonView);
   }
 
-  private static _customizeButton(button: ButtonView): void {
+  static #customizeButton(button: ButtonView): void {
     // The icon view is the first child of the viewCollection:
     const iconView = button.children.first;
     button.children.remove(iconView);

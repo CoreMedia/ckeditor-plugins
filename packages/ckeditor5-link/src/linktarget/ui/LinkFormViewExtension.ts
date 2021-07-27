@@ -114,12 +114,12 @@ export default class LinkFormViewExtension {
 
     linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: any) => !value);
     linkBehaviorDropdown.fieldView.bind("value").to(linkBehaviorDropdown, "linkBehavior");
-    addListToDropdown(linkBehaviorDropdown.fieldView, this._getLinkBehaviorDefinitions(this));
+    addListToDropdown(linkBehaviorDropdown.fieldView, this.#getLinkBehaviorDefinitions(this));
 
     return linkBehaviorDropdown;
   }
 
-  private _getLinkBehaviorDefinitions = (view: any) => {
+  #getLinkBehaviorDefinitions = (view: any) => {
     const itemDefinitions = new Collection();
     const linkBehaviorLabels = getLinkBehaviorLabels(view.locale.t);
 
