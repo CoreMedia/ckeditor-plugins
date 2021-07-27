@@ -13,6 +13,24 @@
 	--ck-sample-editor-min-height: 400px;
 }
 
+/* --------- NOTOFICATIONS  ----------------------------------------------------------------------------------------- */
+
+#notifications {
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.notification {
+  margin: 10px;
+  padding: 12px 20px;
+  font-size: 12px;
+  background-color: var(--ck-sample-color-green);
+  color: white;
+  border-radius: 2px;
+  box-shadow: 0 4px 4px rgba(0,0,0,0.2);
+}
+
 /* --------- PREVIEW STYLES  ---------------------------------------------------------------------------------------- */
 .preview {
   display: inline-block;

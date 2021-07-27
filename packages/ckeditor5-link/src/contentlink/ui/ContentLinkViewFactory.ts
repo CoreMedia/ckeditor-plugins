@@ -3,6 +3,7 @@ import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import "../theme/contentlinkview.css";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkView from "./ContentLinkView";
+import { openInTab } from "../ContentLinkViewUtils";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -34,7 +35,7 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
   contentLinkView.fieldView.bind("uriPath").to(linkUI.formView, "contentUriPath");
 
   contentLinkView.fieldView.on("doubleClick", () => {
-    console.log("open content");
+    openInTab(contentLinkView.fieldView.uriPath);
   });
 
   contentLinkView.fieldView.on("cancelClick", () => {

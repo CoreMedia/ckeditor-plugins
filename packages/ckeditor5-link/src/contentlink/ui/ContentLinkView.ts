@@ -23,6 +23,8 @@ export default class ContentLinkView extends ButtonView {
   private _statusIcon: CoreMediaIconView | undefined = undefined;
   private _cancelButton: ButtonView | undefined = undefined;
 
+  declare uriPath: string;
+
   constructor(
     locale: Locale,
     linkUI: LinkUI,

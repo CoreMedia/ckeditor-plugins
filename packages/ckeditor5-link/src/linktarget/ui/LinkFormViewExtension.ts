@@ -80,8 +80,9 @@ export default class LinkFormViewExtension {
       });
 
     labeledInput.fieldView.on("input", (evt: any) => {
-      //@ts-ignore
-      labeledInput.hiddenTarget = evt.source.element.value;
+      labeledInput.set({
+        hiddenTarget: evt.source.element.value,
+      });
     });
     return labeledInput;
   }
@@ -108,8 +109,9 @@ export default class LinkFormViewExtension {
     });
 
     linkBehaviorDropdown.fieldView.on("execute", (evt: any) => {
-      //@ts-ignore
-      linkBehaviorDropdown.linkBehavior = evt.source._linkBehaviorValue;
+      linkBehaviorDropdown.set({
+        linkBehavior: evt.source._linkBehaviorValue,
+      });
     });
 
     linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: any) => !value);

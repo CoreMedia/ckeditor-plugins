@@ -5,6 +5,7 @@ import MockRichtextConfigurationService from "./content/MockRichtextConfiguratio
 import { ServiceAgent, serviceAgent } from "@coremedia/studio-apps-service-agent";
 import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
 import MockDragDropService from "./content/MockDragDropService";
+import MockWorkAreaService from "./content/MockWorkAreaService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -31,9 +32,10 @@ class MockStudioIntegration extends Plugin {
     const dragDropService = new MockDragDropService();
     serviceAgent.registerService(dragDropService);
 
-    logger.info(
-      `Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`
-    );
+    const workAreaService = new MockWorkAreaService();
+    serviceAgent.registerService(workAreaService);
+
+    logger.info(`Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
   }

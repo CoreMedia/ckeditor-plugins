@@ -5,7 +5,7 @@ import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import { showContentLinkField } from "../ContentLinkViewUtils";
+import { openInTab, showContentLinkField } from "../ContentLinkViewUtils";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -80,7 +80,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
-      console.log("open content");
+      openInTab(contentLinkView.uriPath);
     });
 
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));

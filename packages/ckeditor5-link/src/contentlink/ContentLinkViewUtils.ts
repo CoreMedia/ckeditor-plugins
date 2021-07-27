@@ -1,5 +1,8 @@
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
+import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import WorkAreaService from "@coremedia/coremedia-studio-integration/content/studioservices/WorkAreaService";
+import WorkAreaServiceDescriptor from "@coremedia/coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 
 /**
  * Adds or removes "cm-ck-link-view--show-content-link" to the form view's (and action view's) element or to the corresponding
@@ -26,4 +29,16 @@ export const showContentLinkField = (view: View, show: boolean): void => {
   } else {
     removeClassFromTemplate(view, showContentLinkFieldClass);
   }
+};
+
+export const openInTab = (uriPath: string) => {
+  uriPath = uriPath.replace(":", "/");
+  serviceAgent
+    .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
+    .then((workAreaService: WorkAreaService): void => {
+      workAreaService.openEntitiesInTabs([uriPath]);
+    })
+    .catch((): void => {
+      console.warn("WorkArea Service not available");
+    });
 };
