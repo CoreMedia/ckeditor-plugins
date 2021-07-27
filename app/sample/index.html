@@ -20,7 +20,8 @@
         </li>
         <li><a href="https://ckeditor.com/" target="_blank" rel="noopener noreferrer">Website</a></li>
         <li><a href=".?#ckdebug=verbose" rel="noopener noreferrer" id="debug">Debug Logging</a></li>
-        <li>Language: <a href=".?lang=de" rel="noopener noreferrer" id="lang" title="Switch language of editor (not this page).">DE</a></li>
+        <li>Language: <a href="." rel="noopener noreferrer" id="lang" title="Switch language of editor UI."
+                         style="font-weight: initial;"></a></li>
       </ul>
     </nav>
   </div>
@@ -38,7 +39,8 @@
       <button id="previewButton">Show XML Preview</button>
       <button id="dragExamplesButton">Show drag examples</button>
     </div>
-    <iframe id="dragExamplesIFrame" hidden="hidden" src="dnd.html" style="width:100%;" title="DnD Examples" frameBorder="0"></iframe>
+    <iframe id="dragExamplesIFrame" hidden="hidden" src="dnd.html" style="width:100%;" title="DnD Examples"
+            frameBorder="0"></iframe>
     <div class="row">
       <div class="row-editor">
         <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
@@ -98,14 +100,14 @@
     const languageToggle = document.getElementById(languageFlag);
     let label, hrefLang;
     if (language === "de") {
-      label = "EN";
+      label = "EN | <strong>DE</strong>";
       hrefLang = "en";
     } else {
-      label = "DE";
+      label = "<strong>EN</strong> | DE";
       hrefLang = "de";
     }
     languageToggle.setAttribute("href", `.?lang=${hrefLang}`);
-    languageToggle.textContent = label;
+    languageToggle.innerHTML = label;
     return language;
   };
 
