@@ -30,9 +30,10 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   init(): Promise<void> | null {
+    const logger = ContentLinkFormViewExtension.#logger;
     const startTimestamp = performance.now();
 
-    ContentLinkFormViewExtension.#logger.debug(`Initializing ${ContentLinkFormViewExtension.pluginName}...`);
+    logger.debug(`Initializing ${ContentLinkFormViewExtension.pluginName}...`);
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
@@ -48,7 +49,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     this.#extendView(linkUI);
 
-    ContentLinkFormViewExtension.#logger.debug(
+    logger.debug(
       `Initialized ${ContentLinkFormViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
 
@@ -85,10 +86,11 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #render(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
+    const logger = ContentLinkFormViewExtension.#logger;
     const formView = linkUI.formView;
-    ContentLinkFormViewExtension.#logger.debug("Rendering ContentLinkView and register listeners");
+    logger.debug("Rendering ContentLinkView and register listeners");
     formView.registerChild(contentLinkView);
-    ContentLinkFormViewExtension.#logger.debug("Is ContentLinkView already rendered: " + contentLinkView.isRendered);
+    logger.debug("Is ContentLinkView already rendered: " + contentLinkView.isRendered);
     if (!contentLinkView.isRendered) {
       contentLinkView.render();
     }
@@ -97,7 +99,8 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
-    ContentLinkFormViewExtension.#logger.debug("Adding drag and drop listeners to formView and contentLinkView");
+    const logger = ContentLinkFormViewExtension.#logger;
+    logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
@@ -110,13 +113,10 @@ class ContentLinkFormViewExtension extends Plugin {
       "dragover",
       ContentLinkFormViewExtension.#onDragOverLinkField
     );
-    ContentLinkFormViewExtension.#logger.debug("Finished adding drag and drop listeners.");
+    logger.debug("Finished adding drag and drop listeners.");
   }
 
-  static #onDropOnLinkField(
-    dragEvent: DragEvent,
-    linkUI: LinkUI,
-  ): void {
+  static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
     dragEvent.preventDefault();
     if (contentCkeModelUri !== null) {
@@ -134,10 +134,7 @@ class ContentLinkFormViewExtension extends Plugin {
     return;
   }
 
-  static #setDataAndSwitchToExternalLink(
-    linkUI: LinkUI,
-    data: string
-  ): void {
+  static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
     linkUI.formView.urlInputView.fieldView.set("value", data);
     linkUI.formView.set("contentUriPath", null);
     linkUI.actionsView.set("contentUriPath", null);
@@ -145,10 +142,7 @@ class ContentLinkFormViewExtension extends Plugin {
     showContentLinkField(linkUI.actionsView, false);
   }
 
-  static #setDataAndSwitchToContentLink(
-    linkUI: LinkUI,
-    data: string
-  ): void {
+  static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     linkUI.formView.urlInputView.fieldView.set("value", null);
     linkUI.formView.set("contentUriPath", data);
     linkUI.actionsView.set("contentUriPath", data);
@@ -172,23 +166,20 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const contentUriPath: string | null = receiveUriPathFromDragData();
+    const logger = ContentLinkFormViewExtension.#logger;
     if (!contentUriPath) {
-      ContentLinkFormViewExtension.#logger.debug(
+      logger.debug(
         "DragOverEvent: No uri received from DragDropService, assume that is any text (like an url) and allow it"
       );
       dragEvent.dataTransfer.dropEffect = "copy";
       return;
     }
 
-    ContentLinkFormViewExtension.#logger.debug(
-      "DragOverEvent: Received uri path from DragDropService: " + contentUriPath
-    );
+    logger.debug("DragOverEvent: Received uri path from DragDropService: " + contentUriPath);
     dragEvent.dataTransfer.dropEffect = "none";
     const service = serviceAgent.getService<RichtextConfigurationService>("mockRichtextConfigurationService");
     if (!service) {
-      ContentLinkFormViewExtension.#logger.warn(
-        "No RichtextConfigurationService found, can't evaluate properly if drop is allowed"
-      );
+      logger.warn("No RichtextConfigurationService found, can't evaluate properly if drop is allowed");
       return;
     }
 
@@ -197,15 +188,11 @@ class ContentLinkFormViewExtension extends Plugin {
         return;
       }
       if (isLinkable) {
-        ContentLinkFormViewExtension.#logger.debug(
-          "DragOverEvent: Received content uri is a linkable and drop is allowed"
-        );
+        logger.debug("DragOverEvent: Received content uri is a linkable and drop is allowed");
         dragEvent.dataTransfer.dropEffect = "copy";
         return;
       }
-      ContentLinkFormViewExtension.#logger.debug(
-        "DragOverEvent: Received content uri is NOT linkable and drop is therefore NOT allowed"
-      );
+      logger.debug("DragOverEvent: Received content uri is NOT linkable and drop is therefore NOT allowed");
       dragEvent.dataTransfer.dropEffect = "none";
     });
   }
