@@ -7,7 +7,7 @@ const addDnDListeners = () => {
 };
 
 const contentList = (contentId, ...otherIds) => {
-  const ids = Array.from(contentId).push(otherIds);
+  const ids = [contentId, ...otherIds];
   return ids.map((id) => {
     return {
       $Ref: id,
