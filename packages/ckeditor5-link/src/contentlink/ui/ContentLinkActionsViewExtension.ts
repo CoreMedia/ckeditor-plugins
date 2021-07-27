@@ -84,6 +84,13 @@ class ContentLinkActionsViewExtension extends Plugin {
     });
 
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));
+
+    linkUI.formView.on("cancel", () => {
+      const initialValue: string = <string>this.editor.commands.get("link")?.value;
+      linkUI.actionsView.set({
+        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
+      });
+    });
   }
 
   static #render(actionsView: LinkActionsView, simpleContentLinkView: ContentLinkView): void {

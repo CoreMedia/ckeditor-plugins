@@ -61,26 +61,10 @@ class ContentLinkFormViewExtension extends Plugin {
     const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
 
     formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
-    /*
-     * Workaround to reset the values of linkBehavior and target fields if modal
-     * is canceled and reopened after changes have been made. See related issues:
-     * ckeditor/ckeditor5-link#78 (now: ckeditor/ckeditor5#4765) and
-     * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
-     */
-
-    if (!(linkUI as any)["_events"] || !(linkUI as any)["_events"].hasOwnProperty("_addFormView")) {
-      //@ts-ignore
-      linkUI.decorate("_addFormView");
-    }
-
-    this.listenTo(linkUI, "_addFormView", () => {
-      const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-
-      linkUI.actionsView.set({
-        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
-      });
+    linkUI.formView.on("cancel", () => {
+      const initialValue: string = <string>this.editor.commands.get("link")?.value;
       linkUI.formView.set({
-        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(href) ? href : null,
+        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
   }
