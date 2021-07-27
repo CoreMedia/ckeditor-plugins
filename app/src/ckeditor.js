@@ -33,12 +33,6 @@ import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const inspectorFlag = 'inspector';
-const wantsInspector = urlParams.has(inspectorFlag) ? 'false' !== urlParams.get(inspectorFlag) : false;
-const inspectorToggle = document.getElementById(inspectorFlag);
-
 // set serviceAgent, for DnD Examples to access
 window.serviceAgent = MockStudioIntegration.getServiceAgent();
 
@@ -50,11 +44,6 @@ dndButton.addEventListener("click", () => {
 });
 
 setupPreview();
-
-if (wantsInspector) {
-  inspectorToggle.setAttribute('href', '?inspector=false');
-  inspectorToggle.textContent = 'Close Inspector';
-}
 
 let editor;
 
@@ -196,9 +185,11 @@ ClassicEditor.create(document.querySelector('.editor'), {
     },
   },
 }).then(newEditor => {
-  if (wantsInspector) {
-    CKEditorInspector.attach(newEditor);
-  }
+  CKEditorInspector.attach({
+    'main-editor': newEditor,
+  }, {
+    isCollapsed: true,
+  });
   initExamples(newEditor);
   editor = newEditor;
   window['editor'] = newEditor;
