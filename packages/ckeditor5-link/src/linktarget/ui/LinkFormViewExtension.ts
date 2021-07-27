@@ -32,8 +32,8 @@ export default class LinkFormViewExtension {
   constructor(linkFormView: LinkFormView) {
     this.linkFormView = linkFormView;
     this.locale = linkFormView.locale;
-    this.targetInputView = this._createTargetInput();
-    this.linkBehaviorView = this._createLinkBehaviorField();
+    this.targetInputView = this.#createTargetInput();
+    this.linkBehaviorView = this.#createLinkBehaviorField();
 
     this.targetInputView
       .bind("isEnabled")
@@ -43,23 +43,23 @@ export default class LinkFormViewExtension {
   }
 
   render(): void {
-    this.renderAfter(this.targetInputView, this.linkFormView.urlInputView);
-    this.renderAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
+    this.#renderAfter(this.targetInputView, this.linkFormView.urlInputView);
+    this.#renderAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
   }
 
-  private renderAfter(view: View, after: View) {
+  #renderAfter(view: View, after: View) {
     this.linkFormView.registerChild(view);
     if (!view.isRendered) {
       view.render();
     }
-    this.insertAfter(view, after);
+    this.#insertAfter(view, after);
   }
 
-  private insertAfter(newView: View, refChild: View): void {
+  #insertAfter(newView: View, refChild: View): void {
     this.linkFormView.element.insertBefore(newView.element, refChild.element.nextSibling);
   }
 
-  private _createTargetInput(): LabeledFieldView<InputTextView> {
+  #createTargetInput(): LabeledFieldView<InputTextView> {
     const t = this.locale.t;
     const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
     labeledInput.label = t("Target");
@@ -86,7 +86,7 @@ export default class LinkFormViewExtension {
     return labeledInput;
   }
 
-  private _createLinkBehaviorField(): LabeledFieldView<DropdownView> {
+  #createLinkBehaviorField(): LabeledFieldView<DropdownView> {
     const locale = this.locale;
     const t = locale.t;
 
