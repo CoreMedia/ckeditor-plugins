@@ -25,7 +25,7 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
   );
 
   contentLinkView.set({
-    label: "Url",
+    label: "Link",
     isEmpty: false,
     class: "cm-ck-content-link-view-wrapper",
   });

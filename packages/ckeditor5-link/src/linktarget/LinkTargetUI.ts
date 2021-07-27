@@ -138,7 +138,7 @@ export default class LinkTargetUI extends Plugin {
 
   private _customizeUrlInputView(linkFormView: LinkFormView): void {
     linkFormView.urlInputView.set({
-      label: "Url",
+      label: "Link",
       class: ["cm-ck-external-link-field"],
     });
   }
