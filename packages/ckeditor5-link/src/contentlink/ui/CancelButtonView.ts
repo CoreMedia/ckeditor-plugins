@@ -6,7 +6,7 @@ import CoreMediaIconView from "./CoreMediaIconView";
  * A CancelButton that uses the css class from CoreMedia Studio to display an icon
  */
 export default class CancelButtonView extends ButtonView {
-  readonly _cancelIcon: CoreMediaIconView;
+  readonly #cancelIcon: CoreMediaIconView;
   static readonly iconId = "cancelButtonIcon";
 
   constructor(locale: Locale) {
@@ -18,11 +18,11 @@ export default class CancelButtonView extends ButtonView {
       },
     });
 
-    this._cancelIcon = new CoreMediaIconView();
-    this._cancelIcon.set({
+    this.#cancelIcon = new CoreMediaIconView();
+    this.#cancelIcon.set({
       id: CancelButtonView.iconId,
       iconClass: "cm-core-icons--remove",
     });
-    this.children.add(this._cancelIcon);
+    this.children.add(this.#cancelIcon);
   }
 }
