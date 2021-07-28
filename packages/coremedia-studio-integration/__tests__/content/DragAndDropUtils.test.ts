@@ -1,4 +1,4 @@
-import {extractContentCkeModelUri} from "../../dist/content/DragAndDropUtils";
+import {extractContentCkeModelUri} from "../../src/content/DragAndDropUtils";
 
 test("extractContentCkeModelUri: should return the content:12345", () => {
   const dragEvent: DragEvent = buildDragEventWithValidId("content/12345");

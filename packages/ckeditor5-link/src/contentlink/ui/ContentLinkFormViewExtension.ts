@@ -1,7 +1,8 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import createContentLinkView from "./ContentLinkViewFactory";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";

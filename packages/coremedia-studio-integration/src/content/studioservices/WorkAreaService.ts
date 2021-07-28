@@ -1,4 +1,3 @@
-import { Observable } from "rxjs";
 import type { ServiceObject } from "@coremedia/studio-apps-service-agent";
 
 /**

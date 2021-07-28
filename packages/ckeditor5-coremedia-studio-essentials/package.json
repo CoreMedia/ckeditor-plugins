@@ -1,19 +1,23 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-richtext",
-  "version": "28.0.0",
+  "name": "@coremedia/ckeditor5-studio-essentials",
+  "version": "28.0.2",
   "private": true,
   "engines": {
     "node": ">=14.0.0"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
     "publish": "jangaroo publish ./dist",
-    "jest": "jest",
-    "jest:coverage": "jest --collect-coverage",
+    "jest": "jest --passWithNoTests",
+    "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
     "npm-check-updates": "npm-check-updates --upgrade"
+  },
+  "exports": {
+    "./*": "./dist/*.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -32,6 +36,9 @@
     "@jangaroo/publish": "^1.0.0-alpha",
     "@types/ckeditor__ckeditor5-core": "^28.0.0",
     "@types/ckeditor__ckeditor5-engine": "^28.0.0",
+    "@types/ckeditor__ckeditor5-link": "^28.0.0",
+    "@types/ckeditor__ckeditor5-typing": "^28.0.0",
+    "@types/ckeditor__ckeditor5-ui": "^28.0.0",
     "@types/ckeditor__ckeditor5-utils": "^28.0.0",
     "@types/jest": "^26.0.20",
     "@types/jest-each": "^24.3.0",
@@ -39,6 +46,7 @@
     "@typescript-eslint/parser": "^4.12.0",
     "babel-jest": "^27.0.6",
     "babel-loader": "^8.2.2",
+    "copyfiles": "^2.4.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
@@ -49,14 +57,14 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"
   },
-  "exports": {
-    "./*": "./dist/*.js"
-  },
   "dependencies": {
     "@ckeditor/ckeditor5-core": "^28.0.0",
-    "@ckeditor/ckeditor5-engine": "^28.0.0",
     "@ckeditor/ckeditor5-utils": "^28.0.0",
-    "@coremedia/ckeditor5-dataprocessor-support": "^28.0.0",
-    "@coremedia/coremedia-utils": "^28.0.0"
+    "@ckeditor/ckeditor5-engine": "^28.0.0",
+    "@ckeditor/ckeditor5-link": "^28.0.0",
+    "@ckeditor/ckeditor5-typing": "^28.0.0",
+    "@ckeditor/ckeditor5-ui": "^28.0.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "^28.0.0",
+    "@coremedia/ckeditor5-link": "^28.0.0"
   }
 }

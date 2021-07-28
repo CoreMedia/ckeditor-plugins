@@ -1,5 +1,5 @@
 import "jest-xml-matcher";
-import { NodeProxy } from "../src";
+import NodeProxy from "../src/NodeProxy";
 
 const PARSER = new DOMParser();
 const SERIALIZER = new XMLSerializer();

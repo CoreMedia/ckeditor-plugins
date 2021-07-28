@@ -1,6 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";

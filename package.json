@@ -32,6 +32,7 @@
     "packages/ckeditor5-dataprocessor-support",
     "packages/ckeditor5-symbol-on-paste-mapper",
     "packages/ckeditor5-coremedia-richtext",
+    "packages/ckeditor5-coremedia-studio-essentials",
     "packages/ckeditor5-link",
     "packages/jest-test-helpers",
     "app"

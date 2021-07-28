@@ -3,7 +3,8 @@ import MockContentDisplayService from "./content/MockContentDisplayService";
 import MockRichtextConfigurationService from "./content/MockRichtextConfigurationService";
 
 import { ServiceAgent, serviceAgent } from "@coremedia/studio-apps-service-agent";
-import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
 

@@ -1,4 +1,4 @@
-import { LoggerProvider } from "../../src";
+import LoggerProvider from "../../src/logging/LoggerProvider";
 // TODO[cke] Works in IDE, but not from console build. What's wrong here?
 //import "@types/jest";
 

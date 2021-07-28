@@ -1,12 +1,12 @@
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
-import {
-  ElementFilterRule,
-  FilterRuleSet,
-  FilterRuleSetConfiguration,
-  parseFilterRuleSetConfigurations,
-  ToDataAndViewElementConfiguration,
-} from "@coremedia/ckeditor5-dataprocessor-support/index";
+
+import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { parseFilterRuleSetConfigurations } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";

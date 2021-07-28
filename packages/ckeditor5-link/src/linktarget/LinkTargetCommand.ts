@@ -10,7 +10,8 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DocumentSelection from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Text from "@ckeditor/ckeditor5-engine/src/model/text";
 
 /**

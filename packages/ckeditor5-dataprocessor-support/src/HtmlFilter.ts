@@ -1,6 +1,7 @@
 import ElementProxy, { ElementFilterRule } from "./ElementProxy";
 import TextProxy, { TextFilterRule } from "./TextProxy";
-import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 export interface ElementFilterRulesByName {

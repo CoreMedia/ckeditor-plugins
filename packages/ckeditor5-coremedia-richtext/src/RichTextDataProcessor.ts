@@ -3,10 +3,11 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import RichTextXmlWriter from "./RichTextXmlWriter";
-import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support/index";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
