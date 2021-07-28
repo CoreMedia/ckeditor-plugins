@@ -1,4 +1,4 @@
-import { ServiceDescriptor } from "@coremedia/studio-apps-service-agent/dist/ServiceDescriptor";
+import { ServiceDescriptor } from "@coremedia/studio-apps-service-agent/src/ServiceDescriptor";
 import WorkAreaService from "./studioservices/WorkAreaService";
 
 /**

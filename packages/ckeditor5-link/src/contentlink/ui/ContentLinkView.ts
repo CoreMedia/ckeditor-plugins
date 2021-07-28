@@ -4,7 +4,7 @@ import ContentDisplayService from "@coremedia/coremedia-studio-integration/conte
 import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import { CONTENT_CKE_MODEL_URI_REGEXP, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import ContentAsLink from "@coremedia/coremedia-studio-integration/dist/content/ContentAsLink";
+import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import CoreMediaIconView from "./CoreMediaIconView";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
