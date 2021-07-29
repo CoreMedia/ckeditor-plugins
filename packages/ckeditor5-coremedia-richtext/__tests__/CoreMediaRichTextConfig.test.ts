@@ -1,7 +1,7 @@
 import "jest-xml-matcher";
 import { Strictness } from "../src/RichTextSchema";
 // @ts-ignore
-import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
 
@@ -547,6 +547,7 @@ describe("Default Data Filter Rules", () => {
         return [name, testData];
       });
 
+  // noinspection XmlUnusedNamespaceDeclaration
   const externalLinkFixtures: DataFilterTestFixture[] = [
     [
       "LINK#1: Should transform xlink:href to xlink back and forth.",
@@ -559,6 +560,7 @@ describe("Default Data Filter Rules", () => {
     ],
   ];
 
+  // noinspection XmlUnusedNamespaceDeclaration
   const contentLinkFixtures: DataFilterTestFixture[] = [
     [
       "CONTENT_LINK#1: (Folders) Should transform xlink:href to xlink back and forth and also transform REST link to link with schema.",
