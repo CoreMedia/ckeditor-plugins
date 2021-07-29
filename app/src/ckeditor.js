@@ -23,15 +23,11 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
-import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
-import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
-import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
-import LinkTarget from "@coremedia/ckeditor5-link/linktarget/LinkTarget";
-import ContentLinks from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
 import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/MockStudioIntegration";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
+import CoreMediaStudioEssentials, {COREMEDIA_RICHTEXT_CONFIG_KEY, Strictness } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 
 // set serviceAgent, for DnD Examples to access
 window.serviceAgent = MockStudioIntegration.getServiceAgent();
@@ -64,8 +60,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Italic,
     AutoLink,
     Link,
-    LinkTarget,
-    ContentLinks,
+    CoreMediaStudioEssentials,
     List,
     Paragraph,
     PasteFromOffice,
@@ -77,7 +72,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     TableToolbar,
     Underline,
     CoreMediaSymbolOnPasteMapper,
-    CoreMediaRichText,
     MockStudioIntegration
   ],
   toolbar: {

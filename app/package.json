@@ -24,8 +24,7 @@
     "@ckeditor/ckeditor5-table": "^28.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^28.0.0",
     "@ckeditor/ckeditor5-ui": "^28.0.0",
-    "@coremedia/ckeditor5-coremedia-richtext": "^28.0.0",
-    "@coremedia/ckeditor5-link": "^28.0.0",
+    "@coremedia/ckeditor5-studio-essentials": "^28.0.0",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "^28.0.0",
     "@coremedia/coremedia-studio-integration-mock": "^28.0.2",
     "@coremedia/studio-apps-service-agent": "^0.0.28",
@@ -50,7 +49,7 @@
   },
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production --stats-error-details",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }
