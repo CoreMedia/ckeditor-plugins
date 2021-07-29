@@ -807,7 +807,7 @@ describe("RichTextSchema.adjustAttributes", () => {
             XPathResult.FIRST_ORDERED_NODE_TYPE
           );
           const element: Element = <Element>xPathResult.singleNodeValue;
-          const mutableElement = new ElementProxy(element);
+          const mutableElement = ElementProxy.instantiateForTest(element);
 
           if (element === null) {
             throw new Error(
@@ -1513,7 +1513,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
     let element: Element | null;
     while ((element = <Element | null>xPathResult.iterateNext())) {
       validatedAtLeastOnce = true;
-      const mutableElement = new ElementProxy(element);
+      const mutableElement = ElementProxy.instantiateForTest(element);
       test(`<${element?.parentElement?.tagName ?? "#document"}>, ${
         testData.expected ? "allowed" : "forbidden"
       }: Validating <${element?.tagName}> if allowed as child of <${
