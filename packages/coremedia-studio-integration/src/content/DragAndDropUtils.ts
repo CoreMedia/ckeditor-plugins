@@ -17,6 +17,24 @@ const extractContentCkeModelUri = (dragEvent: DragEvent): string | null => {
 };
 
 /**
+ * Extract the content uri from the json data given by a html5 drag event (dragEvent.dataTransfer.cm/uri-list).
+ *
+ * @param dataAsJson
+ */
+const extractContentUriFromDragEventJsonData = (dataAsJson: string): string | null => {
+  const parse: Array<Record<string, string>> | null = silentParseDataFromDragEvent(dataAsJson);
+  if (parse === null) {
+    return null;
+  }
+
+  if (parse.length !== 1) {
+    return null;
+  }
+  const refObject: Record<string, string> = parse[0];
+  return refObject.$Ref;
+};
+
+/**
  * Extracts the CoreMedia Content URI from the given DragEvent.
  *
  * @param dragEvent the DragEvent object which has been handed in by the drop event.
@@ -32,16 +50,7 @@ const extractContentUriPath = (dragEvent: DragEvent): string | null => {
     return null;
   }
 
-  const parse: Array<Record<string, string>> | null = silentParseDataFromDragEvent(dataAsJson);
-  if (parse === null) {
-    return null;
-  }
-
-  if (parse.length !== 1) {
-    return null;
-  }
-  const refObject: Record<string, string> = parse[0];
-  return refObject.$Ref;
+  return extractContentUriFromDragEventJsonData(dataAsJson);
 };
 
 const receiveUriPathFromDragData = (): string | null => {
@@ -87,4 +96,6 @@ export {
   receiveUriPathFromDragData,
   silentParseDataFromDragDropService,
   silentParseDataFromDragEvent,
+  extractContentUriFromDragEventJsonData,
+  requireContentCkeModelUri,
 };
