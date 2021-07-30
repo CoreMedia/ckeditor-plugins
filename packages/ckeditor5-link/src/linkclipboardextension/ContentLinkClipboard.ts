@@ -1,6 +1,5 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { DataTransfer } from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import {
   extractContentUriFromDragEventJsonData,
   requireContentCkeModelUri,
@@ -39,39 +38,41 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const dataTransfer: DataTransfer = data.dataTransfer;
-      const cmUriList: string = dataTransfer.getData("cm/uri-list");
-
-      const uriPath = extractContentUriFromDragEventJsonData(cmUriList);
-      //TODO: also handle text/uri-list for normal links.
-      if (!uriPath) {
+      const linkContent: LinkContent | null = ContentLinkClipboard.#evaluateLinkContent(data);
+      if (!linkContent) {
         return;
       }
 
       //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
-
-      serviceAgent
-        .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-        .then((contentDisplayService: ContentDisplayService): void => {
-          contentDisplayService.name(uriPath).then((contentName) => {
-            ContentLinkClipboard.#handleContentNameResponse(editor, data, uriPath, contentName);
+      if (linkContent.isContentLink) {
+        serviceAgent
+          .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
+          .then((contentDisplayService: ContentDisplayService): void => {
+            contentDisplayService.name(linkContent.href).then((contentName) => {
+              ContentLinkClipboard.#handleContentNameResponse(editor, data, linkContent.href, contentName);
+            });
           });
-        });
+      } else {
+        ContentLinkClipboard.#writeLink(editor, data, linkContent.href, linkContent.href);
+      }
     });
   }
 
   static #handleContentNameResponse(editor: Editor, data: any, uriPath: string, contentName: string): void {
+    ContentLinkClipboard.#writeLink(editor, data, requireContentCkeModelUri(uriPath), contentName);
+  }
+
+  static #writeLink(editor: Editor, data: any, href: string, linkText: string): void {
     editor.model.change((writer) => {
       if (data.targetRanges) {
         writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
       }
 
       editor.model.enqueueChange("default", () => {
-        const ckeModelContentUri = requireContentCkeModelUri(uriPath);
-        const link = writer.createText(`${contentName}`, {
-          linkHref: `${ckeModelContentUri}`,
+        const link = writer.createText(`${linkText}`, {
+          linkHref: `${href}`,
         });
 
         editor.model.insertContent(link, editor.model.document.selection);
@@ -79,10 +80,38 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
+  static #evaluateLinkContent(data: any): LinkContent | null {
+    const cmUriList = data.dataTransfer.getData("cm/uri-list");
+    if (cmUriList) {
+      const contentUri = extractContentUriFromDragEventJsonData(cmUriList);
+      if (!contentUri) {
+        return null;
+      }
+      return new LinkContent(true, contentUri);
+    }
+
+    const url = data.dataTransfer.getData("text/uri-list");
+    if (url) {
+      return new LinkContent(false, url);
+    }
+
+    return null;
+  }
+
   destroy(): Promise<never> | null {
     if (this._contentSubscription) {
       this._contentSubscription.unsubscribe();
     }
     return null;
+  }
+}
+
+class LinkContent {
+  isContentLink;
+  href: string;
+
+  constructor(isContentLink: boolean, href: string) {
+    this.isContentLink = isContentLink;
+    this.href = href;
   }
 }
