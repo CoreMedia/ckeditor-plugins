@@ -5,9 +5,14 @@ import {
   extractContentUriFromDragEventJsonData,
   requireContentCkeModelUri,
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
-import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
+import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { Subscription } from "rxjs";
 
 export default class ContentLinkClipboard extends Plugin {
+  private _contentSubscription: Subscription | undefined = undefined;
+
   static get pluginName(): string {
     return "ContentLinkClipboard";
   }
@@ -25,6 +30,7 @@ export default class ContentLinkClipboard extends Plugin {
     const view = this.editor.editing.view;
     const viewDocument = view.document;
 
+    const editor = this.editor;
     // Processing pasted or dropped content.
     this.listenTo(viewDocument, "clipboardInput", (evt, data) => {
       // The clipboard content was already processed by the listener on the higher priority
@@ -42,18 +48,41 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const ckeModelContentUri = requireContentCkeModelUri(uriPath);
-      // Translate the h-card data to a view fragment.
-      const writer = new UpcastWriter(viewDocument);
-      const fragment = writer.createDocumentFragment();
+      //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
+      //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
+      evt.stop();
 
-      writer.appendChild(
-        writer.createElement("a", { href: `${ckeModelContentUri}` }, `${ckeModelContentUri}`),
-        fragment
-      );
-
-      // Provide the content to the clipboard pipeline for further processing.
-      data.content = fragment;
+      serviceAgent
+        .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
+        .then((contentDisplayService: ContentDisplayService): void => {
+          contentDisplayService.name(uriPath).then((contentName) => {
+            ContentLinkClipboard.#handleContentNameResponse(editor, data, uriPath, contentName);
+          });
+        });
     });
+  }
+
+  static #handleContentNameResponse(editor: Editor, data: any, uriPath: string, contentName: string): void {
+    editor.model.change((writer) => {
+      if (data.targetRanges) {
+        writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
+      }
+
+      editor.model.enqueueChange("default", () => {
+        const ckeModelContentUri = requireContentCkeModelUri(uriPath);
+        const link = writer.createText(`${contentName}`, {
+          linkHref: `${ckeModelContentUri}`,
+        });
+
+        editor.model.insertContent(link, editor.model.document.selection);
+      });
+    });
+  }
+
+  destroy(): Promise<never> | null {
+    if (this._contentSubscription) {
+      this._contentSubscription.unsubscribe();
+    }
+    return null;
   }
 }

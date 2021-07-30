@@ -1,6 +1,7 @@
 import ViewDocument from "./document";
 import ViewDocumentFragment from "./documentfragment";
 import ViewElement from "./element";
+import Element from "./element";
 import ViewNode from "./node";
 import {Item} from "./item";
 import DocumentFragment from "./documentfragment";
@@ -49,4 +50,6 @@ export default class UpcastWriter {
    * @param children
    */
   createElement( name: string, attrs?: Object | Iterable<any> , children?: Node | Iterable<Node> | string): Element
+
+  replace(oldElement: Element, newElement: Element): boolean;
 }
