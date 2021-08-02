@@ -18,8 +18,15 @@ export default class LinkUI extends Plugin implements Emitter, Observable {
   actionsView: LinkActionsView;
   formView: LinkFormView;
   readonly isEnabled: boolean;
+  _balloon:any;
+
+  get _isUIInPanel():boolean;
+
+  _hideUI():void;
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
 }
