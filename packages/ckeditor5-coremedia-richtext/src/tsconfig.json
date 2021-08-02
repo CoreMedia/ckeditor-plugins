@@ -23,7 +23,7 @@
         "../../../types/ckeditor__ckeditor5-utils/*"
       ],
       "@coremedia/coremedia-utils/*": [
-        "../node_modules/@coremedia/coremedia-utils/src/*"
+        "../../coremedia-utils/src/*"
       ],
       "@coremedia/ckeditor5-dataprocessor-support/*": [
         "../../ckeditor5-dataprocessor-support/src/*"
