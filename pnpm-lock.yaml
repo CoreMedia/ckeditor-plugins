@@ -198,7 +198,7 @@ importers:
       '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-richtext': ^28.0.0
-      '@coremedia/ckeditor5-link': ^28.0.0
+      '@coremedia/ckeditor5-link': 28.2.0
       '@jangaroo/core': ^1.0.0-alpha
       '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
@@ -371,7 +371,7 @@ importers:
       '@ckeditor/ckeditor5-ui': ^28.0.0
       '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
-      '@coremedia/coremedia-studio-integration': ^28.0.2
+      '@coremedia/coremedia-studio-integration': 28.1.0
       '@coremedia/coremedia-utils': ^28.0.0
       '@coremedia/studio-apps-service-agent': ^0.0.28
       '@jangaroo/core': ^1.0.0-alpha
@@ -582,6 +582,8 @@ importers:
       '@babel/preset-typescript': ^7.12.7
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/studio-apps-service-agent': ^0.0.28
+      '@jangaroo/core': ^1.0.0-alpha
+      '@jangaroo/publish': ^1.0.0-alpha
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -616,6 +618,8 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
+      '@jangaroo/core': 1.0.0-alpha.17
+      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0

@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/coremedia-studio-integration",
-  "version": "28.0.2",
+  "version": "28.1.0",
   "private": true,
   "engines": {
     "node": ">=14.0.0"
@@ -10,6 +10,7 @@
     "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
+    "publish": "jangaroo publish ./dist",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
@@ -34,6 +35,8 @@
     "@coremedia-internal/jest-test-helpers": "^1.0.0",
     "@types/jest": "^26.0.20",
     "@types/jest-each": "^24.3.0",
+    "@jangaroo/publish": "^1.0.0-alpha",
+    "@jangaroo/core": "^1.0.0-alpha",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "babel-jest": "^27.0.6",
