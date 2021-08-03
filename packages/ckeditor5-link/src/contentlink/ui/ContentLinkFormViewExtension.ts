@@ -162,7 +162,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     logger.debug("DragOverEvent: Received uri path from DragDropService: " + contentUriPath);
     dragEvent.dataTransfer.dropEffect = "none";
-    const service = serviceAgent.getService<RichtextConfigurationService>("mockRichtextConfigurationService");
+    const service = serviceAgent.getService<RichtextConfigurationService>("richtextConfigurationService");
     if (!service) {
       logger.warn("No RichtextConfigurationService found, can't evaluate properly if drop is allowed");
       return;

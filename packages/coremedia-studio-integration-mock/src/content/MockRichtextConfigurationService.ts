@@ -39,7 +39,7 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
   }
 
   getName(): string {
-    return "mockRichtextConfigurationService";
+    return "richtextConfigurationService";
   }
 }
 export default MockRichtextConfigurationService;
