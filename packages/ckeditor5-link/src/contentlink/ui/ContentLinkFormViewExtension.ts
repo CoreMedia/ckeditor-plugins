@@ -13,7 +13,7 @@ import {
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkView from "./ContentLinkView";
-import DragDropAsyncSupport from "../DragDropAsyncSupport";
+import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
 
 /**
  * Extends the form view for Content link display. This includes:

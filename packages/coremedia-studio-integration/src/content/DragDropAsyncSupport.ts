@@ -1,13 +1,10 @@
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/content/RichtextConfigurationService";
-import Logger from "@coremedia/coremedia-utils/logging/Logger";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import RichtextConfigurationService from "./RichtextConfigurationService";
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IS_LINKABLE_RESPONSE = boolean | "IN_PROGRESS";
 
 export default class DragDropAsyncSupport {
-  static readonly logger: Logger = LoggerProvider.getLogger("DragDropAsyncSupport");
   static #isLinkableMap: Map<string, IS_LINKABLE_RESPONSE> = new Map<string, IS_LINKABLE_RESPONSE>();
 
   /**
@@ -34,18 +31,10 @@ export default class DragDropAsyncSupport {
 
     DragDropAsyncSupport.#isLinkableMap.set(uriPath, IN_PROGRESS);
     const service = serviceAgent.getService<RichtextConfigurationService>("richtextConfigurationService");
-    const localLogger = DragDropAsyncSupport.logger;
     if (!service) {
-      localLogger.warn("No RichtextConfigurationService found, can't evaluate properly if drop is allowed");
       return false;
     }
-    service.hasLinkableType(uriPath).then((isLinkable) => {
-      localLogger.debug(
-        "service agent call RichtextConfigurationService.hasLinkableType for content " +
-          uriPath +
-          "returned with: " +
-          isLinkable
-      );
+    service.hasLinkableType(uriPath).then((isLinkable: boolean) => {
       DragDropAsyncSupport.#isLinkableMap.set(uriPath, isLinkable);
     });
     const isLinkable = DragDropAsyncSupport.#isLinkableMap.get(uriPath);

@@ -2,12 +2,15 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import {
   extractContentUriFromDragEventJsonData,
+  receiveUriPathFromDragData,
   requireContentCkeModelUri,
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
 import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
@@ -58,6 +61,28 @@ export default class ContentLinkClipboard extends Plugin {
         ContentLinkClipboard.#writeLink(editor, data, linkContent.href, linkContent.href);
       }
     });
+
+    this.listenTo(viewDocument, "dragover", (evt: EventInfo, data) => {
+      // The clipboard content was already processed by the listener on the higher priority
+      // (for example while pasting into the code block).
+      if (data.content) {
+        return;
+      }
+
+      const linkContent: LinkContent | null = ContentLinkClipboard.#evaluateLinkContentOnDragover();
+      if (!linkContent) {
+        return;
+      }
+      if (linkContent.isContentLink) {
+        const isLinkable = DragDropAsyncSupport.isLinkable(linkContent.href);
+        if (isLinkable) {
+          data.dataTransfer.dropEffect = "copy";
+        } else {
+          data.dataTransfer.dropEffect = "none";
+          evt.stop();
+        }
+      }
+    });
   }
 
   static #handleContentNameResponse(editor: Editor, data: any, uriPath: string, contentName: string): void {
@@ -96,6 +121,15 @@ export default class ContentLinkClipboard extends Plugin {
     }
 
     return null;
+  }
+
+  static #evaluateLinkContentOnDragover(): LinkContent | null {
+    const contentUriPath: string | null = receiveUriPathFromDragData();
+    if (!contentUriPath) {
+      //due to we have no data, just set it empty...
+      return new LinkContent(false, "");
+    }
+    return new LinkContent(true, contentUriPath);
   }
 
   destroy(): Promise<never> | null {
