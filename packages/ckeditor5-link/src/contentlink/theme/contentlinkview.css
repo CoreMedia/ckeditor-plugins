@@ -21,6 +21,11 @@
   min-height: calc(var(--ck-ui-component-min-height) -2px);
 }
 
+/* prevents icons to be too high in studio context */
+.cm-ck-content-link-view .cm-core-icons {
+  line-height: 1;
+}
+
 
 /*
  * ACTIONS VIEW
