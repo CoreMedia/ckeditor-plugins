@@ -8,12 +8,12 @@ import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integr
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import {
   extractContentCkeModelUri,
+  extractContentUriPath,
   receiveUriPathFromDragData,
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { showContentLinkField } from "../ContentLinkViewUtils";
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/content/RichtextConfigurationService";
 import ContentLinkView from "./ContentLinkView";
+import DragDropAsyncSupport from "../DragDropAsyncSupport";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -102,6 +102,10 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
+    const contentUriPath: string | null = extractContentUriPath(dragEvent);
+    if (contentUriPath) {
+      DragDropAsyncSupport.resetIsLinkableMap();
+    }
     const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
     dragEvent.preventDefault();
     if (contentCkeModelUri !== null) {
@@ -161,25 +165,9 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     logger.debug("DragOverEvent: Received uri path from DragDropService: " + contentUriPath);
-    dragEvent.dataTransfer.dropEffect = "none";
-    const service = serviceAgent.getService<RichtextConfigurationService>("richtextConfigurationService");
-    if (!service) {
-      logger.warn("No RichtextConfigurationService found, can't evaluate properly if drop is allowed");
-      return;
-    }
-
-    service.hasLinkableType(contentUriPath).then((isLinkable) => {
-      if (dragEvent.dataTransfer === null) {
-        return;
-      }
-      if (isLinkable) {
-        logger.debug("DragOverEvent: Received content uri is a linkable and drop is allowed");
-        dragEvent.dataTransfer.dropEffect = "copy";
-        return;
-      }
-      logger.debug("DragOverEvent: Received content uri is NOT linkable and drop is therefore NOT allowed");
-      dragEvent.dataTransfer.dropEffect = "none";
-    });
+    const isLinkable = DragDropAsyncSupport.isLinkable(contentUriPath);
+    logger.debug("DragOverEvent: Content is linkable: " + isLinkable);
+    dragEvent.dataTransfer.dropEffect = isLinkable ? "copy" : "none";
   }
 }
 
