@@ -4,6 +4,7 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
+import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 
 /**
@@ -15,7 +16,7 @@ export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI, LinkEditing, ContentLinkActionsViewExtension, ContentLinkFormViewExtension];
+    return [LinkUI, LinkEditing, ContentLinkActionsViewExtension, ContentLinkFormViewExtension, ContentLinkCommandHook];
   }
 
   init(): Promise<void> | null {
