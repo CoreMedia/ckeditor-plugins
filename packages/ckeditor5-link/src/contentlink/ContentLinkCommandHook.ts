@@ -1,10 +1,22 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import Text from "@ckeditor/ckeditor5-engine/src/model/text";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
+import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
+
+type InsertContentCallback = (eventInfo: EventInfo, params: unknown[]) => void;
+
+interface NextData {
+  text: Text;
+  href: string;
+}
+
+interface Next {
+  data?: NextData;
+}
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -55,8 +67,15 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
  */
 class ContentLinkCommandHook extends Plugin {
   static readonly pluginName: string = "ContentLinkCommandHook";
-  static readonly #logger = LoggerProvider.getLogger(ContentLinkCommandHook.pluginName);
-  static readonly #LINK_COMMAND_NAME = "link";
+
+  readonly #next: Next = {};
+
+  /**
+   * Callback to listen to insertContent event. Stored, because we need to remove
+   * the listener on destroy.
+   * @private
+   */
+  #insertContentCallback?: InsertContentCallback;
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     // The LinkEditing registers the command, which we want to hook into.
@@ -66,10 +85,20 @@ class ContentLinkCommandHook extends Plugin {
   init(): null {
     const editor = this.editor;
     const model = editor.model;
-    const linkCommandName = ContentLinkCommandHook.#LINK_COMMAND_NAME;
-    const linkCommand = editor.commands.get(linkCommandName);
+    const document = model.document;
 
-    model.on("insertContent", this.interceptInsertHref);
+    /*
+     * Callbacks: We need to create an extra "redirection" as otherwise, we
+     * won't have access to `this` anymore. This applies to "insertContent"
+     * listener as well as the post-fixer.
+     */
+
+    document.registerPostFixer((writer) => this.#postFix(writer));
+
+    this.#insertContentCallback = (eventInfo: EventInfo, args: unknown[]) => this.#interceptInsertContent(args);
+
+    model.on("insertContent", (eventInfo: EventInfo, args: unknown[]) => this.#interceptInsertContent(args));
+
     return null;
   }
 
@@ -77,28 +106,61 @@ class ContentLinkCommandHook extends Plugin {
     const editor = this.editor;
     const model = editor.model;
 
-    model.off("insertContent", this.interceptInsertHref);
+    model.off("insertContent", this.#insertContentCallback);
+
+    this.#next.data = undefined;
+    this.#insertContentCallback = undefined;
+
     return null;
   }
 
-  interceptInsertHref(eventInfo: EventInfo, args: unknown[]): void {
-    const logger = ContentLinkCommandHook.#logger;
-    logger.error("interceptInsertHref", {
-      eventInfo: eventInfo,
-      args: args,
-    });
+  #postFix(writer: Writer): boolean {
+    const { data } = this.#next;
+
+    // Parent: We don't want to apply changes to unattached text node.
+    if (!data || !data.text.parent) {
+      // We have nothing to do and did not change anything.
+      return false;
+    }
+
+    const { text, href } = data;
+
+    // Clear next.
+    this.#next.data = undefined;
+
+    /*
+     * We need to remember the position of the original text. This is because
+     * we need to remove the text prior to adding a new one, as otherwise
+     * the text nodes will be merged by CKEditor, which again makes it impossible
+     * to remove the original text.
+     * Prevent to do that again.
+     */
+    const position = writer.createPositionBefore(text);
+    const attrs = text.getAttributes();
+
+    // We first need to remove the text, as otherwise it will be merged with
+    // the next text to add.
+    writer.remove(text);
+    writer.insertText(`ACME (${href})`, attrs, position);
+
+    return true;
+  }
+
+  #interceptInsertContent(args: unknown[]): void {
     // We expect at least two arguments from `insertContent` triggered by
     // LinkCommand: Text node (with href attribute) and position to insert.
     if (args.length >= 2) {
-      const [text, position, ...rest] = args;
+      const [text, position] = args;
 
       if (text instanceof Text && position instanceof Position) {
         if (text.hasAttribute("linkHref")) {
-          logger.error("match!", {
-            text: text,
-            position: position,
-            rest: rest,
-          });
+          const href = <string>text.getAttribute("linkHref");
+          if (CONTENT_CKE_MODEL_URI_REGEXP.test(href)) {
+            this.#next.data = {
+              text: text,
+              href: href,
+            };
+          }
         }
       }
     }
