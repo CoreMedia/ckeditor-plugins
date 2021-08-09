@@ -36,7 +36,7 @@ const editorLanguage = document.currentScript.dataset.lang || "en";
 
 // setup dnd IFrame
 const dndButton = document.querySelector("#dragExamplesButton");
-const dndFrame = document.querySelector("#dragExamplesIFrame");
+const dndFrame = document.querySelector("#dragExamplesDiv");
 dndButton.addEventListener("click", () => {
   dndFrame.hidden = !dndFrame.hidden;
 });
