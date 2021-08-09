@@ -17,7 +17,7 @@ const contentList = (contentId, ...otherIds) => {
 
 const contentDragData = (contentId, ...otherIds) => {
   return {
-    contents: contentList(contentId, otherIds),
+    contents: contentList(contentId, ...otherIds),
   };
 };
 
