@@ -78,8 +78,8 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
       if (linkContent.isContentLink) {
-        const isLinkable = DragDropAsyncSupport.hasAtLeastOneLinkable(linkContent.links);
-        if (isLinkable) {
+        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(linkContent.links);
+        if (containOnlyLinkables) {
           data.dataTransfer.dropEffect = "copy";
         } else {
           data.dataTransfer.dropEffect = "none";

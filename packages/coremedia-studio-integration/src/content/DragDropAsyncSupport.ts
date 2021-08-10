@@ -41,13 +41,13 @@ export default class DragDropAsyncSupport {
     return isLinkable === undefined || isLinkable === IN_PROGRESS ? false : isLinkable;
   }
 
-  static hasAtLeastOneLinkable(uriPaths: Array<string>): boolean {
+  static containsOnlyLinkables(uriPaths: Array<string>): boolean {
     for (const uriPath of uriPaths) {
-      if (DragDropAsyncSupport.isLinkable(uriPath)) {
-        return true;
+      if (!DragDropAsyncSupport.isLinkable(uriPath)) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   /**
