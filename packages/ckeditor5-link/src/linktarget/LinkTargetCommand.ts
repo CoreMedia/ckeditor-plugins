@@ -2,7 +2,7 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import first from "@ckeditor/ckeditor5-utils/src/first";
 import { isImageAllowed } from "@ckeditor/ckeditor5-link/src/utils";
-import { LINK_COMMAND_NAME, LINK_HREF_MODEL, LINK_TARGET_MODEL } from "./Constants";
+import { LINK_TARGET_MODEL } from "./Constants";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import findAttributeRange from "@ckeditor/ckeditor5-typing/src/utils/findattributerange";
@@ -13,6 +13,7 @@ import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Text from "@ckeditor/ckeditor5-engine/src/model/text";
+import { LINK_COMMAND_NAME, LINK_HREF_MODEL } from "../link/Constants";
 
 /**
  * Signals to delete a target.
