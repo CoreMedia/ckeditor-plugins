@@ -34,7 +34,7 @@ export default class Differ {
 }
 
 export interface DiffItem {
-  type: string;
+  type: "insert" | "remove" | "attribute";
 }
 
 export class DiffItemInsert implements DiffItem {
@@ -54,7 +54,7 @@ export class DiffItemRemove implements DiffItem {
 
   get position(): Position;
 
-  get type(): "insert";
+  get type(): "remove";
 }
 
 export class DiffItemAttribute implements DiffItem {
