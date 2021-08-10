@@ -113,7 +113,7 @@ export default class ContentLinkView extends ButtonView {
     });
   }
 
-  render() {
+  render(): void {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
       this.children.add(this._statusIcon);
