@@ -56,7 +56,7 @@ export default class ContentLinks extends Plugin {
     callback: () => void;
     contextElements: HTMLElement[];
   }) {
-    const editorClass = ".ck-editor";
+    const EDITOR_CLASS = "ck-editor";
     emitter.listenTo(
       <Emitter>(<unknown>document),
       "mousedown",
@@ -68,11 +68,21 @@ export default class ContentLinks extends Plugin {
         // Check if `composedPath` is `undefined` in case the browser does not support native shadow DOM.
         // Can be removed when all supported browsers support native shadow DOM.
         const path = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
-        const editorElement = document.querySelector(editorClass);
-        if (domEvt.target.draggable && !path.includes(editorElement)) {
+
+        // Do not close balloon if user clicked on draggable outside of any editor component
+        const editorElements = document.getElementsByClassName(EDITOR_CLASS);
+        let pathIncludesAnyEditor = false;
+        for (const editorElement of editorElements) {
+          if (path.includes(editorElement)) {
+            pathIncludesAnyEditor = true;
+          }
+        }
+
+        if (domEvt.target.draggable && !pathIncludesAnyEditor) {
           return;
         }
 
+        // Do not close balloon if user clicked on balloon
         for (const contextElement of contextElements) {
           if (contextElement.contains(domEvt.target) || path.includes(contextElement)) {
             return;
@@ -82,7 +92,6 @@ export default class ContentLinks extends Plugin {
         callback();
       }
     );
-
     emitter.listenTo(
       <Emitter>(<unknown>document),
       "click",
@@ -92,12 +101,20 @@ export default class ContentLinks extends Plugin {
         }
 
         const path = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
-        const editorElement = document.querySelector(editorClass);
+        const editorElements = document.getElementsByClassName(EDITOR_CLASS);
 
-        if (domEvt.target.draggable && !path.includes(editorElement)) {
-          callback();
+        for (const editorElement of editorElements) {
+          if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {
+            return;
+          }
         }
-        return;
+
+        for (const contextElement of contextElements) {
+          if (contextElement.contains(domEvt.target) || path.includes(contextElement)) {
+            return;
+          }
+        }
+        callback();
       }
     );
   }
