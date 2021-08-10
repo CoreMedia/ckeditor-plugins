@@ -105,16 +105,26 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
-    const contentUriPath: string | null = extractContentUriPath(dragEvent);
-    if (contentUriPath) {
+    const contentUriPaths: Array<string> | null = extractContentUriPath(dragEvent);
+    if (contentUriPaths) {
       DragDropAsyncSupport.resetIsLinkableMap();
     }
-    const contentCkeModelUri = extractContentCkeModelUri(dragEvent);
+    const contentCkeModelUris = extractContentCkeModelUri(dragEvent);
     dragEvent.preventDefault();
-    if (contentCkeModelUri !== null) {
-      ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, contentCkeModelUri);
+
+    //handle content links
+    if (contentCkeModelUris !== null && contentCkeModelUris.length > 0) {
+      if (contentCkeModelUris.length !== 1) {
+        this.#logger.warn(
+          "Received multiple contents on drop. Should not happen as the drag over should prevent drop of multiple contents."
+        );
+        return;
+      }
+      ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, contentCkeModelUris[0]);
       return;
     }
+
+    //handle normal links
     if (dragEvent.dataTransfer === null) {
       return;
     }
@@ -157,7 +167,7 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    const contentUriPath: string | null = receiveUriPathFromDragData();
+    const contentUriPath: Array<string> | null = receiveUriPathFromDragData();
     const logger = ContentLinkFormViewExtension.#logger;
     if (!contentUriPath) {
       logger.debug(
@@ -167,8 +177,15 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    logger.debug("DragOverEvent: Received uri path from DragDropService: " + contentUriPath);
-    const isLinkable = DragDropAsyncSupport.isLinkable(contentUriPath);
+    if (contentUriPath.length !== 1) {
+      logger.debug("DragOverEvent: Received multiple uri paths, not allowed to drop multiple contents.");
+      dragEvent.dataTransfer.dropEffect = "none";
+      return;
+    }
+
+    const contentUri = contentUriPath[0];
+    logger.debug("DragOverEvent: Received uri path from DragDropService: " + contentUri);
+    const isLinkable = DragDropAsyncSupport.isLinkable(contentUri);
     logger.debug("DragOverEvent: Content is linkable: " + isLinkable);
     dragEvent.dataTransfer.dropEffect = isLinkable ? "copy" : "none";
   }

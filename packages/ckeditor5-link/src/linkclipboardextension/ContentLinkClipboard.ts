@@ -3,7 +3,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import {
   extractContentUriFromDragEventJsonData,
   receiveUriPathFromDragData,
-  requireContentCkeModelUri,
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
@@ -11,6 +10,7 @@ import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integra
 import { Subscription } from "rxjs";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
+import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
@@ -53,12 +53,16 @@ export default class ContentLinkClipboard extends Plugin {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
-            contentDisplayService.name(linkContent.href).then((contentName) => {
-              ContentLinkClipboard.#handleContentNameResponse(editor, data, linkContent.href, contentName);
-            });
+            for (const link of linkContent.links) {
+              contentDisplayService.name(link).then((contentName) => {
+                ContentLinkClipboard.#handleContentNameResponse(editor, data, link, contentName);
+              });
+            }
           });
       } else {
-        ContentLinkClipboard.#writeLink(editor, data, linkContent.href, linkContent.href);
+        for (const link of linkContent.links) {
+          ContentLinkClipboard.#writeLink(editor, data, link, link);
+        }
       }
     });
 
@@ -74,7 +78,7 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
       if (linkContent.isContentLink) {
-        const isLinkable = DragDropAsyncSupport.isLinkable(linkContent.href);
+        const isLinkable = DragDropAsyncSupport.hasAtLeastOneLinkable(linkContent.links);
         if (isLinkable) {
           data.dataTransfer.dropEffect = "copy";
         } else {
@@ -85,7 +89,12 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #handleContentNameResponse(editor: Editor, data: any, uriPath: string, contentName: string): void {
+  static #handleContentNameResponse(editor: Editor, data: unknown, uriPath: string, contentName: string): void {
+    const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
+    if (!isLinkableContent) {
+      DragDropAsyncSupport.resetIsLinkableContent(uriPath);
+      return;
+    }
     ContentLinkClipboard.#writeLink(editor, data, requireContentCkeModelUri(uriPath), contentName);
   }
 
@@ -105,31 +114,35 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #evaluateLinkContent(data: any): LinkContent | null {
+  static #evaluateLinkContent(data: DragEvent): LinkContent | null {
+    if (data === null || data.dataTransfer === null) {
+      return null;
+    }
+
     const cmUriList = data.dataTransfer.getData("cm/uri-list");
     if (cmUriList) {
-      const contentUri = extractContentUriFromDragEventJsonData(cmUriList);
-      if (!contentUri) {
+      const contentUris = extractContentUriFromDragEventJsonData(cmUriList);
+      if (!contentUris) {
         return null;
       }
-      return new LinkContent(true, contentUri);
+      return new LinkContent(true, contentUris);
     }
 
     const url = data.dataTransfer.getData("text/uri-list");
     if (url) {
-      return new LinkContent(false, url);
+      return new LinkContent(false, [url]);
     }
 
     return null;
   }
 
   static #evaluateLinkContentOnDragover(): LinkContent | null {
-    const contentUriPath: string | null = receiveUriPathFromDragData();
-    if (!contentUriPath) {
+    const contentUriPaths: Array<string> | null = receiveUriPathFromDragData();
+    if (!contentUriPaths) {
       //due to we have no data, just set it empty...
-      return new LinkContent(false, "");
+      return new LinkContent(false, [""]);
     }
-    return new LinkContent(true, contentUriPath);
+    return new LinkContent(true, contentUriPaths);
   }
 
   destroy(): Promise<never> | null {
@@ -142,10 +155,10 @@ export default class ContentLinkClipboard extends Plugin {
 
 class LinkContent {
   isContentLink;
-  href: string;
+  links: Array<string>;
 
-  constructor(isContentLink: boolean, href: string) {
+  constructor(isContentLink: boolean, links: Array<string>) {
     this.isContentLink = isContentLink;
-    this.href = href;
+    this.links = links;
   }
 }

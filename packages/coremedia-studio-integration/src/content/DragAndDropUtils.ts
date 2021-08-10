@@ -1,4 +1,4 @@
-import { requireContentCkeModelUri } from "./UriPath";
+import { requireContentCkeModelUris } from "./UriPath";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import DragDropService, { CMBeanReference, CMDragData } from "./studioservices/DragDropService";
 
@@ -8,12 +8,12 @@ import DragDropService, { CMBeanReference, CMDragData } from "./studioservices/D
  * @param dragEvent the DragEvent object which has been handed in by the drop event.
  * @return ckeModelUri the extracted CKE Model URI in the format content:{content-id}
  */
-const extractContentCkeModelUri = (dragEvent: DragEvent): string | null => {
-  const uriPath = extractContentUriPath(dragEvent);
-  if (uriPath === null) {
+const extractContentCkeModelUri = (dragEvent: DragEvent): Array<string> | null => {
+  const uriPaths = extractContentUriPath(dragEvent);
+  if (uriPaths === null) {
     return null;
   }
-  return requireContentCkeModelUri(uriPath);
+  return requireContentCkeModelUris(uriPaths);
 };
 
 /**
@@ -21,17 +21,15 @@ const extractContentCkeModelUri = (dragEvent: DragEvent): string | null => {
  *
  * @param dataAsJson
  */
-const extractContentUriFromDragEventJsonData = (dataAsJson: string): string | null => {
+const extractContentUriFromDragEventJsonData = (dataAsJson: string): Array<string> | null => {
   const parse: Array<Record<string, string>> | null = silentParseDataFromDragEvent(dataAsJson);
   if (parse === null) {
     return null;
   }
 
-  if (parse.length !== 1) {
-    return null;
-  }
-  const refObject: Record<string, string> = parse[0];
-  return refObject.$Ref;
+  return parse.map((value) => {
+    return value.$Ref;
+  });
 };
 
 /**
@@ -40,7 +38,7 @@ const extractContentUriFromDragEventJsonData = (dataAsJson: string): string | nu
  * @param dragEvent the DragEvent object which has been handed in by the drop event.
  * @return cmContentUri the extracted CoreMedia Content URI in the format content/{content-id}
  */
-const extractContentUriPath = (dragEvent: DragEvent): string | null => {
+const extractContentUriPath = (dragEvent: DragEvent): Array<string> | null => {
   const dataTransfer: DataTransfer | null = dragEvent.dataTransfer;
   if (!dataTransfer) {
     return null;
@@ -53,7 +51,7 @@ const extractContentUriPath = (dragEvent: DragEvent): string | null => {
   return extractContentUriFromDragEventJsonData(dataAsJson);
 };
 
-const receiveUriPathFromDragData = (): string | null => {
+const receiveUriPathFromDragData = (): Array<string> | null => {
   const dragDropService = serviceAgent.getService<DragDropService>("dragDropService");
   if (dragDropService === null) {
     console.log("drag drop service not found");
@@ -67,11 +65,9 @@ const receiveUriPathFromDragData = (): string | null => {
   }
 
   const contents: Array<CMBeanReference> = dragData.contents;
-  if (contents.length !== 1) {
-    return null;
-  }
-
-  return contents[0].$Ref;
+  return contents.map((value) => {
+    return value.$Ref;
+  });
 };
 
 const silentParseDataFromDragEvent = (data: string): Array<Record<string, string>> | null => {
@@ -97,5 +93,5 @@ export {
   silentParseDataFromDragDropService,
   silentParseDataFromDragEvent,
   extractContentUriFromDragEventJsonData,
-  requireContentCkeModelUri,
+  requireContentCkeModelUris,
 };

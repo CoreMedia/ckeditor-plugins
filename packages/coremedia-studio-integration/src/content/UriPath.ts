@@ -59,22 +59,28 @@ const requireContentUriPath = (str: string): UriPath => {
  * content. In case of a Content URI path as used within CoreMedia Studio,
  * it will be magically transformed to a valid CKEditor Model URI.
  *
- * @param str string to validate and possibly transform
+ * @param uriPaths string to validate and possibly transform
  * @throws InvalidCkeModelUriError in case of unmatched string
  */
-const requireContentCkeModelUri = (str: string): ModelUri => {
-  if (CONTENT_CKE_MODEL_URI_REGEXP.test(str)) {
-    return str;
+const requireContentCkeModelUris = (uriPaths: Array<string>): Array<ModelUri> => {
+  return uriPaths.map((uriPath) => {
+    return requireContentCkeModelUri(uriPath);
+  });
+};
+
+const requireContentCkeModelUri = (uriPath: string): ModelUri => {
+  if (CONTENT_CKE_MODEL_URI_REGEXP.test(uriPath)) {
+    return uriPath;
   }
 
-  const contentDataUriMatch: RegExpExecArray | null = CONTENT_URI_PATH_REGEXP.exec(str);
+  const contentDataUriMatch: RegExpExecArray | null = CONTENT_URI_PATH_REGEXP.exec(uriPath);
 
   if (!contentDataUriMatch) {
-    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${str}'.`);
+    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${uriPath}'.`);
   }
   const contentId: string = contentDataUriMatch[1];
   if (!contentId) {
-    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${str}'.`);
+    throw new InvalidCkeModelUriError(`Invalid Content data URI or cannot convert to data URI: '${uriPath}'.`);
   }
   return `${CONTENT_CKE_MODEL_URI_PREFIX}${contentId}`;
 };
@@ -105,6 +111,7 @@ export {
   numericId,
   requireContentUriPath,
   requireContentCkeModelUri,
+  requireContentCkeModelUris,
   UriPath,
   ModelUri,
   InvalidUriPathError,

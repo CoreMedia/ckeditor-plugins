@@ -41,10 +41,23 @@ export default class DragDropAsyncSupport {
     return isLinkable === undefined || isLinkable === IN_PROGRESS ? false : isLinkable;
   }
 
+  static hasAtLeastOneLinkable(uriPaths: Array<string>): boolean {
+    for (const uriPath of uriPaths) {
+      if (DragDropAsyncSupport.isLinkable(uriPath)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Resets the isLinkableMap. Called to prevent eternal grow of the Map.
    */
   static resetIsLinkableMap(): void {
     DragDropAsyncSupport.#isLinkableMap = new Map<string, boolean>();
+  }
+
+  static resetIsLinkableContent(uriPath: string): void {
+    DragDropAsyncSupport.#isLinkableMap.delete(uriPath);
   }
 }

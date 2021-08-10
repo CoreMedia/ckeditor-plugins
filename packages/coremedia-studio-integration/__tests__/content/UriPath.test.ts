@@ -1,4 +1,5 @@
-import {requireContentCkeModelUri, requireContentUriPath} from "../../src/content/UriPath";
+import {requireContentCkeModelUris, requireContentUriPath} from "../../src/content/UriPath";
+import {requireContentCkeModelUri} from "../../dist/content/UriPath";
 
 test("requireContentCkeModelUri: should replace / with : for a CoreMedia Studio Uri", () => {
   const actual = requireContentCkeModelUri('content/12345');

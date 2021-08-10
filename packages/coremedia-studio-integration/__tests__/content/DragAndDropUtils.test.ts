@@ -3,7 +3,7 @@ import {extractContentCkeModelUri} from "../../src/content/DragAndDropUtils";
 test("extractContentCkeModelUri: should return the content:12345", () => {
   const dragEvent: DragEvent = buildDragEventWithValidId("content/12345");
   const ckeModelUri = extractContentCkeModelUri(dragEvent);
-  expect(ckeModelUri).toBe("content:12345");
+  expect(ckeModelUri).toContain("content:12345");
 });
 
 test("extractContentCkeModelUri: should be null for unknown drop event", () => {
@@ -15,7 +15,8 @@ test("extractContentCkeModelUri: should be null for unknown drop event", () => {
 test("extractContentCkeModelUri: should be null if we have to much data in drop event", () => {
   const dragEvent: DragEvent = buildDragEventWithTooMuchContent();
   const ckeModelUri = extractContentCkeModelUri(dragEvent);
-  expect(ckeModelUri).toBeNull();
+  expect(ckeModelUri).toContain("content:12345");
+  expect(ckeModelUri).toContain("content:54321");
 });
 
 /**
@@ -50,7 +51,7 @@ function buildDragEventWithTooMuchContent(): DragEvent {
     dataTransfer: {
       getData : (key: string): string | null => {
         if (key === 'cm/uri-list') {
-          return "[{\"$Ref\":\"anything\"}, {\"$Ref1\":\"moreofthis\"}]";
+          return "[{\"$Ref\":\"content/12345\"}, {\"$Ref\":\"content/54321\"}]";
         }
         return null;
       }
