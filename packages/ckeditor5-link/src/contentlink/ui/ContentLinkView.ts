@@ -1,7 +1,8 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor
+  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import { CONTENT_CKE_MODEL_URI_REGEXP, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
@@ -144,8 +145,8 @@ export default class ContentLinkView extends ButtonView {
           },
         });
       })
-      .catch((): void => {
-        console.warn("ContentDisplayService not available.");
+      .catch((reason): void => {
+        console.warn("ContentDisplayService not available.", reason);
       });
   }
 
