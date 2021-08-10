@@ -73,12 +73,15 @@ class ContentLinkFormViewExtension extends Plugin {
   static #render(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     const formView = linkUI.formView;
-    logger.debug("Rendering ContentLinkView and register listeners");
+
+    logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
-    logger.debug("Is ContentLinkView already rendered: " + contentLinkView.isRendered);
+
     if (!contentLinkView.isRendered) {
+      logger.debug(`ContentLinkView not rendered yet. Triggering render().`);
       contentLinkView.render();
     }
+
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }
