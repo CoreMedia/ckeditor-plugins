@@ -6,8 +6,7 @@ const addDnDListeners = () => {
   }
 };
 
-const contentList = (contentId, ...otherIds) => {
-  const ids = [contentId, ...otherIds];
+const contentList = (...ids) => {
   return ids.map((id) => {
     return {
       $Ref: id,
@@ -15,9 +14,9 @@ const contentList = (contentId, ...otherIds) => {
   });
 };
 
-const contentDragData = (contentId, ...otherIds) => {
+const contentDragData = (...ids) => {
   return {
-    contents: contentList(contentId, ...otherIds),
+    contents: contentList(...ids),
   };
 };
 
@@ -28,11 +27,12 @@ const contentDragData = (contentId, ...otherIds) => {
  */
 function setDragData(dragEvent) {
   const contentId = dragEvent.target.getAttribute("data-cmuripath");
+  const idsArray = contentId.split(',');
   if (contentId) {
     parent.serviceAgent.fetchService('dragDropService').then((dragDropService) => {
-      dragDropService.dragData = JSON.stringify(contentDragData(contentId));
+      dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
     });
-    dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(contentId)));
+    dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
     return;
   }
   dragEvent.dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
