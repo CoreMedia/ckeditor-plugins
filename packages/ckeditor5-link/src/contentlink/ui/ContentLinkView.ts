@@ -16,12 +16,12 @@ import CancelButtonView from "./CancelButtonView";
  * and the buttonView renders a button that can be used to remove the displayed content.
  */
 export default class ContentLinkView extends ButtonView {
-  private _contentSubscription: Subscription | undefined = undefined;
   readonly renderOptions;
 
-  private _typeIcon: CoreMediaIconView | undefined = undefined;
-  private _statusIcon: CoreMediaIconView | undefined = undefined;
-  private _cancelButton: ButtonView | undefined = undefined;
+  #contentSubscription: Subscription | undefined = undefined;
+  readonly #typeIcon: CoreMediaIconView | undefined = undefined;
+  readonly #statusIcon: CoreMediaIconView | undefined = undefined;
+  readonly #cancelButton: ButtonView | undefined = undefined;
 
   declare uriPath: string;
 
@@ -60,16 +60,16 @@ export default class ContentLinkView extends ButtonView {
     this.withText = true;
 
     if (renderOptions?.renderTypeIcon) {
-      this._typeIcon = new CoreMediaIconView();
-      this.children.add(this._typeIcon);
+      this.#typeIcon = new CoreMediaIconView();
+      this.children.add(this.#typeIcon);
     }
 
     /*We need these, but will only add them in the render phase to make them appear behind all other children*/
     if (this.renderOptions?.renderStatusIcon) {
-      this._statusIcon = new CoreMediaIconView();
+      this.#statusIcon = new CoreMediaIconView();
     }
     if (this.renderOptions?.renderCancelButton) {
-      this._cancelButton = new CancelButtonView(this.locale);
+      this.#cancelButton = new CancelButtonView(this.locale);
     }
 
     this.extendTemplate({
@@ -102,8 +102,8 @@ export default class ContentLinkView extends ButtonView {
 
     this.on("change:uriPath", (evt) => {
       // unsubscribe the currently running subscription
-      if (this._contentSubscription) {
-        this._contentSubscription.unsubscribe();
+      if (this.#contentSubscription) {
+        this.#contentSubscription.unsubscribe();
       }
 
       const value = evt.source.uriPath;
@@ -116,11 +116,11 @@ export default class ContentLinkView extends ButtonView {
   render(): void {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
-      this.children.add(this._statusIcon);
+      this.children.add(this.#statusIcon);
     }
 
     if (this.renderOptions?.renderCancelButton) {
-      this.children.add(this._cancelButton);
+      this.children.add(this.#cancelButton);
     }
   }
 
@@ -129,12 +129,12 @@ export default class ContentLinkView extends ButtonView {
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         // save the subscription to be able to unsubscribe later
-        this._contentSubscription = contentDisplayService.observe_asLink(uriPath).subscribe({
+        this.#contentSubscription = contentDisplayService.observe_asLink(uriPath).subscribe({
           next: (received: ContentAsLink) => {
-            this._typeIcon?.set({
+            this.#typeIcon?.set({
               iconClass: received.type.classes?.join(" "),
             });
-            this._statusIcon?.set({
+            this.#statusIcon?.set({
               iconClass: received.state.classes?.join(" "),
             });
             this.set({
@@ -150,8 +150,8 @@ export default class ContentLinkView extends ButtonView {
   }
 
   destroy(): Promise<never> | null {
-    if (this._contentSubscription) {
-      this._contentSubscription.unsubscribe();
+    if (this.#contentSubscription) {
+      this.#contentSubscription.unsubscribe();
     }
     super.destroy();
     return null;
