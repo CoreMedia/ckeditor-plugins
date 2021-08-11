@@ -31,10 +31,16 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
     class: "cm-ck-content-link-view-wrapper",
   });
 
+  // Propagate URI-Path from formView (see FormViewExtension) to ContentLinkView
   contentLinkView.fieldView.bind("uriPath").to(linkUI.formView, "contentUriPath");
+  // Propagate Content Name from ContentLinkView to FormView, as we require to
+  // know the name in some link insertion scenarios.
+  linkUI.formView.bind("contentName").to(contentLinkView.fieldView);
 
   contentLinkView.fieldView.on("doubleClick", () => {
-    openInTab(contentLinkView.fieldView.uriPath);
+    if (contentLinkView.fieldView.uriPath) {
+      openInTab(contentLinkView.fieldView.uriPath);
+    }
   });
 
   contentLinkView.fieldView.on("cancelClick", () => {

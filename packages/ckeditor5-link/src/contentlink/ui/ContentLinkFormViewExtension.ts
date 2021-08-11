@@ -14,6 +14,7 @@ import {
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkView from "./ContentLinkView";
 import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
+import ContentLinkCommandHook from "../ContentLinkCommandHook";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -27,7 +28,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkFormViewExtension.pluginName);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI];
+    return [LinkUI, ContentLinkCommandHook];
   }
 
   init(): Promise<void> | null {
@@ -38,15 +39,56 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
+    const contentLinkCommandHook: ContentLinkCommandHook = <ContentLinkCommandHook>(
+      editor.plugins.get(ContentLinkCommandHook)
+    );
     const linkCommand = editor.commands.get("link");
 
     linkUI.formView.set({
       contentUriPath: undefined,
+      contentName: undefined,
     });
 
     linkUI.formView.bind("contentUriPath").to(linkCommand, "value", (value: string) => {
       return CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
     });
+
+    // We have to extend the algorithm of LinkUI to calculate the enabled state of
+    // the save button. This is because, we must not submit a content-link when
+    // we don't know its name yet.
+    const saveButtonView = linkUI.formView.saveButtonView;
+    saveButtonView.unbind("isEnabled");
+    saveButtonView.bind("isEnabled").to(
+      linkCommand,
+      "isEnabled",
+      this,
+      "contentName",
+      this,
+      "contentUriPath",
+      (isEnabled: boolean, contentName: string | undefined, contentUriPath: string | undefined): boolean =>
+        // Either contentUriPath must be unset or contentName must be set.
+        isEnabled && (!contentUriPath || !!contentName)
+    );
+
+    // We need to propagate the content name prior to the LinkCommand being executed.
+    // This is required for collapsed selections, where the LinkCommand wants to
+    // write the URL into the text. For content-links this must be the content name
+    // instead.
+    this.listenTo(
+      linkUI.formView,
+      "submit",
+      () => {
+        // @ts-ignore
+        const { contentUriPath, contentName } = linkUI.formView;
+        if (!!contentUriPath && !!contentName) {
+          contentLinkCommandHook.registerContentName(contentUriPath, contentName);
+        }
+      },
+      {
+        // We need to register the content name prior to the LinkCommand being executed.
+        priority: "high",
+      }
+    );
 
     this.#extendView(linkUI);
 

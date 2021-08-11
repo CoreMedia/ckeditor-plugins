@@ -28,7 +28,8 @@ export default class ContentLinkView extends ButtonView {
   readonly #statusIcon: CoreMediaIconView | undefined = undefined;
   readonly #cancelButton: ButtonView | undefined = undefined;
 
-  declare uriPath: string;
+  declare uriPath: string | undefined;
+  declare contentName: string | undefined;
 
   constructor(
     locale: Locale,
@@ -52,6 +53,15 @@ export default class ContentLinkView extends ButtonView {
      * @default undefined
      */
     this.set("uriPath", undefined);
+
+    /**
+     * The value of the content name.
+     *
+     * @observable
+     * @member {String} #contentName
+     * @default undefined
+     */
+    this.set("contentName", undefined);
 
     /**
      * Renders the link as a simple text link
@@ -106,6 +116,11 @@ export default class ContentLinkView extends ButtonView {
     });
 
     this.on("change:uriPath", (evt) => {
+      // URI changes, thus contentName is not valid anymore for the new URI
+      this.set({
+        contentName: undefined,
+      });
+
       // unsubscribe the currently running subscription
       if (this.#contentSubscription) {
         this.#contentSubscription.unsubscribe();
@@ -145,6 +160,7 @@ export default class ContentLinkView extends ButtonView {
             this.set({
               label: received.content.name,
               tooltip: received.content.name,
+              contentName: received.content.name,
             });
           },
         });

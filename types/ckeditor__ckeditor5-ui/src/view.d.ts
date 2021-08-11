@@ -12,6 +12,7 @@ import TemplateDefinition from "./template/templatedefinition";
  */
 export default class View implements Emitter, Observable {
   element: HTMLElement;
+  isEnabled: boolean;
   readonly isRendered: boolean;
   readonly locale: Locale;
   template: Template;

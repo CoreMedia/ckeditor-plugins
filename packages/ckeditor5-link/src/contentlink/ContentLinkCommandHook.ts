@@ -239,6 +239,10 @@ class ContentLinkCommandHook extends Plugin {
    * @param name resolved name
    */
   registerContentName(uriOrPath: UriPath | ModelUri, name: string): void {
+    console.warn("TODO: registerContentName", {
+      uriOrPath: uriOrPath,
+      name: name,
+    });
     this.#trackingData.replacement = {
       modelUri: requireContentCkeModelUri(uriOrPath),
       name: name,
