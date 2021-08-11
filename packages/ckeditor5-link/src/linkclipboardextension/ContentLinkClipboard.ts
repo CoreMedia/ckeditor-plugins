@@ -11,6 +11,7 @@ import { Subscription } from "rxjs";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
 import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
@@ -53,15 +54,16 @@ export default class ContentLinkClipboard extends Plugin {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
+            const multipleContentDrop = linkContent.links.length > 1;
             for (const link of linkContent.links) {
               contentDisplayService.name(link).then((contentName) => {
-                ContentLinkClipboard.#handleContentNameResponse(editor, data, link, contentName);
+                ContentLinkClipboard.#handleContentNameResponse(editor, data, link, contentName, multipleContentDrop);
               });
             }
           });
       } else {
         for (const link of linkContent.links) {
-          ContentLinkClipboard.#writeLink(editor, data, link, link);
+          ContentLinkClipboard.#writeLink(editor, data, link, link, false);
         }
       }
     });
@@ -89,28 +91,44 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #handleContentNameResponse(editor: Editor, data: unknown, uriPath: string, contentName: string): void {
+  static #handleContentNameResponse(
+    editor: Editor,
+    data: unknown,
+    uriPath: string,
+    contentName: string,
+    multipleContentDrop: boolean
+  ): void {
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
+    DragDropAsyncSupport.resetIsLinkableContent(uriPath);
     if (!isLinkableContent) {
-      DragDropAsyncSupport.resetIsLinkableContent(uriPath);
       return;
     }
-    ContentLinkClipboard.#writeLink(editor, data, requireContentCkeModelUri(uriPath), contentName);
+    ContentLinkClipboard.#writeLink(editor, data, requireContentCkeModelUri(uriPath), contentName, multipleContentDrop);
   }
 
-  static #writeLink(editor: Editor, data: any, href: string, linkText: string): void {
-    editor.model.change((writer) => {
+  static #writeLink(editor: Editor, data: any, href: string, linkText: string, multipleContentDrop: boolean): void {
+    //TODO: One undo step or multiple?
+    editor.model.change((writer: Writer) => {
       if (data.targetRanges) {
         writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
       }
-
-      editor.model.enqueueChange("default", () => {
-        const link = writer.createText(`${linkText}`, {
-          linkHref: `${href}`,
-        });
-
-        editor.model.insertContent(link, editor.model.document.selection);
-      });
+      const firstPosition = editor.model.document.selection.getFirstPosition();
+      if (firstPosition === null) {
+        return;
+      }
+      const element = writer.createElement("paragraph", { isInline: true });
+      if (multipleContentDrop) {
+        writer.insert(element, firstPosition, "after");
+      }
+      const linkPosition = multipleContentDrop ? writer.createPositionAt(element, "end") : firstPosition;
+      writer.insertText(
+        linkText,
+        {
+          linkHref: href,
+        },
+        linkPosition
+      );
+      writer.setSelection(firstPosition, "after");
     });
   }
 
