@@ -6,6 +6,7 @@ import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtensio
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -21,9 +22,10 @@ export default class ContentLinks extends Plugin {
 
   init(): Promise<void> | null {
     const editor = this.editor;
+    const linkCommand = <LinkCommand>editor.commands.get("link");
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
     this.#removeInitialMouseDownListener(linkUI);
-    this.#addMouseEventListenerToHideDialog(linkUI);
+    this.#addMouseEventListenerToHideDialog(linkUI, linkCommand);
     return null;
   }
 
@@ -119,12 +121,20 @@ export default class ContentLinks extends Plugin {
     );
   }
 
-  #addMouseEventListenerToHideDialog(linkUI: LinkUI) {
+  #addMouseEventListenerToHideDialog(linkUI: LinkUI, linkCommand: LinkCommand | undefined) {
     this.#addCustomClickOutsideHandler({
       emitter: <Emitter>(<unknown>linkUI.formView),
       activator: () => linkUI._isUIInPanel,
       contextElements: [linkUI._balloon.view.element],
-      callback: () => linkUI._hideUI(),
+      callback: () => {
+        this.#hideUIAndResetUriPath(linkUI, linkCommand);
+      },
     });
+  }
+
+  #hideUIAndResetUriPath(linkUI: LinkUI, linkCommand: LinkCommand | undefined) {
+    linkUI._hideUI();
+    linkUI.formView.set({ contentUriPath: linkCommand?.value });
+    linkUI.actionsView.set({ contentUriPath: linkCommand?.value });
   }
 }
