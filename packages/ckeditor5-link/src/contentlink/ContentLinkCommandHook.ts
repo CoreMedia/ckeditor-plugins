@@ -1,23 +1,16 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import Text from "@ckeditor/ckeditor5-engine/src/model/text";
 import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import {
-  CONTENT_CKE_MODEL_URI_REGEXP,
-  ModelUri,
-  requireContentCkeModelUri,
-  UriPath,
-} from "@coremedia/coremedia-studio-integration/content/UriPath";
+import { ModelUri, requireContentCkeModelUri, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
-import { LINK_COMMAND_NAME, LINK_HREF_MODEL } from "../link/Constants";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import Position from "@ckeditor/ckeditor5-engine/src/model/position";
+import { LINK_COMMAND_NAME } from "../link/Constants";
 import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
+import { ROOT_NAME } from "./Constants";
 
 /**
  * Alias for easier readable code.
@@ -41,58 +34,59 @@ interface Replacement {
   name: ContentName;
 }
 
-interface InsertedContentLink {
-  text: Text;
-  href: string;
-}
-
-interface TrackedData {
-  replacement: Replacement;
-  contentLink: InsertedContentLink;
-}
-
+/**
+ * Helper object for tacking care of tracking the replacement.
+ */
 class TrackingData {
+  /**
+   * The recorded replacement, if any.
+   * @private
+   */
   #replacement: Replacement | undefined;
-  #contentLink: InsertedContentLink | undefined;
 
+  /**
+   * Write-only for replacement. It can only be read via `clear()` with
+   * corresponding side-effect.
+   * @param replacement
+   */
   set replacement(replacement: Replacement) {
     this.#replacement = replacement;
   }
 
-  set contentLink(contentLink: InsertedContentLink) {
-    this.#contentLink = contentLink;
-  }
-
+  /**
+   * Signals, if a given diff item matches a previously recorded replacement.
+   * @param diffItem diff item to compare
+   */
   matches(diffItem: DiffItemInsert): boolean {
-    if (this.emptyOrIncomplete()) {
-      return false;
-    }
     // The length should match, we are not interested in it otherwise,
     // as obviously not the URI has been written to the text.
-    return diffItem.length === this.#replacement?.modelUri.length;
+    return !!this.#replacement && diffItem.length === this.#replacement.modelUri.length;
   }
 
-  emptyOrIncomplete(): boolean {
-    return !this.#replacement || !this.#contentLink;
+  /**
+   * Signals, if a replacement has been recorded or not.
+   */
+  empty(): boolean {
+    return !this.#replacement;
   }
 
-  clear(): TrackedData | undefined {
+  /**
+   * Removes a possibly recorded replacement and returns it.
+   */
+  clear(): Replacement | undefined {
     const repl = this.#replacement;
-    const link = this.#contentLink;
-
     this.#replacement = undefined;
-    this.#contentLink = undefined;
-
-    if (!repl || !link) {
-      // Result is only relevant, if both are set.
-      return undefined;
-    }
-    return {
-      replacement: repl,
-      contentLink: link,
-    };
+    return repl;
   }
 }
+
+/**
+ * Gets shallow items from a given range.
+ * @param range range to get included items for
+ */
+const getItems = (range: Range): Item[] => {
+  return [...range.getItems({ shallow: true })];
+};
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -155,12 +149,9 @@ class ContentLinkCommandHook extends Plugin {
    *
    * @return previously stored value, if any
    */
-  readonly #clearTrackingData = (): TrackedData | undefined => {
+  readonly #clearTrackingData = (): Replacement | undefined => {
     return this.#trackingData.clear();
   };
-
-  readonly #insertContentInterceptor = (eventInfo: EventInfo, args: unknown[]): void =>
-    this.#interceptInsertContent(args);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     // The LinkEditing registers the command, which we want to hook into.
@@ -190,8 +181,13 @@ class ContentLinkCommandHook extends Plugin {
       return null;
     }
 
+    /*
+     * When LinkCommand finished executing, we don't want to apply any more
+     * changes. Thus, we may safely clear the tracked data. Note, that this
+     * requires that the replacement is registered **before** LinkCommand is
+     * executed.
+     */
     linkCommand.on("execute", this.#clearTrackingData);
-    model.on("insertContent", this.#insertContentInterceptor);
 
     /*
      * Callbacks: We need to create an extra "redirection" as otherwise, we
@@ -209,11 +205,9 @@ class ContentLinkCommandHook extends Plugin {
    */
   destroy(): null {
     const editor = this.editor;
-    const model = editor.model;
     const linkCommand = editor.commands.get(LINK_COMMAND_NAME);
 
     linkCommand?.off("execute", this.#clearTrackingData);
-    model.off("insertContent", this.#insertContentInterceptor);
 
     this.#trackingData.clear();
 
@@ -241,10 +235,6 @@ class ContentLinkCommandHook extends Plugin {
    * @param name resolved name
    */
   registerContentName(uriOrPath: UriPath | ModelUri, name: string): void {
-    console.warn("TODO: registerContentName", {
-      uriOrPath: uriOrPath,
-      name: name,
-    });
     this.#trackingData.replacement = {
       modelUri: requireContentCkeModelUri(uriOrPath),
       name: name,
@@ -269,6 +259,12 @@ class ContentLinkCommandHook extends Plugin {
     return false;
   }
 
+  /**
+   * Just cast to `DiffItemInsert`, expecting that it has been validated before,
+   * that the cast is valid.
+   * @param value value to cast
+   * @private
+   */
   static #asDiffItemInsert(value: DiffItem): DiffItemInsert {
     return <DiffItemInsert>value;
   }
@@ -278,37 +274,34 @@ class ContentLinkCommandHook extends Plugin {
    * it has been previously registered to the name cache.
    *
    * @param writer used to apply the change
-   * @param rawContentLink text node to possibly replace
+   * @param textProxy the representation for the text which got inserted
+   * @param range range for the text
    * @return `true` iff. the text node has been replaced; `false` otherwise
    * @private
    */
   #replaceRawLink(writer: Writer, textProxy: TextProxy, range: Range): boolean {
     const logger = ContentLinkCommandHook.#logger;
 
-    const trackedData: TrackedData | undefined = this.#trackingData.clear();
+    const replacement: Replacement | undefined = this.#trackingData.clear();
 
-    if (!trackedData) {
+    if (!replacement) {
       logger.debug(`Skipped replacement as no replacement was registered.`);
       return false;
     }
 
-    // TODO: Continue here, do we need rawContentLink as input?
-    const { replacement, contentLink } = trackedData;
-    // TODO: The text node may be detached from DOM meanwhile, as it got merged with a previous or following node.
-    const { href } = contentLink;
+    const { modelUri: href } = replacement;
 
-    if (replacement.modelUri !== href) {
-      logger.debug(`Skipped replacement for '${href}', as registered replacement does not match:`, replacement);
-      return false;
-    }
+    /*
+     * Empty Name: This signals, that we want to link to the root folder
+     * While this is unexpected in editorial context, it is a valid call
+     * and thus, must be handled.
+     */
+    const name: ContentName = replacement.name || ROOT_NAME;
 
-    // Empty Name: This signals, that we want to link to the root folder
-    // While this is unexpected in editorial context, it is a valid call
-    // and thus, must be handled.
-    const name: ContentName = replacement.name || "<root>";
-
-    // name !== href: Corner case, when the name really matches the model
-    // representation. There is nothing to do then.
+    /*
+     * name !== href: Corner case, when the name really matches the model
+     * representation. There is nothing to do then.
+     */
     if (name !== href) {
       /*
        * We need to remember the position of the original text. This is because
@@ -318,6 +311,7 @@ class ContentLinkCommandHook extends Plugin {
        * Prevent to do that again.
        */
       const position = range.start;
+      // We want to apply the very same attributes.
       const attrs = textProxy.getAttributes();
 
       // We first need to remove the text, as otherwise it will be merged with
@@ -331,106 +325,80 @@ class ContentLinkCommandHook extends Plugin {
     return false;
   }
 
+  /**
+   * Post-Fix handler, which will quickly exit, when there is nothing known
+   * to do. Otherwise, it will replace a raw content-Model-URI written by
+   * `LinkCommand` for collapsed selections by the content name.
+   *
+   * @param writer writer to possibly apply changes
+   * @private
+   */
   #postFix(writer: Writer): boolean {
-    if (this.#trackingData.emptyOrIncomplete()) {
+    if (this.#trackingData.empty()) {
       // We don't have all required data yet, thus, we don't know how to possibly
       // adjust raw content-links. Nothing to do.
       return false;
     }
 
-    console.warn("TODO: postFix");
-    const logger = ContentLinkCommandHook.#logger;
     const isTextNodeInsertion = ContentLinkCommandHook.#isTextNodeInsertion;
     const asDiffItemInsert = ContentLinkCommandHook.#asDiffItemInsert;
 
     const model = writer.model;
     const document = model.document;
     const differ = document.differ;
+
     const changes = differ.getChanges();
-
-    console.warn("TODO: changes:", {
-      changes: changes,
-      size: changes.length,
-      data: this.#trackingData,
-    });
-
-    // TODO: Use the workaround text node to filter and process further
-
     const textInsertions: DiffItemInsert[] = changes.filter(isTextNodeInsertion).map(asDiffItemInsert);
-
-    console.warn("TODO: relevant texts:", {
-      insertedRawContentLinks: textInsertions,
-      size: textInsertions.length,
-    });
-
+    // For the given scenario, we expect at most one matched diff item.
     const matchedDiffItem = textInsertions.find((diffItem) => this.#trackingData.matches(diffItem));
 
     if (!!matchedDiffItem) {
-      const toRange = (diffItem: DiffItemInsert): Range => {
-        const { position: start } = diffItem;
-        const end = start.getShiftedBy(diffItem.length);
-        return writer.createRange(start, end);
-      };
-      const getItems = (range: Range): Item[] => {
-        return [...range.getItems({ shallow: true })];
-      };
-
-      const range: Range = toRange(matchedDiffItem);
-      const itemsInRange = getItems(range);
-      if (itemsInRange.length !== 1) {
-        // Unexpected number of items in range. We may not safely continue.
-        // Assuming an unmatched insertion, we are not responsible for to apply our changes to.
-        return false;
-      }
-      const onlyItem: Item = itemsInRange[0];
-      if (!onlyItem.is("model:$textProxy")) {
-        // We only deal with text proxies, which should be the result of the insert operation
-        // from LinkCommand.
-        return false;
-      }
-      const textProxy = <TextProxy><unknown>onlyItem;
-      return this.#replaceRawLink(writer, textProxy, range);
+      return this.#postFixMatchedItem(writer, matchedDiffItem);
     }
 
     return false;
   }
 
   /**
-   * Workaround for not being able to detect the actual text node within the
-   * post-fixer.
+   * Applies the change to map the raw content link model URI to the content's
+   * name. Some consistency checks are made before, so that the change is only
+   * applied, when we are very sure, to be doing _the right thing_.
    *
-   * This callback will be triggered prior to the post-fixer, so that the
-   * data can be used by the post-fixer as second step.
-   *
-   * @param args event arguments, will contain text and position as first
-   * two arguments for a match
-   * @see https://github.com/ckeditor/ckeditor5/issues/10335
+   * @param writer writer to apply changes
+   * @param matchedDiffItem diff item which represents the link insertion
    * @private
    */
-  #interceptInsertContent(args: unknown[]): void {
-    // We expect at least two arguments from `insertContent` triggered by
-    // LinkCommand: Text node (with href attribute) and position to insert.
-    if (args.length >= 2) {
-      const [text, position] = args;
+  #postFixMatchedItem(writer: Writer, matchedDiffItem: DiffItemInsert): boolean {
+    const toRange = (diffItem: DiffItemInsert): Range => {
+      const { position: start } = diffItem;
+      const end = start.getShiftedBy(diffItem.length);
+      return writer.createRange(start, end);
+    };
 
-      if (text instanceof Text && position instanceof Position) {
-        if (text.hasAttribute(LINK_HREF_MODEL)) {
-          const href = <string>text.getAttribute(LINK_HREF_MODEL);
-          // We only track data for relevant changes:
-          //   - only deal with content-links
-          //   - only when we have to work around LinkCommand behavior to insert
-          //     the raw `linkHref` attribute value to the text (which is, where
-          //     we want to write the content name instead.
-          if (CONTENT_CKE_MODEL_URI_REGEXP.test(href) && href === text.data) {
-            console.warn("TODO: interceptInsertContent, match!");
-            this.#trackingData.contentLink = {
-              text: text,
-              href: href,
-            };
-          }
-        }
-      }
+    const range: Range = toRange(matchedDiffItem);
+    const itemsInRange = getItems(range);
+
+    if (itemsInRange.length !== 1) {
+      /*
+       * As we only want to deal with one atomic `insertContent` triggered
+       * by `LinkCommand` we don't have to deal with any ranges that cross
+       * several items. And obviously, there is nothing to do, if no items
+       * are covered by the given range.
+       */
+      return false;
     }
+
+    const onlyItem: Item = itemsInRange[0];
+
+    if (!onlyItem.is("model:$textProxy")) {
+      /*
+       * We only deal with text proxies, which should be the result of the insert operation
+       * from LinkCommand.
+       */
+      return false;
+    }
+    const textProxy = <TextProxy>(<unknown>onlyItem);
+    return this.#replaceRawLink(writer, textProxy, range);
   }
 }
 
