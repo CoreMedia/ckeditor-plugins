@@ -103,7 +103,7 @@ export default class Writer {
 
   setSelectionFocus(itemOrPosition: Item | Position, offset?: Offset): void;
 
-  split(position: Position, limitElement: Node): {
+  split(position: Position, limitElement?: Node): {
     position: Position;
     range: any;
   };
