@@ -67,6 +67,10 @@ function externalLinkTargetExamples() {
 function contentLinkExamples() {
   const standardScenarios = [
     {
+      comment: "Root Folder",
+      id: 1,
+    },
+    {
       comment: "Folder 1",
       id: 10001,
     },

@@ -49,6 +49,13 @@ const EVIL_CONTENT_NAME_TRUTHY = `<iframe src="javascript:alert('Boo 👻')" wid
 const EVIL_CONTENT_NAME_FALSY = "&lt; عام &amp; 年 &gt;";
 
 /**
+ * Root folder is the only one, which always only has an empty name.
+ */
+const ROOT_DISPLAY_HINT: DisplayHint = {
+  name: "",
+};
+
+/**
  * Configuration for Mock Service, especially meant for testing purpose.
  */
 interface MockServiceConfig {
@@ -247,6 +254,10 @@ class MockContentDisplayService implements ContentDisplayService {
    * For unreadable contents the promise is rejected.
    */
   name(uriPath: UriPath): Promise<string> {
+    // Special case: Only the root folder is represented with empty name.
+    if (uriPath === "content/1") {
+      return Promise.resolve("");
+    }
     const config = parseContentConfig(uriPath);
     const unreadable = !!config.unreadable;
     const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
@@ -309,8 +320,13 @@ class MockContentDisplayService implements ContentDisplayService {
    * @param uriPath URI path to create mock for
    */
   observe_name(uriPath: UriPath): Observable<DisplayHint> {
-    const config = parseContentConfig(uriPath);
     const id = numericId(uriPath);
+
+    if (id === 1) {
+      // Root Folder has always only an empty name.
+      return createObservable(false, ROOT_DISPLAY_HINT, ROOT_DISPLAY_HINT, this.#config);
+    }
+    const config = parseContentConfig(uriPath);
     const typeName = config.isFolder ? "Folder" : "Document";
     const unreadableState: DisplayHint = {
       name: `${CONTENT_NAME_UNREADABLE} ${typeName} #${id}`,
