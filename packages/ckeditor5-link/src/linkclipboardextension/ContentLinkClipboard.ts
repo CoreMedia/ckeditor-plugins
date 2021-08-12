@@ -107,7 +107,34 @@ export default class ContentLinkClipboard extends Plugin {
   }
 
   static #writeLink(editor: Editor, data: any, href: string, linkText: string, multipleContentDrop: boolean): void {
-    //TODO: One undo step or multiple?
+    if (multipleContentDrop) {
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText);
+    } else {
+      ContentLinkClipboard.#writeLinkInline(editor, data, href, linkText);
+    }
+  }
+
+  static #writeLinkInline(editor: Editor, data: any, href: string, linkText: string): void {
+    editor.model.change((writer: Writer) => {
+      if (data.targetRanges) {
+        writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
+      }
+      const firstPosition = editor.model.document.selection.getFirstPosition();
+      if (firstPosition === null) {
+        return;
+      }
+      writer.insertText(
+        linkText,
+        {
+          linkHref: href,
+          "xlink:href": href,
+        },
+        firstPosition
+      );
+    });
+  }
+
+  static #writeLinkInOwnParagraph(editor: Editor, data: any, href: string, linkText: string): void {
     editor.model.change((writer: Writer) => {
       if (data.targetRanges) {
         writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
@@ -117,11 +144,9 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
       const element = writer.createElement("paragraph");
-      if (multipleContentDrop) {
-        const result = writer.split(firstPosition);
-        writer.insert(element, result.position);
-      }
-      const linkPosition = multipleContentDrop ? writer.createPositionAt(element, "end") : firstPosition;
+      const result = writer.split(firstPosition);
+      writer.insert(element, result.position);
+      const linkPosition = writer.createPositionAt(element, "end");
       writer.insertText(
         linkText,
         {
