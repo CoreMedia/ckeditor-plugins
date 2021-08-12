@@ -1,6 +1,8 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Text from "@ckeditor/ckeditor5-engine/src/model/text";
+import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
+import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
@@ -15,6 +17,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import { LINK_COMMAND_NAME, LINK_HREF_MODEL } from "../link/Constants";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
+import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
 
 /**
  * Alias for easier readable code.
@@ -64,11 +67,9 @@ class TrackingData {
     if (this.emptyOrIncomplete()) {
       return false;
     }
-    console.warn("matches", {
-      diffItem: { ...diffItem },
-      text: { ...this.#contentLink?.text },
-    });
-    return true;
+    // The length should match, we are not interested in it otherwise,
+    // as obviously not the URI has been written to the text.
+    return diffItem.length === this.#replacement?.modelUri.length;
   }
 
   emptyOrIncomplete(): boolean {
@@ -158,7 +159,8 @@ class ContentLinkCommandHook extends Plugin {
     return this.#trackingData.clear();
   };
 
-  readonly #insertContentInterceptor = (eventInfo: EventInfo, args: unknown[]) => this.#interceptInsertContent(args);
+  readonly #insertContentInterceptor = (eventInfo: EventInfo, args: unknown[]): void =>
+    this.#interceptInsertContent(args);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     // The LinkEditing registers the command, which we want to hook into.
@@ -272,50 +274,6 @@ class ContentLinkCommandHook extends Plugin {
   }
 
   /**
-   * Transforms the given DiffItem to a text node. Expects, that it is
-   * previously validated, that this transformation is applicable.
-   *
-   * @param value value to transform to text node
-   * @private
-   */
-  static #toTextNode(value: DiffItem): Text {
-    return <Text>(<DiffItemInsert>value).position.textNode;
-  }
-
-  /**
-   * Validates, if the given text node represents a _raw content-link_.
-   * Thus, it validates, if the text has a `linkHref` attribute set and
-   * that the `linkHref` denotes a link to a content item.
-   *
-   * @param text text node to validate
-   * @private
-   */
-  static #isRawContentLink(text: Text): boolean {
-    // Parent Check: We won't deal with text nodes not attached to DOM (anymore).
-    if (!!text.parent && text.hasAttribute(LINK_HREF_MODEL)) {
-      const href = <string>text.getAttribute(LINK_HREF_MODEL);
-      /*
-       * We only want to take care of content-links, and if they were
-       * inserted in "raw" form, i.e. that CKEditor's Link Feature
-       * decided to render the content URL into the text.
-       *
-       * The corner case, that the name of the content may match the
-       * URI representation in CKEditor Model is not relevant, as we would
-       * just replace the URI by the name, each being the very same.
-       */
-      console.warn("TODO: isRawContentLink", {
-        text: text,
-        parent: text.parent,
-        href: href,
-        data: text.data,
-        matchHref: CONTENT_CKE_MODEL_URI_REGEXP.test(href),
-      });
-      return CONTENT_CKE_MODEL_URI_REGEXP.test(href) && href === text.data;
-    }
-    return false;
-  }
-
-  /**
    * Replaces the given raw content-link with the name of the content, if
    * it has been previously registered to the name cache.
    *
@@ -324,7 +282,7 @@ class ContentLinkCommandHook extends Plugin {
    * @return `true` iff. the text node has been replaced; `false` otherwise
    * @private
    */
-  #replaceRawLink(writer: Writer): boolean {
+  #replaceRawLink(writer: Writer, textProxy: TextProxy, range: Range): boolean {
     const logger = ContentLinkCommandHook.#logger;
 
     const trackedData: TrackedData | undefined = this.#trackingData.clear();
@@ -337,7 +295,7 @@ class ContentLinkCommandHook extends Plugin {
     // TODO: Continue here, do we need rawContentLink as input?
     const { replacement, contentLink } = trackedData;
     // TODO: The text node may be detached from DOM meanwhile, as it got merged with a previous or following node.
-    const { text, href } = contentLink;
+    const { href } = contentLink;
 
     if (replacement.modelUri !== href) {
       logger.debug(`Skipped replacement for '${href}', as registered replacement does not match:`, replacement);
@@ -359,12 +317,12 @@ class ContentLinkCommandHook extends Plugin {
        * to remove the original text.
        * Prevent to do that again.
        */
-      const position = writer.createPositionBefore(text);
-      const attrs = text.getAttributes();
+      const position = range.start;
+      const attrs = textProxy.getAttributes();
 
       // We first need to remove the text, as otherwise it will be merged with
       // the next text to add.
-      writer.remove(text);
+      writer.remove(textProxy);
       writer.insertText(name, attrs, position);
 
       return true;
@@ -405,10 +363,33 @@ class ContentLinkCommandHook extends Plugin {
       size: textInsertions.length,
     });
 
-    const matchesTrackingData = textInsertions.some((diffItem) => this.#trackingData.matches(diffItem));
+    const matchedDiffItem = textInsertions.find((diffItem) => this.#trackingData.matches(diffItem));
 
-    if (matchesTrackingData) {
-      return this.#replaceRawLink(writer);
+    if (!!matchedDiffItem) {
+      const toRange = (diffItem: DiffItemInsert): Range => {
+        const { position: start } = diffItem;
+        const end = start.getShiftedBy(diffItem.length);
+        return writer.createRange(start, end);
+      };
+      const getItems = (range: Range): Item[] => {
+        return [...range.getItems({ shallow: true })];
+      };
+
+      const range: Range = toRange(matchedDiffItem);
+      const itemsInRange = getItems(range);
+      if (itemsInRange.length !== 1) {
+        // Unexpected number of items in range. We may not safely continue.
+        // Assuming an unmatched insertion, we are not responsible for to apply our changes to.
+        return false;
+      }
+      const onlyItem: Item = itemsInRange[0];
+      if (!onlyItem.is("model:$textProxy")) {
+        // We only deal with text proxies, which should be the result of the insert operation
+        // from LinkCommand.
+        return false;
+      }
+      const textProxy = <TextProxy><unknown>onlyItem;
+      return this.#replaceRawLink(writer, textProxy, range);
     }
 
     return false;
