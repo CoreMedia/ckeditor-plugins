@@ -42,12 +42,35 @@
       <button id="dragExamplesButton">Show drag examples</button>
     </div>
     <div id="dragExamplesDiv" hidden="hidden">
-      <div class='drag-example' data-cmuripath='content/2' draggable='true'>Linkable Content id: content/2</div>
-      <div class='drag-example' data-cmuripath='content/5552002' draggable='true'>Linkable Content id: content/5552002</div>
-      <div class='drag-example' data-cmuripath='content/4' draggable='true'>Not linkable Content id: content/4</div>
-      <div class='drag-example' data-cmuripath='content/1' draggable='true'>Folder Content id: content/1</div>
-      <div class='drag-example' data-cmuripath='content/2,content/5552002' draggable='true'>Two contents content/2 and content/5552002</div>
-      <div class='drag-example' data-cmuripath='content/4,content/5552002' draggable='true'>Not allowed: content/4 and allowed: content/5552002</div>
+      <div class='drag-example' data-cmuripath='content/1' draggable='true' title="Root Folder, drop forbidden">Root
+      </div>
+      <div class='drag-example' data-cmuripath='content/3' draggable='true' title="Some Folder, drop forbidden">Some
+        Folder
+      </div>
+      <div class='drag-example' data-cmuripath='content/2' draggable='true' title="Linkable Content">Static Linkable
+      </div>
+      <div class='drag-example' data-cmuripath='content/5552022' draggable='true'
+           title="Linkable Content, changing state and name">Dynamic Linkable
+      </div>
+      <div class='drag-example' data-cmuripath='content/6660022' draggable='true'
+           title="Cross-Site-Scripting Probe 1">XSS Linkable 1
+      </div>
+      <div class='drag-example' data-cmuripath='content/6661022' draggable='true'
+           title="Cross-Site-Scripting Probe 2">XSS Linkable 2
+      </div>
+      <div class='drag-example' data-cmuripath='content/6662022' draggable='true'
+           title="Cross-Site-Scripting Dynamic Probe">Dynamic XSS Linkable
+      </div>
+      <div class='drag-example' data-cmuripath='content/4' draggable='true' title="Document of non-linkable type">Static
+        Non-Linkable
+      </div>
+      <div class='drag-example' data-cmuripath='content/2,content/5552002' draggable='true'
+           title="Two linkables, for example dragged from library.">Two Linkables
+      </div>
+      <div class='drag-example' data-cmuripath='content/4,content/5552002' draggable='true'
+           title="Any non-linkable should block drop operation.">Linkable and
+        Non-Linkable
+      </div>
       <script src="../src/dragExamples.js"></script>
     </div>
     <div class="row">
