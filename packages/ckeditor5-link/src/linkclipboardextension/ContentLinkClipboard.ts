@@ -116,19 +116,21 @@ export default class ContentLinkClipboard extends Plugin {
       if (firstPosition === null) {
         return;
       }
-      const element = writer.createElement("paragraph", { isInline: true });
+      const element = writer.createElement("paragraph");
       if (multipleContentDrop) {
-        writer.insert(element, firstPosition, "after");
+        const result = writer.split(firstPosition);
+        writer.insert(element, result.position);
       }
       const linkPosition = multipleContentDrop ? writer.createPositionAt(element, "end") : firstPosition;
       writer.insertText(
         linkText,
         {
           linkHref: href,
+          "xlink:href": href,
         },
         linkPosition
       );
-      writer.setSelection(firstPosition, "after");
+      writer.setSelection(element, "after");
     });
   }
 
