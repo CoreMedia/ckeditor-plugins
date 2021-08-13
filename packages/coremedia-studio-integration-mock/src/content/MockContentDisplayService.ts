@@ -55,6 +55,7 @@ const EVIL_CONTENT_NAME_FALSY = "&lt; عام &amp; 年 &gt;";
  */
 const ROOT_DISPLAY_HINT: DisplayHint = {
   name: "",
+  classes: [],
 };
 
 /**

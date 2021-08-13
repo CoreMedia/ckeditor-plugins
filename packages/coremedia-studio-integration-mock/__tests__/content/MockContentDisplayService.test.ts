@@ -396,15 +396,23 @@ describe("Unit Tests: MockContentDisplayService", () => {
         uriPath: "content/0",
         expected: {
           name: `${CONTENT_NAME_FALSY} Document #0`,
-          classes: ["content--0"]
+          classes: ["content--0"],
+        }
+      },
+      {
+        name: "Special case: Root Folder must provide empty name.",
+        uriPath: "content/1",
+        expected: {
+          name: ``,
+          classes: [],
         }
       },
       {
         name: "Should use falsy defaults, but detect that this is a folder.",
-        uriPath: "content/1",
+        uriPath: "content/3",
         expected: {
-          name: `${CONTENT_NAME_FALSY} Folder #1`,
-          classes: ["content--0"]
+          name: `${CONTENT_NAME_FALSY} Folder #3`,
+          classes: ["content--0"],
         }
       },
     ];
