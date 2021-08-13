@@ -53,13 +53,11 @@ export default class ContentLinkClipboard extends Plugin {
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
       ContentLinkClipboard.#setInitialSelection(editor, data);
+      const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, linkContent);
       if (linkContent.isContentLink) {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
-            const multipleContentDrop = linkContent.links.length > 1;
-            const initialDropPosition = editor.model.document.selection.getFirstPosition();
-            const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
             for (const index in linkContent.links) {
               if (!linkContent.links.hasOwnProperty(index)) {
                 continue;
@@ -72,8 +70,7 @@ export default class ContentLinkClipboard extends Plugin {
                   data,
                   contentLink,
                   contentName,
-                  multipleContentDrop,
-                  initialDropAtEndOfParagraph,
+                  dropCondition,
                   isLast
                 );
               });
@@ -86,7 +83,7 @@ export default class ContentLinkClipboard extends Plugin {
           }
           const isLast = linkContent.links.length - 1 === Number(index);
           const link = linkContent.links[index];
-          ContentLinkClipboard.#writeLink(editor, data, link, link, false, false, isLast);
+          ContentLinkClipboard.#writeLink(editor, data, link, link, dropCondition, isLast);
         }
       }
     });
@@ -119,8 +116,7 @@ export default class ContentLinkClipboard extends Plugin {
     data: unknown,
     uriPath: string,
     contentName: string,
-    multipleContentDrop: boolean,
-    initialDropPosition: boolean,
+    dropCondition: DropCondition,
     isLast: boolean
   ): void {
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
@@ -134,8 +130,7 @@ export default class ContentLinkClipboard extends Plugin {
       data,
       requireContentCkeModelUri(uriPath),
       contentNameRespectingRoot,
-      multipleContentDrop,
-      initialDropPosition,
+      dropCondition,
       isLast
     );
   }
@@ -145,12 +140,11 @@ export default class ContentLinkClipboard extends Plugin {
     data: any,
     href: string,
     linkText: string,
-    multipleContentDrop: boolean,
-    initialDropPosition: boolean,
+    dropCondition: DropCondition,
     isLast: boolean
   ): void {
-    if (multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText, initialDropPosition, isLast);
+    if (dropCondition.multipleContentDrop) {
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText, dropCondition, isLast);
     } else {
       ContentLinkClipboard.#writeLinkInline(editor, data, href, linkText);
     }
@@ -181,7 +175,7 @@ export default class ContentLinkClipboard extends Plugin {
     data: any,
     href: string,
     linkText: string,
-    initialDropAtEnd: boolean,
+    dropCondition: DropCondition,
     isLast: boolean
   ): void {
     editor.model.change((writer: Writer) => {
@@ -202,7 +196,7 @@ export default class ContentLinkClipboard extends Plugin {
       }
 
       const afterTextPosition = writer.createPositionAt(text, "after");
-      if (isLast && !initialDropAtEnd) {
+      if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
         const secondSplit = writer.split(afterTextPosition);
         writer.setSelection(secondSplit.range.end);
       } else {
@@ -260,6 +254,13 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
+  static #createDropCondition(editor: Editor, links: LinkContent): DropCondition {
+    const multipleContentDrop = links.links.length > 1;
+    const initialDropPosition = editor.model.document.selection.getFirstPosition();
+    const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
+    return new DropCondition(multipleContentDrop, initialDropAtEndOfParagraph);
+  }
+
   destroy(): Promise<never> | null {
     if (this._contentSubscription) {
       this._contentSubscription.unsubscribe();
@@ -275,5 +276,14 @@ class LinkContent {
   constructor(isContentLink: boolean, links: Array<string>) {
     this.isContentLink = isContentLink;
     this.links = links;
+  }
+}
+
+class DropCondition {
+  initialDropAtEndOfParagraph: boolean;
+  multipleContentDrop: boolean;
+  constructor(multipleContentDrop: boolean, initialDropAtEndOfParagraph: boolean) {
+    this.multipleContentDrop = multipleContentDrop;
+    this.initialDropAtEndOfParagraph = initialDropAtEndOfParagraph;
   }
 }
