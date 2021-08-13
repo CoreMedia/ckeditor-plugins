@@ -43,6 +43,7 @@ const dndButton = document.querySelector("#dragExamplesButton");
 const dndFrame = document.querySelector("#dragExamplesDiv");
 dndButton.addEventListener("click", () => {
   dndFrame.hidden = !dndFrame.hidden;
+  dndButton.textContent = `${dndFrame.hidden ? "Show" : "Hide"} drag examples`;
 });
 
 setupPreview();
