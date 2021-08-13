@@ -563,7 +563,8 @@ const createContentUriPath = ({
                                 checkedIn,
                                 isFolder,
                                 undroppable
-                              }: CreateContentConfig & DroppableConfig): UriPath => {
+                              }: CreateContentConfig & DroppableConfig
+): UriPath => {
   const randomPrefix = (): number => {
     const base = !!evil ? 66600 : 0;
     return base + 1 + Math.floor(Math.random() * 99);
@@ -584,7 +585,7 @@ const createContentUriPath = ({
   const checkedInPart = stateToIdentifier(checkedIn);
 
   const randomTypePart = Math.floor(10 * Math.random());
-  const matchedTypePart = (!!isFolder) === (randomTypePart % 2 === 1);
+  const matchedTypePart = !!isFolder === (randomTypePart % 2 === 1);
   const typePart = (randomTypePart + (matchedTypePart ? 0 : 1)) % 10;
 
   const contentId = applyDroppable(
