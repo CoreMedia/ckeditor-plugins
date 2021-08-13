@@ -44,8 +44,8 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const linkContent: LinkContent | null = ContentLinkClipboard.#evaluateLinkContent(data);
-      if (!linkContent) {
+      const linkContents: Array<LinkContent> | null = ContentLinkClipboard.#evaluateLinkContent(data);
+      if (!linkContents || linkContents.length === 0) {
         return;
       }
 
@@ -53,21 +53,21 @@ export default class ContentLinkClipboard extends Plugin {
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
       ContentLinkClipboard.#setInitialSelection(editor, data);
-      const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, linkContent);
-      if (linkContent.isContentLink) {
+      const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, linkContents);
+      if (ContentLinkClipboard.#hasOnlyContentLinks(linkContents)) {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
-            for (const index in linkContent.links) {
-              if (!linkContent.links.hasOwnProperty(index)) {
+            for (const index in linkContents) {
+              if (!linkContents.hasOwnProperty(index)) {
                 continue;
               }
-              const isLast = linkContent.links.length - 1 === Number(index);
-              const contentLink = linkContent.links[index];
-              contentDisplayService.name(contentLink).then((contentName) => {
+              const isLast = linkContents.length - 1 === Number(index);
+              const contentLink = linkContents[index];
+              contentDisplayService.name(contentLink.href).then((contentName) => {
                 ContentLinkClipboard.#handleContentNameResponse(
                   editor,
-                  contentLink,
+                  contentLink.href,
                   contentName,
                   dropCondition,
                   isLast
@@ -76,13 +76,13 @@ export default class ContentLinkClipboard extends Plugin {
             }
           });
       } else {
-        for (const index in linkContent.links) {
-          if (!linkContent.links.hasOwnProperty(index)) {
+        for (const index in linkContents) {
+          if (!linkContents.hasOwnProperty(index)) {
             continue;
           }
-          const isLast = linkContent.links.length - 1 === Number(index);
-          const link = linkContent.links[index];
-          ContentLinkClipboard.#writeLink(editor, link, link, dropCondition, isLast);
+          const isLast = linkContents.length - 1 === Number(index);
+          const link = linkContents[index];
+          ContentLinkClipboard.#writeLink(editor, link.href, link.href, dropCondition, isLast);
         }
       }
     });
@@ -94,12 +94,14 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const linkContent: LinkContent | null = ContentLinkClipboard.#evaluateLinkContentOnDragover();
+      const linkContent: Array<LinkContent> | null = ContentLinkClipboard.#evaluateLinkContentOnDragover();
       if (!linkContent) {
         return;
       }
-      if (linkContent.isContentLink) {
-        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(linkContent.links);
+      if (ContentLinkClipboard.#hasOnlyContentLinks(linkContent)) {
+        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(
+          linkContent.map<string>((value) => value.href)
+        );
         if (containOnlyLinkables) {
           data.dataTransfer.dropEffect = "copy";
         } else {
@@ -207,35 +209,33 @@ export default class ContentLinkClipboard extends Plugin {
     return true;
   }
 
-  static #evaluateLinkContent(data: DragEvent): LinkContent | null {
+  static #evaluateLinkContent(data: DragEvent): Array<LinkContent> | null {
     if (data === null || data.dataTransfer === null) {
       return null;
     }
 
     const cmUriList = data.dataTransfer.getData("cm/uri-list");
+
     if (cmUriList) {
       const contentUris = extractContentUriFromDragEventJsonData(cmUriList);
-      if (!contentUris) {
-        return null;
-      }
-      return new LinkContent(true, contentUris);
+      return ContentLinkClipboard.#toLinkContent(contentUris);
     }
 
     const url = data.dataTransfer.getData("text/uri-list");
     if (url) {
-      return new LinkContent(false, [url]);
+      return [new LinkContent(false, url)];
     }
 
-    return null;
+    return [];
   }
 
-  static #evaluateLinkContentOnDragover(): LinkContent | null {
+  static #evaluateLinkContentOnDragover(): Array<LinkContent> | null {
     const contentUriPaths: Array<string> | null = receiveUriPathFromDragData();
     if (!contentUriPaths) {
       //due to we have no data, just set it empty...
-      return new LinkContent(false, [""]);
+      return null;
     }
-    return new LinkContent(true, contentUriPaths);
+    return ContentLinkClipboard.#toLinkContent(contentUriPaths);
   }
 
   static #setInitialSelection(editor: Editor, data: any): void {
@@ -246,8 +246,19 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #createDropCondition(editor: Editor, links: LinkContent): DropCondition {
-    const multipleContentDrop = links.links.length > 1;
+  static #toLinkContent(contentUris: Array<string> | null): Array<LinkContent> {
+    if (!contentUris) {
+      return [];
+    }
+    const linkContents: Array<LinkContent> = [];
+    for (const contentUri of contentUris) {
+      linkContents.push(new LinkContent(true, contentUri));
+    }
+    return linkContents;
+  }
+
+  static #createDropCondition(editor: Editor, links: Array<LinkContent>): DropCondition {
+    const multipleContentDrop = links.length > 1;
     const initialDropPosition = editor.model.document.selection.getFirstPosition();
     const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
     return new DropCondition(multipleContentDrop, initialDropAtEndOfParagraph);
@@ -259,15 +270,24 @@ export default class ContentLinkClipboard extends Plugin {
     }
     return null;
   }
+
+  static #hasOnlyContentLinks(linkContents: Array<LinkContent>): boolean {
+    for (const linkContent of linkContents) {
+      if (!linkContent.isContentLink) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 class LinkContent {
   isContentLink;
-  links: Array<string>;
+  href: string;
 
-  constructor(isContentLink: boolean, links: Array<string>) {
+  constructor(isContentLink: boolean, href: string) {
     this.isContentLink = isContentLink;
-    this.links = links;
+    this.href = href;
   }
 }
 
