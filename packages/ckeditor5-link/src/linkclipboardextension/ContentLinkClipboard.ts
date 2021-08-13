@@ -13,6 +13,7 @@ import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/conten
 import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
+import { ROOT_NAME } from "../contentlink/Constants";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
@@ -63,6 +64,8 @@ export default class ContentLinkClipboard extends Plugin {
                 );
               }
             });
+            const initialDropPosition = editor.model.document.selection.getFirstPosition();
+            const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
             for (const index in linkContent.links) {
               if (!linkContent.links.hasOwnProperty(index)) {
                 continue;
@@ -76,6 +79,7 @@ export default class ContentLinkClipboard extends Plugin {
                   contentLink,
                   contentName,
                   multipleContentDrop,
+                  initialDropAtEndOfParagraph,
                   isLast
                 );
               });
@@ -88,7 +92,7 @@ export default class ContentLinkClipboard extends Plugin {
           }
           const isLast = linkContent.links.length - 1 === Number(index);
           const link = linkContent.links[index];
-          ContentLinkClipboard.#writeLink(editor, data, link, link, false, isLast);
+          ContentLinkClipboard.#writeLink(editor, data, link, link, false, false, isLast);
         }
       }
     });
@@ -122,6 +126,7 @@ export default class ContentLinkClipboard extends Plugin {
     uriPath: string,
     contentName: string,
     multipleContentDrop: boolean,
+    initialDropPosition: boolean,
     isLast: boolean
   ): void {
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
@@ -129,12 +134,14 @@ export default class ContentLinkClipboard extends Plugin {
     if (!isLinkableContent) {
       return;
     }
+    const contentNameRespectingRoot = contentName ? contentName : ROOT_NAME;
     ContentLinkClipboard.#writeLink(
       editor,
       data,
       requireContentCkeModelUri(uriPath),
-      contentName,
+      contentNameRespectingRoot,
       multipleContentDrop,
+      initialDropPosition,
       isLast
     );
   }
@@ -145,10 +152,11 @@ export default class ContentLinkClipboard extends Plugin {
     href: string,
     linkText: string,
     multipleContentDrop: boolean,
+    initialDropPosition: boolean,
     isLast: boolean
   ): void {
     if (multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText, isLast);
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText, initialDropPosition, isLast);
     } else {
       ContentLinkClipboard.#writeLinkInline(editor, data, href, linkText);
     }
@@ -174,7 +182,14 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #writeLinkInOwnParagraph(editor: Editor, data: any, href: string, linkText: string, isLast: boolean): void {
+  static #writeLinkInOwnParagraph(
+    editor: Editor,
+    data: any,
+    href: string,
+    linkText: string,
+    initialDropAtEnd: boolean,
+    isLast: boolean
+  ): void {
     editor.model.change((writer: Writer) => {
       const firstPosition = editor.model.document.selection.getFirstPosition();
       if (firstPosition === null) {
@@ -193,7 +208,7 @@ export default class ContentLinkClipboard extends Plugin {
       }
 
       const afterTextPosition = writer.createPositionAt(text, "after");
-      if (isLast && !firstPosition.isAtEnd) {
+      if (isLast && !initialDropAtEnd) {
         const secondSplit = writer.split(afterTextPosition);
         writer.setSelection(secondSplit.range.end);
       } else {
