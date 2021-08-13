@@ -8,7 +8,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import {
-  addClassToTemplate,
+  addClassToTemplate, createDecoratorHook,
   LINK_BEHAVIOR,
   linkTargetToUiValues,
   removeClassFromTemplate,
@@ -118,22 +118,22 @@ export default class LinkTargetUI extends Plugin {
      * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
      */
 
-    if (!(linkUI as any)["_events"] || !(linkUI as any)["_events"].hasOwnProperty("_addFormView")) {
-      //@ts-ignore
-      linkUI.decorate("_addFormView");
-    }
-
-    this.listenTo(linkUI, "_addFormView", () => {
-      if (linkTargetCommand === undefined) {
-        return;
-      }
-      const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-      const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
-      //@ts-ignore
-      extension.linkBehaviorView.linkBehavior = href ? linkBehavior || "" : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
-      //@ts-ignore
-      extension.targetInputView.hiddenTarget = target || "";
-    });
+    createDecoratorHook(
+      linkUI,
+      "_addFormView",
+      () => {
+        if (linkTargetCommand === undefined) {
+          return;
+        }
+        const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
+        const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
+        //@ts-ignore
+        extension.linkBehaviorView.linkBehavior = href ? linkBehavior || "" : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
+        //@ts-ignore
+        extension.targetInputView.hiddenTarget = target || "";
+      },
+      this
+    );
 
     return extension;
   }

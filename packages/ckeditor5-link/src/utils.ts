@@ -1,5 +1,7 @@
 import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
 import View from "@ckeditor/ckeditor5-ui/src/view";
+import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 
 export const LINK_BEHAVIOR = {
   OPEN_IN_NEW_TAB: "openInNewTab",
@@ -223,4 +225,29 @@ export const removeClass = (view: View, classNames: string[] | string): void => 
     classNames = [classNames];
   }
   view.element.classList.remove(classNames.join());
+};
+
+/**
+ * A utility function to transform methods of observable CKEditor components into events to listen to.
+ * This way, we can hook into function calls in other plugins. This is done by using CKEditor's decorate API.
+ *
+ * @param methodParentCmp the component, holding the method to be transformed
+ * @param methodName the name of the method that should be transformed
+ * @param callback a callback to be executed when the event is fired
+ * @param listenerCmp the class that should listen to the event (probably "this")
+ * @param options (optional) options object for listener priority
+ */
+
+export const createDecoratorHook = (
+  methodParentCmp: Observable,
+  methodName: string,
+  callback: () => void,
+  listenerCmp: any,
+  options?: { priority?: number | PriorityString }
+) => {
+  if (!(methodParentCmp as any)["_events"] || !(methodParentCmp as any)["_events"].hasOwnProperty(methodName)) {
+    methodParentCmp.decorate(methodName);
+  }
+
+  listenerCmp.listenTo(methodParentCmp, methodName, callback, options);
 };

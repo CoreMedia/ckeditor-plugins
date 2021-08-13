@@ -21,6 +21,8 @@ export default class View implements Emitter, Observable {
 
   constructor(locale?: Locale);
 
+  decorate(methodName: string): void;
+
   render(): void;
 
   destroy(): void;

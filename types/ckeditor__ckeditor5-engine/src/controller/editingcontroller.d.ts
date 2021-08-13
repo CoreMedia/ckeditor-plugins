@@ -23,6 +23,8 @@ export default class EditingController implements Emitter, Observable {
 
   constructor(model: Model, stylesProcessor: StylesProcessor);
 
+  decorate(methodName: string): void;
+
   destroy(): void;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;

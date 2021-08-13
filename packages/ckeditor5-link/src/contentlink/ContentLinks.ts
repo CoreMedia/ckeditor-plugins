@@ -7,6 +7,8 @@ import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
+import { createDecoratorHook } from "../utils";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -26,6 +28,17 @@ export default class ContentLinks extends Plugin {
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
     this.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI, linkCommand);
+    createDecoratorHook(
+      linkUI,
+      "_hideUI",
+      () => {
+        const commandValue: string = <string>linkCommand?.value;
+        const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
+        linkUI.formView.set({ contentUriPath: value });
+        linkUI.actionsView.set({ contentUriPath: value });
+      },
+      this
+    );
     return null;
   }
 
@@ -127,14 +140,8 @@ export default class ContentLinks extends Plugin {
       activator: () => linkUI._isUIInPanel,
       contextElements: [linkUI._balloon.view.element],
       callback: () => {
-        this.#hideUIAndResetUriPath(linkUI, linkCommand);
+        linkUI._hideUI();
       },
     });
-  }
-
-  #hideUIAndResetUriPath(linkUI: LinkUI, linkCommand: LinkCommand | undefined) {
-    linkUI._hideUI();
-    linkUI.formView.set({ contentUriPath: linkCommand?.value });
-    linkUI.actionsView.set({ contentUriPath: linkCommand?.value });
   }
 }

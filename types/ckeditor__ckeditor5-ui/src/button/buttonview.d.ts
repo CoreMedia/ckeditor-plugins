@@ -56,4 +56,6 @@ export default class ButtonView extends View implements Emitter, Observable {
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
 
   listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
+
+  decorate(methodName: string): void;
 }
