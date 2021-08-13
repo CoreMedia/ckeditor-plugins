@@ -35,16 +35,7 @@ const removeDropData = () => {
 
 const initDragExamples = () => {
 
-  const singleDroppables = [
-    {
-      label: "Root",
-      tooltip: "Root Folder; droppable for test-scenarios with empty name",
-      classes: ["linkable", "type-folder"],
-      // id is an extra option, which overrides any ID calculation.
-      items: [{
-        id: 1,
-      }],
-    },
+  const singleDroppableDocuments = [
     {
       label: "Document 1",
       tooltip: "Some Document",
@@ -99,6 +90,19 @@ const initDragExamples = () => {
       }],
     },
   ];
+
+  const singleDroppables = [
+    {
+      label: "Root",
+      tooltip: "Root Folder; droppable for test-scenarios with empty name",
+      classes: ["linkable", "type-folder"],
+      // id is an extra option, which overrides any ID calculation.
+      items: [{
+        id: 1,
+      }],
+    },
+    ...singleDroppableDocuments,
+  ];
   const singleUndroppables = [
     {
       label: "Folder",
@@ -143,6 +147,12 @@ const initDragExamples = () => {
       tooltip: `${singleDroppables.length} contents which are allowed to be dropped.`,
       classes: ["linkable", "type-collection"],
       items: singleDroppables.flatMap((item) => item.items),
+    },
+    {
+      label: `Several Droppable Documents`,
+      tooltip: `${singleDroppableDocuments.length} documents which are allowed to be dropped.`,
+      classes: ["linkable", "type-collection"],
+      items: singleDroppableDocuments.flatMap((item) => item.items),
     },
   ];
 
