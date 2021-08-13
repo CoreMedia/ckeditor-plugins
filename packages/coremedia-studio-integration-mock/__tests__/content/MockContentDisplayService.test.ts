@@ -30,6 +30,10 @@ const DOCUMENT_ICON = "icon--document";
 const UNREADABLE_TYPE = "Unreadable";
 const UNREADABLE_ICON = "icon--lock";
 
+const escapeRegExp = (str: string): string => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 /**
  * Test modes especially meant for debugging or known issues.
  */
@@ -195,8 +199,10 @@ describe("Unit Tests: MockContentDisplayService", () => {
     ${"content/6661000"} | ${EVIL_CONTENT_NAME_TRUTHY}
     ${"content/6662000"} | ${EVIL_CONTENT_NAME_TRUTHY}
     `("[$#] URI path $uriPath should resolve to name: $expected", ({ uriPath, expected }) => {
+      const contentId = parseInt(uriPath.replace("content/", ""));
+      const regExp = new RegExp(`^${escapeRegExp(expected)}.*${contentId}.*$`);
       expect.assertions(1);
-      expect(service.name(uriPath)).resolves.toBe(expected);
+      expect(service.name(uriPath)).resolves.toMatch(regExp);
     });
 
     test.each`

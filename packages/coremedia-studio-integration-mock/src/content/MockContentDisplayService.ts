@@ -257,19 +257,24 @@ class MockContentDisplayService implements ContentDisplayService {
    * For unreadable contents the promise is rejected.
    */
   name(uriPath: UriPath): Promise<string> {
+    const id = numericId(uriPath);
+
     // Special case: Only the root folder is represented with empty name.
-    if (uriPath === "content/1") {
+    if (id === 1) {
       return Promise.resolve("");
     }
     const config = parseContentConfig(uriPath);
     const unreadable = !!config.unreadable;
-    const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
-    const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
 
     if (unreadable) {
       return Promise.reject(`Content ${uriPath} is unreadable.`);
     }
-    return Promise.resolve(!config.name ? falsyName : truthyName);
+
+    const typeName = config.isFolder ? "Folder" : "Document";
+    const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
+    const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+
+    return Promise.resolve(`${!config.name ? falsyName : truthyName} ${typeName} #${id}`);
   }
 
   /**
