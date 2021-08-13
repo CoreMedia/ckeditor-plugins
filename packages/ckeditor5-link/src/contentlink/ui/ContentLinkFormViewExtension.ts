@@ -80,7 +80,7 @@ class ContentLinkFormViewExtension extends Plugin {
       () => {
         // @ts-ignore
         const { contentUriPath, contentName } = linkUI.formView;
-        if (!!contentUriPath && !!contentName) {
+        if (!!contentUriPath && typeof contentName === "string") {
           contentLinkCommandHook.registerContentName(contentUriPath, contentName);
         }
       },
