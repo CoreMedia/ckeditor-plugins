@@ -193,7 +193,7 @@ export default class ContentLinkClipboard extends Plugin {
       }
 
       const afterTextPosition = writer.createPositionAt(text, "after");
-      if (isLast) {
+      if (isLast && !firstPosition.isAtEnd) {
         const secondSplit = writer.split(afterTextPosition);
         writer.setSelection(secondSplit.range.end);
       } else {
