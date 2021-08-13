@@ -12,6 +12,7 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
 import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
@@ -179,11 +180,18 @@ export default class ContentLinkClipboard extends Plugin {
       if (firstPosition === null) {
         return;
       }
-      const split = writer.split(firstPosition);
+
+      const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(firstPosition);
       const text = writer.createText(linkText, {
         linkHref: href,
       });
-      writer.insert(text, split.range.end);
+      if (!isFirstDocumentPosition) {
+        const split = writer.split(firstPosition);
+        writer.insert(text, split.range.end);
+      } else {
+        writer.insert(text, firstPosition);
+      }
+
       const afterTextPosition = writer.createPositionAt(text, "after");
       if (isLast) {
         const secondSplit = writer.split(afterTextPosition);
@@ -192,6 +200,16 @@ export default class ContentLinkClipboard extends Plugin {
         writer.setSelection(afterTextPosition);
       }
     });
+  }
+
+  static #isFirstPositionOfDocument(position: Position): boolean {
+    const path = position.getCommonPath(position);
+    for (const pathElement of path) {
+      if (pathElement !== 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
   static #evaluateLinkContent(data: DragEvent): LinkContent | null {
