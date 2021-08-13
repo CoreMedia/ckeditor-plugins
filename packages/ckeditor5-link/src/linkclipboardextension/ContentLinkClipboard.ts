@@ -55,15 +55,39 @@ export default class ContentLinkClipboard extends Plugin {
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
             const multipleContentDrop = linkContent.links.length > 1;
-            for (const link of linkContent.links) {
-              contentDisplayService.name(link).then((contentName) => {
-                ContentLinkClipboard.#handleContentNameResponse(editor, data, link, contentName, multipleContentDrop);
+            editor.model.change((writer: Writer) => {
+              if (data.targetRanges) {
+                writer.setSelection(
+                  data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange))
+                );
+              }
+            });
+            for (const index in linkContent.links) {
+              if (!linkContent.links.hasOwnProperty(index)) {
+                continue;
+              }
+              const isLast = linkContent.links.length - 1 === Number(index);
+              const contentLink = linkContent.links[index];
+              contentDisplayService.name(contentLink).then((contentName) => {
+                ContentLinkClipboard.#handleContentNameResponse(
+                  editor,
+                  data,
+                  contentLink,
+                  contentName,
+                  multipleContentDrop,
+                  isLast
+                );
               });
             }
           });
       } else {
-        for (const link of linkContent.links) {
-          ContentLinkClipboard.#writeLink(editor, data, link, link, false);
+        for (const index in linkContent.links) {
+          if (!linkContent.links.hasOwnProperty(index)) {
+            continue;
+          }
+          const isLast = linkContent.links.length - 1 === Number(index);
+          const link = linkContent.links[index];
+          ContentLinkClipboard.#writeLink(editor, data, link, link, false, isLast);
         }
       }
     });
@@ -96,19 +120,34 @@ export default class ContentLinkClipboard extends Plugin {
     data: unknown,
     uriPath: string,
     contentName: string,
-    multipleContentDrop: boolean
+    multipleContentDrop: boolean,
+    isLast: boolean
   ): void {
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
     DragDropAsyncSupport.resetIsLinkableContent(uriPath);
     if (!isLinkableContent) {
       return;
     }
-    ContentLinkClipboard.#writeLink(editor, data, requireContentCkeModelUri(uriPath), contentName, multipleContentDrop);
+    ContentLinkClipboard.#writeLink(
+      editor,
+      data,
+      requireContentCkeModelUri(uriPath),
+      contentName,
+      multipleContentDrop,
+      isLast
+    );
   }
 
-  static #writeLink(editor: Editor, data: any, href: string, linkText: string, multipleContentDrop: boolean): void {
+  static #writeLink(
+    editor: Editor,
+    data: any,
+    href: string,
+    linkText: string,
+    multipleContentDrop: boolean,
+    isLast: boolean
+  ): void {
     if (multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText);
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText, isLast);
     } else {
       ContentLinkClipboard.#writeLinkInline(editor, data, href, linkText);
     }
@@ -134,11 +173,8 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #writeLinkInOwnParagraph(editor: Editor, data: any, href: string, linkText: string): void {
+  static #writeLinkInOwnParagraph(editor: Editor, data: any, href: string, linkText: string, isLast: boolean): void {
     editor.model.change((writer: Writer) => {
-      if (data.targetRanges) {
-        writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
-      }
       const firstPosition = editor.model.document.selection.getFirstPosition();
       if (firstPosition === null) {
         return;
@@ -147,8 +183,14 @@ export default class ContentLinkClipboard extends Plugin {
       const text = writer.createText(linkText, {
         linkHref: href,
       });
-      writer.insert(text, firstPosition);
-      writer.setSelection(text, "after");
+      writer.insert(text, split.range.end);
+      const afterTextPosition = writer.createPositionAt(text, "after");
+      if (isLast) {
+        const secondSplit = writer.split(afterTextPosition);
+        writer.setSelection(secondSplit.range.end);
+      } else {
+        writer.setSelection(afterTextPosition);
+      }
     });
   }
 
