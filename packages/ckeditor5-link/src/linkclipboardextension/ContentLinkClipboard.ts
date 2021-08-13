@@ -67,7 +67,6 @@ export default class ContentLinkClipboard extends Plugin {
               contentDisplayService.name(contentLink).then((contentName) => {
                 ContentLinkClipboard.#handleContentNameResponse(
                   editor,
-                  data,
                   contentLink,
                   contentName,
                   dropCondition,
@@ -83,7 +82,7 @@ export default class ContentLinkClipboard extends Plugin {
           }
           const isLast = linkContent.links.length - 1 === Number(index);
           const link = linkContent.links[index];
-          ContentLinkClipboard.#writeLink(editor, data, link, link, dropCondition, isLast);
+          ContentLinkClipboard.#writeLink(editor, link, link, dropCondition, isLast);
         }
       }
     });
@@ -113,7 +112,6 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #handleContentNameResponse(
     editor: Editor,
-    data: unknown,
     uriPath: string,
     contentName: string,
     dropCondition: DropCondition,
@@ -127,7 +125,6 @@ export default class ContentLinkClipboard extends Plugin {
     const contentNameRespectingRoot = contentName ? contentName : ROOT_NAME;
     ContentLinkClipboard.#writeLink(
       editor,
-      data,
       requireContentCkeModelUri(uriPath),
       contentNameRespectingRoot,
       dropCondition,
@@ -137,24 +134,20 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #writeLink(
     editor: Editor,
-    data: any,
     href: string,
     linkText: string,
     dropCondition: DropCondition,
     isLast: boolean
   ): void {
     if (dropCondition.multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, data, href, linkText, dropCondition, isLast);
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, href, linkText, dropCondition, isLast);
     } else {
-      ContentLinkClipboard.#writeLinkInline(editor, data, href, linkText);
+      ContentLinkClipboard.#writeLinkInline(editor, href, linkText);
     }
   }
 
-  static #writeLinkInline(editor: Editor, data: any, href: string, linkText: string): void {
+  static #writeLinkInline(editor: Editor, href: string, linkText: string): void {
     editor.model.change((writer: Writer) => {
-      if (data.targetRanges) {
-        writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
-      }
       const firstPosition = editor.model.document.selection.getFirstPosition();
       if (firstPosition === null) {
         return;
@@ -172,7 +165,6 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #writeLinkInOwnParagraph(
     editor: Editor,
-    data: any,
     href: string,
     linkText: string,
     dropCondition: DropCondition,
