@@ -52,18 +52,12 @@ export default class ContentLinkClipboard extends Plugin {
       //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
+      ContentLinkClipboard.#setInitialSelection(editor, data);
       if (linkContent.isContentLink) {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
             const multipleContentDrop = linkContent.links.length > 1;
-            editor.model.change((writer: Writer) => {
-              if (data.targetRanges) {
-                writer.setSelection(
-                  data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange))
-                );
-              }
-            });
             const initialDropPosition = editor.model.document.selection.getFirstPosition();
             const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
             for (const index in linkContent.links) {
@@ -256,6 +250,14 @@ export default class ContentLinkClipboard extends Plugin {
       return new LinkContent(false, [""]);
     }
     return new LinkContent(true, contentUriPaths);
+  }
+
+  static #setInitialSelection(editor: Editor, data: any): void {
+    editor.model.change((writer: Writer) => {
+      if (data.targetRanges) {
+        writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
+      }
+    });
   }
 
   destroy(): Promise<never> | null {
