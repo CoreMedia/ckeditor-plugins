@@ -2,9 +2,11 @@ import ContentDisplayService from "@coremedia/coremedia-studio-integration/conte
 import { combineLatest, Observable, OperatorFunction, Subscriber, TeardownLogic } from "rxjs";
 import { map } from "rxjs/operators";
 import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor
+  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
 import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
+import { applyDroppable, DroppableConfig } from "./MockRichtextConfigurationService";
 
 /**
  * By default delay the appearance of data in the UI a little bit.
@@ -537,16 +539,53 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   };
 };
 
-// TODO[cke] If unused, remove; otherwise, add unit tests
-const createContentUriPath = ({ name, evil, unreadable, checkedIn, isFolder }: CreateContentConfig): UriPath => {
-  function randomPrefix(): number {
-    const base = evil ? 66600 : 0;
-    return base + Math.floor(Math.random() * 99);
-  }
+/**
+ * Creates a content URI path (such as `content/3332002`) based on the
+ * given configuration.
+ *
+ * @param name type of name, or changing
+ * @param evil if an evil name (e.g. for XSS attacks) shall be used
+ * @param unreadable state of unreadable, or changing
+ * @param checkedIn state of checked-in, or changing (not relevant for folders)
+ * @param isFolder if the content shall be a folder or a document
+ * @param undroppable if the document (not applicable to folders) shall be droppable
+ */
+const createContentUriPath = ({
+                                name,
+                                evil,
+                                unreadable,
+                                checkedIn,
+                                isFolder,
+                                undroppable
+                              }: CreateContentConfig & DroppableConfig): UriPath => {
+  const randomPrefix = (): number => {
+    const base = !!evil ? 66600 : 0;
+    return base + Math.floor(Math.random() * 100);
+  };
 
-  return `content/${randomPrefix()}${stateToIdentifier(name)}${stateToIdentifier(unreadable)}${stateToIdentifier(
-    checkedIn
-  )}${stateToIdentifier(isFolder)}`;
+  const combine = (...parts: number[]): number => {
+    const todoParts = [...parts];
+    let result = todoParts.shift() || 0;
+    todoParts.forEach((part): void => {
+      result = result * 10 + part;
+    });
+    return result;
+  };
+
+  const prefixPart = randomPrefix();
+  const namePart = stateToIdentifier(name);
+  const unreadablePart = stateToIdentifier(unreadable);
+  const checkedInPart = stateToIdentifier(checkedIn);
+
+  const randomTypePart = Math.floor(10 * Math.random());
+  const matchedTypePart = (!!isFolder) === (randomTypePart % 2 === 1);
+  const typePart = (randomTypePart + (matchedTypePart ? 0 : 1)) % 10;
+
+  const contentId = applyDroppable(
+    combine(prefixPart, namePart, unreadablePart, checkedInPart, typePart),
+    !!undroppable
+  );
+  return `content/${contentId}`;
 };
 
 export default MockContentDisplayService;
@@ -556,5 +595,7 @@ export {
   CONTENT_NAME_FALSY,
   EVIL_CONTENT_NAME_TRUTHY,
   EVIL_CONTENT_NAME_FALSY,
+  changing$,
+  ConfigState,
   createContentUriPath,
 };

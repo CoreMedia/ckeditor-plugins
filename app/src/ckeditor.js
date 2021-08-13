@@ -27,7 +27,11 @@ import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
-import CoreMediaStudioEssentials, {COREMEDIA_RICHTEXT_CONFIG_KEY, Strictness } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
+import CoreMediaStudioEssentials, {
+  COREMEDIA_RICHTEXT_CONFIG_KEY,
+  Strictness
+} from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
+import {initDragExamples} from "./dragExamples";
 
 // set serviceAgent, for DnD Examples to access
 window.serviceAgent = MockStudioIntegration.getServiceAgent();
@@ -192,6 +196,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     isCollapsed: true,
   });
   initExamples(newEditor);
+  initDragExamples();
   editor = newEditor;
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");
