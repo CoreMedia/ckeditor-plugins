@@ -566,7 +566,7 @@ const createContentUriPath = ({
                               }: CreateContentConfig & DroppableConfig): UriPath => {
   const randomPrefix = (): number => {
     const base = !!evil ? 66600 : 0;
-    return base + Math.floor(Math.random() * 100);
+    return base + 1 + Math.floor(Math.random() * 99);
   };
 
   const combine = (...parts: number[]): number => {

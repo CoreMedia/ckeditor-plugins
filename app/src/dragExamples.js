@@ -103,6 +103,64 @@ const initDragExamples = () => {
     },
     ...singleDroppableDocuments,
   ];
+  const unreadables = [
+    {
+      label: "Unreadable Document",
+      tooltip: "Document cannot be read.",
+      classes: ["linkable", "type-document"],
+      items: [{
+        name: false,
+        unreadable: true,
+      }],
+    },
+    {
+      label: "(Un-)readable Document (edit)",
+      tooltip: "Document which is sometimes in a readable folder, sometimes not.",
+      classes: ["linkable", "type-document"],
+      items: [{
+        name: false,
+        unreadable: changing$,
+      }],
+    },
+    {
+      label: "Unreadable & Readable Document",
+      tooltip: "One document can be read, the other cannot be read.",
+      classes: ["linkable", "type-collection"],
+      items: [
+        {
+          name: false,
+          unreadable: true,
+        },
+        {
+          name: true,
+          unreadable: false,
+        },
+      ],
+    },
+    {
+      label: "Mixed Unreadable & Readable Documents",
+      tooltip: "Two readable, two unreadable documents.",
+      classes: ["linkable", "type-collection"],
+      items: [
+        {
+          name: false,
+          unreadable: true,
+        },
+        {
+          name: false,
+          unreadable: false,
+        },
+        {
+          name: true,
+          unreadable: true,
+        },
+        {
+          name: true,
+          unreadable: false,
+        },
+      ],
+    },
+  ];
   const singleUndroppables = [
     {
       label: "Folder",
@@ -161,6 +219,7 @@ const initDragExamples = () => {
     ...singleUndroppables,
     ...pairedExamples,
     ...allDroppables,
+    ...unreadables,
   ];
 
   const generateUriPath = (item) => {
