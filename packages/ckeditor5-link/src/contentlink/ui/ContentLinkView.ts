@@ -118,9 +118,16 @@ export default class ContentLinkView extends ButtonView {
     this.bind("label").to(this, "contentName");
 
     this.on("change:uriPath", (evt) => {
-      // URI changes, thus contentName is not valid anymore for the new URI
+      // URI changes, thus contentName, icons and tooltip are not valid anymore for the new URI
       this.set({
         contentName: undefined,
+        tooltip: undefined,
+      });
+      this.#typeIcon?.set({
+        iconClass: undefined,
+      });
+      this.#statusIcon?.set({
+        iconClass: undefined,
       });
 
       // unsubscribe the currently running subscription
