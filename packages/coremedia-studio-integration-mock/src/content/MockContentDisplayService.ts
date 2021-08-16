@@ -265,16 +265,23 @@ class MockContentDisplayService implements ContentDisplayService {
     }
     const config = parseContentConfig(uriPath);
     const unreadable = !!config.unreadable;
+    const maxFirstDelayMs = this.#config.maxFirstDelayMs;
+    const delayMs: number = maxFirstDelayMs === undefined ? MAX_FIRST_DELAY_MS : maxFirstDelayMs;
+    const timeoutMs = firstDelayMs(delayMs);
 
-    if (unreadable) {
-      return Promise.reject(`Content ${uriPath} is unreadable.`);
-    }
+    return new Promise<string>((resolve, reject) => {
+      setTimeout(() => {
+        if (unreadable) {
+          return reject(`Content ${uriPath} is unreadable.`);
+        }
 
-    const typeName = config.isFolder ? "Folder" : "Document";
-    const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
-    const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+        const typeName = config.isFolder ? "Folder" : "Document";
+        const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
+        const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
 
-    return Promise.resolve(`${!config.name ? falsyName : truthyName} ${typeName} #${id}`);
+        return resolve(`${!config.name ? falsyName : truthyName} ${typeName} #${id}`);
+      }, timeoutMs);
+    });
   }
 
   /**
