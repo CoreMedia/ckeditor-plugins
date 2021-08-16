@@ -5,7 +5,8 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
    * A content id is linkable if
    * * it is not a folder (even number)
-   * * it is not dividable by 4. This represents any content which is not linkable.
+   * * it the last digit is not dividable by 4.
+   *     This represents any content which is not linkable.
    *
    * @param uripath an uripath in the format 'content/content-id'
    */
@@ -17,13 +18,15 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
       }
       const contentIdString: string = uripath.replace("content/", "");
       const contentId: number = parseInt(contentIdString);
-      if (contentId % 4 === 0) {
+      const typeId: number = contentId % 10;
+
+      if (typeId % 4 === 0) {
         //not linkable content
         resolve(false);
         return;
       }
 
-      if (contentId % 2 === 0) {
+      if (typeId % 2 === 0) {
         //linkable content
         resolve(true);
       } else {
@@ -74,11 +77,14 @@ const applyDroppable = (contentId: number, undroppable: boolean): number => {
     // non-droppable.
     return contentId;
   }
-  const initialUndroppableState = contentId % 4 === 0;
+  const typeId: number = contentId % 10;
+  const initialUndroppableState = typeId % 4 === 0;
   if (initialUndroppableState === undroppable) {
     // We don't need to change anything.
     return contentId;
   }
+  // Replace type identifier (last digit) by either 2 (droppable) or 4
+  // (not droppable).
   const lastDigit = contentId % 10;
   return contentId - lastDigit + (undroppable ? 4 : 2);
 };
