@@ -1,4 +1,4 @@
-import { ServiceDescriptor } from "@coremedia/studio-apps-service-agent/src/ServiceDescriptor";
+import { ServiceDescriptor } from "@coremedia/studio-apps-service-agent";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 
 /**
