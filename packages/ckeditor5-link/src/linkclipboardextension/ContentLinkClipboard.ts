@@ -154,14 +154,9 @@ export default class ContentLinkClipboard extends Plugin {
       if (firstPosition === null) {
         return;
       }
-      writer.insertText(
-        linkText,
-        {
-          linkHref: href,
-          "xlink:href": href,
-        },
-        firstPosition
-      );
+      writer.overrideSelectionGravity();
+      const linkElement = writer.createText(linkText, { linkHref: href });
+      writer.insert(linkElement, firstPosition);
     });
   }
 
