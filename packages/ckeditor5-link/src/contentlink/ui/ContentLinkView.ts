@@ -115,6 +115,8 @@ export default class ContentLinkView extends ButtonView {
       },
     });
 
+    this.bind("label").to(this, "contentName");
+
     this.on("change:uriPath", (evt) => {
       // URI changes, thus contentName is not valid anymore for the new URI
       this.set({
@@ -158,7 +160,6 @@ export default class ContentLinkView extends ButtonView {
               iconClass: received.state.classes?.join(" "),
             });
             this.set({
-              label: received.content.name,
               tooltip: received.content.name,
               contentName: received.content.name,
             });
