@@ -143,12 +143,23 @@ function contentLinkExamples() {
       id: 6662000,
     },
   ];
+  const slowScenarios = [
+    {
+      comment: "Slow Document 1",
+      id: 4080000,
+    },
+    {
+      comment: "Slow Document 2",
+      id: 4081000,
+    },
+  ];
   const scenarios = [
     createContentLinkScenario("Standard Links", standardScenarios),
     createContentLinkScenario("Name Change Scenarios", nameChangeScenarios),
     createContentLinkScenario("Unreadable Scenarios", unreadableScenarios),
     createContentLinkScenario("Content State Scenarios", stateScenarios),
     createContentLinkScenario("XSS Scenarios", xssScenarios),
+    createContentLinkScenario("Slow Loading Scenarios", slowScenarios),
   ].join("");
   // noinspection XmlUnusedNamespaceDeclaration
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;

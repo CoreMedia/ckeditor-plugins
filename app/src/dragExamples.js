@@ -1,5 +1,6 @@
 import {
   createContentUriPath,
+  ContentIdPrefix,
   changing$
 } from "@coremedia/coremedia-studio-integration-mock/content/MockContentDisplayService";
 
@@ -67,7 +68,7 @@ const initDragExamples = () => {
       classes: ["linkable", "type-document"],
       items: [{
         name: false,
-        evil: true,
+        prefix: ContentIdPrefix.evil,
       }],
     },
     {
@@ -76,7 +77,7 @@ const initDragExamples = () => {
       classes: ["linkable", "type-document"],
       items: [{
         name: true,
-        evil: true,
+        prefix: ContentIdPrefix.evil,
       }],
     },
     {
@@ -85,7 +86,7 @@ const initDragExamples = () => {
       classes: ["linkable", "type-document"],
       items: [{
         name: changing$,
-        evil: true,
+        prefix: ContentIdPrefix.evil,
         checkedIn: changing$,
       }],
     },
@@ -179,6 +180,26 @@ const initDragExamples = () => {
       }],
     },
   ];
+  const slowDocuments = [
+    {
+      label: "Slow Document 1",
+      tooltip: "Some Document which takes long to load.",
+      classes: ["linkable", "type-document"],
+      items: [{
+        name: false,
+        prefix: ContentIdPrefix.slow,
+      }],
+    },
+    {
+      label: "Slow Document 2",
+      tooltip: "Some Other Document which takes long to load.",
+      classes: ["linkable", "type-document"],
+      items: [{
+        name: true,
+        prefix: ContentIdPrefix.slow,
+      }],
+    },
+  ];
   const pairedExamples = [
     {
       label: "2 Documents",
@@ -212,11 +233,18 @@ const initDragExamples = () => {
       classes: ["linkable", "type-collection"],
       items: singleDroppableDocuments.flatMap((item) => item.items),
     },
+    {
+      label: `Droppable Documents (incl. Slow)`,
+      tooltip: `${singleDroppableDocuments.length + slowDocuments.length} including ${slowDocuments.length} documents at the start which load slowly.`,
+      classes: ["linkable", "type-collection"],
+      items: slowDocuments.concat(singleDroppableDocuments).flatMap((item) => item.items),
+    },
   ];
 
   const allData = [
     ...singleDroppables,
     ...singleUndroppables,
+    ...slowDocuments,
     ...pairedExamples,
     ...allDroppables,
     ...unreadables,

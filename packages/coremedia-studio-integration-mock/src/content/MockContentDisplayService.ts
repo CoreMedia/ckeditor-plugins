@@ -13,6 +13,10 @@ import { applyDroppable, DroppableConfig } from "./MockRichtextConfigurationServ
  */
 const MAX_FIRST_DELAY_MS = 100;
 /**
+ * First initial delay for contents, that take long to load.
+ */
+const SLOW_FIRST_DELAY_MS = 10000;
+/**
  * If states shall change, it will be done with this fixed
  * interval (in milliseconds).
  */
@@ -38,6 +42,17 @@ const CONTENT_NAME_FALSY = "Ipsum";
  * meant to try challenge escaping et al.
  */
 const EVIL_CONTENT_ID_PREFIX = "666";
+
+/**
+ * Prefix for contents, which take an extra amount of time to be loaded
+ * initially. Note, that the mock-service simulates slow response on
+ * content-access on every access to the content, while the content is
+ * usually cached in production use.
+ *
+ * Prefix derived from HTTP Response Code _Request Timeout_.
+ */
+const SLOW_CONTENT_ID_PREFIX = "408";
+
 /**
  * Evil form (1st) of some content name.
  */
@@ -56,6 +71,39 @@ const EVIL_CONTENT_NAME_FALSY = "&lt; عام &amp; 年 &gt;";
 const ROOT_DISPLAY_HINT: DisplayHint = {
   name: "",
   classes: [],
+};
+
+/**
+ * Different prefixes to provoke a certain behavior.
+ */
+enum ContentIdPrefix {
+  /**
+   * Used to provoke _evil_ content names, such as cross-site-scripting attacks.
+   */
+  evil,
+  /**
+   * Used to provoke _slow_ content access, i.e. initial access takes longer
+   * than for any other content.
+   */
+  slow,
+}
+
+/**
+ * Parses a given prefix. If the prefix has no special meaning, `undefined`
+ * is returned.
+ *
+ * @param numericId numeric ID (as string) to analyze
+ */
+const parsePrefix = (numericId: string): ContentIdPrefix | undefined => {
+  // This may be solved more elegant with mapped enum values. But this should
+  // do it for now.
+  if (numericId.startsWith(EVIL_CONTENT_ID_PREFIX)) {
+    return ContentIdPrefix.evil;
+  }
+  if (numericId.startsWith(SLOW_CONTENT_ID_PREFIX)) {
+    return ContentIdPrefix.slow;
+  }
+  return undefined;
 };
 
 /**
@@ -90,7 +138,11 @@ interface MockServiceConfig {
 /**
  * Calculate the first delay; adds some randomness.
  */
-const firstDelayMs = (maxFirstDelayMs: number): number => {
+const firstDelayMs = (slow: boolean, maxFirstDelayMs: number): number => {
+  if (slow) {
+    // We don't want a random part, to ensure, it is really slow.
+    return SLOW_FIRST_DELAY_MS;
+  }
   return Math.random() * maxFirstDelayMs;
 };
 
@@ -101,12 +153,14 @@ const firstDelayMs = (maxFirstDelayMs: number): number => {
  * @param toggling {@code true} to signal toggling mode, {@code false} for not toggling,
  * i.e. on first value reached, `complete` will be triggered.
  * @param maxFirstDelayMs delay for first display
+ * @param slow if the initially provided value should take some extra amount of time
  * @param initial initial display
  */
 const initDisplay = (
   subscriber: Subscriber<DisplayHint>,
   toggling: boolean,
   { maxFirstDelayMs }: MockServiceConfig,
+  slow: boolean,
   initial: DisplayHint
 ): void => {
   const delayMs: number = maxFirstDelayMs === undefined ? MAX_FIRST_DELAY_MS : maxFirstDelayMs;
@@ -122,7 +176,7 @@ const initDisplay = (
       if (!toggling) {
         subscriber.complete();
       }
-    }, firstDelayMs(delayMs));
+    }, firstDelayMs(slow, delayMs));
   }
 };
 
@@ -182,22 +236,24 @@ const initToggle = (
  * @param truthyState state if mode is {@code true}; first state while toggling
  * @param falsyState state if mode is {@code false}; second state while toggling
  * @param config configuration for observable behavior
+ * @param slow if the initially provided value should take some extra amount of time
  */
 const createObservable = (
   mode: ConfigState | undefined,
   truthyState: DisplayHint,
   falsyState: DisplayHint,
-  config: MockServiceConfig
+  config: MockServiceConfig,
+  slow: boolean
 ): Observable<DisplayHint> => {
   return new Observable<DisplayHint>((subscriber) => {
     if (!mode) {
-      return initDisplay(subscriber, false, config, falsyState);
+      return initDisplay(subscriber, false, config, slow, falsyState);
     }
     if (mode === true) {
-      return initDisplay(subscriber, false, config, truthyState);
+      return initDisplay(subscriber, false, config, slow, truthyState);
     }
     // Mode is changing
-    initDisplay(subscriber, true, config, falsyState);
+    initDisplay(subscriber, true, config, slow, falsyState);
     return initToggle(subscriber, config, truthyState, falsyState);
   });
 };
@@ -264,10 +320,12 @@ class MockContentDisplayService implements ContentDisplayService {
       return Promise.resolve("");
     }
     const config = parseContentConfig(uriPath);
+    const evil = config.prefix === ContentIdPrefix.evil;
+    const slow = config.prefix === ContentIdPrefix.slow;
     const unreadable = !!config.unreadable;
     const maxFirstDelayMs = this.#config.maxFirstDelayMs;
     const delayMs: number = maxFirstDelayMs === undefined ? MAX_FIRST_DELAY_MS : maxFirstDelayMs;
-    const timeoutMs = firstDelayMs(delayMs);
+    const timeoutMs = firstDelayMs(slow, delayMs);
 
     return new Promise<string>((resolve, reject) => {
       setTimeout(() => {
@@ -276,8 +334,8 @@ class MockContentDisplayService implements ContentDisplayService {
         }
 
         const typeName = config.isFolder ? "Folder" : "Document";
-        const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
-        const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+        const truthyName = evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
+        const falsyName = evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
 
         return resolve(`${!config.name ? falsyName : truthyName} ${typeName} #${id}`);
       }, timeoutMs);
@@ -339,16 +397,18 @@ class MockContentDisplayService implements ContentDisplayService {
 
     if (id === 1) {
       // Root Folder has always only an empty name.
-      return createObservable(false, ROOT_DISPLAY_HINT, ROOT_DISPLAY_HINT, this.#config);
+      return createObservable(false, ROOT_DISPLAY_HINT, ROOT_DISPLAY_HINT, this.#config, false);
     }
     const config = parseContentConfig(uriPath);
+    const evil = config.prefix === ContentIdPrefix.evil;
+    const slow = config.prefix === ContentIdPrefix.slow;
     const typeName = config.isFolder ? "Folder" : "Document";
     const unreadableState: DisplayHint = {
       name: `${CONTENT_NAME_UNREADABLE} ${typeName} #${id}`,
       classes: [],
     };
-    const truthyName = config.evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
-    const falsyName = config.evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+    const truthyName = evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
+    const falsyName = evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
 
     const truthyState: DisplayHint = {
       name: `${truthyName} ${typeName} #${id}`,
@@ -365,11 +425,12 @@ class MockContentDisplayService implements ContentDisplayService {
         config.unreadable,
         unreadableState,
         !!config.name ? truthyState : falsyState,
-        this.#config
+        this.#config,
+        slow
       );
     }
 
-    return createObservable(config.name, truthyState, falsyState, this.#config);
+    return createObservable(config.name, truthyState, falsyState, this.#config, slow);
   }
 
   /**
@@ -384,6 +445,7 @@ class MockContentDisplayService implements ContentDisplayService {
    */
   observe_state(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
+    const slow = config.prefix === ContentIdPrefix.slow;
     const checkedInState: DisplayHint = {
       name: "Checked In",
       classes: ["icon--checked-in"],
@@ -405,10 +467,10 @@ class MockContentDisplayService implements ContentDisplayService {
 
     if (!!config.unreadable) {
       const falsyState = !!state ? checkedInState : checkedOutState;
-      return createObservable(config.unreadable, unreadableState, falsyState, this.#config);
+      return createObservable(config.unreadable, unreadableState, falsyState, this.#config, slow);
     }
 
-    return createObservable(state, checkedInState, checkedOutState, this.#config);
+    return createObservable(state, checkedInState, checkedOutState, this.#config, slow);
   }
 
   /**
@@ -420,6 +482,7 @@ class MockContentDisplayService implements ContentDisplayService {
    */
   observe_type(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
+    const slow = config.prefix === ContentIdPrefix.slow;
     const folderState: DisplayHint = {
       name: "Folder",
       classes: ["icon--folder"],
@@ -434,9 +497,9 @@ class MockContentDisplayService implements ContentDisplayService {
     };
     if (!!config.unreadable) {
       const falsyState = !!config.isFolder ? folderState : documentState;
-      return createObservable(config.unreadable, unreadableState, falsyState, this.#config);
+      return createObservable(config.unreadable, unreadableState, falsyState, this.#config, slow);
     }
-    return createObservable(config.isFolder, folderState, documentState, this.#config);
+    return createObservable(config.isFolder, folderState, documentState, this.#config, slow);
   }
 }
 
@@ -452,10 +515,10 @@ interface CreateContentConfig {
    */
   name?: ConfigState;
   /**
-   * If some evil states should be simulated or not. This applies especially
-   * to cross-site-scripting attacks (XSS).
+   * Some prefix to apply for certain behavior like being slow or using
+   * evil names to provoke cross-site-scripting attacks (XSS).
    */
-  evil?: boolean;
+  prefix?: ContentIdPrefix;
   /**
    * Shall the content be readable or unreadable. Defaults to readable.
    */
@@ -537,13 +600,13 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
     const isFolder = uriPathMatch && numericId % 2 === 1;
     // (Nearly) all defaults
     return {
-      evil: numericIdPart.startsWith(EVIL_CONTENT_ID_PREFIX),
+      prefix: parsePrefix(numericIdPart),
       isFolder: isFolder,
     };
   }
   return {
     name: identifierToState(parseInt(match[2])),
-    evil: match[1].startsWith("666"),
+    prefix: parsePrefix(match[1]),
     unreadable: identifierToState(parseInt(match[3])),
     checkedIn: identifierToState(parseInt(match[4])),
     // in contrast to other flags, we simulate the default CMS here, which is,
@@ -557,7 +620,7 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
  * given configuration.
  *
  * @param name type of name, or changing
- * @param evil if an evil name (e.g. for XSS attacks) shall be used
+ * @param prefix if a certain prefix shall be used to trigger a specific behavior
  * @param unreadable state of unreadable, or changing
  * @param checkedIn state of checked-in, or changing (not relevant for folders)
  * @param isFolder if the content shall be a folder or a document
@@ -565,7 +628,7 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
  */
 const createContentUriPath = ({
                                 name,
-                                evil,
+                                prefix,
                                 unreadable,
                                 checkedIn,
                                 isFolder,
@@ -573,7 +636,15 @@ const createContentUriPath = ({
                               }: CreateContentConfig & DroppableConfig
 ): UriPath => {
   const randomPrefix = (): number => {
-    const base = !!evil ? 66600 : 0;
+    let base = 0;
+    switch (prefix) {
+      case ContentIdPrefix.slow:
+        base = parseInt(`${SLOW_CONTENT_ID_PREFIX}00`);
+        break;
+      case ContentIdPrefix.evil:
+        base = parseInt(`${EVIL_CONTENT_ID_PREFIX}00`);
+        break;
+    }
     return base + 1 + Math.floor(Math.random() * 99);
   };
 
@@ -611,5 +682,6 @@ export {
   EVIL_CONTENT_NAME_FALSY,
   changing$,
   ConfigState,
+  ContentIdPrefix,
   createContentUriPath,
 };
