@@ -340,7 +340,7 @@ class MockContentDisplayService implements ContentDisplayService {
 
         resolve(name);
       };
-      if (timeoutMs === 0) {
+      if (delayMs === 0) {
         // Resolve/Reject immediately. Especially used in test context.
         handler();
       } else {
