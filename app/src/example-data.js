@@ -409,7 +409,16 @@ const lorem = (words, paragraphs) => {
     allWords = allWords.concat(LOREM_IPSUM_WORDS.slice(0, missingWords));
   }
   const asParagraphs = chunks(allWords, wordsPerParagraph);
-  const paragraph = (w) => `<p>${w.join(" ")}</p>`;
+  const paragraph = (w) => {
+    const paragraphText = w.join(" ")
+      .trim()
+      // Start each paragraph with upper case.
+      .replace(/^\w/, c => c.toUpperCase())
+      // End each paragraph with a dot, possibly replacing any non-alphabetic character.
+      .replace(/\W?$/, ".")
+    ;
+    return `<p>${paragraphText}</p>`;
+  };
   const htmlParagraphs = `${asParagraphs.map((w) => paragraph(w)).join("")}`;
   return `<div xmlns="${CM_RICHTEXT}">${htmlParagraphs}</div>`;
 };
