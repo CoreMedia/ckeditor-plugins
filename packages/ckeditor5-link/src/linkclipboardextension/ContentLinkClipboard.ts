@@ -64,24 +64,7 @@ export default class ContentLinkClipboard extends Plugin {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
-            for (const index in linkContents) {
-              if (!linkContents.hasOwnProperty(index)) {
-                continue;
-              }
-              const isLast = linkContents.length - 1 === Number(index);
-              const isFirst = Number(index) === 0;
-              const contentLink = linkContents[index];
-              contentDisplayService.name(contentLink.href).then((contentName) => {
-                ContentLinkClipboard.#handleContentNameResponse(
-                  editor,
-                  contentLink.href,
-                  contentName,
-                  dropCondition,
-                  isFirst,
-                  isLast
-                );
-              });
-            }
+            ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, linkContents);
           });
       } else {
         for (const index in linkContents) {
@@ -118,6 +101,32 @@ export default class ContentLinkClipboard extends Plugin {
         }
       }
     });
+  }
+
+  static #makeContentNameRequests(
+    contentDisplayService: ContentDisplayService,
+    editor: Editor,
+    dropCondition: DropCondition,
+    linkContents: Array<LinkContent>
+  ): void {
+    for (const index in linkContents) {
+      if (!linkContents.hasOwnProperty(index)) {
+        continue;
+      }
+      const isLast = linkContents.length - 1 === Number(index);
+      const isFirst = Number(index) === 0;
+      const contentLink = linkContents[index];
+      contentDisplayService.name(contentLink.href).then((contentName) => {
+        ContentLinkClipboard.#handleContentNameResponse(
+          editor,
+          contentLink.href,
+          contentName,
+          dropCondition,
+          isFirst,
+          isLast
+        );
+      });
+    }
   }
 
   static #handleContentNameResponse(
