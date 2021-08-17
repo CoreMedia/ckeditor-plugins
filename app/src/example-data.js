@@ -76,7 +76,7 @@ function contentLinkExamples() {
     },
     {
       comment: "Folder 2",
-      id: 11001,
+      id: 11003,
     },
     {
       comment: "Document 1",
@@ -84,7 +84,7 @@ function contentLinkExamples() {
     },
     {
       comment: "Document 2",
-      id: 11000,
+      id: 11002,
     },
   ];
   const nameChangeScenarios = [
@@ -112,7 +112,7 @@ function contentLinkExamples() {
     },
     {
       comment: "Document 2 (unreadable/readable toggle)",
-      id: 11200,
+      id: 11202,
     },
   ];
   const stateScenarios = [
@@ -122,11 +122,11 @@ function contentLinkExamples() {
     },
     {
       comment: "Document 2 (checked-out)",
-      id: 11000,
+      id: 11002,
     },
     {
       comment: "Document (being edited; toggles checked-out/-in)",
-      id: 10020,
+      id: 10026,
     },
   ];
   const xssScenarios = [
@@ -136,11 +136,11 @@ function contentLinkExamples() {
     },
     {
       comment: "Document 2",
-      id: 6661000,
+      id: 6661002,
     },
     {
       comment: "Document (toggling name)",
-      id: 6662000,
+      id: 6662006,
     },
   ];
   const slowScenarios = [
@@ -150,7 +150,7 @@ function contentLinkExamples() {
     },
     {
       comment: "Slow Document 2",
-      id: 4081000,
+      id: 4081002,
     },
   ];
   const scenarios = [
