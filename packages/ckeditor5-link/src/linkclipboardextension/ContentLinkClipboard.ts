@@ -152,11 +152,11 @@ export default class ContentLinkClipboard extends Plugin {
     if (dropCondition.multipleContentDrop) {
       ContentLinkClipboard.#writeLinkInOwnParagraph(editor, href, linkText, dropCondition, isLast);
     } else {
-      ContentLinkClipboard.#writeLinkInline(editor, href, linkText);
+      ContentLinkClipboard.#writeLinkInline(editor, href, linkText, dropCondition);
     }
   }
 
-  static #writeLinkInline(editor: Editor, href: string, linkText: string): void {
+  static #writeLinkInline(editor: Editor, href: string, linkText: string, dropCondition: DropCondition): void {
     editor.model.change((writer: Writer) => {
       const firstPosition = editor.model.document.selection.getFirstPosition();
       if (firstPosition === null) {
@@ -165,6 +165,9 @@ export default class ContentLinkClipboard extends Plugin {
       writer.overrideSelectionGravity();
       const linkElement = writer.createText(linkText, { linkHref: href });
       writer.insert(linkElement, firstPosition);
+      const positionAfterText = writer.createPositionAfter(linkElement);
+      const textRange = writer.createRange(firstPosition, positionAfterText);
+      ContentLinkClipboard.#setSelectionAttributes(writer, textRange, dropCondition.selectedAttributes);
     });
   }
 
