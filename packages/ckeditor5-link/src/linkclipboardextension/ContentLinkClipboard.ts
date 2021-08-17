@@ -179,12 +179,12 @@ export default class ContentLinkClipboard extends Plugin {
     isLast: boolean
   ): void {
     editor.model.change((writer: Writer) => {
-      const firstPosition = editor.model.document.selection.getFirstPosition();
-      if (firstPosition === null) {
+      const actualPosition = editor.model.document.selection.getFirstPosition();
+      if (actualPosition === null) {
         return;
       }
 
-      const textRange = ContentLinkClipboard.#insertLink(writer, firstPosition, href, linkText);
+      const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, href, linkText);
       ContentLinkClipboard.#setSelectionAttributes(writer, textRange, dropCondition.selectedAttributes);
 
       if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
@@ -196,19 +196,19 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #insertLink(writer: Writer, firstPosition: Position, href: string, linkText: string): Range {
-    const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(firstPosition);
+  static #insertLink(writer: Writer, actualPosition: Position, href: string, linkText: string): Range {
+    const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(actualPosition);
     const text = writer.createText(linkText, {
       linkHref: href,
     });
     let textStartPosition;
-    if (!isFirstDocumentPosition) {
-      const split = writer.split(firstPosition);
+    if (isFirstDocumentPosition) {
+      textStartPosition = actualPosition;
+      writer.insert(text, actualPosition);
+    } else {
+      const split = writer.split(actualPosition);
       textStartPosition = split.range.end;
       writer.insert(text, split.range.end);
-    } else {
-      textStartPosition = firstPosition;
-      writer.insert(text, firstPosition);
     }
     const afterTextPosition = writer.createPositionAt(text, "after");
     return writer.createRange(textStartPosition, afterTextPosition);
