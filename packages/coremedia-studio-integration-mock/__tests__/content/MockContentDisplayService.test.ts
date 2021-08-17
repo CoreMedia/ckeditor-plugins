@@ -106,7 +106,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     serviceAgent.registerService(service);
 
     test("Should be able to retrieve mock service.", () => {
-      return expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toBe(service);
+      return expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toMatchObject(service);
     });
   });
 
