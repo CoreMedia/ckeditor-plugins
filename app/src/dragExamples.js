@@ -211,6 +211,15 @@ const initDragExamples = () => {
       ],
     },
     {
+      label: "2 Documents[Slow/Fast]",
+      tooltip: "Slow/Fast",
+      classes: ["linkable", "type-collection"],
+      items: [
+        {name: true, prefix: ContentIdPrefix.slow},
+        {name: true},
+      ],
+    },
+    {
       label: "2 Documents (1 nodrop)",
       tooltip: "Two documents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],
