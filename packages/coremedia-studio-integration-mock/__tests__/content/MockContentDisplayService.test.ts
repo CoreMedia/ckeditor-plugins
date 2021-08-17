@@ -126,7 +126,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
         const recordedHints: DisplayHint[] = [];
 
         testFn(`Async Test for: ${name}`, (done) => {
-          expect.assertions(1 + 3 * expectedHints.length);
+          expect.hasAssertions();
           serviceFn.call(service, uriPath).subscribe({
             next: (received: DisplayHint) => recordedHints.push(received),
             error: (error: unknown) => {
@@ -134,15 +134,14 @@ describe("Unit Tests: MockContentDisplayService", () => {
             },
             complete: () => {
               expect(recordedHints).toHaveLength(expectedHints.length);
-              recordedHints.forEach(({ name, classes }: DisplayHint) => {
-                // We should still have some states defined. Otherwise, we got more
-                // states than we expected.
-                expect(expectedHints.length).toBeGreaterThan(0);
+              recordedHints.forEach(({ name: actualName, classes: actualClasses }: DisplayHint) => {
 
-                const current = expectedHints.shift();
+                const { name: expectedName, classes: expectedClasses } = expectedHints.shift();
 
-                expect(name).toBe(current?.name);
-                expect(classes?.sort()).toEqual(current?.classes?.sort() || []);
+                expect(actualName).toBe(expectedName);
+                if (expectedClasses?.length > 0) {
+                  expect(actualClasses).toEqual(expect.arrayContaining(expectedClasses));
+                }
               });
               done();
             },
@@ -159,7 +158,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
         const recordedHints: ContentAsLink[] = [];
 
         testFn(`Async Test for: ${name}`, (done) => {
-          expect.assertions(1 + 7 * expectedHints.length);
+          expect.hasAssertions();
           serviceFn.call(service, uriPath).subscribe({
             next: (received: ContentAsLink) => recordedHints.push(received),
             error: (error: unknown) => {
@@ -173,9 +172,9 @@ describe("Unit Tests: MockContentDisplayService", () => {
                 expect(content.name).toBe(current?.content.name);
                 expect(type.name).toBe(current?.type.name);
                 expect(state.name).toBe(current?.state.name);
-                expect(content.classes?.sort()).toEqual(current?.content.classes?.sort() || []);
-                expect(type.classes?.sort()).toEqual(current?.type.classes?.sort() || []);
-                expect(state.classes?.sort()).toEqual(current?.state.classes?.sort() || []);
+                expect(content.classes?.sort()).toEqual(expect.arrayContaining(current?.content.classes?.sort() || []));
+                expect(type.classes?.sort()).toEqual(expect.arrayContaining(current?.type.classes?.sort() || []));
+                expect(state.classes?.sort()).toEqual(expect.arrayContaining(current?.state.classes?.sort() || []));
               });
               done();
             },

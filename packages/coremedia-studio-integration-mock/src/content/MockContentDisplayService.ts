@@ -488,6 +488,8 @@ class MockContentDisplayService implements ContentDisplayService {
    * @param uriPath URI path to create mock type for
    */
   observe_type(uriPath: UriPath): Observable<DisplayHint> {
+    const id = numericId(uriPath);
+    const typeId = id % 10;
     const config = parseContentConfig(uriPath);
     const slow = config.prefix === ContentIdPrefix.slow;
     const folderState: DisplayHint = {
@@ -496,7 +498,7 @@ class MockContentDisplayService implements ContentDisplayService {
     };
     const documentState: DisplayHint = {
       name: "Document",
-      classes: ["icon--document"],
+      classes: ["icon--document", `icon--document-${typeId}`],
     };
     const unreadableState: DisplayHint = {
       name: "Unreadable",
