@@ -12,14 +12,18 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
 import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import { ROOT_NAME } from "../contentlink/Constants";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
-
+  static #CONTENT_LINK_CLIPBOARD_PLUGIN_NAME = "ContentLinkClipboard";
+  static #LOGGER: Logger = LoggerProvider.getLogger(ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME);
   static get pluginName(): string {
-    return "ContentLinkClipboard";
+    return ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME;
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
@@ -48,12 +52,14 @@ export default class ContentLinkClipboard extends Plugin {
       if (!linkContents || linkContents.length === 0) {
         return;
       }
+      ContentLinkClipboard.#LOGGER.debug("Links dropped: " + JSON.stringify(linkContents));
 
       //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
       ContentLinkClipboard.#setInitialSelection(editor, data);
       const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, linkContents);
+      ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
       if (ContentLinkClipboard.#hasOnlyContentLinks(linkContents)) {
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
@@ -119,6 +125,9 @@ export default class ContentLinkClipboard extends Plugin {
     dropCondition: DropCondition,
     isLast: boolean
   ): void {
+    ContentLinkClipboard.#LOGGER.debug(
+      "Rendering link: " + JSON.stringify({ uriPath, contentName, dropCondition, isLast })
+    );
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
     DragDropAsyncSupport.resetIsLinkableContent(uriPath);
     if (!isLinkableContent) {
@@ -173,25 +182,44 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(firstPosition);
-      const text = writer.createText(linkText, {
-        linkHref: href,
-      });
-      if (!isFirstDocumentPosition) {
-        const split = writer.split(firstPosition);
-        writer.insert(text, split.range.end);
-      } else {
-        writer.insert(text, firstPosition);
-      }
+      const textRange = ContentLinkClipboard.#insertLink(writer, firstPosition, href, linkText);
+      ContentLinkClipboard.#setSelectionAttributes(writer, textRange, dropCondition.selectedAttributes);
 
-      const afterTextPosition = writer.createPositionAt(text, "after");
       if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
-        const secondSplit = writer.split(afterTextPosition);
+        const secondSplit = writer.split(textRange.end);
         writer.setSelection(secondSplit.range.end);
       } else {
-        writer.setSelection(afterTextPosition);
+        writer.setSelection(textRange.end);
       }
     });
+  }
+
+  static #insertLink(writer: Writer, firstPosition: Position, href: string, linkText: string): Range {
+    const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(firstPosition);
+    const text = writer.createText(linkText, {
+      linkHref: href,
+    });
+    let textStartPosition;
+    if (!isFirstDocumentPosition) {
+      const split = writer.split(firstPosition);
+      textStartPosition = split.range.end;
+      writer.insert(text, split.range.end);
+    } else {
+      textStartPosition = firstPosition;
+      writer.insert(text, firstPosition);
+    }
+    const afterTextPosition = writer.createPositionAt(text, "after");
+    return writer.createRange(textStartPosition, afterTextPosition);
+  }
+
+  static #setSelectionAttributes(
+    writer: Writer,
+    textRange: Range,
+    attributes: Array<[string, string | number | boolean]>
+  ): void {
+    for (const attribute of attributes) {
+      writer.setAttribute(attribute[0], attribute[1], textRange);
+    }
   }
 
   static #isFirstPositionOfDocument(position: Position): boolean {
@@ -256,7 +284,8 @@ export default class ContentLinkClipboard extends Plugin {
     const multipleContentDrop = links.length > 1;
     const initialDropPosition = editor.model.document.selection.getFirstPosition();
     const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
-    return new DropCondition(multipleContentDrop, initialDropAtEndOfParagraph);
+    const attributes = editor.model.document.selection.getAttributes();
+    return new DropCondition(multipleContentDrop, initialDropAtEndOfParagraph, Array.from(attributes));
   }
 
   destroy(): Promise<never> | null {
@@ -289,8 +318,15 @@ class LinkContent {
 class DropCondition {
   initialDropAtEndOfParagraph: boolean;
   multipleContentDrop: boolean;
-  constructor(multipleContentDrop: boolean, initialDropAtEndOfParagraph: boolean) {
+  selectedAttributes: Array<[string, string | number | boolean]>;
+
+  constructor(
+    multipleContentDrop: boolean,
+    initialDropAtEndOfParagraph: boolean,
+    selectedAttributes: Array<[string, string | number | boolean]>
+  ) {
     this.multipleContentDrop = multipleContentDrop;
     this.initialDropAtEndOfParagraph = initialDropAtEndOfParagraph;
+    this.selectedAttributes = selectedAttributes;
   }
 }
