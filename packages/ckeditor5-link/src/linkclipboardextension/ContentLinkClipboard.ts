@@ -69,6 +69,7 @@ export default class ContentLinkClipboard extends Plugin {
                 continue;
               }
               const isLast = linkContents.length - 1 === Number(index);
+              const isFirst = Number(index) === 0;
               const contentLink = linkContents[index];
               contentDisplayService.name(contentLink.href).then((contentName) => {
                 ContentLinkClipboard.#handleContentNameResponse(
@@ -76,6 +77,7 @@ export default class ContentLinkClipboard extends Plugin {
                   contentLink.href,
                   contentName,
                   dropCondition,
+                  isFirst,
                   isLast
                 );
               });
@@ -87,8 +89,9 @@ export default class ContentLinkClipboard extends Plugin {
             continue;
           }
           const isLast = linkContents.length - 1 === Number(index);
+          const isFirst = Number(index) === 0;
           const link = linkContents[index];
-          ContentLinkClipboard.#writeLink(editor, link.href, link.href, dropCondition, isLast);
+          ContentLinkClipboard.#writeLink(editor, link.href, link.href, dropCondition, isFirst, isLast);
         }
       }
     });
@@ -122,10 +125,11 @@ export default class ContentLinkClipboard extends Plugin {
     uriPath: string,
     contentName: string,
     dropCondition: DropCondition,
+    isFirst: boolean,
     isLast: boolean
   ): void {
     ContentLinkClipboard.#LOGGER.debug(
-      "Rendering link: " + JSON.stringify({ uriPath, contentName, dropCondition, isLast })
+      "Rendering link: " + JSON.stringify({ uriPath, contentName, dropCondition, isFirst, isLast })
     );
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
     DragDropAsyncSupport.resetIsLinkableContent(uriPath);
@@ -138,6 +142,7 @@ export default class ContentLinkClipboard extends Plugin {
       requireContentCkeModelUri(uriPath),
       contentNameRespectingRoot,
       dropCondition,
+      isFirst,
       isLast
     );
   }
@@ -147,10 +152,11 @@ export default class ContentLinkClipboard extends Plugin {
     href: string,
     linkText: string,
     dropCondition: DropCondition,
+    isFirst: boolean,
     isLast: boolean
   ): void {
     if (dropCondition.multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, href, linkText, dropCondition, isLast);
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, href, linkText, dropCondition, isFirst, isLast);
     } else {
       ContentLinkClipboard.#writeLinkInline(editor, href, linkText, dropCondition);
     }
@@ -176,6 +182,7 @@ export default class ContentLinkClipboard extends Plugin {
     href: string,
     linkText: string,
     dropCondition: DropCondition,
+    isFirst: boolean,
     isLast: boolean
   ): void {
     editor.model.change((writer: Writer) => {
@@ -184,7 +191,14 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, href, linkText);
+      const textRange = ContentLinkClipboard.#insertLink(
+        writer,
+        actualPosition,
+        href,
+        linkText,
+        dropCondition.initialDropAtStartOfParagraph,
+        isFirst
+      );
       ContentLinkClipboard.#setSelectionAttributes(writer, textRange, dropCondition.selectedAttributes);
 
       if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
@@ -196,13 +210,20 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #insertLink(writer: Writer, actualPosition: Position, href: string, linkText: string): Range {
+  static #insertLink(
+    writer: Writer,
+    actualPosition: Position,
+    href: string,
+    linkText: string,
+    initialDropAtStartOfParagraph: boolean,
+    isFirstLink: boolean
+  ): Range {
     const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(actualPosition);
     const text = writer.createText(linkText, {
       linkHref: href,
     });
     let textStartPosition;
-    if (isFirstDocumentPosition) {
+    if (isFirstDocumentPosition || (initialDropAtStartOfParagraph && isFirstLink)) {
       textStartPosition = actualPosition;
       writer.insert(text, actualPosition);
     } else {
@@ -286,8 +307,14 @@ export default class ContentLinkClipboard extends Plugin {
     const multipleContentDrop = links.length > 1;
     const initialDropPosition = editor.model.document.selection.getFirstPosition();
     const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
+    const initialDropAtStartOfParagraph = initialDropPosition ? initialDropPosition.isAtStart : false;
     const attributes = editor.model.document.selection.getAttributes();
-    return new DropCondition(multipleContentDrop, initialDropAtEndOfParagraph, Array.from(attributes));
+    return new DropCondition(
+      multipleContentDrop,
+      initialDropAtEndOfParagraph,
+      initialDropAtStartOfParagraph,
+      Array.from(attributes)
+    );
   }
 
   destroy(): Promise<never> | null {
@@ -319,16 +346,19 @@ class LinkContent {
 
 class DropCondition {
   initialDropAtEndOfParagraph: boolean;
+  initialDropAtStartOfParagraph: boolean;
   multipleContentDrop: boolean;
   selectedAttributes: Array<[string, string | number | boolean]>;
 
   constructor(
     multipleContentDrop: boolean,
     initialDropAtEndOfParagraph: boolean,
+    initialDropAtStartOfParagraph: boolean,
     selectedAttributes: Array<[string, string | number | boolean]>
   ) {
     this.multipleContentDrop = multipleContentDrop;
     this.initialDropAtEndOfParagraph = initialDropAtEndOfParagraph;
+    this.initialDropAtStartOfParagraph = initialDropAtStartOfParagraph;
     this.selectedAttributes = selectedAttributes;
   }
 }
