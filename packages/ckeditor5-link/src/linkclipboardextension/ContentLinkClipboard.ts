@@ -117,10 +117,13 @@ export default class ContentLinkClipboard extends Plugin {
       const contentLink = linkContents[index];
       const namePromise = contentDisplayService.name(contentLink.href);
       namePromises.push(namePromise);
-      Promise.all(namePromises).then((value: Array<string>) => {
-        ContentLinkClipboard.#LOGGER.debug(JSON.stringify(value));
-        for (const index in value) {
-          const contentName = value[index];
+      Promise.all(namePromises).then((contentNames: Array<string>) => {
+        ContentLinkClipboard.#LOGGER.debug(JSON.stringify(contentNames));
+        for (const index in contentNames) {
+          if (!contentNames.hasOwnProperty(index) || !linkContents.hasOwnProperty(index)) {
+            continue;
+          }
+          const contentName = contentNames[index];
           const contentLink = linkContents[index];
           const isLast = linkContents.length - 1 === Number(index);
           const isFirst = Number(index) === 0;
