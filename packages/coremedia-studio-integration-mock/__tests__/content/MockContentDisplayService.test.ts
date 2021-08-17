@@ -106,6 +106,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     serviceAgent.registerService(service);
 
     test("Should be able to retrieve mock service.", () => {
+      expect.hasAssertions();
       return expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toMatchObject(service);
     });
   });
@@ -136,10 +137,10 @@ describe("Unit Tests: MockContentDisplayService", () => {
               expect(recordedHints).toHaveLength(expectedHints.length);
               recordedHints.forEach(({ name: actualName, classes: actualClasses }: DisplayHint) => {
 
-                const { name: expectedName, classes: expectedClasses } = expectedHints.shift();
+                const { name: expectedName, classes: expectedClasses } = expectedHints.shift() || {};
 
                 expect(actualName).toBe(expectedName);
-                if (expectedClasses?.length > 0) {
+                if (!!expectedClasses && expectedClasses.length > 0) {
                   expect(actualClasses).toEqual(expect.arrayContaining(expectedClasses));
                 }
               });
@@ -196,6 +197,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     `("[$#] URI path $uriPath should resolve to match name: $expected", ({ uriPath, expected }) => {
       const contentId = parseInt(uriPath.replace("content/", ""));
       const regExp = new RegExp(`^${escapeRegExp(expected)}.*${contentId}.*$`);
+      expect.hasAssertions();
       return expect(service.name(uriPath)).resolves.toMatch(regExp);
     });
 
