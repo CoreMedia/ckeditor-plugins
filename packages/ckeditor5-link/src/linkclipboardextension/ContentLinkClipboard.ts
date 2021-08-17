@@ -109,22 +109,30 @@ export default class ContentLinkClipboard extends Plugin {
     dropCondition: DropCondition,
     linkContents: Array<LinkContent>
   ): void {
+    const namePromises: Array<Promise<string>> = [];
     for (const index in linkContents) {
       if (!linkContents.hasOwnProperty(index)) {
         continue;
       }
-      const isLast = linkContents.length - 1 === Number(index);
-      const isFirst = Number(index) === 0;
       const contentLink = linkContents[index];
-      contentDisplayService.name(contentLink.href).then((contentName) => {
-        ContentLinkClipboard.#handleContentNameResponse(
-          editor,
-          contentLink.href,
-          contentName,
-          dropCondition,
-          isFirst,
-          isLast
-        );
+      const namePromise = contentDisplayService.name(contentLink.href);
+      namePromises.push(namePromise);
+      Promise.all(namePromises).then((value: Array<string>) => {
+        ContentLinkClipboard.#LOGGER.debug(JSON.stringify(value));
+        for (const index in value) {
+          const contentName = value[index];
+          const contentLink = linkContents[index];
+          const isLast = linkContents.length - 1 === Number(index);
+          const isFirst = Number(index) === 0;
+          ContentLinkClipboard.#handleContentNameResponse(
+            editor,
+            contentLink.href,
+            contentName,
+            dropCondition,
+            isFirst,
+            isLast
+          );
+        }
       });
     }
   }
