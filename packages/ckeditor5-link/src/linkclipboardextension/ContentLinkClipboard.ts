@@ -105,9 +105,8 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
       if (ContentLinkClipboard.#hasOnlyContentLinks(linkContent)) {
-        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(
-          linkContent.map<string>((value) => value.href)
-        );
+        const uriPaths = linkContent.map<string>((value) => value.href);
+        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(uriPaths);
         if (containOnlyLinkables) {
           data.dataTransfer.dropEffect = "copy";
         } else {
