@@ -328,17 +328,24 @@ class MockContentDisplayService implements ContentDisplayService {
     const timeoutMs = firstDelayMs(slow, delayMs);
 
     return new Promise<string>((resolve, reject) => {
-      setTimeout(() => {
+      const handler = () => {
         if (unreadable) {
-          return reject(`Content ${uriPath} is unreadable.`);
+          reject(`Content ${uriPath} is unreadable.`);
         }
 
         const typeName = config.isFolder ? "Folder" : "Document";
         const truthyName = evil ? EVIL_CONTENT_NAME_TRUTHY : CONTENT_NAME_TRUTHY;
         const falsyName = evil ? EVIL_CONTENT_NAME_FALSY : CONTENT_NAME_FALSY;
+        const name = `${!config.name ? falsyName : truthyName} ${typeName} #${id}`;
 
-        return resolve(`${!config.name ? falsyName : truthyName} ${typeName} #${id}`);
-      }, timeoutMs);
+        resolve(name);
+      };
+      if (timeoutMs === 0) {
+        // Resolve/Reject immediately. Especially used in test context.
+        handler();
+      } else {
+        setTimeout(handler, timeoutMs);
+      }
     });
   }
 

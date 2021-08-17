@@ -198,7 +198,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     ${"content/6660000"} | ${EVIL_CONTENT_NAME_FALSY}
     ${"content/6661000"} | ${EVIL_CONTENT_NAME_TRUTHY}
     ${"content/6662000"} | ${EVIL_CONTENT_NAME_TRUTHY}
-    `("[$#] URI path $uriPath should resolve to name: $expected", ({ uriPath, expected }) => {
+    `("[$#] URI path $uriPath should resolve to match name: $expected", ({ uriPath, expected }) => {
       const contentId = parseInt(uriPath.replace("content/", ""));
       const regExp = new RegExp(`^${escapeRegExp(expected)}.*${contentId}.*$`);
       expect.assertions(1);
