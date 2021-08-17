@@ -106,7 +106,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     serviceAgent.registerService(service);
 
     test("Should be able to retrieve mock service.", () => {
-      expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toBe(service);
+      return expect(serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())).resolves.toBe(service);
     });
   });
 
@@ -168,10 +168,6 @@ describe("Unit Tests: MockContentDisplayService", () => {
             complete: () => {
               expect(recordedHints).toHaveLength(expectedHints.length);
               recordedHints.forEach(({ content, type, state }: ContentAsLink) => {
-                // We should still have some states defined. Otherwise, we got more
-                // states than we expected.
-                expect(expectedHints.length).toBeGreaterThan(0);
-
                 const current = expectedHints.shift();
 
                 expect(content.name).toBe(current?.content.name);
@@ -201,8 +197,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     `("[$#] URI path $uriPath should resolve to match name: $expected", ({ uriPath, expected }) => {
       const contentId = parseInt(uriPath.replace("content/", ""));
       const regExp = new RegExp(`^${escapeRegExp(expected)}.*${contentId}.*$`);
-      expect.assertions(1);
-      expect(service.name(uriPath)).resolves.toMatch(regExp);
+      return expect(service.name(uriPath)).resolves.toMatch(regExp);
     });
 
     test.each`
@@ -212,8 +207,7 @@ describe("Unit Tests: MockContentDisplayService", () => {
     ${"content/6660100"}
     ${"content/6661200"}
     `("[$#] URI path $uriPath should reject promise, as it is unreadable", ({ uriPath }) => {
-      expect.assertions(1);
-      expect(service.name(uriPath)).rejects.toContain(uriPath);
+      return expect(service.name(uriPath)).rejects.toContain(uriPath);
     });
 
   });
