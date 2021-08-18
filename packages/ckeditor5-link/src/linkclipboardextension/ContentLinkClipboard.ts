@@ -227,11 +227,16 @@ export default class ContentLinkClipboard extends Plugin {
         isFirst
       );
       ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
-
       if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
+        //Finish with a new line if the contents are dropped into an inline position
         const secondSplit = writer.split(textRange.end);
         writer.setSelection(secondSplit.range.end);
       } else {
+        if (isLast) {
+          //If we drop to the end of the document we do not end in the next paragraph so we have to make sure that we do not
+          //end in the link tag to not proceed the link when typing.
+          writer.overrideSelectionGravity();
+        }
         writer.setSelection(textRange.end);
       }
     });
