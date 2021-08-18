@@ -326,11 +326,10 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #createDropCondition(editor: Editor, data: any, links: Array<LinkContent>): DropCondition {
     const multipleContentDrop = links.length > 1;
-    const initialDropPosition = editor.model.document.selection.getFirstPosition();
-    const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
-    const initialDropAtStartOfParagraph = initialDropPosition ? initialDropPosition.isAtStart : false;
-    const attributes = editor.model.document.selection.getAttributes();
     const targetRange: Range | null = ContentLinkClipboard.#evaluateTargetRange(editor, data);
+    const initialDropAtStartOfParagraph = targetRange ? targetRange.start.isAtStart : false;
+    const initialDropAtEndOfParagraph = targetRange ? targetRange.end.isAtEnd : false;
+    const attributes = editor.model.document.selection.getAttributes();
     return new DropCondition(
       multipleContentDrop,
       initialDropAtEndOfParagraph,
