@@ -57,8 +57,7 @@ export default class ContentLinkClipboard extends Plugin {
       //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
-      ContentLinkClipboard.#setInitialSelection(editor, data);
-      const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, linkContents);
+      const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, linkContents);
       ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
       if (ContentLinkClipboard.#hasOnlyContentLinks(linkContents)) {
         serviceAgent
@@ -184,6 +183,9 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #writeLinkInline(editor: Editor, href: string, linkText: string, dropCondition: DropCondition): void {
     editor.model.change((writer: Writer) => {
+      if (dropCondition.targetRange) {
+        writer.setSelection(dropCondition.targetRange);
+      }
       const firstPosition = editor.model.document.selection.getFirstPosition();
       if (firstPosition === null) {
         return;
@@ -193,7 +195,7 @@ export default class ContentLinkClipboard extends Plugin {
       writer.insert(linkElement, firstPosition);
       const positionAfterText = writer.createPositionAfter(linkElement);
       const textRange = writer.createRange(firstPosition, positionAfterText);
-      ContentLinkClipboard.#setSelectionAttributes(writer, textRange, dropCondition.selectedAttributes);
+      ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
     });
   }
 
@@ -206,6 +208,11 @@ export default class ContentLinkClipboard extends Plugin {
     isLast: boolean
   ): void {
     editor.model.change((writer: Writer) => {
+      // When dropping the drop position is stored as range but the editor not yet updated, so we have to update the
+      // the selection to the drop position/cursor position.
+      if (isFirst && dropCondition.targetRange) {
+        writer.setSelection(dropCondition.targetRange);
+      }
       const actualPosition = editor.model.document.selection.getFirstPosition();
       if (actualPosition === null) {
         return;
@@ -219,7 +226,7 @@ export default class ContentLinkClipboard extends Plugin {
         dropCondition.initialDropAtStartOfParagraph,
         isFirst
       );
-      ContentLinkClipboard.#setSelectionAttributes(writer, textRange, dropCondition.selectedAttributes);
+      ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
 
       if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
         const secondSplit = writer.split(textRange.end);
@@ -257,11 +264,13 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #setSelectionAttributes(
     writer: Writer,
-    textRange: Range,
+    textRange: Array<Range>,
     attributes: Array<[string, string | number | boolean]>
   ): void {
     for (const attribute of attributes) {
-      writer.setAttribute(attribute[0], attribute[1], textRange);
+      for (const range of textRange) {
+        writer.setAttribute(attribute[0], attribute[1], range);
+      }
     }
   }
 
@@ -304,14 +313,6 @@ export default class ContentLinkClipboard extends Plugin {
     return ContentLinkClipboard.#toLinkContent(contentUriPaths);
   }
 
-  static #setInitialSelection(editor: Editor, data: any): void {
-    editor.model.change((writer: Writer) => {
-      if (data.targetRanges) {
-        writer.setSelection(data.targetRanges.map((viewRange: Range) => editor.editing.mapper.toModelRange(viewRange)));
-      }
-    });
-  }
-
   static #toLinkContent(contentUris: Array<string> | null): Array<LinkContent> {
     if (!contentUris) {
       return [];
@@ -323,18 +324,33 @@ export default class ContentLinkClipboard extends Plugin {
     return linkContents;
   }
 
-  static #createDropCondition(editor: Editor, links: Array<LinkContent>): DropCondition {
+  static #createDropCondition(editor: Editor, data: any, links: Array<LinkContent>): DropCondition {
     const multipleContentDrop = links.length > 1;
     const initialDropPosition = editor.model.document.selection.getFirstPosition();
     const initialDropAtEndOfParagraph = initialDropPosition ? initialDropPosition.isAtEnd : false;
     const initialDropAtStartOfParagraph = initialDropPosition ? initialDropPosition.isAtStart : false;
     const attributes = editor.model.document.selection.getAttributes();
+    const targetRange: Range | null = ContentLinkClipboard.#evaluateTargetRange(editor, data);
     return new DropCondition(
       multipleContentDrop,
       initialDropAtEndOfParagraph,
       initialDropAtStartOfParagraph,
+      targetRange,
       Array.from(attributes)
     );
+  }
+
+  static #evaluateTargetRange(editor: Editor, data: any): Range | null {
+    if (!data.targetRanges) {
+      return null;
+    }
+    const targetRanges: Array<Range> = data.targetRanges.map((viewRange: Range) => {
+      return editor.editing.mapper.toModelRange(viewRange);
+    });
+    if (targetRanges.length > 0) {
+      return targetRanges[0];
+    }
+    return null;
   }
 
   destroy(): Promise<never> | null {
@@ -368,17 +384,20 @@ class DropCondition {
   initialDropAtEndOfParagraph: boolean;
   initialDropAtStartOfParagraph: boolean;
   multipleContentDrop: boolean;
+  targetRange: Range | null;
   selectedAttributes: Array<[string, string | number | boolean]>;
 
   constructor(
     multipleContentDrop: boolean,
     initialDropAtEndOfParagraph: boolean,
     initialDropAtStartOfParagraph: boolean,
+    targetRange: Range | null,
     selectedAttributes: Array<[string, string | number | boolean]>
   ) {
     this.multipleContentDrop = multipleContentDrop;
     this.initialDropAtEndOfParagraph = initialDropAtEndOfParagraph;
     this.initialDropAtStartOfParagraph = initialDropAtStartOfParagraph;
+    this.targetRange = targetRange;
     this.selectedAttributes = selectedAttributes;
   }
 }
