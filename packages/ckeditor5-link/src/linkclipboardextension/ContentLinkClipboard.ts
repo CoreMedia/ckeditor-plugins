@@ -144,11 +144,18 @@ export default class ContentLinkClipboard extends Plugin {
     uriPath: string,
     contentName: string,
     dropCondition: DropCondition,
-    isFirst: boolean,
-    isLast: boolean
+    isFirstInsertedLink: boolean,
+    isLastInsertedLink: boolean
   ): void {
     ContentLinkClipboard.#LOGGER.debug(
-      "Rendering link: " + JSON.stringify({ uriPath, contentName, dropCondition, isFirst, isLast })
+      "Rendering link: " +
+        JSON.stringify({
+          uriPath,
+          contentName,
+          dropCondition,
+          isFirst: isFirstInsertedLink,
+          isLast: isLastInsertedLink,
+        })
     );
     const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
     DragDropAsyncSupport.resetIsLinkableContent(uriPath);
@@ -161,8 +168,8 @@ export default class ContentLinkClipboard extends Plugin {
       requireContentCkeModelUri(uriPath),
       contentNameRespectingRoot,
       dropCondition,
-      isFirst,
-      isLast
+      isFirstInsertedLink,
+      isLastInsertedLink
     );
   }
 
@@ -171,11 +178,18 @@ export default class ContentLinkClipboard extends Plugin {
     href: string,
     linkText: string,
     dropCondition: DropCondition,
-    isFirst: boolean,
-    isLast: boolean
+    isFirstInsertedLink: boolean,
+    isLastInsertedLink: boolean
   ): void {
     if (dropCondition.multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, href, linkText, dropCondition, isFirst, isLast);
+      ContentLinkClipboard.#writeLinkInOwnParagraph(
+        editor,
+        href,
+        linkText,
+        dropCondition,
+        isFirstInsertedLink,
+        isLastInsertedLink
+      );
     } else {
       ContentLinkClipboard.#writeLinkInline(editor, href, linkText, dropCondition);
     }
@@ -204,13 +218,13 @@ export default class ContentLinkClipboard extends Plugin {
     href: string,
     linkText: string,
     dropCondition: DropCondition,
-    isFirst: boolean,
-    isLast: boolean
+    isFirstInsertedLink: boolean,
+    isLastInsertedLink: boolean
   ): void {
     editor.model.change((writer: Writer) => {
       // When dropping the drop position is stored as range but the editor not yet updated, so we have to update the
       // the selection to the drop position/cursor position.
-      if (isFirst && dropCondition.targetRange) {
+      if (isFirstInsertedLink && dropCondition.targetRange) {
         writer.setSelection(dropCondition.targetRange);
       }
       const actualPosition = editor.model.document.selection.getFirstPosition();
@@ -224,15 +238,15 @@ export default class ContentLinkClipboard extends Plugin {
         href,
         linkText,
         dropCondition.initialDropAtStartOfParagraph,
-        isFirst
+        isFirstInsertedLink
       );
       ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
-      if (isLast && !dropCondition.initialDropAtEndOfParagraph) {
+      if (isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
         //Finish with a new line if the contents are dropped into an inline position
         const secondSplit = writer.split(textRange.end);
         writer.setSelection(secondSplit.range.end);
       } else {
-        if (isLast) {
+        if (isLastInsertedLink) {
           //If we drop to the end of the document we do not end in the next paragraph so we have to make sure that we do not
           //end in the link tag to not proceed the link when typing.
           writer.overrideSelectionGravity();
