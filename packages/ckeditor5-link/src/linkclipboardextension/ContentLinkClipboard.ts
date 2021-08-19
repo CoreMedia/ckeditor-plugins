@@ -53,11 +53,10 @@ export default class ContentLinkClipboard extends Plugin {
       ContentLinkClipboard.#LOGGER.debug("Content links dropped: " + JSON.stringify(cmDataUris));
       ContentLinkClipboard.#LOGGER.debug("Normal links dropped: " + JSON.stringify(normalLink));
 
-      //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
-      //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
-      evt.stop();
-
       if (cmDataUris) {
+        //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
+        //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
+        evt.stop();
         const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
         ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
         serviceAgent
