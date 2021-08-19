@@ -79,14 +79,12 @@ export default class ContentLinkClipboard extends Plugin {
       if (data.content) {
         return;
       }
-
-      const linkContent: Array<LinkContent> | null = ContentLinkClipboard.#evaluateLinkContentOnDragover();
-      if (!linkContent) {
+      const cmDataUris: Array<string> | null = receiveUriPathFromDragData();
+      if (!cmDataUris) {
         return;
       }
-      if (ContentLinkClipboard.#hasOnlyContentLinks(linkContent)) {
-        const uriPaths = linkContent.map<string>((value) => value.href);
-        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(uriPaths);
+      if (cmDataUris) {
+        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(cmDataUris);
         if (containOnlyLinkables) {
           data.dataTransfer.dropEffect = "copy";
         } else {
@@ -316,46 +314,6 @@ export default class ContentLinkClipboard extends Plugin {
     return true;
   }
 
-  static #evaluateLinkContent(data: DragEvent): Array<LinkContent> | null {
-    if (data === null || data.dataTransfer === null) {
-      return null;
-    }
-
-    const cmUriList = data.dataTransfer.getData("cm/uri-list");
-
-    if (cmUriList) {
-      const contentUris = extractContentUriFromDragEventJsonData(cmUriList);
-      return ContentLinkClipboard.#toLinkContent(contentUris);
-    }
-
-    const url = data.dataTransfer.getData("text/uri-list");
-    if (url) {
-      return [new LinkContent(false, url)];
-    }
-
-    return [];
-  }
-
-  static #evaluateLinkContentOnDragover(): Array<LinkContent> | null {
-    const contentUriPaths: Array<string> | null = receiveUriPathFromDragData();
-    if (!contentUriPaths) {
-      //due to we have no data, just set it empty...
-      return null;
-    }
-    return ContentLinkClipboard.#toLinkContent(contentUriPaths);
-  }
-
-  static #toLinkContent(contentUris: Array<string> | null): Array<LinkContent> {
-    if (!contentUris) {
-      return [];
-    }
-    const linkContents: Array<LinkContent> = [];
-    for (const contentUri of contentUris) {
-      linkContents.push(new LinkContent(true, contentUri));
-    }
-    return linkContents;
-  }
-
   static #createDropCondition(editor: Editor, data: any, links: Array<string>): DropCondition {
     const multipleContentDrop = links.length > 1;
     const targetRange: Range | null = ContentLinkClipboard.#evaluateTargetRange(editor, data);
@@ -389,15 +347,6 @@ export default class ContentLinkClipboard extends Plugin {
       this._contentSubscription.unsubscribe();
     }
     return null;
-  }
-
-  static #hasOnlyContentLinks(linkContents: Array<LinkContent>): boolean {
-    for (const linkContent of linkContents) {
-      if (!linkContent.isContentLink) {
-        return false;
-      }
-    }
-    return true;
   }
 }
 
