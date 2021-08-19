@@ -68,7 +68,7 @@ export default class ContentLinkClipboard extends Plugin {
       }
       if (normalLink) {
         const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, [normalLink]);
-        ContentLinkClipboard.#writeLink(editor, normalLink, normalLink, dropCondition, true, true);
+        ContentLinkClipboard.#writeLinkInline(editor, normalLink, normalLink, dropCondition);
       }
     });
 
@@ -133,75 +133,32 @@ export default class ContentLinkClipboard extends Plugin {
         if (!contentNames.hasOwnProperty(index) || !cmDataUris.hasOwnProperty(index)) {
           continue;
         }
-        const contentName = contentNames[index];
-        const contentLink = cmDataUris[index];
+        const contentName = contentNames[index] ? contentNames[index] : ROOT_NAME;
+        const contentUri = cmDataUris[index];
+        const href = requireContentCkeModelUri(contentUri);
         const isLast = cmDataUris.length - 1 === Number(index);
         const isFirst = Number(index) === 0;
-        ContentLinkClipboard.#handleContentNameResponse(
-          editor,
-          contentLink,
-          contentName,
-          dropCondition,
-          isFirst,
-          isLast
-        );
+        const linkData = new ContentLinkData(isFirst, isLast, contentName, contentUri, href);
+        ContentLinkClipboard.#handleContentNameResponse(editor, dropCondition, linkData);
       }
     });
   }
 
-  static #handleContentNameResponse(
-    editor: Editor,
-    uriPath: string,
-    contentName: string,
-    dropCondition: DropCondition,
-    isFirstInsertedLink: boolean,
-    isLastInsertedLink: boolean
-  ): void {
-    ContentLinkClipboard.#LOGGER.debug(
-      "Rendering link: " +
-        JSON.stringify({
-          uriPath,
-          contentName,
-          dropCondition,
-          isFirst: isFirstInsertedLink,
-          isLast: isLastInsertedLink,
-        })
-    );
-    const isLinkableContent = DragDropAsyncSupport.isLinkable(uriPath);
-    DragDropAsyncSupport.resetIsLinkableContent(uriPath);
+  static #handleContentNameResponse(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
+    ContentLinkClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
+    const isLinkableContent = DragDropAsyncSupport.isLinkable(linkData.contentUri);
+    DragDropAsyncSupport.resetIsLinkableContent(linkData.contentUri);
     if (!isLinkableContent) {
       return;
     }
-    const contentNameRespectingRoot = contentName ? contentName : ROOT_NAME;
-    ContentLinkClipboard.#writeLink(
-      editor,
-      requireContentCkeModelUri(uriPath),
-      contentNameRespectingRoot,
-      dropCondition,
-      isFirstInsertedLink,
-      isLastInsertedLink
-    );
+    ContentLinkClipboard.#writeLink(editor, dropCondition, linkData);
   }
 
-  static #writeLink(
-    editor: Editor,
-    href: string,
-    linkText: string,
-    dropCondition: DropCondition,
-    isFirstInsertedLink: boolean,
-    isLastInsertedLink: boolean
-  ): void {
+  static #writeLink(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     if (dropCondition.multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(
-        editor,
-        href,
-        linkText,
-        dropCondition,
-        isFirstInsertedLink,
-        isLastInsertedLink
-      );
+      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, dropCondition, linkData);
     } else {
-      ContentLinkClipboard.#writeLinkInline(editor, href, linkText, dropCondition);
+      ContentLinkClipboard.#writeLinkInline(editor, linkData.href, linkData.text, dropCondition);
     }
   }
 
@@ -223,18 +180,11 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #writeLinkInOwnParagraph(
-    editor: Editor,
-    href: string,
-    linkText: string,
-    dropCondition: DropCondition,
-    isFirstInsertedLink: boolean,
-    isLastInsertedLink: boolean
-  ): void {
+  static #writeLinkInOwnParagraph(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     editor.model.change((writer: Writer) => {
       // When dropping the drop position is stored as range but the editor not yet updated, so we have to update the
       // the selection to the drop position/cursor position.
-      if (isFirstInsertedLink && dropCondition.targetRange) {
+      if (linkData.isFirstInsertedLink && dropCondition.targetRange) {
         writer.setSelection(dropCondition.targetRange);
       }
       const actualPosition = editor.model.document.selection.getFirstPosition();
@@ -245,18 +195,18 @@ export default class ContentLinkClipboard extends Plugin {
       const textRange = ContentLinkClipboard.#insertLink(
         writer,
         actualPosition,
-        href,
-        linkText,
+        linkData.href,
+        linkData.text,
         dropCondition.initialDropAtStartOfParagraph,
-        isFirstInsertedLink
+        linkData.isFirstInsertedLink
       );
       ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
-      if (isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
+      if (linkData.isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
         //Finish with a new line if the contents are dropped into an inline position
         const secondSplit = writer.split(textRange.end);
         writer.setSelection(secondSplit.range.end);
       } else {
-        if (isLastInsertedLink) {
+        if (linkData.isLastInsertedLink) {
           //If we drop to the end of the document we do not end in the next paragraph so we have to make sure that we do not
           //end in the link tag to not proceed the link when typing.
           writer.overrideSelectionGravity();
@@ -349,12 +299,24 @@ export default class ContentLinkClipboard extends Plugin {
   }
 }
 
-class LinkContent {
-  isContentLink;
+class ContentLinkData {
+  isFirstInsertedLink: boolean;
+  isLastInsertedLink: boolean;
+  text: string;
+  contentUri: string;
   href: string;
 
-  constructor(isContentLink: boolean, href: string) {
-    this.isContentLink = isContentLink;
+  constructor(
+    isFirstInsertedLink: boolean,
+    isLastInsertedLink: boolean,
+    text: string,
+    contentUri: string,
+    href: string
+  ) {
+    this.isFirstInsertedLink = isFirstInsertedLink;
+    this.isLastInsertedLink = isLastInsertedLink;
+    this.text = text;
+    this.contentUri = contentUri;
     this.href = href;
   }
 }
