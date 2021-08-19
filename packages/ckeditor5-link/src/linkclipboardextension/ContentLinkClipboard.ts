@@ -48,33 +48,28 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const linkContents: Array<LinkContent> | null = ContentLinkClipboard.#evaluateLinkContent(data);
-      if (!linkContents || linkContents.length === 0) {
-        return;
-      }
-      ContentLinkClipboard.#LOGGER.debug("Links dropped: " + JSON.stringify(linkContents));
+      const cmDataUris: Array<string> | null = ContentLinkClipboard.#extractContentUris(data);
+      const normalLink: string | null = ContentLinkClipboard.#extractNormalLinks(data);
+      ContentLinkClipboard.#LOGGER.debug("Content links dropped: " + JSON.stringify(cmDataUris));
+      ContentLinkClipboard.#LOGGER.debug("Normal links dropped: " + JSON.stringify(normalLink));
 
       //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
       //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
       evt.stop();
-      const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, linkContents);
-      ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
-      if (ContentLinkClipboard.#hasOnlyContentLinks(linkContents)) {
+
+      if (cmDataUris) {
+        const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
+        ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
           .then((contentDisplayService: ContentDisplayService): void => {
-            ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, linkContents);
+            ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, cmDataUris);
           });
-      } else {
-        for (const index in linkContents) {
-          if (!linkContents.hasOwnProperty(index)) {
-            continue;
-          }
-          const isLast = linkContents.length - 1 === Number(index);
-          const isFirst = Number(index) === 0;
-          const link = linkContents[index];
-          ContentLinkClipboard.#writeLink(editor, link.href, link.href, dropCondition, isFirst, isLast);
-        }
+        return;
+      }
+      if (normalLink) {
+        const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, [normalLink]);
+        ContentLinkClipboard.#writeLink(editor, normalLink, normalLink, dropCondition, true, true);
       }
     });
 
@@ -102,34 +97,52 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
+  static #extractNormalLinks(data: any): string | null {
+    const url = data.dataTransfer.getData("text/uri-list");
+    if (url) {
+      return url;
+    }
+
+    return null;
+  }
+
+  static #extractContentUris(data: any): Array<string> | null {
+    if (data === null || data.dataTransfer === null) {
+      return null;
+    }
+
+    const cmUriList = data.dataTransfer.getData("cm/uri-list");
+
+    if (!cmUriList) {
+      return null;
+    }
+    return extractContentUriFromDragEventJsonData(cmUriList);
+  }
+
   static #makeContentNameRequests(
     contentDisplayService: ContentDisplayService,
     editor: Editor,
     dropCondition: DropCondition,
-    linkContents: Array<LinkContent>
+    cmDataUris: Array<string>
   ): void {
     const namePromises: Array<Promise<string>> = [];
-    for (const index in linkContents) {
-      if (!linkContents.hasOwnProperty(index)) {
-        continue;
-      }
-      const contentLink = linkContents[index];
-      const namePromise = contentDisplayService.name(contentLink.href);
+    for (const cmDataUri of cmDataUris) {
+      const namePromise = contentDisplayService.name(cmDataUri);
       namePromises.push(namePromise);
     }
     Promise.all(namePromises).then((contentNames: Array<string>) => {
       ContentLinkClipboard.#LOGGER.debug(JSON.stringify(contentNames));
       for (const index in contentNames) {
-        if (!contentNames.hasOwnProperty(index) || !linkContents.hasOwnProperty(index)) {
+        if (!contentNames.hasOwnProperty(index) || !cmDataUris.hasOwnProperty(index)) {
           continue;
         }
         const contentName = contentNames[index];
-        const contentLink = linkContents[index];
-        const isLast = linkContents.length - 1 === Number(index);
+        const contentLink = cmDataUris[index];
+        const isLast = cmDataUris.length - 1 === Number(index);
         const isFirst = Number(index) === 0;
         ContentLinkClipboard.#handleContentNameResponse(
           editor,
-          contentLink.href,
+          contentLink,
           contentName,
           dropCondition,
           isFirst,
@@ -343,7 +356,7 @@ export default class ContentLinkClipboard extends Plugin {
     return linkContents;
   }
 
-  static #createDropCondition(editor: Editor, data: any, links: Array<LinkContent>): DropCondition {
+  static #createDropCondition(editor: Editor, data: any, links: Array<string>): DropCondition {
     const multipleContentDrop = links.length > 1;
     const targetRange: Range | null = ContentLinkClipboard.#evaluateTargetRange(editor, data);
     const initialDropAtStartOfParagraph = targetRange ? targetRange.start.isAtStart : false;
