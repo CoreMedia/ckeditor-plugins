@@ -122,11 +122,9 @@ export default class ContentLinkClipboard extends Plugin {
     dropCondition: DropCondition,
     cmDataUris: Array<string>
   ): void {
-    const namePromises: Array<Promise<string>> = [];
-    for (const cmDataUri of cmDataUris) {
-      const namePromise = contentDisplayService.name(cmDataUri);
-      namePromises.push(namePromise);
-    }
+    const namePromises = cmDataUris.map<Promise<string>>((uri: string): Promise<string> => {
+      return contentDisplayService.name(uri);
+    });
     Promise.all(namePromises).then((contentNames: Array<string>) => {
       ContentLinkClipboard.#LOGGER.debug(JSON.stringify(contentNames));
       for (const index in contentNames) {
