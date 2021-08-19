@@ -182,8 +182,9 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #writeLinkInOwnParagraph(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     editor.model.change((writer: Writer) => {
-      // When dropping the drop position is stored as range but the editor not yet updated, so we have to update the
-      // the selection to the drop position/cursor position.
+      // When dropping, the drop position is stored as range but the cursor is not yet updated to the drop position
+      // We can only set the cursor inside a model.change so we have to do it here. If it is not the first inserted link
+      // during a multiple we assume that the latest inserted link has set the cursor at its end.
       if (linkData.isFirstInsertedLink && dropCondition.targetRange) {
         writer.setSelection(dropCondition.targetRange);
       }
