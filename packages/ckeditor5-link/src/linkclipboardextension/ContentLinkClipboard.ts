@@ -17,6 +17,8 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import { ROOT_NAME } from "../contentlink/Constants";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import { DropCondition } from "./DropCondition";
+import { ContentLinkData } from "./ContentLinkData";
 
 export default class ContentLinkClipboard extends Plugin {
   private _contentSubscription: Subscription | undefined = undefined;
@@ -286,49 +288,5 @@ export default class ContentLinkClipboard extends Plugin {
       this._contentSubscription.unsubscribe();
     }
     return null;
-  }
-}
-
-class ContentLinkData {
-  isFirstInsertedLink: boolean;
-  isLastInsertedLink: boolean;
-  text: string;
-  contentUri: string;
-  href: string;
-
-  constructor(
-    isFirstInsertedLink: boolean,
-    isLastInsertedLink: boolean,
-    text: string,
-    contentUri: string,
-    href: string
-  ) {
-    this.isFirstInsertedLink = isFirstInsertedLink;
-    this.isLastInsertedLink = isLastInsertedLink;
-    this.text = text;
-    this.contentUri = contentUri;
-    this.href = href;
-  }
-}
-
-class DropCondition {
-  initialDropAtEndOfParagraph: boolean;
-  initialDropAtStartOfParagraph: boolean;
-  multipleContentDrop: boolean;
-  targetRange: Range | null;
-  selectedAttributes: Array<[string, string | number | boolean]>;
-
-  constructor(
-    multipleContentDrop: boolean,
-    initialDropAtEndOfParagraph: boolean,
-    initialDropAtStartOfParagraph: boolean,
-    targetRange: Range | null,
-    selectedAttributes: Array<[string, string | number | boolean]>
-  ) {
-    this.multipleContentDrop = multipleContentDrop;
-    this.initialDropAtEndOfParagraph = initialDropAtEndOfParagraph;
-    this.initialDropAtStartOfParagraph = initialDropAtStartOfParagraph;
-    this.targetRange = targetRange;
-    this.selectedAttributes = selectedAttributes;
   }
 }
