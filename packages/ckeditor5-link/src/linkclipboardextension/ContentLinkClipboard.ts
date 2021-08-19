@@ -193,14 +193,7 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const textRange = ContentLinkClipboard.#insertLink(
-        writer,
-        actualPosition,
-        linkData.href,
-        linkData.text,
-        dropCondition.initialDropAtStartOfParagraph,
-        linkData.isFirstInsertedLink
-      );
+      const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
       ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
       if (linkData.isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
         //Finish with a new line if the contents are dropped into an inline position
@@ -219,22 +212,20 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #insertLink(
     writer: Writer,
-    actualPosition: Position,
-    href: string,
-    linkText: string,
-    initialDropAtStartOfParagraph: boolean,
-    isFirstLink: boolean
+    cursorPosition: Position,
+    dropCondition: DropCondition,
+    linkData: ContentLinkData
   ): Range {
-    const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(actualPosition);
-    const text = writer.createText(linkText, {
-      linkHref: href,
+    const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(cursorPosition);
+    const text = writer.createText(linkData.text, {
+      linkHref: linkData.href,
     });
     let textStartPosition;
-    if (isFirstDocumentPosition || (initialDropAtStartOfParagraph && isFirstLink)) {
-      textStartPosition = actualPosition;
-      writer.insert(text, actualPosition);
+    if (isFirstDocumentPosition || (dropCondition.initialDropAtStartOfParagraph && linkData.isFirstInsertedLink)) {
+      textStartPosition = cursorPosition;
+      writer.insert(text, cursorPosition);
     } else {
-      const split = writer.split(actualPosition);
+      const split = writer.split(cursorPosition);
       textStartPosition = split.range.end;
       writer.insert(text, split.range.end);
     }
