@@ -3,6 +3,7 @@ import {
   ContentIdPrefix,
   changing$
 } from "@coremedia/coremedia-studio-integration-mock/content/MockContentDisplayService";
+import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
 
@@ -15,7 +16,7 @@ const setDragData = (dragEvent) => {
   const contentId = dragEvent.target.getAttribute("data-cmuripath");
   const idsArray = contentId.split(',');
   if (contentId) {
-    parent.serviceAgent.fetchService('dragDropService').then((dragDropService) => {
+    serviceAgent.fetchService('dragDropService').then((dragDropService) => {
       dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
     });
     dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
@@ -29,7 +30,7 @@ const setDragData = (dragEvent) => {
  * Studio has the same behaviour. This is the reason why dragDropService.dragData is empty on drop. dragEnd is executed before drop.
  */
 const removeDropData = () => {
-  parent.serviceAgent.fetchService('dragDropService').then((dragDropService) => {
+  serviceAgent.fetchService('dragDropService').then((dragDropService) => {
     dragDropService.dragData = null;
   });
 };

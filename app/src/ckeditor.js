@@ -33,9 +33,6 @@ import CoreMediaStudioEssentials, {
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
 
-// set serviceAgent, for DnD Examples to access
-window.serviceAgent = MockStudioIntegration.getServiceAgent();
-
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
 // setup dnd IFrame
