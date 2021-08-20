@@ -95,12 +95,7 @@ export default class ContentLinkClipboard extends Plugin {
   }
 
   static #extractNormalLinks(data: any): string | null {
-    const url = data.dataTransfer.getData("text/uri-list");
-    if (url) {
-      return url;
-    }
-
-    return null;
+    return data.dataTransfer.getData("text/uri-list") || null;
   }
 
   static #extractContentUris(data: any): Array<string> | null {
