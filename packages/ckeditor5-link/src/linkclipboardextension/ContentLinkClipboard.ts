@@ -71,6 +71,7 @@ export default class ContentLinkClipboard extends Plugin {
       if (normalLink) {
         const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, [normalLink]);
         ContentLinkClipboard.#writeLinkInline(editor, normalLink, normalLink, dropCondition);
+        evt.stop();
       }
     });
 
