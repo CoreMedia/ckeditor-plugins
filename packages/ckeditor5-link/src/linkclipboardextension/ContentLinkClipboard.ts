@@ -49,8 +49,8 @@ export default class ContentLinkClipboard extends Plugin {
         return;
       }
 
-      const cmDataUris: Array<string> | null = ContentLinkClipboard.#extractContentUris(data);
-      const normalLink: string | null = ContentLinkClipboard.#extractNormalLinks(data);
+      const cmDataUris = ContentLinkClipboard.#extractContentUris(data);
+      const normalLink = ContentLinkClipboard.#extractNormalLinks(data);
       ContentLinkClipboard.#LOGGER.debug("Content links dropped: " + JSON.stringify(cmDataUris));
       ContentLinkClipboard.#LOGGER.debug("Normal links dropped: " + JSON.stringify(normalLink));
 
@@ -58,7 +58,7 @@ export default class ContentLinkClipboard extends Plugin {
         //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
         //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
         evt.stop();
-        const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
+        const dropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
         ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
         serviceAgent
           .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
@@ -80,7 +80,7 @@ export default class ContentLinkClipboard extends Plugin {
       if (data.content) {
         return;
       }
-      const cmDataUris: Array<string> | null = receiveUriPathFromDragData();
+      const cmDataUris = receiveUriPathFromDragData();
       if (!cmDataUris) {
         return;
       }
@@ -255,7 +255,7 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #createDropCondition(editor: Editor, data: any, links: Array<string>): DropCondition {
     const multipleContentDrop = links.length > 1;
-    const targetRange: Range | null = ContentLinkClipboard.#evaluateTargetRange(editor, data);
+    const targetRange = ContentLinkClipboard.#evaluateTargetRange(editor, data);
     const initialDropAtStartOfParagraph = targetRange ? targetRange.start.isAtStart : false;
     const initialDropAtEndOfParagraph = targetRange ? targetRange.end.isAtEnd : false;
     const attributes = editor.model.document.selection.getAttributes();
