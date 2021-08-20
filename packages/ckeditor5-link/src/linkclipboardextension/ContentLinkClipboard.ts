@@ -21,7 +21,6 @@ import { DropCondition } from "./DropCondition";
 import { ContentLinkData } from "./ContentLinkData";
 
 export default class ContentLinkClipboard extends Plugin {
-  private _contentSubscription: Subscription | undefined = undefined;
   static #CONTENT_LINK_CLIPBOARD_PLUGIN_NAME = "ContentLinkClipboard";
   static #LOGGER: Logger = LoggerProvider.getLogger(ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME);
   static get pluginName(): string {
@@ -278,13 +277,6 @@ export default class ContentLinkClipboard extends Plugin {
     });
     if (targetRanges.length > 0) {
       return targetRanges[0];
-    }
-    return null;
-  }
-
-  destroy(): Promise<never> | null {
-    if (this._contentSubscription) {
-      this._contentSubscription.unsubscribe();
     }
     return null;
   }
