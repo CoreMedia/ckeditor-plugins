@@ -7,7 +7,6 @@ import {
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
 import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
-import { Subscription } from "rxjs";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
 import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
@@ -157,48 +156,68 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #writeLinkInline(editor: Editor, href: string, linkText: string, dropCondition: DropCondition): void {
     editor.model.change((writer: Writer) => {
-      if (dropCondition.targetRange) {
-        writer.setSelection(dropCondition.targetRange);
+      try {
+        if (dropCondition.targetRange) {
+          writer.setSelection(dropCondition.targetRange);
+        }
+        const firstPosition = editor.model.document.selection.getFirstPosition();
+        if (firstPosition === null) {
+          return;
+        }
+        writer.overrideSelectionGravity();
+        const linkElement = writer.createText(linkText, { linkHref: href });
+        writer.insert(linkElement, firstPosition);
+        const positionAfterText = writer.createPositionAfter(linkElement);
+        const textRange = writer.createRange(firstPosition, positionAfterText);
+        ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
+      } catch (e) {
+        //Insert a content link to the end of the document which takes a long time to load the name and remove the last word.
+        //This leads to an error because the position the link should be inserted to is invalid now.
+        //Probably an edge case as we assume fast answers
+        ContentLinkClipboard.#LOGGER.debug(e);
+        ContentLinkClipboard.#LOGGER.warn(
+          "An error occured, probably the document has been edited while waiting for insertion of a link. Further informations in debug output"
+        );
       }
-      const firstPosition = editor.model.document.selection.getFirstPosition();
-      if (firstPosition === null) {
-        return;
-      }
-      writer.overrideSelectionGravity();
-      const linkElement = writer.createText(linkText, { linkHref: href });
-      writer.insert(linkElement, firstPosition);
-      const positionAfterText = writer.createPositionAfter(linkElement);
-      const textRange = writer.createRange(firstPosition, positionAfterText);
-      ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
     });
   }
 
   static #writeLinkInOwnParagraph(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     editor.model.change((writer: Writer) => {
-      // When dropping, the drop position is stored as range but the cursor is not yet updated to the drop position
-      // We can only set the cursor inside a model.change so we have to do it here. If it is not the first inserted link
-      // during a multiple we assume that the latest inserted link has set the cursor at its end.
-      if (linkData.isFirstInsertedLink && dropCondition.targetRange) {
-        writer.setSelection(dropCondition.targetRange);
-      }
-      const actualPosition = editor.model.document.selection.getFirstPosition();
-      if (actualPosition === null) {
-        return;
-      }
-
-      const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
-      ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
-      if (linkData.isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
-        //Finish with a new line if the contents are dropped into an inline position
-        const secondSplit = writer.split(textRange.end);
-        writer.setSelection(secondSplit.range.end);
-      } else {
-        if (linkData.isLastInsertedLink) {
-          //If we drop to the end of the document we do not end in the next paragraph so we have to make sure that we do not
-          //end in the link tag to not proceed the link when typing.
-          writer.overrideSelectionGravity();
+      try {
+        // When dropping, the drop position is stored as range but the cursor is not yet updated to the drop position
+        // We can only set the cursor inside a model.change so we have to do it here. If it is not the first inserted link
+        // during a multiple we assume that the latest inserted link has set the cursor at its end.
+        if (linkData.isFirstInsertedLink && dropCondition.targetRange) {
+          writer.setSelection(dropCondition.targetRange);
         }
-        writer.setSelection(textRange.end);
+        const actualPosition = editor.model.document.selection.getFirstPosition();
+        if (actualPosition === null) {
+          return;
+        }
+
+        const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
+        ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
+        if (linkData.isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
+          //Finish with a new line if the contents are dropped into an inline position
+          const secondSplit = writer.split(textRange.end);
+          writer.setSelection(secondSplit.range.end);
+        } else {
+          if (linkData.isLastInsertedLink) {
+            //If we drop to the end of the document we do not end in the next paragraph so we have to make sure that we do not
+            //end in the link tag to not proceed the link when typing.
+            writer.overrideSelectionGravity();
+          }
+          writer.setSelection(textRange.end);
+        }
+      } catch (e) {
+        //Insert a content link to the end of the document which takes a long time to load the name and remove the last word.
+        //This leads to an error because the position the link should be inserted to is invalid now.
+        //Probably an edge case as we assume fast answers
+        ContentLinkClipboard.#LOGGER.debug(e);
+        ContentLinkClipboard.#LOGGER.warn(
+          "An error occured, probably the document has been edited while waiting for insertion of a link. Further informations in debug output"
+        );
       }
     });
   }
