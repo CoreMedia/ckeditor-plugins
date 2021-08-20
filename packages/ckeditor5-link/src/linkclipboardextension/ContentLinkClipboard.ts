@@ -85,14 +85,12 @@ export default class ContentLinkClipboard extends Plugin {
       if (!cmDataUris) {
         return;
       }
-      if (cmDataUris) {
-        const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(cmDataUris);
-        if (containOnlyLinkables) {
-          data.dataTransfer.dropEffect = "copy";
-        } else {
-          data.dataTransfer.dropEffect = "none";
-          evt.stop();
-        }
+      const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(cmDataUris);
+      if (containOnlyLinkables) {
+        data.dataTransfer.dropEffect = "copy";
+      } else {
+        data.dataTransfer.dropEffect = "none";
+        evt.stop();
       }
     });
   }
