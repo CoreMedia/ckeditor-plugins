@@ -1,7 +1,6 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import DropdownView from "@ckeditor/ckeditor5-ui/src/dropdown/dropdownview";
-//@ts-ignore
 import { addListToDropdown } from "@ckeditor/ckeditor5-ui/src/dropdown/utils";
 import { createLabeledInputText, createLabeledDropdown } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
