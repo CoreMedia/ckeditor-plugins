@@ -1,7 +1,7 @@
 export const DEFAULT_NAMESPACE_PREFIX = "";
 
 export default interface Namespace {
-  uri: string,
+  uri: string;
 }
 
 export interface Namespaces {
@@ -9,13 +9,13 @@ export interface Namespaces {
 }
 
 export const DEFAULT_NAMESPACES: Namespaces = {
-  "xlink": {
+  xlink: {
     uri: "http://www.w3.org/1999/xlink",
   },
-  "xml": {
+  xml: {
     uri: "http://www.w3.org/XML/1998/namespace",
   },
-  "xmlns": {
+  xmlns: {
     uri: "http://www.w3.org/2000/xmlns/",
   },
-}
+};

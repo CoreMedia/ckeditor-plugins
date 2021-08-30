@@ -6,21 +6,21 @@ import { TextFilterParams, TextFilterRule } from "./TextProxy";
  * This represents the combination of toData/toView.
  */
 export interface ParsedToDataAndView {
-  toData: FilterRuleSet,
-  toView: FilterRuleSet,
+  toData: FilterRuleSet;
+  toView: FilterRuleSet;
 }
 
 /**
  * Interface for separate toData/toView Handling within the configuration.
  */
 export interface ToDataAndViewElementConfiguration {
-  toData?: ElementFilterRule,
-  toView?: ElementFilterRule | ElementFilterRulesByName,
+  toData?: ElementFilterRule;
+  toView?: ElementFilterRule | ElementFilterRulesByName;
 }
 
 export interface ToDataAndViewTextConfiguration {
-  toData?: TextFilterRule,
-  toView?: TextFilterRule,
+  toData?: TextFilterRule;
+  toView?: TextFilterRule;
 }
 
 /**
@@ -87,15 +87,20 @@ export interface FilterRuleSetConfiguration {
   text?: TextFilterRuleSetConfigurationValueType;
 }
 
-export function parseFilterRuleSetConfigurations(customFilterRuleSetConfiguration?: FilterRuleSetConfiguration,
-                                                 defaultFilterRuleSetConfiguration?: FilterRuleSetConfiguration): ParsedToDataAndView {
+export function parseFilterRuleSetConfigurations(
+  customFilterRuleSetConfiguration?: FilterRuleSetConfiguration,
+  defaultFilterRuleSetConfiguration?: FilterRuleSetConfiguration
+): ParsedToDataAndView {
   const preParsedDefault = new FilterRuleSetConfigurationParser(defaultFilterRuleSetConfiguration || {}).parse();
-  const preParsedToDataAndView: PreParsedToDataAndView = new FilterRuleSetConfigurationParser(customFilterRuleSetConfiguration || {}, preParsedDefault).parse();
+  const preParsedToDataAndView: PreParsedToDataAndView = new FilterRuleSetConfigurationParser(
+    customFilterRuleSetConfiguration || {},
+    preParsedDefault
+  ).parse();
   const preParsedToView: PreParsedToView = preParsedToDataAndView.toView;
   return {
     toData: preParsedToDataAndView.toData,
     toView: mergePreParsedToViews(preParsedToView),
-  }
+  };
 }
 
 /**
@@ -136,8 +141,8 @@ export interface PreParsedElementSection {
   [toViewKey: string]: ElementFilterRulesByName;
 }
 export interface PreParsedToDataAndView {
-  toData: FilterRuleSet,
-  toView: PreParsedToView,
+  toData: FilterRuleSet;
+  toView: PreParsedToView;
 }
 
 export function mergePreParsedToViews(preParsedConfig: PreParsedToView): FilterRuleSet {
@@ -148,11 +153,10 @@ export function mergePreParsedToViews(preParsedConfig: PreParsedToView): FilterR
     const allToViewKeys = Object.keys(customElementsConfig);
     allToViewKeys.forEach((key) => {
       const customSection: ElementFilterRulesByName = customElementsConfig[key] || {};
-      const rules = Object.keys(customSection)
-        .map((customKey) => customSection[customKey]);
-      elementsResult[key] = ((params) => {
+      const rules = Object.keys(customSection).map((customKey) => customSection[customKey]);
+      elementsResult[key] = (params) => {
         rules.forEach((r) => r(params));
-      });
+      };
     });
     return elementsResult;
   }
@@ -251,9 +255,11 @@ class FilterRuleSetConfigurationParser {
    */
   private static readonly UNBOUND_TO_VIEW_KEY = " ";
 
-  private mergeToViewElementsConfiguration(toDataKey: string,
-                                   toViewConfig: ElementFilterRule | ElementFilterRulesByName | undefined,
-                                   hasToData: boolean): void {
+  private mergeToViewElementsConfiguration(
+    toDataKey: string,
+    toViewConfig: ElementFilterRule | ElementFilterRulesByName | undefined,
+    hasToData: boolean
+  ): void {
     if (!toViewConfig) {
       return;
     }
@@ -272,9 +278,11 @@ class FilterRuleSetConfigurationParser {
     }
   }
 
-  private addPreParsedToViewElementsRule(toViewKey: string,
-                                         toDataKey: string,
-                                         filterRule: ElementFilterRule | undefined): void {
+  private addPreParsedToViewElementsRule(
+    toViewKey: string,
+    toDataKey: string,
+    filterRule: ElementFilterRule | undefined
+  ): void {
     if (!filterRule) {
       return;
     }
@@ -292,7 +300,7 @@ class FilterRuleSetConfigurationParser {
     } else {
       preParsedRules.elements[toViewKey] = {
         toDataKey: filterRule,
-      }
+      };
     }
   }
 
@@ -307,8 +315,7 @@ class FilterRuleSetConfigurationParser {
     }
   }
 
-  private addToDataElementsFilterRule(key: string,
-                                      filterRule: ElementFilterRule | undefined): void {
+  private addToDataElementsFilterRule(key: string, filterRule: ElementFilterRule | undefined): void {
     if (!filterRule) {
       return;
     }
@@ -328,11 +335,11 @@ class FilterRuleSetConfigurationParser {
 function parentChildElementRule(parentRule: ElementFilterRule, childRule: ElementFilterRule): ElementFilterRule {
   return (params: ElementFilterParams) => {
     return childRule({ ...params, parentRule: parentRule });
-  }
+  };
 }
 
 function parentChildTextRule(parentRule: TextFilterRule, childRule: TextFilterRule): TextFilterRule {
   return (params: TextFilterParams) => {
     return childRule({ ...params, parentRule: parentRule });
-  }
+  };
 }

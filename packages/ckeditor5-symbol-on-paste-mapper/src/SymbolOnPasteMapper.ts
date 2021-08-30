@@ -27,7 +27,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     super(ed);
   }
 
-  static get requires() {
+  static get requires(): Array<new (editor: Editor) => Plugin> {
     return [Clipboard];
   }
 

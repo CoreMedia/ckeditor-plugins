@@ -170,11 +170,11 @@ const CDATA: AttributeValueValidator = () => true;
 /**
  * a language code, as per [RFC1766]
  */
-const LANGUAGE: AttributeValueValidator = (v, s) => (s === Strictness.STRICT) ? LANGUAGE_PATTERN.test(v) : true;
+const LANGUAGE: AttributeValueValidator = (v, s) => (s === Strictness.STRICT ? LANGUAGE_PATTERN.test(v) : true);
 /**
  * one or more digits
  */
-const NUMBER: AttributeValueValidator = (v, s) => (s === Strictness.STRICT) ? /^\d+$/.test(v) : true;
+const NUMBER: AttributeValueValidator = (v, s) => (s === Strictness.STRICT ? /^\d+$/.test(v) : true);
 /**
  * a Uniform Resource Identifier, see [RFC2396]
  *
@@ -190,7 +190,7 @@ const TEXT: AttributeValueValidator = CDATA;
 /**
  * nn for pixels or nn% for percentage length
  */
-const LENGTH: AttributeValueValidator = (v, s) => (s === Strictness.STRICT) ? /^\d+%?$/.test(v) : true;
+const LENGTH: AttributeValueValidator = (v, s) => (s === Strictness.STRICT ? /^\d+%?$/.test(v) : true);
 
 /*
  * =============================================================================
@@ -730,7 +730,9 @@ export default class RichTextSchema {
 
   private deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
-    const notAllowedAttributes: string[] = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
+    const notAllowedAttributes: string[] = actualAttributes.filter(
+      (a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0
+    );
 
     if (notAllowedAttributes.length > 0) {
       RichTextSchema.#logger.debug(

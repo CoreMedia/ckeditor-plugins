@@ -37,7 +37,7 @@ export default class LoggerProvider {
    * @param name
    * @param context
    */
-  static getLogger(name: string | undefined, ...context: any[]): Logger {
+  static getLogger(name: string | undefined, ...context: unknown[]): Logger {
     const contextName: string = context.join(".");
     const loggerName: string | undefined = !!name && !!contextName ? contextName + ":" + name : name;
     const logLevel: LogLevel = LoggerProvider.getLoggerLevel(name);

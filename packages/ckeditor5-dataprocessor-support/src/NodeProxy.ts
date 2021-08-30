@@ -23,7 +23,7 @@ export default class NodeProxy<N extends Node = Node> {
    * @param delegate delegate to wrap
    * @param mutable signals, if this representation is mutable or not
    */
-  constructor(delegate: N, mutable: boolean = true) {
+  constructor(delegate: N, mutable = true) {
     this._delegate = delegate;
     this._mutable = mutable;
   }
@@ -36,7 +36,7 @@ export default class NodeProxy<N extends Node = Node> {
    * @param mutable signals, if this representation is mutable or not
    * @return NodeProxy for given node; `null` for falsy values
    */
-  public static proxy<T extends Node>(node: T | undefined | null, mutable: boolean = true): NodeProxy<T> | null {
+  public static proxy<T extends Node>(node: T | undefined | null, mutable = true): NodeProxy<T> | null {
     if (!!node) {
       return new NodeProxy(node, mutable);
     }
@@ -144,9 +144,7 @@ export default class NodeProxy<N extends Node = Node> {
     if (!considerChildNode) {
       return this.delegate.childNodes.length === 0;
     }
-    const consideredChildNodesLength = Array.from(this.delegate.childNodes)
-      .filter(considerChildNode)
-      .length;
+    const consideredChildNodesLength = Array.from(this.delegate.childNodes).filter(considerChildNode).length;
     return consideredChildNodesLength === 0;
   }
 
@@ -173,7 +171,7 @@ export default class NodeProxy<N extends Node = Node> {
     } else {
       predicate = (child) => {
         return child.nodeName.toLowerCase() === condition.toLowerCase();
-      }
+      };
     }
     return NodeProxy.proxy(Array.from(this.delegate.childNodes).find(predicate, false));
   }

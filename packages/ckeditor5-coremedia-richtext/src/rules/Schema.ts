@@ -7,7 +7,7 @@ export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
 export function getSchema({ editor }: ElementFilterParams | TextFilterParams): RichTextSchema {
   const dataProcessor: any = editor?.data?.processor || {};
-  return dataProcessor["richTextSchema"] as RichTextSchema ?? defaultSchema;
+  return (dataProcessor["richTextSchema"] as RichTextSchema) ?? defaultSchema;
 }
 
 /**
@@ -18,7 +18,7 @@ export const schemaRules: ElementsFilterRuleSetConfiguration = {
   $: (params) => {
     getSchema(params).adjustHierarchy(params.node);
   },
-  "$$": (params) => {
+  $$: (params) => {
     const schema = getSchema(params);
     // The hierarchy may have changed after processing children. Thus, we
     // need to check again.

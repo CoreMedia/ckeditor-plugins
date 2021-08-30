@@ -10,13 +10,13 @@ export default class LoggerImpl implements Logger {
     this.logLevel = logLevel;
   }
 
-  private out(logFn: (...data: any[]) => void, data: any[]): void {
+  private out(logFn: (...data: unknown[]) => void, data: unknown[]): void {
     const level = logFn.name.toUpperCase();
     const contextPrefix = !!this.name ? ` ${this.name}:` : "";
     const prefix = `[${level}]${contextPrefix}`;
-    const prefixData: any[] = [prefix];
-    const prefixedData: any[] = prefixData.concat(data);
-    logFn.apply(null, prefixedData);
+    const prefixData: unknown[] = [prefix];
+    const prefixedData: unknown[] = prefixData.concat(data);
+    logFn(...prefixedData);
   }
 
   isEnabled(logLevel: LogLevel): boolean {
@@ -27,7 +27,7 @@ export default class LoggerImpl implements Logger {
     return this.isEnabled(LogLevel.DEBUG);
   }
 
-  debug(...data: any[]): void {
+  debug(...data: unknown[]): void {
     this.isDebugEnabled() && this.out(console.debug, data);
   }
 
@@ -35,7 +35,7 @@ export default class LoggerImpl implements Logger {
     return this.isEnabled(LogLevel.INFO);
   }
 
-  info(...data: any[]): void {
+  info(...data: unknown[]): void {
     this.isInfoEnabled() && this.out(console.info, data);
   }
 
@@ -43,7 +43,7 @@ export default class LoggerImpl implements Logger {
     return this.isEnabled(LogLevel.WARN);
   }
 
-  warn(...data: any[]): void {
+  warn(...data: unknown[]): void {
     this.isWarnEnabled() && this.out(console.warn, data);
   }
 
@@ -51,7 +51,7 @@ export default class LoggerImpl implements Logger {
     return this.isEnabled(LogLevel.ERROR);
   }
 
-  error(...data: any[]): void {
+  error(...data: unknown[]): void {
     this.isErrorEnabled() && this.out(console.error, data);
   }
 
@@ -59,7 +59,7 @@ export default class LoggerImpl implements Logger {
     return this.logLevel !== LogLevel.NONE;
   }
 
-  log(...data: any[]): void {
+  log(...data: unknown[]): void {
     this.isAnyEnabled() && this.out(console.log, data);
   }
 }

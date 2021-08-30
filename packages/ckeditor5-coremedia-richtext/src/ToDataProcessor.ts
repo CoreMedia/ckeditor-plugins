@@ -23,8 +23,7 @@ export default class ToDataProcessor {
    * and will be transformed according to the rules
    * @return the transformed CoreMedia RichText XML
    */
-  toData(fromView: Node | DocumentFragment,
-         targetDocument?: Document): Document {
+  toData(fromView: Node | DocumentFragment, targetDocument?: Document): Document {
     const document: Document = targetDocument || ToDataProcessor.createCoreMediaRichTextDocument();
     document.documentElement.appendChild(fromView);
     this._toDataFilter.applyTo(document.documentElement);
@@ -41,5 +40,4 @@ export default class ToDataProcessor {
     doc.insertBefore(pi, doc.firstChild);
     return doc;
   }
-
 }

@@ -17,7 +17,7 @@ export default class CoreMediaRichText extends Plugin {
     const logger = CoreMediaRichText.#logger;
     const startTimestamp = performance.now();
 
-    logger.info(`Initializing ${CoreMediaRichText.pluginName}...`, );
+    CoreMediaRichText.#logger.info(`Initializing ${CoreMediaRichText.pluginName}...`);
 
     this.editor.data.processor = new RichTextDataProcessor(this.editor);
 
