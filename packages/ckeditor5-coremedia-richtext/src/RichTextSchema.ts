@@ -615,21 +615,29 @@ export default class RichTextSchema {
   isTextAllowedAtParent(text: TextProxy): boolean {
     const parentName = text.parentElement?.name;
     if (!parentName) {
-      RichTextSchema.#logger.debug(`Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`, text);
+      RichTextSchema.#logger.debug(
+        `Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`,
+        text
+      );
       return false;
     }
 
     const elementSpecification = ELEMENTS[parentName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      RichTextSchema.#logger.debug(`Element <${parentName}> not specified and thus, not allowed as parent of text-node.`);
+      RichTextSchema.#logger.debug(
+        `Element <${parentName}> not specified and thus, not allowed as parent of text-node.`
+      );
       return false;
     }
 
     const isAllowed = elementSpecification.mayContainText || false;
 
     if (!isAllowed) {
-      RichTextSchema.#logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
+      RichTextSchema.#logger.debug(
+        `Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`,
+        text
+      );
     }
     return isAllowed;
   }

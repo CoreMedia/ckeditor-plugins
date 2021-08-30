@@ -1,8 +1,7 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor
-  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,

@@ -1,5 +1,4 @@
-import RichtextConfigurationService
-  from "@coremedia/coremedia-studio-integration/src/content/RichtextConfigurationService";
+import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/src/content/RichtextConfigurationService";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
@@ -39,6 +38,9 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
 
   isEmbeddableType(uripath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
+      if (uripath.startsWith("content")) {
+        resolve(true);
+      }
       resolve(true);
     });
   }

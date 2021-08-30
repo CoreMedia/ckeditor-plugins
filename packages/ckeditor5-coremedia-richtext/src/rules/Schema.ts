@@ -2,12 +2,19 @@ import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/
 import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
 import RichTextSchema, { Strictness } from "../RichTextSchema";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
 export function getSchema({ editor }: ElementFilterParams | TextFilterParams): RichTextSchema {
-  const dataProcessor: any = editor?.data?.processor || {};
-  return (dataProcessor["richTextSchema"] as RichTextSchema) ?? defaultSchema;
+  const dataProcessor: DataProcessor | null = editor?.data?.processor || null;
+  if (dataProcessor === null) {
+    return defaultSchema;
+  }
+
+  // @ts-ignore
+  const dataProcessorElement: unknown = dataProcessor["richTextSchema"];
+  return (dataProcessorElement as RichTextSchema) ?? defaultSchema;
 }
 
 /**

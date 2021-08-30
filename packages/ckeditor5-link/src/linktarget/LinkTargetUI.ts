@@ -8,7 +8,8 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import {
-  addClassToTemplate, createDecoratorHook,
+  addClassToTemplate,
+  createDecoratorHook,
   LINK_BEHAVIOR,
   linkTargetToUiValues,
   removeClassFromTemplate,
