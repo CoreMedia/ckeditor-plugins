@@ -47,7 +47,7 @@ export default class LinkFormViewExtension {
     this.#renderAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
   }
 
-  #renderAfter(view: View, after: View) {
+  #renderAfter(view: View, after: View): void {
     this.linkFormView.registerChild(view);
     if (!view.isRendered) {
       view.render();
@@ -121,7 +121,7 @@ export default class LinkFormViewExtension {
     return linkBehaviorDropdown;
   }
 
-  #getLinkBehaviorDefinitions = (view: any) => {
+  #getLinkBehaviorDefinitions = (view: any): Collection => {
     const itemDefinitions = new Collection();
     const linkBehaviorLabels = getLinkBehaviorLabels(view.locale.t);
 

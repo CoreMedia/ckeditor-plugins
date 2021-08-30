@@ -26,8 +26,8 @@ export default class ContentLinks extends Plugin {
     const editor = this.editor;
     const linkCommand = <LinkCommand>editor.commands.get("link");
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
-    this.#removeInitialMouseDownListener(linkUI);
-    this.#addMouseEventListenerToHideDialog(linkUI, linkCommand);
+    ContentLinks.#removeInitialMouseDownListener(linkUI);
+    this.#addMouseEventListenerToHideDialog(linkUI);
     createDecoratorHook(
       linkUI,
       "_hideUI",
@@ -42,7 +42,7 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
-  #removeInitialMouseDownListener(linkUI: LinkUI) {
+  static #removeInitialMouseDownListener(linkUI: LinkUI): void {
     linkUI.formView.stopListening(<Emitter>(<unknown>document), "mousedown");
   }
 
@@ -70,7 +70,7 @@ export default class ContentLinks extends Plugin {
     activator: () => boolean;
     callback: () => void;
     contextElements: HTMLElement[];
-  }) {
+  }): void {
     const EDITOR_CLASS = "ck-editor";
     emitter.listenTo(
       <Emitter>(<unknown>document),
@@ -134,7 +134,7 @@ export default class ContentLinks extends Plugin {
     );
   }
 
-  #addMouseEventListenerToHideDialog(linkUI: LinkUI, linkCommand: LinkCommand | undefined) {
+  #addMouseEventListenerToHideDialog(linkUI: LinkUI): void {
     this.#addCustomClickOutsideHandler({
       emitter: <Emitter>(<unknown>linkUI.formView),
       activator: () => linkUI._isUIInPanel,

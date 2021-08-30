@@ -244,7 +244,7 @@ export const createDecoratorHook = (
   callback: () => void,
   listenerCmp: any,
   options?: { priority?: number | PriorityString }
-) => {
+): void => {
   if (!(methodParentCmp as any)["_events"] || !(methodParentCmp as any)["_events"].hasOwnProperty(methodName)) {
     methodParentCmp.decorate(methodName);
   }
