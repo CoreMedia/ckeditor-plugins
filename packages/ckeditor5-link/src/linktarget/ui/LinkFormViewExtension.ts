@@ -7,7 +7,6 @@ import { createLabeledInputText, createLabeledDropdown } from "@ckeditor/ckedito
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 
-//@ts-ignore
 import Model from "@ckeditor/ckeditor5-ui/src/model";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
