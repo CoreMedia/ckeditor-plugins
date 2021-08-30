@@ -6,13 +6,6 @@ import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeli
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkediting-LinkEditing.html">Class LinkEditing (link/linkediting~LinkEditing) - CKEditor 5 API docs</a>
  */
-// @ts-ignore: Fails for `requires`. TODO[cke]
 export default class LinkEditing extends Plugin {
   static readonly pluginName: "LinkEditing";
-
-  static readonly requires: [
-    TwoStepCaretMovement,
-    Input,
-    ClipboardPipeline
-  ];
 }
