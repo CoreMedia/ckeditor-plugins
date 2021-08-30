@@ -82,9 +82,7 @@ export default class LinkTargetUI extends Plugin {
         url ? linkTargetToUiValues(value).linkBehavior : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB
       );
 
-    // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
-    // @ts-ignore
-    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
+    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value: unknown) => !value);
     LinkTargetUI._customizeFormView(formView);
     LinkTargetUI.#customizeToolbarButtons(formView);
 
