@@ -3,6 +3,7 @@ import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emitter
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
+import TemplateIfBinding from "./template/templateifbinding";
 
 /**
  * A basic Template class.
@@ -10,7 +11,7 @@ import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventd
 export default class Template implements Emitter {
   constructor(def: any);
 
-  attributes: object;
+  attributes: {class: Array<string | TemplateIfBinding>};
 
   render(): HTMLElement|Text;
   apply(node: Node): any;
