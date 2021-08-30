@@ -1,4 +1,5 @@
-import { ElementProxy, ElementFilterRule, ElementFilterParams } from "../src";
+import ElementProxy, { ElementFilterRule, ElementFilterParams } from "../src/ElementProxy";
+
 import "jest-xml-matcher";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 

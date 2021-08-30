@@ -2,3 +2,78 @@ div.ck-body-wrapper {
   --ck-color-button-cancel: #2689c7;
   --ck-color-button-save: #2689c7;
 }
+
+/*Example data for the icons, displayed in the ContentView*/
+
+.cm-core-icons {
+}
+
+.cm-core-icons::before {
+  display: block;
+  width: 16px;
+  height: 15px;
+  margin: 4px;
+  text-align: center;
+  line-height: 15px;
+  font-weight: lighter;
+  font-size: 10px;
+  background-color: #eee;
+}
+
+
+.cm-core-icons.icon--checked-in::before {
+  content: "CI";
+}
+.cm-core-icons.icon--checked-out::before {
+  content: "CO";
+}
+
+.cm-core-icons.icon--folder::before {
+  content: "FD";
+}
+
+/* Fallback, if specific icon class is not available. */
+.cm-core-icons.icon--document::before {
+  content: "DC";
+}
+
+.cm-core-icons.icon--document-0::before {
+  content: "D0" !important;
+}
+
+.cm-core-icons.icon--document-2::before {
+  content: "D2" !important;
+}
+
+.cm-core-icons.icon--document-4::before {
+  content: "D4" !important;
+}
+
+.cm-core-icons.icon--document-6::before {
+  content: "D6" !important;
+}
+
+.cm-core-icons.icon--document-8::before {
+  content: "D8" !important;
+}
+
+.cm-core-icons.icon--lock::before {
+  content: "LO";
+}
+
+.cm-core-icons.cm-core-icons--remove:hover {
+  color: black;
+}
+
+.cm-core-icons.cm-core-icons--remove::before {
+  content: "x";
+  margin-right: 0;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: transparent;
+}
+
+.cm-ck-cancel-button {
+  min-width: auto !important;
+  margin-right: -4px !important;
+}

@@ -48,7 +48,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * Mimics `ElementFilterParams`, which helps dealing with rule processing.
    * </p>
    */
-  public readonly editor: Editor;
+  readonly #editor: Editor;
   /**
    * <p>
    * Represents the node instance. For `ElementProxy` this is just the
@@ -82,7 +82,35 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
   constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable: boolean = true) {
     super(delegate, mutable);
     this._namespaces = namespaces;
-    this.editor = editor;
+    this.#editor = editor;
+  }
+
+  /**
+   * This provides a light-weight proxy, which is not aware of the editor.
+   * It is meant for testing purpose only, thus, not recommended for production
+   * use, as filters may rely on the `editor` property being set.
+   *
+   * @param delegate the original element to wrap
+   */
+  static instantiateForTest(delegate: Element): ElementProxy {
+    return new ElementProxy(delegate, <Editor>{});
+  }
+
+  /**
+   * <p>
+   * Represents the editor instance. May be used to access configuration options
+   * for example.
+   * </p>
+   * <p>
+   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * </p>
+   */
+  get editor(): Editor {
+    if (!this.#editor) {
+      // Should always be set in production use as filters may rely on it.
+      throw new Error("'editor' unset.");
+    }
+    return this.#editor;
   }
 
   get delegate(): Element {

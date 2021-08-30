@@ -1,6 +1,5 @@
 import { PriorityString } from "./priorities";
 import EventInfo from "./eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 export type CallbackFunction = (evt: EventInfo, ...args: any[]) => void;
 
@@ -34,6 +33,8 @@ export default interface Emitter {
    * order they were added.
    */
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
-  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: any) => void): void;
 }

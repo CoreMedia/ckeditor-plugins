@@ -14,7 +14,7 @@ module.exports = {
     "^.+\\.[jt]sx?$": ["babel-jest", babelConfig],
   },
   transformIgnorePatterns: [
-    "node_modules/(?!@ckeditor|lodash-es|ckeditor5)"
+    "node_modules/.pnpm/(?!@ckeditor|lodash-es|ckeditor5|rxjs)"
   ],
   resolver: require.resolve("./enhanced-resolve.js"),
 };

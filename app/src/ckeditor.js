@@ -23,26 +23,27 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
-import CoreMediaRichText from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
-import {COREMEDIA_RICHTEXT_CONFIG_KEY} from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig';
-import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
-import LinkTarget from "@coremedia/ckeditor5-link/LinkTarget";
+import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/MockStudioIntegration";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
+import CoreMediaStudioEssentials, {
+  COREMEDIA_RICHTEXT_CONFIG_KEY,
+  Strictness
+} from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
+import {initDragExamples} from "./dragExamples";
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const inspectorFlag = 'inspector';
-const wantsInspector = urlParams.has(inspectorFlag) ? 'false' !== urlParams.get(inspectorFlag) : false;
-const inspectorToggle = document.getElementById(inspectorFlag);
+const editorLanguage = document.currentScript.dataset.lang || "en";
+
+// setup dnd IFrame
+const dndButton = document.querySelector("#dragExamplesButton");
+const dndFrame = document.querySelector("#dragExamplesDiv");
+dndButton.addEventListener("click", () => {
+  dndFrame.hidden = !dndFrame.hidden;
+  dndButton.textContent = `${dndFrame.hidden ? "Show" : "Hide"} drag examples`;
+});
 
 setupPreview();
-
-if (wantsInspector) {
-  inspectorToggle.setAttribute('href', '?inspector=false');
-  inspectorToggle.textContent = 'Close Inspector';
-}
 
 let editor;
 
@@ -61,7 +62,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Italic,
     AutoLink,
     Link,
-    LinkTarget,
+    CoreMediaStudioEssentials,
     List,
     Paragraph,
     PasteFromOffice,
@@ -73,7 +74,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     TableToolbar,
     Underline,
     CoreMediaSymbolOnPasteMapper,
-    CoreMediaRichText
+    MockStudioIntegration
   ],
   toolbar: {
     items: [
@@ -134,7 +135,12 @@ ClassicEditor.create(document.querySelector('.editor'), {
       'mergeTableCells'
     ]
   },
-  language: 'en',
+  language: {
+    // Language switch only applies to editor instance.
+    ui: editorLanguage,
+    // Won't change language of content.
+    content: 'en',
+  },
   autosave: {
     waitingTime: 1000, // in ms
     save(currentEditor) {
@@ -182,10 +188,13 @@ ClassicEditor.create(document.querySelector('.editor'), {
     },
   },
 }).then(newEditor => {
-  if (wantsInspector) {
-    CKEditorInspector.attach(newEditor);
-  }
+  CKEditorInspector.attach({
+    'main-editor': newEditor,
+  }, {
+    isCollapsed: true,
+  });
   initExamples(newEditor);
+  initDragExamples();
   editor = newEditor;
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");

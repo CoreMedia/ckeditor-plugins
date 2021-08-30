@@ -1,6 +1,11 @@
 import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 
+const CONTENT_LINK_DATA_REGEXP = /^content\/(?<id>\d+)*/;
+const CONTENT_LINK_DATA_PREFIX = "content/";
+const CONTENT_LINK_MODEL_REGEXP = /^content:(?<id>\d+)*/;
+const CONTENT_LINK_MODEL_PREFIX = "content:";
+
 function hasHref({ attributes }: ElementProxy): boolean {
   const href = attributes["href"];
   return href === "" || !!href;
@@ -10,7 +15,49 @@ function hrefToXLinkHref({ attributes }: ElementProxy): void {
   // It should have been checked before, that we have a href attribute set.
   const href: string = <string>attributes["href"];
   delete attributes["href"];
-  attributes["xlink:href"] = href;
+  attributes["xlink:href"] = contentLinkToData(href);
+}
+
+function xLinkHrefToHref({ attributes }: ElementProxy): void {
+  // It should have been checked before, that we have a href attribute set.
+  const href = <string>attributes["xlink:href"];
+  delete attributes["xlink:href"];
+  attributes["href"] = contentLinkToModel(href);
+}
+
+/**
+ * Transforms any possible occurrence of `content:123` to `content/123` as this
+ * is the required representation for Studio REST Backend. Any unmatched href
+ * will be returned unmodified.
+ *
+ * @param href href to transform
+ */
+function contentLinkToData(href: string): string {
+  const match = CONTENT_LINK_MODEL_REGEXP.exec(href);
+  if (!match) {
+    return href;
+  }
+  return `${CONTENT_LINK_DATA_PREFIX}${match[1]}`;
+}
+
+/**
+ * Transforms any possible occurrence of `content/123` to `content:123` as this
+ * is the recommended representation within CKEditor. This way, CKEditor assumes
+ * that `content:` is a schema and does not try adding any schema to the value.
+ * `content/123` is the representation as provided in Studio REST Backend, while
+ * the representation in CoreMedia CMS is `coremedia:///cap/content/123`.
+ *
+ * Any unmatched href will be returned unmodified, assuming that it is an
+ * external link.
+ *
+ * @param href href to transform
+ */
+function contentLinkToModel(href: string): string {
+  const match = CONTENT_LINK_DATA_REGEXP.exec(href);
+  if (!match) {
+    return href;
+  }
+  return `${CONTENT_LINK_MODEL_PREFIX}${match[1]}`;
 }
 
 function targetToXLinkAttributes({ attributes }: ElementProxy): void {
@@ -90,12 +137,6 @@ function targetToXLinkAttributes({ attributes }: ElementProxy): void {
   if (!!newAttrs.role) {
     attributes["xlink:role"] = newAttrs.role;
   }
-}
-
-function xLinkHrefToHref({ attributes }: ElementProxy): void {
-  const href = attributes["xlink:href"];
-  delete attributes["xlink:href"];
-  attributes["href"] = href;
 }
 
 function xLinkShowAndRoleToTarget(node: ElementProxy): void {

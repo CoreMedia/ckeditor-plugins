@@ -12,7 +12,6 @@ export default class Viewcollection<T = any> extends Collection implements Emitt
 
   constructor(initialItems?: Iterable<T>);
 
-
   destroy(): void;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
@@ -28,4 +27,9 @@ export default class Viewcollection<T = any> extends Collection implements Emitt
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
+
+  decorate(methodName: string): void;
+
 }

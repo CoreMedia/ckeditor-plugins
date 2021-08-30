@@ -6,6 +6,7 @@ import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
+import IconView from "../icon/iconview";
 
 /**
  * The button view class.
@@ -34,6 +35,8 @@ export default class ButtonView extends View implements Emitter, Observable {
 
   children:ViewCollection;
 
+  iconView:IconView;
+
   render(): void;
 
   focus(): void;
@@ -51,4 +54,8 @@ export default class ButtonView extends View implements Emitter, Observable {
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
+
+  decorate(methodName: string): void;
 }

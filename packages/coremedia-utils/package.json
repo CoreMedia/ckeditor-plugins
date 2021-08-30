@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/coremedia-utils",
-  "version": "28.0.0",
+  "version": "28.1.0",
   "description": "Several utilities for CoreMedia Plugins.",
   "keywords": [
     "coremedia"
@@ -15,7 +15,7 @@
     "npm": ">=5.7.1"
   },
   "exports": {
-    "./": "./dist/"
+    "./*": "./dist/*.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -25,22 +25,23 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-transform-arrow-functions": "^7.12.1",
     "@babel/plugin-transform-computed-properties": "^7.12.1",
+    "@babel/plugin-transform-for-of": "^7.14.5",
     "@babel/plugin-transform-parameters": "^7.12.1",
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
     "@coremedia-internal/jest-test-helpers": "^1.0.0",
-    "@jangaroo/publish":"^1.0.0-alpha",
+    "@jangaroo/publish": "^1.0.0-alpha",
+    "@jangaroo/core": "^1.0.0-alpha",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
-    "babel-jest": "^26.6.3",
-    "babel-loader": "^8.2.2",
+    "babel-jest": "^27.0.6",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^26.6.3",
-    "jest-config": "^26.6.3",
+    "jest": "^27.0.6",
+    "jest-config": "^27.0.6",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"

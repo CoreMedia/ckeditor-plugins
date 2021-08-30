@@ -12,5 +12,7 @@ export type BindReturnValue = {
 export default interface Observable extends Emitter {
   bind(...bindProperties: any[]): BindReturnValue;
 
+  decorate(methodName: string): void;
+
   set(name: string | Object, value?: any): void;
 }

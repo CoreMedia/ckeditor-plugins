@@ -2,6 +2,7 @@ import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emitter
 import Position from "./position";
 import DocumentSelection from "./documentselection";
 import Element from "./element";
+import Node from "./node";
 import { Item } from "./item";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
@@ -74,6 +75,8 @@ export default class Selection implements Emitter {
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
 }
 
 /**

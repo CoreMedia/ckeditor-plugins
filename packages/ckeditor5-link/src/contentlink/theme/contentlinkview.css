@@ -1,0 +1,53 @@
+@import "contentlinkvisibility.css";
+
+.ck.cm-ck-link-form-view .cm-ck-content-link-view {
+  display: flex;
+  border: 1px solid var(--ck-color-input-disabled-border);
+  border-radius: var(--ck-border-radius);
+}
+
+/* content view label */
+.cm-ck-content-link-view > .ck.ck-button__label {
+  flex: 1;
+  overflow: hidden;
+  margin-left: 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* content link view inner button */
+.cm-ck-content-link-view > .ck.ck-button{
+  border: none;
+  min-height: calc(var(--ck-ui-component-min-height) -2px);
+}
+
+/* prevents icons to be too high in studio context */
+.cm-ck-content-link-view .cm-core-icons {
+  line-height: 1;
+}
+
+
+/*
+ * ACTIONS VIEW
+ */
+
+/* we need to set a width to make ellipsis work for content link views */
+.ck .cm-ck-link-actions-view .cm-ck-content-link-view {
+  max-width: var(--ck-input-text-width);
+  margin-left: 0 !important;
+}
+
+/*
+ * FORM VIEW
+ */
+
+/* we need to set a width to make ellipsis work for content link views */
+.ck.cm-ck-link-form-view {
+  width: calc(var(--ck-input-text-width) + 46px + 30px);
+}
+
+.cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {
+  min-height: 100%;
+  padding: 0;
+}

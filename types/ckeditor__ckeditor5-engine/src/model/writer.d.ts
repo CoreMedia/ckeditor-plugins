@@ -71,6 +71,8 @@ export default class Writer {
 
   insertText(text: string, attributes: Object, itemOrPosition: Item | Position, offset?: Offset): void;
 
+  insertText(text: string, itemOrPosition: Item, offset?: Offset): void;
+
   merge(position: Position): void;
 
   move(range: Range, itemOrPosition: Item | Position, offset?: Offset): void;
@@ -101,7 +103,7 @@ export default class Writer {
 
   setSelectionFocus(itemOrPosition: Item | Position, offset?: Offset): void;
 
-  split(position: Position, limitElement: Node): {
+  split(position: Position, limitElement?: Node): {
     position: Position;
     range: any;
   };

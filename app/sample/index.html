@@ -10,6 +10,8 @@
 </head>
 <body data-editor="ClassicEditor" data-collaboration="false">
 
+<div id="notifications"></div>
+
 <header>
   <div class="centered">
     <h1><a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener noreferrer"><img
@@ -19,8 +21,9 @@
         <li><a href="https://ckeditor.com/docs/ckeditor5/" target="_blank" rel="noopener noreferrer">Documentation</a>
         </li>
         <li><a href="https://ckeditor.com/" target="_blank" rel="noopener noreferrer">Website</a></li>
-        <li><a href="?inspector" rel="noopener noreferrer" id="inspector">Open Inspector</a></li>
         <li><a href=".?#ckdebug=verbose" rel="noopener noreferrer" id="debug">Debug Logging</a></li>
+        <li>Language: <a href="." rel="noopener noreferrer" id="lang" title="Switch language of editor UI."
+                         style="font-weight: initial;"></a></li>
       </ul>
     </nav>
   </div>
@@ -36,6 +39,10 @@
   <div class="centered">
     <div>
       <button id="previewButton">Show XML Preview</button>
+      <button id="dragExamplesButton">Show drag examples</button>
+    </div>
+    <div id="dragExamplesDiv" hidden="hidden">
+      <!-- The Drag Examples will be generated here. -->
     </div>
     <div class="row">
       <div class="row-editor">
@@ -70,6 +77,46 @@
     <a href="https://www.coremedia.com/" target="_blank" rel="noopener">CoreMedia</a>
   </p>
 </footer>
-<script src="../dist/ckeditor.js"></script>
+<script>
+  const loadTranslations = (locale) => {
+    if (locale === "en") {
+      console.log("Default locale. No need to load further resources.");
+    } else {
+      const scriptEl = document.createElement("script");
+      scriptEl.src = "../dist/translations/" + locale + ".js";
+      document.body.appendChild(scriptEl);
+    }
+  };
+
+  const loadCKEditor = (locale) => {
+    const scriptEl = document.createElement("script");
+    scriptEl.src = "../dist/ckeditor.js";
+    scriptEl.dataset["lang"] = locale;
+    document.body.appendChild(scriptEl);
+  };
+
+  const initLanguage = () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const languageFlag = 'lang';
+    const language = urlParams.get(languageFlag)?.toLowerCase() || 'en';
+    const languageToggle = document.getElementById(languageFlag);
+    let label, hrefLang;
+    if (language === "de") {
+      label = "EN | <strong>DE</strong>";
+      hrefLang = "en";
+    } else {
+      label = "<strong>EN</strong> | DE";
+      hrefLang = "de";
+    }
+    languageToggle.setAttribute("href", `.?lang=${hrefLang}`);
+    languageToggle.innerHTML = label;
+    return language;
+  };
+
+  const lang = initLanguage();
+  loadCKEditor(lang);
+  loadTranslations(lang);
+</script>
 </body>
 </html>

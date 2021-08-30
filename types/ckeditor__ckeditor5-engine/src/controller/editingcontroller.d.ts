@@ -23,6 +23,8 @@ export default class EditingController implements Emitter, Observable {
 
   constructor(model: Model, stylesProcessor: StylesProcessor);
 
+  decorate(methodName: string): void;
+
   destroy(): void;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
@@ -38,4 +40,6 @@ export default class EditingController implements Emitter, Observable {
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
 }

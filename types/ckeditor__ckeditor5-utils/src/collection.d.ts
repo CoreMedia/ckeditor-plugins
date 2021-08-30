@@ -1,7 +1,6 @@
 import Emitter, { CallbackFunction } from "./emittermixin";
 import { PriorityString } from "./priorities";
 import EventInfo from "./eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 /**
  * Collections are ordered sets of objects. Items in the collection can be retrieved by their indexes
@@ -50,7 +49,9 @@ export default class Collection<T = any> implements Emitter {
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
-  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: any) => void): void;
+
+  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
 }
 
 export type CollectionOptions = {

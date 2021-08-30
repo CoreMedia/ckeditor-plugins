@@ -6,8 +6,10 @@
  * =============================================================================
  */
 
-import { ElementProxy, TextProxy } from "@coremedia/ckeditor5-dataprocessor-support/index";
-import { LoggerProvider, Logger } from "@coremedia/coremedia-utils/index";
+import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import TextProxy from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 
 /**
  * Strictness for Schema validation.
@@ -568,7 +570,7 @@ const ELEMENTS: Elements = {
  * Representation of CoreMedia RichText 1.0 Schema.
  */
 export default class RichTextSchema {
-  private static readonly logger: Logger = LoggerProvider.getLogger("RichTextSchema");
+  static readonly #logger: Logger = LoggerProvider.getLogger("RichTextSchema");
   private readonly strictness: Strictness;
 
   constructor(strictness: Strictness) {
@@ -599,10 +601,10 @@ export default class RichTextSchema {
         }
       });
     });
-    if (RichTextSchema.logger.isDebugEnabled()) {
-      RichTextSchema.logger.debug("Initialized child-parent relationship.");
+    if (RichTextSchema.#logger.isDebugEnabled()) {
+      RichTextSchema.#logger.debug("Initialized child-parent relationship.");
       Object.keys(elements).forEach((elementName) => {
-        RichTextSchema.logger.debug(
+        RichTextSchema.#logger.debug(
           `    Initialized <${elementName}> to be child of:`,
           elements[elementName].parentElementNames
         );
@@ -613,21 +615,21 @@ export default class RichTextSchema {
   isTextAllowedAtParent(text: TextProxy): boolean {
     const parentName = text.parentElement?.name;
     if (!parentName) {
-      RichTextSchema.logger.debug(`Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`, text);
+      RichTextSchema.#logger.debug(`Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`, text);
       return false;
     }
 
     const elementSpecification = ELEMENTS[parentName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      RichTextSchema.logger.debug(`Element <${parentName}> not specified and thus, not allowed as parent of text-node.`);
+      RichTextSchema.#logger.debug(`Element <${parentName}> not specified and thus, not allowed as parent of text-node.`);
       return false;
     }
 
     const isAllowed = elementSpecification.mayContainText || false;
 
     if (!isAllowed) {
-      RichTextSchema.logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
+      RichTextSchema.#logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
     }
     return isAllowed;
   }
@@ -643,14 +645,14 @@ export default class RichTextSchema {
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
-      RichTextSchema.logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
+      RichTextSchema.#logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
       return false;
     }
 
     const elementSpecification = ELEMENTS[elementName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      RichTextSchema.logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
+      RichTextSchema.#logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
       return false;
     }
 
@@ -659,18 +661,18 @@ export default class RichTextSchema {
 
     if (isAtRoot) {
       if (!!elementSpecification.parentElementNames) {
-        RichTextSchema.logger.debug(`Element <${elementName}> not allowed at root.`);
+        RichTextSchema.#logger.debug(`Element <${elementName}> not allowed at root.`);
         return false;
       }
       return true;
     } else if (!elementSpecification.parentElementNames) {
-      RichTextSchema.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      RichTextSchema.#logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
       return false;
     }
 
     const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(<string>parentName) >= 0;
     if (!isAllowedAtParent) {
-      RichTextSchema.logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      RichTextSchema.#logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
     return isAllowedAtParent;
   }
@@ -731,7 +733,7 @@ export default class RichTextSchema {
     const notAllowedAttributes: string[] = actualAttributes.filter((a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0);
 
     if (notAllowedAttributes.length > 0) {
-      RichTextSchema.logger.debug(
+      RichTextSchema.#logger.debug(
         `${notAllowedAttributes.length} unsupported attribute(s) found at <${element.name}>. Attribute(s) will be removed prior to storing to server.`,
         {
           element: element,
@@ -757,12 +759,12 @@ export default class RichTextSchema {
           const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY;
           const suggestedValue = invalidValueHandler(attributeValue, this.strictness);
           if (suggestedValue === undefined) {
-            RichTextSchema.logger.debug(
+            RichTextSchema.#logger.debug(
               `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
             );
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
-            RichTextSchema.logger.debug(
+            RichTextSchema.#logger.debug(
               `Adjusting attribute ${attributeName} for <${element.name}>: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`
             );
             element.attributes[attributeName] = suggestedValue;
@@ -787,7 +789,7 @@ export default class RichTextSchema {
       const handler = specification.onMissingAttribute ?? NOTHING_TODO_ON_MISSING_ATTRIBUTE;
       const suggestedValue = handler();
       if (suggestedValue !== undefined) {
-        RichTextSchema.logger.debug(
+        RichTextSchema.#logger.debug(
           `Adjusting attribute ${attributeName} for <${element.name}>: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`
         );
         element.attributes[attributeName] = suggestedValue;

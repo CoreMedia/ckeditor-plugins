@@ -3,10 +3,11 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import { Logger, LoggerProvider } from "@coremedia/coremedia-utils/index";
+import Logger from "@coremedia/coremedia-utils/logging/Logger";
+import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import RichTextXmlWriter from "./RichTextXmlWriter";
-import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support/index";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
@@ -16,7 +17,7 @@ import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basich
 import ToDataProcessor from "./ToDataProcessor";
 
 export default class RichTextDataProcessor implements DataProcessor {
-  private readonly logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
+  static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   private readonly _delegate: HtmlDataProcessor;
   private readonly _domConverter: DomConverter;
   private readonly _richTextXmlWriter: RichTextXmlWriter;
@@ -32,11 +33,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   constructor(editor: Editor) {
     const document: ViewDocument = editor.data.viewDocument;
 
-    const {
-      schema,
-      toData,
-      toView
-    } = getConfig(editor.config);
+    const { schema, toData, toView } = getConfig(editor.config);
 
     this._delegate = new HtmlDataProcessor(document);
     this._domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
@@ -76,11 +73,12 @@ export default class RichTextDataProcessor implements DataProcessor {
    * @return CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
+    const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     const { richTextDocument, domFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
     const xml = this.toDataInternal(domFragment, richTextDocument);
-    this.logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
+    logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: fragmentAsStringForDebugging,
       out: xml,
     });
@@ -98,16 +96,17 @@ export default class RichTextDataProcessor implements DataProcessor {
    * be initialized, if debug logging is turned on.
    */
   initToData(viewFragment: ViewDocumentFragment): { richTextDocument: Document, domFragment: Node | DocumentFragment, fragmentAsStringForDebugging: string } {
+    const logger = RichTextDataProcessor.#logger;
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
     // We use the RichTextDocument at this early stage, so that all created elements
     // already have the required namespace. This eases subsequent processing.
     const domFragment: Node | DocumentFragment = this._domConverter.viewToDom(viewFragment, richTextDocument);
-    let fragmentAsStringForDebugging: string = "uninitialized";
+    let fragmentAsStringForDebugging = "uninitialized";
 
-    if (this.logger.isDebugEnabled()) {
+    if (logger.isDebugEnabled()) {
       fragmentAsStringForDebugging = this.fragmentToString(domFragment);
 
-      this.logger.debug("toData: ViewFragment converted to DOM.", {
+      logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: domFragment,
         domAsString: fragmentAsStringForDebugging,
@@ -128,8 +127,7 @@ export default class RichTextDataProcessor implements DataProcessor {
    * and will be transformed according to the rules
    * @return the transformed CoreMedia RichText XML
    */
-  toDataInternal(fromView: Node | DocumentFragment,
-                 targetDocument?: Document): string {
+  toDataInternal(fromView: Node | DocumentFragment, targetDocument?: Document): string {
     const dataDocument = this._toDataProcessor.toData(fromView, targetDocument);
     return this._richTextXmlWriter.getXml(dataDocument);
   }
@@ -146,6 +144,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   }
 
   toView(data: string): ViewDocumentFragment | null {
+    const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     const dataDocument = this._domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
@@ -156,8 +155,8 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     const html: string = this._htmlWriter.getHtml(documentFragment);
 
-    if (this.logger.isDebugEnabled()) {
-      this.logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
+    if (logger.isDebugEnabled()) {
+      logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
         out: html,
       });
@@ -165,7 +164,6 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     return this._delegate.toView(html);
   }
-
 }
 
 /**

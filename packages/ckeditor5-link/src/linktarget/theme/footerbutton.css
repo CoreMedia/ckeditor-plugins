@@ -1,0 +1,29 @@
+[dir=ltr] .ck.ck-responsive-form.cm-ck-link-form-view>:last-child {
+  margin-right: 11px !important;
+}
+
+[dir=ltr] .ck.cm-ck-link-form-view .ck-button.cm-ck-footer-button {
+  padding: 3px 5px;
+  margin-left: 0;
+  margin-right: 6px;
+  border-radius: 4px;
+  width: initial;
+  min-width: 75px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid var(--ck-color-button-cancel);
+}
+
+[dir=ltr] .ck.cm-ck-link-form-view .ck-button.cm-ck-footer-button.cm-ck-footer-button-primary {
+  color: white;
+  background-color: var(--ck-color-button-cancel);
+}
+
+[dir=ltr] .ck.cm-ck-link-form-view .ck-button.cm-ck-footer-button .ck-button__label {
+  width: 100%;
+  text-align: center;
+}
+
+[dir=ltr] .ck.cm-ck-link-form-view .ck-button.cm-ck-footer-button:after {
+  display: none;
+}

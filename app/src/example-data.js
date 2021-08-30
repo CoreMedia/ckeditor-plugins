@@ -1,3 +1,4 @@
+// noinspection HttpUrlsUsage
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
@@ -5,21 +6,21 @@ const EXAMPLE_URL = "https://example.org/";
 const LINK_TEXT = "Link";
 const UNSET = "—";
 
-function createLink(show, role) {
+function createLink(show, role, href = EXAMPLE_URL) {
   if (!show) {
     if (!role) {
       // noinspection HtmlUnknownAttribute
-      return `<a xlink:href="${EXAMPLE_URL}">${LINK_TEXT}</a>`
+      return `<a xlink:href="${href}">${LINK_TEXT}</a>`
     }
     // noinspection HtmlUnknownAttribute
-    return `<a xlink:href="${EXAMPLE_URL}" xlink:role="${role}">${LINK_TEXT}</a>`
+    return `<a xlink:href="${href}" xlink:role="${role}">${LINK_TEXT}</a>`
   }
   if (!role) {
     // noinspection HtmlUnknownAttribute
-    return `<a xlink:href="${EXAMPLE_URL}" xlink:show="${show}">${LINK_TEXT}</a>`
+    return `<a xlink:href="${href}" xlink:show="${show}">${LINK_TEXT}</a>`
   }
   // noinspection HtmlUnknownAttribute
-  return `<a xlink:href="${EXAMPLE_URL}" xlink:show="${show}" xlink:role="${role}">${LINK_TEXT}</a>`
+  return `<a xlink:href="${href}" xlink:show="${show}" xlink:role="${role}">${LINK_TEXT}</a>`
 }
 
 function renderUiTarget(uiTarget) {
@@ -34,7 +35,7 @@ function createLinkTableHeading() {
 }
 
 function createLinkTableRow({comment, show, role, target, uiBehavior, uiTarget}) {
-  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiBehavior || UNSET}</td><td>${renderUiTarget(uiTarget)}</td><td>${createLink(show, role)}</td><td>${comment || ""}</td></tr>`;
+  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiBehavior || UNSET}</td><td>${renderUiTarget(uiTarget)}</td><td>${createLink(show, role, EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
 }
 
 function createLinkScenario(title, scenarios) {
@@ -44,7 +45,127 @@ function createLinkScenario(title, scenarios) {
   return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
 }
 
+function createContentLinkTableHeading() {
+  return `<tr class="tr--header"><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
+}
+
+function createContentLinkTableRow({comment, id}) {
+  return `<tr><td>${createLink("", "", "content:" + id)}</td><td>${comment || ""}</td></tr>`;
+}
+
+function createContentLinkScenario(title, scenarios) {
+  const scenarioTitle = `<h1>${title}</h1>`;
+  const scenarioHeader = createContentLinkTableHeading();
+  const scenarioRows = scenarios.map(createContentLinkTableRow).join("");
+  return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
+}
+
 function externalLinkTargetExamples() {
+  return linkTargetExamples();
+}
+
+function contentLinkExamples() {
+  const standardScenarios = [
+    {
+      comment: "Root Folder",
+      id: 1,
+    },
+    {
+      comment: "Folder 1",
+      id: 10001,
+    },
+    {
+      comment: "Folder 2",
+      id: 11003,
+    },
+    {
+      comment: "Document 1",
+      id: 10000,
+    },
+    {
+      comment: "Document 2",
+      id: 11002,
+    },
+  ];
+  const nameChangeScenarios = [
+    {
+      comment: "Folder (changing names)",
+      id: 12001,
+    },
+    {
+      comment: "Document (changing names)",
+      id: 12000,
+    },
+  ];
+  const unreadableScenarios = [
+    {
+      comment: "Folder 1 (unreadable)",
+      id: 10101,
+    },
+    {
+      comment: "Folder 2 (unreadable/readable toggle)",
+      id: 11201,
+    },
+    {
+      comment: "Document 1 (unreadable)",
+      id: 10100,
+    },
+    {
+      comment: "Document 2 (unreadable/readable toggle)",
+      id: 11202,
+    },
+  ];
+  const stateScenarios = [
+    {
+      comment: "Document 1 (checked-in)",
+      id: 10010,
+    },
+    {
+      comment: "Document 2 (checked-out)",
+      id: 11002,
+    },
+    {
+      comment: "Document (being edited; toggles checked-out/-in)",
+      id: 10026,
+    },
+  ];
+  const xssScenarios = [
+    {
+      comment: "Document 1",
+      id: 6660000,
+    },
+    {
+      comment: "Document 2",
+      id: 6661002,
+    },
+    {
+      comment: "Document (toggling name)",
+      id: 6662006,
+    },
+  ];
+  const slowScenarios = [
+    {
+      comment: "Slow Document 1",
+      id: 4080000,
+    },
+    {
+      comment: "Slow Document 2",
+      id: 4081002,
+    },
+  ];
+  const scenarios = [
+    createContentLinkScenario("Standard Links", standardScenarios),
+    createContentLinkScenario("Name Change Scenarios", nameChangeScenarios),
+    createContentLinkScenario("Unreadable Scenarios", unreadableScenarios),
+    createContentLinkScenario("Content State Scenarios", stateScenarios),
+    createContentLinkScenario("XSS Scenarios", xssScenarios),
+    createContentLinkScenario("Slow Loading Scenarios", slowScenarios),
+  ].join("");
+  // noinspection XmlUnusedNamespaceDeclaration
+  return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
+}
+
+function linkTargetExamples() {
   /**
    * The mapping we agreed upon for `xlink:show` to some target value.
    * `other` is skipped here, as it is used for special meaning, which is,
@@ -260,13 +381,87 @@ function externalLinkTargetExamples() {
     createLinkScenario("Reserved Target Scenarios", reservedTargetScenarios),
     createLinkScenario("Corner Case Scenarios", cornerCaseScenarios),
   ].join("");
+  // noinspection XmlUnusedNamespaceDeclaration
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
 }
+
+// Source: https://loremipsum.de/
+const LOREM_IPSUM_RAW = `
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in
+vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto
+odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
+consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit
+praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend
+option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
+consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos
+erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed
+takimata ut vero voluptua. est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+sea takimata sanctus est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.`;
+const LOREM_IPSUM_WORDS = LOREM_IPSUM_RAW.split(/\s+/);
+const chunks = (arr, chunkSize) => {
+  let result = [];
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    result.push(arr.slice(i, i + chunkSize));
+  }
+  return result;
+};
+const lorem = (words, paragraphs) => {
+  const wordsPerParagraph = Math.ceil(words / paragraphs);
+  let allWords = [];
+  while (allWords.length < words) {
+    const missingWords = words - allWords.length;
+    allWords = allWords.concat(LOREM_IPSUM_WORDS.slice(0, missingWords));
+  }
+  const asParagraphs = chunks(allWords, wordsPerParagraph);
+  const paragraph = (w) => {
+    const paragraphText = w.join(" ")
+      .trim()
+      // Start each paragraph with upper case.
+      .replace(/^\w/, c => c.toUpperCase())
+      // End each paragraph with a dot, possibly replacing any non-alphabetic character.
+      .replace(/\W?$/, ".")
+    ;
+    return `<p>${paragraphText}</p>`;
+  };
+  const htmlParagraphs = `${asParagraphs.map((w) => paragraph(w)).join("")}`;
+  return `<div xmlns="${CM_RICHTEXT}">${htmlParagraphs}</div>`;
+};
 
 const exampleData = {
   "Hello": `<div xmlns="${CM_RICHTEXT}"><p>Hello World!</p></div>`,
   "Empty": `<div xmlns="${CM_RICHTEXT}"/>`,
+  "Lorem": lorem(LOREM_IPSUM_WORDS.length, 10),
+  "Lorem (Huge)": lorem(LOREM_IPSUM_WORDS.length * 10, 80),
   "Links (Targets)": externalLinkTargetExamples(),
+  "Content Links": contentLinkExamples(),
 };
 
 const setExampleData = (editor, exampleKey) => {
