@@ -10,6 +10,7 @@ import Model from "@ckeditor/ckeditor5-ui/src/model";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../../utils";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * Extends the LinkFormView of the CKEditor Link Plugin by additional form
@@ -71,7 +72,7 @@ export default class LinkFormViewExtension {
         return isEnabled ? value : "";
       });
 
-    labeledInput.fieldView.on("input", (evt: any) => {
+    labeledInput.fieldView.on("input", (evt: EventInfo) => {
       labeledInput.set({
         hiddenTarget: evt.source.element.value,
       });
@@ -96,24 +97,26 @@ export default class LinkFormViewExtension {
       tooltip: t("Link Behavior"),
     });
 
-    linkBehaviorDropdown.fieldView.buttonView.bind("label").to(linkBehaviorDropdown, "linkBehavior", (value: any) => {
-      return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB];
-    });
+    linkBehaviorDropdown.fieldView.buttonView
+      .bind("label")
+      .to(linkBehaviorDropdown, "linkBehavior", (value: string) => {
+        return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB];
+      });
 
-    linkBehaviorDropdown.fieldView.on("execute", (evt: any) => {
+    linkBehaviorDropdown.fieldView.on("execute", (evt: EventInfo) => {
       linkBehaviorDropdown.set({
         linkBehavior: evt.source._linkBehaviorValue,
       });
     });
 
-    linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: any) => !value);
+    linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: string) => !value);
     linkBehaviorDropdown.fieldView.bind("value").to(linkBehaviorDropdown, "linkBehavior");
     addListToDropdown(linkBehaviorDropdown.fieldView, this.#getLinkBehaviorDefinitions(this));
 
     return linkBehaviorDropdown;
   }
 
-  #getLinkBehaviorDefinitions = (view: any): Collection => {
+  #getLinkBehaviorDefinitions = (view: LinkFormViewExtension): Collection => {
     const itemDefinitions = new Collection();
     const linkBehaviorLabels = getLinkBehaviorLabels(view.locale.t);
 
