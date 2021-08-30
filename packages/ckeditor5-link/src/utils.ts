@@ -2,6 +2,7 @@ import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 
 export const LINK_BEHAVIOR = {
   OPEN_IN_NEW_TAB: "openInNewTab",
@@ -242,7 +243,7 @@ export const createDecoratorHook = (
   methodParentCmp: Observable,
   methodName: string,
   callback: () => void,
-  listenerCmp: any,
+  listenerCmp: Emitter,
   options?: { priority?: number | PriorityString }
 ): void => {
   if (!(methodParentCmp as any)["_events"] || !(methodParentCmp as any)["_events"].hasOwnProperty(methodName)) {
