@@ -1,7 +1,6 @@
 import InputTextView from "../inputtext/inputtextview";
 import LabeledFieldView from "./labeledfieldview";
-//@ts-ignore
-import DropdownView from "@ckeditor/ckeditor5-ui/src/dropdown/dropdownview";
+import DropdownView from "../dropdown/dropdownview";
 
 export function createLabeledDropdown(
   labeledFieldView: LabeledFieldView<DropdownView>,

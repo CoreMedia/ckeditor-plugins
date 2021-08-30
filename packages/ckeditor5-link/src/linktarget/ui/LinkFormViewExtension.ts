@@ -26,8 +26,8 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 export default class LinkFormViewExtension {
   readonly locale: Locale;
   readonly linkFormView: LinkFormView;
-  readonly linkBehaviorView: LabeledFieldView<InputTextView>;
-  readonly targetInputView: LabeledFieldView<DropdownView>;
+  readonly linkBehaviorView: LabeledFieldView<DropdownView>;
+  readonly targetInputView: LabeledFieldView<InputTextView>;
 
   constructor(linkFormView: LinkFormView) {
     this.linkFormView = linkFormView;
