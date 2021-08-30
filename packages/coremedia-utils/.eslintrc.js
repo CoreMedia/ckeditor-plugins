@@ -1,4 +1,13 @@
 module.exports = {
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"], // Your TypeScript files extension
+      parserOptions: {
+        project: ["src/tsconfig.json"], // Specify it only for TypeScript files
+        tsconfigRootDir: __dirname,
+      },
+    },
+  ],
   parser: "@typescript-eslint/parser", // Specifies the ESLint parser
   extends: [
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
@@ -8,11 +17,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: "module", // Allows for the use of imports
-    project: "./tsconfig.json",
-    tsconfigRootDir: "./",
   },
-  ignorePatterns: [
-    "dist/",
-    "node_modules/",
-  ],
+  ignorePatterns: ["dist/", "node_modules/"],
 };

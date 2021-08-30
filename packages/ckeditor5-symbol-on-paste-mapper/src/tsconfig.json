@@ -27,8 +27,10 @@
       ]
     }
   },
-  "references": [{
-    "path": "../../coremedia-utils/src"
-  }],
-  "extends": "../../../tsconfig.json",
+  "references": [
+    {
+      "path": "../../coremedia-utils/src"
+    }
+  ],
+  "extends": "../../../tsconfig.json"
 }
