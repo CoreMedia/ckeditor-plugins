@@ -18,6 +18,7 @@ import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import { DropCondition } from "./DropCondition";
 import { ContentLinkData } from "./ContentLinkData";
+import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 
 export default class ContentLinkClipboard extends Plugin {
   static #CONTENT_LINK_CLIPBOARD_PLUGIN_NAME = "ContentLinkClipboard";
@@ -93,11 +94,11 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
-  static #extractNormalLinks(data: any): string | null {
+  static #extractNormalLinks(data: ClipboardEventData): string | null {
     return data.dataTransfer.getData("text/uri-list") || null;
   }
 
-  static #extractContentUris(data: any): Array<string> | null {
+  static #extractContentUris(data: ClipboardEventData): Array<string> | null {
     if (data === null || data.dataTransfer === null) {
       return null;
     }
@@ -267,7 +268,7 @@ export default class ContentLinkClipboard extends Plugin {
     return true;
   }
 
-  static #createDropCondition(editor: Editor, data: any, links: Array<string>): DropCondition {
+  static #createDropCondition(editor: Editor, data: ClipboardEventData, links: Array<string>): DropCondition {
     const multipleContentDrop = links.length > 1;
     const targetRange = ContentLinkClipboard.#evaluateTargetRange(editor, data);
     const initialDropAtStartOfParagraph = targetRange ? targetRange.start.isAtStart : false;
@@ -282,11 +283,11 @@ export default class ContentLinkClipboard extends Plugin {
     );
   }
 
-  static #evaluateTargetRange(editor: Editor, data: any): Range | null {
+  static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): Range | null {
     if (!data.targetRanges) {
       return null;
     }
-    const targetRanges: Array<Range> = data.targetRanges.map((viewRange: Range) => {
+    const targetRanges: Array<Range> = data.targetRanges.map((viewRange: Range): Range => {
       return editor.editing.mapper.toModelRange(viewRange);
     });
     if (targetRanges.length > 0) {
