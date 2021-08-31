@@ -2,6 +2,8 @@ import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import TemplateIfBinding from "@ckeditor/ckeditor5-ui/src/template/templateifbinding";
 
 export const LINK_BEHAVIOR = {
   OPEN_IN_NEW_TAB: "openInNewTab",
@@ -158,8 +160,7 @@ export const getLinkBehaviorLabels = (
  * @param classNames a classname or an array of classname strings
  */
 export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
-  // @ts-ignore
-  const classes: string[] = view.template.attributes.class;
+  const classes: Array<string | TemplateIfBinding> = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -178,8 +179,7 @@ export const addClassToTemplate = (view: View, classNames: string[] | string): v
  * @param classNames a classname or an array of classname strings
  */
 export const removeClassFromTemplate = (view: View, classNames: string[] | string): void => {
-  // @ts-ignore
-  const classes: string[] = view.template.attributes.class;
+  const classes: Array<string | TemplateIfBinding> = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -242,12 +242,19 @@ export const createDecoratorHook = (
   methodParentCmp: Observable,
   methodName: string,
   callback: () => void,
-  listenerCmp: any,
+  listenerCmp: Emitter,
   options?: { priority?: number | PriorityString }
-) => {
-  if (!(methodParentCmp as any)["_events"] || !(methodParentCmp as any)["_events"].hasOwnProperty(methodName)) {
+): void => {
+  if (
+    !(methodParentCmp as DecorableCmp)["_events"] ||
+    !(methodParentCmp as DecorableCmp)["_events"].hasOwnProperty(methodName)
+  ) {
     methodParentCmp.decorate(methodName);
   }
 
   listenerCmp.listenTo(methodParentCmp, methodName, callback, options);
 };
+
+interface DecorableCmp extends Observable {
+  _events: Array<unknown>;
+}

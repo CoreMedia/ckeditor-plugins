@@ -26,8 +26,8 @@ export default class ContentLinks extends Plugin {
     const editor = this.editor;
     const linkCommand = <LinkCommand>editor.commands.get("link");
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
-    this.#removeInitialMouseDownListener(linkUI);
-    this.#addMouseEventListenerToHideDialog(linkUI, linkCommand);
+    ContentLinks.#removeInitialMouseDownListener(linkUI);
+    this.#addMouseEventListenerToHideDialog(linkUI);
     createDecoratorHook(
       linkUI,
       "_hideUI",
@@ -42,7 +42,7 @@ export default class ContentLinks extends Plugin {
     return null;
   }
 
-  #removeInitialMouseDownListener(linkUI: LinkUI) {
+  static #removeInitialMouseDownListener(linkUI: LinkUI): void {
     linkUI.formView.stopListening(<Emitter>(<unknown>document), "mousedown");
   }
 
@@ -70,19 +70,19 @@ export default class ContentLinks extends Plugin {
     activator: () => boolean;
     callback: () => void;
     contextElements: HTMLElement[];
-  }) {
+  }): void {
     const EDITOR_CLASS = "ck-editor";
     emitter.listenTo(
       <Emitter>(<unknown>document),
       "mousedown",
-      (evt: any, domEvt: { composedPath: () => any; target: any }) => {
+      (evt: unknown, domEvt: { composedPath: () => Array<Element>; target: HTMLElement }) => {
         if (!activator()) {
           return;
         }
 
         // Check if `composedPath` is `undefined` in case the browser does not support native shadow DOM.
         // Can be removed when all supported browsers support native shadow DOM.
-        const path = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
+        const path: Array<Element> = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
 
         // Do not close balloon if user clicked on draggable outside of any editor component
         const editorElements = document.getElementsByClassName(EDITOR_CLASS);
@@ -110,7 +110,7 @@ export default class ContentLinks extends Plugin {
     emitter.listenTo(
       <Emitter>(<unknown>document),
       "click",
-      (evt: any, domEvt: { composedPath: () => any; target: any }) => {
+      (evt: unknown, domEvt: { composedPath: () => Array<Element>; target: HTMLElement }) => {
         if (!activator()) {
           return;
         }
@@ -134,7 +134,7 @@ export default class ContentLinks extends Plugin {
     );
   }
 
-  #addMouseEventListenerToHideDialog(linkUI: LinkUI, linkCommand: LinkCommand | undefined) {
+  #addMouseEventListenerToHideDialog(linkUI: LinkUI): void {
     this.#addCustomClickOutsideHandler({
       emitter: <Emitter>(<unknown>linkUI.formView),
       activator: () => linkUI._isUIInPanel,

@@ -4,6 +4,11 @@ import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
+export enum FilterMode {
+  toData,
+  toView,
+}
+
 export interface ElementFilterRulesByName {
   [key: string]: ElementFilterRule;
 }
@@ -13,7 +18,7 @@ export interface ElementFilterRuleSet {
 }
 
 export interface TextFilterRuleSet {
-  text?: TextFilterRule,
+  text?: TextFilterRule;
 }
 
 export type FilterRuleSet = ElementFilterRuleSet & TextFilterRuleSet;
@@ -104,7 +109,7 @@ export default class HtmlFilter {
 
     logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent: parent, currentNode: currentNode });
 
-    let next = currentNode.nextSibling;
+    const next = currentNode.nextSibling;
     let newCurrentSupplier: () => Node | null = () => null;
 
     if (currentNode instanceof Element) {
@@ -115,7 +120,7 @@ export default class HtmlFilter {
        *
        * We may re-use `currentNode` here, as the rule will not be executed, if any
        * rule before replaces `currentNode` by a new node.
-      */
+       */
       const handleChildrenRule: ElementFilterRule = (p) => {
         this.applyToChildNodes(p.node.delegate);
       };
@@ -126,7 +131,8 @@ export default class HtmlFilter {
         const afterRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT];
         const afterChildrenRule: ElementFilterRule | undefined = this._ruleSet.elements[AFTER_ELEMENT_AND_CHILDREN];
 
-        newCurrentSupplier = () => proxy.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
+        newCurrentSupplier = () =>
+          proxy.applyRules(beforeRule, filterRule, afterRule, handleChildrenRule, afterChildrenRule);
       } else {
         // No element rules? We need to at least handle the children.
         newCurrentSupplier = () => proxy.applyRules(handleChildrenRule);
@@ -145,13 +151,13 @@ export default class HtmlFilter {
         logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
           parent: parent,
           replacedNode: currentNode,
-          next: newCurrent
+          next: newCurrent,
         });
       } else {
         logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
           parent: parent,
           currentNode: currentNode,
-          next: currentNode.nextSibling
+          next: currentNode.nextSibling,
         });
       }
     }

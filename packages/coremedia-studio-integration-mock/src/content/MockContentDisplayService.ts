@@ -2,8 +2,7 @@ import ContentDisplayService from "@coremedia/coremedia-studio-integration/conte
 import { combineLatest, Observable, OperatorFunction, Subscriber, TeardownLogic } from "rxjs";
 import { map } from "rxjs/operators";
 import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import ContentDisplayServiceDescriptor
-  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
 import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
 import { applyDroppable, DroppableConfig } from "./MockRichtextConfigurationService";
@@ -636,14 +635,13 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
  * @param undroppable if the document (not applicable to folders) shall be droppable
  */
 const createContentUriPath = ({
-                                name,
-                                prefix,
-                                unreadable,
-                                checkedIn,
-                                isFolder,
-                                undroppable
-                              }: CreateContentConfig & DroppableConfig
-): UriPath => {
+  name,
+  prefix,
+  unreadable,
+  checkedIn,
+  isFolder,
+  undroppable,
+}: CreateContentConfig & DroppableConfig): UriPath => {
   const randomPrefix = (): number => {
     let base = 0;
     switch (prefix) {

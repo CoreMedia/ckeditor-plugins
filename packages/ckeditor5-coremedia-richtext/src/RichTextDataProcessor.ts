@@ -95,18 +95,21 @@ export default class RichTextDataProcessor implements DataProcessor {
    * `fragmentAsStringForDebugging` some representation of `domFragment` to be used for debugging - it will only
    * be initialized, if debug logging is turned on.
    */
-  initToData(viewFragment: ViewDocumentFragment): { richTextDocument: Document, domFragment: Node | DocumentFragment, fragmentAsStringForDebugging: string } {
-    const logger = RichTextDataProcessor.#logger;
+  initToData(viewFragment: ViewDocumentFragment): {
+    richTextDocument: Document;
+    domFragment: Node | DocumentFragment;
+    fragmentAsStringForDebugging: string;
+  } {
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
     // We use the RichTextDocument at this early stage, so that all created elements
     // already have the required namespace. This eases subsequent processing.
     const domFragment: Node | DocumentFragment = this._domConverter.viewToDom(viewFragment, richTextDocument);
     let fragmentAsStringForDebugging = "uninitialized";
 
-    if (logger.isDebugEnabled()) {
+    if (RichTextDataProcessor.#logger.isDebugEnabled()) {
       fragmentAsStringForDebugging = this.fragmentToString(domFragment);
 
-      logger.debug("toData: ViewFragment converted to DOM.", {
+      RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: domFragment,
         domAsString: fragmentAsStringForDebugging,
@@ -138,9 +141,11 @@ export default class RichTextDataProcessor implements DataProcessor {
    * @private
    */
   private fragmentToString(domFragment: Node | DocumentFragment): string {
-    return Array.from(domFragment.childNodes)
-      .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
-      .reduce((result, s) => (result || "") + (s || "")) || "";
+    return (
+      Array.from(domFragment.childNodes)
+        .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
+        .reduce((result, s) => (result || "") + (s || "")) || ""
+    );
   }
 
   toView(data: string): ViewDocumentFragment | null {

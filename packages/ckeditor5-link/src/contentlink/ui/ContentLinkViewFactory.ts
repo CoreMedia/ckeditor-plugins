@@ -18,7 +18,7 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
   const { t } = locale;
   const contentLinkView: LabeledFieldView<ContentLinkView> = new LabeledFieldView(
     locale,
-    (labeledFieldView, viewUid, statusUid) =>
+    () =>
       new ContentLinkView(locale, linkUI, {
         renderTypeIcon: true,
         renderCancelButton: true,

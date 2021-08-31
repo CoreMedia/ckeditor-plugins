@@ -68,6 +68,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * </p>
    */
   public readonly parentRule: ElementFilterRule = () => {
+    return undefined;
   };
 
   /**
@@ -79,7 +80,7 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * @param mutable signals, if this proxy should be mutable; trying to modify
    * an immutable proxy will raise an error.
    */
-  constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable: boolean = true) {
+  constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable = true) {
     super(delegate, mutable);
     this._namespaces = namespaces;
     this.#editor = editor;
@@ -237,7 +238,12 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
       }
     }
 
-    function handleAttributeWithNamespacePrefix(uri: string | undefined, prefix: string, key: string, value: string | null) {
+    function handleAttributeWithNamespacePrefix(
+      uri: string | undefined,
+      prefix: string,
+      key: string,
+      value: string | null
+    ) {
       if (value === null) {
         if (uri) {
           targetElement.removeAttributeNS(uri, key);

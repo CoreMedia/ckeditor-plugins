@@ -31,7 +31,7 @@ export const showContentLinkField = (view: View, show: boolean): void => {
   }
 };
 
-export const openInTab = (uriPath: string) => {
+export const openInTab = (uriPath: string): void => {
   uriPath = uriPath.replace(":", "/");
   serviceAgent
     .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())

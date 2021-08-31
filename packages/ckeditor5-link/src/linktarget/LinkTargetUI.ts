@@ -8,7 +8,8 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import {
-  addClassToTemplate, createDecoratorHook,
+  addClassToTemplate,
+  createDecoratorHook,
   LINK_BEHAVIOR,
   linkTargetToUiValues,
   removeClassFromTemplate,
@@ -18,6 +19,8 @@ import {
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
+import LinkBehaviorViewPropertyAccessor from "./ui/LinkBehaviorViewPropertyAccessor";
+import TargetInputViewPropertyAccessor from "./ui/TargetInputViewPropertyAccessor";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -81,9 +84,7 @@ export default class LinkTargetUI extends Plugin {
         url ? linkTargetToUiValues(value).linkBehavior : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB
       );
 
-    // TODO[cke] We need to fix the typing of bind regarding the bind parameters.
-    // @ts-ignore
-    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value) => !value);
+    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value: unknown) => !value);
     LinkTargetUI._customizeFormView(formView);
     LinkTargetUI.#customizeToolbarButtons(formView);
 
@@ -93,8 +94,7 @@ export default class LinkTargetUI extends Plugin {
       () => {
         const { value: target } = <HTMLInputElement>extension.targetInputView.fieldView.element;
         const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-        // @ts-ignore
-        const linkBehavior: string = extension.linkBehaviorView.linkBehavior;
+        const linkBehavior: string = (extension.linkBehaviorView as LinkBehaviorViewPropertyAccessor).linkBehavior;
         const linkTarget = uiValuesToLinkTarget(linkBehavior, target);
         editor.execute("linkTarget", linkTarget, href);
       },
@@ -127,10 +127,10 @@ export default class LinkTargetUI extends Plugin {
         }
         const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
         const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
-        //@ts-ignore
-        extension.linkBehaviorView.linkBehavior = href ? linkBehavior || "" : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
-        //@ts-ignore
-        extension.targetInputView.hiddenTarget = target || "";
+        (extension.linkBehaviorView as LinkBehaviorViewPropertyAccessor).linkBehavior = href
+          ? linkBehavior || ""
+          : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
+        (extension.linkBehaviorView as TargetInputViewPropertyAccessor).hiddenTarget = target || "";
       },
       this
     );

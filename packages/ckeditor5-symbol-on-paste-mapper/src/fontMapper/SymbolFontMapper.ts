@@ -179,8 +179,8 @@ export default class SymbolFontMapper implements FontMapper {
   ]);
 
   toEscapedHtml(toMap: string): string {
-    const chars: Array<any> = [...toMap];
-    const replaced: Array<any> = chars.map((value) => {
+    const chars: Array<string> = [...toMap];
+    const replaced: Array<string | null> = chars.map((value) => {
       const textChar: number = SymbolFontMapper.unpack(value);
       if (SymbolFontMapper.map.has(textChar)) {
         const htmlReplacement: string | undefined = SymbolFontMapper.map.get(textChar);

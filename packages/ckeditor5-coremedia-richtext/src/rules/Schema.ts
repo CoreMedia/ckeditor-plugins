@@ -2,12 +2,22 @@ import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/
 import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
 import RichTextSchema, { Strictness } from "../RichTextSchema";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import RichTextDataProcessor from "../RichTextDataProcessor";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
 export function getSchema({ editor }: ElementFilterParams | TextFilterParams): RichTextSchema {
-  const dataProcessor: any = editor?.data?.processor || {};
-  return dataProcessor["richTextSchema"] as RichTextSchema ?? defaultSchema;
+  const dataProcessor: DataProcessor | null = editor?.data?.processor || null;
+  if (dataProcessor === null) {
+    return defaultSchema;
+  }
+  const richTextDataProcessor: RichTextDataProcessor = dataProcessor as RichTextDataProcessor;
+  if (!richTextDataProcessor) {
+    return defaultSchema;
+  }
+
+  return richTextDataProcessor.richTextSchema ?? defaultSchema;
 }
 
 /**
@@ -18,7 +28,7 @@ export const schemaRules: ElementsFilterRuleSetConfiguration = {
   $: (params) => {
     getSchema(params).adjustHierarchy(params.node);
   },
-  "$$": (params) => {
+  $$: (params) => {
     const schema = getSchema(params);
     // The hierarchy may have changed after processing children. Thus, we
     // need to check again.

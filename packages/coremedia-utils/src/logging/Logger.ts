@@ -24,7 +24,7 @@ export default interface Logger {
    *
    * @param data data to log, such as a message and some objects.
    */
-  debug(...data: any[]): void;
+  debug(...data: unknown[]): void;
 
   /**
    * Check, if info logging or below is enabled.
@@ -38,7 +38,7 @@ export default interface Logger {
    *
    * @param data data to log, such as a message and some objects.
    */
-  info(...data: any[]): void;
+  info(...data: unknown[]): void;
 
   /**
    * Check, if warn logging or below is enabled.
@@ -52,7 +52,7 @@ export default interface Logger {
    *
    * @param data data to log, such as a message and some objects.
    */
-  warn(...data: any[]): void;
+  warn(...data: unknown[]): void;
 
   /**
    * Check, if error logging or below is enabled.
@@ -66,7 +66,7 @@ export default interface Logger {
    *
    * @param data data to log, such as a message and some objects.
    */
-  error(...data: any[]): void;
+  error(...data: unknown[]): void;
 
   /**
    * Check, if logging is enabled in general.
@@ -81,5 +81,5 @@ export default interface Logger {
    *
    * @param data data to log, such as a message and some objects.
    */
-  log(...data: any[]): void;
+  log(...data: unknown[]): void;
 }

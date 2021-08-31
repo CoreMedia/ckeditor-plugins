@@ -1,23 +1,16 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
-//@ts-ignore
 import DropdownView from "@ckeditor/ckeditor5-ui/src/dropdown/dropdownview";
-//@ts-ignore
-import ToolbarView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarview";
-//@ts-ignore
-import { createDropdown, addListToDropdown } from "@ckeditor/ckeditor5-ui/src/dropdown/utils";
+import { addListToDropdown } from "@ckeditor/ckeditor5-ui/src/dropdown/utils";
 import { createLabeledInputText, createLabeledDropdown } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 
-//@ts-ignore
 import Model from "@ckeditor/ckeditor5-ui/src/model";
-//@ts-ignore
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 import { getLinkBehaviorLabels, LINK_BEHAVIOR } from "../../utils";
-//@ts-ignore
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 /**
  * Extends the LinkFormView of the CKEditor Link Plugin by additional form
@@ -26,8 +19,8 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 export default class LinkFormViewExtension {
   readonly locale: Locale;
   readonly linkFormView: LinkFormView;
-  readonly linkBehaviorView: LabeledFieldView<InputTextView>;
-  readonly targetInputView: LabeledFieldView<DropdownView>;
+  readonly linkBehaviorView: LabeledFieldView<DropdownView>;
+  readonly targetInputView: LabeledFieldView<InputTextView>;
 
   constructor(linkFormView: LinkFormView) {
     this.linkFormView = linkFormView;
@@ -47,7 +40,7 @@ export default class LinkFormViewExtension {
     this.#renderAfter(this.linkBehaviorView, this.linkFormView.urlInputView);
   }
 
-  #renderAfter(view: View, after: View) {
+  #renderAfter(view: View, after: View): void {
     this.linkFormView.registerChild(view);
     if (!view.isRendered) {
       view.render();
@@ -79,7 +72,7 @@ export default class LinkFormViewExtension {
         return isEnabled ? value : "";
       });
 
-    labeledInput.fieldView.on("input", (evt: any) => {
+    labeledInput.fieldView.on("input", (evt: EventInfo) => {
       labeledInput.set({
         hiddenTarget: evt.source.element.value,
       });
@@ -104,24 +97,26 @@ export default class LinkFormViewExtension {
       tooltip: t("Link Behavior"),
     });
 
-    linkBehaviorDropdown.fieldView.buttonView.bind("label").to(linkBehaviorDropdown, "linkBehavior", (value: any) => {
-      return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB];
-    });
+    linkBehaviorDropdown.fieldView.buttonView
+      .bind("label")
+      .to(linkBehaviorDropdown, "linkBehavior", (value: string) => {
+        return linkBehaviorLabels[value ? value : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB];
+      });
 
-    linkBehaviorDropdown.fieldView.on("execute", (evt: any) => {
+    linkBehaviorDropdown.fieldView.on("execute", (evt: EventInfo) => {
       linkBehaviorDropdown.set({
         linkBehavior: evt.source._linkBehaviorValue,
       });
     });
 
-    linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: any) => !value);
+    linkBehaviorDropdown.bind("isEmpty").to(linkBehaviorDropdown, "linkBehavior", (value: string) => !value);
     linkBehaviorDropdown.fieldView.bind("value").to(linkBehaviorDropdown, "linkBehavior");
     addListToDropdown(linkBehaviorDropdown.fieldView, this.#getLinkBehaviorDefinitions(this));
 
     return linkBehaviorDropdown;
   }
 
-  #getLinkBehaviorDefinitions = (view: any) => {
+  #getLinkBehaviorDefinitions = (view: LinkFormViewExtension): Collection => {
     const itemDefinitions = new Collection();
     const linkBehaviorLabels = getLinkBehaviorLabels(view.locale.t);
 

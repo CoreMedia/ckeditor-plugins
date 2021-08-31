@@ -48,6 +48,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * </p>
    */
   public readonly parentRule: TextFilterRule = () => {
+    return undefined;
   };
 
   /**
@@ -58,7 +59,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * @param mutable signals, if this proxy should be mutable; trying to modify
    * an immutable proxy will raise an error.
    */
-  constructor(delegate: Text, editor: Editor, mutable: boolean = true) {
+  constructor(delegate: Text, editor: Editor, mutable = true) {
     super(delegate, mutable);
     this.editor = editor;
   }

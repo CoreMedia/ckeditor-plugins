@@ -1,9 +1,9 @@
 import WorkAreaService from "@coremedia/coremedia-studio-integration/content/studioservices/WorkAreaService";
 
 class MockWorkAreaService implements WorkAreaService {
-  openEntitiesInTabs(entities: Array<any>, background = false, options: any = null): Promise<any> {
+  openEntitiesInTabs(entities: Array<unknown>): Promise<unknown> {
     return new Promise((resolve: (resolve: { success: boolean }) => void): void => {
-      entities = entities.map((entity: any): any => {
+      entities = entities.map((entity: unknown): unknown => {
         const node: Element = document.createElement("DIV");
         node.classList.add("notification");
         const textnode: Text = document.createTextNode(`Open Content ${entity} in Studio Tab`);
@@ -18,7 +18,7 @@ class MockWorkAreaService implements WorkAreaService {
       resolve({ success: true });
     });
   }
-  canBeOpenedInTab(entityUris: any[]): Promise<any> {
+  canBeOpenedInTab(): Promise<unknown> {
     throw new Error("Method not implemented.");
   }
   getName(): string {
