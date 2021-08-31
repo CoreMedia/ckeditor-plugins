@@ -343,7 +343,7 @@ external sources.
 
 <!-- ======================================================== [ References ] -->
 
-[Top]: <#_top>
+[Top]: <#top>
 
 [cke5:docs:link:feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/link.html> "Link - CKEditor 5 Documentation"
 
