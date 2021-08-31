@@ -67,7 +67,7 @@ class ContentLinkFormViewExtension extends Plugin {
       formView,
       "submit",
       () => {
-        const contentLinksProperties = formView as unknown as ContentLinkFormViewPropertyAccessor;
+        const contentLinksProperties = formView as ContentLinkFormViewPropertyAccessor;
         if (!!contentLinksProperties.contentUriPath && typeof contentLinksProperties.contentName === "string") {
           contentLinkCommandHook.registerContentName(
             contentLinksProperties.contentUriPath,

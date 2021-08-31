@@ -246,8 +246,8 @@ export const createDecoratorHook = (
   options?: { priority?: number | PriorityString }
 ): void => {
   if (
-    !(methodParentCmp as unknown as DecorableCmp)["_events"] ||
-    !(methodParentCmp as unknown as DecorableCmp)["_events"].hasOwnProperty(methodName)
+    !(methodParentCmp as DecorableCmp)["_events"] ||
+    !(methodParentCmp as DecorableCmp)["_events"].hasOwnProperty(methodName)
   ) {
     methodParentCmp.decorate(methodName);
   }
@@ -255,6 +255,6 @@ export const createDecoratorHook = (
   listenerCmp.listenTo(methodParentCmp, methodName, callback, options);
 };
 
-interface DecorableCmp {
+interface DecorableCmp extends Observable {
   _events: Array<unknown>;
 }

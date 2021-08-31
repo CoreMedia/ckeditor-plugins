@@ -94,8 +94,7 @@ export default class LinkTargetUI extends Plugin {
       () => {
         const { value: target } = <HTMLInputElement>extension.targetInputView.fieldView.element;
         const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-        const linkBehavior: string = (extension.linkBehaviorView as unknown as LinkBehaviorViewPropertyAccessor)
-          .linkBehavior;
+        const linkBehavior: string = (extension.linkBehaviorView as LinkBehaviorViewPropertyAccessor).linkBehavior;
         const linkTarget = uiValuesToLinkTarget(linkBehavior, target);
         editor.execute("linkTarget", linkTarget, href);
       },
@@ -128,10 +127,10 @@ export default class LinkTargetUI extends Plugin {
         }
         const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
         const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
-        (extension.linkBehaviorView as unknown as LinkBehaviorViewPropertyAccessor).linkBehavior = href
+        (extension.linkBehaviorView as LinkBehaviorViewPropertyAccessor).linkBehavior = href
           ? linkBehavior || ""
           : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
-        (extension.linkBehaviorView as unknown as TargetInputViewPropertyAccessor).hiddenTarget = target || "";
+        (extension.linkBehaviorView as TargetInputViewPropertyAccessor).hiddenTarget = target || "";
       },
       this
     );
