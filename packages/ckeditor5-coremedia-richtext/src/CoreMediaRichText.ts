@@ -14,14 +14,15 @@ export default class CoreMediaRichText extends Plugin {
   }
 
   init(): Promise<void> | null {
-    const logger = CoreMediaRichText.#logger;
     const startTimestamp = performance.now();
 
     CoreMediaRichText.#logger.info(`Initializing ${CoreMediaRichText.pluginName}...`);
 
     this.editor.data.processor = new RichTextDataProcessor(this.editor);
 
-    logger.info(`Initialized ${CoreMediaRichText.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    CoreMediaRichText.#logger.info(
+      `Initialized ${CoreMediaRichText.pluginName} within ${performance.now() - startTimestamp} ms.`
+    );
 
     return null;
   }
