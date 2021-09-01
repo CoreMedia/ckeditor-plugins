@@ -14,7 +14,7 @@ The Content-Link Feature adds transparent support to
 
 [Integration]: <#integration>
 
-[[Top][]|[Integration][]|[RichText][]]
+[[Top][]|[Integration][]|[Design][]|[RichText][]]
 
 ```typescript
 import LinkTarget from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
@@ -33,13 +33,39 @@ ClassicEditor
 
 **Essentials Plugin:** This Plugin is part of CoreMedia Essentials Plugin.
 
+## Design
+
+[Design]: <#design>
+
+[[Top][]|[Integration][]|[Design][]|[RichText][]]
+
+### Representation for Root-Folder
+
+While in general it is expected, that folders are not allowed to be referenced
+within standard RichText properties, clients like Studio-Client can be
+configured, to allow links to folders — including the root folder.
+
+The root-folder, though, is the only content, which has/may have an empty name,
+which again provides a challenge when a name is required for editing purpose.
+
+In context of the Content-Links feature, we decided:
+
+* To use an artificial name/placeholder `<root>` when a name has to be written
+  to the text (on drag and drop or for creating links for a collapsed selection)
+  .
+* To display an empty name in preview scenarios (`LinkActionsView`,
+  `LinkFormView`).
+
+If we experience the need to officially support links to root-folder these
+decisions are subject to change.
+
 ## CoreMedia RichText 1.0 Integration
 
 [CoreMedia RichText 1.0 Integration]: <#coremedia-richtext-10-integration>
 
 [RichText]: <#coremedia-richtext-10-integration>
 
-[[Top][]|[Integration][]|[RichText][]]
+[[Top][]|[Integration][]|[Design][]|[RichText][]]
 
 For easier integration with [CKEditor's Link Feature][cke5:docs:link:feature] it
 is required, that content-links are represented in `href` attribute with
