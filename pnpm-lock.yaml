@@ -117,9 +117,9 @@ importers:
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-dataprocessor-support': 28.1.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -154,9 +154,9 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
@@ -195,12 +195,12 @@ importers:
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-richtext': 28.1.0
       '@coremedia/ckeditor5-link': 28.4.0
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-link': ^28.0.0
-      '@types/ckeditor__ckeditor5-typing': ^28.0.0
-      '@types/ckeditor__ckeditor5-ui': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-link': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-typing': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-ui': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -239,12 +239,12 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
-      '@types/ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
-      '@types/ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
-      '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
+      '@coremedia/types-ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
+      '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
@@ -280,9 +280,9 @@ importers:
       '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': 28.0.0
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -316,9 +316,9 @@ importers:
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
@@ -358,12 +358,12 @@ importers:
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
       '@coremedia/studio-apps-service-agent': ^0.0.30
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-link': ^28.0.0
-      '@types/ckeditor__ckeditor5-typing': ^28.0.0
-      '@types/ckeditor__ckeditor5-ui': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-link': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-typing': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-ui': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -405,12 +405,12 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
-      '@types/ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
-      '@types/ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
-      '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
+      '@coremedia/types-ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
+      '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
@@ -463,11 +463,11 @@ importers:
       '@ckeditor/ckeditor5-ui': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@types/ckeditor__ckeditor5-clipboard': 28.0.0
-      '@types/ckeditor__ckeditor5-core': 28.0.0
-      '@types/ckeditor__ckeditor5-engine': 28.0.0
-      '@types/ckeditor__ckeditor5-paste-from-office': 28.0.0
-      '@types/ckeditor__ckeditor5-utils': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-paste-from-office': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': 28.0.0
       '@types/jest': ^26.0.20
       '@types/webpack': ^4.41.25
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -523,11 +523,11 @@ importers:
       '@ckeditor/ckeditor5-table': 28.0.0
       '@ckeditor/ckeditor5-theme-lark': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@types/ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
-      '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-paste-from-office': link:../../types/ckeditor__ckeditor5-paste-from-office
-      '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-paste-from-office': link:../../types/ckeditor__ckeditor5-paste-from-office
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.23
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
       '@typescript-eslint/parser': 4.28.1_eslint@7.29.0+typescript@4.3.5
@@ -624,8 +624,8 @@ importers:
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
       '@coremedia/studio-apps-service-agent': ^0.0.30
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -662,8 +662,8 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
@@ -749,73 +749,73 @@ importers:
 
   types/ckeditor__ckeditor5-clipboard:
     specifiers:
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
 
   types/ckeditor__ckeditor5-core:
     specifiers:
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
 
   types/ckeditor__ckeditor5-editor-classic:
     specifiers:
-      '@types/ckeditor__ckeditor5-core': 28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': 28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
 
   types/ckeditor__ckeditor5-engine:
     specifiers:
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
 
   types/ckeditor__ckeditor5-link:
     specifiers:
-      '@types/ckeditor__ckeditor5-clipboard': ^28.0.0
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-typing': ^28.0.0
-      '@types/ckeditor__ckeditor5-ui': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-typing': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-ui': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
-      '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-typing': link:../ckeditor__ckeditor5-typing
-      '@types/ckeditor__ckeditor5-ui': link:../ckeditor__ckeditor5-ui
-      '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-typing': link:../ckeditor__ckeditor5-typing
+      '@coremedia/types-ckeditor__ckeditor5-ui': link:../ckeditor__ckeditor5-ui
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
 
   types/ckeditor__ckeditor5-paste-from-office:
     specifiers:
-      '@types/ckeditor__ckeditor5-clipboard': ^28.0.0
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
-      '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
 
   types/ckeditor__ckeditor5-typing:
     specifiers:
-      '@types/ckeditor__ckeditor5-core': ^28.0.0
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
 
   types/ckeditor__ckeditor5-ui:
     specifiers:
-      '@types/ckeditor__ckeditor5-engine': ^28.0.0
-      '@types/ckeditor__ckeditor5-ui': ^28.0.0
-      '@types/ckeditor__ckeditor5-utils': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-ui': ^28.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
-      '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@types/ckeditor__ckeditor5-ui': 'link:'
-      '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-ui': 'link:'
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
 
   types/ckeditor__ckeditor5-utils:
     specifiers: {}
