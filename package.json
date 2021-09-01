@@ -23,7 +23,6 @@
     "type": "git"
   },
   "license": "MIT",
-  "private": true,
   "workspaces": [
     "types/*",
     "packages/coremedia-utils",
