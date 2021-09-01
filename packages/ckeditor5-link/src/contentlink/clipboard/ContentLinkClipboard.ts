@@ -63,14 +63,10 @@ export default class ContentLinkClipboard extends Plugin {
       }
 
       const cmDataUris = ContentLinkClipboard.#extractContentUris(data);
-      const normalLink = ContentLinkClipboard.#extractNormalLinks(data);
 
-      if (logger.isDebugEnabled()) {
-        logger.debug("Content links dropped.", {
-          dataUris: JSON.stringify(cmDataUris),
-          links: JSON.stringify(normalLink),
-        });
-      }
+      logger.debug("Content links dropped.", {
+        dataUris: cmDataUris,
+      });
 
       if (cmDataUris) {
         //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
@@ -93,11 +89,6 @@ export default class ContentLinkClipboard extends Plugin {
 
         return;
       }
-      if (normalLink) {
-        const dropCondition: DropCondition = ContentLinkClipboard.#createDropCondition(editor, data, [normalLink]);
-        ContentLinkClipboard.#writeLinkInline(editor, normalLink, normalLink, dropCondition);
-        evt.stop();
-      }
     });
 
     this.listenTo(viewDocument, "dragover", (evt: EventInfo, data) => {
@@ -118,20 +109,6 @@ export default class ContentLinkClipboard extends Plugin {
         evt.stop();
       }
     });
-  }
-
-  /**
-   * Extract normal links in clipboard. Such links are stored in `text/uri-list`
-   * as specified by [RFC 2483, Section 5](https://datatracker.ietf.org/doc/html/rfc2483#section-5).
-   * Such links may be dropped for example from browser's location bar.
-   *
-   * @param data clipboard data to parse
-   * @private
-   * @see {@link https://github.com/ckeditor/ckeditor5/issues/10464 ckeditor/ckeditor5#10464}
-   */
-  static #extractNormalLinks(data: ClipboardEventData): string | null {
-    // TODO[cke] Implementation is too naive, according possible content
-    return data.dataTransfer.getData("text/uri-list") || null;
   }
 
   /**
