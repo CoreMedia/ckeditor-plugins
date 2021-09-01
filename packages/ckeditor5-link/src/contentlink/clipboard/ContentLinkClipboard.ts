@@ -19,6 +19,7 @@ import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import { DropCondition } from "./DropCondition";
 import { ContentLinkData } from "./ContentLinkData";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
+import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 
 /**
  * Provides support for dragging contents directly into the text. The name of
@@ -35,8 +36,7 @@ export default class ContentLinkClipboard extends Plugin {
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    // TODO[cke] We should depend explicitly on CKEditor's Clipboard plugin than just implicitly (by relying on someone proving some clipboardInput event).
-    return [];
+    return [Clipboard];
   }
 
   init(): Promise<void> | null {
