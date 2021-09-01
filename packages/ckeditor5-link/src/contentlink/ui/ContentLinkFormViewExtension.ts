@@ -8,8 +8,8 @@ import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integr
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import {
   extractContentCkeModelUri,
-  extractContentUriPath,
-  receiveUriPathFromDragData,
+  extractContentUriPaths,
+  receiveUriPathsFromDragDropService,
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkView from "./ContentLinkView";
@@ -166,7 +166,7 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
-    const contentUriPaths: Array<string> | null = extractContentUriPath(dragEvent);
+    const contentUriPaths: Array<string> | null = extractContentUriPaths(dragEvent);
     if (contentUriPaths) {
       DragDropAsyncSupport.resetIsLinkableMap();
     }
@@ -229,7 +229,7 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const contentUriPaths: Array<string> | null = receiveUriPathFromDragData();
+    const contentUriPaths: Array<string> | null = receiveUriPathsFromDragDropService();
 
     if (!contentUriPaths) {
       logger.debug(

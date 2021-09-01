@@ -1,8 +1,8 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import {
-  extractContentUriFromDragEventJsonData,
-  receiveUriPathFromDragData,
+  extractContentUriPathsFromDragEventJsonData,
+  receiveUriPathsFromDragDropService,
 } from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
@@ -97,7 +97,7 @@ export default class ContentLinkClipboard extends Plugin {
       if (data.content) {
         return;
       }
-      const cmDataUris = receiveUriPathFromDragData();
+      const cmDataUris = receiveUriPathsFromDragDropService();
       if (!cmDataUris) {
         return;
       }
@@ -130,7 +130,7 @@ export default class ContentLinkClipboard extends Plugin {
     if (!cmUriList) {
       return null;
     }
-    return extractContentUriFromDragEventJsonData(cmUriList);
+    return extractContentUriPathsFromDragEventJsonData(cmUriList);
   }
 
   static #makeContentNameRequests(
