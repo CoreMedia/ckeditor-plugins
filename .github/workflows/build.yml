@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: github.actor != 'coremedia-ci' && github.actor != 'github-action[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Configure NPM
+        run: |
+          npm install -g pnpm
+          npm config set @coremedia:registry=https://npm.coremedia.io
+      - name: Setup Git
+        run: |
+          git config --global user.name 'coremedia-ci'
+          git config --global user.email 'coremedia-ci@coremedia.com'
+      - name: Set Version for PR
+        if: github.event_name == 'pull_request'
+        run: npm version prerelease --preid=pr${{ github.event.number }}-${{ github.run_number }} --no-git-tag-version
+      - name: Create Release Version
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+        run: |
+          npm version patch
+          git push
+      - name: Read Version
+        id: read-version
+        run: |
+          release_version=$(cat package.json | jq -r .version)
+          echo "::set-output name=version::${release_version}"
+      - name: Require Prerelease Version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(steps.read-version.outputs.version, '-')
+        run: |
+          echo "Expected prerelease version on main"
+          exit 1
+      - name: Install
+        run: pnpm install
+      - name: Build
+        run: pnpm build
+      - name: Lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm test
+      - name: Install for Production
+        run: pnpm install --production
+      - name: Publish
+        run: pnpm publish
+      - name: Create Next Prerelease Version
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: |
+          npm version prerelease --preid=rc
+          git push
