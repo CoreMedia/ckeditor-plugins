@@ -39,7 +39,7 @@
   ],
   "scripts": {
     "bootstrap": "pnpm install",
-    "publish": "pnpm -r run publish",
+    "publish": "pnpm -r run publishpkg",
     "clean": "pnpm -r clean && rimraf ./dist",
     "build": "pnpm -r build",
     "jest": "pnpm -r jest",

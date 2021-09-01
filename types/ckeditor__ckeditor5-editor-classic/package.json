@@ -2,15 +2,11 @@
   "name": "@types/ckeditor__ckeditor5-editor-classic",
   "version": "28.0.0",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "@types/ckeditor__ckeditor5-core": "28.0.0"
   },
-  "devDependencies": {
-    "@jangaroo/publish":"^1.0.0-alpha"
-  },
   "scripts": {
-    "publish": "jangaroo publish ./",
+    "publishpkg": "npm publish",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

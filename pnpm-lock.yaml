@@ -117,8 +117,6 @@ importers:
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-dataprocessor-support': 28.1.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
       '@types/ckeditor__ckeditor5-utils': ^28.0.0
@@ -156,8 +154,6 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
@@ -199,8 +195,6 @@ importers:
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-richtext': 28.1.0
       '@coremedia/ckeditor5-link': 28.4.0
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
       '@types/ckeditor__ckeditor5-link': ^28.0.0
@@ -245,8 +239,6 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@types/ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
@@ -288,8 +280,6 @@ importers:
       '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
       '@types/ckeditor__ckeditor5-utils': 28.0.0
@@ -326,8 +316,6 @@ importers:
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@types/ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
@@ -370,8 +358,6 @@ importers:
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
       '@coremedia/studio-apps-service-agent': ^0.0.30
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
       '@types/ckeditor__ckeditor5-link': ^28.0.0
@@ -419,8 +405,6 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@types/ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
@@ -479,8 +463,6 @@ importers:
       '@ckeditor/ckeditor5-ui': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-clipboard': 28.0.0
       '@types/ckeditor__ckeditor5-core': 28.0.0
       '@types/ckeditor__ckeditor5-engine': 28.0.0
@@ -541,8 +523,6 @@ importers:
       '@ckeditor/ckeditor5-table': 28.0.0
       '@ckeditor/ckeditor5-theme-lark': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
       '@types/ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
@@ -576,8 +556,6 @@ importers:
       '@babel/preset-typescript': ^7.12.7
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/studio-apps-service-agent': ^0.0.30
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -611,8 +589,6 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/jest': 26.0.23
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
@@ -719,8 +695,6 @@ importers:
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
       '@coremedia-internal/jest-test-helpers': ^1.0.0
-      '@jangaroo/core': ^1.0.0-alpha
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/jest': ^26.0.20
       '@typescript-eslint/eslint-plugin': ^4.12.0
       '@typescript-eslint/parser': ^4.12.0
@@ -752,8 +726,6 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@jangaroo/core': 1.0.0-alpha.17
-      '@jangaroo/publish': 1.0.0-alpha.17
       '@types/jest': 26.0.23
       '@typescript-eslint/eslint-plugin': 4.28.1_3b707c2a5a0917891f3a39746f7412f0
       '@typescript-eslint/parser': 4.28.1_eslint@7.29.0+typescript@4.3.5
@@ -777,47 +749,34 @@ importers:
 
   types/ckeditor__ckeditor5-clipboard:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-core:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
       '@types/ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
       '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-editor-classic:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': 28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-engine:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-link:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-clipboard': ^28.0.0
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
@@ -831,34 +790,25 @@ importers:
       '@types/ckeditor__ckeditor5-typing': link:../ckeditor__ckeditor5-typing
       '@types/ckeditor__ckeditor5-ui': link:../ckeditor__ckeditor5-ui
       '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-paste-from-office:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-clipboard': ^28.0.0
       '@types/ckeditor__ckeditor5-core': ^28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
       '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-typing:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-core': ^28.0.0
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-ui:
     specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
       '@types/ckeditor__ckeditor5-ui': ^28.0.0
       '@types/ckeditor__ckeditor5-utils': ^28.0.0
@@ -866,14 +816,9 @@ importers:
       '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
       '@types/ckeditor__ckeditor5-ui': 'link:'
       '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
 
   types/ckeditor__ckeditor5-utils:
-    specifiers:
-      '@jangaroo/publish': ^1.0.0-alpha
-    devDependencies:
-      '@jangaroo/publish': 1.0.0-alpha.17
+    specifiers: {}
 
 packages:
 
@@ -2510,32 +2455,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /@jangaroo/core/1.0.0-alpha.17:
-    resolution: {integrity: sha512-1KihCPFE3jqknrq7i7AugBJtSJ9eDg4hySeK3eg8f5qJTfTNnngdH6Pgz7jCAaajr4CI09+WXvqSrcojCiKUig==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dependencies:
-      dependency-graph: 0.9.0
-      dotenv: 8.6.0
-      find-up: 5.0.0
-      fs-extra: 9.1.0
-      json5: 2.2.0
-      semver: 7.3.5
-      tar-fs: 2.1.1
-      yargs: 16.2.0
-    dev: true
-
-  /@jangaroo/publish/1.0.0-alpha.17:
-    resolution: {integrity: sha512-jo2QZjGRHJ8eWH0qHlHsbLfBg0f7D9LRYRw6Rj2Gz4Y9tY2YBaBW/wNfsAwtB8ShGhMJG8+L++BplviVJqYisg==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@jangaroo/core': 1.0.0-alpha.17
-      json5: 2.2.0
-      libnpmpublish: 4.0.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /@jest/console/27.0.6:
     resolution: {integrity: sha512-fMlIBocSHPZ3JxgWiDNW/KPj6s+YRd0hicb33IrmelCcjXo/pXPwvuiKFmZz+XuqI/1u7nbUK10zSsWL/1aegg==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -3470,17 +3389,6 @@ packages:
       - supports-color
     dev: true
 
-  /agentkeepalive/4.1.4:
-    resolution: {integrity: sha512-+V/rGa3EuU74H6wR04plBb7Ks10FbtUQgRj/FQOG7uUIEuaINI+AiqJR1k6t3SVNs7o7ZjIdus6706qqzVq8jQ==}
-    engines: {node: '>= 8.0.0'}
-    dependencies:
-      debug: 4.3.1
-      depd: 1.1.2
-      humanize-ms: 1.2.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /aggregate-error/3.1.0:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
@@ -4087,14 +3995,6 @@ packages:
     dev: true
     optional: true
 
-  /bl/4.1.0:
-    resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
-    dependencies:
-      buffer: 5.7.1
-      inherits: 2.0.4
-      readable-stream: 3.6.0
-    dev: true
-
   /blob/0.0.5:
     resolution: {integrity: sha512-gaqbzQPqOoamawKg0LGVd7SzLgXS+JH61oWprSLH+P+abTczqJbhTR8CmJ2u9/bUYNmHTGJx/UEmn6doAvvuig==}
     dev: true
@@ -4260,19 +4160,8 @@ packages:
       isarray: 1.0.0
     dev: true
 
-  /buffer/5.7.1:
-    resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
-    dependencies:
-      base64-js: 1.5.1
-      ieee754: 1.2.1
-    dev: true
-
   /builtin-status-codes/3.0.0:
     resolution: {integrity: sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=}
-    dev: true
-
-  /builtins/1.0.3:
-    resolution: {integrity: sha1-y5T662HIaWRR2zZTThQi+U8K7og=}
     dev: true
 
   /bytes/3.1.0:
@@ -5252,11 +5141,6 @@ packages:
     engines: {node: '>= 0.6'}
     dev: true
 
-  /dependency-graph/0.9.0:
-    resolution: {integrity: sha512-9YLIBURXj4DJMFALxXw9K3Y3rwb5Fk0X5/8ipCzaN84+gKxoHK43tVKRNakCQbiEx07E8Uwhuq21BpUagFhZ8w==}
-    engines: {node: '>= 0.6.0'}
-    dev: true
-
   /deps-regex/0.1.4:
     resolution: {integrity: sha1-UYZnt2kUYKXn4KNBvnbrfOgJAYQ=}
     dev: true
@@ -5392,11 +5276,6 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /dotenv/8.6.0:
-    resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
-    engines: {node: '>=10'}
-    dev: true
-
   /duplexify/3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
     dependencies:
@@ -5453,13 +5332,6 @@ packages:
     resolution: {integrity: sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=}
     engines: {node: '>= 0.8'}
     dev: true
-
-  /encoding/0.1.13:
-    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
-    dependencies:
-      iconv-lite: 0.6.3
-    dev: true
-    optional: true
 
   /end-of-stream/1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
@@ -5550,10 +5422,6 @@ packages:
     resolution: {integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==}
     engines: {node: '>=4'}
     hasBin: true
-
-  /err-code/2.0.3:
-    resolution: {integrity: sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA==}
-    dev: true
 
   /errno/0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
@@ -6041,14 +5909,6 @@ packages:
       locate-path: 5.0.0
       path-exists: 4.0.0
 
-  /find-up/5.0.0:
-    resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
-    engines: {node: '>=10'}
-    dependencies:
-      locate-path: 6.0.0
-      path-exists: 4.0.0
-    dev: true
-
   /flat-cache/3.0.4:
     resolution: {integrity: sha512-dm9s5Pw7Jc0GvMYbshN6zchCA9RgQlzzEZX3vylR9IqFfS8XciblUXOKfW6SiuJ0e13eDYZoZV5wdrev7P3Nwg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -6128,10 +5988,6 @@ packages:
     dependencies:
       inherits: 2.0.4
       readable-stream: 2.3.7
-    dev: true
-
-  /fs-constants/1.0.0:
-    resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
     dev: true
 
   /fs-extra/8.1.0:
@@ -6495,13 +6351,6 @@ packages:
       os-tmpdir: 1.0.2
     dev: true
 
-  /hosted-git-info/4.0.2:
-    resolution: {integrity: sha512-c9OGXbZ3guC/xOlCg1Ci/VgWlwsqDv1yMQL1CWqXDL0hDjXuNcq0zuR4xqPSuasI3kqFDhqSyTjREz5gzq0fXg==}
-    engines: {node: '>=10'}
-    dependencies:
-      lru-cache: 6.0.0
-    dev: true
-
   /hsl-regex/1.0.0:
     resolution: {integrity: sha1-1JMwx4ntgZ4nakwNJy3/owsY/m4=}
     dev: true
@@ -6519,10 +6368,6 @@ packages:
 
   /html-escaper/2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
-    dev: true
-
-  /http-cache-semantics/4.1.0:
-    resolution: {integrity: sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==}
     dev: true
 
   /http-errors/1.7.2:
@@ -6585,26 +6430,12 @@ packages:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
 
-  /humanize-ms/1.2.1:
-    resolution: {integrity: sha1-xG4xWaKT9riW2ikxbYtv6Lt5u+0=}
-    dependencies:
-      ms: 2.1.3
-    dev: true
-
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
     dev: true
-
-  /iconv-lite/0.6.3:
-    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      safer-buffer: 2.1.2
-    dev: true
-    optional: true
 
   /icss-replace-symbols/1.1.0:
     resolution: {integrity: sha1-Bupvg2ead0njhs/h/oEq5dsiPe0=}
@@ -6739,10 +6570,6 @@ packages:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
     dependencies:
       loose-envify: 1.4.0
-    dev: true
-
-  /ip/1.1.5:
-    resolution: {integrity: sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=}
     dev: true
 
   /is-absolute-url/2.1.0:
@@ -6932,10 +6759,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       is-extglob: 2.1.1
-    dev: true
-
-  /is-lambda/1.0.1:
-    resolution: {integrity: sha1-PZh3iZ5qU+/AFgUEzeFfgubwYdU=}
     dev: true
 
   /is-negative-zero/2.0.1:
@@ -7795,11 +7618,6 @@ packages:
       graceful-fs: 4.2.6
     dev: true
 
-  /jsonparse/1.3.1:
-    resolution: {integrity: sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=}
-    engines: {'0': node >= 0.2.0}
-    dev: true
-
   /jsprim/1.4.1:
     resolution: {integrity: sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=}
     engines: {'0': node >=0.6.0}
@@ -8000,19 +7818,6 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /libnpmpublish/4.0.2:
-    resolution: {integrity: sha512-+AD7A2zbVeGRCFI2aO//oUmapCwy7GHqPXFJh3qpToSRNU+tXKJ2YFUgjt04LPPAf2dlEH95s6EhIHM1J7bmOw==}
-    engines: {node: '>=10'}
-    dependencies:
-      normalize-package-data: 3.0.2
-      npm-package-arg: 8.1.5
-      npm-registry-fetch: 11.0.0
-      semver: 7.3.5
-      ssri: 8.0.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /lines-and-columns/1.1.6:
     resolution: {integrity: sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=}
     dev: true
@@ -8056,13 +7861,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       p-locate: 4.1.0
-
-  /locate-path/6.0.0:
-    resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
-    engines: {node: '>=10'}
-    dependencies:
-      p-locate: 5.0.0
-    dev: true
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
@@ -8169,30 +7967,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       semver: 6.3.0
-
-  /make-fetch-happen/9.0.3:
-    resolution: {integrity: sha512-uZ/9Cf2vKqsSWZyXhZ9wHHyckBrkntgbnqV68Bfe8zZenlf7D6yuGMXvHZQ+jSnzPkjosuNP1HGasj1J4h8OlQ==}
-    engines: {node: '>= 10'}
-    dependencies:
-      agentkeepalive: 4.1.4
-      cacache: 15.2.0
-      http-cache-semantics: 4.1.0
-      http-proxy-agent: 4.0.1
-      https-proxy-agent: 5.0.0
-      is-lambda: 1.0.1
-      lru-cache: 6.0.0
-      minipass: 3.1.3
-      minipass-collect: 1.0.2
-      minipass-fetch: 1.3.3
-      minipass-flush: 1.0.5
-      minipass-pipeline: 1.2.4
-      negotiator: 0.6.2
-      promise-retry: 2.0.1
-      socks-proxy-agent: 5.0.1
-      ssri: 8.0.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
 
   /makeerror/1.0.11:
     resolution: {integrity: sha1-4BpckQnyr3lmDk6LlYd5AYT1qWw=}
@@ -8345,17 +8119,6 @@ packages:
       minipass: 3.1.3
     dev: true
 
-  /minipass-fetch/1.3.3:
-    resolution: {integrity: sha512-akCrLDWfbdAWkMLBxJEeWTdNsjML+dt5YgOI4gJ53vuO0vrmYQkUPxa6j6V65s9CcePIr2SSWqjT2EcrNseryQ==}
-    engines: {node: '>=8'}
-    dependencies:
-      minipass: 3.1.3
-      minipass-sized: 1.0.3
-      minizlib: 2.1.2
-    optionalDependencies:
-      encoding: 0.1.13
-    dev: true
-
   /minipass-flush/1.0.5:
     resolution: {integrity: sha512-JmQSYYpPUqX5Jyn1mXaRwOda1uQ8HP5KAT/oDSLCzt1BYRhQU0/hDtsB1ufZfEEzMZ9aAVmsBw8+FWsIXlClWw==}
     engines: {node: '>= 8'}
@@ -8363,22 +8126,8 @@ packages:
       minipass: 3.1.3
     dev: true
 
-  /minipass-json-stream/1.0.1:
-    resolution: {integrity: sha512-ODqY18UZt/I8k+b7rl2AENgbWE8IDYam+undIJONvigAz8KR5GWblsFTEfQs0WODsjbSXWlm+JHEv8Gr6Tfdbg==}
-    dependencies:
-      jsonparse: 1.3.1
-      minipass: 3.1.3
-    dev: true
-
   /minipass-pipeline/1.2.4:
     resolution: {integrity: sha512-xuIq7cIOt09RPRJ19gdi4b+RiNvDFYe5JH+ggNvBqGqpQXcru3PcRmOZuHBKWK1Txf9+cQ+HMVN4d6z46LZP7A==}
-    engines: {node: '>=8'}
-    dependencies:
-      minipass: 3.1.3
-    dev: true
-
-  /minipass-sized/1.0.3:
-    resolution: {integrity: sha512-MbkQQ2CTiBMlA2Dm/5cY+9SWFEN8pzzOXi6rlM5Xxq0Yqbda5ZQy9sU75a673FE9ZK0Zsbr6Y5iP6u9nktfg2g==}
     engines: {node: '>=8'}
     dependencies:
       minipass: 3.1.3
@@ -8421,10 +8170,6 @@ packages:
     dependencies:
       for-in: 1.0.2
       is-extendable: 1.0.1
-    dev: true
-
-  /mkdirp-classic/0.5.3:
-    resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     dev: true
 
   /mkdirp/0.5.5:
@@ -8612,16 +8357,6 @@ packages:
       readable-stream: 1.0.34
     dev: true
 
-  /normalize-package-data/3.0.2:
-    resolution: {integrity: sha512-6CdZocmfGaKnIHPVFhJJZ3GuR8SsLKvDANFp47Jmy51aKIr8akjAWTSxtpI+MBgBFdSMRyo4hMpDlT6dTffgZg==}
-    engines: {node: '>=10'}
-    dependencies:
-      hosted-git-info: 4.0.2
-      resolve: 1.20.0
-      semver: 7.3.5
-      validate-npm-package-license: 3.0.4
-    dev: true
-
   /normalize-path/2.1.1:
     resolution: {integrity: sha1-GrKLVW4Zg2Oowab35vogE3/mrtk=}
     engines: {node: '>=0.10.0'}
@@ -8637,29 +8372,6 @@ packages:
   /normalize-url/3.3.0:
     resolution: {integrity: sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==}
     engines: {node: '>=6'}
-    dev: true
-
-  /npm-package-arg/8.1.5:
-    resolution: {integrity: sha512-LhgZrg0n0VgvzVdSm1oiZworPbTxYHUJCgtsJW8mGvlDpxTM1vSJc3m5QZeUkhAHIzbz3VCHd/R4osi1L1Tg/Q==}
-    engines: {node: '>=10'}
-    dependencies:
-      hosted-git-info: 4.0.2
-      semver: 7.3.5
-      validate-npm-package-name: 3.0.0
-    dev: true
-
-  /npm-registry-fetch/11.0.0:
-    resolution: {integrity: sha512-jmlgSxoDNuhAtxUIG6pVwwtz840i994dL14FoNVZisrmZW5kWd63IUTNv1m/hyRSGSqWjCUp/YZlS1BJyNp9XA==}
-    engines: {node: '>=10'}
-    dependencies:
-      make-fetch-happen: 9.0.3
-      minipass: 3.1.3
-      minipass-fetch: 1.3.3
-      minipass-json-stream: 1.0.1
-      minizlib: 2.1.2
-      npm-package-arg: 8.1.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /npm-run-path/4.0.1:
@@ -8843,13 +8555,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       p-limit: 2.3.0
-
-  /p-locate/5.0.0:
-    resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
-    engines: {node: '>=10'}
-    dependencies:
-      p-limit: 3.1.0
-    dev: true
 
   /p-map/3.0.0:
     resolution: {integrity: sha512-d3qXVTF/s+W+CdJ5A29wywV2n8CQQYahlgz2bFiA+4eVNJbHJodPZ+/gXwPGh0bOqA+j8S+6+ckmvLGPk1QpxQ==}
@@ -9557,14 +9262,6 @@ packages:
     resolution: {integrity: sha1-mEcocL8igTL8vdhoEputEsPAKeM=}
     dev: true
 
-  /promise-retry/2.0.1:
-    resolution: {integrity: sha512-y+WKFlBR8BGXnsNlIHFGPZmyDf3DFMoLhaflAnyZgV6rG6xu+JwesTo2Q9R6XwYmtmwAFCkAk3e35jEdoeh/3g==}
-    engines: {node: '>=10'}
-    dependencies:
-      err-code: 2.0.3
-      retry: 0.12.0
-    dev: true
-
   /prompts/2.4.1:
     resolution: {integrity: sha512-EQyfIuO2hPDsX1L/blblV+H7I0knhgAd82cVneCwcdND9B8AuCDuRcBH6yIcG4dFzlOUqbazQqwGjx5xmsNLuQ==}
     engines: {node: '>= 6'}
@@ -9962,11 +9659,6 @@ packages:
     engines: {node: '>=0.12'}
     dev: true
 
-  /retry/0.12.0:
-    resolution: {integrity: sha1-G0KmJmoh8HQh0bC1S33BZ7AcATs=}
-    engines: {node: '>= 4'}
-    dev: true
-
   /reusify/1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
@@ -10259,11 +9951,6 @@ packages:
       is-fullwidth-code-point: 3.0.0
     dev: true
 
-  /smart-buffer/4.1.0:
-    resolution: {integrity: sha512-iVICrxOzCynf/SNaBQCw34eM9jROU/s5rzIhpOvzhzuYHfJR/DhZfDkXiZSgKXfgv26HT3Yni3AV/DGw0cGnnw==}
-    engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
-    dev: true
-
   /snapdragon-node/2.1.1:
     resolution: {integrity: sha512-O27l4xaMYt/RSQ5TR3vpWCAB5Kb/czIcqUFOM/C4fYcLnbZUc1PkjTAMjof2pBWaSTwOUd6qUHcFGVGj7aIwnw==}
     engines: {node: '>=0.10.0'}
@@ -10347,25 +10034,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /socks-proxy-agent/5.0.1:
-    resolution: {integrity: sha512-vZdmnjb9a2Tz6WEQVIurybSwElwPxMZaIc7PzqbJTrezcKNznv6giT7J7tZDZ1BojVaa1jvO/UiUdhDVB0ACoQ==}
-    engines: {node: '>= 6'}
-    dependencies:
-      agent-base: 6.0.2
-      debug: 4.3.1
-      socks: 2.6.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /socks/2.6.1:
-    resolution: {integrity: sha512-kLQ9N5ucj8uIcxrDwjm0Jsqk06xdpBjGNQtpXy4Q8/QY2k+fY7nZH8CARy+hkbG+SGAovmzzuauCpBlb8FrnBA==}
-    engines: {node: '>= 10.13.0', npm: '>= 3.0.0'}
-    dependencies:
-      ip: 1.1.5
-      smart-buffer: 4.1.0
-    dev: true
-
   /source-list-map/2.0.1:
     resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==}
 
@@ -10414,28 +10082,6 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
-    dev: true
-
-  /spdx-correct/3.1.1:
-    resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}
-    dependencies:
-      spdx-expression-parse: 3.0.1
-      spdx-license-ids: 3.0.9
-    dev: true
-
-  /spdx-exceptions/2.3.0:
-    resolution: {integrity: sha512-/tTrYOC7PPI1nUAgx34hUpqXuyJG+DTHJTnIULG4rDygi4xu/tfgmq1e1cIRwRzwZgo4NLySi+ricLkZkw4i5A==}
-    dev: true
-
-  /spdx-expression-parse/3.0.1:
-    resolution: {integrity: sha512-cbqHunsQWnJNE6KhVSMsMeH5H/L9EpymbzqTQ3uLwNCLZ1Q481oWaofqH7nO6V07xlXwY6PhQdQ2IedWx/ZK4Q==}
-    dependencies:
-      spdx-exceptions: 2.3.0
-      spdx-license-ids: 3.0.9
-    dev: true
-
-  /spdx-license-ids/3.0.9:
-    resolution: {integrity: sha512-Ki212dKK4ogX+xDo4CtOZBVIwhsKBEfsEEcwmJfLQzirgc2jIWdzg40Unxz/HzEUqM1WFzVlQSMF9kZZ2HboLQ==}
     dev: true
 
   /split-string/3.1.0:
@@ -10798,26 +10444,6 @@ packages:
   /tapable/2.2.0:
     resolution: {integrity: sha512-FBk4IesMV1rBxX2tfiK8RAmogtWn53puLOQlvO8XuwlgxcYbP4mVPS9Ph4aeamSyyVjOl24aYWAuc8U5kCVwMw==}
     engines: {node: '>=6'}
-
-  /tar-fs/2.1.1:
-    resolution: {integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==}
-    dependencies:
-      chownr: 1.1.4
-      mkdirp-classic: 0.5.3
-      pump: 3.0.0
-      tar-stream: 2.2.0
-    dev: true
-
-  /tar-stream/2.2.0:
-    resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
-    engines: {node: '>=6'}
-    dependencies:
-      bl: 4.1.0
-      end-of-stream: 1.4.4
-      fs-constants: 1.0.0
-      inherits: 2.0.4
-      readable-stream: 3.6.0
-    dev: true
 
   /tar/6.1.0:
     resolution: {integrity: sha512-DUCttfhsnLCjwoDoFcI+B2iJgYa93vBnDUATYEeRx6sntCTdN01VnqsIuTlALXla/LWooNg0yEGeB+Y8WdFxGA==}
@@ -11334,19 +10960,6 @@ packages:
       '@types/istanbul-lib-coverage': 2.0.3
       convert-source-map: 1.8.0
       source-map: 0.7.3
-    dev: true
-
-  /validate-npm-package-license/3.0.4:
-    resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
-    dependencies:
-      spdx-correct: 3.1.1
-      spdx-expression-parse: 3.0.1
-    dev: true
-
-  /validate-npm-package-name/3.0.0:
-    resolution: {integrity: sha1-X6kS2B630MdK/BQN5zF/DKffQ34=}
-    dependencies:
-      builtins: 1.0.3
     dev: true
 
   /vendors/1.0.4:

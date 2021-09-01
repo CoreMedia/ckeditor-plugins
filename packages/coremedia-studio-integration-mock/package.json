@@ -1,7 +1,6 @@
 {
   "name": "@coremedia/coremedia-studio-integration-mock",
   "version": "28.1.0",
-  "private": true,
   "engines": {
     "node": ">=14.0.0"
   },
@@ -9,6 +8,7 @@
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
+    "publishpkg": "npm publish",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "lint": "eslint --fix \"src/**\"",
