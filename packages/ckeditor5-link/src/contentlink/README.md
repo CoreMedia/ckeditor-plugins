@@ -8,6 +8,7 @@ The Content-Link Feature adds transparent support to
 `LinkFormView` to be able to hold references to Contents.
 
 * [Integration][]
+  * [Service Agent][]
 * [CoreMedia RichText 1.0 Integration][]
 
 ## Integration
@@ -32,6 +33,37 @@ ClassicEditor
 ```
 
 **Essentials Plugin:** This Plugin is part of CoreMedia Essentials Plugin.
+
+### Service Agent
+
+[Service Agent]: <#service-agent>
+
+[[Top][]|[Up][Integration]|[Service Agent][]]
+
+To resolve the name and other properties of a linked content, the Content-Link
+feature uses the Service Agent architecture as introduced in context of
+CoreMedia Studio. This also applies to Drag and Drop support of contents
+into `LinkFormView` or directly into the text.
+
+This requires the client integrating CKEditor with Content-Link feature to
+implement some required interfaces and register them at the service agent:
+
+* `ContentDisplayService`
+
+  Resolves the display name of a content (which may as well be a placeholder
+  text, in case for unreadable content for example), the representation for the
+  content-type and other data required for displaying a content.
+
+* `RichtextConfigurationService`
+
+  Used to configure the behavior for content-links, especially, which
+  content-types are allowed to by linked into a given RichText property, and,
+  which are not.
+
+You will find these interfaces in `@coremedia/coremedia-studio-integration`.
+
+For integration into the example application mocks may be registered as provided
+by `@coremedia/coremedia-studio-integration-mock`.
 
 ## Design
 
