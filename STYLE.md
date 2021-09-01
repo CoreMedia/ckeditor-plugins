@@ -39,11 +39,43 @@ logger.warn("A warning");
 logger.info("Some information");
 ```
 
+## Markdown
+
+Documentation (including inline documentation in TypeScript) is formatted using
+Markdown.
+
+### Links
+
+The reference-style is the preferred syntax for links outside of inline
+documentation. If possible, words are preferred as references.
+
+```markdown
+[Markdown][]
+
+[some markdown][Markdown]
+
+[private hash syntax][mdn:private]
+
+[Markdown]:
+  <https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet>
+  "Markdown Cheatsheet · adam-p/markdown-here Wiki"
+[mdn:private]:
+  <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields>
+  "Private class features - JavaScript | MDN"
+```
+
+In general, references should be resolved at the end of the document. To shorten
+lines, references-catalogs may be wrapped as proposed in the above example.
+
 <!--
 --------------------------------------------------------------------------------
 References
 --------------------------------------------------------------------------------
 -->
 
-[ESLint]: <https://eslint.org/> "ESLint - Pluggable JavaScript linter"
-[mdn:private]: <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields> "Private class features - JavaScript | MDN"
+[ESLint]:
+  <https://eslint.org/>
+  "ESLint - Pluggable JavaScript linter"
+[mdn:private]:
+  <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields>
+  "Private class features - JavaScript | MDN"
