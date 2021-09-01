@@ -52,6 +52,7 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
+    "@coremedia/coremedia-utils": "28.1.0",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
     "rxjs": "^6.5.4"
   }
