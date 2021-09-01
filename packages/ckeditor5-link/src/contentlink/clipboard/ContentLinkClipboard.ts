@@ -20,14 +20,22 @@ import { DropCondition } from "./DropCondition";
 import { ContentLinkData } from "./ContentLinkData";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 
+/**
+ * Provides support for dragging contents directly into the text. The name of
+ * the dragged content will be written at the target position. Dragging multiple
+ * contents will create additional block-elements, each containing one
+ * content.
+ */
 export default class ContentLinkClipboard extends Plugin {
   static #CONTENT_LINK_CLIPBOARD_PLUGIN_NAME = "ContentLinkClipboard";
   static #LOGGER: Logger = LoggerProvider.getLogger(ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME);
+
   static get pluginName(): string {
     return ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME;
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
+    // TODO[cke] We should depend explicitly on CKEditor's Clipboard plugin than just implicitly (by relying on someone proving some clipboardInput event).
     return [];
   }
 
@@ -36,11 +44,16 @@ export default class ContentLinkClipboard extends Plugin {
     return null;
   }
 
+  /**
+   * Adds a listener to `clipboardInput` to process possibly dragged contents.
+   * @private
+   */
   #defineClipboardInputOutput(): void {
-    const view = this.editor.editing.view;
-    const viewDocument = view.document;
-
     const editor = this.editor;
+    const view = editor.editing.view;
+    const viewDocument = view.document;
+    const logger = ContentLinkClipboard.#LOGGER;
+
     // Processing pasted or dropped content.
     this.listenTo(viewDocument, "clipboardInput", (evt, data) => {
       // The clipboard content was already processed by the listener on the higher priority
@@ -51,20 +64,33 @@ export default class ContentLinkClipboard extends Plugin {
 
       const cmDataUris = ContentLinkClipboard.#extractContentUris(data);
       const normalLink = ContentLinkClipboard.#extractNormalLinks(data);
-      ContentLinkClipboard.#LOGGER.debug("Content links dropped: " + JSON.stringify(cmDataUris));
-      ContentLinkClipboard.#LOGGER.debug("Normal links dropped: " + JSON.stringify(normalLink));
+
+      if (logger.isDebugEnabled()) {
+        logger.debug("Content links dropped.", {
+          dataUris: JSON.stringify(cmDataUris),
+          links: JSON.stringify(normalLink),
+        });
+      }
 
       if (cmDataUris) {
         //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
         //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
         evt.stop();
-        const dropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
-        ContentLinkClipboard.#LOGGER.debug("Calculated drop condition: " + JSON.stringify(dropCondition));
-        serviceAgent
-          .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-          .then((contentDisplayService: ContentDisplayService): void => {
-            ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, cmDataUris);
-          });
+
+        if (cmDataUris.length > 0) {
+          const dropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
+
+          if (logger.isDebugEnabled()) {
+            logger.debug("Calculated drop condition.", { condition: JSON.stringify(dropCondition) });
+          }
+
+          serviceAgent
+            .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
+            .then((contentDisplayService: ContentDisplayService): void => {
+              ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, cmDataUris);
+            });
+        }
+
         return;
       }
       if (normalLink) {
@@ -94,10 +120,29 @@ export default class ContentLinkClipboard extends Plugin {
     });
   }
 
+  /**
+   * Extract normal links in clipboard. Such links are stored in `text/uri-list`
+   * as specified by [RFC 2483, Section 5](https://datatracker.ietf.org/doc/html/rfc2483#section-5).
+   * Such links may be dropped for example from browser's location bar.
+   *
+   * @param data clipboard data to parse
+   * @private
+   * @see {@link https://github.com/ckeditor/ckeditor5/issues/10464 ckeditor/ckeditor5#10464}
+   */
   static #extractNormalLinks(data: ClipboardEventData): string | null {
+    // TODO[cke] Implementation is too naive, according possible content
     return data.dataTransfer.getData("text/uri-list") || null;
   }
 
+  /**
+   * Extract content-URIs from clipboard. Content-URIs are stored within
+   * `cm/uri-list` and contain the URIs in the form `content/42` (wrapped
+   * by some JSON).
+   *
+   * @param data data to get content URIs from
+   * @returns array of content-URIs, possibly empty; `null` signals, that the data did not contain content-URI data
+   * @private
+   */
   static #extractContentUris(data: ClipboardEventData): Array<string> | null {
     if (data === null || data.dataTransfer === null) {
       return null;
@@ -199,7 +244,7 @@ export default class ContentLinkClipboard extends Plugin {
 
         const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
         ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
-        if (linkData.isLastInsertedLink && !dropCondition.initialDropAtEndOfParagraph) {
+        if (linkData.isLastInsertedLink && !dropCondition.dropAtEnd) {
           //Finish with a new line if the contents are dropped into an inline position
           const secondSplit = writer.split(textRange.end);
           writer.setSelection(secondSplit.range.end);
@@ -234,7 +279,7 @@ export default class ContentLinkClipboard extends Plugin {
       linkHref: linkData.href,
     });
     let textStartPosition;
-    if (isFirstDocumentPosition || (dropCondition.initialDropAtStartOfParagraph && linkData.isFirstInsertedLink)) {
+    if (isFirstDocumentPosition || (dropCondition.dropAtStart && linkData.isFirstInsertedLink)) {
       textStartPosition = cursorPosition;
       writer.insert(text, cursorPosition);
     } else {

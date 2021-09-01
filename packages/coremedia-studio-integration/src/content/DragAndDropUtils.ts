@@ -74,6 +74,7 @@ const silentParseDataFromDragEvent = (data: string): Array<Record<string, string
   try {
     return JSON.parse(data);
   } catch (e: unknown) {
+    // TODO[cke] We should not completely ignore unparsable data!
     return null;
   }
 };
@@ -82,6 +83,7 @@ const silentParseDataFromDragDropService = (data: string): CMDragData | null => 
   try {
     return JSON.parse(data) as CMDragData;
   } catch (e: unknown) {
+    // TODO[cke] We should not completely ignore unparsable data!
     return null;
   }
 };
