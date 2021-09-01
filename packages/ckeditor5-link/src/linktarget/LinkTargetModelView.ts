@@ -5,7 +5,7 @@ import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
-import LinkTargetCommand from "./LinkTargetCommand";
+import LinkTargetCommand from "./command/LinkTargetCommand";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeelement";
 

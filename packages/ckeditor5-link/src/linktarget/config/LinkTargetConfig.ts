@@ -3,7 +3,7 @@ import DefaultTarget, {
   DEFAULT_TARGETS,
   DEFAULT_TARGETS_ARRAY,
   getDefaultTargetDefinition,
-  icon
+  icon,
 } from "./DefaultTarget";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
 
@@ -57,8 +57,8 @@ interface ParsedLinkTargetConfig {
 }
 
 // TODO: Continue here... is this a config, we may now use?
-const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinition[] => {
-  let fromConfig = config.get("link.targets");
+export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinition[] => {
+  const fromConfig = config.get("link.targets");
   const result: LinkTargetOptionDefinition[] = [];
   if (!fromConfig) {
     return DEFAULT_TARGETS_ARRAY;
