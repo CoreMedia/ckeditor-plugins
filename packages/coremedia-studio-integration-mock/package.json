@@ -49,11 +49,11 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2",
-    "@coremedia/studio-apps-service-agent": "^0.0.30",
+    "@coremedia/studio-apps-service-agent": "^0.0.31",
     "@ckeditor/ckeditor5-core": "^28.0.0"
   },
   "peerDependencies": {
-    "@coremedia/studio-apps-service-agent": "^0.0.30",
+    "@coremedia/studio-apps-service-agent": "^0.0.31",
     "@ckeditor/ckeditor5-core": "^28.0.0"
   },
   "dependencies": {

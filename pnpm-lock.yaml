@@ -38,7 +38,7 @@ importers:
       '@coremedia/ckeditor5-studio-essentials': 28.4.0
       '@coremedia/ckeditor5-symbol-on-paste-mapper': 28.0.0
       '@coremedia/coremedia-studio-integration-mock': 28.1.0
-      '@coremedia/studio-apps-service-agent': ^0.0.30
+      '@coremedia/studio-apps-service-agent': ^0.0.31
       circular-dependency-plugin: ^5.2.2
       css-loader: ^5.0.1
       postcss: ^8.2.4
@@ -77,7 +77,7 @@ importers:
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
       '@coremedia/coremedia-studio-integration-mock': link:../packages/coremedia-studio-integration-mock
-      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
+      '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
       rxjs: 6.6.7
       xml-formatter: 2.4.0
     devDependencies:
@@ -357,7 +357,7 @@ importers:
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@coremedia/studio-apps-service-agent': ^0.0.30
+      '@coremedia/studio-apps-service-agent': ^0.0.31
       '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-link': ^28.0.0
@@ -404,7 +404,7 @@ importers:
       '@ckeditor/ckeditor5-ui': 28.0.0
       '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
+      '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
@@ -555,7 +555,7 @@ importers:
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
       '@coremedia-internal/jest-test-helpers': ^1.0.0
-      '@coremedia/studio-apps-service-agent': ^0.0.30
+      '@coremedia/studio-apps-service-agent': ^0.0.31
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -588,7 +588,7 @@ importers:
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
+      '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
       '@types/jest': 26.0.24
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3
@@ -623,7 +623,7 @@ importers:
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
-      '@coremedia/studio-apps-service-agent': ^0.0.30
+      '@coremedia/studio-apps-service-agent': ^0.0.31
       '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
       '@types/jest': ^26.0.20
@@ -661,7 +661,7 @@ importers:
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
       '@ckeditor/ckeditor5-core': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
-      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
+      '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.24
@@ -2409,8 +2409,8 @@ packages:
       '@ckeditor/ckeditor5-utils': 28.0.0
       lodash-es: 4.17.21
 
-  /@coremedia/studio-apps-service-agent/0.0.30_rxjs@6.6.7:
-    resolution: {integrity: sha512-fHXwNvwqgY4LKuVYomQVsSUJkqQDh8/fazkJ7ozXCKub70pVQiuZftEwuGkf2tOuvuNzWiwOZ8DspMu2G9V6KA==}
+  /@coremedia/studio-apps-service-agent/0.0.31_rxjs@6.6.7:
+    resolution: {integrity: sha512-CTM7HGCRw+He0T2ILEQyPqEqbUtx3FWsDdjOLmM1fSv3TbV/0buZpv3iSNMNz6HVkVXdh6TcbVlpEMT2hZvsHA==}
     peerDependencies:
       rxjs: ^6.5.4
     dependencies:
