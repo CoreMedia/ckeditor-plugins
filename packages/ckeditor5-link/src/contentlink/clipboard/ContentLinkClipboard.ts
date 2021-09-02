@@ -107,7 +107,7 @@ export default class ContentLinkClipboard extends Plugin {
   }
 
   init(): Promise<void> | null {
-    this.#defineClipboardInputOutput();
+    this.#initEventListeners();
     return null;
   }
 
@@ -115,7 +115,7 @@ export default class ContentLinkClipboard extends Plugin {
    * Adds a listener to `clipboardInput` to process possibly dragged contents.
    * @private
    */
-  #defineClipboardInputOutput(): void {
+  #initEventListeners(): void {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
@@ -123,6 +123,16 @@ export default class ContentLinkClipboard extends Plugin {
     // Processing pasted or dropped content.
     this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.listenTo(viewDocument, "dragover", ContentLinkClipboard.#dragOverHandler);
+  }
+
+  destroy(): null {
+    const editor = this.editor;
+    const view = editor.editing.view;
+    const viewDocument = view.document;
+
+    this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
+    this.stopListening(viewDocument, "dragover", ContentLinkClipboard.#dragOverHandler);
+    return null;
   }
 
   /**

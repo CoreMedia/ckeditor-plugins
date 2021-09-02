@@ -39,7 +39,7 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
-  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+  stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   decorate(methodName: string): void;
 }

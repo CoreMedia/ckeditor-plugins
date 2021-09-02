@@ -39,7 +39,7 @@ export default class EditingController implements Emitter, Observable {
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
-  stopListening(emitter?: Emitter, event?: string, callback?: (info: EventInfo, data: DomEventData) => void): void;
+  stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
-  listenTo(emitter: Emitter, event: string, callback: (info: EventInfo, data: any) => void, options?: { priority: PriorityString | number }): void;
+  listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 }
