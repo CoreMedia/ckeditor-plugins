@@ -48,8 +48,10 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"
   },
+  "peerDependencies": {
+    "@coremedia/studio-apps-service-agent": "^0.0.30"
+  },
   "dependencies": {
-    "@coremedia/studio-apps-service-agent": "^0.0.30",
     "rxjs": "^6.5.4"
   }
 }
