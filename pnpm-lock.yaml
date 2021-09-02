@@ -111,6 +111,9 @@ importers:
       '@babel/plugin-transform-shorthand-properties': ^7.12.1
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
+      '@ckeditor/ckeditor5-core': ^28.0.0
+      '@ckeditor/ckeditor5-engine': ^28.0.0
+      '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-dataprocessor-support': 28.1.0
       '@coremedia/coremedia-utils': 28.1.0
@@ -147,6 +150,9 @@ importers:
       '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.0
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
+      '@ckeditor/ckeditor5-core': 28.0.0
+      '@ckeditor/ckeditor5-engine': 28.0.0
+      '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
@@ -180,6 +186,12 @@ importers:
       '@babel/plugin-transform-shorthand-properties': ^7.12.1
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
+      '@ckeditor/ckeditor5-core': ^28.0.0
+      '@ckeditor/ckeditor5-engine': ^28.0.0
+      '@ckeditor/ckeditor5-link': ^28.0.0
+      '@ckeditor/ckeditor5-typing': ^28.0.0
+      '@ckeditor/ckeditor5-ui': ^28.0.0
+      '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-richtext': 28.1.0
       '@coremedia/ckeditor5-link': 28.4.0
@@ -220,6 +232,12 @@ importers:
       '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.0
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
+      '@ckeditor/ckeditor5-core': 28.0.0
+      '@ckeditor/ckeditor5-engine': 28.0.0
+      '@ckeditor/ckeditor5-link': 28.0.0
+      '@ckeditor/ckeditor5-typing': 28.0.0
+      '@ckeditor/ckeditor5-ui': 28.0.0
+      '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
@@ -257,6 +275,8 @@ importers:
       '@babel/plugin-transform-shorthand-properties': ^7.12.1
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
+      '@ckeditor/ckeditor5-core': ^28.0.0
+      '@ckeditor/ckeditor5-engine': ^28.0.0
       '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-utils': 28.1.0
@@ -292,6 +312,8 @@ importers:
       '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.0
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
+      '@ckeditor/ckeditor5-core': 28.0.0
+      '@ckeditor/ckeditor5-engine': 28.0.0
       '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
@@ -326,9 +348,16 @@ importers:
       '@babel/plugin-transform-shorthand-properties': ^7.12.1
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
+      '@ckeditor/ckeditor5-core': ^28.0.0
+      '@ckeditor/ckeditor5-engine': ^28.0.0
+      '@ckeditor/ckeditor5-link': ^28.0.0
+      '@ckeditor/ckeditor5-typing': ^28.0.0
+      '@ckeditor/ckeditor5-ui': ^28.0.0
+      '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
+      '@coremedia/studio-apps-service-agent': ^0.0.30
       '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-link': ^28.0.0
@@ -368,7 +397,14 @@ importers:
       '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.0
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
+      '@ckeditor/ckeditor5-core': 28.0.0
+      '@ckeditor/ckeditor5-engine': 28.0.0
+      '@ckeditor/ckeditor5-link': 28.0.0
+      '@ckeditor/ckeditor5-typing': 28.0.0
+      '@ckeditor/ckeditor5-ui': 28.0.0
+      '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
+      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
@@ -409,8 +445,11 @@ importers:
       '@ckeditor/ckeditor5-alignment': ^28.0.0
       '@ckeditor/ckeditor5-basic-styles': ^28.0.0
       '@ckeditor/ckeditor5-block-quote': ^28.0.0
+      '@ckeditor/ckeditor5-clipboard': ^28.0.0
+      '@ckeditor/ckeditor5-core': ^28.0.0
       '@ckeditor/ckeditor5-dev-tests': ^24.0.0
       '@ckeditor/ckeditor5-editor-classic': ^28.0.0
+      '@ckeditor/ckeditor5-engine': ^28.0.0
       '@ckeditor/ckeditor5-essentials': ^28.0.0
       '@ckeditor/ckeditor5-heading': ^28.0.0
       '@ckeditor/ckeditor5-indent': ^28.0.0
@@ -421,6 +460,7 @@ importers:
       '@ckeditor/ckeditor5-remove-format': ^28.0.0
       '@ckeditor/ckeditor5-table': ^28.0.0
       '@ckeditor/ckeditor5-theme-lark': ^28.0.0
+      '@ckeditor/ckeditor5-ui': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-utils': 28.1.0
       '@coremedia/types-ckeditor__ckeditor5-clipboard': 28.0.0
@@ -466,8 +506,11 @@ importers:
       '@ckeditor/ckeditor5-alignment': 28.0.0
       '@ckeditor/ckeditor5-basic-styles': 28.0.0
       '@ckeditor/ckeditor5-block-quote': 28.0.0
+      '@ckeditor/ckeditor5-clipboard': 28.0.0
+      '@ckeditor/ckeditor5-core': 28.0.0
       '@ckeditor/ckeditor5-dev-tests': 24.4.2_webpack-cli@4.8.0
       '@ckeditor/ckeditor5-editor-classic': 28.0.0
+      '@ckeditor/ckeditor5-engine': 28.0.0
       '@ckeditor/ckeditor5-essentials': 28.0.0
       '@ckeditor/ckeditor5-heading': 28.0.0
       '@ckeditor/ckeditor5-indent': 28.0.0
@@ -478,6 +521,7 @@ importers:
       '@ckeditor/ckeditor5-remove-format': 28.0.0
       '@ckeditor/ckeditor5-table': 28.0.0
       '@ckeditor/ckeditor5-theme-lark': 28.0.0
+      '@ckeditor/ckeditor5-ui': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
@@ -511,6 +555,7 @@ importers:
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
       '@coremedia-internal/jest-test-helpers': ^1.0.0
+      '@coremedia/studio-apps-service-agent': ^0.0.30
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
       '@typescript-eslint/eslint-plugin': ^4.12.0
@@ -543,6 +588,7 @@ importers:
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
+      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
       '@types/jest': 26.0.24
       '@types/jest-each': 24.3.0
       '@typescript-eslint/eslint-plugin': 4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3
@@ -573,9 +619,11 @@ importers:
       '@babel/plugin-transform-shorthand-properties': ^7.12.1
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
+      '@ckeditor/ckeditor5-core': ^28.0.0
       '@coremedia-internal/jest-test-helpers': ^1.0.0
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
+      '@coremedia/studio-apps-service-agent': ^0.0.30
       '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^28.0.0
       '@types/jest': ^26.0.20
@@ -611,7 +659,9 @@ importers:
       '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.0
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
+      '@ckeditor/ckeditor5-core': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
+      '@coremedia/studio-apps-service-agent': 0.0.30_rxjs@6.6.7
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 26.0.24
@@ -2365,7 +2415,6 @@ packages:
       rxjs: ^6.5.4
     dependencies:
       rxjs: 6.6.7
-    dev: false
 
   /@discoveryjs/json-ext/0.5.3:
     resolution: {integrity: sha512-Fxt+AfXgjMoin2maPIYzFZnQjAXjAL0PHscM5pRTtatFqB+vZxAM9tLp2Optnuw3QOQC40jTNeGYFOMvyf7v9g==}
