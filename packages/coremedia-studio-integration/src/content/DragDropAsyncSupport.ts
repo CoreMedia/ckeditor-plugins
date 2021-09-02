@@ -101,15 +101,6 @@ export default class DragDropAsyncSupport {
           evictImmediately: evictImmediately,
         });
         cache.set(uriPath, isLinkable);
-      } else {
-        logger.debug("isLinkable: Received response ignored, as not relevant anymore.", {
-          value: isLinkable,
-          uriPath: uriPath,
-          evictImmediately: evictImmediately,
-        });
-        // TODO[cke] Having the current bug in service agent, removing this would prevent any drop - always.
-        // TODO[cke] The following line should be removed, once the service-agent is fixed.
-        cache.set(uriPath, isLinkable);
       }
     });
 
