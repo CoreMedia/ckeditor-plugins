@@ -68,7 +68,7 @@ jobs:
       - name: Test
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: pnpm test
+        run: pnpm jest
       - name: Install for Production
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
