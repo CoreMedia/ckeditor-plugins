@@ -25,7 +25,8 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           npm install -g pnpm
-          npm config set @coremedia:registry=https://npm.coremedia.io:_authToken=${NPM_AUTH_TOKEN}
+          npm config set @coremedia:registry=https://npm.coremedia.io
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}'>.npmrc
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
