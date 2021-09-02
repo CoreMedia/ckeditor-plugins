@@ -24,6 +24,8 @@ jobs:
         run: |
           npm install -g pnpm
           npm config set @coremedia:registry=https://npm.coremedia.io
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
