@@ -161,8 +161,7 @@ export default class ContentLinkClipboard extends Plugin {
 
   static #handleContentNameResponse(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     ContentLinkClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
-    const isLinkableContent = DragDropAsyncSupport.isLinkable(linkData.contentUri);
-    DragDropAsyncSupport.resetIsLinkableContent(linkData.contentUri);
+    const isLinkableContent = DragDropAsyncSupport.isLinkable(linkData.contentUri, true);
     if (!isLinkableContent) {
       return;
     }

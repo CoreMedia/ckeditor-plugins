@@ -168,7 +168,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const contentUriPaths: Array<string> | null = extractContentUriPaths(dragEvent);
     if (contentUriPaths) {
-      DragDropAsyncSupport.resetIsLinkableMap();
+      DragDropAsyncSupport.resetCache();
     }
     const contentCkeModelUris = extractContentCkeModelUri(dragEvent);
     dragEvent.preventDefault();
