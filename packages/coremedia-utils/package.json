@@ -47,6 +47,7 @@
     "clean": "rimraf ./dist",
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "publishpkg": "npm publish",
+    "updateversion": "npm version",
     "jest": "jest",
     "jest:coverage": "jest --collect-coverage",
     "lint": "eslint --fix \"src/**\"",
