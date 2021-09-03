@@ -43,6 +43,7 @@ importers:
       '@coremedia/studio-apps-service-agent': ^0.0.31
       circular-dependency-plugin: ^5.2.2
       css-loader: ^5.0.1
+      lodash: ^4.0.0
       postcss: ^8.2.4
       postcss-loader: ^4.1.0
       raw-loader: ^4.0.2
@@ -52,6 +53,7 @@ importers:
       terser-webpack-plugin: ^5.1.1
       ts-loader: ^8.0.14
       typescript: ^4.3.2
+      uuid: ^3.3.3
       webpack: ^5.12.3
       webpack-cli: ^4.3.1
       xml-formatter: ^2.4.0
@@ -82,7 +84,9 @@ importers:
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
       '@coremedia/coremedia-studio-integration-mock': link:../packages/coremedia-studio-integration-mock
       '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
+      lodash: 4.17.21
       rxjs: 6.6.7
+      uuid: 3.4.0
       xml-formatter: 2.4.0
     devDependencies:
       '@ckeditor/ckeditor5-dev-utils': 24.4.2_webpack@5.51.1
@@ -7980,7 +7984,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols/2.2.0:
     resolution: {integrity: sha512-VeIAFslyIerEJLXHziedo2basKbMKtTw3vfn5IzG0XTjhAVEJyNHnL2p7vc+wBDSdQuUpNw3M2u6xb9QsAY5Eg==}
@@ -11046,7 +11049,6 @@ packages:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
     deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
     hasBin: true
-    dev: true
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}

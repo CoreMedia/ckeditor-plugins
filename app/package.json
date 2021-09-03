@@ -31,7 +31,9 @@
     "@coremedia/coremedia-studio-integration-mock": "^28.1.0",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
     "rxjs": "^6.5.4",
-    "xml-formatter": "^2.4.0"
+    "xml-formatter": "^2.4.0",
+    "lodash": "^4.0.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^24.0.0",
