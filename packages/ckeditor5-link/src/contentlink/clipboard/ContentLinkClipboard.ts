@@ -75,26 +75,24 @@ export default class ContentLinkClipboard extends Plugin {
 
     const cmDataUris = ContentLinkClipboard.#extractContentUris(data);
 
-    if (cmDataUris) {
-      //If it is a content link we have to handle the event asynchronously to fetch data like the content name from a remote service.
-      //Therefore we have to stop the event, otherwise we would have to treat the event synchronously.
-      evt.stop();
+    if (!cmDataUris) {
+      return;
+    }
 
-      logger.debug("Content links dropped.", {
-        dataUris: cmDataUris,
-      });
+    evt.stop();
+    logger.debug("Content links dropped.", {
+      dataUris: cmDataUris,
+    });
+    if (cmDataUris.length > 0) {
+      const dropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
 
-      if (cmDataUris.length > 0) {
-        const dropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
+      logger.debug("Calculated drop condition.", { condition: dropCondition });
 
-        logger.debug("Calculated drop condition.", { condition: dropCondition });
-
-        serviceAgent
-          .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-          .then((contentDisplayService: ContentDisplayService): void => {
-            ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, cmDataUris);
-          });
-      }
+      serviceAgent
+        .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
+        .then((contentDisplayService: ContentDisplayService): void => {
+          ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, cmDataUris);
+        });
     }
   };
 
