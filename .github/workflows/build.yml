@@ -60,7 +60,9 @@ jobs:
       - name: Build
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: pnpm build
+        run: |
+          ls -a app/node_modules/@coremedia/ckeditor5-symbol-on-paste-mapper/
+          pnpm build
       - name: Lint
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
