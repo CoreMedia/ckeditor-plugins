@@ -58,8 +58,8 @@
     "@ckeditor/ckeditor5-core": "^28.0.0"
   },
   "dependencies": {
-    "@coremedia/coremedia-studio-integration": "28.2.0",
-    "@coremedia/coremedia-utils": "28.1.0",
+    "@coremedia/coremedia-studio-integration": "^28.2.0",
+    "@coremedia/coremedia-utils": "^28.1.0",
     "rxjs": "^6.5.4"
   }
 }

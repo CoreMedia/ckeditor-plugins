@@ -70,7 +70,7 @@
     "@ckeditor/ckeditor5-ui": "^28.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-richtext": "28.1.0",
-    "@coremedia/ckeditor5-link": "28.4.0"
+    "@coremedia/ckeditor5-coremedia-richtext": "^28.1.0",
+    "@coremedia/ckeditor5-link": "^28.4.0"
   }
 }
