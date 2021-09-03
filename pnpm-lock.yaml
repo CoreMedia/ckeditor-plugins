@@ -7,7 +7,7 @@ importers:
       pnpm: ^6.9.1
       rimraf: ^3.0.2
     devDependencies:
-      pnpm: 6.9.1
+      pnpm: 6.14.5
       rimraf: 3.0.2
 
   app:
@@ -348,6 +348,7 @@ importers:
       '@babel/plugin-transform-shorthand-properties': ^7.12.1
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
+      '@ckeditor/ckeditor5-clipboard': ^28.0.0
       '@ckeditor/ckeditor5-core': ^28.0.0
       '@ckeditor/ckeditor5-engine': ^28.0.0
       '@ckeditor/ckeditor5-link': ^28.0.0
@@ -358,6 +359,7 @@ importers:
       '@coremedia/coremedia-studio-integration': 28.2.0
       '@coremedia/coremedia-utils': 28.1.0
       '@coremedia/studio-apps-service-agent': ^0.0.31
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': 28.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-engine': ^28.0.0
       '@coremedia/types-ckeditor__ckeditor5-link': ^28.0.0
@@ -397,6 +399,7 @@ importers:
       '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.0
       '@babel/preset-env': 7.15.0_@babel+core@7.15.0
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
+      '@ckeditor/ckeditor5-clipboard': 28.0.0
       '@ckeditor/ckeditor5-core': 28.0.0
       '@ckeditor/ckeditor5-engine': 28.0.0
       '@ckeditor/ckeditor5-link': 28.0.0
@@ -405,6 +408,7 @@ importers:
       '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
       '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
@@ -555,6 +559,7 @@ importers:
       '@babel/preset-env': ^7.12.11
       '@babel/preset-typescript': ^7.12.7
       '@coremedia-internal/jest-test-helpers': ^1.0.0
+      '@coremedia/coremedia-utils': 28.1.0
       '@coremedia/studio-apps-service-agent': ^0.0.31
       '@types/jest': ^26.0.20
       '@types/jest-each': ^24.3.0
@@ -573,6 +578,7 @@ importers:
       rxjs: ^6.5.4
       typescript: ^4.3.2
     dependencies:
+      '@coremedia/coremedia-utils': link:../coremedia-utils
       rxjs: 6.6.7
     devDependencies:
       '@babel/cli': 7.14.8_@babel+core@7.15.0
@@ -8829,8 +8835,8 @@ packages:
       semver-compare: 1.0.0
     dev: true
 
-  /pnpm/6.9.1:
-    resolution: {integrity: sha512-2qlbvmHB+ULAoTCMpJ75oADYoVQnsxD1ipCemdDJA2KW4auGwoTUzyowVYEiAe4DIDOqw3axhHVkNAo7P6goZA==}
+  /pnpm/6.14.5:
+    resolution: {integrity: sha512-+N1B+Bj2JKZJ1GDJS141OgnDmwxAavHi/ecU3IIl0QunPSVBXxd51DbVizCw/mPwIB3UmeT474Fyz8o3Xj9sXA==}
     engines: {node: '>=12.17'}
     hasBin: true
     dev: true
