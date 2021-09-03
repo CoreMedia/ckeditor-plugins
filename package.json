@@ -23,19 +23,6 @@
     "type": "git"
   },
   "license": "MIT",
-  "workspaces": [
-    "types/*",
-    "packages/coremedia-utils",
-    "packages/coremedia-studio-integration",
-    "packages/coremedia-studio-integration-mock",
-    "packages/ckeditor5-dataprocessor-support",
-    "packages/ckeditor5-symbol-on-paste-mapper",
-    "packages/ckeditor5-coremedia-richtext",
-    "packages/ckeditor5-coremedia-studio-essentials",
-    "packages/ckeditor5-link",
-    "packages/jest-test-helpers",
-    "app"
-  ],
   "scripts": {
     "bootstrap": "pnpm install",
     "publish": "pnpm -r run publishpkg",
