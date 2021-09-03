@@ -77,8 +77,8 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          git status
-          pnpm publish
+          git diff
+          pnpm publish --no-git-checks
       - name: Create Next Prerelease Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
