@@ -9,17 +9,24 @@ import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { createDecoratorHook } from "../utils";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import ContentLinkClipboard from "./clipboard/ContentLinkClipboard";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
  * Content Links will be displayed as a content item.
- *
  */
 export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI, LinkEditing, ContentLinkActionsViewExtension, ContentLinkFormViewExtension, ContentLinkCommandHook];
+    return [
+      LinkUI,
+      LinkEditing,
+      ContentLinkActionsViewExtension,
+      ContentLinkFormViewExtension,
+      ContentLinkCommandHook,
+      ContentLinkClipboard,
+    ];
   }
 
   init(): Promise<void> | null {

@@ -4,6 +4,7 @@ import {
   changing$
 } from "@coremedia/coremedia-studio-integration-mock/content/MockContentDisplayService";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import MockDragDropService from "@coremedia/coremedia-studio-integration-mock/content/MockDragDropService";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
 
@@ -16,9 +17,9 @@ const setDragData = (dragEvent) => {
   const contentId = dragEvent.target.getAttribute("data-cmuripath");
   const idsArray = contentId.split(',');
   if (contentId) {
-    serviceAgent.fetchService('dragDropService').then((dragDropService) => {
-      dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
-    });
+    const dragDropService = new MockDragDropService();
+    dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
+    serviceAgent.registerService(dragDropService);
     dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
     return;
   }
@@ -26,13 +27,10 @@ const setDragData = (dragEvent) => {
 };
 
 /**
- * We have to clear the dragData in dragDropService otherwise the data stay available and next checks might be affected.
- * Studio has the same behaviour. This is the reason why dragDropService.dragData is empty on drop. dragEnd is executed before drop.
+ * Unregister the old dragDropService.
  */
 const removeDropData = () => {
-  serviceAgent.fetchService('dragDropService').then((dragDropService) => {
-    dragDropService.dragData = null;
-  });
+  serviceAgent.unregisterServices('dragDropService');
 };
 
 const initDragExamples = () => {
