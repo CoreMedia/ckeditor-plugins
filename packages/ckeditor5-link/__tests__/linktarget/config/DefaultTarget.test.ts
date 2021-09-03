@@ -7,6 +7,6 @@ describe("DefaultTarget", () => {
       // These are the buttons we want to see in the given order by default,
       // if no other configuration got provided.
       expect(names).toEqual(["_self", "_blank", "_embed", "_other"]);
-    })
+    });
   });
 });
