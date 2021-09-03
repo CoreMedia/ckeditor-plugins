@@ -68,9 +68,8 @@ export default class DragDropAsyncSupport {
    * @param uriPath the URI-Path of the content, e.g. `content/42`
    * @param evictImmediately `true` to immediately evict the response from
    * cache; defaults to `false`
-   * immediate response; defaults to `false`.
-   * @return most likely `false`, as response has not been received yet;
-   * possibly `true` for immediate positive responses
+   * @return `false`, if either not linkable are a different response is not
+   * available yet; `true` if known to be linkable
    * @private
    */
   static #evaluateIsLinkable(uriPath: string, evictImmediately = false): boolean {
