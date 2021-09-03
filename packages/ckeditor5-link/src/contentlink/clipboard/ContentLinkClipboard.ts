@@ -269,7 +269,7 @@ export default class ContentLinkClipboard extends Plugin {
 
         const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
         ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
-        if (linkData.isLastInsertedLink && !dropCondition.dropAtEnd) {
+        if (linkData.isLastInsertedLink && !dropCondition.dropAtEndOfBlock) {
           //Finish with a new line if the contents are dropped into an inline position
           const secondSplit = writer.split(textRange.end);
           writer.setSelection(secondSplit.range.end);
@@ -314,7 +314,7 @@ export default class ContentLinkClipboard extends Plugin {
       linkHref: linkData.href,
     });
     let textStartPosition;
-    if (isFirstDocumentPosition || (dropCondition.dropAtStart && linkData.isFirstInsertedLink)) {
+    if (isFirstDocumentPosition || (dropCondition.dropAtStartOfBlock && linkData.isFirstInsertedLink)) {
       textStartPosition = cursorPosition;
       writer.insert(text, cursorPosition);
     } else {

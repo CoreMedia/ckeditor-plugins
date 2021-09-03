@@ -11,13 +11,15 @@ export class DropCondition {
      */
     readonly multipleContentDrop: boolean,
     /**
-     * Signals, if the the drop position is at the end of its parent.
+     * Signals, if the the drop position is at the end of its parent
+     * block-element.
      */
-    readonly dropAtEnd: boolean,
+    readonly dropAtEndOfBlock: boolean,
     /**
-     * Signals, if the the drop position is at the start of its parent.
+     * Signals, if the the drop position is at the start of its parent
+     * block-element.
      */
-    readonly dropAtStart: boolean,
+    readonly dropAtStartOfBlock: boolean,
     /**
      * The target drop ranges, if existing. `null` otherwise.
      */
