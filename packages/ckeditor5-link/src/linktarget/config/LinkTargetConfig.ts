@@ -1,10 +1,5 @@
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
-import DefaultTarget, {
-  DEFAULT_TARGETS,
-  DEFAULT_TARGETS_ARRAY,
-  getDefaultTargetDefinition,
-  icon,
-} from "./DefaultTarget";
+import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition, icon } from "./DefaultTarget";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
 
 /**
@@ -52,10 +47,6 @@ interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
 }
 
-interface ParsedLinkTargetConfig {
-  [key: string]: LinkTargetOptionDefinition;
-}
-
 // TODO: Continue here... is this a config, we may now use?
 export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinition[] => {
   const fromConfig = config.get("link.targets");
@@ -101,4 +92,5 @@ export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinitio
   }
   return result;
 };
+
 export default LinkTargetConfig;
