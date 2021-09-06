@@ -1,5 +1,6 @@
 import Config from "@ckeditor/ckeditor5-utils/src/config";
 import { parseLinkTargetConfig } from "../../../src/linktarget/config/LinkTargetConfig";
+import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";
 
 jest.mock("@ckeditor/ckeditor5-utils/src/config");
 
@@ -13,9 +14,12 @@ describe("LinkTargetConfig", () => {
       config = new Config();
     });
 
-    test("should provide defaults for no config", () => {
-      // Just check precondition, that we mocked correctly.
-      expect(config.get("link.targets")).toBeUndefined();
+    test.each`
+    config
+    ${undefined}
+    ${null}
+    `("[$#] should provide defaults for no/empty config: $config", ({ config: emptyConfig }) => {
+      config.set("link.targets", emptyConfig);
 
       const definitions = parseLinkTargetConfig(config);
       const names = definitions.map((definition) => definition.name);
@@ -112,6 +116,76 @@ describe("LinkTargetConfig", () => {
       expect(definitions[0]?.name).toStrictEqual(customName);
       expect(definitions[0]?.title).toStrictEqual(customTitle);
     });
-  });
 
+    test.each`
+    mode
+    ${"object"}
+    ${"string"}
+    `("[$#] should provide defaults for custom targets ($mode definition)", ({ mode }) => {
+      const customName = "custom";
+
+      config.set("link.targets", [
+        createCustomNamedTarget(customName, mode),
+      ]);
+
+      const definitions = parseLinkTargetConfig(config);
+
+      expect(definitions).toHaveLength(1);
+      expect(definitions[0]?.name).toStrictEqual(customName);
+      expect(definitions[0]?.title).toStrictEqual(customName);
+    });
+
+    test.each`
+    mode
+    ${"object"}
+    ${"string"}
+    `("[$#] should fail for invalid custom names ($mode definition)", ({ mode }) => {
+      // Knowing the code (white-box), this also tests for a target not having
+      // any name set. But only testing empty name is fine here, as it should also
+      // be forbidden.
+      const customName = "";
+
+      config.set("link.targets", [
+        createCustomNamedTarget(customName, mode),
+      ]);
+
+      expect(() => parseLinkTargetConfig(config)).toThrow();
+    });
+
+    test.each`
+    config
+    ${42}
+    ${"lorem ipsum"}
+    ${""}
+    ${true}
+    ${false}
+    ${{}}
+    ${{ lorem: "ipsum" }}
+    `("[$#] should fail on invalid configuration type for link.targets: $config", ({ config: brokenConfig }) => {
+      config.set("link.targets", brokenConfig);
+      expect(() => parseLinkTargetConfig(config)).toThrow();
+    });
+
+    test.each`
+    entry
+    ${42}
+    ${true}
+    ${false}
+    `("[$#] should fail on invalid configuration entry types for link.targets array: $entry", ({ entry: invalidEntry }) => {
+      config.set("link.targets", [invalidEntry]);
+      expect(() => parseLinkTargetConfig(config)).toThrow();
+    });
+  });
 });
+
+const createCustomNamedTarget = (name: string, mode: "object" | "string"): LinkTargetOptionDefinition | string => {
+  switch (mode) {
+    case "object":
+      return {
+        name: name,
+      };
+    case "string":
+      return name;
+  }
+  throw new Error(`Unknown mode ${mode}.`);
+};

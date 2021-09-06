@@ -51,45 +51,56 @@ interface LinkTargetConfig {
 export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinition[] => {
   const fromConfig = config.get("link.targets");
   const result: LinkTargetOptionDefinition[] = [];
-  if (!fromConfig) {
+  if (fromConfig === null || fromConfig === undefined) {
     return DEFAULT_TARGETS_ARRAY;
   }
-  if (Array.isArray(fromConfig)) {
-    const targetsArray: unknown[] = fromConfig;
-    targetsArray.forEach((entry: unknown): void => {
-      if (typeof entry === "string") {
-        const name = entry;
-        const defaultDefinition = getDefaultTargetDefinition(name);
-        if (!!defaultDefinition) {
-          result.push(defaultDefinition);
-        } else {
-          result.push({
-            name: name,
-            iconCls: icon(name),
-            title: name,
-          });
-        }
-      } else if (typeof entry === "object") {
-        const definition: LinkTargetOptionDefinition = {
-          // Provoke a default empty name, which will fail if not set in object.
-          name: "",
-          ...entry,
-        };
-        if (!definition.name) {
-          throw new Error("link.targets configuration entry misses required property 'name'");
-        }
-        // Possibly resolve default definition and add missing properties.
-        const defaultDefinition = getDefaultTargetDefinition(definition.name);
-        if (!definition.iconCls) {
-          definition.iconCls = defaultDefinition?.iconCls || icon(definition.name);
-        }
-        if (!definition.title) {
-          definition.title = defaultDefinition?.title || definition.name;
-        }
-        result.push(definition);
-      }
-    });
+
+  if (!Array.isArray(fromConfig)) {
+    throw new Error(`link.targets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`);
   }
+
+  const targetsArray: unknown[] = fromConfig;
+  targetsArray.forEach((entry: unknown): void => {
+    if (typeof entry === "string") {
+      const name = entry;
+      if (!name) {
+        throw new Error("link.targets: Target name must not be empty.");
+      }
+      const defaultDefinition = getDefaultTargetDefinition(name);
+      if (!!defaultDefinition) {
+        result.push(defaultDefinition);
+      } else {
+        result.push({
+          name: name,
+          iconCls: icon(name),
+          title: name,
+        });
+      }
+    } else if (typeof entry === "object") {
+      const definition: LinkTargetOptionDefinition = {
+        // Provoke a default empty name, which will fail if not set in object.
+        name: "",
+        ...entry,
+      };
+      if (!definition.name) {
+        throw new Error("link.targets: Configuration entry misses required non-empty property 'name'");
+      }
+      // Possibly resolve default definition and add missing properties.
+      const defaultDefinition = getDefaultTargetDefinition(definition.name);
+      if (!definition.iconCls) {
+        definition.iconCls = defaultDefinition?.iconCls || icon(definition.name);
+      }
+      if (!definition.title) {
+        definition.title = defaultDefinition?.title || definition.name;
+      }
+      result.push(definition);
+    } else {
+      throw new Error(
+        `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(fromConfig)}`
+      );
+    }
+  });
+
   return result;
 };
 
