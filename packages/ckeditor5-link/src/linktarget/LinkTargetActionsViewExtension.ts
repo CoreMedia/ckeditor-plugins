@@ -8,6 +8,8 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import Command from "@ckeditor/ckeditor5-core/src/command";
+import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
+import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -25,7 +27,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI];
+    return [LinkUI, CustomLinkTargetUI];
   }
 
   init(): Promise<void> | null {
@@ -55,13 +57,16 @@ class LinkTargetActionsViewExtension extends Plugin {
   #extendView(linkUI: LinkUI): void {
     const actionsView: LinkActionsView = linkUI.actionsView;
     const linkTargetCommand = this.editor.commands.get("linkTarget");
-
     const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config);
 
     // convert button configurations to buttonView instances
-    const buttons = linkTargetDefinitions.map((buttonConfig) =>
-      this.#createTargetButton(buttonConfig, linkTargetCommand)
-    );
+    const buttons = linkTargetDefinitions.map((buttonConfig) => {
+      if (buttonConfig.name === OTHER_TARGET_NAME) {
+        return <ButtonView>this.editor.ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
+      } else {
+        return this.#createTargetButton(buttonConfig, linkTargetCommand);
+      }
+    });
 
     // we register all buttons to let the actions view handle the rendering from now on
     actionsView.registerChild(buttons);
@@ -94,20 +99,9 @@ class LinkTargetActionsViewExtension extends Plugin {
         (value: string) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self")
       );
 
-    let executeFct: () => void;
-    switch (buttonConfig.name) {
-      case "_other":
-        executeFct = () => {
-          linkTargetCommand?.execute(buttonConfig.name);
-          console.log("open something");
-        };
-        break;
-      default:
-        executeFct = linkTargetCommand?.execute(buttonConfig.name);
-        break;
-    }
-
-    view.on("execute", executeFct);
+    view.on("execute", () => {
+      linkTargetCommand?.execute(buttonConfig.name);
+    });
 
     return view;
   }

@@ -35,7 +35,10 @@ import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
  *     custom options you may provide. Otherwise, you may find `linkTarget`
  *     attributes in the model, which cannot be represented in the UI.
  */
-type DefaultTarget = "_self" | "_blank" | "_embed" | "_other";
+
+export const OTHER_TARGET_NAME = "_other";
+
+type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
 
 type DefaultTargetOptions = {
   [key in DefaultTarget]: Omit<LinkTargetOptionDefinition, "name">;
