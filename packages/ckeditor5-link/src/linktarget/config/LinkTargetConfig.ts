@@ -47,7 +47,13 @@ interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
 }
 
-// TODO: Continue here... is this a config, we may now use?
+/**
+ * Parses a possibly existing configuration option as part of CKEditor's
+ * link plugin configuration. It expects an entry `targets` which contains an
+ * array of targets to offer to the editors for selection in the UI.
+ *
+ * @param config CKEditor configuration to parse
+ */
 export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinition[] => {
   const fromConfig = config.get("link.targets");
   const result: LinkTargetOptionDefinition[] = [];
