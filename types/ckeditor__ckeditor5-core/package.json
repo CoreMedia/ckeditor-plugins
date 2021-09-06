@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^"
+    "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:*",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:*"
   },
   "scripts": {
     "publishpkg": "npm publish",

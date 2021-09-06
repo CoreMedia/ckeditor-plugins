@@ -35,8 +35,8 @@
     "@ckeditor/ckeditor5-core": "^28.0.0",
     "@coremedia-internal/jest-test-helpers": "^1.0.0",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
-    "@coremedia/types-ckeditor__ckeditor5-core": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-core": "workspace:*",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:*",
     "@types/jest": "^26.0.20",
     "@types/jest-each": "^24.3.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -58,8 +58,8 @@
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-studio-integration": "workspace:^",
-    "@coremedia/coremedia-utils": "workspace:^",
+    "@coremedia/coremedia-studio-integration": "workspace:*",
+    "@coremedia/coremedia-utils": "workspace:*",
     "rxjs": "^6.5.4"
   }
 }
