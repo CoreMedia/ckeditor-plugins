@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/coremedia-studio-integration",
-  "version": "28.2.0",
+  "version": "1.0.0",
   "engines": {
     "node": ">=14.0.0"
   },
