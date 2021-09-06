@@ -28,6 +28,9 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
+    "@ckeditor/ckeditor5-core": "^28.0.0",
+    "@ckeditor/ckeditor5-engine": "^28.0.0",
+    "@ckeditor/ckeditor5-utils": "^28.0.0",
     "@coremedia-internal/jest-test-helpers": "^1.0.0",
     "@coremedia/types-ckeditor__ckeditor5-core": "workspace:^",
     "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:^",
@@ -45,10 +48,7 @@
     "jest-xml-matcher": "^1.2.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.3.2",
-    "@ckeditor/ckeditor5-core": "^28.0.0",
-    "@ckeditor/ckeditor5-engine": "^28.0.0",
-    "@ckeditor/ckeditor5-utils": "^28.0.0"
+    "typescript": "^4.3.2"
   },
   "exports": {
     "./*": "./dist/*.js"

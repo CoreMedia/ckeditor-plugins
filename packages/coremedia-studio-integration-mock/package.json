@@ -32,7 +32,9 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
+    "@ckeditor/ckeditor5-core": "^28.0.0",
     "@coremedia-internal/jest-test-helpers": "^1.0.0",
+    "@coremedia/studio-apps-service-agent": "^0.0.31",
     "@coremedia/types-ckeditor__ckeditor5-core": "workspace:^",
     "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^",
     "@types/jest": "^26.0.20",
@@ -49,13 +51,11 @@
     "jest-xml-matcher": "^1.2.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.3.2",
-    "@coremedia/studio-apps-service-agent": "^0.0.31",
-    "@ckeditor/ckeditor5-core": "^28.0.0"
+    "typescript": "^4.3.2"
   },
   "peerDependencies": {
-    "@coremedia/studio-apps-service-agent": "^0.0.31",
-    "@ckeditor/ckeditor5-core": "^28.0.0"
+    "@ckeditor/ckeditor5-core": "^28.0.0",
+    "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
     "@coremedia/coremedia-studio-integration": "workspace:^",
