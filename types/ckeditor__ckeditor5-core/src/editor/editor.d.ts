@@ -1,9 +1,9 @@
 import EditingController from "@ckeditor/ckeditor5-engine/src/controller/editingcontroller";
 import DataController from "@ckeditor/ckeditor5-engine/src/controller/datacontroller";
 
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin"
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin"
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import PluginCollection from "../plugincollection";
 import Plugin from "../plugin";
@@ -38,6 +38,8 @@ export default class Editor implements Emitter, Observable {
   static defaultConfig: object;
 
   constructor(config?: EditorConfig);
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   destroy(): Promise<void>;
 

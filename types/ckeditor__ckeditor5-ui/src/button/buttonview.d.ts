@@ -26,7 +26,7 @@ import IconView from "../icon/iconview";
  *
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_ui_button_buttonview-ButtonView.html">Class ButtonView (ui/button/buttonview~ButtonView) - CKEditor 5 API docs</a>
  */
-export default class ButtonView extends View implements Emitter, Observable {
+export default class ButtonView extends View {
   constructor(locale?: Locale);
 
   icon?:string;
@@ -36,6 +36,8 @@ export default class ButtonView extends View implements Emitter, Observable {
   children:ViewCollection;
 
   iconView:IconView;
+
+  type?: "button" | "submit" | "reset" | "menu" | undefined;
 
   render(): void;
 

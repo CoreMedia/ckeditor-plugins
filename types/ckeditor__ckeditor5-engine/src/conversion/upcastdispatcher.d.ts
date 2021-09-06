@@ -1,4 +1,4 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import ViewDocumentFragment from "../view/documentfragment";
 import ViewElement from "../view/element";
 import Writer from "../model/writer";
@@ -31,6 +31,8 @@ export default class UpcastDispatcher implements Emitter {
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 }
 
 /**

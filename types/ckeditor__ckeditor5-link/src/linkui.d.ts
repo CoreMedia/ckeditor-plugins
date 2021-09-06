@@ -7,6 +7,7 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 import LinkActionsView from "./ui/linkactionsview";
+import {EditorWithUI} from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkui-LinkUI.html">Class LinkUI (link/linkui~LinkUI) - CKEditor 5 API docs</a>
@@ -14,13 +15,15 @@ import LinkActionsView from "./ui/linkactionsview";
 export default class LinkUI extends Plugin implements Emitter, Observable {
   static readonly pluginName: "LinkUI";
 
-  readonly editor: Editor;
+  readonly editor: Editor & EditorWithUI;
   actionsView: LinkActionsView;
   formView: LinkFormView;
   readonly isEnabled: boolean;
   _balloon:any;
 
   get _isUIInPanel():boolean;
+
+  _getBalloonPositionData():any;
 
   _hideUI():void;
 

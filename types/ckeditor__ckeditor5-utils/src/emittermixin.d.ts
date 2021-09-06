@@ -21,6 +21,8 @@ export default interface Emitter {
 
   off(event: string, callback?: CallbackFunction): void;
 
+  delegate(...events: string[]): EmitterMixinDelegateChain;
+
   /**
    * Registers a callback function to be executed on the next time the event is fired only. This is similar to
    * calling {@link #on} followed by {@link #off} in the callback.
@@ -39,4 +41,9 @@ export default interface Emitter {
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
+}
+
+
+export interface EmitterMixinDelegateChain {
+  to(emitter: Emitter, nameOrFunction?: string | ((name: string) => string)): void;
 }

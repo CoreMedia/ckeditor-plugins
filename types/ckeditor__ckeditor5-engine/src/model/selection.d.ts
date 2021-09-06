@@ -1,10 +1,10 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import Position from "./position";
 import DocumentSelection from "./documentselection";
 import Element from "./element";
 import Node from "./node";
-import { Item } from "./item";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import {Item} from "./item";
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "../view/observer/domeventdata";
 
@@ -27,6 +27,8 @@ export default class Selection implements Emitter {
   constructor(selectable: Selectable, placeOrOffset?: number | 'before' | 'end' | 'after' | 'on' | 'in', options?: {
     backward?: boolean;
   });
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   containsEntireContent(element?: Element): boolean;
 

@@ -1,5 +1,5 @@
-import Emitter, { CallbackFunction } from "./emittermixin";
-import { PriorityString } from "./priorities";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "./emittermixin";
+import {PriorityString} from "./priorities";
 import EventInfo from "./eventinfo";
 
 /**
@@ -16,6 +16,8 @@ export default class Collection<T = any> implements Emitter {
   get last(): T | null;
 
   constructor(initialItemsOrOptions?: Iterable<T> | CollectionOptions, options?: CollectionOptions);
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   [Symbol.iterator](): Iterable<T>;
 

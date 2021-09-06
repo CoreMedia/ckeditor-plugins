@@ -796,9 +796,11 @@ importers:
     specifiers:
       '@jangaroo/publish': ^1.0.0-alpha
       '@types/ckeditor__ckeditor5-engine': ^28.0.0
+      '@types/ckeditor__ckeditor5-ui': ^28.0.0
       '@types/ckeditor__ckeditor5-utils': ^28.0.0
     dependencies:
       '@types/ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
+      '@types/ckeditor__ckeditor5-ui': link:../ckeditor__ckeditor5-ui
       '@types/ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
     devDependencies:
       '@jangaroo/publish': 1.0.0-alpha.21
