@@ -54,7 +54,7 @@
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-utils": "^28.1.0",
+    "@coremedia/coremedia-utils": "workspace:^",
     "rxjs": "^6.5.4"
   }
 }
