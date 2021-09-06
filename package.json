@@ -38,7 +38,7 @@
   ],
   "scripts": {
     "bootstrap": "pnpm install",
-    "publish": "pnpm -r publish",
+    "publish": "pnpm -r publish --no-git-checks",
     "updateversion": "npm version",
     "clean": "pnpm -r clean && rimraf ./dist",
     "build": "pnpm -r build",
