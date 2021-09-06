@@ -68,15 +68,15 @@
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-studio-integration": "workspace:*",
-    "@coremedia/coremedia-utils": "workspace:*",
+    "@coremedia/coremedia-studio-integration": "workspace:^",
+    "@coremedia/coremedia-utils": "workspace:^",
     "rxjs": "^6.5.4",
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "workspace:*",
-    "@coremedia/types-ckeditor__ckeditor5-core": "workspace:*",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:*",
-    "@coremedia/types-ckeditor__ckeditor5-link": "workspace:*",
-    "@coremedia/types-ckeditor__ckeditor5-typing": "workspace:*",
-    "@coremedia/types-ckeditor__ckeditor5-ui": "workspace:*",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:*"
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-core": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-link": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-typing": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-ui": "workspace:^",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^"
   }
 }
