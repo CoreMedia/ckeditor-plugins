@@ -32,7 +32,7 @@ export default class Editor implements Emitter, Observable {
   readonly keystrokes: EditingKeystrokeHandler;
   readonly locale: Locale;
   readonly model: Model;
-  readonly plugins: PluginCollection<Plugin<any>>;
+  readonly plugins: PluginCollection;
 
   static builtinPlugins: Array<Plugin<any>>;
   static defaultConfig: object;

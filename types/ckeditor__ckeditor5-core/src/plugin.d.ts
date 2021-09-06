@@ -4,7 +4,6 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import Editor from "./editor/editor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 export default abstract class Plugin<T = void> implements Emitter, Observable {
   readonly editor: Editor;
@@ -42,4 +41,9 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   decorate(methodName: string): void;
+}
+
+// Beware that this defines a class constructor, not the class instance.
+export interface PluginInterface<T = Plugin> {
+  new(editor: Editor): T;
 }
