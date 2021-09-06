@@ -143,6 +143,11 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
 /**
  * Retrieve an instance of LinkCleanup-Plugin for registering/unregistering
  * model attribute names.
+ *
+ * @example
+ * ```typescript
+ * getLinkCleanup(editor)?.registerDependentAttribute("linkTarget");
+ * ```
  * @param editor current editor instance
  */
 const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => {
@@ -168,4 +173,5 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   return isDeleteAttribute && diffItemAttribute.attributeKey === LINK_HREF_MODEL;
 };
 
+export { getLinkCleanup };
 export default LinkCleanup;
