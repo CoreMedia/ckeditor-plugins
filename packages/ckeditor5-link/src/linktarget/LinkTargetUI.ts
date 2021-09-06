@@ -3,24 +3,14 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Logger from "@coremedia/coremedia-utils/logging/Logger";
 import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
-import LinkFormViewExtension from "./ui/LinkFormViewExtension";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import {
-  addClassToTemplate,
-  createDecoratorHook,
-  LINK_BEHAVIOR,
-  linkTargetToUiValues,
-  removeClassFromTemplate,
-  uiValuesToLinkTarget,
-} from "../utils";
+import { addClassToTemplate, removeClassFromTemplate } from "../utils";
 
 import "./theme/linkform.css";
 import "./theme/footerbutton.css";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import LinkBehaviorViewPropertyAccessor from "./ui/LinkBehaviorViewPropertyAccessor";
-import TargetInputViewPropertyAccessor from "./ui/TargetInputViewPropertyAccessor";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -36,8 +26,6 @@ export default class LinkTargetUI extends Plugin {
     return [LinkUI, LinkEditing];
   }
 
-  private formExtension?: LinkFormViewExtension;
-
   init(): Promise<void> | null {
     const logger = LinkTargetUI.#logger;
     const startTimestamp = performance.now();
@@ -47,7 +35,7 @@ export default class LinkTargetUI extends Plugin {
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
-    this.formExtension = this.#extendFormView(linkUI);
+    this.#extendFormView(linkUI);
 
     logger.debug(`Initialized ${LinkTargetUI.pluginName} within ${performance.now() - startTimestamp} ms.`);
     return null;
@@ -61,81 +49,13 @@ export default class LinkTargetUI extends Plugin {
    * * We may need to move the addition of linkTarget attribute to a command
    *   which is then executed.
    */
-  #extendFormView(linkUI: LinkUI): LinkFormViewExtension {
-    const editor = this.editor;
-    const linkCommand = editor.commands.get("link");
-    const linkTargetCommand = editor.commands.get("linkTarget");
+  #extendFormView(linkUI: LinkUI) {
     const formView = linkUI.formView;
-    const extension = new LinkFormViewExtension(formView);
     LinkTargetUI.#customizeUrlInputView(formView);
     LinkTargetUI.#customizeActionsView(linkUI.actionsView);
 
-    extension.targetInputView
-      .bind("hiddenTarget")
-      .to(linkTargetCommand, "value", (value: string) => linkTargetToUiValues(value).target);
-
-    /*
-     * Also listen to the url input field to be able to differentiate between new links (with default link behavior)
-     * and already existing links with no linkBehavior set
-     */
-    extension.linkBehaviorView
-      .bind("linkBehavior")
-      .to(linkTargetCommand, "value", formView.urlInputView.fieldView, "value", (value: string, url: string) =>
-        url ? linkTargetToUiValues(value).linkBehavior : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB
-      );
-
-    extension.targetInputView.bind("isReadOnly").to(linkCommand, "isEnabled", (value: unknown) => !value);
     LinkTargetUI._customizeFormView(formView);
     LinkTargetUI.#customizeToolbarButtons(formView);
-
-    this.listenTo(
-      formView,
-      "submit",
-      () => {
-        const { value: target } = <HTMLInputElement>extension.targetInputView.fieldView.element;
-        const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-        const linkBehavior: string = (extension.linkBehaviorView as LinkBehaviorViewPropertyAccessor).linkBehavior;
-        const linkTarget = uiValuesToLinkTarget(linkBehavior, target);
-        editor.execute("linkTarget", linkTarget, href);
-      },
-      /*
-       * We need a higher listener priority here than for `LinkCommand`.
-       * This is because we want to listen to any changes to the model
-       * triggered by LinkCommand.
-       *
-       * This is actually a workaround regarding a corresponding extension
-       * point to the link command.
-       */
-      {
-        priority: "high",
-      }
-    );
-
-    /*
-     * Workaround to reset the values of linkBehavior and target fields if modal
-     * is canceled and reopened after changes have been made. See related issues:
-     * ckeditor/ckeditor5-link#78 (now: ckeditor/ckeditor5#4765) and
-     * ckeditor/ckeditor5-link#123 (now: ckeditor/ckeditor5#4793)
-     */
-
-    createDecoratorHook(
-      linkUI,
-      "_addFormView",
-      () => {
-        if (linkTargetCommand === undefined) {
-          return;
-        }
-        const { value: href } = <HTMLInputElement>formView.urlInputView.fieldView.element;
-        const { linkBehavior, target } = linkTargetToUiValues(<string>linkTargetCommand.value);
-        (extension.linkBehaviorView as LinkBehaviorViewPropertyAccessor).linkBehavior = href
-          ? linkBehavior || ""
-          : LINK_BEHAVIOR.OPEN_IN_CURRENT_TAB;
-        (extension.linkBehaviorView as TargetInputViewPropertyAccessor).hiddenTarget = target || "";
-      },
-      this
-    );
-
-    return extension;
   }
 
   static #customizeUrlInputView(linkFormView: LinkFormView): void {
@@ -190,10 +110,5 @@ export default class LinkTargetUI extends Plugin {
     const iconView = button.children.first;
     button.children.remove(iconView);
     button.withText = true;
-  }
-
-  destroy(): Promise<never> | null {
-    this.formExtension?.destroy();
-    return null;
   }
 }
