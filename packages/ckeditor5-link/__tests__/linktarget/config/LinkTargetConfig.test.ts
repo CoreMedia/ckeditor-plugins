@@ -39,7 +39,7 @@ describe("LinkTargetConfig", () => {
        ${"_blank"} | ${"Open in New Tab"}
        ${"_embed"} | ${"Show Embedded"}
        ${"_other"} | ${"Open in Frame"}
-    `("[$#] Should resolve well-known config to full object for '$name' having title '$title'",
+    `("[$#] Should resolve well-known config (referenced as string) to full object for '$name' having title '$title'",
       ({
          name,
          title: expectedTitle
@@ -48,6 +48,27 @@ describe("LinkTargetConfig", () => {
 
         const definitions = parseLinkTargetConfig(config);
         expect(definitions).toHaveLength(1);
+        expect(definitions[0]?.title).toStrictEqual(expectedTitle);
+      });
+
+    test.each`
+       name        | title
+       ${"_self"}  | ${"Open in Current Tab"}
+       ${"_blank"} | ${"Open in New Tab"}
+       ${"_embed"} | ${"Show Embedded"}
+       ${"_other"} | ${"Open in Frame"}
+    `("[$#] Should resolve well-known config (referenced as object) to full object for '$name' having title '$title'",
+      ({
+         name,
+         title: expectedTitle
+       }) => {
+        config.set("link.targets", [{
+          name: name
+        }]);
+
+        const definitions = parseLinkTargetConfig(config);
+        expect(definitions).toHaveLength(1);
+        // This also tests for "auto-completing object".
         expect(definitions[0]?.title).toStrictEqual(expectedTitle);
       });
 

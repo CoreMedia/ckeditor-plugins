@@ -92,14 +92,21 @@ export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinitio
         throw new Error("link.targets: Configuration entry misses required non-empty property 'name'");
       }
       // Possibly resolve default definition and add missing properties.
-      const defaultDefinition = getDefaultTargetDefinition(definition.name);
-      if (!definition.iconCls) {
-        definition.iconCls = defaultDefinition?.iconCls || icon(definition.name);
-      }
-      if (!definition.title) {
-        definition.title = defaultDefinition?.title || definition.name;
-      }
-      result.push(definition);
+      const defaultDefinition: LinkTargetOptionDefinition | undefined = getDefaultTargetDefinition(definition.name);
+      // The following approach will also work, if we add additional configuration attributes
+      // to the standard definitions.
+      const mergedDefinition: LinkTargetOptionDefinition = {
+        // Defaults for entry
+        ...{
+          name: definition.name,
+          title: definition.name,
+        },
+        // Possibly existing standard definition. (Hint: On undefined, just no attribute will be added.)
+        ...defaultDefinition,
+        // The actual definition, possibly overriding all, possibly missing some properties such as `title`.
+        ...definition,
+      };
+      result.push(mergedDefinition);
     } else {
       throw new Error(
         `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(fromConfig)}`
