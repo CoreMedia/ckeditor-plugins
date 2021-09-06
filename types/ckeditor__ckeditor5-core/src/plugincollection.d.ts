@@ -1,6 +1,6 @@
 import Plugin, { PluginInterface } from "./plugin";
 import Editor from "./editor/editor";
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, {EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
@@ -52,4 +52,6 @@ export default class PluginCollection implements Emitter, Iterable<[typeof Plugi
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopDelegating(event?: string, emitter?: Emitter): void;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 }
