@@ -167,7 +167,7 @@ mapping from `xlink:show` and `xlink:role` as required for CoreMedia RichText
 
   If the model states `linkTarget="_other"` it is defined to represent
   `xlink:show="other"` without recommended, but not enforced attribute
-  `xlink:role`,
+  `xlink:role`.
 
   The UI, in this state, will mark _Open in Frame_ as active, while the
   corresponding FormView for editing the target will show an empty editor.
