@@ -155,6 +155,8 @@ describe("LinkTargetConfig", () => {
     test.each`
     config
     ${42}
+    ${() => {
+    }}
     ${"lorem ipsum"}
     ${""}
     ${true}
@@ -169,6 +171,8 @@ describe("LinkTargetConfig", () => {
     test.each`
     entry
     ${42}
+    ${() => {
+    }}
     ${true}
     ${false}
     `("[$#] should fail on invalid configuration entry types for link.targets array: $entry", ({ entry: invalidEntry }) => {
