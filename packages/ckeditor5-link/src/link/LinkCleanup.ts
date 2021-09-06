@@ -71,23 +71,10 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     return null;
   }
 
-  /**
-   * Registers an attribute to be removed from a given range, when a
-   * `linkHref` attribute got removed.
-   *
-   * @param modelAttributeName name of the model attribute to possibly remove
-   */
   registerDependentAttribute(modelAttributeName: string): void {
     this.#watchedAttributes.add(modelAttributeName);
   }
 
-  /**
-   * Unregisters an attribute, which in result, will not be removed anymore
-   * when a `linkHref` attribute got removed.
-   *
-   * @param modelAttributeName name of the model attribute not to remove anymore
-   * @returns `true` if attribute got removed; `false` if that attribute was not registered anymore
-   */
   unregisterDependentAttribute(modelAttributeName: string): boolean {
     return this.#watchedAttributes.delete(modelAttributeName);
   }
