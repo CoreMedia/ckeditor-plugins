@@ -23,6 +23,7 @@ jobs:
       - name: Configure NPM
         run: |
           npm install -g pnpm@6.14.6
+          npm config set @coremedia:registry=https://npm.coremedia.io
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
       - name: Setup Git
         run: |
