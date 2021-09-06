@@ -8,6 +8,10 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import { LINK_HREF_MODEL } from "./Constants";
 
+/**
+ * Provides configuration options for attributes which must not exist without
+ * corresponding `linkHref` attribute.
+ */
 interface LinkCleanupRegistry {
   /**
    * Registers an attribute to be removed from a given range, when a
@@ -173,5 +177,5 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   return isDeleteAttribute && diffItemAttribute.attributeKey === LINK_HREF_MODEL;
 };
 
-export { getLinkCleanup };
+export { getLinkCleanup, LinkCleanupRegistry };
 export default LinkCleanup;
