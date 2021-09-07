@@ -174,10 +174,14 @@ mapping from `xlink:show` and `xlink:role` as required for CoreMedia RichText
 
 * **Press _Save_ on empty editor:**
 
-  Unlike other values added, this will not trigger to store an empty string into
-  the model, but will transform it to `_other`. This is required by the
-  subsequent data-processing, which will transform this to corresponding
-  `xlink`-attributes.
+  We decided, that the editor wants to signal not to set any target. Thus, if
+  editors select `_other` and save with empty text, `linkTarget` attribute will
+  be removed. As no `linkTarget` defaults to _Open in Current Tab_, the UI will
+  toggle to the corresponding button and turn it on.
+
+  Note, that this will also cause, that if the model value was `_other` as
+  stated above, you open the target editor and save, then `_other` will be
+  removed from as target.
 
 * **Handle unregistered standard-target such as `_blank`:**
 
