@@ -7,27 +7,35 @@ const LINK_TEXT = "Link";
 const UNSET = "—";
 
 function createLink(show, role, href = EXAMPLE_URL) {
-  if (!show) {
-    if (!role) {
-      // noinspection HtmlUnknownAttribute
-      return `<a xlink:href="${href}">${LINK_TEXT}</a>`
-    }
-    // noinspection HtmlUnknownAttribute
-    return `<a xlink:href="${href}" xlink:role="${role}">${LINK_TEXT}</a>`
-  }
-  if (!role) {
-    // noinspection HtmlUnknownAttribute
-    return `<a xlink:href="${href}" xlink:show="${show}">${LINK_TEXT}</a>`
-  }
-  // noinspection HtmlUnknownAttribute
-  return `<a xlink:href="${href}" xlink:show="${show}" xlink:role="${role}">${LINK_TEXT}</a>`
+  const a = document.createElement("a");
+  a.textContent = LINK_TEXT;
+  a.setAttribute("xlink:href", href);
+  show && a.setAttribute("xlink:show", show);
+  role && a.setAttribute("xlink:role", role);
+  return a.outerHTML;
 }
 
-function renderuiEditorValue(uiEditorValue) {
+/**
+ * Escapes the given string for display in HTML.
+ * @param str
+ * @returns {string}
+ */
+function escape(str) {
+  const el = document.createElement("span");
+  el.textContent = str;
+  // noinspection InnerHTMLJS
+  return el.innerHTML;
+}
+
+function renderUiEditorValue(uiEditorValue) {
   if (uiEditorValue === "") {
-    return `<em>empty</em>`
+    return `${em("empty")}`;
   }
-  return uiEditorValue || UNSET;
+  return escape(uiEditorValue) || UNSET;
+}
+
+function em(str) {
+  return `<em>${str}</em>`;
 }
 
 function createLinkTableHeading() {
@@ -35,7 +43,7 @@ function createLinkTableHeading() {
 }
 
 function createLinkTableRow({comment, show, role, target, uiActiveButton, uiEditorValue}) {
-  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiActiveButton || UNSET}</td><td>${renderuiEditorValue(uiEditorValue)}</td><td>${createLink(show, role, EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
+  return `<tr><td>${escape(show) || UNSET}</td><td>${escape(role) || UNSET}</td><td>${escape(target) || UNSET}</td><td>${uiActiveButton || UNSET}</td><td>${renderUiEditorValue(uiEditorValue)}</td><td>${createLink(show, role, EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
 }
 
 function createLinkScenario(title, scenarios) {
@@ -196,7 +204,7 @@ function linkTargetExamples() {
   };
   const standardScenarios = [
     {
-      comment: "Only href, no target.",
+      comment: `default for having no target set; if triggered, will change target value to _self`,
       show: null,
       role: null,
       target: null,
@@ -226,7 +234,7 @@ function linkTargetExamples() {
       uiEditorValue: null,
     },
     {
-      comment: "artificial state, as a 'role' would have been expected.",
+      comment: `artificial state, as a 'role' would have been expected; on ${em("Save")} the empty editor value will trigger the deletion of target attribute value`,
       show: "other",
       role: null,
       target: "_other",
@@ -247,44 +255,52 @@ function linkTargetExamples() {
       role: SOME_TARGET,
       target: SOME_TARGET,
       uiActiveButton: "Open in Frame",
-      uiEditorValue: "somewhere",
+      uiEditorValue: SOME_TARGET,
+    },
+    {
+      comment: "Open in Frame; UI challenge with long target value",
+      show: "other",
+      role: lorem(10),
+      target: `${lorem(2)}...`,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${lorem(2)}...`,
     },
   ];
   const artificialRichTextScenarios = [
     {
-      comment: "artificial state, where a role misses an expected show attribute; repaired on save by adding xlink:show=other",
+      comment: "artificial state, where a role misses an expected show attribute",
       show: null,
       role: SOME_TARGET,
       target: `_role_${SOME_TARGET}`,
       uiActiveButton: "Open in Frame",
-      uiEditorValue: SOME_TARGET,
+      uiEditorValue: `_role_${SOME_TARGET}`,
     },
     {
-      comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
+      comment: "artificial state with unexpected role attribute",
       show: "new",
       role: SOME_TARGET,
       target: `${show.new}_${SOME_TARGET}`,
-      uiActiveButton: "Open in New Tab",
-      uiEditorValue: null,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.new}_${SOME_TARGET}`,
     },
     {
-      comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
+      comment: "artificial state with unexpected role attribute",
       show: "replace",
       role: SOME_TARGET,
       target: `${show.replace}_${SOME_TARGET}`,
-      uiActiveButton: "Open in Current Tab",
-      uiEditorValue: null,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.replace}_${SOME_TARGET}`,
     },
     {
-      comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
+      comment: "artificial state with unexpected role attribute",
       show: "embed",
       role: SOME_TARGET,
       target: `${show.embed}_${SOME_TARGET}`,
-      uiActiveButton: "Show Embedded",
-      uiEditorValue: null,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.embed}_${SOME_TARGET}`,
     },
     {
-      comment: "artificial state with unexpected role attribute; will not be repaired",
+      comment: "artificial state with unexpected role attribute",
       show: "none",
       role: SOME_TARGET,
       target: `${show.none}_${SOME_TARGET}`,
@@ -327,47 +343,47 @@ function linkTargetExamples() {
   let cornerCaseScenarios;
   cornerCaseScenarios = [
     {
-      comment: "Trying to misuse reserved word _role. Repaired on save by removing xlink:role.",
+      comment: "trying to misuse reserved word _role; handled as any custom target",
       show: "other",
       role: "_role",
       target: "_role",
       uiActiveButton: "Open in Frame",
-      uiEditorValue: "",
+      uiEditorValue: "_role",
     },
     {
-      comment: "Trying to misuse reserved word _role. Repaired on save by removing xlink:role.",
+      comment: "trying to misuse reserved word _role; handled as any custom target",
       show: "other",
       role: "_role_",
       target: "_role_",
       uiActiveButton: "Open in Frame",
-      uiEditorValue: "",
+      uiEditorValue: "_role_",
     },
     {
-      comment: `Trying to misuse artificial handling of ${show.new}_[role] with empty role. Repaired on save by removing xlink:role.`,
+      comment: `trying to misuse artificial handling of ${show.new}_[role] with empty role; handled as any custom target`,
       show: "other",
       role: `${show.new}_`,
       target: `${show.new}_`,
-      uiActiveButton: "Open in New Tab",
-      uiEditorValue: null,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.new}_`,
     },
     {
-      comment: `Trying to misuse artificial handling of ${show.replace}_[role] with empty role. Repaired on save by removing xlink:role.`,
+      comment: `trying to misuse artificial handling of ${show.replace}_[role] with empty role; handled as any custom target`,
       show: "other",
       role: `${show.replace}_`,
       target: `${show.replace}_`,
-      uiActiveButton: "Open in Current Tab",
-      uiEditorValue: null,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.replace}_`,
     },
     {
-      comment: `Trying to misuse artificial handling of ${show.embed}_[role] with empty role. Repaired on save by removing xlink:role.`,
+      comment: `trying to misuse artificial handling of ${show.embed}_[role] with empty role; handled as any custom target`,
       show: "other",
       role: `${show.embed}_`,
       target: `${show.embed}_`,
-      uiActiveButton: "Show Embedded",
-      uiEditorValue: null,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.embed}_`,
     },
     {
-      comment: `Trying to misuse artificial handling of ${show.none}_[role] with empty role. Not repaired on save, stored as is.`,
+      comment: `trying to misuse artificial handling of ${show.none}_[role] with empty role; handled as any custom target`,
       show: "other",
       role: `${show.none}_`,
       target: `${show.none}_`,
@@ -425,7 +441,7 @@ gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
 magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
 gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.`;
-const LOREM_IPSUM_WORDS = LOREM_IPSUM_RAW.split(/\s+/);
+const LOREM_IPSUM_WORDS = LOREM_IPSUM_RAW.trim().split(/\s+/);
 const chunks = (arr, chunkSize) => {
   let result = [];
   for (let i = 0; i < arr.length; i += chunkSize) {
@@ -434,12 +450,16 @@ const chunks = (arr, chunkSize) => {
   return result;
 };
 const lorem = (words, paragraphs) => {
-  const wordsPerParagraph = Math.ceil(words / paragraphs);
   let allWords = [];
   while (allWords.length < words) {
     const missingWords = words - allWords.length;
     allWords = allWords.concat(LOREM_IPSUM_WORDS.slice(0, missingWords));
   }
+  if (!paragraphs) {
+    // No paragraph, just plain text.
+    return allWords.join(" ");
+  }
+  const wordsPerParagraph = Math.ceil(words / paragraphs);
   const asParagraphs = chunks(allWords, wordsPerParagraph);
   const paragraph = (w) => {
     const paragraphText = w.join(" ")
