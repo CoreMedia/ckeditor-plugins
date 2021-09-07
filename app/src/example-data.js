@@ -2,17 +2,21 @@
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
+const EVIL_TARGET = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;
 const EXAMPLE_URL = "https://example.org/";
 const LINK_TEXT = "Link";
 const UNSET = "—";
+const parser = new DOMParser();
+const serializer = new XMLSerializer();
+const xmlDocument = parser.parseFromString(`<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}"></div>`, "text/xml");
 
 function createLink(show, role, href = EXAMPLE_URL) {
-  const a = document.createElement("a");
+  const a = xmlDocument.createElement("a");
   a.textContent = LINK_TEXT;
   a.setAttribute("xlink:href", href);
   show && a.setAttribute("xlink:show", show);
   role && a.setAttribute("xlink:role", role);
-  return a.outerHTML;
+  return serializer.serializeToString(a);
 }
 
 /**
@@ -21,7 +25,7 @@ function createLink(show, role, href = EXAMPLE_URL) {
  * @returns {string}
  */
 function escape(str) {
-  const el = document.createElement("span");
+  const el = xmlDocument.createElement("span");
   el.textContent = str;
   // noinspection InnerHTMLJS
   return el.innerHTML;
@@ -265,6 +269,14 @@ function linkTargetExamples() {
       uiActiveButton: "Open in Frame",
       uiEditorValue: `${lorem(2)}...`,
     },
+    {
+      comment: "Open in Frame; UI cross-site-scripting challenge",
+      show: "other",
+      role: EVIL_TARGET,
+      target: EVIL_TARGET,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: EVIL_TARGET,
+    },
   ];
   const artificialRichTextScenarios = [
     {
@@ -485,7 +497,11 @@ const exampleData = {
 };
 
 const setExampleData = (editor, exampleKey) => {
-  editor.setData(exampleData[exampleKey]);
+  try {
+    editor.setData(exampleData[exampleKey]);
+  } catch (e) {
+    console.error(`Failed setting data for ${exampleKey}.`, e);
+  }
 };
 
 const initExamples = (editor) => {
