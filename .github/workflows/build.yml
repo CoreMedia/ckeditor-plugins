@@ -41,6 +41,16 @@ jobs:
         run: |
           pnpm -r run updateversion -- patch
           git push
+      - name: Read Version
+        id: read-version
+        run: |
+          release_version=$(cat package.json | jq -r .version)
+          echo "::set-output name=version::${release_version}"
+      - name: Require Prerelease Version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(steps.read-version.outputs.version, '-')
+        run: |
+          echo "Expected prerelease version on main"
+          exit 1
       - name: Install
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
