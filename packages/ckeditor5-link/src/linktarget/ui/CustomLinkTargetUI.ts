@@ -80,7 +80,7 @@ export default class CustomLinkTargetUI extends Plugin {
       view.set({
         label: t(definition.title),
         tooltip: true,
-        withText: true,
+        icon: definition.icon,
         isToggleable: true,
       });
 

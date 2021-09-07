@@ -1,4 +1,8 @@
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
+import selfIcon from "../icons/target/openInCurrentTab.svg";
+import blankIcon from "../icons/target/openInNewTab.svg";
+import embedIcon from "../icons/target/embed.svg";
+import otherIcon from "../icons/target/openInFrame.svg";
 
 /**
  * Default targets to choose from.
@@ -44,23 +48,17 @@ type DefaultTargetOptions = {
   [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
 };
 
-const iconCssPrefix = "link-target";
-
-const icon = (base: string): string => {
-  return `${iconCssPrefix}--${base}`;
-};
-
 const DEFAULT_TARGETS: DefaultTargetOptions = {
   _self: {
-    iconCls: icon("self"),
+    icon: selfIcon,
     title: "Open in Current Tab",
   },
   _blank: {
-    iconCls: icon("blank"),
+    icon: blankIcon,
     title: "Open in New Tab",
   },
   _embed: {
-    iconCls: icon("embed"),
+    icon: embedIcon,
     title: "Show Embedded",
   },
   // _none: While xlink:show also provides an option `none` we decided not to
@@ -69,7 +67,7 @@ const DEFAULT_TARGETS: DefaultTargetOptions = {
   //    `_none`.
   _other: {
     // Just an example for a custom icon.
-    iconCls: icon("other"),
+    icon: otherIcon,
     title: "Open in Frame",
   },
 };
@@ -120,6 +118,5 @@ export {
   DEFAULT_TARGETS_ARRAY,
   getDefaultTargetDefinition,
   requireDefaultTargetDefinition,
-  icon,
   DefaultTargetOptions,
 };

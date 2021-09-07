@@ -85,9 +85,10 @@ class LinkTargetActionsViewExtension extends Plugin {
   #createTargetButton(buttonConfig: LinkTargetOptionDefinition, linkTargetCommand: Command | undefined): ButtonView {
     const view = new ButtonView();
     view.set({
-      label: buttonConfig.title,
+      label: buttonConfig.title || buttonConfig.name,
       tooltip: true,
-      withText: true,
+      icon: buttonConfig.icon,
+      withText: !buttonConfig.icon,
       isToggleable: true,
     });
 

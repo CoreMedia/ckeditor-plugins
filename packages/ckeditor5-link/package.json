@@ -7,7 +7,8 @@
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
-    "postbuild": "copyfiles --up 3 src/linktarget/theme/* src/linktarget/theme/**/* dist/linktarget/theme && copyfiles --up 3 src/contentlink/theme/* src/contentlink/theme/**/* dist/contentlink/theme",
+    "postbuild": "copyfiles --up 3 src/linktarget/theme/* src/linktarget/theme/**/* dist/linktarget/theme && copyfiles --up 3 src/contentlink/theme/* src/contentlink/theme/**/* dist/contentlink/theme && pnpm run copysvg",
+    "copysvg": "copyfiles --up 3 src/linktarget/icons/* src/linktarget/icons/**/* dist/linktarget/icons",
     "clean": "rimraf ./dist",
     "publish": "jangaroo publish ./dist",
     "jest": "jest --passWithNoTests",

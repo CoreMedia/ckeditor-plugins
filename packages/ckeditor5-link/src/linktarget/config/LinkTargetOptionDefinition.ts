@@ -15,12 +15,12 @@ interface LinkTargetOptionDefinition {
    */
   name: string;
   /**
-   * Specifies a class to apply to the target button in ActionsView for
-   * selecting a corresponding icon.
+   * Specifies an icon to apply to the target button in ActionsView.
+   * This is usually an imported SVG.
    *
-   * If unset defaults to `link-target--{name}`.
+   * If unset the target's title (or name as a fallback) will be displayed instead.
    */
-  iconCls?: string;
+  icon?: string;
   /**
    * The target's title. The title will be handed over to locale for translation.
    *

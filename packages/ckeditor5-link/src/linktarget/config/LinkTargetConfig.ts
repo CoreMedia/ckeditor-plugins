@@ -1,5 +1,5 @@
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
-import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition, icon } from "./DefaultTarget";
+import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
 
 /**
@@ -22,13 +22,13 @@ import Config from "@ckeditor/ckeditor5-utils/src/config";
  *               // Will be transformed to:
  *               // {
  *               //   name: "custom1",
- *               //   iconCls: "link-target--custom1",
+ *               //   icon: custom1Icon,
  *               //   title: "custom1",
  *               // }
  *               "custom1",
  *               {
  *                 name: "myCustomTarget",
- *                 iconCls: "link-target--custom",
+ *                 icon: customTargetIcon,
  *                 title: "Custom Target",
  *               },
  *             ],
@@ -78,7 +78,7 @@ export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinitio
       } else {
         result.push({
           name: name,
-          iconCls: icon(name),
+          icon: "",
           title: name,
         });
       }
