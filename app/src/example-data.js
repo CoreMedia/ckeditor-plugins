@@ -23,19 +23,19 @@ function createLink(show, role, href = EXAMPLE_URL) {
   return `<a xlink:href="${href}" xlink:show="${show}" xlink:role="${role}">${LINK_TEXT}</a>`
 }
 
-function renderUiTarget(uiTarget) {
-  if (uiTarget === "") {
+function renderuiEditorValue(uiEditorValue) {
+  if (uiEditorValue === "") {
     return `<em>empty</em>`
   }
-  return uiTarget || UNSET;
+  return uiEditorValue || UNSET;
 }
 
 function createLinkTableHeading() {
-  return `<tr class="tr--header"><td class="td--header">xlink:show</td><td class="td--header">xlink:role</td><td class="td--header">target</td><td class="td--header">UI Behavior</td><td class="td--header">UI Target</td><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
+  return `<tr class="tr--header"><td class="td--header">xlink:show</td><td class="td--header">xlink:role</td><td class="td--header">target</td><td class="td--header">Active Button</td><td class="td--header">Editor Value</td><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
 }
 
-function createLinkTableRow({comment, show, role, target, uiBehavior, uiTarget}) {
-  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiBehavior || UNSET}</td><td>${renderUiTarget(uiTarget)}</td><td>${createLink(show, role, EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
+function createLinkTableRow({comment, show, role, target, uiActiveButton, uiEditorValue}) {
+  return `<tr><td>${show || UNSET}</td><td>${role || UNSET}</td><td>${target || UNSET}</td><td>${uiActiveButton || UNSET}</td><td>${renderuiEditorValue(uiEditorValue)}</td><td>${createLink(show, role, EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
 }
 
 function createLinkScenario(title, scenarios) {
@@ -200,54 +200,54 @@ function linkTargetExamples() {
       show: null,
       role: null,
       target: null,
-      uiBehavior: "Open in Current Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in Current Tab",
+      uiEditorValue: null,
     },
     {
       show: "new",
       role: null,
       target: show.new,
-      uiBehavior: "Open in New Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in New Tab",
+      uiEditorValue: null,
     },
     {
       show: "replace",
       role: null,
       target: show.replace,
-      uiBehavior: "Open in Current Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in Current Tab",
+      uiEditorValue: null,
     },
     {
       comment: "artificial reserved word for 'target'.",
       show: "embed",
       role: null,
       target: show.embed,
-      uiBehavior: "Show Embedded",
-      uiTarget: null,
+      uiActiveButton: "Show Embedded",
+      uiEditorValue: null,
     },
     {
       comment: "artificial state, as a 'role' would have been expected.",
       show: "other",
       role: null,
       target: "_other",
-      uiBehavior: "Open in Frame",
-      uiTarget: "",
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: "",
     },
     {
       comment: "artificial reserved word for 'target' to reflect this XLink-state",
       show: "none",
       role: null,
       target: show.none,
-      uiBehavior: "Open in Frame",
-      uiTarget: show.none,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: show.none,
     },
     {
       comment: "Open in Frame; normal state for a named target.",
       show: "other",
       role: SOME_TARGET,
       target: SOME_TARGET,
-      uiBehavior: "Open in Frame",
-      uiTarget: "somewhere",
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: "somewhere",
     },
   ];
   const artificialRichTextScenarios = [
@@ -256,40 +256,40 @@ function linkTargetExamples() {
       show: null,
       role: SOME_TARGET,
       target: `_role_${SOME_TARGET}`,
-      uiBehavior: "Open in Frame",
-      uiTarget: SOME_TARGET,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: SOME_TARGET,
     },
     {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
       show: "new",
       role: SOME_TARGET,
       target: `${show.new}_${SOME_TARGET}`,
-      uiBehavior: "Open in New Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in New Tab",
+      uiEditorValue: null,
     },
     {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
       show: "replace",
       role: SOME_TARGET,
       target: `${show.replace}_${SOME_TARGET}`,
-      uiBehavior: "Open in Current Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in Current Tab",
+      uiEditorValue: null,
     },
     {
       comment: "artificial state with unexpected role attribute; repaired on save by removing xlink:role",
       show: "embed",
       role: SOME_TARGET,
       target: `${show.embed}_${SOME_TARGET}`,
-      uiBehavior: "Show Embedded",
-      uiTarget: null,
+      uiActiveButton: "Show Embedded",
+      uiEditorValue: null,
     },
     {
       comment: "artificial state with unexpected role attribute; will not be repaired",
       show: "none",
       role: SOME_TARGET,
       target: `${show.none}_${SOME_TARGET}`,
-      uiBehavior: "Open in Frame",
-      uiTarget: `${show.none}_${SOME_TARGET}`,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.none}_${SOME_TARGET}`,
     },
   ];
   const reservedTargetScenarios = [
@@ -297,31 +297,31 @@ function linkTargetExamples() {
       show: "replace",
       role: null,
       target: show.replace,
-      uiBehavior: "Open in Current Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in Current Tab",
+      uiEditorValue: null,
     },
     {
       show: "new",
       role: null,
       target: show.new,
-      uiBehavior: "Open in New Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in New Tab",
+      uiEditorValue: null,
     },
     {
       comment: "artificial regarding xlink-attributes",
       show: "other",
       role: "_parent",
       target: "_parent",
-      uiBehavior: "Open in Frame",
-      uiTarget: "_parent",
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: "_parent",
     },
     {
       comment: "artificial regarding xlink-attributes",
       show: "other",
       role: "_top",
       target: "_top",
-      uiBehavior: "Open in Frame",
-      uiTarget: "_top",
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: "_top",
     },
   ];
   let cornerCaseScenarios;
@@ -331,48 +331,48 @@ function linkTargetExamples() {
       show: "other",
       role: "_role",
       target: "_role",
-      uiBehavior: "Open in Frame",
-      uiTarget: "",
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: "",
     },
     {
       comment: "Trying to misuse reserved word _role. Repaired on save by removing xlink:role.",
       show: "other",
       role: "_role_",
       target: "_role_",
-      uiBehavior: "Open in Frame",
-      uiTarget: "",
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: "",
     },
     {
       comment: `Trying to misuse artificial handling of ${show.new}_[role] with empty role. Repaired on save by removing xlink:role.`,
       show: "other",
       role: `${show.new}_`,
       target: `${show.new}_`,
-      uiBehavior: "Open in New Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in New Tab",
+      uiEditorValue: null,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.replace}_[role] with empty role. Repaired on save by removing xlink:role.`,
       show: "other",
       role: `${show.replace}_`,
       target: `${show.replace}_`,
-      uiBehavior: "Open in Current Tab",
-      uiTarget: null,
+      uiActiveButton: "Open in Current Tab",
+      uiEditorValue: null,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.embed}_[role] with empty role. Repaired on save by removing xlink:role.`,
       show: "other",
       role: `${show.embed}_`,
       target: `${show.embed}_`,
-      uiBehavior: "Show Embedded",
-      uiTarget: null,
+      uiActiveButton: "Show Embedded",
+      uiEditorValue: null,
     },
     {
       comment: `Trying to misuse artificial handling of ${show.none}_[role] with empty role. Not repaired on save, stored as is.`,
       show: "other",
       role: `${show.none}_`,
       target: `${show.none}_`,
-      uiBehavior: "Open in Frame",
-      uiTarget: `${show.none}_`,
+      uiActiveButton: "Open in Frame",
+      uiEditorValue: `${show.none}_`,
     },
   ];
   const scenarios = [
