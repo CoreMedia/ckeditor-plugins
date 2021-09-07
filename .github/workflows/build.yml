@@ -35,16 +35,16 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Create Release Version
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feature-prerelease-publish'
         run: |
           pnpm -r run updateversion -- patch
           git push
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Install
-        run: pnpm install
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: pnpm install
       - name: Build
         run: |
           pnpm build
@@ -53,16 +53,18 @@ jobs:
       - name: Test
         run: pnpm jest
       - name: Install for Production
-        run: pnpm install --production
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: pnpm install --production
       - name: Publish
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           git status
           pnpm publish --no-git-checks
+      - name: Create Next Prerelease Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-      - name: Create Next Prerelease Version
         if: github.ref == 'refs/heads/feature-prerelease-publish' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: |
           pnpm -r run updateversion -- prerelease --preid=rc
