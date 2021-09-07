@@ -12,6 +12,7 @@ import injectCssTransitionDisabler from "@ckeditor/ckeditor5-ui/src/bindings/inj
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import submitHandler from "@ckeditor/ckeditor5-ui/src/bindings/submithandler";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
+import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 //import "../../../theme/textalternativeform.css";
 
 /**
@@ -24,8 +25,8 @@ export default class CustomLinkTargetInputFormView extends View {
   readonly labeledInput;
   readonly saveButtonView: ButtonView;
   readonly cancelButtonView: ButtonView;
-  readonly _focusables: ViewCollection;
-  readonly _focusCycler: FocusCycler;
+  readonly #focusables: ViewCollection;
+  readonly #focusCycler: FocusCycler;
 
   // declared, because we extend this view by calling {@link injectCssTransitionDisabler} later on
   declare enableCssTransitions: () => void;
@@ -53,18 +54,18 @@ export default class CustomLinkTargetInputFormView extends View {
     /**
      * An input with a label.
      */
-    this.labeledInput = this._createLabeledInputView();
+    this.labeledInput = this.#createLabeledInputView();
 
     /**
      * A button used to submit the form.
      */
-    this.saveButtonView = this._createButton(t("Save"), icons.check, "ck-button-save");
+    this.saveButtonView = this.#createButton(t("Save"), icons.check, "ck-button-save");
     this.saveButtonView.type = "submit";
 
     /**
      * A button used to cancel the form.
      */
-    this.cancelButtonView = this._createButton(t("Cancel"), icons.cancel, "ck-button-cancel", "cancel");
+    this.cancelButtonView = this.#createButton(t("Cancel"), icons.cancel, "ck-button-cancel", "cancel");
 
     /**
      * A collection of views which can be focused in the form.
@@ -72,7 +73,7 @@ export default class CustomLinkTargetInputFormView extends View {
      * @readonly
      * @protected
      */
-    this._focusables = new ViewCollection();
+    this.#focusables = new ViewCollection();
 
     /**
      * Helps cycling over focusables in the form.
@@ -80,8 +81,8 @@ export default class CustomLinkTargetInputFormView extends View {
      * @readonly
      * @protected
      */
-    this._focusCycler = new FocusCycler({
-      focusables: this._focusables,
+    this.#focusCycler = new FocusCycler({
+      focusables: this.#focusables,
       focusTracker: this.focusTracker,
       keystrokeHandler: this.keystrokes,
       actions: {
@@ -109,7 +110,7 @@ export default class CustomLinkTargetInputFormView extends View {
     injectCssTransitionDisabler(this);
   }
 
-  render() {
+  override render(): void {
     super.render();
 
     // types expect an Emitter here, but listenTo() also works with HTMLElements.
@@ -120,7 +121,7 @@ export default class CustomLinkTargetInputFormView extends View {
 
     [this.labeledInput, this.saveButtonView, this.cancelButtonView].forEach((v) => {
       // Register the view as focusable.
-      this._focusables.add(v);
+      this.#focusables.add(v);
 
       // Register the view in the focus tracker.
       this.focusTracker.add(v.element);
@@ -134,10 +135,10 @@ export default class CustomLinkTargetInputFormView extends View {
    * @param {String} label The button label
    * @param {String} icon The button's icon.
    * @param {String} className The additional button CSS class name.
-   * @param {String} [eventName] The event name that the ButtonView#execute event will be delegated to.
+   * @param {String} [eventName?] The event name that the ButtonView#execute event will be delegated to.
    * @returns {@link ButtonView} The button view instance.
    */
-  _createButton(label: string, icon: string, className: string, eventName?: string): ButtonView {
+  #createButton(label: string, icon: string, className: string, eventName?: string): ButtonView {
     const button = new ButtonView(this.locale);
 
     button.set({
@@ -165,9 +166,9 @@ export default class CustomLinkTargetInputFormView extends View {
    * @private
    * @returns {@link LabeledFieldView} Labeled field view instance.
    */
-  _createLabeledInputView() {
+  #createLabeledInputView(): LabeledFieldView<InputTextView> {
     const t = this.locale.t;
-    const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
+    const labeledInput: LabeledFieldView<InputTextView> = new LabeledFieldView(this.locale, createLabeledInputText);
     labeledInput.label = t("Target");
     return labeledInput;
   }
