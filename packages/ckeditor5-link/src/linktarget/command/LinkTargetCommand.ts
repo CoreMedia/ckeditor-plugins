@@ -171,11 +171,11 @@ class LinkTargetCommand extends Command {
    * @param model model to retrieve ranges for
    * @private
    */
-  static #findCurrentLinkHrefRanges(model: Model): Iterable<Range> {
+  static #findCurrentLinkHrefRanges(model: Model): Range[] {
     const selection = model.document.selection;
-    const findAttributeRanges = LinkTargetCommand.#findAttributeRanges;
 
     if (selection.isCollapsed) {
+      const findAttributeRanges = LinkTargetCommand.#findAttributeRanges;
       return findAttributeRanges(
         selection.getFirstPosition(),
         LINK_HREF_MODEL,
@@ -184,7 +184,7 @@ class LinkTargetCommand extends Command {
       );
     }
 
-    return model.schema.getValidRanges(selection.getRanges(), LINK_HREF_MODEL);
+    return [...model.schema.getValidRanges(selection.getRanges(), LINK_HREF_MODEL)];
   }
 
   /**
