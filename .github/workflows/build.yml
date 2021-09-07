@@ -38,7 +38,7 @@ jobs:
         run: pnpm -r run updateversion -- prerelease --preid=pr${{ github.event.number }}-${{ github.run_number }} --no-git-tag-version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-      # MANUAL ON MAIN ONLY!
+      # ON MAIN BY MANUAL TRIGGER ONLY!
       # Set the release version to actual MAJOR.MINOR.PATCH version.
       - name: Create Release Version
         env:
@@ -47,11 +47,15 @@ jobs:
         run: |
           pnpm -r run updateversion -- patch
           git push
+      #Provide the actual version for later checks.
+      #Access: steps.read-version.outputs.version
       - name: Read Version
         id: read-version
         run: |
           release_version=$(cat package.json | jq -r .version)
           echo "::set-output name=version::${release_version}"
+      #Require a prerelease version on main branch when not explicitly releasing.
+      #Guard to not accidentially release.
       - name: Require Prerelease Version
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(steps.read-version.outputs.version, '-')
         run: |
@@ -77,6 +81,9 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           pnpm publish --no-git-checks
+      # MAIN ONLY
+      # Set next prerelease version to prepare for next build.
+      # This ensures that we do not build one release number twice (for not getting conflicts in our repository)
       - name: Create Next Prerelease Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
