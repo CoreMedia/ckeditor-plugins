@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ feature-prerelease-publish ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Create Release Version
-        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feature-prerelease-publish'
         run: |
           pnpm -r run updateversion -- patch
           git push
@@ -47,7 +47,7 @@ jobs:
           release_version=$(cat package.json | jq -r .version)
           echo "::set-output name=version::${release_version}"
       - name: Require Prerelease Version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(steps.read-version.outputs.version, '-')
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature-prerelease-publish' && !contains(steps.read-version.outputs.version, '-')
         run: |
           echo "Expected prerelease version on main"
           exit 1
@@ -57,7 +57,6 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Build
         run: |
-          ls -a app/node_modules/@coremedia/ckeditor5-symbol-on-paste-mapper/
           pnpm build
       - name: Lint
         run: pnpm lint
@@ -74,7 +73,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Create Next Prerelease Version
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/feature-prerelease-publish' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: |
           pnpm -r run updateversion -- prerelease --preid=rc
           git push
