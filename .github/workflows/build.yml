@@ -2,13 +2,13 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ feature-prerelease-publish ]
   pull_request:
-    branches: [ feature ]
+    branches: [ feature-prerelease-publish ]
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Release type. Allowed values: "major", "minor", "patch", "prerelease"'
+        description: 'Release type. Allowed values: "major", "minor", "patch"'
         required: true
         default: 'patch'
 
@@ -25,28 +25,44 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feature-prerelease-publish' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch' || github.event.inputs.release_type == 'prerelease')
         run: |
           echo "Expected a release type due to the manual build execution on main branch."
-          echo "Allowed release types are: major, minor, patch, prerelease"
+          echo "Allowed release types are: major, minor, patch"
           exit 1
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
       - name: Configure NPM
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           npm install -g pnpm@6.14.6
+          npm install -g semver
           npm config set @coremedia:registry=https://npm.coremedia.io
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
+      - name: Install
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: pnpm install
       # FOR PR ONLY!
       #
       # For pull requests we use special prerelease version to prevent accidents while publishing them into local repository.
       # Format: MAJOR.MINOR.PATCH.pr{PR_NUMBER}-{PR_RUN_NUMBER}.{RUN_NUMBER}
+      # It is important to set the versions of the dependencies to exactly the prerelease version because
+      # prerelease versions are never included in semver ranges.
       - name: Set Version for PR
         if: github.event_name == 'pull_request'
-        run: pnpm -r run updateversion -- prerelease --preid=pr${{ github.event.number }}-${{ github.run_number }} --no-git-tag-version
+        run: |
+          git stash
+          actual_version=$(cat .release-version)
+          next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          pnpm install --no-frozen-lockfile
+          git commit -am "Set PR Version: ${next_version}"
+          git stash apply
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       # ON MAIN BY MANUAL TRIGGER ONLY!
@@ -55,20 +71,22 @@ jobs:
       - name: Create Release Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feature-prerelease-publish' && github.event.inputs.release_type != 'prerelease'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feature-prerelease-publish'
         run: |
           git stash
-          pnpm -r run updateversion -- ${{ github.event.inputs.release_type }} --no-git-tag-version
-          release_version=$(cat package.json | jq -r .version)
-          git commit -am "Set release version ${release_version}"
-          git push
+          actual_version=$(cat .release-version)
+          next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=^${next_version}
+          pnpm install --no-frozen-lockfile
+          echo "${next_version}" > .release-version
+          git commit -am "Set release version ${next_version}"
           git stash apply
       #Provide the actual version for later checks.
       #Access: steps.read-version.outputs.version
       - name: Read Version
         id: read-version
         run: |
-          release_version=$(cat package.json | jq -r .version)
+          release_version=$(cat .release-version)
           echo "::set-output name=version::${release_version}"
       #Require a prerelease version on main branch when not explicitly releasing.
       #Guard to not accidentially release.
@@ -77,10 +95,6 @@ jobs:
         run: |
           echo "Expected prerelease version on main"
           exit 1
-      - name: Install
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: pnpm install
       - name: Build
         run: |
           pnpm build
@@ -108,7 +122,10 @@ jobs:
         # Update the version, afterwards commit and push.
         run: |
           git reset --hard
-          pnpm -r run updateversion -- prerelease --preid=rc --no-git-tag-version
-          next_prerelease_version=$(cat package.json | jq -r .version)
-          git commit -am "Set next prerelease version ${next_prerelease_version}"
+          actual_version=$(cat .release-version)
+          next_version=$(semver --increment prerelease --preid rc ${actual_version})
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          echo "${next_version}" > .release-version
+          pnpm install --no-frozen-lockfile
+          git commit -am "Set next prerelease version ${next_version}"
           git push

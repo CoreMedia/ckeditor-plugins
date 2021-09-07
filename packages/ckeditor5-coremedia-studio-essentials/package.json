@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-studio-essentials",
-  "version": "1.0.1-rc.1",
+  "version": "1.0.1-rc.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -64,13 +64,13 @@
     "@ckeditor/ckeditor5-utils": "^28.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^",
-    "@coremedia/ckeditor5-link": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-core": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-link": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-typing": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-ui": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^"
+    "@coremedia/ckeditor5-coremedia-richtext": "^1.0.0",
+    "@coremedia/ckeditor5-link": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-link": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-typing": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-ui": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "^1.0.0"
   }
 }

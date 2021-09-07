@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
-  "version": "1.0.1-rc.1",
+  "version": "1.0.1-rc.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -62,16 +62,16 @@
   },
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.12.1",
-    "@coremedia/coremedia-utils": "workspace:^",
+    "@coremedia/coremedia-utils": "^1.0.0",
     "@types/webpack": "^4.41.25",
     "babel-loader": "^8.2.2",
     "webpack": "^5.12.3",
     "webpack-cli": "^4.3.1",
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-core": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "workspace:^",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^"
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "^1.0.0"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",

@@ -41,6 +41,7 @@
     "bootstrap": "pnpm install",
     "publishall": "pnpm -r publish --no-git-checks",
     "updateversion": "npm version",
+    "setversion": "set-version",
     "clean": "pnpm -r clean && rimraf ./dist",
     "build": "pnpm -r build",
     "jest": "pnpm -r jest",
@@ -50,6 +51,9 @@
     "lint": "pnpm -r lint",
     "prettier": "pnpm -r prettier",
     "npm-check-updates": "pnpm -r npm-check-updates"
+  },
+  "dependencies": {
+    "@coremedia/set-version": "1.1.0"
   },
   "devDependencies": {
     "pnpm": "^6.9.1",
