@@ -29,11 +29,17 @@ jobs:
         run: |
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
+      # FOR PR ONLY!
+      #
+      # For pull requests we use special prerelease version to prevent accidents while publishing them into local repository.
+      # Format: MAJOR.MINOR.PATCH.pr{PR_NUMBER}-{PR_RUN_NUMBER}.{RUN_NUMBER}
       - name: Set Version for PR
         if: github.event_name == 'pull_request'
         run: pnpm -r run updateversion -- prerelease --preid=pr${{ github.event.number }}-${{ github.run_number }} --no-git-tag-version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      # MANUAL ON MAIN ONLY!
+      # Set the release version to actual MAJOR.MINOR.PATCH version.
       - name: Create Release Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
@@ -70,12 +76,12 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          git status
           pnpm publish --no-git-checks
       - name: Create Next Prerelease Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         if: github.ref == 'refs/heads/feature-prerelease-publish' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: |
+          git reset --hard
           pnpm -r run updateversion -- prerelease --preid=rc
           git push
