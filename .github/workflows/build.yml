@@ -41,16 +41,6 @@ jobs:
           git push
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-      - name: Read Version
-        id: read-version
-        run: |
-          release_version=$(cat package.json | jq -r .version)
-          echo "::set-output name=version::${release_version}"
-      - name: Require Prerelease Version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feature-prerelease-publish' && !contains(steps.read-version.outputs.version, '-')
-        run: |
-          echo "Expected prerelease version on main"
-          exit 1
       - name: Install
         run: pnpm install
         env:
