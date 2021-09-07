@@ -182,7 +182,8 @@ export default class CustomLinkTargetUI extends Plugin {
 
     const commandValue: string = <string | undefined>linkTargetCommand?.value || "";
     // For 'reserved targets' as current value, we still want to display an empty field.
-    const initialValue: string = this.#reservedTargetNames.has(commandValue) ? "" : commandValue;
+    const initialValue: string =
+      commandValue === OTHER_TARGET_NAME || this.#reservedTargetNames.has(commandValue) ? "" : commandValue;
 
     // Make sure that each time the panel shows up, the field remains in sync with the value of
     // the command. If the user typed in the input, then canceled the balloon (`labeledInput#value`
