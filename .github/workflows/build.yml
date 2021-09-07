@@ -51,12 +51,13 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       # ON MAIN BY MANUAL TRIGGER ONLY!
       # Set the release version to actual MAJOR.MINOR.PATCH version.
+      # If a prerelease is triggered manually, we keep the prerelease version for this workflow.
       - name: Create Release Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.event.inputs.release_type != 'prerelease'
         run: |
-          pnpm -r run updateversion -- patch
+          pnpm -r run updateversion -- ${{ github.event.inputs.release_type }}
           git push
       #Provide the actual version for later checks.
       #Access: steps.read-version.outputs.version
