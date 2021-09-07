@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ feature-prerelease-publish ]
-  #pull_request:
-  #  branches: [ main ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
       - name: Create Release Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feature-prerelease-publish'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
         run: |
           pnpm -r run updateversion -- patch
           git push
@@ -87,7 +87,7 @@ jobs:
       - name: Create Next Prerelease Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        if: github.ref == 'refs/heads/feature-prerelease-publish' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         # Make sure to not commit anything which has been changed in one of the previous steps.
         # Update the version, afterwards commit and push.
         run: |
