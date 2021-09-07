@@ -96,7 +96,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          pnpm publish --no-git-checks
+          pnpm publishall --no-git-checks
       # MAIN ONLY
       # Set next prerelease version to prepare for next build.
       # This ensures that we do not build one release number twice (for not getting conflicts in our repository)
