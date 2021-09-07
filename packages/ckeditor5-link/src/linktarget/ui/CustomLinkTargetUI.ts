@@ -5,13 +5,23 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import Config from "@ckeditor/ckeditor5-utils/src/config";
 import clickOutsideHandler from "@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
-import { OTHER_TARGET_NAME } from "../config/DefaultTarget";
+import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
+import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 
 export default class CustomLinkTargetUI extends Plugin {
-  _balloon: ContextualBalloon | undefined = undefined;
-  _form: any;
+  #balloon: ContextualBalloon | undefined = undefined;
+  #form: any;
+  /**
+   * Names which are bound to other target-selection buttons, and thus, are
+   * perceived as _reserved names_. Such names must not show up in the edit
+   * form and they will be used to determine, if the `_other` button needs
+   * to be _on_ or _off_.
+   * @private
+   */
+  #reservedTargetNames: Set<string> = new Set<string>();
   linkUI: LinkUI | undefined = undefined;
 
   static readonly pluginName: string = "CustomLinkTargetUI";
@@ -23,10 +33,33 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   init(): Promise<void> | null {
-    this.linkUI = <LinkUI>this.editor.plugins.get(LinkUI);
-    this.#createButton();
+    const editor = this.editor;
+    const { otherNames, myConfig } = this.#parseConfig(editor.config);
+    this.linkUI = <LinkUI>editor.plugins.get(LinkUI);
+    this.#reservedTargetNames = new Set<string>(otherNames);
+    this.#createButton(myConfig);
     this.#createForm();
     return null;
+  }
+
+  #parseConfig(config: Config): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
+    const linkTargetDefinitions = parseLinkTargetConfig(config);
+
+    const otherNames = linkTargetDefinitions
+      .map((definition): string => definition.name)
+      .filter((name): boolean => name !== OTHER_TARGET_NAME);
+
+    const myConfig: Required<LinkTargetOptionDefinition> = {
+      // First provide some defaults, in case they don't exist in definition.
+      ...requireDefaultTargetDefinition(OTHER_TARGET_NAME),
+      // Now override with definition found in config.
+      ...linkTargetDefinitions.find((definition) => definition.name === OTHER_TARGET_NAME),
+    };
+
+    return {
+      otherNames: otherNames,
+      myConfig: myConfig,
+    };
   }
 
   /**
@@ -35,18 +68,17 @@ export default class CustomLinkTargetUI extends Plugin {
    *
    * @private
    */
-  #createButton(): void {
+  #createButton(definition: Required<LinkTargetOptionDefinition>): void {
     const editor = this.editor;
     const linkTargetCommand = editor.commands.get("linkTarget");
-    const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config);
+    const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
 
     editor.ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
       const view = new ButtonView(locale);
 
-      const definition = linkTargetDefinitions.find((def) => def.name === OTHER_TARGET_NAME);
       view.set({
-        label: t(definition?.title || "Custom Link Target"),
+        label: t(definition.title),
         tooltip: true,
         withText: true,
         isToggleable: true,
@@ -56,7 +88,7 @@ export default class CustomLinkTargetUI extends Plugin {
         if (value === undefined) {
           return false;
         }
-        return linkTargetDefinitions.filter((def) => def.name === value && def.name !== OTHER_TARGET_NAME).length === 0;
+        return !reservedTargetNames.has(value);
       });
 
       this.listenTo(view, "execute", () => {
@@ -80,27 +112,27 @@ export default class CustomLinkTargetUI extends Plugin {
      *
      * @private
      */
-    this._balloon = <ContextualBalloon>this.editor.plugins.get("ContextualBalloon");
+    this.#balloon = <ContextualBalloon>this.editor.plugins.get("ContextualBalloon");
 
     /**
      * A form containing a textarea and buttons, used to change the `alt` text value.
      */
-    this._form = new CustomLinkTargetInputFormView(editor.locale);
+    this.#form = new CustomLinkTargetInputFormView(editor.locale);
 
     // Render the form so its #element is available for clickOutsideHandler.
-    this._form.render();
+    this.#form.render();
 
-    this.listenTo(this._form, "submit", () => {
-      editor.execute("linkTarget", this._form.labeledInput.fieldView.element.value);
+    this.listenTo(this.#form, "submit", () => {
+      editor.execute("linkTarget", this.#form.labeledInput.fieldView.element.value);
       this.#hideForm(true);
     });
 
-    this.listenTo(this._form, "cancel", () => {
+    this.listenTo(this.#form, "cancel", () => {
       this.#hideForm(true);
     });
 
     // Close the form on Esc key press.
-    this._form.keystrokes.set("Esc", (data: any, cancel: () => void) => {
+    this.#form.keystrokes.set("Esc", (data: any, cancel: () => void) => {
       this.#hideForm(true);
       cancel();
     });
@@ -118,66 +150,70 @@ export default class CustomLinkTargetUI extends Plugin {
 
     // Close on click outside of balloon panel element.
     clickOutsideHandler({
-      emitter: this._form,
-      activator: () => this._isVisible,
-      contextElements: [this._balloon.view.element],
+      emitter: this.#form,
+      activator: () => this.#isVisible,
+      contextElements: [this.#balloon.view.element],
       callback: () => this.#hideForm(),
     });
   }
 
   /**
-   * Shows the {@link #_form} in the {@link #_balloon}.
+   * Shows the {@link #form} in the {@link #balloon}.
    *
    * @private
    */
-  #showForm() {
-    if (this._isVisible) {
+  #showForm(): void {
+    if (this.#isVisible) {
       return;
     }
 
     const editor = this.editor;
     const linkTargetCommand = editor.commands.get("linkTarget");
-    const labeledInput = this._form.labeledInput;
+    const labeledInput = this.#form.labeledInput;
 
-    this._form.disableCssTransitions();
+    this.#form.disableCssTransitions();
 
-    if (!this._isInBalloon) {
-      this._balloon?.add({
-        view: this._form,
+    if (!this.#isInBalloon) {
+      this.#balloon?.add({
+        view: this.#form,
         position: this.#getBalloonPositionData(),
       });
     }
+
+    const commandValue: string = <string | undefined>linkTargetCommand?.value || "";
+    // For 'reserved targets' as current value, we still want to display an empty field.
+    const initialValue: string = this.#reservedTargetNames.has(commandValue) ? "" : commandValue;
 
     // Make sure that each time the panel shows up, the field remains in sync with the value of
     // the command. If the user typed in the input, then canceled the balloon (`labeledInput#value`
     // stays unaltered) and re-opened it without changing the value of the command, they would see the
     // old value instead of the actual value of the command.
     // https://github.com/ckeditor/ckeditor5-image/issues/114
-    labeledInput.fieldView.value = labeledInput.fieldView.element.value = linkTargetCommand?.value || "";
+    labeledInput.fieldView.value = labeledInput.fieldView.element.value = initialValue;
 
-    this._form.labeledInput.fieldView.select();
+    this.#form.labeledInput.fieldView.select();
 
-    this._form.enableCssTransitions();
+    this.#form.enableCssTransitions();
   }
 
   /**
-   * Removes the {@link #_form} from the {@link #_balloon}.
+   * Removes the {@link #form} from the {@link #balloon}.
    *
    * @param {Boolean} [focusEditable=false] Controls whether the editing view is focused afterwards.
    * @private
    */
   #hideForm(focusEditable = false): void {
-    if (!this._isInBalloon) {
+    if (!this.#isInBalloon) {
       return;
     }
 
     // Blur the input element before removing it from DOM to prevent issues in some browsers.
     // See https://github.com/ckeditor/ckeditor5/issues/1501.
-    if (this._form.focusTracker.isFocused) {
-      this._form.saveButtonView.focus();
+    if (this.#form.focusTracker.isFocused) {
+      this.#form.saveButtonView.focus();
     }
 
-    this._balloon?.remove(this._form);
+    this.#balloon?.remove(this.#form);
 
     if (focusEditable) {
       this.editor.editing.view.focus();
@@ -185,28 +221,28 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   /**
-   * Returns `true` when the {@link #_form} is the visible view in the {@link #_balloon}.
+   * Returns `true` when the {@link #form} is the visible view in the {@link #balloon}.
    *
    * @private
    * @type {Boolean}
    */
-  get _isVisible() {
-    return this._balloon?.visibleView === this._form;
+  get #isVisible(): boolean {
+    return this.#balloon?.visibleView === this.#form;
   }
 
   /**
-   * Returns `true` when the {@link #_form} is in the {@link #_balloon}.
+   * Returns `true` when the {@link #form} is in the {@link #balloon}.
    *
    * @private
    * @type {Boolean}
    */
-  get _isInBalloon() {
-    return this._balloon?.hasView(this._form);
+  get #isInBalloon(): boolean {
+    return this.#balloon?.hasView(this.#form) || false;
   }
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
-  #getBalloonPositionData() {
+  #getBalloonPositionData(): any {
     return this.linkUI?._getBalloonPositionData();
   }
 }

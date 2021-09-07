@@ -36,12 +36,12 @@ import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
  *     attributes in the model, which cannot be represented in the UI.
  */
 
-export const OTHER_TARGET_NAME = "_other";
+const OTHER_TARGET_NAME = "_other";
 
 type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
 
 type DefaultTargetOptions = {
-  [key in DefaultTarget]: Omit<LinkTargetOptionDefinition, "name">;
+  [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
 };
 
 const iconCssPrefix = "link-target";
@@ -74,8 +74,8 @@ const DEFAULT_TARGETS: DefaultTargetOptions = {
   },
 };
 
-const asMap = (targets: DefaultTargetOptions): Map<string, LinkTargetOptionDefinition> => {
-  const result = new Map<string, LinkTargetOptionDefinition>();
+const asMap = (targets: DefaultTargetOptions): Map<string, Required<LinkTargetOptionDefinition>> => {
+  const result = new Map<string, Required<LinkTargetOptionDefinition>>();
   let target: keyof DefaultTargetOptions;
   for (target in targets) {
     result.set(target, {
@@ -86,8 +86,8 @@ const asMap = (targets: DefaultTargetOptions): Map<string, LinkTargetOptionDefin
   return result;
 };
 
-const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): LinkTargetOptionDefinition[] => {
-  const result: LinkTargetOptionDefinition[] = [];
+const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<LinkTargetOptionDefinition>[] => {
+  const result: Required<LinkTargetOptionDefinition>[] = [];
   let target: keyof DefaultTargetOptions;
   for (target in targets) {
     result.push({
@@ -98,12 +98,28 @@ const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): LinkTarge
   return result;
 };
 
-const DEFAULT_TARGETS_MAP: Map<string, LinkTargetOptionDefinition> = asMap(DEFAULT_TARGETS);
-const DEFAULT_TARGETS_ARRAY: LinkTargetOptionDefinition[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
+const DEFAULT_TARGETS_MAP: Map<string, Required<LinkTargetOptionDefinition>> = asMap(DEFAULT_TARGETS);
+const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
 
-const getDefaultTargetDefinition = (key: string): LinkTargetOptionDefinition | undefined => {
+const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
   return DEFAULT_TARGETS_MAP.get(key);
 };
 
+const requireDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> => {
+  const definition = getDefaultTargetDefinition(key);
+  if (!definition) {
+    throw new Error(`Default Target Definition does not exist: "${key}"`);
+  }
+  return definition;
+};
+
 export default DefaultTarget;
-export { DEFAULT_TARGETS, DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition, icon, DefaultTargetOptions };
+export {
+  OTHER_TARGET_NAME,
+  DEFAULT_TARGETS,
+  DEFAULT_TARGETS_ARRAY,
+  getDefaultTargetDefinition,
+  requireDefaultTargetDefinition,
+  icon,
+  DefaultTargetOptions,
+};
