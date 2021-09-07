@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Jest test helpers.",
   "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "enhanced-resolve": "^5.7.0",
     "tslib": "^2.3.0"

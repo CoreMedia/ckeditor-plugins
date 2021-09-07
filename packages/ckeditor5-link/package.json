@@ -4,6 +4,7 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "postbuild": "copyfiles --up 3 src/linktarget/theme/* src/linktarget/theme/**/* dist/linktarget/theme && copyfiles --up 3 src/contentlink/theme/* src/contentlink/theme/**/* dist/contentlink/theme",
