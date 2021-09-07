@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-link",
-  "version": "1.0.1-rc.0",
+  "version": "1.0.1-rc.1",
   "license": "MIT",
   "dependencies": {
     "@coremedia/types-ckeditor__ckeditor5-clipboard": "workspace:^",
