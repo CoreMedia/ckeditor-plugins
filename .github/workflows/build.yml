@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ feature-prerelease-publish ]
+    branches: [ main ]
   pull_request:
-    branches: [ feature-prerelease-publish ]
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       release_type:
