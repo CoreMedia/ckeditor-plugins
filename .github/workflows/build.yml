@@ -88,7 +88,11 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         if: github.ref == 'refs/heads/feature-prerelease-publish' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        # Make sure to not commit anything which has been changed in one of the previous steps.
+        # Update the version, afterwards commit and push.
         run: |
           git reset --hard
-          pnpm -r run updateversion -- prerelease --preid=rc
+          pnpm -r run updateversion -- prerelease --preid=rc --no-git-tag-version
+          next_prerelease_version=$(cat package.json | jq -r .version)
+          git commit -am "Set next prerelease version ${next_prerelease_version}"
           git push
