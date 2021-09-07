@@ -7,9 +7,11 @@ import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
-import { createDecoratorHook } from "../utils";
+import { addClassToTemplate, createDecoratorHook } from "../utils";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
 import ContentLinkClipboard from "./clipboard/ContentLinkClipboard";
+import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
+import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -35,6 +37,8 @@ export default class ContentLinks extends Plugin {
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
     ContentLinks.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI);
+    this.#extendFormView(linkUI);
+    this.#extendActionsView(linkUI);
     createDecoratorHook(
       linkUI,
       "_hideUI",
@@ -150,5 +154,37 @@ export default class ContentLinks extends Plugin {
         linkUI._hideUI();
       },
     });
+  }
+
+  #extendFormView(linkUI: LinkUI) {
+    const formView = linkUI.formView;
+
+    const t = this.editor.locale.t;
+    formView.urlInputView.set({
+      label: t("Link"),
+      class: ["cm-ck-external-link-field"],
+    });
+    formView.urlInputView.fieldView.set({
+      placeholder: t("Enter url or drag and drop content onto this area."),
+    });
+
+    ContentLinks.#customizeFormView(formView);
+  }
+
+  #extendActionsView(linkUI: LinkUI) {
+    ContentLinks.#customizeActionsView(linkUI.actionsView);
+  }
+
+  static #customizeActionsView(actionsView: LinkActionsView): void {
+    const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
+    const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
+    addClassToTemplate(actionsView, [CM_FORM_VIEW_CLS]);
+    addClassToTemplate(actionsView.previewButtonView, [CM_PREVIEW_BUTTON_VIEW_CLS]);
+  }
+
+  static #customizeFormView(formView: LinkFormView): void {
+    const CM_LINK_FORM_CLS = "cm-ck-link-form";
+    const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
+    addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
   }
 }

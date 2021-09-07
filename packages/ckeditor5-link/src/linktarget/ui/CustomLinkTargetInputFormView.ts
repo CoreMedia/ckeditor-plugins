@@ -13,7 +13,7 @@ import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import submitHandler from "@ckeditor/ckeditor5-ui/src/bindings/submithandler";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
-//import "../../../theme/textalternativeform.css";
+import "../theme/customlinktargerform.css";
 
 /**
  * The CustomLinkTargetInputFormView class.
@@ -98,7 +98,7 @@ export default class CustomLinkTargetInputFormView extends View {
       tag: "form",
 
       attributes: {
-        class: ["ck", "ck-text-alternative-form", "ck-responsive-form"],
+        class: ["ck", "cm-ck-custom-link-target-form", "ck-responsive-form"],
 
         // https://github.com/ckeditor/ckeditor5-image/issues/40
         tabindex: "-1",
