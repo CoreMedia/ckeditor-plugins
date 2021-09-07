@@ -79,7 +79,6 @@
     "jest:coverage": "jest --collect-coverage",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
-    "publishpkg": "npm publish",
     "updateversion": "npm version",
     "npm-check-updates": "npm-check-updates --upgrade"
   }

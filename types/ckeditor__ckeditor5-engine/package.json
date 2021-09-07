@@ -6,7 +6,6 @@
     "@coremedia/types-ckeditor__ckeditor5-utils": "workspace:^"
   },
   "scripts": {
-    "publishpkg": "npm publish",
     "updateversion": "npm version",
     "npm-check-updates": "npm-check-updates --upgrade"
   }

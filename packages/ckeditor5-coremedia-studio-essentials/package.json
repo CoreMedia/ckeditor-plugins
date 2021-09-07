@@ -8,7 +8,6 @@
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
-    "publishpkg": "npm publish",
     "updateversion": "npm version",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",

@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "clean": "rimraf ./dist",
-    "publishpkg": "npm publish",
     "updateversion": "npm version",
     "jest": "jest",
     "jest:coverage": "jest --collect-coverage",

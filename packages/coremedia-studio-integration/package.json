@@ -9,7 +9,6 @@
     "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
-    "publishpkg": "npm publish",
     "updateversion": "npm version",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "lint": "eslint --fix \"src/**\"",
