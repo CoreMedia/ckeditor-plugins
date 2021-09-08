@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Manual workflow trigger precondition check
+        if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main'
+        run: |
+          echo "It is not allowed to run a workflow manually from a feature branch."
+          exit 1
       #Make sure the release type is one of the allowed inputs.
       - name: Workflow Dispatch release type check
         if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch' || github.event.inputs.release_type == 'prerelease')
