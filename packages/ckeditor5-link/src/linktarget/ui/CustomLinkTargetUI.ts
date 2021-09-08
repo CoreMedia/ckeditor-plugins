@@ -89,6 +89,7 @@ export default class CustomLinkTargetUI extends Plugin {
         label: t(definition.title),
         tooltip: true,
         icon: definition.icon,
+        class: "cm-ck-target-button",
         isToggleable: true,
       });
 

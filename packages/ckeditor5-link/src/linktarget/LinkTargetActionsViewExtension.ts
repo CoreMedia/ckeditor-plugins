@@ -10,6 +10,9 @@ import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
+import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarseparatorview";
+import View from "@ckeditor/ckeditor5-ui/src/view";
+import "./theme/linktargetactionsviewextension.css";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -72,11 +75,27 @@ class LinkTargetActionsViewExtension extends Plugin {
       }
     });
 
-    // we register all buttons to let the actions view handle the rendering from now on
-    actionsView.registerChild(buttons);
+    const separatorLeft = new ToolbarSeparatorView();
+    separatorLeft.set({ class: "cm-ck-item-separator" });
+    separatorLeft.extendTemplate({
+      attributes: {
+        class: ["cm-ck-item-separator", "cm-ck-item-separator--left"],
+      },
+    });
+    const separatorRight = new ToolbarSeparatorView();
+    separatorRight.extendTemplate({
+      attributes: {
+        class: ["cm-ck-item-separator", "cm-ck-item-separator--right"],
+      },
+    });
 
-    // no need to render the buttons manually, just add them to the DOM
-    actionsView.once("render", () => this.#addButtons(actionsView, buttons));
+    // we register all buttons to let the actions view handle the rendering from now on
+    if (buttons.length > 0) {
+      actionsView.registerChild([separatorLeft, separatorRight, ...buttons]);
+
+      // no need to render the buttons manually, just add them to the DOM
+      actionsView.once("render", () => this.#addButtons(actionsView, [separatorLeft, ...buttons, separatorRight]));
+    }
   }
 
   /**
@@ -92,6 +111,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     const view = new ButtonView();
     view.set({
       label: buttonConfig.title || buttonConfig.name,
+      class: "cm-ck-target-button",
       tooltip: true,
       icon: buttonConfig.icon,
       withText: !buttonConfig.icon,
@@ -120,7 +140,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * @param buttons the buttons to add in the given order
    * @private
    */
-  #addButtons(actionsView: LinkActionsView, buttons: ButtonView[]): void {
+  #addButtons(actionsView: LinkActionsView, buttons: View[]): void {
     buttons.forEach((button) => {
       actionsView.element.insertBefore(button.element, actionsView.unlinkButtonView.element);
     });
