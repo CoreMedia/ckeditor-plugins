@@ -99,6 +99,17 @@ export default class CustomLinkTargetUI extends Plugin {
         return !reservedTargetNames.has(value);
       });
 
+      /*
+       * The tooltip changes if a custom target is set. We can determine this by checking the "isOn" value of the button.
+       * Corner case: if the value is "_other", we'll display the default tooltip as well.
+       */
+      view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: string) => {
+        if (isOn && value !== OTHER_TARGET_NAME) {
+          return `${this.editor.locale.t(definition.title)}: "${this.editor.locale.t(value)}"`;
+        }
+        return true;
+      });
+
       this.listenTo(view, "execute", () => {
         this.#showForm();
       });
@@ -144,17 +155,6 @@ export default class CustomLinkTargetUI extends Plugin {
     this.#form.keystrokes.set("Esc", (data: any, cancel: () => void) => {
       this.#hideForm(true);
       cancel();
-    });
-
-    // Reposition the balloon or hide the form if an image widget is no longer selected.
-    this.listenTo(editor.ui, "update", () => {
-      //TODO
-      //console.log("update has been triggered, see LinkTargetInputView");
-      /*if (!imageUtils.getClosestSelectedImageWidget(viewDocument.selection)) {
-        this.#hideForm(true);
-      } else if (this._isVisible) {
-        repositionContextualBalloon(editor);
-      }*/
     });
 
     // Close on click outside of balloon panel element.

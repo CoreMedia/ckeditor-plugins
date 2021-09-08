@@ -21,7 +21,7 @@ import "../theme/customlinktargerform.css";
 export default class CustomLinkTargetInputFormView extends View {
   readonly focusTracker: FocusTracker;
   readonly keystrokes: KeystrokeHandler;
-  readonly labeledInput;
+  readonly labeledInput: LabeledFieldView<InputTextView>;
   readonly saveButtonView: ButtonView;
   readonly cancelButtonView: ButtonView;
   readonly #focusables: ViewCollection;
