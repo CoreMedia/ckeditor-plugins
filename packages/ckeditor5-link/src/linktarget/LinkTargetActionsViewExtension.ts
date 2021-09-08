@@ -17,7 +17,8 @@ import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
  * * render toggle buttons in the action view of the linkUI to indicate the set target of a given link
  * * executing a button will result in setting the target of a given link
  *
- * When clicking the "Open in Frame" button, an additional balloon with a text input opens and allows to set a custom target.
+ * When clicking the "Open in Frame" button, an additional balloon with a text input
+ * opens and allows to set a custom target.
  *
  * The buttons to be rendered can be set in the editor's configuration.
  * The default configuration is defined in @see {@link DefaultTarget}.
@@ -49,8 +50,11 @@ class LinkTargetActionsViewExtension extends Plugin {
   }
 
   /**
-   * Extends the actions view of the linkUI plugin by adding target buttons right before the {@link unlinkButtonView} element.
-   * The order of buttons is defined by the editor's configuration, respectively the order of default targets in {@link DefaultTarget}.
+   * Extends the actions view of the linkUI plugin by adding target buttons right
+   * before the {@link unlinkButtonView} element. The order of buttons is defined
+   * by the editor's configuration, respectively the order of default targets
+   * in {@link DefaultTarget}.
+   *
    * @param linkUI the linkUI plugin
    * @private
    */
@@ -77,9 +81,11 @@ class LinkTargetActionsViewExtension extends Plugin {
 
   /**
    * Creates and returns an instance of a buttonView for link target representation.
-   * The buttons are bound to {@link LinkTargetCommand} to set the target on execute and toggle their state accordingly.
-   * @param buttonConfig
-   * @param linkTargetCommand
+   * The buttons are bound to {@link LinkTargetCommand} to set the target on execute
+   * and toggle their state accordingly.
+   *
+   * @param buttonConfig configuration for the button
+   * @param linkTargetCommand command to execute on click
    * @private
    */
   #createTargetButton(buttonConfig: LinkTargetOptionDefinition, linkTargetCommand: Command | undefined): ButtonView {
@@ -109,8 +115,9 @@ class LinkTargetActionsViewExtension extends Plugin {
 
   /**
    * Adds button elements right before the {@link unlinkButtonView} element in the actions view.
-   * @param actionsView
-   * @param buttons the buttons to add in the correct order
+   *
+   * @param actionsView CKEditor's `LinkActionsView` to extend
+   * @param buttons the buttons to add in the given order
    * @private
    */
   #addButtons(actionsView: LinkActionsView, buttons: ButtonView[]): void {
