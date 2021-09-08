@@ -16,8 +16,7 @@ import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 import "../theme/customlinktargerform.css";
 
 /**
- * The CustomLinkTargetInputFormView class.
- *
+ * The CustomLinkTargetInputFormView class. It is used to edit a custom target.
  */
 export default class CustomLinkTargetInputFormView extends View {
   readonly focusTracker: FocusTracker;
