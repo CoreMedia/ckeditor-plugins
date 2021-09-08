@@ -65,6 +65,7 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^27.0.6",
+    "jest-transform-stub": "^2.0.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"

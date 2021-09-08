@@ -132,6 +132,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -171,6 +172,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -218,6 +220,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -264,6 +267,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -303,6 +307,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -341,6 +346,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -391,6 +397,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -442,6 +449,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -500,6 +508,7 @@ importers:
       eslint-config-prettier: ^7.1.0
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
+      jest-transform-stub: ^2.0.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
       typescript: ^4.3.2
@@ -560,6 +569,7 @@ importers:
       eslint-config-prettier: 7.2.0_eslint@7.32.0
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
+      jest-transform-stub: 2.0.0
       prettier: 2.3.2
       rimraf: 3.0.2
       typescript: 4.4.2
@@ -594,6 +604,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -630,6 +641,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -667,6 +679,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -705,6 +718,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -736,6 +750,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-config: ^27.0.6
+      jest-transform-stub: ^2.0.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
       typescript: ^4.3.2
@@ -769,6 +784,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-config: 27.1.0
+      jest-transform-stub: 2.0.0
       prettier: 2.3.2
       rimraf: 3.0.2
       typescript: 4.4.2
@@ -7643,6 +7659,10 @@ packages:
       semver: 7.3.5
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /jest-transform-stub/2.0.0:
+    resolution: {integrity: sha512-lspHaCRx/mBbnm3h4uMMS3R5aZzMwyNpNIJLXj4cEsV0mIUtS4IjYJLSoyjRCtnxb6RIGJ4NL2quZzfIeNhbkg==}
     dev: true
 
   /jest-util/27.1.0:
