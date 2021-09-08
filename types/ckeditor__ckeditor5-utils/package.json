@@ -6,7 +6,6 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "updateversion": "npm version",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

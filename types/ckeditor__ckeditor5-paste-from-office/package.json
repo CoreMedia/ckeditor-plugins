@@ -7,7 +7,6 @@
     "@coremedia/types-ckeditor__ckeditor5-core": "^1.0.0"
   },
   "scripts": {
-    "updateversion": "npm version",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }
