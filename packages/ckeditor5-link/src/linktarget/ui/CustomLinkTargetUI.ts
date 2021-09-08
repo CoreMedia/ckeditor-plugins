@@ -3,6 +3,7 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
+import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
@@ -12,8 +13,16 @@ import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/Def
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 
 export default class CustomLinkTargetUI extends Plugin {
+  static readonly pluginName: string = "CustomLinkTargetUI";
+
+  static readonly customTargetButtonName: string = "customLinkTargetButton";
+
   #balloon: ContextualBalloon | undefined = undefined;
-  #form: any;
+  /**
+   * Form View to enter custom target. Initialized during `init`.
+   * @private
+   */
+  #form!: CustomLinkTargetInputFormView;
   /**
    * Names which are bound to other target-selection buttons, and thus, are
    * perceived as _reserved names_. Such names must not show up in the edit
@@ -22,11 +31,10 @@ export default class CustomLinkTargetUI extends Plugin {
    * @private
    */
   #reservedTargetNames: Set<string> = new Set<string>();
-  linkUI: LinkUI | undefined = undefined;
-
-  static readonly pluginName: string = "CustomLinkTargetUI";
-
-  static readonly customTargetButtonName: string = "customLinkTargetButton";
+  /**
+   * LinkUI Plugin. Initialized on `init`.
+   */
+  linkUI!: LinkUI;
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [ContextualBalloon, LinkUI];
@@ -123,7 +131,8 @@ export default class CustomLinkTargetUI extends Plugin {
     this.#form.render();
 
     this.listenTo(this.#form, "submit", () => {
-      editor.execute("linkTarget", this.#form.labeledInput.fieldView.element.value);
+      const { value } = <HTMLInputElement>this.#form.labeledInput.fieldView.element;
+      editor.execute("linkTarget", value);
       this.#hideForm(true);
     });
 
@@ -190,7 +199,7 @@ export default class CustomLinkTargetUI extends Plugin {
     // stays unaltered) and re-opened it without changing the value of the command, they would see the
     // old value instead of the actual value of the command.
     // https://github.com/ckeditor/ckeditor5-image/issues/114
-    labeledInput.fieldView.value = labeledInput.fieldView.element.value = initialValue;
+    labeledInput.fieldView.value = (<HTMLInputElement>labeledInput.fieldView.element).value = initialValue;
 
     this.#form.labeledInput.fieldView.select();
 
@@ -243,7 +252,7 @@ export default class CustomLinkTargetUI extends Plugin {
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
-  #getBalloonPositionData(): any {
-    return this.linkUI?._getBalloonPositionData();
+  #getBalloonPositionData(): Options {
+    return this.linkUI._getBalloonPositionData();
   }
 }
