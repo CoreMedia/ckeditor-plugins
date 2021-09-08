@@ -89,7 +89,7 @@ jobs:
           release_version=$(cat .release-version)
           echo "::set-output name=version::${release_version}"
       #Require a prerelease version on main branch when not explicitly releasing.
-      #Guard to not accidentially release.
+      #Guard to not accidentally release.
       - name: Require Prerelease Version
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(steps.read-version.outputs.version, '-')
         run: |
