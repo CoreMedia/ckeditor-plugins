@@ -128,4 +128,7 @@ jobs:
           echo "${next_version}" > .release-version
           pnpm install --no-frozen-lockfile
           git commit -am "Set next prerelease version ${next_version}"
-          git push
+      # Only push if something on main has been built. We don't want to have a lot of unnecessary version commits on every pull request.
+      - name: Push commits to git
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: git push
