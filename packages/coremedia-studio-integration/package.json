@@ -31,7 +31,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
-    "@coremedia-internal/jest-test-helpers": "^1.0.0",
+    "@coremedia-internal/jest-test-helpers": "1.0.1-rc.0",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
     "@types/jest": "^26.0.20",
     "@types/jest-each": "^24.3.0",
@@ -53,7 +53,7 @@
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-utils": "^1.0.0",
+    "@coremedia/coremedia-utils": "1.0.1-rc.0",
     "rxjs": "^6.5.4"
   }
 }
