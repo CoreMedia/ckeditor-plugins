@@ -58,7 +58,7 @@ jobs:
         run: |
           git stash
           actual_version=$(cat .release-version)
-          next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
+          next_version=$(semver --increment prerelease --preid pr${{ github.event.number }}-${{ github.run_number }} ${actual_version})
           pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
           pnpm install --no-frozen-lockfile
           git commit -am "Set PR Version: ${next_version}"
