@@ -5,6 +5,21 @@ import embedIcon from "../icons/target/embed.svg";
 import otherIcon from "../icons/target/openInFrame.svg";
 
 /**
+ * Artificial target name for the recommended minimal target configuration to
+ * add.
+ */
+const OTHER_TARGET_NAME = "_other";
+
+/**
+ * Values the default target option may take.
+ */
+type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
+
+type DefaultTargetOptions = {
+  [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
+};
+
+/**
  * Default targets to choose from.
  *
  * * **`_self`:**
@@ -39,22 +54,6 @@ import otherIcon from "../icons/target/openInFrame.svg";
  *     custom options you may provide. Otherwise, you may find `linkTarget`
  *     attributes in the model, which cannot be represented in the UI.
  */
-
-/**
- * Artificial target name for the recommended minimal target configuration to
- * add.
- */
-const OTHER_TARGET_NAME = "_other";
-
-/**
- * Values the default target option may take.
- */
-type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
-
-type DefaultTargetOptions = {
-  [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
-};
-
 const DEFAULT_TARGETS: DefaultTargetOptions = {
   _self: {
     icon: selfIcon,
@@ -71,7 +70,8 @@ const DEFAULT_TARGETS: DefaultTargetOptions = {
   // _none: While xlink:show also provides an option `none` we decided not to
   //    provide it as part of the API. If `_none` is used as `target` attribute
   //    value it will behave as `_other` with a custom target option value
-  //    `_none`.
+  //    `_none`. In custom configuration a custom target for `_none` can be
+  //    added.
   _other: {
     // Just an example for a custom icon.
     icon: otherIcon,
