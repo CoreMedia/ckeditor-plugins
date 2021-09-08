@@ -40,8 +40,15 @@ import otherIcon from "../icons/target/openInFrame.svg";
  *     attributes in the model, which cannot be represented in the UI.
  */
 
+/**
+ * Artificial target name for the recommended minimal target configuration to
+ * add.
+ */
 const OTHER_TARGET_NAME = "_other";
 
+/**
+ * Values the default target option may take.
+ */
 type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
 
 type DefaultTargetOptions = {
@@ -72,6 +79,12 @@ const DEFAULT_TARGETS: DefaultTargetOptions = {
   },
 };
 
+/**
+ * Transforms @see {@link DEFAULT_TARGETS} to a map from target name to target
+ * configuration.
+ *
+ * @param targets default target options
+ */
 const asMap = (targets: DefaultTargetOptions): Map<string, Required<LinkTargetOptionDefinition>> => {
   const result = new Map<string, Required<LinkTargetOptionDefinition>>();
   let target: keyof DefaultTargetOptions;
@@ -84,6 +97,12 @@ const asMap = (targets: DefaultTargetOptions): Map<string, Required<LinkTargetOp
   return result;
 };
 
+/**
+ * Transforms @see {@link DEFAULT_TARGETS} to an array of definition objects,
+ * as it is used in editor configuration for example.
+ *
+ * @param targets default target options
+ */
 const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<LinkTargetOptionDefinition>[] => {
   const result: Required<LinkTargetOptionDefinition>[] = [];
   let target: keyof DefaultTargetOptions;
@@ -99,10 +118,23 @@ const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<
 const DEFAULT_TARGETS_MAP: Map<string, Required<LinkTargetOptionDefinition>> = asMap(DEFAULT_TARGETS);
 const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
 
+/**
+ * Gets a default target definition for the given key, if available.
+ *
+ * @param key name of the definition to get
+ * @returns default target definition; `undefined` if not available
+ */
 const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
   return DEFAULT_TARGETS_MAP.get(key);
 };
 
+/**
+ * Gets a required default target definition for the given key.
+ *
+ * @param key name of the definition to get
+ * @returns default target definition
+ * @throws Error when default target definition of given name is not available
+ */
 const requireDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> => {
   const definition = getDefaultTargetDefinition(key);
   if (!definition) {
