@@ -54,9 +54,9 @@ interface LinkTargetConfig {
  *
  * @param config CKEditor configuration to parse
  */
-export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinition[] => {
+export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOptionDefinition>[] => {
   const fromConfig = config.get("link.targets");
-  const result: LinkTargetOptionDefinition[] = [];
+  const result: Required<LinkTargetOptionDefinition>[] = [];
   if (fromConfig === null || fromConfig === undefined) {
     return DEFAULT_TARGETS_ARRAY;
   }
@@ -83,6 +83,11 @@ export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinitio
         });
       }
     } else if (typeof entry === "object") {
+      // Part 1: Check for valid configuration object.
+      //
+      // Complicated? The following lines are a typesafe approach to validate,
+      // if required attributes have been set. It requires no type-checking nor
+      // casting, as we "fulfill" the required attributes on our own.
       const definition: LinkTargetOptionDefinition = {
         // Provoke a default empty name, which will fail if not set in object.
         name: "",
@@ -91,14 +96,19 @@ export const parseLinkTargetConfig = (config: Config): LinkTargetOptionDefinitio
       if (!definition.name) {
         throw new Error("link.targets: Configuration entry misses required non-empty property 'name'");
       }
+
+      // Part 2: Provide a merged result with fallbacks, where the custom
+      //         configuration always wins.
+
       // Possibly resolve default definition and add missing properties.
       const defaultDefinition: LinkTargetOptionDefinition | undefined = getDefaultTargetDefinition(definition.name);
       // The following approach will also work, if we add additional configuration attributes
       // to the standard definitions.
-      const mergedDefinition: LinkTargetOptionDefinition = {
+      const mergedDefinition: Required<LinkTargetOptionDefinition> = {
         // Defaults for entry
         ...{
           name: definition.name,
+          icon: "",
           title: definition.name,
         },
         // Possibly existing standard definition. (Hint: On undefined, just no attribute will be added.)
