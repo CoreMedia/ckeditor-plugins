@@ -103,6 +103,9 @@ class LinkTargetActionsViewExtension extends Plugin {
    * The buttons are bound to {@link LinkTargetCommand} to set the target on execute
    * and toggle their state accordingly.
    *
+   * Buttons created by this method directly set the target value they are bound
+   * to. For a custom target input field, use `CustomLinkTargetUI`.
+   *
    * @param buttonConfig configuration for the button
    * @param linkTargetCommand command to execute on click
    * @private
@@ -118,6 +121,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       isToggleable: true,
     });
 
+    // Corner Case: `_self` is also on, if no target is set yet.
     view
       .bind("isOn")
       .to(
