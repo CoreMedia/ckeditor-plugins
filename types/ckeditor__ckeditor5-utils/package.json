@@ -1,13 +1,11 @@
 {
-  "name": "@types/ckeditor__ckeditor5-utils",
-  "version": "28.0.0",
-  "license": "MIT",
-  "private": true,
-  "devDependencies": {
-    "@jangaroo/publish":"^1.0.0-alpha"
+  "name": "@coremedia/types-ckeditor__ckeditor5-utils",
+  "version": "1.0.1-rc.0",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=14.0.0"
   },
   "scripts": {
-    "publish": "jangaroo publish ./",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

@@ -1,16 +1,15 @@
 {
   "name": "@coremedia/coremedia-studio-integration",
-  "version": "28.2.0",
-  "private": true,
+  "version": "1.0.1-rc.0",
   "engines": {
     "node": ">=14.0.0"
   },
+  "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
     "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
-    "publish": "jangaroo publish ./dist",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
@@ -32,11 +31,10 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
-    "@coremedia-internal/jest-test-helpers": "^1.0.0",
+    "@coremedia-internal/jest-test-helpers": "1.0.1-rc.0",
+    "@coremedia/studio-apps-service-agent": "^0.0.31",
     "@types/jest": "^26.0.20",
     "@types/jest-each": "^24.3.0",
-    "@jangaroo/publish": "^1.0.0-alpha",
-    "@jangaroo/core": "^1.0.0-alpha",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "babel-jest": "^27.0.6",
@@ -51,9 +49,11 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"
   },
+  "peerDependencies": {
+    "@coremedia/studio-apps-service-agent": "^0.0.31"
+  },
   "dependencies": {
-    "@coremedia/coremedia-utils": "28.1.0",
-    "@coremedia/studio-apps-service-agent": "^0.0.31",
+    "@coremedia/coremedia-utils": "1.0.1-rc.0",
     "rxjs": "^6.5.4"
   }
 }

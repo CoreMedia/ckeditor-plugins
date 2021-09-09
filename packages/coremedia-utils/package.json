@@ -1,11 +1,10 @@
 {
   "name": "@coremedia/coremedia-utils",
-  "version": "28.1.0",
+  "version": "1.0.1-rc.0",
   "description": "Several utilities for CoreMedia Plugins.",
   "keywords": [
     "coremedia"
   ],
-  "private": true,
   "dependencies": {
     "webpack": "^5.12.3",
     "webpack-cli": "^4.3.1"
@@ -17,6 +16,7 @@
   "exports": {
     "./*": "./dist/*.js"
   },
+  "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
@@ -30,9 +30,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
-    "@coremedia-internal/jest-test-helpers": "^1.0.0",
-    "@jangaroo/publish": "^1.0.0-alpha",
-    "@jangaroo/core": "^1.0.0-alpha",
+    "@coremedia-internal/jest-test-helpers": "1.0.1-rc.0",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -49,7 +47,6 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
-    "publish": "jangaroo publish ./dist",
     "jest": "jest",
     "jest:coverage": "jest --collect-coverage",
     "lint": "eslint --fix \"src/**\"",

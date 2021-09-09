@@ -17,20 +17,23 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
+      "@ckeditor/ckeditor5-clipboard/*": [
+        "../ckeditor__ckeditor5-clipboard/*"
+      ],
       "@ckeditor/ckeditor5-core/*": [
         "../ckeditor__ckeditor5-core/*"
       ],
-      "@ckeditor/ckeditor5-paste-from-office/*": [
-        "../ckeditor__ckeditor5-paste-from-office/*"
-      ],
-      "@ckeditor/ckeditor5-clipboard/*": [
-        "../ckeditor__ckeditor5-clipboard/*"
+      "@ckeditor/ckeditor5-engine/*": [
+        "../ckeditor__ckeditor5-engine/*"
       ],
       "@ckeditor/ckeditor5-typing/*": [
         "../ckeditor__ckeditor5-typing/*"
       ],
-      "@ckeditor/ckeditor5-engine/*": [
-        "../ckeditor__ckeditor5-engine/*"
+      "@ckeditor/ckeditor5-ui/*": [
+        "../ckeditor__ckeditor5-ui/*"
+      ],
+      "@ckeditor/ckeditor5-utils/*": [
+        "../ckeditor__ckeditor5-utils/*"
       ]
     }
   }

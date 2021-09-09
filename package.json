@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5",
   "version": "1.0.0",
+  "private": true,
   "description": "Plugins required or recommended to use CKEditor 5 within CoreMedia Studio.",
   "keywords": [
     "ckeditor",
@@ -22,8 +23,7 @@
     "url": "https://github.com/CoreMedia/ckeditor-plugins",
     "type": "git"
   },
-  "license": "MIT",
-  "private": true,
+  "license": "Apache-2.0",
   "workspaces": [
     "types/*",
     "packages/coremedia-utils",
@@ -39,7 +39,8 @@
   ],
   "scripts": {
     "bootstrap": "pnpm install",
-    "publish": "pnpm -r run publish",
+    "publishall": "pnpm -r publish --no-git-checks",
+    "setversion": "set-version",
     "clean": "pnpm -r clean && rimraf ./dist",
     "build": "pnpm -r build",
     "jest": "pnpm -r jest",
@@ -49,6 +50,9 @@
     "lint": "pnpm -r lint",
     "prettier": "pnpm -r prettier",
     "npm-check-updates": "pnpm -r npm-check-updates"
+  },
+  "dependencies": {
+    "@coremedia/set-version": "1.1.0"
   },
   "devDependencies": {
     "pnpm": "^6.9.1",

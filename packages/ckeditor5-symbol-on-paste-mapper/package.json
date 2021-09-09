@@ -1,25 +1,13 @@
 {
   "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
-  "version": "28.0.0",
-  "private": true,
-  "dependencies": {
-    "@babel/plugin-transform-typescript": "^7.12.1",
-    "@ckeditor/ckeditor5-clipboard": "^28.0.0",
-    "@ckeditor/ckeditor5-core": "^28.0.0",
-    "@ckeditor/ckeditor5-engine": "^28.0.0",
-    "@ckeditor/ckeditor5-ui": "^28.0.0",
-    "@coremedia/coremedia-utils": "28.1.0",
-    "@types/webpack": "^4.41.25",
-    "babel-loader": "^8.2.2",
-    "webpack": "^5.12.3",
-    "webpack-cli": "^4.3.1"
-  },
+  "version": "1.0.1-rc.0",
   "engines": {
     "node": ">=14.0.0"
   },
   "exports": {
     "./*": "./dist/*.js"
   },
+  "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
@@ -36,8 +24,11 @@
     "@ckeditor/ckeditor5-alignment": "^28.0.0",
     "@ckeditor/ckeditor5-basic-styles": "^28.0.0",
     "@ckeditor/ckeditor5-block-quote": "^28.0.0",
+    "@ckeditor/ckeditor5-clipboard": "^28.0.0",
+    "@ckeditor/ckeditor5-core": "^28.0.0",
     "@ckeditor/ckeditor5-dev-tests": "^24.0.0",
     "@ckeditor/ckeditor5-editor-classic": "^28.0.0",
+    "@ckeditor/ckeditor5-engine": "^28.0.0",
     "@ckeditor/ckeditor5-essentials": "^28.0.0",
     "@ckeditor/ckeditor5-heading": "^28.0.0",
     "@ckeditor/ckeditor5-indent": "^28.0.0",
@@ -48,14 +39,8 @@
     "@ckeditor/ckeditor5-remove-format": "^28.0.0",
     "@ckeditor/ckeditor5-table": "^28.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^28.0.0",
-    "@coremedia-internal/jest-test-helpers": "^1.0.0",
-    "@jangaroo/publish": "^1.0.0-alpha",
-    "@jangaroo/core": "^1.0.0-alpha",
-    "@types/ckeditor__ckeditor5-clipboard": "28.0.0",
-    "@types/ckeditor__ckeditor5-core": "28.0.0",
-    "@types/ckeditor__ckeditor5-engine": "28.0.0",
-    "@types/ckeditor__ckeditor5-paste-from-office": "28.0.0",
-    "@types/ckeditor__ckeditor5-utils": "28.0.0",
+    "@ckeditor/ckeditor5-ui": "^28.0.0",
+    "@coremedia-internal/jest-test-helpers": "1.0.1-rc.0",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -67,7 +52,26 @@
     "jest": "^27.0.6",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.0"
+  },
+  "peerDependencies": {
+    "@ckeditor/ckeditor5-clipboard": "^28.0.0",
+    "@ckeditor/ckeditor5-core": "^28.0.0",
+    "@ckeditor/ckeditor5-engine": "^28.0.0",
+    "@ckeditor/ckeditor5-ui": "^28.0.0"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-typescript": "^7.12.1",
+    "@coremedia/coremedia-utils": "1.0.1-rc.0",
+    "@types/webpack": "^4.41.25",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.12.3",
+    "webpack-cli": "^4.3.1"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
@@ -76,7 +80,6 @@
     "jest:coverage": "jest --collect-coverage",
     "lint": "eslint --fix \"src/**\"",
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
-    "publish": "jangaroo publish ./dist",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

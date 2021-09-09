@@ -1,17 +1,12 @@
 {
-  "name": "@types/ckeditor__ckeditor5-core",
-  "version": "28.0.0",
-  "license": "MIT",
-  "private": true,
+  "name": "@coremedia/types-ckeditor__ckeditor5-core",
+  "version": "1.0.1-rc.0",
+  "license": "Apache-2.0",
   "dependencies": {
-    "@types/ckeditor__ckeditor5-engine": "^28.0.0",
-    "@types/ckeditor__ckeditor5-utils": "^28.0.0"
-  },
-  "devDependencies": {
-    "@jangaroo/publish":"^1.0.0-alpha"
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.0"
   },
   "scripts": {
-    "publish": "jangaroo publish ./",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

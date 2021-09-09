@@ -275,7 +275,7 @@ describe("RichTextDataProcessor.toData", () => {
         from: wrapView(generateComplexView(f).join("")),
         // Only measure for no repetition.
         optimalMilliseconds: f > 1 ? -1 : 30,
-        gracePercentage: 0.2,
+        gracePercentage: 5,
       }
     ])
   }

@@ -2,7 +2,7 @@ import View from '../view';
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
+import ViewCollection from "../viewcollection";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
