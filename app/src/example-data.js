@@ -25,17 +25,40 @@ function createLink(show, role, href = EXAMPLE_URL) {
  * @returns {string}
  */
 function escape(str) {
+  if (!str) {
+    return str;
+  }
+
   const el = xmlDocument.createElement("span");
   el.textContent = str;
   // noinspection InnerHTMLJS
   return el.innerHTML;
 }
 
+function decode(str) {
+  if (!str) {
+    return str;
+  }
+
+  // We need to parse HTML entities here, thus using HTML document.
+  let el = document.createElement("span");
+  // noinspection InnerHTMLJS
+  el.innerHTML = str;
+  return el.textContent;
+}
+
+function truncate(str, maxLength) {
+  if (!!str && str.length > maxLength) {
+    return `${str.substring(0, maxLength)}${decode("&hellip;")}`;
+  }
+  return str;
+}
+
 function renderUiEditorValue(uiEditorValue) {
   if (uiEditorValue === "") {
     return `${em("empty")}`;
   }
-  return escape(uiEditorValue) || UNSET;
+  return uiEditorValue || UNSET;
 }
 
 function em(str) {
@@ -47,7 +70,16 @@ function createLinkTableHeading() {
 }
 
 function createLinkTableRow({comment, show, role, target, uiActiveButton, uiEditorValue}) {
-  return `<tr><td>${escape(show) || UNSET}</td><td>${escape(role) || UNSET}</td><td>${escape(target) || UNSET}</td><td>${uiActiveButton || UNSET}</td><td>${renderUiEditorValue(uiEditorValue)}</td><td>${createLink(show, role, EXAMPLE_URL)}</td><td>${comment || ""}</td></tr>`;
+  const shorten = (str) => escape(truncate(str, 15));
+  return `<tr>
+    <td>${shorten(show) || UNSET}</td>
+    <td>${shorten(role) || UNSET}</td>
+    <td>${shorten(target) || UNSET}</td>
+    <td>${uiActiveButton || UNSET}</td>
+    <td>${renderUiEditorValue(shorten(uiEditorValue))}</td>
+    <td>${createLink(show, role, EXAMPLE_URL)}</td>
+    <td>${comment || ""}</td>
+  </tr>`;
 }
 
 function createLinkScenario(title, scenarios) {
@@ -178,6 +210,8 @@ function contentLinkExamples() {
 }
 
 function linkTargetExamples() {
+  const LONG_TARGET = lorem(100);
+
   /**
    * The mapping we agreed upon for `xlink:show` to some target value.
    * `other` is skipped here, as it is used for special meaning, which is,
@@ -264,10 +298,10 @@ function linkTargetExamples() {
     {
       comment: "Open in Frame; UI challenge with long target value",
       show: "other",
-      role: lorem(10),
-      target: `${lorem(2)}...`,
+      role: LONG_TARGET,
+      target: LONG_TARGET,
       uiActiveButton: "Open in Frame",
-      uiEditorValue: `${lorem(2)}...`,
+      uiEditorValue: LONG_TARGET,
     },
     {
       comment: "Open in Frame; UI cross-site-scripting challenge",
