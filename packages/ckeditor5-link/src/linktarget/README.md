@@ -293,6 +293,9 @@ may provide labels translated to your UI language.
 
 The title defaults to the name of the target option if unset.
 
+**icon:** Icons will be scaled to 20×20. Thus, it is recommended providing SVGs
+having this initial size.
+
 ## CoreMedia RichText 1.0 Integration
 
 [CoreMedia RichText 1.0 Integration]: <#coremedia-richtext-10-integration>
