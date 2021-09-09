@@ -1,0 +1,69 @@
+name: Feature Branches
+
+on:
+  # On push on a PR we want to trigger a normal build without publishing anything
+  pull_request:
+    branches: [ main ]
+  # Manual trigger means we want to produce published prerelease artifacts for retesting purposes
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    # do not run when if it is a manual trigger on the main branch as we have other CI for this. This one is only for feature branches
+    if: github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Allocate PR Number for manual trigger
+        id: read-prnumber
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          prnumber=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{github.repository}}/pulls?head=${{github.repository_owner}}:${{github.ref}} | jq -r '.[] | .number' )
+          echo "Allocated pr number ${prnumber}"
+          echo "::set-output name=prnumber::${prnumber}"
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Configure NPM
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          npm install -g pnpm@6.14.6
+          npm install -g semver
+          npm config set @coremedia:registry=https://npm.coremedia.io
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
+      - name: Setup Git
+        run: |
+          git config --global user.name 'coremedia-ci'
+          git config --global user.email 'coremedia-ci@coremedia.com'
+      - name: Install
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: pnpm install
+      - name: Set prerelease version (if triggered manually)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git stash
+          actual_version=$(cat .release-version)
+          prnumber=${{ steps.read-prnumber.outputs.prnumber }}
+          next_version=$(semver --increment prerelease --preid pr${prnumber}-${{ github.run_number }} ${actual_version})
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          pnpm install --no-frozen-lockfile
+          git commit -am "Set PR Version: ${next_version}"
+          git stash apply
+      - name: Build
+        run: pnpm build
+      - name: Lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm jest
+      - name: Publish prerelease
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          pnpm install --production
+          pnpm publishall --no-git-checks
+
