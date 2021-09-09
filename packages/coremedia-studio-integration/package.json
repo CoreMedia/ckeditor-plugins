@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/coremedia-studio-integration",
-  "version": "1.0.1-rc.0",
+  "version": "1.0.1-rc.1",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -53,7 +53,7 @@
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-utils": "1.0.1-rc.0",
+    "@coremedia/coremedia-utils": "1.0.1-rc.1",
     "rxjs": "^6.5.4"
   }
 }

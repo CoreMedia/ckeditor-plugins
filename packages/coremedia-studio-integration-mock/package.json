@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/coremedia-studio-integration-mock",
-  "version": "1.0.1-rc.0",
+  "version": "1.0.1-rc.1",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -49,16 +49,16 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.0",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.0"
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.1"
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^28.0.0",
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-studio-integration": "1.0.1-rc.0",
-    "@coremedia/coremedia-utils": "1.0.1-rc.0",
+    "@coremedia/coremedia-studio-integration": "1.0.1-rc.1",
+    "@coremedia/coremedia-utils": "1.0.1-rc.1",
     "rxjs": "^6.5.4"
   }
 }
