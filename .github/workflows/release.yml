@@ -1,9 +1,7 @@
-name: Build
+name: Releases
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
   workflow_dispatch:
     inputs:
@@ -11,7 +9,6 @@ on:
         description: 'Release type. Allowed values: "major", "minor", "patch"'
         required: true
         default: 'patch'
-
 jobs:
   build:
     name: Build
@@ -52,24 +49,6 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: pnpm install
-      # FOR PR ONLY!
-      #
-      # For pull requests we use special prerelease version to prevent accidents while publishing them into local repository.
-      # Format: MAJOR.MINOR.PATCH.pr{PR_NUMBER}-{PR_RUN_NUMBER}.{RUN_NUMBER}
-      # It is important to set the versions of the dependencies to exactly the prerelease version because
-      # prerelease versions are never included in semver ranges.
-      - name: Set Version for PR
-        if: github.event_name == 'pull_request'
-        run: |
-          git stash
-          actual_version=$(cat .release-version)
-          next_version=$(semver --increment prerelease --preid pr${{ github.event.number }}-${{ github.run_number }} ${actual_version})
-          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
-          pnpm install --no-frozen-lockfile
-          git commit -am "Set PR Version: ${next_version}"
-          git stash apply
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       # ON MAIN BY MANUAL TRIGGER ONLY!
       # Set the release version to actual MAJOR.MINOR.PATCH version.
       # If a prerelease is triggered manually, we keep the prerelease version for this workflow.
@@ -112,7 +91,7 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: pnpm install --production
       - name: Publish
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/main'
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
@@ -123,7 +102,7 @@ jobs:
       - name: Create Next Prerelease Version
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/main'
         # Make sure to not commit anything which has been changed in one of the previous steps.
         # Update the version, afterwards commit and push.
         run: |

@@ -1,0 +1,38 @@
+name: Pull Requests
+
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Configure NPM
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          npm install -g pnpm@6.14.6
+          npm install -g semver
+          npm config set @coremedia:registry=https://npm.coremedia.io
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
+      - name: Setup Git
+        run: |
+          git config --global user.name 'coremedia-ci'
+          git config --global user.email 'coremedia-ci@coremedia.com'
+      - name: Install
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: pnpm install
+      - name: Build
+        run: pnpm build
+      - name: Lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm jest
