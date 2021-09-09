@@ -1,6 +1,7 @@
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
-import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
+import DefaultTarget, { getDefaultTargetsArray, getDefaultTargetDefinition } from "./DefaultTarget";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
+import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 
 /**
  * Provides the given targets to select from.
@@ -54,11 +55,11 @@ interface LinkTargetConfig {
  *
  * @param config CKEditor configuration to parse
  */
-export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOptionDefinition>[] => {
+export const parseLinkTargetConfig = (config: Config, locale: Locale): Required<LinkTargetOptionDefinition>[] => {
   const fromConfig = config.get("link.targets");
   const result: Required<LinkTargetOptionDefinition>[] = [];
   if (fromConfig === null || fromConfig === undefined) {
-    return DEFAULT_TARGETS_ARRAY;
+    return getDefaultTargetsArray(locale);
   }
 
   if (!Array.isArray(fromConfig)) {
@@ -72,7 +73,7 @@ export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOption
       if (!name) {
         throw new Error("link.targets: Target name must not be empty.");
       }
-      const defaultDefinition = getDefaultTargetDefinition(name);
+      const defaultDefinition = getDefaultTargetDefinition(name, locale);
       if (!!defaultDefinition) {
         result.push(defaultDefinition);
       } else {
@@ -101,7 +102,10 @@ export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOption
       //         configuration always wins.
 
       // Possibly resolve default definition and add missing properties.
-      const defaultDefinition: LinkTargetOptionDefinition | undefined = getDefaultTargetDefinition(definition.name);
+      const defaultDefinition: LinkTargetOptionDefinition | undefined = getDefaultTargetDefinition(
+        definition.name,
+        locale
+      );
       // The following approach will also work, if we add additional configuration attributes
       // to the standard definitions.
       const mergedDefinition: Required<LinkTargetOptionDefinition> = {

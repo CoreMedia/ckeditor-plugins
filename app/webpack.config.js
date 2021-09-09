@@ -54,7 +54,10 @@ module.exports = {
       // UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
       // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
       language: 'en',
-      additionalLanguages: 'all'
+      // The sourceFilesPattern needs to be set manually in order to detect the CoreMedia plugins
+      // since the package's entry js is located in the dist folder
+      sourceFilesPattern: /[/\\]ckeditor5-[^/\\]+[/\\](src|dist)[/\\].+\.js$/,
+      additionalLanguages: ['de']
     }),
     new webpack.BannerPlugin({
       banner: bundler.getLicenseBanner(),

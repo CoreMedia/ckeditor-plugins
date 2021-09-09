@@ -3,6 +3,7 @@ import selfIcon from "../icons/target/openInCurrentTab.svg";
 import blankIcon from "../icons/target/openInNewTab.svg";
 import embedIcon from "../icons/target/embed.svg";
 import otherIcon from "../icons/target/openInFrame.svg";
+import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 
 /**
  * Artificial target name for the recommended minimal target configuration to
@@ -54,18 +55,18 @@ type DefaultTargetOptions = {
  *     custom options you may provide. Otherwise, you may find `linkTarget`
  *     attributes in the model, which cannot be represented in the UI.
  */
-const DEFAULT_TARGETS: DefaultTargetOptions = {
+const getDefaultTargets = (locale: Locale): DefaultTargetOptions => ({
   _self: {
     icon: selfIcon,
-    title: "Open in Current Tab",
+    title: locale.t("Open in Current Tab"),
   },
   _blank: {
     icon: blankIcon,
-    title: "Open in New Tab",
+    title: locale.t("Open in New Tab"),
   },
   _embed: {
     icon: embedIcon,
-    title: "Show Embedded",
+    title: locale.t("Show Embedded"),
   },
   // _none: While xlink:show also provides an option `none` we decided not to
   //    provide it as part of the API. If `_none` is used as `target` attribute
@@ -75,9 +76,9 @@ const DEFAULT_TARGETS: DefaultTargetOptions = {
   _other: {
     // Just an example for a custom icon.
     icon: otherIcon,
-    title: "Open in Frame",
+    title: locale.t("Open in Frame"),
   },
-};
+});
 
 /**
  * Transforms @see {@link DEFAULT_TARGETS} to a map from target name to target
@@ -115,8 +116,10 @@ const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<
   return result;
 };
 
-const DEFAULT_TARGETS_MAP: Map<string, Required<LinkTargetOptionDefinition>> = asMap(DEFAULT_TARGETS);
-const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
+const getDefaultTargetsMap = (locale: Locale): Map<string, Required<LinkTargetOptionDefinition>> =>
+  asMap(getDefaultTargets(locale));
+const getDefaultTargetsArray = (locale: Locale): Required<LinkTargetOptionDefinition>[] =>
+  asLinkTargetOptionDefinitions(getDefaultTargets(locale));
 
 /**
  * Gets a default target definition for the given key, if available.
@@ -124,8 +127,8 @@ const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTarg
  * @param key name of the definition to get
  * @returns default target definition; `undefined` if not available
  */
-const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
-  return DEFAULT_TARGETS_MAP.get(key);
+const getDefaultTargetDefinition = (key: string, locale: Locale): Required<LinkTargetOptionDefinition> | undefined => {
+  return getDefaultTargetsMap(locale).get(key);
 };
 
 /**
@@ -135,8 +138,8 @@ const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefin
  * @returns default target definition
  * @throws Error when default target definition of given name is not available
  */
-const requireDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> => {
-  const definition = getDefaultTargetDefinition(key);
+const requireDefaultTargetDefinition = (key: string, locale: Locale): Required<LinkTargetOptionDefinition> => {
+  const definition = getDefaultTargetDefinition(key, locale);
   if (!definition) {
     throw new Error(`Default Target Definition does not exist: "${key}"`);
   }
@@ -146,8 +149,8 @@ const requireDefaultTargetDefinition = (key: string): Required<LinkTargetOptionD
 export default DefaultTarget;
 export {
   OTHER_TARGET_NAME,
-  DEFAULT_TARGETS,
-  DEFAULT_TARGETS_ARRAY,
+  getDefaultTargets,
+  getDefaultTargetsArray,
   getDefaultTargetDefinition,
   requireDefaultTargetDefinition,
   DefaultTargetOptions,
