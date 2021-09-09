@@ -20,7 +20,7 @@
 /* content link view inner button */
 .cm-ck-content-link-view > .ck.ck-button{
   border: none;
-  min-height: calc(var(--ck-ui-component-min-height) -2px);
+  min-height: calc(var(--ck-ui-component-min-height) - 2px);
 }
 
 /* prevents icons to be too high in studio context */
