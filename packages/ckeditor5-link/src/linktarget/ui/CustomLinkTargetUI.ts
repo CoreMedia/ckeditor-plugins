@@ -12,6 +12,11 @@ import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 
+/**
+ * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
+ * the button is pressed, an input field pops up to enter any string as
+ * `linkTarget`.
+ */
 export default class CustomLinkTargetUI extends Plugin {
   static readonly pluginName: string = "CustomLinkTargetUI";
 
@@ -50,6 +55,15 @@ export default class CustomLinkTargetUI extends Plugin {
     return null;
   }
 
+  /**
+   * Parses the configuration to determine the desired behavior of `_other`
+   * button.
+   *
+   * @param config configuration to parse
+   * @returns well-defined attribute values, which should not be handled by `_other` in `otherNames`;
+   * button-configuration in `myConfig`
+   * @private
+   */
   #parseConfig(config: Config): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
     const linkTargetDefinitions = parseLinkTargetConfig(config);
 
@@ -97,12 +111,15 @@ export default class CustomLinkTargetUI extends Plugin {
         if (value === undefined) {
           return false;
         }
+        // As "fallback" the `_other` button is active, if no other button matched.
         return !reservedTargetNames.has(value);
       });
 
       /*
        * The tooltip changes if a custom target is set. We can determine this by checking the "isOn" value of the button.
-       * Corner case: if the value is "_other", we'll display the default tooltip as well.
+       * Corner case: if the value is "_other", we'll display the default tooltip as well,
+       * although it will open with an empty editor when clicked (as specified, as we may fix the orphaned value of
+       * xlink:show="other" this way).
        */
       view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: string) => {
         if (isOn && value !== OTHER_TARGET_NAME) {
