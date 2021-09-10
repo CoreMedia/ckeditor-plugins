@@ -53,14 +53,17 @@ jobs:
       - name: Create Release Version
         if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
         run: |
-          git stash
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
           actual_version=$(cat .release-version)
           next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
           pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=^${next_version}
           pnpm install --no-frozen-lockfile
           echo "${next_version}" > .release-version
           git commit -am "Set release version ${next_version}"
-          git stash apply
       #Provide the actual version for later checks.
       #Access: steps.read-version.outputs.version
       - name: Read Version
@@ -98,7 +101,11 @@ jobs:
         # Make sure to not commit anything which has been changed in one of the previous steps.
         # Update the version, afterwards commit and push.
         run: |
-          git reset --hard
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
           actual_version=$(cat .release-version)
           next_version=$(semver --increment prerelease --preid rc ${actual_version})
           pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}

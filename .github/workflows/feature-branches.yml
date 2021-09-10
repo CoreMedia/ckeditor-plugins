@@ -43,14 +43,17 @@ jobs:
       - name: Set prerelease version (if triggered manually)
         if: github.event_name == 'workflow_dispatch'
         run: |
-          git stash
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
           actual_version=$(cat .release-version)
           prnumber=${{ steps.read-prnumber.outputs.prnumber }}
           next_version=$(semver --increment prerelease --preid pr${prnumber}-${{ github.run_number }} ${actual_version})
           pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
           pnpm install --no-frozen-lockfile
           git commit -am "Set PR Version: ${next_version}"
-          git stash apply
       - name: Build
         run: pnpm build
       - name: Lint
