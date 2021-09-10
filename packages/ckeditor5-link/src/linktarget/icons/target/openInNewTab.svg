@@ -1,3 +1,14 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M8 4H21C21.5523 4 22 4.44771 22 5V8H8V4ZM1 5C1 3.89543 1.89543 3 3 3H21C22.1046 3 23 3.89543 23 5V19C23 20.1046 22.1046 21 21 21H3C1.89543 21 1 20.1046 1 19V5ZM12 19C14.4853 19 16.5 16.9853 16.5 14.5C16.5 12.0147 14.4853 10 12 10C9.51472 10 7.5 12.0147 7.5 14.5C7.5 16.9853 9.51472 19 12 19ZM11.5 14V11H12.5V14H15.5V15H12.5V18H11.5V15H8.5V14H11.5Z" fill="#3F3F3F"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 20 20" style="enable-background:new 0 0 20 20;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#3F3F3F;}
+</style>
+<g>
+	<path class="st0" d="M17,2H3C1.9,2,1,2.9,1,4v12c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V4C19,2.9,18.1,2,17,2z M10,16
+		c-1.93,0-3.5-1.57-3.5-3.5S8.07,9,10,9s3.5,1.57,3.5,3.5S11.93,16,10,16z M18,6.93C18,6.97,17.97,7,17.93,7H7.07
+		C7.03,7,7,6.97,7,6.93V3.07C7,3.03,7.03,3,7.07,3H17c0.55,0,1,0.45,1,1V6.93z"/>
+	<polygon class="st0" points="10.5,9.5 9.5,9.5 9.5,12 7,12 7,13 9.5,13 9.5,15.5 10.5,15.5 10.5,13 13,13 13,12 10.5,12 	"/>
+</g>
 </svg>
