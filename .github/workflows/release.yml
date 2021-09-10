@@ -105,5 +105,10 @@ jobs:
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
           git reset --hard
-      - name: Push commits to git
+      - name: Push commits
         run: git push
+      - name: Create git tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag $(cat .release-version)
+          git push origin $(cat .release-version)
