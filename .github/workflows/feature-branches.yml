@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     # do not run when if it is a manual trigger on the main branch as we have other CI for this. This one is only for feature branches
     if: github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main'
+    env:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
+      NPM_CONFIG_//npm.coremedia.io/:_authToken: ${NPM_AUTH_TOKEN}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,20 +31,14 @@ jobs:
         with:
           node-version: 14.x
       - name: Configure NPM
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           npm install -g pnpm@6.14.6
           npm install -g semver
-          npm config set @coremedia:registry=https://npm.coremedia.io
-          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
       - name: Install
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: pnpm install
       - name: Set prerelease version (if triggered manually)
         if: github.event_name == 'workflow_dispatch'
@@ -61,8 +59,6 @@ jobs:
         run: pnpm jest
       - name: Publish prerelease
         if: github.event_name == 'workflow_dispatch'
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           pnpm install --production
           pnpm publishall --no-git-checks
