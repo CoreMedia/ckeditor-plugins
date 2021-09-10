@@ -64,7 +64,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   #extendView(linkUI: LinkUI): void {
     const actionsView: LinkActionsView = linkUI.actionsView;
     const linkTargetCommand = this.editor.commands.get("linkTarget");
-    const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config, this.editor.locale);
+    const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config);
 
     // convert button configurations to buttonView instances
     const buttons = linkTargetDefinitions.map((buttonConfig) => {

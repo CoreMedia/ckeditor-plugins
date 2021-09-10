@@ -65,7 +65,7 @@ export default class CustomLinkTargetUI extends Plugin {
    * @private
    */
   #parseConfig(config: Config): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
-    const linkTargetDefinitions = parseLinkTargetConfig(config, this.editor.locale);
+    const linkTargetDefinitions = parseLinkTargetConfig(config);
 
     const otherNames = linkTargetDefinitions
       .map((definition): string => definition.name)
@@ -73,7 +73,7 @@ export default class CustomLinkTargetUI extends Plugin {
 
     const myConfig: Required<LinkTargetOptionDefinition> = {
       // First provide some defaults, in case they don't exist in definition.
-      ...requireDefaultTargetDefinition(OTHER_TARGET_NAME, this.editor.locale),
+      ...requireDefaultTargetDefinition(OTHER_TARGET_NAME),
       // Now override with definition found in config.
       ...linkTargetDefinitions.find((definition) => definition.name === OTHER_TARGET_NAME),
     };
