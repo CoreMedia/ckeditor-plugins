@@ -20,7 +20,7 @@ jobs:
       - name: Manual workflow trigger precondition check
         if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main'
         run: |
-          echo "It is not allowed to run a workflow manually from a feature branch."
+          echo "::error Building a release is only allowed from main-branch!"
           exit 1
       #Make sure the release type is one of the allowed inputs.
       - name: Workflow Dispatch release type check
