@@ -64,20 +64,25 @@ jobs:
           pnpm install --no-frozen-lockfile
           echo "${next_version}" > .release-version
           git commit -am "Set release version ${next_version}"
-      #Provide the actual version for later checks.
-      #Access: steps.read-version.outputs.version
-      - name: Read Version
-        id: read-version
+      # Set prerelease version.
+      # On push we only want to provide a possible rc which is testable and maybe already testable by our customers.
+      # Make sure to set the dependency versions to the concrete version as prerelease versions are not referenced by semver ranges.
+      - name: Create Prerelease Version
+        if: github.event_name == 'push'
+        # Make sure to not commit anything which has been changed in one of the previous steps.
+        # Update the version, afterwards commit and push.
         run: |
-          release_version=$(cat .release-version)
-          echo "::set-output name=version::${release_version}"
-      #Require a prerelease version when not explicitly releasing.
-      #Guard to not accidentally release.
-      - name: Require Prerelease Version
-        if: github.event_name == 'push' && !contains(steps.read-version.outputs.version, '-')
-        run: |
-          echo "Expected prerelease version on main"
-          exit 1
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
+          actual_version=$(cat .release-version)
+          next_version=$(semver --increment prerelease --preid rc ${actual_version})
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          pnpm install --no-frozen-lockfile
+          echo "${next_version}" > .release-version
+          git commit -am "Set next prerelease version ${next_version}"
       - name: Build
         run: |
           pnpm build
@@ -93,22 +98,5 @@ jobs:
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
           git reset --hard
-      # Set next prerelease version to prepare for next build.
-      # This ensures that we do not build one release number twice (for not getting conflicts in our repository)
-      - name: Create Next Prerelease Version
-        # Make sure to not commit anything which has been changed in one of the previous steps.
-        # Update the version, afterwards commit and push.
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git status
-            echo "error:: There are unexpected changes in git!";
-            exit 1
-          fi
-          actual_version=$(cat .release-version)
-          next_version=$(semver --increment prerelease --preid rc ${actual_version})
-          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
-          echo "${next_version}" > .release-version
-          pnpm install --no-frozen-lockfile
-          git commit -am "Set next prerelease version ${next_version}"
       - name: Push commits to git
         run: git push
