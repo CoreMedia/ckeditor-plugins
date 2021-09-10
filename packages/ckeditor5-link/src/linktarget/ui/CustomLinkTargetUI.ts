@@ -170,7 +170,7 @@ export default class CustomLinkTargetUI extends Plugin {
     });
 
     // Close the form on Esc key press.
-    this.#form.keystrokes.set("Esc", (data: any, cancel: () => void) => {
+    this.#form.keystrokes.set("Esc", (data: unknown, cancel: () => void) => {
       this.#hideForm(true);
       cancel();
     });

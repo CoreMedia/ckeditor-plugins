@@ -156,7 +156,7 @@ export default class ContentLinks extends Plugin {
     });
   }
 
-  #extendFormView(linkUI: LinkUI) {
+  #extendFormView(linkUI: LinkUI): void {
     const formView = linkUI.formView;
 
     const t = this.editor.locale.t;
@@ -171,7 +171,7 @@ export default class ContentLinks extends Plugin {
     ContentLinks.#customizeFormView(formView);
   }
 
-  #extendActionsView(linkUI: LinkUI) {
+  #extendActionsView(linkUI: LinkUI): void {
     ContentLinks.#customizeActionsView(linkUI.actionsView);
   }
 
