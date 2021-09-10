@@ -1,5 +1,7 @@
 name: Releases
-
+# ensure that for one branch the workflow is not running multiple times at the same time as we will get trouble
+# with the versions and pushes.
+concurrency: ci-${{ github.ref }}
 on:
   push:
     branches: [ main ]
@@ -45,6 +47,7 @@ jobs:
         run: |
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
+          git pull
       - name: Install
         run: pnpm install
       # BY MANUAL TRIGGER ONLY!
@@ -60,6 +63,8 @@ jobs:
           fi
           actual_version=$(cat .release-version)
           next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
+          echo "Current version: ${actual_version}"
+          echo "Next version: ${next_version}"
           pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=^${next_version}
           pnpm install --no-frozen-lockfile
           echo "${next_version}" > .release-version
@@ -79,6 +84,8 @@ jobs:
           fi
           actual_version=$(cat .release-version)
           next_version=$(semver --increment prerelease --preid rc ${actual_version})
+          echo "Current version: ${actual_version}"
+          echo "Next version: ${next_version}"
           pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
           pnpm install --no-frozen-lockfile
           echo "${next_version}" > .release-version
