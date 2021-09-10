@@ -28,7 +28,7 @@ jobs:
           exit 1
       #Make sure the release type is one of the allowed inputs.
       - name: Workflow Dispatch release type check
-        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch' || github.event.inputs.release_type == 'prerelease')
+        if: github.event_name == 'workflow_dispatch' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch' || github.event.inputs.release_type == 'prerelease')
         run: |
           echo "Expected a release type due to the manual build execution on main branch."
           echo "Allowed release types are: major, minor, patch"
@@ -47,11 +47,11 @@ jobs:
           git config --global user.email 'coremedia-ci@coremedia.com'
       - name: Install
         run: pnpm install
-      # ON MAIN BY MANUAL TRIGGER ONLY!
+      # BY MANUAL TRIGGER ONLY!
       # Set the release version to actual MAJOR.MINOR.PATCH version.
       # If a prerelease is triggered manually, we keep the prerelease version for this workflow.
       - name: Create Release Version
-        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch'
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git status
@@ -71,10 +71,10 @@ jobs:
         run: |
           release_version=$(cat .release-version)
           echo "::set-output name=version::${release_version}"
-      #Require a prerelease version on main branch when not explicitly releasing.
+      #Require a prerelease version when not explicitly releasing.
       #Guard to not accidentally release.
       - name: Require Prerelease Version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(steps.read-version.outputs.version, '-')
+        if: github.event_name == 'push' && !contains(steps.read-version.outputs.version, '-')
         run: |
           echo "Expected prerelease version on main"
           exit 1
@@ -93,11 +93,9 @@ jobs:
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
           git reset --hard
-      # MAIN ONLY
       # Set next prerelease version to prepare for next build.
       # This ensures that we do not build one release number twice (for not getting conflicts in our repository)
       - name: Create Next Prerelease Version
-        if: github.ref == 'refs/heads/main'
         # Make sure to not commit anything which has been changed in one of the previous steps.
         # Update the version, afterwards commit and push.
         run: |
@@ -112,7 +110,5 @@ jobs:
           echo "${next_version}" > .release-version
           pnpm install --no-frozen-lockfile
           git commit -am "Set next prerelease version ${next_version}"
-      # Only push if something on main has been built. We don't want to have a lot of unnecessary version commits on every pull request.
       - name: Push commits to git
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: git push
