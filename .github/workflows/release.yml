@@ -87,7 +87,9 @@ jobs:
       - name: Publish
         if: github.ref == 'refs/heads/main'
         run: |
-          pnpm publishall --no-git-checks
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
+          pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
+          git reset --hard
       # MAIN ONLY
       # Set next prerelease version to prepare for next build.
       # This ensures that we do not build one release number twice (for not getting conflicts in our repository)
