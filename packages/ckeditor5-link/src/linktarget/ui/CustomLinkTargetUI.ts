@@ -85,7 +85,7 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   /**
-   * Creates a button showing the balloon panel for changing the image text alternative and
+   * Creates a button showing the balloon panel for changing the link target and
    * registers it in the editor {@link module:ui/componentfactory~ComponentFactory ComponentFactory}.
    *
    * @private
@@ -152,7 +152,7 @@ export default class CustomLinkTargetUI extends Plugin {
     this.#balloon = <ContextualBalloon>this.editor.plugins.get("ContextualBalloon");
 
     /**
-     * A form containing a textarea and buttons, used to change the `alt` text value.
+     * A form containing a textarea and buttons, used to change the target value for "Open In Frame".
      */
     this.#form = new CustomLinkTargetInputFormView(editor.locale);
 
@@ -185,7 +185,7 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   /**
-   * Shows the {@link #form} in the {@link #balloon}.
+   * Opens a balloon and shows the {@link #form} in the {@link #balloon}.
    *
    * @private
    */
@@ -227,7 +227,7 @@ export default class CustomLinkTargetUI extends Plugin {
   /**
    * Removes the {@link #form} from the {@link #balloon}.
    *
-   * @param {Boolean} [focusEditable=false] Controls whether the editing view is focused afterwards.
+   * @param {Boolean} focusEditable optional (defaults to false) Controls whether the editing view is focused afterwards.
    * @private
    */
   #hideForm(focusEditable = false): void {
@@ -263,6 +263,7 @@ export default class CustomLinkTargetUI extends Plugin {
    *
    * @private
    * @type {Boolean}
+   * @return true if the {@link #form} is in the {@link #balloon}
    */
   get #isInBalloon(): boolean {
     return this.#balloon?.hasView(this.#form) || false;

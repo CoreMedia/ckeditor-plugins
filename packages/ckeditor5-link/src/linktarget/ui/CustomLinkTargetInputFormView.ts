@@ -16,7 +16,10 @@ import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 import "../theme/customlinktargerform.css";
 
 /**
- * The CustomLinkTargetInputFormView class. It is used to edit a custom target.
+ * The CustomLinkTargetInputFormView class is a basic view with a few child items.
+ * It is used to edit a custom target.
+ * It consists of a basic input field (with label) and two buttons (save & cancel)
+ * Keystrokes and focus are handled accordingly.
  */
 export default class CustomLinkTargetInputFormView extends View {
   readonly focusTracker: FocusTracker;
@@ -51,7 +54,7 @@ export default class CustomLinkTargetInputFormView extends View {
     this.keystrokes = new KeystrokeHandler();
 
     /**
-     * An input with a label.
+     * The target input.
      */
     this.labeledInput = this.#createLabeledInputView();
 
@@ -70,15 +73,14 @@ export default class CustomLinkTargetInputFormView extends View {
      * A collection of views which can be focused in the form.
      *
      * @readonly
-     * @protected
      */
     this.#focusables = new ViewCollection();
 
     /**
      * Helps cycling over focusables in the form.
+     * The focusCycler determines which focusables exist and how to cycle between them.
      *
      * @readonly
-     * @protected
      */
     this.#focusCycler = new FocusCycler({
       focusables: this.#focusables,
@@ -109,6 +111,10 @@ export default class CustomLinkTargetInputFormView extends View {
     injectCssTransitionDisabler(this);
   }
 
+  /**
+   * We need to handle key inputs and focus management for the view and its items
+   * This is done similar to how CKEditor does this in their own plugins.
+   */
   override render(): void {
     super.render();
 
@@ -134,7 +140,7 @@ export default class CustomLinkTargetInputFormView extends View {
    * @param {String} label The button label
    * @param {String} icon The button's icon.
    * @param {String} className The additional button CSS class name.
-   * @param {String} [eventName?] The event name that the ButtonView#execute event will be delegated to.
+   * @param {String} eventName? The event name that the ButtonView#execute event will be delegated to.
    * @returns {@link ButtonView} The button view instance.
    */
   #createButton(label: string, icon: string, className: string, eventName?: string): ButtonView {
@@ -160,7 +166,7 @@ export default class CustomLinkTargetInputFormView extends View {
   }
 
   /**
-   * Creates an input with a label.
+   * Creates the target input with a corresponding label.
    *
    * @private
    * @returns {@link LabeledFieldView} Labeled field view instance.
