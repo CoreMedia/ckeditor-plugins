@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext",
-  "version": "1.0.1-rc.1",
+  "version": "1.0.1-rc.3",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -46,9 +46,9 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.1",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.1",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.1"
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.3"
   },
   "exports": {
     "./*": "./dist/*.js"
@@ -59,7 +59,7 @@
     "@ckeditor/ckeditor5-utils": "^28.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-dataprocessor-support": "1.0.1-rc.1",
-    "@coremedia/coremedia-utils": "1.0.1-rc.1"
+    "@coremedia/ckeditor5-dataprocessor-support": "1.0.1-rc.3",
+    "@coremedia/coremedia-utils": "1.0.1-rc.3"
   }
 }

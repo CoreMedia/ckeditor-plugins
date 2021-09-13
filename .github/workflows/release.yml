@@ -1,0 +1,115 @@
+name: Releases
+# ensure that for one branch the workflow is not running multiple times at the same time as we will get trouble
+# with the versions and pushes.
+concurrency: ci-${{ github.ref }}
+on:
+  push:
+    branches:
+     - main
+     - 'maintenance/**'
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type. Allowed values: "major", "minor", "patch"'
+        required: true
+        default: 'patch'
+jobs:
+  build:
+    name: Build
+    env:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
+      NPM_CONFIG_//npm.coremedia.io/:_authToken: ${NPM_AUTH_TOKEN}
+    runs-on: ubuntu-latest
+    if: github.actor != 'coremedia-ci' && github.actor != 'github-action[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Manual workflow trigger precondition check
+        if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' || startsWith(github.ref, 'maintenance/'))
+        run: |
+          echo "::error Building a release is only allowed from main- or maintenance- branches!"
+          exit 1
+      #Make sure the release type is one of the allowed inputs.
+      - name: Workflow Dispatch release type check
+        if: github.event_name == 'workflow_dispatch' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch')
+        run: |
+          echo "Expected a release type due to the manual build execution on main branch."
+          echo "Allowed release types are: major, minor, patch"
+          exit 1
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Configure NPM
+        run: |
+          npm install -g pnpm@6.14.6
+          npm install -g semver
+      - name: Setup Git
+        run: |
+          git config --global user.name 'coremedia-ci'
+          git config --global user.email 'coremedia-ci@coremedia.com'
+          git pull
+      - name: Install
+        run: pnpm install
+      # BY MANUAL TRIGGER ONLY!
+      # Set the release version to actual MAJOR.MINOR.PATCH version.
+      # If a prerelease is triggered manually, we keep the prerelease version for this workflow.
+      - name: Create Release Version
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
+          actual_version=$(cat .release-version)
+          next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
+          echo "Current version: ${actual_version}"
+          echo "Next version: ${next_version}"
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=^${next_version}
+          pnpm install --no-frozen-lockfile
+          echo "${next_version}" > .release-version
+          git commit -am "Set release version ${next_version}"
+      # Set prerelease version.
+      # On push we only want to provide a possible rc which is testable and maybe already testable by our customers.
+      # Make sure to set the dependency versions to the concrete version as prerelease versions are not referenced by semver ranges.
+      - name: Create Prerelease Version
+        if: github.event_name == 'push'
+        # Make sure to not commit anything which has been changed in one of the previous steps.
+        # Update the version, afterwards commit and push.
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
+          actual_version=$(cat .release-version)
+          next_version=$(semver --increment prerelease --preid rc ${actual_version})
+          echo "Current version: ${actual_version}"
+          echo "Next version: ${next_version}"
+          pnpm run setversion -- ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          pnpm install --no-frozen-lockfile
+          echo "${next_version}" > .release-version
+          git commit -am "Set next prerelease version ${next_version}"
+      - name: Build
+        run: |
+          pnpm build
+      - name: Lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm jest
+      - name: Install for Production
+        run: pnpm install --production
+      - name: Publish
+        run: |
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
+          pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
+          git reset --hard
+      - name: Push commits
+        run: git push
+      - name: Create git tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag $(cat .release-version)
+          git push origin $(cat .release-version)
