@@ -20,6 +20,9 @@
       "@ckeditor/ckeditor5-utils/*": [
         "../ckeditor__ckeditor5-utils/*"
       ],
+      "@ckeditor/ckeditor5-core/*": [
+        "../ckeditor__ckeditor5-core/*"
+      ],
       "@ckeditor/ckeditor5-engine/*": [
         "../ckeditor__ckeditor5-engine/*"
       ]

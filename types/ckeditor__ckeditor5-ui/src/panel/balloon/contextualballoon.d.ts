@@ -37,9 +37,3 @@ export class RotatorView extends View {
   hideView(): void;
   showView(view: View): void;
 }
-
-declare module '@ckeditor/ckeditor5-core/src/plugincollection' {
-  interface Plugins {
-    ContextualBalloon: Contextualballoon;
-  }
-}

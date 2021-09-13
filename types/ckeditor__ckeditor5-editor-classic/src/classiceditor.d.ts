@@ -1,11 +1,9 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import {EditorWithUI} from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
+import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
 
 // TODO[typing]
 interface DataApi {
-}
-
-// TODO[typing]
-interface EditorWithUI {
 }
 
 // TODO[typing]
@@ -13,12 +11,9 @@ interface ElementApi {
 }
 
 // TODO[typing]
-type ClassicEditorUI = any;
-// TODO[typing]
 type EditorConfig = any;
 
 export default class ClassicEditor extends Editor implements DataApi, EditorWithUI, ElementApi {
-  ui: ClassicEditorUI;
 
   static create(sourceElementOrData: HTMLElement | string, config?: EditorConfig): Promise<ClassicEditor>;
 
@@ -29,4 +24,6 @@ export default class ClassicEditor extends Editor implements DataApi, EditorWith
   sourceElement?: HTMLElement;
 
   updateSourceElement(): void;
+
+  readonly ui: EditorUI;
 }

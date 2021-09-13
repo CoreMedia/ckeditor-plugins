@@ -1,12 +1,12 @@
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
-import ComponentFactory from "@ckeditor/ckeditor5-ui/src/componentfactory";
 import Emitter, { EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Editor from "./editor";
 
 export default class EditorUI implements Emitter {
-  readonly componentFactory: ComponentFactory;
+  // use any to avoid cyclic dependency (was: ComponentFactory)
+  readonly componentFactory: any;
   readonly editor: Editor;
   readonly element: HTMLElement | null;
   //readonly focusTracker: FocusTracker;
