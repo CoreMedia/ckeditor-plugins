@@ -1,7 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-app",
   "description": "A custom CKEditor 5 build made by the CKEditor 5 online builder.",
-  "version": "1.0.1-rc.2",
+  "version": "1.0.1-rc.3",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
@@ -27,9 +27,9 @@
     "@ckeditor/ckeditor5-ui": "^28.0.0",
     "@ckeditor/ckeditor5-utils": "^28.0.0",
     "@ckeditor/ckeditor5-typing": "^28.0.0",
-    "@coremedia/ckeditor5-studio-essentials": "1.0.1-rc.2",
-    "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.1-rc.2",
-    "@coremedia/coremedia-studio-integration-mock": "1.0.1-rc.2",
+    "@coremedia/ckeditor5-studio-essentials": "1.0.1-rc.3",
+    "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.1-rc.3",
+    "@coremedia/coremedia-studio-integration-mock": "1.0.1-rc.3",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
     "rxjs": "^6.5.4",
     "xml-formatter": "^2.4.0",
