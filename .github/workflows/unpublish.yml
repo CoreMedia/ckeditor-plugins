@@ -1,0 +1,40 @@
+name: Unpublish Version
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to unpublish'
+        required: true
+jobs:
+  build:
+    name: Unpublish Version
+    env:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
+      NPM_CONFIG_//npm.coremedia.io/:_authToken: ${NPM_AUTH_TOKEN}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Unpublish release
+        run: |
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
+
+          version=${{ github.event.inputs.version }}
+          npm unpublish @coremedia/coremedia-utils@$version
+          npm unpublish @coremedia/coremedia-studio-integration-mock@$version
+          npm unpublish @coremedia/coremedia-studio-integration@$version
+          npm unpublish @coremedia/ckeditor5-studio-essentials@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-richtext@$version
+          npm unpublish @coremedia/ckeditor5-dataprocessor-support@$version
+          npm unpublish @coremedia/ckeditor5-link@$version
+          npm unpublish @coremedia/ckeditor5-symbol-on-paste-mapper@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-clipboard@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-utils@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-ui@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-core@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-engine@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-typing@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-link@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-paste-from-office@$version
+          npm unpublish @coremedia/types-ckeditor__ckeditor5-editor-classic@$version
