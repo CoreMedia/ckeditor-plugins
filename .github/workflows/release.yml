@@ -32,7 +32,7 @@ jobs:
           exit 1
       #Make sure the release type is one of the allowed inputs.
       - name: Workflow Dispatch release type check
-        if: github.event_name == 'workflow_dispatch' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch' || github.event.inputs.release_type == 'prerelease')
+        if: github.event_name == 'workflow_dispatch' && !(github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch')
         run: |
           echo "Expected a release type due to the manual build execution on main branch."
           echo "Allowed release types are: major, minor, patch"
