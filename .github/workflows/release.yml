@@ -4,7 +4,9 @@ name: Releases
 concurrency: ci-${{ github.ref }}
 on:
   push:
-    branches: [ main ]
+    branches:
+     - main
+     - 'maintenance/**'
   workflow_dispatch:
     inputs:
       release_type:
@@ -24,9 +26,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Manual workflow trigger precondition check
-        if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' || startsWith(github.ref, 'maintenance/'))
         run: |
-          echo "::error Building a release is only allowed from main-branch!"
+          echo "::error Building a release is only allowed from main- or maintenance- branches!"
           exit 1
       #Make sure the release type is one of the allowed inputs.
       - name: Workflow Dispatch release type check
