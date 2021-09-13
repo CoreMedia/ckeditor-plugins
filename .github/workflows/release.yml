@@ -100,7 +100,6 @@ jobs:
       - name: Install for Production
         run: pnpm install --production
       - name: Publish
-        if: github.ref == 'refs/heads/main'
         run: |
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
