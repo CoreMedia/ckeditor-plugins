@@ -1,6 +1,6 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import ViewDocument from "./document"
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "./observer/domeventdata";
@@ -28,6 +28,8 @@ export default class View implements Emitter, Observable {
 
   bind(...bindProperties: any[]): BindReturnValue;
 
+  focus(): void;
+
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
@@ -35,4 +37,6 @@ export default class View implements Emitter, Observable {
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   decorate(methodName: string): void;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 }

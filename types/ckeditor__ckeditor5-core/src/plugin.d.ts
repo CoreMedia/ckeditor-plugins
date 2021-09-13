@@ -1,18 +1,20 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin"
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin"
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import Editor from "./editor/editor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
+import { EditorWithUI } from "./editor/editorwithui";
 
 export default abstract class Plugin<T = void> implements Emitter, Observable {
-  readonly editor: Editor;
+  readonly editor: Editor & EditorWithUI;
 
   static readonly pluginName?: string;
   static readonly requires?: Array<new(editor: Editor) => Plugin>;
 
   constructor(editor: Editor);
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   destroy?(): null | Promise<any>;
 
@@ -42,4 +44,9 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   decorate(methodName: string): void;
+}
+
+// Beware that this defines a class constructor, not the class instance.
+export interface PluginInterface<T = Plugin> {
+  new(editor: Editor): T;
 }

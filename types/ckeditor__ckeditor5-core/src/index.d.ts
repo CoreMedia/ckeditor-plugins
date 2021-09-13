@@ -1,0 +1,27 @@
+export const icons: {
+  cancel: string;
+  caption: string;
+  check: string;
+  eraser: string;
+  lowVision: string;
+  image: string;
+  alignBottom: string;
+  alignMiddle: string;
+  alignTop: string;
+  alignLeft: string;
+  alignCenter: string;
+  alignRight: string;
+  alignJustify: string;
+  objectLeft: string;
+  objectCenter: string;
+  objectRight: string;
+  objectFullWidth: string;
+  objectSizeFull: string;
+  objectSizeLarge: string;
+  objectSizeSmall: string;
+  objectSizeMedium: string;
+  pencil: string;
+  pilcrow: string;
+  quote: string;
+  threeVerticalDots: string;
+};

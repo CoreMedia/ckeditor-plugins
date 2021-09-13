@@ -4,7 +4,7 @@ import LabelView from "../label/labelview";
 
 export type ViewCreator<T extends View> = (view: LabeledFieldView<T>, labelViewUid: string, statusViewUid: string) => T;
 
-export default class LabeledFieldView<T extends View> extends View {
+export default class LabeledFieldView<T extends View = View & { value: string }> extends View {
   class: string;
   errorText: string | null;
   fieldView: T;

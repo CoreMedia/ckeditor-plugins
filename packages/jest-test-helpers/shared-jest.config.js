@@ -5,13 +5,14 @@ module.exports = {
   // passWithNoTests: true,
   testEnvironment: 'jsdom',
   moduleFileExtensions: ["js", "ts", "d.ts"],
-  // see https://jestjs.io/docs/webpack#handling-static-assets
   "moduleNameMapper": {
-    "\\.(css|less)$": require.resolve("./__mocks__/styleMock.js"),
-    "\\.(gif|ttf|eot|svg)$": require.resolve("./__mocks__/fileMock.js"),
+    // https://www.npmjs.com/package/jest-transform-stub
+    "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": "jest-transform-stub",
   },
   transform: {
     "^.+\\.[jt]sx?$": ["babel-jest", babelConfig],
+    // https://www.npmjs.com/package/jest-transform-stub
+    "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": "jest-transform-stub",
   },
   transformIgnorePatterns: [
     "node_modules/.pnpm/(?!@ckeditor|lodash-es|ckeditor5|rxjs)"

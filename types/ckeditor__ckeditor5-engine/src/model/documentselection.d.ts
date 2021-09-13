@@ -1,4 +1,4 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Position from "./position";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
@@ -78,4 +78,6 @@ export default class DocumentSelection implements Emitter {
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 }

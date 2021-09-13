@@ -1,8 +1,8 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkTargetModelView from "./LinkTargetModelView";
-import LinkTargetUI from "./LinkTargetUI";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import LinkTargetActionsViewExtension from "./LinkTargetActionsViewExtension";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -14,6 +14,6 @@ export default class LinkTarget extends Plugin {
   static readonly pluginName: string = "LinkTarget";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Link, LinkTargetModelView, LinkTargetUI];
+    return [Link, LinkTargetModelView, LinkTargetActionsViewExtension];
   }
 }

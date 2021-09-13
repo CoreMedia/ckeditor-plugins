@@ -1,19 +1,19 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import Schema from "./schema";
 import MarkerCollection from "./markercollection";
 import Document from "./document";
 import Operation from "./operation/operation";
 import Writer from "./writer";
 import Batch from "./batch";
-import { Item } from "./item";
-import Position, { PositionStickiness } from "./position";
+import {Item} from "./item";
+import Position, {PositionStickiness} from "./position";
 import Element from "./element";
 import DocumentFragment from "./documentfragment";
 import Range from "./range";
-import Selection, { Selectable } from "./selection";
+import Selection, {Selectable} from "./selection";
 import DocumentSelection from "./documentselection";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "../view/observer/domeventdata";
 
@@ -30,6 +30,8 @@ export default class Model implements Emitter, Observable {
   applyOperation(operation: Operation): void;
 
   change<T = any>(callback: (writer: Writer) => T): T;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   enqueueChange(batchOrType: any, callback: Function): void;
 

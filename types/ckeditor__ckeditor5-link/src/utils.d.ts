@@ -10,6 +10,8 @@ export const LINK_KEYSTROKE: string;
 
 export function isLinkElement(node: Node): boolean;
 
+export function isLinkableElement(element: Element | null | undefined, schema: Schema): boolean;
+
 export function createLinkElement(href: string, conversionApi: DowncastConversionApi): AttributeElement;
 
 export function ensureSafeUrl(url: any): string;

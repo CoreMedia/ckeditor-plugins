@@ -1,6 +1,6 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Template from "./template";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
@@ -10,7 +10,7 @@ import TemplateDefinition from "./template/templatedefinition";
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_ui_view-View.html">Class View (ui/view~View) - CKEditor 5 API docs</a>
  */
-export default class View implements Emitter, Observable {
+export default class View implements Observable {
   element: HTMLElement;
   isEnabled: boolean;
   readonly isRendered: boolean;
@@ -20,6 +20,8 @@ export default class View implements Emitter, Observable {
   bindTemplate:any;
 
   constructor(locale?: Locale);
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   decorate(methodName: string): void;
 
