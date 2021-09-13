@@ -2,6 +2,7 @@
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
+  width: var(--ck-input-text-width);
   border: 1px solid var(--ck-color-input-disabled-border);
   border-radius: var(--ck-border-radius);
 }
@@ -19,7 +20,7 @@
 /* content link view inner button */
 .cm-ck-content-link-view > .ck.ck-button{
   border: none;
-  min-height: calc(var(--ck-ui-component-min-height) -2px);
+  min-height: calc(var(--ck-ui-component-min-height) - 2px);
 }
 
 /* prevents icons to be too high in studio context */
@@ -42,9 +43,8 @@
  * FORM VIEW
  */
 
-/* we need to set a width to make ellipsis work for content link views */
-.ck.cm-ck-link-form-view {
-  width: calc(var(--ck-input-text-width) + 46px + 30px);
+.ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
+  margin-left: 0 !important;
 }
 
 .cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {

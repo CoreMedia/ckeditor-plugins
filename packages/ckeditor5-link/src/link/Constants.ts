@@ -7,3 +7,8 @@ export const LINK_HREF_MODEL = "linkHref";
  * CKEditor Link plugin.
  */
 export const LINK_COMMAND_NAME = "link";
+/**
+ * Name `UnlinkCommand` has been registered with by
+ * CKEditor Link plugin.
+ */
+export const UNLINK_COMMAND_NAME = "unlink";

@@ -1,0 +1,13 @@
+.ck.cm-ck-custom-link-target-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.ck.cm-ck-custom-link-target-form .ck-labeled-field-view {
+  display: inline-block;
+}
+
+.ck.cm-ck-custom-link-target-form .ck-label {
+  display: none;
+}

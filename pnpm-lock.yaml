@@ -141,6 +141,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -178,6 +179,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -223,6 +225,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -267,6 +270,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -288,7 +292,6 @@ importers:
       '@babel/preset-typescript': ^7.12.7
       '@ckeditor/ckeditor5-core': ^28.0.0
       '@ckeditor/ckeditor5-engine': ^28.0.0
-      '@ckeditor/ckeditor5-utils': ^28.0.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
       '@coremedia/coremedia-utils': 1.0.1-rc.3
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.3
@@ -304,6 +307,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -325,7 +329,6 @@ importers:
       '@babel/preset-typescript': 7.15.0_@babel+core@7.15.0
       '@ckeditor/ckeditor5-core': 28.0.0
       '@ckeditor/ckeditor5-engine': 28.0.0
-      '@ckeditor/ckeditor5-utils': 28.0.0
       '@coremedia-internal/jest-test-helpers': link:../jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
@@ -340,6 +343,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -388,6 +392,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -437,6 +442,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -493,6 +499,7 @@ importers:
       eslint-config-prettier: ^7.1.0
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
+      jest-transform-stub: ^2.0.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
       typescript: ^4.3.2
@@ -551,6 +558,7 @@ importers:
       eslint-config-prettier: 7.2.0_eslint@7.32.0
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
+      jest-transform-stub: 2.0.0
       prettier: 2.3.2
       rimraf: 3.0.2
       typescript: 4.4.2
@@ -583,6 +591,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -617,6 +626,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -654,6 +664,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-each: ^27.0.6
+      jest-transform-stub: ^2.0.0
       jest-xml-matcher: ^1.2.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
@@ -692,6 +703,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-each: 27.1.0
+      jest-transform-stub: 2.0.0
       jest-xml-matcher: 1.2.0
       prettier: 2.3.2
       rimraf: 3.0.2
@@ -721,6 +733,7 @@ importers:
       eslint-plugin-prettier: ^3.3.1
       jest: ^27.0.6
       jest-config: ^27.0.6
+      jest-transform-stub: ^2.0.0
       prettier: ^2.2.1
       rimraf: ^3.0.2
       typescript: ^4.3.2
@@ -752,6 +765,7 @@ importers:
       eslint-plugin-prettier: 3.4.1_1896108410d6ca413b1fb82810caebba
       jest: 27.1.0
       jest-config: 27.1.0
+      jest-transform-stub: 2.0.0
       prettier: 2.3.2
       rimraf: 3.0.2
       typescript: 4.4.2
@@ -826,9 +840,11 @@ importers:
 
   types/ckeditor__ckeditor5-ui:
     specifiers:
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.3
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.1-rc.3
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.1-rc.3
     dependencies:
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
 
@@ -7473,6 +7489,10 @@ packages:
       semver: 7.3.5
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /jest-transform-stub/2.0.0:
+    resolution: {integrity: sha512-lspHaCRx/mBbnm3h4uMMS3R5aZzMwyNpNIJLXj4cEsV0mIUtS4IjYJLSoyjRCtnxb6RIGJ4NL2quZzfIeNhbkg==}
     dev: true
 
   /jest-util/27.1.0:

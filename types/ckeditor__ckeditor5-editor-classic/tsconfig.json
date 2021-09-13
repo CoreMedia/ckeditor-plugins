@@ -15,5 +15,10 @@
     "rootDir": "./src",
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@ckeditor/ckeditor5-core/*": [
+        "../ckeditor__ckeditor5-core/*"
+      ]
+    }
   }
 }

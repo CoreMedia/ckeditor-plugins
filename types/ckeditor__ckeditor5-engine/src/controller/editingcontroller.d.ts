@@ -1,7 +1,7 @@
 import View from "../view/view"
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin"
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin"
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
 import Model from "../model/model";
 import DowncastDispatcher from "../conversion/downcastdispatcher";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
@@ -22,6 +22,8 @@ export default class EditingController implements Emitter, Observable {
   readonly view: View;
 
   constructor(model: Model, stylesProcessor: StylesProcessor);
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   decorate(methodName: string): void;
 

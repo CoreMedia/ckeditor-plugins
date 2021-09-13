@@ -1,0 +1,24 @@
+"Language-Team: German (https://www.transifex.com/ckeditor/teams/11143/de/)\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Enter url or drag and drop content onto this area."
+msgstr "URL angeben oder Inhalt hierher ziehen"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Target"
+msgstr "Ziel"
+
+msgid "Open in Current Tab"
+msgstr "Im aktuellen Tab öffnen"
+
+msgid "Open in New Tab"
+msgstr "In neuem Tab öffnen"
+
+msgid "Show Embedded"
+msgstr "Eingebettet öffnen"
+
+msgid "Open in Frame"
+msgstr "Im Frame öffnen"

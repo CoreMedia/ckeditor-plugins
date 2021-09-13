@@ -1,5 +1,5 @@
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import Model from "./model";
 import Writer from "./writer";
 import Differ from "./differ";
@@ -17,6 +17,8 @@ import DomEventData from "../view/observer/domeventdata";
  */
 export default class Document implements Emitter {
   constructor();
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
 
   get differ(): Differ;
 
