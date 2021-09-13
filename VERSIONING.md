@@ -99,7 +99,7 @@ Major and Minor Breaking Changes
         changes regarding the configuration. Just as for Plugin API, we
         try at best effort providing backwards compatible configurations.
 
-    * A breaking change in Plugin API is understood as a
+    * A breaking change in Customization API is understood as a
         **minor breaking change**.
 
 <!-- ======================================================[ REFERENCES ]=== -->
