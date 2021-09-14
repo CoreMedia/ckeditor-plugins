@@ -24,17 +24,17 @@
     "@ckeditor/ckeditor5-remove-format": "^29.2.0",
     "@ckeditor/ckeditor5-table": "^29.2.0",
     "@ckeditor/ckeditor5-theme-lark": "^29.2.0",
+    "@ckeditor/ckeditor5-typing": "^29.2.0",
     "@ckeditor/ckeditor5-ui": "^29.2.0",
     "@ckeditor/ckeditor5-utils": "^29.2.0",
-    "@ckeditor/ckeditor5-typing": "^29.2.0",
     "@coremedia/ckeditor5-studio-essentials": "1.0.1-rc.4",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.1-rc.4",
     "@coremedia/coremedia-studio-integration-mock": "1.0.1-rc.4",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
-    "rxjs": "^6.5.4",
-    "xml-formatter": "^2.4.0",
     "lodash": "^4.0.0",
-    "uuid": "^3.3.3"
+    "rxjs": "^6.5.4",
+    "uuid": "^3.3.3",
+    "xml-formatter": "^2.4.1"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^25.4.2",

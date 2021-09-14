@@ -59,7 +59,7 @@ importers:
       uuid: ^3.3.3
       webpack: ^5.12.3
       webpack-cli: ^4.3.1
-      xml-formatter: ^2.4.0
+      xml-formatter: ^2.4.1
     dependencies:
       '@ckeditor/ckeditor5-alignment': 29.2.0
       '@ckeditor/ckeditor5-autosave': 29.2.0
@@ -90,7 +90,7 @@ importers:
       lodash: 4.17.21
       rxjs: 6.6.7
       uuid: 3.4.0
-      xml-formatter: 2.4.0
+      xml-formatter: 2.4.1
     devDependencies:
       '@ckeditor/ckeditor5-dev-utils': 25.4.2_webpack@5.51.1
       '@ckeditor/ckeditor5-dev-webpack-plugin': 25.4.2_webpack@5.51.1
@@ -11552,19 +11552,19 @@ packages:
         optional: true
     dev: true
 
-  /xml-formatter/2.4.0:
-    resolution: {integrity: sha512-xTQ2IfbkCQKn0DGN5SD5KUgTgVohWiolyOXTLUHKJczIuSeGonN0BPduB9VQR5HOEuT1KOHQsOHSmTpU76zpUA==}
+  /xml-formatter/2.4.1:
+    resolution: {integrity: sha512-UFnFRNum4BxicU9U4DPhIlHAQqHtT/vTdCvC6fiD78xlpug8YLgawW3MHmT1+eCAM7YomvMGZziiMz9AnExZgQ==}
     engines: {node: '>= 10'}
     dependencies:
-      xml-parser-xo: 3.1.1
+      xml-parser-xo: 3.1.2
     dev: false
 
   /xml-name-validator/3.0.0:
     resolution: {integrity: sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==}
     dev: true
 
-  /xml-parser-xo/3.1.1:
-    resolution: {integrity: sha512-gq1nDlJxjKQpPPZUhLbJ52pghtlB4Rz6LAQULm3SF6xzOYVnUloBglNhJR9vtZB3vIxMN/R3nZTf3qmun+6GCg==}
+  /xml-parser-xo/3.1.2:
+    resolution: {integrity: sha512-Qyttmiy305unyg1ONpArT4FPDL3J+ohXWpMI1ecopClGMw53lCRHJ4FV/fVYHFU6qfEzMV0frqSlNaLo2dw15Q==}
     engines: {node: '>= 10'}
     dev: false
 
