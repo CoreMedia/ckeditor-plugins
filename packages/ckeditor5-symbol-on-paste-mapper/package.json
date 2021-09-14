@@ -69,9 +69,9 @@
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.15.4",
     "@coremedia/coremedia-utils": "1.0.1-rc.4",
-    "@types/webpack": "^4.41.25",
+    "@types/webpack": "^5.28.0",
     "babel-loader": "^8.2.2",
-    "webpack": "^5.12.3",
+    "webpack": "^5.52.1",
     "webpack-cli": "^4.3.1"
   },
   "scripts": {
