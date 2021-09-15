@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/coremedia-studio-integration-mock",
   "version": "1.0.1-rc.4",
+  "private": true,
   "engines": {
     "node": ">=14.0.0"
   },

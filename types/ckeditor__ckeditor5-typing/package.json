@@ -2,6 +2,7 @@
   "name": "@coremedia/types-ckeditor__ckeditor5-typing",
   "version": "1.0.1-rc.4",
   "license": "Apache-2.0",
+  "private": true,
   "dependencies": {
     "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.4",
     "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.4"
