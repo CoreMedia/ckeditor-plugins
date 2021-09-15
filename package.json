@@ -55,7 +55,7 @@
     "@coremedia/set-version": "1.1.0"
   },
   "devDependencies": {
-    "pnpm": "^6.9.1",
+    "pnpm": "^6.15.0",
     "rimraf": "^3.0.2"
   }
 }

@@ -262,7 +262,7 @@ describe("RichTextDataProcessor.toData", () => {
       {
         from: wrapView("<p></p>"),
         optimalMilliseconds: 2,
-        gracePercentage: 0.2,
+        gracePercentage: 5,
       },
     ],
   ];
