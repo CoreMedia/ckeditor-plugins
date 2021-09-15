@@ -1,3 +1,3 @@
-# CKEditor 5 CoreMedia utils
+# CKEditor 5 CoreMedia logging
 
-Provides utility methods
+Provides logging to use in CKEditor 5 plugins.

@@ -127,7 +127,7 @@ importers:
       '@ckeditor/ckeditor5-utils': ^29.2.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
       '@coremedia/ckeditor5-dataprocessor-support': 1.0.1-rc.6
-      '@coremedia/coremedia-utils': 1.0.1-rc.6
+      '@coremedia/ckeditor5-logging': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.1-rc.6
@@ -147,7 +147,7 @@ importers:
       typescript: ^4.4.3
     dependencies:
       '@coremedia/ckeditor5-dataprocessor-support': link:../ckeditor5-dataprocessor-support
-      '@coremedia/coremedia-utils': link:../ckeditor5-logging
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
       '@babel/cli': 7.15.4_@babel+core@7.15.5
       '@babel/core': 7.15.5
@@ -290,7 +290,7 @@ importers:
       '@ckeditor/ckeditor5-engine': ^29.2.0
       '@ckeditor/ckeditor5-utils': ^29.2.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
-      '@coremedia/coremedia-utils': 1.0.1-rc.6
+      '@coremedia/ckeditor5-logging': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.1-rc.6
@@ -309,7 +309,7 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.4.3
     dependencies:
-      '@coremedia/coremedia-utils': link:../ckeditor5-logging
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
       '@babel/cli': 7.15.4_@babel+core@7.15.5
       '@babel/core': 7.15.5
@@ -367,8 +367,8 @@ importers:
       '@ckeditor/ckeditor5-ui': ^29.2.0
       '@ckeditor/ckeditor5-utils': ^29.2.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
+      '@coremedia/ckeditor5-logging': 1.0.1-rc.6
       '@coremedia/coremedia-studio-integration': 1.0.1-rc.6
-      '@coremedia/coremedia-utils': 1.0.1-rc.6
       '@coremedia/studio-apps-service-agent': ^0.0.31
       '@coremedia/types-ckeditor__ckeditor5-clipboard': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.6
@@ -394,8 +394,8 @@ importers:
       rxjs: ^6.5.4
       typescript: ^4.4.3
     dependencies:
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
       '@coremedia/coremedia-studio-integration': link:../coremedia-studio-integration
-      '@coremedia/coremedia-utils': link:../ckeditor5-logging
       rxjs: 6.6.7
     devDependencies:
       '@babel/cli': 7.15.4_@babel+core@7.15.5
@@ -538,7 +538,7 @@ importers:
       '@ckeditor/ckeditor5-theme-lark': ^29.2.0
       '@ckeditor/ckeditor5-ui': ^29.2.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
-      '@coremedia/coremedia-utils': 1.0.1-rc.6
+      '@coremedia/ckeditor5-logging': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-clipboard': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.1-rc.6
@@ -562,7 +562,7 @@ importers:
       webpack-cli: ^4.3.1
     dependencies:
       '@babel/plugin-transform-typescript': 7.15.4_@babel+core@7.15.5
-      '@coremedia/coremedia-utils': link:../ckeditor5-logging
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
       '@types/webpack': 5.28.0_webpack-cli@4.8.0
       babel-loader: 8.2.2_16ff48a381fa3cd612ae60c01c46e0d7
       webpack: 5.52.1_webpack-cli@4.8.0
@@ -633,7 +633,7 @@ importers:
       '@babel/preset-env': ^7.15.6
       '@babel/preset-typescript': ^7.15.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
-      '@coremedia/coremedia-utils': 1.0.1-rc.6
+      '@coremedia/ckeditor5-logging': 1.0.1-rc.6
       '@coremedia/studio-apps-service-agent': ^0.0.31
       '@types/jest': ^27.0.1
       '@typescript-eslint/eslint-plugin': ^4.31.1
@@ -652,7 +652,7 @@ importers:
       rxjs: ^6.5.4
       typescript: ^4.4.3
     dependencies:
-      '@coremedia/coremedia-utils': link:../ckeditor5-logging
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
       rxjs: 6.6.7
     devDependencies:
       '@babel/cli': 7.15.4_@babel+core@7.15.5
@@ -701,8 +701,8 @@ importers:
       '@babel/preset-typescript': ^7.15.0
       '@ckeditor/ckeditor5-core': ^29.2.0
       '@coremedia-internal/jest-test-helpers': 1.0.1-rc.0
+      '@coremedia/ckeditor5-logging': 1.0.1-rc.6
       '@coremedia/coremedia-studio-integration': 1.0.1-rc.6
-      '@coremedia/coremedia-utils': 1.0.1-rc.6
       '@coremedia/studio-apps-service-agent': ^0.0.31
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1-rc.6
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.1-rc.6
@@ -723,8 +723,8 @@ importers:
       rxjs: ^6.5.4
       typescript: ^4.4.3
     dependencies:
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
       '@coremedia/coremedia-studio-integration': link:../coremedia-studio-integration
-      '@coremedia/coremedia-utils': link:../ckeditor5-logging
       rxjs: 6.6.7
     devDependencies:
       '@babel/cli': 7.15.4_@babel+core@7.15.5

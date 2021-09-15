@@ -1,7 +1,7 @@
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "./RichtextConfigurationServiceDescriptor";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IsLinkableResponse = boolean | "IN_PROGRESS";

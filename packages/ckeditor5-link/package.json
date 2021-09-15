@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "@coremedia/coremedia-studio-integration": "1.0.1-rc.6",
-    "@coremedia/coremedia-utils": "1.0.1-rc.6",
+    "@coremedia/ckeditor5-logging": "1.0.1-rc.6",
     "rxjs": "^6.5.4"
   }
 }

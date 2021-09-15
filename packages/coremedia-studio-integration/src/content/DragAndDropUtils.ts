@@ -1,7 +1,7 @@
 import { requireContentCkeModelUris } from "./UriPath";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import DragDropService, { CMBeanReference, CMDragData } from "./studioservices/DragDropService";
-import LoggerProvider from "@coremedia/coremedia-utils/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 const logger = LoggerProvider.getLogger("DragAndDropUtils");
 

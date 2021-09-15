@@ -21,6 +21,7 @@ jobs:
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
 
           version=${{ github.event.inputs.version }}
+          npm unpublish @coremedia/coremedia-logging@$version
           npm unpublish @coremedia/coremedia-utils@$version
           npm unpublish @coremedia/coremedia-studio-integration-mock@$version
           npm unpublish @coremedia/coremedia-studio-integration@$version

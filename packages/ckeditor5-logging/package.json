@@ -1,7 +1,7 @@
 {
-  "name": "@coremedia/coremedia-utils",
+  "name": "@coremedia/ckeditor5-logging",
   "version": "1.0.1-rc.6",
-  "description": "Several utilities for CoreMedia Plugins.",
+  "description": "Provides logging to use in the plugins.",
   "keywords": [
     "coremedia"
   ],

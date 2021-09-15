@@ -53,7 +53,7 @@
     "@coremedia/studio-apps-service-agent": "^0.0.31"
   },
   "dependencies": {
-    "@coremedia/coremedia-utils": "1.0.1-rc.6",
+    "@coremedia/ckeditor5-logging": "1.0.1-rc.6",
     "rxjs": "^6.5.4"
   }
 }
