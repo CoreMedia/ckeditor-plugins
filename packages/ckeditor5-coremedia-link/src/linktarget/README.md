@@ -27,7 +27,7 @@ the `LinkActionsView` of CKEditor's link feature.
 [[Top][]|[Integration][]|[Configuration][]|[RichText][]]
 
 ```typescript
-import LinkTarget from "@coremedia/ckeditor5-link/linktarget/LinkTarget";
+import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 
 ClassicEditor
   .create(document.querySelector("#editor"), {

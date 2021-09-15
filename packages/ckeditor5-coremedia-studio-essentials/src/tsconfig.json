@@ -14,7 +14,7 @@
       "@ckeditor/ckeditor5-clipboard/*": ["../../../types/ckeditor__ckeditor5-clipboard/*"],
       "@ckeditor/ckeditor5-engine/*": ["../../../types/ckeditor__ckeditor5-engine/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
-      "@coremedia/ckeditor5-link/*": ["../../ckeditor5-coremedia-link/src/*"],
+      "@coremedia/ckeditor5-coremedia-link/*": ["../../ckeditor5-coremedia-link/src/*"],
       "@coremedia/ckeditor5-coremedia-richtext/*": ["../../ckeditor5-coremedia-richtext/src/*"]
     }
   },

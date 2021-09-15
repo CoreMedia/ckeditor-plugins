@@ -18,7 +18,7 @@ The Content-Link Feature adds transparent support to
 [[Top][]|[Integration][]|[Design][]|[RichText][]]
 
 ```typescript
-import LinkTarget from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
+import LinkTarget from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 
 ClassicEditor
   .create(document.querySelector("#editor"), {

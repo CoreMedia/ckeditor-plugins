@@ -70,6 +70,6 @@
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-richtext": "1.0.1-rc.6",
-    "@coremedia/ckeditor5-link": "1.0.1-rc.6"
+    "@coremedia/ckeditor5-coremedia-link": "1.0.1-rc.6"
   }
 }

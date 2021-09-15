@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-link",
+  "name": "@coremedia/ckeditor5-coremedia-link",
   "version": "1.0.1-rc.6",
   "engines": {
     "node": ">=14.0.0"
