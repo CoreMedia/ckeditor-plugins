@@ -26,7 +26,7 @@
   "license": "Apache-2.0",
   "workspaces": [
     "types/*",
-    "packages/coremedia-utils",
+    "packages/ckeditor5-logging",
     "packages/coremedia-studio-integration",
     "packages/coremedia-studio-integration-mock",
     "packages/ckeditor5-dataprocessor-support",
