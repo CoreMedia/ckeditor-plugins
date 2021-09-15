@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
-  "version": "1.0.1-rc.4",
+  "version": "1.0.1-rc.5",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -54,11 +54,11 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2",
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "1.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.4"
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.5",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.5",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.5",
+    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "1.0.1-rc.5",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.5"
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-clipboard": "^28.0.0",
@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.12.1",
-    "@coremedia/coremedia-utils": "1.0.1-rc.4",
+    "@coremedia/coremedia-utils": "1.0.1-rc.5",
     "@types/webpack": "^4.41.25",
     "babel-loader": "^8.2.2",
     "webpack": "^5.12.3",
