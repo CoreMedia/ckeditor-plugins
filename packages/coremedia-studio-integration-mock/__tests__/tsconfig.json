@@ -5,14 +5,14 @@
     "noEmit": true,
     "paths": {
       "@coremedia/coremedia-studio-integration/*": [
-        "../../coremedia-studio-integration/src/*"
+        "../../ckeditor5-coremedia-studio-integration/src/*"
       ]
     }
   },
   "references": [{
     "path": "../src"
   },{
-    "path": "../../coremedia-studio-integration/src"
+    "path": "../../ckeditor5-coremedia-studio-integration/src"
   }],
   "extends": "../../../tsconfig.json",
 }

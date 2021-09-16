@@ -27,7 +27,7 @@
   "workspaces": [
     "types/*",
     "packages/ckeditor5-logging",
-    "packages/coremedia-studio-integration",
+    "packages/ckeditor5-coremedia-studio-integration",
     "packages/coremedia-studio-integration-mock",
     "packages/ckeditor5-dataprocessor-support",
     "packages/ckeditor5-symbol-on-paste-mapper",
