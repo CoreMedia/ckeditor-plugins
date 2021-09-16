@@ -63,7 +63,7 @@ implement some required interfaces and register them at the service agent:
 You will find these interfaces in `@coremedia/ckeditor5-coremedia-studio-integration`.
 
 For integration into the example application mocks may be registered as provided
-by `@coremedia/coremedia-studio-integration-mock`.
+by `@coremedia/ckeditor5-coremedia-studio-integration-mock`.
 
 ## Design
 

@@ -40,9 +40,9 @@ importers:
       '@ckeditor/ckeditor5-typing': ^29.2.0
       '@ckeditor/ckeditor5-ui': ^29.2.0
       '@ckeditor/ckeditor5-utils': ^29.2.0
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock': 1.0.1-rc.6
       '@coremedia/ckeditor5-studio-essentials': 1.0.1-rc.6
       '@coremedia/ckeditor5-symbol-on-paste-mapper': 1.0.1-rc.6
-      '@coremedia/coremedia-studio-integration-mock': 1.0.1-rc.6
       '@coremedia/studio-apps-service-agent': ^0.0.31
       circular-dependency-plugin: ^5.2.2
       css-loader: ^6.2.0
@@ -83,9 +83,9 @@ importers:
       '@ckeditor/ckeditor5-typing': 29.2.0
       '@ckeditor/ckeditor5-ui': 29.2.0
       '@ckeditor/ckeditor5-utils': 29.2.0
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
-      '@coremedia/coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/studio-apps-service-agent': 0.0.31_rxjs@6.6.7
       lodash: 4.17.21
       rxjs: 6.6.7

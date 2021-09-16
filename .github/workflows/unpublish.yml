@@ -24,6 +24,7 @@ jobs:
           npm unpublish @coremedia/coremedia-logging@$version
           npm unpublish @coremedia/coremedia-utils@$version
           npm unpublish @coremedia/coremedia-studio-integration-mock@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-studio-integration-mock@$version
           npm unpublish @coremedia/coremedia-studio-integration@$version
           npm unpublish @coremedia/ckeditor5-coremedia-studio-integration@$version
           npm unpublish @coremedia/ckeditor5-studio-essentials@$version

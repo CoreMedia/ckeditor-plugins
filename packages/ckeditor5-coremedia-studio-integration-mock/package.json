@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/coremedia-studio-integration-mock",
+  "name": "@coremedia/ckeditor5-coremedia-studio-integration-mock",
   "version": "1.0.1-rc.6",
   "private": true,
   "engines": {
