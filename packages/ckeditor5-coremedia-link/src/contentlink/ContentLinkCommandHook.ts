@@ -3,7 +3,11 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import { ModelUri, requireContentCkeModelUri, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import {
+  ModelUri,
+  requireContentCkeModelUri,
+  UriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
