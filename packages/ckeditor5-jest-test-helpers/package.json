@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia-internal/jest-test-helpers",
+  "name": "@coremedia-internal/ckeditor5-jest-test-helpers",
   "version": "1.0.1-rc.0",
   "description": "Jest test helpers.",
   "private": true,

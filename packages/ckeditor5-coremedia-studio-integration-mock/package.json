@@ -33,7 +33,7 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@ckeditor/ckeditor5-core": "^29.2.0",
-    "@coremedia-internal/jest-test-helpers": "1.0.1-rc.0",
+    "@coremedia-internal/ckeditor5-jest-test-helpers": "1.0.1-rc.0",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
     "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.6",
     "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.6",

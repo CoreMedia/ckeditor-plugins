@@ -30,7 +30,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.14.5",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
-    "@coremedia-internal/jest-test-helpers": "1.0.1-rc.0",
+    "@coremedia-internal/ckeditor5-jest-test-helpers": "1.0.1-rc.0",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
