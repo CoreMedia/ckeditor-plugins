@@ -1,4 +1,4 @@
-import WorkAreaService from "@coremedia/coremedia-studio-integration/content/studioservices/WorkAreaService";
+import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 
 class MockWorkAreaService implements WorkAreaService {
   openEntitiesInTabs(entities: Array<unknown>): Promise<unknown> {

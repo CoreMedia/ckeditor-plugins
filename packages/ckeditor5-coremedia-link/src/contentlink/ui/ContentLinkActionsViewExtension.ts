@@ -5,7 +5,7 @@ import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import ContentLinkView from "./ContentLinkView";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { openInTab, showContentLinkField } from "../ContentLinkViewUtils";
 
 /**

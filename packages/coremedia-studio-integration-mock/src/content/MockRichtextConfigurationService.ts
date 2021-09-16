@@ -1,4 +1,4 @@
-import RichtextConfigurationService from "@coremedia/coremedia-studio-integration/src/content/RichtextConfigurationService";
+import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**

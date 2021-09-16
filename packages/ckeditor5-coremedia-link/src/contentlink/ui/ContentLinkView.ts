@@ -1,14 +1,14 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
+import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentUriPath,
   UriPath,
-} from "@coremedia/coremedia-studio-integration/content/UriPath";
-import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import CoreMediaIconView from "./CoreMediaIconView";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";

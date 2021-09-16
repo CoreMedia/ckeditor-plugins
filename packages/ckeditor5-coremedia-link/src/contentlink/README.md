@@ -60,7 +60,7 @@ implement some required interfaces and register them at the service agent:
   content-types are allowed to by linked into a given RichText property, and,
   which are not.
 
-You will find these interfaces in `@coremedia/coremedia-studio-integration`.
+You will find these interfaces in `@coremedia/ckeditor5-coremedia-studio-integration`.
 
 For integration into the example application mocks may be registered as provided
 by `@coremedia/coremedia-studio-integration-mock`.

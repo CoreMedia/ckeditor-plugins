@@ -3,13 +3,13 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import {
   extractContentUriPathsFromDragEventJsonData,
   receiveUriPathsFromDragDropService,
-} from "@coremedia/coremedia-studio-integration/content/DragAndDropUtils";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
+import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DragDropAsyncSupport from "@coremedia/coremedia-studio-integration/content/DragDropAsyncSupport";
-import { requireContentCkeModelUri } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
+import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";

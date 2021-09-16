@@ -1,10 +1,10 @@
-import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
+import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
 import { combineLatest, Observable, OperatorFunction, Subscriber, TeardownLogic } from "rxjs";
 import { map } from "rxjs/operators";
-import { numericId, UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
-import ContentDisplayServiceDescriptor from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
-import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
-import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
+import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
+import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
 import { applyDroppable, DroppableConfig } from "./MockRichtextConfigurationService";
 
 /**

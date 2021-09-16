@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/coremedia-studio-integration",
+  "name": "@coremedia/ckeditor5-coremedia-studio-integration",
   "version": "1.0.1-rc.6",
   "engines": {
     "node": ">=14.0.0"

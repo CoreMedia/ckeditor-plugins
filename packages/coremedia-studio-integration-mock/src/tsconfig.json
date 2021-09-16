@@ -15,7 +15,7 @@
       "@ckeditor/ckeditor5-engine/*": ["../../../types/ckeditor__ckeditor5-engine/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
-      "@coremedia/coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
     }
   },
   "references": [

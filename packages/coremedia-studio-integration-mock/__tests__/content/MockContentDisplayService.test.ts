@@ -1,4 +1,4 @@
-import ContentDisplayService from "@coremedia/coremedia-studio-integration/content/ContentDisplayService";
+import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
 import MockContentDisplayService, {
   CONTENT_NAME_FALSY,
   CONTENT_NAME_TRUTHY,
@@ -6,13 +6,13 @@ import MockContentDisplayService, {
   EVIL_CONTENT_NAME_FALSY,
   EVIL_CONTENT_NAME_TRUTHY
 } from "../../src/content/MockContentDisplayService";
-import { UriPath } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { Observable } from "rxjs";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
 import ContentDisplayServiceDescriptor
-  from "@coremedia/coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
-import DisplayHint from "@coremedia/coremedia-studio-integration/content/DisplayHint";
-import ContentAsLink from "@coremedia/coremedia-studio-integration/content/ContentAsLink";
+  from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
+import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
 
 const MOCK_SERVICE_TEST_CONFIG = {
   maxFirstDelayMs: 0,

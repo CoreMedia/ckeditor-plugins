@@ -8,7 +8,7 @@ import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { addClassToTemplate, createDecoratorHook } from "../utils";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/coremedia-studio-integration/content/UriPath";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import ContentLinkClipboard from "./clipboard/ContentLinkClipboard";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";

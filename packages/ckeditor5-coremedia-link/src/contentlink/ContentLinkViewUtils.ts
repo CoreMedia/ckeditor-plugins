@@ -1,8 +1,8 @@
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
 import { serviceAgent } from "@coremedia/studio-apps-service-agent";
-import WorkAreaService from "@coremedia/coremedia-studio-integration/content/studioservices/WorkAreaService";
-import WorkAreaServiceDescriptor from "@coremedia/coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
+import WorkAreaServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 
 /**
  * Adds or removes "cm-ck-link-view--show-content-link" to the form view's (and action view's) element or to the corresponding
