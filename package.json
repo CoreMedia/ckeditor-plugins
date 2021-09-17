@@ -48,6 +48,7 @@
     "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
     "test:manual": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test-manual.js",
     "lint": "pnpm -r lint",
+    "preinstall": "npx -y only-allow pnpm",
     "prettier": "pnpm -r prettier",
     "npm-check-updates": "pnpm -r npm-check-updates"
   },
