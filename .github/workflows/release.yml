@@ -37,6 +37,11 @@ jobs:
           echo "Expected a release type due to the manual build execution on main branch."
           echo "Allowed release types are: major, minor, patch"
           exit 1
+      - name: Maintenance release type check
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'maintenance/') && !(github.event.inputs.release_type == 'patch')
+        run: |
+          echo "For maintenance branches only patch versions are allowed."
+          exit 1
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
