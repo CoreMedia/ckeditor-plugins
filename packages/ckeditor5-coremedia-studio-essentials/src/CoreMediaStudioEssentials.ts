@@ -1,7 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import LinkTarget from "@coremedia/ckeditor5-link/linktarget/LinkTarget";
-import ContentLinks from "@coremedia/ckeditor5-link/contentlink/ContentLinks";
+import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
+import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 import CoreMediaRichText from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
 
 /**

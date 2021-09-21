@@ -29,7 +29,7 @@
     "@ckeditor/ckeditor5-utils": "^29.2.0",
     "@coremedia/ckeditor5-studio-essentials": "1.0.1-rc.7",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.1-rc.7",
-    "@coremedia/coremedia-studio-integration-mock": "1.0.1-rc.7",
+    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "1.0.1-rc.7",
     "@coremedia/studio-apps-service-agent": "^0.0.31",
     "lodash": "^4.0.0",
     "rxjs": "^6.5.4",

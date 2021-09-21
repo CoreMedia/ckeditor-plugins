@@ -6,6 +6,6 @@ CoreMedia Studio.
 
 Plugins contained:
 
-* `LinkTarget` from `@coremedia/ckeditor5-link` 
-* `ContentLinks` from `@coremedia/ckeditor5-link`
+* `LinkTarget` from `@coremedia/ckeditor5-coremedia-link` 
+* `ContentLinks` from `@coremedia/ckeditor5-coremedia-link`
 * `CoreMediaRichText` from `@coremedia/ckeditor5-dataprocessor-support`

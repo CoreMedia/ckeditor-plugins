@@ -21,12 +21,16 @@ jobs:
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
 
           version=${{ github.event.inputs.version }}
+          npm unpublish @coremedia/coremedia-logging@$version
           npm unpublish @coremedia/coremedia-utils@$version
           npm unpublish @coremedia/coremedia-studio-integration-mock@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-studio-integration-mock@$version
           npm unpublish @coremedia/coremedia-studio-integration@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-studio-integration@$version
           npm unpublish @coremedia/ckeditor5-studio-essentials@$version
           npm unpublish @coremedia/ckeditor5-coremedia-richtext@$version
           npm unpublish @coremedia/ckeditor5-dataprocessor-support@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-link@$version
           npm unpublish @coremedia/ckeditor5-link@$version
           npm unpublish @coremedia/ckeditor5-symbol-on-paste-mapper@$version
           npm unpublish @coremedia/types-ckeditor__ckeditor5-clipboard@$version

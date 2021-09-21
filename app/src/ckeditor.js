@@ -23,7 +23,7 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
-import MockStudioIntegration from "@coremedia/coremedia-studio-integration-mock/MockStudioIntegration";
+import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
 
 import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
