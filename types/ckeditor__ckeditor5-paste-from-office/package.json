@@ -1,11 +1,11 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-paste-from-office",
-  "version": "1.0.1-rc.7",
+  "version": "1.0.1-rc.8",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.7",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.7"
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.8",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.8"
   },
   "scripts": {
     "npm-check-updates": "npm-check-updates --upgrade"
