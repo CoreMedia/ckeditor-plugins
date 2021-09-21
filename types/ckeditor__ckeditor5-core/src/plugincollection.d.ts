@@ -20,7 +20,7 @@ export default class PluginCollection implements Emitter, Iterable<[typeof Plugi
 
   destroy(): Promise<void>;
 
-  get<T extends Plugin>(key: PluginInterface<T>): T | undefined;
+  get<T extends Plugin>(key: PluginInterface<T>): T;
   get<T extends keyof Plugins>(key: T): Plugins[T];
   get(key: string): Plugin | undefined;
 
