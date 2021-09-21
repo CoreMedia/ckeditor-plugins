@@ -9,7 +9,7 @@ export default class CommandCollection {
   constructor();
   [Symbol.iterator](): IterableIterator<[string, Command]>;
   add(commandName: string, command: Command): void;
-  get(commandName: string): Command;
+  get(commandName: string): Command | undefined;
   execute(commandName: string, ...args: any[]): any;
   // TODO[cke] Unsure about types TReturn and TNext
   names(): Generator<string, void, any>;
