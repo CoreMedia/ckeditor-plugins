@@ -103,10 +103,13 @@
     const languageToggle = document.getElementById(languageFlag);
     let label, hrefLang;
     if (language === "de") {
-      label = "EN | <strong>DE</strong>";
+      label = "EN | <strong>DE</strong> | ES";
+      hrefLang = "es";
+    } else if (language === "es") {
+      label = "EN | DE | <strong>ES</strong>";
       hrefLang = "en";
     } else {
-      label = "<strong>EN</strong> | DE";
+      label = "<strong>EN</strong> | DE | ES";
       hrefLang = "de";
     }
     languageToggle.setAttribute("href", `.?lang=${hrefLang}`);

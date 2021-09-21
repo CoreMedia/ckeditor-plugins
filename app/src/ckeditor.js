@@ -32,7 +32,7 @@ import CoreMediaStudioEssentials, {
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
-
+import "./customlanguage"
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
 // setup dnd IFrame
