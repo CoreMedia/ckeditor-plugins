@@ -8,24 +8,33 @@ you can get used to the patterns while reading it.
 > This styleguide is open for discussion.
 
 * [TypeScript][]
+
     * [Private Members][]
     * [Logger][]
+
 * [Markdown][]
+
     * [Links][]
     * [Table of Contents][]
+
+* [Packages][]
+
+    * [Package Names][]
+    * [Package Scopes][]
+    * [Private Packages][]
 
 ## TypeScript
 
 [TypeScript]: <#typescript>
 
-[[Top][]|[TypeScript][]|[Markdown][]]
+[[Top][]|[TypeScript][]|[Markdown][]|[Packages][]]
 
 ### Private Members
 
 [Private Members]: <#private-members>
-[Private]: <#private-members>
+[ts:Private]: <#private-members>
 
-[[Top][]|[Up][TypeScript]|[Private][]|[Logger][]]
+[[Top][]|[Up][TypeScript]|[Private][ts:Private]|[Logger][]]
 
 Instead of using TypeScript's keyword `private` we use the hash-syntax (`#`) as
 [introduced for JavaScript][mdn:private], because of much stricter
@@ -35,9 +44,9 @@ access-control.
 
 [Logger]: <#logger>
 
-[[Top][]|[Up][TypeScript]|[Private][]|[Logger][]]
+[[Top][]|[Up][TypeScript]|[Private][ts:Private]|[Logger][]]
 
-`@coremedia/coremedia-utils` provides a logging feature, which allows to control
+`@coremedia/ckeditor5-logging` provides a logging feature, which allows to control
 logging details via hash parameter in the URL.
 
 A logger is assigned at the top of a class in need of a logger:
@@ -63,7 +72,7 @@ logger.info("Some information");
 
 [Markdown]: <#markdown>
 
-[[Top][]|[TypeScript][]|[Markdown][]]
+[[Top][]|[TypeScript][]|[Markdown][]|[Packages][]]
 
 Documentation (including inline documentation in TypeScript) is formatted using
 Markdown.
@@ -144,12 +153,77 @@ headings, as done for GitHub flavored Markdown for example.
 
 ```
 
+## Packages
+
+[Packages]: <#packages>
+
+[[Top][]|[TypeScript][]|[Markdown][]|[Packages][]]
+
+### Package Names
+
+[Package Names]: <#package-names>
+[Names]: <#package-names>
+
+[[Top][]|[Up][Packages]|[Names][]|[Scopes][]|[Private][pkg:Private]]
+
+* The folder name of a package should be the same as the package name.
+
+* All packages must be prefixed with `ckeditor5`.
+
+    This is required to prevent clashes with artifacts having the same scope.
+
+* All packages containing code related to CoreMedia CMS must contain `coremedia`.
+
+    This is at second position, separated by a dash: `ckeditor5-coremedia-*`.
+
+* Typing packages must be prefixed with `types-`.
+
+    The complete name for a typing package is `types-<scope>__<package name>`
+    (two underscores as separator).
+    Thus, it is similar to typings at [DefinitelyTyped][]. The folder name,
+    in contrast to the role above, is just `<scope>__<package name>`
+
+### Package Scopes
+
+[Package Scopes]: <#package-scopes>
+[Scopes]: <#package-scopes>
+
+[[Top][]|[Up][Packages]|[Names][]|[Scopes][]|[Private][pkg:Private]]
+
+* For public packages, the scope `@coremedia` must be used.
+
+    This allows using common repository mappings within `.npmrc` and others.
+
+* For [Private Packages][], the scope `@coremedia-internal` must be used.
+
+### Private Packages
+
+[Private Packages]: <#private-packages>
+[pkg:Private]: <#private-packages>
+
+[[Top][]|[Up][Packages]|[Names][]|[Scopes][]|[Private][pkg:Private]]
+
+* Private or _internal_ packages are only meant for use within this repository.
+
+* Private packages must only be used as developer dependencies.
+
+* As stated in [Package Scopes][], private packages must use scope `@coremedia-internal`.
+
+* Private package always have a fixed version `1.0.0` which does not update on release.
+
+<!-- Last Navigation Entry -->
+
+[[Top][]|[TypeScript][]|[Markdown][]|[Packages][]]
+
 <!--
 --------------------------------------------------------------------------------
 References
 --------------------------------------------------------------------------------
 -->
 
+[DefinitelyTyped]:
+  <https://github.com/DefinitelyTyped/DefinitelyTyped>
+  "DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions."
 [ESLint]:
   <https://eslint.org/>
   "ESLint - Pluggable JavaScript linter"
