@@ -4,6 +4,7 @@ import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
@@ -55,6 +56,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Autosave,
     BlockQuote,
     Bold,
+    CodeBlock,
     Essentials,
     Heading,
     Highlight,
@@ -99,6 +101,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
       'outdent',
       'indent',
       '|',
+      'codeBlock',
       'blockQuote',
       'alignment',
       '|',
@@ -159,6 +162,31 @@ ClassicEditor.create(document.querySelector('.editor'), {
     strictness: Strictness.STRICT,
     rules: {
       elements: {
+        // CodeBlock Plugin Support
+        code: {
+          toData: (params) => {
+            params.parentRule(params);
+
+            const originalClass = params.node.attributes["class"];
+            params.node.attributes["class"] = `code--${originalClass}`;
+            params.node.name = "span";
+          },
+          toView: {
+            span: (params) => {
+              params.parentRule(params);
+
+              const originalClass = params.node.attributes["class"] || "";
+              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
+              //    can be italics, but also marked.
+              const pattern = /^code--(\S*)$/;
+              const match = pattern.exec(originalClass);
+              if (match) {
+                params.node.name = "code";
+                params.node.attributes["class"] = match[1];
+              }
+            },
+          },
+        },
         // Highlight Plugin Support
         mark: {
           toData: (params) => {
