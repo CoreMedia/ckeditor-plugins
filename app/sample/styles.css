@@ -66,15 +66,33 @@
   display: none;
 }
 
+/* --------- CK Content Formatting --------------------------------------------------------------------------------- */
+
+.ck-content .align--left {
+  text-align: left;
+}
+
+.ck-content .align--right {
+  text-align: right;
+}
+
+.ck-content .align--center {
+  text-align: center;
+}
+
+.ck-content .align--justify {
+  text-align: justify;
+}
+
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
 .editor__editable,
-/* Classic build. */
+  /* Classic build. */
 main .ck-editor[role='application'] .ck.ck-content,
-/* Decoupled document build. */
+  /* Decoupled document build. */
 .ck.editor__editable[role='textbox'],
 .ck.ck-editor__editable[role='textbox'],
-/* Inline & Balloon build. */
+  /* Inline & Balloon build. */
 .ck.editor[role='textbox'] {
 	line-height: 1.6em;
 	min-height: var(--ck-sample-editor-min-height);
