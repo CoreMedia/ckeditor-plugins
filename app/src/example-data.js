@@ -554,26 +554,22 @@ const coreMediaRichTextPoC = () => {
     </p>
   `;
   const inlineWithAttrs = (el) => {
-    const nestedEl = (nested) => `<li><strong>Nested Element ${nested}:</strong> Before<${el}>Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</li>`;
+    const nestedEl = (nested) => `<p><strong>Nested Element ${nested}:</strong> Before<${el}>Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</p>`;
     return `
     <p class="${mainSectionHeading}">Element: ${el}</p>
     <p class="${subSectionHeading}">Attributes</p>
-    <ul>
-    <li><strong>No Attributes:</strong> Before<${el}>Within</${el}>After</li>
-    <li><strong>Attribute xml:lang:</strong> Before<${el} xml:lang="${someLanguage}">Within</${el}>After</li>
-    <li><strong>Attribute lang:</strong> Before<${el} lang="${someLanguage}">Within</${el}>After</li>
-    <li><strong>Attribute dir:</strong> Before<${el} dir="${someDir}">Within</${el}>After</li>
-    <li><strong>Attribute class:</strong> Before<${el} class="${someClass}">Within</${el}>After</li>
-    </ul>
+    <p><strong>No Attributes:</strong> Before<${el}>Within</${el}>After</p>
+    <p><strong>Attribute xml:lang:</strong> Before<${el} xml:lang="${someLanguage}">Within</${el}>After</p>
+    <p><strong>Attribute lang:</strong> Before<${el} lang="${someLanguage}">Within</${el}>After</p>
+    <p><strong>Attribute dir:</strong> Before<${el} dir="${someDir}">Within</${el}>After</p>
+    <p><strong>Attribute class:</strong> Before<${el} class="${someClass}">Within</${el}>After</p>
     <p class="${subSectionHeading}">Nesting</p>
-    <ul>
-    <li><strong>Only Text:</strong> Before<${el}>${el}</${el}>After</li>
-    <li><strong>Nested Element a:</strong> Before<${el}><a xlink:href="${someUrl}">${el}</a></${el}>After</li>
-    <li><strong>Nested Element br:</strong> Before<${el}>Lorem<br/>ipsum<br/>dolor</${el}>After</li>
-    <li><strong>Nested Element span:</strong> Before<${el}>Lorem<span class="${someClass}">ipsum</span>dolor</${el}>After</li>
-    <li><strong>Nested Element img:</strong> Before<${el}>Lorem<img xlink:href="${someInlineImg}" alt="${someAlt}"/>dolor</${el}>After</li>
+    <p><strong>Only Text:</strong> Before<${el}>${el}</${el}>After</p>
+    <p><strong>Nested Element a:</strong> Before<${el}><a xlink:href="${someUrl}">${el}</a></${el}>After</p>
+    <p><strong>Nested Element br:</strong> Before<${el}>Lorem<br/>ipsum<br/>dolor</${el}>After</p>
+    <p><strong>Nested Element span:</strong> Before<${el}>Lorem<span class="${someClass}">ipsum</span>dolor</${el}>After</p>
+    <p><strong>Nested Element img:</strong> Before<${el}>Lorem<img xlink:href="${someInlineImg}" alt="${someAlt}"/>dolor</${el}>After</p>
     ${["em", "strong", "sub", "sup"].map(nestedEl).join("")}
-    </ul>
     `;
   };
   const br = () => {
@@ -581,123 +577,103 @@ const coreMediaRichTextPoC = () => {
     return `
       <p class="${mainSectionHeading}">Element: ${el}</p>
       <p class="${subSectionHeading}">Attributes</p>
-      <ul>
-      <li><strong>No Attributes:</strong> Lorem<${el}/>ipsum<${el}/>dolor</li>
-      <li><strong>Attribute class:</strong> Lorem<${el} class="${someClass}"/>ipsum<${el} class="${someClass}"/>dolor</li>
-      </ul>
+      <p><strong>No Attributes:</strong> Lorem<${el}/>ipsum<${el}/>dolor</p>
+      <p><strong>Attribute class:</strong> Lorem<${el} class="${someClass}"/>ipsum<${el} class="${someClass}"/>dolor</p>
     `;
   };
   const span = () => {
     const el = "span";
-    const nestedEl = (nested) => `<li><strong>Nested Element ${nested}:</strong> Before<${el} class="${someClass}">Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</li>`;
+    const nestedEl = (nested) => `<p><strong>Nested Element ${nested}:</strong> Before<${el} class="${someClass}">Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</p>`;
     return `
     <p class="${mainSectionHeading}">Element: ${el}</p>
     <p class="${subSectionHeading}">Attributes</p>
-    <ul>
-    <li><strong>No Attributes:</strong> Before<${el}>Within</${el}>After<br/>Note, that a ${el} without attributes is considered pointless and thus, may be ignored during processing.</li>
-    <li><strong>Attribute xml:lang:</strong> Before<${el} xml:lang="${someLanguage}" class="${someClass}">Within</${el}>After</li>
-    <li><strong>Attribute lang:</strong> Before<${el} lang="${someLanguage}" class="${someClass}">Within</${el}>After</li>
-    <li><strong>Attribute dir:</strong> Before<${el} dir="${someDir}" class="${someClass}">Within</${el}>After</li>
-    <li><strong>Attribute class:</strong> Before<${el} class="${someClass}">Within</${el}>After</li>
-    </ul>
+    <p><strong>No Attributes:</strong> Before<${el}>Within</${el}>After<br/>Note, that a ${el} without attributes is considered pointless and thus, may be ignored during processing.</p>
+    <p><strong>Attribute xml:lang:</strong> Before<${el} xml:lang="${someLanguage}" class="${someClass}">Within</${el}>After</p>
+    <p><strong>Attribute lang:</strong> Before<${el} lang="${someLanguage}" class="${someClass}">Within</${el}>After</p>
+    <p><strong>Attribute dir:</strong> Before<${el} dir="${someDir}" class="${someClass}">Within</${el}>After</p>
+    <p><strong>Attribute class:</strong> Before<${el} class="${someClass}">Within</${el}>After</p>
     <p class="${subSectionHeading}">Nesting</p>
-    <ul>
-    <li><strong>Only Text:</strong> Before<${el} class="${someClass}">${el}</${el}>After</li>
-    <li><strong>Nested Element a:</strong> Before<${el} class="${someClass}"><a xlink:href="${someUrl}">${el}</a></${el}>After</li>
-    <li><strong>Nested Element br:</strong> Before<${el} class="${someClass}">Lorem<br/>ipsum<br/>dolor</${el}>After</li>
-    <li><strong>Nested Element span:</strong> Before<${el} class="${someClass}">Lorem<span class="nested">ipsum</span>dolor</${el}>After</li>
-    <li><strong>Nested Element img:</strong> Before<${el} class="${someClass}">Lorem<img xlink:href="${someInlineImg}" alt="${someAlt}"/>dolor</${el}>After</li>
+    <p><strong>Only Text:</strong> Before<${el} class="${someClass}">${el}</${el}>After</p>
+    <p><strong>Nested Element a:</strong> Before<${el} class="${someClass}"><a xlink:href="${someUrl}">${el}</a></${el}>After</p>
+    <p><strong>Nested Element br:</strong> Before<${el} class="${someClass}">Lorem<br/>ipsum<br/>dolor</${el}>After</p>
+    <p><strong>Nested Element span:</strong> Before<${el} class="${someClass}">Lorem<span class="nested">ipsum</span>dolor</${el}>After</p>
+    <p><strong>Nested Element img:</strong> Before<${el} class="${someClass}">Lorem<img xlink:href="${someInlineImg}" alt="${someAlt}"/>dolor</${el}>After</p>
     ${["em", "strong", "sub", "sup"].map(nestedEl).join("")}
-    </ul>
     `;
   };
   const a = () => {
     const el = "a";
-    const nestedEl = (nested) => `<li><strong>Nested Element ${nested}:</strong> Before<${el} xlink:href="${someUrl}">Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</li>`;
+    const nestedEl = (nested) => `<p><strong>Nested Element ${nested}:</strong> Before<${el} xlink:href="${someUrl}">Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</p>`;
     return `
     <p class="${mainSectionHeading}">Element: ${el}</p>
     <p class="${subSectionHeading}">Attributes</p>
-    <ul>
-    <li><strong>No Attributes:</strong> Before<${el} xlink:href="${someUrl}">Within</${el}>After</li>
-    <li><strong>Attribute xml:lang:</strong> Before<${el} xlink:href="${someUrl}" xml:lang="${someLanguage}">Within</${el}>After</li>
-    <li><strong>Attribute lang:</strong> Before<${el} xlink:href="${someUrl}" lang="${someLanguage}">Within</${el}>After</li>
-    <li><strong>Attribute dir:</strong> Before<${el} xlink:href="${someUrl}" dir="${someDir}">Within</${el}>After</li>
-    <li><strong>Attribute class:</strong> Before<${el} xlink:href="${someUrl}" class="${someClass}">Within</${el}>After</li>
-    <li><strong>Attribute xlink:type:</strong> Before<${el} xlink:href="${someUrl}" xlink:type="simple">Within</${el}>After<br/>xlink:type is a fixed attribute and may be removed during processing.</li>
-    <li><strong>Attribute xlink:role:</strong> Before<${el} xlink:href="${someUrl}" xlink:role="someRole">Within</${el}>After</li>
-    <li><strong>Attribute xlink:title:</strong> Before<${el} xlink:href="${someUrl}" xlink:title="Some Title">Within</${el}>After</li>
-    <li><strong>Attribute xlink:show:</strong> Before<${el} xlink:href="${someUrl}" xlink:show="new">Within</${el}>After</li>
-    <li><strong>Attribute xlink:actuate:</strong> Before<${el} xlink:href="${someUrl}" xlink:actuate="onLoad">Within</${el}>After</li>
-    </ul>
+    <p><strong>No Attributes:</strong> Before<${el} xlink:href="${someUrl}">Within</${el}>After</p>
+    <p><strong>Attribute xml:lang:</strong> Before<${el} xlink:href="${someUrl}" xml:lang="${someLanguage}">Within</${el}>After</p>
+    <p><strong>Attribute lang:</strong> Before<${el} xlink:href="${someUrl}" lang="${someLanguage}">Within</${el}>After</p>
+    <p><strong>Attribute dir:</strong> Before<${el} xlink:href="${someUrl}" dir="${someDir}">Within</${el}>After</p>
+    <p><strong>Attribute class:</strong> Before<${el} xlink:href="${someUrl}" class="${someClass}">Within</${el}>After</p>
+    <p><strong>Attribute xlink:type:</strong> Before<${el} xlink:href="${someUrl}" xlink:type="simple">Within</${el}>After<br/>xlink:type is a fixed attribute and may be removed during processing.</p>
+    <p><strong>Attribute xlink:role:</strong> Before<${el} xlink:href="${someUrl}" xlink:role="someRole">Within</${el}>After</p>
+    <p><strong>Attribute xlink:title:</strong> Before<${el} xlink:href="${someUrl}" xlink:title="Some Title">Within</${el}>After</p>
+    <p><strong>Attribute xlink:show:</strong> Before<${el} xlink:href="${someUrl}" xlink:show="new">Within</${el}>After</p>
+    <p><strong>Attribute xlink:actuate:</strong> Before<${el} xlink:href="${someUrl}" xlink:actuate="onLoad">Within</${el}>After</p>
     <p class="${subSectionHeading}">Nesting</p>
-    <ul>
-    <li><strong>Only Text:</strong> Before<${el} xlink:href="${someUrl}">${el}</${el}>After</li>
-    <li><strong>Nested Element br:</strong> Before<${el} xlink:href="${someUrl}">Lorem<br/>ipsum<br/>dolor</${el}>After</li>
-    <li><strong>Nested Element span:</strong> Before<${el} xlink:href="${someUrl}">Lorem<span class="${someClass}">ipsum</span>dolor</${el}>After</li>
-    <li><strong>Nested Element img:</strong> Before<${el} xlink:href="${someUrl}"><img xlink:href="${someInlineImg}" alt="${someAlt}"/></${el}>After</li>
+    <p><strong>Only Text:</strong> Before<${el} xlink:href="${someUrl}">${el}</${el}>After</p>
+    <p><strong>Nested Element br:</strong> Before<${el} xlink:href="${someUrl}">Lorem<br/>ipsum<br/>dolor</${el}>After</p>
+    <p><strong>Nested Element span:</strong> Before<${el} xlink:href="${someUrl}">Lorem<span class="${someClass}">ipsum</span>dolor</${el}>After</p>
+    <p><strong>Nested Element img:</strong> Before<${el} xlink:href="${someUrl}"><img xlink:href="${someInlineImg}" alt="${someAlt}"/></${el}>After</p>
     ${["em", "strong", "sub", "sup"].map(nestedEl).join("")}
-    </ul>
     `;
   };
   const pre = () => {
     const el = "pre";
-    const nestedEl = (nested) => `<li><p><strong>Nested Element ${nested}:</strong></p><${el}>Lorem<${nested}>ipsum</${nested}>ipsum</${el}></li>`;
+    const nestedEl = (nested) => `<p><strong>Nested Element ${nested}:</strong></p><${el}>Lorem<${nested}>ipsum</${nested}>ipsum</${el}><br/>`;
     return `
     <p class="${mainSectionHeading}">Element: ${el}</p>
     <p class="${subSectionHeading}">Attributes</p>
-    <ul>
-    <li><p><strong>No Attributes:</strong></p><${el}>${someContent}</${el}></li>
-    <li><p><strong>Attribute xml:lang:</strong></p><${el} xml:lang="${someLanguage}">${someContent}</${el}></li>
-    <li><p><strong>Attribute lang:</strong></p><${el} lang="${someLanguage}">${someContent}</${el}></li>
-    <li><p><strong>Attribute dir:</strong></p><${el} dir="${someDir}">${someContent}</${el}></li>
-    <li><p><strong>Attribute class:</strong></p><${el} class="${someClass}">${someContent}</${el}></li>
-    <li><p><strong>Attribute xml:space</strong></p><${el} xml:space="preserve">${someContent}</${el}><p>xlink:preserve is a fixed attribute and may be removed during processing.</p></li>
-    </ul>
+    <p><strong>No Attributes:</strong></p><${el}>${someContent}</${el}><br/>
+    <p><strong>Attribute xml:lang:</strong></p><${el} xml:lang="${someLanguage}">${someContent}</${el}><br/>
+    <p><strong>Attribute lang:</strong></p><${el} lang="${someLanguage}">${someContent}</${el}><br/>
+    <p><strong>Attribute dir:</strong></p><${el} dir="${someDir}">${someContent}</${el}><br/>
+    <p><strong>Attribute class:</strong></p><${el} class="${someClass}">${someContent}</${el}><br/>
+    <p><strong>Attribute xml:space</strong></p><${el} xml:space="preserve">${someContent}</${el}><p>xlink:preserve is a fixed attribute and may be removed during processing.</p><br/>
     <p class="${subSectionHeading}">Nesting</p>
-    <ul>
-    <li><p><strong>Only Text:</strong></p><${el}>${someContent}</${el}></li>
-    <li><p><strong>Nested Element br:</strong></p><${el}>Lorem<br/>ipsum<br/>dolor</${el}></li>
-    <li><p><strong>Nested Element a:</strong></p><${el}>Lorem<a xlink:href="${someUrl}">ipsum</a>dolor</${el}></li>
-    <li><p><strong>Nested Element span:</strong></p><${el}>Lorem<span class="${someClass}">ipsum</span>dolor</${el}></li>
+    <p><strong>Only Text:</strong></p><${el}>${someContent}</${el}><br/>
+    <p><strong>Nested Element br:</strong></p><${el}>Lorem<br/>ipsum<br/>dolor</${el}><br/>
+    <p><strong>Nested Element a:</strong></p><${el}>Lorem<a xlink:href="${someUrl}">ipsum</a>dolor</${el}><br/>
+    <p><strong>Nested Element span:</strong></p><${el}>Lorem<span class="${someClass}">ipsum</span>dolor</${el}><br/>
     ${["em", "strong", "sub", "sup"].map(nestedEl).join("")}
-    </ul>
     `;
   };
   const lists = () => {
     const list = (el) => {
-      const nestedInline = (nested) => `<li><p><strong>Nested Element ${nested}:</strong></p><${el}><li>Lorem<${nested}>ipsum</${nested}>ipsum</li><li><${nested}>Plain ${nested}</${nested}></li></${el}></li>`;
+      const nestedInline = (nested) => `<p><strong>Nested Element ${nested}:</strong></p><${el}><li>Lorem<${nested}>ipsum</${nested}>ipsum</li><li><${nested}>Plain ${nested}</${nested}></li></${el}><br/>`;
       return `
         <p class="${mainSectionHeading}">Element: ${el}</p>
         <p class="${subSectionHeading}">Attributes</p>
-        <ul>
-        <li><p><strong>No Attributes:</strong></p><${el}><li>${someContent}</li></${el}></li>
-        <li><p><strong>Attribute xml:lang:</strong></p><${el} xml:lang="${someLanguage}"><li>${someContent}</li></${el}></li>
-        <li><p><strong>Attribute lang:</strong></p><${el} lang="${someLanguage}"><li>${someContent}</li></${el}></li>
-        <li><p><strong>Attribute dir:</strong></p><${el} dir="${someDir}"><li>${someContent}</li></${el}></li>
-        <li><p><strong>Attribute class:</strong></p><${el} class="${someClass}"><li>${someContent}</li></${el}></li>
-        </ul>
+        <p><strong>No Attributes:</strong></p><${el}><li>${someContent}</li></${el}><br/>
+        <p><strong>Attribute xml:lang:</strong></p><${el} xml:lang="${someLanguage}"><li>${someContent}</li></${el}><br/>
+        <p><strong>Attribute lang:</strong></p><${el} lang="${someLanguage}"><li>${someContent}</li></${el}><br/>
+        <p><strong>Attribute dir:</strong></p><${el} dir="${someDir}"><li>${someContent}</li></${el}><br/>
+        <p><strong>Attribute class:</strong></p><${el} class="${someClass}"><li>${someContent}</li></${el}><br/>
         <p class="${subSectionHeading}">Nested LI Attributes</p>
-        <ul>
-        <li><p><strong>No Attributes:</strong></p><${el}><li>${someContent}</li></${el}></li>
-        <li><p><strong>Attribute xml:lang:</strong></p><${el}><li xml:lang="${someLanguage}">${someContent}</li></${el}></li>
-        <li><p><strong>Attribute lang:</strong></p><${el}><li lang="${someLanguage}">${someContent}</li></${el}></li>
-        <li><p><strong>Attribute dir:</strong></p><${el}><li dir="${someDir}">${someContent}</li></${el}></li>
-        <li><p><strong>Attribute class:</strong></p><${el}><li class="${someClass}">${someContent}</li></${el}></li>
-        </ul>
+        <p><strong>No Attributes:</strong></p><${el}><li>${someContent}</li></${el}><br/>
+        <p><strong>Attribute xml:lang:</strong></p><${el}><li xml:lang="${someLanguage}">${someContent}</li></${el}><br/>
+        <p><strong>Attribute lang:</strong></p><${el}><li lang="${someLanguage}">${someContent}</li></${el}><br/>
+        <p><strong>Attribute dir:</strong></p><${el}><li dir="${someDir}">${someContent}</li></${el}><br/>
+        <p><strong>Attribute class:</strong></p><${el}><li class="${someClass}">${someContent}</li></${el}><br/>
         <p class="${subSectionHeading}">Nested LI Elements</p>
-        <ul>
-        <li><p><strong>Only Text:</strong></p><${el}><li>${someContent}</li></${el}></li>
-        <li><p><strong>Nested Element br:</strong></p><${el}><li>Lorem<br/>ipsum<br/>dolor</li></${el}></li>
-        <li><p><strong>Nested Element a:</strong></p><${el}><li>Lorem<a xlink:href="${someUrl}">ipsum</a>dolor</li></${el}></li>
-        <li><p><strong>Nested Element span:</strong></p><${el}><li>Lorem<span class="${someClass}">ipsum</span>dolor</li></${el}></li>
+        <p><strong>Only Text:</strong></p><${el}><li>${someContent}</li></${el}><br/>
+        <p><strong>Nested Element br:</strong></p><${el}><li>Lorem<br/>ipsum<br/>dolor</li></${el}><br/>
+        <p><strong>Nested Element a:</strong></p><${el}><li>Lorem<a xlink:href="${someUrl}">ipsum</a>dolor</li></${el}><br/>
+        <p><strong>Nested Element span:</strong></p><${el}><li>Lorem<span class="${someClass}">ipsum</span>dolor</li></${el}><br/>
         ${["em", "strong", "sub", "sup"].map(nestedInline).join("")}
-        <li><p><strong>Nested Element p:</strong></p><${el}><li>Lorem<p>ipsum</p>dolor</li><li><p>${someContent}</p></li></${el}></li>
-        <li><p><strong>Nested Element ul:</strong></p><${el}><li>Nested inline: Lorem<ul><li>ipsum</li></ul>dolor</li><li><p>Nested Blocks:</p><ul><li>${someContent}</li></ul></li></${el}></li>
-        <li><p><strong>Nested Element ol:</strong></p><${el}><li>Nested inline: Lorem<ol><li>ipsum</li></ol>dolor</li><li><p>Nested Blocks:</p><ol><li>${someContent}</li></ol></li></${el}></li>
-        <li><p><strong>Nested Element pre:</strong></p><${el}><li>Lorem<pre>ipsum</pre>dolor</li><li><pre>${someContent}</pre></li></${el}></li>
-        <li><p><strong>Nested Element blockquote:</strong></p><${el}><li>Lorem<blockquote>ipsum</blockquote>dolor</li><li><blockquote>${someContent}</blockquote></li></${el}></li>
-        <li><p><strong>Nested Element table:</strong></p><${el}><li>Lorem<table><tr><td>ipsum</td></tr></table>dolor</li><li><table><tr><td>${someContent}</td></tr></table></li></${el}></li>
-        </ul>
+        <p><strong>Nested Element p:</strong></p><${el}><li>Lorem<p>ipsum</p>dolor</li><li><p>${someContent}</p></li></${el}><br/>
+        <p><strong>Nested Element ul:</strong></p><${el}><li>Nested inline: Lorem<ul><li>ipsum</li></ul>dolor</li><li><p>Nested Blocks:</p><ul><li>${someContent}</li></ul></li></${el}><br/>
+        <p><strong>Nested Element ol:</strong></p><${el}><li>Nested inline: Lorem<ol><li>ipsum</li></ol>dolor</li><li><p>Nested Blocks:</p><ol><li>${someContent}</li></ol></li></${el}><br/>
+        <p><strong>Nested Element pre:</strong></p><${el}><li>Lorem<pre>ipsum</pre>dolor</li><li><pre>${someContent}</pre></li></${el}><br/>
+        <p><strong>Nested Element blockquote:</strong></p><${el}><li>Lorem<blockquote>ipsum</blockquote>dolor</li><li><blockquote>${someContent}</blockquote></li></${el}><br/>
+        <p><strong>Nested Element table:</strong></p><${el}><li>Lorem<table><tr><td>ipsum</td></tr></table>dolor</li><li><table><tr><td>${someContent}</td></tr></table></li></${el}><br/>
     `;
     };
     return ["ul", "ol"].map(list).join("");
@@ -707,23 +683,19 @@ const coreMediaRichTextPoC = () => {
     return `
     <p class="${mainSectionHeading}">Element: ${el}</p>
     <p class="${subSectionHeading}">Attributes</p>
-    <ul>
-    <li><p><strong>No Attributes:</strong></p><${el}><p>${someContent}</p></${el}></li>
-    <li><p><strong>Attribute xml:lang:</strong></p><${el} xml:lang="${someLanguage}"><p>${someContent}</p></${el}></li>
-    <li><p><strong>Attribute lang:</strong></p><${el} lang="${someLanguage}"><p>${someContent}</p></${el}></li>
-    <li><p><strong>Attribute dir:</strong></p><${el} dir="${someDir}"><p>${someContent}</p></${el}></li>
-    <li><p><strong>Attribute class:</strong></p><${el} class="${someClass}"><p>${someContent}</p></${el}></li>
-    <li><p><strong>Attribute cite:</strong></p><${el} cite="https://example.org/"><p>${someContent}</p></${el}></li>
-    </ul>
+    <p><strong>No Attributes:</strong></p><${el}><p>${someContent}</p></${el}><br/>
+    <p><strong>Attribute xml:lang:</strong></p><${el} xml:lang="${someLanguage}"><p>${someContent}</p></${el}><br/>
+    <p><strong>Attribute lang:</strong></p><${el} lang="${someLanguage}"><p>${someContent}</p></${el}><br/>
+    <p><strong>Attribute dir:</strong></p><${el} dir="${someDir}"><p>${someContent}</p></${el}><br/>
+    <p><strong>Attribute class:</strong></p><${el} class="${someClass}"><p>${someContent}</p></${el}><br/>
+    <p><strong>Attribute cite:</strong></p><${el} cite="https://example.org/"><p>${someContent}</p></${el}><br/>
     <p class="${subSectionHeading}">Nesting</p>
-    <ul>
-    <li><p><strong>Nested Element p:</strong></p><${el}><p>${someContent}</p></${el}></li>
-    <li><p><strong>Nested Element ul:</strong></p><${el}><ul><li>${someContent}</li></ul></${el}></li>
-    <li><p><strong>Nested Element ol:</strong></p><${el}><ol><li>${someContent}</li></ol></${el}></li>
-    <li><p><strong>Nested Element pre:</strong></p><${el}><pre>${someContent}</pre></${el}></li>
-    <li><p><strong>Nested Element blockquote:</strong></p><${el}><p>Before</p><blockquote>${someContent}</blockquote><p>After</p></${el}></li>
-    <li><p><strong>Nested Element table:</strong></p><${el}><p>Before</p><table><tr><td>${someContent}</td></tr></table><p>After</p></${el}></li>
-    </ul>
+    <p><strong>Nested Element p:</strong></p><${el}><p>${someContent}</p></${el}><br/>
+    <p><strong>Nested Element ul:</strong></p><${el}><ul><li>${someContent}</li></ul></${el}><br/>
+    <p><strong>Nested Element ol:</strong></p><${el}><ol><li>${someContent}</li></ol></${el}><br/>
+    <p><strong>Nested Element pre:</strong></p><${el}><pre>${someContent}</pre></${el}><br/>
+    <p><strong>Nested Element blockquote:</strong></p><${el}><p>Before</p><blockquote>${someContent}</blockquote><p>After</p></${el}><br/>
+    <p><strong>Nested Element table:</strong></p><${el}><p>Before</p><table><tr><td>${someContent}</td></tr></table><p>After</p></${el}><br/>
     `;
   };
   const scenarios = [
