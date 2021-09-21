@@ -546,6 +546,12 @@ const coreMediaRichTextPoC = () => {
       The following examples provide an overview and test-fixture for valid
       CoreMedia RichText 1.0 structures, which must be supported.
     </p>
+    <p>
+      <strong>Note on Images:</strong>
+      The data-images used in this example will not work within CoreMedia CMS.
+      Thus, for testing the generated RichText within CoreMedia CMS, we recommend
+      removing the image-based test-data first.
+    </p>
   `;
   const inlineWithAttrs = (el) => {
     const nestedEl = (nested) => `<li><strong>Nested Element ${nested}:</strong> Before<${el}>Lorem<${nested}>ipsum</${nested}>dolor</${el}>After</li>`;
