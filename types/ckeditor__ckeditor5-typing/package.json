@@ -1,11 +1,11 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-typing",
-  "version": "0.0.2-rc.1",
+  "version": "0.0.2-rc.2",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.1",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "0.0.2-rc.1"
+    "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.2",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "0.0.2-rc.2"
   },
   "scripts": {
     "npm-check-updates": "npm-check-updates --upgrade"
