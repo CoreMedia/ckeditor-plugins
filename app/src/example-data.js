@@ -699,7 +699,6 @@ const coreMediaRichTextPoC = () => {
     `;
   };
   const scenarios = [
-    introduction(),
     ...["p", "em", "strong", "sub", "sup"].map(inlineWithAttrs),
     span(),
     br(),
@@ -710,7 +709,7 @@ const coreMediaRichTextPoC = () => {
     // TODO[cke] Tables
     // TODO[cke] Images
   ].join("").split("\n").map((l) => l.trim()).join("");
-  return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
+  return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${introduction()}${scenarios}</div>`;
 };
 
 const exampleData = {
