@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext",
-  "version": "0.0.2-rc.3",
+  "version": "0.0.2-rc.4",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -31,9 +31,9 @@
     "@ckeditor/ckeditor5-engine": "^29.2.0",
     "@ckeditor/ckeditor5-utils": "^29.2.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.3",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "0.0.2-rc.3",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "0.0.2-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.4",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "0.0.2-rc.4",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "0.0.2-rc.4",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
@@ -58,7 +58,7 @@
     "@ckeditor/ckeditor5-utils": "^29.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-dataprocessor-support": "0.0.2-rc.3",
-    "@coremedia/ckeditor5-logging": "0.0.2-rc.3"
+    "@coremedia/ckeditor5-dataprocessor-support": "0.0.2-rc.4",
+    "@coremedia/ckeditor5-logging": "0.0.2-rc.4"
   }
 }
