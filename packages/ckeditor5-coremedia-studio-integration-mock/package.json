@@ -34,7 +34,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@ckeditor/ckeditor5-core": "^29.2.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/studio-apps-service-agent": "^0.0.31",
+    "@coremedia/studio-apps-service-agent": "0.0.32",
     "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.3",
     "@coremedia/types-ckeditor__ckeditor5-utils": "0.0.2-rc.3",
     "@types/jest": "^27.0.1",
@@ -55,7 +55,7 @@
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^29.2.0",
-    "@coremedia/studio-apps-service-agent": "^0.0.31"
+    "@coremedia/studio-apps-service-agent": "0.0.32"
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-studio-integration": "0.0.2-rc.3",
