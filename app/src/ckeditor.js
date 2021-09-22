@@ -4,6 +4,7 @@ import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
@@ -55,6 +56,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Autosave,
     BlockQuote,
     Bold,
+    CodeBlock,
     Essentials,
     Heading,
     Highlight,
@@ -99,13 +101,41 @@ ClassicEditor.create(document.querySelector('.editor'), {
       'outdent',
       'indent',
       '|',
+      'codeBlock',
       'blockQuote',
       'alignment',
       '|',
       'insertTable',
     ]
   },
-  heading: {
+  alignment: {
+    // The following alternative to signal alignment was used in CKEditor 4
+    // of CoreMedia CMCC 10 and before.
+    // Note, that in contrast to CKEditor 4 approach, these classes are now
+    // applicable to any block element, while it supported only `<p>` in the
+    // past.
+    // TODO[cke] This approach fails currently for headings, for example.
+    // TODO[cke] It would require the data-processor to respect that <h1> et al.
+    // TODO[cke] may contain additional class attributes.
+    options: [
+      {
+        name: "left",
+        className: "align--left",
+      },
+      {
+        name: "right",
+        className: "align--right",
+      },
+      {
+        name: "center",
+        className: "align--center",
+      },
+      {
+        name: "justify",
+        className: "align--justify",
+      },
+    ],
+  }, heading: {
     options: [
       {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
       {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
@@ -159,6 +189,31 @@ ClassicEditor.create(document.querySelector('.editor'), {
     strictness: Strictness.STRICT,
     rules: {
       elements: {
+        // CodeBlock Plugin Support
+        code: {
+          toData: (params) => {
+            params.parentRule(params);
+
+            const originalClass = params.node.attributes["class"];
+            params.node.attributes["class"] = `code--${originalClass}`;
+            params.node.name = "span";
+          },
+          toView: {
+            span: (params) => {
+              params.parentRule(params);
+
+              const originalClass = params.node.attributes["class"] || "";
+              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
+              //    can be italics, but also marked.
+              const pattern = /^code--(\S*)$/;
+              const match = pattern.exec(originalClass);
+              if (match) {
+                params.node.name = "code";
+                params.node.attributes["class"] = match[1];
+              }
+            },
+          },
+        },
         // Highlight Plugin Support
         mark: {
           toData: (params) => {
