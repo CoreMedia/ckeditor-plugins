@@ -48,6 +48,7 @@ jobs:
           node-version: 14.x
       - name: Configure NPM
         run: |
+          npm install -g npm@latest
           npm install -g pnpm@6.15.1
           npm install -g semver
       - name: Setup Git

@@ -4,6 +4,11 @@ on:
   # On push on a PR we want to trigger a normal build without publishing anything
   pull_request:
     branches: [ main ]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
   # Manual trigger means we want to produce published prerelease artifacts for retesting purposes
   workflow_dispatch:
 jobs:
@@ -11,7 +16,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     # do not run when if it is a manual trigger on the main branch as we have other CI for this. This one is only for feature branches
-    if: github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main'
+    if: (github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main') && !github.event.pull_request.draft
     env:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
@@ -32,6 +37,7 @@ jobs:
           node-version: 14.x
       - name: Configure NPM
         run: |
+          npm install -g npm@latest
           npm install -g pnpm@6.15.1
           npm install -g semver
       - name: Setup Git
