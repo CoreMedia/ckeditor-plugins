@@ -13,6 +13,8 @@ import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarseparatorview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import "./theme/linktargetactionsviewextension.css";
+import Locale from "@ckeditor/ckeditor5-utils/src/locale";
+import "../lang";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -71,7 +73,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       if (buttonConfig.name === OTHER_TARGET_NAME) {
         return <ButtonView>this.editor.ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
       } else {
-        return this.#createTargetButton(buttonConfig, linkTargetCommand);
+        return this.#createTargetButton(linkUI.editor.locale, buttonConfig, linkTargetCommand);
       }
     });
 
@@ -106,14 +108,19 @@ class LinkTargetActionsViewExtension extends Plugin {
    * Buttons created by this method directly set the target value they are bound
    * to. For a custom target input field, use `CustomLinkTargetUI`.
    *
+   * @param locale
    * @param buttonConfig configuration for the button
    * @param linkTargetCommand command to execute on click
    * @private
    */
-  #createTargetButton(buttonConfig: LinkTargetOptionDefinition, linkTargetCommand: Command | undefined): ButtonView {
+  #createTargetButton(
+    locale: Locale,
+    buttonConfig: LinkTargetOptionDefinition,
+    linkTargetCommand: Command | undefined
+  ): ButtonView {
     const view = new ButtonView();
     view.set({
-      label: buttonConfig.title || buttonConfig.name,
+      label: buttonConfig.title ? locale.t(buttonConfig.title) : buttonConfig.name,
       class: "cm-ck-target-button",
       tooltip: true,
       icon: buttonConfig.icon,

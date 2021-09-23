@@ -32,7 +32,8 @@ import CoreMediaStudioEssentials, {
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
-import "./customlanguage"
+//import "@coremedia/ckeditor5-coremedia-link/lang"
+//import "./customlanguage"
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
 // setup dnd IFrame
@@ -127,6 +128,17 @@ ClassicEditor.create(document.querySelector('.editor'), {
         },
       }
     },
+    targets: [
+      "_parent",
+      {
+        name: "_top",
+        title: "Open in Frame",
+      },
+      {
+        name: "_self",
+        title: {string: "Open in Current Tab"}
+      }
+    ]
   },
   table: {
     contentToolbar: [

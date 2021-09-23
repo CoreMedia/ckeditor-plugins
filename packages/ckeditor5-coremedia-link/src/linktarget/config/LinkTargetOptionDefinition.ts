@@ -1,6 +1,8 @@
 /**
  * The target option definition descriptor.
  */
+import { Message } from "@ckeditor/ckeditor5-utils/translation-service";
+
 // This is similar to `ImageStyleOptionDefinition` as provided by
 // CKEditor's Image Plugin.
 interface LinkTargetOptionDefinition {
@@ -26,7 +28,7 @@ interface LinkTargetOptionDefinition {
    *
    * If unset defaults to `{name}`.
    */
-  title?: string;
+  title?: string | Message;
 }
 
 export default LinkTargetOptionDefinition;
