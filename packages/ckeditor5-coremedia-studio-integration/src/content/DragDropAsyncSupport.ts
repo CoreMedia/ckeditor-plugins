@@ -1,4 +1,4 @@
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import { serviceAgent } from "@coremedia/service-agent";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "./RichtextConfigurationServiceDescriptor";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";

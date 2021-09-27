@@ -1,4 +1,4 @@
-import type { ServiceObject } from "@coremedia/studio-apps-service-agent";
+import type { ServiceObject } from "@coremedia/service-agent";
 
 /**
  * Service for base Studio work area functionality to be registered with the

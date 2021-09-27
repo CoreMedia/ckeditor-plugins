@@ -1,4 +1,4 @@
-import { ServiceObject } from "@coremedia/studio-apps-service-agent";
+import { ServiceObject } from "@coremedia/service-agent";
 import { UriPath } from "./UriPath";
 
 /**

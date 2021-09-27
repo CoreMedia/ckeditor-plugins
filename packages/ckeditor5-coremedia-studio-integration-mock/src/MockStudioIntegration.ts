@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import MockContentDisplayService from "./content/MockContentDisplayService";
 import MockRichtextConfigurationService from "./content/MockRichtextConfigurationService";
 
-import { ServiceAgent, serviceAgent } from "@coremedia/studio-apps-service-agent";
+import { ServiceAgent, serviceAgent } from "@coremedia/service-agent";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MockDragDropService from "./content/MockDragDropService";

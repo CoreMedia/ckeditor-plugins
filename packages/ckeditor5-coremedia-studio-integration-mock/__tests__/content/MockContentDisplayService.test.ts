@@ -8,7 +8,7 @@ import MockContentDisplayService, {
 } from "../../src/content/MockContentDisplayService";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { Observable } from "rxjs";
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import { serviceAgent } from "@coremedia/service-agent";
 import ContentDisplayServiceDescriptor
   from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";

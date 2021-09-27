@@ -3,7 +3,7 @@ import {
   ContentIdPrefix,
   changing$
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentDisplayService";
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropService";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
