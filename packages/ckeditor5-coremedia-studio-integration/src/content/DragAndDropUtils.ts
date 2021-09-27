@@ -1,5 +1,5 @@
 import { requireContentCkeModelUris } from "./UriPath";
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import { serviceAgent } from "@coremedia/service-agent";
 import DragDropService, { CMBeanReference, CMDragData } from "./studioservices/DragDropService";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 

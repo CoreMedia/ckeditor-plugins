@@ -1,4 +1,4 @@
-import type { ServiceObject } from "@coremedia/studio-apps-service-agent";
+import type { ServiceObject } from "@coremedia/service-agent";
 
 /**
  * TODO: interface is copied from Studio and means we have a circular dependency as ckeditor provides interfaces but also now studio provides interfaces for ckeditor. We have to take a decision how to resolve this.

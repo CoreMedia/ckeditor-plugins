@@ -1,4 +1,4 @@
-import { ServiceDescriptor } from "@coremedia/studio-apps-service-agent";
+import { ServiceDescriptor } from "@coremedia/service-agent";
 import ContentDisplayService from "./ContentDisplayService";
 
 /**

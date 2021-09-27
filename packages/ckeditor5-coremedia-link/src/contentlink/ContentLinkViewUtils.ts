@@ -1,6 +1,6 @@
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
-import { serviceAgent } from "@coremedia/studio-apps-service-agent";
+import { serviceAgent } from "@coremedia/service-agent";
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 import WorkAreaServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 

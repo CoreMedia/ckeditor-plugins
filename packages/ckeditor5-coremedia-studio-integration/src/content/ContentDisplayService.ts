@@ -1,6 +1,6 @@
 import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
-import { ServiceObject } from "@coremedia/studio-apps-service-agent";
+import { ServiceObject } from "@coremedia/service-agent";
 import ContentAsLink from "./ContentAsLink";
 
 /**

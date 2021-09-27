@@ -31,7 +31,7 @@
     "@coremedia/ckeditor5-studio-essentials": "0.0.2-rc.6",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "0.0.2-rc.6",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "0.0.2-rc.6",
-    "@coremedia/studio-apps-service-agent": "0.0.32",
+    "@coremedia/service-agent": "^1.0.0",
     "xml-formatter": "^2.4.1"
   },
   "devDependencies": {
