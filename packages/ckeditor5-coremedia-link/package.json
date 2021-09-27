@@ -7,8 +7,6 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
-    "postbuild": "copyfiles --up 3 src/linktarget/theme/* src/linktarget/theme/**/* dist/linktarget/theme && copyfiles --up 3 src/contentlink/theme/* src/contentlink/theme/**/* dist/contentlink/theme && pnpm run copysvg",
-    "copysvg": "copyfiles --up 3 src/linktarget/icons/* src/linktarget/icons/**/* dist/linktarget/icons",
     "clean": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
@@ -52,7 +50,6 @@
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "babel-jest": "^27.2.0",
-    "copyfiles": "^2.4.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
