@@ -22,3 +22,6 @@ msgstr "Eingebettet öffnen"
 
 msgid "Open in Frame"
 msgstr "Im Frame öffnen"
+
+msgid "Localization pofile"
+msgstr "In PO-File lokalisiert"
