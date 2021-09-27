@@ -9,15 +9,15 @@ jobs:
   build:
     name: Unpublish Version
     env:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
-      NPM_CONFIG_//npm.coremedia.io/:_authToken: ${NPM_AUTH_TOKEN}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unpublish release
         run: |
+          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.USER_COREMEDIA_NPM_REGISTRY }}", "password": "${{ secrets.TOKEN_COREMEDIA_NPM_REGISTRY }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.USER_COREMEDIA_NPM_REGISTRY }} | jq -r .token)
+          echo "::add-mask::$NPM_AUTH_TOKEN"
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
 
           version=${{ github.event.inputs.version }}
