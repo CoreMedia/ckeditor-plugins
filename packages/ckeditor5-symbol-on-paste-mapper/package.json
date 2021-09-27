@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
-  "version": "1.0.0",
+  "version": "1.0.1-rc.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -41,11 +41,11 @@
     "@ckeditor/ckeditor5-theme-lark": "^29.2.0",
     "@ckeditor/ckeditor5-ui": "^29.2.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.0",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.15.4",
-    "@coremedia/ckeditor5-logging": "^1.0.0",
+    "@coremedia/ckeditor5-logging": "1.0.1-rc.0",
     "@types/webpack": "^5.28.0",
     "babel-loader": "^8.2.2",
     "webpack": "^5.52.1",
