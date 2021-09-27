@@ -12,7 +12,7 @@ import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarseparatorview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
-import "./theme/linktargetactionsviewextension.css";
+import "../../theme/linktargetactionsviewextension.css";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
