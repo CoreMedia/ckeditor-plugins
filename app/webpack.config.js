@@ -56,7 +56,6 @@ module.exports = {
       language: 'en',
       // The sourceFilesPattern needs to be set manually in order to detect the CoreMedia plugins
       // since the package's entry js is located in the dist folder
-      sourceFilesPattern: /[/\\]ckeditor5-[^/\\]+[/\\](src|dist)[/\\].+\.js$/,
       additionalLanguages: ['de']
     }),
     new webpack.BannerPlugin({
