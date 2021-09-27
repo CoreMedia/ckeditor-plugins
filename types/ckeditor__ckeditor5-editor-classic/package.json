@@ -1,9 +1,9 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-editor-classic",
-  "version": "0.0.2-rc.6",
+  "version": "0.0.2-rc.7",
   "license": "Apache-2.0",
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.6"
+    "@coremedia/types-ckeditor__ckeditor5-core": "0.0.2-rc.7"
   },
   "scripts": {
     "npm-check-updates": "npm-check-updates --upgrade"
