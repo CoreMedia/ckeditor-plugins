@@ -289,7 +289,9 @@ ClassicEditor
 
 **title:** As can be seen in the example, you may also provide a text for the
 tooltip. The text is handed over to `Locale.t()` for translation, so that you
-may provide labels translated to your UI language.
+may provide labels translated to your UI language. Translations must be provided 
+by using the function `translation-service.add()`. For more informations regarding 
+`translation-service.add()` consult the CKEditor 5 documentation.
 
 The title defaults to the name of the target option if unset.
 
