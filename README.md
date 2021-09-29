@@ -2,8 +2,6 @@
 
 [![License: Apache 2.0][badge:license:Apache2]][LICENSE]
 
-Test for explicit link to [license](./LICENSE.md).
-
 _CoreMedia's CKEditor 5 Plugins_ provides plugins for [CKEditor 5][] with focus
 on integration into [CoreMedia CMS][]. CKEditor 5 is going to replace the
 previous integration of [CKEditor 4][].
