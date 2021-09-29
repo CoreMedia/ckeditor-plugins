@@ -16,6 +16,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import Table from '@ckeditor/ckeditor5-table/src/table';
@@ -70,6 +71,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     PasteFromOffice,
     RemoveFormat,
     Strikethrough,
+    SourceEditing,
     Subscript,
     Superscript,
     Table,
@@ -106,6 +108,8 @@ ClassicEditor.create(document.querySelector('.editor'), {
       'alignment',
       '|',
       'insertTable',
+      '|',
+      'sourceEditing',
     ]
   },
   alignment: {

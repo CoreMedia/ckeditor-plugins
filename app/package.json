@@ -23,6 +23,7 @@
     "@ckeditor/ckeditor5-paragraph": "^30.0.0",
     "@ckeditor/ckeditor5-paste-from-office": "^30.0.0",
     "@ckeditor/ckeditor5-remove-format": "^30.0.0",
+    "@ckeditor/ckeditor5-source-editing": "^30.0.0",
     "@ckeditor/ckeditor5-table": "^30.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^30.0.0",
     "@ckeditor/ckeditor5-typing": "^30.0.0",
