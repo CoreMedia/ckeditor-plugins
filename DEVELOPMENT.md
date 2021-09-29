@@ -1,3 +1,6 @@
+---
+permalink: /development.md
+---
 # Development
 
 ## Prerequisites
