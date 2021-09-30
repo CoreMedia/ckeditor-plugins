@@ -6,3 +6,4 @@ description: >- # Ignore newlines until next element
   on integration into CoreMedia CMS.
 social-network-links:
   twitter: CoreMedia
+show_downloads: true
