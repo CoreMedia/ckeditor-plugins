@@ -1,6 +1,6 @@
 # CoreMedia CKEditor 5 Plugins
 
-[![License: Apache 2.0][badge:license:Apache2]](./LICENSE.md)
+![License: Apache 2.0][badge:license:Apache2]
 
 _CoreMedia's CKEditor 5 Plugins_ provides plugins for [CKEditor 5][] with focus
 on integration into [CoreMedia CMS][]. CKEditor 5 is going to replace the
@@ -58,6 +58,7 @@ The following packages are not published, and thus, may only be used as
 
 * **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
 * **[Development](./DEVELOPMENT.md):** Hints for developing within this workspace
+* **[License](./LICENSE.md):** Apache 2.0 License Text
 * **[Versioning](./VERSIONING.md):** Versioning Policy
 
 <!-- ===========================================================[References] -->
