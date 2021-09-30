@@ -1,4 +1,6 @@
 theme: jekyll-theme-slate
+title: CoreMedia CKEditor 5 Plugins
+author: CoreMedia
 description: >- # Ignore newlines until next element
   CoreMedia's CKEditor 5 Plugins provides plugins for CKEditor 5 with focus
   on integration into CoreMedia CMS.
