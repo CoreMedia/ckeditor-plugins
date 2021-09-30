@@ -30,3 +30,4 @@ See Also
 [Top]: <#top>
 
 [cke5:docs:link:feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/link.html> "Link - CKEditor 5 Documentation"
+[Manual Testing]: <./TESTING.md>

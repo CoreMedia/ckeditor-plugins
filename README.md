@@ -1,61 +1,79 @@
-# CKEditor 5 Evaluation and Preparation
+# CoreMedia CKEditor 5 Plugins
 
-This repository contains the results of our preparation steps for
-replacing CKEditor 4 which reaches EOL soon. While `archive/` contains
-previous evaluation efforts, the root-folder represents the current
-evaluation process.
+[![License: Apache 2.0][badge:license:Apache2]](./LICENSE)
 
-## Build
+_CoreMedia's CKEditor 5 Plugins_ provides plugins for [CKEditor 5][] with focus
+on integration into [CoreMedia CMS][]. CKEditor 5 is going to replace the
+previous integration of [CKEditor 4][].
 
-To build we use `pnpm`.
+As the the CKEditor 5 integration into CoreMedia CMS is not yet feature-complete,
+it is provided as early-bird to customers of CoreMedia CMS to pre-evaluate the
+future of CKEditor within the CMS.
 
-### Setup
-
-Install pnpm globally:
-
-```text
-npm install --global pnpm
-```
-
-### Install
-
-Install artifacts via:
+## Quick Start
 
 ```text
-pnpm install
+$ pnpm install
+$ pnpm run build
 ```
 
-### Build
+Open `app/sample/index.html` to open an example CKEditor 5 with all provided
+plugins enabled.
 
-To build the workspace use:
+## Main Packages
 
-```text
-pnpm run build
-```
+All packages are published with scope `@coremedia/` as for example
+`@coremedia/ckeditor5-coremedia-link`.
 
-### Test
+| Name                                         | Description                                                |
+| -------------------------------------------- | ---------------------------------------------------------- |
+| [`ckeditor5-coremedia-link`][]               | Extension to CKEditor 5 Link Feature                       |
+| [`ckeditor5-coremedia-richtext`][]           | Support for CoreMedia RichText 1.0 DTD                     |
+| [`ckeditor5-coremedia-studio-essentials`][]  | Aggregator for essential plugins in CoreMedia Studio       |
+| [`ckeditor5-coremedia-studio-integration`][] | Communication Facade for integration into CoreMedia Studio |
+| [`ckeditor5-symbol-on-paste-mapper`][]       | Extension to CKEditor 5 Paste-from-Office                  |
 
-To run tests use:
+## Assistive Packages
 
-```text
-pnpm run jest
-```
+All packages are published with scope `@coremedia/` as for example
+`@coremedia/ckeditor5-logging`.
 
-### Troubleshooting
+| Name                                  | Description                                      |
+| ------------------------------------- | ------------------------------------------------ |
+| [`ckeditor5-dataprocessor-support`][] | Support for providing a CKEditor 5 DataProcessor |
+| [`ckeditor5-logging`][]               | Logging Facade                                   |
 
-* **Remove node_modules:**
+## Private Packages
 
-    In case of problems, you may want to try to remove all `node_modules`
-    folders and re-install artifacts again via `pnpm install`. The recommended
-    way to do so, is using [`npkill`](https://www.npmjs.com/package/npkill).
-    Ensure, to install it globally first:
+The following packages are not published, and thus, may only be used as
+`devDependencies`. Use scope `@coremedia/` as for example
+`@coremedia/ckeditor5-jest-test-helpers`.
 
-    ```text
-    npm install --global npkill
-    ```
+| Name                                              | Description                                 |
+| ------------------------------------------------- | ------------------------------------------- |
+| [`ckeditor5-coremedia-studio-integration-mock`][] | Simulates integration into CoreMedia Studio |
+| [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                      |
 
-    And clean up `node_modules` recursively then:
+## See Also
 
-    ```text
-    npx npkill
-    ```
+* **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
+* **[Development](./DEVELOPMENT.md):** Hints for developing within this workspace
+* **[License](./LICENSE):** Apache 2.0 License Text
+* **[Versioning](./VERSIONING.md):** Versioning Policy
+
+<!-- ===========================================================[References] -->
+
+[`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link/>
+[`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext/>
+[`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials/>
+[`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration/>
+[`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock/>
+[`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support/>
+[`ckeditor5-jest-test-helpers`]: <./packages/ckeditor5-jest-test-helpers>
+[`ckeditor5-logging`]: <./packages/ckeditor5-logging/>
+[`ckeditor5-symbol-on-paste-mapper`]: <./packages/ckeditor5-symbol-on-paste-mapper/>
+[badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-blue?style=for-the-badge>
+[CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
+[CKEditor 5]: <https://ckeditor.com/ckeditor-5/> "CKEditor 5 | Powerful Framework with Modular Architecture"
+[CoreMedia CMS]: <https://www.coremedia.com/> "Best-of-Breed Digital Experience Platform CoreMedia"
+[gp:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/>
