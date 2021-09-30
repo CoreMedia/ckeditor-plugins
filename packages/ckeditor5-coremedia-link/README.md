@@ -25,10 +25,6 @@ See Also
 
     Notes for manual testing, which should be done on each CKEditor update.
 
-* **[Manual Testing][]**
-
-* **[Testing][Manual Testing]**
-
 <!-- ======================================================== [ References ] -->
 
 [Top]: <#top>
