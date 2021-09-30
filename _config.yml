@@ -9,3 +9,5 @@ social-network-links:
 show_downloads: true
 minima:
   skin: dark
+header_pages:
+  - readme.md
