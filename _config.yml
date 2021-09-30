@@ -1,4 +1,4 @@
-theme: jekyll-theme-slate
+theme: minima
 title: CoreMedia CKEditor 5 Plugins
 author: CoreMedia
 description: >- # Ignore newlines until next element
@@ -7,3 +7,5 @@ description: >- # Ignore newlines until next element
 social-network-links:
   twitter: CoreMedia
 show_downloads: true
+minima:
+  skin: dark
