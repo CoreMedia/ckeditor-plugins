@@ -25,8 +25,13 @@ See Also
 
     Notes for manual testing, which should be done on each CKEditor update.
 
+* **[Manual Testing][]**
+
+* **[Testing][Manual Testing]**
+
 <!-- ======================================================== [ References ] -->
 
 [Top]: <#top>
 
 [cke5:docs:link:feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/link.html> "Link - CKEditor 5 Documentation"
+[Manual Testing]: <./TESTING.md>

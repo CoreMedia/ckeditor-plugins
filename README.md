@@ -56,10 +56,17 @@ The following packages are not published, and thus, may only be used as
 
 ## See Also
 
-* [Development][] – Hints for developing within this workspace
-* [Versioning][] – Versioning Policy
+* **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
+* **[Development][]:** Hints for developing within this workspace
+* **[Versioning][]:** Versioning Policy
+* **[Development](./DEVELOPMENT.md):** Hints for developing within this workspace
+* **[Versioning](./VERSIONING.md):** Versioning Policy
 
 <!-- ===========================================================[References] -->
+
+[Development]: <./DEVELOPMENT.md> "Hints for developing within this workspace"
+[Versioning]: <./VERSIONING.md> "Versioning Policy"
+[LICENSE]: <./LICENSE.md>
 
 [`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link/>
 [`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext/>
@@ -74,6 +81,4 @@ The following packages are not published, and thus, may only be used as
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
 [CKEditor 5]: <https://ckeditor.com/ckeditor-5/> "CKEditor 5 | Powerful Framework with Modular Architecture"
 [CoreMedia CMS]: <https://www.coremedia.com/> "Best-of-Breed Digital Experience Platform CoreMedia"
-[Development]: <./DEVELOPMENT.md> "Hints for developing within this workspace"
-[Versioning]: <./VERSIONING.md> "Versioning Policy"
-[LICENSE]: <./LICENSE.md>
+[gp:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/>
