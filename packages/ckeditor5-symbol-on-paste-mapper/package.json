@@ -19,6 +19,7 @@
     "@babel/plugin-transform-for-of": "^7.15.4",
     "@babel/plugin-transform-parameters": "^7.15.4",
     "@babel/plugin-transform-shorthand-properties": "^7.14.5",
+    "@babel/plugin-transform-typescript": "^7.15.4",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@ckeditor/ckeditor5-alignment": "^29.2.0",
@@ -47,6 +48,7 @@
     "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "1.0.1-rc.2",
     "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.2",
     "@types/jest": "^27.0.1",
+    "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "babel-jest": "^27.2.0",
@@ -58,7 +60,9 @@
     "jest-transform-stub": "^2.0.0",
     "prettier": "^2.4.0",
     "rimraf": "^3.0.2",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.3.1"
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-clipboard": "^29.2.0",
@@ -67,12 +71,7 @@
     "@ckeditor/ckeditor5-ui": "^29.2.0"
   },
   "dependencies": {
-    "@babel/plugin-transform-typescript": "^7.15.4",
-    "@coremedia/ckeditor5-logging": "1.0.1-rc.2",
-    "@types/webpack": "^5.28.0",
-    "babel-loader": "^8.2.2",
-    "webpack": "^5.52.1",
-    "webpack-cli": "^4.3.1"
+    "@coremedia/ckeditor5-logging": "1.0.1-rc.2"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
