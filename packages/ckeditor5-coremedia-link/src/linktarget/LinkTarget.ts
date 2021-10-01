@@ -3,7 +3,7 @@ import LinkTargetModelView from "./LinkTargetModelView";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkTargetActionsViewExtension from "./LinkTargetActionsViewExtension";
-
+import "../lang/linktarget";
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
  * as `target` attribute in view.
