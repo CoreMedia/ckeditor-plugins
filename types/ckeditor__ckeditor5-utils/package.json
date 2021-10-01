@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-utils",
-  "version": "1.0.1-rc.3",
+  "version": "1.0.1",
   "license": "Apache-2.0",
   "private": true,
   "engines": {
