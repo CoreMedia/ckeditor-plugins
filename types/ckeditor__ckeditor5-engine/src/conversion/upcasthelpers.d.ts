@@ -42,7 +42,7 @@ export default class UpcastHelpers extends ConversionHelpers {
 
   elementToElement(config: {
     model: string | ModelElement | Function,
-    view?: any,
+    view?: MatcherPattern,
     converterPriority?: PriorityString,
   }): UpcastHelpers;
 }

@@ -28,7 +28,7 @@ export default class Schema implements Emitter, Observable {
 
   checkAttributeInSelection(selection: any, attribute: string): boolean;
 
-  checkChild(context: SchemaContextDefinition, def: Node | string): void;
+  checkChild(context: SchemaContextDefinition, def: Node | string): boolean;
 
   checkMerge(positionOrBaseElement: Position | Element, elementToMerge: Element): boolean;
 
