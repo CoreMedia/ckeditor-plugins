@@ -119,7 +119,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   ): ButtonView {
     const view = new ButtonView();
     view.set({
-      label: buttonConfig.title ? locale.t(buttonConfig.title) : buttonConfig.name,
+      label: buttonConfig.title ? locale.t(buttonConfig.title) : locale.t(buttonConfig.name),
       class: "cm-ck-target-button",
       tooltip: true,
       icon: buttonConfig.icon,
