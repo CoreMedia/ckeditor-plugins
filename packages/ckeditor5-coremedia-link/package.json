@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-link",
-  "version": "1.0.1-rc.2",
+  "version": "1.0.1-rc.3",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -39,13 +39,13 @@
     "@ckeditor/ckeditor5-utils": "^29.2.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-link": "1.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-typing": "1.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-ui": "1.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.2",
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-link": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-typing": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-ui": "1.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.1-rc.3",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
@@ -72,8 +72,8 @@
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "1.0.1-rc.2",
-    "@coremedia/ckeditor5-logging": "1.0.1-rc.2",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "1.0.1-rc.3",
+    "@coremedia/ckeditor5-logging": "1.0.1-rc.3",
     "rxjs": "^6.5.4"
   }
 }
