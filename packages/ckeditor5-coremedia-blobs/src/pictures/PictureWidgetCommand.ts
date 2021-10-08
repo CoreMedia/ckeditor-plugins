@@ -5,12 +5,12 @@ export default class PictureWidgetCommand extends Command {
   execute({ value }: any) {
     const editor = this.editor;
     const selection = editor.model.document.selection;
-
+    //http://localhost:12345/studio/rest/api/content/23618/properties/data;blob=44f2e8b5e29f66a529afd0a2fbabff2d/rm/fit;maxw=240
     editor.model.change((writer) => {
       // Create a <placeholder> elment with the "name" attribute (and all the selection attributes)...
       const placeholder = writer.createElement("placeholder", {
         ...Object.fromEntries(selection.getAttributes()),
-        name: value,
+        src: value,
       });
 
       // ... and insert it into the document.

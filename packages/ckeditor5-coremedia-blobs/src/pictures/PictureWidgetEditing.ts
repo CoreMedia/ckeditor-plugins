@@ -23,7 +23,6 @@ export default class PictureWidgetEditing extends Plugin {
 
   #defineSchema(): void {
     const schema = this.editor.model.schema;
-
     schema.register("placeholder", {
       // Allow wherever text is allowed:
       allowWhere: "$text",
@@ -34,11 +33,8 @@ export default class PictureWidgetEditing extends Plugin {
       // The inline widget is self-contained so it cannot be split by the caret and can be selected:
       isObject: true,
 
-      // The inline widget can have the same attributes as text (for example linkHref, bold).
-      allowAttributesOf: "$text",
-
       // The placeholder can have many types, like date, name, surname, etc:
-      allowAttributes: ["name"],
+      allowAttributes: ["src"],
     });
   }
 
@@ -48,14 +44,14 @@ export default class PictureWidgetEditing extends Plugin {
 
     conversion.for("upcast").elementToElement({
       view: {
-        name: "span",
+        name: "p",
         classes: ["placeholder"],
       },
       model: (viewElement: ViewElement, { writer: modelWriter }: UpcastConversionApi): ModelElement => {
         // Extract the "name" from "{name}".
-        const name = viewElement.getAttribute("name");
+        const src = viewElement.getAttribute("src");
 
-        return modelWriter.createElement("placeholder", { name });
+        return modelWriter.createElement("placeholder", { src });
       },
     });
 
@@ -77,23 +73,18 @@ export default class PictureWidgetEditing extends Plugin {
 
     // Helper method for both downcast converters.
     function createPlaceholderView(modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
-      const name = modelItem.getAttribute("name");
-
-      const placeholderView = viewWriter.createContainerElement(
-        "span",
-        {
-          class: "placeholder",
-        },
-        {
-          isAllowedInsideAttributeElement: true,
-        }
+      const src = modelItem.getAttribute("src");
+      const container = viewWriter.createContainerElement(
+        "p",
+        { class: "placeholder" },
+        { isAllowedInsideAttributeElement: true }
       );
-
+      const pictureView = viewWriter.createEmptyElement("img", { src: src });
       // Insert the placeholder name (as a text).
-      const innerText = viewWriter.createText("{" + name + "}");
-      viewWriter.insert(viewWriter.createPositionAt(placeholderView, 0), innerText);
+      //const innerText = viewWriter.createUIElement("{" + name + "}");
+      viewWriter.insert(viewWriter.createPositionAt(container, 0), pictureView);
 
-      return placeholderView;
+      return container;
     }
   }
 }

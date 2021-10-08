@@ -5,6 +5,7 @@
  */
 import Document from "./document";
 import AttributeElement from "./attributeelement";
+import ContainerElement from "./containerelement";
 
 export default class DowncastWriter {
   constructor(document: Document);
@@ -27,13 +28,13 @@ export default class DowncastWriter {
       id?: number | string,
     }): AttributeElement;
 
-  createContainerElement(name: any, attributes: any, options?: {}): any;
+  createContainerElement(name: any, attributes?: any, options?: {}): ContainerElement;
 
   createDocumentFragment(children: any): any;
 
   createEditableElement(name: any, attributes: any): any;
 
-  createEmptyElement(name: any, attributes: any, options?: {}): any;
+  createEmptyElement(name: any, attributes?: any, options?: {}): any;
 
   createPositionAfter(item: any): any;
 
