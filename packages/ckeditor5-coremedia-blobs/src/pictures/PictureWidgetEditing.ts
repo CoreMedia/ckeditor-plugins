@@ -13,6 +13,7 @@ import BlobRichtextServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import BlobRichtextService from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextService";
 import EmbeddedBlobRenderInformation from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/EmbeddedBlobRenderInformation";
+import ContainerElement from "@ckeditor/ckeditor5-engine/src/view/containerelement";
 
 export default class PictureWidgetEditing extends Plugin {
   static get requires() {
@@ -82,36 +83,36 @@ export default class PictureWidgetEditing extends Plugin {
         },
         { isAllowedInsideAttributeElement: true }
       );
-      const src = PictureWidgetEditing.#toSrcLink(viewWriter, contentId, property);
-      const pictureView = viewWriter.createEmptyElement("img", {
-        src: src,
-        "data-contentId": contentId,
-        "data-contentProperty": property,
-      });
-      viewWriter.insert(viewWriter.createPositionAt(container, 0), pictureView);
-
+      PictureWidgetEditing.#createImageElement(viewWriter, container, contentId, property);
       return container;
     }
   }
 
-  static #toSrcLink(viewWriter: DowncastWriter, uriPath: UriPath, property: string): string {
+  static #createImageElement(
+    viewWriter: DowncastWriter,
+    container: ContainerElement,
+    uriPath: UriPath,
+    property: string
+  ): void {
     serviceAgent.fetchService(new BlobRichtextServiceDescriptor()).then((service): void => {
       if (!(service as BlobRichtextService)) {
         return;
       }
       const blobRichtextService = service as BlobRichtextService;
       blobRichtextService.observe_embeddedBlobInformation(uriPath, property).subscribe((value) => {
-        PictureWidgetEditing.#onNewBlobRenderInformation(viewWriter, uriPath, property, value);
+        PictureWidgetEditing.#onNewBlobRenderInformation(viewWriter, container, value);
       });
     });
-    return "/studio/rest/api/content/23618/properties/data;blob=44f2e8b5e29f66a529afd0a2fbabff2d/rm/fit;maxw=240";
   }
 
   static #onNewBlobRenderInformation(
     viewWriter: DowncastWriter,
-    uriPath: UriPath,
-    property: string,
+    container: ContainerElement,
     value: EmbeddedBlobRenderInformation
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-  ): void {}
+  ): void {
+    const pictureView = viewWriter.createEmptyElement("img", {
+      src: value.url,
+    });
+    viewWriter.insert(viewWriter.createPositionAt(container, 0), pictureView);
+  }
 }
