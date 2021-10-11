@@ -8,6 +8,11 @@ import Widget from "@ckeditor/ckeditor5-widget/src/widget";
 import { toWidget } from "@ckeditor/ckeditor5-widget/src/utils";
 import PictureWidgetCommand from "./PictureWidgetCommand";
 import "../../theme/picture.css";
+import { serviceAgent } from "@coremedia/service-agent";
+import BlobRichtextServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextServiceDescriptor";
+import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import BlobRichtextService from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextService";
+import EmbeddedBlobRenderInformation from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/EmbeddedBlobRenderInformation";
 
 export default class PictureWidgetEditing extends Plugin {
   static get requires() {
@@ -67,17 +72,21 @@ export default class PictureWidgetEditing extends Plugin {
     function createPlaceholderView(modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
       const contentId = modelItem.getAttribute("contentId");
       const property = modelItem.getAttribute("property");
-      const src = PictureWidgetEditing.#toSrcLink(contentId, property);
 
       const container = viewWriter.createContainerElement(
         "p",
-        { class: "placeholder" },
+        {
+          class: "placeholder",
+          "data-contentUri": contentId,
+          "data-property": property,
+        },
         { isAllowedInsideAttributeElement: true }
       );
+      const src = PictureWidgetEditing.#toSrcLink(viewWriter, contentId, property);
       const pictureView = viewWriter.createEmptyElement("img", {
         src: src,
         "data-contentId": contentId,
-        "data-property": property,
+        "data-contentProperty": property,
       });
       viewWriter.insert(viewWriter.createPositionAt(container, 0), pictureView);
 
@@ -85,7 +94,24 @@ export default class PictureWidgetEditing extends Plugin {
     }
   }
 
-  static #toSrcLink(contentId: string, property: string): string {
+  static #toSrcLink(viewWriter: DowncastWriter, uriPath: UriPath, property: string): string {
+    serviceAgent.fetchService(new BlobRichtextServiceDescriptor()).then((service): void => {
+      if (!(service as BlobRichtextService)) {
+        return;
+      }
+      const blobRichtextService = service as BlobRichtextService;
+      blobRichtextService.observe_embeddedBlobInformation(uriPath, property).subscribe((value) => {
+        PictureWidgetEditing.#onNewBlobRenderInformation(viewWriter, uriPath, property, value);
+      });
+    });
     return "/studio/rest/api/content/23618/properties/data;blob=44f2e8b5e29f66a529afd0a2fbabff2d/rm/fit;maxw=240";
   }
+
+  static #onNewBlobRenderInformation(
+    viewWriter: DowncastWriter,
+    uriPath: UriPath,
+    property: string,
+    value: EmbeddedBlobRenderInformation
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+  ): void {}
 }

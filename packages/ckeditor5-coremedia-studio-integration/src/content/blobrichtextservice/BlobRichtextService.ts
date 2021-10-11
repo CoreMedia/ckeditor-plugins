@@ -25,5 +25,5 @@ export default interface BlobRichtextService extends ServiceObject {
    * @param property
    * @return EmbeddedBlobRenderInformation
    */
-  calculateEmbeddedBlobInformation(uriPath: UriPath, property: string): Observable<EmbeddedBlobRenderInformation>;
+  observe_embeddedBlobInformation(uriPath: UriPath, property: string): Observable<EmbeddedBlobRenderInformation>;
 }
