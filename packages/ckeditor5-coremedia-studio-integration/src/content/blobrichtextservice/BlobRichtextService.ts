@@ -1,7 +1,9 @@
 import { UriPath } from "../UriPath";
 import { ServiceObject } from "@coremedia/service-agent";
+import { Observable } from "rxjs";
+import EmbeddedBlobRenderInformation from "./EmbeddedBlobRenderInformation";
 
-export interface BlobRichtextService extends ServiceObject {
+export default interface BlobRichtextService extends ServiceObject {
   /**
    * Finds the property of the image that must be rendered.
    *
@@ -15,4 +17,13 @@ export interface BlobRichtextService extends ServiceObject {
    * @param uriPath
    */
   findImageBlobProperty(uriPath: UriPath): Promise<string | null>;
+
+  /**
+   * Provides information to render the property of the given uri path.
+   *
+   * @param uriPath
+   * @param property
+   * @return EmbeddedBlobRenderInformation
+   */
+  calculateEmbeddedBlobInformation(uriPath: UriPath, property: string): Observable<EmbeddedBlobRenderInformation>;
 }
