@@ -1,6 +1,5 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-blobs",
-  "private": true,
   "version": "1.0.1",
   "engines": {
     "node": ">=14.0.0"
