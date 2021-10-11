@@ -32,4 +32,5 @@ jobs:
           npm unpublish @coremedia/ckeditor5-dataprocessor-support@$version
           npm unpublish @coremedia/ckeditor5-coremedia-link@$version
           npm unpublish @coremedia/ckeditor5-symbol-on-paste-mapper@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-blobs@$version
           npm unpublish @coremedia/types-ckeditor__ckeditor5-editor-classic@$version
