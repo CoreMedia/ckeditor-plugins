@@ -2,7 +2,7 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 import Element from "@ckeditor/ckeditor5-engine/src/model/element";
 
 export default class PictureWidgetCommand extends Command {
-  execute({ value }: any) {
+  execute({ contentId, property }: any) {
     const editor = this.editor;
     const selection = editor.model.document.selection;
     //http://localhost:12345/studio/rest/api/content/23618/properties/data;blob=44f2e8b5e29f66a529afd0a2fbabff2d/rm/fit;maxw=240
@@ -10,7 +10,8 @@ export default class PictureWidgetCommand extends Command {
       // Create a <placeholder> elment with the "name" attribute (and all the selection attributes)...
       const placeholder = writer.createElement("placeholder", {
         ...Object.fromEntries(selection.getAttributes()),
-        src: value,
+        contentId: contentId,
+        property: property,
       });
 
       // ... and insert it into the document.

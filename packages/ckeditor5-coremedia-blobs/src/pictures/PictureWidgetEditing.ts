@@ -24,22 +24,14 @@ export default class PictureWidgetEditing extends Plugin {
   #defineSchema(): void {
     const schema = this.editor.model.schema;
     schema.register("placeholder", {
-      // Allow wherever text is allowed:
       allowWhere: "$text",
-
-      // The placeholder will act as an inline node:
       isInline: true,
-
-      // The inline widget is self-contained so it cannot be split by the caret and can be selected:
       isObject: true,
-
-      // The placeholder can have many types, like date, name, surname, etc:
-      allowAttributes: ["src"],
+      allowAttributes: ["contentId", "property"],
     });
   }
 
   #defineConverters(): void {
-    // ADDED
     const conversion = this.editor.conversion;
 
     conversion.for("upcast").elementToElement({
@@ -48,7 +40,6 @@ export default class PictureWidgetEditing extends Plugin {
         classes: ["placeholder"],
       },
       model: (viewElement: ViewElement, { writer: modelWriter }: UpcastConversionApi): ModelElement => {
-        // Extract the "name" from "{name}".
         const src = viewElement.getAttribute("src");
 
         return modelWriter.createElement("placeholder", { src });
@@ -67,24 +58,34 @@ export default class PictureWidgetEditing extends Plugin {
 
     conversion.for("dataDowncast").elementToElement({
       model: "placeholder",
-      view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi) =>
-        createPlaceholderView(modelItem, viewWriter),
+      view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi): ViewElement => {
+        return createPlaceholderView(modelItem, viewWriter);
+      },
     });
 
     // Helper method for both downcast converters.
     function createPlaceholderView(modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
-      const src = modelItem.getAttribute("src");
+      const contentId = modelItem.getAttribute("contentId");
+      const property = modelItem.getAttribute("property");
+      const src = PictureWidgetEditing.#toSrcLink(contentId, property);
+
       const container = viewWriter.createContainerElement(
         "p",
         { class: "placeholder" },
         { isAllowedInsideAttributeElement: true }
       );
-      const pictureView = viewWriter.createEmptyElement("img", { src: src });
-      // Insert the placeholder name (as a text).
-      //const innerText = viewWriter.createUIElement("{" + name + "}");
+      const pictureView = viewWriter.createEmptyElement("img", {
+        src: src,
+        "data-contentId": contentId,
+        "data-property": property,
+      });
       viewWriter.insert(viewWriter.createPositionAt(container, 0), pictureView);
 
       return container;
     }
+  }
+
+  static #toSrcLink(contentId: string, property: string): string {
+    return "/studio/rest/api/content/23618/properties/data;blob=44f2e8b5e29f66a529afd0a2fbabff2d/rm/fit;maxw=240";
   }
 }
