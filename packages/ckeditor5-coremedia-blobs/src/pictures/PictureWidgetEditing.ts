@@ -61,7 +61,6 @@ export default class PictureWidgetEditing extends Plugin {
         return toWidget(widgetElement, viewWriter);
       },
     });
-
     conversion.for("dataDowncast").elementToElement({
       model: "placeholder",
       view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi): ViewElement => {
@@ -78,8 +77,6 @@ export default class PictureWidgetEditing extends Plugin {
         "p",
         {
           class: "placeholder",
-          "data-contentUri": contentId,
-          "data-property": property,
         },
         { isAllowedInsideAttributeElement: true }
       );
@@ -110,9 +107,29 @@ export default class PictureWidgetEditing extends Plugin {
     container: ContainerElement,
     value: EmbeddedBlobRenderInformation
   ): void {
+    const existingImageElement = PictureWidgetEditing.#lookupImageElement(container);
+    if (existingImageElement) {
+      const containerRange = viewWriter.createRangeOn(container);
+      viewWriter.clear(containerRange, existingImageElement);
+    }
     const pictureView = viewWriter.createEmptyElement("img", {
       src: value.url,
     });
     viewWriter.insert(viewWriter.createPositionAt(container, 0), pictureView);
+  }
+
+  static #lookupImageElement(container: ContainerElement): Element | null {
+    const children = Array.from(container.getChildren());
+    if (!children) {
+      return null;
+    }
+
+    for (const child of children) {
+      if (child.is("element", "img")) {
+        // cast to unknown is necessary as eslint is not able to understand child.is()
+        return child as unknown as Element;
+      }
+    }
+    return null;
   }
 }
