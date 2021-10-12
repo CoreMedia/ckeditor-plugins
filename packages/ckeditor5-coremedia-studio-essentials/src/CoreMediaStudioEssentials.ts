@@ -3,7 +3,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 import CoreMediaRichText from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
-import PictureWidget from "@coremedia/ckeditor5-coremedia-blobs/pictures/PictureWidget";
+import EmbeddedBlobWidget from "@coremedia/ckeditor5-coremedia-blobs/embeddedblobs/EmbeddedBlobWidget";
 
 /**
  * Essential editing features for CKEditor 5 in the CoreMedia Studio wrapped in one plugin.
@@ -19,7 +19,7 @@ export default class CoreMediaStudioEssentials extends Plugin {
   static readonly pluginName: string = "CoreMediaStudioEssentials";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkTarget, ContentLinks, CoreMediaRichText, PictureWidget];
+    return [LinkTarget, ContentLinks, CoreMediaRichText, EmbeddedBlobWidget];
   }
 }
 

@@ -6,8 +6,8 @@ import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion
 import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
 import Widget from "@ckeditor/ckeditor5-widget/src/widget";
 import { toWidget } from "@ckeditor/ckeditor5-widget/src/utils";
-import PictureWidgetCommand from "./PictureWidgetCommand";
-import "../../theme/picture.css";
+import EmbeddedBlobWidgetCommand from "./EmbeddedBlobWidgetCommand";
+import "../../theme/blob.css";
 import { serviceAgent } from "@coremedia/service-agent";
 import BlobRichtextServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextServiceDescriptor";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
@@ -15,7 +15,7 @@ import BlobRichtextService from "@coremedia/ckeditor5-coremedia-studio-integrati
 import EmbeddedBlobRenderInformation from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/EmbeddedBlobRenderInformation";
 import ContainerElement from "@ckeditor/ckeditor5-engine/src/view/containerelement";
 
-export default class PictureWidgetEditing extends Plugin {
+export default class EmbeddedBlobWidgetEditing extends Plugin {
   static get requires() {
     return [Widget];
   }
@@ -23,17 +23,17 @@ export default class PictureWidgetEditing extends Plugin {
   init(): Promise<void> | null {
     this.#defineSchema();
     this.#defineConverters();
-    this.editor.commands.add("placeholder", new PictureWidgetCommand(this.editor));
+    this.editor.commands.add("embeddedBlob", new EmbeddedBlobWidgetCommand(this.editor));
     return null;
   }
 
   #defineSchema(): void {
     const schema = this.editor.model.schema;
-    schema.register("placeholder", {
+    schema.register("embeddedBlob", {
       allowWhere: "$text",
       isInline: true,
       isObject: true,
-      allowAttributes: ["contentId", "property"],
+      allowAttributes: ["contentUri", "property"],
     });
   }
 
@@ -43,44 +43,44 @@ export default class PictureWidgetEditing extends Plugin {
     conversion.for("upcast").elementToElement({
       view: {
         name: "p",
-        classes: ["placeholder"],
+        classes: ["embeddedBlob"],
       },
       model: (viewElement: ViewElement, { writer: modelWriter }: UpcastConversionApi): ModelElement => {
         const src = viewElement.getAttribute("src");
 
-        return modelWriter.createElement("placeholder", { src });
+        return modelWriter.createElement("embeddedBlob", { src });
       },
     });
 
     conversion.for("editingDowncast").elementToElement({
-      model: "placeholder",
+      model: "embeddedBlob",
       view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi): ViewElement => {
-        const widgetElement = createPlaceholderView(modelItem, viewWriter);
+        const widgetElement = createEmbeddedBlobView(modelItem, viewWriter);
 
-        // Enable widget handling on a placeholder element inside the editing view.
+        // Enable widget handling on a embeddedBlob element inside the editing view.
         return toWidget(widgetElement, viewWriter);
       },
     });
     conversion.for("dataDowncast").elementToElement({
-      model: "placeholder",
+      model: "embeddedBlob",
       view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi): ViewElement => {
-        return createPlaceholderView(modelItem, viewWriter);
+        return createEmbeddedBlobView(modelItem, viewWriter);
       },
     });
 
     // Helper method for both downcast converters.
-    function createPlaceholderView(modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
-      const contentId = modelItem.getAttribute("contentId");
+    function createEmbeddedBlobView(modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
+      const contentUri = modelItem.getAttribute("contentUri");
       const property = modelItem.getAttribute("property");
 
       const container = viewWriter.createContainerElement(
         "p",
         {
-          class: "placeholder",
+          class: "embeddedBlob",
         },
         { isAllowedInsideAttributeElement: true }
       );
-      PictureWidgetEditing.#createImageElement(viewWriter, container, contentId, property);
+      EmbeddedBlobWidgetEditing.#createImageElement(viewWriter, container, contentUri, property);
       return container;
     }
   }
@@ -97,7 +97,7 @@ export default class PictureWidgetEditing extends Plugin {
       }
       const blobRichtextService = service as BlobRichtextService;
       blobRichtextService.observe_embeddedBlobInformation(uriPath, property).subscribe((value) => {
-        PictureWidgetEditing.#onNewBlobRenderInformation(viewWriter, container, value);
+        EmbeddedBlobWidgetEditing.#onNewBlobRenderInformation(viewWriter, container, value);
       });
     });
   }
@@ -107,7 +107,7 @@ export default class PictureWidgetEditing extends Plugin {
     container: ContainerElement,
     value: EmbeddedBlobRenderInformation
   ): void {
-    const existingImageElement = PictureWidgetEditing.#lookupImageElement(container);
+    const existingImageElement = EmbeddedBlobWidgetEditing.#lookupImageElement(container);
     if (existingImageElement) {
       const containerRange = viewWriter.createRangeOn(container);
       viewWriter.clear(containerRange, existingImageElement);
