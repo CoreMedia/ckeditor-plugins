@@ -36,6 +36,7 @@
     "@ckeditor/ckeditor5-link": "^29.2.0",
     "@ckeditor/ckeditor5-typing": "^29.2.0",
     "@ckeditor/ckeditor5-ui": "^29.2.0",
+    "@coremedia/ckeditor5-coremedia-dragdrop-utils": "^1.0.1",
     "@ckeditor/ckeditor5-utils": "^29.2.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.0.0",

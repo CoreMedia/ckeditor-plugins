@@ -5,6 +5,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IsLinkableResponse = boolean | "IN_PROGRESS";
+type IsEmbeddableResponse = boolean | "IN_PROGRESS";
 
 /**
  * Provides support for asynchronous API called within synchronous drag and
@@ -60,6 +61,10 @@ export default class DragDropAsyncSupport {
     }
 
     return this.#evaluateIsLinkable(uriPath, evictImmediately);
+  }
+
+  static isEmbeddable(uriPath: string, evictImmediately = false): boolean {
+    return true;
   }
 
   /**

@@ -1,0 +1,58 @@
+{
+  "name": "@coremedia/ckeditor5-coremedia-dragdrop-utils",
+  "version": "1.0.1",
+  "description": "Provides utilities for working with CoreMedia Drag and Drop.",
+  "keywords": [
+    "coremedia"
+  ],
+  "dependencies": {
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.3.1"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=5.7.1"
+  },
+  "exports": {
+    "./*": "./dist/*.js"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.15.6",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-arrow-functions": "^7.14.5",
+    "@babel/plugin-transform-computed-properties": "^7.14.5",
+    "@babel/plugin-transform-for-of": "^7.15.4",
+    "@babel/plugin-transform-parameters": "^7.15.4",
+    "@babel/plugin-transform-shorthand-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-typescript": "^7.15.0",
+    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^1.0.1",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "babel-jest": "^27.2.0",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.2.0",
+    "jest-config": "^27.2.0",
+    "jest-transform-stub": "^2.0.0",
+    "prettier": "^2.4.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "jest": "jest",
+    "jest:coverage": "jest --collect-coverage",
+    "lint": "eslint --fix \"src/**\"",
+    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
+    "npm-check-updates": "npm-check-updates --upgrade"
+  }
+}

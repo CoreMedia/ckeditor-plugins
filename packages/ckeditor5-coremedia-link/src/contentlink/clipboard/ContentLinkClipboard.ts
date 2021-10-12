@@ -1,9 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import {
-  extractContentUriPathsFromDragEventJsonData,
-  receiveUriPathsFromDragDropService,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
+import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import { serviceAgent } from "@coremedia/service-agent";
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
 import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
@@ -20,6 +17,7 @@ import { DropCondition } from "./DropCondition";
 import { ContentLinkData } from "./ContentLinkData";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
+import CoreMediaClipboardUtils from "@coremedia/ckeditor5-coremedia-dragdrop-utils/CoreMediaClipboardUtils";
 
 /**
  * Provides support for dragging contents directly into the text. The name of
@@ -73,7 +71,7 @@ export default class ContentLinkClipboard extends Plugin {
       return;
     }
 
-    const cmDataUris = ContentLinkClipboard.#extractContentUris(data);
+    const cmDataUris = CoreMediaClipboardUtils.extractContentUris(data);
 
     if (!cmDataUris) {
       return;
@@ -131,28 +129,6 @@ export default class ContentLinkClipboard extends Plugin {
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentLinkClipboard.#dragOverHandler);
     return null;
-  }
-
-  /**
-   * Extract content-URIs from clipboard. Content-URIs are stored within
-   * `cm/uri-list` and contain the URIs in the form `content/42` (wrapped
-   * by some JSON).
-   *
-   * @param data data to get content URIs from
-   * @returns array of content-URIs, possibly empty; `null` signals, that the data did not contain content-URI data
-   * @private
-   */
-  static #extractContentUris(data: ClipboardEventData): string[] | null {
-    if (data === null || data.dataTransfer === null) {
-      return null;
-    }
-
-    const cmUriList = data.dataTransfer.getData("cm/uri-list");
-
-    if (!cmUriList) {
-      return null;
-    }
-    return extractContentUriPathsFromDragEventJsonData(cmUriList);
   }
 
   /**

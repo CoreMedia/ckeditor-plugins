@@ -16,6 +16,7 @@
       "@ckeditor/ckeditor5-engine/*": ["../../../types/ckeditor__ckeditor5-engine/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
+      "@coremedia/ckeditor5-coremedia-dragdrop-utils/*": ["../../ckeditor5-coremedia-dragdrop-utils/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
     }
   },
@@ -25,6 +26,9 @@
     },
     {
       "path": "../../ckeditor5-coremedia-studio-integration/src"
+    },
+    {
+      "path": "../../ckeditor5-coremedia-dragdrop-utils/src"
     }
   ],
   "extends": "../../../tsconfig.json"
