@@ -6,6 +6,7 @@
 import Document from "./document";
 import AttributeElement from "./attributeelement";
 import ContainerElement from "./containerelement";
+import EmptyElement from "./emptyelement";
 
 export default class DowncastWriter {
   constructor(document: Document);
@@ -34,7 +35,7 @@ export default class DowncastWriter {
 
   createEditableElement(name: any, attributes: any): any;
 
-  createEmptyElement(name: any, attributes?: any, options?: {}): any;
+  createEmptyElement(name: any, attributes?: any, options?: {}): EmptyElement;
 
   createPositionAfter(item: any): any;
 
@@ -42,7 +43,7 @@ export default class DowncastWriter {
 
   createPositionBefore(item: any): any;
 
-  createRange(start: any, end: any): any;
+  createRange(start: any, end: any): Range;
 
   createRangeIn(element: any): any;
 
