@@ -11,7 +11,7 @@ export default class TreeWalker {
 
   [Symbol.iterator](): Iterable<TreeWalkerValue>;
 
-  next(): TreeWalkerValue;
+  next(): {done: boolean, value: TreeWalkerValue};
 
   skip(skip: (value: TreeWalkerValue) => boolean): void;
 }

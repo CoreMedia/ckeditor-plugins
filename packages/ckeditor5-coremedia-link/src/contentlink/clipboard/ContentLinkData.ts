@@ -12,16 +12,8 @@ export class ContentLinkData {
      */
     readonly isLastInsertedLink: boolean,
     /**
-     * The text to write to CKEditor (the name of the content).
-     */
-    readonly text: string,
-    /**
      * The URI-Path of the content, e.g., `content/42`.
      */
-    readonly contentUri: string,
-    /**
-     * The respective `linkHref` value to set in model, e.g., `content:42`.
-     */
-    readonly href: string
+    readonly contentUri: string
   ) {}
 }

@@ -1,16 +1,11 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
-import { serviceAgent } from "@coremedia/service-agent";
-import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
-import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
-import { ROOT_NAME } from "../Constants";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { DropCondition } from "./DropCondition";
@@ -86,11 +81,12 @@ export default class ContentLinkClipboard extends Plugin {
 
       logger.debug("Calculated drop condition.", { condition: dropCondition });
 
-      serviceAgent
-        .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-        .then((contentDisplayService: ContentDisplayService): void => {
-          ContentLinkClipboard.#makeContentNameRequests(contentDisplayService, editor, dropCondition, cmDataUris);
-        });
+      cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
+        const isLast = originalArray.length - 1 === Number(index);
+        const isFirst = Number(index) === 0;
+        const linkData = new ContentLinkData(isFirst, isLast, contentUri);
+        ContentLinkClipboard.#writeLink(editor, dropCondition, linkData);
+      });
     }
   };
 
@@ -131,64 +127,20 @@ export default class ContentLinkClipboard extends Plugin {
     return null;
   }
 
-  /**
-   * Trigger to receive names of all contents to eventually write them all to
-   * CKEditor.
-   *
-   * All names must be resolved prior to writing them to CKEditor, as name
-   * queries of for example last document may return earlier than the first
-   * one.
-   *
-   * @param contentDisplayService service to use to resolve names
-   * @param editor editor to write linked contents to
-   * @param dropCondition meta-data of current drop event
-   * @param cmDataUris data URIs to write links for
-   * @private
-   */
-  static #makeContentNameRequests(
-    contentDisplayService: ContentDisplayService,
-    editor: Editor,
-    dropCondition: DropCondition,
-    cmDataUris: string[]
-  ): void {
-    const namePromises = cmDataUris.map<Promise<string>>((uri: string): Promise<string> => {
-      return contentDisplayService.name(uri);
-    });
-    Promise.all(namePromises).then((contentNames: string[]) => {
-      ContentLinkClipboard.#LOGGER.debug(JSON.stringify(contentNames));
-      for (const index in contentNames) {
-        if (!contentNames.hasOwnProperty(index) || !cmDataUris.hasOwnProperty(index)) {
-          continue;
-        }
-        const contentName = contentNames[index] ? contentNames[index] : ROOT_NAME;
-        const contentUri = cmDataUris[index];
-        const href = requireContentCkeModelUri(contentUri);
-        const isLast = cmDataUris.length - 1 === Number(index);
-        const isFirst = Number(index) === 0;
-        const linkData = new ContentLinkData(isFirst, isLast, contentName, contentUri, href);
-        ContentLinkClipboard.#handleContentNameResponse(editor, dropCondition, linkData);
-      }
-    });
-  }
-
-  static #handleContentNameResponse(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
+  static #writeLink(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     ContentLinkClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
     const isLinkableContent = DragDropAsyncSupport.isLinkable(linkData.contentUri, true);
     if (!isLinkableContent) {
       return;
     }
-    ContentLinkClipboard.#writeLink(editor, dropCondition, linkData);
-  }
-
-  static #writeLink(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     if (dropCondition.multipleContentDrop) {
       ContentLinkClipboard.#writeLinkInOwnParagraph(editor, dropCondition, linkData);
     } else {
-      ContentLinkClipboard.#writeLinkInline(editor, linkData.href, linkData.text, dropCondition);
+      ContentLinkClipboard.#writeLinkInline(editor, linkData.contentUri, dropCondition);
     }
   }
 
-  static #writeLinkInline(editor: Editor, href: string, linkText: string, dropCondition: DropCondition): void {
+  static #writeLinkInline(editor: Editor, contentUri: string, dropCondition: DropCondition): void {
     const logger = ContentLinkClipboard.#LOGGER;
 
     editor.model.change((writer: Writer) => {
@@ -201,9 +153,12 @@ export default class ContentLinkClipboard extends Plugin {
           return;
         }
         writer.overrideSelectionGravity();
-        const linkElement = writer.createText(linkText, { linkHref: href });
-        writer.insert(linkElement, firstPosition);
-        const positionAfterText = writer.createPositionAfter(linkElement);
+        const coremediaContent = writer.createElement("coremedia-content", {
+          contentUri: contentUri,
+          isLinkable: true,
+        });
+        writer.insert(coremediaContent, firstPosition);
+        const positionAfterText = writer.createPositionAfter(coremediaContent);
         const textRange = writer.createRange(firstPosition, positionAfterText);
         ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
       } catch (e) {
@@ -286,19 +241,20 @@ export default class ContentLinkClipboard extends Plugin {
     linkData: ContentLinkData
   ): Range {
     const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(cursorPosition);
-    const text = writer.createText(linkData.text, {
-      linkHref: linkData.href,
+    const coremediaContent = writer.createElement("coremedia-content", {
+      contentUri: linkData.contentUri,
+      isLinkable: true,
     });
     let textStartPosition;
     if (isFirstDocumentPosition || (dropCondition.dropAtStartOfBlock && linkData.isFirstInsertedLink)) {
       textStartPosition = cursorPosition;
-      writer.insert(text, cursorPosition);
+      writer.model.insertContent(coremediaContent, cursorPosition);
     } else {
       const split = writer.split(cursorPosition);
       textStartPosition = split.range.end;
-      writer.insert(text, split.range.end);
+      writer.model.insertContent(coremediaContent, split.range.end);
     }
-    const afterTextPosition = writer.createPositionAt(text, "after");
+    const afterTextPosition = writer.createPositionAt(coremediaContent, "after");
     return writer.createRange(textStartPosition, afterTextPosition);
   }
 
