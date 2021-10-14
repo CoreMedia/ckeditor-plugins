@@ -8,8 +8,6 @@ import { serviceAgent } from "@coremedia/service-agent";
 import BlobRichtextServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextServiceDescriptor";
 import EmbeddedBlobRenderInformation from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/EmbeddedBlobRenderInformation";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import Element from "@ckeditor/ckeditor5-engine/src/view/element";
-import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import { toWidget } from "@ckeditor/ckeditor5-widget/src/utils";
 import Widget from "@ckeditor/ckeditor5-widget/src/widget";
 
@@ -36,30 +34,27 @@ export default class EmbeddedBlobEditing extends Plugin {
 
   #defineConverters(): void {
     const conversion = this.editor.conversion;
-    const editor = this.editor;
     conversion.for("editingDowncast").elementToElement({
       model: "embeddedBlob",
       view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi): ViewElement => {
-        const widgetView = EmbeddedBlobEditing.#createEmbeddedBlobView(editor, modelItem, viewWriter);
+        const widgetView = EmbeddedBlobEditing.#createEmbeddedBlobView(modelItem, viewWriter);
         return toWidget(widgetView, viewWriter);
       },
     });
     conversion.for("dataDowncast").elementToElement({
       model: "embeddedBlob",
       view: (modelItem: ModelElement, { writer: viewWriter }: DowncastConversionApi): ViewElement => {
-        return toWidget(EmbeddedBlobEditing.#createEmbeddedBlobView(editor, modelItem, viewWriter), viewWriter);
+        return toWidget(EmbeddedBlobEditing.#createEmbeddedBlobView(modelItem, viewWriter), viewWriter);
       },
     });
   }
 
-  static #createEmbeddedBlobView(editor: Editor, modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
+  static #createEmbeddedBlobView(modelItem: ModelElement, viewWriter: DowncastWriter): ViewElement {
     const contentUri = modelItem.getAttribute("contentUri");
     const property = modelItem.getAttribute("property");
-    const pictureView = viewWriter.createEmptyElement("img");
-    const containerElement = viewWriter.createContainerElement("span", { class: "embedded-blob-widget" });
-    viewWriter.insert(viewWriter.createPositionAt(containerElement, 0), pictureView);
+    const pictureView = viewWriter.createContainerElement("img", { "xlink:href": contentUri + "#" + property });
     EmbeddedBlobEditing.#fillImageTag(viewWriter, pictureView, contentUri, property);
-    return containerElement;
+    return pictureView;
   }
 
   static #fillImageTag(viewWriter: DowncastWriter, imageTag: ViewElement, contentUri: string, property: string): void {
