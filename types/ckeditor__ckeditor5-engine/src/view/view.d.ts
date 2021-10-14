@@ -39,4 +39,6 @@ export default class View implements Emitter, Observable {
   decorate(methodName: string): void;
 
   delegate(...events: string[]): EmitterMixinDelegateChain;
+
+  getDomRoot(name?: string): Element;
 }

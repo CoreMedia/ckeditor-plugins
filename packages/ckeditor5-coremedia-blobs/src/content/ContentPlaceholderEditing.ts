@@ -16,6 +16,8 @@ import BlobRichtextServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio
 import BlobRichtextService from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextService";
 import RootElement from "@ckeditor/ckeditor5-engine/src/model/rootelement";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
+import BatchCache from "../batchcache/BatchCache";
+import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static get requires(): Array<new (editor: Editor) => Plugin> {
@@ -100,7 +102,10 @@ export default class ContentPlaceholderEditing extends Plugin {
     inline: boolean,
     placeholderId: string
   ): void {
-    editor.model.change((writer): void => {
+    const batch = BatchCache.lookupBatch(placeholderId);
+    BatchCache.removeBatch(placeholderId);
+    const batchOrType: Batch | string = batch ? batch : "default";
+    editor.model.enqueueChange(batchOrType, (writer: Writer): void => {
       const embeddedBlob = writer.createElement("embeddedBlob", {
         contentUri: contentUri,
         property: property,
@@ -115,8 +120,10 @@ export default class ContentPlaceholderEditing extends Plugin {
   static replaceWithLink(editor: Editor, contentUri: string, contentName: string, placeholderId: string): void {
     const root = editor.model.document.getRoot();
     const contentNameRespectingRoot = contentName ? contentName : "<root>";
-
-    editor.model.change((writer): void => {
+    const batch = BatchCache.lookupBatch(placeholderId);
+    BatchCache.removeBatch(placeholderId);
+    const batchOrType: Batch | string = batch ? batch : "default";
+    editor.model.enqueueChange(batchOrType, (writer: Writer): void => {
       const text = writer.createText(contentNameRespectingRoot, {
         linkHref: requireContentCkeModelUri(contentUri),
       });

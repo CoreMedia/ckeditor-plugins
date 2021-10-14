@@ -15,6 +15,7 @@ import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import CoreMediaClipboardUtils from "@coremedia/ckeditor5-coremedia-dragdrop-utils/CoreMediaClipboardUtils";
 import ContentPlaceholder from "../content/ContentPlaceholder";
 import EmbeddedBlob from "../embeddedblobs/EmbeddedBlob";
+import BatchCache from "../batchcache/BatchCache";
 
 /**
  * Provides support for dragging contents directly into the text. The name of
@@ -155,18 +156,31 @@ export default class ContentClipboard extends Plugin {
         if (firstPosition === null) {
           return;
         }
+        const contentPlaceholderId = "" + Math.random();
+        BatchCache.storeBatch(contentPlaceholderId, writer.batch);
+
         writer.overrideSelectionGravity();
+        let position = firstPosition;
+        if (linkData.isEmbeddable) {
+          const split = writer.split(firstPosition);
+          position = split.range.end;
+          writer.setSelection(position);
+        }
         const coremediaContent = writer.createElement("content-placeholder", {
           contentUri: linkData.contentUri,
           isLinkable: linkData.isLinkable,
           isEmbeddable: linkData.isEmbeddable,
           inline: true,
-          placeholderId: "" + Math.random(),
+          placeholderId: contentPlaceholderId,
         });
-        writer.insert(coremediaContent, firstPosition);
+        writer.insert(coremediaContent, position);
         const positionAfterText = writer.createPositionAfter(coremediaContent);
-        const textRange = writer.createRange(firstPosition, positionAfterText);
+        const textRange = writer.createRange(position, positionAfterText);
         ContentClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
+        if (linkData.isEmbeddable) {
+          const split = writer.split(positionAfterText);
+          writer.setSelection(split.range.end);
+        }
       } catch (e) {
         //Insert a content link to the end of the document which takes a long time to load the name and remove the last word.
         //This leads to an error because the position the link should be inserted to is invalid now.

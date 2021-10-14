@@ -7,6 +7,7 @@ import Document from "./document";
 import AttributeElement from "./attributeelement";
 import ContainerElement from "./containerelement";
 import EmptyElement from "./emptyelement";
+import Selection from "./selection";
 
 export default class DowncastWriter {
   constructor(document: Document);
@@ -51,7 +52,7 @@ export default class DowncastWriter {
 
   createRawElement(name: any, attributes: any, renderFunction: any, options?: {}): any;
 
-  createSelection(selectable: any, placeOrOffset: any, options: any): any;
+  createSelection(selectable?: any, placeOrOffset?: any, options?: any): Selection;
 
   createText(data: any): any;
 
