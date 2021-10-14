@@ -1,7 +1,7 @@
 /**
  * Meta-data of a content dropped to CKEditor.
  */
-export class ContentLinkData {
+export class ContentData {
   constructor(
     /**
      * Signals, if the given content is the first in a list of dropped contents.
@@ -14,6 +14,8 @@ export class ContentLinkData {
     /**
      * The URI-Path of the content, e.g., `content/42`.
      */
-    readonly contentUri: string
+    readonly contentUri: string,
+    readonly isLinkable: boolean,
+    readonly isEmbeddable: boolean
   ) {}
 }

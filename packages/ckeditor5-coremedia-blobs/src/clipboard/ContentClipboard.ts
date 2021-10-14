@@ -9,10 +9,12 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { DropCondition } from "./DropCondition";
-import { ContentLinkData } from "./ContentLinkData";
+import { ContentData } from "./ContentData";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import CoreMediaClipboardUtils from "@coremedia/ckeditor5-coremedia-dragdrop-utils/CoreMediaClipboardUtils";
+import ContentPlaceholder from "../content/ContentPlaceholder";
+import EmbeddedBlob from "../embeddedblobs/EmbeddedBlob";
 
 /**
  * Provides support for dragging contents directly into the text. The name of
@@ -20,9 +22,9 @@ import CoreMediaClipboardUtils from "@coremedia/ckeditor5-coremedia-dragdrop-uti
  * contents will create additional block-elements, each containing one
  * content.
  */
-export default class ContentLinkClipboard extends Plugin {
+export default class ContentClipboard extends Plugin {
   static #CONTENT_LINK_CLIPBOARD_PLUGIN_NAME = "ContentLinkClipboard";
-  static #LOGGER: Logger = LoggerProvider.getLogger(ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME);
+  static #LOGGER: Logger = LoggerProvider.getLogger(ContentClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME);
 
   /**
    * Drag-over handler to control drop-effect icons, which is, to forbid for
@@ -41,7 +43,7 @@ export default class ContentLinkClipboard extends Plugin {
     if (!cmDataUris) {
       return;
     }
-    const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(cmDataUris);
+    const containOnlyLinkables = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
     if (containOnlyLinkables) {
       data.dataTransfer.dropEffect = "copy";
     } else {
@@ -58,7 +60,7 @@ export default class ContentLinkClipboard extends Plugin {
    */
   readonly #clipboardInputHandler = (evt: EventInfo, data: ClipboardEventData): void => {
     const editor = this.editor;
-    const logger = ContentLinkClipboard.#LOGGER;
+    const logger = ContentClipboard.#LOGGER;
 
     // The clipboard content was already processed by the listener on the higher priority
     // (for example while pasting into the code block).
@@ -77,25 +79,27 @@ export default class ContentLinkClipboard extends Plugin {
       dataUris: cmDataUris,
     });
     if (cmDataUris.length > 0) {
-      const dropCondition = ContentLinkClipboard.#createDropCondition(editor, data, cmDataUris);
+      const dropCondition = ContentClipboard.#createDropCondition(editor, data, cmDataUris);
 
       logger.debug("Calculated drop condition.", { condition: dropCondition });
 
       cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
         const isLast = originalArray.length - 1 === Number(index);
         const isFirst = Number(index) === 0;
-        const linkData = new ContentLinkData(isFirst, isLast, contentUri);
-        ContentLinkClipboard.#writeLink(editor, dropCondition, linkData);
+        const isLinkableContent = DragDropAsyncSupport.isLinkable(contentUri, true);
+        const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
+        const linkData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, isEmbeddableContent);
+        ContentClipboard.#writeLink(editor, dropCondition, linkData);
       });
     }
   };
 
   static get pluginName(): string {
-    return ContentLinkClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME;
+    return ContentClipboard.#CONTENT_LINK_CLIPBOARD_PLUGIN_NAME;
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard];
+    return [Clipboard, EmbeddedBlob, ContentPlaceholder];
   }
 
   init(): Promise<void> | null {
@@ -114,7 +118,7 @@ export default class ContentLinkClipboard extends Plugin {
 
     // Processing pasted or dropped content.
     this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
-    this.listenTo(viewDocument, "dragover", ContentLinkClipboard.#dragOverHandler);
+    this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
   }
 
   destroy(): null {
@@ -123,25 +127,24 @@ export default class ContentLinkClipboard extends Plugin {
     const viewDocument = view.document;
 
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
-    this.stopListening(viewDocument, "dragover", ContentLinkClipboard.#dragOverHandler);
+    this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
     return null;
   }
 
-  static #writeLink(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
-    ContentLinkClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
-    const isLinkableContent = DragDropAsyncSupport.isLinkable(linkData.contentUri, true);
-    if (!isLinkableContent) {
+  static #writeLink(editor: Editor, dropCondition: DropCondition, linkData: ContentData): void {
+    ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
+    if (!linkData.isLinkable && !linkData.isEmbeddable) {
       return;
     }
     if (dropCondition.multipleContentDrop) {
-      ContentLinkClipboard.#writeLinkInOwnParagraph(editor, dropCondition, linkData);
+      ContentClipboard.#writeLinkInOwnParagraph(editor, dropCondition, linkData);
     } else {
-      ContentLinkClipboard.#writeLinkInline(editor, linkData.contentUri, dropCondition);
+      ContentClipboard.#writeLinkInline(editor, linkData, dropCondition);
     }
   }
 
-  static #writeLinkInline(editor: Editor, contentUri: string, dropCondition: DropCondition): void {
-    const logger = ContentLinkClipboard.#LOGGER;
+  static #writeLinkInline(editor: Editor, linkData: ContentData, dropCondition: DropCondition): void {
+    const logger = ContentClipboard.#LOGGER;
 
     editor.model.change((writer: Writer) => {
       try {
@@ -153,14 +156,17 @@ export default class ContentLinkClipboard extends Plugin {
           return;
         }
         writer.overrideSelectionGravity();
-        const coremediaContent = writer.createElement("coremedia-content", {
-          contentUri: contentUri,
-          isLinkable: true,
+        const coremediaContent = writer.createElement("content-placeholder", {
+          contentUri: linkData.contentUri,
+          isLinkable: linkData.isLinkable,
+          isEmbeddable: linkData.isEmbeddable,
+          inline: true,
+          placeholderId: "" + Math.random(),
         });
         writer.insert(coremediaContent, firstPosition);
         const positionAfterText = writer.createPositionAfter(coremediaContent);
         const textRange = writer.createRange(firstPosition, positionAfterText);
-        ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
+        ContentClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
       } catch (e) {
         //Insert a content link to the end of the document which takes a long time to load the name and remove the last word.
         //This leads to an error because the position the link should be inserted to is invalid now.
@@ -182,8 +188,8 @@ export default class ContentLinkClipboard extends Plugin {
    * @param linkData data of the link to write
    * @private
    */
-  static #writeLinkInOwnParagraph(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
-    const logger = ContentLinkClipboard.#LOGGER;
+  static #writeLinkInOwnParagraph(editor: Editor, dropCondition: DropCondition, linkData: ContentData): void {
+    const logger = ContentClipboard.#LOGGER;
 
     editor.model.change((writer: Writer) => {
       try {
@@ -198,8 +204,8 @@ export default class ContentLinkClipboard extends Plugin {
           return;
         }
 
-        const textRange = ContentLinkClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
-        ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
+        const textRange = ContentClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
+        ContentClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
         if (linkData.isLastInsertedLink && !dropCondition.dropAtEndOfBlock) {
           //Finish with a new line if the contents are dropped into an inline position
           const secondSplit = writer.split(textRange.end);
@@ -238,12 +244,15 @@ export default class ContentLinkClipboard extends Plugin {
     writer: Writer,
     cursorPosition: Position,
     dropCondition: DropCondition,
-    linkData: ContentLinkData
+    linkData: ContentData
   ): Range {
-    const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(cursorPosition);
-    const coremediaContent = writer.createElement("coremedia-content", {
+    const isFirstDocumentPosition = ContentClipboard.#isFirstPositionOfDocument(cursorPosition);
+    const coremediaContent = writer.createElement("content-placeholder", {
       contentUri: linkData.contentUri,
-      isLinkable: true,
+      isLinkable: linkData.isLinkable,
+      isEmbeddable: linkData.isEmbeddable,
+      inline: false,
+      placeholderId: "" + Math.random(),
     });
     let textStartPosition;
     if (isFirstDocumentPosition || (dropCondition.dropAtStartOfBlock && linkData.isFirstInsertedLink)) {
@@ -303,7 +312,7 @@ export default class ContentLinkClipboard extends Plugin {
    */
   static #createDropCondition(editor: Editor, data: ClipboardEventData, links: string[]): DropCondition {
     const multipleContentDrop = links.length > 1;
-    const targetRange = ContentLinkClipboard.#evaluateTargetRange(editor, data);
+    const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
     const initialDropAtStartOfParagraph = targetRange ? targetRange.start.isAtStart : false;
     const initialDropAtEndOfParagraph = targetRange ? targetRange.end.isAtEnd : false;
     const attributes = editor.model.document.selection.getAttributes();
