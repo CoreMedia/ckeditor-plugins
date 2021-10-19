@@ -40,10 +40,10 @@
     "npm-check-updates": "pnpm -r npm-check-updates"
   },
   "dependencies": {
-    "@coremedia/set-version": "1.1.0"
+    "@coremedia/set-version": "1.1.1"
   },
   "devDependencies": {
-    "pnpm": "^6.15.0",
+    "pnpm": "^6.17.2",
     "rimraf": "^3.0.2"
   }
 }
