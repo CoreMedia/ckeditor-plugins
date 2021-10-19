@@ -34,7 +34,7 @@
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/types-ckeditor__ckeditor5-core": "1.0.2-rc.0",
     "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.2-rc.0",
-    "@coremedia/types-ckeditor__ckeditor5-html-support": "1.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-html-support": "1.0.2-rc.0",
     "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.2-rc.0",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
