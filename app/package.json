@@ -35,8 +35,8 @@
     "xml-formatter": "^2.4.1"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-utils": "^25.4.2",
-    "@ckeditor/ckeditor5-dev-webpack-plugin": "^25.4.2",
+    "@ckeditor/ckeditor5-dev-utils": "^25.4.4",
+    "@ckeditor/ckeditor5-dev-webpack-plugin": "^25.4.4",
     "@ckeditor/ckeditor5-inspector": "^2.2.2",
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.2.0",
