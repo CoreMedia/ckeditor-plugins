@@ -43,7 +43,7 @@
     "@coremedia/types-ckeditor__ckeditor5-typing": "1.0.2-rc.0",
     "@coremedia/types-ckeditor__ckeditor5-ui": "1.0.2-rc.0",
     "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.2-rc.0",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "babel-jest": "^27.2.0",
