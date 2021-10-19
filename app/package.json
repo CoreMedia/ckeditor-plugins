@@ -41,7 +41,7 @@
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.4.0",
     "postcss": "^8.3.9",
-    "postcss-loader": "^6.1.1",
+    "postcss-loader": "^6.2.0",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
     "style-loader": "^3.2.1",
