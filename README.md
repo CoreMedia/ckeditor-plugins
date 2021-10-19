@@ -6,7 +6,7 @@ _CoreMedia's CKEditor 5 Plugins_ provides plugins for [CKEditor 5][] with focus
 on integration into [CoreMedia CMS][]. CKEditor 5 is going to replace the
 previous integration of [CKEditor 4][].
 
-As the the CKEditor 5 integration into CoreMedia CMS is not yet feature-complete,
+As the CKEditor 5 integration into CoreMedia CMS is not yet feature-complete,
 it is provided as early-bird to customers of CoreMedia CMS to pre-evaluate the
 future of CKEditor within the CMS.
 
