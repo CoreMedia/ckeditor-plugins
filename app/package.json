@@ -40,7 +40,7 @@
     "@ckeditor/ckeditor5-inspector": "^2.2.2",
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.2.0",
-    "postcss": "^8.2.4",
+    "postcss": "^8.3.9",
     "postcss-loader": "^6.1.1",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
