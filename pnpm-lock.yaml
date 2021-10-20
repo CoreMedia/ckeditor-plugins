@@ -42,7 +42,7 @@ importers:
       '@ckeditor/ckeditor5-typing': ^30.0.0
       '@ckeditor/ckeditor5-ui': ^30.0.0
       '@ckeditor/ckeditor5-utils': ^30.0.0
-      '@coremedia/ckeditor5-coremedia-general-richtext-support': 1.0.2-rc.0
+      '@coremedia/ckeditor5-coremedia-general-richtext-support': 1.0.2-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 1.0.2-rc.1
       '@coremedia/ckeditor5-studio-essentials': 1.0.2-rc.1
       '@coremedia/ckeditor5-symbol-on-paste-mapper': 1.0.2-rc.1
@@ -127,11 +127,11 @@ importers:
       '@ckeditor/ckeditor5-html-support': ^30.0.0
       '@ckeditor/ckeditor5-utils': ^30.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': 1.0.2-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-html-support': 1.0.2-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.0
+      '@coremedia/ckeditor5-logging': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-html-support': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
       '@typescript-eslint/eslint-plugin': ^5.1.0
       '@typescript-eslint/parser': ^5.1.0
@@ -871,9 +871,9 @@ importers:
 
   types/ckeditor__ckeditor5-html-support:
     specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.0
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
     dependencies:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
