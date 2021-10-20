@@ -34,6 +34,8 @@ import CoreMediaStudioEssentials, {
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
+import GeneralRichTextSupport
+  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -66,6 +68,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     AutoLink,
     Link,
     CoreMediaStudioEssentials,
+    GeneralRichTextSupport,
     List,
     Paragraph,
     PasteFromOffice,
