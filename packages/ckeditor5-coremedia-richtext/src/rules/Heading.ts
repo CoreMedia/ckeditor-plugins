@@ -1,5 +1,6 @@
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { langMapper } from "./Lang";
 
 export const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
 export const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
@@ -8,7 +9,8 @@ export const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
  * Transforms a heading from view to a paragraph having a class attribute
  * denoting the heading level.
  */
-export const headingToParagraph: ElementFilterRule = ({ node }) => {
+export const headingToParagraph: ElementFilterRule = (params) => {
+  const { node } = params;
   const match = HEADING_NUMBER_PATTERN.exec(node.name || "");
   if (!match) {
     // Some other rule may have already changed the name. Nothing to do.
@@ -17,6 +19,7 @@ export const headingToParagraph: ElementFilterRule = ({ node }) => {
   const headingLevel = match[1];
   node.name = "p";
   node.attributes["class"] = `p--heading-${headingLevel}`;
+  langMapper.toData(params);
 };
 
 /**
@@ -25,7 +28,8 @@ export const headingToParagraph: ElementFilterRule = ({ node }) => {
  *
  * Node won't be changed for unmatched heading classes.
  */
-export const paragraphToHeading: ElementFilterRule = ({ node }) => {
+export const paragraphToHeading: ElementFilterRule = (params) => {
+  const { node } = params;
   const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(node.attributes["class"] || "");
   if (!match) {
     // Cannot determine number. Perhaps someone already removed the class.

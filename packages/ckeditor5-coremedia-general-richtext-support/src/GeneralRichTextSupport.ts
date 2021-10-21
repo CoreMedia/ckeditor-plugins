@@ -83,7 +83,10 @@ class CoreMediaRichText10Dtd {
     ...CoreMediaRichText10Dtd.attrs,
   };
   static attrsInlineElements: MatcherPattern = {
-    name: /^(span|em|strong|sub|sup)$/,
+    // i: While `<i>` is not part of CoreMedia RichText DTD, it is required here
+    // because CKEditor uses `<i>` instead of `<em>` in view.
+    // See https://github.com/ckeditor/ckeditor5/issues/1394
+    name: /^(span|em|i|strong|sub|sup)$/,
     ...CoreMediaRichText10Dtd.attrs,
   };
   static pre: MatcherPattern = {

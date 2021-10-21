@@ -514,3 +514,7 @@ export interface ElementFilterParams {
 export interface ElementFilterRule {
   (params: ElementFilterParams): void;
 }
+
+export const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
+  return (params) => rules.forEach((r) => r(params));
+};

@@ -1,17 +1,20 @@
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
-import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { allFilterRules, ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import { parseFilterRuleSetConfigurations } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import {
+  FilterRuleSetConfiguration,
+  parseFilterRuleSetConfigurations,
+  ToDataAndViewElementConfiguration,
+} from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
+import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -46,7 +49,7 @@ const removeInvalidList: ElementFilterRule = (params) => {
  * to `<s>` on toView mapping.
  */
 const strike: ToDataAndViewElementConfiguration = {
-  toData: replaceBy("span", "strike"),
+  toData: allFilterRules(replaceBy("span", "strike")),
   // The default CKEditor 5 representation of strikethrough is `<s>`.
   toView: replaceElementAndClassBy("span", "strike", "s"),
 };
@@ -68,7 +71,6 @@ const strike: ToDataAndViewElementConfiguration = {
  * The opposite handler is <code>'^'</code> which would be applied before all other element handlers.</li>
  * </ul>
  */
-// TODO[cke] Review and move these rules, e. g. to configuration class documentation.
 const defaultRules: FilterRuleSetConfiguration = {
   text: (params) => {
     if (!getSchema(params).isTextAllowedAtParent(params.node)) {
@@ -80,18 +82,30 @@ const defaultRules: FilterRuleSetConfiguration = {
   elements: {
     ...schemaRules,
     a: handleAnchor,
-    ol: removeInvalidList,
-    ul: removeInvalidList,
+    ol: {
+      toData: allFilterRules(langDataFilterRule, removeInvalidList),
+      toView: langViewFilterRule,
+    },
+    ul: {
+      toData: allFilterRules(langDataFilterRule, removeInvalidList),
+      toView: langViewFilterRule,
+    },
+    li: langMapperConfiguration,
     p: {
-      // While we could do this per heading level, this approach spares some
-      // nested calls.
+      toData: langDataFilterRule,
+      // paragraphToHeading: While we could do this per heading level, this
+      // approach spares some nested calls.
       toView: {
-        p: paragraphToHeading,
+        p: allFilterRules(langViewFilterRule, paragraphToHeading),
       },
     },
     ...headingRules,
     // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
     b: replaceBy("strong"),
+    strong: langMapperConfiguration,
+    em: langMapperConfiguration,
+    sub: langMapperConfiguration,
+    sup: langMapperConfiguration,
     i: {
       toData: replaceBy("em"),
       toView: {
@@ -124,12 +138,8 @@ const defaultRules: FilterRuleSetConfiguration = {
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
     ...tableRules,
-    span: (params) => {
-      if (!params.node.attributes["class"]) {
-        // drop element, but not children
-        params.node.replaceByChildren = true;
-      }
-    },
+    span: langMapperConfiguration,
+    pre: langMapperConfiguration,
     "xdiff:span": (params) => {
       params.node.replaceByChildren = true;
     },
