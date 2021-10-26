@@ -6,7 +6,6 @@ import Schema, { SchemaContextDefinition } from "../model/schema";
 import DocumentFragment from "../model/documentfragment";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "../view/observer/domeventdata";
 
 /**
  * Upcast dispatcher is a central point of the view-to-model conversion

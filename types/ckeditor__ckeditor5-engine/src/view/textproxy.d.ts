@@ -4,4 +4,5 @@
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_textproxy-TextProxy.html">Class TextProxy (engine/view/textproxy~TextProxy) - CKEditor 5 API docs</a>
  */
 export default class TextProxy {
+  is(type: string): boolean;
 }

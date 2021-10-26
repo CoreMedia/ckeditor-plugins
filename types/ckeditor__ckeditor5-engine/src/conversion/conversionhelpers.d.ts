@@ -10,5 +10,7 @@ import UpcastDispatcher from "./upcastdispatcher";
 export default class ConversionHelpers {
   constructor(dispatchers: (DowncastDispatcher | UpcastDispatcher)[]);
 
-  add(conversionHelper: Function): DowncastHelpers | UpcastHelpers;
+  add(conversionHelper: ConversionHelperAddFunction): DowncastHelpers | UpcastHelpers;
 }
+
+export type ConversionHelperAddFunction = (dispatcher: (DowncastDispatcher | UpcastDispatcher)) => void;

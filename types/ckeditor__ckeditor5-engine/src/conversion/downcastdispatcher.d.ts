@@ -2,6 +2,11 @@ import Position from "../model/position";
 import Element from "../model/element";
 import Schema from "../model/schema";
 import DowncastWriter from "../view/downcastwriter";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { Mapper } from "./Mapper";
+import ModelElement from "../model/element";
 
 /**
  * The downcast dispatcher is a central point of downcasting (conversion from the model to the view), which is a process of reacting
@@ -9,7 +14,7 @@ import DowncastWriter from "../view/downcastwriter";
  *
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_conversion_downcastdispatcher-DowncastDispatcher.html">Class DowncastDispatcher (engine/conversion/downcastdispatcher~DowncastDispatcher) - CKEditor 5 API docs</a>
  */
-export default class DowncastDispatcher {
+export default class DowncastDispatcher implements Emitter {
   conversionApi: DowncastConversionApi;
 
   constructor(conversionApi: DowncastConversionApi);
@@ -29,6 +34,20 @@ export default class DowncastDispatcher {
   convertSelection(selection: any, markers: any, writer: any): void;
 
   reconvertElement(element: Element, writer: any): void;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
+
+  fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
+
+  listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority?: PriorityString | number }): void;
+
+  off(event: string, callback?: CallbackFunction): void;
+
+  on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 }
 
 /**
@@ -37,8 +56,13 @@ export default class DowncastDispatcher {
 export interface DowncastConversionApi {
   consumable: any;
   dispatcher: DowncastDispatcher;
-  mapper: any;
+  mapper: Mapper;
   options: Object;
   schema: Schema;
   writer: DowncastWriter;
+}
+
+export interface DowncastData {
+  item: ModelElement;
+  attributeNewValue: string;
 }

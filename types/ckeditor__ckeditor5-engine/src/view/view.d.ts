@@ -1,9 +1,9 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import ViewDocument from "./document"
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "./observer/domeventdata";
+import UpcastWriter from "./upcastwriter";
 
 /**
  * Editor's view controller class. Its main responsibility is DOM - View
@@ -24,6 +24,8 @@ export default class View implements Emitter, Observable {
 
   once(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
+  change(callback: ViewChangeCallback): void;
+
   set(name: string | Object, value?: any): void;
 
   bind(...bindProperties: any[]): BindReturnValue;
@@ -42,3 +44,5 @@ export default class View implements Emitter, Observable {
 
   getDomRoot(name?: string): Element;
 }
+
+export type ViewChangeCallback = (writer: UpcastWriter) => void;

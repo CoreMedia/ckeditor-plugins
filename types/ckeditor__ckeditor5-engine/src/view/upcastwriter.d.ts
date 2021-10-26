@@ -5,6 +5,8 @@ import Element from "./element";
 import ViewNode from "./node";
 import {Item} from "./item";
 import DocumentFragment from "./documentfragment";
+import Document from "./document";
+import Range from "./range";
 
 /**
  * View upcast writer. It provides a set of methods used to manipulate non-semantic view trees.
@@ -12,6 +14,7 @@ import DocumentFragment from "./documentfragment";
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_upcastwriter-UpcastWriter.html">Class UpcastWriter (engine/view/upcastwriter~UpcastWriter) - CKEditor 5 API docs</a>
  */
 export default class UpcastWriter {
+  document: Document;
   constructor(document: ViewDocument);
 
   /**
@@ -50,6 +53,12 @@ export default class UpcastWriter {
    * @param children
    */
   createElement( name: string, attrs?: Object | Iterable<any> , children?: Node | Iterable<Node> | string): Element
+
+  createRangeIn(element: Element): Range;
+
+  createRangeOn(item: Item): Range;
+
+  setAttribute(key: string, value: string, element: Element): void;
 
   replace(oldElement: Element, newElement: Element): boolean;
 }

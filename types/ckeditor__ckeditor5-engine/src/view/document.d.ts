@@ -1,9 +1,10 @@
 import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "./observer/domeventdata";
 import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import DocumentSelection from "../model/documentselection";
+import Collection from "@ckeditor/ckeditor5-utils/src/collection";
+import Element from "./element";
 
 /**
  * Document class creates an abstract layer over the content editable area,
@@ -13,6 +14,7 @@ import DocumentSelection from "../model/documentselection";
  */
 export default class Document implements Observable {
   selection: DocumentSelection;
+  roots: Collection<Element>
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 

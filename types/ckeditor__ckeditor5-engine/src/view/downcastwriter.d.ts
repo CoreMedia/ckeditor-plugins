@@ -10,6 +10,7 @@ import EmptyElement from "./emptyelement";
 import Selection from "./selection";
 
 export default class DowncastWriter {
+  document: Document;
   constructor(document: Document);
 
   addClass(className: any, element: any): void;
