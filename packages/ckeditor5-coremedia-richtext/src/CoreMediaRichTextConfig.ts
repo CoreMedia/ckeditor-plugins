@@ -3,15 +3,23 @@ import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import { parseFilterRuleSetConfigurations } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import {
+  FilterRuleSetConfiguration,
+  parseFilterRuleSetConfigurations,
+  ToDataAndViewElementConfiguration,
+} from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
+import BlobRichtextServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/BlobRichtextServiceDescriptor";
+import EmbeddedBlobRenderInformation from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/EmbeddedBlobRenderInformation";
+import { serviceAgent } from "@coremedia/service-agent";
+import TreeWalker from "@ckeditor/ckeditor5-engine/src/model/treewalker";
+import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
+import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -123,6 +131,41 @@ const defaultRules: FilterRuleSetConfiguration = {
     // We are not applied to root-div. Thus, we have a nested div here, which
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    //TODO: This stuff shouldn't be done here. For a spike it is fine but eventually will be moved to even another module.
+    img: {
+      toData: (params) => {
+        params.node;
+      },
+      toView: (params) => {
+        const hrefAttribute = params.node.attributes["xlink:href"];
+        if (!hrefAttribute) {
+          return;
+        }
+        const contentAttributes = hrefAttribute.split("#");
+        const contentUri: string = contentAttributes[0];
+        const property: string = contentAttributes[1];
+        const loaderId = "" + Math.random();
+        params.node.attributes["src"] = "loading....";
+        params.node.attributes["contentUri"] = contentUri;
+        params.node.attributes["property"] = property;
+        params.node.attributes["loaderId"] = loaderId;
+        // TODO: Especially this knowledge I wouldn't assume here.
+        serviceAgent.fetchService(new BlobRichtextServiceDescriptor()).then((service): void => {
+          service
+            .observe_embeddedBlobInformation(contentUri, property)
+            .subscribe((value: EmbeddedBlobRenderInformation) => {
+              params.editor.model.change((writer) => {
+                const node = findNode(writer, loaderId);
+                if (!node) {
+                  return;
+                }
+                writer.setAttribute("src", value.url, node);
+              });
+            });
+        });
+      },
+    },
     ...tableRules,
     span: (params) => {
       if (!params.node.attributes["class"]) {
@@ -135,6 +178,24 @@ const defaultRules: FilterRuleSetConfiguration = {
     },
   },
 };
+
+function findNode(writer: Writer, placeholderId: string): ModelElement | null {
+  const documentRoot = writer.model.document.roots.get(0);
+  if (!documentRoot) {
+    return null;
+  }
+  const treeWalker: TreeWalker = writer.createRangeIn(documentRoot).getWalker({ ignoreElementEnd: true });
+  let treeWalkerValue = treeWalker.next();
+  while (!treeWalkerValue.done) {
+    const item = treeWalkerValue.value.item;
+    const element: ModelElement | null = item.is("element") ? (item as unknown as ModelElement) : null;
+    if (element && element.getAttribute("loaderId") === placeholderId) {
+      return element;
+    }
+    treeWalkerValue = treeWalker.next();
+  }
+  return null;
+}
 
 export function getConfig(config?: CKEditorConfig): ParsedConfig {
   const customConfig: CoreMediaRichTextConfig =

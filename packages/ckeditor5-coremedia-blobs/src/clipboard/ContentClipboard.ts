@@ -89,7 +89,15 @@ export default class ContentClipboard extends Plugin {
         const isFirst = Number(index) === 0;
         const isLinkableContent = DragDropAsyncSupport.isLinkable(contentUri, true);
         const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-        const linkData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, isEmbeddableContent);
+        const placeholdreId = "" + Math.random();
+        const linkData = new ContentData(
+          isFirst,
+          isLast,
+          contentUri,
+          isLinkableContent,
+          isEmbeddableContent,
+          placeholdreId
+        );
         ContentClipboard.#writeLink(editor, dropCondition, linkData);
       });
     }
@@ -206,6 +214,7 @@ export default class ContentClipboard extends Plugin {
     const logger = ContentClipboard.#LOGGER;
 
     editor.model.change((writer: Writer) => {
+      BatchCache.storeBatch(linkData.placeholderId, writer.batch);
       try {
         // When dropping, the drop position is stored as range but the cursor is not yet updated to the drop position
         // We can only set the cursor inside a model.change so we have to do it here. If it is not the first inserted link
@@ -217,7 +226,6 @@ export default class ContentClipboard extends Plugin {
         if (actualPosition === null) {
           return;
         }
-
         const textRange = ContentClipboard.#insertLink(writer, actualPosition, dropCondition, linkData);
         ContentClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
         if (linkData.isLastInsertedLink && !dropCondition.dropAtEndOfBlock) {
@@ -266,7 +274,7 @@ export default class ContentClipboard extends Plugin {
       isLinkable: linkData.isLinkable,
       isEmbeddable: linkData.isEmbeddable,
       inline: false,
-      placeholderId: "" + Math.random(),
+      placeholderId: linkData.placeholderId,
     });
     let textStartPosition;
     if (isFirstDocumentPosition || (dropCondition.dropAtStartOfBlock && linkData.isFirstInsertedLink)) {

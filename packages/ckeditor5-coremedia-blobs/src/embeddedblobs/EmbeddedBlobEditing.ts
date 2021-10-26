@@ -11,6 +11,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { toWidget } from "@ckeditor/ckeditor5-widget/src/utils";
 import Widget from "@ckeditor/ckeditor5-widget/src/widget";
 
+// TODO: Replaced with the extension for imageInline provided by CKEditor
 export default class EmbeddedBlobEditing extends Plugin {
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [Widget];

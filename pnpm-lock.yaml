@@ -123,6 +123,7 @@ importers:
       '@ckeditor/ckeditor5-clipboard': ^29.2.0
       '@ckeditor/ckeditor5-core': ^29.2.0
       '@ckeditor/ckeditor5-engine': ^29.2.0
+      '@ckeditor/ckeditor5-image': ^29.2.0
       '@ckeditor/ckeditor5-utils': ^29.2.0
       '@ckeditor/ckeditor5-widget': ^29.2.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
@@ -132,6 +133,7 @@ importers:
       '@coremedia/service-agent': ^1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.1
+      '@coremedia/types-ckeditor__ckeditor5-image': 1.0.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.1
       '@coremedia/types-ckeditor__ckeditor5-widget': 1.0.1
       '@types/jest': ^27.0.1
@@ -167,6 +169,7 @@ importers:
       '@ckeditor/ckeditor5-clipboard': 29.2.0
       '@ckeditor/ckeditor5-core': 29.2.0
       '@ckeditor/ckeditor5-engine': 29.2.0
+      '@ckeditor/ckeditor5-image': 29.2.0
       '@ckeditor/ckeditor5-utils': 29.2.0
       '@ckeditor/ckeditor5-widget': 29.2.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
@@ -176,6 +179,7 @@ importers:
       '@coremedia/service-agent': 1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-image': link:../../types/ckeditor__ckeditor5-image
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@coremedia/types-ckeditor__ckeditor5-widget': link:../../types/ckeditor__ckeditor5-widget
       '@types/jest': 27.0.1
@@ -371,8 +375,10 @@ importers:
       '@ckeditor/ckeditor5-engine': ^29.2.0
       '@ckeditor/ckeditor5-utils': ^29.2.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-coremedia-studio-integration': ^1.0.1
       '@coremedia/ckeditor5-dataprocessor-support': ^1.0.1
       '@coremedia/ckeditor5-logging': ^1.0.1
+      '@coremedia/service-agent': ^1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': ^1.0.1
       '@coremedia/types-ckeditor__ckeditor5-engine': ^1.0.1
       '@coremedia/types-ckeditor__ckeditor5-utils': ^1.0.1
@@ -391,6 +397,7 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.4.3
     dependencies:
+      '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-dataprocessor-support': link:../ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
@@ -410,6 +417,7 @@ importers:
       '@ckeditor/ckeditor5-engine': 29.2.0
       '@ckeditor/ckeditor5-utils': 29.2.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
+      '@coremedia/service-agent': 1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
@@ -942,6 +950,16 @@ importers:
     specifiers:
       '@coremedia/types-ckeditor__ckeditor5-utils': ^1.0.1
     dependencies:
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
+
+  types/ckeditor__ckeditor5-image:
+    specifiers:
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.1
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.1
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.1
+    dependencies:
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
 
   types/ckeditor__ckeditor5-link:
@@ -2465,6 +2483,15 @@ packages:
     dependencies:
       ckeditor5: 29.2.0
     dev: false
+
+  /@ckeditor/ckeditor5-image/29.2.0:
+    resolution: {integrity: sha512-TLjFSg5KMHGuDr0UXompW9DuuQUtvsxPXg8N75rrQUgPj9B8yXrX4wrLXBbvgSvS7BMSlBWYjAVGr3Wyn0IEgQ==}
+    engines: {node: '>=12.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-ui': 29.2.0
+      ckeditor5: 29.2.0
+      lodash-es: 4.17.21
+    dev: true
 
   /@ckeditor/ckeditor5-indent/29.2.0:
     resolution: {integrity: sha512-BX2nxSkvwNfIERUIbO9050eTbv+bnEYmKPnow22r2LftQp/Xl4PU7+Xuo5Ay1evh2ZakIGphPqBGnsZ3xvmZRw==}

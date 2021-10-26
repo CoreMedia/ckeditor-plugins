@@ -13,7 +13,8 @@
       "@ckeditor/ckeditor5-engine/*": ["../../../types/ckeditor__ckeditor5-engine/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
-      "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"]
+      "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"],
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
     }
   },
   "references": [
@@ -22,6 +23,9 @@
     },
     {
       "path": "../../ckeditor5-dataprocessor-support/src"
+    },
+    {
+      "path": "../../ckeditor5-coremedia-studio-integration/src"
     }
   ],
   "extends": "../../../tsconfig.json"

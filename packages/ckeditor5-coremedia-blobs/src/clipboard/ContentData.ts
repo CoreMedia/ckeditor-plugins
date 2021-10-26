@@ -16,6 +16,7 @@ export class ContentData {
      */
     readonly contentUri: string,
     readonly isLinkable: boolean,
-    readonly isEmbeddable: boolean
+    readonly isEmbeddable: boolean,
+    readonly placeholderId: string
   ) {}
 }

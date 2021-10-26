@@ -2,7 +2,10 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
 import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import Element from "@ckeditor/ckeditor5-engine/src/model/element";
-import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import DowncastDispatcher, {
+  DowncastConversionApi,
+  DowncastData,
+} from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
 import { serviceAgent } from "@coremedia/service-agent";
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
@@ -18,10 +21,14 @@ import RootElement from "@ckeditor/ckeditor5-engine/src/model/rootelement";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
 import BatchCache from "../batchcache/BatchCache";
 import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
+import EmbeddedBlobRenderInformation from "@coremedia/ckeditor5-coremedia-studio-integration/content/blobrichtextservice/EmbeddedBlobRenderInformation";
+import Image from "@ckeditor/ckeditor5-image/src/image";
+import UpcastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [];
+    return [Image];
   }
 
   init(): Promise<void> | null {
@@ -37,6 +44,11 @@ export default class ContentPlaceholderEditing extends Plugin {
       isInline: true,
       isObject: true,
       allowAttributes: ["contentUri", "isLinkable", "isEmbeddable", "placeholderId", "inline"],
+    });
+
+    //TODO: Move to another plugin.
+    schema.extend("imageInline", {
+      allowAttributes: ["contentUri", "property", "loaderId"],
     });
   }
 
@@ -56,19 +68,38 @@ export default class ContentPlaceholderEditing extends Plugin {
         return ContentPlaceholderEditing.#createContentPlaceholder(modelItem, viewWriter, editor);
       },
     });
+    //TODO: Maybe move this and the stuff about image inline to another plugin.
+    editor.conversion.for("downcast").add((dispatcher: DowncastDispatcher | UpcastDispatcher) =>
+      dispatcher.on(
+        `attribute:contentUri:imageInline`,
+        (evt: EventInfo, data: DowncastData, conversionApi: DowncastConversionApi) => {
+          if (!conversionApi.consumable.consume(data.item, evt.name)) {
+            return;
+          }
+
+          const viewWriter = conversionApi.writer;
+          const figure = conversionApi.mapper.toViewElement(data.item);
+          if (data.attributeNewValue !== null) {
+            const propertyAttribute = data.item.getAttribute("property");
+            const xlinkHrefAttribute = data.attributeNewValue + "#" + propertyAttribute;
+            viewWriter.setAttribute("xlink:href", xlinkHrefAttribute, figure);
+          }
+        }
+      )
+    );
   }
 
   static #createContentPlaceholder(modelItem: ModelElement, viewWriter: DowncastWriter, editor: Editor): ViewElement {
     const contentUri = modelItem.getAttribute("contentUri");
     const isLinkable = modelItem.getAttribute("isLinkable");
     const isEmbeddable = modelItem.getAttribute("isEmbeddable");
-    const inline = modelItem.getAttribute("inline");
     const placeholderId = modelItem.getAttribute("placeholderId");
 
+    //TODO: Maybe extension point for other plugins to render different content differently.
     if (isLinkable && !isEmbeddable) {
       ContentPlaceholderEditing.#requestLinkDetails(editor, contentUri, placeholderId);
     } else if (isEmbeddable) {
-      ContentPlaceholderEditing.#requestBlobProperty(editor, contentUri, inline, placeholderId);
+      ContentPlaceholderEditing.#requestBlobProperty(editor, contentUri, placeholderId);
     }
 
     return viewWriter.createContainerElement("p");
@@ -82,7 +113,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     });
   }
 
-  static #requestBlobProperty(editor: Editor, contentUri: string, inline: boolean, placeholderId: string): void {
+  static #requestBlobProperty(editor: Editor, contentUri: string, placeholderId: string): void {
     serviceAgent
       .fetchService<BlobRichtextService>(new BlobRichtextServiceDescriptor())
       .then((service: BlobRichtextService): void => {
@@ -90,30 +121,30 @@ export default class ContentPlaceholderEditing extends Plugin {
           if (!blobProperty) {
             return;
           }
-          ContentPlaceholderEditing.#replaceWithEmbeddedBlob(editor, contentUri, blobProperty, inline, placeholderId);
+          ContentPlaceholderEditing.#replaceWithEmbeddedBlob(editor, contentUri, blobProperty, placeholderId);
         });
       });
   }
 
-  static #replaceWithEmbeddedBlob(
-    editor: Editor,
-    contentUri: string,
-    property: string,
-    inline: boolean,
-    placeholderId: string
-  ): void {
-    const batch = BatchCache.lookupBatch(placeholderId);
-    BatchCache.removeBatch(placeholderId);
-    const batchOrType: Batch | string = batch ? batch : "default";
-    editor.model.enqueueChange(batchOrType, (writer: Writer): void => {
-      const embeddedBlob = writer.createElement("embeddedBlob", {
-        contentUri: contentUri,
-        property: property,
-        inline: inline,
-      });
+  static #replaceWithEmbeddedBlob(editor: Editor, contentUri: string, property: string, placeholderId: string): void {
+    serviceAgent.fetchService(new BlobRichtextServiceDescriptor()).then((service): void => {
+      service
+        .observe_embeddedBlobInformation(contentUri, property)
+        .subscribe((value: EmbeddedBlobRenderInformation) => {
+          const batch = BatchCache.lookupBatch(placeholderId);
+          BatchCache.removeBatch(placeholderId);
+          const batchOrType: Batch | string = batch ? batch : "default";
+          editor.model.enqueueChange(batchOrType, (writer: Writer): void => {
+            const embeddedBlob = writer.createElement("imageInline", {
+              src: value.url,
+              contentUri: contentUri,
+              property: property,
+            });
 
-      const root = editor.model.document.getRoot();
-      ContentPlaceholderEditing.replaceNode(writer, root, contentUri, placeholderId, embeddedBlob);
+            const root = writer.model.document.getRoot();
+            ContentPlaceholderEditing.replaceNode(writer, root, contentUri, placeholderId, embeddedBlob);
+          });
+        });
     });
   }
 
@@ -121,7 +152,6 @@ export default class ContentPlaceholderEditing extends Plugin {
     const root = editor.model.document.getRoot();
     const contentNameRespectingRoot = contentName ? contentName : "<root>";
     const batch = BatchCache.lookupBatch(placeholderId);
-    BatchCache.removeBatch(placeholderId);
     const batchOrType: Batch | string = batch ? batch : "default";
     editor.model.enqueueChange(batchOrType, (writer: Writer): void => {
       const text = writer.createText(contentNameRespectingRoot, {
