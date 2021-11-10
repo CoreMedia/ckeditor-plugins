@@ -32,7 +32,7 @@
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.2-rc.1",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "1.0.2-rc.1",
     "@coremedia/service-agent": "^1.0.0",
-    "xml-formatter": "^2.5.0"
+    "xml-formatter": "^2.5.1"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^25.4.4",
