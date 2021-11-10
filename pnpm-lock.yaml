@@ -52,7 +52,7 @@ importers:
       raw-loader: ^4.0.2
       rimraf: ^3.0.2
       style-loader: ^3.3.1
-      terser-webpack-plugin: ^5.2.4
+      terser-webpack-plugin: ^5.2.5
       ts-loader: ^9.2.6
       typescript: ^4.4.4
       webpack: ^5.58.2
@@ -98,7 +98,7 @@ importers:
       raw-loader: 4.0.2_webpack@5.58.2
       rimraf: 3.0.2
       style-loader: 3.3.1_webpack@5.58.2
-      terser-webpack-plugin: 5.2.4_webpack@5.58.2
+      terser-webpack-plugin: 5.2.5_webpack@5.58.2
       ts-loader: 9.2.6_typescript@4.4.4+webpack@5.58.2
       typescript: 4.4.4
       webpack: 5.58.2_webpack-cli@4.9.1
@@ -10628,6 +10628,30 @@ packages:
       source-map: 0.6.1
       terser: 5.7.2
       webpack: 5.58.2_webpack-cli@4.9.1
+
+  /terser-webpack-plugin/5.2.5_webpack@5.58.2:
+    resolution: {integrity: sha512-3luOVHku5l0QBeYS8r4CdHYWEGMmIj3H1U64jgkdZzECcSOJAyJ9TjuqcQZvw1Y+4AOBN9SeYJPJmFn2cM4/2g==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      '@swc/core': '*'
+      esbuild: '*'
+      uglify-js: '*'
+      webpack: ^5.1.0
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      esbuild:
+        optional: true
+      uglify-js:
+        optional: true
+    dependencies:
+      jest-worker: 27.3.1
+      schema-utils: 3.1.1
+      serialize-javascript: 6.0.0
+      source-map: 0.6.1
+      terser: 5.7.2
+      webpack: 5.58.2_webpack-cli@4.9.1
+    dev: true
 
   /terser/4.8.0:
     resolution: {integrity: sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==}
