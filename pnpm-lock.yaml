@@ -691,7 +691,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.1.0
       '@typescript-eslint/parser': ^5.1.0
       babel-jest: ^27.3.1
-      babel-loader: ^8.2.2
+      babel-loader: ^8.2.3
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
@@ -748,7 +748,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
       '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.15.8
-      babel-loader: 8.2.2_f5560e5b4f7053984b6dd7c23aa03d2f
+      babel-loader: 8.2.3_f5560e5b4f7053984b6dd7c23aa03d2f
       eslint: 8.0.1
       eslint-config-prettier: 8.3.0_eslint@8.0.1
       eslint-plugin-prettier: 4.0.0_15313026b01cdd263118061498e273ac
@@ -2120,7 +2120,7 @@ packages:
       '@ckeditor/ckeditor5-dev-webpack-plugin': 25.4.4_webpack@4.46.0
       '@ckeditor/ckeditor5-inspector': 2.2.2
       babel-core: 6.26.3
-      babel-loader: 8.2.2_7f185b6b63b1b293762538aa414d8c1b
+      babel-loader: 8.2.3_7f185b6b63b1b293762538aa414d8c1b
       babel-plugin-transform-es2015-modules-commonjs: 6.26.2
       chai: 4.3.4
       chalk: 4.1.2
@@ -3729,8 +3729,8 @@ packages:
       - supports-color
     dev: true
 
-  /babel-loader/8.2.2_7f185b6b63b1b293762538aa414d8c1b:
-    resolution: {integrity: sha512-JvTd0/D889PQBtUXJ2PXaKU/pjZDMtHA9V2ecm+eNRmmBCMR09a+fmpGTNwnJtFmFl5Ei7Vy47LjBb+L0wQ99g==}
+  /babel-loader/8.2.3_7f185b6b63b1b293762538aa414d8c1b:
+    resolution: {integrity: sha512-n4Zeta8NC3QAsuyiizu0GkmRcQ6clkV9WFUnUf1iXP//IeSKbWjofW3UHyZVwlOB4y039YQKefawyTn64Zwbuw==}
     engines: {node: '>= 8.9'}
     peerDependencies:
       '@babel/core': ^7.0.0
@@ -3744,8 +3744,8 @@ packages:
       webpack: 4.46.0_webpack-cli@4.9.1
     dev: true
 
-  /babel-loader/8.2.2_f5560e5b4f7053984b6dd7c23aa03d2f:
-    resolution: {integrity: sha512-JvTd0/D889PQBtUXJ2PXaKU/pjZDMtHA9V2ecm+eNRmmBCMR09a+fmpGTNwnJtFmFl5Ei7Vy47LjBb+L0wQ99g==}
+  /babel-loader/8.2.3_f5560e5b4f7053984b6dd7c23aa03d2f:
+    resolution: {integrity: sha512-n4Zeta8NC3QAsuyiizu0GkmRcQ6clkV9WFUnUf1iXP//IeSKbWjofW3UHyZVwlOB4y039YQKefawyTn64Zwbuw==}
     engines: {node: '>= 8.9'}
     peerDependencies:
       '@babel/core': ^7.0.0
