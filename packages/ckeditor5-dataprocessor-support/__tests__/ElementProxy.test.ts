@@ -61,27 +61,38 @@ describe("Should Respecting (Im-)Mutable State", () => {
   });
 
   test("should not be able to change name", () => {
-    const previousValue = immutableElement.name;
+    const getValue = () => immutableElement.name;
+    const previousValue = getValue();
     expect(() => immutableElement.name = "test").toThrowError();
-    expect(previousValue).toStrictEqual(previousValue);
+    expect(getValue()).toStrictEqual(previousValue);
   });
 
   test("should not be able to change attribute value", () => {
-    const previousValue = immutableElement.attributes["class"];
+    const getValue = () => immutableElement.attributes["class"];
+    const previousValue = getValue();
     expect(() => immutableElement.attributes["class"] = "test").toThrowError();
-    expect(previousValue).toStrictEqual(previousValue);
+    expect(getValue()).toStrictEqual(previousValue);
+  });
+
+  test("should not be able to add additional class", () => {
+    const getValue = () => immutableElement.classList;
+    const previousValue = getValue();
+    expect(() => immutableElement.classList.add("test")).toThrowError();
+    expect(getValue()).toStrictEqual(previousValue);
   });
 
   test("should not be able to add attribute", () => {
-    const previousValue = immutableElement.attributes["id"];
+    const getValue = () => immutableElement.attributes["id"];
+    const previousValue = getValue();
     expect(() => immutableElement.attributes["id"] = "test").toThrowError();
-    expect(previousValue).toStrictEqual(previousValue);
+    expect(getValue()).toStrictEqual(previousValue);
   });
 
   test("should not be able to delete attribute", () => {
-    const previousValue = immutableElement.attributes["class"];
+    const getValue = () => immutableElement.attributes["id"];
+    const previousValue = getValue();
     expect(() => delete immutableElement.attributes["class"]).toThrowError();
-    expect(previousValue).toStrictEqual(previousValue);
+    expect(getValue()).toStrictEqual(previousValue);
   });
 });
 
@@ -166,6 +177,90 @@ describe("ElementProxy.applyRules()", () => {
         from: "<parent>Lorem <el><c1>Child 1</c1><c2>Child 1</c2></el> Ipsum</parent>",
         to: "<parent>Lorem <c1>Child 1</c1><c2>Child 1</c2> Ipsum</parent>",
         restart: "//c1",
+      },
+    ],
+    [
+      "classList: should add new class",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.add("class--new");
+          },
+        ],
+        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el class="class--new">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "classList: should add class to existing classes",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.add("class--new");
+          },
+        ],
+        from: '<parent>Lorem <el class="class--old">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el class="class--old class--new">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "classList: should remove class",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.remove("class--remove");
+          },
+        ],
+        from: '<parent>Lorem <el class="class--before class--remove class-after">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el class="class--before class-after">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "classList: should remove class attribute if empty",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.remove("class--remove");
+          },
+        ],
+        from: '<parent>Lorem <el class="class--remove">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "classList: should replace class",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.replace("class--old", "class--new");
+          },
+        ],
+        from: '<parent>Lorem <el class="class--before class--old class-after">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el class="class--before class--new class-after">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "classList: should toggle class on",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.toggle("class--new");
+          },
+        ],
+        from: '<parent>Lorem <el class="class--old">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el class="class--old class--new">Ipsum</el> Dolor</parent>',
+      },
+    ],
+    [
+      "classList: should toggle class off",
+      {
+        rules: [
+          (me) => {
+            me.node.classList.toggle("class--old");
+          },
+        ],
+        from: '<parent>Lorem <el class="class--old">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
       },
     ],
     [
@@ -489,7 +584,7 @@ describe("ElementProxy.applyRules()", () => {
 
     const me = new ElementProxy(xmlElement, MOCK_EDITOR);
     const appliedRulesResult = me.applyRules(...testData.rules);
-    expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to)
+    expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to);
 
     if (testData.restart) {
       const expectedRestart = xmlDocument.evaluate(testData.restart, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;

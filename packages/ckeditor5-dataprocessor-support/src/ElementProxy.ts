@@ -3,10 +3,163 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**
+ * Simulates a DOMTokenList to access the `class` attribute.
+ * The class-list is backed by the proxied attributes provided
+ * by the `ElementProxy`.
+ */
+class ClassList implements DOMTokenList {
+  /**
+   * For the proxy, we only need access to the attributes.
+   * @private
+   */
+  readonly #proxy: Pick<ElementProxy, "attributes">;
+  static readonly #trimValue = (v: string): string => v.trim();
+  static readonly #uniqueValuesOnly = (v: string, i: number, a: string[]) => a.indexOf(v) === i;
+
+  constructor(proxy: ElementProxy) {
+    this.#proxy = proxy;
+  }
+
+  get value(): string {
+    return this.#proxy.attributes["class"] || "";
+  }
+
+  set value(value: string) {
+    if (!value) {
+      delete this.#proxy.attributes["class"];
+    } else {
+      this.#proxy.attributes["class"] = value;
+    }
+  }
+
+  get #classes(): string[] {
+    const raw = this.value;
+    if (!raw) {
+      return [];
+    }
+    return raw.split(/\s+/).filter(String);
+  }
+
+  set #classes(values: string[]) {
+    this.value = values.join(" ");
+  }
+
+  set #possiblyDirtyClasses(values: string[]) {
+    const trimValue = ClassList.#trimValue;
+    const uniqueValuesOnly = ClassList.#uniqueValuesOnly;
+    this.#classes = values.map(trimValue).filter(uniqueValuesOnly);
+  }
+
+  add(...values: string[]): void {
+    const trimValue = ClassList.#trimValue;
+    const addValue = (v: string): Set<string> => raw.add(v.trim());
+
+    const raw: Set<string> = new Set<string>(this.#classes);
+    values.map(trimValue).forEach(addValue);
+
+    this.#classes = [...raw];
+  }
+
+  remove(...values: string[]): void {
+    const trimValue = ClassList.#trimValue;
+    const deleteValue = (v: string): boolean => raw.delete(v);
+
+    const raw: Set<string> = new Set<string>(this.#classes);
+    values.map(trimValue).forEach(deleteValue);
+
+    this.#classes = [...raw];
+  }
+
+  replace(value: string, newValue: string): boolean {
+    // We first need to ensure unique values.
+    const raw = [...new Set<string>(this.#classes)];
+    const valuePosition = raw.indexOf(value);
+    if (valuePosition < 0) {
+      return false;
+    }
+    raw[valuePosition] = newValue.trim();
+    this.#possiblyDirtyClasses = raw;
+    return true;
+  }
+
+  toggle(value: string, force?: boolean): boolean {
+    // We first need to ensure unique values.
+    const raw = [...new Set<string>(this.#classes)];
+    const trimmed = value.trim();
+    const valuePosition = raw.indexOf(trimmed);
+    const doAdd = force === undefined || force;
+    const doRemove = force === undefined || !force;
+
+    if (valuePosition < 0) {
+      if (doAdd) {
+        this.add(trimmed);
+        return true;
+      }
+      return false;
+    }
+
+    if (doRemove) {
+      this.remove(trimmed);
+      return false;
+    }
+    return true;
+  }
+
+  [Symbol.iterator](): IterableIterator<string> {
+    return this.#classes[Symbol.iterator]();
+  }
+
+  contains(token: string): boolean {
+    return this.#classes.includes(token.trim());
+  }
+
+  entries(): IterableIterator<[number, string]> {
+    return this.#classes.entries();
+  }
+
+  forEach(callback: (value: string, key: number, parent: DOMTokenList) => void, thisArg: never): void {
+    this.#classes.forEach((value: string, index: number): void => {
+      callback.call(thisArg, value, index, this);
+    });
+  }
+
+  item(index: number): string | null {
+    const raw = this.#classes;
+    if (index >= raw.length) {
+      return null;
+    }
+    return raw[index];
+  }
+
+  keys(): IterableIterator<number> {
+    return this.#classes.keys();
+  }
+
+  supports(): boolean {
+    // This is what for example Chrome responds for class lists.
+    throw new TypeError("DOMTokenList has no supported tokens.");
+  }
+
+  get length(): number {
+    return this.#classes.length;
+  }
+
+  values(): IterableIterator<string> {
+    return this.#classes.values();
+  }
+
+  toString(): string {
+    return this.value;
+  }
+
+  [index: number]: string;
+}
+
+/**
  * A wrapper for a given element, which allows to store changes to be applied
  * to the DOM structure later on.
  */
-export default class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
+class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
    * During processing, we may change our identity. This overrides the previous
    * delegate.
@@ -38,6 +191,14 @@ export default class ElementProxy extends NodeProxy<Element> implements ElementF
    * @private
    */
   private readonly _namespaces: Namespaces;
+
+  /**
+   * A mutable list of classes applied to the element.
+   *
+   * Internally backed by {@link #attributes}, you may as well change the
+   * `class` attribute or use this convenience `classList`.
+   */
+  public readonly classList: DOMTokenList = new ClassList(this);
 
   /**
    * <p>
@@ -472,12 +633,12 @@ type OwnPropertyKey = string | symbol;
 /**
  * Possible attribute values to assign. `null` represents a deleted property.
  */
-export type AttributeValue = string | null;
+type AttributeValue = string | null;
 
 /**
  * The attributes of an element.
  */
-export interface Attributes {
+interface Attributes {
   [index: string]: AttributeValue;
 }
 
@@ -489,7 +650,7 @@ export interface Attributes {
  * params.parent && params.parent(args);
  * </pre>
  */
-export interface ElementFilterParams {
+interface ElementFilterParams {
   /**
    * The node to process.
    */
@@ -511,10 +672,13 @@ export interface ElementFilterParams {
 /**
  * Function interface: `(params: ElementFilterParams) => void`.
  */
-export interface ElementFilterRule {
+interface ElementFilterRule {
   (params: ElementFilterParams): void;
 }
 
-export const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
+const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
   return (params) => rules.forEach((r) => r(params));
 };
+
+export default ElementProxy;
+export { AttributeValue, Attributes, ElementFilterParams, ElementFilterRule, allFilterRules };
