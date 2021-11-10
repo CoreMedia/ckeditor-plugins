@@ -137,8 +137,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': 1.0.2-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
@@ -185,8 +185,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       eslint: 8.0.1
       eslint-config-prettier: 8.3.0_eslint@8.0.1
@@ -223,8 +223,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
@@ -260,8 +260,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       eslint: 8.0.1
       eslint-config-prettier: 8.3.0_eslint@8.0.1
@@ -304,8 +304,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': 1.0.2-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
@@ -347,8 +347,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       eslint: 8.0.1
       eslint-config-prettier: 8.3.0_eslint@8.0.1
@@ -379,8 +379,8 @@ importers:
       '@coremedia/ckeditor5-logging': 1.0.2-rc.1
       '@coremedia/service-agent': ^1.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       copyfiles: ^2.4.1
       eslint: ^8.0.1
@@ -413,8 +413,8 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.0.0
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       copyfiles: 2.4.1
       eslint: 8.0.1
@@ -450,8 +450,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       copyfiles: ^2.4.1
       eslint: ^8.0.1
@@ -488,8 +488,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       copyfiles: 2.4.1
       eslint: 8.0.1
@@ -526,8 +526,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
@@ -562,8 +562,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       eslint: 8.0.1
       eslint-config-prettier: 8.3.0_eslint@8.0.1
@@ -600,8 +600,8 @@ importers:
       '@babel/preset-typescript': ^7.16.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
@@ -632,8 +632,8 @@ importers:
       '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       eslint: 8.0.1
       eslint-config-prettier: 8.3.0_eslint@8.0.1
@@ -688,8 +688,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
       '@types/jest': ^27.0.2
       '@types/webpack': ^5.28.0
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
       babel-loader: ^8.2.3
       eslint: ^8.0.1
@@ -745,8 +745,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
       '@types/webpack': 5.28.0_webpack-cli@4.9.1
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.3.1_11fc01ab60c89b34c42c281ed3d7bd26
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       babel-loader: 8.2.3_09eaae2510c2de687fcb4af25f526386
       eslint: 8.0.1
@@ -2990,8 +2990,8 @@ packages:
       '@types/yargs-parser': 20.2.1
     dev: true
 
-  /@typescript-eslint/eslint-plugin/5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f:
-    resolution: {integrity: sha512-bekODL3Tqf36Yz8u+ilha4zGxL9mdB6LIsIoMAvvC5FAuWo4NpZYXtCbv7B2CeR1LhI/lLtLk+q4tbtxuoVuCg==}
+  /@typescript-eslint/eslint-plugin/5.3.1_11fc01ab60c89b34c42c281ed3d7bd26:
+    resolution: {integrity: sha512-cFImaoIr5Ojj358xI/SDhjog57OK2NqlpxwdcgyxDA3bJlZcJq5CPzUXtpD7CxI2Hm6ATU7w5fQnnkVnmwpHqw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       '@typescript-eslint/parser': ^5.0.0
@@ -3001,9 +3001,9 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/experimental-utils': 5.1.0_eslint@8.0.1+typescript@4.4.4
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
-      '@typescript-eslint/scope-manager': 5.1.0
+      '@typescript-eslint/experimental-utils': 5.3.1_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/parser': 5.3.1_eslint@8.0.1+typescript@4.4.4
+      '@typescript-eslint/scope-manager': 5.3.1
       debug: 4.3.2
       eslint: 8.0.1
       functional-red-black-tree: 1.0.1
@@ -3016,16 +3016,16 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/experimental-utils/5.1.0_eslint@8.0.1+typescript@4.4.4:
-    resolution: {integrity: sha512-ovE9qUiZMOMgxQAESZsdBT+EXIfx/YUYAbwGUI6V03amFdOOxI9c6kitkgRvLkJaLusgMZ2xBhss+tQ0Y1HWxA==}
+  /@typescript-eslint/experimental-utils/5.3.1_eslint@8.0.1+typescript@4.4.4:
+    resolution: {integrity: sha512-RgFn5asjZ5daUhbK5Sp0peq0SSMytqcrkNfU4pnDma2D8P3ElZ6JbYjY8IMSFfZAJ0f3x3tnO3vXHweYg0g59w==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: '*'
     dependencies:
       '@types/json-schema': 7.0.9
-      '@typescript-eslint/scope-manager': 5.1.0
-      '@typescript-eslint/types': 5.1.0
-      '@typescript-eslint/typescript-estree': 5.1.0_typescript@4.4.4
+      '@typescript-eslint/scope-manager': 5.3.1
+      '@typescript-eslint/types': 5.3.1
+      '@typescript-eslint/typescript-estree': 5.3.1_typescript@4.4.4
       eslint: 8.0.1
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@8.0.1
@@ -3034,8 +3034,8 @@ packages:
       - typescript
     dev: true
 
-  /@typescript-eslint/parser/5.1.0_eslint@8.0.1+typescript@4.4.4:
-    resolution: {integrity: sha512-vx1P+mhCtYw3+bRHmbalq/VKP2Y3gnzNgxGxfEWc6OFpuEL7iQdAeq11Ke3Rhy8NjgB+AHsIWEwni3e+Y7djKA==}
+  /@typescript-eslint/parser/5.3.1_eslint@8.0.1+typescript@4.4.4:
+    resolution: {integrity: sha512-TD+ONlx5c+Qhk21x9gsJAMRohWAUMavSOmJgv3JGy9dgPhuBd5Wok0lmMClZDyJNLLZK1JRKiATzCKZNUmoyfw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -3044,9 +3044,9 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/scope-manager': 5.1.0
-      '@typescript-eslint/types': 5.1.0
-      '@typescript-eslint/typescript-estree': 5.1.0_typescript@4.4.4
+      '@typescript-eslint/scope-manager': 5.3.1
+      '@typescript-eslint/types': 5.3.1
+      '@typescript-eslint/typescript-estree': 5.3.1_typescript@4.4.4
       debug: 4.3.2
       eslint: 8.0.1
       typescript: 4.4.4
@@ -3054,21 +3054,21 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/scope-manager/5.1.0:
-    resolution: {integrity: sha512-yYlyVjvn5lvwCL37i4hPsa1s0ORsjkauhTqbb8MnpvUs7xykmcjGqwlNZ2Q5QpoqkJ1odlM2bqHqJwa28qV6Tw==}
+  /@typescript-eslint/scope-manager/5.3.1:
+    resolution: {integrity: sha512-XksFVBgAq0Y9H40BDbuPOTUIp7dn4u8oOuhcgGq7EoDP50eqcafkMVGrypyVGvDYHzjhdUCUwuwVUK4JhkMAMg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      '@typescript-eslint/types': 5.1.0
-      '@typescript-eslint/visitor-keys': 5.1.0
+      '@typescript-eslint/types': 5.3.1
+      '@typescript-eslint/visitor-keys': 5.3.1
     dev: true
 
-  /@typescript-eslint/types/5.1.0:
-    resolution: {integrity: sha512-sEwNINVxcB4ZgC6Fe6rUyMlvsB2jvVdgxjZEjQUQVlaSPMNamDOwO6/TB98kFt4sYYfNhdhTPBEQqNQZjMMswA==}
+  /@typescript-eslint/types/5.3.1:
+    resolution: {integrity: sha512-bG7HeBLolxKHtdHG54Uac750eXuQQPpdJfCYuw4ZI3bZ7+GgKClMWM8jExBtp7NSP4m8PmLRM8+lhzkYnSmSxQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@typescript-eslint/typescript-estree/5.1.0_typescript@4.4.4:
-    resolution: {integrity: sha512-SSz+l9YrIIsW4s0ZqaEfnjl156XQ4VRmJsbA0ZE1XkXrD3cRpzuZSVCyqeCMR3EBjF27IisWakbBDGhGNIOvfQ==}
+  /@typescript-eslint/typescript-estree/5.3.1_typescript@4.4.4:
+    resolution: {integrity: sha512-PwFbh/PKDVo/Wct6N3w+E4rLZxUDgsoII/GrWM2A62ETOzJd4M6s0Mu7w4CWsZraTbaC5UQI+dLeyOIFF1PquQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       typescript: '*'
@@ -3076,8 +3076,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/types': 5.1.0
-      '@typescript-eslint/visitor-keys': 5.1.0
+      '@typescript-eslint/types': 5.3.1
+      '@typescript-eslint/visitor-keys': 5.3.1
       debug: 4.3.2
       globby: 11.0.4
       is-glob: 4.0.3
@@ -3088,11 +3088,11 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/visitor-keys/5.1.0:
-    resolution: {integrity: sha512-uqNXepKBg81JVwjuqAxYrXa1Ql/YDzM+8g/pS+TCPxba0wZttl8m5DkrasbfnmJGHs4lQ2jTbcZ5azGhI7kK+w==}
+  /@typescript-eslint/visitor-keys/5.3.1:
+    resolution: {integrity: sha512-3cHUzUuVTuNHx0Gjjt5pEHa87+lzyqOiHXy/Gz+SJOCW1mpw9xQHIIEwnKn+Thph1mgWyZ90nboOcSuZr/jTTQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      '@typescript-eslint/types': 5.1.0
+      '@typescript-eslint/types': 5.3.1
       eslint-visitor-keys: 3.0.0
     dev: true
 
