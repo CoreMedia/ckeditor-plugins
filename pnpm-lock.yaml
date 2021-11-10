@@ -46,7 +46,7 @@ importers:
       '@coremedia/ckeditor5-symbol-on-paste-mapper': 1.0.2-rc.1
       '@coremedia/service-agent': ^1.0.0
       circular-dependency-plugin: ^5.2.2
-      css-loader: ^6.4.0
+      css-loader: ^6.5.1
       postcss: ^8.3.11
       postcss-loader: ^6.2.0
       raw-loader: ^4.0.2
@@ -92,7 +92,7 @@ importers:
       '@ckeditor/ckeditor5-dev-webpack-plugin': 25.4.4_webpack@5.58.2
       '@ckeditor/ckeditor5-inspector': 2.2.2
       circular-dependency-plugin: 5.2.2_webpack@5.58.2
-      css-loader: 6.4.0_webpack@5.58.2
+      css-loader: 6.5.1_webpack@5.58.2
       postcss: 8.3.11
       postcss-loader: 6.2.0_postcss@8.3.11+webpack@5.58.2
       raw-loader: 4.0.2_webpack@5.58.2
@@ -4919,8 +4919,8 @@ packages:
       timsort: 0.3.0
     dev: true
 
-  /css-loader/6.4.0_webpack@5.58.2:
-    resolution: {integrity: sha512-Dlt6qfsxI/w1vU0r8qDd4BtMPxWqJeY5qQU7SmmZfvbpe6Xl18McO4GhyaMLns24Y2VNPiZwJPQ8JSbg4qvQLw==}
+  /css-loader/6.5.1_webpack@5.58.2:
+    resolution: {integrity: sha512-gEy2w9AnJNnD9Kuo4XAP9VflW/ujKoS9c/syO+uWMlm5igc7LysKzPXaDoR2vroROkSwsTS2tGr1yGGEbZOYZQ==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       webpack: ^5.0.0
