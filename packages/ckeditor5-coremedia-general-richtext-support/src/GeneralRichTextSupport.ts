@@ -100,7 +100,9 @@ class CoreMediaRichText10Dtd {
     // u, del, s, strike: These are part of the HTML representation after
     // data-processing `<span>` with a dedicated class. Thus, they must be
     // handled in the same way as `<span>`.
-    name: /^(span|em|i|strong|sub|sup|u|del|s|strike)$/,
+    // code: Part of HTML representation of data-processed `<span>` with
+    // dedicated class. Thus, must be handled in the same way as `<span>`.
+    name: /^(span|em|i|strong|sub|sup|u|del|s|strike|code)$/,
     ...CoreMediaRichText10Dtd.attrs,
   };
   static pre: MatcherPattern = {
