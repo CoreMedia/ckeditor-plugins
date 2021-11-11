@@ -103,6 +103,82 @@ describe("Should Respecting (Im-)Mutable State", () => {
 /*
  * =============================================================================
  *
+ * classList Attribute Handling
+ *
+ * =============================================================================
+ */
+
+describe("ElementProxy.classList", () => {
+  let domElement = window.document.createElement("div");
+  let proxy = new ElementProxy(domElement, MOCK_EDITOR);
+
+  const setClass = (domClass: string | null): void => {
+    if (typeof domClass === "string") {
+      domElement.setAttribute("class", domClass);
+    } else {
+      domElement.removeAttribute("class");
+    }
+  };
+
+  const getClass = (): string | null => {
+    return domElement.getAttribute("class");
+  };
+
+  beforeEach(() => {
+    domElement = window.document.createElement("div");
+    proxy = new ElementProxy(domElement, MOCK_EDITOR);
+  });
+
+  describe("classList.value", () => {
+    describe.each`
+      class                                | comment
+      ${""}                                | ${"Empty class should stay as is."}
+      ${"some--class"}                     | ${"Plain class should stay as is."}
+      ${" \tsome--class"}                  | ${"Should not normalize leading space characters."}
+      ${"some--class\t "}                  | ${"Should not normalize trailing space characters."}
+      ${"some--class\t some--other-class"} | ${"Should not normalize inner space characters."}
+    `("[$#] classList.value for unmodified state: $comment ", ({ class: domClass, class: expectedClass }) => {
+      test("Should not normalize on plain get", () => {
+        setClass(domClass);
+        expect(proxy.classList.value).toStrictEqual(expectedClass);
+      });
+
+      test("Should not normalize on plain set", () => {
+        proxy.classList.value = domClass;
+        expect(proxy.classList.value).toStrictEqual(expectedClass);
+      });
+    });
+  });
+
+  describe("classList.add", () => {
+    test.each`
+      before                 | add                 | after              | count | comment
+      ${null}                | ${"new"}            | ${"new"}           | ${1}  | ${"Should add class if not existing."}
+      ${"old"}               | ${"new"}            | ${"old new"}       | ${2}  | ${"Should add new class after previous."}
+      ${" \told1 \told2 \t"} | ${"new"}            | ${"old1 old2 new"} | ${3}  | ${"Should normalize old data on modification."}
+      ${"old"}               | ${" \tnew \t"}      | ${"old new"}       | ${2}  | ${"Should normalize added value."}
+      ${"old"}               | ${""}               | ${"old"}           | ${1}  | ${"Should ignore added empty value."}
+      ${"old"}               | ${["new1", "new2"]} | ${"old new1 new2"} | ${3}  | ${"Should be able adding multiple values."}
+    `("[$#] classList.add: $comment", ({ before, add, after, count }) => {
+      setClass(before);
+      if (typeof add === "string") {
+        proxy.classList.add(add);
+      } else {
+        proxy.classList.add(...add);
+      }
+
+      // Internal state should be updated.
+      expect(proxy.classList.value).toStrictEqual(after);
+      expect(proxy.classList.length).toStrictEqual(count);
+      // As not persisted yet, external state should stay as is.
+      expect(getClass()).toStrictEqual(before);
+    });
+  });
+});
+
+/*
+ * =============================================================================
+ *
  * applyRules()
  *
  * =============================================================================
