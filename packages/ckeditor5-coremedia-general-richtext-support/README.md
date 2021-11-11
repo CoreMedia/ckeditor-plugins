@@ -54,6 +54,8 @@ and the data transformed to CKEditor model and later to CKEditor view: While
 layer in CKEditor (as used for CoreMedia RichText 1.0 Editing) is represented
 as HTML (which again is different from the HTML in view).
 
+![Overview CKEditor Editing Engine & GHS/GRS](docs/overview-ckeditor-editing-engine.normal.svg)!
+
 **Example:**
 
 * **Data:** By contract, a heading level 1 is represented in CoreMedia RichText
