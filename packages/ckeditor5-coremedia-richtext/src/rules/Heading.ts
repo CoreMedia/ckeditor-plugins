@@ -19,13 +19,7 @@ export const headingToParagraph: ElementFilterRule = (params) => {
   }
   const headingLevel = match[1];
   node.name = "p";
-  console.error("headingToParagraph, before", {
-    classList: [...node.classList],
-  });
   node.classList.add(`p--heading-${headingLevel}`);
-  console.error("headingToParagraph, after", {
-    classList: [...node.classList],
-  });
   langMapper.toData(params);
 };
 
@@ -54,14 +48,8 @@ export const paragraphToHeading: ElementFilterRule = (params) => {
     return;
   }
   node.name = `h${headingLevel}`;
-  console.error("paragraphToHeading, before", {
-    classList: [...node.classList],
-  });
   // Now remove any heading-related classes.
   HEADING_CLASSES.forEach((c) => node.classList.remove(c));
-  console.error("paragraphToHeading, after", {
-    classList: [...node.classList],
-  });
 };
 
 export const headingRules: ElementsFilterRuleSetConfiguration = {
