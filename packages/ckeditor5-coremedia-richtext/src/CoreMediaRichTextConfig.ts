@@ -115,6 +115,7 @@ const defaultRules: FilterRuleSetConfiguration = {
         em: replaceBy("i"),
       },
     },
+    code: replaceByElementAndClassBackAndForth("code", "span", "code"),
     u: replaceByElementAndClassBackAndForth("u", "span", "underline"),
     br: (params) => {
       // Remove obsolete BR, if only element on block level params.el.

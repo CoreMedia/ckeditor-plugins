@@ -193,31 +193,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     strictness: Strictness.STRICT,
     rules: {
       elements: {
-        // CodeBlock Plugin Support
-        code: {
-          toData: (params) => {
-            params.parentRule(params);
-
-            const originalClass = params.node.attributes["class"];
-            params.node.attributes["class"] = `code--${originalClass}`;
-            params.node.name = "span";
-          },
-          toView: {
-            span: (params) => {
-              params.parentRule(params);
-
-              const originalClass = params.node.attributes["class"] || "";
-              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
-              //    can be italics, but also marked.
-              const pattern = /^code--(\S*)$/;
-              const match = pattern.exec(originalClass);
-              if (match) {
-                params.node.name = "code";
-                params.node.attributes["class"] = match[1];
-              }
-            },
-          },
-        },
         // Highlight Plugin Support
         mark: {
           toData: (params) => {
