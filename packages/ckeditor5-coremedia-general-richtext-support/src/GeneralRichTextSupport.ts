@@ -97,7 +97,10 @@ class CoreMediaRichText10Dtd {
     // i: While `<i>` is not part of CoreMedia RichText DTD, it is required here
     // because CKEditor uses `<i>` instead of `<em>` in view.
     // See https://github.com/ckeditor/ckeditor5/issues/1394
-    name: /^(span|em|i|strong|sub|sup)$/,
+    // u, del, s, strike: These are part of the HTML representation after
+    // data-processing `<span>` with a dedicated class. Thus, they must be
+    // handled in the same way as `<span>`.
+    name: /^(span|em|i|strong|sub|sup|u|del|s|strike)$/,
     ...CoreMediaRichText10Dtd.attrs,
   };
   static pre: MatcherPattern = {

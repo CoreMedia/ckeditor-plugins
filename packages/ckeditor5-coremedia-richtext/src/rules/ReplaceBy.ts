@@ -15,7 +15,7 @@ export function replaceBy(name: string, className?: string): ElementFilterRule {
     const { node } = params;
     node.name = name;
     if (className) {
-      node.attributes["class"] = className;
+      node.classList.add(className);
     }
   };
 }
@@ -38,10 +38,10 @@ export function replaceElementAndClassBy(
   return {
     [originalName]: (params) => {
       const { node } = params;
-      if (node.attributes["class"] !== className) {
+      if (!node.classList.contains(className)) {
         return;
       }
-      delete node.attributes["class"];
+      node.classList.remove(className);
       node.name = newName;
       subSequentRules.forEach((r) => r(params));
     },
