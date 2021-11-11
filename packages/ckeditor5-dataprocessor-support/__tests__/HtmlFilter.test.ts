@@ -1,7 +1,7 @@
 // noinspection InnerHTMLJS
 
 import "jest-xml-matcher";
-import  HtmlFilter, { FilterRuleSet } from "../src/HtmlFilter";
+import HtmlFilter, { FilterRuleSet } from "../src/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
@@ -87,8 +87,7 @@ describe("HtmlFilter.applyTo()", () => {
           },
         },
         from: "<parent>Lorem <el>Ipsum</el> Dolor <el>Sit</el></parent>",
-        to:
-          '<parent>Lorem <replacement was="el">Ipsum</replacement> Dolor <replacement was="el">Sit</replacement></parent>',
+        to: '<parent>Lorem <replacement was="el">Ipsum</replacement> Dolor <replacement was="el">Sit</replacement></parent>',
       },
     ],
     [
@@ -103,8 +102,7 @@ describe("HtmlFilter.applyTo()", () => {
           },
         },
         from: "<parent>Lorem <el>Ipsum <el>Dolor</el> Sit</el></parent>",
-        to:
-          '<parent>Lorem <replacement was="el">Ipsum <replacement was="el">Dolor</replacement> Sit</replacement></parent>',
+        to: '<parent>Lorem <replacement was="el">Ipsum <replacement was="el">Dolor</replacement> Sit</replacement></parent>',
       },
     ],
     [
@@ -124,8 +122,7 @@ describe("HtmlFilter.applyTo()", () => {
           },
         },
         from: "<parent>Lorem <el>Ipsum <el>Dolor</el> Sit</el></parent>",
-        to:
-          '<parent>Lorem <replacement was="el">Ipsum <replacement was="el">Dolor</replacement> Sit</replacement></parent>',
+        to: '<parent>Lorem <replacement was="el">Ipsum <replacement was="el">Dolor</replacement> Sit</replacement></parent>',
       },
     ],
     [
@@ -134,7 +131,9 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             "^": (params) => {
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}before`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }before`;
             },
             el: (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
@@ -151,7 +150,9 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             $: (params) => {
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}after`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }after`;
             },
             el: (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
@@ -168,10 +169,14 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             "^": (params) => {
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}before`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }before`;
             },
             $: (params) => {
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}after`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }after`;
             },
             el: (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
@@ -188,10 +193,14 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             "^": (params) => {
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}before`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }before`;
             },
             $: (params) => {
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}after`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }after`;
             },
             el: (params) => {
               params.node.name = "replacement";
@@ -199,7 +208,9 @@ describe("HtmlFilter.applyTo()", () => {
             },
             replacement: (params) => {
               // This should not be triggered.
-              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}replacement`;
+              params.node.attributes.name = `${
+                params.node.attributes.name ? params.node.attributes.name + "-" : ""
+              }replacement`;
             },
           },
         },
@@ -211,7 +222,7 @@ describe("HtmlFilter.applyTo()", () => {
       "APPLY#12: should apply text rules",
       {
         rules: {
-          text: (params) => params.node.textContent = params.node.textContent.split("").reverse().join(""),
+          text: (params) => (params.node.textContent = params.node.textContent.split("").reverse().join("")),
         },
         from: "<parent>Lorem Ipsum Dolor</parent>",
         to: "<parent>roloD muspI meroL</parent>",

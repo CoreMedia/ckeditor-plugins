@@ -10,7 +10,7 @@ Node.prototype.toString = function nodeToString(): string {
 };
 
 interface NodeProxyAction {
-  (proxy: NodeProxy): any;
+  (proxy: NodeProxy): unknown;
 }
 
 describe("NodeProxy.constructor", () => {
@@ -26,13 +26,10 @@ describe("NodeProxy.constructor", () => {
     expect(proxy.mutable).toStrictEqual(true);
   });
 
-  test.each([[true], [false]])(
-    "Should respect mutable state %p",
-    (mutable: boolean) => {
-      const proxy = new NodeProxy(rootNode, mutable);
-      expect(proxy.mutable).toStrictEqual(mutable);
-    }
-  );
+  test.each([[true], [false]])("Should respect mutable state %p", (mutable: boolean) => {
+    const proxy = new NodeProxy(rootNode, mutable);
+    expect(proxy.mutable).toStrictEqual(mutable);
+  });
 
   test("Should provide access to delegate.", () => {
     const proxy = new NodeProxy(rootNode);
@@ -58,33 +55,24 @@ describe("NodeProxy.wrap", () => {
     expect(proxy?.mutable).toStrictEqual(true);
   });
 
-  test.each([[true], [false]])(
-    "Should respect mutable state %p",
-    (mutable: boolean) => {
-      const proxy = NodeProxy.proxy(rootNode, mutable);
-      expect(proxy?.mutable).toStrictEqual(mutable);
-    }
-  );
+  test.each([[true], [false]])("Should respect mutable state %p", (mutable: boolean) => {
+    const proxy = NodeProxy.proxy(rootNode, mutable);
+    expect(proxy?.mutable).toStrictEqual(mutable);
+  });
 
-  test.each([[undefined], [null]])("Should return null when wrapping falsy values like %p.",
-    (value) => {
-      const proxy = NodeProxy.proxy(value);
-      expect(proxy).toStrictEqual(null);
-    });
+  test.each([[undefined], [null]])("Should return null when wrapping falsy values like %p.", (value) => {
+    const proxy = NodeProxy.proxy(value);
+    expect(proxy).toStrictEqual(null);
+  });
 });
 
-
 describe("Immutable NodeProxy", () => {
-
   interface ImmutableTestData {
     action: NodeProxyAction;
     expectException: boolean;
   }
 
-  type ImmutableTest = [
-    string,
-    ImmutableTestData,
-  ];
+  type ImmutableTest = [string, ImmutableTestData];
 
   const testData: ImmutableTest[] = [
     [
@@ -97,14 +85,14 @@ describe("Immutable NodeProxy", () => {
     [
       "IMMUTABLE#1.2: Setting Property `remove` should NOT be possible.",
       {
-        action: (p) => p.remove = true,
+        action: (p) => (p.remove = true),
         expectException: true,
       },
     ],
     [
       "IMMUTABLE#1.3: Setting Property `remove` of parentNode should NOT be possible.",
       {
-        action: (p) => p.parentNode ? p.parentNode.remove = true : undefined,
+        action: (p) => (p.parentNode ? (p.parentNode.remove = true) : undefined),
         expectException: true,
       },
     ],
@@ -118,14 +106,14 @@ describe("Immutable NodeProxy", () => {
     [
       "IMMUTABLE#2.2: Setting Property `replaceByChildren` should NOT be possible.",
       {
-        action: (p) => p.replaceByChildren = true,
+        action: (p) => (p.replaceByChildren = true),
         expectException: true,
       },
     ],
     [
       "IMMUTABLE#2.3: Setting Property `replaceByChildren` of parentNode should NOT be possible.",
       {
-        action: (p) => p.parentNode ? p.parentNode.replaceByChildren = true : undefined,
+        action: (p) => (p.parentNode ? (p.parentNode.replaceByChildren = true) : undefined),
         expectException: true,
       },
     ],
@@ -139,14 +127,14 @@ describe("Immutable NodeProxy", () => {
     [
       "IMMUTABLE#3.2: Setting Property `removeChildren` should NOT be possible.",
       {
-        action: (p) => p.removeChildren = true,
+        action: (p) => (p.removeChildren = true),
         expectException: true,
       },
     ],
     [
       "IMMUTABLE#3.3: Setting Property `removeChildren` of parentNode should NOT be possible.",
       {
-        action: (p) => p.parentNode ? p.parentNode.removeChildren = true : undefined,
+        action: (p) => (p.parentNode ? (p.parentNode.removeChildren = true) : undefined),
         expectException: true,
       },
     ],
@@ -178,17 +166,19 @@ describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
   const emptyProxy: NodeProxy = new NodeProxy(childNode);
   const nonEmptyProxy: NodeProxy = new NodeProxy(rootNode);
 
-  test.each([[true, emptyProxy], [false, nonEmptyProxy]])(
-    "(%#) Should provide expected state on proxy.empty: %p for %s",
-    (expected, proxy) => {
-      expect(proxy.empty).toStrictEqual(expected);
-    });
+  test.each([
+    [true, emptyProxy],
+    [false, nonEmptyProxy],
+  ])("(%#) Should provide expected state on proxy.empty: %p for %s", (expected, proxy) => {
+    expect(proxy.empty).toStrictEqual(expected);
+  });
 
-  test.each([[true, emptyProxy], [false, nonEmptyProxy]])(
-    "(%#) Should provide expected state on proxy.isEmpty(): %p for %s",
-    (expected, proxy) => {
-      expect(proxy.isEmpty()).toStrictEqual(expected);
-    });
+  test.each([
+    [true, emptyProxy],
+    [false, nonEmptyProxy],
+  ])("(%#) Should provide expected state on proxy.isEmpty(): %p for %s", (expected, proxy) => {
+    expect(proxy.isEmpty()).toStrictEqual(expected);
+  });
 
   test("Should be able to ignore children when testing for isEmpty", () => {
     const actual = nonEmptyProxy.isEmpty((c) => c.nodeName !== "child");
@@ -202,11 +192,9 @@ describe("NodeProxy.ownerDocument", () => {
   const rootNode = <Node>documentRootNode.firstChild;
   const childNode = <Node>rootNode.firstChild;
 
-  test.each([[rootNode], [childNode]])(
-    "(%#) Should provide expected ownerDocument for %s",
-    (node) => {
-      expect(new NodeProxy(node).ownerDocument).toStrictEqual(document);
-    });
+  test.each([[rootNode], [childNode]])("(%#) Should provide expected ownerDocument for %s", (node) => {
+    expect(new NodeProxy(node).ownerDocument).toStrictEqual(document);
+  });
 });
 
 describe("NodeProxy.parentNode", () => {
@@ -215,11 +203,12 @@ describe("NodeProxy.parentNode", () => {
   const rootNode = <Node>documentRootNode.firstChild;
   const childNode = <Node>rootNode.firstChild;
 
-  test.each([[childNode, rootNode], [rootNode, documentRootNode]])(
-    "(%#) Should provide expected parentNode for %s: %s",
-    (childNode, parentNode) => {
-      expect(new NodeProxy(childNode).parentNode?.delegate).toStrictEqual(parentNode);
-    });
+  test.each([
+    [childNode, rootNode],
+    [rootNode, documentRootNode],
+  ])("(%#) Should provide expected parentNode for %s: %s", (childNode, parentNode) => {
+    expect(new NodeProxy(childNode).parentNode?.delegate).toStrictEqual(parentNode);
+  });
 });
 
 describe("NodeProxy.parentElement", () => {
@@ -228,11 +217,12 @@ describe("NodeProxy.parentElement", () => {
   const rootNode = <Node>documentRootNode.firstChild;
   const childNode = <Node>rootNode.firstChild;
 
-  test.each([[childNode, rootNode], [rootNode, undefined]])(
-    "(%#) Should provide expected parentElement for %s: %s",
-    (childNode, parentNode) => {
-      expect(new NodeProxy(childNode).parentElement?.delegate).toStrictEqual(parentNode);
-    });
+  test.each([
+    [childNode, rootNode],
+    [rootNode, undefined],
+  ])("(%#) Should provide expected parentElement for %s: %s", (childNode, parentNode) => {
+    expect(new NodeProxy(childNode).parentElement?.delegate).toStrictEqual(parentNode);
+  });
 });
 
 describe("NodeProxy.name and NodeProxy.realName", () => {
@@ -241,13 +231,11 @@ describe("NodeProxy.name and NodeProxy.realName", () => {
   const rootNode = <Node>documentRootNode.firstChild;
   const childNode = <Node>rootNode.firstChild;
 
-  test.each([[childNode], [rootNode]])(
-    "(%#) Should provide expected name and realName for %s",
-    (node) => {
-      const { name, realName } = new NodeProxy(node);
-      expect(name).toStrictEqual(node.nodeName.toLowerCase());
-      expect(realName).toStrictEqual(node.nodeName.toLowerCase());
-    });
+  test.each([[childNode], [rootNode]])("(%#) Should provide expected name and realName for %s", (node) => {
+    const { name, realName } = new NodeProxy(node);
+    expect(name).toStrictEqual(node.nodeName.toLowerCase());
+    expect(realName).toStrictEqual(node.nodeName.toLowerCase());
+  });
 });
 
 describe("NodeProxy.singleton", () => {
@@ -266,11 +254,9 @@ describe("NodeProxy.singleton", () => {
     [pair1, false],
     [pair2, false],
     [pair3, false],
-  ])(
-    "(%#) Should provide expected singleton state for %s: %p",
-    (node, expected) => {
-      expect(new NodeProxy(node).singleton).toStrictEqual(expected);
-    });
+  ])("(%#) Should provide expected singleton state for %s: %p", (node, expected) => {
+    expect(new NodeProxy(node).singleton).toStrictEqual(expected);
+  });
 });
 
 describe("NodeProxy.lastNode", () => {
@@ -289,11 +275,9 @@ describe("NodeProxy.lastNode", () => {
     [pair1, false],
     [pair2, false],
     [pair3, true],
-  ])(
-    "(%#) Should provide expected lastNode state for %s: %p",
-    (node, expected) => {
-      expect(new NodeProxy(node).lastNode).toStrictEqual(expected);
-    });
+  ])("(%#) Should provide expected lastNode state for %s: %p", (node, expected) => {
+    expect(new NodeProxy(node).lastNode).toStrictEqual(expected);
+  });
 });
 
 describe("NodeProxy.findFirst", () => {
@@ -312,15 +296,13 @@ describe("NodeProxy.findFirst", () => {
     [pair1, null],
     [pair2, null],
     [pair3, null],
-  ])(
-    "(%#) Should find expected first child node for %s: %s",
-    (node, firstChild) => {
-      if (firstChild === null) {
-        expect(new NodeProxy(node).findFirst()).toStrictEqual(firstChild);
-      } else {
-        expect(new NodeProxy(node).findFirst()?.delegate).toStrictEqual(firstChild);
-      }
-    });
+  ])("(%#) Should find expected first child node for %s: %s", (node, firstChild) => {
+    if (firstChild === null) {
+      expect(new NodeProxy(node).findFirst()).toStrictEqual(firstChild);
+    } else {
+      expect(new NodeProxy(node).findFirst()?.delegate).toStrictEqual(firstChild);
+    }
+  });
 
   test.each([
     [documentRootNode, "parent", rootNode],
@@ -333,15 +315,13 @@ describe("NodeProxy.findFirst", () => {
     [pair1, "pair2", null],
     [pair2, "pair3", null],
     [pair3, "child", null],
-  ])(
-    "(%#) Should find expected first child node for %s searching for '%s': %s",
-    (node, childName, firstChild) => {
-      if (firstChild === null) {
-        expect(new NodeProxy(node).findFirst(childName)).toStrictEqual(firstChild);
-      } else {
-        expect(new NodeProxy(node).findFirst(childName)?.delegate).toStrictEqual(firstChild);
-      }
-    });
+  ])("(%#) Should find expected first child node for %s searching for '%s': %s", (node, childName, firstChild) => {
+    if (firstChild === null) {
+      expect(new NodeProxy(node).findFirst(childName)).toStrictEqual(firstChild);
+    } else {
+      expect(new NodeProxy(node).findFirst(childName)?.delegate).toStrictEqual(firstChild);
+    }
+  });
 
   test.each([
     [documentRootNode, () => true, rootNode],
@@ -360,7 +340,8 @@ describe("NodeProxy.findFirst", () => {
       } else {
         expect(new NodeProxy(node).findFirst(childPredicate)?.delegate).toStrictEqual(firstChild);
       }
-    });
+    }
+  );
 });
 
 describe("NodeProxy.persistToDom", () => {
@@ -374,18 +355,15 @@ describe("NodeProxy.persistToDom", () => {
     expectedAbort: boolean;
   }
 
-  type PersistTest = [
-    string,
-    PersistTestData,
-  ];
+  type PersistTest = [string, PersistTestData];
 
   const testData: PersistTest[] = [
     [
       "PERSIST#1: Should not modify DOM if no operations got applied.",
       {
         nodeXPath: "//child",
-        action: () => {
-        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        action: () => {},
         expectedDom: "<parent><child><pair1/><pair2/><pair3/></child></parent>",
         expectedAbort: false,
       },
@@ -394,7 +372,7 @@ describe("NodeProxy.persistToDom", () => {
       "PERSIST#2: Should remove child not and descendants if requested.",
       {
         nodeXPath: "//child",
-        action: (node) => node.remove = true,
+        action: (node) => (node.remove = true),
         expectedDom: "<parent/>",
         expectedAbort: true,
       },
@@ -415,7 +393,7 @@ describe("NodeProxy.persistToDom", () => {
       "PERSIST#4: Should replace child by its descendants if requested.",
       {
         nodeXPath: "//child",
-        action: (node) => node.replaceByChildren = true,
+        action: (node) => (node.replaceByChildren = true),
         expectedDom: "<parent><pair1/><pair2/><pair3/></parent>",
         expectedAbort: true,
         expectedRestartFromXPath: "//pair1",
@@ -425,7 +403,7 @@ describe("NodeProxy.persistToDom", () => {
       "PERSIST#5: Should remove node instead on replace children if having no children.",
       {
         nodeXPath: "//pair1",
-        action: (node) => node.replaceByChildren = true,
+        action: (node) => (node.replaceByChildren = true),
         expectedDom: "<parent><child><pair2/><pair3/></child></parent>",
         expectedAbort: true,
       },
@@ -446,7 +424,7 @@ describe("NodeProxy.persistToDom", () => {
       "PERSIST#7: Should remove children if requested.",
       {
         nodeXPath: "//child",
-        action: (node) => node.removeChildren = true,
+        action: (node) => (node.removeChildren = true),
         expectedDom: "<parent><child/></parent>",
         expectedAbort: false,
       },
@@ -468,19 +446,24 @@ describe("NodeProxy.persistToDom", () => {
   describe.each<PersistTest>(testData)("(%#) %s", (name, data) => {
     test.each([[true], [false]])("(%#) has ownerDocument: %s", (hasOwnerDocument: boolean) => {
       const document = PARSER.parseFromString(dom, "text/xml");
-      const node = <Node>document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;
+      const node = <Node>(
+        document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+      );
       const proxy = new NodeProxy(node);
 
       if (!hasOwnerDocument) {
         // https://stackoverflow.com/questions/43697455/how-to-mock-replace-getter-function-of-object-with-jest
-        Object.defineProperty(proxy, 'ownerDocument', {
+        Object.defineProperty(proxy, "ownerDocument", {
           get: jest.fn(() => null),
         });
       }
 
       let expectedRestartFrom: Node | undefined = undefined;
       if (!!data.expectedRestartFromXPath) {
-        expectedRestartFrom = <Node>document.evaluate(data.expectedRestartFromXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;
+        expectedRestartFrom = <Node>(
+          document.evaluate(data.expectedRestartFromXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+            .singleNodeValue
+        );
       }
       data.action(proxy);
       const { continueWith, abort } = proxy.persistToDom();

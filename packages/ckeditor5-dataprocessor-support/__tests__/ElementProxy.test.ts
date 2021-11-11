@@ -5,7 +5,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
-// @ts-ignore
 const MOCK_EDITOR = new Editor();
 
 /*
@@ -19,7 +18,12 @@ const MOCK_EDITOR = new Editor();
 function requireValidXml(xmlString: string): Document {
   const parser = new DOMParser();
   const xmlDocument = parser.parseFromString(xmlString, "text/xml");
-  const xPathResult: XPathResult = xmlDocument.evaluate("/parsererror/text()", xmlDocument, null, XPathResult.STRING_TYPE);
+  const xPathResult: XPathResult = xmlDocument.evaluate(
+    "/parsererror/text()",
+    xmlDocument,
+    null,
+    XPathResult.STRING_TYPE
+  );
   if (xPathResult.stringValue) {
     throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
   }
@@ -53,24 +57,24 @@ describe("Should Respecting (Im-)Mutable State", () => {
   const immutableElement = new ElementProxy(htmlDivElement, MOCK_EDITOR, {}, false);
 
   test("should not be able to delete element", () => {
-    expect(() => immutableElement.remove = true).toThrowError();
+    expect(() => (immutableElement.remove = true)).toThrowError();
   });
 
   test("should not be able to replace element by children", () => {
-    expect(() => immutableElement.replaceByChildren = true).toThrowError();
+    expect(() => (immutableElement.replaceByChildren = true)).toThrowError();
   });
 
   test("should not be able to change name", () => {
     const getValue = () => immutableElement.name;
     const previousValue = getValue();
-    expect(() => immutableElement.name = "test").toThrowError();
+    expect(() => (immutableElement.name = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
 
   test("should not be able to change attribute value", () => {
     const getValue = () => immutableElement.attributes["class"];
     const previousValue = getValue();
-    expect(() => immutableElement.attributes["class"] = "test").toThrowError();
+    expect(() => (immutableElement.attributes["class"] = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
 
@@ -84,7 +88,7 @@ describe("Should Respecting (Im-)Mutable State", () => {
   test("should not be able to add attribute", () => {
     const getValue = () => immutableElement.attributes["id"];
     const previousValue = getValue();
-    expect(() => immutableElement.attributes["id"] = "test").toThrowError();
+    expect(() => (immutableElement.attributes["id"] = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
 
@@ -107,7 +111,7 @@ describe("Should Respecting (Im-)Mutable State", () => {
 type ApplyRulesData = [
   string,
   {
-    comment?: string,
+    comment?: string;
     rules: (ElementFilterRule | undefined)[];
     from: string;
     to: string;
@@ -187,7 +191,7 @@ describe("ElementProxy.applyRules()", () => {
             me.node.classList.add("class--new");
           },
         ],
-        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
         to: '<parent>Lorem <el class="class--new">Ipsum</el> Dolor</parent>',
       },
     ],
@@ -224,7 +228,7 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el class="class--remove">Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
       },
     ],
     [
@@ -260,7 +264,7 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el class="class--old">Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
       },
     ],
     [
@@ -299,27 +303,29 @@ describe("ElementProxy.applyRules()", () => {
             me.node.attributes["xlink:href"] = "https://example.org/";
           },
         ],
-        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
         to: '<parent xmlns:xlink="http://www.w3.org/1999/xlink">Lorem <el xlink:href="https://example.org/">Ipsum</el> Dolor</parent>',
       },
     ],
     [
       "should respect added xml namespace attributes and add namespace to document element",
       {
-        comment: "While Chrome respects the xmlns:xml attribute in XMLSerializer, it is not respected (yet) in JEST. If this behavior changes, you may have to adapt the expected XML.",
+        comment:
+          "While Chrome respects the xmlns:xml attribute in XMLSerializer, it is not respected (yet) in JEST. If this behavior changes, you may have to adapt the expected XML.",
         rules: [
           (me) => {
             me.node.attributes["xml:lang"] = "en-US";
           },
         ],
-        from: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
         to: '<parent>Lorem <el xml:lang="en-US">Ipsum</el> Dolor</parent>',
       },
     ],
     [
       "should respect xlink namespace when deleting attributes",
       {
-        comment: "In this simple approach, we cannot remove unused namespace declarations. If we do better in the future, don't hesitate adapting the expectations.",
+        comment:
+          "In this simple approach, we cannot remove unused namespace declarations. If we do better in the future, don't hesitate adapting the expectations.",
         rules: [
           (me) => {
             me.node.attributes["xlink:href"] = null;
@@ -338,7 +344,7 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el xml:lang="en-US">Ipsum</el> Dolor</parent>',
-        to: '<parent>Lorem <el>Ipsum</el> Dolor</parent>',
+        to: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
       },
     ],
     [
@@ -460,8 +466,7 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
-        to:
-          '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
       },
     ],
     [
@@ -484,8 +489,7 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent>Lorem <el attr1="value 1" attr2="value 2">Ipsum</el> Dolor</parent>',
-        to:
-          '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
+        to: '<parent>Lorem <el attr1="prefixed:value 1" attr2="prefixed:value 2" new="prefixed:new value">Ipsum</el> Dolor</parent>',
       },
     ],
     [
@@ -578,8 +582,14 @@ describe("ElementProxy.applyRules()", () => {
     if (!xmlElement) {
       throw new Error(`Test Setup Issue: Unable resolving XPath '${xpath}' to element under test in: ${testData.from}`);
     }
-    if (testData.restart && !xmlExpectedDocument.evaluate(testData.restart, xmlExpectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue) {
-      throw new Error(`Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`);
+    if (
+      testData.restart &&
+      !xmlExpectedDocument.evaluate(testData.restart, xmlExpectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+        .singleNodeValue
+    ) {
+      throw new Error(
+        `Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`
+      );
     }
 
     const me = new ElementProxy(xmlElement, MOCK_EDITOR);
@@ -587,7 +597,12 @@ describe("ElementProxy.applyRules()", () => {
     expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to);
 
     if (testData.restart) {
-      const expectedRestart = xmlDocument.evaluate(testData.restart, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;
+      const expectedRestart = xmlDocument.evaluate(
+        testData.restart,
+        xmlDocument,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE
+      ).singleNodeValue;
       expect(appliedRulesResult).toStrictEqual(expectedRestart);
     } else {
       // We don't expect any restart node to be returned.
