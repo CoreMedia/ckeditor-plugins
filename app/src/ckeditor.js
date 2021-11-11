@@ -36,6 +36,7 @@ import CoreMediaStudioEssentials, {
 import {initDragExamples} from "./dragExamples";
 import GeneralRichTextSupport
   from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -194,30 +195,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     rules: {
       elements: {
         // Highlight Plugin Support
-        mark: {
-          toData: (params) => {
-            params.parentRule(params);
-
-            const originalClass = params.node.attributes["class"];
-            params.node.attributes["class"] = `mark--${originalClass}`;
-            params.node.name = "span";
-          },
-          toView: {
-            span: (params) => {
-              params.parentRule(params);
-
-              const originalClass = params.node.attributes["class"] || "";
-              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
-              //    can be italics, but also marked.
-              const pattern = /^mark--(\S*)$/;
-              const match = pattern.exec(originalClass);
-              if (match) {
-                params.node.name = "mark";
-                params.node.attributes["class"] = match[1];
-              }
-            },
-          },
-        },
+        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
       },
     },
   },
