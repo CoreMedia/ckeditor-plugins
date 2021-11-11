@@ -194,3 +194,4 @@ class CoreMediaRichText10Dtd {
 }
 
 export default GeneralRichTextSupport;
+export { CoreMediaRichText10Dtd };

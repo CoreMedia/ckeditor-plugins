@@ -29,6 +29,7 @@ importers:
       '@ckeditor/ckeditor5-essentials': ^30.0.0
       '@ckeditor/ckeditor5-heading': ^30.0.0
       '@ckeditor/ckeditor5-highlight': ^30.0.0
+      '@ckeditor/ckeditor5-html-support': ^30.0.0
       '@ckeditor/ckeditor5-indent': ^30.0.0
       '@ckeditor/ckeditor5-inspector': ^2.2.2
       '@ckeditor/ckeditor5-link': ^30.0.0
@@ -74,6 +75,7 @@ importers:
       '@ckeditor/ckeditor5-essentials': 30.0.0
       '@ckeditor/ckeditor5-heading': 30.0.0
       '@ckeditor/ckeditor5-highlight': 30.0.0
+      '@ckeditor/ckeditor5-html-support': 30.0.0
       '@ckeditor/ckeditor5-indent': 30.0.0
       '@ckeditor/ckeditor5-link': 30.0.0
       '@ckeditor/ckeditor5-list': 30.0.0
@@ -2390,7 +2392,6 @@ packages:
     dependencies:
       ckeditor5: 30.0.0
       lodash-es: 4.17.21
-    dev: true
 
   /@ckeditor/ckeditor5-indent/30.0.0:
     resolution: {integrity: sha512-czzpwtiH15qZYBuH2xhz24V0hy9Jxnq8uhhRlYajiUbj0cf8ePAceomP/jNH20j9L4DWopuoPNlHprO0LtGioQ==}

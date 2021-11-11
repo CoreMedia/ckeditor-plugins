@@ -37,6 +37,8 @@ import {initDragExamples} from "./dragExamples";
 import GeneralRichTextSupport
   from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
+import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
+import {CoreMediaRichText10Dtd} from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -69,6 +71,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     AutoLink,
     Link,
     CoreMediaStudioEssentials,
+    GeneralHtmlSupport,
     GeneralRichTextSupport,
     List,
     Paragraph,
@@ -198,6 +201,18 @@ ClassicEditor.create(document.querySelector('.editor'), {
         mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
       },
     },
+  },
+  htmlSupport: {
+    allow: [
+      {
+        // As we represent `<mark>` as `<span class="mark">`, we must ensure,
+        // that the same attributes are kept as is from CMS. For example, the
+        // dir-attribute, which is valid for `<span>` must not be removed just
+        // because CKEditor is not configured to handle it.
+        name: "mark",
+        ...CoreMediaRichText10Dtd.attrs,
+      }
+    ],
   },
 }).then(newEditor => {
   CKEditorInspector.attach({
