@@ -121,9 +121,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     // Note, that in contrast to CKEditor 4 approach, these classes are now
     // applicable to any block element, while it supported only `<p>` in the
     // past.
-    // TODO[cke] This approach fails currently for headings, for example.
-    // TODO[cke] It would require the data-processor to respect that <h1> et al.
-    // TODO[cke] may contain additional class attributes.
     options: [
       {
         name: "left",
