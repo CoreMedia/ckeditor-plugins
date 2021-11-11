@@ -56,6 +56,14 @@ class GeneralRichTextSupport extends Plugin {
  * original DTD. Note, that ambiguous attributes like `xml:lang` and `lang`
  * are only handled for one attribute name. Mapping to this one attribute name
  * has to be done in data-processing.
+ *
+ * **HTML Data Layer Takes the Lead:** It is important to mention, that, while
+ * the configuration is based on the subsequent representation of CoreMedia
+ * RichText **after** data-processing, which in general is a HTML
+ * representation. Example: While CoreMedia RichText does not know about
+ * heading elements such as `<h1>`, data-processing will map any
+ * `<p class="p--heading-1">` to `<h1>`. That's why `<h1>` has to be part
+ * of the General HTML Support Configuration.
  */
 class CoreMediaRichText10Dtd {
   static readonly coreattrs = {
@@ -79,7 +87,10 @@ class CoreMediaRichText10Dtd {
     ...CoreMediaRichText10Dtd.i18n,
   };
   static attrsBlockElements: MatcherPattern = {
-    name: /^(p|ul|ol|li)$/,
+    // h[1-6]: While CoreMedia RichText DTD does not support headings, this is
+    // used after toView transformation in data-processor, so that we handle
+    // them here, too.
+    name: /^(p|ul|ol|li|h[1-6])$/,
     ...CoreMediaRichText10Dtd.attrs,
   };
   static attrsInlineElements: MatcherPattern = {

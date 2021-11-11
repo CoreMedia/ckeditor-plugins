@@ -2,8 +2,9 @@ import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/El
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { langMapper } from "./Lang";
 
-export const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
-export const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
+const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
+const HEADING_CLASSES = Array.from(Array(6).keys()).map((i) => `p--heading-${i + 1}`);
+const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
 
 /**
  * Transforms a heading from view to a paragraph having a class attribute
@@ -18,7 +19,13 @@ export const headingToParagraph: ElementFilterRule = (params) => {
   }
   const headingLevel = match[1];
   node.name = "p";
-  node.attributes["class"] = `p--heading-${headingLevel}`;
+  console.error("headingToParagraph, before", {
+    classList: [...node.classList],
+  });
+  node.classList.add(`p--heading-${headingLevel}`);
+  console.error("headingToParagraph, after", {
+    classList: [...node.classList],
+  });
   langMapper.toData(params);
 };
 
@@ -30,9 +37,15 @@ export const headingToParagraph: ElementFilterRule = (params) => {
  */
 export const paragraphToHeading: ElementFilterRule = (params) => {
   const { node } = params;
-  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(node.attributes["class"] || "");
-  if (!match) {
+  const classes = [...node.classList];
+  const matchedHeading = HEADING_CLASSES.find((c) => classes.includes(c));
+  if (!matchedHeading) {
     // Cannot determine number. Perhaps someone already removed the class.
+    return;
+  }
+  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(matchedHeading);
+  if (!match) {
+    // Should not happen, as we matched before.
     return;
   }
   const headingLevel: number = +match[1];
@@ -41,7 +54,14 @@ export const paragraphToHeading: ElementFilterRule = (params) => {
     return;
   }
   node.name = `h${headingLevel}`;
-  delete node.attributes["class"];
+  console.error("paragraphToHeading, before", {
+    classList: [...node.classList],
+  });
+  // Now remove any heading-related classes.
+  HEADING_CLASSES.forEach((c) => node.classList.remove(c));
+  console.error("paragraphToHeading, after", {
+    classList: [...node.classList],
+  });
 };
 
 export const headingRules: ElementsFilterRuleSetConfiguration = {
