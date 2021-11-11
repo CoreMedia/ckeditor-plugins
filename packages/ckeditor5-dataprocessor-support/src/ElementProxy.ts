@@ -52,7 +52,7 @@ class ClassList implements DOMTokenList {
 
   add(...values: string[]): void {
     const trimValue = ClassList.#trimValue;
-    const addValue = (v: string): Set<string> => raw.add(v.trim());
+    const addValue = (v: string): unknown => !!v && raw.add(v);
 
     const raw: Set<string> = new Set<string>(this.#classes);
     values.map(trimValue).forEach(addValue);
