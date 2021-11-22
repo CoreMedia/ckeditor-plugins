@@ -29,6 +29,7 @@ importers:
       '@ckeditor/ckeditor5-essentials': ^31.0.0
       '@ckeditor/ckeditor5-heading': ^31.0.0
       '@ckeditor/ckeditor5-highlight': ^31.0.0
+      '@ckeditor/ckeditor5-html-support': ^31.0.0
       '@ckeditor/ckeditor5-indent': ^31.0.0
       '@ckeditor/ckeditor5-inspector': ^2.2.2
       '@ckeditor/ckeditor5-link': ^31.0.0
@@ -36,11 +37,14 @@ importers:
       '@ckeditor/ckeditor5-paragraph': ^31.0.0
       '@ckeditor/ckeditor5-paste-from-office': ^31.0.0
       '@ckeditor/ckeditor5-remove-format': ^31.0.0
+      '@ckeditor/ckeditor5-source-editing': ^31.0.0
       '@ckeditor/ckeditor5-table': ^31.0.0
       '@ckeditor/ckeditor5-theme-lark': ^31.0.0
       '@ckeditor/ckeditor5-typing': ^31.0.0
       '@ckeditor/ckeditor5-ui': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
+      '@coremedia/ckeditor5-coremedia-general-richtext-support': 1.0.2-rc.2
+      '@coremedia/ckeditor5-coremedia-richtext': 1.0.2-rc.2
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 1.0.2-rc.2
       '@coremedia/ckeditor5-studio-essentials': 1.0.2-rc.2
       '@coremedia/ckeditor5-symbol-on-paste-mapper': 1.0.2-rc.2
@@ -71,17 +75,21 @@ importers:
       '@ckeditor/ckeditor5-essentials': 31.0.0
       '@ckeditor/ckeditor5-heading': 31.0.0
       '@ckeditor/ckeditor5-highlight': 31.0.0
+      '@ckeditor/ckeditor5-html-support': 31.0.0
       '@ckeditor/ckeditor5-indent': 31.0.0
       '@ckeditor/ckeditor5-link': 31.0.0
       '@ckeditor/ckeditor5-list': 31.0.0
       '@ckeditor/ckeditor5-paragraph': 31.0.0
       '@ckeditor/ckeditor5-paste-from-office': 31.0.0
       '@ckeditor/ckeditor5-remove-format': 31.0.0
+      '@ckeditor/ckeditor5-source-editing': 31.0.0
       '@ckeditor/ckeditor5-table': 31.0.0
       '@ckeditor/ckeditor5-theme-lark': 31.0.0
       '@ckeditor/ckeditor5-typing': 31.0.0
       '@ckeditor/ckeditor5-ui': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
+      '@coremedia/ckeditor5-coremedia-general-richtext-support': link:../packages/ckeditor5-coremedia-general-richtext-support
+      '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
@@ -106,33 +114,33 @@ importers:
 
   packages/ckeditor5-coremedia-general-richtext-support:
     specifiers:
-      '@babel/cli': ^7.15.7
-      '@babel/core': ^7.15.8
-      '@babel/plugin-proposal-class-properties': ^7.14.5
-      '@babel/plugin-proposal-object-rest-spread': ^7.15.6
+      '@babel/cli': ^7.16.0
+      '@babel/core': ^7.16.0
+      '@babel/plugin-proposal-class-properties': ^7.16.0
+      '@babel/plugin-proposal-object-rest-spread': ^7.16.0
       '@babel/plugin-syntax-dynamic-import': ^7.8.3
-      '@babel/plugin-transform-arrow-functions': ^7.14.5
-      '@babel/plugin-transform-computed-properties': ^7.14.5
-      '@babel/plugin-transform-for-of': ^7.15.4
-      '@babel/plugin-transform-parameters': ^7.15.4
-      '@babel/plugin-transform-shorthand-properties': ^7.14.5
-      '@babel/preset-env': ^7.15.8
-      '@babel/preset-typescript': ^7.15.0
-      '@ckeditor/ckeditor5-core': ^30.0.0
-      '@ckeditor/ckeditor5-engine': ^30.0.0
-      '@ckeditor/ckeditor5-html-support': ^30.0.0
-      '@ckeditor/ckeditor5-utils': ^30.0.0
+      '@babel/plugin-transform-arrow-functions': ^7.16.0
+      '@babel/plugin-transform-computed-properties': ^7.16.0
+      '@babel/plugin-transform-for-of': ^7.16.0
+      '@babel/plugin-transform-parameters': ^7.16.3
+      '@babel/plugin-transform-shorthand-properties': ^7.16.0
+      '@babel/preset-env': ^7.16.0
+      '@babel/preset-typescript': ^7.16.0
+      '@ckeditor/ckeditor5-core': ^31.0.0
+      '@ckeditor/ckeditor5-engine': ^31.0.0
+      '@ckeditor/ckeditor5-html-support': ^31.0.0
+      '@ckeditor/ckeditor5-utils': ^31.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': 1.0.2-rc.1
-      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.1
-      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.1
-      '@coremedia/types-ckeditor__ckeditor5-html-support': 1.0.2-rc.1
-      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
+      '@coremedia/ckeditor5-logging': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-html-support': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.2
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.1.0
-      '@typescript-eslint/parser': ^5.1.0
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
       babel-jest: ^27.3.1
-      eslint: ^8.0.1
+      eslint: ^8.2.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -145,34 +153,34 @@ importers:
     dependencies:
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
-      '@babel/cli': 7.15.7_@babel+core@7.15.8
-      '@babel/core': 7.15.8
-      '@babel/plugin-proposal-class-properties': 7.14.5_@babel+core@7.15.8
-      '@babel/plugin-proposal-object-rest-spread': 7.15.6_@babel+core@7.15.8
-      '@babel/plugin-syntax-dynamic-import': 7.8.3_@babel+core@7.15.8
-      '@babel/plugin-transform-arrow-functions': 7.14.5_@babel+core@7.15.8
-      '@babel/plugin-transform-computed-properties': 7.14.5_@babel+core@7.15.8
-      '@babel/plugin-transform-for-of': 7.15.4_@babel+core@7.15.8
-      '@babel/plugin-transform-parameters': 7.15.4_@babel+core@7.15.8
-      '@babel/plugin-transform-shorthand-properties': 7.14.5_@babel+core@7.15.8
-      '@babel/preset-env': 7.15.8_@babel+core@7.15.8
-      '@babel/preset-typescript': 7.15.0_@babel+core@7.15.8
-      '@ckeditor/ckeditor5-core': 30.0.0
-      '@ckeditor/ckeditor5-engine': 30.0.0
-      '@ckeditor/ckeditor5-html-support': 30.0.0
-      '@ckeditor/ckeditor5-utils': 30.0.0
+      '@babel/cli': 7.16.0_@babel+core@7.16.0
+      '@babel/core': 7.16.0
+      '@babel/plugin-proposal-class-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-proposal-object-rest-spread': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-syntax-dynamic-import': 7.8.3_@babel+core@7.16.0
+      '@babel/plugin-transform-arrow-functions': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-computed-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-for-of': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-parameters': 7.16.3_@babel+core@7.16.0
+      '@babel/plugin-transform-shorthand-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/preset-env': 7.16.0_@babel+core@7.16.0
+      '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
+      '@ckeditor/ckeditor5-core': 31.0.0
+      '@ckeditor/ckeditor5-engine': 31.0.0
+      '@ckeditor/ckeditor5-html-support': 31.0.0
+      '@ckeditor/ckeditor5-utils': 31.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.1.0_5c3e9dad3ab5199adbc8541e4d2d5a4f
-      '@typescript-eslint/parser': 5.1.0_eslint@8.0.1+typescript@4.4.4
-      babel-jest: 27.3.1_@babel+core@7.15.8
-      eslint: 8.0.1
-      eslint-config-prettier: 8.3.0_eslint@8.0.1
-      eslint-plugin-prettier: 4.0.0_15313026b01cdd263118061498e273ac
+      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
+      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      babel-jest: 27.3.1_@babel+core@7.16.0
+      eslint: 8.2.0
+      eslint-config-prettier: 8.3.0_eslint@8.2.0
+      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -867,9 +875,9 @@ importers:
 
   types/ckeditor__ckeditor5-html-support:
     specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.1
-      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.1
-      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.1
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.2
     dependencies:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
@@ -2393,6 +2401,13 @@ packages:
       ckeditor5: 31.0.0
     dev: false
 
+  /@ckeditor/ckeditor5-html-support/31.0.0:
+    resolution: {integrity: sha512-ayNDdGqmhQLqUvbNGv4c+4qtzfOFrQsO8OqIsn1TLbCLjyIzHKrVHpAVUWIQCxJBZDUPJKQ/McGLIS2R37LIrQ==}
+    engines: {node: '>=12.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 31.0.0
+      lodash-es: 4.17.21
+
   /@ckeditor/ckeditor5-indent/31.0.0:
     resolution: {integrity: sha512-3WuQFMvbxTzGJkAlNhmXaCqwyrSb0k/8HpTw3M9ef7nu0J0eutwT09bJQrfdyeyZ9I7thOXKjh00wTOAni8y2Q==}
     engines: {node: '>=12.0.0', npm: '>=5.7.1'}
@@ -2445,6 +2460,14 @@ packages:
       '@ckeditor/ckeditor5-core': 31.0.0
       '@ckeditor/ckeditor5-ui': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
+
+  /@ckeditor/ckeditor5-source-editing/31.0.0:
+    resolution: {integrity: sha512-PPy6Q0/+APKECexoDgzwj52obpow+PnEuoRFTaEspjgt11Dfw/YB7XjAnvuc2msehSkzDhEnDfsB0rPgVvvnzw==}
+    engines: {node: '>=12.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-theme-lark': 31.0.0
+      ckeditor5: 31.0.0
+    dev: false
 
   /@ckeditor/ckeditor5-table/31.0.0:
     resolution: {integrity: sha512-KdotVXhRlJBuYUPkTo/VDvCSoPm4dZSeZDwV0PWTMiAutmxkpdHHG0FGnAJphCPA1BLO0eLj84DkSyMdw3WlsQ==}
