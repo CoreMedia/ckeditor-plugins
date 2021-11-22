@@ -37,13 +37,13 @@
     "lint": "pnpm -r lint",
     "preinstall": "npx -y only-allow pnpm",
     "prettier": "pnpm -r prettier",
-    "npm-check-updates": "pnpm -r npm-check-updates"
+    "update-latest": "pnpm update --interactive --latest --recursive"
   },
   "dependencies": {
     "@coremedia/set-version": "1.1.1"
   },
   "devDependencies": {
-    "pnpm": "^6.17.2",
+    "pnpm": "^6.20.4",
     "rimraf": "^3.0.2"
   }
 }
