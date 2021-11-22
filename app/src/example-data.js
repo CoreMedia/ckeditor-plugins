@@ -758,15 +758,47 @@ const setExampleData = (editor, exampleKey) => {
 };
 
 const initExamples = (editor) => {
-  const examplesDiv = document.getElementById("examples");
+  const xmpInput = document.getElementById("xmp-input");
+  const xmpData = document.getElementById("xmp-data");
+  const reloadBtn = document.getElementById("xmp-reload");
+
+  if (!(xmpInput && xmpData && reloadBtn)) {
+    throw new Error("Required components for Example-Data Loading missing.");
+  }
+
+  // Clear input on focus (otherwise, only matched option is shown)
+  xmpInput.addEventListener("focus", () => {
+    xmpInput.value = "";
+  });
+  // On change, set the data - or show an error, if data are unknown.
+  xmpInput.addEventListener("change", () => {
+    const newValue = xmpInput.value;
+    if (exampleData.hasOwnProperty(newValue)) {
+      xmpInput.classList.remove("error");
+      setExampleData(editor, newValue);
+      xmpInput.blur();
+    } else {
+      xmpInput.classList.add("error");
+      xmpInput.select();
+    }
+  });
+  // Init the reload-button, to also listen to the value of example input field.
+  reloadBtn.addEventListener("click", () => {
+    const newValue = xmpInput.value;
+    if (exampleData.hasOwnProperty(newValue)) {
+      xmpInput.classList.remove("error");
+      setExampleData(editor, newValue);
+      xmpInput.blur();
+    }
+  });
+
+  // Now add all examples
   for (let exampleKey in exampleData) {
-    const button = document.createElement("button");
+    const option = document.createElement("option");
     // noinspection InnerHTMLJS
-    button.innerHTML = exampleKey;
-    button.addEventListener("click", () => {
-      setExampleData(editor, exampleKey);
-    });
-    examplesDiv?.appendChild(button);
+    option.innerHTML = exampleKey;
+    option.value = exampleKey;
+    xmpData?.appendChild(option);
   }
 };
 
