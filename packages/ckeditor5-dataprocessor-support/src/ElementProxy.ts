@@ -16,14 +16,51 @@ class ClassList implements DOMTokenList {
   static readonly #trimValue = (v: string): string => v.trim();
   static readonly #uniqueValuesOnly = (v: string, i: number, a: string[]) => a.indexOf(v) === i;
 
+  /**
+   * Creates a `DOMTokenList` providing access to the `class` attribute
+   * of the given proxy.
+   * @param proxy proxy to forward `class` attribute adaptions to
+   */
   constructor(proxy: ElementProxy) {
     this.#proxy = proxy;
   }
 
+  /**
+   * This simulates at best-effort some scenarios, where tokens are considered
+   * invalid. The concrete behavior, especially the exception type is
+   * browser-specific. In here we decided for `DOMException` to throw, as it
+   * is done by Chrome, for example.
+   *
+   * @param tokens tokens to validate
+   * @throws DOMException on any mismatched token
+   * @private
+   */
+  #validate(...tokens: string[]): void {
+    const toValidate: string[] = (<string[]>[]).concat(tokens || []);
+    toValidate.forEach((v) => {
+      if (!v) {
+        throw new DOMException("The token provided must not be empty.");
+      }
+      if (/\s/.test(v)) {
+        throw new DOMException(`${toValidate.length > 1 ? "A" : "The"} provided token ('${v}') contains invalid characters.`);
+      }
+    });
+  }
+
+  /**
+   * Returns the current `class` value. Empty string will be returned, if unset.
+   */
   get value(): string {
     return this.#proxy.attributes["class"] || "";
   }
 
+  /**
+   * Sets or deletes the `class` attribute value. No normalization is applied.
+   * An empty string will trigger deletion of the attribute.
+   *
+   * @param value `class` value to set; empty string to remove attribute
+   * @throws Error when proxy is immutable
+   */
   set value(value: string) {
     if (!value) {
       delete this.#proxy.attributes["class"];
@@ -32,74 +69,129 @@ class ClassList implements DOMTokenList {
     }
   }
 
+  /**
+   * Returns the list of classes set. Entries are trimmed. An empty list is
+   * returned, if the value is currently empty (trimmed value).
+   * @private
+   */
   get #classes(): string[] {
     const raw = this.value;
-    if (!raw) {
+    if (!raw?.trim()) {
       return [];
     }
+    // .filter(String) removes empty entries
     return raw.split(/\s+/).filter(String);
   }
 
+  /**
+   * Sets the classes as space-separated value. No normalization applied.
+   *
+   * @param values class values to set.
+   * @throws Error when proxy is immutable
+   * @private
+   */
   set #classes(values: string[]) {
     this.value = values.join(" ");
   }
 
+  /**
+   * Sets the classes as space-separated value. Some normalizations are applied:
+   * classes will be trimmed and duplicated values will be removed.
+   *
+   * @param values class values to set.
+   * @throws Error when proxy is immutable
+   * @private
+   */
   set #possiblyDirtyClasses(values: string[]) {
     const trimValue = ClassList.#trimValue;
     const uniqueValuesOnly = ClassList.#uniqueValuesOnly;
     this.#classes = values.map(trimValue).filter(uniqueValuesOnly);
   }
 
+  /**
+   * Adds the given class values.
+   * Values will be normalized (trimmed, duplicates and empty removed).
+   * Normalization will be triggered for resulting `class` value as well.
+   *
+   * @param values class values to add.
+   * @throws Error when proxy is immutable
+   */
   add(...values: string[]): void {
-    const trimValue = ClassList.#trimValue;
+    this.#validate(...values);
+    const raw: Set<string> = new Set<string>(this.#classes);
     const addValue = (v: string): unknown => !!v && raw.add(v);
 
-    const raw: Set<string> = new Set<string>(this.#classes);
-    values.map(trimValue).forEach(addValue);
+    values.forEach(addValue);
 
     this.#classes = [...raw];
   }
 
+  /**
+   * Removes the given class values.
+   * Values will be normalized (trimmed, duplicates and empty removed).
+   * Normalization will be triggered for resulting `class` value as well.
+   *
+   * @param values class values to remove.
+   * @throws Error when proxy is immutable
+   */
   remove(...values: string[]): void {
-    const trimValue = ClassList.#trimValue;
+    this.#validate(...values);
+    const raw: Set<string> = new Set<string>(this.#classes);
     const deleteValue = (v: string): boolean => raw.delete(v);
 
-    const raw: Set<string> = new Set<string>(this.#classes);
-    values.map(trimValue).forEach(deleteValue);
+    values.forEach(deleteValue);
 
     this.#classes = [...raw];
   }
 
-  replace(value: string, newValue: string): boolean {
+  /**
+   * Replaces the given class value.
+   * Both value parameters will be normalized (trimmed).
+   * Normalization will be triggered for resulting `class` value as well.
+   *
+   * @param oldValue value to replace.
+   * @param newValue value to replace by.
+   * @throws Error when proxy is immutable
+   */
+  replace(oldValue: string, newValue: string): boolean {
+    this.#validate(oldValue, newValue);
     // We first need to ensure unique values.
     const raw = [...new Set<string>(this.#classes)];
-    const valuePosition = raw.indexOf(value);
+    const valuePosition = raw.indexOf(oldValue);
     if (valuePosition < 0) {
       return false;
     }
-    raw[valuePosition] = newValue.trim();
+    raw[valuePosition] = newValue;
+    // We may have duplicates, thus, trigger clean-up.
     this.#possiblyDirtyClasses = raw;
     return true;
   }
 
+  /**
+   * Toggles the given class, thus, removes it when set, and adds
+   * it when unset.
+   *
+   * @param value class to toggle
+   * @param force `undefined` to always toggle, `true` to only add if missing, `false` to only remove if set
+   */
   toggle(value: string, force?: boolean): boolean {
+    this.#validate(value);
     // We first need to ensure unique values.
     const raw = [...new Set<string>(this.#classes)];
-    const trimmed = value.trim();
-    const valuePosition = raw.indexOf(trimmed);
+    const valuePosition = raw.indexOf(value);
     const doAdd = force === undefined || force;
     const doRemove = force === undefined || !force;
 
     if (valuePosition < 0) {
       if (doAdd) {
-        this.add(trimmed);
+        this.add(value);
         return true;
       }
       return false;
     }
 
     if (doRemove) {
-      this.remove(trimmed);
+      this.remove(value);
       return false;
     }
     return true;
