@@ -64,7 +64,7 @@
     "@ckeditor/ckeditor5-link": "^31.0.0",
     "@ckeditor/ckeditor5-typing": "^31.0.0",
     "@ckeditor/ckeditor5-ui": "^31.0.0",
-    "@ckeditor/ckeditor5-utils": "^30.0.0"
+    "@ckeditor/ckeditor5-utils": "^31.0.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-richtext": "1.0.2-rc.2",
