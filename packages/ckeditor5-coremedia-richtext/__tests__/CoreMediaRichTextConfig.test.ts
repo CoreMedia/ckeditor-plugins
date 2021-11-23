@@ -588,6 +588,7 @@ describe("Default Data Filter Rules", () => {
 
   const textEntityFixtures: DataFilterTestFixture[] = [
     "&nbsp;",
+    "&quot;",
     "&cent;",
     "&plusmn;",
     "&Alpha;",
@@ -609,6 +610,16 @@ describe("Default Data Filter Rules", () => {
       inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
       expectedData: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
       expectedView: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
+    },
+  ]);
+  const textCoreEntityFixtures: DataFilterTestFixture[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => [
+    `TEXT/CORE_ENTITY#${index + 1}: Core Entity should be kept as is: ${entity}`,
+    {
+      disabled: "CoreMedia/ckeditor-plugins#39: Bug in handling these core XML entities.",
+      comment: "toView: In contrast to other entities, we must keep core entities, as otherwise XML may break.",
+      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${entity}${text}</p></div>`,
+      expectedData: `<div xmlns="${ns_richtext}"><p>${text}${entity}${text}</p></div>`,
     },
   ]);
   const tableFixtures: DataFilterTestFixture[] = [
@@ -1042,13 +1053,13 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "CLEANUP#7: Remove irrelevant <span>.",
+      "CLEANUP#7: Don't remove possibly irrelevant <span>.",
       {
         comment:
-          "This has been a design decision around 2011 or before. As the span does not violate RichText DTD we may argue about it.",
+          "While around 2011 we decided to delete irrelevant spans, there is no reason with regards to RichText DTD. And clean-up will make things more complicate. Thus, decided in 2021 to keep it.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
       },
     ],
   ];
@@ -1080,6 +1091,7 @@ describe("Default Data Filter Rules", () => {
     ...externalLinkFixtures,
     ...contentLinkFixtures,
     ...textEntityFixtures,
+    ...textCoreEntityFixtures,
     ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,
