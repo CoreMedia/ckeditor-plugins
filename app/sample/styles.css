@@ -40,6 +40,9 @@ input.error {
 .ck-content .grs.xmp {
   color: #880000;
 }
+.ck-content .grs.xmp1 {
+  color: #004444;
+}
 .ck-content [lang="de"] {
   background: rgba(0,0,0,0.3);
   background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(255,0,0,0.3) 50%, rgba(255,204,0,0.3) 100%);

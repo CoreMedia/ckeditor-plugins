@@ -723,6 +723,7 @@ const grsExampleData = () => {
   const alignedText = "Aligned";
   const grsHeading = (title) => `<p class="p--heading-1">${grsName}: ${title}</p>`;
   const examplesHeading = `<p class="p--heading-2">Examples</p>`;
+  const listSeparator = `<p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>`;
 
   /**
    * Example data for General RichText Support (based on CKEditor's General
@@ -737,8 +738,8 @@ const grsExampleData = () => {
   <p>${langNote}</p>
   ${examplesHeading}
   <p>Lorem<a xlink:href="${EXAMPLE_URL}">${plainText}</a>Ipsum</p>
-  <p>Lorem<a xlink:href="${EXAMPLE_URL}" dir="ltr" xlink:show="other" xlink:role="some_target" xlink:title="Some Title" xlink:actuate="onLoad" xlink:type="simple" class="grs xmp">${allAttributesText}</a>Ipsum</p>
-  <p>Lorem<a xlink:href="${EXAMPLE_URL}">${langText}</a>Ipsum</p>
+  <p>Lorem<a xlink:href="${EXAMPLE_URL}" xml:lang="en" dir="ltr" xlink:show="other" xlink:role="some_target" xlink:title="Some Title" xlink:actuate="onLoad" xlink:type="simple" class="grs xmp">${allAttributesText}</a>Ipsum</p>
+  <p>Lorem<a xlink:href="${EXAMPLE_URL}" xml:lang="de" lang="en">${langText}</a>Ipsum</p>
   </div>`,
     // <blockquote> – Blockquote
     "GRS Blockquote": `<div xmlns="${CM_RICHTEXT}">
@@ -823,10 +824,12 @@ const grsExampleData = () => {
   <p>${langNote}</p>
   ${examplesHeading}
   <ol><li>${plainText}</li></ol>
-  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  ${listSeparator}
   <ol xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li></ol>
-  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  ${listSeparator}
   <ol xml:lang="de" lang="en"><li>${langText}</li></ol>
+  ${listSeparator}
+  <ol xml:lang="en" dir="ltr" class="grs xmp"><li xml:lang="de" dir="rtl" class="grs xmp1">Colliding ol/li attributes</li></ol>
   </div>`,
     // <p> – Paragraph
     "GRS Paragraph": `<div xmlns="${CM_RICHTEXT}">
@@ -983,10 +986,12 @@ const grsExampleData = () => {
   <p>${langNote}</p>
   ${examplesHeading}
   <ul><li>${plainText}</li></ul>
-  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  ${listSeparator}
   <ul xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li></ul>
-  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  ${listSeparator}
   <ul xml:lang="de" lang="en"><li>${langText}</li></ul>
+  ${listSeparator}
+  <ul xml:lang="en" dir="ltr" class="grs xmp"><li xml:lang="de" dir="rtl" class="grs xmp1">Colliding ol/li attributes</li></ul>
   </div>`,
   };
 };
