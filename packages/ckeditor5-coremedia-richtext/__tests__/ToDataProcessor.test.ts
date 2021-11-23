@@ -52,7 +52,12 @@ const PARSER = new DOMParser();
 
 function parseAndValidate(xmlString: string): Document {
   const xmlDocument = PARSER.parseFromString(xmlString, "text/html");
-  const xPathResult: XPathResult = xmlDocument.evaluate("/parsererror/text()", xmlDocument, null, XPathResult.STRING_TYPE);
+  const xPathResult: XPathResult = xmlDocument.evaluate(
+    "/parsererror/text()",
+    xmlDocument,
+    null,
+    XPathResult.STRING_TYPE
+  );
   if (xPathResult.stringValue) {
     throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
   }
@@ -89,7 +94,7 @@ type NamedTestData = [
    * A name/description for the test (will be printed to output).
    */
   string,
-  TestData,
+  TestData
 ];
 
 /**
@@ -118,10 +123,10 @@ function median(sequence: number[]): number {
 }
 
 // https://stackoverflow.com/questions/7343890/standard-deviation-javascript
-function standardDeviation (sequence: number[]): number {
-  const n = sequence.length
+function standardDeviation(sequence: number[]): number {
+  const n = sequence.length;
   const mean = sequence.reduce((a, b) => a + b) / n;
-  return Math.sqrt(sequence.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+  return Math.sqrt(sequence.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 }
 
 const blockquoteFixtures: string[] = [
@@ -180,17 +185,13 @@ const paragraphFixtures: string[] = [
   ...generateInlineFixtures("p"),
 ];
 
-function generateSimpleRows(el: string, cells: number, rows: number = 1): string[] {
+function generateSimpleRows(el: string, cells: number, rows = 1): string[] {
   const result: string[] = [];
   const singleRow: string[] = [];
 
   singleRow.push(`<tr class="${fxClass}" lang="${fxLang}" dir="ltr">`);
   for (let i = 0; i < cells; i++) {
-    singleRow.push(
-      `<${el}> class="${fxClass}" lang="${fxLang}" dir="ltr">`,
-      fxLtrText,
-      `</${el}>`
-    );
+    singleRow.push(`<${el}> class="${fxClass}" lang="${fxLang}" dir="ltr">`, fxLtrText, `</${el}>`);
   }
   singleRow.push(`</tr>`);
 
@@ -216,7 +217,7 @@ const tableFixtures: string[] = [
     `</tr>`,
     ...generateSimpleRows("td", 5, 3),
     `</tbody>`,
-    `</table>`
+    `</table>`,
   ].join(""),
 ];
 
@@ -226,10 +227,7 @@ function generateListFixtures(el: string): string[] {
   ];
 }
 
-const listFixtures: string[] = [
-  ...generateListFixtures("ol"),
-  ...generateListFixtures("ul"),
-];
+const listFixtures: string[] = [...generateListFixtures("ol"), ...generateListFixtures("ul")];
 
 function generateComplexView(count: number): string[] {
   const result: string[] = [];
@@ -276,15 +274,15 @@ describe("RichTextDataProcessor.toData", () => {
         // Only measure for no repetition.
         optimalMilliseconds: f > 1 ? -1 : 30,
         gracePercentage: 5,
-      }
-    ])
+      },
+    ]);
   }
 
   describe.each<NamedTestData>(testData)("(%#) %s", (name: string, data: TestData) => {
     const { optimalMilliseconds, gracePercentage } = data;
     const maximumMilliseconds = optimalMilliseconds + optimalMilliseconds * gracePercentage;
 
-    function performToData(): { data: Document, elements: number } {
+    function performToData(): { data: Document; elements: number } {
       const viewData: DocumentFragment = viewToDom(data.from);
       const elements = viewData.querySelectorAll("*").length;
       return {
@@ -293,7 +291,9 @@ describe("RichTextDataProcessor.toData", () => {
       };
     }
 
-    test(`Should not have consumed more than ${maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"} ms (median).`, () => {
+    test(`Should not have consumed more than ${
+      maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"
+    } ms (median).`, () => {
       const { elements } = performToData();
       const measuredMilliseconds: number[] = [];
 
@@ -309,14 +309,18 @@ describe("RichTextDataProcessor.toData", () => {
       const minTime = Math.min(...measuredMilliseconds);
       const maxTime = Math.max(...measuredMilliseconds);
 
-      console.log(`${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(1)} ms vs. allowed ${maximumMilliseconds > 0 ? maximumMilliseconds.toFixed(1) : "<unlimited>"} ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`);
+      console.log(
+        `${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(
+          1
+        )} ms vs. allowed ${
+          maximumMilliseconds > 0 ? maximumMilliseconds.toFixed(1) : "<unlimited>"
+        } ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`
+      );
 
       if (maximumMilliseconds >= 0) {
         // Otherwise we just measure.
         expect(actualTime).toBeLessThanOrEqual(maximumMilliseconds);
       }
     });
-
   });
 });
-
