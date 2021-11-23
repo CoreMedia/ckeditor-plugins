@@ -4,6 +4,7 @@ const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
 const EVIL_TARGET = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;
 const EXAMPLE_URL = "https://example.org/";
+const INLINE_IMG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8AARIQB46hC+ioEAGX8E/cKr6qsAAAAAElFTkSuQmCC";
 const LINK_TEXT = "Link";
 const UNSET = "—";
 const parser = new DOMParser();
@@ -534,9 +535,9 @@ const coreMediaRichTextPoC = () => {
   const someClass = "class--some";
   const someContent = lorem(8);
   const someDir = "rtl";
-  const someInlineImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8AARIQB46hC+ioEAGX8E/cKr6qsAAAAAElFTkSuQmCC";
+  const someInlineImg = INLINE_IMG;
   const someLanguage = "en-US";
-  const someUrl = "https://example.org/";
+  const someUrl = EXAMPLE_URL;
   const introduction = () => `
     <p class="${titleHeading}">CoreMedia RichText 1.0 Examples</p>
     <p>
@@ -712,14 +713,293 @@ const coreMediaRichTextPoC = () => {
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${introduction()}${scenarios}</div>`;
 };
 
+const grsExampleData = () => {
+  const grsName = "General RichText Support";
+  const langNote = "'xml:lang' is always mapped to 'lang'. If both are set, 'lang' takes precedence.";
+  const alignedNote = "Alignment must be represented by classes. As such, it must not collide with other classes.";
+  const plainText = "Plain";
+  const allAttributesText = "All Attributes";
+  const langText = "Lang Precedence";
+  const alignedText = "Aligned";
+  const grsHeading = (title) => `<p class="p--heading-1">${grsName}: ${title}</p>`;
+  const examplesHeading = `<p class="p--heading-2">Examples</p>`;
+
+  /**
+   * Example data for General RichText Support (based on CKEditor's General
+   * HTML Support). Only the existence of elements and attributes is important
+   * for these scenarios, not the structure, as this is not covered by GHS/GRS.
+   */
+  return {
+    // <a> – Anchor
+    "GRS Anchor": `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">
+  ${grsHeading("Anchor")}
+  <p>&lt;a&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<a xlink:href="${EXAMPLE_URL}">${plainText}</a>Ipsum</p>
+  <p>Lorem<a xlink:href="${EXAMPLE_URL}" dir="ltr" xlink:show="other" xlink:role="some_target" xlink:title="Some Title" xlink:actuate="onLoad" xlink:type="simple" class="grs xmp">${allAttributesText}</a>Ipsum</p>
+  <p>Lorem<a xlink:href="${EXAMPLE_URL}">${langText}</a>Ipsum</p>
+  </div>`,
+    // <blockquote> – Blockquote
+    "GRS Blockquote": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Blockquote")}
+  <p>&lt;blockquote&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <blockquote>${plainText}</blockquote>
+  <blockquote xml:lang="en" cite="${EXAMPLE_URL}" dir="ltr" class="grs xmp">${allAttributesText}</blockquote>
+  <blockquote xml:lang="de" lang="en">${langText}</blockquote>
+  </div>`,
+    // <span> – Content Span
+    "GRS Content Span": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Content Span")}
+  <p>&lt;span&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<span>${plainText}</span>Ipsum</p>
+  <p>Lorem<span xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</span>Ipsum</p>
+  <p>Lorem<span xml:lang="de" lang="en">${langText}</span>Ipsum</p>
+  </div>`,
+    // <em> – Emphasis
+    "GRS Emphasis": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Emphasis")}
+  <p>&lt;em&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<em>${plainText}</em>Ipsum</p>
+  <p>Lorem<em xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</em>Ipsum</p>
+  <p>Lorem<em xml:lang="de" lang="en">${langText}</em>Ipsum</p>
+  </div>`,
+    // <h1> – Heading
+    "GRS Heading": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Heading")}
+  <p>&lt;h1&gt; to &lt;h6&gt; elemens: plain and with all supported attributes.</p>
+  <p>&lt;h1&gt; is represented in CoreMedia RichText as &lt;p class="p--heading-1"&gt; and thus, shares the same attributes as &lt;p&gt;.</p>
+  <p>${langNote}</p>
+  <p>${alignedNote}</p>
+  ${examplesHeading}
+  <p class="p--heading-3">${plainText}</p>
+  <p xml:lang="en" dir="ltr" class="p--heading-3 grs xmp">${allAttributesText}</p>
+  <p xml:lang="de" lang="en" class="p--heading-3">${langText}</p>
+  <p class="p--heading-3 grs xmp align--center">${alignedText}</p>
+  </div>`,
+    // <img> – Image
+    "GRS Image": `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">
+  ${grsHeading("Image")}
+  <p>&lt;img&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p><img alt="Some Alternative" xlink:href="${INLINE_IMG}" xlink:title="${plainText}"/></p>
+  <p><img alt="Some Alternative" xlink:href="${INLINE_IMG}" xml:lang="en" height="48" width="48" dir="ltr" xlink:show="embed" xlink:title="${allAttributesText}" xlink:actuate="onLoad" xlink:type="simple" class="grs xmp" xlink:role="${EXAMPLE_URL}"/></p>
+  <p><img alt="Some Alternative" xlink:href="${INLINE_IMG}" xlink:title="${langText}" xml:lang="de" lang="en"/></p>
+  </div>`,
+    // <code> – Inline Code
+    "GRS Inline Code": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Inline Code")}
+  <p>&lt;code&gt; element: plain and with all supported attributes.</p>
+  <p>&lt;code&gt; is represented in CoreMedia RichText as &lt;span class="code"&gt; and thus, shares the same attributes as &lt;span&gt;.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<span class="code">${plainText}</span>Ipsum</p>
+  <p>Lorem<span xml:lang="en" dir="ltr" class="grs xmp code">${allAttributesText}</span>Ipsum</p>
+  <p>Lorem<span class="code" xml:lang="de" lang="en">${langText}</span>Ipsum</p>
+  </div>`,
+    // <li> – List Item
+    "GRS List Item": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("List Item")}
+  <p>&lt;li&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <ul>
+  <li>${plainText}</li>
+  <li xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</li>
+  <li xml:lang="de" lang="en">${langText}</li>
+  </ul>
+  </div>`,
+    // <ul> – Ordered List
+    "GRS Ordered List": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Ordered List")}
+  <p>&lt;ol&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <ol><li>${plainText}</li></ol>
+  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  <ol xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li></ol>
+  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  <ol xml:lang="de" lang="en"><li>${langText}</li></ol>
+  </div>`,
+    // <p> – Paragraph
+    "GRS Paragraph": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Paragraph")}
+  <p>&lt;p&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  <p>${alignedNote}</p>
+  ${examplesHeading}
+  <p>${plainText}</p>
+  <p xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</p>
+  <p xml:lang="de" lang="en">${langText}</p>
+  <p class="grs xmp align--center">${alignedText}</p>
+  </div>`,
+    // <pre> – Preformatted Text
+    "GRS Preformatted Text": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Preformatted Text")}
+  <p>&lt;pre&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <pre><span class="language-plaintext code">${plainText}</span></pre>
+  <pre xml:lang="en" xml:space="preserve" dir="ltr" class="grs xmp"><span class="language-plaintext code">${allAttributesText}</span></pre>
+  <pre xml:lang="de" lang="en"><span class="language-plaintext code">${langText}</span></pre>
+  </div>`,
+    // <br> – Soft Break
+    "GRS Soft Break": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Soft Break")}
+  <p>&lt;br&gt; element: plain and with all supported attributes.</p>
+  ${examplesHeading}
+  <p>Lorem Ipsum<br/>${plainText}</p>
+  <p>Lorem Ipsum<br class="grs xmp"/>${allAttributesText}</p>
+  </div>`,
+    // <s> – Strikethrough
+    "GRS Strikethrough": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Strikethrough")}
+  <p>&lt;s&gt; element: plain and with all supported attributes.</p>
+  <p>&lt;s&gt; is represented in CoreMedia RichText as &lt;span class="strike"&gt; and thus, shares the same attributes as &lt;span&gt;.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<span class="strike">${plainText}</span>Ipsum</p>
+  <p>Lorem<span xml:lang="en" dir="ltr" class="grs xmp strike">${allAttributesText}</span>Ipsum</p>
+  <p>Lorem<span class="strike" xml:lang="de" lang="en">${langText}</span>Ipsum</p>
+  </div>`,
+    // <strong> – Strong
+    "GRS Strong": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Subscript")}
+  <p>&lt;strong&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<strong>${plainText}</strong>Ipsum</p>
+  <p>Lorem<strong xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</strong>Ipsum</p>
+  <p>Lorem<strong xml:lang="de" lang="en">${langText}</strong>Ipsum</p>
+  </div>`,
+    // <sub> – Subscript
+    "GRS Subscript": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Subscript")}
+  <p>&lt;sub&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<sub>${plainText}</sub>Ipsum</p>
+  <p>Lorem<sub xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</sub>Ipsum</p>
+  <p>Lorem<sub xml:lang="de" lang="en">${langText}</sub>Ipsum</p>
+  </div>`,
+    // <sup> – Superscript
+    "GRS Superscript": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Superscript")}
+  <p>&lt;sup&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<sup>${plainText}</sup>Ipsum</p>
+  <p>Lorem<sup xml:lang="en" dir="ltr" class="grs xmp">${allAttributesText}</sup>Ipsum</p>
+  <p>Lorem<sup xml:lang="de" lang="en">${langText}</sup>Ipsum</p>
+  </div>`,
+    // <table> – Table
+    "GRS Table": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Table")}
+  <p>&lt;table&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <table><tr><td>${plainText}</td></tr></table>
+  <table xml:lang="en" dir="ltr" class="grs xmp" summary="Some Summary"><tr><td>${allAttributesText}</td></tr></table>
+  <table xml:lang="de" lang="en"><tr><td>${langText}</td></tr></table>
+  </div>`,
+    // <tbody> – Table Body
+    "GRS Table Body": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Table Body")}
+  <p>&lt;tbody&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <table><tbody><tr><td>${plainText}</td></tr></tbody></table>
+  <table><tbody xml:lang="en" dir="ltr" align="right" valign="bottom" class="grs xmp"><tr><td>${allAttributesText}</td></tr></tbody></table>
+  <table><tbody><tr><td xml:lang="de" lang="en">${langText}</td></tr></tbody></table>
+  </div>`,
+    // <td> – Table Data
+    "GRS Table Data": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Table Data")}
+  <p>&lt;td&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <table><tr><td>${plainText}</td></tr></table>
+  <table><tr><td abbr="Some Abbreviation" xml:lang="en" dir="ltr" align="right" valign="bottom" class="grs xmp">${allAttributesText} (no col/rowspan)</td></tr></table>
+  <table><tr><td xml:lang="de" lang="en">${langText}</td></tr></table>
+  <table><tr><td>Lorem</td><td>Ipsum</td></tr><tr><td colspan="2">colspan=2</td></tr></table>
+  <table><tr><td>Lorem</td><td rowspan="2">rowspan=2</td></tr><tr><td>Ipsum</td></tr></table>
+  </div>`,
+    // <thead> – Table Head
+    "GRS Table Head": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Table Head")}
+  <p>&lt;thead&gt; element: plain and with all supported attributes.</p>
+  <p>&lt;thead&gt; is represented in CoreMedia RichText as &lt;tr class="tr--header"&gt; and thus, shares the same attributes as &lt;tr&gt;.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <table><tr class="tr--header"><td class="td--header">${plainText}</td></tr></table>
+  <table><tr xml:lang="en" dir="ltr" align="right" valign="bottom" class="grs xmp tr--header"><td class="td--header">${allAttributesText}</td></tr></table>
+  <table><tr class="tr--header" xml:lang="de" lang="en"><td class="td--header">${langText}</td></tr></table>
+  </div>`,
+    // <th> – Table Header
+    "GRS Table Header": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Table Header")}
+  <p>&lt;th&gt; element: plain and with all supported attributes.</p>
+  <p>&lt;th&gt; is represented in CoreMedia RichText as &lt;td class="td--header"&gt; and thus, shares the same attributes as &lt;td&gt;.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <table><tr class="tr--header"><td class="td--header">${plainText}</td></tr></table>
+  <table><tr class="tr--header"><td abbr="Some Abbreviation" xml:lang="en" dir="ltr" align="right" valign="bottom" class="grs xmp td--header">${allAttributesText} (no col/rowspan)</td></tr></table>
+  <table><tr class="tr--header"><td class="td--header" xml:lang="de" lang="en">${langText}</td></tr></table>
+  <table><tr class="tr--header"><td class="td--header" colspan="2">colspan=2</td></tr><tr><td>Lorem</td><td>Ipsum</td></tr></table>
+  <table><tr class="tr--header"><td class="td--header">Lorem</td><td class="td--header" rowspan="2">rowspan=2</td></tr><tr><td>Ipsum</td></tr></table>
+  </div>`,
+    // <tr> – Table Row
+    "GRS Table Row": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Table Row")}
+  <p>&lt;tr&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <table><tr><td>${plainText}</td></tr></table>
+  <table><tr xml:lang="en" dir="ltr" align="right" valign="bottom" class="grs xmp"><td>${allAttributesText}</td></tr></table>
+  <table><tr xml:lang="de" lang="en"><td>${langText}</td></tr></table>
+  </div>`,
+    // <u> – Underline
+    "GRS Underline": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Underline")}
+  <p>&lt;u&gt; element: plain and with all supported attributes.</p>
+  <p>&lt;u&gt; is represented in CoreMedia RichText as &lt;span class="underline"&gt; and thus, shares the same attributes as &lt;span&gt;.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <p>Lorem<span class="underline">${plainText}</span>Ipsum</p>
+  <p>Lorem<span xml:lang="en" dir="ltr" class="grs xmp underline">${allAttributesText}</span>Ipsum</p>
+  <p>Lorem<span class="underline" xml:lang="de" lang="en">${langText}</span>Ipsum</p>
+  </div>`,
+    // <ul> – Unordered List
+    "GRS Unordered List": `<div xmlns="${CM_RICHTEXT}">
+  ${grsHeading("Unordered List")}
+  <p>&lt;ul&gt; element: plain and with all supported attributes.</p>
+  <p>${langNote}</p>
+  ${examplesHeading}
+  <ul><li>${plainText}</li></ul>
+  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  <ul xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li></ul>
+  <p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>
+  <ul xml:lang="de" lang="en"><li>${langText}</li></ul>
+  </div>`,
+  };
+};
+
 const exampleData = {
-  "Hello": `<div xmlns="${CM_RICHTEXT}"><p>Hello World!</p></div>`,
-  "Empty": `<div xmlns="${CM_RICHTEXT}"/>`,
-  "Lorem": lorem(LOREM_IPSUM_WORDS.length, 10),
-  "Lorem (Huge)": lorem(LOREM_IPSUM_WORDS.length * 10, 80),
-  "Links (Targets)": externalLinkTargetExamples(),
   "Content Links": contentLinkExamples(),
   "CoreMedia RichText": coreMediaRichTextPoC(),
+  "Empty": `<div xmlns="${CM_RICHTEXT}"/>`,
+  ...grsExampleData(),
+  "Hello": `<div xmlns="${CM_RICHTEXT}"><p>Hello World!</p></div>`,
+  "Links (Targets)": externalLinkTargetExamples(),
+  "Lorem": lorem(LOREM_IPSUM_WORDS.length, 10),
+  "Lorem (Huge)": lorem(LOREM_IPSUM_WORDS.length * 10, 80),
   // TODO[cke] The following must be addressed prior to reaching MVP for CKEditor 5 Plugins for CoreMedia CMS
   "Lists Bug": `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">
   <p>
