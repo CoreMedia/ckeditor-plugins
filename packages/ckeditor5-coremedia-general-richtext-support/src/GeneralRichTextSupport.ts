@@ -32,9 +32,10 @@ class GeneralRichTextSupport extends Plugin {
   }
 
   #registerRichTextElements() {
+    const logger = GeneralRichTextSupport.#logger;
     const editor = this.editor;
     const dataFilter = editor.plugins.get(DataFilter);
-    dataFilter.loadAllowedConfig([
+    const config = [
       CoreMediaRichText10Dtd.attrsBlockElements,
       CoreMediaRichText10Dtd.attrsInlineElements,
       CoreMediaRichText10Dtd.pre,
@@ -46,9 +47,49 @@ class GeneralRichTextSupport extends Plugin {
       CoreMediaRichText10Dtd.tbody,
       CoreMediaRichText10Dtd.tr,
       CoreMediaRichText10Dtd.td,
-    ]);
+    ];
+    logger.debug("Declared elements and attributes to GHS.", { config });
+    dataFilter.loadAllowedConfig(config);
   }
 }
+
+type AttributesType = {
+  [key: string]: boolean | RegExp;
+};
+/**
+ * While the `MatcherPattern` is rather complex, we only want to support a
+ * subset in this configuration, which eases merging patterns a lot.
+ */
+type ReducedMatcherPattern = {
+  classes?: boolean;
+  attributes?: AttributesType;
+};
+
+/**
+ * Merges MatcherPatterns (of specific object type).
+ *
+ * @param sources sources to merge
+ * @throws Error when sources define the same attribute with different supported values
+ */
+const merge = (...sources: ReducedMatcherPattern[]): ReducedMatcherPattern => {
+  const result: ReducedMatcherPattern = {};
+  const supportsClasses = sources.find((s) => s.classes === true);
+  if (supportsClasses) {
+    result.classes = true;
+  }
+  sources.forEach((s) => {
+    if (s.attributes) {
+      result.attributes = result.attributes || {};
+      for (const key in s.attributes) {
+        if (result.attributes?.hasOwnProperty(key) && result.attributes[key] !== s.attributes[key]) {
+          throw new Error("Failed to merge, because sources collide in attributes.");
+        }
+        result.attributes[key] = s.attributes[key];
+      }
+    }
+  });
+  return result;
+};
 
 /**
  * Represents the CoreMedia RichText 1.0 DTD as required for configuration
@@ -66,11 +107,11 @@ class GeneralRichTextSupport extends Plugin {
  * of the General HTML Support Configuration.
  */
 class CoreMediaRichText10Dtd {
-  static readonly coreattrs = {
+  static readonly coreattrs: ReducedMatcherPattern = {
     // Any class attribute values are allowed.
     classes: true,
   };
-  static readonly i18n = {
+  static readonly i18n: ReducedMatcherPattern = {
     attributes: {
       /**
        * Language Attribute. Alias: xml:lang - needs to be handled in data-processing.
@@ -112,23 +153,25 @@ class CoreMediaRichText10Dtd {
   };
   static blockquote: MatcherPattern = {
     name: "blockquote",
-    attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      cite: true,
-    },
+    ...merge(CoreMediaRichText10Dtd.attrs, {
+      attributes: {
+        cite: true,
+      },
+    }),
   };
   static a: MatcherPattern = {
     name: "a",
-    attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      title: true,
-      // There is no HTML alternative to this attribute. Decided to represent
-      // as data attribute. Must be addressed during data-processing accordingly.
-      "data-xlink-type": /^(simple)$/,
-      // There is no HTML alternative to this attribute. Decided to represent
-      // as data attribute. Must be addressed during data-processing accordingly.
-      "data-xlink-actuate": /^(onRequest|onLoad)$/,
-    },
+    ...merge(CoreMediaRichText10Dtd.attrs, {
+      attributes: {
+        title: true,
+        // There is no HTML alternative to this attribute. Decided to represent
+        // as data attribute. Must be addressed during data-processing accordingly.
+        "data-xlink-type": /^(simple)$/,
+        // There is no HTML alternative to this attribute. Decided to represent
+        // as data attribute. Must be addressed during data-processing accordingly.
+        "data-xlink-actuate": /^(onRequest|onLoad)$/,
+      },
+    }),
   };
   static br: MatcherPattern = {
     name: "br",
@@ -136,60 +179,56 @@ class CoreMediaRichText10Dtd {
   };
   static img: MatcherPattern = {
     name: "img",
-    // Skipping "xlink:type" as it is fixed and thus ignorable anyway.
-    attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      alt: true,
-      height: true,
-      width: true,
-      title: true,
-      // There is no HTML alternative to this attribute. Decided to represent
-      // as data attribute. Must be addressed during data-processing accordingly.
-      "data-xlink-type": /^(simple)$/,
-      // There is no HTML alternative to this attribute. Decided to represent
-      // as data attribute. Must be addressed during data-processing accordingly.
-      "data-xlink-actuate": /^(onLoad)$/,
-    },
+    ...merge(CoreMediaRichText10Dtd.attrs, {
+      attributes: {
+        alt: true,
+        height: true,
+        width: true,
+        title: true,
+        // There is no HTML alternative to this attribute. Decided to represent
+        // as data attribute. Must be addressed during data-processing accordingly.
+        "data-xlink-type": /^(simple)$/,
+        // There is no HTML alternative to this attribute. Decided to represent
+        // as data attribute. Must be addressed during data-processing accordingly.
+        "data-xlink-actuate": /^(onLoad)$/,
+      },
+    }),
   };
   static table: MatcherPattern = {
     name: "table",
+    ...merge(CoreMediaRichText10Dtd.attrs, {
+      attributes: {
+        summary: true,
+      },
+    }),
+  };
+  static cellhalign: ReducedMatcherPattern = {
     attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      summary: true,
+      align: /^(left|center|right)$/,
     },
   };
-  static cellhalign = {
-    align: /^(left|center|right)$/,
-  };
-  static cellvalign = {
-    valign: /^(top|middle|bottom|baseline)$/,
+  static cellvalign: ReducedMatcherPattern = {
+    attributes: {
+      valign: /^(top|middle|bottom|baseline)$/,
+    },
   };
   static tbody: MatcherPattern = {
     name: "tbody",
-    attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      ...CoreMediaRichText10Dtd.cellhalign,
-      ...CoreMediaRichText10Dtd.cellvalign,
-    },
+    ...merge(CoreMediaRichText10Dtd.attrs, CoreMediaRichText10Dtd.cellhalign, CoreMediaRichText10Dtd.cellvalign),
   };
   static tr: MatcherPattern = {
     name: "tr",
-    attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      ...CoreMediaRichText10Dtd.cellhalign,
-      ...CoreMediaRichText10Dtd.cellvalign,
-    },
+    ...merge(CoreMediaRichText10Dtd.attrs, CoreMediaRichText10Dtd.cellhalign, CoreMediaRichText10Dtd.cellvalign),
   };
   static td: MatcherPattern = {
     name: "td",
-    attributes: {
-      ...CoreMediaRichText10Dtd.attrs.attributes,
-      abbr: true,
-      rowspan: true,
-      colspan: true,
-      ...CoreMediaRichText10Dtd.cellhalign,
-      ...CoreMediaRichText10Dtd.cellvalign,
-    },
+    ...merge(CoreMediaRichText10Dtd.attrs, CoreMediaRichText10Dtd.cellhalign, CoreMediaRichText10Dtd.cellvalign, {
+      attributes: {
+        abbr: true,
+        rowspan: true,
+        colspan: true,
+      },
+    }),
   };
 }
 
