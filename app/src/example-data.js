@@ -929,7 +929,7 @@ const grsExampleData = () => {
   ${examplesHeading}
   <table><tbody><tr><td>${plainText}</td></tr></tbody></table>
   <table><tbody xml:lang="en" dir="ltr" align="right" valign="bottom" class="grs xmp"><tr><td>${allAttributesText}</td></tr></tbody></table>
-  <table><tbody><tr><td xml:lang="de" lang="en">${langText}</td></tr></tbody></table>
+  <table><tbody xml:lang="de" lang="en"><tr><td>${langText}</td></tr></tbody></table>
   </div>`,
     // <td> – Table Data
     "GRS Table Data": `<div xmlns="${CM_RICHTEXT}">
