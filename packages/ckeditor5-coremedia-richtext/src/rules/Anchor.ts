@@ -1,6 +1,6 @@
 import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { xLinkActuateMapper, xLinkTypeMapper } from "./XLink";
+import { xLinkActuateMapper, xLinkTitleMapper, xLinkTypeMapper } from "./XLink";
 import { langMapper } from "./Lang";
 
 const CONTENT_LINK_DATA_REGEXP = /^content\/(?<id>\d+)*/;
@@ -221,6 +221,7 @@ export const handleAnchor: ToDataAndViewElementConfiguration = {
     targetToXLinkAttributes(node);
     xLinkTypeMapper.toData(params);
     xLinkActuateMapper.toData(params);
+    xLinkTitleMapper.toData(params);
     langMapper.toData(params);
   },
   toView: (params) => {
@@ -229,6 +230,7 @@ export const handleAnchor: ToDataAndViewElementConfiguration = {
     xLinkShowAndRoleToTarget(node);
     xLinkTypeMapper.toView(params);
     xLinkActuateMapper.toView(params);
+    xLinkTitleMapper.toView(params);
     langMapper.toView(params);
   },
 };
