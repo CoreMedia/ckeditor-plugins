@@ -220,6 +220,25 @@ ClassicEditor.create(document.querySelector('.editor'), {
 Having this example, you may see, how to create a lot more complex scenarios
 for data-processing and GHS configuration.
 
-[GHS]: <https://ckeditor.com/docs/ckeditor5/latest/api/html-support.html> "CKEditor 5 HTML Support feature - CKEditor 5 API docs"
+## Known Issues
+
+* [\[GHS\] Stabilize and release a production-ready General HTML support feature · Issue #9856][CK#9856]
+
+    * [\[GHS\] Applying attributes to existing features - lists · Issue #9917][CK#9917]
+
+        **Effect:** Elements `<ol>`/`<ul>` should not have any attributes, as it
+        will cause attributes of corresponding `<li>` to be overwritten. Possible
+        workarounds have to be addressed in data-processing (see issue for details).
+        Last validated and documented for CKEditor 5 31.0.0, November 2021.
+
+    * [\[GHS\] Support for empty elements · Issue #9960][CK#9960]
+
+        **Effect:** `<br>` cannot handle a `class` attribute (which is valid
+        CoreMedia RichText 1.0, though).
+
+[CK#9856]: <https://github.com/ckeditor/ckeditor5/issues/9856> "[GHS] Stabilize and release a production-ready General HTML support feature · Issue #9856 · ckeditor/ckeditor5"
+[CK#9917]: <https://github.com/ckeditor/ckeditor5/issues/9917> "[GHS] Applying attributes to existing features - lists · Issue #9917 · ckeditor/ckeditor5"
+[CK#9960]: <https://github.com/ckeditor/ckeditor5/issues/9960> "[GHS] Support for empty elements · Issue #9960 · ckeditor/ckeditor5"
 [Editing engine]: <https://ckeditor.com/docs/ckeditor5/latest/framework/guides/architecture/editing-engine.html> "Editing engine - CKEditor 5 Documentation"
+[GHS]: <https://ckeditor.com/docs/ckeditor5/latest/api/html-support.html> "CKEditor 5 HTML Support feature - CKEditor 5 API docs"
 [Highlight feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/highlight.html> "Highlight - CKEditor 5 Documentation"
