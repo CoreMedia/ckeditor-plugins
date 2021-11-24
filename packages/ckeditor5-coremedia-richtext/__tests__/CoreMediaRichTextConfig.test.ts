@@ -153,6 +153,24 @@ describe("Default Data Filter Rules", () => {
         expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
       },
     ],
+    [
+      "BR#1: Should keep BR as is.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "BR#2: Should keep BR class as is.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
+        expectedView: true,
+      },
+    ],
   ];
   // noinspection XmlUnusedNamespaceDeclaration
   const textFixtures: DataFilterTestFixture[] = [
@@ -1150,6 +1168,9 @@ describe("Default Data Filter Rules", () => {
           }
 
           toViewFilter.applyTo(xmlDocument.documentElement);
+          // Note, that in RichTextDataProcessor we serialize via CKEditor's
+          // BasicHtmlWriter, which provides subtle differences, which again
+          // cause CoreMedia/ckeditor-plugins#40.
           const actualXml = serializer.serializeToString(xmlDocument.documentElement);
           expect(actualXml).toEqualXML(expectedViewXml);
         }
