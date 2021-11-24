@@ -163,13 +163,14 @@ class CoreMediaRichText10Dtd {
     name: "a",
     ...merge(CoreMediaRichText10Dtd.attrs, {
       attributes: {
+        // Data-Processed by merging xlink:show and xlink:role
+        target: true,
+        // Data-processed from xlink:title
         title: true,
-        // There is no HTML alternative to this attribute. Decided to represent
-        // as data attribute. Must be addressed during data-processing accordingly.
-        "data-xlink-type": /^(simple)$/,
-        // There is no HTML alternative to this attribute. Decided to represent
-        // as data attribute. Must be addressed during data-processing accordingly.
+        // Data-Processed from xlink:actuate
         "data-xlink-actuate": /^(onRequest|onLoad)$/,
+        // Data-Processed from xlink:type
+        "data-xlink-type": /^(simple)$/,
       },
     }),
   };
@@ -183,14 +184,22 @@ class CoreMediaRichText10Dtd {
       attributes: {
         alt: true,
         height: true,
-        width: true,
+        // Will hold the Blob URL to load for displaying the image.
+        // The actual Blob reference is stored in `data-xlink-href`.
+        src: true,
+        // Data-processed from xlink:title
         title: true,
-        // There is no HTML alternative to this attribute. Decided to represent
-        // as data attribute. Must be addressed during data-processing accordingly.
+        width: true,
+        // Data-Processed from xlink:actuate
+        "data-xlink-actuate": /^(onRequest|onLoad)$/,
+        // Data-Processed from xlink:href
+        "data-xlink-href": true,
+        // Data-Processed from xlink:role
+        "data-xlink-role": true,
+        // Data-Processed from xlink:show
+        "data-xlink-show": /^(embed)$/,
+        // Data-Processed from xlink:type
         "data-xlink-type": /^(simple)$/,
-        // There is no HTML alternative to this attribute. Decided to represent
-        // as data attribute. Must be addressed during data-processing accordingly.
-        "data-xlink-actuate": /^(onLoad)$/,
       },
     }),
   };

@@ -15,6 +15,7 @@ import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
 import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
+import { handleImage } from "./rules/Image";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -82,6 +83,7 @@ const defaultRules: FilterRuleSetConfiguration = {
   elements: {
     ...schemaRules,
     a: handleAnchor,
+    img: handleImage,
     ol: {
       toData: allFilterRules(langDataFilterRule, removeInvalidList),
       toView: langViewFilterRule,

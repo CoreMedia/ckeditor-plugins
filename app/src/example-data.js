@@ -4,7 +4,14 @@ const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
 const EVIL_TARGET = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;
 const EXAMPLE_URL = "https://example.org/";
-const INLINE_IMG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8AARIQB46hC+ioEAGX8E/cKr6qsAAAAAElFTkSuQmCC";
+/**
+ * This represents a Blob-URL as it would be provided from CMS Studio Server.
+ * It will be stored in CKEditor Data View as `data-xlink-href` while the
+ * `src` attribute will be updated to refer the Blob URL, so that the image
+ * can be displayed.
+ * @type {string}
+ */
+const INLINE_IMG = "content/42#properties.data";
 const LINK_TEXT = "Link";
 const UNSET = "—";
 const parser = new DOMParser();
