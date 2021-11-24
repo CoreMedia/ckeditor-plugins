@@ -586,6 +586,8 @@ export default class RichTextSchema {
    * @param elements element schema to process
    */
   private static initParentElementNames(elements: Elements): void {
+    const logger = RichTextSchema.#logger;
+
     Object.keys(elements).forEach((elementName) => {
       const nestedElementNames: string[] = elements[elementName].nestedElementNames;
       nestedElementNames.forEach((nested) => {
@@ -601,10 +603,10 @@ export default class RichTextSchema {
         }
       });
     });
-    if (RichTextSchema.#logger.isDebugEnabled()) {
-      RichTextSchema.#logger.debug("Initialized child-parent relationship.");
+    if (logger.isDebugEnabled()) {
+      logger.debug("Initialized child-parent relationship.");
       Object.keys(elements).forEach((elementName) => {
-        RichTextSchema.#logger.debug(
+        logger.debug(
           `    Initialized <${elementName}> to be child of:`,
           elements[elementName].parentElementNames
         );
@@ -613,9 +615,10 @@ export default class RichTextSchema {
   }
 
   isTextAllowedAtParent(text: TextProxy): boolean {
+    const logger = RichTextSchema.#logger;
     const parentName = text.parentElement?.name;
     if (!parentName) {
-      RichTextSchema.#logger.debug(
+      logger.debug(
         `Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`,
         text
       );
@@ -625,7 +628,7 @@ export default class RichTextSchema {
     const elementSpecification = ELEMENTS[parentName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      RichTextSchema.#logger.debug(
+      logger.debug(
         `Element <${parentName}> not specified and thus, not allowed as parent of text-node.`
       );
       return false;
@@ -634,7 +637,7 @@ export default class RichTextSchema {
     const isAllowed = elementSpecification.mayContainText || false;
 
     if (!isAllowed) {
-      RichTextSchema.#logger.debug(
+      logger.debug(
         `Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`,
         text
       );
@@ -650,17 +653,19 @@ export default class RichTextSchema {
    * for removal (name is empty or null) or if the given element is not allowed at parent.
    */
   isElementAllowedAtParent(element: ElementProxy): boolean {
+    const logger = RichTextSchema.#logger;
+
     const elementName = element.name?.toLowerCase();
     if (!elementName) {
       // Nothing to do, we are about to be removed.
-      RichTextSchema.#logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
+      logger.debug(`Element's name unset. Most likely already registered for removal.`, element);
       return false;
     }
 
     const elementSpecification = ELEMENTS[elementName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      RichTextSchema.#logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
+      logger.debug(`Element <${elementName}> not specified and thus, not allowed at current parent.`);
       return false;
     }
 
@@ -669,18 +674,18 @@ export default class RichTextSchema {
 
     if (isAtRoot) {
       if (!!elementSpecification.parentElementNames) {
-        RichTextSchema.#logger.debug(`Element <${elementName}> not allowed at root.`);
+        logger.debug(`Element <${elementName}> not allowed at root.`);
         return false;
       }
       return true;
     } else if (!elementSpecification.parentElementNames) {
-      RichTextSchema.#logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
       return false;
     }
 
     const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(<string>parentName) >= 0;
     if (!isAllowedAtParent) {
-      RichTextSchema.#logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
+      logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
     return isAllowedAtParent;
   }
@@ -696,15 +701,19 @@ export default class RichTextSchema {
    * @param element element to process
    */
   adjustHierarchy(element: ElementProxy): void {
+    const logger = RichTextSchema.#logger;
+    const elementName = element.name?.toLowerCase();
+
     if (!this.isElementAllowedAtParent(element)) {
       element.replaceByChildren = true;
+      logger.debug(`Element not allowed at parent. Removing: ${elementName}`);
       return;
     }
 
-    const elementName = element.name;
-    const elementSpecification = ELEMENTS[elementName?.toLowerCase() || ""];
+    const elementSpecification = ELEMENTS[elementName || ""];
     if (elementSpecification?.mayBeEmpty === false && element.isEmpty()) {
       element.remove = true;
+      logger.debug(`Element empty but must not be empty. Removing: ${elementName}`);
     }
   }
 

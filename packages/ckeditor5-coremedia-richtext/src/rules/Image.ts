@@ -18,20 +18,16 @@ const INLINE_IMG =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8AARIQB46hC+ioEAGX8E/cKr6qsAAAAAElFTkSuQmCC";
 
 function hasHref({ attributes }: ElementProxy): boolean {
-  const href = attributes["href"];
+  const href = attributes["xlink:href"];
   return href === "" || !!href;
 }
 
 export const handleImage: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
-    if (!hasHref(node)) {
-      // Invalid state: We have an img-element without href which is not
-      // supported by CoreMedia RichText DTD.
-      node.replaceByChildren = true;
-      return;
-    }
     delete node.attributes["src"];
+    // Just ensure, that we have the required alt Attribute if it is unset.
+    node.attributes["alt"] = node.attributes["alt"] || "";
     xLinkActuateMapper.toData(params);
     xLinkHrefMapper.toData(params);
     xLinkRoleMapper.toData(params);
@@ -39,6 +35,12 @@ export const handleImage: ToDataAndViewElementConfiguration = {
     xLinkTitleMapper.toData(params);
     xLinkTypeMapper.toData(params);
     langMapper.toData(params);
+
+    if (!hasHref(node)) {
+      // Invalid state: We have an img-element without href which is not
+      // supported by CoreMedia RichText DTD.
+      node.replaceByChildren = true;
+    }
   },
   toView: (params) => {
     const { node } = params;
