@@ -160,14 +160,25 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     const html: string = this._htmlWriter.getHtml(documentFragment);
 
+    // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
+    // for singleton elements such as `<img>` and `<br>`. A better fix would
+    // fix the serialization issue instead.
+    // For now we just remove (in terms of HTML) obsolete dangling closing tag
+    // for the affected elements.
+    const workaroundHtml = html.replaceAll(/<\/(?:img|br)>/g, "");
+
+    const viewFragment = this._delegate.toView(workaroundHtml);
+
     if (logger.isDebugEnabled()) {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
         out: html,
+        workaround: workaroundHtml,
+        viewFragment: viewFragment,
       });
     }
 
-    return this._delegate.toView(html);
+    return viewFragment;
   }
 }
 
