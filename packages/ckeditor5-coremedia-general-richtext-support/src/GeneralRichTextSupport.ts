@@ -120,7 +120,7 @@ class CoreMediaRichText10Dtd {
       /**
        * Direction.
        */
-      dir: /(rtl|ltr)/,
+      dir: /^(rtl|ltr)$/,
     },
   };
   static readonly attrs = {
