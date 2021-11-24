@@ -44,12 +44,12 @@ input.error {
   color: #004444;
 }
 .ck-content [lang="de"] {
-  background: rgba(0,0,0,0.3);
-  background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(255,0,0,0.3) 50%, rgba(255,204,0,0.3) 100%);
+  background: rgba(0,0,0,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(255,0,0,0.3) 50%, rgba(255,204,0,0.3) 100%) !important;
 }
 .ck-content [lang="en"] {
-  background: rgba(0,36,125,0.3);
-  background: linear-gradient(135deg, rgba(0,36,125,0.3) 0%, rgba(255,255,255,0.3) 50%, rgba(207,20,43,0.3) 100%);
+  background: rgba(0,36,125,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,36,125,0.3) 0%, rgba(255,255,255,0.3) 50%, rgba(207,20,43,0.3) 100%) !important;
 }
 
 /* --------- DND  --------------------------------------------------------------------------------------------------- */
