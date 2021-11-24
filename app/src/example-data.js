@@ -825,18 +825,20 @@ const grsExampleData = () => {
   </ul>
   </div>`,
     // <ul> – Ordered List
-    "GRS Ordered List": `<div xmlns="${CM_RICHTEXT}">
+    "GRS Ordered List": `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">
   ${grsHeading("Ordered List")}
   <p>&lt;ol&gt; element: plain and with all supported attributes.</p>
   <p>${langNote}</p>
   ${examplesHeading}
   <ol><li>${plainText}</li></ol>
   ${listSeparator}
-  <ol xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li></ol>
+  <ol xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li><li>Second Entry</li></ol>
   ${listSeparator}
-  <ol xml:lang="de" lang="en"><li>${langText}</li></ol>
+  <ol xml:lang="de" lang="en"><li>${langText}</li><li>Second Entry</li></ol>
   ${listSeparator}
-  <ol xml:lang="en" dir="ltr" class="grs xmp"><li xml:lang="de" dir="rtl" class="grs xmp1">Colliding ol/li attributes</li></ol>
+  <ol xml:lang="en" dir="ltr" class="grs xmp"><li xml:lang="de" dir="rtl" class="grs xmp1">Colliding ol/li attributes</li><li xml:lang="de" dir="rtl" class="grs xmp1">Second Entry</li></ol>
+  <p class="p--heading-2">Known Issue</p>
+  <p>Problems with list-handling is a known issue: <a xlink:href="https://github.com/ckeditor/ckeditor5/issues/9917">ckeditor/ckeditor5#9917</a>.</p>
   </div>`,
     // <p> – Paragraph
     "GRS Paragraph": `<div xmlns="${CM_RICHTEXT}">
@@ -987,18 +989,20 @@ const grsExampleData = () => {
   <p>Lorem<span class="underline" xml:lang="de" lang="en">${langText}</span>Ipsum</p>
   </div>`,
     // <ul> – Unordered List
-    "GRS Unordered List": `<div xmlns="${CM_RICHTEXT}">
+    "GRS Unordered List": `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">
   ${grsHeading("Unordered List")}
   <p>&lt;ul&gt; element: plain and with all supported attributes.</p>
   <p>${langNote}</p>
   ${examplesHeading}
   <ul><li>${plainText}</li></ul>
   ${listSeparator}
-  <ul xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li></ul>
+  <ul xml:lang="en" dir="ltr" class="grs xmp"><li>${allAttributesText}</li><li>Second Entry</li></ul>
   ${listSeparator}
-  <ul xml:lang="de" lang="en"><li>${langText}</li></ul>
+  <ul xml:lang="de" lang="en"><li>${langText}</li><li>Second Entry</li></ul>
   ${listSeparator}
-  <ul xml:lang="en" dir="ltr" class="grs xmp"><li xml:lang="de" dir="rtl" class="grs xmp1">Colliding ol/li attributes</li></ul>
+  <ul xml:lang="en" dir="ltr" class="grs xmp"><li xml:lang="de" dir="rtl" class="grs xmp1">Colliding ol/li attributes</li><li xml:lang="de" dir="rtl" class="grs xmp1">Second Entry</li></ul>
+  <p class="p--heading-2">Known Issue</p>
+  <p>Problems with list-handling is a known issue: <a xlink:href="https://github.com/ckeditor/ckeditor5/issues/9917">ckeditor/ckeditor5#9917</a>.</p>
   </div>`,
   };
 };
