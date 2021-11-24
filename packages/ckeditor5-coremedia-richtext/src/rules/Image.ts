@@ -12,6 +12,7 @@ import { langMapper } from "./Lang";
 
 /**
  * Placeholder image as long as we have no image support yet.
+ * The placeholder is a 10x10 red PNG image.
  */
 // TODO[cke] Remove, as soon as images are supported.
 const INLINE_IMG =
