@@ -46,7 +46,7 @@ jobs:
           node-version: 14.x
       - name: Configure NPM
         run: |
-          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.USER_COREMEDIA_NPM_REGISTRY }}", "password": "${{ secrets.TOKEN_COREMEDIA_NPM_REGISTRY }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.USER_COREMEDIA_NPM_REGISTRY }} | jq -r .token)
+          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)
           echo "::add-mask::$NPM_AUTH_TOKEN"
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
