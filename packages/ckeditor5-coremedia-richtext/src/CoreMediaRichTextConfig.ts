@@ -102,6 +102,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       },
     },
     ...headingRules,
+    blockquote: langMapperConfiguration,
     // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
     b: replaceBy("strong"),
     strong: langMapperConfiguration,
