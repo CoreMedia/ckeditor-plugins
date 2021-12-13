@@ -148,8 +148,12 @@ class CoreMediaRichText10Dtd {
   };
   static pre: MatcherPattern = {
     name: "pre",
-    // We skip the xml:space attribute, as it is fixed and thus ignorable anyway.
-    ...CoreMediaRichText10Dtd.attrs,
+    ...merge(CoreMediaRichText10Dtd.attrs, {
+      attributes: {
+        // No need to map to data-attribute, as xml:space is supported in HTML.
+        "xml:space": /^(preserve)$/,
+      },
+    }),
   };
   static blockquote: MatcherPattern = {
     name: "blockquote",
