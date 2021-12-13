@@ -1,7 +1,7 @@
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { replaceByElementAndClassBackAndForth } from "./ReplaceBy";
 import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { langMapper, langViewFilterRule } from "./Lang";
+import {langMapper, langMapperConfiguration, langViewFilterRule} from "./Lang";
 
 /**
  * Reserved class to denote tables cells in CoreMedia RichText, which are
@@ -56,6 +56,7 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
     },
     toView: langViewFilterRule,
   },
+  tr: langMapperConfiguration,
   th: replaceByElementAndClassBackAndForth("th", "td", HEADER_CELL_CLASS, langMapper),
   /*
    * tr/tables rules:
