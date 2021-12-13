@@ -44,6 +44,7 @@ importers:
       '@ckeditor/ckeditor5-ui': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
       '@coremedia/ckeditor5-coremedia-general-richtext-support': 1.0.2-rc.3
+      '@coremedia/ckeditor5-coremedia-richtext': 1.0.2-rc.3
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 1.0.2-rc.3
       '@coremedia/ckeditor5-studio-essentials': 1.0.2-rc.3
       '@coremedia/ckeditor5-symbol-on-paste-mapper': 1.0.2-rc.3
@@ -130,11 +131,11 @@ importers:
       '@ckeditor/ckeditor5-html-support': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': 1.0.2-rc.2
-      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.2
-      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.2
-      '@coremedia/types-ckeditor__ckeditor5-html-support': 1.0.2-rc.2
-      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.2
+      '@coremedia/ckeditor5-logging': 1.0.2-rc.3
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.3
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.3
+      '@coremedia/types-ckeditor__ckeditor5-html-support': 1.0.2-rc.3
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.3
       '@types/jest': ^27.0.2
       '@typescript-eslint/eslint-plugin': ^5.3.1
       '@typescript-eslint/parser': ^5.3.1
@@ -874,9 +875,9 @@ importers:
 
   types/ckeditor__ckeditor5-html-support:
     specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.2
-      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.2
-      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.2
+      '@coremedia/types-ckeditor__ckeditor5-core': 1.0.2-rc.3
+      '@coremedia/types-ckeditor__ckeditor5-engine': 1.0.2-rc.3
+      '@coremedia/types-ckeditor__ckeditor5-utils': 1.0.2-rc.3
     dependencies:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
