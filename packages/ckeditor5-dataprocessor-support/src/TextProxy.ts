@@ -9,11 +9,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
  */
 export default class TextProxy extends NodeProxy<Text> implements TextFilterParams {
   /**
-   * Helper element for decoding entities.
-   * @private
-   */
-  private readonly decodeElement = document.createElement("div");
-  /**
    * Possibly overridden text.
    * @private
    */
@@ -25,7 +20,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * for example.
    * </p>
    * <p>
-   * Mimics `TextFilterParams`, which helps dealing with rule processing.
+   * Mimics `TextFilterParams`, which helps to deal with rule processing.
    * </p>
    */
   public readonly editor: Editor;
@@ -35,7 +30,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * proxy class itself.
    * </p>
    * <p>
-   * Mimics `TextFilterParams`, which helps dealing with rule processing.
+   * Mimics `TextFilterParams`, which helps to deal with rule processing.
    * </p>
    */
   public readonly node: TextProxy = this;
@@ -115,26 +110,6 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
   }
 
   /**
-   * Decodes all HTML entities within this text node. This helps to ensure, that
-   * we don't store entities unsupported by the current grammar.
-   *
-   * @see <a href="https://stackoverflow.com/questions/5796718/html-entity-decode">javascript - HTML Entity Decode - Stack Overflow</a>
-   */
-  public decodeHtmlEntities(): void {
-    // noinspection InnerHTMLJS
-    this.decodeElement.innerHTML = this.textContent;
-    const newText = this.decodeElement.textContent;
-    // noinspection InnerHTMLJS
-    this.decodeElement.innerHTML = "";
-
-    // Prevent possible cycles, if re-applying rules because of a recreated
-    // text node.
-    if (newText !== this.textContent) {
-      this._text = newText || "";
-    }
-  }
-
-  /**
    * For kept text-nodes it possibly sets changed text.
    * @protected
    */
@@ -151,9 +126,9 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
  * Named parameters to be passed to element filters. For overriding filter rules
  * a typical pattern to start with is:
  *
- * <pre>
+ * ```
  * params.parent && params.parent(args);
- * </pre>
+ * ```
  */
 export interface TextFilterParams {
   /**

@@ -65,8 +65,8 @@ const strike: ToDataAndViewElementConfiguration = {
  * <li>If false is returned, the element and all its children will be removed.</li>
  * <li>If element name changes to empty, only the element itself will be removed and the children appended to the parent</li>
  * <li>An element is processed first, then its attributes and afterwards its children (if any)</li>
- * <li>Text nodes only support to be changed or removed... but not to be wrapped into some other params.el.</li>
- * <li><code>$</code> and <code>$$</code> are so called generic element rules which are applied after element
+ * <li>Text nodes only support to be changed or removed… but not to be wrapped into some other params.el.</li>
+ * <li><code>$</code> and <code>$$</code> are so-called generic element rules, which are applied after element
  * processing. <code>$</code> is applied prior to filtering the children, while <code>$$</code> is applied
  * after the element and all its children have been processed.
  * The opposite handler is <code>'^'</code> which would be applied before all other element handlers.</li>
@@ -76,9 +76,11 @@ const defaultRules: FilterRuleSetConfiguration = {
   text: (params) => {
     if (!getSchema(params).isTextAllowedAtParent(params.node)) {
       params.node.remove = true;
-    } else {
-      params.node.decodeHtmlEntities();
     }
+    // In CKEditor 4 we were used resolving entities here to their
+    // UTF-8 characters. With CKEditor 5 this is unnecessary, as it
+    // is the default behavior when it comes to storing data.
+    // Not doing so here, fixes #39.
   },
   elements: {
     ...schemaRules,
