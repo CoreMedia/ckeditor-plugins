@@ -18,6 +18,7 @@ import ToDataProcessor from "./ToDataProcessor";
 
 export default class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
+  static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   private readonly _delegate: HtmlDataProcessor;
   private readonly _domConverter: DomConverter;
   private readonly _richTextXmlWriter: RichTextXmlWriter;
@@ -29,6 +30,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   private readonly _richTextSchema: RichTextSchema;
 
   private readonly _domParser: DOMParser;
+  readonly #noParserErrorNamespace: boolean;
 
   constructor(editor: Editor) {
     const document: ViewDocument = editor.data.viewDocument;
@@ -45,6 +47,11 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     this._toViewFilter = new HtmlFilter(toView, editor);
     this._toDataProcessor = new ToDataProcessor(new HtmlFilter(toData, editor));
+
+    const parserErrorDocument = this._domParser.parseFromString("<", "text/xml");
+    this.#noParserErrorNamespace =
+      RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
+      parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -148,12 +155,34 @@ export default class RichTextDataProcessor implements DataProcessor {
     );
   }
 
+  // https://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
+  #isParserError(parsedDocument: Document) {
+    const namespace = RichTextDataProcessor.#PARSER_ERROR_NAMESPACE;
+    if (this.#noParserErrorNamespace) {
+      // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
+      return parsedDocument.getElementsByTagName("parsererror").length > 0;
+    }
+
+    return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
+  }
+
   toView(data: string): ViewDocumentFragment | null {
     const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     const dataDocument = this._domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
-    this._toViewFilter.applyTo(dataDocument.documentElement);
+    if (this.#isParserError(dataDocument)) {
+      logger.error("Failed parsing data. See debug messages for details.", { data });
+      if (logger.isDebugEnabled()) {
+        // noinspection InnerHTMLJS
+        const parsererror = dataDocument.documentElement.innerHTML;
+        logger.debug("Failed parsing data.", { parsererror });
+      }
+    } else {
+      // Only apply filters, if we received valid data.
+      this._toViewFilter.applyTo(dataDocument.documentElement);
+    }
+
     const documentFragment = dataDocument.createDocumentFragment();
     const nodes: Node[] = Array.from(dataDocument.documentElement.childNodes);
     documentFragment.append(...nodes);

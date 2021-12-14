@@ -1306,6 +1306,8 @@ const exampleData = {
   "Entities": entitiesExample,
   ...grsExampleData(),
   "Hello": richText(`<p>Hello World!</p>`),
+  "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
+          .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
   "Links (Targets)": externalLinkTargetExamples(),
   "Lorem": lorem(LOREM_IPSUM_WORDS.length, 10),
   "Lorem (Huge)": lorem(LOREM_IPSUM_WORDS.length * 10, 80),
