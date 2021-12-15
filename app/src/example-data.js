@@ -1302,7 +1302,7 @@ const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("X
 const exampleData = {
   "Content Links": contentLinkExamples(),
   "CoreMedia RichText": coreMediaRichTextPoC(),
-  "Empty": richText(),
+  "Empty": "",
   "Entities": entitiesExample,
   ...grsExampleData(),
   "Hello": richText(`<p>Hello World!</p>`),
