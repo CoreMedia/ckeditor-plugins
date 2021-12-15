@@ -65,7 +65,7 @@ export default class RichTextDataProcessor implements DataProcessor {
    */
   get richTextSchema(): RichTextSchema {
     // For testing purpose: CoreMediaRichTextConfig contains a fallback, which
-    // is to use the RichTextSchema with Strict mode. This should be sufficient
+    // is to use the RichTextSchema with Strict mode. This should be enough
     // for testing, so that it should not be necessary to mock this call during
     // tests.
     return this._richTextSchema;
@@ -170,39 +170,45 @@ export default class RichTextDataProcessor implements DataProcessor {
     const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
-    const dataDocument = this._domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
-    if (this.#isParserError(dataDocument)) {
-      logger.error("Failed parsing data. See debug messages for details.", { data });
-      if (logger.isDebugEnabled()) {
-        // noinspection InnerHTMLJS
-        const parsererror = dataDocument.documentElement.innerHTML;
-        logger.debug("Failed parsing data.", { parsererror });
+    let dataView = "";
+
+    // If data are empty, we expect empty RichText by default, thus, we don't
+    // need any parsing but may directly forward the empty data to the delegate
+    // `toView` handler.
+    if (!!data) {
+      const dataDocument = this._domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
+      if (this.#isParserError(dataDocument)) {
+        logger.error("Failed parsing data. See debug messages for details.", { data });
+        if (logger.isDebugEnabled()) {
+          // noinspection InnerHTMLJS
+          const parsererror = dataDocument.documentElement.innerHTML;
+          logger.debug("Failed parsing data.", { parsererror });
+        }
+      } else {
+        // Only apply filters, if we received valid data.
+        this._toViewFilter.applyTo(dataDocument.documentElement);
       }
-    } else {
-      // Only apply filters, if we received valid data.
-      this._toViewFilter.applyTo(dataDocument.documentElement);
+
+      const documentFragment = dataDocument.createDocumentFragment();
+      const nodes: Node[] = Array.from(dataDocument.documentElement.childNodes);
+      documentFragment.append(...nodes);
+
+      const html: string = this._htmlWriter.getHtml(documentFragment);
+
+      // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
+      // for singleton elements such as `<img>` and `<br>`. A better fix would
+      // fix the serialization issue instead.
+      // For now, we just remove (in HTML) obsolete dangling closing tag
+      // for the affected elements.
+      dataView = html.replaceAll(/<\/(?:img|br)>/g, "");
     }
 
-    const documentFragment = dataDocument.createDocumentFragment();
-    const nodes: Node[] = Array.from(dataDocument.documentElement.childNodes);
-    documentFragment.append(...nodes);
-
-    const html: string = this._htmlWriter.getHtml(documentFragment);
-
-    // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
-    // for singleton elements such as `<img>` and `<br>`. A better fix would
-    // fix the serialization issue instead.
-    // For now we just remove (in terms of HTML) obsolete dangling closing tag
-    // for the affected elements.
-    const workaroundHtml = html.replaceAll(/<\/(?:img|br)>/g, "");
-
-    const viewFragment = this._delegate.toView(workaroundHtml);
+    const viewFragment = this._delegate.toView(dataView);
 
     if (logger.isDebugEnabled()) {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
-        out: html,
-        workaround: workaroundHtml,
+        out: dataView,
         viewFragment: viewFragment,
       });
     }
