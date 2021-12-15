@@ -166,6 +166,13 @@ plugins:
     These are the attributes, which are marked as _allowed_ for `<span>`,
     for example, in CoreMedia RichText.
 
+    **Why using attributes from `<span>`?** This is because in data-processing
+    we map `<mark>` to `<span>` and the other way round: What is `<span>` in
+    CoreMedia RichText 1.0 DTD (data), will be transformed to `<mark>` as it
+    will be represented in the data view layer of CKEditor 5. Having this,
+    `<mark>` may have just the same attributes as `<span>` like, for example,
+    a language attribute.
+
 **Less Convenient Configuration:** A less convenient configuration exposes some
 details, which may help to understand the processing better. So, if inlining
 the convenience API from above, the example above will be similar to:
