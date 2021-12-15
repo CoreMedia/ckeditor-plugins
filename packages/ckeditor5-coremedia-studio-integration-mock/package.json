@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration-mock",
-  "version": "1.0.2-rc.4",
+  "version": "1.0.2-rc.5",
   "private": true,
   "engines": {
     "node": ">=14.0.0"
@@ -35,8 +35,8 @@
     "@ckeditor/ckeditor5-core": "^31.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.2-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.2-rc.4",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.2-rc.5",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.2-rc.5",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
@@ -58,8 +58,8 @@
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "1.0.2-rc.4",
-    "@coremedia/ckeditor5-logging": "1.0.2-rc.4",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "1.0.2-rc.5",
+    "@coremedia/ckeditor5-logging": "1.0.2-rc.5",
     "rxjs": "^6.5.4"
   }
 }
