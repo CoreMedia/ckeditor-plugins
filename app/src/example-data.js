@@ -17,6 +17,20 @@ const UNSET = "—";
 const parser = new DOMParser();
 const serializer = new XMLSerializer();
 const xmlDocument = parser.parseFromString(`<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}"></div>`, "text/xml");
+const tableHeader = (...headers) => `<tr class="tr--header">${headers.map((h) => `<td class="td--header">${h}</td>`).join("")}</tr>`;
+const htmlCode = (code) => `<pre><span class="language-html code">${code}</span></pre>`;
+const richText = (plain) => {
+  if (!plain) {
+    return `<div xmlns="${CM_RICHTEXT}"/>`
+  }
+  const hasXLink = plain.indexOf("xlink:") >= 0;
+  return `<div xmlns="${CM_RICHTEXT}"${hasXLink ? ` xmlns:xlink="${XLINK}"`: ""}>${plain}</div>`
+};
+const h = (level, text) => `<p class="p--heading-${level}">${text}</p>`;
+const h1 = (text) => h(1, text);
+const h2 = (text) => h(2, text);
+const em = (str) => `<em>${str}</em>`;
+
 
 function createLink(show, role, href = EXAMPLE_URL) {
   const a = xmlDocument.createElement("a");
@@ -69,12 +83,8 @@ function renderUiEditorValue(uiEditorValue) {
   return uiEditorValue || UNSET;
 }
 
-function em(str) {
-  return `<em>${str}</em>`;
-}
-
 function createLinkTableHeading() {
-  return `<tr class="tr--header"><td class="td--header">xlink:show</td><td class="td--header">xlink:role</td><td class="td--header">target</td><td class="td--header">Active Button</td><td class="td--header">Editor Value</td><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
+  return tableHeader("xlink:show", "xlink:role", "target", "Active Button", "Editor Value", "Link", "Comment");
 }
 
 function createLinkTableRow({comment, show, role, target, uiActiveButton, uiEditorValue}) {
@@ -91,14 +101,14 @@ function createLinkTableRow({comment, show, role, target, uiActiveButton, uiEdit
 }
 
 function createLinkScenario(title, scenarios) {
-  const scenarioTitle = `<h1>${title}</h1>`;
+  const scenarioTitle = h1(title);
   const scenarioHeader = createLinkTableHeading();
   const scenarioRows = scenarios.map(createLinkTableRow).join("");
   return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
 }
 
 function createContentLinkTableHeading() {
-  return `<tr class="tr--header"><td class="td--header">Link</td><td class="td--header">Comment</td></tr>`;
+  return tableHeader("Link", "Comment");
 }
 
 function createContentLinkTableRow({comment, id}) {
@@ -106,7 +116,7 @@ function createContentLinkTableRow({comment, id}) {
 }
 
 function createContentLinkScenario(title, scenarios) {
-  const scenarioTitle = `<h1>${title}</h1>`;
+  const scenarioTitle = h1(title);
   const scenarioHeader = createContentLinkTableHeading();
   const scenarioRows = scenarios.map(createContentLinkTableRow).join("");
   return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
@@ -526,7 +536,7 @@ const lorem = (words, paragraphs) => {
     return `<p>${paragraphText}</p>`;
   };
   const htmlParagraphs = `${asParagraphs.map((w) => paragraph(w)).join("")}`;
-  return `<div xmlns="${CM_RICHTEXT}">${htmlParagraphs}</div>`;
+  return richText(htmlParagraphs);
 };
 
 /**
@@ -546,7 +556,7 @@ const coreMediaRichTextPoC = () => {
   const someLanguage = "en-US";
   const someUrl = EXAMPLE_URL;
   const introduction = () => `
-    <p class="${titleHeading}">CoreMedia RichText 1.0 Examples</p>
+    ${h1("CoreMedia RichText 1.0 Examples")}
     <p>
       CKEditor 5 must provide support for all valid elements, attributes and nested structures,
       which represent valid CoreMedia RichText 1.0.
@@ -728,8 +738,8 @@ const grsExampleData = () => {
   const allAttributesText = "All Attributes";
   const langText = "Lang Precedence";
   const alignedText = "Aligned";
-  const grsHeading = (title) => `<p class="p--heading-1">${grsName}: ${title}</p>`;
-  const examplesHeading = `<p class="p--heading-2">Examples</p>`;
+  const grsHeading = (title) => h1(`${grsName}: ${title}`);
+  const examplesHeading = h2("Examples");
   const listSeparator = `<p>Separator: CKEditor merges lists directly following each other. Thus, separate.</p>`;
 
   /**
@@ -1007,26 +1017,309 @@ const grsExampleData = () => {
   };
 };
 
+/**
+ * These are all CoreMedia RichText Entities known to CoreMedia RichText 1.0
+ * DTD.
+ * @type {string[]}
+ */
+const coreMediaRichTextEntities = [
+  "&AElig;",
+  "&Aacute;",
+  "&Acirc;",
+  "&Agrave;",
+  "&Alpha;",
+  "&Aring;",
+  "&Atilde;",
+  "&Auml;",
+  "&Beta;",
+  "&Ccedil;",
+  "&Chi;",
+  "&Dagger;",
+  "&Delta;",
+  "&ETH;",
+  "&Eacute;",
+  "&Ecirc;",
+  "&Egrave;",
+  "&Epsilon;",
+  "&Eta;",
+  "&Euml;",
+  "&Gamma;",
+  "&Iacute;",
+  "&Icirc;",
+  "&Igrave;",
+  "&Iota;",
+  "&Iuml;",
+  "&Kappa;",
+  "&Lambda;",
+  "&Mu;",
+  "&Ntilde;",
+  "&Nu;",
+  "&OElig;",
+  "&Oacute;",
+  "&Ocirc;",
+  "&Ograve;",
+  "&Omega;",
+  "&Omicron;",
+  "&Oslash;",
+  "&Otilde;",
+  "&Ouml;",
+  "&Phi;",
+  "&Pi;",
+  "&Prime;",
+  "&Psi;",
+  "&Rho;",
+  "&Scaron;",
+  "&Sigma;",
+  "&THORN;",
+  "&Tau;",
+  "&Theta;",
+  "&Uacute;",
+  "&Ucirc;",
+  "&Ugrave;",
+  "&Upsilon;",
+  "&Uuml;",
+  "&Xi;",
+  "&Yacute;",
+  "&Yuml;",
+  "&Zeta;",
+  "&aacute;",
+  "&acirc;",
+  "&acute;",
+  "&aelig;",
+  "&agrave;",
+  "&alefsym;",
+  "&alpha;",
+  "&amp;",
+  "&and;",
+  "&ang;",
+  "&apos;",
+  "&aring;",
+  "&asymp;",
+  "&atilde;",
+  "&auml;",
+  "&bdquo;",
+  "&beta;",
+  "&brvbar;",
+  "&bull;",
+  "&cap;",
+  "&ccedil;",
+  "&cedil;",
+  "&cent;",
+  "&chi;",
+  "&circ;",
+  "&clubs;",
+  "&cong;",
+  "&copy;",
+  "&crarr;",
+  "&cup;",
+  "&curren;",
+  "&dArr;",
+  "&dagger;",
+  "&darr;",
+  "&deg;",
+  "&delta;",
+  "&diams;",
+  "&divide;",
+  "&eacute;",
+  "&ecirc;",
+  "&egrave;",
+  "&empty;",
+  "&emsp;",
+  "&ensp;",
+  "&epsilon;",
+  "&equiv;",
+  "&eta;",
+  "&eth;",
+  "&euml;",
+  "&euro;",
+  "&exist;",
+  "&fnof;",
+  "&forall;",
+  "&frac12;",
+  "&frac14;",
+  "&frac34;",
+  "&frasl;",
+  "&gamma;",
+  "&ge;",
+  "&gt;",
+  "&hArr;",
+  "&harr;",
+  "&hearts;",
+  "&hellip;",
+  "&iacute;",
+  "&icirc;",
+  "&iexcl;",
+  "&igrave;",
+  "&image;",
+  "&infin;",
+  "&int;",
+  "&iota;",
+  "&iquest;",
+  "&isin;",
+  "&iuml;",
+  "&kappa;",
+  "&lArr;",
+  "&lambda;",
+  "&lang;",
+  "&laquo;",
+  "&larr;",
+  "&lceil;",
+  "&ldquo;",
+  "&le;",
+  "&lfloor;",
+  "&lowast;",
+  "&loz;",
+  "&lrm;",
+  "&lsaquo;",
+  "&lsquo;",
+  "&lt;",
+  "&macr;",
+  "&mdash;",
+  "&micro;",
+  "&middot;",
+  "&minus;",
+  "&mu;",
+  "&nabla;",
+  "&nbsp;",
+  "&ndash;",
+  "&ne;",
+  "&ni;",
+  "&not;",
+  "&notin;",
+  "&nsub;",
+  "&ntilde;",
+  "&nu;",
+  "&oacute;",
+  "&ocirc;",
+  "&oelig;",
+  "&ograve;",
+  "&oline;",
+  "&omega;",
+  "&omicron;",
+  "&oplus;",
+  "&or;",
+  "&ordf;",
+  "&ordm;",
+  "&oslash;",
+  "&otilde;",
+  "&otimes;",
+  "&ouml;",
+  "&para;",
+  "&part;",
+  "&permil;",
+  "&perp;",
+  "&phi;",
+  "&pi;",
+  "&piv;",
+  "&plusmn;",
+  "&pound;",
+  "&prime;",
+  "&prod;",
+  "&prop;",
+  "&psi;",
+  "&quot;",
+  "&rArr;",
+  "&radic;",
+  "&rang;",
+  "&raquo;",
+  "&rarr;",
+  "&rceil;",
+  "&rdquo;",
+  "&real;",
+  "&reg;",
+  "&rfloor;",
+  "&rho;",
+  "&rlm;",
+  "&rsaquo;",
+  "&rsquo;",
+  "&sbquo;",
+  "&scaron;",
+  "&sdot;",
+  "&sect;",
+  "&shy;",
+  "&sigma;",
+  "&sigmaf;",
+  "&sim;",
+  "&spades;",
+  "&sub;",
+  "&sube;",
+  "&sum;",
+  "&sup1;",
+  "&sup2;",
+  "&sup3;",
+  "&sup;",
+  "&supe;",
+  "&szlig;",
+  "&tau;",
+  "&there4;",
+  "&theta;",
+  "&thetasym;",
+  "&thinsp;",
+  "&thorn;",
+  "&tilde;",
+  "&times;",
+  "&trade;",
+  "&uArr;",
+  "&uacute;",
+  "&uarr;",
+  "&ucirc;",
+  "&ugrave;",
+  "&uml;",
+  "&upsih;",
+  "&upsilon;",
+  "&uuml;",
+  "&weierp;",
+  "&xi;",
+  "&yacute;",
+  "&yen;",
+  "&yuml;",
+  "&zeta;",
+  "&zwj;",
+  "&zwnj;",
+];
+const entitiesTableRow = (entity) => `<tr><td>${htmlCode(entity.replace("&", "&amp;"))}</td><td>${entity}</td></tr>`;
+/**
+ * These are the default entities, allowed or required in XML.
+ * These entities were affected by CoreMedia/ckeditor-plugins#39.
+ * @type {string[]}
+ */
+const xmlEntities = ["&amp;", "&lt;", "&gt;", "&quot;", "&apos;"].sort();
+const xmlEntityRows = xmlEntities.map(entitiesTableRow).join("");
+const richTextEntityRows = coreMediaRichTextEntities.map(entitiesTableRow).join("");
+const entitiesDescription = `<p>
+  The following entities must be supported when they are part of a
+  CoreMedia RichText&nbsp;1.0 document. While <em>XML Entities</em> lists
+  the default entities, which come with XML (and where not all of them must be
+  resolved to their characters in processing), <em>CoreMedia RichText&nbsp;1.0 Entities</em>
+  are those, which are declared by CoreMedia RichText&nbsp;1.0 DTD.
+</p><p>
+  The behavior for all entities, despite some XML entities like
+  <span class="code">&amp;lt;</span>, is, that when written back to server, these
+  entities are resolved to their corresponding UTF-8 characters.
+</p>`;
+const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("XML Entities")}<table>${tableHeader("Entity", "Character")}${xmlEntityRows}</table>${h2("CoreMedia RichText&nbsp;1.0 Entities")}<table>${tableHeader("Entity", "Character")}${richTextEntityRows}</table>`);
+
 const exampleData = {
   "Content Links": contentLinkExamples(),
   "CoreMedia RichText": coreMediaRichTextPoC(),
-  "Empty": `<div xmlns="${CM_RICHTEXT}"/>`,
+  "Empty": richText(),
+  "Entities": entitiesExample,
   ...grsExampleData(),
-  "Hello": `<div xmlns="${CM_RICHTEXT}"><p>Hello World!</p></div>`,
+  "Hello": richText(`<p>Hello World!</p>`),
+  "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
+          .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
   "Links (Targets)": externalLinkTargetExamples(),
   "Lorem": lorem(LOREM_IPSUM_WORDS.length, 10),
   "Lorem (Huge)": lorem(LOREM_IPSUM_WORDS.length * 10, 80),
   // TODO[cke] The following must be addressed prior to reaching MVP for CKEditor 5 Plugins for CoreMedia CMS
-  "Lists Bug": `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">
-  <p>
+  "Lists Bug": richText(`<p>
   The following example shows a symptom of
   <a xlink:href="https://github.com/ckeditor/ckeditor5/issues/2973">ckeditor/ckeditor5#2973</a>,
   which is, that more complex lists are not supported yet — a known issue since
   2017. If we cannot find a workaround, we will not be able editing valid
   CoreMedia RichText 1.0 (and HTML) lists within CKEditor 5.
   </p>
-  <ul><li>Lorem</li><li><p>Ipsum</p></li><li>Dolor</li></ul>
-  </div>`,
+  <ul><li>Lorem</li><li><p>Ipsum</p></li><li>Dolor</li></ul>`),
 };
 
 const setExampleData = (editor, exampleKey) => {

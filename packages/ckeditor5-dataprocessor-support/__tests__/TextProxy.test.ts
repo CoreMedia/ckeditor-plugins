@@ -66,7 +66,7 @@ interface TextFilterTestData extends CommentableTestData, DisablableTestData {
    */
   nodePath: string;
   /**
-   * XPath for a node in `to` result which should have been returned as
+   * XPath for a node in `to` result, which should have been returned as
    * `restartFrom`. Will not be checked, if unset.
    */
   restartPath?: string;
@@ -139,34 +139,6 @@ describe("TextProxy.applyRules()", () => {
         ],
         from: `<parent><el>${asciiText}</el></parent>`,
         to: `<parent><el>${otherAsciiText}</el></parent>`,
-        nodePath: "//el/text()[1]",
-      },
-    ],
-    [
-      "ENTITY#01: Should replace numeric entity by UTF-8 characters.",
-      {
-        rules: [
-          (p) => {
-            p.node.textContent = "Lorem&#xa0;Ipsum";
-            p.node.decodeHtmlEntities();
-          },
-        ],
-        from: `<parent><el>Replace Me</el></parent>`,
-        to: `<parent><el>Lorem\xa0Ipsum</el></parent>`,
-        nodePath: "//el/text()[1]",
-      },
-    ],
-    [
-      "ENTITY#02: Should replace named entity by UTF-8 characters.",
-      {
-        rules: [
-          (p) => {
-            p.node.textContent = "Lorem&nbsp;Ipsum";
-            p.node.decodeHtmlEntities();
-          },
-        ],
-        from: `<parent><el>Replace Me</el></parent>`,
-        to: `<parent><el>Lorem\xa0Ipsum</el></parent>`,
         nodePath: "//el/text()[1]",
       },
     ],
