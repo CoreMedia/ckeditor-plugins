@@ -5,6 +5,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
 import DataFilter from "@ckeditor/ckeditor5-html-support/src/datafilter";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
+import ReducedMatcherPattern, { mergePatterns } from "./ReducedMatcherPattern";
 
 class GeneralRichTextSupport extends Plugin {
   static readonly pluginName: string = "GeneralRichTextSupport";
@@ -52,44 +53,6 @@ class GeneralRichTextSupport extends Plugin {
     dataFilter.loadAllowedConfig(config);
   }
 }
-
-type AttributesType = {
-  [key: string]: boolean | RegExp;
-};
-/**
- * While the `MatcherPattern` is rather complex, we only want to support a
- * subset in this configuration, which eases merging patterns a lot.
- */
-type ReducedMatcherPattern = {
-  classes?: boolean;
-  attributes?: AttributesType;
-};
-
-/**
- * Merges MatcherPatterns (of specific object type).
- *
- * @param sources sources to merge
- * @throws Error when sources define the same attribute with different supported values
- */
-const merge = (...sources: ReducedMatcherPattern[]): ReducedMatcherPattern => {
-  const result: ReducedMatcherPattern = {};
-  const supportsClasses = sources.find((s) => s.classes === true);
-  if (supportsClasses) {
-    result.classes = true;
-  }
-  sources.forEach((s) => {
-    if (s.attributes) {
-      result.attributes = result.attributes || {};
-      for (const key in s.attributes) {
-        if (result.attributes?.hasOwnProperty(key) && result.attributes[key] !== s.attributes[key]) {
-          throw new Error("Failed to merge, because sources collide in attributes.");
-        }
-        result.attributes[key] = s.attributes[key];
-      }
-    }
-  });
-  return result;
-};
 
 /**
  * Represents the CoreMedia RichText 1.0 DTD as required for configuration
@@ -148,7 +111,7 @@ class CoreMediaRichText10Dtd {
   };
   static pre: MatcherPattern = {
     name: "pre",
-    ...merge(CoreMediaRichText10Dtd.attrs, {
+    ...mergePatterns(CoreMediaRichText10Dtd.attrs, {
       attributes: {
         // No need to map to data-attribute, as xml:space is supported in HTML.
         "xml:space": /^(preserve)$/,
@@ -157,7 +120,7 @@ class CoreMediaRichText10Dtd {
   };
   static blockquote: MatcherPattern = {
     name: "blockquote",
-    ...merge(CoreMediaRichText10Dtd.attrs, {
+    ...mergePatterns(CoreMediaRichText10Dtd.attrs, {
       attributes: {
         cite: true,
       },
@@ -165,7 +128,7 @@ class CoreMediaRichText10Dtd {
   };
   static a: MatcherPattern = {
     name: "a",
-    ...merge(CoreMediaRichText10Dtd.attrs, {
+    ...mergePatterns(CoreMediaRichText10Dtd.attrs, {
       attributes: {
         // Data-Processed by merging xlink:show and xlink:role
         target: true,
@@ -184,7 +147,7 @@ class CoreMediaRichText10Dtd {
   };
   static img: MatcherPattern = {
     name: "img",
-    ...merge(CoreMediaRichText10Dtd.attrs, {
+    ...mergePatterns(CoreMediaRichText10Dtd.attrs, {
       attributes: {
         alt: true,
         height: true,
@@ -209,7 +172,7 @@ class CoreMediaRichText10Dtd {
   };
   static table: MatcherPattern = {
     name: "table",
-    ...merge(CoreMediaRichText10Dtd.attrs, {
+    ...mergePatterns(CoreMediaRichText10Dtd.attrs, {
       attributes: {
         summary: true,
       },
@@ -227,21 +190,34 @@ class CoreMediaRichText10Dtd {
   };
   static tbody: MatcherPattern = {
     name: "tbody",
-    ...merge(CoreMediaRichText10Dtd.attrs, CoreMediaRichText10Dtd.cellhalign, CoreMediaRichText10Dtd.cellvalign),
+    ...mergePatterns(
+      CoreMediaRichText10Dtd.attrs,
+      CoreMediaRichText10Dtd.cellhalign,
+      CoreMediaRichText10Dtd.cellvalign
+    ),
   };
   static tr: MatcherPattern = {
     name: "tr",
-    ...merge(CoreMediaRichText10Dtd.attrs, CoreMediaRichText10Dtd.cellhalign, CoreMediaRichText10Dtd.cellvalign),
+    ...mergePatterns(
+      CoreMediaRichText10Dtd.attrs,
+      CoreMediaRichText10Dtd.cellhalign,
+      CoreMediaRichText10Dtd.cellvalign
+    ),
   };
   static td: MatcherPattern = {
     name: "td",
-    ...merge(CoreMediaRichText10Dtd.attrs, CoreMediaRichText10Dtd.cellhalign, CoreMediaRichText10Dtd.cellvalign, {
-      attributes: {
-        abbr: true,
-        rowspan: true,
-        colspan: true,
-      },
-    }),
+    ...mergePatterns(
+      CoreMediaRichText10Dtd.attrs,
+      CoreMediaRichText10Dtd.cellhalign,
+      CoreMediaRichText10Dtd.cellvalign,
+      {
+        attributes: {
+          abbr: true,
+          rowspan: true,
+          colspan: true,
+        },
+      }
+    ),
   };
 }
 
