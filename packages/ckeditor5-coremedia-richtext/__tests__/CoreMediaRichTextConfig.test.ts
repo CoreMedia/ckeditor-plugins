@@ -17,7 +17,8 @@ const TEST_SELECTOR = "";
 
 const MOCK_EDITOR = new Editor();
 
-const LAST_RESORT = "This is a last-resort fix, prior to sending data to the " +
+const LAST_RESORT =
+  "This is a last-resort fix, prior to sending data to the " +
   "server. It's actually almost an indicator of missing explicit data " +
   "processing. That's why `toView` will not be able to restore the original " +
   "result.";
@@ -150,6 +151,24 @@ describe("Default Data Filter Rules", () => {
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><div>${text}</div></div>`,
         expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+      },
+    ],
+    [
+      "BR#1: Should keep BR as is.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
+        expectedView: true,
+      },
+    ],
+    [
+      "BR#2: Should keep BR class as is.",
+      {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
+        expectedView: true,
       },
     ],
   ];
@@ -331,18 +350,18 @@ describe("Default Data Filter Rules", () => {
   ];
 
   type XLinkBehavior = {
-    show?: string,
-    role?: string,
+    show?: string;
+    role?: string;
   };
   type XlinkBehaviorDefinition = XLinkBehavior & {
-    comment?: string,
+    comment?: string;
     non_bijective?: boolean;
   };
   /**
    * Represents an empty target attribute.
    */
   type ExpectedTargetToXlinkShowAndRole = {
-    [target: string]: XlinkBehaviorDefinition,
+    [target: string]: XlinkBehaviorDefinition;
   };
   /**
    * The mapping we agreed upon for `xlink:show` to some target value.
@@ -374,7 +393,7 @@ describe("Default Data Filter Rules", () => {
   };
   // noinspection NonAsciiCharacters
   const specialCharacterTargets: ExpectedTargetToXlinkShowAndRole = {
-    "äöü": {
+    äöü: {
       comment: "Special Characters in target: Umlauts",
       show: "other",
       role: "äöü",
@@ -405,12 +424,12 @@ describe("Default Data Filter Rules", () => {
       comment: `Decision: Map ${show.new} to xlink:show=new as it was for CKEditor 4.`,
       show: "new",
     },
-    "_top": {
+    _top: {
       comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_top instead.",
       show: "other",
       role: "_top",
     },
-    "_parent": {
+    _parent: {
       comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_parent instead.",
       show: "other",
       role: "_parent",
@@ -463,11 +482,11 @@ describe("Default Data Filter Rules", () => {
       show: "none",
       role: "some_target",
     },
-    "_role_some_target": {
+    _role_some_target: {
       comment: "Here we have an xlink:role without xlink:show in RichText.",
       role: "some_target",
     },
-    "_other": {
+    _other: {
       comment: "Here we have an xlink:show='other' without expected xlink:role.",
       show: "other",
     },
@@ -493,7 +512,7 @@ describe("Default Data Filter Rules", () => {
       show: "other",
       role: `${show.none}_`,
     },
-    "_role_": {
+    _role_: {
       show: "other",
       role: "_role_",
     },
@@ -508,10 +527,11 @@ describe("Default Data Filter Rules", () => {
       comment: "For no target, no xlink:show/xlink:role attributes should be added.",
     },
     "": {
-      comment: "We assume empty targets to be non-existing. As the state disappears, it is not bijective as other mappings.",
+      comment:
+        "We assume empty targets to be non-existing. As the state disappears, it is not bijective as other mappings.",
       non_bijective: true,
     },
-    "_role": {
+    _role: {
       comment: "If artificial _role doesn't come with a role, assume to take it as target.",
       show: "other",
       role: "_role",
@@ -522,30 +542,32 @@ describe("Default Data Filter Rules", () => {
     ...artificialXlinkAttributeCombinations,
     ...penetrationTargets,
   };
-  const linkBehaviorFixtures: DataFilterTestFixture[] =
-    Object.entries(expectedTargetToXlinkShowAndRole)
-      .map(([target, { show, role, comment, non_bijective }], index) => {
-        let name: string = `ANCHOR#${index}: Should map ${target === noTarget ? "no target" : `target="${target}"`} to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
-        let viewTarget: string = `${target === noTarget ? "" : ` target="${target}"`}`;
-        let dataShow: string = !show ? "" : ` xlink:show="${show}"`;
-        let dataRole: string = !role ? "" : ` xlink:role="${role}"`;
-        // noinspection XmlUnusedNamespaceDeclaration
-        let inputFromView: string = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}"${viewTarget}>${text}</a></p></div>`;
-        let expectedData: string = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}"${dataShow}${dataRole}>${text}</a></p></div>`;
-        const testData: DataFilterRulesTestData = {
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: inputFromView,
-          expectedData: expectedData,
-        };
-        if (!non_bijective) {
-          testData.expectedView = true;
-        }
-        if (!!comment) {
-          testData.comment = comment;
-        }
+  const linkBehaviorFixtures: DataFilterTestFixture[] = Object.entries(expectedTargetToXlinkShowAndRole).map(
+    ([target, { show, role, comment, non_bijective }], index) => {
+      const name = `ANCHOR#${index}: Should map ${target === noTarget ? "no target" : `target="${target}"`} to ${
+        !show ? "no xlink:show" : `xlink:show="${show}"`
+      } and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
+      const viewTarget = `${target === noTarget ? "" : ` target="${target}"`}`;
+      const dataShow: string = !show ? "" : ` xlink:show="${show}"`;
+      const dataRole: string = !role ? "" : ` xlink:role="${role}"`;
+      // noinspection XmlUnusedNamespaceDeclaration
+      const inputFromView = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}"${viewTarget}>${text}</a></p></div>`;
+      const expectedData = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}"${dataShow}${dataRole}>${text}</a></p></div>`;
+      const testData: DataFilterRulesTestData = {
+        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+        inputFromView: inputFromView,
+        expectedData: expectedData,
+      };
+      if (!non_bijective) {
+        testData.expectedView = true;
+      }
+      if (!!comment) {
+        testData.comment = comment;
+      }
 
-        return [name, testData];
-      });
+      return [name, testData];
+    }
+  );
 
   // noinspection XmlUnusedNamespaceDeclaration
   const externalLinkFixtures: DataFilterTestFixture[] = [
@@ -584,6 +606,7 @@ describe("Default Data Filter Rules", () => {
 
   const textEntityFixtures: DataFilterTestFixture[] = [
     "&nbsp;",
+    "&quot;",
     "&cent;",
     "&plusmn;",
     "&Alpha;",
@@ -596,18 +619,27 @@ describe("Default Data Filter Rules", () => {
     "&loz;",
     // Pile of Poo, testers favorite character
     "&#128169;",
-  ].map(
-    (entity, index) => [
-      `TEXT/ENTITY#${(index + 1)}: Entity should be resolved to plain character: ${entity}`,
-      {
-        comment: "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",
-        strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-        inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
-        expectedView: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
-      }
-    ],
-  );
+  ].map((entity, index) => [
+    `TEXT/ENTITY#${index + 1}: Entity should be resolved to plain character: ${entity}`,
+    {
+      comment:
+        "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",
+      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
+      expectedData: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
+      expectedView: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
+    },
+  ]);
+  const textCoreEntityFixtures: DataFilterTestFixture[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => [
+    `TEXT/CORE_ENTITY#${index + 1}: Core Entity should be kept as is: ${entity}`,
+    {
+      disabled: "CoreMedia/ckeditor-plugins#39: Bug in handling these core XML entities.",
+      comment: "toView: In contrast to other entities, we must keep core entities, as otherwise XML may break.",
+      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${entity}${text}</p></div>`,
+      expectedData: `<div xmlns="${ns_richtext}"><p>${text}${entity}${text}</p></div>`,
+    },
+  ]);
   const tableFixtures: DataFilterTestFixture[] = [
     [
       "TABLE#01: Empty table should be removed, as it is invalid.",
@@ -621,7 +653,8 @@ describe("Default Data Filter Rules", () => {
     [
       "TABLE#02: tbody should be added if missing.",
       {
-        comment: "This is a design decision which eases data-processing implementation. If this is unexpected, it may be changed.",
+        comment:
+          "This is a design decision which eases data-processing implementation. If this is unexpected, it may be changed.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><table><tr><td>${text}</td></tr></table></div>`,
         expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
@@ -631,7 +664,8 @@ describe("Default Data Filter Rules", () => {
     [
       "TABLE#03: thead should be transformed as being part of tbody.",
       {
-        comment: "ckeditor/ckeditor5#9360: We must try at best effort to keep information about rows which are meant to be part of thead.",
+        comment:
+          "ckeditor/ckeditor5#9360: We must try at best effort to keep information about rows which are meant to be part of thead.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><th>Head</th></tr></thead></table></div>`,
         expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr class="tr--header"><td class="td--header">Head</td></tr></tbody></table></div>`,
@@ -650,7 +684,8 @@ describe("Default Data Filter Rules", () => {
     [
       "TABLE#05: thead should merge into tbody",
       {
-        comment: "One contract is, that thead merges into existing tbody, so that e.g. class attributes at tbody are kept.",
+        comment:
+          "One contract is, that thead merges into existing tbody, so that e.g. class attributes at tbody are kept.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><table><thead><tr><td>Head</td></tr></thead><tbody class="${attr_class}"><tr><td>Body</td></tr></tbody></table></div>`,
         expectedData: `<div xmlns="${ns_richtext}"><table><tbody class="${attr_class}"><tr class="tr--header"><td>Head</td></tr><tr><td>Body</td></tr></tbody></table></div>`,
@@ -770,7 +805,8 @@ describe("Default Data Filter Rules", () => {
     [
       "TABLE#18: Multiple tbodies should be merged into first.",
       {
-        comment: "HTML may provide multiple tbodies, CoreMedia RichText may only have one. Design decision: Only keep attributes of first tbody.",
+        comment:
+          "HTML may provide multiple tbodies, CoreMedia RichText may only have one. Design decision: Only keep attributes of first tbody.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><table><tbody class="body1"><tr><td>Body 1</td></tr></tbody><tbody class="body2"><tr><td>Body 2</td></tr></tbody></table></div>`,
         expectedData: `<div xmlns="${ns_richtext}"><table><tbody class="body1"><tr><td>Body 1</td></tr><tr><td>Body 2</td></tr></tbody></table></div>`,
@@ -778,8 +814,8 @@ describe("Default Data Filter Rules", () => {
       },
     ],
   ];
-  const listFixtures: DataFilterTestFixture[] =
-    flatten(["ul", "ol"].map(el => {
+  const listFixtures: DataFilterTestFixture[] = flatten(
+    ["ul", "ol"].map((el) => {
       const key = el.toUpperCase();
       return [
         [
@@ -810,9 +846,10 @@ describe("Default Data Filter Rules", () => {
           },
         ],
       ];
-    }));
-  const headingFixtures: DataFilterTestFixture[] =
-    flatten([1, 2, 3, 4, 5, 6].map(level => {
+    })
+  );
+  const headingFixtures: DataFilterTestFixture[] = flatten(
+    [1, 2, 3, 4, 5, 6].map((level) => {
       const el = `h${level}`;
       const key = el.toUpperCase();
       const expectedClass = `p--heading-${level}`;
@@ -837,9 +874,10 @@ describe("Default Data Filter Rules", () => {
           },
         ],
       ];
-    }));
-  const invalidHeadingFixtures: DataFilterTestFixture[] =
-    flatten([0, 7].map(level => {
+    })
+  );
+  const invalidHeadingFixtures: DataFilterTestFixture[] = flatten(
+    [0, 7].map((level) => {
       const key = `INVALID_H${level}`;
       const invalidHeadingClass = `p--heading-${level}`;
 
@@ -854,9 +892,10 @@ describe("Default Data Filter Rules", () => {
           },
         ],
       ];
-    }));
-  const defaultBlockFixtures: DataFilterTestFixture[] =
-    flatten(["p", "pre", "blockquote"].map(el => {
+    })
+  );
+  const defaultBlockFixtures: DataFilterTestFixture[] = flatten(
+    ["p", "pre", "blockquote"].map((el) => {
       const key = el.toUpperCase();
       return [
         [
@@ -886,9 +925,10 @@ describe("Default Data Filter Rules", () => {
           },
         ],
       ];
-    }));
-  const replaceInlineSimpleFixtures: DataFilterTestFixture[] =
-    flatten([
+    })
+  );
+  const replaceInlineSimpleFixtures: DataFilterTestFixture[] = flatten(
+    [
       {
         view: "b",
         data: "strong",
@@ -899,78 +939,77 @@ describe("Default Data Filter Rules", () => {
         data: "em",
         bijective: true,
       },
-    ]
-      .map(({ view, data, bijective }) => {
-        const key = view.toUpperCase();
-        return [
-          [
-            `${key}#1: View: <${view}> ${bijective ? '<' : ''}-> Data: <${data}>.`,
-            {
-              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-              inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
-              expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-              expectedView: bijective,
-            },
-          ],
-          [
-            `${key}#2: Should keep <${data}> when transformed.`,
-            {
-              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-              inputFromView: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-              expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-            },
-          ],
-        ];
-      }));
-  const replaceInlineBySpanFixtures: DataFilterTestFixture[] =
-    flatten(
-      [
-        {
-          view: "u",
-          dataClass: "underline",
-          bijective: true,
-        },
-        {
-          view: "strike",
-          dataClass: "strike",
-          bijective: false,
-        },
-        {
-          view: "s",
-          dataClass: "strike",
-          bijective: true,
-        },
-        {
-          view: "del",
-          dataClass: "strike",
-          bijective: false,
-        },
-      ].map(({ view, dataClass, bijective }) => {
-        // bijective: Typically false for "alias" mappings.
-        // The mapping which corresponds to the default representation in
-        // CKEditor should be bijective (i.e. = true).
-        const key = view.toUpperCase();
-        return [
-          [
-            `${key}#1: View: <${view}> ${bijective ? '<' : ''}-> Data: by <span class="${dataClass}">.`,
-            {
-              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-              inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
-              expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
-              expectedView: bijective,
-            },
-          ],
-          [
-            `${key}#2: Should keep <span class="${dataClass}"> when transformed.`,
-            {
-              strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-              inputFromView: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
-              expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
-            },
-          ],
-        ];
-      })
-    );
+    ].map(({ view, data, bijective }) => {
+      const key = view.toUpperCase();
+      return [
+        [
+          `${key}#1: View: <${view}> ${bijective ? "<" : ""}-> Data: <${data}>.`,
+          {
+            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+            inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+            expectedView: bijective,
+          },
+        ],
+        [
+          `${key}#2: Should keep <${data}> when transformed.`,
+          {
+            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+            inputFromView: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
+          },
+        ],
+      ];
+    })
+  );
+  const replaceInlineBySpanFixtures: DataFilterTestFixture[] = flatten(
+    [
+      {
+        view: "u",
+        dataClass: "underline",
+        bijective: true,
+      },
+      {
+        view: "strike",
+        dataClass: "strike",
+        bijective: false,
+      },
+      {
+        view: "s",
+        dataClass: "strike",
+        bijective: true,
+      },
+      {
+        view: "del",
+        dataClass: "strike",
+        bijective: false,
+      },
+    ].map(({ view, dataClass, bijective }) => {
+      // bijective: Typically false for "alias" mappings.
+      // The mapping which corresponds to the default representation in
+      // CKEditor should be bijective (i.e. = true).
+      const key = view.toUpperCase();
+      return [
+        [
+          `${key}#1: View: <${view}> ${bijective ? "<" : ""}-> Data: by <span class="${dataClass}">.`,
+          {
+            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+            inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
+            expectedView: bijective,
+          },
+        ],
+        [
+          `${key}#2: Should keep <span class="${dataClass}"> when transformed.`,
+          {
+            strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+            inputFromView: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
+            expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
+          },
+        ],
+      ];
+    })
+  );
   /*
    * In CKEditor 4 data-processing we did some clean-up of elements. While this
    * was most likely dealing with shortcomings of CKEditor 4, we want to ensure
@@ -1032,12 +1071,13 @@ describe("Default Data Filter Rules", () => {
       },
     ],
     [
-      "CLEANUP#7: Remove irrelevant <span>.",
+      "CLEANUP#7: Don't remove possibly irrelevant <span>.",
       {
-        comment: "This has been a design decision around 2011 or before. As the span does not violate RichText DTD we may argue about it.",
+        comment:
+          "While around 2011 we decided to delete irrelevant spans, there is no reason with regards to RichText DTD. And clean-up will make things more complicate. Thus, decided in 2021 to keep it.",
         strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
         inputFromView: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
-        expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+        expectedData: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
       },
     ],
   ];
@@ -1069,6 +1109,7 @@ describe("Default Data Filter Rules", () => {
     ...externalLinkFixtures,
     ...contentLinkFixtures,
     ...textEntityFixtures,
+    ...textCoreEntityFixtures,
     ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,
@@ -1090,62 +1131,62 @@ describe("Default Data Filter Rules", () => {
     return 0;
   });
 
-  describe.each<DataFilterTestFixture>(testFixtures)(
-    "(%#) %s",
-    (name: string, testData: DataFilterRulesTestData) => {
-      const { disabled, strictness, inputFromView, expectedData, expectedView } = testData;
+  describe.each<DataFilterTestFixture>(testFixtures)("(%#) %s", (name: string, testData: DataFilterRulesTestData) => {
+    const { disabled, strictness, inputFromView, expectedData, expectedView } = testData;
 
-      if (TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
-        test.todo(`${name} (disabled by test selector for debugging purpose)`);
-        return;
-      }
+    if (TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
+      test.todo(`${name} (disabled by test selector for debugging purpose)`);
+      return;
+    }
 
-      for (const currentStrictness of strictness) {
-        const { toData, toView } = getConfig();
-        const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
-        const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
+    for (const currentStrictness of strictness) {
+      const { toData, toView } = getConfig();
+      const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
+      const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
 
-        const testCaseName = `${name} (mode: ${strictnessKeys[currentStrictness]})`;
-        const toDataTestCase = () => {
-          const xmlDocument: Document = parser.parseFromString(inputFromView, "text/xml");
+      const testCaseName = `${name} (mode: ${strictnessKeys[currentStrictness]})`;
+      const toDataTestCase = () => {
+        const xmlDocument: Document = parser.parseFromString(inputFromView, "text/xml");
+
+        if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+          throw new Error(`Failed parsing XML: ${inputFromView}: ${xmlDocument.documentElement.outerHTML}`);
+        }
+
+        toDataFilter.applyTo(xmlDocument.documentElement);
+        const actualXml = serializer.serializeToString(xmlDocument.documentElement);
+        expect(actualXml).toEqualXML(expectedData);
+      };
+
+      const toViewTestCase = () => {
+        if (!!expectedView) {
+          // If `true` expect bijective mapping.
+          const expectedViewXml = expectedView === true ? inputFromView : expectedView;
+          const xmlDocument: Document = parser.parseFromString(expectedData, "text/xml");
 
           if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
-            throw new Error(`Failed parsing XML: ${inputFromView}: ${xmlDocument.documentElement.outerHTML}`)
+            throw new Error(`Failed parsing XML: ${expectedData}: ${xmlDocument.documentElement.outerHTML}`);
           }
 
-          toDataFilter.applyTo(xmlDocument.documentElement);
+          toViewFilter.applyTo(xmlDocument.documentElement);
+          // Note, that in RichTextDataProcessor we serialize via CKEditor's
+          // BasicHtmlWriter, which provides subtle differences, which again
+          // cause CoreMedia/ckeditor-plugins#40.
           const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-          expect(actualXml).toEqualXML(expectedData);
-        };
-
-        const toViewTestCase = () => {
-          if (!!expectedView) {
-            // If `true` expect bijective mapping.
-            const expectedViewXml = expectedView === true ? inputFromView : expectedView;
-            const xmlDocument: Document = parser.parseFromString(expectedData, "text/xml");
-
-            if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
-              throw new Error(`Failed parsing XML: ${expectedData}: ${xmlDocument.documentElement.outerHTML}`)
-            }
-
-            toViewFilter.applyTo(xmlDocument.documentElement);
-            const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-            expect(actualXml).toEqualXML(expectedViewXml);
-          }
-        };
-
-        if (disabled) {
-          const disabledMessage = typeof disabled === "string" ? ` (${disabled})` : "";
-          const disabledName = `${testCaseName}${disabledMessage}`;
-          test.skip(`toData: ${disabledName}`, toDataTestCase);
-          !!expectedView && test.skip(`toView: ${disabledName}`, toViewTestCase);
-        } else {
-          test(`toData: ${testCaseName}`, toDataTestCase);
-          !!expectedView && test(`toView: ${testCaseName}`, toViewTestCase);
+          expect(actualXml).toEqualXML(expectedViewXml);
         }
+      };
+
+      if (disabled) {
+        const disabledMessage = typeof disabled === "string" ? ` (${disabled})` : "";
+        const disabledName = `${testCaseName}${disabledMessage}`;
+        test.skip(`toData: ${disabledName}`, toDataTestCase);
+        !!expectedView && test.skip(`toView: ${disabledName}`, toViewTestCase);
+      } else {
+        test(`toData: ${testCaseName}`, toDataTestCase);
+        !!expectedView && test(`toView: ${testCaseName}`, toViewTestCase);
       }
     }
-  )
+  });
 });
 
 /**
@@ -1165,5 +1206,5 @@ function encodeString(str: string): string {
   const text: string = decodeEntity(str);
   // Takes care of Unicode characters. https://mathiasbynens.be/notes/javascript-unicode
   const chars: string[] = [...text];
-  return chars.map((c) => `&#${c.codePointAt(0)};`).join('');
+  return chars.map((c) => `&#${c.codePointAt(0)};`).join("");
 }

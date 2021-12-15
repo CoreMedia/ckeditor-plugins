@@ -1,8 +1,5 @@
 import "jest-xml-matcher";
-import {
-  parseFilterRuleSetConfigurations,
-  FilterRuleSetConfiguration,
-} from "../src/Rules";
+import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
 import HtmlFilter from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
@@ -39,18 +36,18 @@ type DisablableTestCase = {
 };
 
 type ParseFilterRuleSetConfigurationTestData = {
-  config: FilterRuleSetConfiguration,
+  config: FilterRuleSetConfiguration;
   // The original 'view'
-  from: string,
+  from: string;
   // The transformed data.
-  data: string,
+  data: string;
   // The view after re-transforming the previously generated data.
-  view: string,
-}
+  view: string;
+};
 
 type WithDefaultsTestData = {
-  default: FilterRuleSetConfiguration,
-}
+  default: FilterRuleSetConfiguration;
+};
 
 const replaceElementByChildren: ElementFilterRule = (p) => {
   p.node.replaceByChildren = true;
@@ -72,13 +69,10 @@ describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
-
 });
 
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No Defaults)", () => {
-  type TestData = CommentableTestData &
-    DisablableTestCase &
-    ParseFilterRuleSetConfigurationTestData;
+  type TestData = CommentableTestData & DisablableTestCase & ParseFilterRuleSetConfigurationTestData;
   type TestFixture = [string, TestData];
   const testFixtures: TestFixture[] = [
     [
@@ -96,7 +90,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
         config: {
           elements: {
             el: replaceElementByChildren,
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: "<root>Lorem Ipsum Dolor</root>",
@@ -124,7 +118,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
                 el: replaceElementByChildren,
               },
             },
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: "<root>Lorem <el>Ipsum</el> Dolor</root>",
@@ -139,7 +133,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
             el: {
               toView: replaceElementByChildren,
             },
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: "<root>Lorem <el>Ipsum</el> Dolor</root>",
@@ -186,9 +180,9 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
                 data: (p) => {
                   p.node.name = "el";
                 },
-              }
+              },
             },
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: "<root>Lorem <data>Ipsum</data> Dolor</root>",
@@ -210,7 +204,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
                 delete p.node.attributes["dataattr"];
               },
             },
-          }
+          },
         },
         from: `<root>Lorem <el viewattr="value">Ipsum</el> Dolor</root>`,
         data: `<root>Lorem <el dataattr="value">Ipsum</el> Dolor</root>`,
@@ -235,7 +229,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
                 },
               },
             },
-          }
+          },
         },
         from: `<root>Lorem <el>Ipsum</el> Dolor</root>`,
         data: `<root>Lorem <data type="el">Ipsum</data> Dolor</root>`,
@@ -245,7 +239,8 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
     [
       "#elementAttributeMapping: Should handle ambiguous toView-Mapping.",
       {
-        comment: "This is similar to heading-handling for h1 to p with p--heading-1 as class attribute, here for two heading levels.",
+        comment:
+          "This is similar to heading-handling for h1 to p with p--heading-1 as class attribute, here for two heading levels.",
         config: {
           elements: {
             el1: {
@@ -276,7 +271,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
                 },
               },
             },
-          }
+          },
         },
         from: `<root>Lorem <el1>Ipsum</el1> Dolor <el2>Sit</el2> Amet</root>`,
         data: `<root>Lorem <data type="el1">Ipsum</data> Dolor <data type="el2">Sit</data> Amet</root>`,
@@ -286,7 +281,6 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
   ];
 
   describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
-
     if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
       return;
@@ -345,7 +339,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
             el: (p) => {
               p.node.attributes["label"] = "data";
             },
-          }
+          },
         },
         config: {
           elements: {
@@ -353,7 +347,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
               p.parentRule(p);
               p.node.name = "data";
             },
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: `<root>Lorem <data label="data">Ipsum</data> Dolor</root>`,
@@ -368,14 +362,14 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
             el: (p) => {
               p.node.attributes["label"] = "data";
             },
-          }
+          },
         },
         config: {
           elements: {
             el: (p) => {
               p.node.name = "data";
             },
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: `<root>Lorem <data>Ipsum</data> Dolor</root>`,
@@ -426,12 +420,12 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
           },
           elements: {
             el: {
-              toData: (p) => p.node.name = "data",
+              toData: (p) => (p.node.name = "data"),
               toView: {
-                data: (p) => p.node.name = "view",
+                data: (p) => (p.node.name = "view"),
               },
             },
-          }
+          },
         },
         config: {
           text: (p) => {
@@ -451,7 +445,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
                 },
               },
             },
-          }
+          },
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: `<root> mVrVL<data as="data">mVspV</data>rVlVD </root>`,
@@ -461,7 +455,6 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
   ];
 
   describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
-
     if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
       return;

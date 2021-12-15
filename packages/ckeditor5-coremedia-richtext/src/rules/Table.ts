@@ -1,6 +1,7 @@
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { replaceByElementAndClassBackAndForth } from "./ReplaceBy";
 import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import {langMapper, langMapperConfiguration, langViewFilterRule} from "./Lang";
 
 /**
  * Reserved class to denote tables cells in CoreMedia RichText, which are
@@ -22,36 +23,41 @@ const THEAD_ROW_CLASS = "tr--header";
 const TFOOT_ROW_CLASS = "tr--footer";
 
 export const tableRules: ElementsFilterRuleSetConfiguration = {
-  td: (params) => {
-    params.node.removeChildren = params.node.isEmpty((el, idx, children) => {
-      // !Reverted logic! `true` signals, that the element should be considered,
-      //   when judging on "is empty".
+  td: {
+    toData: (params) => {
+      langMapper.toData(params);
+      params.node.removeChildren = params.node.isEmpty((el, idx, children) => {
+        // !Reverted logic! `true` signals, that the element should be considered,
+        //   when judging on "is empty".
 
-      // Only filter, if there is only one child. While it may be argued, if this
-      // is useful, this is the behavior as we had it for CKEditor 4.
-      if (children.length !== 1) {
-        return true;
-      }
-      // If the element has more than one child node, the following rules don't apply.
-      if (el.childNodes.length > 1) {
-        return true;
-      }
+        // Only filter, if there is only one child. While it may be argued, if this
+        // is useful, this is the behavior as we had it for CKEditor 4.
+        if (children.length !== 1) {
+          return true;
+        }
+        // If the element has more than one child node, the following rules don't apply.
+        if (el.childNodes.length > 1) {
+          return true;
+        }
 
-      // Ignore, if only one br exists.
-      if (el.nodeName.toLowerCase() === "br") {
-        return false;
-      }
-      // Next gate: Further analysis only required, if current element is <p>
-      if (el.nodeName.toLowerCase() !== "p") {
-        return true;
-      }
-      // Only respect p-element, if it is considered non-empty.
-      // Because of the check above, we already know, that, the element
-      // has at maximum one child.
-      return el.hasChildNodes() && el.firstChild?.nodeName.toLowerCase() !== "br";
-    });
+        // Ignore, if only one br exists.
+        if (el.nodeName.toLowerCase() === "br") {
+          return false;
+        }
+        // Next gate: Further analysis only required, if current element is <p>
+        if (el.nodeName.toLowerCase() !== "p") {
+          return true;
+        }
+        // Only respect p-element, if it is considered non-empty.
+        // Because of the check above, we already know, that, the element
+        // has at maximum one child.
+        return el.hasChildNodes() && el.firstChild?.nodeName.toLowerCase() !== "br";
+      });
+    },
+    toView: langViewFilterRule,
   },
-  th: replaceByElementAndClassBackAndForth("th", "td", HEADER_CELL_CLASS),
+  tr: langMapperConfiguration,
+  th: replaceByElementAndClassBackAndForth("th", "td", HEADER_CELL_CLASS, langMapper),
   /*
    * tr/tables rules:
    * ----------------
@@ -61,18 +67,24 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
    * behavior, which checks for elements which must not be empty but now
    * are empty.
    */
-  tbody: (params) => {
-    // If there are more elements at parent than just this tbody, tbody must
-    // be removed. Typical scenario: Unknown element <thead> got removed, leaving
-    // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
-    // all nested trs up one level and remove the tbody params.el.
-    params.node.replaceByChildren = !params.node.singleton;
+  tbody: {
+    toData: (params) => {
+      langMapper.toData(params);
+      // If there are more elements at parent than just this tbody, tbody must
+      // be removed. Typical scenario: Unknown element <thead> got removed, leaving
+      // a structure like <table><tr/><tbody><tr/></tbody></table>. We must now move
+      // all nested trs up one level and remove the tbody params.el.
+      params.node.replaceByChildren = !params.node.singleton;
+    },
+    toView: langViewFilterRule,
   },
   table: {
     toData: (params: ElementFilterParams): void => {
+      langMapper.toData(params);
       toDataProcessTableContents(new TableWrapper(params.node.delegate));
     },
     toView: (params: ElementFilterParams): void => {
+      langMapper.toView(params);
       toViewProcessTableContents(new TableWrapper(params.node.delegate));
     },
   },

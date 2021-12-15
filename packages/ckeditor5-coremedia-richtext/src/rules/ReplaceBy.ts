@@ -1,6 +1,7 @@
 import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { ElementFilterRulesByName } from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
-import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { allFilterRules, ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { asDataFilterRule, AttributeMapper } from "@coremedia/ckeditor5-dataprocessor-support/Attributes";
 
 /**
  * Rule to replace a given element by a new element with an optional
@@ -10,10 +11,11 @@ import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/El
  * @param className optional class name to apply
  */
 export function replaceBy(name: string, className?: string): ElementFilterRule {
-  return ({ node }) => {
+  return (params) => {
+    const { node } = params;
     node.name = name;
     if (className) {
-      node.attributes["class"] = className;
+      node.classList.add(className);
     }
   };
 }
@@ -25,19 +27,23 @@ export function replaceBy(name: string, className?: string): ElementFilterRule {
  * @param originalName original name of the element to match
  * @param className class attribute which must match; this attribute will be removed from the new element
  * @param newName new element name
+ * @param subSequentRules rules to apply for a mapped element in case the class matches
  */
 export function replaceElementAndClassBy(
   originalName: string,
   className: string,
-  newName: string
+  newName: string,
+  ...subSequentRules: ElementFilterRule[]
 ): ElementFilterRulesByName {
   return {
-    [originalName]: ({ node }) => {
-      if (node.attributes["class"] !== className) {
+    [originalName]: (params) => {
+      const { node } = params;
+      if (!node.classList.contains(className)) {
         return;
       }
-      delete node.attributes["class"];
+      node.classList.remove(className);
       node.name = newName;
+      subSequentRules.forEach((r) => r(params));
     },
   };
 }
@@ -49,14 +55,22 @@ export function replaceElementAndClassBy(
  * @param viewName name of the view element
  * @param dataName element name for data
  * @param dataClassName class attribute value to apply to data element
+ * @param attributeMapper optional mapper for attributes
  */
 export function replaceByElementAndClassBackAndForth(
   viewName: string,
   dataName: string,
-  dataClassName: string
+  dataClassName: string,
+  attributeMapper?: AttributeMapper
 ): ToDataAndViewElementConfiguration {
+  const toDataRule = !attributeMapper
+    ? replaceBy(dataName, dataClassName)
+    : allFilterRules(replaceBy(dataName, dataClassName), asDataFilterRule(attributeMapper));
+  const toViewRule = !attributeMapper
+    ? replaceElementAndClassBy(dataName, dataClassName, viewName)
+    : replaceElementAndClassBy(dataName, dataClassName, viewName, attributeMapper.toView);
   return {
-    toData: replaceBy(dataName, dataClassName),
-    toView: replaceElementAndClassBy(dataName, dataClassName, viewName),
+    toData: toDataRule,
+    toView: toViewRule,
   };
 }

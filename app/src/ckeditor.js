@@ -16,6 +16,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import Table from '@ckeditor/ckeditor5-table/src/table';
@@ -33,6 +34,11 @@ import CoreMediaStudioEssentials, {
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
+import GeneralRichTextSupport
+  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
+import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
+import {CoreMediaRichText10Dtd} from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -65,11 +71,14 @@ ClassicEditor.create(document.querySelector('.editor'), {
     AutoLink,
     Link,
     CoreMediaStudioEssentials,
+    GeneralHtmlSupport,
+    GeneralRichTextSupport,
     List,
     Paragraph,
     PasteFromOffice,
     RemoveFormat,
     Strikethrough,
+    SourceEditing,
     Subscript,
     Superscript,
     Table,
@@ -106,6 +115,8 @@ ClassicEditor.create(document.querySelector('.editor'), {
       'alignment',
       '|',
       'insertTable',
+      '|',
+      'sourceEditing',
     ]
   },
   alignment: {
@@ -114,9 +125,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     // Note, that in contrast to CKEditor 4 approach, these classes are now
     // applicable to any block element, while it supported only `<p>` in the
     // past.
-    // TODO[cke] This approach fails currently for headings, for example.
-    // TODO[cke] It would require the data-processor to respect that <h1> et al.
-    // TODO[cke] may contain additional class attributes.
     options: [
       {
         name: "left",
@@ -189,58 +197,22 @@ ClassicEditor.create(document.querySelector('.editor'), {
     strictness: Strictness.STRICT,
     rules: {
       elements: {
-        // CodeBlock Plugin Support
-        code: {
-          toData: (params) => {
-            params.parentRule(params);
-
-            const originalClass = params.node.attributes["class"];
-            params.node.attributes["class"] = `code--${originalClass}`;
-            params.node.name = "span";
-          },
-          toView: {
-            span: (params) => {
-              params.parentRule(params);
-
-              const originalClass = params.node.attributes["class"] || "";
-              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
-              //    can be italics, but also marked.
-              const pattern = /^code--(\S*)$/;
-              const match = pattern.exec(originalClass);
-              if (match) {
-                params.node.name = "code";
-                params.node.attributes["class"] = match[1];
-              }
-            },
-          },
-        },
         // Highlight Plugin Support
-        mark: {
-          toData: (params) => {
-            params.parentRule(params);
-
-            const originalClass = params.node.attributes["class"];
-            params.node.attributes["class"] = `mark--${originalClass}`;
-            params.node.name = "span";
-          },
-          toView: {
-            span: (params) => {
-              params.parentRule(params);
-
-              const originalClass = params.node.attributes["class"] || "";
-              // TODO[cke] Would be really nice having "class list" access instead here, so that an element
-              //    can be italics, but also marked.
-              const pattern = /^mark--(\S*)$/;
-              const match = pattern.exec(originalClass);
-              if (match) {
-                params.node.name = "mark";
-                params.node.attributes["class"] = match[1];
-              }
-            },
-          },
-        },
+        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
       },
     },
+  },
+  htmlSupport: {
+    allow: [
+      {
+        // As we represent `<mark>` as `<span class="mark">`, we must ensure,
+        // that the same attributes are kept as is from CMS. For example, the
+        // dir-attribute, which is valid for `<span>` must not be removed just
+        // because CKEditor is not configured to handle it.
+        name: "mark",
+        ...CoreMediaRichText10Dtd.attrs,
+      }
+    ],
   },
 }).then(newEditor => {
   CKEditorInspector.attach({

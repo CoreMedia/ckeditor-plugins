@@ -10,7 +10,12 @@ const PARSER = new DOMParser();
 
 function parseAndValidate(xmlString: string): Document {
   const xmlDocument = PARSER.parseFromString(xmlString, "text/xml");
-  const xPathResult: XPathResult = xmlDocument.evaluate("/parsererror/text()", xmlDocument, null, XPathResult.STRING_TYPE);
+  const xPathResult: XPathResult = xmlDocument.evaluate(
+    "/parsererror/text()",
+    xmlDocument,
+    null,
+    XPathResult.STRING_TYPE
+  );
   if (xPathResult.stringValue) {
     throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
   }
@@ -67,7 +72,6 @@ interface TextFilterTestData extends CommentableTestData, DisablableTestData {
   restartPath?: string;
 }
 
-
 describe("TextProxy.applyRules()", () => {
   type ApplyRulesData = [
     /**
@@ -77,8 +81,8 @@ describe("TextProxy.applyRules()", () => {
     TextFilterTestData
   ];
 
-  const asciiText: string = "Lorem ipsum dolor sit amet.";
-  const otherAsciiText: string = "Hinter den Wortbergen.";
+  const asciiText = "Lorem ipsum dolor sit amet.";
+  const otherAsciiText = "Hinter den Wortbergen.";
 
   const testData: ApplyRulesData[] = [
     [
@@ -169,18 +173,16 @@ describe("TextProxy.applyRules()", () => {
   ];
 
   describe.each<ApplyRulesData>(testData)("(%#) %s", (name, testData) => {
-
     function getTextNode(): Text {
       const textNode: Text | null = <Text>(
-        inputDocument.evaluate(
-          testData.nodePath,
-          inputDocument,
-          null,
-          XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+        inputDocument.evaluate(testData.nodePath, inputDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+          .singleNodeValue
       );
 
       if (!textNode) {
-        throw new Error(`Test Setup Issue: Unable resolving XPath '${testData.nodePath}' to element under test in: ${testData.from}`);
+        throw new Error(
+          `Test Setup Issue: Unable resolving XPath '${testData.nodePath}' to element under test in: ${testData.from}`
+        );
       }
       return textNode;
     }
@@ -190,19 +192,18 @@ describe("TextProxy.applyRules()", () => {
         return null;
       }
       const restartNode: Node | null = <Node>(
-        expectedDocument.evaluate(
-          testData.restartPath,
-          expectedDocument,
-          null,
-          XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+        expectedDocument.evaluate(testData.restartPath, expectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+          .singleNodeValue
       );
       if (!restartNode) {
-        throw new Error(`Test Setup Issue: Unable resolving XPath '${testData.restartPath}' to expected restart node in: ${testData.to}`);
+        throw new Error(
+          `Test Setup Issue: Unable resolving XPath '${testData.restartPath}' to expected restart node in: ${testData.to}`
+        );
       }
       return restartNode;
     }
 
-    function parseDisabled(): { disabled: boolean, namePostfix: string } {
+    function parseDisabled(): { disabled: boolean; namePostfix: string } {
       if (!testData.disabled) {
         return { disabled: false, namePostfix: "" };
       }
@@ -217,8 +218,8 @@ describe("TextProxy.applyRules()", () => {
       }
       return {
         disabled: true,
-        namePostfix: ` (${typeof state === "string" ? state : "disabled"})`
-      }
+        namePostfix: ` (${typeof state === "string" ? state : "disabled"})`,
+      };
     }
 
     const inputDocument: Document = parseAndValidate(testData.from);

@@ -27,7 +27,20 @@
       </ul>
     </nav>
   </div>
-  <div id="examples"></div>
+  <div id="examples">
+    <label for="xmp-input">
+      Example Data:
+    </label>
+    <input id="xmp-input"
+           list="xmp-data"
+           placeholder="Start typing..."
+           autocomplete="on"
+    >
+    <datalist id="xmp-data">
+      <!-- Will be filled from example-data.js -->
+    </datalist>
+    <button id="xmp-reload">🔄</button>
+  </div>
 </header>
 
 <main>

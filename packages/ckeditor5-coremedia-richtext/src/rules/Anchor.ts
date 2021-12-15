@@ -1,5 +1,7 @@
 import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { xLinkActuateMapper, xLinkTitleMapper, xLinkTypeMapper } from "./XLink";
+import { langMapper } from "./Lang";
 
 const CONTENT_LINK_DATA_REGEXP = /^content\/(?<id>\d+)*/;
 const CONTENT_LINK_DATA_PREFIX = "content/";
@@ -207,7 +209,8 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
 }
 
 export const handleAnchor: ToDataAndViewElementConfiguration = {
-  toData: ({ node }) => {
+  toData: (params) => {
+    const { node } = params;
     if (!hasHref(node)) {
       // Invalid state: We have an a-element without href which is not
       // supported by CoreMedia RichText DTD.
@@ -216,9 +219,18 @@ export const handleAnchor: ToDataAndViewElementConfiguration = {
     }
     hrefToXLinkHref(node);
     targetToXLinkAttributes(node);
+    xLinkTypeMapper.toData(params);
+    xLinkActuateMapper.toData(params);
+    xLinkTitleMapper.toData(params);
+    langMapper.toData(params);
   },
-  toView: ({ node }) => {
+  toView: (params) => {
+    const { node } = params;
     xLinkHrefToHref(node);
     xLinkShowAndRoleToTarget(node);
+    xLinkTypeMapper.toView(params);
+    xLinkActuateMapper.toView(params);
+    xLinkTitleMapper.toView(params);
+    langMapper.toView(params);
   },
 };

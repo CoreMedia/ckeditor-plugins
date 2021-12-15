@@ -55,7 +55,7 @@
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^31.0.0",
     "@ckeditor/ckeditor5-engine": "^31.0.0",
-    "@ckeditor/ckeditor5-utils": "^30.0.0"
+    "@ckeditor/ckeditor5-utils": "^31.0.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-dataprocessor-support": "1.0.2-rc.3",

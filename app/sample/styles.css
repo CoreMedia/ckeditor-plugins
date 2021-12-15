@@ -13,7 +13,7 @@
 	--ck-sample-editor-min-height: 400px;
 }
 
-/* --------- NOTOFICATIONS  ----------------------------------------------------------------------------------------- */
+/* --------- NOTIFICATIONS ------------------------------------------------------------------------------------------ */
 
 #notifications {
   position: fixed;
@@ -29,6 +29,27 @@
   color: white;
   border-radius: 2px;
   box-shadow: 0 4px 4px rgba(0,0,0,0.2);
+}
+
+/* --------- EXAMPLE DATA ------------------------------------------------------------------------------------------- */
+
+input.error {
+  border-color: red;
+  background-color: #ff000044;
+}
+.ck-content .grs.xmp {
+  color: #880000;
+}
+.ck-content .grs.xmp1 {
+  color: #004444;
+}
+.ck-content [lang="de"] {
+  background: rgba(0,0,0,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(255,0,0,0.3) 50%, rgba(255,204,0,0.3) 100%) !important;
+}
+.ck-content [lang="en"] {
+  background: rgba(0,36,125,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,36,125,0.3) 0%, rgba(255,255,255,0.3) 50%, rgba(207,20,43,0.3) 100%) !important;
 }
 
 /* --------- DND  --------------------------------------------------------------------------------------------------- */

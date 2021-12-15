@@ -1,14 +1,17 @@
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { langMapper } from "./Lang";
 
-export const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
-export const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
+const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
+const HEADING_CLASSES = Array.from(Array(6).keys()).map((i) => `p--heading-${i + 1}`);
+const HEADING_BY_CLASS_NUMBER_PATTERN = /^p--heading-(\d+)$/;
 
 /**
  * Transforms a heading from view to a paragraph having a class attribute
  * denoting the heading level.
  */
-export const headingToParagraph: ElementFilterRule = ({ node }) => {
+export const headingToParagraph: ElementFilterRule = (params) => {
+  const { node } = params;
   const match = HEADING_NUMBER_PATTERN.exec(node.name || "");
   if (!match) {
     // Some other rule may have already changed the name. Nothing to do.
@@ -16,7 +19,8 @@ export const headingToParagraph: ElementFilterRule = ({ node }) => {
   }
   const headingLevel = match[1];
   node.name = "p";
-  node.attributes["class"] = `p--heading-${headingLevel}`;
+  node.classList.add(`p--heading-${headingLevel}`);
+  langMapper.toData(params);
 };
 
 /**
@@ -25,10 +29,17 @@ export const headingToParagraph: ElementFilterRule = ({ node }) => {
  *
  * Node won't be changed for unmatched heading classes.
  */
-export const paragraphToHeading: ElementFilterRule = ({ node }) => {
-  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(node.attributes["class"] || "");
-  if (!match) {
+export const paragraphToHeading: ElementFilterRule = (params) => {
+  const { node } = params;
+  const classes = [...node.classList];
+  const matchedHeading = HEADING_CLASSES.find((c) => classes.includes(c));
+  if (!matchedHeading) {
     // Cannot determine number. Perhaps someone already removed the class.
+    return;
+  }
+  const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(matchedHeading);
+  if (!match) {
+    // Should not happen, as we matched before.
     return;
   }
   const headingLevel: number = +match[1];
@@ -37,7 +48,8 @@ export const paragraphToHeading: ElementFilterRule = ({ node }) => {
     return;
   }
   node.name = `h${headingLevel}`;
-  delete node.attributes["class"];
+  // Now remove any heading-related classes.
+  HEADING_CLASSES.forEach((c) => node.classList.remove(c));
 };
 
 export const headingRules: ElementsFilterRuleSetConfiguration = {
