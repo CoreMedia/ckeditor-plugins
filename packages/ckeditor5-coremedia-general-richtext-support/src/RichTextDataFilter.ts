@@ -9,6 +9,7 @@ import ReducedMatcherPattern, {
   toLookupStrategy,
 } from "./ReducedMatcherPattern";
 import { COREMEDIA_RICHTEXT_1_0_CONFIG } from "./CoreMediaRichText10Dtd";
+import { getConfig } from "./CoreMediaRichTextSupportConfig";
 
 /**
  * Plugin, which configures CKEditor's General HTML Support, so that
@@ -85,6 +86,12 @@ class RichTextDataFilter extends Plugin {
         inherit: "td",
       },
     ]);
+
+    const config = getConfig(editor.config);
+    // Doing this as extra step, allows using previously introduced aliases
+    // (see above) as reference. Thus, you may also define an alias for
+    // `<h1>` now.
+    this.loadAliases(config.aliases || []);
 
     if (logger.isDebugEnabled()) {
       logger.debug("Declared elements and attributes to GHS.", { config: { ...this.#config } });

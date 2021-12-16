@@ -34,11 +34,11 @@ import CoreMediaStudioEssentials, {
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
-import GeneralRichTextSupport
-  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
-import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
-import CoreMediaRichText10Dtd from "@coremedia/ckeditor5-coremedia-general-richtext-support/CoreMediaRichText10Dtd";
+import {
+  COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY
+} from "@coremedia/ckeditor5-coremedia-general-richtext-support/CoreMediaRichTextSupportConfig";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -71,7 +71,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     AutoLink,
     Link,
     CoreMediaStudioEssentials,
-    GeneralHtmlSupport,
     GeneralRichTextSupport,
     List,
     Paragraph,
@@ -202,16 +201,13 @@ ClassicEditor.create(document.querySelector('.editor'), {
       },
     },
   },
-  htmlSupport: {
-    allow: [
-      {
-        // As we represent `<mark>` as `<span class="mark">`, we must ensure,
-        // that the same attributes are kept as is from CMS. For example, the
-        // dir-attribute, which is valid for `<span>` must not be removed just
-        // because CKEditor is not configured to handle it.
-        name: "mark",
-        ...CoreMediaRichText10Dtd.attrs,
-      }
+  [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
+    aliases: [
+      // As we represent `<mark>` as `<span class="mark">`, we must ensure,
+      // that the same attributes are kept as is from CMS. For example, the
+      // dir-attribute, which is valid for `<span>` must not be removed just
+      // because CKEditor is not configured to handle it.
+      {name: "mark", inherit: "span"},
     ],
   },
 }).then(newEditor => {
