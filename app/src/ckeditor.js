@@ -38,7 +38,7 @@ import GeneralRichTextSupport
   from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
-import {CoreMediaRichText10Dtd} from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+import CoreMediaRichText10Dtd from "@coremedia/ckeditor5-coremedia-general-richtext-support/CoreMediaRichText10Dtd";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
