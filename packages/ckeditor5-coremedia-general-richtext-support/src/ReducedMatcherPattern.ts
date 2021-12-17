@@ -27,7 +27,14 @@ interface ReducedMatcherPattern {
  * pattern by name reference in `inherit`.
  */
 interface InheritingMatcherPattern extends ReducedMatcherPattern {
-  inherit: string;
+  /**
+   * Name of pattern to inherit. For existing patterns with regular expressions,
+   * this string will be matched towards this regular expression.
+   *
+   * If unset, this pattern is assumed to be a new pattern without
+   * any inheritance.
+   */
+  inherit?: string;
 }
 
 /**
@@ -113,10 +120,21 @@ const resolveInheritance = (
   lookup: MatcherPatternLookup | ReducedMatcherPattern[]
 ): ReducedMatcherPattern => {
   const strategy = typeof lookup === "function" ? lookup : toLookupStrategy(...lookup);
-  const inherited = strategy(pattern.inherit);
+  const { inherit, ...rest } = pattern;
+
+  if (!inherit) {
+    // We may just return pattern here, but this way, we ensure, that for example
+    // even an empty string is inheritance is ignored, but does not make it into
+    // the result.
+    return rest;
+  }
+
+  const inherited = strategy(inherit);
+
   if (!inherited) {
     throw new Error(`Failed resolving alias for '${pattern.inherit}'.`);
   }
+
   // Merging will ignore the (now obsolete) `inherit` attribute.
   return mergePatterns(inherited, pattern);
 };

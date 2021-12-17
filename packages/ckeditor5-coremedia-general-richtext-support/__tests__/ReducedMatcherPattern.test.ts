@@ -232,5 +232,30 @@ describe("ReducedMatcherPattern", () => {
       const failing = () => resolveInheritance(pattern, strategy);
       expect(failing).toThrowError();
     });
+
+    it("convenience: should accept patterns without inheritance, deleting empty inherit", () => {
+      const pattern: InheritingMatcherPattern = {
+        name: "custom",
+        inherit: "",
+        classes: true,
+      };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { inherit, ...expected } = pattern;
+
+      const actual = resolveInheritance(pattern, strategy);
+
+      expect(actual).toStrictEqual(expected);
+    });
+
+    it("convenience: should accept patterns without inheritance", () => {
+      const pattern: InheritingMatcherPattern = {
+        name: "custom",
+        classes: true,
+      };
+
+      const actual = resolveInheritance(pattern, strategy);
+
+      expect(actual).toStrictEqual(pattern);
+    });
   });
 });

@@ -43,18 +43,16 @@ class RichTextDataFilter extends Plugin {
     const editor = this.editor;
     this.#delegate = editor.plugins.get(DataFilter);
 
-    this.#loadAllowedConfig([
-      ...COREMEDIA_RICHTEXT_1_0_CONFIG,
-      // thead|tfoot: Introduced by data-processing for `<tr>` elements
-      // having a dedicated class. No additional attributes are defined
-      // during data-processing for `thead` and `tfoot`.
-      {
-        name: /^(thead|tfoot)$/,
-      },
-    ]);
+    this.#loadAllowedConfig(COREMEDIA_RICHTEXT_1_0_CONFIG);
 
     // Add alias elements from default data-processing.
     this.loadAliases([
+      // thead|tfoot: Introduced by data-processing for `<tr>` elements
+      // having a dedicated class. No additional attributes are defined
+      // during data-processing for `thead` and `tfoot`, thus, no inheritance.
+      {
+        name: /^(thead|tfoot)$/,
+      },
       {
         name: /^(h[1-6])$/,
         inherit: "p",
@@ -118,6 +116,9 @@ class RichTextDataFilter extends Plugin {
    * Adds the given inheriting patterns to the filter configuration.
    * Patterns added this way, are available as inheritance pattern
    * afterwards.
+   *
+   * For convenience, also normal patterns not being an alias/not inheriting
+   * another pattern, can be added this way.
    *
    * @param config inheritance configuration to load
    */
