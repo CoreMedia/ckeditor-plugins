@@ -732,7 +732,7 @@ const coreMediaRichTextPoC = () => {
 
 const grsExampleData = () => {
   const grsName = "General RichText Support";
-  const langNote = "'xml:lang' is always mapped to 'lang'. If both are set, 'lang' takes precedence.";
+  const langNote = "'xml:lang' is always mapped to 'lang'. If both are set, 'xml:lang' takes precedence.";
   const alignedNote = "Alignment must be represented by classes. As such, it must not collide with other classes.";
   const plainText = "Plain";
   const allAttributesText = "All Attributes";
@@ -956,8 +956,10 @@ const grsExampleData = () => {
     // <thead> – Table Head
     "GRS Table Head": `<div xmlns="${CM_RICHTEXT}">
   ${grsHeading("Table Head")}
-  <p>&lt;thead&gt; element: plain and with all supported attributes.</p>
-  <p>&lt;thead&gt; is represented in CoreMedia RichText as &lt;tr class="tr--header"&gt; and thus, shares the same attributes as &lt;tr&gt;.</p>
+  <p>&lt;thead&gt; element: It is just a <em>virtual</em> element in CoreMedia RichText. As such, it has no attributes on its own.</p>
+  <p>As &lt;thead&gt; is represented in CoreMedia RichText as &lt;tr class="tr--header"&gt;, the marker class will be removed
+  from &lt;tr&gt;, but all others remain. Thus, in contrast to other GRS examples, the following examples only show,
+  that all other attributes are successfully held at &lt;tr&gt;.</p>
   <p>${langNote}</p>
   ${examplesHeading}
   <table><tr class="tr--header"><td class="td--header">${plainText}</td></tr></table>

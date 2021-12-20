@@ -82,7 +82,7 @@ GHS: You must also register the same attribute for all elements in Data View,
 which will be mapped to `<p>` in Data later on. Thus, we will have to configure
 GHS similar to this:
 
-```javascript
+```text
 {
   htmlSupport: {
     allow: [{
@@ -111,27 +111,24 @@ added via Unified API for example are not removed as soon as edited in CKEditor:
 1. Add data-processing to represent `<mark>` in CoreMedia RichText 1.0.
 2. Extend GHS configuration provided by GRS by the new element.
 
+For the latter, GRS provides a convenience API called _RichText Aliases_.
+
 If we decide representing `<mark>` as `<span class="mark">` you will require
-two configuration entries `coremedia:richtext` and `htmlSupport`:
+two configuration entries `coremedia:richtext` and `coremedia:richtextSupport`:
 
 ```javascript
 import CoreMediaRichText
   from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
-import GeneralHtmlSupport
-  from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
 import GeneralRichTextSupport
   from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth}
   from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
-import {CoreMediaRichText10Dtd}
-  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
 
 /* ... */
 
 ClassicEditor.create(document.querySelector('.editor'), {
   plugins: [
     CoreMediaRichText,
-    GeneralHtmlSupport,
     GeneralRichTextSupport,
     // ...
   ],
@@ -142,18 +139,18 @@ ClassicEditor.create(document.querySelector('.editor'), {
       },
     },
   },
-  htmlSupport: {
-    allow: [
+  "coremedia:richtextSupport": {
+    aliases: [
       {
         name: "mark",
-        ...CoreMediaRichText10Dtd.attrs,
+        inherit: "span",
       }
     ],
   },
 });
 ```
 
-As you see, this already uses two convenience APIs provided by the CoreMedia
+As you see, this already uses a convenience API provided by the CoreMedia
 plugins:
 
 * **`replaceByElementAndClassBackAndForth`:**
@@ -161,10 +158,9 @@ plugins:
     This adds a rule, which maps `<mark>` to `<span class="mark">` in
     data-processing.
 
-* **`CoreMediaRichText10Dtd.attrs`:**
-
-    These are the attributes, which are marked as _allowed_ for `<span>`,
-    for example, in CoreMedia RichText.
+The `coremedia:richtextSupport` configuration will inform the underlying
+GHS feature, that `<mark>` may share the same attributes as `<span>`
+from CoreMedia RichText 1.0 DTD.
 
 **Less Convenient Configuration:** A less convenient configuration exposes some
 details, which may help to understand the processing better. So, if inlining
@@ -202,15 +198,11 @@ ClassicEditor.create(document.querySelector('.editor'), {
       },
     },
   },
-  htmlSupport: {
-    allow: [
+  "coremedia:richtextSupport": {
+    aliases: [
       {
         name: "mark",
-        classes: true,
-        attributes: {
-          lang: true,
-          dir: /(rtl|ltr)/,
-        },
+        inherit: "span",
       }
     ],
   },
@@ -218,7 +210,50 @@ ClassicEditor.create(document.querySelector('.editor'), {
 ```
 
 Having this example, you may see, how to create a lot more complex scenarios
-for data-processing and GHS configuration.
+for data-processing and GHS configuration. If you also decided adding an
+attribute to `<mark>` element such as `<mark data-priority="high">`, you also
+may want to declare this as part of the alias configuration:
+
+```text
+{
+  "coremedia:richtextSupport": {
+    aliases: [
+      {
+        name: "mark",
+        inherit: "span",
+        attributes: {
+          "data-priority": /^(high|medium|low)$/,
+        }
+      }
+    ],
+  },
+}
+```
+
+Note, that such an approach is only required/recommended, if you ever expect
+the corresponding RichText to be loaded in a CKEditor instance, which is
+unable to handle `data-priority` attribute. In a default scenario, you would
+have created a plugin, to edit this attribute, also dealing with up- and
+downcast.
+
+**Side Note:** _Where to store `data-priority` in CoreMedia RichText?_
+
+CoreMedia RichText 1.0 does not support data attributes. One possible
+solution is to transform it to some dedicated class, as can be seen below.
+
+Given this data view (HTML):
+
+```html
+<mark data-priority="high">Text</mark>
+<mark data-priority="low">Text</mark>
+```
+
+we may transform it to:
+
+```html
+<span class="mark priority--high">Text</span>
+<span class="mark priority--low">Text</span>
+```
 
 ## Known Issues
 
