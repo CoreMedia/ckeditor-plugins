@@ -1,12 +1,12 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-ui",
-  "version": "1.0.2-rc.6",
+  "version": "1.0.2-rc.7",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.2-rc.6",
-    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.2-rc.6",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.2-rc.6"
+    "@coremedia/types-ckeditor__ckeditor5-engine": "1.0.2-rc.7",
+    "@coremedia/types-ckeditor__ckeditor5-core": "1.0.2-rc.7",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "1.0.2-rc.7"
   },
   "scripts": {
     "npm-check-updates": "npm-check-updates --upgrade"
