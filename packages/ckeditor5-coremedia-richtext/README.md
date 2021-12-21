@@ -28,7 +28,7 @@ these RichText contents for delivery to browsers if used within webpages.
 This plugin introduced the following reserved class attribute values:
 
 | Class          | Applicable To | Representing | Comment                                           |
-| -------------- | ------------- | ------------ | ------------------------------------------------- |
+|----------------|---------------|--------------|---------------------------------------------------|
 | `code`         | `<span>`      | `<code>`     |                                                   |
 | `p--heading-1` | `<p>`         | `<h1>`       |                                                   |
 | `p--heading-2` | `<p>`         | `<h2>`       |                                                   |
