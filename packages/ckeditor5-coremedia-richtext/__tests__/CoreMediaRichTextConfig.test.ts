@@ -1,6 +1,5 @@
 import "jest-xml-matcher";
 import { Strictness } from "../src/RichTextSchema";
-// @ts-ignore
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
@@ -25,7 +24,7 @@ const LAST_RESORT =
 
 type CommentableTestData = {
   /**
-   * Some comment which may help understanding the test case better.
+   * Some comment, which may help to understand the test case better.
    */
   comment?: string;
 };
@@ -112,8 +111,7 @@ const ns_xhtml = "http://www.w3.org/1999/xhtml";
 const ns_xdiff = "http://www.coremedia.com/2015/xdiff";
 
 function flatten<T>(arr: T[][]): T[] {
-  const empty: T[] = [];
-  return empty.concat.apply(empty, arr);
+  return (<T[]>[]).concat(...arr);
 }
 
 // noinspection JSNonASCIINames
@@ -375,7 +373,7 @@ describe("Default Data Filter Rules", () => {
      */
     new: "_blank",
     /**
-     * May be either `_top` or `_self`. In CoreMedia CAE context we decided to
+     * Either `_top` or `_self`. In CoreMedia CAE context we decided to
      * map `replace` to `_self` as this is, what is documented for example
      * at MDN.
      */
@@ -986,7 +984,7 @@ describe("Default Data Filter Rules", () => {
       },
     ].map(({ view, dataClass, bijective }) => {
       // bijective: Typically false for "alias" mappings.
-      // The mapping which corresponds to the default representation in
+      // The mapping, which corresponds to the default representation in
       // CKEditor should be bijective (i.e. = true).
       const key = view.toUpperCase();
       return [
