@@ -3,7 +3,7 @@ import { Strictness } from "../src/RichTextSchema";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
-import { ddTest, NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
+import { DataProcessingData, ddTest, Direction, DirectionRestriction, NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
 import { decodeEntity, encodeString, flatten, parseXml } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
@@ -1069,30 +1069,27 @@ describe("Data View to Data mapping only", () => {
   const { toData } = getConfig();
   const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
 
-  type TestData = {
-    dataView: string;
-    expectedData: string;
-  };
-  type DataViewToDataTestCase = NamedTestCase & SkippableTestCase & TestData;
+  type DataViewToDataTestCase = NamedTestCase & SkippableTestCase & DirectionRestriction & DataProcessingData;
 
   const data: DataViewToDataTestCase[] = [
     {
       name: "ANCHOR#1: Should remove anchors without required href.",
+      direction: Direction.toData,
+      data: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
       dataView: `<div xmlns="${ns_richtext}"><p><a class="some">${text}</a></p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
     },
   ];
 
   describe.each<[string, DataViewToDataTestCase]>(testData(data))(
     "(%#) %s",
     (name: string, testData: DataViewToDataTestCase) => {
-      ddTest(testData, (data) => {
+      ddTest(Direction.toData, testData, (data) => {
         const xmlDocument: Document = parseXml(data.dataView);
 
         toDataFilter.applyTo(xmlDocument.documentElement);
 
         const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-        expect(actualXml).toEqualXML(data.expectedData);
+        expect(actualXml).toEqualXML(data.data);
       });
     }
   );
@@ -1140,7 +1137,7 @@ describe("Data to Data View mapping only", () => {
   describe.each<[string, DataToViewTestCase]>(testData(data))(
     "(%#) %s",
     (name: string, testData: DataToViewTestCase) => {
-      ddTest(testData, (data) => {
+      ddTest(Direction.toDataView, testData, (data) => {
         const xmlDocument: Document = parseXml(data.data);
 
         toViewFilter.applyTo(xmlDocument.documentElement);
@@ -1166,18 +1163,20 @@ describe("img Mapping, ignoring src-Attribute", () => {
   // noinspection XmlUnusedNamespaceDeclaration
   const wrapImg = (img: string): string => `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${img}</p></div>`;
 
-  enum Direction {
-    toDataView,
-    toData,
-  }
+  type TestCase = NamedTestCase & SkippableTestCase & DataProcessingData & DirectionRestriction;
 
-  type TestData = {
-    data: string;
-    dataView: string;
-    direction?: Direction;
+  const imageSourceToDummyHref = (document: Document): void => {
+    const actualImageElements = document.documentElement.getElementsByTagName("img");
+
+    // If required, set some dummy source, as we are not interested in it in
+    // these tests.
+    if (actualImageElements.length === 1) {
+      const actualImageElement = actualImageElements[0];
+      if (!!actualImageElement.getAttribute("src")) {
+        actualImageElement.setAttribute("src", dummySrc);
+      }
+    }
   };
-
-  type TestCase = NamedTestCase & SkippableTestCase & TestData;
 
   // noinspection HtmlUnknownAttribute,RequiredAttributes
   const data: TestCase[] = [
@@ -1185,41 +1184,49 @@ describe("img Mapping, ignoring src-Attribute", () => {
       name: "IMAGE#1: Just an embedded image without additional attributes.",
       data: wrapImg(`<img alt="" xlink:href="${imageHref}"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#2: Preserve alt text.",
       data: wrapImg(`<img alt="ALT" xlink:href="${imageHref}"/>`),
       dataView: wrapImg(`<img alt="ALT" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#2: Preserve value of xlink:actuate.",
       data: wrapImg(`<img alt="" xlink:actuate="onLoad" xlink:href="${imageHref}"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-actuate="onLoad" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#3: Preserve value of xlink:role.",
       data: wrapImg(`<img alt="" xlink:href="${imageHref}" xlink:role="ROLE"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}" data-xlink-role="ROLE"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#4: Preserve value of xlink:show.",
       data: wrapImg(`<img alt="" xlink:href="${imageHref}" xlink:show="embed"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}" data-xlink-show="embed"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#5: Preserve value of xlink:title.",
       data: wrapImg(`<img alt="" xlink:href="${imageHref}" xlink:title="TITLE"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}" title="TITLE"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#6: Preserve value of xlink:type.",
       data: wrapImg(`<img alt="" xlink:href="${imageHref}" xlink:type="simple"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}" data-xlink-type="simple"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#7: Preserve value of xml:lang.",
       data: wrapImg(`<img alt="" xlink:href="${imageHref}" xml:lang="en"/>`),
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}" lang="en"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#8: Preserve value of lang.",
@@ -1227,12 +1234,14 @@ describe("img Mapping, ignoring src-Attribute", () => {
       direction: Direction.toDataView,
       data: wrapImg(`<img alt="" lang="en" xlink:href="${imageHref}"/>`),
       dataView: wrapImg(`<img alt="" lang="en" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#9: Prefer xml:lang over lang when processing Data → Data View.",
       direction: Direction.toDataView,
       data: wrapImg(`<img alt="" xml:lang="de" lang="en" xlink:href="${imageHref}"/>`),
       dataView: wrapImg(`<img alt="" lang="de" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
     {
       name: "IMAGE#10: Remove Image without data-xlink-href.",
@@ -1241,25 +1250,12 @@ describe("img Mapping, ignoring src-Attribute", () => {
       direction: Direction.toData,
       data: wrapImg(`${text}`),
       dataView: wrapImg(`${text}<img alt="" src="${dummySrc}"/>`),
+      postProcessActual: imageSourceToDummyHref,
     },
   ];
 
-  /*
-   * More tests:
-   *   toData: Add missing alt-attribute on toData.
-   *   toData: Remove IMG without xlink-href
-   */
-
   const testImage = (direction: Direction, data: TestCase): void => {
-    const requiredDirection = data.direction;
-
-    if (requiredDirection !== undefined && requiredDirection !== direction) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      test.skip("Not applicable for this transformation direction.", () => {});
-      return;
-    }
-
-    ddTest(data, (d) => {
+    ddTest(direction, data, (d) => {
       const input = direction === Direction.toDataView ? d.data : d.dataView;
       const output = direction === Direction.toDataView ? d.dataView : d.data;
       const filter = direction === Direction.toDataView ? toViewFilter : toDataFilter;
@@ -1267,16 +1263,7 @@ describe("img Mapping, ignoring src-Attribute", () => {
       const xmlDocument: Document = parseXml(input);
       filter.applyTo(xmlDocument.documentElement);
 
-      const actualImageElements = xmlDocument.documentElement.getElementsByTagName("img");
-
-      // If required, set some dummy source, as we are not interested in it in
-      // these tests.
-      if (actualImageElements.length === 1) {
-        const actualImageElement = actualImageElements[0];
-        if (!!actualImageElement.getAttribute("src")) {
-          actualImageElement.setAttribute("src", dummySrc);
-        }
-      }
+      data.postProcessActual?.(xmlDocument);
 
       const actualXml = serializer.serializeToString(xmlDocument);
       expect(actualXml).toEqualXML(output);

@@ -33,6 +33,56 @@ interface OnlyTestCase {
   only?: boolean;
 }
 
+/**
+ * Data processing direction to test or under test.
+ */
+enum Direction {
+  toDataView,
+  toData,
+  both,
+}
+
+/**
+ * Restricts a testcase to be only run on matched direction.
+ */
+interface DirectionRestriction {
+  /**
+   * The data transformation direction a test is applicable for. Defaults
+   * to `both`.
+   */
+  direction?: Direction;
+}
+
+/**
+ * Data for data processing tests.
+ */
+interface DataProcessingData {
+  /**
+   * The Data Layer (CoreMedia RichText).
+   */
+  data: string;
+  /**
+   * CKEditor's Data View Layer (HTML), not to be misunderstood with the
+   * Editing View (HTML in Browser to be edited).
+   */
+  dataView: string;
+  /**
+   * Optional post-processor for actual data after transformation. Used,
+   * for example, to ignore the value of certain attributes during test.
+   *
+   * @param document document to possibly post-process.
+   */
+  postProcessActual?: (document: Document) => void;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const hasDirectionRestriction = (data: any): data is DirectionRestriction => {
+  if (!("direction" in data)) {
+    return false;
+  }
+  return typeof data.direction === "number";
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isSkippable = (data: any): data is SkippableTestCase => {
   if (!("skip" in data)) {
@@ -50,13 +100,20 @@ const isOnly = (data: any): data is OnlyTestCase => {
 };
 
 const ddTest = <T extends NamedTestCase>(
-  data: T | (T & SkippableTestCase) | (T & OnlyTestCase),
+  direction: Direction,
+  data: T | (T & SkippableTestCase) | (T & OnlyTestCase) | (T & DirectionRestriction),
   fn: (data: T) => void
 ): void => {
   const testFn = () => {
     fn(data);
   };
   const { name } = data;
+
+  if (hasDirectionRestriction(data)) {
+    if (data.direction !== Direction.both && data.direction !== direction) {
+      return test.skip(`Not applicable for current data processing direction: ${name}`, testFn);
+    }
+  }
 
   if (isSkippable(data)) {
     if (!!data.skip) {
@@ -88,4 +145,13 @@ const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.na
   return data.map((d) => [generator(d), d]);
 };
 
-export { ddTest, testData, OnlyTestCase, SkippableTestCase, NamedTestCase };
+export {
+  DataProcessingData,
+  Direction,
+  DirectionRestriction,
+  NamedTestCase,
+  OnlyTestCase,
+  SkippableTestCase,
+  ddTest,
+  testData,
+};
