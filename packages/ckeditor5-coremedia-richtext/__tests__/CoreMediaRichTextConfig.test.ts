@@ -4,7 +4,7 @@ import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
 import { NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
-import { decodeEntity, encodeString, flatten } from "./Utils";
+import { flatten } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
@@ -410,42 +410,6 @@ describe("Default Data Filter Rules", () => {
     },
   ];
 
-  const textEntityFixtures: DataFilterRulesTestData[] = [
-    "&nbsp;",
-    "&quot;",
-    "&cent;",
-    "&plusmn;",
-    "&Alpha;",
-    "&piv;",
-    "&bull;",
-    "&hellip;",
-    "&trade;",
-    "&harr;",
-    "&sum;",
-    "&loz;",
-    // Pile of Poo, testers favorite character
-    "&#128169;",
-  ].map((entity, index) => {
-    return {
-      name: `TEXT/ENTITY#${index + 1}: Entity should be resolved to plain character: ${entity}`,
-      comment:
-        "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${encodeString(entity)}${text}</p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
-      expectedView: `<div xmlns="${ns_richtext}"><p>${text}${decodeEntity(entity)}${text}</p></div>`,
-    };
-  });
-  const textCoreEntityFixtures: DataFilterRulesTestData[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => {
-    return {
-      name: `TEXT/CORE_ENTITY#${index + 1}: Core Entity should be kept as is: ${entity}`,
-      skip: "CoreMedia/ckeditor-plugins#39: Bug in handling these core XML entities.",
-      comment: "toView: In contrast to other entities, we must keep core entities, as otherwise XML may break.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}${entity}${text}</p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}${entity}${text}</p></div>`,
-    };
-  });
   const tableFixtures: DataFilterRulesTestData[] = [
     {
       name: "TABLE#01: Empty table should be removed, as it is invalid.",
@@ -842,8 +806,6 @@ describe("Default Data Filter Rules", () => {
     ...linkBehaviorFixtures,
     ...externalLinkFixtures,
     ...contentLinkFixtures,
-    ...textEntityFixtures,
-    ...textCoreEntityFixtures,
     ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,

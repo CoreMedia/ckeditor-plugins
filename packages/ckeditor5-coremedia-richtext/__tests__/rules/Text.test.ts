@@ -1,4 +1,5 @@
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
+import { decodeEntity, encodeString, flatten } from "../Utils";
 
 // noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";
@@ -13,6 +14,57 @@ const wrapContent = (content: string): string =>
   `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}">${content}</div>`;
 
 describe("CoreMediaRichTextConfig: Text Fixtures", () => {
+  const textEntityFixtures: DataProcessingTestCase[] = flatten(
+    [
+      "&nbsp;",
+      "&quot;",
+      "&cent;",
+      "&plusmn;",
+      "&Alpha;",
+      "&piv;",
+      "&bull;",
+      "&hellip;",
+      "&trade;",
+      "&harr;",
+      "&sum;",
+      "&loz;",
+      // Pile of Poo, testers favorite character
+      "&#128169;",
+    ].map((entity, index): DataProcessingTestCase[] => {
+      const dataView = wrapContent(`<p>${text}${encodeString(entity)}${text}</p>`);
+      const dataFromDataView = wrapContent(`<p>${text}${decodeEntity(entity)}${text}</p>`);
+      // Don't transform already decoded entities again.
+      const dataViewFromData = dataFromDataView;
+      const name = `TEXT/ENTITY#${index + 1}: Entity should be resolved to plain character: ${entity}`;
+      return [
+        {
+          name: name,
+          direction: Direction.toData,
+          data: dataFromDataView,
+          dataView: dataView,
+        },
+        {
+          name: name,
+          direction: Direction.toDataView,
+          comment:
+            "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",
+          data: dataFromDataView,
+          dataView: dataViewFromData,
+        },
+      ];
+    })
+  );
+
+  const textCoreEntityFixtures: DataProcessingTestCase[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => {
+    return {
+      name: `TEXT/CORE_ENTITY#${index + 1}: Core Entity should be kept as is: ${entity}`,
+      direction: Direction.toData,
+      comment: "toView: In contrast to other entities, we must keep core entities, as otherwise XML may break.",
+      data: wrapContent(`<p>${text}${entity}${text}</p>`),
+      dataView: wrapContent(`<p>${text}${entity}${text}</p>`),
+    };
+  });
+
   // noinspection HtmlUnknownAttribute,XmlUnusedNamespaceDeclaration
   const data: DataProcessingTestCase[] = [
     {
@@ -123,6 +175,8 @@ describe("CoreMediaRichTextConfig: Text Fixtures", () => {
       data: wrapContent(`<table><tbody><tr><td>${text}</td></tr></tbody></table>`),
       dataView: wrapContent(`<table><tbody><tr><td>${text}</td></tr></tbody></table>`),
     },
+    ...textEntityFixtures,
+    ...textCoreEntityFixtures,
   ];
 
   allDataProcessingTests(data);
