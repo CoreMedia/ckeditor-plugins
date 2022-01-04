@@ -28,4 +28,14 @@ const encodeString = (str: string): string => {
   return chars.map((c) => `&#${c.codePointAt(0)};`).join("");
 };
 
-export { flatten, decodeEntity, encodeString };
+const xmlParser = new DOMParser();
+
+const parseXml = (xmlData: string): Document => {
+  const xmlDocument: Document = xmlParser.parseFromString(xmlData, "text/xml");
+  if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+    throw new Error(`Failed parsing XML: ${xmlData}: ${xmlDocument.documentElement.outerHTML}`);
+  }
+  return xmlDocument;
+};
+
+export { flatten, decodeEntity, encodeString, parseXml };
