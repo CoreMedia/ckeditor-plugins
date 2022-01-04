@@ -192,16 +192,35 @@ const dataProcessingTest = (direction: Direction.toData | Direction.toDataView, 
   });
 };
 
+const eachDataProcessingTest = (
+  direction: Direction.toData | Direction.toDataView,
+  testCases: DataProcessingTestCase[]
+): void => {
+  const directionHint = direction === Direction.toData ? "Data View → Data" : "Data → Data View";
+  const name = `[%#] ${directionHint}: %s`;
+  describe.each<[string, DataProcessingTestCase]>(testData(testCases))(name, (name, data) => {
+    dataProcessingTest(direction, data);
+  });
+};
+
+const allDataProcessingTests = (testCases: DataProcessingTestCase[]): void => {
+  eachDataProcessingTest(Direction.toDataView, testCases);
+  eachDataProcessingTest(Direction.toData, testCases);
+};
+
 export {
   DataProcessingData,
+  DataProcessingTestCase,
   Direction,
   DirectionRestriction,
   MOCK_EDITOR,
   NamedTestCase,
   OnlyTestCase,
   SkippableTestCase,
+  allDataProcessingTests,
   dataProcessingTest,
   ddTest,
+  eachDataProcessingTest,
   testData,
   toDataFilter,
   toViewFilter,
