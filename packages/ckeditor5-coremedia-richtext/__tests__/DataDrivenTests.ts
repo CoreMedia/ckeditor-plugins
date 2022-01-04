@@ -1,10 +1,3 @@
-interface CommentableTestData {
-  /**
-   * Some comment, which may help to understand the test case better.
-   */
-  comment?: string;
-}
-
 /**
  * A test case, which comes with a name.
  */
@@ -95,4 +88,4 @@ const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.na
   return data.map((d) => [generator(d), d]);
 };
 
-export { ddTest, testData, OnlyTestCase, SkippableTestCase, CommentableTestData, NamedTestCase };
+export { ddTest, testData, OnlyTestCase, SkippableTestCase, NamedTestCase };

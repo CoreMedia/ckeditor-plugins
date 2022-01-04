@@ -100,7 +100,6 @@ function flatten<T>(arr: T[][]): T[] {
   return (<T[]>[]).concat(...arr);
 }
 
-// noinspection JSNonASCIINames
 describe("Default Data Filter Rules", () => {
   type DataFilterRulesTestData = NamedTestCase &
     SkippableTestCase &
