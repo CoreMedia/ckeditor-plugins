@@ -1075,36 +1075,6 @@ describe("Default Data Filter Rules", () => {
   );
 });
 
-describe("Data View to Data mapping only", () => {
-  const { toData } = getConfig();
-  const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
-
-  type DataViewToDataTestCase = NamedTestCase & SkippableTestCase & DirectionRestriction & DataProcessingData;
-
-  const data: DataViewToDataTestCase[] = [
-    {
-      name: "ANCHOR#1: Should remove anchors without required href.",
-      direction: Direction.toData,
-      data: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
-      dataView: `<div xmlns="${ns_richtext}"><p><a class="some">${text}</a></p></div>`,
-    },
-  ];
-
-  describe.each<[string, DataViewToDataTestCase]>(testData(data))(
-    "(%#) %s",
-    (name: string, testData: DataViewToDataTestCase) => {
-      ddTest(Direction.toData, testData, (data) => {
-        const xmlDocument: Document = parseXml(data.dataView);
-
-        toDataFilter.applyTo(xmlDocument.documentElement);
-
-        const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-        expect(actualXml).toEqualXML(data.data);
-      });
-    }
-  );
-});
-
 describe("Data to Data View mapping only", () => {
   const { toView } = getConfig();
   const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
@@ -1117,16 +1087,6 @@ describe("Data to Data View mapping only", () => {
 
   // noinspection XmlUnusedNamespaceDeclaration
   const data: DataToViewTestCase[] = [
-    {
-      name: "ANCHOR#1: Should ignore invalid show-attribute.",
-      data: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="unknown">${text}</a></p></div>`,
-      expectedDataView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}">${text}</a></p></div>`,
-    },
-    {
-      name: "ANCHOR#2: Should ignore invalid show-attribute and only keep role attribute.",
-      data: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="unknown" xlink:role="some_role">${text}</a></p></div>`,
-      expectedDataView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_role_some_role">${text}</a></p></div>`,
-    },
     {
       name: "HEADING#1: Should prefer higher heading class (here: 1 and 2 → prefer 1).",
       data: `<div xmlns="${ns_richtext}"><p class="p--heading-1 p--heading-2">${text}</p></div>`,
