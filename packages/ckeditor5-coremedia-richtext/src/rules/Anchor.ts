@@ -186,6 +186,7 @@ const xLinkShowAndRoleToTarget = (node: ElementProxy): void => {
       default:
         if (handleRole) {
           target = `_role_${role}`;
+          handleRole = false;
           console.warn(
             `Invalid value for xlink:show="${show}". Only xlink:role respected in target attribute. Node:`,
             node

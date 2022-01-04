@@ -3,7 +3,7 @@ import { Strictness } from "../src/RichTextSchema";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
-import { NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
+import { ddTest, NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
 import { decodeEntity, encodeString, flatten } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
@@ -1061,6 +1061,84 @@ describe("Default Data Filter Rules", () => {
           !!expectedView && test(`toView: ${testCaseName}`, toViewTestCase);
         }
       }
+    }
+  );
+});
+
+describe("Data View to Data mapping only", () => {
+  const { toData } = getConfig();
+  const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
+
+  type TestData = {
+    dataView: string;
+    expectedData: string;
+  };
+  type DataViewToDataTestCase = NamedTestCase & SkippableTestCase & TestData;
+
+  const data: DataViewToDataTestCase[] = [
+    {
+      name: "ANCHOR#1: Should remove anchors without required href.",
+      dataView: `<div xmlns="${ns_richtext}"><p><a class="some">${text}</a></p></div>`,
+      expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
+    },
+  ];
+
+  describe.each<[string, DataViewToDataTestCase]>(testData(data))(
+    "(%#) %s",
+    (name: string, testData: DataViewToDataTestCase) => {
+      ddTest(testData, (data) => {
+        const xmlDocument: Document = parser.parseFromString(data.dataView, "text/xml");
+
+        if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+          throw new Error(`Failed parsing XML: ${data.dataView}: ${xmlDocument.documentElement.outerHTML}`);
+        }
+
+        toDataFilter.applyTo(xmlDocument.documentElement);
+        const actualXml = serializer.serializeToString(xmlDocument.documentElement);
+        expect(actualXml).toEqualXML(data.expectedData);
+      });
+    }
+  );
+});
+
+describe("Data to Data View mapping only", () => {
+  const { toView } = getConfig();
+  const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
+
+  type TestData = {
+    data: string;
+    expectedDataView: string;
+  };
+  type DataToViewTestCase = NamedTestCase & SkippableTestCase & TestData;
+
+  // noinspection XmlUnusedNamespaceDeclaration
+  const data: DataToViewTestCase[] = [
+    {
+      name: "ANCHOR#1: Should ignore invalid show-attribute.",
+      data: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="unknown">${text}</a></p></div>`,
+      expectedDataView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}">${text}</a></p></div>`,
+    },
+    {
+      name: "ANCHOR#2: Should ignore invalid show-attribute and only keep role attribute.",
+      data: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="unknown" xlink:role="some_role">${text}</a></p></div>`,
+      expectedDataView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_role_some_role">${text}</a></p></div>`,
+    },
+  ];
+
+  describe.each<[string, DataToViewTestCase]>(testData(data))(
+    "(%#) %s",
+    (name: string, testData: DataToViewTestCase) => {
+      ddTest(testData, (data) => {
+        const xmlDocument: Document = parser.parseFromString(data.data, "text/xml");
+
+        if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+          throw new Error(`Failed parsing XML: ${data.data}: ${xmlDocument.documentElement.outerHTML}`);
+        }
+
+        toViewFilter.applyTo(xmlDocument.documentElement);
+        const actualXml = serializer.serializeToString(xmlDocument.documentElement);
+        expect(actualXml).toEqualXML(data.expectedDataView);
+      });
     }
   );
 });
