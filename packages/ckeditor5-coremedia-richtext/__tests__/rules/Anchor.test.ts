@@ -1,6 +1,6 @@
-// noinspection HttpUrlsUsage
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 
+// noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";
 const ns_xlink = "http://www.w3.org/1999/xlink";
 const text = "TEXT";
@@ -33,7 +33,7 @@ const attr_link_content_document_data = "content/42";
 const attr_link_content_document_model = "content:42";
 
 // noinspection XmlUnusedNamespaceDeclaration
-const wrapAnchor = (img: string): string => `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${img}</p></div>`;
+const wrapAnchor = (anchor: string): string => `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${anchor}</p></div>`;
 
 describe("CoreMediaRichTextConfig: Anchors", () => {
   // noinspection HtmlUnknownAttribute

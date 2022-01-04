@@ -3,18 +3,8 @@ import { Strictness } from "../src/RichTextSchema";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
-import {
-  allDataProcessingTests,
-  DataProcessingData,
-  dataProcessingTest, DataProcessingTestCase,
-  ddTest,
-  Direction,
-  DirectionRestriction, eachDataProcessingTest,
-  NamedTestCase,
-  SkippableTestCase,
-  testData,
-} from "./DataDrivenTests";
-import { decodeEntity, encodeString, flatten, parseXml } from "./Utils";
+import { NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
+import { decodeEntity, encodeString, flatten } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
@@ -1071,50 +1061,6 @@ describe("Default Data Filter Rules", () => {
           !!expectedView && test(`toView: ${testCaseName}`, toViewTestCase);
         }
       }
-    }
-  );
-});
-
-describe("Data to Data View mapping only", () => {
-  const { toView } = getConfig();
-  const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
-
-  type TestData = {
-    data: string;
-    expectedDataView: string;
-  };
-  type DataToViewTestCase = NamedTestCase & SkippableTestCase & TestData;
-
-  // noinspection XmlUnusedNamespaceDeclaration
-  const data: DataToViewTestCase[] = [
-    {
-      name: "HEADING#1: Should prefer higher heading class (here: 1 and 2 → prefer 1).",
-      data: `<div xmlns="${ns_richtext}"><p class="p--heading-1 p--heading-2">${text}</p></div>`,
-      expectedDataView: `<div xmlns="${ns_richtext}"><h1>${text}</h1></div>`,
-    },
-    {
-      name: "HEADING#2: Should prefer higher heading class (here: 2 and 1 → prefer 1).",
-      data: `<div xmlns="${ns_richtext}"><p class="p--heading-2 p--heading-1">${text}</p></div>`,
-      expectedDataView: `<div xmlns="${ns_richtext}"><h1>${text}</h1></div>`,
-    },
-    {
-      name: "HEADING#3: Should prefer higher heading class and keep unrelated classes.",
-      data: `<div xmlns="${ns_richtext}"><p class="some-class p--heading-2 p--heading-1">${text}</p></div>`,
-      expectedDataView: `<div xmlns="${ns_richtext}"><h1 class="some-class">${text}</h1></div>`,
-    },
-  ];
-
-  describe.each<[string, DataToViewTestCase]>(testData(data))(
-    "(%#) %s",
-    (name: string, testData: DataToViewTestCase) => {
-      ddTest(Direction.toDataView, testData, (data) => {
-        const xmlDocument: Document = parseXml(data.data);
-
-        toViewFilter.applyTo(xmlDocument.documentElement);
-
-        const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-        expect(actualXml).toEqualXML(data.expectedDataView);
-      });
     }
   );
 });
