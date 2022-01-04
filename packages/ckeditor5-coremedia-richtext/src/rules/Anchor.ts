@@ -8,24 +8,10 @@ const CONTENT_LINK_DATA_PREFIX = "content/";
 const CONTENT_LINK_MODEL_REGEXP = /^content:(?<id>\d+)*/;
 const CONTENT_LINK_MODEL_PREFIX = "content:";
 
-function hasHref({ attributes }: ElementProxy): boolean {
+const hasHref = ({ attributes }: ElementProxy): boolean => {
   const href = attributes["href"];
   return href === "" || !!href;
-}
-
-function hrefToXLinkHref({ attributes }: ElementProxy): void {
-  // It should have been checked before, that we have a href attribute set.
-  const href: string = <string>attributes["href"];
-  delete attributes["href"];
-  attributes["xlink:href"] = contentLinkToData(href);
-}
-
-function xLinkHrefToHref({ attributes }: ElementProxy): void {
-  // It should have been checked before, that we have a href attribute set.
-  const href = <string>attributes["xlink:href"];
-  delete attributes["xlink:href"];
-  attributes["href"] = contentLinkToModel(href);
-}
+};
 
 /**
  * Transforms any possible occurrence of `content:123` to `content/123` as this
@@ -34,13 +20,20 @@ function xLinkHrefToHref({ attributes }: ElementProxy): void {
  *
  * @param href href to transform
  */
-function contentLinkToData(href: string): string {
+const contentLinkToData = (href: string): string => {
   const match = CONTENT_LINK_MODEL_REGEXP.exec(href);
   if (!match) {
     return href;
   }
   return `${CONTENT_LINK_DATA_PREFIX}${match[1]}`;
-}
+};
+
+const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
+  // It should have been checked before, that we have a href attribute set.
+  const href: string = <string>attributes["href"];
+  delete attributes["href"];
+  attributes["xlink:href"] = contentLinkToData(href);
+};
 
 /**
  * Transforms any possible occurrence of `content/123` to `content:123` as this
@@ -54,15 +47,22 @@ function contentLinkToData(href: string): string {
  *
  * @param href href to transform
  */
-function contentLinkToModel(href: string): string {
+const contentLinkToModel = (href: string): string => {
   const match = CONTENT_LINK_DATA_REGEXP.exec(href);
   if (!match) {
     return href;
   }
   return `${CONTENT_LINK_MODEL_PREFIX}${match[1]}`;
-}
+};
 
-function targetToXLinkAttributes({ attributes }: ElementProxy): void {
+const xLinkHrefToHref = ({ attributes }: ElementProxy): void => {
+  // It should have been checked before, that we have a href attribute set.
+  const href = <string>attributes["xlink:href"];
+  delete attributes["xlink:href"];
+  attributes["href"] = contentLinkToModel(href);
+};
+
+const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
   const target = attributes["target"] || "";
   // Just ensure, that even no empty target is written.
   delete attributes["target"];
@@ -139,9 +139,9 @@ function targetToXLinkAttributes({ attributes }: ElementProxy): void {
   if (!!newAttrs.role) {
     attributes["xlink:role"] = newAttrs.role;
   }
-}
+};
 
-function xLinkShowAndRoleToTarget(node: ElementProxy): void {
+const xLinkShowAndRoleToTarget = (node: ElementProxy): void => {
   const show = node.attributes["xlink:show"];
   const role = node.attributes["xlink:role"];
 
@@ -206,9 +206,9 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
   if (!!target) {
     node.attributes["target"] = target;
   }
-}
+};
 
-export const handleAnchor: ToDataAndViewElementConfiguration = {
+const handleAnchor: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
     if (!hasHref(node)) {
@@ -234,3 +234,5 @@ export const handleAnchor: ToDataAndViewElementConfiguration = {
     langMapper.toView(params);
   },
 };
+
+export { handleAnchor };
