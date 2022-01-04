@@ -140,6 +140,24 @@ describe("Default Data Filter Rules", () => {
       expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
       expectedView: true,
     },
+    {
+      name: "SPAN#1: Should keep empty span.",
+      comment:
+        "While the element is irrelevant, this refers to an issue with CKEditor 4, where such empty spans got expanded instead, so that <span/>t became <span>t</span>",
+      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<span/>${text}</p></div>`,
+      expectedData: `<div xmlns="${ns_richtext}"><p>${text}<span/>${text}</p></div>`,
+      expectedView: true,
+    },
+    {
+      name: "SPAN#2: Should keep empty span and its attributes.",
+      comment:
+        "While the element is irrelevant, this refers to an issue with CKEditor 4, where such empty spans got expanded instead, so that <span/>t became <span>t</span>",
+      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
+      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<span dir="rtl" class="${attr_class}"/>${text}</p></div>`,
+      expectedData: `<div xmlns="${ns_richtext}"><p>${text}<span dir="rtl" class="${attr_class}"/>${text}</p></div>`,
+      expectedView: true,
+    },
   ];
   // noinspection XmlUnusedNamespaceDeclaration
   const textFixtures: DataFilterRulesTestData[] = [
