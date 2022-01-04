@@ -1,3 +1,13 @@
+import "jest-xml-matcher";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { getConfig } from "../src/CoreMediaRichTextConfig";
+import { parseXml } from "./Utils";
+
+jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+
+const MOCK_EDITOR = new Editor();
+
 /**
  * A test case, which comes with a name.
  */
@@ -145,13 +155,54 @@ const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.na
   return data.map((d) => [generator(d), d]);
 };
 
+type DataProcessingTestCase = NamedTestCase &
+  SkippableTestCase &
+  OnlyTestCase &
+  DataProcessingData &
+  DirectionRestriction;
+
+const { toData, toView } = getConfig();
+const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
+const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
+const serializer = new XMLSerializer();
+
+const dataProcessingTest = (direction: Direction.toData | Direction.toDataView, data: DataProcessingTestCase): void => {
+  let input: string;
+  let output: string;
+  let filter: HtmlFilter;
+
+  if (direction === Direction.toDataView) {
+    input = data.data;
+    output = data.dataView;
+    filter = toViewFilter;
+  } else {
+    input = data.dataView;
+    output = data.data;
+    filter = toDataFilter;
+  }
+
+  ddTest(direction, data, () => {
+    const xmlDocument: Document = parseXml(input);
+    filter.applyTo(xmlDocument.documentElement);
+
+    data.postProcessActual?.(xmlDocument);
+
+    const actualXml = serializer.serializeToString(xmlDocument);
+    expect(actualXml).toEqualXML(output);
+  });
+};
+
 export {
   DataProcessingData,
   Direction,
   DirectionRestriction,
+  MOCK_EDITOR,
   NamedTestCase,
   OnlyTestCase,
   SkippableTestCase,
+  dataProcessingTest,
   ddTest,
   testData,
+  toDataFilter,
+  toViewFilter,
 };

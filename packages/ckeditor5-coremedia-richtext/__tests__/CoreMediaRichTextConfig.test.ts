@@ -3,7 +3,16 @@ import { Strictness } from "../src/RichTextSchema";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
-import { DataProcessingData, ddTest, Direction, DirectionRestriction, NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
+import {
+  DataProcessingData,
+  dataProcessingTest,
+  ddTest,
+  Direction,
+  DirectionRestriction,
+  NamedTestCase,
+  SkippableTestCase,
+  testData,
+} from "./DataDrivenTests";
 import { decodeEntity, encodeString, flatten, parseXml } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
@@ -1150,9 +1159,6 @@ describe("Data to Data View mapping only", () => {
 });
 
 describe("img Mapping, ignoring src-Attribute", () => {
-  const { toData, toView } = getConfig();
-  const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
-  const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
   // Represents a typical representation of an embedded image in CoreMedia Studio.
   // It references the content-ID and a certain property to read the blob data from.
   const imageHref = "content/0#properties.data";
@@ -1254,27 +1260,11 @@ describe("img Mapping, ignoring src-Attribute", () => {
     },
   ];
 
-  const testImage = (direction: Direction, data: TestCase): void => {
-    ddTest(direction, data, (d) => {
-      const input = direction === Direction.toDataView ? d.data : d.dataView;
-      const output = direction === Direction.toDataView ? d.dataView : d.data;
-      const filter = direction === Direction.toDataView ? toViewFilter : toDataFilter;
-
-      const xmlDocument: Document = parseXml(input);
-      filter.applyTo(xmlDocument.documentElement);
-
-      data.postProcessActual?.(xmlDocument);
-
-      const actualXml = serializer.serializeToString(xmlDocument);
-      expect(actualXml).toEqualXML(output);
-    });
-  };
-
   describe.each<[string, TestCase]>(testData(data))("[%#] Data → Data View: %s", (name, data) => {
-    testImage(Direction.toDataView, data);
+    dataProcessingTest(Direction.toDataView, data);
   });
 
   describe.each<[string, TestCase]>(testData(data))("[%#] Data View → Data: %s", (name, data) => {
-    testImage(Direction.toData, data);
+    dataProcessingTest(Direction.toData, data);
   });
 });
