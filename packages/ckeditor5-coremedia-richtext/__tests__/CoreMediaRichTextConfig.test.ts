@@ -4,6 +4,7 @@ import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
 import { NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
+import { decodeEntity, encodeString, flatten } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
@@ -95,10 +96,6 @@ const ns_xlink = "http://www.w3.org/1999/xlink";
 const ns_xhtml = "http://www.w3.org/1999/xhtml";
 // noinspection HttpUrlsUsage
 const ns_xdiff = "http://www.coremedia.com/2015/xdiff";
-
-function flatten<T>(arr: T[][]): T[] {
-  return (<T[]>[]).concat(...arr);
-}
 
 describe("Default Data Filter Rules", () => {
   type DataFilterRulesTestData = NamedTestCase &
@@ -1049,23 +1046,3 @@ describe("Default Data Filter Rules", () => {
     }
   );
 });
-
-/**
- * Decodes all entities to plain characters.
- */
-function decodeEntity(str: string): string {
-  const ENTITY_ELEMENT = document.createElement("div");
-  // noinspection InnerHTMLJS
-  ENTITY_ELEMENT.innerHTML = str;
-  return <string>ENTITY_ELEMENT.textContent;
-}
-
-/**
- * Encodes all given characters to a decimal entity representation.
- */
-function encodeString(str: string): string {
-  const text: string = decodeEntity(str);
-  // Takes care of Unicode characters. https://mathiasbynens.be/notes/javascript-unicode
-  const chars: string[] = [...text];
-  return chars.map((c) => `&#${c.codePointAt(0)};`).join("");
-}
