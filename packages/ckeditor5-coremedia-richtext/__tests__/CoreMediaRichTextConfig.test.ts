@@ -777,7 +777,7 @@ describe("Default Data Filter Rules", () => {
   );
 
   const invalidHeadingFixtures: DataFilterRulesTestData[] = flatten(
-    [0, 7].map((level): DataFilterRulesTestData[] => {
+    [0, 7, 10].map((level): DataFilterRulesTestData[] => {
       const key = `INVALID_H${level}`;
       const invalidHeadingClass = `p--heading-${level}`;
 
@@ -1122,6 +1122,21 @@ describe("Data to Data View mapping only", () => {
       name: "ANCHOR#2: Should ignore invalid show-attribute and only keep role attribute.",
       data: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a xlink:href="${attr_link_external}" xlink:show="unknown" xlink:role="some_role">${text}</a></p></div>`,
       expectedDataView: `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p><a href="${attr_link_external}" target="_role_some_role">${text}</a></p></div>`,
+    },
+    {
+      name: "HEADING#1: Should prefer higher heading class (here: 1 and 2 → prefer 1).",
+      data: `<div xmlns="${ns_richtext}"><p class="p--heading-1 p--heading-2">${text}</p></div>`,
+      expectedDataView: `<div xmlns="${ns_richtext}"><h1>${text}</h1></div>`,
+    },
+    {
+      name: "HEADING#2: Should prefer higher heading class (here: 2 and 1 → prefer 1).",
+      data: `<div xmlns="${ns_richtext}"><p class="p--heading-2 p--heading-1">${text}</p></div>`,
+      expectedDataView: `<div xmlns="${ns_richtext}"><h1>${text}</h1></div>`,
+    },
+    {
+      name: "HEADING#3: Should prefer higher heading class and keep unrelated classes.",
+      data: `<div xmlns="${ns_richtext}"><p class="some-class p--heading-2 p--heading-1">${text}</p></div>`,
+      expectedDataView: `<div xmlns="${ns_richtext}"><h1 class="some-class">${text}</h1></div>`,
     },
   ];
 
