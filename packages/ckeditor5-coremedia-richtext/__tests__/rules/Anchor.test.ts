@@ -233,9 +233,11 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
   };
   const linkBehaviorFixtures: DataProcessingTestCase[] = Object.entries(expectedTargetToXlinkShowAndRole).map(
     ([target, { show, role, comment, non_bijective }], index) => {
-      const name = `ANCHOR/BEHAVIOR#${index}: Should map ${target === noTarget ? "no target" : `target="${target}"`} to ${
-        !show ? "no xlink:show" : `xlink:show="${show}"`
-      } and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${non_bijective ? " and vice versa" : ""}.`;
+      const name = `ANCHOR/BEHAVIOR#${index}: Should map ${
+        target === noTarget ? "no target" : `target="${target}"`
+      } to ${!show ? "no xlink:show" : `xlink:show="${show}"`} and ${!role ? "no xlink:role" : `xlink:show="${role}"`}${
+        non_bijective ? " and vice versa" : ""
+      }.`;
       const viewTarget = `${target === noTarget ? "" : ` target="${target}"`}`;
       const dataShow: string = !show ? "" : ` xlink:show="${show}"`;
       const dataRole: string = !role ? "" : ` xlink:role="${role}"`;
@@ -277,6 +279,21 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       direction: Direction.toData,
       data: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
       dataView: `<div xmlns="${ns_richtext}"><p><a class="some">${text}</a></p></div>`,
+    },
+    {
+      name: "ANCHOR#4: Should transform xlink:href to xlink back and forth.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_external}">${text}</a>`),
+    },
+    {
+      name: "ANCHOR#5: (Folders) Should transform xlink:href to xlink back and forth and also transform REST link to link with schema.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_content_folder_data}">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_content_folder_model}">${text}</a>`),
+    },
+    {
+      name: "ANCHOR#6: (Documents) Should transform xlink:href to xlink back and forth and also transform REST link to link with schema.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_content_document_data}">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_content_document_model}">${text}</a>`),
     },
     ...linkBehaviorFixtures,
   ];
