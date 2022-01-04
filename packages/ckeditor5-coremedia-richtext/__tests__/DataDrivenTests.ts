@@ -196,16 +196,20 @@ const eachDataProcessingTest = (
   direction: Direction.toData | Direction.toDataView,
   testCases: DataProcessingTestCase[]
 ): void => {
-  const directionHint = direction === Direction.toData ? "Data View → Data" : "Data → Data View";
-  const name = `[%#] ${directionHint}: %s`;
-  describe.each<[string, DataProcessingTestCase]>(testData(testCases))(name, (name, data) => {
+  const name = `[%#] %s`;
+  const data = testData(testCases);
+  describe.each<[string, DataProcessingTestCase]>(data)(name, (name, data) => {
     dataProcessingTest(direction, data);
   });
 };
 
 const allDataProcessingTests = (testCases: DataProcessingTestCase[]): void => {
-  eachDataProcessingTest(Direction.toDataView, testCases);
-  eachDataProcessingTest(Direction.toData, testCases);
+  describe("Data → Data View", () => {
+    eachDataProcessingTest(Direction.toDataView, testCases);
+  });
+  describe("Data View → Data", () => {
+    eachDataProcessingTest(Direction.toData, testCases);
+  });
 };
 
 export {
