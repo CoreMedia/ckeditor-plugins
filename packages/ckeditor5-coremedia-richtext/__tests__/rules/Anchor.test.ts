@@ -33,7 +33,8 @@ const attr_link_content_document_data = "content/42";
 const attr_link_content_document_model = "content:42";
 
 // noinspection XmlUnusedNamespaceDeclaration
-const wrapAnchor = (anchor: string): string => `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${anchor}</p></div>`;
+const wrapAnchor = (anchor: string): string =>
+  `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${anchor}</p></div>`;
 
 describe("CoreMediaRichTextConfig: Anchors", () => {
   // noinspection HtmlUnknownAttribute
