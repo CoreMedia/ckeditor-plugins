@@ -98,82 +98,6 @@ describe("Default Data Filter Rules", () => {
     })
   );
 
-  const replaceInlineSimpleFixtures: DataFilterRulesTestData[] = flatten(
-    [
-      {
-        view: "b",
-        data: "strong",
-        bijective: false,
-      },
-      {
-        view: "i",
-        data: "em",
-        bijective: true,
-      },
-    ].map(({ view, data, bijective }): DataFilterRulesTestData[] => {
-      const key = view.toUpperCase();
-      return [
-        {
-          name: `${key}#1: View: <${view}> ${bijective ? "<" : ""}-> Data: <${data}>.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-          expectedView: bijective,
-        },
-        {
-          name: `${key}#2: Should keep <${data}> when transformed.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p><${data}>${text}</${data}></p></div>`,
-        },
-      ];
-    })
-  );
-
-  const replaceInlineBySpanFixtures: DataFilterRulesTestData[] = flatten(
-    [
-      {
-        view: "u",
-        dataClass: "underline",
-        bijective: true,
-      },
-      {
-        view: "strike",
-        dataClass: "strike",
-        bijective: false,
-      },
-      {
-        view: "s",
-        dataClass: "strike",
-        bijective: true,
-      },
-      {
-        view: "del",
-        dataClass: "strike",
-        bijective: false,
-      },
-    ].map(({ view, dataClass, bijective }): DataFilterRulesTestData[] => {
-      // bijective: Typically false for "alias" mappings.
-      // The mapping, which corresponds to the default representation in
-      // CKEditor should be bijective (i.e. = true).
-      const key = view.toUpperCase();
-      return [
-        {
-          name: `${key}#1: View: <${view}> ${bijective ? "<" : ""}-> Data: by <span class="${dataClass}">.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><p><${view}>${text}</${view}></p></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
-          expectedView: bijective,
-        },
-        {
-          name: `${key}#2: Should keep <span class="${dataClass}"> when transformed.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p><span class="${dataClass}">${text}</span></p></div>`,
-        },
-      ];
-    })
-  );
   /*
    * In CKEditor 4 data-processing we did some clean-up of elements. While this
    * was most likely dealing with shortcomings of CKEditor 4, we want to ensure
@@ -252,23 +176,19 @@ describe("Default Data Filter Rules", () => {
     },
   ];
 
-  const testFixtures: DataFilterRulesTestData[] = [
-    ...defaultBlockFixtures,
-    ...replaceInlineSimpleFixtures,
-    ...replaceInlineBySpanFixtures,
-    ...cleanupFixtures,
-    ...xdiffFixtures,
-  ].sort((a, b) => {
-    const nameA = a.name;
-    const nameB = b.name;
-    if (nameA < nameB) {
-      return -1;
+  const testFixtures: DataFilterRulesTestData[] = [...defaultBlockFixtures, ...cleanupFixtures, ...xdiffFixtures].sort(
+    (a, b) => {
+      const nameA = a.name;
+      const nameB = b.name;
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
     }
-    if (nameA > nameB) {
-      return 1;
-    }
-    return 0;
-  });
+  );
 
   describe.each<[string, DataFilterRulesTestData]>(testData(testFixtures))(
     "(%#) %s",
