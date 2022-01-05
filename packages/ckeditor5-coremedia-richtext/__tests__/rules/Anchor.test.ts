@@ -261,6 +261,59 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
   );
 
   // noinspection HtmlUnknownAttribute
+  const attributes: DataProcessingTestCase[] = [
+    {
+      name: "ANCHOR/ATTRIBUTES#1: Should keep `dir` attribute.",
+      data: wrapAnchor(`<a dir="rtl" xlink:href="${attr_link_external}">${text}</a>`),
+      dataView: wrapAnchor(`<a dir="rtl" href="${attr_link_external}">${text}</a>`),
+    },
+    {
+      name: "ANCHOR/ATTRIBUTES#2: Should transform xlink:title (data) to title attribute (data view) back and forth.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}" xlink:title="TITLE">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_external}" title="TITLE">${text}</a>`),
+    },
+    {
+      name: "ANCHOR/ATTRIBUTES#3: Should transform xlink:actuate (data) to data-xlink-actuate attribute (data view) back and forth.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}" xlink:actuate="onLoad">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_external}" data-xlink-actuate="onLoad">${text}</a>`),
+    },
+    {
+      name: "ANCHOR/ATTRIBUTES#4: Should transform xlink:type (data) to data-xlink-type attribute (data view) back and forth.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}" xlink:type="simple">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_external}" data-xlink-type="simple">${text}</a>`),
+    },
+    {
+      name: "ANCHOR/ATTRIBUTES#5: Should keep `class` attribute.",
+      data: wrapAnchor(`<a class="CLASS" xlink:href="${attr_link_external}">${text}</a>`),
+      dataView: wrapAnchor(`<a class="CLASS" href="${attr_link_external}">${text}</a>`),
+    },
+  ];
+
+  // noinspection HtmlUnknownAttribute
+  const languageAttributes: DataProcessingTestCase[] = [
+    {
+      name: "ANCHOR/LANG#1: Should transform xml:lang (data) to lang attribute (data view) back and forth.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}" xml:lang="en">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_external}" lang="en">${text}</a>`),
+    },
+    {
+      name: "ANCHOR/LANG#2: Should transform lang (data) to lang attribute (data view).",
+      direction: Direction.toDataView,
+      comment:
+        "CoreMedia RichText supports xml:lang as well as lang attribute. While preferring xml:lang for toData transformation, we have to respect lang attribute from data as well.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}" lang="en">${text}</a>`),
+      dataView: wrapAnchor(`<a lang="en" href="${attr_link_external}">${text}</a>`),
+    },
+    {
+      name: "ANCHOR/LANG#3: Should prefer xml:lang over lang in data.",
+      direction: Direction.toDataView,
+      comment: "As in HTML specification, xml:lang should take precedence, when both are given.",
+      data: wrapAnchor(`<a xlink:href="${attr_link_external}" lang="en" xml:lang="de">${text}</a>`),
+      dataView: wrapAnchor(`<a lang="de" href="${attr_link_external}">${text}</a>`),
+    },
+  ];
+
+  // noinspection HtmlUnknownAttribute
   const data: DataProcessingTestCase[] = [
     {
       name: "ANCHOR#1: Should ignore invalid show-attribute.",
@@ -296,6 +349,8 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       dataView: wrapAnchor(`<a href="${attr_link_content_document_model}">${text}</a>`),
     },
     ...linkBehaviorFixtures,
+    ...attributes,
+    ...languageAttributes,
   ];
 
   allDataProcessingTests(data);
