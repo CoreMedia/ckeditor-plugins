@@ -31,6 +31,11 @@ const attr_link_content_document_data = "content/42";
  * links and does not try adding any custom schema like https to these values.
  */
 const attr_link_content_document_model = "content:42";
+/**
+ * In UAPI content URIs are represented this way. We want to be able to understand
+ * them, if a user enters them in source editing, for example.
+ */
+const attr_link_content_document_uapi = "coremedia:///cap/content/42";
 
 // noinspection XmlUnusedNamespaceDeclaration
 const wrapAnchor = (anchor: string): string =>
@@ -346,6 +351,12 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
     {
       name: "ANCHOR#6: (Documents) Should transform xlink:href to xlink back and forth and also transform REST link to link with schema.",
       data: wrapAnchor(`<a xlink:href="${attr_link_content_document_data}">${text}</a>`),
+      dataView: wrapAnchor(`<a href="${attr_link_content_document_model}">${text}</a>`),
+    },
+    {
+      name: "ANCHOR#7: (UAPI URI) Should be able to understand UAPI URIs for toView processing.",
+      direction: Direction.toDataView,
+      data: wrapAnchor(`<a xlink:href="${attr_link_content_document_uapi}">${text}</a>`),
       dataView: wrapAnchor(`<a href="${attr_link_content_document_model}">${text}</a>`),
     },
     ...linkBehaviorFixtures,

@@ -2,6 +2,7 @@ import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataproc
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { xLinkActuateMapper, xLinkTitleMapper, xLinkTypeMapper } from "./XLink";
 import { langMapper } from "./Lang";
+import { formatLink } from "./IdHelper";
 
 const CONTENT_LINK_DATA_REGEXP = /^content\/(?<id>\d+)*/;
 const CONTENT_LINK_DATA_PREFIX = "content/";
@@ -48,9 +49,13 @@ const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
  * @param href href to transform
  */
 const contentLinkToModel = (href: string): string => {
-  const match = CONTENT_LINK_DATA_REGEXP.exec(href);
+  // If data or not retrieved via CoreMedia Studio Server, we may have
+  // UAPI Links in our data (for example from source editing). `formatLink`
+  // will respect such URIs and transform them according to our expectations.
+  const link = formatLink(href);
+  const match = CONTENT_LINK_DATA_REGEXP.exec(link);
   if (!match) {
-    return href;
+    return link;
   }
   return `${CONTENT_LINK_MODEL_PREFIX}${match[1]}`;
 };
