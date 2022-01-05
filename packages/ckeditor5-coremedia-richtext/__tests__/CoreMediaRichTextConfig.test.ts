@@ -4,7 +4,6 @@ import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
 import { NamedTestCase, SkippableTestCase, testData } from "./DataDrivenTests";
-import { flatten } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
@@ -56,10 +55,8 @@ const serializer = new XMLSerializer();
 const strictnessKeys = Object.keys(Strictness).filter((x) => !(parseInt(x) >= 0));
 const whitespace = " \t\n";
 const text = `Lorem${whitespace}Ipsum`;
-const attr_class = "alpha";
 // noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";
-const ns_xhtml = "http://www.w3.org/1999/xhtml";
 // noinspection HttpUrlsUsage
 const ns_xdiff = "http://www.coremedia.com/2015/xdiff";
 
@@ -69,34 +66,6 @@ describe("Default Data Filter Rules", () => {
     StrictnessAwareTestData &
     XmlInputTestData &
     ExpectTransformationTestData;
-
-  const defaultBlockFixtures: DataFilterRulesTestData[] = flatten(
-    ["p", "pre", "blockquote"].map((el): DataFilterRulesTestData[] => {
-      const key = el.toUpperCase();
-      return [
-        {
-          name: `${key}#1: Should keep if empty.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el}/></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><${el}/></div>`,
-          expectedView: true,
-        },
-        {
-          name: `${key}#2: Should adapt namespace if required.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el} xmlns="${ns_xhtml}"/></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><${el}/></div>`,
-        },
-        {
-          name: `${key}#3: Should keep class attribute.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"/></div>`,
-          expectedView: true,
-        },
-      ];
-    })
-  );
 
   /*
    * In CKEditor 4 data-processing we did some clean-up of elements. While this
@@ -176,19 +145,17 @@ describe("Default Data Filter Rules", () => {
     },
   ];
 
-  const testFixtures: DataFilterRulesTestData[] = [...defaultBlockFixtures, ...cleanupFixtures, ...xdiffFixtures].sort(
-    (a, b) => {
-      const nameA = a.name;
-      const nameB = b.name;
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
+  const testFixtures: DataFilterRulesTestData[] = [...cleanupFixtures, ...xdiffFixtures].sort((a, b) => {
+    const nameA = a.name;
+    const nameB = b.name;
+    if (nameA < nameB) {
+      return -1;
     }
-  );
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
 
   describe.each<[string, DataFilterRulesTestData]>(testData(testFixtures))(
     "(%#) %s",
