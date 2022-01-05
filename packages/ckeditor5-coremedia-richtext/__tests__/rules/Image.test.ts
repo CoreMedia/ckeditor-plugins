@@ -7,6 +7,12 @@ const text = "TEXT";
 // Represents a typical representation of an embedded image in CoreMedia Studio.
 // It references the content-ID and a certain property to read the blob data from.
 const imageHref = "content/0#properties.data";
+// Represents a typical representation of an embedded image in CoreMedia
+// RichText in its normal (non-Studio) UAPI form.
+// As editors may enter this during source editing (they may be more used to
+// it, or they just copy and paste it from another source), we should respect
+// this in `toView` transformation.
+const imageUapiUri = "coremedia:///cap/blob/content/0#data";
 // The src attribute will be mapped to some src referencing a BLOB at
 // CoreMedia Studio Server. For these tests, the source is irrelevant.
 const dummySrc = "https://example.org/img.png";
@@ -100,6 +106,13 @@ describe("CoreMediaRichTextConfig: Images", () => {
       direction: Direction.toData,
       data: wrapImg(`${text}`),
       dataView: wrapImg(`${text}<img alt="" src="${dummySrc}"/>`),
+      postProcessActual: imageSourceToDummyHref,
+    },
+    {
+      name: "IMAGE#11: Source Editing Convenience: Respect Content Blob Links in UAPI Form.",
+      direction: Direction.toDataView,
+      data: wrapImg(`<img alt="" xlink:href="${imageUapiUri}"/>`),
+      dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
       postProcessActual: imageSourceToDummyHref,
     },
   ];
