@@ -15,6 +15,8 @@ CKEditor 5 in CoreMedia CMS with or without it.
 
 ## Do I need to install GRS?
 
+Most likely: Yes.
+
 If all your RichText data are created via CKEditor 5 within CoreMedia CMS:
 most likely not. You should consider installing GRS, if you answer one of the
 following question with _"yes"_:
@@ -33,6 +35,27 @@ If not installing GRS, any RichText, which is loaded and edited within
 CKEditor 5 will get all elements and attributes removed, which cannot be created
 by the installed CKEditor 5 editing features. This may be a desired behavior,
 though.
+
+## Source Editing
+
+The CKEditor Team recommends enabling the Source Editing feature if using GHS.
+As GHS is the base technology for GRS, the same recommendation applies here.
+
+**Special Note on Content Links and Content Blob Links (Images):** Links are
+represented in a way, so that CoreMedia Studio understands them. Thus, a link
+to a content with ID `2` is represented as `content/2`. Similar to that, Content
+Blob references are expressed as: `content/2#properties.data`.
+
+Users may be more used to the more verbose Unified API (UAPI) format. For the
+examples above this would be:
+
+* `coremedia:///cap/content/2`
+* `coremedia:///cap/blob/content/2#data`
+
+As convenience in Source Editing, both formats are understood. Note though, that
+when closing Source Editing, the links will be transformed to the CoreMedia
+Studio format. Thus, when opening Source Editing the next time, you will see
+`content/2` again, for example.
 
 ## Pitfall: Customizing Default Data-Processing
 
