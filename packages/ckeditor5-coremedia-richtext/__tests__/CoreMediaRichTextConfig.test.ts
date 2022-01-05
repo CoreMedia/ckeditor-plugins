@@ -76,62 +76,6 @@ describe("Default Data Filter Rules", () => {
     XmlInputTestData &
     ExpectTransformationTestData;
 
-  const uncategorizedFixtures: DataFilterRulesTestData[] = [
-    {
-      name: "DISABLED#1: Example how you may (temporarily) disable a test.",
-      skip: "Disabled for demonstration purpose only.",
-      strictness: [Strictness.STRICT],
-      inputFromView: `<div xmlns="${ns_richtext}"/>`,
-      expectedData: `<div xmlns="${ns_richtext}"/>`,
-    },
-    {
-      name: "EMPTY#1: Should not modify empty RichText.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"/>`,
-      expectedData: `<div xmlns="${ns_richtext}"/>`,
-      expectedView: true,
-    },
-    {
-      name: "DIV#1: Should replace nested DIVs by P.",
-      comment: `${LAST_RESORT}`,
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><div>${text}</div></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
-    },
-    {
-      name: "BR#1: Should keep BR as is.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br/>${text}</p></div>`,
-      expectedView: true,
-    },
-    {
-      name: "BR#2: Should keep BR class as is.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}<br class="${attr_class}"/>${text}</p></div>`,
-      expectedView: true,
-    },
-    {
-      name: "SPAN#1: Should keep empty span.",
-      comment:
-        "While the element is irrelevant, this refers to an issue with CKEditor 4, where such empty spans got expanded instead, so that <span/>t became <span>t</span>",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<span/>${text}</p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}<span/>${text}</p></div>`,
-      expectedView: true,
-    },
-    {
-      name: "SPAN#2: Should keep empty span and its attributes.",
-      comment:
-        "While the element is irrelevant, this refers to an issue with CKEditor 4, where such empty spans got expanded instead, so that <span/>t became <span>t</span>",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<span dir="rtl" class="${attr_class}"/>${text}</p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}<span dir="rtl" class="${attr_class}"/>${text}</p></div>`,
-      expectedView: true,
-    },
-  ];
-
   const tableFixtures: DataFilterRulesTestData[] = [
     {
       name: "TABLE#01: Empty table should be removed, as it is invalid.",
@@ -524,7 +468,6 @@ describe("Default Data Filter Rules", () => {
   ];
 
   const testFixtures: DataFilterRulesTestData[] = [
-    ...uncategorizedFixtures,
     ...tableFixtures,
     ...listFixtures,
     ...headingFixtures,
