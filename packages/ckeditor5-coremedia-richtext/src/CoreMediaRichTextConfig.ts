@@ -1,7 +1,7 @@
 import RichTextSchema, { Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
-import { allFilterRules, ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { allFilterRules } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import {
   FilterRuleSetConfiguration,
@@ -16,6 +16,7 @@ import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
 import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
 import { handleImage } from "./rules/Image";
+import { listRules } from "./rules/List";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -38,11 +39,6 @@ export interface ParsedConfig {
   readonly toData: FilterRuleSet;
   readonly toView: FilterRuleSet;
 }
-
-// Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)
-const removeInvalidList: ElementFilterRule = (params) => {
-  params.node.remove = params.node.empty || !params.node.findFirst("li");
-};
 
 /**
  * Rule to transform several representations of strikeout-state. As CKEditor
@@ -86,15 +82,6 @@ const defaultRules: FilterRuleSetConfiguration = {
     ...schemaRules,
     a: handleAnchor,
     img: handleImage,
-    ol: {
-      toData: allFilterRules(langDataFilterRule, removeInvalidList),
-      toView: langViewFilterRule,
-    },
-    ul: {
-      toData: allFilterRules(langDataFilterRule, removeInvalidList),
-      toView: langViewFilterRule,
-    },
-    li: langMapperConfiguration,
     p: {
       toData: langDataFilterRule,
       // paragraphToHeading: While we could do this per heading level, this
@@ -104,6 +91,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       },
     },
     ...headingRules,
+    ...listRules,
     blockquote: langMapperConfiguration,
     // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
     b: replaceBy("strong"),
