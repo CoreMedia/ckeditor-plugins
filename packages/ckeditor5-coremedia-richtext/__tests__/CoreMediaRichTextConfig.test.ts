@@ -70,48 +70,6 @@ describe("Default Data Filter Rules", () => {
     XmlInputTestData &
     ExpectTransformationTestData;
 
-  const headingFixtures: DataFilterRulesTestData[] = flatten(
-    [1, 2, 3, 4, 5, 6].map((level): DataFilterRulesTestData[] => {
-      const el = `h${level}`;
-      const key = el.toUpperCase();
-      const expectedClass = `p--heading-${level}`;
-
-      return [
-        {
-          name: `${key}#1: Should transform to empty <p> if empty.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el}/></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p class="${expectedClass}"/></div>`,
-          expectedView: true,
-        },
-        {
-          name: `${key}#2: Should transform to <p> with class attribute.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el}>${text}</${el}></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p class="${expectedClass}">${text}</p></div>`,
-          expectedView: true,
-        },
-      ];
-    })
-  );
-
-  const invalidHeadingFixtures: DataFilterRulesTestData[] = flatten(
-    [0, 7, 10].map((level): DataFilterRulesTestData[] => {
-      const key = `INVALID_H${level}`;
-      const invalidHeadingClass = `p--heading-${level}`;
-
-      return [
-        {
-          name: `${key}#1: Should not handle invalid heading class.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><p class="${invalidHeadingClass}">${text}</p></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><p class="${invalidHeadingClass}">${text}</p></div>`,
-          expectedView: true,
-        },
-      ];
-    })
-  );
-
   const defaultBlockFixtures: DataFilterRulesTestData[] = flatten(
     ["p", "pre", "blockquote"].map((el): DataFilterRulesTestData[] => {
       const key = el.toUpperCase();
@@ -295,8 +253,6 @@ describe("Default Data Filter Rules", () => {
   ];
 
   const testFixtures: DataFilterRulesTestData[] = [
-    ...headingFixtures,
-    ...invalidHeadingFixtures,
     ...defaultBlockFixtures,
     ...replaceInlineSimpleFixtures,
     ...replaceInlineBySpanFixtures,
