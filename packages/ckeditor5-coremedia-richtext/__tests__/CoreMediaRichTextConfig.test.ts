@@ -18,12 +18,6 @@ const TEST_SELECTOR = "";
 
 const MOCK_EDITOR = new Editor();
 
-const LAST_RESORT =
-  "This is a last-resort fix, prior to sending data to the " +
-  "server. It's actually almost an indicator of missing explicit data " +
-  "processing. That's why `toView` will not be able to restore the original " +
-  "result.";
-
 type StrictnessAwareTestData = {
   /**
    * To which strictness modes the test applies to.
@@ -75,35 +69,6 @@ describe("Default Data Filter Rules", () => {
     StrictnessAwareTestData &
     XmlInputTestData &
     ExpectTransformationTestData;
-
-  const listFixtures: DataFilterRulesTestData[] = flatten(
-    ["ul", "ol"].map((el): DataFilterRulesTestData[] => {
-      const key = el.toUpperCase();
-      return [
-        {
-          name: `${key}#1: Should remove if empty, as empty <${el}> not allowed by DTD.`,
-          comment: `${LAST_RESORT}`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el}>${whitespace}</${el}></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"/>`,
-        },
-        {
-          name: `${key}#2: Should keep if valid.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el}><li>${text}</li></${el}></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><${el}><li>${text}</li></${el}></div>`,
-          expectedView: true,
-        },
-        {
-          name: `${key}#3: Should keep class attribute.`,
-          strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-          inputFromView: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
-          expectedData: `<div xmlns="${ns_richtext}"><${el} class="${attr_class}"><li>${text}</li></${el}></div>`,
-          expectedView: true,
-        },
-      ];
-    })
-  );
 
   const headingFixtures: DataFilterRulesTestData[] = flatten(
     [1, 2, 3, 4, 5, 6].map((level): DataFilterRulesTestData[] => {
@@ -330,7 +295,6 @@ describe("Default Data Filter Rules", () => {
   ];
 
   const testFixtures: DataFilterRulesTestData[] = [
-    ...listFixtures,
     ...headingFixtures,
     ...invalidHeadingFixtures,
     ...defaultBlockFixtures,
