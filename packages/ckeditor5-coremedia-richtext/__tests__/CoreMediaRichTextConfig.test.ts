@@ -68,64 +68,6 @@ describe("Default Data Filter Rules", () => {
     ExpectTransformationTestData;
 
   /*
-   * In CKEditor 4 data-processing we did some clean-up of elements. While this
-   * was most likely dealing with shortcomings of CKEditor 4, we want to ensure
-   * (for now) that the clean-up mechanisms still work, at least to provide
-   * compatibility with existing richtext data.
-   *
-   * Later, it may become a configuration option to keep this legacy behavior.
-   */
-  const cleanupFixtures: DataFilterRulesTestData[] = [
-    {
-      name: "CLEANUP#1: Remove top-level <br> tag.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><br/></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"/>`,
-    },
-    {
-      name: "CLEANUP#2: Remove trailing <br> tag in <td>.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}<br/></td></tr></tbody></table></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td>${text}</td></tr></tbody></table></div>`,
-    },
-    {
-      name: "CLEANUP#3: Remove trailing <br> tag in <p>.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p>${text}<br/></p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p>${text}</p></div>`,
-    },
-    {
-      name: "CLEANUP#4: Remove singleton <br> in <td>",
-      comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><br/></td></tr></tbody></table></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
-    },
-    {
-      name: "CLEANUP#5: Remove singleton <p> in <td>",
-      comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p/></td></tr></tbody></table></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
-    },
-    {
-      name: "CLEANUP#6: Remove singleton <p> only containing <br> in <td>",
-      comment: "This is a CKEditor 4 CoreMedia RichText Behavior.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><table><tbody><tr><td><p><br/></p></td></tr></tbody></table></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><table><tbody><tr><td/></tr></tbody></table></div>`,
-    },
-    {
-      name: "CLEANUP#7: Don't remove possibly irrelevant <span>.",
-      comment:
-        "While around 2011 we decided to delete irrelevant spans, there is no reason with regards to RichText DTD. And clean-up will make things more complicate. Thus, decided in 2021 to keep it.",
-      strictness: [Strictness.STRICT, Strictness.LOOSE, Strictness.LEGACY],
-      inputFromView: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
-      expectedData: `<div xmlns="${ns_richtext}"><p><span>${text}</span></p></div>`,
-    },
-  ];
-
-  /*
    * The <xdiff:span> element (xmlns:xdiff="http://www.coremedia.com/2015/xdiff")
    * must not make it to the server. There may be scenarios (for example
    * copy & paste), where these elements become part of the richtext to store
@@ -145,7 +87,7 @@ describe("Default Data Filter Rules", () => {
     },
   ];
 
-  const testFixtures: DataFilterRulesTestData[] = [...cleanupFixtures, ...xdiffFixtures].sort((a, b) => {
+  const testFixtures: DataFilterRulesTestData[] = [...xdiffFixtures].sort((a, b) => {
     const nameA = a.name;
     const nameB = b.name;
     if (nameA < nameB) {
