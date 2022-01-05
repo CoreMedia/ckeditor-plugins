@@ -23,13 +23,13 @@ describe("CoreMediaRichTextConfig: Lists", () => {
         },
         {
           name: `${key}#2: Should keep if valid.`,
-          dataView: wrapContent(`<${el}><li>${text}</li></${el}>`),
           data: wrapContent(`<${el}><li>${text}</li></${el}>`),
+          dataView: wrapContent(`<${el}><li>${text}</li></${el}>`),
         },
         {
           name: `${key}#3: Should keep class attribute.`,
-          dataView: wrapContent(`<${el} class="CLASS"><li>${text}</li></${el}>`),
           data: wrapContent(`<${el} class="CLASS"><li>${text}</li></${el}>`),
+          dataView: wrapContent(`<${el} class="CLASS"><li>${text}</li></${el}>`),
         },
       ];
     })
