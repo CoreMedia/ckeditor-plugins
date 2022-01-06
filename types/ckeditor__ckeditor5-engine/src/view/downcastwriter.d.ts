@@ -19,7 +19,7 @@ export default class DowncastWriter {
 
   breakAttributes(positionOrRange: any): any;
 
-  breakContainer(position: any): any;
+  breakContainer(position: Position): Position;
 
   clear(range: any, element: any): void;
 

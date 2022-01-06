@@ -51,16 +51,14 @@ export default class ContentPlaceholderEditing extends Plugin {
 
   static #addContentMarkerConversion(editor: Editor, evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void {
     const viewPosition = conversionApi.mapper.toViewPosition( data.markerRange.start );
-
-    const viewElement = conversionApi.writer.createUIElement("span", { class: "cm-load-mask" }, function (this: UIElement, dom: Document): Element {
+    const viewContainer = conversionApi.writer.createUIElement("div", { class: "cm-load-mask cm-load-mask-inline" }, function (this: UIElement, dom: Document): Element {
       const uielement: UIElement = this as unknown as UIElement;
       const htmlElement = uielement.toDomElement(dom);
       htmlElement.innerHTML = "loading...";
       return htmlElement;
     });
-
-    conversionApi.writer.insert( viewPosition, viewElement );
-    conversionApi.mapper.bindElementToMarker( viewElement, data.markerName );
+    conversionApi.writer.insert( viewPosition, viewContainer );
+    conversionApi.mapper.bindElementToMarker( viewContainer, data.markerName );
 
     ContentPlaceholderEditing.#triggerLoadAndWriteToModel(editor, data.markerName.split(":")[1]);
 
