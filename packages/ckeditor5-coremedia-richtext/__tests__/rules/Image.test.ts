@@ -115,6 +115,24 @@ describe("CoreMediaRichTextConfig: Images", () => {
       dataView: wrapImg(`<img alt="" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
       postProcessActual: imageSourceToDummyHref,
     },
+    {
+      name: "IMAGE#12: Preserve height attribute.",
+      data: wrapImg(`<img height="42" alt="" xlink:href="${imageHref}"/>`),
+      dataView: wrapImg(`<img height="42" alt="" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
+    },
+    {
+      name: "IMAGE#13: Preserve width attribute.",
+      data: wrapImg(`<img width="42" alt="" xlink:href="${imageHref}"/>`),
+      dataView: wrapImg(`<img width="42" alt="" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
+    },
+    {
+      name: "IMAGE#14: Preserve dir attribute.",
+      data: wrapImg(`<img dir="rtl" alt="" xlink:href="${imageHref}"/>`),
+      dataView: wrapImg(`<img dir="rtl" alt="" src="${dummySrc}" data-xlink-href="${imageHref}"/>`),
+      postProcessActual: imageSourceToDummyHref,
+    },
   ];
 
   allDataProcessingTests(data);
