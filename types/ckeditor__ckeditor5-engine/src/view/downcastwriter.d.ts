@@ -10,6 +10,7 @@ import RawElement from "./rawelement";
 import Element from "./element";
 import Range from "./range"
 import UIElement from "./uielement";
+import Position from "./position";
 
 export default class DowncastWriter {
   constructor(document: Document);
@@ -60,7 +61,7 @@ export default class DowncastWriter {
 
   createUIElement(name: any, attributes?: any, renderFunction?: any, options?: {}): UIElement;
 
-  insert(position: any, nodes: any): any;
+  insert(position: Position, nodes: any): any;
 
   mergeAttributes(position: any): any;
 
