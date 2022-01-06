@@ -25,6 +25,31 @@ describe("CoreMediaRichTextConfig: Headings", () => {
           data: wrapContent(`<p class="${expectedClass}">${text}</p>`),
           dataView: wrapContent(`<${el}>${text}</${el}>`),
         },
+        {
+          name: `${key}#3: Should keep dir attribute.`,
+          data: wrapContent(`<p dir="rtl" class="${expectedClass}"/>`),
+          dataView: wrapContent(`<${el} dir="rtl"/>`),
+        },
+        {
+          name: `${key}#4: Should transform xml:lang (data) to lang attribute (data view) back and forth.`,
+          data: wrapContent(`<p class="${expectedClass}" xml:lang="en"/>`),
+          dataView: wrapContent(`<${el} lang="en"/>`),
+        },
+        {
+          name: `${key}#5: Should transform lang (data) to lang attribute (data view).`,
+          direction: Direction.toDataView,
+          comment:
+            "CoreMedia RichText supports xml:lang as well as lang attribute. While preferring xml:lang for toData transformation, we have to respect lang attribute from data as well.",
+          data: wrapContent(`<p class="${expectedClass}" lang="en"/>`),
+          dataView: wrapContent(`<${el} lang="en"/>`),
+        },
+        {
+          name: `${key}#6: Should prefer xml:lang over lang in data.`,
+          direction: Direction.toDataView,
+          comment: "As in HTML specification, xml:lang should take precedence, when both are given.",
+          data: wrapContent(`<p class="${expectedClass}" lang="en" xml:lang="de"/>`),
+          dataView: wrapContent(`<${el} lang="de"/>`),
+        },
       ];
     })
   );
