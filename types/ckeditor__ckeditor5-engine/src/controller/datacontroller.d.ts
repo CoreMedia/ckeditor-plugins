@@ -5,6 +5,7 @@ import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
 import DataProcessor from "../dataprocessor/dataprocessor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "../view/observer/domeventdata";
+import Mapper from "../conversion/mapper";
 
 /**
  * Controller for the data pipeline.
@@ -15,6 +16,7 @@ export default class DataController implements Emitter, Observable {
   delegate(...events: string[]): EmitterMixinDelegateChain;
   processor: DataProcessor;
   readonly viewDocument: ViewDocument;
+  mapper: Mapper;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 

@@ -5,6 +5,11 @@
  */
 import Document from "./document";
 import AttributeElement from "./attributeelement";
+import ContainerElement from "./ContainerElement";
+import RawElement from "./rawelement";
+import Element from "./element";
+import Range from "./range"
+import UIElement from "./uielement";
 
 export default class DowncastWriter {
   constructor(document: Document);
@@ -27,13 +32,13 @@ export default class DowncastWriter {
       id?: number | string,
     }): AttributeElement;
 
-  createContainerElement(name: any, attributes: any, options?: {}): any;
+  createContainerElement(name: any, attributes?: any, options?: {}): ContainerElement;
 
   createDocumentFragment(children: any): any;
 
   createEditableElement(name: any, attributes: any): any;
 
-  createEmptyElement(name: any, attributes: any, options?: {}): any;
+  createEmptyElement(name: any, attributes?: any, options?: {}): any;
 
   createPositionAfter(item: any): any;
 
@@ -43,17 +48,17 @@ export default class DowncastWriter {
 
   createRange(start: any, end: any): any;
 
-  createRangeIn(element: any): any;
+  createRangeIn(element: Element): Range;
 
   createRangeOn(item: any): any;
 
-  createRawElement(name: any, attributes: any, renderFunction: any, options?: {}): any;
+  createRawElement(name: any, attributes?: any, renderFunction?: (document: HTMLElement) => void, options?: {}): RawElement;
 
   createSelection(selectable: any, placeOrOffset: any, options: any): any;
 
   createText(data: any): any;
 
-  createUIElement(name: any, attributes: any, renderFunction: any, options?: {}): any;
+  createUIElement(name: any, attributes?: any, renderFunction?: any, options?: {}): UIElement;
 
   insert(position: any, nodes: any): any;
 
@@ -89,3 +94,4 @@ export default class DowncastWriter {
 
   wrap(range: any, attribute: any): any;
 }
+

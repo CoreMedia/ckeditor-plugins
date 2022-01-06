@@ -110,6 +110,93 @@ importers:
       webpack: 5.63.0_webpack-cli@4.9.1
       webpack-cli: 4.9.1_webpack@5.63.0
 
+  packages/ckeditor5-coremedia-content-clipboard:
+    specifiers:
+      '@babel/cli': ^7.16.0
+      '@babel/core': ^7.16.0
+      '@babel/plugin-proposal-class-properties': ^7.16.0
+      '@babel/plugin-proposal-object-rest-spread': ^7.16.0
+      '@babel/plugin-syntax-dynamic-import': ^7.8.3
+      '@babel/plugin-transform-arrow-functions': ^7.16.0
+      '@babel/plugin-transform-computed-properties': ^7.16.0
+      '@babel/plugin-transform-for-of': ^7.16.0
+      '@babel/plugin-transform-parameters': ^7.16.3
+      '@babel/plugin-transform-shorthand-properties': ^7.16.0
+      '@babel/preset-env': ^7.16.0
+      '@babel/preset-typescript': ^7.16.0
+      '@ckeditor/ckeditor5-clipboard': ^31.0.0
+      '@ckeditor/ckeditor5-core': ^31.0.0
+      '@ckeditor/ckeditor5-engine': ^31.0.0
+      '@ckeditor/ckeditor5-html-support': ^31.0.0
+      '@ckeditor/ckeditor5-utils': ^31.0.0
+      '@ckeditor/ckeditor5-widget': ^31.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-coremedia-studio-integration': ^2.0.0
+      '@coremedia/ckeditor5-logging': ^2.0.0
+      '@coremedia/service-agent': ^1.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-html-support': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-widget': ^2.0.0
+      '@types/jest': ^27.0.2
+      '@typescript-eslint/eslint-plugin': ^5.3.1
+      '@typescript-eslint/parser': ^5.3.1
+      babel-jest: ^27.3.1
+      eslint: ^8.2.0
+      eslint-config-prettier: ^8.3.0
+      eslint-plugin-prettier: ^4.0.0
+      jest: ^27.3.1
+      jest-each: ^27.3.1
+      jest-transform-stub: ^2.0.0
+      jest-xml-matcher: ^1.2.0
+      prettier: ^2.4.1
+      rimraf: ^3.0.2
+      typescript: ^4.4.4
+    dependencies:
+      '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
+    devDependencies:
+      '@babel/cli': 7.16.0_@babel+core@7.16.0
+      '@babel/core': 7.16.0
+      '@babel/plugin-proposal-class-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-proposal-object-rest-spread': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-syntax-dynamic-import': 7.8.3_@babel+core@7.16.0
+      '@babel/plugin-transform-arrow-functions': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-computed-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-for-of': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-parameters': 7.16.3_@babel+core@7.16.0
+      '@babel/plugin-transform-shorthand-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/preset-env': 7.16.0_@babel+core@7.16.0
+      '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
+      '@ckeditor/ckeditor5-clipboard': 31.0.0
+      '@ckeditor/ckeditor5-core': 31.0.0
+      '@ckeditor/ckeditor5-engine': 31.0.0
+      '@ckeditor/ckeditor5-html-support': 31.0.0
+      '@ckeditor/ckeditor5-utils': 31.0.0
+      '@ckeditor/ckeditor5-widget': 31.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
+      '@coremedia/service-agent': 1.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@coremedia/types-ckeditor__ckeditor5-widget': link:../../types/ckeditor__ckeditor5-widget
+      '@types/jest': 27.0.2
+      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
+      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      babel-jest: 27.3.1_@babel+core@7.16.0
+      eslint: 8.2.0
+      eslint-config-prettier: 8.3.0_eslint@8.2.0
+      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      jest: 27.3.1
+      jest-each: 27.3.1
+      jest-transform-stub: 2.0.0
+      jest-xml-matcher: 1.2.0
+      prettier: 2.4.1
+      rimraf: 3.0.2
+      typescript: 4.4.4
+
   packages/ckeditor5-coremedia-general-richtext-support:
     specifiers:
       '@babel/cli': ^7.16.0
@@ -378,6 +465,7 @@ importers:
       '@ckeditor/ckeditor5-ui': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-coremedia-content-clipboard': ^2.0.0
       '@coremedia/ckeditor5-coremedia-link': ^2.0.0
       '@coremedia/ckeditor5-coremedia-richtext': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
@@ -401,6 +489,7 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.4.4
     dependencies:
+      '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-link': link:../ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext': link:../ckeditor5-coremedia-richtext
     devDependencies:
@@ -925,6 +1014,12 @@ importers:
 
   types/ckeditor__ckeditor5-utils:
     specifiers: {}
+
+  types/ckeditor__ckeditor5-widget:
+    specifiers:
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
+    dependencies:
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
 
 packages:
 
