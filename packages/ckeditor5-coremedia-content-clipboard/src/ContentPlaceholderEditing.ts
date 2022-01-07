@@ -53,7 +53,13 @@ export default class ContentPlaceholderEditing extends Plugin {
 
   static #addContentMarkerConversion(editor: Editor, evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void {
     const viewPosition = conversionApi.mapper.toViewPosition( data.markerRange.start );
-    const viewContainer = conversionApi.writer.createUIElement("div", { class: "cm-load-mask cm-load-mask-inline" }, function (this: UIElement, dom: Document): Element {
+    const lookupData = PlaceholderDataCache.lookupData(data.markerName);
+    if (!lookupData) {
+      return;
+    }
+
+    let cssClass = lookupData.isEmbeddableContent || lookupData.dropContext.multipleItemsDropped ? "" : "cm-load-mask-inline";
+    const viewContainer = conversionApi.writer.createUIElement("div", { class: "cm-load-mask "+cssClass }, function (this: UIElement, dom: Document): Element {
       const uielement: UIElement = this as unknown as UIElement;
       const htmlElement = uielement.toDomElement(dom);
       htmlElement.innerHTML = "loading...";

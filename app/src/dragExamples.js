@@ -258,6 +258,17 @@ const initDragExamples = () => {
       items: slowDocuments.concat(singleDroppableDocuments).flatMap((item) => item.items),
     },
   ];
+  const embeddables = [
+    {
+      label: `Embeddable Content`,
+      tooltip: `1 contents which is embeddable`,
+      classes: ["linkable", "type-collection"],
+      items: [{
+        id: 40810006,
+        name: false
+      }]
+    },
+  ];
 
   const allData = [
     ...singleDroppables,
@@ -266,6 +277,7 @@ const initDragExamples = () => {
     ...pairedExamples,
     ...allDroppables,
     ...unreadables,
+    ...embeddables
   ];
 
   const generateUriPath = (item) => {

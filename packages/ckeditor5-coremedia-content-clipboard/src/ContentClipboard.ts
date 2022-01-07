@@ -73,8 +73,8 @@ export default class ContentClipboard extends Plugin {
     if (!cmDataUris) {
       return;
     }
-    const containOnlyLinkables = DragDropAsyncSupport.containsOnlyLinkables(cmDataUris);
-    if (containOnlyLinkables) {
+    const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
+    if (containsDisplayableContents) {
       data.dataTransfer.dropEffect = "copy";
     } else {
       data.dataTransfer.dropEffect = "none";
@@ -98,9 +98,10 @@ export default class ContentClipboard extends Plugin {
       const isLast = originalArray.length - 1 === Number(index);
       const isFirst = Number(index) === 0;
       const isLinkableContent = DragDropAsyncSupport.isLinkable(contentUri, true);
+      const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const placeholderId = "" + Math.random();
       const contentData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, placeholderId);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index, isEmbeddableContent);
     });
   };
 
@@ -147,7 +148,7 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number): void {
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number, isEmbeddableContent: boolean): void {
     ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
     if (!linkData.isLinkable) {
       return;
@@ -162,8 +163,10 @@ export default class ContentClipboard extends Plugin {
       const data: PlaceholderData = {
         batch: writer.batch,
         contentUri: linkData.contentUri,
+        isEmbeddableContent: isEmbeddableContent,
         dropContext: {
-          index: index
+          index: index,
+          multipleItemsDropped: dropCondition.multipleContentDrop,
         }
       }
       PlaceholderDataCache.storeData(markerName, data);

@@ -41,7 +41,13 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
       if (uripath.startsWith("content")) {
         resolve(true);
       }
-      resolve(true);
+      const contentIdString: string = uripath.replace("content/", "");
+      const contentId: number = parseInt(contentIdString);
+      const typeId: number = contentId % 10;
+      if (typeId % 6 === 0) {
+        resolve(true);
+      }
+      resolve(false);
     });
   }
 
