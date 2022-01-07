@@ -261,6 +261,10 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
         testData.comment = comment;
       }
 
+      // Silencing all, as some may cause expected console.outputs.
+      // If this is too much, you may instead add a configuration to the processed test-data
+      // if it shall be silent or not.
+      testData.silent = true;
       return testData;
     }
   );
@@ -322,12 +326,14 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
   const data: DataProcessingTestCase[] = [
     {
       name: "ANCHOR#1: Should ignore invalid show-attribute.",
+      silent: true,
       direction: Direction.toDataView,
       data: wrapAnchor(`<a xlink:href="${attr_link_external}" xlink:show="unknown">${text}</a>`),
       dataView: wrapAnchor(`<a href="${attr_link_external}">${text}</a>`),
     },
     {
       name: "ANCHOR#2: Should ignore invalid show-attribute and only keep role attribute.",
+      silent: true,
       direction: Direction.toDataView,
       data: wrapAnchor(`<a xlink:href="${attr_link_external}" xlink:show="unknown" xlink:role="some_role">${text}</a>`),
       dataView: wrapAnchor(`<a href="${attr_link_external}" target="_role_some_role">${text}</a>`),

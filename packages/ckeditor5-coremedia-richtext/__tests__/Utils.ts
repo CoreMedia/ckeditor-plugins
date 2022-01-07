@@ -38,4 +38,28 @@ const parseXml = (xmlData: string): Document => {
   return xmlDocument;
 };
 
-export { flatten, decodeEntity, encodeString, parseXml };
+/**
+ * Suppresses Console Output while executing the given function, if
+ * `silent === true`.
+ *
+ * @param call function to execute
+ * @param silent flag, if output shall be suppressed or not
+ */
+const silenced = (call: () => void, silent?: boolean): void => {
+  const consoleOutputs: (keyof Console)[] = ["log", "error", "warn", "info", "debug"];
+  const spies: jest.SpyInstance[] = [];
+  consoleOutputs.forEach((output) => {
+    const spy = jest.spyOn(console, output);
+    spies.push(spy);
+    if (silent) {
+      spy.mockImplementation(() => null);
+    }
+  });
+  try {
+    call();
+  } finally {
+    spies.forEach((spy) => spy.mockRestore());
+  }
+};
+
+export { flatten, decodeEntity, encodeString, parseXml, silenced };

@@ -2,7 +2,7 @@ import "jest-xml-matcher";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../src/CoreMediaRichTextConfig";
-import { parseXml } from "./Utils";
+import { parseXml, silenced } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
@@ -41,6 +41,16 @@ interface OnlyTestCase {
    * Marks a test-case as the only test to be run, if set to `true`.
    */
   only?: boolean;
+}
+
+/**
+ * Allows suppressing console output while calling production code.
+ */
+interface SilentTestCase {
+  /**
+   * `true` to suppress console output while calling production code.
+   */
+  silent?: boolean;
 }
 
 /**
@@ -158,6 +168,7 @@ const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.na
 type DataProcessingTestCase = NamedTestCase &
   SkippableTestCase &
   OnlyTestCase &
+  SilentTestCase &
   DataProcessingData &
   DirectionRestriction;
 
@@ -183,7 +194,8 @@ const dataProcessingTest = (direction: Direction.toData | Direction.toDataView, 
 
   ddTest(direction, data, () => {
     const xmlDocument: Document = parseXml(input);
-    filter.applyTo(xmlDocument.documentElement);
+
+    silenced(() => filter.applyTo(xmlDocument.documentElement), data.silent);
 
     data.postProcessActual?.(xmlDocument);
 
@@ -220,6 +232,7 @@ export {
   MOCK_EDITOR,
   NamedTestCase,
   OnlyTestCase,
+  SilentTestCase,
   SkippableTestCase,
   allDataProcessingTests,
   dataProcessingTest,
