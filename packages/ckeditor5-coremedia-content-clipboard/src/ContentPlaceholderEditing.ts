@@ -17,6 +17,7 @@ import ContentDisplayServiceDescriptor
   from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -95,13 +96,50 @@ export default class ContentPlaceholderEditing extends Plugin {
       if (!marker) {
         return;
       }
-
       const start: Position | undefined = marker.getStart();
       if (start) {
         writer.insert(link, start);
+        const positionBeforeInsertedItem = writer.createPositionBefore(link);
+        ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, positionBeforeInsertedItem, marker, lookupData);
       }
       writer.removeMarker(marker);
       PlaceholderDataCache.removeData(placeholderId);
+    });
+  }
+
+  static #moveMarkerForPreviousItemsToLeft(editor: Editor, start: Position, marker: Marker, lookupData: PlaceholderData) {
+    const markers: Array<Marker> = ContentPlaceholderEditing.#findMarkersBefore(editor, marker, lookupData);
+    markers.forEach((markerToMoveToLeft: Marker) => {
+
+      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
+      const currentData = PlaceholderDataCache.lookupData(markerToMoveToLeft.name.split(":")[1]);
+      if (!currentData) {
+        return;
+      }
+      editor.model.enqueueChange(currentData.batch, (writer: Writer): void => {
+          const newRange = writer.createRange(start, start);
+          writer.updateMarker(markerToMoveToLeft, {range: newRange})
+      });
+    })
+  }
+
+  static #findMarkersBefore(editor: Editor, marker: Marker, lookupData: PlaceholderData): Array<Marker> {
+    const markersAtSamePosition = ContentPlaceholderEditing.#markersAtPosition(editor, marker.getStart());
+    const actualInsertIndex = lookupData.dropContext.index;
+
+    return markersAtSamePosition.filter(value => {
+      const placeholderId:string = value.name.split(":")[1];
+      const lookupDataForMarker = PlaceholderDataCache.lookupData(placeholderId);
+      if (!lookupDataForMarker) {
+        return false
+      }
+      return lookupDataForMarker.dropContext.index < actualInsertIndex;
+    });
+  }
+
+  static #markersAtPosition(editor: Editor, position: Position): Array<Marker> {
+    return Array.from(editor.model.markers.getMarkersGroup("content")).filter(value => {
+      return value.getStart().isEqual(position);
     });
   }
 

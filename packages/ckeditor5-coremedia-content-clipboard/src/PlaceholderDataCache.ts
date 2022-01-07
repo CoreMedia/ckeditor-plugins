@@ -17,6 +17,9 @@ export default class PlaceholderDataCache {
 }
 
 export type PlaceholderData = {
-  batch: Batch;
-  contentUri: string;
+  batch: Batch,
+  contentUri: string,
+  dropContext: {
+    index: number
+  }
 };

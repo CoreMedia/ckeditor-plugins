@@ -219,6 +219,16 @@ const initDragExamples = () => {
       ],
     },
     {
+      label: "3 Documents[Slow/Fast/Slow]",
+      tooltip: "Slow/Fast/Slow for testing drop order after lazy loading",
+      classes: ["linkable", "type-collection"],
+      items: [
+        {name: true, prefix: ContentIdPrefix.slow},
+        {name: true},
+        {name: true, prefix: ContentIdPrefix.slow},
+      ],
+    },
+    {
       label: "2 Documents (1 nodrop)",
       tooltip: "Two documents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],

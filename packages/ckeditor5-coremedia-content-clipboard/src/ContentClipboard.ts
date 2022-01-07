@@ -10,7 +10,7 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import { ContentData } from "./ContentData";
 import { DropCondition } from "./DropCondition";
-import PlaceholderDataCache from "./PlaceholderDataCache";
+import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
 
@@ -98,7 +98,7 @@ export default class ContentClipboard extends Plugin {
       const isLinkableContent = DragDropAsyncSupport.isLinkable(contentUri, true);
       const placeholderId = "" + Math.random();
       const contentData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, placeholderId);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, originalArray.length, index);
     });
   };
 
@@ -145,7 +145,7 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData): void {
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, totalAmount: number, index: number): void {
     ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
     if (!linkData.isLinkable) {
       return;
@@ -156,7 +156,14 @@ export default class ContentClipboard extends Plugin {
         return;
       }
       writer.addMarker("content:" + linkData.placeholderId, { usingOperation: true, range: targetRange });
-      PlaceholderDataCache.storeData(linkData.placeholderId, { batch: writer.batch, contentUri: linkData.contentUri });
+      const data: PlaceholderData = {
+        batch: writer.batch,
+        contentUri: linkData.contentUri,
+        dropContext: {
+          index: index
+        }
+      }
+      PlaceholderDataCache.storeData(linkData.placeholderId, data);
     });
   }
 }
