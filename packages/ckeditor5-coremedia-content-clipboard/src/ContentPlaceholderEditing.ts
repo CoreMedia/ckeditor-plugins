@@ -18,6 +18,7 @@ import ContentDisplayServiceDescriptor
 import { serviceAgent } from "@coremedia/service-agent";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
+import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -60,50 +61,50 @@ export default class ContentPlaceholderEditing extends Plugin {
     });
     conversionApi.writer.insert( viewPosition, viewContainer );
     conversionApi.mapper.bindElementToMarker( viewContainer, data.markerName );
-
-    ContentPlaceholderEditing.#triggerLoadAndWriteToModel(editor, data.markerName.split(":")[1]);
+    const markerData = ContentClipboardMarkerUtils.splitMarkerName(data.markerName);
+    ContentPlaceholderEditing.#triggerLoadAndWriteToModel(editor, markerData);
 
     evt.stop();
   }
 
-  static #triggerLoadAndWriteToModel(editor: Editor, placeholderId: string): void {
-    const lookupData = PlaceholderDataCache.lookupData(placeholderId);
+  static #triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
+    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(markerData.prefix, markerData.dropId, markerData.item);
+    const lookupData = PlaceholderDataCache.lookupData(markerName);
     if (!lookupData) {
       return;
     }
     ContentPlaceholderEditing.#LOGGER.debug(
-      `Looking for replace marker (${placeholderId}) with content ${lookupData.contentUri}`
+      `Looking for replace marker (${markerName}) with content ${lookupData.contentUri}`
     );
 
     serviceAgent
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         contentDisplayService.name(lookupData.contentUri).then(name => {
-          ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, placeholderId, name);
+          ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name);
         });
       });
-
   }
 
-  static #writeLinkToModel(editor: Editor, lookupData: PlaceholderData, placeholderId: string, name: string): void {
+  static #writeLinkToModel(editor: Editor, lookupData: PlaceholderData, markerData: MarkerData, name: string): void {
     editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
       const contentUri: string = lookupData.contentUri;
       const link = writer.createText(name, {
         linkHref: contentUri,
       });
 
-      const marker = writer.model.markers.get("content:" + placeholderId);
+      const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
       }
       const start: Position | undefined = marker.getStart();
       if (start) {
         writer.insert(link, start);
-        const positionBeforeInsertedItem = writer.createPositionBefore(link);
-        ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, positionBeforeInsertedItem, marker, lookupData);
+
+        ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, start, marker, lookupData);
+        writer.removeMarker(marker);
       }
-      writer.removeMarker(marker);
-      PlaceholderDataCache.removeData(placeholderId);
+      PlaceholderDataCache.removeData(marker.name);
     });
   }
 
@@ -112,7 +113,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     markers.forEach((markerToMoveToLeft: Marker) => {
 
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = PlaceholderDataCache.lookupData(markerToMoveToLeft.name.split(":")[1]);
+      const currentData = PlaceholderDataCache.lookupData(markerToMoveToLeft.name);
       if (!currentData) {
         return;
       }
@@ -126,14 +127,25 @@ export default class ContentPlaceholderEditing extends Plugin {
   static #findMarkersBefore(editor: Editor, marker: Marker, lookupData: PlaceholderData): Array<Marker> {
     const markersAtSamePosition = ContentPlaceholderEditing.#markersAtPosition(editor, marker.getStart());
     const actualInsertIndex = lookupData.dropContext.index;
+    const markerData = ContentClipboardMarkerUtils.splitMarkerName(marker.name);
+    const dropId = markerData.dropId;
 
     return markersAtSamePosition.filter(value => {
-      const placeholderId:string = value.name.split(":")[1];
-      const lookupDataForMarker = PlaceholderDataCache.lookupData(placeholderId);
+      const actualMarker = ContentClipboardMarkerUtils.splitMarkerName(value.name);
+      const lookupDataForMarker = PlaceholderDataCache.lookupData(value.name);
       if (!lookupDataForMarker) {
         return false
       }
-      return lookupDataForMarker.dropContext.index < actualInsertIndex;
+      //dropId = Timestamp when a group of marker have been created.
+      //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
+      //smaller index.
+      if (actualMarker.dropId === dropId) {
+        return lookupDataForMarker.dropContext.index < actualInsertIndex;
+      }
+
+      //If a drop done later to the same position happened we want to make sure all the dropped
+      //items stay on the left of the marker.
+      return actualMarker.dropId > dropId
     });
   }
 

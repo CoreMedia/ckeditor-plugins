@@ -13,6 +13,7 @@ import { DropCondition } from "./DropCondition";
 import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
+import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
 
 export default class ContentClipboard extends Plugin {
   static #CONTENT_CLIPBOARD_PLUGIN_NAME = "ContentClipboardPlugin";
@@ -92,13 +93,14 @@ export default class ContentClipboard extends Plugin {
       return;
     }
     const dropCondition = ContentClipboard.#createDropCondition(editor, data, cmDataUris);
+    const dropId = Date.now();
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isLast = originalArray.length - 1 === Number(index);
       const isFirst = Number(index) === 0;
       const isLinkableContent = DragDropAsyncSupport.isLinkable(contentUri, true);
       const placeholderId = "" + Math.random();
       const contentData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, placeholderId);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, originalArray.length, index);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index);
     });
   };
 
@@ -145,7 +147,7 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, totalAmount: number, index: number): void {
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number): void {
     ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
     if (!linkData.isLinkable) {
       return;
@@ -155,7 +157,8 @@ export default class ContentClipboard extends Plugin {
       if (!targetRange) {
         return;
       }
-      writer.addMarker("content:" + linkData.placeholderId, { usingOperation: true, range: targetRange });
+      const markerName: string = ContentClipboardMarkerUtils.toMarkerName("content", dropId, index);
+      writer.addMarker(markerName, { usingOperation: true, range: targetRange });
       const data: PlaceholderData = {
         batch: writer.batch,
         contentUri: linkData.contentUri,
@@ -163,7 +166,7 @@ export default class ContentClipboard extends Plugin {
           index: index
         }
       }
-      PlaceholderDataCache.storeData(linkData.placeholderId, data);
+      PlaceholderDataCache.storeData(markerName, data);
     });
   }
 }
