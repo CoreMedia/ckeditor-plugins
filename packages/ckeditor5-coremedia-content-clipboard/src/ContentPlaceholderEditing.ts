@@ -19,6 +19,7 @@ import { serviceAgent } from "@coremedia/service-agent";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
 import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
+import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -87,7 +88,7 @@ export default class ContentPlaceholderEditing extends Plugin {
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         contentDisplayService.name(lookupData.contentUri).then(name => {
-            ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name);
+            ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name ? name: ROOT_NAME);
           }, (reason) => {
             ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", lookupData.contentUri, reason);
 

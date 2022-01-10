@@ -13,7 +13,7 @@ import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
-import { ROOT_NAME } from "../Constants";
+import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { DropCondition } from "./DropCondition";
