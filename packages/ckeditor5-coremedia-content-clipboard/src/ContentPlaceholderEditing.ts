@@ -120,7 +120,8 @@ export default class ContentPlaceholderEditing extends Plugin {
         return;
       }
 
-      const insertPosition = isInline || markerPosition.isAtStart ? markerPosition : writer.split(markerPosition).range.end;
+      const isFirstDroppedItem = lookupData.dropContext.index === 0;
+      const insertPosition = !isFirstDroppedItem || isInline || markerPosition.isAtStart ? markerPosition : writer.split(markerPosition).range.end;
       writer.insert(link, insertPosition);
       const positionAfterInsertedElement = writer.createPositionAt(link, "after");
 
