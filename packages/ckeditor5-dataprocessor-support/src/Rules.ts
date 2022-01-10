@@ -217,7 +217,7 @@ class FilterRuleSetConfigurationParser {
     }
   }
 
-  private addToViewTextFilterRule(textFilterRule: TextFilterRule | undefined) {
+  private addToViewTextFilterRule(textFilterRule: TextFilterRule | undefined): void {
     if (!textFilterRule) {
       return;
     }
