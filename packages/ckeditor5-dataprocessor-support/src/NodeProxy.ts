@@ -292,8 +292,7 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Helper function for return value, which signals to continue with
-   * another node, but to do not abort current processing. This is
-   * typically used, if a node just changed its identity.
+   * another node, but to do not abort current processing.
    * @param node node to continue with
    * @protected
    */
