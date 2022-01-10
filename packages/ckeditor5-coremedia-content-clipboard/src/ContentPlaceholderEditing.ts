@@ -87,8 +87,16 @@ export default class ContentPlaceholderEditing extends Plugin {
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         contentDisplayService.name(lookupData.contentUri).then(name => {
-          ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name);
-        });
+            ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name);
+          }, (reason) => {
+            ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", lookupData.contentUri, reason);
+
+            PlaceholderDataCache.removeData(markerName);
+            editor.model.enqueueChange(lookupData.batch, (writer: Writer): void  => {
+              writer.removeMarker(markerName);
+            });
+          }
+        );
       });
   }
 
