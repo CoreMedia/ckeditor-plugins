@@ -106,23 +106,22 @@ describe("HtmlFilter.applyTo()", () => {
       },
     ],
     [
-      "APPLY#7: should not restart from scratch after replacement",
+      "APPLY#7: should restart from scratch after replacement",
       {
-        comment: "We have to assume that a new node got created 'as it should be'.",
         rules: {
           elements: {
             el: (params) => {
-              params.node.name = "replacement";
-              params.node.attributes.was = "el";
+              params.node.attributes.was = params.node.name;
+              params.node.name = "intermediate";
             },
-            replacement: (params) => {
-              params.node.name = "invalid";
-              params.node.attributes.was = "replacement";
+            intermediate: (params) => {
+              params.node.attributes.was = params.node.name;
+              params.node.name = "replacement";
             },
           },
         },
         from: "<parent>Lorem <el>Ipsum <el>Dolor</el> Sit</el></parent>",
-        to: '<parent>Lorem <replacement was="el">Ipsum <replacement was="el">Dolor</replacement> Sit</replacement></parent>',
+        to: '<parent>Lorem <replacement was="intermediate">Ipsum <replacement was="intermediate">Dolor</replacement> Sit</replacement></parent>',
       },
     ],
     [
@@ -215,7 +214,7 @@ describe("HtmlFilter.applyTo()", () => {
           },
         },
         from: "<parent>Lorem <el>Ipsum</el> Dolor</parent>",
-        to: '<parent>Lorem <replacement name="before-el-after">Ipsum</replacement> Dolor</parent>',
+        to: '<parent>Lorem <replacement name="before-el-before-replacement-after">Ipsum</replacement> Dolor</parent>',
       },
     ],
     [

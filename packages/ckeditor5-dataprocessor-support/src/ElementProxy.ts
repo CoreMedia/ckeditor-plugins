@@ -556,7 +556,42 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     } else {
       newElement = ownerDocument.createElementNS(ownerDocument.documentElement.namespaceURI, newName);
     }
+
+    const isRenamed = this.realName !== newName;
+
     this.replaceByElement(newElement);
+
+    if (isRenamed) {
+      /*
+       * Re-Processing recommended as we have a new element name
+       * -------------------------------------------------------
+       *
+       * If we changed for example from `<u>` to `<span class="underline">` we
+       * should also apply additional rules for `<span/>`. Otherwise, we would
+       * require repeating any attribute mappings.
+       *
+       * Example: We map `lang` attribute in data view to `xml:lang` in data and
+       * vice versa. With restart, we don't need to specify it for `<u>` mapping.
+       * It will just _naturally_ inherit from handling in `<span>`.
+       *
+       * This re-processing was part of CKEditor 4 data-processing, and it eases
+       * extending data-processing a lot. Think of a new HTML element to be
+       * mapped to `<span>` just with a different identifying class attribute.
+       * As for example `<mark>` to `<span class="mark">`. Without re-processing
+       * the extension needs to now of all attribute mappers applicable for
+       * `<span>` and apply them, too. With re-processing only renaming from
+       * `<mark>` to `<span>` and adding a class-attribute is all, what is
+       * required to do.
+       *
+       * Additionally we need to abort further processing of child-rules, as
+       * it would cause duplicate processing of children (such as text-nodes
+       * where entities may be encoded twice).
+       */
+      return this.restartFrom(newElement);
+    }
+
+    // If just our namespace changed, there is no need to trigger
+    // processing again for this element.
     return this.continueFrom(newElement.nextSibling);
   }
 

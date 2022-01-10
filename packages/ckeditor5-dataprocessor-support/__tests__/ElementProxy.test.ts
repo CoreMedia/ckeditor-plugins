@@ -786,7 +786,7 @@ describe("ElementProxy.applyRules()", () => {
         ],
         from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
         to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        restart: "//new",
       },
     ],
     [
@@ -800,7 +800,7 @@ describe("ElementProxy.applyRules()", () => {
         ],
         from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
         to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        restart: "//new",
       },
     ],
     [
@@ -814,11 +814,17 @@ describe("ElementProxy.applyRules()", () => {
         ],
         from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
         to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        restart: "//new",
       },
     ],
     [
-      "should execute subsequent rules even after replacing by new element",
+      "should stop executing subsequent rules after replacement by new element",
+      /*
+       * For example children must not be processed, as they will be processed
+       * with the new identity of the node. Also, the generic `$` goal should
+       * be executed for the replaced element only, not as part of the current
+       * replacement iteration.
+       */
       {
         rules: [
           (me) => {
@@ -832,8 +838,8 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
-        to: '<parent><before>Lorem </before><new attr="before-value-after"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        to: '<parent><before>Lorem </before><new attr="before-value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
+        restart: "//new",
       },
     ],
   ])("(%#) %s", (name, testData) => {
