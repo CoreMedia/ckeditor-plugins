@@ -93,6 +93,8 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #writeLinkToModel(editor: Editor, lookupData: PlaceholderData, markerData: MarkerData, name: string): void {
+    const isInline = !lookupData.isEmbeddableContent && !lookupData.dropContext.multipleItemsDropped;
+
     editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
       const contentUri: string = lookupData.contentUri;
       const link = writer.createText(name, {
@@ -103,19 +105,45 @@ export default class ContentPlaceholderEditing extends Plugin {
       if (!marker) {
         return;
       }
-      const start: Position | undefined = marker.getStart();
-      if (start) {
-        writer.insert(link, start);
-
-        ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, start, marker, lookupData);
-        writer.removeMarker(marker);
+      const markerPosition: Position | undefined = marker.getStart();
+      if (!markerPosition) {
+        PlaceholderDataCache.removeData(marker.name);
+        return;
       }
+
+      const insertPosition = isInline || markerPosition.isAtStart ? markerPosition : writer.split(markerPosition).range.end;
+      writer.insert(link, insertPosition);
+      const positionAfterInsertedElement = writer.createPositionAt(link, "after");
+
+      //evaluate if a the container element has to be split after the element has been inserted.
+      //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
+      //This prevents empty paragraphs after the inserted element.
+      const finalAfterInsertPosition = isInline || positionAfterInsertedElement.isAtEnd ? positionAfterInsertedElement: writer.split(positionAfterInsertedElement).range.end;
+      ContentPlaceholderEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, lookupData);
+      ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, lookupData);
+      writer.removeMarker(marker);
       PlaceholderDataCache.removeData(marker.name);
     });
   }
 
   static #moveMarkerForPreviousItemsToLeft(editor: Editor, start: Position, marker: Marker, lookupData: PlaceholderData) {
     const markers: Array<Marker> = ContentPlaceholderEditing.#findMarkersBefore(editor, marker, lookupData);
+    markers.forEach((markerToMoveToLeft: Marker) => {
+
+      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
+      const currentData = PlaceholderDataCache.lookupData(markerToMoveToLeft.name);
+      if (!currentData) {
+        return;
+      }
+      editor.model.enqueueChange(currentData.batch, (writer: Writer): void => {
+          const newRange = writer.createRange(start, start);
+          writer.updateMarker(markerToMoveToLeft, {range: newRange})
+      });
+    })
+  }
+
+  static #moveMarkerForNextItemsToTheRight(editor: Editor, start: Position, marker: Marker, lookupData: PlaceholderData) {
+    const markers: Array<Marker> = ContentPlaceholderEditing.#findMarkersAfter(editor, marker, lookupData);
     markers.forEach((markerToMoveToLeft: Marker) => {
 
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
@@ -175,5 +203,30 @@ export default class ContentPlaceholderEditing extends Plugin {
     conversionApi.writer.clearClonedElementsGroup( data.markerName );
 
     evt.stop();
+  }
+
+  static #findMarkersAfter(editor: Editor, marker: Marker, lookupData: PlaceholderData) {
+    const markersAtSamePosition = ContentPlaceholderEditing.#markersAtPosition(editor, marker.getStart());
+    const actualInsertIndex = lookupData.dropContext.index;
+    const markerData = ContentClipboardMarkerUtils.splitMarkerName(marker.name);
+    const dropId = markerData.dropId;
+
+    return markersAtSamePosition.filter(value => {
+      const actualMarker = ContentClipboardMarkerUtils.splitMarkerName(value.name);
+      const lookupDataForMarker = PlaceholderDataCache.lookupData(value.name);
+      if (!lookupDataForMarker) {
+        return false
+      }
+      //dropId = Timestamp when a group of marker have been created.
+      //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
+      //bigger index.
+      if (actualMarker.dropId === dropId) {
+        return lookupDataForMarker.dropContext.index > actualInsertIndex;
+      }
+
+      //If a drop done later to the same position happened we want to make sure all the dropped
+      //items stay on the right of the marker.
+      return actualMarker.dropId < dropId
+    });
   }
 }
