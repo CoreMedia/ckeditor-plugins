@@ -42,7 +42,9 @@ class ClassList implements DOMTokenList {
         throw new DOMException("The token provided must not be empty.");
       }
       if (/\s/.test(v)) {
-        throw new DOMException(`${toValidate.length > 1 ? "A" : "The"} provided token ('${v}') contains invalid characters.`);
+        throw new DOMException(
+          `${toValidate.length > 1 ? "A" : "The"} provided token ('${v}') contains invalid characters.`
+        );
       }
     });
   }
@@ -71,7 +73,7 @@ class ClassList implements DOMTokenList {
 
   /**
    * Returns the list of classes set. Entries are trimmed. An empty list is
-   * returned, if the value is currently empty (trimmed value).
+   * returned, if the value is now empty (trimmed value).
    * @private
    */
   get #classes(): string[] {
@@ -248,7 +250,7 @@ class ClassList implements DOMTokenList {
 }
 
 /**
- * A wrapper for a given element, which allows to store changes to be applied
+ * A wrapper for a given element, which allows storing changes to be applied
  * to the DOM structure later on.
  */
 class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
@@ -298,7 +300,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * for example.
    * </p>
    * <p>
-   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * Mimics `ElementFilterParams`, which helps to deal with rule processing.
    * </p>
    */
   readonly #editor: Editor;
@@ -308,7 +310,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * proxy class itself.
    * </p>
    * <p>
-   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * Mimics `ElementFilterParams`, which helps to deal with rule processing.
    * </p>
    */
   public readonly node: ElementProxy = this;
@@ -340,7 +342,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   }
 
   /**
-   * This provides a light-weight proxy, which is not aware of the editor.
+   * This provides a light-weight proxy, which is unaware of the editor.
    * It is meant for testing purpose only, thus, not recommended for production
    * use, as filters may rely on the `editor` property being set.
    *
@@ -356,7 +358,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * for example.
    * </p>
    * <p>
-   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
+   * Mimics `ElementFilterParams`, which helps to deal with rule processing.
    * </p>
    */
   get editor(): Editor {
@@ -410,7 +412,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   }
 
   /**
-   * Node should be kept, but may require to apply attribute changes or
+   * Node should be kept, but may require applying attribute changes or
    * to replace the element by a new one.
    *
    * @protected
@@ -441,7 +443,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * or if the namespace of the current element does not match the namespace
    * of the owning document.
    * </p><p>
-   * The latter one is typically the case when transforming e.g. from HTML
+   * The latter one is typically the case when transforming e.g., from HTML
    * to CoreMedia RichText, where elements have the HTML namespace
    * `http://www.w3.org/1999/xhtml` and must be adapted to the corresponding
    * XML namespace.
