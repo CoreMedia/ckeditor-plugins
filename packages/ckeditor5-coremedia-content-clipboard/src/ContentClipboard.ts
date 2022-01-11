@@ -8,7 +8,6 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import { DropCondition } from "./DropCondition";
 import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
@@ -93,32 +92,23 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const dropCondition = ContentClipboard.#createDropCondition(editor, data, cmDataUris);
+    const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
+    if (!targetRange) {
+      return;
+    }
+
     const dropId = Date.now();
     const batch = editor.model.createBatch();
     CommandUtils.disableCommand(editor, "undo");
     editor.model.enqueueChange("transparent", (writer: Writer) => {
-      writer.setSelection(dropCondition.targetRange);
+      writer.setSelection(targetRange);
     });
     const attributes = Array.from(editor.model.document.selection.getAttributes());
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentUri, dropId, index, originalArray.length, isEmbeddableContent, batch, attributes);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, targetRange, contentUri, dropId, index, originalArray.length, isEmbeddableContent, batch, attributes);
     });
   };
-
-  /**
-   * Create meta-data from drop event.
-   *
-   * @param editor current editor instance
-   * @param data event data
-   * @param links links which shall be written
-   * @private
-   */
-  static #createDropCondition(editor: Editor, data: ClipboardEventData, links: string[]): DropCondition {
-    const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
-    return new DropCondition(targetRange);
-  }
 
   /**
    * Evaluate target range. `null` if no range could be determined.
@@ -129,7 +119,7 @@ export default class ContentClipboard extends Plugin {
    */
   static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): Range | null {
     if (!data.targetRanges) {
-      return null;
+      return editor.model.document.selection.getFirstRange()
     }
     const targetRanges: Range[] = data.targetRanges.map((viewRange: Range): Range => {
       return editor.editing.mapper.toModelRange(viewRange);
@@ -140,13 +130,8 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
-    ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ contentUri, dropCondition }));
+  static #addMarkerAsPlaceholder(editor: Editor, targetRange: Range, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
     editor.model.enqueueChange("transparent", (writer: Writer) => {
-      const targetRange = dropCondition.targetRange;
-      if (!targetRange) {
-        return;
-      }
       const markerName: string = ContentClipboardMarkerUtils.toMarkerName("content", dropId, index);
       writer.addMarker(markerName, { usingOperation: true, range: targetRange });
       const data: PlaceholderData = {
