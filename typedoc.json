@@ -1,0 +1,9 @@
+{
+  "cleanOutputDir": true,
+  "entryPoints": [
+    "./packages/ckeditor5-logging/doc/index.ts"
+  ],
+  "excludePrivate": true,
+  "out": "./docs/api",
+  "tsconfig": "./typedoc-tsconfig.json"
+}
