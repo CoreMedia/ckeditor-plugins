@@ -97,7 +97,7 @@ export default class ContentPlaceholderEditing extends Plugin {
           }, (reason) => {
             ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", lookupData.contentUri, reason);
             PlaceholderDataCache.removeData(markerName);
-            editor.model.enqueueChange(lookupData.batch, (writer: Writer): void  => {
+            editor.model.enqueueChange("transparent", (writer: Writer): void  => {
               writer.removeMarker(markerName);
             });
             ContentPlaceholderEditing.#reenableUndo(editor);
@@ -154,7 +154,7 @@ export default class ContentPlaceholderEditing extends Plugin {
       ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, lookupData);
     });
 
-    editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
+    editor.model.enqueueChange("transparent", (writer: Writer): void => {
       const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
@@ -173,7 +173,7 @@ export default class ContentPlaceholderEditing extends Plugin {
       if (!currentData) {
         return;
       }
-      editor.model.enqueueChange(currentData.batch, (writer: Writer): void => {
+      editor.model.enqueueChange("transparent", (writer: Writer): void => {
           const newRange = writer.createRange(start, start);
           writer.updateMarker(markerToMoveToLeft, {range: newRange})
       });
@@ -189,7 +189,7 @@ export default class ContentPlaceholderEditing extends Plugin {
       if (!currentData) {
         return;
       }
-      editor.model.enqueueChange(currentData.batch, (writer: Writer): void => {
+      editor.model.enqueueChange("transparent", (writer: Writer): void => {
           const newRange = writer.createRange(start, start);
           writer.updateMarker(markerToMoveToLeft, {range: newRange})
       });

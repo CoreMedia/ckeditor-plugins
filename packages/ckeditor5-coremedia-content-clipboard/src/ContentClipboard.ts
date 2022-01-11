@@ -100,7 +100,7 @@ export default class ContentClipboard extends Plugin {
     const dropId = Date.now();
     const batch = editor.model.createBatch();
     CommandUtils.disableCommand(editor, "undo");
-    editor.model.enqueueChange(batch, (writer: Writer) => {
+    editor.model.enqueueChange("transparent", (writer: Writer) => {
       writer.setSelection(dropCondition.targetRange);
     });
     const attributes = Array.from(editor.model.document.selection.getAttributes());
@@ -163,7 +163,7 @@ export default class ContentClipboard extends Plugin {
     if (!linkData.isLinkable) {
       return;
     }
-    editor.model.enqueueChange(batch, (writer: Writer) => {
+    editor.model.enqueueChange("transparent", (writer: Writer) => {
       const targetRange = dropCondition.targetRange;
       if (!targetRange) {
         return;
