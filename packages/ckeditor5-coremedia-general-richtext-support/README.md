@@ -277,6 +277,72 @@ we may transform it to:
 <span class="mark priority--high">Text</span>
 <span class="mark priority--low">Text</span>
 ```
+## Note on Strictness.LEGACY and Disappearing Attributes
+
+GRS implements attribute registration according to mode `Strictness.LOOSE`.
+Thus, it strictly follows attributes and their values, which will pass a
+CoreMedia RichText 1.0 validation.
+
+If using `Strictness.LEGACY` for Data-Processing, you most likely want to
+extend possible values for a given attribute. This can be done by adapting
+the configuration of the underlying _General HTML Support (GHS)_. An
+explicit configuration as part of the Editor's configuration will override
+the configuration as provided by GRS.
+
+**Example:** You decided to store any string value in `xlink:actuate` of a link.
+On the CMS server you either disabled CoreMedia RichText 1.0 validation or you
+configured a grammar, only similar but different to CoreMedia RichText 1.0.
+
+You configured the CoreMedia Data-Processing with `Strictness.LEGACY`. Now you
+need to tell GHS, that `xlink:actuate` is not only limited to values
+`onLoad` or `onRequest` but accepts any string. To do so, you extend the
+`htmlSupport` configuration similar to the one stated above.
+
+All in all, your configuration will look similar to this:
+
+```javascript
+import CoreMediaRichText
+  from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
+import GeneralRichTextSupport
+  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+import {replaceByElementAndClassBackAndForth}
+  from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
+
+/* ... */
+
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    GeneralRichTextSupport,
+    // For completeness you may want to add CKEditor's GeneralHtmlSupport in
+    // here. But it also comes as transitive dependency of GeneralRichTextSupport.
+    // ...
+  ],
+  "coremedia:richtext": {
+    // Requires changes on server side regarding RichText validation.
+    strictness: Strictness.LEGACY,
+  },
+  // Configuration for GeneralHtmlSupport
+  htmlSupport: {
+    allow: [
+      {
+        name: "a",
+        attributes: {
+          // xlink:actuate is mapped to data-xlink-actuate during data-processing.
+          // Thus, as we are in data-view, we need to configure allowed values
+          // for the mapped value.
+          "data-xlink-actuate": true,
+        },
+      },
+    ],
+  },
+});
+```
+
+The above configuration for element `<a>` will be merged automatically
+by GHS with the configuration provided by GRS. Thus, the attribute `dir` may
+still be provided as configured by GRS. Just as any other attributes registered
+by GRS.
 
 ## Known Issues
 
