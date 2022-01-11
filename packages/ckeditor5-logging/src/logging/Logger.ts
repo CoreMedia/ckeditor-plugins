@@ -1,21 +1,21 @@
+import { LogLevel } from "./LogLevel";
+
 /**
  * Used to log at given levels.
  */
-import { LogLevel } from "./LogLevel";
-
 export default interface Logger {
   /**
    * Check if logging of given level or below is enabled.
    *
    * @param logLevel level to validate
-   * @returns <code>true</code>, if logging at given level (or below) is enabled; <code>false</code> otherwise.
+   * @returns `true`, if logging at given level (or below) is enabled; `false` otherwise.
    */
   isEnabled(logLevel: LogLevel): boolean;
 
   /**
    * Check, if debug logging is enabled.
    *
-   * @returns <code>true</code>, if debug logging is enabled; <code>false</code> otherwise.
+   * @returns `true`, if debug logging is enabled; `false` otherwise.
    */
   isDebugEnabled(): boolean;
 
@@ -29,7 +29,7 @@ export default interface Logger {
   /**
    * Check, if info logging or below is enabled.
    *
-   * @returns <code>true</code>, if info logging (or below) is enabled; <code>false</code> otherwise.
+   * @returns `true`, if info logging (or below) is enabled; `false` otherwise.
    */
   isInfoEnabled(): boolean;
 
@@ -43,7 +43,7 @@ export default interface Logger {
   /**
    * Check, if warn logging or below is enabled.
    *
-   * @returns <code>true</code>, if warn logging (or below) is enabled; <code>false</code> otherwise.
+   * @returns `true`, if warn logging (or below) is enabled; `false` otherwise.
    */
   isWarnEnabled(): boolean;
 
@@ -57,7 +57,7 @@ export default interface Logger {
   /**
    * Check, if error logging or below is enabled.
    *
-   * @returns <code>true</code>, if error logging (or below) is enabled; <code>false</code> otherwise.
+   * @returns `true`, if error logging (or below) is enabled; `false` otherwise.
    */
   isErrorEnabled(): boolean;
 
@@ -71,13 +71,13 @@ export default interface Logger {
   /**
    * Check, if logging is enabled in general.
    *
-   * @returns <code>true</code>, if logging is enabled; <code>false</code> otherwise.
+   * @returns `true`, if logging is enabled; `false` otherwise.
    */
   isAnyEnabled(): boolean;
 
   /**
    * Logs the given data at if logging is enabled. Thus, unless the log level
-   * is set to <em>none</em>, this will be logged.
+   * is set to _none_, this will be logged.
    *
    * @param data data to log, such as a message and some objects.
    */
