@@ -8,6 +8,34 @@ const ns_xhtml = "http://www.w3.org/1999/xhtml";
 // noinspection XmlUnusedNamespaceDeclaration
 const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${content}</div>`;
 
+/**
+ * CoreMedia RichText 1.0 Element Definition Reference for Tested Elements:
+ *
+ * ```
+ * <!ELEMENT blockquote (p|ul|ol|pre|blockquote|table)* >
+ * <!ATTLIST blockquote
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   cite     CDATA     #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ *
+ * <!ELEMENT p (#PCDATA|a|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST p
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ *
+ * <!ELEMENT pre (#PCDATA|a|br|span|em|strong|sub|sup)* >
+ * <!ATTLIST pre
+ *   xml:lang  NMTOKEN    #IMPLIED
+ *   xml:space (preserve) #FIXED 'preserve'
+ *   dir       (ltr|rtl)  #IMPLIED
+ *   lang      NMTOKEN    #IMPLIED
+ *   class     CDATA      #IMPLIED >
+ * ```
+ */
 describe("CoreMediaRichTextConfig: Miscellaneous Block Tags", () => {
   const defaultBlockFixtures: DataProcessingTestCase[] = flatten(
     ["p", "pre", "blockquote"].map((el): DataProcessingTestCase[] => {
