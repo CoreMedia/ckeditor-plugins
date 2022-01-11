@@ -8,6 +8,45 @@ const text = "TEXT";
 // noinspection XmlUnusedNamespaceDeclaration
 const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${content}</div>`;
 
+/**
+ * CoreMedia RichText 1.0 Element Definition Reference for Tested Elements:
+ *
+ * ```
+ * <!ELEMENT strong (#PCDATA|a|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST strong
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ *
+ * <!ELEMENT em (#PCDATA|a|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST em
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ *
+ * <!ELEMENT span (#PCDATA|a|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST span
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ *
+ * <!ATTLIST sub
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ *
+ * <!ELEMENT sup (#PCDATA|a|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST sup
+ *   xml:lang NMTOKEN   #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED >
+ * ```
+ */
 describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
   const replaceInlineSimpleFixtures: DataProcessingTestCase[] = flatten(
     [
@@ -146,7 +185,52 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
     })
   );
 
-  const data: DataProcessingTestCase[] = [...replaceInlineSimpleFixtures, ...replaceInlineBySpanFixtures];
+  const asIsFixtures: DataProcessingTestCase[] = flatten(
+    ["span", "sub", "sup"].map((el): DataProcessingTestCase[] => {
+      const key = el.toUpperCase();
+      // noinspection HtmlUnknownAttribute
+      return [
+        {
+          name: `${key}#1: Should Map Element Identically.`,
+          data: wrapContent(`<p><${el}>${text}</${el}></p>`),
+          dataView: wrapContent(`<p><${el}>${text}</${el}></p>`),
+        },
+        {
+          name: `${key}#2: Keep class attribute.`,
+          data: wrapContent(`<p><${el} class="CLASS">${text}</${el}></p>`),
+          dataView: wrapContent(`<p><${el} class="CLASS">${text}</${el}></p>`),
+        },
+        {
+          name: `${key}#3: Keep dir attribute.`,
+          data: wrapContent(`<p><${el} dir="rtl">${text}</${el}></p>`),
+          dataView: wrapContent(`<p><${el} dir="rtl">${text}</${el}></p>`),
+        },
+        {
+          name: `${key}#4: Keep lang/xml:lang attribute.`,
+          data: wrapContent(`<p><${el} xml:lang="en">${text}</${el}></p>`),
+          dataView: wrapContent(`<p><${el} lang="en">${text}</${el}></p>`),
+        },
+        {
+          name: `${key}#5: Should transform lang (data) to lang attribute (data view).`,
+          direction: Direction.toDataView,
+          data: wrapContent(`<p><${el} lang="en">${text}</${el}></p>`),
+          dataView: wrapContent(`<p><${el} lang="en">${text}</${el}></p>`),
+        },
+        {
+          name: `${key}#6: Should prefer xml:lang over lang in data.`,
+          direction: Direction.toDataView,
+          data: wrapContent(`<p><${el} lang="en" xml:lang="de">${text}</${el}></p>`),
+          dataView: wrapContent(`<p><${el} lang="de">${text}</${el}></p>`),
+        },
+      ];
+    })
+  );
+
+  const data: DataProcessingTestCase[] = [
+    ...replaceInlineSimpleFixtures,
+    ...replaceInlineBySpanFixtures,
+    ...asIsFixtures,
+  ];
 
   allDataProcessingTests(data);
 });
