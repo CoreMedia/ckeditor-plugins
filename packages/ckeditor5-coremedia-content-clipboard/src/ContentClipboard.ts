@@ -8,7 +8,6 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import { ContentData } from "./ContentData";
 import { DropCondition } from "./DropCondition";
 import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
@@ -105,13 +104,8 @@ export default class ContentClipboard extends Plugin {
     });
     const attributes = Array.from(editor.model.document.selection.getAttributes());
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
-      const isLast = originalArray.length - 1 === Number(index);
-      const isFirst = Number(index) === 0;
-      const isLinkableContent = DragDropAsyncSupport.isLinkable(contentUri, true);
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      const placeholderId = "" + Math.random();
-      const contentData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, placeholderId);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index, isEmbeddableContent, batch, attributes);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentUri, dropId, index, isEmbeddableContent, batch, attributes);
     });
   };
 
@@ -152,11 +146,8 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
-    ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
-    if (!linkData.isLinkable) {
-      return;
-    }
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, contentUri: string, dropId: number, index: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
+    ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ contentUri, dropCondition }));
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       const targetRange = dropCondition.targetRange;
       if (!targetRange) {
@@ -166,7 +157,7 @@ export default class ContentClipboard extends Plugin {
       writer.addMarker(markerName, { usingOperation: true, range: targetRange });
       const data: PlaceholderData = {
         batch: batch,
-        contentUri: linkData.contentUri,
+        contentUri: contentUri,
         isEmbeddableContent: isEmbeddableContent,
         selectedAttributes: attributes,
         dropContext: {
