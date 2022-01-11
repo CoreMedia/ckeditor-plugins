@@ -84,6 +84,24 @@ const show = {
   none: "_none",
 };
 
+/**
+ * CoreMedia RichText 1.0 Element Definition for Anchors:
+ *
+ * ```
+ * <!ELEMENT a (#PCDATA|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST a
+ *   xml:lang       NMTOKEN                        #IMPLIED
+ *   dir            (ltr|rtl)                      #IMPLIED
+ *   xlink:show     (new|replace|embed|other|none) #IMPLIED
+ *   xlink:title    CDATA                          #IMPLIED
+ *   xlink:actuate  (onRequest|onLoad)             #IMPLIED
+ *   xlink:href     CDATA                          #REQUIRED
+ *   xlink:type     (simple)                       #FIXED 'simple'
+ *   lang           NMTOKEN                        #IMPLIED
+ *   class          CDATA                          #IMPLIED
+ *   xlink:role     CDATA                          #IMPLIED >
+ * ```
+ */
 describe("CoreMediaRichTextConfig: Anchors", () => {
   // noinspection NonAsciiCharacters
   const specialCharacterTargets: ExpectedTargetToXlinkShowAndRole = {
