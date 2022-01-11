@@ -21,6 +21,7 @@ import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
 import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import CommandUtils from "./CommandUtils";
+import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -133,7 +134,9 @@ export default class ContentPlaceholderEditing extends Plugin {
       const insertPosition = !isFirstDroppedItem || isInline || markerPosition.isAtStart ? markerPosition : writer.split(markerPosition).range.end;
       writer.insert(link, insertPosition);
       const positionAfterInsertedElement = writer.createPositionAt(link, "after");
-
+      const positionBeforeInsertedElement = writer.createPositionAt(link, "before");
+      const range = writer.createRange(positionBeforeInsertedElement, positionAfterInsertedElement);
+      ContentPlaceholderEditing.#setSelectionAttributes(writer, [range], lookupData.selectedAttributes);
       //evaluate if a the container element has to be split after the element has been inserted.
       //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.
@@ -254,5 +257,24 @@ export default class ContentPlaceholderEditing extends Plugin {
       //items stay on the right of the marker.
       return actualMarker.dropId < dropId
     });
+  }
+  /**
+   * Applies selection attributes to the given ranges.
+   *
+   * @param writer writer to use
+   * @param textRanges ranges to apply selection attributes to
+   * @param attributes selection attributes to apply
+   * @private
+   */
+  static #setSelectionAttributes(
+    writer: Writer,
+    textRanges: Range[],
+    attributes: [string, string | number | boolean][]
+  ): void {
+    for (const attribute of attributes) {
+      for (const range of textRanges) {
+        writer.setAttribute(attribute[0], attribute[1], range);
+      }
+    }
   }
 }

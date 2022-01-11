@@ -100,6 +100,7 @@ export default class ContentClipboard extends Plugin {
     const dropId = Date.now();
     const batch = editor.model.createBatch();
     CommandUtils.disableCommand(editor, "undo");
+    const attributes = Array.from(editor.model.document.selection.getAttributes());
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isLast = originalArray.length - 1 === Number(index);
       const isFirst = Number(index) === 0;
@@ -107,7 +108,7 @@ export default class ContentClipboard extends Plugin {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const placeholderId = "" + Math.random();
       const contentData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, placeholderId);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index, isEmbeddableContent, batch);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index, isEmbeddableContent, batch, attributes);
     });
   };
 
@@ -154,7 +155,7 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number, isEmbeddableContent: boolean, batch: Batch): void {
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
     ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
     if (!linkData.isLinkable) {
       return;
@@ -170,6 +171,7 @@ export default class ContentClipboard extends Plugin {
         batch: batch,
         contentUri: linkData.contentUri,
         isEmbeddableContent: isEmbeddableContent,
+        selectedAttributes: attributes,
         dropContext: {
           index: index,
           multipleItemsDropped: dropCondition.multipleContentDrop,

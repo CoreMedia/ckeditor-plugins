@@ -18,6 +18,7 @@ export default class PlaceholderDataCache {
 
 export type PlaceholderData = {
   batch: Batch,
+  selectedAttributes: Array<[string, string | number | boolean]>,
   contentUri: string,
   isEmbeddableContent: boolean,
   dropContext: {
