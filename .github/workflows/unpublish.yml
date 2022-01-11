@@ -28,7 +28,7 @@ jobs:
           npm unpublish @coremedia/ckeditor5-coremedia-studio-integration-mock@$version
           npm unpublish @coremedia/ckeditor5-coremedia-studio-integration@$version
           npm unpublish @coremedia/ckeditor5-studio-essentials@$version
-          npm unpublish @coremedia/ckeditor5-coremedia-general-richtext-support@$version
+          npm unpublish @coremedia/ckeditor5-coremedia-richtext-support@$version
           npm unpublish @coremedia/ckeditor5-coremedia-richtext@$version
           npm unpublish @coremedia/ckeditor5-dataprocessor-support@$version
           npm unpublish @coremedia/ckeditor5-coremedia-link@$version

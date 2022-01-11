@@ -42,7 +42,7 @@ importers:
       '@ckeditor/ckeditor5-typing': ^31.0.0
       '@ckeditor/ckeditor5-ui': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
-      '@coremedia/ckeditor5-coremedia-general-richtext-support': ^2.0.0
+      '@coremedia/ckeditor5-coremedia-richtext-support': ^2.0.0
       '@coremedia/ckeditor5-coremedia-richtext': ^2.0.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': ^2.0.0
       '@coremedia/ckeditor5-studio-essentials': ^2.0.0
@@ -86,7 +86,7 @@ importers:
       '@ckeditor/ckeditor5-typing': 31.0.0
       '@ckeditor/ckeditor5-ui': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
-      '@coremedia/ckeditor5-coremedia-general-richtext-support': link:../packages/ckeditor5-coremedia-general-richtext-support
+      '@coremedia/ckeditor5-coremedia-richtext-support': link:../packages/ckeditor5-coremedia-richtext-support
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
@@ -110,7 +110,7 @@ importers:
       webpack: 5.63.0_webpack-cli@4.9.1
       webpack-cli: 4.9.1_webpack@5.63.0
 
-  packages/ckeditor5-coremedia-general-richtext-support:
+  packages/ckeditor5-coremedia-richtext-support:
     specifiers:
       '@babel/cli': ^7.16.0
       '@babel/core': ^7.16.0

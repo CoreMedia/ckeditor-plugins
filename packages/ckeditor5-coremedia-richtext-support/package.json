@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-general-richtext-support",
+  "name": "@coremedia/ckeditor5-coremedia-richtext-support",
   "version": "2.0.0",
   "engines": {
     "node": ">=14.0.0"

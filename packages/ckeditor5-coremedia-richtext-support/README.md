@@ -143,7 +143,7 @@ two configuration entries `coremedia:richtext` and `coremedia:richtextSupport`:
 import CoreMediaRichText
   from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
 import GeneralRichTextSupport
-  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+  from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth}
   from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 
@@ -304,7 +304,7 @@ All in all, your configuration will look similar to this:
 import CoreMediaRichText
   from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
 import GeneralRichTextSupport
-  from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+  from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth}
   from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 
