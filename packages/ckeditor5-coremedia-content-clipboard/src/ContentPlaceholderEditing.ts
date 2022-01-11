@@ -22,6 +22,7 @@ import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarke
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import CommandUtils from "./CommandUtils";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -117,7 +118,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
       const contentUri: string = lookupData.contentUri;
       const link = writer.createText(name, {
-        linkHref: contentUri,
+        linkHref: requireContentCkeModelUri(contentUri),
       });
 
       const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
