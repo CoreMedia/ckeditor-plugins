@@ -9,7 +9,7 @@ import DowncastDispatcher, {
   DowncastConversionApi, RemoveMarkerEventData
 } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
-import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
+import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import UIElement from "@ckeditor/ckeditor5-engine/src/view/uielement";
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
@@ -58,7 +58,7 @@ export default class ContentPlaceholderEditing extends Plugin {
 
   static #addContentMarkerConversion(editor: Editor, evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void {
     const viewPosition = conversionApi.mapper.toViewPosition( data.markerRange.start );
-    const lookupData = PlaceholderDataCache.lookupData(data.markerName);
+    const lookupData = ContentDropDataCache.lookupData(data.markerName);
     if (!lookupData) {
       return;
     }
@@ -80,7 +80,7 @@ export default class ContentPlaceholderEditing extends Plugin {
 
   static #triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
     const markerName: string = ContentClipboardMarkerUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
-    const lookupData = PlaceholderDataCache.lookupData(markerName);
+    const lookupData = ContentDropDataCache.lookupData(markerName);
     if (!lookupData) {
       return;
     }
@@ -96,7 +96,7 @@ export default class ContentPlaceholderEditing extends Plugin {
             ContentPlaceholderEditing.#reenableUndo(editor);
           }, (reason) => {
             ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", lookupData.contentUri, reason);
-            PlaceholderDataCache.removeData(markerName);
+            ContentDropDataCache.removeData(markerName);
             editor.model.enqueueChange("transparent", (writer: Writer): void  => {
               writer.removeMarker(markerName);
             });
@@ -113,7 +113,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     }
   }
 
-  static #writeLinkToModel(editor: Editor, lookupData: PlaceholderData, markerData: MarkerData, name: string): void {
+  static #writeLinkToModel(editor: Editor, lookupData: ContentDropData, markerData: MarkerData, name: string): void {
     const isInline = !lookupData.isEmbeddableContent && !lookupData.dropContext.multipleItemsDropped;
 
     editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
@@ -128,7 +128,7 @@ export default class ContentPlaceholderEditing extends Plugin {
       }
       const markerPosition: Position | undefined = marker.getStart();
       if (!markerPosition) {
-        PlaceholderDataCache.removeData(marker.name);
+        ContentDropDataCache.removeData(marker.name);
         return;
       }
 
@@ -160,7 +160,7 @@ export default class ContentPlaceholderEditing extends Plugin {
         return;
       }
       writer.removeMarker(marker);
-      PlaceholderDataCache.removeData(marker.name);
+      ContentDropDataCache.removeData(marker.name);
     });
   }
 
@@ -169,7 +169,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     markers.forEach((markerToMoveToLeft: Marker) => {
 
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = PlaceholderDataCache.lookupData(markerToMoveToLeft.name);
+      const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
       if (!currentData) {
         return;
       }
@@ -185,7 +185,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     markers.forEach((markerToMoveToLeft: Marker) => {
 
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = PlaceholderDataCache.lookupData(markerToMoveToLeft.name);
+      const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
       if (!currentData) {
         return;
       }

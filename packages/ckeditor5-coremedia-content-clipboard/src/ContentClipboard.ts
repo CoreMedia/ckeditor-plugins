@@ -8,7 +8,7 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
+import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
@@ -134,7 +134,7 @@ export default class ContentClipboard extends Plugin {
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       const markerName: string = ContentClipboardMarkerUtils.toMarkerName(dropId, index);
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
-      const data: PlaceholderData = {
+      const data: ContentDropData = {
         batch: batch,
         contentUri: contentUri,
         isEmbeddableContent: isEmbeddableContent,
@@ -143,7 +143,7 @@ export default class ContentClipboard extends Plugin {
           multipleItemsDropped: numberOfDroppedItems > 1,
         }
       }
-      PlaceholderDataCache.storeData(markerName, data);
+      ContentDropDataCache.storeData(markerName, data);
     });
   }
 }
