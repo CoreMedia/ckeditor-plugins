@@ -3,21 +3,19 @@ import LoggerImpl from "./LoggerImpl";
 import { LogLevel } from "./LogLevel";
 
 /**
- * <p>
  * Used to retrieve a named logger instance.
- * </p>
- * <p>
+ *
  * Loggers can be triggered by hash-parameters. To control the log level of
  * all loggers (also known as root logger), you may use the hash parameter
- * <code>ckdebug</code> and for more verbose output <code>ckdebug=verbose</code>.
+ * `ckdebug` and for more verbose output `ckdebug=verbose`.
  * In addition to that, you can control the output of any logger using
- * <code>loggerName=level</code>.
- * </p>
- * <p><strong>Example:</strong></p>
- * <pre>
+ * `loggerName=level`.
+ *
+ * @example
+ * ```
  * private readonly logger: Logger =
  *   LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
- * </pre>
+ * ```
  */
 export default class LoggerProvider {
   static readonly #verbose = "verbose";
@@ -27,20 +25,24 @@ export default class LoggerProvider {
   static readonly #warn = "warn";
   static readonly #error = "error";
 
-  static defaultLogLevel: LogLevel = LogLevel.INFO;
-  static defaultRootLogLevel: LogLevel = LogLevel.WARN;
-  static rootLoggerName = "ckdebug";
-  static hashParamRegExp = /([^=]*)=(.*)/;
+  static readonly #defaultLogLevel: LogLevel = LogLevel.INFO;
+  static readonly #defaultRootLogLevel: LogLevel = LogLevel.WARN;
+  static readonly #rootLoggerName = "ckdebug";
+  static readonly #hashParamRegExp = /([^=]*)=(.*)/;
+
+  // noinspection JSUnusedLocalSymbols
+  private constructor() {}
 
   /**
    * Retrieve logger for the given name.
-   * @param name
-   * @param context
+   *
+   * @param name some identifying name for the logger; used to toggle logging behavior
+   * @param context additional context, which will prefix the logger name in output (dot separated)
    */
   static getLogger(name: string | undefined, ...context: unknown[]): Logger {
     const contextName: string = context.join(".");
-    const loggerName: string | undefined = !!name && !!contextName ? contextName + ":" + name : name;
-    const logLevel: LogLevel = LoggerProvider.getLoggerLevel(name);
+    const loggerName: string | undefined = !!name && !!contextName ? `${contextName}:${name}` : name;
+    const logLevel: LogLevel = LoggerProvider.#getLoggerLevel(name);
 
     return new LoggerImpl(loggerName, logLevel);
   }
@@ -50,45 +52,40 @@ export default class LoggerProvider {
    * log level for specific logger name by an explicit hash-parameter,
    * the fallback is to use the root-logger-name.
    *
-   * @param name (base) name of the logger; if <code>undefined</code> explicit log-level
-   * switching by name will not be available, thus,  only <code>ckdebug</code> can be used.
+   * @param name (base) name of the logger; if `undefined` explicit log-level
+   * switching by name will not be available, thus,  only `ckdebug` can be used.
    * @private
    */
-  static getLoggerLevel(name: string | undefined): LogLevel {
-    const logLevelParam: string | boolean = LoggerProvider.getHashParam(name);
-    const rootLogLevel: string | boolean = LoggerProvider.getHashParam(LoggerProvider.rootLoggerName);
-    let logLevel: LogLevel = LoggerProvider.defaultRootLogLevel;
+  static #getLoggerLevel(name: string | undefined): LogLevel {
+    const logLevelParam: string | boolean = LoggerProvider.#getHashParam(name);
+    const rootLogLevel: string | boolean = LoggerProvider.#getHashParam(LoggerProvider.#rootLoggerName);
+    let logLevel: LogLevel = LoggerProvider.#defaultRootLogLevel;
 
     if (!!logLevelParam) {
-      logLevel = LoggerProvider.toLogLevel(logLevelParam);
+      logLevel = LoggerProvider.#toLogLevel(logLevelParam);
     } else if (!!rootLogLevel) {
-      logLevel = LoggerProvider.toLogLevel(rootLogLevel);
+      logLevel = LoggerProvider.#toLogLevel(rootLogLevel);
     }
 
     return logLevel;
   }
 
   /**
-   * <p>
    * Converts the name or switch to a corresponding log-level.
-   * </p>
-   * <p>
-   * The value <code>verbose</code> is equivalent to <code>debug</code>
+   *
+   * The value `verbose` is equivalent to `debug`
    * for compatibility reasons.
-   * </p>
-   * <p>
+   *
    * If of type boolean, you will either get the default log level for
-   * <code>true</code>, or log level <code>none</code> if the value is
-   * <code>false</code>.
-   * </p>
+   * `true`, or log level `none` if the value is `false`.
    *
    * @param nameOrSwitch log-level name
    * @returns the corresponding level
    * @private
    */
-  static toLogLevel(nameOrSwitch: string | boolean): LogLevel {
+  static #toLogLevel(nameOrSwitch: string | boolean): LogLevel {
     if (typeof nameOrSwitch === "boolean") {
-      return nameOrSwitch ? LoggerProvider.defaultLogLevel : LogLevel.NONE;
+      return nameOrSwitch ? LoggerProvider.#defaultLogLevel : LogLevel.NONE;
     }
     switch (nameOrSwitch.toLowerCase()) {
       case this.#verbose: {
@@ -113,19 +110,19 @@ export default class LoggerProvider {
       default: {
         // Log-Level change requested, thus, we assume that you want at least
         // info logging.
-        return LoggerProvider.defaultLogLevel;
+        return LoggerProvider.#defaultLogLevel;
       }
     }
   }
 
   /**
    * Get the given hash parameter value from the given url
-   * @param {string|undefined} key the hash parameter key to read; <code>undefined</code> will always
-   * return <code>false</code>
+   * @param {string|undefined} key the hash parameter key to read; `undefined` will always
+   * return `false`
    * @returns {string/boolean} false iff. hash parameter is not set; true iff. the hash parameter is given without
    * arguments; string value otherwise
    */
-  static getHashParam(key: string | undefined): string | boolean {
+  static #getHashParam(key: string | undefined): string | boolean {
     if (key === undefined) {
       return false;
     }
@@ -138,7 +135,7 @@ export default class LoggerProvider {
         if (key === hashParam) {
           return true;
         }
-        const paramMatch: RegExpExecArray | null = LoggerProvider.hashParamRegExp.exec(hashParam);
+        const paramMatch: RegExpExecArray | null = LoggerProvider.#hashParamRegExp.exec(hashParam);
         if (paramMatch) {
           if (paramMatch[1] === key) {
             // Map empty String to truthy value.
