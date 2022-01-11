@@ -42,8 +42,8 @@ importers:
       '@ckeditor/ckeditor5-typing': ^31.0.0
       '@ckeditor/ckeditor5-ui': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
-      '@coremedia/ckeditor5-coremedia-richtext-support': ^2.0.0
       '@coremedia/ckeditor5-coremedia-richtext': ^2.0.0
+      '@coremedia/ckeditor5-coremedia-richtext-support': ^2.0.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': ^2.0.0
       '@coremedia/ckeditor5-studio-essentials': ^2.0.0
       '@coremedia/ckeditor5-symbol-on-paste-mapper': ^2.0.0
@@ -86,8 +86,8 @@ importers:
       '@ckeditor/ckeditor5-typing': 31.0.0
       '@ckeditor/ckeditor5-ui': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
-      '@coremedia/ckeditor5-coremedia-richtext-support': link:../packages/ckeditor5-coremedia-richtext-support
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
+      '@coremedia/ckeditor5-coremedia-richtext-support': link:../packages/ckeditor5-coremedia-richtext-support
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
@@ -109,83 +109,6 @@ importers:
       typescript: 4.4.4
       webpack: 5.63.0_webpack-cli@4.9.1
       webpack-cli: 4.9.1_webpack@5.63.0
-
-  packages/ckeditor5-coremedia-richtext-support:
-    specifiers:
-      '@babel/cli': ^7.16.0
-      '@babel/core': ^7.16.0
-      '@babel/plugin-proposal-class-properties': ^7.16.0
-      '@babel/plugin-proposal-object-rest-spread': ^7.16.0
-      '@babel/plugin-syntax-dynamic-import': ^7.8.3
-      '@babel/plugin-transform-arrow-functions': ^7.16.0
-      '@babel/plugin-transform-computed-properties': ^7.16.0
-      '@babel/plugin-transform-for-of': ^7.16.0
-      '@babel/plugin-transform-parameters': ^7.16.3
-      '@babel/plugin-transform-shorthand-properties': ^7.16.0
-      '@babel/preset-env': ^7.16.0
-      '@babel/preset-typescript': ^7.16.0
-      '@ckeditor/ckeditor5-core': ^31.0.0
-      '@ckeditor/ckeditor5-engine': ^31.0.0
-      '@ckeditor/ckeditor5-html-support': ^31.0.0
-      '@ckeditor/ckeditor5-utils': ^31.0.0
-      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': ^2.0.0
-      '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
-      '@coremedia/types-ckeditor__ckeditor5-html-support': ^2.0.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
-      '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
-      babel-jest: ^27.3.1
-      eslint: ^8.2.0
-      eslint-config-prettier: ^8.3.0
-      eslint-plugin-prettier: ^4.0.0
-      jest: ^27.3.1
-      jest-each: ^27.3.1
-      jest-transform-stub: ^2.0.0
-      jest-xml-matcher: ^1.2.0
-      prettier: ^2.4.1
-      rimraf: ^3.0.2
-      typescript: ^4.4.4
-    dependencies:
-      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
-    devDependencies:
-      '@babel/cli': 7.16.0_@babel+core@7.16.0
-      '@babel/core': 7.16.0
-      '@babel/plugin-proposal-class-properties': 7.16.0_@babel+core@7.16.0
-      '@babel/plugin-proposal-object-rest-spread': 7.16.0_@babel+core@7.16.0
-      '@babel/plugin-syntax-dynamic-import': 7.8.3_@babel+core@7.16.0
-      '@babel/plugin-transform-arrow-functions': 7.16.0_@babel+core@7.16.0
-      '@babel/plugin-transform-computed-properties': 7.16.0_@babel+core@7.16.0
-      '@babel/plugin-transform-for-of': 7.16.0_@babel+core@7.16.0
-      '@babel/plugin-transform-parameters': 7.16.3_@babel+core@7.16.0
-      '@babel/plugin-transform-shorthand-properties': 7.16.0_@babel+core@7.16.0
-      '@babel/preset-env': 7.16.0_@babel+core@7.16.0
-      '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
-      '@ckeditor/ckeditor5-core': 31.0.0
-      '@ckeditor/ckeditor5-engine': 31.0.0
-      '@ckeditor/ckeditor5-html-support': 31.0.0
-      '@ckeditor/ckeditor5-utils': 31.0.0
-      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
-      babel-jest: 27.3.1_@babel+core@7.16.0
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
-      jest: 27.3.1
-      jest-each: 27.3.1
-      jest-transform-stub: 2.0.0
-      jest-xml-matcher: 1.2.0
-      prettier: 2.4.1
-      rimraf: 3.0.2
-      typescript: 4.4.4
 
   packages/ckeditor5-coremedia-link:
     specifiers:
@@ -220,10 +143,10 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -268,12 +191,12 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -306,10 +229,10 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -343,12 +266,89 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      jest: 27.3.1
+      jest-each: 27.3.1
+      jest-transform-stub: 2.0.0
+      jest-xml-matcher: 1.2.0
+      prettier: 2.4.1
+      rimraf: 3.0.2
+      typescript: 4.4.4
+
+  packages/ckeditor5-coremedia-richtext-support:
+    specifiers:
+      '@babel/cli': ^7.16.0
+      '@babel/core': ^7.16.0
+      '@babel/plugin-proposal-class-properties': ^7.16.0
+      '@babel/plugin-proposal-object-rest-spread': ^7.16.0
+      '@babel/plugin-syntax-dynamic-import': ^7.8.3
+      '@babel/plugin-transform-arrow-functions': ^7.16.0
+      '@babel/plugin-transform-computed-properties': ^7.16.0
+      '@babel/plugin-transform-for-of': ^7.16.0
+      '@babel/plugin-transform-parameters': ^7.16.3
+      '@babel/plugin-transform-shorthand-properties': ^7.16.0
+      '@babel/preset-env': ^7.16.0
+      '@babel/preset-typescript': ^7.16.0
+      '@ckeditor/ckeditor5-core': ^31.0.0
+      '@ckeditor/ckeditor5-engine': ^31.0.0
+      '@ckeditor/ckeditor5-html-support': ^31.0.0
+      '@ckeditor/ckeditor5-utils': ^31.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-logging': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-html-support': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
+      '@types/jest': ^27.0.2
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
+      babel-jest: ^27.3.1
+      eslint: ^8.6.0
+      eslint-config-prettier: ^8.3.0
+      eslint-plugin-prettier: ^4.0.0
+      jest: ^27.3.1
+      jest-each: ^27.3.1
+      jest-transform-stub: ^2.0.0
+      jest-xml-matcher: ^1.2.0
+      prettier: ^2.4.1
+      rimraf: ^3.0.2
+      typescript: ^4.4.4
+    dependencies:
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
+    devDependencies:
+      '@babel/cli': 7.16.0_@babel+core@7.16.0
+      '@babel/core': 7.16.0
+      '@babel/plugin-proposal-class-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-proposal-object-rest-spread': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-syntax-dynamic-import': 7.8.3_@babel+core@7.16.0
+      '@babel/plugin-transform-arrow-functions': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-computed-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-for-of': 7.16.0_@babel+core@7.16.0
+      '@babel/plugin-transform-parameters': 7.16.3_@babel+core@7.16.0
+      '@babel/plugin-transform-shorthand-properties': 7.16.0_@babel+core@7.16.0
+      '@babel/preset-env': 7.16.0_@babel+core@7.16.0
+      '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
+      '@ckeditor/ckeditor5-core': 31.0.0
+      '@ckeditor/ckeditor5-engine': 31.0.0
+      '@ckeditor/ckeditor5-html-support': 31.0.0
+      '@ckeditor/ckeditor5-utils': 31.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
+      '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
+      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/jest': 27.0.2
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
+      babel-jest: 27.3.1_@babel+core@7.16.0
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -387,10 +387,10 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -430,12 +430,12 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -462,11 +462,11 @@ importers:
       '@coremedia/ckeditor5-logging': ^2.0.0
       '@coremedia/service-agent': ^1.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
       copyfiles: ^2.4.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -496,13 +496,13 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.0.0
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       copyfiles: 2.4.1
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -533,11 +533,11 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
       copyfiles: ^2.4.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -571,13 +571,13 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       copyfiles: 2.4.1
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -609,10 +609,10 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -645,12 +645,12 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -683,10 +683,10 @@ importers:
       '@babel/preset-typescript': ^7.16.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@types/jest': ^27.0.2
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -715,12 +715,12 @@ importers:
       '@babel/preset-typescript': 7.16.0_@babel+core@7.16.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@types/jest': 27.0.2
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-config: 27.3.1
       jest-transform-stub: 2.0.0
@@ -771,11 +771,11 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
       '@types/jest': ^27.0.2
       '@types/webpack': ^5.28.0
-      '@typescript-eslint/eslint-plugin': ^5.3.1
-      '@typescript-eslint/parser': ^5.3.1
+      '@typescript-eslint/eslint-plugin': ^5.9.1
+      '@typescript-eslint/parser': ^5.9.1
       babel-jest: ^27.3.1
       babel-loader: ^8.2.3
-      eslint: ^8.2.0
+      eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.3.1
@@ -828,13 +828,13 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
       '@types/jest': 27.0.2
       '@types/webpack': 5.28.0_webpack-cli@4.9.1
-      '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
+      '@typescript-eslint/eslint-plugin': 5.9.1_6f5319e1fdd770e3c8021611f1b6640d
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
       babel-jest: 27.3.1_@babel+core@7.16.0
       babel-loader: 8.2.3_b291063a66ad4190fccfa12a16fa9621
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
-      eslint-plugin-prettier: 4.0.0_307f015733298e29da9050ea0cee5b9e
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
+      eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
       jest: 27.3.1
       jest-transform-stub: 2.0.0
       prettier: 2.4.1
@@ -2555,13 +2555,13 @@ packages:
     resolution: {integrity: sha512-Fxt+AfXgjMoin2maPIYzFZnQjAXjAL0PHscM5pRTtatFqB+vZxAM9tLp2Optnuw3QOQC40jTNeGYFOMvyf7v9g==}
     engines: {node: '>=10.0.0'}
 
-  /@eslint/eslintrc/1.0.4:
-    resolution: {integrity: sha512-h8Vx6MdxwWI2WM8/zREHMoqdgLNXEL4QX3MWSVMdyNJGvXVOs+6lp+m2hc3FnuMHDc4poxFNI20vCk0OmI4G0Q==}
+  /@eslint/eslintrc/1.0.5:
+    resolution: {integrity: sha512-BLxsnmK3KyPunz5wmCCpqy0YelEoxxGmH73Is+Z74oOTMtExcjkr3dDR6quwrjh1YspA8DH9gnX1o069KiS9AQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
       debug: 4.3.2
-      espree: 9.0.0
+      espree: 9.3.0
       globals: 13.11.0
       ignore: 4.0.6
       import-fresh: 3.3.0
@@ -2576,19 +2576,19 @@ packages:
     resolution: {integrity: sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==}
     dev: true
 
-  /@humanwhocodes/config-array/0.6.0:
-    resolution: {integrity: sha512-JQlEKbcgEUjBFhLIF4iqM7u/9lwgHRBcpHrmUNCALK0Q3amXN6lxdoXLnF0sm11E9VqTmBALR87IlUg1bZ8A9A==}
+  /@humanwhocodes/config-array/0.9.2:
+    resolution: {integrity: sha512-UXOuFCGcwciWckOpmfKDq/GyhlTf9pN/BzG//x8p8zTOFEcGuA68ANXheFS0AGvy3qgZqLBUkMs7hqzqCKOVwA==}
     engines: {node: '>=10.10.0'}
     dependencies:
-      '@humanwhocodes/object-schema': 1.2.0
+      '@humanwhocodes/object-schema': 1.2.1
       debug: 4.3.2
       minimatch: 3.0.4
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@humanwhocodes/object-schema/1.2.0:
-    resolution: {integrity: sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==}
+  /@humanwhocodes/object-schema/1.2.1:
+    resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
   /@istanbuljs/load-nyc-config/1.1.0:
@@ -3021,8 +3021,8 @@ packages:
       '@types/yargs-parser': 20.2.1
     dev: true
 
-  /@typescript-eslint/eslint-plugin/5.3.1_4653b7803b7453f5f37717b7e1448517:
-    resolution: {integrity: sha512-cFImaoIr5Ojj358xI/SDhjog57OK2NqlpxwdcgyxDA3bJlZcJq5CPzUXtpD7CxI2Hm6ATU7w5fQnnkVnmwpHqw==}
+  /@typescript-eslint/eslint-plugin/5.9.1_6f5319e1fdd770e3c8021611f1b6640d:
+    resolution: {integrity: sha512-Xv9tkFlyD4MQGpJgTo6wqDqGvHIRmRgah/2Sjz1PUnJTawjHWIwBivUE9x0QtU2WVii9baYgavo/bHjrZJkqTw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       '@typescript-eslint/parser': ^5.0.0
@@ -3032,11 +3032,12 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/experimental-utils': 5.3.1_eslint@8.2.0+typescript@4.4.4
-      '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
-      '@typescript-eslint/scope-manager': 5.3.1
+      '@typescript-eslint/experimental-utils': 5.9.1_eslint@8.6.0+typescript@4.4.4
+      '@typescript-eslint/parser': 5.9.1_eslint@8.6.0+typescript@4.4.4
+      '@typescript-eslint/scope-manager': 5.9.1
+      '@typescript-eslint/type-utils': 5.9.1_eslint@8.6.0+typescript@4.4.4
       debug: 4.3.2
-      eslint: 8.2.0
+      eslint: 8.6.0
       functional-red-black-tree: 1.0.1
       ignore: 5.1.8
       regexpp: 3.2.0
@@ -3047,26 +3048,26 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/experimental-utils/5.3.1_eslint@8.2.0+typescript@4.4.4:
-    resolution: {integrity: sha512-RgFn5asjZ5daUhbK5Sp0peq0SSMytqcrkNfU4pnDma2D8P3ElZ6JbYjY8IMSFfZAJ0f3x3tnO3vXHweYg0g59w==}
+  /@typescript-eslint/experimental-utils/5.9.1_eslint@8.6.0+typescript@4.4.4:
+    resolution: {integrity: sha512-cb1Njyss0mLL9kLXgS/eEY53SZQ9sT519wpX3i+U457l2UXRDuo87hgKfgRazmu9/tQb0x2sr3Y0yrU+Zz0y+w==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
-      eslint: '*'
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
       '@types/json-schema': 7.0.9
-      '@typescript-eslint/scope-manager': 5.3.1
-      '@typescript-eslint/types': 5.3.1
-      '@typescript-eslint/typescript-estree': 5.3.1_typescript@4.4.4
-      eslint: 8.2.0
+      '@typescript-eslint/scope-manager': 5.9.1
+      '@typescript-eslint/types': 5.9.1
+      '@typescript-eslint/typescript-estree': 5.9.1_typescript@4.4.4
+      eslint: 8.6.0
       eslint-scope: 5.1.1
-      eslint-utils: 3.0.0_eslint@8.2.0
+      eslint-utils: 3.0.0_eslint@8.6.0
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
-  /@typescript-eslint/parser/5.3.1_eslint@8.2.0+typescript@4.4.4:
-    resolution: {integrity: sha512-TD+ONlx5c+Qhk21x9gsJAMRohWAUMavSOmJgv3JGy9dgPhuBd5Wok0lmMClZDyJNLLZK1JRKiATzCKZNUmoyfw==}
+  /@typescript-eslint/parser/5.9.1_eslint@8.6.0+typescript@4.4.4:
+    resolution: {integrity: sha512-PLYO0AmwD6s6n0ZQB5kqPgfvh73p0+VqopQQLuNfi7Lm0EpfKyDalchpVwkE+81k5HeiRrTV/9w1aNHzjD7C4g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -3075,31 +3076,50 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/scope-manager': 5.3.1
-      '@typescript-eslint/types': 5.3.1
-      '@typescript-eslint/typescript-estree': 5.3.1_typescript@4.4.4
+      '@typescript-eslint/scope-manager': 5.9.1
+      '@typescript-eslint/types': 5.9.1
+      '@typescript-eslint/typescript-estree': 5.9.1_typescript@4.4.4
       debug: 4.3.2
-      eslint: 8.2.0
+      eslint: 8.6.0
       typescript: 4.4.4
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/scope-manager/5.3.1:
-    resolution: {integrity: sha512-XksFVBgAq0Y9H40BDbuPOTUIp7dn4u8oOuhcgGq7EoDP50eqcafkMVGrypyVGvDYHzjhdUCUwuwVUK4JhkMAMg==}
+  /@typescript-eslint/scope-manager/5.9.1:
+    resolution: {integrity: sha512-8BwvWkho3B/UOtzRyW07ffJXPaLSUKFBjpq8aqsRvu6HdEuzCY57+ffT7QoV4QXJXWSU1+7g3wE4AlgImmQ9pQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      '@typescript-eslint/types': 5.3.1
-      '@typescript-eslint/visitor-keys': 5.3.1
+      '@typescript-eslint/types': 5.9.1
+      '@typescript-eslint/visitor-keys': 5.9.1
     dev: true
 
-  /@typescript-eslint/types/5.3.1:
-    resolution: {integrity: sha512-bG7HeBLolxKHtdHG54Uac750eXuQQPpdJfCYuw4ZI3bZ7+GgKClMWM8jExBtp7NSP4m8PmLRM8+lhzkYnSmSxQ==}
+  /@typescript-eslint/type-utils/5.9.1_eslint@8.6.0+typescript@4.4.4:
+    resolution: {integrity: sha512-tRSpdBnPRssjlUh35rE9ug5HrUvaB9ntREy7gPXXKwmIx61TNN7+l5YKgi1hMKxo5NvqZCfYhA5FvyuJG6X6vg==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: '*'
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/experimental-utils': 5.9.1_eslint@8.6.0+typescript@4.4.4
+      debug: 4.3.2
+      eslint: 8.6.0
+      tsutils: 3.21.0_typescript@4.4.4
+      typescript: 4.4.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@typescript-eslint/types/5.9.1:
+    resolution: {integrity: sha512-SsWegWudWpkZCwwYcKoDwuAjoZXnM1y2EbEerTHho19Hmm+bQ56QG4L4jrtCu0bI5STaRTvRTZmjprWlTw/5NQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@typescript-eslint/typescript-estree/5.3.1_typescript@4.4.4:
-    resolution: {integrity: sha512-PwFbh/PKDVo/Wct6N3w+E4rLZxUDgsoII/GrWM2A62ETOzJd4M6s0Mu7w4CWsZraTbaC5UQI+dLeyOIFF1PquQ==}
+  /@typescript-eslint/typescript-estree/5.9.1_typescript@4.4.4:
+    resolution: {integrity: sha512-gL1sP6A/KG0HwrahVXI9fZyeVTxEYV//6PmcOn1tD0rw8VhUWYeZeuWHwwhnewnvEMcHjhnJLOBhA9rK4vmb8A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       typescript: '*'
@@ -3107,8 +3127,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/types': 5.3.1
-      '@typescript-eslint/visitor-keys': 5.3.1
+      '@typescript-eslint/types': 5.9.1
+      '@typescript-eslint/visitor-keys': 5.9.1
       debug: 4.3.2
       globby: 11.0.4
       is-glob: 4.0.3
@@ -3119,12 +3139,12 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/visitor-keys/5.3.1:
-    resolution: {integrity: sha512-3cHUzUuVTuNHx0Gjjt5pEHa87+lzyqOiHXy/Gz+SJOCW1mpw9xQHIIEwnKn+Thph1mgWyZ90nboOcSuZr/jTTQ==}
+  /@typescript-eslint/visitor-keys/5.9.1:
+    resolution: {integrity: sha512-Xh37pNz9e9ryW4TVdwiFzmr4hloty8cFj8GTWMXh3Z8swGwyQWeCcNgF0hm6t09iZd6eiZmIf4zHedQVP6TVtg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      '@typescript-eslint/types': 5.3.1
-      eslint-visitor-keys: 3.0.0
+      '@typescript-eslint/types': 5.9.1
+      eslint-visitor-keys: 3.1.0
     dev: true
 
   /@vue/compiler-core/3.2.7:
@@ -3466,12 +3486,12 @@ packages:
     dependencies:
       acorn: 8.5.0
 
-  /acorn-jsx/5.3.2_acorn@8.5.0:
+  /acorn-jsx/5.3.2_acorn@8.7.0:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      acorn: 8.5.0
+      acorn: 8.7.0
     dev: true
 
   /acorn-walk/6.2.0:
@@ -3500,6 +3520,12 @@ packages:
     resolution: {integrity: sha512-yXbYeFy+jUuYd3/CDcg2NkIYE991XYX/bje7LmjJigUciaeO1JR4XxXgCIV1/Zc/dRuFEyw1L0pbA+qynJkW5Q==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  /acorn/8.7.0:
+    resolution: {integrity: sha512-V/LGr1APy+PXIwKebEWrkZPwoeoF+w1jiOBUmuxuiUIaOHtob8Qc9BTrYo7VuI5fR8tqsy+buA2WFooR5olqvQ==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+    dev: true
 
   /after/0.8.2:
     resolution: {integrity: sha1-/ts5T58OAqqXaOcCvaI7UF+ufh8=}
@@ -5635,16 +5661,16 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-prettier/8.3.0_eslint@8.2.0:
+  /eslint-config-prettier/8.3.0_eslint@8.6.0:
     resolution: {integrity: sha512-BgZuLUSeKzvlL/VUjx/Yb787VQ26RU3gGjA3iiFvdsp/2bMfVIWUVP7tjxtjS0e+HP409cPlPvNkQloz8C91ew==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
     dependencies:
-      eslint: 8.2.0
+      eslint: 8.6.0
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_307f015733298e29da9050ea0cee5b9e:
+  /eslint-plugin-prettier/4.0.0_9fba825b82a5f853d1fb68962b1ee0f0:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -5655,8 +5681,8 @@ packages:
       eslint-config-prettier:
         optional: true
     dependencies:
-      eslint: 8.2.0
-      eslint-config-prettier: 8.3.0_eslint@8.2.0
+      eslint: 8.6.0
+      eslint-config-prettier: 8.3.0_eslint@8.6.0
       prettier: 2.4.1
       prettier-linter-helpers: 1.0.0
     dev: true
@@ -5676,21 +5702,21 @@ packages:
       esrecurse: 4.3.0
       estraverse: 4.3.0
 
-  /eslint-scope/6.0.0:
-    resolution: {integrity: sha512-uRDL9MWmQCkaFus8RF5K9/L/2fn+80yoW3jkD53l4shjCh26fCtvJGasxjUqP5OT87SYTxCVA3BwTUzuELx9kA==}
+  /eslint-scope/7.1.0:
+    resolution: {integrity: sha512-aWwkhnS0qAXqNOgKOK0dJ2nvzEbhEvpy8OlJ9kZ0FeZnA6zpjv1/Vei+puGFFX7zkPCkHHXb7IDX3A+7yPrRWg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       esrecurse: 4.3.0
       estraverse: 5.2.0
     dev: true
 
-  /eslint-utils/3.0.0_eslint@8.2.0:
+  /eslint-utils/3.0.0_eslint@8.6.0:
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
     engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
     peerDependencies:
       eslint: '>=5'
     dependencies:
-      eslint: 8.2.0
+      eslint: 8.6.0
       eslint-visitor-keys: 2.1.0
     dev: true
 
@@ -5699,18 +5725,18 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /eslint-visitor-keys/3.0.0:
-    resolution: {integrity: sha512-mJOZa35trBTb3IyRmo8xmKBZlxf+N7OnUl4+ZhJHs/r+0770Wh/LEACE2pqMGMe27G/4y8P2bYGk4J70IC5k1Q==}
+  /eslint-visitor-keys/3.1.0:
+    resolution: {integrity: sha512-yWJFpu4DtjsWKkt5GeNBBuZMlNcYVs6vRCLoCVEJrTjaSB6LC98gFipNK/erM2Heg/E8mIK+hXG/pJMLK+eRZA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /eslint/8.2.0:
-    resolution: {integrity: sha512-erw7XmM+CLxTOickrimJ1SiF55jiNlVSp2qqm0NuBWPtHYQCegD5ZMaW0c3i5ytPqL+SSLaCxdvQXFPLJn+ABw==}
+  /eslint/8.6.0:
+    resolution: {integrity: sha512-UvxdOJ7mXFlw7iuHZA4jmzPaUqIw54mZrv+XPYKNbKdLR0et4rf60lIZUU9kiNtnzzMzGWxMV+tQ7uG7JG8DPw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     hasBin: true
     dependencies:
-      '@eslint/eslintrc': 1.0.4
-      '@humanwhocodes/config-array': 0.6.0
+      '@eslint/eslintrc': 1.0.5
+      '@humanwhocodes/config-array': 0.9.2
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
@@ -5718,10 +5744,10 @@ packages:
       doctrine: 3.0.0
       enquirer: 2.3.6
       escape-string-regexp: 4.0.0
-      eslint-scope: 6.0.0
-      eslint-utils: 3.0.0_eslint@8.2.0
-      eslint-visitor-keys: 3.0.0
-      espree: 9.0.0
+      eslint-scope: 7.1.0
+      eslint-utils: 3.0.0_eslint@8.6.0
+      eslint-visitor-keys: 3.1.0
+      espree: 9.3.0
       esquery: 1.4.0
       esutils: 2.0.3
       fast-deep-equal: 3.1.3
@@ -5751,13 +5777,13 @@ packages:
       - supports-color
     dev: true
 
-  /espree/9.0.0:
-    resolution: {integrity: sha512-r5EQJcYZ2oaGbeR0jR0fFVijGOcwai07/690YRXLINuhmVeRY4UKSAsQPe/0BNuDgwP7Ophoc1PRsr2E3tkbdQ==}
+  /espree/9.3.0:
+    resolution: {integrity: sha512-d/5nCsb0JcqsSEeQzFZ8DH1RmxPcglRWh24EFTlUEmCKoehXGdpsx0RkHDubqUI8LSAIKMQp4r9SzQ3n+sm4HQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      acorn: 8.5.0
-      acorn-jsx: 5.3.2_acorn@8.5.0
-      eslint-visitor-keys: 3.0.0
+      acorn: 8.7.0
+      acorn-jsx: 5.3.2_acorn@8.7.0
+      eslint-visitor-keys: 3.1.0
     dev: true
 
   /esprima/4.0.1:
