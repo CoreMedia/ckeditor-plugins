@@ -109,6 +109,23 @@ well, so that when delivering CoreMedia RichText 1.0 within your webpage, the
 color attribute is either re-transformed to a style attribute, or, possibly
 better for a consistent site appearance, added as CSS style class.
 
+Another example, if using the
+[Table Caption plugin](https://ckeditor.com/docs/ckeditor5/latest/api/module_table_tablecaption-TableCaption.html), you
+will note, that, as the name suggests, it creates an extra element `<caption>`.
+As this is not supported by CoreMedia RichText 1.0 you have to think of
+alternatives.
+
+*Store in `summary` attribute?* You may think about storing the value of
+`<caption>` in encoded form into the `summary` attribute (deprecated HTML
+attribute, but best-fit alternative in CoreMedia RichText). Note, though, that
+this comes with limitations. As the `<caption>` requires to be stored as plain
+text then in `summary`, you have to encode it. Encoding it, you will especially
+lose the ability to track possible internal links encoded into the summary
+attribute.
+
+Thus, such a mapping has to be carefully designed and its side effects have to
+be evaluated and rated if they apply to you or not.
+
 ## See Also
 
 * [ckeditor5/gfmdataprocessor.js at master · ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5/blob/master/packages/ckeditor5-markdown-gfm/src/gfmdataprocessor.js)
