@@ -58,12 +58,12 @@ export default class ContentPlaceholderEditing extends Plugin {
 
   static #addContentMarkerConversion(editor: Editor, evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void {
     const viewPosition = conversionApi.mapper.toViewPosition( data.markerRange.start );
-    const lookupData = ContentDropDataCache.lookupData(data.markerName);
-    if (!lookupData) {
+    const contentDropData = ContentDropDataCache.lookupData(data.markerName);
+    if (!contentDropData) {
       return;
     }
 
-    let cssClass = lookupData.isEmbeddableContent || lookupData.dropContext.multipleItemsDropped ? "" : "cm-load-mask-inline";
+    let cssClass = contentDropData.itemContext.isEmbeddableContent || contentDropData.dropContext.multipleItemsDropped ? "" : "cm-load-mask-inline";
     const viewContainer = conversionApi.writer.createUIElement("div", { class: "cm-load-mask "+cssClass }, function (this: UIElement, dom: Document): Element {
       const uielement: UIElement = this as unknown as UIElement;
       const htmlElement = uielement.toDomElement(dom);
@@ -80,22 +80,22 @@ export default class ContentPlaceholderEditing extends Plugin {
 
   static #triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
     const markerName: string = ContentClipboardMarkerUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
-    const lookupData = ContentDropDataCache.lookupData(markerName);
-    if (!lookupData) {
+    const contentDropData = ContentDropDataCache.lookupData(markerName);
+    if (!contentDropData) {
       return;
     }
     ContentPlaceholderEditing.#LOGGER.debug(
-      `Looking for replace marker (${markerName}) with content ${lookupData.contentUri}`
+      `Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`
     );
 
     serviceAgent
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
-        contentDisplayService.name(lookupData.contentUri).then(name => {
-            ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name ? name: ROOT_NAME);
+        contentDisplayService.name(contentDropData.itemContext.contentUri).then(name => {
+            ContentPlaceholderEditing.#writeLinkToModel(editor, contentDropData, markerData, name ? name: ROOT_NAME);
             ContentPlaceholderEditing.#reenableUndo(editor);
           }, (reason) => {
-            ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", lookupData.contentUri, reason);
+            ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", contentDropData.itemContext.contentUri, reason);
             ContentDropDataCache.removeData(markerName);
             editor.model.enqueueChange("transparent", (writer: Writer): void  => {
               writer.removeMarker(markerName);
@@ -113,11 +113,11 @@ export default class ContentPlaceholderEditing extends Plugin {
     }
   }
 
-  static #writeLinkToModel(editor: Editor, lookupData: ContentDropData, markerData: MarkerData, name: string): void {
-    const isInline = !lookupData.isEmbeddableContent && !lookupData.dropContext.multipleItemsDropped;
+  static #writeLinkToModel(editor: Editor, contentDropData: ContentDropData, markerData: MarkerData, name: string): void {
+    const isInline = !contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped;
 
-    editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
-      const contentUri: string = lookupData.contentUri;
+    editor.model.enqueueChange(contentDropData.dropContext.batch, (writer: Writer): void => {
+      const contentUri: string = contentDropData.itemContext.contentUri;
       const link = writer.createText(name, {
         linkHref: requireContentCkeModelUri(contentUri),
       });
@@ -145,7 +145,7 @@ export default class ContentPlaceholderEditing extends Plugin {
       const positionAfterInsertedElement = writer.createPositionAt(link, "after");
       const positionBeforeInsertedElement = writer.createPositionAt(link, "before");
       const range = writer.createRange(positionBeforeInsertedElement, positionAfterInsertedElement);
-      ContentPlaceholderEditing.#setSelectionAttributes(writer, [range], lookupData.selectedAttributes);
+      ContentPlaceholderEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
       //evaluate if a the container element has to be split after the element has been inserted.
       //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.

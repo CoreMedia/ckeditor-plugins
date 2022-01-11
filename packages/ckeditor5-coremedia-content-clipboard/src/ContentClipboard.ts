@@ -8,12 +8,11 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
+import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import CommandUtils from "./CommandUtils";
 
@@ -104,9 +103,21 @@ export default class ContentClipboard extends Plugin {
       writer.setSelection(targetRange);
     });
     const attributes = Array.from(editor.model.document.selection.getAttributes());
-    cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
+    const dropContext: DropContext = {
+      batch,
+      multipleItemsDropped: cmDataUris.length > 1,
+      selectedAttributes: attributes
+    }
+    cmDataUris.forEach((contentUri: string, index: number): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      ContentClipboard.#addContentDropMarker(editor, targetRange, contentUri, dropId, index, originalArray.length, isEmbeddableContent, batch, attributes);
+      const contentDropData: ContentDropData = {
+        dropContext,
+        itemContext: {
+          contentUri,
+          isEmbeddableContent
+        }
+      }
+      ContentClipboard.#addContentDropMarker(editor, targetRange, dropId, index, contentDropData);
     });
   };
 
@@ -130,20 +141,11 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addContentDropMarker(editor: Editor, markerRange: Range, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
+  static #addContentDropMarker(editor: Editor, markerRange: Range, dropId: number, index: number, contentDropData: ContentDropData): void {
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       const markerName: string = ContentClipboardMarkerUtils.toMarkerName(dropId, index);
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
-      const data: ContentDropData = {
-        batch: batch,
-        contentUri: contentUri,
-        isEmbeddableContent: isEmbeddableContent,
-        selectedAttributes: attributes,
-        dropContext: {
-          multipleItemsDropped: numberOfDroppedItems > 1,
-        }
-      }
-      ContentDropDataCache.storeData(markerName, data);
+      ContentDropDataCache.storeData(markerName, contentDropData);
     });
   }
 }

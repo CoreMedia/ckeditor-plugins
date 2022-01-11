@@ -17,11 +17,17 @@ export default class ContentDropDataCache {
 }
 
 export type ContentDropData = {
-  batch: Batch,
-  selectedAttributes: Array<[string, string | number | boolean]>,
+  dropContext: DropContext,
+  itemContext: ItemContext
+}
+
+export type ItemContext = {
   contentUri: string,
   isEmbeddableContent: boolean,
-  dropContext: {
-    multipleItemsDropped: boolean
-  }
-};
+}
+
+export type DropContext = {
+  batch: Batch,
+  selectedAttributes: Array<[string, string | number | boolean]>,
+  multipleItemsDropped: boolean
+}
