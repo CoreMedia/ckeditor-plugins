@@ -7,8 +7,51 @@ const emptyRichText = `<div xmlns="${ns_richtext}"/>`;
 // noinspection XmlUnusedNamespaceDeclaration
 const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${content}</div>`;
 
+/**
+ * CoreMedia RichText 1.0 Element Definition Reference for Tested Elements:
+ *
+ * ```
+ * <!ELEMENT table (tbody|tr+) >
+ * <!ATTLIST table
+ *   xml:lang NMTOKEN #IMPLIED
+ *   dir      (ltr|rtl) #IMPLIED
+ *   lang     NMTOKEN   #IMPLIED
+ *   class    CDATA     #IMPLIED
+ *   summary  CDATA     #IMPLIED >
+ *
+ * <!ELEMENT tbody (tr)+ >
+ * <!ATTLIST tbody
+ *   xml:lang NMTOKEN #IMPLIED
+ *   dir      (ltr|rtl)                    #IMPLIED
+ *   align    (left|center|right)          #IMPLIED
+ *   valign   (top|middle|bottom|baseline) #IMPLIED
+ *   lang     NMTOKEN                      #IMPLIED
+ *   class    CDATA                        #IMPLIED >
+ *
+ * <!ELEMENT td (#PCDATA|p|ul|ol|pre|blockquote|table|a|br|span|img|em|strong|sub|sup)* >
+ * <!ATTLIST td
+ *   abbr     CDATA                        #IMPLIED
+ *   xml:lang NMTOKEN                      #IMPLIED
+ *   colspan  CDATA                        '1'
+ *   dir      (ltr|rtl)                    #IMPLIED
+ *   align    (left|center|right)          #IMPLIED
+ *   rowspan  CDATA                        '1'
+ *   valign   (top|middle|bottom|baseline) #IMPLIED
+ *   lang     NMTOKEN                      #IMPLIED
+ *   class    CDATA                        #IMPLIED >
+ *
+ * <!ELEMENT tr (td)+ >
+ * <!ATTLIST tr
+ *   xml:lang NMTOKEN                      #IMPLIED
+ *   dir      (ltr|rtl)                    #IMPLIED
+ *   align    (left|center|right)          #IMPLIED
+ *   valign   (top|middle|bottom|baseline) #IMPLIED
+ *   lang     NMTOKEN                      #IMPLIED
+ *   class    CDATA                        #IMPLIED >
+ * ```
+ */
 describe("CoreMediaRichTextConfig: Table", () => {
-  const data: DataProcessingTestCase[] = [
+  const elementMapping = [
     {
       name: "TABLE#01: Empty table should be removed, as it is invalid.",
       direction: Direction.toData,
@@ -130,6 +173,212 @@ describe("CoreMediaRichTextConfig: Table", () => {
         `<table><tbody class="body1"><tr><td>Body 1</td></tr></tbody><tbody class="body2"><tr><td>Body 2</td></tr></tbody></table>`
       ),
     },
+  ];
+
+  const tableAttributes: DataProcessingTestCase[] = [
+    {
+      name: `TABLE/ATTRIBUTES#1: Should keep class attribute.`,
+      data: wrapContent(`<table class="CLASS"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table class="CLASS"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TABLE/ATTRIBUTES#2: Should keep dir attribute.`,
+      data: wrapContent(`<table dir="rtl"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table dir="rtl"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TABLE/ATTRIBUTES#3: Should transform xml:lang (data) to lang attribute (data view) back and forth.`,
+      data: wrapContent(`<table xml:lang="en"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table lang="en"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TABLE/ATTRIBUTES#4: Should transform lang (data) to lang attribute (data view).`,
+      direction: Direction.toDataView,
+      comment:
+        "CoreMedia RichText supports xml:lang as well as lang attribute. While preferring xml:lang for toData transformation, we have to respect lang attribute from data as well.",
+      data: wrapContent(`<table lang="en"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table lang="en"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TABLE/ATTRIBUTES#5: Should prefer xml:lang over lang in data.`,
+      direction: Direction.toDataView,
+      comment: "As in HTML specification, xml:lang should take precedence, when both are given.",
+      data: wrapContent(`<table lang="en" xml:lang="de"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table lang="de"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TABLE/ATTRIBUTES#6: Should keep summary attribute.`,
+      comment:
+        "`summary` is deprecated in HTML and `<caption>` should be used instead. Introducing a corresponding mapping in data-processing has not been introduced yet. Thus, this test is subject to change.",
+      data: wrapContent(`<table summary="SUMMARY"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table summary="SUMMARY"><tbody><tr><td>${text}</td></tr></tbody></table>`),
+    },
+  ];
+
+  const tbodyAttributes: DataProcessingTestCase[] = [
+    {
+      name: `TBODY/ATTRIBUTES#1: Should keep class attribute.`,
+      data: wrapContent(`<table><tbody class="CLASS"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody class="CLASS"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TBODY/ATTRIBUTES#2: Should keep dir attribute.`,
+      data: wrapContent(`<table><tbody dir="rtl"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody dir="rtl"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TBODY/ATTRIBUTES#3: Should transform xml:lang (data) to lang attribute (data view) back and forth.`,
+      data: wrapContent(`<table><tbody xml:lang="en"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody lang="en"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TBODY/ATTRIBUTES#4: Should transform lang (data) to lang attribute (data view).`,
+      direction: Direction.toDataView,
+      comment:
+        "CoreMedia RichText supports xml:lang as well as lang attribute. While preferring xml:lang for toData transformation, we have to respect lang attribute from data as well.",
+      data: wrapContent(`<table><tbody lang="en"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody lang="en"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TBODY/ATTRIBUTES#5: Should prefer xml:lang over lang in data.`,
+      direction: Direction.toDataView,
+      comment: "As in HTML specification, xml:lang should take precedence, when both are given.",
+      data: wrapContent(`<table><tbody lang="en" xml:lang="de"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody lang="de"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TBODY/ATTRIBUTES#6: Should keep align attribute.`,
+      comment:
+        "As `align` is deprecated, we may instead think about mapping from/to corresponding text-align style attribute.",
+      data: wrapContent(`<table><tbody align="center"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody align="center"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TBODY/ATTRIBUTES#6: Should keep valign attribute.`,
+      comment:
+        "As `valign` is deprecated, we may instead think about mapping from/to corresponding vertical-align style attribute.",
+      data: wrapContent(`<table><tbody valign="bottom"><tr><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody valign="bottom"><tr><td>${text}</td></tr></tbody></table>`),
+    },
+  ];
+
+  const tableRowAttributes: DataProcessingTestCase[] = [
+    {
+      name: `TR/ATTRIBUTES#1: Should keep class attribute.`,
+      data: wrapContent(`<table><tbody><tr class="CLASS"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr class="CLASS"><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TR/ATTRIBUTES#2: Should keep dir attribute.`,
+      data: wrapContent(`<table><tbody><tr dir="rtl"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr dir="rtl"><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TR/ATTRIBUTES#3: Should transform xml:lang (data) to lang attribute (data view) back and forth.`,
+      data: wrapContent(`<table><tbody><tr xml:lang="en"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr lang="en"><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TR/ATTRIBUTES#4: Should transform lang (data) to lang attribute (data view).`,
+      direction: Direction.toDataView,
+      comment:
+        "CoreMedia RichText supports xml:lang as well as lang attribute. While preferring xml:lang for toData transformation, we have to respect lang attribute from data as well.",
+      data: wrapContent(`<table><tbody><tr lang="en"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr lang="en"><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TR/ATTRIBUTES#5: Should prefer xml:lang over lang in data.`,
+      direction: Direction.toDataView,
+      comment: "As in HTML specification, xml:lang should take precedence, when both are given.",
+      data: wrapContent(`<table><tbody><tr lang="en" xml:lang="de"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr lang="de"><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TR/ATTRIBUTES#6: Should keep align attribute.`,
+      comment:
+        "As `align` is deprecated, we may instead think about mapping from/to corresponding text-align style attribute.",
+      data: wrapContent(`<table><tbody><tr align="center"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr align="center"><td>${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TR/ATTRIBUTES#7: Should keep valign attribute.`,
+      comment:
+        "As `valign` is deprecated, we may instead think about mapping from/to corresponding vertical-align style attribute.",
+      data: wrapContent(`<table><tbody><tr valign="bottom"><td>${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr valign="bottom"><td>${text}</td></tr></tbody></table>`),
+    },
+  ];
+
+  const tableDataAttributes: DataProcessingTestCase[] = [
+    {
+      name: `TD/ATTRIBUTES#1: Should keep class attribute.`,
+      data: wrapContent(`<table><tbody><tr><td class="CLASS">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td class="CLASS">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#2: Should keep dir attribute.`,
+      data: wrapContent(`<table><tbody><tr><td dir="rtl">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td dir="rtl">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#3: Should transform xml:lang (data) to lang attribute (data view) back and forth.`,
+      data: wrapContent(`<table><tbody><tr><td xml:lang="en">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td lang="en">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#4: Should transform lang (data) to lang attribute (data view).`,
+      direction: Direction.toDataView,
+      comment:
+        "CoreMedia RichText supports xml:lang as well as lang attribute. While preferring xml:lang for toData transformation, we have to respect lang attribute from data as well.",
+      data: wrapContent(`<table><tbody><tr><td lang="en">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td lang="en">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#5: Should prefer xml:lang over lang in data.`,
+      direction: Direction.toDataView,
+      comment: "As in HTML specification, xml:lang should take precedence, when both are given.",
+      data: wrapContent(`<table><tbody><tr><td lang="en" xml:lang="de">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td lang="de">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#6: Should keep align attribute.`,
+      comment:
+        "As `align` is deprecated, we may instead think about mapping from/to corresponding text-align style attribute.",
+      data: wrapContent(`<table><tbody><tr><td align="center">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td align="center">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#7: Should keep valign attribute.`,
+      comment:
+        "As `valign` is deprecated, we may instead think about mapping from/to corresponding vertical-align style attribute.",
+      data: wrapContent(`<table><tbody><tr><td valign="bottom">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td valign="bottom">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#8: Should keep colspan attribute.`,
+      data: wrapContent(`<table><tbody><tr><td colspan="2">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td colspan="2">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#9: Should keep rowspan attribute.`,
+      data: wrapContent(`<table><tbody><tr><td rowspan="2">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td rowspan="2">${text}</td></tr></tbody></table>`),
+    },
+    {
+      name: `TD/ATTRIBUTES#9: Should keep abbr attribute.`,
+      comment:
+        "abbr is deprecated. An alternative mapping in data-processing does not exist yet. If, it should be aligned with corresponding editing actions in CKEditor.",
+      data: wrapContent(`<table><tbody><tr><td abbr="ABBR">${text}</td></tr></tbody></table>`),
+      dataView: wrapContent(`<table><tbody><tr><td abbr="ABBR">${text}</td></tr></tbody></table>`),
+    },
+  ];
+
+  const data: DataProcessingTestCase[] = [
+    ...elementMapping,
+    ...tableAttributes,
+    ...tbodyAttributes,
+    ...tableRowAttributes,
+    ...tableDataAttributes,
   ];
 
   allDataProcessingTests(data);
