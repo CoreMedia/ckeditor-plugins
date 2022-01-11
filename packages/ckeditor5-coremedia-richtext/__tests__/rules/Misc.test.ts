@@ -7,6 +7,20 @@ const text = "TEXT";
 // noinspection XmlUnusedNamespaceDeclaration
 const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${content}</div>`;
 
+/**
+ * CoreMedia RichText 1.0 Element Definition Reference for Tested Elements:
+ *
+ * ```
+ * <!ELEMENT div (p|ul|ol|pre|blockquote|table)* >
+ * <!ATTLIST div
+ *   xmlns       CDATA #FIXED 'http://www.coremedia.com/2003/richtext-1.0'
+ *   xmlns:xlink CDATA #FIXED 'http://www.w3.org/1999/xlink' >
+ *
+ * <!ELEMENT br EMPTY >
+ * <!ATTLIST br
+ *   class CDATA #IMPLIED >
+ * ```
+ */
 describe("CoreMediaRichTextConfig: Miscellaneous", () => {
   const data: DataProcessingTestCase[] = [
     {
@@ -31,20 +45,6 @@ describe("CoreMediaRichTextConfig: Miscellaneous", () => {
       name: "BR#2: Should keep BR class as is.",
       data: `<div xmlns="${ns_richtext}"><p>${text}<br class="CLASS"/>${text}</p></div>`,
       dataView: `<div xmlns="${ns_richtext}"><p>${text}<br class="CLASS"/>${text}</p></div>`,
-    },
-    {
-      name: "SPAN#1: Should keep empty span.",
-      comment:
-        "While the element is irrelevant, this refers to an issue with CKEditor 4, where such empty spans got expanded instead, so that <span/>t became <span>t</span>",
-      data: `<div xmlns="${ns_richtext}"><p>${text}<span/>${text}</p></div>`,
-      dataView: `<div xmlns="${ns_richtext}"><p>${text}<span/>${text}</p></div>`,
-    },
-    {
-      name: "SPAN#2: Should keep empty span and its attributes.",
-      comment:
-        "While the element is irrelevant, this refers to an issue with CKEditor 4, where such empty spans got expanded instead, so that <span/>t became <span>t</span>",
-      data: `<div xmlns="${ns_richtext}"><p>${text}<span dir="rtl" class="CLASS"/>${text}</p></div>`,
-      dataView: `<div xmlns="${ns_richtext}"><p>${text}<span dir="rtl" class="CLASS"/>${text}</p></div>`,
     },
   ];
 
