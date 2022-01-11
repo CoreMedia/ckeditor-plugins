@@ -100,6 +100,9 @@ export default class ContentClipboard extends Plugin {
     const dropId = Date.now();
     const batch = editor.model.createBatch();
     CommandUtils.disableCommand(editor, "undo");
+    editor.model.enqueueChange(batch, (writer: Writer) => {
+      writer.setSelection(dropCondition.targetRange);
+    });
     const attributes = Array.from(editor.model.document.selection.getAttributes());
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isLast = originalArray.length - 1 === Number(index);
