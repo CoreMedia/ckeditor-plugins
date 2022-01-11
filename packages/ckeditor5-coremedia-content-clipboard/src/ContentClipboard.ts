@@ -126,15 +126,9 @@ export default class ContentClipboard extends Plugin {
   static #createDropCondition(editor: Editor, data: ClipboardEventData, links: string[]): DropCondition {
     const multipleContentDrop = links.length > 1;
     const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
-    const initialDropAtStartOfParagraph = targetRange ? targetRange.start.isAtStart : false;
-    const initialDropAtEndOfParagraph = targetRange ? targetRange.end.isAtEnd : false;
-    const attributes = editor.model.document.selection.getAttributes();
     return new DropCondition(
       multipleContentDrop,
-      initialDropAtEndOfParagraph,
-      initialDropAtStartOfParagraph,
-      targetRange,
-      Array.from(attributes)
+      targetRange
     );
   }
 
