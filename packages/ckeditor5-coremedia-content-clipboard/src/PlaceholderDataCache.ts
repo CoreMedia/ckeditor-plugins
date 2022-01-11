@@ -22,7 +22,6 @@ export type PlaceholderData = {
   contentUri: string,
   isEmbeddableContent: boolean,
   dropContext: {
-    index: number,
     multipleItemsDropped: boolean
   }
 };

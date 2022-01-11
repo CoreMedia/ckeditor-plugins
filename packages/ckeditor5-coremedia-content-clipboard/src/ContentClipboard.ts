@@ -130,17 +130,16 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, targetRange: Range, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
+  static #addMarkerAsPlaceholder(editor: Editor, markerRange: Range, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       const markerName: string = ContentClipboardMarkerUtils.toMarkerName("content", dropId, index);
-      writer.addMarker(markerName, { usingOperation: true, range: targetRange });
+      writer.addMarker(markerName, { usingOperation: true, range: markerRange });
       const data: PlaceholderData = {
         batch: batch,
         contentUri: contentUri,
         isEmbeddableContent: isEmbeddableContent,
         selectedAttributes: attributes,
         dropContext: {
-          index: index,
           multipleItemsDropped: numberOfDroppedItems > 1,
         }
       }
