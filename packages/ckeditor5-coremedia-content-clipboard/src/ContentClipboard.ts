@@ -14,6 +14,10 @@ import PlaceholderDataCache, { PlaceholderData } from "./PlaceholderDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
+import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
+import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
+import CommandUtils from "./CommandUtils";
 
 export default class ContentClipboard extends Plugin {
   static #CONTENT_CLIPBOARD_PLUGIN_NAME = "ContentClipboardPlugin";
@@ -24,7 +28,7 @@ export default class ContentClipboard extends Plugin {
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard, ContentPlaceholderEditing];
+    return [Clipboard, ContentPlaceholderEditing, UndoEditing];
   }
 
   init(): Promise<void> | null {
@@ -94,6 +98,8 @@ export default class ContentClipboard extends Plugin {
     }
     const dropCondition = ContentClipboard.#createDropCondition(editor, data, cmDataUris);
     const dropId = Date.now();
+    const batch = editor.model.createBatch();
+    CommandUtils.disableCommand(editor, "undo");
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isLast = originalArray.length - 1 === Number(index);
       const isFirst = Number(index) === 0;
@@ -101,7 +107,7 @@ export default class ContentClipboard extends Plugin {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const placeholderId = "" + Math.random();
       const contentData = new ContentData(isFirst, isLast, contentUri, isLinkableContent, placeholderId);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index, isEmbeddableContent);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentData, dropId, index, isEmbeddableContent, batch);
     });
   };
 
@@ -148,12 +154,12 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number, isEmbeddableContent: boolean): void {
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, linkData: ContentData, dropId: number, index: number, isEmbeddableContent: boolean, batch: Batch): void {
     ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ linkData, dropCondition }));
     if (!linkData.isLinkable) {
       return;
     }
-    editor.model.change((writer) => {
+    editor.model.enqueueChange(batch, (writer: Writer) => {
       const targetRange = dropCondition.targetRange;
       if (!targetRange) {
         return;
@@ -161,7 +167,7 @@ export default class ContentClipboard extends Plugin {
       const markerName: string = ContentClipboardMarkerUtils.toMarkerName("content", dropId, index);
       writer.addMarker(markerName, { usingOperation: true, range: targetRange });
       const data: PlaceholderData = {
-        batch: writer.batch,
+        batch: batch,
         contentUri: linkData.contentUri,
         isEmbeddableContent: isEmbeddableContent,
         dropContext: {

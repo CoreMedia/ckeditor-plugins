@@ -20,6 +20,7 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
 import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
+import CommandUtils from "./CommandUtils";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -89,16 +90,24 @@ export default class ContentPlaceholderEditing extends Plugin {
       .then((contentDisplayService: ContentDisplayService): void => {
         contentDisplayService.name(lookupData.contentUri).then(name => {
             ContentPlaceholderEditing.#writeLinkToModel(editor, lookupData, markerData, name ? name: ROOT_NAME);
+            ContentPlaceholderEditing.#reenableUndo(editor);
           }, (reason) => {
             ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", lookupData.contentUri, reason);
-
             PlaceholderDataCache.removeData(markerName);
             editor.model.enqueueChange(lookupData.batch, (writer: Writer): void  => {
               writer.removeMarker(markerName);
             });
+            ContentPlaceholderEditing.#reenableUndo(editor);
           }
         );
       });
+  }
+
+  static #reenableUndo(editor: Editor): void {
+    const markers = Array.from(editor.model.markers.getMarkersGroup("content"));
+    if (markers.length === 0) {
+      CommandUtils.enableCommand(editor, "undo");
+    }
   }
 
   static #writeLinkToModel(editor: Editor, lookupData: PlaceholderData, markerData: MarkerData, name: string): void {
@@ -131,6 +140,13 @@ export default class ContentPlaceholderEditing extends Plugin {
       const finalAfterInsertPosition = isInline || positionAfterInsertedElement.isAtEnd ? positionAfterInsertedElement: writer.split(positionAfterInsertedElement).range.end;
       ContentPlaceholderEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, lookupData);
       ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, lookupData);
+    });
+
+    editor.model.enqueueChange(lookupData.batch, (writer: Writer): void => {
+      const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
+      if (!marker) {
+        return;
+      }
       writer.removeMarker(marker);
       PlaceholderDataCache.removeData(marker.name);
     });

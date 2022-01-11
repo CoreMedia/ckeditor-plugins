@@ -11,7 +11,7 @@
       "@ckeditor/ckeditor5-paste-from-office/*": ["../../../types/ckeditor__ckeditor5-paste-from-office/*"],
       "@ckeditor/ckeditor5-clipboard/*": ["../../../types/ckeditor__ckeditor5-clipboard/*"],
       "@ckeditor/ckeditor5-engine/*": ["../../../types/ckeditor__ckeditor5-engine/*"],
-      "@ckeditor/ckeditor5-widget/*": ["../../../types/ckeditor__ckeditor5-widget/*"],
+      "@ckeditor/ckeditor5-undo/*": ["../../../types/ckeditor__ckeditor5-undo/*"],
       "@ckeditor/ckeditor5-html-support/*": ["../../../types/ckeditor__ckeditor5-html-support/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],

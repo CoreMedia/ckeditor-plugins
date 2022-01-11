@@ -128,8 +128,8 @@ importers:
       '@ckeditor/ckeditor5-core': ^31.0.0
       '@ckeditor/ckeditor5-engine': ^31.0.0
       '@ckeditor/ckeditor5-html-support': ^31.0.0
+      '@ckeditor/ckeditor5-undo': ^31.0.0
       '@ckeditor/ckeditor5-utils': ^31.0.0
-      '@ckeditor/ckeditor5-widget': ^31.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-studio-integration': ^2.0.0
       '@coremedia/ckeditor5-logging': ^2.0.0
@@ -137,8 +137,8 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-html-support': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-undo': ^2.0.0
       '@coremedia/types-ckeditor__ckeditor5-utils': ^2.0.0
-      '@coremedia/types-ckeditor__ckeditor5-widget': ^2.0.0
       '@types/jest': ^27.0.2
       '@typescript-eslint/eslint-plugin': ^5.3.1
       '@typescript-eslint/parser': ^5.3.1
@@ -173,15 +173,15 @@ importers:
       '@ckeditor/ckeditor5-core': 31.0.0
       '@ckeditor/ckeditor5-engine': 31.0.0
       '@ckeditor/ckeditor5-html-support': 31.0.0
+      '@ckeditor/ckeditor5-undo': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
-      '@ckeditor/ckeditor5-widget': 31.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
+      '@coremedia/types-ckeditor__ckeditor5-undo': link:../../types/ckeditor__ckeditor5-undo
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@coremedia/types-ckeditor__ckeditor5-widget': link:../../types/ckeditor__ckeditor5-widget
       '@types/jest': 27.0.2
       '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
       '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
@@ -1011,6 +1011,14 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
+
+  types/ckeditor__ckeditor5-undo:
+    specifiers:
+      '@coremedia/types-ckeditor__ckeditor5-core': ^2.0.0
+      '@coremedia/types-ckeditor__ckeditor5-engine': ^2.0.0
+    dependencies:
+      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
+      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
 
   types/ckeditor__ckeditor5-utils:
     specifiers: {}
