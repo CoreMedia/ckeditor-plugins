@@ -26,12 +26,21 @@ All packages are published with scope `@coremedia/` as for example
 `@coremedia/ckeditor5-coremedia-link`.
 
 | Name                                         | Description                                                |
-| -------------------------------------------- | ---------------------------------------------------------- |
+|----------------------------------------------|------------------------------------------------------------|
 | [`ckeditor5-coremedia-link`][]               | Extension to CKEditor 5 Link Feature                       |
-| [`ckeditor5-coremedia-richtext`][]           | Support for CoreMedia RichText 1.0 DTD                     |
+| [`ckeditor5-coremedia-richtext`][]           | Data-Processing for CoreMedia RichText 1.0 DTD             |
+| [`ckeditor5-coremedia-richtext-support`][]   | Support for CoreMedia RichText 1.0 DTD                     |
 | [`ckeditor5-coremedia-studio-essentials`][]  | Aggregator for essential plugins in CoreMedia Studio       |
 | [`ckeditor5-coremedia-studio-integration`][] | Communication Facade for integration into CoreMedia Studio |
 | [`ckeditor5-symbol-on-paste-mapper`][]       | Extension to CKEditor 5 Paste-from-Office                  |
+
+The subtle difference between `ckeditor5-coremedia-richtext` and
+`ckeditor5-coremedia-richtext-support` is, that the latter one just adds support
+for attributes from CoreMedia RichText for which no editing actions are configured
+(yet). Simply speaking, `ckeditor5-coremedia-richtext` ensures, that data can be
+read and stored on server, while `ckeditor5-coremedia-richtext-support` ensures,
+that all valid CoreMedia RichText attributes are registered as _valid_ within
+CKEditor. For details see the corresponding documentation.
 
 ## Assistive Packages
 
@@ -65,6 +74,7 @@ The following packages are not published, and thus, may only be used as
 
 [`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link/>
 [`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext/>
+[`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support/>
 [`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials/>
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration/>
 [`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock/>
