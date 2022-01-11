@@ -20,12 +20,12 @@ import { LogLevel } from "./LogLevel";
  * </pre>
  */
 export default class LoggerProvider {
-  private static readonly _verbose = "verbose";
-  private static readonly _none = "none";
-  private static readonly _debug = "debug";
-  private static readonly _info = "info";
-  private static readonly _warn = "warn";
-  private static readonly _error = "error";
+  static readonly #verbose = "verbose";
+  static readonly #none = "none";
+  static readonly #debug = "debug";
+  static readonly #info = "info";
+  static readonly #warn = "warn";
+  static readonly #error = "error";
 
   static defaultLogLevel: LogLevel = LogLevel.INFO;
   static defaultRootLogLevel: LogLevel = LogLevel.WARN;
@@ -91,23 +91,23 @@ export default class LoggerProvider {
       return nameOrSwitch ? LoggerProvider.defaultLogLevel : LogLevel.NONE;
     }
     switch (nameOrSwitch.toLowerCase()) {
-      case this._verbose: {
+      case this.#verbose: {
         // Fallback for older CKEditor versions released with CoreMedia CMS.
         return LogLevel.DEBUG;
       }
-      case this._none: {
+      case this.#none: {
         return LogLevel.NONE;
       }
-      case this._debug: {
+      case this.#debug: {
         return LogLevel.DEBUG;
       }
-      case this._info: {
+      case this.#info: {
         return LogLevel.INFO;
       }
-      case this._warn: {
+      case this.#warn: {
         return LogLevel.WARN;
       }
-      case this._error: {
+      case this.#error: {
         return LogLevel.ERROR;
       }
       default: {
