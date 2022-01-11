@@ -47,10 +47,10 @@ export default class ContentPlaceholderEditing extends Plugin {
     const conversion = editor.conversion;
 
     conversion.for("editingDowncast").add( (dispatcher: DowncastDispatcher) => {
-      dispatcher.on("addMarker:content", (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi) => {
+      dispatcher.on("addMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi) => {
         ContentPlaceholderEditing.#addContentMarkerConversion(editor, evt, data, conversionApi);
       });
-      dispatcher.on("removeMarker:content", (evt: EventInfo, data: RemoveMarkerEventData, conversionApi: DowncastConversionApi) => {
+      dispatcher.on("removeMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, (evt: EventInfo, data: RemoveMarkerEventData, conversionApi: DowncastConversionApi) => {
         ContentPlaceholderEditing.#removeContentMarkerConversion(editor, evt, data, conversionApi);
       });
     });
@@ -79,7 +79,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
-    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(markerData.prefix, markerData.dropId, markerData.itemIndex);
+    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
     const lookupData = PlaceholderDataCache.lookupData(markerName);
     if (!lookupData) {
       return;
@@ -107,7 +107,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #reenableUndo(editor: Editor): void {
-    const markers = Array.from(editor.model.markers.getMarkersGroup("content"));
+    const markers = Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX));
     if (markers.length === 0) {
       CommandUtils.enableCommand(editor, "undo");
     }
@@ -217,7 +217,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #markersAtPosition(editor: Editor, position: Position): Array<Marker> {
-    return Array.from(editor.model.markers.getMarkersGroup("content")).filter(value => {
+    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)).filter(value => {
       return value.getStart().isEqual(position);
     });
   }

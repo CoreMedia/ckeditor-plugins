@@ -106,7 +106,7 @@ export default class ContentClipboard extends Plugin {
     const attributes = Array.from(editor.model.document.selection.getAttributes());
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, targetRange, contentUri, dropId, index, originalArray.length, isEmbeddableContent, batch, attributes);
+      ContentClipboard.#addContentDropMarker(editor, targetRange, contentUri, dropId, index, originalArray.length, isEmbeddableContent, batch, attributes);
     });
   };
 
@@ -130,9 +130,9 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, markerRange: Range, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
+  static #addContentDropMarker(editor: Editor, markerRange: Range, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
     editor.model.enqueueChange("transparent", (writer: Writer) => {
-      const markerName: string = ContentClipboardMarkerUtils.toMarkerName("content", dropId, index);
+      const markerName: string = ContentClipboardMarkerUtils.toMarkerName(dropId, index);
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
       const data: PlaceholderData = {
         batch: batch,
