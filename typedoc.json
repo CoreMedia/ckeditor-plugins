@@ -1,9 +1,15 @@
 {
   "cleanOutputDir": true,
   "entryPoints": [
+    "./packages/ckeditor5-dataprocessor-support/doc/index.ts",
     "./packages/ckeditor5-logging/doc/index.ts"
   ],
+  "externalPattern": [
+    "**/*.d.ts"
+  ],
+  "excludeExternals": true,
   "excludePrivate": true,
+  "name": "CoreMedia CKEditor 5 Plugins",
   "out": "./docs/api",
   "tsconfig": "./typedoc-tsconfig.json"
 }
