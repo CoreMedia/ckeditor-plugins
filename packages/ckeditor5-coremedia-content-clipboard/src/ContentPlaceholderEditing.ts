@@ -23,6 +23,7 @@ import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import CommandUtils from "./CommandUtils";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { SelectionRangeChangeEventData } from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 
 export default class ContentPlaceholderEditing extends Plugin {
   static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
@@ -133,6 +134,13 @@ export default class ContentPlaceholderEditing extends Plugin {
 
       const isFirstDroppedItem = lookupData.dropContext.index === 0;
       const insertPosition = !isFirstDroppedItem || isInline || markerPosition.isAtStart ? markerPosition : writer.split(markerPosition).range.end;
+      const gravityRestore = writer.overrideSelectionGravity();
+      writer.model.document.selection.on("change:range", (evtInfo: EventInfo, directChange: SelectionRangeChangeEventData) => {
+        if (directChange.directChange) {
+          writer.restoreSelectionGravity(gravityRestore);
+          evtInfo.off();
+        }
+      });
       writer.insert(link, insertPosition);
       const positionAfterInsertedElement = writer.createPositionAt(link, "after");
       const positionBeforeInsertedElement = writer.createPositionAt(link, "before");
