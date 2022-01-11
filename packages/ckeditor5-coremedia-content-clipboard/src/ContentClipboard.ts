@@ -89,12 +89,10 @@ export default class ContentClipboard extends Plugin {
     const editor = this.editor;
     const cmDataUris: string[] | null = CoreMediaClipboardUtils.extractContentUris(data);
 
-    if (!cmDataUris) {
+    if (!cmDataUris || cmDataUris.length === 0) {
       return;
     }
-    if (cmDataUris.length <= 0) {
-      return;
-    }
+
     const dropCondition = ContentClipboard.#createDropCondition(editor, data, cmDataUris);
     const dropId = Date.now();
     const batch = editor.model.createBatch();
