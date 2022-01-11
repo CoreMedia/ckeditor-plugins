@@ -33,6 +33,27 @@ const imageSourceToDummyHref = (document: Document): void => {
   }
 };
 
+/**
+ * CoreMedia RichText 1.0 Element Definition Reference for Tested Elements:
+ *
+ * ```
+ * <!ELEMENT img EMPTY >
+ * <!ATTLIST img
+ *   height        CDATA     #IMPLIED
+ *   xml:lang      NMTOKEN   #IMPLIED
+ *   width         CDATA     #IMPLIED
+ *   dir           (ltr|rtl) #IMPLIED
+ *   xlink:show    (embed)   #FIXED 'embed'
+ *   xlink:title   CDATA     #IMPLIED
+ *   xlink:actuate (onLoad)  #FIXED 'onLoad'
+ *   alt           CDATA     #REQUIRED
+ *   xlink:href    CDATA     #REQUIRED
+ *   xlink:type    (simple)  #FIXED 'simple'
+ *   lang          NMTOKEN   #IMPLIED
+ *   class         CDATA     #IMPLIED
+ *   xlink:role    CDATA     #IMPLIED >
+ * ```
+ */
 describe("CoreMediaRichTextConfig: Images", () => {
   // noinspection HtmlUnknownAttribute,RequiredAttributes
   const data: DataProcessingTestCase[] = [
