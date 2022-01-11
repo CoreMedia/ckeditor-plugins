@@ -606,10 +606,7 @@ export default class RichTextSchema {
     if (logger.isDebugEnabled()) {
       logger.debug("Initialized child-parent relationship.");
       Object.keys(elements).forEach((elementName) => {
-        logger.debug(
-          `    Initialized <${elementName}> to be child of:`,
-          elements[elementName].parentElementNames
-        );
+        logger.debug(`    Initialized <${elementName}> to be child of:`, elements[elementName].parentElementNames);
       });
     }
   }
@@ -628,19 +625,14 @@ export default class RichTextSchema {
     const elementSpecification = ELEMENTS[parentName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      logger.debug(
-        `Element <${parentName}> not specified and thus, not allowed as parent of text-node.`
-      );
+      logger.debug(`Element <${parentName}> not specified and thus, not allowed as parent of text-node.`);
       return false;
     }
 
     const isAllowed = elementSpecification.mayContainText || false;
 
     if (!isAllowed) {
-      logger.debug(
-        `Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`,
-        text
-      );
+      logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
     }
     return isAllowed;
   }
