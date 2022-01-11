@@ -103,7 +103,7 @@ export default class ContentClipboard extends Plugin {
     const attributes = Array.from(editor.model.document.selection.getAttributes());
     cmDataUris.forEach((contentUri: string, index: number, originalArray: string[]): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentUri, dropId, index, isEmbeddableContent, batch, attributes);
+      ContentClipboard.#addMarkerAsPlaceholder(editor, dropCondition, contentUri, dropId, index, originalArray.length, isEmbeddableContent, batch, attributes);
     });
   };
 
@@ -116,12 +116,8 @@ export default class ContentClipboard extends Plugin {
    * @private
    */
   static #createDropCondition(editor: Editor, data: ClipboardEventData, links: string[]): DropCondition {
-    const multipleContentDrop = links.length > 1;
     const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
-    return new DropCondition(
-      multipleContentDrop,
-      targetRange
-    );
+    return new DropCondition(targetRange);
   }
 
   /**
@@ -144,7 +140,7 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, contentUri: string, dropId: number, index: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
+  static #addMarkerAsPlaceholder(editor: Editor, dropCondition: DropCondition, contentUri: string, dropId: number, index: number, numberOfDroppedItems: number, isEmbeddableContent: boolean, batch: Batch, attributes: [string, (string | number | boolean)][]): void {
     ContentClipboard.#LOGGER.debug("Rendering link: " + JSON.stringify({ contentUri, dropCondition }));
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       const targetRange = dropCondition.targetRange;
@@ -160,7 +156,7 @@ export default class ContentClipboard extends Plugin {
         selectedAttributes: attributes,
         dropContext: {
           index: index,
-          multipleItemsDropped: dropCondition.multipleContentDrop,
+          multipleItemsDropped: numberOfDroppedItems > 1,
         }
       }
       PlaceholderDataCache.storeData(markerName, data);
