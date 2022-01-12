@@ -11,11 +11,11 @@
  * @module ckeditor5-coremedia-richtext-support
  */
 
-export * from "./CoreMediaRichTextSupportConfig";
-export { default as CoreMediaRichTextSupportConfig } from "./CoreMediaRichTextSupportConfig";
+export * from "./CoreMediaRichText10Dtd";
+export { default as CoreMediaRichText10Dtd } from "./CoreMediaRichText10Dtd";
 
 export * from "./CoreMediaRichTextSupportConfig";
-//export { default as CoreMediaRichTextSupportConfig } from "./CoreMediaRichTextSupportConfig";
+export { default as CoreMediaRichTextSupportConfig } from "./CoreMediaRichTextSupportConfig";
 
 export * from "./GeneralRichTextSupport";
 export { default as GeneralRichTextSupport } from "./GeneralRichTextSupport";
