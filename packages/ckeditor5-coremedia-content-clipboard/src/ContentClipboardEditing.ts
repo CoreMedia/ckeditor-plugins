@@ -18,6 +18,7 @@ import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarke
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import CommandUtils from "./CommandUtils";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import Node from "@ckeditor/ckeditor5-engine/src/model/node";
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { SelectionRangeChangeEventData } from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
@@ -66,7 +67,8 @@ export default class ContentClipboardEditing extends Plugin {
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         contentDisplayService.name(contentDropData.itemContext.contentUri).then(name => {
-            ContentClipboardEditing.#writeLinkToModel(editor, contentDropData, markerData, name ? name: ROOT_NAME);
+            ContentClipboardEditing.#writeItemToModel(editor, contentDropData, markerData, (writer: Writer): Node =>
+                ContentClipboardEditing.#createLink(writer, contentDropData.itemContext.contentUri, name ? name: ROOT_NAME));
             ContentClipboardEditing.#reenableUndo(editor);
           }, (reason) => {
             ContentClipboardEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", contentDropData.itemContext.contentUri, reason);
@@ -80,6 +82,12 @@ export default class ContentClipboardEditing extends Plugin {
       });
   }
 
+  static #createLink(writer: Writer, contentUri: string, name: string): Node {
+    return writer.createText(name, {
+      linkHref: requireContentCkeModelUri(contentUri),
+    });
+  }
+
   static #reenableUndo(editor: Editor): void {
     const markers = Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX));
     if (markers.length === 0) {
@@ -87,15 +95,11 @@ export default class ContentClipboardEditing extends Plugin {
     }
   }
 
-  static #writeLinkToModel(editor: Editor, contentDropData: ContentDropData, markerData: MarkerData, name: string): void {
+  static #writeItemToModel(editor: Editor, contentDropData: ContentDropData, markerData: MarkerData, createItemFunction: (writer: Writer) => Node): void {
     const isInline = !contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped;
 
     editor.model.enqueueChange(contentDropData.dropContext.batch, (writer: Writer): void => {
-      const contentUri: string = contentDropData.itemContext.contentUri;
-      const link = writer.createText(name, {
-        linkHref: requireContentCkeModelUri(contentUri),
-      });
-
+      const item: Node = createItemFunction(writer);
       const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
@@ -115,9 +119,9 @@ export default class ContentClipboardEditing extends Plugin {
           evtInfo.off();
         }
       });
-      writer.insert(link, insertPosition);
-      const positionAfterInsertedElement = writer.createPositionAt(link, "after");
-      const positionBeforeInsertedElement = writer.createPositionAt(link, "before");
+      writer.insert(item, insertPosition);
+      const positionAfterInsertedElement = writer.createPositionAt(item, "after");
+      const positionBeforeInsertedElement = writer.createPositionAt(item, "before");
       const range = writer.createRange(positionBeforeInsertedElement, positionAfterInsertedElement);
       ContentClipboardEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
       //evaluate if a the container element has to be split after the element has been inserted.
