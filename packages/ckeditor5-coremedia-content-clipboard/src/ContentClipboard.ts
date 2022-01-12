@@ -8,7 +8,7 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import ContentDropDataCache, { ContentDropData, DropContext, ItemContext } from "./ContentDropDataCache";
+import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
@@ -116,6 +116,14 @@ export default class ContentClipboard extends Plugin {
     });
   };
 
+  static #addContentDropMarker(editor: Editor, markerRange: Range, dropId: number, index: number, contentDropData: ContentDropData): void {
+    editor.model.enqueueChange("transparent", (writer: Writer) => {
+      const markerName: string = ContentClipboardMarkerUtils.toMarkerName(dropId, index);
+      writer.addMarker(markerName, { usingOperation: true, range: markerRange });
+      ContentDropDataCache.storeData(markerName, contentDropData);
+    });
+  }
+
   /**
    * Evaluate target range. `null` if no range could be determined.
    *
@@ -134,14 +142,6 @@ export default class ContentClipboard extends Plugin {
       return targetRanges[0];
     }
     return null;
-  }
-
-  static #addContentDropMarker(editor: Editor, markerRange: Range, dropId: number, index: number, contentDropData: ContentDropData): void {
-    editor.model.enqueueChange("transparent", (writer: Writer) => {
-      const markerName: string = ContentClipboardMarkerUtils.toMarkerName(dropId, index);
-      writer.addMarker(markerName, { usingOperation: true, range: markerRange });
-      ContentDropDataCache.storeData(markerName, contentDropData);
-    });
   }
 
   static #createContentDropData(dropContext: DropContext, contentUri: string, isEmbeddableContent: boolean): ContentDropData {
