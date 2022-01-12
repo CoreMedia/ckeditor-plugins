@@ -15,13 +15,11 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
       return;
     }
 
-    let cssClass = contentDropData.itemContext.isEmbeddableContent || contentDropData.dropContext.multipleItemsDropped ? "" : "cm-load-mask-inline";
-    const viewContainer = conversionApi.writer.createUIElement("div", { class: "cm-load-mask "+cssClass }, function (this: UIElement, dom: Document): Element {
-      const uielement: UIElement = this as unknown as UIElement;
-      const htmlElement = uielement.toDomElement(dom);
-      htmlElement.innerHTML = "loading...";
-      return htmlElement;
-    });
+    let loadMaskClasses = ["cm-load-mask"];
+    if (!contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped) {
+      loadMaskClasses.push("cm-load-mask--inline");
+    }
+    const viewContainer = conversionApi.writer.createUIElement("div", { class: loadMaskClasses.join(" ") });
     conversionApi.writer.insert( viewPosition, viewContainer );
     conversionApi.mapper.bindElementToMarker( viewContainer, data.markerName );
     const markerData = ContentClipboardMarkerUtils.splitMarkerName(data.markerName);
