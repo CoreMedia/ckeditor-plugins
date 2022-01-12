@@ -62,9 +62,9 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
    * tr/tables rules:
    * ----------------
    *
-   * In CKEditor 4 we also had to handle tr and table which may have been
+   * In CKEditor 4 we also had to handle tr and table, which may have been
    * emptied during the process. This behavior moved to the after-children
-   * behavior, which checks for elements which must not be empty but now
+   * behavior, which checks for elements, which must not be empty but now
    * are empty.
    */
   tbody: {
@@ -91,14 +91,14 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
 };
 
 class ElementWrapper {
-  private readonly _delegate: Element;
+  readonly #delegate: Element;
 
   constructor(delegate: Element) {
-    this._delegate = delegate;
+    this.#delegate = delegate;
   }
 
   get delegate(): Element {
-    return this._delegate;
+    return this.#delegate;
   }
 
   getDirectElementByTagName(tagName: string): Element | undefined {
@@ -164,7 +164,7 @@ class TableWrapper extends ElementWrapper {
   }
 
   /**
-   * Returns all `<tbody>` elements which are available as snapshot.
+   * Returns all `<tbody>` elements, which are available as snapshot.
    * Note, that while in HTML a table may have multiple `<tbody>` elements,
    * CoreMedia RichText 1.0 may have only one element.
    */

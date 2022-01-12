@@ -25,7 +25,7 @@ export function replaceBy(name: string, className?: string): ElementFilterRule {
  * attribute has the expected value.
  *
  * @param originalName original name of the element to match
- * @param className class attribute which must match; this attribute will be removed from the new element
+ * @param className class attribute, which must match; this attribute will be removed from the new element
  * @param newName new element name
  * @param subSequentRules rules to apply for a mapped element in case the class matches
  */

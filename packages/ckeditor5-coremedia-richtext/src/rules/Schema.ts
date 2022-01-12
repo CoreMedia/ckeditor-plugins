@@ -22,7 +22,7 @@ export function getSchema({ editor }: ElementFilterParams | TextFilterParams): R
 
 /**
  * Rules meant as final check for schema validity. The task is to prevent any
- * data which cannot be stored on the CoreMedia CMS Server.
+ * data, which cannot be stored on the CoreMedia CMS Server.
  */
 export const schemaRules: ElementsFilterRuleSetConfiguration = {
   $: (params) => {
