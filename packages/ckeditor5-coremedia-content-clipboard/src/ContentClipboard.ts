@@ -16,6 +16,10 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import CommandUtils from "./CommandUtils";
 
+/**
+ * This plugin takes care of linkable Studio contents which are dropped directly into the editor
+ * or pasted from the clipboard.
+ */
 export default class ContentClipboard extends Plugin {
   static #CONTENT_CLIPBOARD_PLUGIN_NAME = "ContentClipboardPlugin";
   static #LOGGER: Logger = LoggerProvider.getLogger(ContentClipboard.#CONTENT_CLIPBOARD_PLUGIN_NAME);
@@ -34,7 +38,8 @@ export default class ContentClipboard extends Plugin {
   }
 
   /**
-   * Adds a listener to `clipboardInput` to process possibly dragged contents.
+   * Adds a listener to `dragover` and `clipboardInput` to process possibly dragged contents.
+   *
    * @private
    */
   #initEventListeners(): void {
@@ -61,8 +66,8 @@ export default class ContentClipboard extends Plugin {
    * Drag-over handler to control drop-effect icons, which is, to forbid for
    * any content-sets containing types which are not allowed to be linked.
    *
-   * @param evt event information
-   * @param data clipboard data
+   * @param evt - event information
+   * @param data - clipboard data
    */
   static #dragOverHandler(evt: EventInfo, data: ClipboardEventData): void {
     // The clipboard content was already processed by the listener on the higher priority
@@ -83,25 +88,44 @@ export default class ContentClipboard extends Plugin {
     }
   }
 
+  /**
+   * Handler for the clipboardInput event. This function gets called when
+   * an item is dropped or pasted into the editor.
+   *
+   * @param evt - event information
+   * @param data - clipboard data
+   */
   #clipboardInputHandler = (evt: EventInfo, data: ClipboardEventData): void => {
     const editor = this.editor;
     const cmDataUris: string[] | null = CoreMediaClipboardUtils.extractContentUris(data);
 
+    // return if this input does not contain content items
     if (!cmDataUris || cmDataUris.length === 0) {
       return;
     }
 
+    // return if no range has been set (usually indicated by a blue cursor during the drag)
     const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
     if (!targetRange) {
       return;
     }
+
+    // we might run into trouble during complex input scenarios
+    // e.g. a drop with multiple items will result in different requests that might differ in response time
+    // an undo/redo when only a part of the input has already been resolved, will cause an unsyncted state between content and placeholder elements
+    // the best solution for this seems to disable the undo command before the input and enable it again afterwards
     CommandUtils.disableCommand(editor, "undo");
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       writer.setSelection(targetRange);
     });
 
     const batch = editor.model.createBatch();
+
+    // save the attribues of the current selection to apply them later on the input element
     const attributes = Array.from(editor.model.document.selection.getAttributes());
+
+    // use the current timestamp as the dropId to have increasing drop indexes. needed to keep the order when muliple inputs happen simultaneously
+    // on the same position
     const dropId = Date.now();
     const dropContext: DropContext = {
       dropId,
@@ -110,6 +134,7 @@ export default class ContentClipboard extends Plugin {
       selectedAttributes: attributes
     }
 
+    // add a drop marker for each item
     cmDataUris.forEach((contentUri: string, index: number): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const contentDropData = ContentClipboard.#createContentDropData(dropContext, contentUri, isEmbeddableContent, index);
@@ -117,6 +142,15 @@ export default class ContentClipboard extends Plugin {
     });
   };
 
+  /**
+   * Adds a marker to the editors model.
+   * A marker indicates the position of an input item, which can then be displayed in the editing view, but will not be written into the data view.
+   * This function also stores data for the dropped item (contentDropData) to the ContentDropDataCache.
+   *
+   * @param editor - the editor
+   * @param markerRange - the marker range
+   * @param contentDropData - content drop data
+   */
   static #addContentDropMarker(editor: Editor, markerRange: Range, contentDropData: ContentDropData): void {
     const markerName: string = ContentClipboardMarkerUtils.toMarkerName(contentDropData.dropContext.dropId, contentDropData.itemContext.itemIndex);
     ContentClipboard.#LOGGER.debug("Adding content-drop marker", markerName, contentDropData);
@@ -146,6 +180,15 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
+  /**
+   * Creates a ContentDropData object.
+   *
+   * @param dropContext - dropContext
+   * @param contentUri - the contenturi of the input item
+   * @param isEmbeddableContent - determines whether the item will be displayed inline or as new paragraph
+   * @param itemIndex - the position of the item inside the drop
+   * @returns ContentDropData
+   */
   static #createContentDropData(dropContext: DropContext, contentUri: string, isEmbeddableContent: boolean, itemIndex: number): ContentDropData {
     return {
       dropContext,
