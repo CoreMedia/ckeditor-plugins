@@ -95,19 +95,20 @@ export default class ContentClipboard extends Plugin {
     if (!targetRange) {
       return;
     }
-
-    const dropId = Date.now();
-    const batch = editor.model.createBatch();
     CommandUtils.disableCommand(editor, "undo");
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       writer.setSelection(targetRange);
     });
+
+    const batch = editor.model.createBatch();
     const attributes = Array.from(editor.model.document.selection.getAttributes());
     const dropContext: DropContext = {
       batch,
       multipleItemsDropped: cmDataUris.length > 1,
       selectedAttributes: attributes
     }
+
+    const dropId = Date.now();
     cmDataUris.forEach((contentUri: string, index: number): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const contentDropData: ContentDropData = {
