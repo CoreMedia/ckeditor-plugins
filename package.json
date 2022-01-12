@@ -31,7 +31,7 @@
     "clean": "pnpm -r clean && rimraf ./dist",
     "build": "pnpm -r build",
     "doc": "typedoc",
-    "dbg": "typedoc --showConfig",
+    "doc:config": "typedoc --showConfig",
     "jest": "pnpm -r jest",
     "jest:coverage": "pnpm -r jest:coverage",
     "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
