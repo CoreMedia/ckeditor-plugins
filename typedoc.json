@@ -8,6 +8,7 @@
     "**/*.d.ts"
   ],
   "excludeExternals": true,
+  "excludeInternal": true,
   "excludePrivate": true,
   "name": "CoreMedia CKEditor 5 Plugins",
   "out": "./docs/api",

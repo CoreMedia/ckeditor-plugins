@@ -15,7 +15,10 @@
       "@coremedia/ckeditor5-coremedia-richtext/*": ["./packages/ckeditor5-coremedia-richtext/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": ["./packages/ckeditor5-coremedia-studio-integration/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": ["./packages/ckeditor5-coremedia-studio-integration-mock/src/*"],
-      "@coremedia/ckeditor5-dataprocessor-support/*": ["./packages/ckeditor5-dataprocessor-support/src/*"],
+      "@coremedia/ckeditor5-dataprocessor-support/*": [
+        "./packages/ckeditor5-dataprocessor-support/doc/*",
+        "./packages/ckeditor5-dataprocessor-support/src/*"
+      ],
       "@coremedia/ckeditor5-logging/*": [
         "./packages/ckeditor5-logging/doc/*",
         "./packages/ckeditor5-logging/src/*"

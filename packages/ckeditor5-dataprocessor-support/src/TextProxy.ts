@@ -7,40 +7,31 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
  * proxy should not be re-used as it may cause unexpected results or may even
  * fail.
  */
-export default class TextProxy extends NodeProxy<Text> implements TextFilterParams {
+class TextProxy extends NodeProxy<Text> implements TextFilterParams {
   /**
    * Possibly overridden text.
    * @private
    */
-  private _text: string | undefined;
+  #text: string | undefined;
 
   /**
-   * <p>
    * Represents the editor instance. May be used to access configuration options
    * for example.
-   * </p>
-   * <p>
+   *
    * Mimics `TextFilterParams`, which helps to deal with rule processing.
-   * </p>
    */
   public readonly editor: Editor;
   /**
-   * <p>
    * Represents the node instance. For `TextProxy` this is just the
    * proxy class itself.
-   * </p>
-   * <p>
+   *
    * Mimics `TextFilterParams`, which helps to deal with rule processing.
-   * </p>
    */
   public readonly node: TextProxy = this;
   /**
-   * <p>
    * Represents the parent rule. No-Operation rule for `TextProxy`.
-   * </p>
-   * <p>
-   * Mimics `TextFilterParams`, which helps dealing with rule processing.
-   * </p>
+   *
+   * Mimics `TextFilterParams`, which helps to deal with rule processing.
    */
   public readonly parentRule: TextFilterRule = () => {
     return undefined;
@@ -64,7 +55,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * by deletion or by replacing it, no further rules will be applied.
    *
    * @param rules rules to apply in given order
-   * @return a node, if filtering should be restarted from this node; `null` otherwise.
+   * @returns a node, if filtering should be restarted from this node; `null` otherwise.
    */
   public applyRules(...rules: (TextFilterRule | undefined)[]): Node | null {
     for (const rule of rules) {
@@ -89,7 +80,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * Access owner document.
    */
   // Override, as we know, that it is non-null here.
-  get ownerDocument(): Document {
+  public get ownerDocument(): Document {
     return this.delegate.ownerDocument;
   }
 
@@ -97,16 +88,17 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    * Gets the text content, which may be overridden.
    */
   public get textContent(): string {
-    return this._text || this.delegate.textContent || "";
+    return this.#text || this.delegate.textContent || "";
   }
 
   /**
    * Sets the text content. Only allowed in mutable state.
+   *
    * @param value text content to set.
    */
   public set textContent(value: string) {
     this.requireMutable();
-    this._text = value;
+    this.#text = value;
   }
 
   /**
@@ -115,7 +107,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
    */
   protected persistKeepOrReplace(): PersistResponse {
     const response = super.persistKeepOrReplace();
-    if (!response.abort && this._text !== undefined) {
+    if (!response.abort && this.#text !== undefined) {
       this.delegate.textContent = this.textContent;
     }
     return response;
@@ -130,7 +122,7 @@ export default class TextProxy extends NodeProxy<Text> implements TextFilterPara
  * params.parent && params.parent(args);
  * ```
  */
-export interface TextFilterParams {
+interface TextFilterParams {
   /**
    * The node to process.
    */
@@ -152,6 +144,9 @@ export interface TextFilterParams {
 /**
  * Function interface: `(params: TextFilterParams) => void`.
  */
-export interface TextFilterRule {
+interface TextFilterRule {
   (params: TextFilterParams): void;
 }
+
+export default TextProxy;
+export { TextFilterParams, TextFilterRule };

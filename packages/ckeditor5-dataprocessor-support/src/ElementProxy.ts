@@ -13,12 +13,27 @@ class ClassList implements DOMTokenList {
    * @private
    */
   readonly #proxy: Pick<ElementProxy, "attributes">;
+  /**
+   * Trims the given string.
+   *
+   * @param v string to trim
+   * @private
+   */
   static readonly #trimValue = (v: string): string => v.trim();
+  /**
+   * Predicate to filter unique values only
+   *
+   * @param v current value
+   * @param i current index
+   * @param a all array values
+   * @private
+   */
   static readonly #uniqueValuesOnly = (v: string, i: number, a: string[]) => a.indexOf(v) === i;
 
   /**
    * Creates a `DOMTokenList` providing access to the `class` attribute
    * of the given proxy.
+   *
    * @param proxy proxy to forward `class` attribute adaptions to
    */
   constructor(proxy: ElementProxy) {
@@ -203,20 +218,32 @@ class ClassList implements DOMTokenList {
     return this.#classes[Symbol.iterator]();
   }
 
+  /**
+   * @inheritDoc DOMTokenList.contains
+   */
   contains(token: string): boolean {
     return this.#classes.includes(token.trim());
   }
 
+  /**
+   * @inheritDoc DOMTokenList.entries
+   */
   entries(): IterableIterator<[number, string]> {
     return this.#classes.entries();
   }
 
+  /**
+   * @inheritDoc DOMTokenList.forEach
+   */
   forEach(callback: (value: string, key: number, parent: DOMTokenList) => void, thisArg: never): void {
     this.#classes.forEach((value: string, index: number): void => {
       callback.call(thisArg, value, index, this);
     });
   }
 
+  /**
+   * @inheritDoc DOMTokenList.item
+   */
   item(index: number): string | null {
     const raw = this.#classes;
     if (index >= raw.length) {
@@ -225,19 +252,31 @@ class ClassList implements DOMTokenList {
     return raw[index];
   }
 
+  /**
+   * @inheritDoc DOMTokenList.keys
+   */
   keys(): IterableIterator<number> {
     return this.#classes.keys();
   }
 
+  /**
+   * @inheritDoc DOMTokenList.supports
+   */
   supports(): boolean {
     // This is what for example Chrome responds for class lists.
     throw new TypeError("DOMTokenList has no supported tokens.");
   }
 
+  /**
+   * @inheritDoc DOMTokenList.length
+   */
   get length(): number {
     return this.#classes.length;
   }
 
+  /**
+   * @inheritDoc DOMTokenList.values
+   */
   values(): IterableIterator<string> {
     return this.#classes.values();
   }
@@ -259,19 +298,19 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * delegate.
    * @private
    */
-  private _replacement?: Element;
+  #replacement?: Element;
 
   /**
    * Signals either a possibly new name for this element, or that the name
    * should not be changed (which is `undefined`).
    * @private
    */
-  private _name: string | undefined = undefined;
+  #name: string | undefined = undefined;
   /**
    * Overrides for attribute values.
    * @private
    */
-  private readonly _attributes: Attributes = {};
+  readonly #attributes: Attributes = {};
   /**
    * A set of well-known namespaces. Any prefix detected during processing
    * will trigger the corresponding namespace declaration to be added to
@@ -284,43 +323,31 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    * @private
    */
-  private readonly _namespaces: Namespaces;
+  readonly #namespaces: Namespaces;
 
   /**
    * A mutable list of classes applied to the element.
-   *
-   * Internally backed by {@link #attributes}, you may as well change the
-   * `class` attribute or use this convenience `classList`.
    */
   public readonly classList: DOMTokenList = new ClassList(this);
 
   /**
-   * <p>
    * Represents the editor instance. May be used to access configuration options
    * for example.
-   * </p>
-   * <p>
+   *
    * Mimics `ElementFilterParams`, which helps to deal with rule processing.
-   * </p>
    */
   readonly #editor: Editor;
   /**
-   * <p>
    * Represents the node instance. For `ElementProxy` this is just the
    * proxy class itself.
-   * </p>
-   * <p>
+   *
    * Mimics `ElementFilterParams`, which helps to deal with rule processing.
-   * </p>
    */
   public readonly node: ElementProxy = this;
   /**
-   * <p>
    * Represents the parent rule. No-Operation rule for `ElementProxy`.
-   * </p>
-   * <p>
-   * Mimics `ElementFilterParams`, which helps dealing with rule processing.
-   * </p>
+   *
+   * Mimics `ElementFilterParams`, which helps to deal with rule processing.
    */
   public readonly parentRule: ElementFilterRule = () => {
     return undefined;
@@ -337,7 +364,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    */
   constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable = true) {
     super(delegate, mutable);
-    this._namespaces = namespaces;
+    this.#namespaces = namespaces;
     this.#editor = editor;
   }
 
@@ -353,13 +380,10 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   }
 
   /**
-   * <p>
    * Represents the editor instance. May be used to access configuration options
    * for example.
-   * </p>
-   * <p>
+   *
    * Mimics `ElementFilterParams`, which helps to deal with rule processing.
-   * </p>
    */
   get editor(): Editor {
     if (!this.#editor) {
@@ -369,8 +393,11 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     return this.#editor;
   }
 
+  /**
+   * @inheritDoc NodeProxy.delegate
+   */
   get delegate(): Element {
-    return this._replacement || super.delegate;
+    return this.#replacement || super.delegate;
   }
 
   /**
@@ -407,10 +434,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     return result;
   }
 
-  persist(): void {
-    this.persistToDom();
-  }
-
   /**
    * Node should be kept, but may require applying attribute changes or
    * to replace the element by a new one.
@@ -423,9 +446,9 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
       return response;
     }
     if (this.name === this.realName) {
-      return this.persistAttributes();
+      return this.#persistAttributes();
     }
-    return this.persistReplaceBy(this.name);
+    return this.#persistReplaceBy(this.name);
   }
 
   /**
@@ -436,27 +459,25 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   }
 
   /**
-   * <p>
    * The main purpose of this method is to persist changes to attributes.
    * Nevertheless, this method may forward to `persistReplaceBy` if either
    * a namespace change has been explicitly requested (by `xmlns` attribute)
    * or if the namespace of the current element does not match the namespace
    * of the owning document.
-   * </p><p>
+   *
    * The latter one is typically the case when transforming e.g., from HTML
    * to CoreMedia RichText, where elements have the HTML namespace
    * `http://www.w3.org/1999/xhtml` and must be adapted to the corresponding
    * XML namespace.
-   * </p>
    *
    * @private
    */
-  private persistAttributes(): PersistResponse {
-    const elementNamespaceAttribute: string | null = this._attributes["xmlns"];
+  #persistAttributes(): PersistResponse {
+    const elementNamespaceAttribute: string | null = this.#attributes["xmlns"];
     if (!!elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
-      return this.persistReplaceBy(this.realName, elementNamespaceAttribute);
+      return this.#persistReplaceBy(this.realName, elementNamespaceAttribute);
     }
     /*
      * We don't have an extra namespace-attribute set during filtering.
@@ -466,9 +487,9 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
      */
     const ownerNamespaceURI = this.ownerDocument.documentElement.namespaceURI;
     if (this.namespaceURI !== ownerNamespaceURI) {
-      return this.persistReplaceBy(this.realName, ownerNamespaceURI);
+      return this.#persistReplaceBy(this.realName, ownerNamespaceURI);
     }
-    this.applyAttributes(this.delegate, this._attributes);
+    this.#applyAttributes(this.delegate, this.#attributes);
     return RESPONSE_CONTINUE;
   }
 
@@ -481,7 +502,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @param attributes set of attributes to apply
    * @private
    */
-  private applyAttributes(targetElement: Element, attributes: Attributes): void {
+  #applyAttributes(targetElement: Element, attributes: Attributes): void {
     const ownerDocument = targetElement.ownerDocument;
     const attributeNames = Object.keys(attributes);
 
@@ -493,12 +514,12 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
       }
     }
 
-    function handleAttributeWithNamespacePrefix(
+    const handleAttributeWithNamespacePrefix = (
       uri: string | undefined,
       prefix: string,
       key: string,
       value: string | null
-    ) {
+    ) => {
       if (value === null) {
         if (uri) {
           targetElement.removeAttributeNS(uri, key);
@@ -516,7 +537,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
           targetElement.setAttribute(key, value);
         }
       }
-    }
+    };
 
     attributeNames
       // Must not set namespace as attribute.
@@ -529,7 +550,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
           handleAttributeWithoutNamespacePrefix(key, value);
         } else {
           const prefix = match[1];
-          const uri = this._namespaces[prefix]?.uri;
+          const uri = this.#namespaces[prefix]?.uri;
           handleAttributeWithNamespacePrefix(uri, prefix, key, value);
         }
       });
@@ -541,13 +562,13 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * the owner document.
    *
    * @param newName new element name
-   * @param namespace optional namespace URI
+   * @param namespace? optional namespace URI
    * @return newly created element, for which filtering should be re-applied.
    * @private
    */
-  private persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {
+  #persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {
     if (!namespace && !!this.attributes["xmlns"]) {
-      return this.persistReplaceBy(newName, this.attributes["xmlns"]);
+      return this.#persistReplaceBy(newName, this.attributes["xmlns"]);
     }
     let newElement: Element;
     const ownerDocument = this.ownerDocument;
@@ -559,7 +580,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
 
     const isRenamed = this.realName !== newName;
 
-    this.replaceByElement(newElement);
+    this.#replaceByElement(newElement);
 
     if (isRenamed) {
       /*
@@ -595,8 +616,8 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     return this.continueFrom(newElement.nextSibling);
   }
 
-  private replaceByElement(newElement: Element): void {
-    this.applyAttributes(newElement, this.attributes);
+  #replaceByElement(newElement: Element): void {
+    this.#applyAttributes(newElement, this.attributes);
 
     const childrenToMove = this.delegate.childNodes;
     while (childrenToMove.length > 0) {
@@ -608,13 +629,13 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     if (!!parentNode) {
       parentNode.replaceChild(newElement, this.delegate);
     }
-    this._replacement = newElement;
+    this.#replacement = newElement;
   }
 
   /**
    * Get direct access to the delegate element.
    */
-  get element(): Element {
+  public get element(): Element {
     return this.delegate;
   }
 
@@ -623,7 +644,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * If the name got changed, will return this changed name instead.
    */
   public get name(): string {
-    return this._name || super.name;
+    return this.#name || super.name;
   }
 
   /**
@@ -635,7 +656,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    */
   public set name(newName: string) {
     this.requireMutable();
-    this._name = newName.toLowerCase();
+    this.#name = newName.toLowerCase();
   }
 
   /**
@@ -647,9 +668,9 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * Deleting an attribute, or setting its value to `null` will later
    * remove the attribute from the element.
    */
-  get attributes(): Attributes {
+  public get attributes(): Attributes {
     const self = this;
-    return new Proxy(this._attributes, {
+    return new Proxy(this.#attributes, {
       defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
         return Reflect.defineProperty(target, p, attributes);
       },
@@ -775,9 +796,9 @@ interface Attributes {
  * Named parameters to be passed to element filters. For overriding filter rules
  * a typical pattern to start with is:
  *
- * <pre>
+ * ```
  * params.parent && params.parent(args);
- * </pre>
+ * ```
  */
 interface ElementFilterParams {
   /**
@@ -805,6 +826,12 @@ interface ElementFilterRule {
   (params: ElementFilterParams): void;
 }
 
+/**
+ * Combines all filter rules into one.
+ *
+ * @param rules rules to combine
+ * @returns rule, which combines all passed rules into one
+ */
 const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
   return (params) => rules.forEach((r) => r(params));
 };

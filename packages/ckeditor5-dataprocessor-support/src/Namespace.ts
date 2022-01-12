@@ -1,14 +1,14 @@
-export const DEFAULT_NAMESPACE_PREFIX = "";
+const DEFAULT_NAMESPACE_PREFIX = "";
 
-export default interface Namespace {
+interface Namespace {
   uri: string;
 }
 
-export interface Namespaces {
+interface Namespaces {
   [prefix: string]: Namespace;
 }
 
-export const DEFAULT_NAMESPACES: Namespaces = {
+const DEFAULT_NAMESPACES: Namespaces = {
   xlink: {
     uri: "http://www.w3.org/1999/xlink",
   },
@@ -19,3 +19,6 @@ export const DEFAULT_NAMESPACES: Namespaces = {
     uri: "http://www.w3.org/2000/xmlns/",
   },
 };
+
+export default Namespace;
+export { DEFAULT_NAMESPACE_PREFIX, DEFAULT_NAMESPACES, Namespaces };
