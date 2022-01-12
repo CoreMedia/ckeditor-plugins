@@ -8,7 +8,7 @@ import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import { applyDroppable, DroppableConfig } from "./MockRichtextConfigurationService";
 
 /**
- * By default delay the appearance of data in the UI a little bit.
+ * By default, delay the appearance of data in the UI a little.
  */
 const MAX_FIRST_DELAY_MS = 100;
 /**
@@ -37,7 +37,7 @@ const CONTENT_NAME_TRUTHY = "Lorem";
 const CONTENT_NAME_FALSY = "Ipsum";
 
 /**
- * Ids which start with this number, will trigger some evil behavior
+ * Ids, which start with this number, will trigger some evil behavior
  * meant to try challenge escaping et al.
  */
 const EVIL_CONTENT_ID_PREFIX = "666";
@@ -81,7 +81,7 @@ enum ContentIdPrefix {
    */
   evil,
   /**
-   * Used to provoke _slow_ content access, i.e. initial access takes longer
+   * Used to provoke _slow_ content access, i.e., initial access takes longer
    * than for any other content.
    */
   slow,
@@ -139,7 +139,7 @@ interface MockServiceConfig {
  */
 const firstDelayMs = (slow: boolean, maxFirstDelayMs: number): number => {
   if (slow) {
-    // We don't want a random part, to ensure, it is really slow.
+    // We don't want a random part, to ensure, it is slow.
     return SLOW_FIRST_DELAY_MS;
   }
   return Math.random() * maxFirstDelayMs;
@@ -150,7 +150,7 @@ const firstDelayMs = (slow: boolean, maxFirstDelayMs: number): number => {
  *
  * @param subscriber subscriber to inform
  * @param toggling {@code true} to signal toggling mode, {@code false} for not toggling,
- * i.e. on first value reached, `complete` will be triggered.
+ * i.e., on first value reached, `complete` will be triggered.
  * @param maxFirstDelayMs delay for first display
  * @param slow if the initially provided value should take some extra amount of time
  * @param initial initial display
@@ -259,7 +259,7 @@ const createObservable = (
 
 /**
  * Mock Display Service for use in example app. The display of contents
- * is controlled by their ID which has some magic parts. The content ID
+ * is controlled by their ID, which has some magic parts. The content ID
  * (represented as URI path) is expected to be as follows:
  *
  * ```
@@ -271,7 +271,7 @@ const createObservable = (
  *   <folderType: 0-9>
  * ```
  *
- * **prefix:** _some numbers_ is any set of numbers as prefix (may be empty).
+ * **prefix:** _some numbers_ is any set of numbers as prefix (maybe empty).
  * If you set `666` as start of the prefix, it will trigger some evil behavior,
  * which is meant to test cross-site-scripting attacks.
  *
@@ -391,7 +391,7 @@ class MockContentDisplayService implements ContentDisplayService {
   }
 
   /**
-   * Provides a name which is either static (one of two) or changing over time
+   * Provides a name, which is either static (one of two) or changing over time
    * (between two names). For unreadable contents, an unreadable placeholder
    * is returned. For unreadable-toggle behavior, it toggled between unreadable
    * and one of the two names. This overrides name-toggle behavior.
@@ -440,7 +440,7 @@ class MockContentDisplayService implements ContentDisplayService {
   }
 
   /**
-   * Provides a hint for content state (checked-in, checked-out, published, ...)
+   * Provides a hint for content state (checked-in, checked-out, published, …)
    * but only for checked-in and checked-out. In case of toggle-behavior the
    * state changes from checked-out to checked-in back and forth.
    *
@@ -574,23 +574,23 @@ const identifierToState = (identifier: number) => {
  * Examples:
  *
  * ```
- * content/90000 - first name, readable, checked-out and a document
- * content/91000 - second name, readable, checked-out and a document
- * content/92000 - toggling name, readable, checked-out and a document
+ * content/90000 — first name, readable, checked-out and a document
+ * content/91000 — second name, readable, checked-out and a document
+ * content/92000 — toggling name, readable, checked-out and a document
  *
- * content/90100 - first name, unreadable, checked-out and a document
- * content/90010 - first name, unreadable, checked-in and a document
+ * content/90100 — first name, unreadable, checked-out and a document
+ * content/90010 — first name, unreadable, checked-in and a document
  * ```
  *
  * There is also an evil mode, triggered by a prefix `666` in the numeric ID.
  * This is especially dedicated to cross-site-scripting attacks. Thus,
- * `content/666000` will provide some name containing HTML which is trying to
+ * `content/666000` will provide some name containing HTML, which is trying to
  * escape "the box" and do harm to the editors.
  *
  * For any unmatched uriPath, a default behavior is assumed. Thus, you any
  * numeric ID will trigger some state.
  *
- * @param uriPath URI path which by magic contains some configuration
+ * @param uriPath URI path, which by magic contains some configuration
  */
 const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   const configPattern =
@@ -690,5 +690,7 @@ export {
   changing$,
   ConfigState,
   ContentIdPrefix,
+  CreateContentConfig,
+  MockServiceConfig,
   createContentUriPath,
 };

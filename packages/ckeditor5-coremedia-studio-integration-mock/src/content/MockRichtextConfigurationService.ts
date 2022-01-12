@@ -3,9 +3,12 @@ import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
    * A content id is linkable if
+   *
    * * it is not a folder (even number)
-   * * it the last digit is not dividable by 4.
-   *     This represents any content which is not linkable.
+   *
+   * * it is the last digit, and it is not dividable by 4.
+   *
+   *     This represents any content, which is not linkable.
    *
    * @param uripath an uripath in the format 'content/content-id'
    */
