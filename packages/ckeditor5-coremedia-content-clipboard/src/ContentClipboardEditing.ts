@@ -4,14 +4,10 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import "../theme/loadmask.css";
 
-import DowncastDispatcher, {
-  AddMarkerEventData,
-  DowncastConversionApi, RemoveMarkerEventData
-} from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import UIElement from "@ckeditor/ckeditor5-engine/src/view/uielement";
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
 import ContentDisplayServiceDescriptor
   from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
@@ -24,6 +20,7 @@ import CommandUtils from "./CommandUtils";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { SelectionRangeChangeEventData } from "@ckeditor/ckeditor5-engine/src/model/documentselection";
+import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 
 export default class ContentClipboardEditing extends Plugin {
   static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
@@ -47,35 +44,11 @@ export default class ContentClipboardEditing extends Plugin {
     const conversion = editor.conversion;
 
     conversion.for("editingDowncast").add( (dispatcher: DowncastDispatcher) => {
-      dispatcher.on("addMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi) => {
-        ContentClipboardEditing.#addContentMarkerConversion(editor, evt, data, conversionApi);
-      });
-      dispatcher.on("removeMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, (evt: EventInfo, data: RemoveMarkerEventData, conversionApi: DowncastConversionApi) => {
-        ContentClipboardEditing.#removeContentMarkerConversion(editor, evt, data, conversionApi);
-      });
+      dispatcher.on("addMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, addContentMarkerConversion((markerData: MarkerData): void => {
+        ContentClipboardEditing.#triggerLoadAndWriteToModel(editor, markerData);
+      }));
+      dispatcher.on("removeMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, removeContentMarkerConversion);
     });
-  }
-
-  static #addContentMarkerConversion(editor: Editor, evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void {
-    const viewPosition = conversionApi.mapper.toViewPosition( data.markerRange.start );
-    const contentDropData = ContentDropDataCache.lookupData(data.markerName);
-    if (!contentDropData) {
-      return;
-    }
-
-    let cssClass = contentDropData.itemContext.isEmbeddableContent || contentDropData.dropContext.multipleItemsDropped ? "" : "cm-load-mask-inline";
-    const viewContainer = conversionApi.writer.createUIElement("div", { class: "cm-load-mask "+cssClass }, function (this: UIElement, dom: Document): Element {
-      const uielement: UIElement = this as unknown as UIElement;
-      const htmlElement = uielement.toDomElement(dom);
-      htmlElement.innerHTML = "loading...";
-      return htmlElement;
-    });
-    conversionApi.writer.insert( viewPosition, viewContainer );
-    conversionApi.mapper.bindElementToMarker( viewContainer, data.markerName );
-    const markerData = ContentClipboardMarkerUtils.splitMarkerName(data.markerName);
-    ContentClipboardEditing.#triggerLoadAndWriteToModel(editor, markerData);
-
-    evt.stop();
   }
 
   static #triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
@@ -220,22 +193,6 @@ export default class ContentClipboardEditing extends Plugin {
     return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)).filter(value => {
       return value.getStart().isEqual(position);
     });
-  }
-
-  static #removeContentMarkerConversion(editor: Editor, evt: EventInfo, data: RemoveMarkerEventData, conversionApi: DowncastConversionApi) {
-    const elements = conversionApi.mapper.markerNameToElements( data.markerName );
-    if ( !elements ) {
-      return;
-    }
-    elements.forEach(function(element){
-      conversionApi.mapper.unbindElementFromMarkerName( element, data.markerName );
-      const range = conversionApi.writer.createRangeOn( element );
-      conversionApi.writer.clear( range, element );
-    });
-
-    conversionApi.writer.clearClonedElementsGroup( data.markerName );
-
-    evt.stop();
   }
 
   static #findMarkersAfter(editor: Editor, marker: Marker, markerData: MarkerData) {
