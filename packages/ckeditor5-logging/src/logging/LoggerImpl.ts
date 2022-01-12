@@ -1,4 +1,4 @@
-import { LogLevel } from "./LogLevel";
+import LogLevel from "./LogLevel";
 import Logger from "./Logger";
 
 export default class LoggerImpl implements Logger {

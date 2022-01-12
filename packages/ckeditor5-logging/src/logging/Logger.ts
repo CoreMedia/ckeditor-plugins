@@ -1,4 +1,4 @@
-import { LogLevel } from "./LogLevel";
+import LogLevel from "./LogLevel";
 
 /**
  * Used to log at given levels.

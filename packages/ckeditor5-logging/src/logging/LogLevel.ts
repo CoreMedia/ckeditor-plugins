@@ -2,7 +2,7 @@
  * Log Levels to use. This includes the artificial level
  * `none` to suppress output by a given logger.
  */
-export enum LogLevel {
+enum LogLevel {
   /**
    * Level for debug and above output.
    */
@@ -24,3 +24,5 @@ export enum LogLevel {
    */
   NONE,
 }
+
+export default LogLevel;
