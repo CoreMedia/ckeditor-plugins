@@ -102,23 +102,25 @@ export default class ContentClipboard extends Plugin {
 
     const batch = editor.model.createBatch();
     const attributes = Array.from(editor.model.document.selection.getAttributes());
+    const dropId = Date.now();
     const dropContext: DropContext = {
+      dropId,
       batch,
       multipleItemsDropped: cmDataUris.length > 1,
       selectedAttributes: attributes
     }
 
-    const dropId = Date.now();
     cmDataUris.forEach((contentUri: string, index: number): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      const contentDropData = ContentClipboard.#createContentDropData(dropContext, contentUri, isEmbeddableContent);
-      ContentClipboard.#addContentDropMarker(editor, targetRange, dropId, index, contentDropData);
+      const contentDropData = ContentClipboard.#createContentDropData(dropContext, contentUri, isEmbeddableContent, index);
+      ContentClipboard.#addContentDropMarker(editor, targetRange, contentDropData);
     });
   };
 
-  static #addContentDropMarker(editor: Editor, markerRange: Range, dropId: number, index: number, contentDropData: ContentDropData): void {
+  static #addContentDropMarker(editor: Editor, markerRange: Range, contentDropData: ContentDropData): void {
+    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(contentDropData.dropContext.dropId, contentDropData.itemContext.itemIndex);
+    ContentClipboard.#LOGGER.debug("Adding content-drop marker", markerName, contentDropData);
     editor.model.enqueueChange("transparent", (writer: Writer) => {
-      const markerName: string = ContentClipboardMarkerUtils.toMarkerName(dropId, index);
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
       ContentDropDataCache.storeData(markerName, contentDropData);
     });
@@ -144,11 +146,12 @@ export default class ContentClipboard extends Plugin {
     return null;
   }
 
-  static #createContentDropData(dropContext: DropContext, contentUri: string, isEmbeddableContent: boolean): ContentDropData {
+  static #createContentDropData(dropContext: DropContext, contentUri: string, isEmbeddableContent: boolean, itemIndex: number): ContentDropData {
     return {
       dropContext,
       itemContext: {
         contentUri,
+        itemIndex,
         isEmbeddableContent
       }
     }

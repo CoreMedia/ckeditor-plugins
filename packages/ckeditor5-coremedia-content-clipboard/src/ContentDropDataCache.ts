@@ -24,9 +24,11 @@ export type ContentDropData = {
 export type ItemContext = {
   contentUri: string,
   isEmbeddableContent: boolean,
+  itemIndex: number
 }
 
 export type DropContext = {
+  dropId: number,
   batch: Batch,
   selectedAttributes: Array<[string, string | number | boolean]>,
   multipleItemsDropped: boolean
