@@ -1,6 +1,7 @@
 {
   "cleanOutputDir": true,
   "entryPoints": [
+    "./packages/ckeditor5-coremedia-link/src/index-doc.ts",
     "./packages/ckeditor5-coremedia-richtext/src/index-doc.ts",
     "./packages/ckeditor5-coremedia-richtext-support/src/index-doc.ts",
     "./packages/ckeditor5-coremedia-studio-essentials/src/index-doc.ts",

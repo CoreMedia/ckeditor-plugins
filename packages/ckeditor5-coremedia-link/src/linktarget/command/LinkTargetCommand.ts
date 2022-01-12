@@ -211,3 +211,4 @@ class LinkTargetCommand extends Command {
 }
 
 export default LinkTargetCommand;
+export { Target, DeletedTarget };
