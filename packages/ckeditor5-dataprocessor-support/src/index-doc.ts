@@ -1,7 +1,7 @@
 /**
  * @module ckeditor5-dataprocessor-support
  */
-export * from "./Attributes";
+export * as Attributes from "./Attributes";
 
 export * from "./ElementProxy";
 export { default as ElementProxy } from "./ElementProxy";

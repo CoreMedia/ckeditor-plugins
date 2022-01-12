@@ -4,13 +4,13 @@
  * @packageDocumentation
  * @category Virtual
  */
-export * from "./Anchor";
-export * from "./Heading";
-export * from "./IdHelper";
-export * from "./Image";
-export * from "./Lang";
-export * from "./List";
-export * from "./ReplaceBy";
-export * from "./Schema";
-export * from "./Table";
-export * from "./XLink";
+export * as Anchor from "./Anchor";
+export * as Heading from "./Heading";
+export * as IdHelper from "./IdHelper";
+export * as Image from "./Image";
+export * as Lang from "./Lang";
+export * as List from "./List";
+export * as ReplaceBy from "./ReplaceBy";
+export * as Schema from "./Schema";
+export * as Table from "./Table";
+export * as XLink from "./XLink";

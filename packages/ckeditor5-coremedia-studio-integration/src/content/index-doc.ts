@@ -18,7 +18,7 @@ export { default as ContentDisplayServiceDescriptor } from "./ContentDisplayServ
 export * from "./DisplayHint";
 export { default as DisplayHint } from "./DisplayHint";
 
-export * from "./DragAndDropUtils";
+export * as DragAndDropUtils from "./DragAndDropUtils";
 //export { default as DragAndDropUtils } from "./DragAndDropUtils";
 
 export * from "./DragDropAsyncSupport";
@@ -30,7 +30,7 @@ export { default as RichtextConfigurationService } from "./RichtextConfiguration
 export * from "./RichtextConfigurationServiceDescriptor";
 export { default as RichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 
-export * from "./UriPath";
+export * as UriPath from "./UriPath";
 //export { default as UriPath } from "./UriPath";
 
 export * from "./WorkAreaServiceDescriptor";
