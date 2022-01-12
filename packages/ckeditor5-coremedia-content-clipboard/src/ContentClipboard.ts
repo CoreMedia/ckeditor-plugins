@@ -8,7 +8,7 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
+import ContentDropDataCache, { ContentDropData, DropContext, ItemContext } from "./ContentDropDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
@@ -111,13 +111,7 @@ export default class ContentClipboard extends Plugin {
     const dropId = Date.now();
     cmDataUris.forEach((contentUri: string, index: number): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      const contentDropData: ContentDropData = {
-        dropContext,
-        itemContext: {
-          contentUri,
-          isEmbeddableContent
-        }
-      }
+      const contentDropData = ContentClipboard.#createContentDropData(dropContext, contentUri, isEmbeddableContent);
       ContentClipboard.#addContentDropMarker(editor, targetRange, dropId, index, contentDropData);
     });
   };
@@ -148,5 +142,15 @@ export default class ContentClipboard extends Plugin {
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
       ContentDropDataCache.storeData(markerName, contentDropData);
     });
+  }
+
+  static #createContentDropData(dropContext: DropContext, contentUri: string, isEmbeddableContent: boolean): ContentDropData {
+    return {
+      dropContext,
+      itemContext: {
+        contentUri,
+        isEmbeddableContent
+      }
+    }
   }
 }
