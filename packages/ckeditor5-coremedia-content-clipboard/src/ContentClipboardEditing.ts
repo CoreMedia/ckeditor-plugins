@@ -25,7 +25,8 @@ import { addContentMarkerConversion, removeContentMarkerConversion } from "./con
 export default class ContentClipboardEditing extends Plugin {
   static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
   static #LOGGER: Logger = LoggerProvider.getLogger(ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME);
-
+  static readonly #CONTENT_DROP_ADD_MARKER_EVENT = "addMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
+  static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT = "removeMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
   static get pluginName(): string {
     return ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME;
   }
@@ -44,10 +45,10 @@ export default class ContentClipboardEditing extends Plugin {
     const conversion = editor.conversion;
 
     conversion.for("editingDowncast").add( (dispatcher: DowncastDispatcher) => {
-      dispatcher.on("addMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, addContentMarkerConversion((markerData: MarkerData): void => {
+      dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_ADD_MARKER_EVENT, addContentMarkerConversion((markerData: MarkerData): void => {
         ContentClipboardEditing.#triggerLoadAndWriteToModel(editor, markerData);
       }));
-      dispatcher.on("removeMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, removeContentMarkerConversion);
+      dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
     });
   }
 
