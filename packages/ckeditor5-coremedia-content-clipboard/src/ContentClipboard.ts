@@ -10,7 +10,7 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
-import ContentPlaceholderEditing from "./ContentPlaceholderEditing";
+import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
@@ -25,7 +25,7 @@ export default class ContentClipboard extends Plugin {
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard, ContentPlaceholderEditing, UndoEditing];
+    return [Clipboard, ContentClipboardEditing, UndoEditing];
   }
 
   init(): Promise<void> | null {

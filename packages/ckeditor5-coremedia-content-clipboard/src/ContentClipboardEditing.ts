@@ -25,12 +25,12 @@ import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { SelectionRangeChangeEventData } from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 
-export default class ContentPlaceholderEditing extends Plugin {
-  static #CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME = "ContentPlaceholderEditing";
-  static #LOGGER: Logger = LoggerProvider.getLogger(ContentPlaceholderEditing.#CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME);
+export default class ContentClipboardEditing extends Plugin {
+  static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
+  static #LOGGER: Logger = LoggerProvider.getLogger(ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME);
 
   static get pluginName(): string {
-    return ContentPlaceholderEditing.#CONTENT_PLACEHOLDER_EDITING_PLUGIN_NAME;
+    return ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME;
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
@@ -48,10 +48,10 @@ export default class ContentPlaceholderEditing extends Plugin {
 
     conversion.for("editingDowncast").add( (dispatcher: DowncastDispatcher) => {
       dispatcher.on("addMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi) => {
-        ContentPlaceholderEditing.#addContentMarkerConversion(editor, evt, data, conversionApi);
+        ContentClipboardEditing.#addContentMarkerConversion(editor, evt, data, conversionApi);
       });
       dispatcher.on("removeMarker:"+ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX, (evt: EventInfo, data: RemoveMarkerEventData, conversionApi: DowncastConversionApi) => {
-        ContentPlaceholderEditing.#removeContentMarkerConversion(editor, evt, data, conversionApi);
+        ContentClipboardEditing.#removeContentMarkerConversion(editor, evt, data, conversionApi);
       });
     });
   }
@@ -73,7 +73,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     conversionApi.writer.insert( viewPosition, viewContainer );
     conversionApi.mapper.bindElementToMarker( viewContainer, data.markerName );
     const markerData = ContentClipboardMarkerUtils.splitMarkerName(data.markerName);
-    ContentPlaceholderEditing.#triggerLoadAndWriteToModel(editor, markerData);
+    ContentClipboardEditing.#triggerLoadAndWriteToModel(editor, markerData);
 
     evt.stop();
   }
@@ -84,7 +84,7 @@ export default class ContentPlaceholderEditing extends Plugin {
     if (!contentDropData) {
       return;
     }
-    ContentPlaceholderEditing.#LOGGER.debug(
+    ContentClipboardEditing.#LOGGER.debug(
       `Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`
     );
 
@@ -92,15 +92,15 @@ export default class ContentPlaceholderEditing extends Plugin {
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         contentDisplayService.name(contentDropData.itemContext.contentUri).then(name => {
-            ContentPlaceholderEditing.#writeLinkToModel(editor, contentDropData, markerData, name ? name: ROOT_NAME);
-            ContentPlaceholderEditing.#reenableUndo(editor);
+            ContentClipboardEditing.#writeLinkToModel(editor, contentDropData, markerData, name ? name: ROOT_NAME);
+            ContentClipboardEditing.#reenableUndo(editor);
           }, (reason) => {
-            ContentPlaceholderEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", contentDropData.itemContext.contentUri, reason);
+            ContentClipboardEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", contentDropData.itemContext.contentUri, reason);
             ContentDropDataCache.removeData(markerName);
             editor.model.enqueueChange("transparent", (writer: Writer): void  => {
               writer.removeMarker(markerName);
             });
-            ContentPlaceholderEditing.#reenableUndo(editor);
+            ContentClipboardEditing.#reenableUndo(editor);
           }
         );
       });
@@ -145,13 +145,13 @@ export default class ContentPlaceholderEditing extends Plugin {
       const positionAfterInsertedElement = writer.createPositionAt(link, "after");
       const positionBeforeInsertedElement = writer.createPositionAt(link, "before");
       const range = writer.createRange(positionBeforeInsertedElement, positionAfterInsertedElement);
-      ContentPlaceholderEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
+      ContentClipboardEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
       //evaluate if a the container element has to be split after the element has been inserted.
       //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.
       const finalAfterInsertPosition = isInline || positionAfterInsertedElement.isAtEnd ? positionAfterInsertedElement: writer.split(positionAfterInsertedElement).range.end;
-      ContentPlaceholderEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
-      ContentPlaceholderEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
+      ContentClipboardEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
+      ContentClipboardEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
     });
 
     editor.model.enqueueChange("transparent", (writer: Writer): void => {
@@ -165,7 +165,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #moveMarkerForPreviousItemsToLeft(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
-    const markers: Array<Marker> = ContentPlaceholderEditing.#findMarkersBefore(editor, marker, markerData);
+    const markers: Array<Marker> = ContentClipboardEditing.#findMarkersBefore(editor, marker, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
 
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
@@ -181,7 +181,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #moveMarkerForNextItemsToTheRight(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
-    const markers: Array<Marker> = ContentPlaceholderEditing.#findMarkersAfter(editor, marker, markerData);
+    const markers: Array<Marker> = ContentClipboardEditing.#findMarkersAfter(editor, marker, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
 
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
@@ -197,7 +197,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #findMarkersBefore(editor: Editor, marker: Marker, markerData: MarkerData): Array<Marker> {
-    const markersAtSamePosition = ContentPlaceholderEditing.#markersAtPosition(editor, marker.getStart());
+    const markersAtSamePosition = ContentClipboardEditing.#markersAtPosition(editor, marker.getStart());
     const itemIndex = markerData.itemIndex;
     const dropId = markerData.dropId;
 
@@ -239,7 +239,7 @@ export default class ContentPlaceholderEditing extends Plugin {
   }
 
   static #findMarkersAfter(editor: Editor, marker: Marker, markerData: MarkerData) {
-    const markersAtSamePosition = ContentPlaceholderEditing.#markersAtPosition(editor, marker.getStart());
+    const markersAtSamePosition = ContentClipboardEditing.#markersAtPosition(editor, marker.getStart());
     const itemIndex = markerData.itemIndex;
     const dropId = markerData.dropId;
 
