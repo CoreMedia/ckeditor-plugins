@@ -9,9 +9,10 @@ import ContentAsLink from "./ContentAsLink";
  * content name shall be written into CKEditor's text area.
  *
  * The service has to be registered globally by `serviceAgent` and may then
- * retrieved by its descriptor, for example:
+ * be retrieved by its descriptor, for example:
  *
- * ```
+ * @example
+ * ```typescript
  * const descriptor = new ContentDisplayServiceDescriptor();
  * serviceAgent
  *   .fetchService<ContentDisplayService>(descriptor)
@@ -29,13 +30,13 @@ interface ContentDisplayService extends ServiceObject {
    * editors started to drag.
    *
    * @param uriPath URI path of the content, such as `content/120`
-   * @return Promise<string> which resolves to the content's name or is rejected, if the
+   * @returns Promise which resolves to the content's name or is rejected, if the
    * name cannot be resolved.
    */
   name(uriPath: UriPath): Promise<string>;
 
   /**
-   * Observes information of a content which is required to display it as
+   * Observes information of a content, which is required to display it as
    * link in the CKEditor UI. To be used for example in link editing (`FormView`)
    * or link view (`ActionView`).
    *
@@ -43,7 +44,7 @@ interface ContentDisplayService extends ServiceObject {
    * returned instead.
    *
    * @param uriPath URI path of the content, such as `content/120`
-   * @return ContentAsLink object, which provides information required to render
+   * @returns ContentAsLink object, which provides information required to render
    * a content as Link in the CKEditor UI
    */
   observe_asLink(uriPath: UriPath): Observable<ContentAsLink>;

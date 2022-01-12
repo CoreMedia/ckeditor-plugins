@@ -22,10 +22,10 @@ export default class DragDropAsyncSupport {
   static readonly #isLinkableCache: Map<string, IsLinkableResponse> = new Map<string, IsLinkableResponse>();
 
   /**
-   * Workaround for the HTML 5 behaviour that drag over is always synchronous
+   * Workaround for the HTML 5 behaviour that drag over is always synchronous,
    * but we have to call an asynchronous service.
    *
-   * When the method is called the first time for an URI-Path, the method calls
+   * When the method is called the first time for a URI-Path, the method calls
    * the asynchronous `RichtextConfigurationService` and stores the actual state
    * of the call in a map and returns probably `false` because the service call
    * is probably still in progress.
@@ -36,7 +36,7 @@ export default class DragDropAsyncSupport {
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
    *
-   * @param uriPath the URI-Path of the content, e.g. `content/42`
+   * @param uriPath the URI-Path of the content, e.g., `content/42`
    * @param evictImmediately `true` to immediately evict the response from
    * cache; defaults to `false`
    * immediate response; defaults to `false`.
@@ -65,10 +65,10 @@ export default class DragDropAsyncSupport {
   /**
    * Triggers cache-update.
    *
-   * @param uriPath the URI-Path of the content, e.g. `content/42`
+   * @param uriPath the URI-Path of the content, e.g., `content/42`
    * @param evictImmediately `true` to immediately evict the response from
    * cache; defaults to `false`
-   * @return `false`, if either not linkable are a different response is not
+   * @returns `false`, if either not linkable are a different response is not
    * available yet; `true` if known to be linkable
    * @private
    */
@@ -126,7 +126,7 @@ export default class DragDropAsyncSupport {
    *
    * This method triggers asynchronous updates, so that repetitive calls
    * for the same URI-Paths may result in different responses. A positive
-   * answer (=== `true`) is only returned, when all responses are available
+   * answer (`=== true`) is only returned, when all responses are available
    * and positive.
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**

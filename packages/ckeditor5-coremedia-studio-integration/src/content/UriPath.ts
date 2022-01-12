@@ -15,7 +15,7 @@ type UriPath = string;
 type ModelUri = string;
 
 /**
- * Returns the numeric ID from an URI path.
+ * Returns the numeric ID from a URI path.
  * @param uriPath URI path to return numeric ID from
  */
 const numericId = (uriPath: UriPath): number => {

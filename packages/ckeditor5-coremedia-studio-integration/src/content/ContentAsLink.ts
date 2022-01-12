@@ -48,7 +48,7 @@ interface ContentAsLink {
   type: DisplayHint;
   /**
    * Information on the state of a content. This is something like
-   * checked-in, checked-out, checked-out by other, published, ...
+   * checked-in, checked-out, checked-out by other, published, …
    * The name is used for ARIA and expected to contain some localized
    * representation of the state.
    * The classes are applied to the display element and expected to trigger
