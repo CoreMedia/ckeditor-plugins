@@ -31,7 +31,10 @@ export default class LoggerProvider {
   static readonly #hashParamRegExp = /([^=]*)=(.*)/;
 
   // noinspection JSUnusedLocalSymbols
-  private constructor() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {
+    // This is just a utility class. Must not be instantiated.
+  }
 
   /**
    * Retrieve logger for the given name.
