@@ -8,6 +8,7 @@ importers:
       pnpm: ^6.20.4
       rimraf: ^3.0.2
       typedoc: ^0.22.10
+      typedoc-plugin-merge-modules: ^3.1.0
       typescript: ^4.4.4
     dependencies:
       '@coremedia/set-version': 1.1.1
@@ -15,6 +16,7 @@ importers:
       pnpm: 6.20.4
       rimraf: 3.0.2
       typedoc: 0.22.10_typescript@4.4.4
+      typedoc-plugin-merge-modules: 3.1.0_typedoc@0.22.10
       typescript: 4.4.4
 
   app:
@@ -10979,6 +10981,14 @@ packages:
 
   /typedarray/0.0.6:
     resolution: {integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=}
+    dev: true
+
+  /typedoc-plugin-merge-modules/3.1.0_typedoc@0.22.10:
+    resolution: {integrity: sha512-DAHDZD+KG3mRm+hJFAMh/pO98CQ3W/BFA81FzWpc1kos66mLRIa7QVO30yBREkZNZMsTA7fgGEjEN2GO2cgi3A==}
+    peerDependencies:
+      typedoc: 0.21.x || 0.22.x
+    dependencies:
+      typedoc: 0.22.10_typescript@4.4.4
     dev: true
 
   /typedoc/0.22.10_typescript@4.4.4:

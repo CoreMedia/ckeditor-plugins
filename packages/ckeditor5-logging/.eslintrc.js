@@ -3,7 +3,7 @@ module.exports = {
     {
       files: ["*.ts", "*.tsx"], // Your TypeScript files extension
       parserOptions: {
-        project: ["doc/tsconfig.json", "src/tsconfig.json"],
+        project: ["src/tsconfig.json"],
         tsconfigRootDir: __dirname,
       },
     },

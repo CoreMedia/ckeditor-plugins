@@ -1,6 +1,10 @@
 import LogLevel from "./LogLevel";
 import Logger from "./Logger";
 
+/**
+ * Implementation of Logger.
+ * @internal
+ */
 export default class LoggerImpl implements Logger {
   private readonly name: string | undefined;
   private readonly logLevel: LogLevel;
