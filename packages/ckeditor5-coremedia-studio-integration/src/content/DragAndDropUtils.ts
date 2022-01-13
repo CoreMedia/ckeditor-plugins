@@ -21,8 +21,6 @@ const extractContentCkeModelUri = (dragEvent: DragEvent): string[] | null => {
 
 /**
  * Extract the content uri from the json data given by a html5 drag event (dragEvent.dataTransfer.cm/uri-list).
- *
- * @param dataAsJson
  */
 const extractContentUriPathsFromDragEventJsonData = (dataAsJson: string): string[] | null => {
   const parse: Record<string, string>[] | null = parseDataFromDragEvent(dataAsJson);

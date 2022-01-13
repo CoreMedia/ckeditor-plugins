@@ -128,7 +128,6 @@ export default class DragDropAsyncSupport {
    * and positive.
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
-   * @param uriPaths
    */
   static containsOnlyLinkables(uriPaths: string[]): boolean {
     for (const uriPath of uriPaths) {
