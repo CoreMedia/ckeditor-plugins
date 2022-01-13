@@ -14,10 +14,10 @@ interface AttributeMapper {
  * value will be used for the target name. All attributes in that combined
  * list will be removed.
  *
- * @param node node to handle attributes for
- * @param name the original name to rename
- * @param targetName the new name of the attribute
- * @param aliases possible alternative original names
+ * @param node - node to handle attributes for
+ * @param name - the original name to rename
+ * @param targetName - the new name of the attribute
+ * @param aliases - possible alternative original names
  */
 const renameAttribute = (
   { node }: ElementFilterParams,
@@ -59,9 +59,9 @@ const renameAttribute = (
  * mapper = preserveAttributeAs("lang", "lang", "xml:lang");
  * ```
  *
- * @param dataAttributeName the name of the attribute in data
- * @param viewAttributeName the name of the attribute in data view
- * @param dataAttributeAliases aliases for the attribute in data, which shall be mapped to the same data view attribute
+ * @param dataAttributeName - the name of the attribute in data
+ * @param viewAttributeName - the name of the attribute in data view
+ * @param dataAttributeAliases - aliases for the attribute in data, which shall be mapped to the same data view attribute
  */
 const preserveAttributeAs = (
   dataAttributeName: string,
@@ -77,7 +77,7 @@ const preserveAttributeAs = (
 /**
  * Combines all attribute mappers into one.
  *
- * @param mappers attribute mappers to combine
+ * @param mappers - attribute mappers to combine
  */
 const allAttributeMappers = (...mappers: AttributeMapper[]): AttributeMapper => {
   return {
@@ -89,7 +89,7 @@ const allAttributeMappers = (...mappers: AttributeMapper[]): AttributeMapper => 
 /**
  * Extracts the `toData` rule from given mapper.
  *
- * @param mapper mapper to extract `toData` from
+ * @param mapper - mapper to extract `toData` from
  */
 const asDataFilterRule = (mapper: AttributeMapper): ElementFilterRule => {
   return (params) => mapper.toData(params);
@@ -98,7 +98,7 @@ const asDataFilterRule = (mapper: AttributeMapper): ElementFilterRule => {
 /**
  * Extracts the `toView` rule from given mapper.
  *
- * @param mapper mapper to extract `toView` from
+ * @param mapper - mapper to extract `toView` from
  */
 const asViewFilterRule = (mapper: AttributeMapper): ElementFilterRule => {
   return (params) => mapper.toView(params);

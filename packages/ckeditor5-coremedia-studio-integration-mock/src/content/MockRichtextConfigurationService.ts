@@ -10,7 +10,7 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
    *
    *     This represents any content, which is not linkable.
    *
-   * @param uripath an uripath in the format 'content/content-id'
+   * @param uripath - an uripath in the format 'content/content-id'
    */
   hasLinkableType(uripath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -73,8 +73,8 @@ interface DroppableConfig {
  * Modifies the given contentId, so that it signals droppable or undroppable
  * state. contentIds for folders are not modified.
  *
- * @param contentId content ID to possibly adapt
- * @param undroppable if to provide an undroppable (= `true`) or droppable ID (= `false`)
+ * @param contentId - content ID to possibly adapt
+ * @param undroppable - if to provide an undroppable (= `true`) or droppable ID (= `false`)
  */
 const applyDroppable = (contentId: number, undroppable: boolean): number => {
   if (contentId % 2 === 1) {

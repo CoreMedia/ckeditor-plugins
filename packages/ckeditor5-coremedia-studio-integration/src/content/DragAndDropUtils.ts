@@ -8,7 +8,7 @@ const logger = LoggerProvider.getLogger("DragAndDropUtils");
 /**
  * Extracts the content uri from the given DragEvent and converts it to the CKE Model URI.
  *
- * @param dragEvent the DragEvent object, which has been handed in by the drop event.
+ * @param dragEvent - the DragEvent object, which has been handed in by the drop event.
  * @returns ckeModelUri the extracted CKE Model URI in the format `content:{content-id}`
  */
 const extractContentCkeModelUri = (dragEvent: DragEvent): string[] | null => {
@@ -38,7 +38,7 @@ const extractContentUriPathsFromDragEventJsonData = (dataAsJson: string): string
 /**
  * Extracts the CoreMedia Content URI from the given DragEvent.
  *
- * @param dragEvent the DragEvent object, which has been handed in by the drop event.
+ * @param dragEvent - the DragEvent object, which has been handed in by the drop event.
  * @returns cmContentUri the extracted CoreMedia Content URI in the format `content/{content-id}`; `null` when there were no (valid) data
  */
 const extractContentUriPaths = (dragEvent: DragEvent): string[] | null => {
@@ -82,7 +82,7 @@ const receiveUriPathsFromDragDropService = (): string[] | null => {
 /**
  * Parse data from drag-event.
  *
- * @param dataAsJson data to parse, expected to be JSON string
+ * @param dataAsJson - data to parse, expected to be JSON string
  * @returns parsed data; `null` if parsing failed
  */
 const parseDataFromDragEvent = (dataAsJson: string | null | undefined): Record<string, string>[] | null => {
@@ -100,7 +100,7 @@ const parseDataFromDragEvent = (dataAsJson: string | null | undefined): Record<s
 /**
  * Parse drag-data from drag drop service.
  *
- *  @param dataAsJson data to parse
+ *  @param dataAsJson - data to parse
  * @returns parsed drag-data; `null` if drag-data could not be parsed.
  */
 const parseDragDataJson = (dataAsJson: string | null | undefined): CMDragData | null => {

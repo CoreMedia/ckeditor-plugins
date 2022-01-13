@@ -4,7 +4,7 @@
  * ```
  * flatten([["a"], ["b"]]) → ["a", "b"]
  * ```
- * @param arr array to flatten
+ * @param arr - array to flatten
  */
 const flatten = <T>(arr: T[][]): T[] => (<T[]>[]).concat(...arr);
 
@@ -42,8 +42,8 @@ const parseXml = (xmlData: string): Document => {
  * Suppresses Console Output while executing the given function, if
  * `silent === true`.
  *
- * @param call function to execute
- * @param silent flag, if output shall be suppressed or not
+ * @param call - function to execute
+ * @param silent - flag, if output shall be suppressed or not
  */
 const silenced = (call: () => void, silent?: boolean): void => {
   const consoleOutputs: (keyof Console)[] = ["log", "error", "warn", "info", "debug"];

@@ -20,8 +20,8 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Constructor.
-   * @param delegate delegate to wrap
-   * @param mutable signals, if this representation is mutable or not
+   * @param delegate - delegate to wrap
+   * @param mutable - signals, if this representation is mutable or not
    */
   constructor(delegate: N, mutable = true) {
     this._delegate = delegate;
@@ -32,8 +32,8 @@ class NodeProxy<N extends Node = Node> {
    * Wraps the given node into a NodeProxy. If the node is falsy, `null`
    * will be returned.
    *
-   * @param node node to wrap
-   * @param mutable signals, if this representation is mutable or not
+   * @param node - node to wrap
+   * @param mutable - signals, if this representation is mutable or not
    * @return NodeProxy for given node; `null` for falsy values
    */
   public static proxy<T extends Node>(node: T | undefined | null, mutable = true): NodeProxy<T> | null {
@@ -138,7 +138,7 @@ class NodeProxy<N extends Node = Node> {
   /**
    * Signals, if this element is empty.
    *
-   * @param considerChildNode signals, if a given node shall be considered while determining empty state
+   * @param considerChildNode - signals, if a given node shall be considered while determining empty state
    */
   public isEmpty(considerChildNode?: ChildPredicate): boolean {
     if (!considerChildNode) {
@@ -158,7 +158,7 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Get first (matching) child node of the given element.
-   * @param condition string: the node name to match (ignoring case), predicate:
+   * @param condition - string: the node name to match (ignoring case), predicate:
    * the predicate to apply.
    */
   public findFirst(condition?: string | ChildPredicate): NodeProxy<ChildNode> | null {
@@ -232,7 +232,7 @@ class NodeProxy<N extends Node = Node> {
    * {@link NodeProxy#state}, thus setting this overrides any other decisions
    * upon the state of the node.
    *
-   * @param remove `true` to mark as <em>remove children</em>; `false` otherwise.
+   * @param remove - `true` to mark as <em>remove children</em>; `false` otherwise.
    */
   public set removeChildren(remove: boolean) {
     this.requireMutable();
@@ -259,7 +259,7 @@ class NodeProxy<N extends Node = Node> {
    * {@link NodeProxy#state}, thus setting this overrides any other decisions
    * upon the state of the node.
    *
-   * @param replace `true` to mark as <em>replace with children</em>; `false` otherwise.
+   * @param replace - `true` to mark as <em>replace with children</em>; `false` otherwise.
    */
   public set replaceByChildren(replace: boolean) {
     this.requireMutable();
@@ -302,7 +302,7 @@ class NodeProxy<N extends Node = Node> {
    * Helper function for return value, which signals to continue with
    * another node, but to do not abort current processing.
    *
-   * @param node node to continue with
+   * @param node - node to continue with
    * @protected
    */
   protected continueFrom(node: Node | null | undefined): PersistResponse {
@@ -315,7 +315,7 @@ class NodeProxy<N extends Node = Node> {
   /**
    * Helper function for return value, which signals "restart from".
    *
-   * @param node node to restart from
+   * @param node - node to restart from
    * @protected
    */
   protected restartFrom(node: Node | null | undefined): PersistResponse {
@@ -442,9 +442,9 @@ interface ChildPredicate {
    * <pre>
    * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
    * </pre>
-   * @param child the child node to validate
-   * @param index child node index
-   * @param array list of all sibling child nodes (including the child itself)
+   * @param child - the child node to validate
+   * @param index - child node index
+   * @param array - list of all sibling child nodes (including the child itself)
    */
   (child: ChildNode, index: number, array: ChildNode[]): boolean;
 }

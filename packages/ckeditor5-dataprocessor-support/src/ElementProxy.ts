@@ -16,16 +16,16 @@ class ClassList implements DOMTokenList {
   /**
    * Trims the given string.
    *
-   * @param v string to trim
+   * @param v - string to trim
    * @private
    */
   static readonly #trimValue = (v: string): string => v.trim();
   /**
    * Predicate to filter unique values only
    *
-   * @param v current value
-   * @param i current index
-   * @param a all array values
+   * @param v - current value
+   * @param i - current index
+   * @param a - all array values
    * @private
    */
   static readonly #uniqueValuesOnly = (v: string, i: number, a: string[]) => a.indexOf(v) === i;
@@ -34,7 +34,7 @@ class ClassList implements DOMTokenList {
    * Creates a `DOMTokenList` providing access to the `class` attribute
    * of the given proxy.
    *
-   * @param proxy proxy to forward `class` attribute adaptions to
+   * @param proxy - proxy to forward `class` attribute adaptions to
    */
   constructor(proxy: ElementProxy) {
     this.#proxy = proxy;
@@ -46,7 +46,7 @@ class ClassList implements DOMTokenList {
    * browser-specific. In here we decided for `DOMException` to throw, as it
    * is done by Chrome, for example.
    *
-   * @param tokens tokens to validate
+   * @param tokens - tokens to validate
    * @throws DOMException on any mismatched token
    * @private
    */
@@ -75,7 +75,7 @@ class ClassList implements DOMTokenList {
    * Sets or deletes the `class` attribute value. No normalization is applied.
    * An empty string will trigger deletion of the attribute.
    *
-   * @param value `class` value to set; empty string to remove attribute
+   * @param value - `class` value to set; empty string to remove attribute
    * @throws Error when proxy is immutable
    */
   set value(value: string) {
@@ -103,7 +103,7 @@ class ClassList implements DOMTokenList {
   /**
    * Sets the classes as space-separated value. No normalization applied.
    *
-   * @param values class values to set.
+   * @param values - class values to set.
    * @throws Error when proxy is immutable
    * @private
    */
@@ -115,7 +115,7 @@ class ClassList implements DOMTokenList {
    * Sets the classes as space-separated value. Some normalizations are applied:
    * classes will be trimmed and duplicated values will be removed.
    *
-   * @param values class values to set.
+   * @param values - class values to set.
    * @throws Error when proxy is immutable
    * @private
    */
@@ -130,7 +130,7 @@ class ClassList implements DOMTokenList {
    * Values will be normalized (trimmed, duplicates and empty removed).
    * Normalization will be triggered for resulting `class` value as well.
    *
-   * @param values class values to add.
+   * @param values - class values to add.
    * @throws Error when proxy is immutable
    */
   add(...values: string[]): void {
@@ -148,7 +148,7 @@ class ClassList implements DOMTokenList {
    * Values will be normalized (trimmed, duplicates and empty removed).
    * Normalization will be triggered for resulting `class` value as well.
    *
-   * @param values class values to remove.
+   * @param values - class values to remove.
    * @throws Error when proxy is immutable
    */
   remove(...values: string[]): void {
@@ -166,8 +166,8 @@ class ClassList implements DOMTokenList {
    * Both value parameters will be normalized (trimmed).
    * Normalization will be triggered for resulting `class` value as well.
    *
-   * @param oldValue value to replace.
-   * @param newValue value to replace by.
+   * @param oldValue - value to replace.
+   * @param newValue - value to replace by.
    * @throws Error when proxy is immutable
    */
   replace(oldValue: string, newValue: string): boolean {
@@ -188,8 +188,8 @@ class ClassList implements DOMTokenList {
    * Toggles the given class, thus, removes it when set, and adds
    * it when unset.
    *
-   * @param value class to toggle
-   * @param force `undefined` to always toggle, `true` to only add if missing, `false` to only remove if set
+   * @param value - class to toggle
+   * @param force - `undefined` to always toggle, `true` to only add if missing, `false` to only remove if set
    */
   toggle(value: string, force?: boolean): boolean {
     this.#validate(value);
@@ -356,10 +356,10 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
    * Constructor.
    *
-   * @param delegate the original element to wrap
-   * @param editor CKEditor instance
-   * @param namespaces the namespaces to take into account
-   * @param mutable signals, if this proxy should be mutable; trying to modify
+   * @param delegate - the original element to wrap
+   * @param editor - CKEditor instance
+   * @param namespaces - the namespaces to take into account
+   * @param mutable - signals, if this proxy should be mutable; trying to modify
    * an immutable proxy will raise an error.
    */
   constructor(delegate: Element, editor: Editor, namespaces: Namespaces = DEFAULT_NAMESPACES, mutable = true) {
@@ -373,7 +373,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * It is meant for testing purpose only, thus, not recommended for production
    * use, as filters may rely on the `editor` property being set.
    *
-   * @param delegate the original element to wrap
+   * @param delegate - the original element to wrap
    */
   static instantiateForTest(delegate: Element): ElementProxy {
     return new ElementProxy(delegate, <Editor>{});
@@ -412,7 +412,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * Apply given rules. If any of the rules will invalidate this element either
    * by deletion, no further rules will be applied.
    *
-   * @param rules rules to apply in given order
+   * @param rules - rules to apply in given order
    * @return a node, if filtering should be continued from this node; `null` for default as next node.
    */
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
@@ -498,8 +498,8 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * a possibly given `xmlns` attribute, as it must be handled separately
    * (by creating a new element with given namespace).
    *
-   * @param targetElement the element to apply attributes to
-   * @param attributes set of attributes to apply
+   * @param targetElement - the element to apply attributes to
+   * @param attributes - set of attributes to apply
    * @private
    */
   #applyAttributes(targetElement: Element, attributes: Attributes): void {
@@ -561,7 +561,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * create an element of the given namespace or of the same namespace as
    * the owner document.
    *
-   * @param newName new element name
+   * @param newName - new element name
    * @param namespace? optional namespace URI
    * @return newly created element, for which filtering should be re-applied.
    * @private
@@ -652,7 +652,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * name signals, that in the end the delegate element shall be replaced by
    * the new element.
    *
-   * @param newName new name for the element; case does not matter.
+   * @param newName - new name for the element; case does not matter.
    */
   public set name(newName: string) {
     this.requireMutable();
@@ -829,7 +829,7 @@ interface ElementFilterRule {
 /**
  * Combines all filter rules into one.
  *
- * @param rules rules to combine
+ * @param rules - rules to combine
  * @returns rule, which combines all passed rules into one
  */
 const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {

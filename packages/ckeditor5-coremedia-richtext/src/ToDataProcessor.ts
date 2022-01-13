@@ -9,7 +9,7 @@ export default class ToDataProcessor {
 
   /**
    * Filter to use for `toData` processing.
-   * @param toDataFilter filter
+   * @param toDataFilter - filter
    */
   constructor(toDataFilter: HtmlFilter) {
     this.#toDataFilter = toDataFilter;
@@ -18,8 +18,8 @@ export default class ToDataProcessor {
   /**
    * Internal `toData` transformation, especially meant for testing purpose.
    *
-   * @param fromView the fragment created from view
-   * @param targetDocument the target document, which will get the elements added
+   * @param fromView - the fragment created from view
+   * @param targetDocument - the target document, which will get the elements added
    * and will be transformed according to the rules
    * @return the transformed CoreMedia RichText XML
    */

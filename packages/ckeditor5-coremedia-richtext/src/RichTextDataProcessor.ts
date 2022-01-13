@@ -76,7 +76,7 @@ export default class RichTextDataProcessor implements DataProcessor {
    * to trigger data processor for empty text as well, you have to set the
    * option `trim: 'none'` on `CKEditor.getData()`.
    *
-   * @param viewFragment fragment from view model to process
+   * @param viewFragment - fragment from view model to process
    * @return CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
@@ -96,7 +96,7 @@ export default class RichTextDataProcessor implements DataProcessor {
   /**
    * Prepares toData transformation.
    *
-   * @param viewFragment view fragment to transform
+   * @param viewFragment - view fragment to transform
    * @return `richTextDocument` the (empty) document, which shall receive the transformed data;
    * `domFragment` the view DOM-structure to transform;
    * `fragmentAsStringForDebugging` some representation of `domFragment` to be used for debugging — it will only
@@ -132,8 +132,8 @@ export default class RichTextDataProcessor implements DataProcessor {
   /**
    * Internal `toData` transformation, especially meant for testing purpose.
    *
-   * @param fromView the fragment created from view
-   * @param targetDocument the target document, which will get the elements added
+   * @param fromView - the fragment created from view
+   * @param targetDocument - the target document, which will get the elements added
    * and will be transformed according to the rules
    * @return the transformed CoreMedia RichText XML
    */
@@ -144,7 +144,7 @@ export default class RichTextDataProcessor implements DataProcessor {
 
   /**
    * Transform a fragment into an HTML string for debugging purpose.
-   * @param domFragment fragment to transform
+   * @param domFragment - fragment to transform
    * @private
    */
   #fragmentToString(domFragment: Node | DocumentFragment): string {
@@ -223,7 +223,7 @@ export default class RichTextDataProcessor implements DataProcessor {
  * makes use of Parameter Entities (to shorten the DTD). These are not supported
  * in inline DTDs.
  *
- * @param xml XML to parse.
+ * @param xml - XML to parse.
  */
 export function declareCoreMediaRichText10Entities(xml: string): string {
   if (!xml) {

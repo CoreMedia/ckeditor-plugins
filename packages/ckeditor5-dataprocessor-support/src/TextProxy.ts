@@ -40,9 +40,9 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
   /**
    * Constructor.
    *
-   * @param delegate the original text node to wrap
-   * @param editor CKEditor instance
-   * @param mutable signals, if this proxy should be mutable; trying to modify
+   * @param delegate - the original text node to wrap
+   * @param editor - CKEditor instance
+   * @param mutable - signals, if this proxy should be mutable; trying to modify
    * an immutable proxy will raise an error.
    */
   constructor(delegate: Text, editor: Editor, mutable = true) {
@@ -54,7 +54,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
    * Apply given rules. If any of the rules will invalidate this node either
    * by deletion or by replacing it, no further rules will be applied.
    *
-   * @param rules rules to apply in given order
+   * @param rules - rules to apply in given order
    * @returns a node, if filtering should be restarted from this node; `null` otherwise.
    */
   public applyRules(...rules: (TextFilterRule | undefined)[]): Node | null {
@@ -94,7 +94,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
   /**
    * Sets the text content. Only allowed in mutable state.
    *
-   * @param value text content to set.
+   * @param value - text content to set.
    */
   public set textContent(value: string) {
     this.requireMutable();

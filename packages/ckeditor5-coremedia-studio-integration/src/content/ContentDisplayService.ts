@@ -29,7 +29,7 @@ interface ContentDisplayService extends ServiceObject {
    * rejected instead. This may happen on concurrent changes to the content
    * editors started to drag.
    *
-   * @param uriPath URI path of the content, such as `content/120`
+   * @param uriPath - URI path of the content, such as `content/120`
    * @returns Promise which resolves to the content's name or is rejected, if the
    * name cannot be resolved.
    */
@@ -43,7 +43,7 @@ interface ContentDisplayService extends ServiceObject {
    * For unreadable contents placeholder information are expected to be
    * returned instead.
    *
-   * @param uriPath URI path of the content, such as `content/120`
+   * @param uriPath - URI path of the content, such as `content/120`
    * @returns ContentAsLink object, which provides information required to render
    * a content as Link in the CKEditor UI
    */

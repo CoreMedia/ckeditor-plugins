@@ -19,7 +19,7 @@ const hasHref = ({ attributes }: ElementProxy): boolean => {
  * is the required representation for Studio REST Backend. Any unmatched href
  * will be returned unmodified.
  *
- * @param href href to transform
+ * @param href - href to transform
  */
 const contentLinkToData = (href: string): string => {
   const match = CONTENT_LINK_MODEL_REGEXP.exec(href);
@@ -46,7 +46,7 @@ const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
  * Any unmatched href will be returned unmodified, assuming that it is an
  * external link.
  *
- * @param href href to transform
+ * @param href - href to transform
  */
 const contentLinkToModel = (href: string): string => {
   // If data or not retrieved via CoreMedia Studio Server, we may have

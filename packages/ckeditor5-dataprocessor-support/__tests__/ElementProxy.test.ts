@@ -118,7 +118,7 @@ describe("ElementProxy.classList", () => {
    * Sets the class attribute value for both, DOM reference as
    * proxied DOM element. If `null`, the class attribute is removed
    * instead.
-   * @param domClass class to set; `null`to remove class attribute
+   * @param domClass - class to set; `null`to remove class attribute
    */
   const setClass = (domClass: string | null): void => {
     if (typeof domClass === "string") {
@@ -134,11 +134,11 @@ describe("ElementProxy.classList", () => {
    * Runs several validations on proxy and the proxied DOM element. In addition
    * to that, provides a comparison of proxy and real DOM element behavior.
    *
-   * @param valueBefore the value, the class attribute had before; used to validate,
+   * @param valueBefore - the value, the class attribute had before; used to validate,
    * that the proxied DOM element did not change
-   * @param expectedValue expected value of class attribute; will be validated on proxy as well as on reference
+   * @param expectedValue - expected value of class attribute; will be validated on proxy as well as on reference
    * DOM element
-   * @param expectedCount number of class entries we expect
+   * @param expectedCount - number of class entries we expect
    */
   const validate = (valueBefore: string | null, expectedValue: string, expectedCount: number): void => {
     // Proxy: Should represent expected classList.value.

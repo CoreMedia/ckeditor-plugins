@@ -90,7 +90,7 @@ interface DataProcessingData {
    * Optional post-processor for actual data after transformation. Used,
    * for example, to ignore the value of certain attributes during test.
    *
-   * @param document document to possibly post-process.
+   * @param document - document to possibly post-process.
    */
   postProcessActual?: (document: Document) => void;
 }
@@ -157,8 +157,8 @@ const ddTest = <T extends NamedTestCase>(
 /**
  * Workaround for Jest issue with less nice handling of array-driven tests
  * compared to table syntax tests.
- * @param data test data to transform into [name, data] pattern.
- * @param generator strategy to generate a name for the test case
+ * @param data - test data to transform into [name, data] pattern.
+ * @param generator - strategy to generate a name for the test case
  * @see https://github.com/facebook/jest/issues/6413
  */
 const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.name): [string, T][] => {

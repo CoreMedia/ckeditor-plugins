@@ -13,7 +13,7 @@ interface RichtextConfigurationService extends ServiceObject {
    * Signals, if the entity described by the given URI path (typically
    * a content) can be linked to from within Richtext.
    *
-   * @param uripath URI path of the entity such as `content/42`
+   * @param uripath - URI path of the entity such as `content/42`
    */
   hasLinkableType(uripath: UriPath): Promise<boolean>;
 
@@ -22,7 +22,7 @@ interface RichtextConfigurationService extends ServiceObject {
    * a content) can be embedded into Richtext. This typically applies to
    * contents holding media blobs such as images.
    *
-   * @param uripath URI path of the entity such as `content/42`
+   * @param uripath - URI path of the entity such as `content/42`
    */
   isEmbeddableType(uripath: UriPath): Promise<boolean>;
 }

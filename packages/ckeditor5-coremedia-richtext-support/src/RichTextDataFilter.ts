@@ -104,7 +104,7 @@ class RichTextDataFilter extends Plugin {
    * Forwards loading the configuration to General HTML Support and tracks
    * added patterns in `#config`.
    *
-   * @param config additional patterns to load
+   * @param config - additional patterns to load
    * @private
    */
   #loadAllowedConfig(config: ReducedMatcherPattern[]): void {
@@ -120,7 +120,7 @@ class RichTextDataFilter extends Plugin {
    * For convenience, also normal patterns not being an alias/not inheriting
    * another pattern, can be added this way.
    *
-   * @param config inheritance configuration to load
+   * @param config - inheritance configuration to load
    */
   loadAliases(config: InheritingMatcherPattern[]): void {
     const lookup = toLookupStrategy(...this.#config);

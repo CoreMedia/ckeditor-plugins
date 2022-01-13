@@ -44,7 +44,7 @@ interface InheritingMatcherPattern extends ReducedMatcherPattern {
  * previously defined definitions. Thus, merging
  * `[{ name: "a" }, { name: "b" }]` will result in pattern `{ name: "b" }`.
  *
- * @param sources sources to merge
+ * @param sources - sources to merge
  */
 const mergePatterns = (...sources: ReducedMatcherPattern[]): ReducedMatcherPattern => {
   const result: ReducedMatcherPattern = {};
@@ -103,7 +103,7 @@ type MatcherPatternLookup = (name: string) => ReducedMatcherPattern | undefined;
 /**
  * Transforms the array of patterns to a lookup-strategy by pattern name.
  *
- * @param patterns patterns to search within
+ * @param patterns - patterns to search within
  */
 const toLookupStrategy = (...patterns: ReducedMatcherPattern[]): MatcherPatternLookup => {
   return (name) => findFirstPattern(name, ...patterns);
@@ -112,8 +112,8 @@ const toLookupStrategy = (...patterns: ReducedMatcherPattern[]): MatcherPatternL
 /**
  * Resolves an inheriting pattern.
  *
- * @param pattern pattern to resolve
- * @param lookup strategy or list of patterns to lookup existing matcher patterns to inherit
+ * @param pattern - pattern to resolve
+ * @param lookup - strategy or list of patterns to lookup existing matcher patterns to inherit
  */
 const resolveInheritance = (
   pattern: InheritingMatcherPattern,

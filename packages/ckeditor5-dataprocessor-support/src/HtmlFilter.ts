@@ -95,8 +95,8 @@ class HtmlFilter {
   /**
    * Applies rules to the current node and all of its child nodes.
    *
-   * @param parent parent of node
-   * @param currentNode current node to process
+   * @param parent - parent of node
+   * @param currentNode - current node to process
    * @return next sibling node to process
    * @private
    */

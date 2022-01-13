@@ -91,7 +91,7 @@ enum ContentIdPrefix {
  * Parses a given prefix. If the prefix has no special meaning, `undefined`
  * is returned.
  *
- * @param numericId numeric ID (as string) to analyze
+ * @param numericId - numeric ID (as string) to analyze
  */
 const parsePrefix = (numericId: string): ContentIdPrefix | undefined => {
   // This may be solved more elegant with mapped enum values. But this should
@@ -148,12 +148,12 @@ const firstDelayMs = (slow: boolean, maxFirstDelayMs: number): number => {
 /**
  * Create the initial display.
  *
- * @param subscriber subscriber to inform
+ * @param subscriber - subscriber to inform
  * @param toggling {@code true} to signal toggling mode, {@code false} for not toggling,
  * i.e., on first value reached, `complete` will be triggered.
- * @param maxFirstDelayMs delay for first display
- * @param slow if the initially provided value should take some extra amount of time
- * @param initial initial display
+ * @param maxFirstDelayMs - delay for first display
+ * @param slow - if the initially provided value should take some extra amount of time
+ * @param initial - initial display
  */
 const initDisplay = (
   subscriber: Subscriber<DisplayHint>,
@@ -181,10 +181,10 @@ const initDisplay = (
 
 /**
  * Sets up toggling behavior of display state.
- * @param subscriber subscriber to inform on changes
- * @param changeDelayMs the change delay in milliseconds
- * @param firstState first state to enter
- * @param otherStates other states to follow
+ * @param subscriber - subscriber to inform on changes
+ * @param changeDelayMs - the change delay in milliseconds
+ * @param firstState - first state to enter
+ * @param otherStates - other states to follow
  * @return TeardownLogic function to stop the timer on unsubscribe
  */
 const initToggle = (
@@ -231,11 +231,11 @@ const initToggle = (
 /**
  * Creates an observable for the given mode.
  *
- * @param mode mode to respect.
- * @param truthyState state if mode is {@code true}; first state while toggling
- * @param falsyState state if mode is {@code false}; second state while toggling
- * @param config configuration for observable behavior
- * @param slow if the initially provided value should take some extra amount of time
+ * @param mode - mode to respect.
+ * @param truthyState - state if mode is {@code true}; first state while toggling
+ * @param falsyState - state if mode is {@code false}; second state while toggling
+ * @param config - configuration for observable behavior
+ * @param slow - if the initially provided value should take some extra amount of time
  */
 const createObservable = (
   mode: ConfigState | undefined,
@@ -396,7 +396,7 @@ class MockContentDisplayService implements ContentDisplayService {
    * is returned. For unreadable-toggle behavior, it toggled between unreadable
    * and one of the two names. This overrides name-toggle behavior.
    *
-   * @param uriPath URI path to create mock for
+   * @param uriPath - URI path to create mock for
    */
   observe_name(uriPath: UriPath): Observable<DisplayHint> {
     const id = numericId(uriPath);
@@ -447,7 +447,7 @@ class MockContentDisplayService implements ContentDisplayService {
    * In case of unreadable content, a possibly configured toggle-behavior for
    * unreadable overrides toggle-behavior for state.
    *
-   * @param uriPath URI path to create mock state for
+   * @param uriPath - URI path to create mock state for
    */
   observe_state(uriPath: UriPath): Observable<DisplayHint> {
     const config = parseContentConfig(uriPath);
@@ -484,7 +484,7 @@ class MockContentDisplayService implements ContentDisplayService {
    * and document type are distinguished. Toggle behavior is only available for
    * unreadable flag.
    *
-   * @param uriPath URI path to create mock type for
+   * @param uriPath - URI path to create mock type for
    */
   observe_type(uriPath: UriPath): Observable<DisplayHint> {
     const id = numericId(uriPath);
@@ -590,7 +590,7 @@ const identifierToState = (identifier: number) => {
  * For any unmatched uriPath, a default behavior is assumed. Thus, you any
  * numeric ID will trigger some state.
  *
- * @param uriPath URI path, which by magic contains some configuration
+ * @param uriPath - URI path, which by magic contains some configuration
  */
 const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
   const configPattern =
@@ -627,12 +627,12 @@ const parseContentConfig = (uriPath: UriPath): CreateContentConfig => {
  * Creates a content URI path (such as `content/3332002`) based on the
  * given configuration.
  *
- * @param name type of name, or changing
- * @param prefix if a certain prefix shall be used to trigger a specific behavior
- * @param unreadable state of unreadable, or changing
- * @param checkedIn state of checked-in, or changing (not relevant for folders)
- * @param isFolder if the content shall be a folder or a document
- * @param undroppable if the document (not applicable to folders) shall be droppable
+ * @param name - type of name, or changing
+ * @param prefix - if a certain prefix shall be used to trigger a specific behavior
+ * @param unreadable - state of unreadable, or changing
+ * @param checkedIn - state of checked-in, or changing (not relevant for folders)
+ * @param isFolder - if the content shall be a folder or a document
+ * @param undroppable - if the document (not applicable to folders) shall be droppable
  */
 const createContentUriPath = ({
   name,

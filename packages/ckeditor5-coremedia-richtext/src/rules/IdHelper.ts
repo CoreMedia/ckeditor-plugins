@@ -84,7 +84,7 @@ const isContentBlobIdParseResult = (result: any): result is ContentBlobIdParseRe
  * ```
  * const result = parseContentId("coremedia:///cap/content/2");
  * ```
- * @param contentId id to parse
+ * @param contentId - id to parse
  * @returns content ID; `undefined` if string does not represent a content ID.
  */
 const parseContentId = (contentId: string): ContentIdResult | undefined => {
@@ -106,7 +106,7 @@ const parseContentId = (contentId: string): ContentIdResult | undefined => {
  * ```
  * const result = parseContentBlobId("coremedia:///cap/blob/content/2#prop");
  * ```
- * @param blobId id to parse
+ * @param blobId - id to parse
  * @returns content ID; `undefined` if string does not represent a content ID.
  */
 const parseContentBlobId = (blobId: string): ContentBlobIdResult | undefined => {
@@ -158,7 +158,7 @@ const parseContentBlobId = (blobId: string): ContentBlobIdResult | undefined => 
  * => "content/2#properties.data"
  * ```
  *
- * @param href link href to possibly adjust
+ * @param href - link href to possibly adjust
  * @returns the original href or in case of UAPI references, references suitable for use in Studio Client.
  */
 const formatLink = (href: string): string => {

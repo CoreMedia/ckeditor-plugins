@@ -39,8 +39,8 @@ export enum Strictness {
 
 /**
  * Validator type for attribute values.
- * @param value the attribute value to validate
- * @param strictness mode for checking validity
+ * @param value - the attribute value to validate
+ * @param strictness - mode for checking validity
  * @return `true` if attribute value is considered valid; `false` if not
  */
 type AttributeValueValidator = (value: string, strictness?: Strictness) => boolean;
@@ -584,7 +584,7 @@ export default class RichTextSchema {
    * relationship parent to child. Thus, add a reverse mapping for easier
    * lookup.
    *
-   * @param elements element schema to process
+   * @param elements - element schema to process
    */
   static #initParentElementNames(elements: Elements): void {
     const logger = RichTextSchema.#logger;
@@ -641,7 +641,7 @@ export default class RichTextSchema {
   /**
    * Checks, if the given element is known to be valid at current parent.
    *
-   * @param element element to validate
+   * @param element - element to validate
    * @return `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
    * for removal (name is empty or null) or if the given element is not allowed at parent.
    */
@@ -691,7 +691,7 @@ export default class RichTextSchema {
    * Note, that changes are only applied to the mutable element. It is required
    * to persist these changes to propagate it to the wrapped delegate element.
    *
-   * @param element element to process
+   * @param element - element to process
    */
   adjustHierarchy(element: ElementProxy): void {
     const logger = RichTextSchema.#logger;
@@ -718,7 +718,7 @@ export default class RichTextSchema {
    * Note, that changes are only applied to the mutable element. It is required
    * to persist these changes to propagate it to the wrapped delegate element.
    *
-   * @param element element to process
+   * @param element - element to process
    */
   adjustAttributes(element: ElementProxy): void {
     const elementName = element.name;

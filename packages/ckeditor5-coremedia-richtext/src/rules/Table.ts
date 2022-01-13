@@ -259,7 +259,7 @@ class TableWrapper extends ElementWrapper {
 
   /**
    * Removes the given child element.
-   * @param oldChild child element to remove
+   * @param oldChild - child element to remove
    * @return removed child
    */
   removeChild(oldChild: Node): Node {
@@ -291,7 +291,7 @@ class TableWrapper extends ElementWrapper {
  * element, which just shares the same tagName as a `HTMLTableElement`. That's
  * why implementation needs to be more complex.
  *
- * @param tableElement table element to process
+ * @param tableElement - table element to process
  */
 function toDataProcessTableContents(tableElement: TableWrapper): void {
   function addClassToRows(section: Element | undefined | null, className: string): void {
@@ -333,7 +333,7 @@ function toDataProcessTableContents(tableElement: TableWrapper): void {
  * why it is important to remember and restore the state of a row being part
  * of `<thead>` in view.
  *
- * @param tableElement table element to process
+ * @param tableElement - table element to process
  */
 function toViewProcessTableContents(tableElement: TableWrapper): void {
   const rowsSnapshot = tableElement.rows;
