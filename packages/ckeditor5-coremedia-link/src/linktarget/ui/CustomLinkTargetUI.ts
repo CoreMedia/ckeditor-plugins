@@ -25,15 +25,13 @@ export default class CustomLinkTargetUI extends Plugin {
   #balloon: ContextualBalloon | undefined = undefined;
   /**
    * Form View to enter custom target. Initialized during `init`.
-   * @private
    */
   #form!: CustomLinkTargetInputFormView;
   /**
-   * Names which are bound to other target-selection buttons, and thus, are
+   * Names, which are bound to other target-selection buttons, and thus, are
    * perceived as _reserved names_. Such names must not show up in the edit
-   * form and they will be used to determine, if the `_other` button needs
+   * form, and they will be used to determine, if the `_other` button needs
    * to be _on_ or _off_.
-   * @private
    */
   #reservedTargetNames: Set<string> = new Set<string>();
   /**
@@ -59,10 +57,9 @@ export default class CustomLinkTargetUI extends Plugin {
    * Parses the configuration to determine the desired behavior of `_other`
    * button.
    *
-   * @param config configuration to parse
+   * @param config - configuration to parse
    * @returns well-defined attribute values, which should not be handled by `_other` in `otherNames`;
    * button-configuration in `myConfig`
-   * @private
    */
   #parseConfig(config: Config): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
     const linkTargetDefinitions = parseLinkTargetConfig(config);
@@ -86,9 +83,7 @@ export default class CustomLinkTargetUI extends Plugin {
 
   /**
    * Creates a button showing the balloon panel for changing the link target and
-   * registers it in the editor {@link module:ui/componentfactory~ComponentFactory ComponentFactory}.
-   *
-   * @private
+   * registers it in the editor `ComponentFactory`.
    */
   #createButton(definition: Required<LinkTargetOptionDefinition>): void {
     const editor = this.editor;
@@ -138,16 +133,12 @@ export default class CustomLinkTargetUI extends Plugin {
 
   /**
    * Creates the CustomLinkTargetInputFormView form.
-   *
-   * @private
    */
   #createForm(): void {
     const editor = this.editor;
 
     /**
      * The contextual balloon plugin instance.
-     *
-     * @private
      */
     this.#balloon = <ContextualBalloon>this.editor.plugins.get("ContextualBalloon");
 
@@ -185,9 +176,7 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   /**
-   * Opens a balloon and shows the {@link #form} in the {@link #balloon}.
-   *
-   * @private
+   * Opens a balloon and shows the {@link CustomLinkTargetUI.#form} in the {@link CustomLinkTargetUI.#balloon}.
    */
   #showForm(): void {
     if (this.#isVisible) {
@@ -225,10 +214,9 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   /**
-   * Removes the {@link #form} from the {@link #balloon}.
+   * Removes the {@link CustomLinkTargetUI.#form} from the {@link CustomLinkTargetUI.#balloon}.
    *
-   * @param {Boolean} focusEditable optional (defaults to false) Controls whether the editing view is focused afterwards.
-   * @private
+   * @param focusEditable - optional (defaults to false) Controls whether the editing view is focused afterwards.
    */
   #hideForm(focusEditable = false): void {
     if (!this.#isInBalloon) {
@@ -249,21 +237,16 @@ export default class CustomLinkTargetUI extends Plugin {
   }
 
   /**
-   * Returns `true` when the {@link #form} is the visible view in the {@link #balloon}.
-   *
-   * @private
-   * @type {Boolean}
+   * Returns `true` when the {@link CustomLinkTargetUI.#form} is the visible view in the {@link CustomLinkTargetUI.#balloon}.
    */
   get #isVisible(): boolean {
     return this.#balloon?.visibleView === this.#form;
   }
 
   /**
-   * Returns `true` when the {@link #form} is in the {@link #balloon}.
+   * Returns `true` when the {@link CustomLinkTargetUI.#form} is in the {@link CustomLinkTargetUI.#balloon}.
    *
-   * @private
-   * @type {Boolean}
-   * @return true if the {@link #form} is in the {@link #balloon}
+   * @returns true if the {@link CustomLinkTargetUI.#form} is in the {@link CustomLinkTargetUI.#balloon}
    */
   get #isInBalloon(): boolean {
     return this.#balloon?.hasView(this.#form) || false;

@@ -11,12 +11,12 @@ export class DropCondition {
      */
     readonly multipleContentDrop: boolean,
     /**
-     * Signals, if the the drop position is at the end of its parent
+     * Signals, if the drop position is at the end of its parent
      * block-element.
      */
     readonly dropAtEndOfBlock: boolean,
     /**
-     * Signals, if the the drop position is at the start of its parent
+     * Signals, if the drop position is at the start of its parent
      * block-element.
      */
     readonly dropAtStartOfBlock: boolean,

@@ -10,7 +10,7 @@ import LinkCleanup, { getLinkCleanup } from "../link/LinkCleanup";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
- * It is important, that this is the very same priority as for href
+ * It is important, that this is the same priority as for href
  * attributes, as otherwise `<a>` elements won't merge when transformed
  * to data.
  */
@@ -24,7 +24,7 @@ const LINK_CUSTOM_PROPERTY = "link";
  * Adds an attribute `linkTarget` to the model, which will be represented
  * as `target` attribute in view.
  *
- * @see <a href="https://stackoverflow.com/questions/51303892/how-to-add-target-attribute-to-a-tag-in-ckeditor5">How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow</a>
+ * @see {@link https://stackoverflow.com/questions/51303892/how-to-add-target-attribute-to-a-tag-in-ckeditor5 | How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow}
  */
 export default class LinkTargetModelView extends Plugin {
   static readonly pluginName: string = "LinkTargetModelView";
@@ -32,12 +32,12 @@ export default class LinkTargetModelView extends Plugin {
   private readonly TEXT_NAME = "$text";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    // LinkUI: Registers the commands which are expected to set/unset `linkHref`
+    // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
     return [LinkCleanup];
   }
 
   /**
-   * Defines `linkTarget` model-attribute which is represented on downcast
+   * Defines `linkTarget` model-attribute, which is represented on downcast
    * (to data and for editing) as `target` attribute.
    */
   init(): Promise<void> | null {
@@ -88,13 +88,13 @@ export default class LinkTargetModelView extends Plugin {
   }
 }
 /**
- * Downcast `linkTarget` attribute (downcast: Model -> Output (Data & Editing)).
+ * Downcast `linkTarget` attribute (downcast: Model → Output (Data & Editing)).
  * Creates element with target attribute. Element will be merged with
  * a-Element created by Link plugin (requires that both share the same
  * priority).
  *
- * @param modelAttributeValue target value
- * @param writer writer from conversion API
+ * @param modelAttributeValue - target value
+ * @param writer - writer from conversion API
  */
 function downcastTarget(modelAttributeValue: never, { writer }: DowncastConversionApi): AttributeElement {
   const element = writer.createAttributeElement(

@@ -33,10 +33,10 @@ export default class ContentLinkClipboard extends Plugin {
 
   /**
    * Drag-over handler to control drop-effect icons, which is, to forbid for
-   * any content-sets containing types which are not allowed to be linked.
+   * any content-sets containing types, which are not allowed to be linked.
    *
-   * @param evt event information
-   * @param data clipboard data
+   * @param evt - event information
+   * @param data - clipboard data
    */
   static readonly #dragOverHandler = (evt: EventInfo, data: ClipboardEventData): void => {
     // The clipboard content was already processed by the listener on the higher priority
@@ -60,8 +60,8 @@ export default class ContentLinkClipboard extends Plugin {
   /**
    * Drop handler, to write name of content into CKEditor.
    *
-   * @param evt event information
-   * @param data clipboard data
+   * @param evt - event information
+   * @param data - clipboard data
    */
   readonly #clipboardInputHandler = (evt: EventInfo, data: ClipboardEventData): void => {
     const editor = this.editor;
@@ -111,7 +111,6 @@ export default class ContentLinkClipboard extends Plugin {
 
   /**
    * Adds a listener to `clipboardInput` to process possibly dragged contents.
-   * @private
    */
   #initEventListeners(): void {
     const editor = this.editor;
@@ -138,9 +137,8 @@ export default class ContentLinkClipboard extends Plugin {
    * `cm/uri-list` and contain the URIs in the form `content/42` (wrapped
    * by some JSON).
    *
-   * @param data data to get content URIs from
+   * @param data - data to get content URIs from
    * @returns array of content-URIs, possibly empty; `null` signals, that the data did not contain content-URI data
-   * @private
    */
   static #extractContentUris(data: ClipboardEventData): string[] | null {
     if (data === null || data.dataTransfer === null) {
@@ -163,11 +161,10 @@ export default class ContentLinkClipboard extends Plugin {
    * queries of for example last document may return earlier than the first
    * one.
    *
-   * @param contentDisplayService service to use to resolve names
-   * @param editor editor to write linked contents to
-   * @param dropCondition meta-data of current drop event
-   * @param cmDataUris data URIs to write links for
-   * @private
+   * @param contentDisplayService - service to use to resolve names
+   * @param editor - editor to write linked contents to
+   * @param dropCondition - meta-data of current drop event
+   * @param cmDataUris - data URIs to write links for
    */
   static #makeContentNameRequests(
     contentDisplayService: ContentDisplayService,
@@ -231,7 +228,7 @@ export default class ContentLinkClipboard extends Plugin {
         const textRange = writer.createRange(firstPosition, positionAfterText);
         ContentLinkClipboard.#setSelectionAttributes(writer, [textRange], dropCondition.selectedAttributes);
       } catch (e) {
-        //Insert a content link to the end of the document which takes a long time to load the name and remove the last word.
+        //Insert a content link to the end of the document, which takes a long time to load the name and remove the last word.
         //This leads to an error because the position the link should be inserted to is invalid now.
         //Probably an edge case as we assume fast answers
         const msg = "An error occurred, probably the document has been edited while waiting for insertion of a link.";
@@ -246,10 +243,9 @@ export default class ContentLinkClipboard extends Plugin {
    * Writes the link in its own block element, like for example a paragraph or
    * list item.
    *
-   * @param editor editor to write to
-   * @param dropCondition meta-information for drop-event
-   * @param linkData data of the link to write
-   * @private
+   * @param editor - editor to write to
+   * @param dropCondition - meta-information for drop-event
+   * @param linkData - data of the link to write
    */
   static #writeLinkInOwnParagraph(editor: Editor, dropCondition: DropCondition, linkData: ContentLinkData): void {
     const logger = ContentLinkClipboard.#LOGGER;
@@ -257,7 +253,7 @@ export default class ContentLinkClipboard extends Plugin {
     editor.model.change((writer: Writer) => {
       try {
         // When dropping, the drop position is stored as range but the cursor is not yet updated to the drop position
-        // We can only set the cursor inside a model.change so we have to do it here. If it is not the first inserted link
+        // We can only set the cursor inside a model.change, so we have to do it here. If it is not the first inserted link
         // during a multiple we assume that the latest inserted link has set the cursor at its end.
         if (linkData.isFirstInsertedLink && dropCondition.targetRange) {
           writer.setSelection(dropCondition.targetRange);
@@ -275,14 +271,14 @@ export default class ContentLinkClipboard extends Plugin {
           writer.setSelection(secondSplit.range.end);
         } else {
           if (linkData.isLastInsertedLink) {
-            //If we drop to the end of the document we do not end in the next paragraph so we have to make sure that we do not
+            //If we drop to the end of the document we do not end in the next paragraph, so we have to make sure that we do not
             //end in the link tag to not proceed the link when typing.
             writer.overrideSelectionGravity();
           }
           writer.setSelection(textRange.end);
         }
       } catch (e) {
-        //Insert a content link to the end of the document which takes a long time to load the name and remove the last word.
+        //Insert a content link to the end of the document, which takes a long time to load the name and remove the last word.
         //This leads to an error because the position the link should be inserted to is invalid now.
         //Probably an edge case as we assume fast answers
         const msg = "An error occurred, probably the document has been edited while waiting for insertion of a link.";
@@ -297,11 +293,10 @@ export default class ContentLinkClipboard extends Plugin {
    * Writes given link at the given position, returning the range of the new
    * text.
    *
-   * @param writer writer to use
-   * @param cursorPosition cursor position to write link to
-   * @param dropCondition meta-data of drop event
-   * @param linkData data describing the link to write
-   * @private
+   * @param writer - writer to use
+   * @param cursorPosition - cursor position to write link to
+   * @param dropCondition - meta-data of drop event
+   * @param linkData - data describing the link to write
    */
   static #insertLink(
     writer: Writer,
@@ -329,10 +324,9 @@ export default class ContentLinkClipboard extends Plugin {
   /**
    * Applies selection attributes to the given ranges.
    *
-   * @param writer writer to use
-   * @param textRanges ranges to apply selection attributes to
-   * @param attributes selection attributes to apply
-   * @private
+   * @param writer - writer to use
+   * @param textRanges - ranges to apply selection attributes to
+   * @param attributes - selection attributes to apply
    */
   static #setSelectionAttributes(
     writer: Writer,
@@ -348,8 +342,7 @@ export default class ContentLinkClipboard extends Plugin {
 
   /**
    * Checks, if position is the first one in document.
-   * @param position position to check
-   * @private
+   * @param position - position to check
    */
   static #isFirstPositionOfDocument(position: Position): boolean {
     const path = position.getCommonPath(position);
@@ -364,10 +357,9 @@ export default class ContentLinkClipboard extends Plugin {
   /**
    * Create meta-data from drop event.
    *
-   * @param editor current editor instance
-   * @param data event data
-   * @param links links which shall be written
-   * @private
+   * @param editor - current editor instance
+   * @param data - event data
+   * @param links - links, which shall be written
    */
   static #createDropCondition(editor: Editor, data: ClipboardEventData, links: string[]): DropCondition {
     const multipleContentDrop = links.length > 1;
@@ -387,9 +379,8 @@ export default class ContentLinkClipboard extends Plugin {
   /**
    * Evaluate target range. `null` if no range could be determined.
    *
-   * @param editor current editor instance
-   * @param data event data
-   * @private
+   * @param editor - current editor instance
+   * @param data - event data
    */
   static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): Range | null {
     if (!data.targetRanges) {

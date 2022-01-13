@@ -52,7 +52,7 @@ interface LinkTargetConfig {
  * link plugin configuration. It expects an entry `targets` which contains an
  * array of targets to offer to the editors for selection in the UI.
  *
- * @param config CKEditor configuration to parse
+ * @param config - CKEditor configuration to parse
  */
 export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOptionDefinition>[] => {
   const fromConfig = config.get("link.targets");

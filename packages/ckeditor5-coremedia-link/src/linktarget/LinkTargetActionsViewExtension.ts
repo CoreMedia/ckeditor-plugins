@@ -59,8 +59,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * by the editor's configuration, respectively the order of default targets
    * in {@link DefaultTarget}.
    *
-   * @param linkUI the linkUI plugin
-   * @private
+   * @param linkUI - the linkUI plugin
    */
   #extendView(linkUI: LinkUI): void {
     const actionsView: LinkActionsView = linkUI.actionsView;
@@ -107,10 +106,9 @@ class LinkTargetActionsViewExtension extends Plugin {
    * Buttons created by this method directly set the target value they are bound
    * to. For a custom target input field, use `CustomLinkTargetUI`.
    *
-   * @param locale the locale used for localization.
-   * @param buttonConfig configuration for the button
-   * @param linkTargetCommand command to execute on click
-   * @private
+   * @param locale - the locale used for localization.
+   * @param buttonConfig - configuration for the button
+   * @param linkTargetCommand - command to execute on click
    */
   #createTargetButton(
     locale: Locale,
@@ -146,9 +144,8 @@ class LinkTargetActionsViewExtension extends Plugin {
   /**
    * Adds button elements right before the {@link unlinkButtonView} element in the actions view.
    *
-   * @param actionsView CKEditor's `LinkActionsView` to extend
-   * @param buttons the buttons to add in the given order
-   * @private
+   * @param actionsView - CKEditor's `LinkActionsView` to extend
+   * @param buttons - the buttons to add in the given order
    */
   #addButtons(actionsView: LinkActionsView, buttons: View[]): void {
     buttons.forEach((button) => {

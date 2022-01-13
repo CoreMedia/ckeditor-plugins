@@ -67,11 +67,10 @@ class LinkTargetCommand extends Command {
    * Validates if all given attributes are hypothetically supported by the
    * given element. The result is always `false` if the element does not exist.
    *
-   * @param element element to hypothetically validate attributes for
-   * @param schema schema to use for validation
-   * @param attribute first attribute to check
-   * @param otherAttributes other attributes to check
-   * @protected
+   * @param element - element to hypothetically validate attributes for
+   * @param schema - schema to use for validation
+   * @param attribute - first attribute to check
+   * @param otherAttributes - other attributes to check
    */
   protected static attributesAllowedFor(
     element: Element | null | undefined,
@@ -90,11 +89,10 @@ class LinkTargetCommand extends Command {
   /**
    * Checks that all given attributes are allowed for given element.
    *
-   * @param element element which must allow all attributes
-   * @param schema schema to use for validation
-   * @param attribute first attribute to check
-   * @param otherAttributes other attributes to check
-   * @protected
+   * @param element - element, which must allow all attributes
+   * @param schema - schema to use for validation
+   * @param attribute - first attribute to check
+   * @param otherAttributes - other attributes to check
    */
   static #checkAttributes(element: Element, schema: Schema, attribute: string, ...otherAttributes: string[]): boolean {
     const attributes = [attribute, ...otherAttributes];
@@ -104,11 +102,10 @@ class LinkTargetCommand extends Command {
   /**
    * Checks that all given attributes are allowed for given selection.
    *
-   * @param selection selection which must allow all attributes
-   * @param schema schema to use for validation
-   * @param attribute first attribute to check
-   * @param otherAttributes other attributes to check
-   * @protected
+   * @param selection - selection, which must allow all attributes
+   * @param schema - schema to use for validation
+   * @param attribute - first attribute to check
+   * @param otherAttributes - other attributes to check
    */
   static #checkAttributeInSelection(
     selection: DocumentSelection,
@@ -125,7 +122,7 @@ class LinkTargetCommand extends Command {
    * (thus, empty string, null or undefined), the `linkTarget` attribute will
    * be removed instead.
    *
-   * @param target target to set; empty string/null/undefined to trigger removal of `linkTarget` attribute
+   * @param target - target to set; empty string/null/undefined to trigger removal of `linkTarget` attribute
    */
   execute(target: Target): void {
     const editor = this.editor;
@@ -145,9 +142,8 @@ class LinkTargetCommand extends Command {
   }
 
   /**
-   * Depending if the target is empty or not, the attribute is either removed
-   * from the given range or set.
-   * @private
+   * Depending on the target if it is empty or not, the attribute is either
+   * removed from the given range or set.
    */
   static #setOrRemoveTarget(writer: Writer, target: Target, range: Range): void {
     // If we empty the target, we just want to remove it.
@@ -156,7 +152,7 @@ class LinkTargetCommand extends Command {
       // this does no harm. The following command will just do nothing.
       writer.removeAttribute(LINK_TARGET_MODEL, range);
     } else {
-      // May set the very same value as already set. Just as for
+      // May set the same value as already set. Just as for
       // removal: Won't do any action, if the target attribute did
       // not change.
       writer.setAttribute(LINK_TARGET_MODEL, target, range);
@@ -164,12 +160,11 @@ class LinkTargetCommand extends Command {
   }
 
   /**
-   * Similar to `UnlinkCommand` we want to process all ranges which provide the
+   * Similar to `UnlinkCommand` we want to process all ranges, which provide the
    * current `linkHref` attribute. This method returns those ranges, either
    * for a collapsed or an expanded selection.
    *
-   * @param model model to retrieve ranges for
-   * @private
+   * @param model - model to retrieve ranges for
    */
   static #findCurrentLinkHrefRanges(model: Model): Range[] {
     const selection = model.document.selection;
@@ -191,11 +186,10 @@ class LinkTargetCommand extends Command {
    * Null-Safe access for `findAttributeRange` which returns an empty
    * array of ranges, if position is _falsy_.
    *
-   * @param position position to check
-   * @param attributeName attribute name
-   * @param value attribute value
-   * @param model model to get range for
-   * @private
+   * @param position - position to check
+   * @param attributeName - attribute name
+   * @param value - attribute value
+   * @param model - model to get range for
    */
   static #findAttributeRanges(
     position: Position | null | undefined,
