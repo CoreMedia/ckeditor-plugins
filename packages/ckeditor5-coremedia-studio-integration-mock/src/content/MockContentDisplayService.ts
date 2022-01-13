@@ -149,7 +149,7 @@ const firstDelayMs = (slow: boolean, maxFirstDelayMs: number): number => {
  * Create the initial display.
  *
  * @param subscriber - subscriber to inform
- * @param toggling {@code true} to signal toggling mode, {@code false} for not toggling,
+ * @param toggling - `true` to signal toggling mode, `false` for not toggling,
  * i.e., on first value reached, `complete` will be triggered.
  * @param maxFirstDelayMs - delay for first display
  * @param slow - if the initially provided value should take some extra amount of time
@@ -232,8 +232,8 @@ const initToggle = (
  * Creates an observable for the given mode.
  *
  * @param mode - mode to respect.
- * @param truthyState - state if mode is {@code true}; first state while toggling
- * @param falsyState - state if mode is {@code false}; second state while toggling
+ * @param truthyState - state if mode is `true`; first state while toggling
+ * @param falsyState - state if mode is `false`; second state while toggling
  * @param config - configuration for observable behavior
  * @param slow - if the initially provided value should take some extra amount of time
  */
@@ -293,8 +293,6 @@ class MockContentDisplayService implements ContentDisplayService {
 
   /**
    * Constructor with some configuration options for the mock service.
-   *
-   * @param config
    */
   constructor(config?: MockServiceConfig) {
     this.#config = !config ? {} : { ...config };
@@ -350,7 +348,6 @@ class MockContentDisplayService implements ContentDisplayService {
 
   /**
    * Combines the observables for name, type and state into one.
-   * @param uriPath
    */
   observe_asLink(uriPath: UriPath): Observable<ContentAsLink> {
     const nameSubscription = this.observe_name(uriPath);
@@ -543,8 +540,6 @@ interface CreateContentConfig {
 
 /**
  * Provides an identifier within the content ID to configure behavior.
- *
- * @param state
  */
 const stateToIdentifier = (state: ConfigState | undefined): number => {
   if (state === changing$) {
