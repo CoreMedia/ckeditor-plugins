@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+  "tagDefinitions": [
+    {
+      "tagName": "@callback",
+      "syntaxKind": "modifier",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@category",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@enum",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@event",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@hidden",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@ignore",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@module",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@template",
+      "syntaxKind": "modifier",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@typedef",
+      "syntaxKind": "modifier"
+    }
+  ],
+  "supportForTags": {
+    "@callback": true,
+    "@category": true,
+    "@enum": true,
+    "@event": true,
+    "@hidden": true,
+    "@ignore": true,
+    "@module": true,
+    "@template": true,
+    "@typedef": true
+  }
+}

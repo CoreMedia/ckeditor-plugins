@@ -47,6 +47,7 @@
     "@coremedia/types-ckeditor__ckeditor5-engine": "^2.0.0",
     "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "^2.0.0",
     "@coremedia/types-ckeditor__ckeditor5-utils": "^2.0.0",
+    "@microsoft/api-extractor": "^7.19.4",
     "@types/jest": "^27.0.2",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
