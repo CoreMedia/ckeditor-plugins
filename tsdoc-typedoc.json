@@ -4,12 +4,16 @@
   "tagDefinitions": [
     {
       "tagName": "@callback",
-      "syntaxKind": "modifier",
+      "syntaxKind": "block",
       "allowMultiple": true
     },
     {
       "tagName": "@category",
-      "syntaxKind": "modifier"
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@deprecated",
+      "syntaxKind": "block"
     },
     {
       "tagName": "@enum",
@@ -17,7 +21,13 @@
     },
     {
       "tagName": "@event",
-      "syntaxKind": "modifier"
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@example",
+      "syntaxKind": "block",
+      "allowMultiple": true
     },
     {
       "tagName": "@hidden",
@@ -36,26 +46,53 @@
       "syntaxKind": "modifier"
     },
     {
+      "tagName": "@link",
+      "syntaxKind": "inline",
+      "allowMultiple": true
+    },
+    {
       "tagName": "@module",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@override",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@packageDocumentation",
       "syntaxKind": "modifier"
     },
     {
       "tagName": "@param",
-      "syntaxKind": "modifier",
+      "syntaxKind": "block",
       "allowMultiple": true
     },
     {
-      "tagName": "@returns",
+      "tagName": "@readonly",
       "syntaxKind": "modifier"
     },
     {
+      "tagName": "@returns",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@see",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
       "tagName": "@template",
-      "syntaxKind": "modifier",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@throws",
+      "syntaxKind": "block",
       "allowMultiple": true
     },
     {
       "tagName": "@typeParam",
-      "syntaxKind": "modifier",
+      "syntaxKind": "block",
       "allowMultiple": true
     },
     {
@@ -66,16 +103,24 @@
   "supportForTags": {
     "@callback": true,
     "@category": true,
+    "@deprecated": true,
     "@enum": true,
     "@event": true,
+    "@example": true,
     "@hidden": true,
     "@ignore": true,
     "@inheritDoc": true,
     "@internal": true,
+    "@link": true,
     "@module": true,
+    "@override": true,
+    "@packageDocumentation": true,
     "@param": true,
+    "@readonly": true,
     "@returns": true,
+    "@see": true,
     "@template": true,
+    "@throws": true,
     "@typeParam": true,
     "@typedef": true
   }
