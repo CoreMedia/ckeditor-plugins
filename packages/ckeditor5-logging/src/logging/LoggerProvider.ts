@@ -39,8 +39,8 @@ export default class LoggerProvider {
   /**
    * Retrieve logger for the given name.
    *
-   * @param name some identifying name for the logger; used to toggle logging behavior
-   * @param context additional context, which will prefix the logger name in output (dot separated)
+   * @param name - some identifying name for the logger; used to toggle logging behavior
+   * @param context - additional context, which will prefix the logger name in output (dot separated)
    */
   static getLogger(name: string | undefined, ...context: unknown[]): Logger {
     const contextName: string = context.join(".");
@@ -55,9 +55,8 @@ export default class LoggerProvider {
    * log level for specific logger name by an explicit hash-parameter,
    * the fallback is to use the root-logger-name.
    *
-   * @param name (base) name of the logger; if `undefined` explicit log-level
+   * @param name - (base) name of the logger; if `undefined` explicit log-level
    * switching by name will not be available, thus,  only `ckdebug` can be used.
-   * @private
    */
   static #getLoggerLevel(name: string | undefined): LogLevel {
     const logLevelParam: string | boolean = LoggerProvider.#getHashParam(name);
@@ -82,9 +81,8 @@ export default class LoggerProvider {
    * If of type boolean, you will either get the default log level for
    * `true`, or log level `none` if the value is `false`.
    *
-   * @param nameOrSwitch log-level name
+   * @param nameOrSwitch - log-level name
    * @returns the corresponding level
-   * @private
    */
   static #toLogLevel(nameOrSwitch: string | boolean): LogLevel {
     if (typeof nameOrSwitch === "boolean") {
@@ -120,9 +118,9 @@ export default class LoggerProvider {
 
   /**
    * Get the given hash parameter value from the given url
-   * @param {string|undefined} key the hash parameter key to read; `undefined` will always
+   * @param key - the hash parameter key to read; `undefined` will always
    * return `false`
-   * @returns {string/boolean} false iff. hash parameter is not set; true iff. the hash parameter is given without
+   * @returns false iff. hash parameter is not set; true iff. the hash parameter is given without
    * arguments; string value otherwise
    */
   static #getHashParam(key: string | undefined): string | boolean {
