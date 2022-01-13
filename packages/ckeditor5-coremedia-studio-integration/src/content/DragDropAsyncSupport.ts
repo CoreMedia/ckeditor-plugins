@@ -17,7 +17,6 @@ export default class DragDropAsyncSupport {
    * Short-term cache required to resolve asynchronous responses in
    * synchronous environment. Responses are meant to be cached only for the
    * short time between drag-start and drag-end.
-   * @private
    */
   static readonly #isLinkableCache: Map<string, IsLinkableResponse> = new Map<string, IsLinkableResponse>();
 
@@ -70,7 +69,6 @@ export default class DragDropAsyncSupport {
    * cache; defaults to `false`
    * @returns `false`, if either not linkable are a different response is not
    * available yet; `true` if known to be linkable
-   * @private
    */
   static #evaluateIsLinkable(uriPath: string, evictImmediately = false): boolean {
     const logger = DragDropAsyncSupport.#logger;

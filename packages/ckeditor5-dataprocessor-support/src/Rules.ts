@@ -248,7 +248,6 @@ class FilterRuleSetConfigurationParser {
    * rule can exist, it is enough just having one key — it is even required
    * to have one key, so that merging a custom configuration with a default
    * configuration applies parentChild-relation-ship to these rules.
-   * @private
    */
   static readonly #UNBOUND_TO_VIEW_KEY = " ";
 

@@ -10,7 +10,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 class TextProxy extends NodeProxy<Text> implements TextFilterParams {
   /**
    * Possibly overridden text.
-   * @private
    */
   #text: string | undefined;
 
@@ -103,7 +102,6 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
 
   /**
    * For kept text-nodes it possibly sets changed text.
-   * @protected
    */
   protected persistKeepOrReplace(): PersistResponse {
     const response = super.persistKeepOrReplace();

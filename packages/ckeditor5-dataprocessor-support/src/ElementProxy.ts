@@ -10,14 +10,12 @@ import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 class ClassList implements DOMTokenList {
   /**
    * For the proxy, we only need access to the attributes.
-   * @private
    */
   readonly #proxy: Pick<ElementProxy, "attributes">;
   /**
    * Trims the given string.
    *
    * @param v - string to trim
-   * @private
    */
   static readonly #trimValue = (v: string): string => v.trim();
   /**
@@ -26,7 +24,6 @@ class ClassList implements DOMTokenList {
    * @param v - current value
    * @param i - current index
    * @param a - all array values
-   * @private
    */
   static readonly #uniqueValuesOnly = (v: string, i: number, a: string[]) => a.indexOf(v) === i;
 
@@ -48,7 +45,6 @@ class ClassList implements DOMTokenList {
    *
    * @param tokens - tokens to validate
    * @throws DOMException on any mismatched token
-   * @private
    */
   #validate(...tokens: string[]): void {
     const toValidate: string[] = (<string[]>[]).concat(tokens || []);
@@ -89,7 +85,6 @@ class ClassList implements DOMTokenList {
   /**
    * Returns the list of classes set. Entries are trimmed. An empty list is
    * returned, if the value is now empty (trimmed value).
-   * @private
    */
   get #classes(): string[] {
     const raw = this.value;
@@ -105,7 +100,6 @@ class ClassList implements DOMTokenList {
    *
    * @param values - class values to set.
    * @throws Error when proxy is immutable
-   * @private
    */
   set #classes(values: string[]) {
     this.value = values.join(" ");
@@ -117,7 +111,6 @@ class ClassList implements DOMTokenList {
    *
    * @param values - class values to set.
    * @throws Error when proxy is immutable
-   * @private
    */
   set #possiblyDirtyClasses(values: string[]) {
     const trimValue = ClassList.#trimValue;
@@ -296,19 +289,16 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
    * During processing, we may change our identity. This overrides the previous
    * delegate.
-   * @private
    */
   #replacement?: Element;
 
   /**
    * Signals either a possibly new name for this element, or that the name
    * should not be changed (which is `undefined`).
-   * @private
    */
   #name: string | undefined = undefined;
   /**
    * Overrides for attribute values.
-   * @private
    */
   readonly #attributes: Attributes = {};
   /**
@@ -321,7 +311,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * xlink-namespace, no matter if used or not. And we did not add any other
    * namespace, possibly used by other elements.
    *
-   * @private
    */
   readonly #namespaces: Namespaces;
 
@@ -438,7 +427,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * Node should be kept, but may require applying attribute changes or
    * to replace the element by a new one.
    *
-   * @protected
    */
   protected persistKeepOrReplace(): PersistResponse {
     const response = super.persistKeepOrReplace();
@@ -470,7 +458,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * `http://www.w3.org/1999/xhtml` and must be adapted to the corresponding
    * XML namespace.
    *
-   * @private
    */
   #persistAttributes(): PersistResponse {
     const elementNamespaceAttribute: string | null = this.#attributes["xmlns"];
@@ -500,7 +487,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    * @param targetElement - the element to apply attributes to
    * @param attributes - set of attributes to apply
-   * @private
    */
   #applyAttributes(targetElement: Element, attributes: Attributes): void {
     const ownerDocument = targetElement.ownerDocument;
@@ -564,7 +550,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @param newName - new element name
    * @param namespace? optional namespace URI
    * @returns newly created element, for which filtering should be re-applied.
-   * @private
    */
   #persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {
     if (!namespace && !!this.attributes["xmlns"]) {

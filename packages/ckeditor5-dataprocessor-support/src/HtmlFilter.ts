@@ -98,7 +98,6 @@ class HtmlFilter {
    * @param parent - parent of node
    * @param currentNode - current node to process
    * @returns next sibling node to process
-   * @private
    */
   #applyToCurrent(parent: Node, currentNode: Node): Node | null {
     const logger = HtmlFilter.#logger;

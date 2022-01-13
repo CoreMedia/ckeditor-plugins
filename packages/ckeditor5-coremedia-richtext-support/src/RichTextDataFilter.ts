@@ -105,7 +105,6 @@ class RichTextDataFilter extends Plugin {
    * added patterns in `#config`.
    *
    * @param config - additional patterns to load
-   * @private
    */
   #loadAllowedConfig(config: ReducedMatcherPattern[]): void {
     this.#config.push(...config);

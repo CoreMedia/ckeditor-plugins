@@ -145,7 +145,6 @@ export default class RichTextDataProcessor implements DataProcessor {
   /**
    * Transform a fragment into an HTML string for debugging purpose.
    * @param domFragment - fragment to transform
-   * @private
    */
   #fragmentToString(domFragment: Node | DocumentFragment): string {
     return (

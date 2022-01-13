@@ -8,13 +8,10 @@ class NodeProxy<N extends Node = Node> {
    * Flag to signal if this instance is meant to be mutable. Typically, you
    * don't want to make nested instances to be mutable, as the framework will
    * not take care of persisting possibly applied changes.
-   *
-   * @private
    */
   private readonly _mutable: boolean;
   /**
    * Represents the state the node should take when persisting to DOM.
-   * @private
    */
   private _state: NodeState = NodeState.KEEP_OR_REPLACE;
 
@@ -59,7 +56,6 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Will raise an error, if this element is not mutable.
-   * @protected
    */
   protected requireMutable(): void {
     if (!this.mutable) {
@@ -303,7 +299,6 @@ class NodeProxy<N extends Node = Node> {
    * another node, but to do not abort current processing.
    *
    * @param node - node to continue with
-   * @protected
    */
   protected continueFrom(node: Node | null | undefined): PersistResponse {
     return {
@@ -316,7 +311,6 @@ class NodeProxy<N extends Node = Node> {
    * Helper function for return value, which signals "restart from".
    *
    * @param node - node to restart from
-   * @protected
    */
   protected restartFrom(node: Node | null | undefined): PersistResponse {
     return {
@@ -329,8 +323,6 @@ class NodeProxy<N extends Node = Node> {
    * Persists, to keep the current node. May be overwritten for example to
    * apply additional changes to the node like changing attributes of an
    * element.
-   *
-   * @protected
    */
   protected persistKeepOrReplace(): PersistResponse {
     return RESPONSE_CONTINUE;
@@ -338,8 +330,6 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Persists the deletion of this node and all its child nodes.
-   *
-   * @protected
    */
   protected persistRemoveRecursively(): PersistResponse {
     this.delegate.parentNode?.removeChild(this.delegate);
@@ -349,8 +339,6 @@ class NodeProxy<N extends Node = Node> {
   /**
    * Persists, that only the node itself shall be removed.
    * The default implementation will replace the node with its child nodes.
-   *
-   * @protected
    */
   protected persistRemoveSelf(): PersistResponse {
     const parentNode = this.delegate.parentNode;
@@ -386,8 +374,6 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Persists removal of all child nodes.
-   *
-   * @protected
    */
   protected persistRemoveChildren(): PersistResponse {
     while (this.delegate.firstChild) {
