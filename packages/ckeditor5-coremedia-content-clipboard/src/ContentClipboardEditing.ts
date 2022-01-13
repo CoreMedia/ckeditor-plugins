@@ -69,16 +69,14 @@ export default class ContentClipboardEditing extends Plugin {
         contentDisplayService.name(contentDropData.itemContext.contentUri).then(name => {
             ContentClipboardEditing.#writeItemToModel(editor, contentDropData, markerData, (writer: Writer): Node =>
                 ContentClipboardEditing.#createLink(writer, contentDropData.itemContext.contentUri, name ? name: ROOT_NAME));
-            ContentClipboardEditing.#reenableUndo(editor);
           }, (reason) => {
             ContentClipboardEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", contentDropData.itemContext.contentUri, reason);
             ContentDropDataCache.removeData(markerName);
             editor.model.enqueueChange("transparent", (writer: Writer): void  => {
               writer.removeMarker(markerName);
             });
-            ContentClipboardEditing.#reenableUndo(editor);
           }
-        );
+        ).finally(() => ContentClipboardEditing.#reenableUndo(editor));
       });
   }
 
