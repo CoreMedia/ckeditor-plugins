@@ -71,8 +71,8 @@ const mergePatterns = (...sources: ReducedMatcherPattern[]): ReducedMatcherPatte
  * Finds the first pattern, which matches the given name (either by string
  * equality or pattern match). Patterns without names are ignored during lookup.
  *
- * @param name
- * @param patterns
+ * @param name - name to find
+ * @param patterns - patterns to search in
  * @returns pattern found; `undefined` for no pattern found
  */
 const findFirstPattern = (name: string, ...patterns: ReducedMatcherPattern[]): ReducedMatcherPattern | undefined => {
