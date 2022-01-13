@@ -131,13 +131,18 @@ export default class ContentClipboard extends Plugin {
       dropId,
       batch,
       multipleItemsDropped: cmDataUris.length > 1,
-      selectedAttributes: attributes
-    }
+      selectedAttributes: attributes,
+    };
 
     // add a drop marker for each item
     cmDataUris.forEach((contentUri: string, index: number): void => {
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-      const contentDropData = ContentClipboard.#createContentDropData(dropContext, contentUri, isEmbeddableContent, index);
+      const contentDropData = ContentClipboard.#createContentDropData(
+        dropContext,
+        contentUri,
+        isEmbeddableContent,
+        index
+      );
       ContentClipboard.#addContentDropMarker(editor, targetRange, contentDropData);
     });
   };
@@ -152,7 +157,10 @@ export default class ContentClipboard extends Plugin {
    * @param contentDropData - content drop data
    */
   static #addContentDropMarker(editor: Editor, markerRange: Range, contentDropData: ContentDropData): void {
-    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(contentDropData.dropContext.dropId, contentDropData.itemContext.itemIndex);
+    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(
+      contentDropData.dropContext.dropId,
+      contentDropData.itemContext.itemIndex
+    );
     ContentClipboard.#LOGGER.debug("Adding content-drop marker", markerName, contentDropData);
     editor.model.enqueueChange("transparent", (writer: Writer) => {
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
@@ -169,7 +177,7 @@ export default class ContentClipboard extends Plugin {
    */
   static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): Range | null {
     if (!data.targetRanges) {
-      return editor.model.document.selection.getFirstRange()
+      return editor.model.document.selection.getFirstRange();
     }
     const targetRanges: Range[] = data.targetRanges.map((viewRange: Range): Range => {
       return editor.editing.mapper.toModelRange(viewRange);
@@ -189,14 +197,19 @@ export default class ContentClipboard extends Plugin {
    * @param itemIndex - the position of the item inside the drop
    * @returns ContentDropData
    */
-  static #createContentDropData(dropContext: DropContext, contentUri: string, isEmbeddableContent: boolean, itemIndex: number): ContentDropData {
+  static #createContentDropData(
+    dropContext: DropContext,
+    contentUri: string,
+    isEmbeddableContent: boolean,
+    itemIndex: number
+  ): ContentDropData {
     return {
       dropContext,
       itemContext: {
         contentUri,
         itemIndex,
-        isEmbeddableContent
-      }
-    }
+        isEmbeddableContent,
+      },
+    };
   }
 }

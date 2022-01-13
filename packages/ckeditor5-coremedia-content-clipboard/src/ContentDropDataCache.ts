@@ -17,19 +17,19 @@ export default class ContentDropDataCache {
 }
 
 export type ContentDropData = {
-  dropContext: DropContext,
-  itemContext: ItemContext
-}
+  dropContext: DropContext;
+  itemContext: ItemContext;
+};
 
 export type ItemContext = {
-  contentUri: string,
-  isEmbeddableContent: boolean,
-  itemIndex: number
-}
+  contentUri: string;
+  isEmbeddableContent: boolean;
+  itemIndex: number;
+};
 
 export type DropContext = {
-  dropId: number,
-  batch: Batch,
-  selectedAttributes: Array<[string, string | number | boolean]>,
-  multipleItemsDropped: boolean
-}
+  dropId: number;
+  batch: Batch;
+  selectedAttributes: Array<[string, string | number | boolean]>;
+  multipleItemsDropped: boolean;
+};
