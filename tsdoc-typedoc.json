@@ -1,5 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+  "noStandardTags": true,
   "tagDefinitions": [
     {
       "tagName": "@callback",
@@ -27,11 +28,33 @@
       "syntaxKind": "modifier"
     },
     {
+      "tagName": "@internal",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@inheritDoc",
+      "syntaxKind": "modifier"
+    },
+    {
       "tagName": "@module",
       "syntaxKind": "modifier"
     },
     {
+      "tagName": "@param",
+      "syntaxKind": "modifier",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@returns",
+      "syntaxKind": "modifier"
+    },
+    {
       "tagName": "@template",
+      "syntaxKind": "modifier",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@typeParam",
       "syntaxKind": "modifier",
       "allowMultiple": true
     },
@@ -47,8 +70,13 @@
     "@event": true,
     "@hidden": true,
     "@ignore": true,
+    "@inheritDoc": true,
+    "@internal": true,
     "@module": true,
+    "@param": true,
+    "@returns": true,
     "@template": true,
+    "@typeParam": true,
     "@typedef": true
   }
 }
