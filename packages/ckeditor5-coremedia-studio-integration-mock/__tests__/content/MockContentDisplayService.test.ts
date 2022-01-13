@@ -90,7 +90,7 @@ interface UriPath2ContentAsLink {
  *
  * @param skip - `true` to mark a test as skipped
  * @param only - `true` to only execute this test
- * @return test function
+ * @returns test function
  */
 const modalTest = ({ skip, only }: TestMode): jest.It => {
   if (skip) {

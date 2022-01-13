@@ -77,7 +77,7 @@ export default class RichTextDataProcessor implements DataProcessor {
    * option `trim: 'none'` on `CKEditor.getData()`.
    *
    * @param viewFragment - fragment from view model to process
-   * @return CoreMedia RichText 1.0 XML as string
+   * @returns CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
     const logger = RichTextDataProcessor.#logger;
@@ -97,7 +97,7 @@ export default class RichTextDataProcessor implements DataProcessor {
    * Prepares toData transformation.
    *
    * @param viewFragment - view fragment to transform
-   * @return `richTextDocument` the (empty) document, which shall receive the transformed data;
+   * @returns `richTextDocument` the (empty) document, which shall receive the transformed data;
    * `domFragment` the view DOM-structure to transform;
    * `fragmentAsStringForDebugging` some representation of `domFragment` to be used for debugging — it will only
    * be initialized, if debug logging is turned on.
@@ -135,7 +135,7 @@ export default class RichTextDataProcessor implements DataProcessor {
    * @param fromView - the fragment created from view
    * @param targetDocument - the target document, which will get the elements added
    * and will be transformed according to the rules
-   * @return the transformed CoreMedia RichText XML
+   * @returns the transformed CoreMedia RichText XML
    */
   toDataInternal(fromView: Node | DocumentFragment, targetDocument?: Document): string {
     const dataDocument = this.#toDataProcessor.toData(fromView, targetDocument);

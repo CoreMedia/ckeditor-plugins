@@ -413,7 +413,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * by deletion, no further rules will be applied.
    *
    * @param rules - rules to apply in given order
-   * @return a node, if filtering should be continued from this node; `null` for default as next node.
+   * @returns a node, if filtering should be continued from this node; `null` for default as next node.
    */
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
     let result: Node | null = null;
@@ -563,7 +563,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    * @param newName - new element name
    * @param namespace? optional namespace URI
-   * @return newly created element, for which filtering should be re-applied.
+   * @returns newly created element, for which filtering should be re-applied.
    * @private
    */
   #persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {

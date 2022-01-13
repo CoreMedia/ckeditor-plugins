@@ -185,7 +185,7 @@ const initDisplay = (
  * @param changeDelayMs - the change delay in milliseconds
  * @param firstState - first state to enter
  * @param otherStates - other states to follow
- * @return TeardownLogic function to stop the timer on unsubscribe
+ * @returns TeardownLogic function to stop the timer on unsubscribe
  */
 const initToggle = (
   subscriber: Subscriber<DisplayHint>,

@@ -41,7 +41,7 @@ export enum Strictness {
  * Validator type for attribute values.
  * @param value - the attribute value to validate
  * @param strictness - mode for checking validity
- * @return `true` if attribute value is considered valid; `false` if not
+ * @returns `true` if attribute value is considered valid; `false` if not
  */
 type AttributeValueValidator = (value: string, strictness?: Strictness) => boolean;
 
@@ -642,7 +642,7 @@ export default class RichTextSchema {
    * Checks, if the given element is known to be valid at current parent.
    *
    * @param element - element to validate
-   * @return `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
+   * @returns `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
    * for removal (name is empty or null) or if the given element is not allowed at parent.
    */
   isElementAllowedAtParent(element: ElementProxy): boolean {

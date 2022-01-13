@@ -21,7 +21,7 @@ export default class ToDataProcessor {
    * @param fromView - the fragment created from view
    * @param targetDocument - the target document, which will get the elements added
    * and will be transformed according to the rules
-   * @return the transformed CoreMedia RichText XML
+   * @returns the transformed CoreMedia RichText XML
    */
   toData(fromView: Node | DocumentFragment, targetDocument?: Document): Document {
     const document: Document = targetDocument || ToDataProcessor.createCoreMediaRichTextDocument();

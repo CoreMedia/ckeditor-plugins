@@ -260,7 +260,7 @@ class TableWrapper extends ElementWrapper {
   /**
    * Removes the given child element.
    * @param oldChild - child element to remove
-   * @return removed child
+   * @returns removed child
    */
   removeChild(oldChild: Node): Node {
     return this.delegate.removeChild(oldChild);

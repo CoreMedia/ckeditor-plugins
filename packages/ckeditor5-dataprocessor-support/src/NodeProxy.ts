@@ -34,7 +34,7 @@ class NodeProxy<N extends Node = Node> {
    *
    * @param node - node to wrap
    * @param mutable - signals, if this representation is mutable or not
-   * @return NodeProxy for given node; `null` for falsy values
+   * @returns NodeProxy for given node; `null` for falsy values
    */
   public static proxy<T extends Node>(node: T | undefined | null, mutable = true): NodeProxy<T> | null {
     if (!!node) {
@@ -280,7 +280,7 @@ class NodeProxy<N extends Node = Node> {
   /**
    * Persists the applied changes to the DOM.
    *
-   * @return {PersistResponse} which signals, how to continue persisting other nodes
+   * @returns {PersistResponse} which signals, how to continue persisting other nodes
    * @internal Public only for testing purpose.
    */
   public persistToDom(): PersistResponse {
