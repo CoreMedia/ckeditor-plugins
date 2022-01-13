@@ -548,7 +548,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * the owner document.
    *
    * @param newName - new element name
-   * @param namespace? optional namespace URI
+   * @param namespace - optional namespace URI
    * @returns newly created element, for which filtering should be re-applied.
    */
   #persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {

@@ -276,7 +276,7 @@ class NodeProxy<N extends Node = Node> {
   /**
    * Persists the applied changes to the DOM.
    *
-   * @returns {PersistResponse} which signals, how to continue persisting other nodes
+   * @returns `PersistResponse` which signals, how to continue persisting other nodes
    * @internal Public only for testing purpose.
    */
   public persistToDom(): PersistResponse {
