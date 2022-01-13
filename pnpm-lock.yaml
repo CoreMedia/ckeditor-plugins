@@ -155,6 +155,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -203,6 +204,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -241,6 +243,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -278,6 +281,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -317,6 +321,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -355,6 +360,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -399,6 +405,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -442,6 +449,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -475,6 +483,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -509,6 +518,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -546,6 +556,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -584,6 +595,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -621,6 +633,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-each: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -657,6 +670,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-each: 27.3.1
       jest-transform-stub: 2.0.0
@@ -695,6 +709,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-config: ^27.3.1
       jest-transform-stub: ^2.0.0
@@ -727,6 +742,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-config: 27.3.1
       jest-transform-stub: 2.0.0
@@ -784,6 +800,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.14
       jest: ^27.3.1
       jest-transform-stub: ^2.0.0
       prettier: ^2.4.1
@@ -841,6 +858,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-prettier: 4.0.0_9fba825b82a5f853d1fb68962b1ee0f0
+      eslint-plugin-tsdoc: 0.2.14
       jest: 27.3.1
       jest-transform-stub: 2.0.0
       prettier: 2.4.1
@@ -2802,6 +2820,19 @@ packages:
       '@types/node': 16.7.10
       '@types/yargs': 16.0.4
       chalk: 4.1.2
+    dev: true
+
+  /@microsoft/tsdoc-config/0.15.2:
+    resolution: {integrity: sha512-mK19b2wJHSdNf8znXSMYVShAHktVr/ib0Ck2FA3lsVBSEhSI/TfXT7DJQkAYgcztTuwazGcg58ZjYdk0hTCVrA==}
+    dependencies:
+      '@microsoft/tsdoc': 0.13.2
+      ajv: 6.12.6
+      jju: 1.4.0
+      resolve: 1.19.0
+    dev: true
+
+  /@microsoft/tsdoc/0.13.2:
+    resolution: {integrity: sha512-WrHvO8PDL8wd8T2+zBGKrMwVL5IyzR3ryWUsl0PXgEV0QHup4mTLi0QcATefGI6Gx9Anu7vthPyyyLpY0EpiQg==}
     dev: true
 
   /@mrmlnc/readdir-enhanced/2.2.1:
@@ -5693,6 +5724,13 @@ packages:
       prettier-linter-helpers: 1.0.0
     dev: true
 
+  /eslint-plugin-tsdoc/0.2.14:
+    resolution: {integrity: sha512-fJ3fnZRsdIoBZgzkQjv8vAj6NeeOoFkTfgosj6mKsFjX70QV256sA/wq+y/R2+OL4L8E79VVaVWrPeZnKNe8Ng==}
+    dependencies:
+      '@microsoft/tsdoc': 0.13.2
+      '@microsoft/tsdoc-config': 0.15.2
+    dev: true
+
   /eslint-scope/4.0.3:
     resolution: {integrity: sha512-p7VutNr1O/QrxysMo3E45FjYDTeXBy0iTltPFNSqKAIfjDSXC+4dj+qfyuD8bfAXrW/y6lW3O76VaYNPKfpKrg==}
     engines: {node: '>=4.0.0'}
@@ -7648,6 +7686,10 @@ packages:
       - supports-color
       - ts-node
       - utf-8-validate
+    dev: true
+
+  /jju/1.4.0:
+    resolution: {integrity: sha1-o6vicYryQaKykE+EpiWXDzia4yo=}
     dev: true
 
   /js-tokens/3.0.2:
@@ -9838,6 +9880,13 @@ packages:
   /resolve.exports/1.1.0:
     resolution: {integrity: sha512-J1l+Zxxp4XK3LUDZ9m60LRJF/mAe4z6a4xyabPHk7pvK5t35dACV32iIjJDFeWZFfZlO29w6SZ67knR0tHzJtQ==}
     engines: {node: '>=10'}
+    dev: true
+
+  /resolve/1.19.0:
+    resolution: {integrity: sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==}
+    dependencies:
+      is-core-module: 2.6.0
+      path-parse: 1.0.7
     dev: true
 
   /resolve/1.20.0:

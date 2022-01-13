@@ -50,6 +50,7 @@
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
     "jest": "^27.3.1",
     "jest-each": "^27.3.1",
     "jest-transform-stub": "^2.0.0",

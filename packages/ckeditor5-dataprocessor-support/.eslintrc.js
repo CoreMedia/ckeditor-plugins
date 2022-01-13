@@ -1,4 +1,5 @@
 module.exports = {
+  plugins: ["@typescript-eslint/eslint-plugin", "eslint-plugin-tsdoc"],
   overrides: [
     {
       files: ["*.ts", "*.tsx"], // Your TypeScript files extension
@@ -19,6 +20,7 @@ module.exports = {
     sourceType: "module", // Allows for the use of imports
   },
   rules: {
+    "tsdoc/syntax": "warn",
     "@typescript-eslint/no-this-alias": [
       "error",
       {
