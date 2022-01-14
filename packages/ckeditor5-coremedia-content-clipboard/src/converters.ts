@@ -5,9 +5,17 @@ import {
   RemoveMarkerEventData,
 } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentDropDataCache from "./ContentDropDataCache";
-import UIElement from "@ckeditor/ckeditor5-engine/src/view/uielement";
 import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
 
+/**
+ * Conversion function used in DowncastDispatcher event listeners.
+ * Adds a UIElement to the editing view at a given marker position.
+ * The marker position is retrieved from the data object provided by the event listener.
+ *
+ * The added UIElement renders a loading spinner into the editing view without changing the model.
+ *
+ * @param callback - the callback to be executed after the UIElement has been added (Usually to load the data for the loading spinner). Gets the markerData of the corresponding marker as the sole argument.
+ */
 export const addContentMarkerConversion = (callback: (markerData: MarkerData) => void) => {
   return (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
     const viewPosition = conversionApi.mapper.toViewPosition(data.markerRange.start);
@@ -16,7 +24,7 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
       return;
     }
 
-    let loadMaskClasses = ["cm-load-mask"];
+    const loadMaskClasses = ["cm-load-mask"];
     if (!contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped) {
       loadMaskClasses.push("cm-load-mask--inline");
     }
@@ -29,6 +37,16 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
     evt.stop();
   };
 };
+
+/**
+ * Conversion function used in DowncastDispatcher event listeners.
+ * Removes a previously added UIElement from the editing view at a given marker position.
+ * Does not change the model.
+ *
+ * @param evt - eventInfo
+ * @param data - the remove marker event data
+ * @param conversionApi - downcast conversion api
+ */
 export const removeContentMarkerConversion = (
   evt: EventInfo,
   data: RemoveMarkerEventData,

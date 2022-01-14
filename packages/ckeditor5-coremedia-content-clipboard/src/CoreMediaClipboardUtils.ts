@@ -7,7 +7,7 @@ export default class CoreMediaClipboardUtils {
    * `cm/uri-list` and contain the URIs in the form `content/42` (wrapped
    * by some JSON).
    *
-   * @param data data to get content URIs from
+   * @param data - data to get content URIs from
    * @returns array of content-URIs, possibly empty; `null` signals, that the data did not contain content-URI data
    * @private
    */
