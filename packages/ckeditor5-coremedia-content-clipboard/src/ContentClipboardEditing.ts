@@ -117,15 +117,12 @@ export default class ContentClipboardEditing extends Plugin {
           evtInfo.off();
         }
       });
-      writer.insert(item, insertPosition);
-      const positionAfterInsertedElement = writer.createPositionAt(item, "after");
-      const positionBeforeInsertedElement = writer.createPositionAt(item, "before");
-      const range = writer.createRange(positionBeforeInsertedElement, positionAfterInsertedElement);
+      const range = writer.model.insertContent(item, insertPosition);
       ContentClipboardEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
       //evaluate if a the container element has to be split after the element has been inserted.
       //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.
-      const finalAfterInsertPosition = isInline || positionAfterInsertedElement.isAtEnd ? positionAfterInsertedElement: writer.split(positionAfterInsertedElement).range.end;
+      const finalAfterInsertPosition = isInline || range.end.isAtEnd ? range.end: writer.split(range.end).range.end;
       ContentClipboardEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
       ContentClipboardEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
     });
