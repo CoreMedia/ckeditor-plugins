@@ -74,5 +74,5 @@ jobs:
         run: |
           pnpm install --production
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
+          pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks --tag pullrequest
 
