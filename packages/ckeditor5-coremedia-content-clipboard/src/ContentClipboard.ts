@@ -48,7 +48,7 @@ export default class ContentClipboard extends Plugin {
     const viewDocument = view.document;
 
     // Processing pasted or dropped content.
-    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
+    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler, { priority: "highest" });
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
   }
 
@@ -109,6 +109,8 @@ export default class ContentClipboard extends Plugin {
     if (!targetRange) {
       return;
     }
+
+    evt.stop();
 
     // we might run into trouble during complex input scenarios
     // e.g. a drop with multiple items will result in different requests that might differ in response time
