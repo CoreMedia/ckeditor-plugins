@@ -21,6 +21,7 @@ const setDragData = (dragEvent) => {
     dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
     serviceAgent.registerService(dragDropService);
     dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
+    dragEvent.dataTransfer.setData('text', JSON.stringify(contentList(...idsArray)));
     return;
   }
   dragEvent.dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
