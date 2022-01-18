@@ -4,8 +4,9 @@ import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observa
 import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
 import DataProcessor from "../dataprocessor/dataprocessor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "../view/observer/domeventdata";
+import Element from "../view/element";
 import Mapper from "../conversion/mapper";
+import { SchemaContextDefinition } from "../model/schema";
 
 /**
  * Controller for the data pipeline.
@@ -35,4 +36,6 @@ export default class DataController implements Emitter, Observable {
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
   decorate(methodName: string): void;
+
+  toModel(viewElementOdFramgment: Element | DocumentFragment, context?: SchemaContextDefinition): DocumentFragment;
 }

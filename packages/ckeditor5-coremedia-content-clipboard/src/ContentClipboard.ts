@@ -3,6 +3,7 @@ import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
+import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
@@ -14,6 +15,7 @@ import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
+import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import CommandUtils from "./CommandUtils";
 
 /**
@@ -29,7 +31,7 @@ export default class ContentClipboard extends Plugin {
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard, ContentClipboardEditing, UndoEditing];
+    return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoEditing];
   }
 
   init(): Promise<void> | null {
@@ -46,19 +48,27 @@ export default class ContentClipboard extends Plugin {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
+    const clipboardPipelinePlugin = editor.plugins.get("ClipboardPipeline");
 
     // Processing pasted or dropped content.
-    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler, { priority: "highest" });
+    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
+    if (clipboardPipelinePlugin) {
+      this.listenTo(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
+    }
   }
 
   destroy(): null {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
+    const clipboardPipelinePlugin = editor.plugins.get("ClipboardPipeline");
 
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
+    if (clipboardPipelinePlugin) {
+      this.stopListening(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
+    }
     return null;
   }
 
@@ -96,13 +106,23 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   #clipboardInputHandler = (evt: EventInfo, data: ClipboardEventData): void => {
-    const editor = this.editor;
-    const cmDataUris: string[] | null = CoreMediaClipboardUtils.extractContentUris(data);
-
-    // return if this input does not contain content items
-    if (!cmDataUris || cmDataUris.length === 0) {
+    // return if this is no CoreMedia content drop
+    if (!CoreMediaClipboardUtils.isContentInput(data)) {
       return;
     }
+
+    // this is kinda hacky, we need to set content in order to skip the default clipboardInputHandler
+    // by setting content, we mark this event as "already resolved"
+    data.content = new DocumentFragment();
+  };
+
+  #inputTransformation = (evt: EventInfo, data: ClipboardEventData): void => {
+    // return if this is no CoreMedia content drop
+    if (!CoreMediaClipboardUtils.isContentInput(data)) {
+      return;
+    }
+
+    const editor = this.editor;
 
     // return if no range has been set (usually indicated by a blue cursor during the drag)
     const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
@@ -110,6 +130,14 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
+    const cmDataUris: string[] | null = CoreMediaClipboardUtils.extractContentUris(data);
+
+    // return if this input does not contain content items
+    if (!cmDataUris || cmDataUris.length === 0) {
+      return;
+    }
+
+    // do not trigger the default inputTransformation event listener to avoid rendering the text of the input data
     evt.stop();
 
     // we might run into trouble during complex input scenarios
@@ -146,6 +174,17 @@ export default class ContentClipboard extends Plugin {
         index
       );
       ContentClipboard.#addContentDropMarker(editor, targetRange, contentDropData);
+    });
+
+    // Fire content insertion event in a single change block to allow other handlers to run in the same block
+    // without post-fixers called in between (i.e., the selection post-fixer).
+    this.editor.model.change(() => {
+      this.fire("contentInsertion", {
+        content: new DocumentFragment(),
+        method: (data as any).method,
+        dataTransfer: data.dataTransfer,
+        targetRanges: data.targetRanges,
+      });
     });
   };
 

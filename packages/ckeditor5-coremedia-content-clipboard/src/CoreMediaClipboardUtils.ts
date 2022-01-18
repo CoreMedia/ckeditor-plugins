@@ -23,4 +23,8 @@ export default class CoreMediaClipboardUtils {
     }
     return extractContentUriPathsFromDragEventJsonData(cmUriList);
   }
+
+  static isContentInput(data: ClipboardEventData): boolean {
+    return !!CoreMediaClipboardUtils.extractContentUris(data);
+  }
 }
