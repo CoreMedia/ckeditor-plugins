@@ -9,8 +9,7 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor
-  from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
@@ -26,8 +25,10 @@ import { addContentMarkerConversion, removeContentMarkerConversion } from "./con
 export default class ContentClipboardEditing extends Plugin {
   static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
   static #LOGGER: Logger = LoggerProvider.getLogger(ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME);
-  static readonly #CONTENT_DROP_ADD_MARKER_EVENT = "addMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
-  static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT = "removeMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
+  static readonly #CONTENT_DROP_ADD_MARKER_EVENT =
+    "addMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
+  static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT =
+    "removeMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
   static get pluginName(): string {
     return ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME;
   }
@@ -45,10 +46,13 @@ export default class ContentClipboardEditing extends Plugin {
     const editor = this.editor;
     const conversion = editor.conversion;
 
-    conversion.for("editingDowncast").add( (dispatcher: DowncastDispatcher) => {
-      dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_ADD_MARKER_EVENT, addContentMarkerConversion((markerData: MarkerData): void => {
-        ContentClipboardEditing.#triggerLoadAndWriteToModel(editor, markerData);
-      }));
+    conversion.for("editingDowncast").add((dispatcher: DowncastDispatcher) => {
+      dispatcher.on(
+        ContentClipboardEditing.#CONTENT_DROP_ADD_MARKER_EVENT,
+        addContentMarkerConversion((markerData: MarkerData): void => {
+          ContentClipboardEditing.#triggerLoadAndWriteToModel(editor, markerData);
+        })
+      );
       dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
     });
   }
@@ -66,17 +70,35 @@ export default class ContentClipboardEditing extends Plugin {
     serviceAgent
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
-        contentDisplayService.name(contentDropData.itemContext.contentUri).then(name => {
-            ContentClipboardEditing.#writeItemToModel(editor, contentDropData, markerData, (writer: Writer): Node =>
-                ContentClipboardEditing.#createLink(writer, contentDropData.itemContext.contentUri, name ? name: ROOT_NAME));
-          }, (reason) => {
-            ContentClipboardEditing.#LOGGER.warn("An error occurred on request to ContentDisplayService.name()", contentDropData.itemContext.contentUri, reason);
-            ContentDropDataCache.removeData(markerName);
-            editor.model.enqueueChange("transparent", (writer: Writer): void  => {
-              writer.removeMarker(markerName);
-            });
-          }
-        ).finally(() => ContentClipboardEditing.#reenableUndo(editor));
+        contentDisplayService
+          .name(contentDropData.itemContext.contentUri)
+          .then(
+            (name) => {
+              ContentClipboardEditing.#writeItemToModel(
+                editor,
+                contentDropData,
+                markerData,
+                (writer: Writer): Node =>
+                  ContentClipboardEditing.#createLink(
+                    writer,
+                    contentDropData.itemContext.contentUri,
+                    name ? name : ROOT_NAME
+                  )
+              );
+            },
+            (reason) => {
+              ContentClipboardEditing.#LOGGER.warn(
+                "An error occurred on request to ContentDisplayService.name()",
+                contentDropData.itemContext.contentUri,
+                reason
+              );
+              ContentDropDataCache.removeData(markerName);
+              editor.model.enqueueChange("transparent", (writer: Writer): void => {
+                writer.removeMarker(markerName);
+              });
+            }
+          )
+          .finally(() => ContentClipboardEditing.#reenableUndo(editor));
       });
   }
 
@@ -87,14 +109,22 @@ export default class ContentClipboardEditing extends Plugin {
   }
 
   static #reenableUndo(editor: Editor): void {
-    const markers = Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX));
+    const markers = Array.from(
+      editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)
+    );
     if (markers.length === 0) {
       CommandUtils.enableCommand(editor, "undo");
     }
   }
 
-  static #writeItemToModel(editor: Editor, contentDropData: ContentDropData, markerData: MarkerData, createItemFunction: (writer: Writer) => Node): void {
-    const isInline = !contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped;
+  static #writeItemToModel(
+    editor: Editor,
+    contentDropData: ContentDropData,
+    markerData: MarkerData,
+    createItemFunction: (writer: Writer) => Node
+  ): void {
+    const isInline =
+      !contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped;
 
     editor.model.enqueueChange(contentDropData.dropContext.batch, (writer: Writer): void => {
       const item: Node = createItemFunction(writer);
@@ -109,20 +139,26 @@ export default class ContentClipboardEditing extends Plugin {
       }
 
       const isFirstDroppedItem = markerData.itemIndex === 0;
-      const insertPosition = !isFirstDroppedItem || isInline || markerPosition.isAtStart ? markerPosition : writer.split(markerPosition).range.end;
+      const insertPosition =
+        !isFirstDroppedItem || isInline || markerPosition.isAtStart
+          ? markerPosition
+          : writer.split(markerPosition).range.end;
       const gravityRestore = writer.overrideSelectionGravity();
-      writer.model.document.selection.on("change:range", (evtInfo: EventInfo, directChange: SelectionRangeChangeEventData) => {
-        if (directChange.directChange) {
-          writer.restoreSelectionGravity(gravityRestore);
-          evtInfo.off();
+      writer.model.document.selection.on(
+        "change:range",
+        (evtInfo: EventInfo, directChange: SelectionRangeChangeEventData) => {
+          if (directChange.directChange) {
+            writer.restoreSelectionGravity(gravityRestore);
+            evtInfo.off();
+          }
         }
-      });
+      );
       const range = writer.model.insertContent(item, insertPosition);
       ContentClipboardEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
       //evaluate if a the container element has to be split after the element has been inserted.
       //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.
-      const finalAfterInsertPosition = isInline || range.end.isAtEnd ? range.end: writer.split(range.end).range.end;
+      const finalAfterInsertPosition = isInline || range.end.isAtEnd ? range.end : writer.split(range.end).range.end;
       ContentClipboardEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
       ContentClipboardEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
     });
@@ -140,33 +176,31 @@ export default class ContentClipboardEditing extends Plugin {
   static #moveMarkerForPreviousItemsToLeft(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
     const markers: Array<Marker> = ContentClipboardEditing.#findMarkersBefore(editor, marker, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
-
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
       const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
       if (!currentData) {
         return;
       }
       editor.model.enqueueChange("transparent", (writer: Writer): void => {
-          const newRange = writer.createRange(start, start);
-          writer.updateMarker(markerToMoveToLeft, {range: newRange})
+        const newRange = writer.createRange(start, start);
+        writer.updateMarker(markerToMoveToLeft, { range: newRange });
       });
-    })
+    });
   }
 
   static #moveMarkerForNextItemsToTheRight(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
     const markers: Array<Marker> = ContentClipboardEditing.#findMarkersAfter(editor, marker, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
-
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
       const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
       if (!currentData) {
         return;
       }
       editor.model.enqueueChange("transparent", (writer: Writer): void => {
-          const newRange = writer.createRange(start, start);
-          writer.updateMarker(markerToMoveToLeft, {range: newRange})
+        const newRange = writer.createRange(start, start);
+        writer.updateMarker(markerToMoveToLeft, { range: newRange });
       });
-    })
+    });
   }
 
   static #findMarkersBefore(editor: Editor, marker: Marker, markerData: MarkerData): Array<Marker> {
@@ -185,12 +219,14 @@ export default class ContentClipboardEditing extends Plugin {
 
       //If a drop done later to the same position happened we want to make sure all the dropped
       //items stay on the left of the marker.
-      return otherMarkerData.dropId > dropId
+      return otherMarkerData.dropId > dropId;
     });
   }
 
   static #markersAtPosition(editor: Editor, position: Position): Array<Marker> {
-    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)).filter(value => {
+    return Array.from(
+      editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)
+    ).filter((value) => {
       return value.getStart().isEqual(position);
     });
   }
@@ -211,7 +247,7 @@ export default class ContentClipboardEditing extends Plugin {
 
       //If a drop done later to the same position happened we want to make sure all the dropped
       //items stay on the right of the marker.
-      return otherMarkerData.dropId < dropId
+      return otherMarkerData.dropId < dropId;
     });
   }
   /**
