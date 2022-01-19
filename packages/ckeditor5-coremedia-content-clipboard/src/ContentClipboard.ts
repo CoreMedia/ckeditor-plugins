@@ -15,7 +15,8 @@ import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
-import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
+import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
+import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import CommandUtils from "./CommandUtils";
 
 /**
@@ -102,6 +103,9 @@ export default class ContentClipboard extends Plugin {
    * Handler for the clipboardInput event. This function gets called when
    * an item is dropped or pasted into the editor.
    *
+   * See: https://github.com/ckeditor/ckeditor5/blob/6eab4831ef4432152069c457c8921395315c1b33/packages/ckeditor5-clipboard/src/clipboardpipeline.js#L59-L121
+   * The goal here is to hook into the clipboardPipeline and use our inputTransform method if the clipboard data is a CoreMedia content.
+   *
    * @param evt - event information
    * @param data - clipboard data
    */
@@ -113,9 +117,19 @@ export default class ContentClipboard extends Plugin {
 
     // this is kinda hacky, we need to set content in order to skip the default clipboardInputHandler
     // by setting content, we mark this event as "already resolved"
-    data.content = new DocumentFragment();
+    data.content = new ViewDocumentFragment();
   };
 
+  /**
+   * Event listener callback that gets hooked into CKEditor's clipboardPipeline.
+   * If the retrieved data is a CoreMedia content, the event will be stopped. This also stops the default clipboardPipeline.
+   * After adding all needed markers (and UIElements), we trigger the last step of the pipeline manually by firing an event with an empty document fragment.
+   *
+   * Important: This function also disabled the undo command. Be sure to enable it again after the content has been written to the model.
+   *
+   * @param evt - event information
+   * @param data - clipboard data
+   */
   #inputTransformation = (evt: EventInfo, data: ClipboardEventData): void => {
     // return if this is no CoreMedia content drop
     if (!CoreMediaClipboardUtils.isContentInput(data)) {
@@ -180,8 +194,8 @@ export default class ContentClipboard extends Plugin {
     // without post-fixers called in between (i.e., the selection post-fixer).
     this.editor.model.change(() => {
       this.fire("contentInsertion", {
-        content: new DocumentFragment(),
-        method: (data as any).method,
+        content: new ModelDocumentFragment(),
+        method: data.method,
         dataTransfer: data.dataTransfer,
         targetRanges: data.targetRanges,
       });
