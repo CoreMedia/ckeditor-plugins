@@ -110,7 +110,16 @@ jobs:
         run: pnpm jest
       - name: Install for Production
         run: pnpm install --production
-      - name: Publish
+      # Publishes a release candidate with tag "next".
+      - name: Publish RC
+        if: github.event_name == 'push'
+        run: |
+          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
+          pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks --tag next
+          git reset --hard
+      # Publishes a release with tag "latest"
+      - name: Publish Release
+        if: github.event_name == 'workflow_dispatch'
         run: |
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks
