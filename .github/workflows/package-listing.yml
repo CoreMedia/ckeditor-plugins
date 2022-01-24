@@ -1,13 +1,9 @@
-name: Unpublish Version
+name: List packages
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to unpublish'
-        required: true
 jobs:
   build:
-    name: Unpublish Version
+    name: Package listing
     env:
       NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
     runs-on: ubuntu-latest
@@ -21,18 +17,12 @@ jobs:
           echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-      - name: Unpublish release
+      - name: List all @coremedia/ckeditor5 packages with all versions
         run: |
-          version=${{ github.event.inputs.version }}
-          if [[ $version != *"-"* ]]; then
-            echo "$version is a release version. Only prerelease versions can be unpublished"
-            exit 0
-          fi
-
           cmcke5packages=$(npm search "@coremedia/ckeditor" --json --registry https://npm.coremedia.io)
-          echo "$version"
-          echo "$cmcke5packages"
           for i in $(jq -r ".[].name" <(echo "$cmcke5packages"))
           do
-            npm unpublish $i@$version
+            echo $i
+            npm view "$i" versions --registry https://npm.coremedia.io
           done
+
