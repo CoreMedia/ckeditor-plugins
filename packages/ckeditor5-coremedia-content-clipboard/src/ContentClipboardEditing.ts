@@ -138,11 +138,11 @@ export default class ContentClipboardEditing extends Plugin {
         return;
       }
 
-      const isFirstDroppedItem = markerData.itemIndex === 0;
-      const insertPosition =
-        !isFirstDroppedItem || isInline || markerPosition.isAtStart
-          ? markerPosition
-          : writer.split(markerPosition).range.end;
+      let insertPosition = markerPosition;
+      if(!markerPosition.isAtStart && !isInline) {
+        insertPosition = writer.split(markerPosition).range.end;
+      }
+
       const gravityRestore = writer.overrideSelectionGravity();
       writer.model.document.selection.on(
         "change:range",
@@ -155,10 +155,14 @@ export default class ContentClipboardEditing extends Plugin {
       );
       const range = writer.model.insertContent(item, insertPosition);
       ContentClipboardEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
-      //evaluate if a the container element has to be split after the element has been inserted.
-      //Split is necesarry if the link is not rendered inline and if we are not at the end of a container/document.
+
+      //Evaluate if a the container element has to be split after the element has been inserted.
+      //Split is necessary if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.
-      const finalAfterInsertPosition = isInline || range.end.isAtEnd ? range.end : writer.split(range.end).range.end;
+      let finalAfterInsertPosition: Position = range.end;
+      if (!range.end.isAtEnd && !isInline) {
+        finalAfterInsertPosition = writer.split(range.end).range.end;
+      }
       ContentClipboardEditing.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
       ContentClipboardEditing.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
     });
