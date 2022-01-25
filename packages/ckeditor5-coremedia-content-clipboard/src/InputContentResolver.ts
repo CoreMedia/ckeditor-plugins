@@ -10,10 +10,10 @@ import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import CommandUtils from "./CommandUtils";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
-import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import MarkerUtils from "./MarkerUtils";
 
 export default class InputContentResolver {
   static #LOGGER: Logger = LoggerProvider.getLogger("InputContentResolver");
@@ -114,8 +114,7 @@ export default class InputContentResolver {
       if (!range.end.isAtEnd && !isInline) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
       }
-      InputContentResolver.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
-      InputContentResolver.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
+      MarkerUtils.repositionMarkers(editor, marker, markerData, markerPosition, finalAfterInsertPosition);
     });
 
     editor.model.enqueueChange("transparent", (writer: Writer): void => {
@@ -129,83 +128,6 @@ export default class InputContentResolver {
     });
   }
 
-  static #moveMarkerForPreviousItemsToLeft(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
-    const markers: Array<Marker> = InputContentResolver.#findMarkersBefore(editor, marker, markerData);
-    markers.forEach((markerToMoveToLeft: Marker) => {
-      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
-      if (!currentData) {
-        return;
-      }
-      editor.model.enqueueChange("transparent", (writer: Writer): void => {
-        const newRange = writer.createRange(start, start);
-        writer.updateMarker(markerToMoveToLeft, { range: newRange });
-      });
-    });
-  }
-
-  static #moveMarkerForNextItemsToTheRight(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
-    const markers: Array<Marker> = InputContentResolver.#findMarkersAfter(editor, marker, markerData);
-    markers.forEach((markerToMoveToLeft: Marker) => {
-      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
-      if (!currentData) {
-        return;
-      }
-      editor.model.enqueueChange("transparent", (writer: Writer): void => {
-        const newRange = writer.createRange(start, start);
-        writer.updateMarker(markerToMoveToLeft, { range: newRange });
-      });
-    });
-  }
-
-  static #findMarkersBefore(editor: Editor, marker: Marker, markerData: MarkerData): Array<Marker> {
-    const markersAtSamePosition = InputContentResolver.#markersAtPosition(editor, marker.getStart());
-    const itemIndex = markerData.itemIndex;
-    const dropId = markerData.dropId;
-
-    return markersAtSamePosition.filter((otherMarker: Marker) => {
-      const otherMarkerData = ContentClipboardMarkerDataUtils.splitMarkerName(otherMarker.name);
-      //dropId = Timestamp when a group of marker have been created.
-      //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
-      //smaller index.
-      if (otherMarkerData.dropId === dropId) {
-        return otherMarkerData.itemIndex < itemIndex;
-      }
-
-      //If a drop done later to the same position happened we want to make sure all the dropped
-      //items stay on the left of the marker.
-      return otherMarkerData.dropId > dropId;
-    });
-  }
-
-  static #markersAtPosition(editor: Editor, position: Position): Array<Marker> {
-    return Array.from(
-      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
-    ).filter((value) => {
-      return value.getStart().isEqual(position);
-    });
-  }
-
-  static #findMarkersAfter(editor: Editor, marker: Marker, markerData: MarkerData) {
-    const markersAtSamePosition = InputContentResolver.#markersAtPosition(editor, marker.getStart());
-    const itemIndex = markerData.itemIndex;
-    const dropId = markerData.dropId;
-
-    return markersAtSamePosition.filter((otherMarker: Marker) => {
-      const otherMarkerData = ContentClipboardMarkerDataUtils.splitMarkerName(otherMarker.name);
-      //dropId = Timestamp when a group of marker have been created.
-      //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
-      //bigger index.
-      if (otherMarkerData.dropId === dropId) {
-        return otherMarkerData.itemIndex > itemIndex;
-      }
-
-      //If a drop done later to the same position happened we want to make sure all the dropped
-      //items stay on the right of the marker.
-      return otherMarkerData.dropId < dropId;
-    });
-  }
   /**
    * Applies attributes to the given ranges.
    *
