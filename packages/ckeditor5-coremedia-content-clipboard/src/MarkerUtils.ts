@@ -1,12 +1,11 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { Marker } from "@ckeditor/ckeditor5-engine/src/model/markercollection";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ModelPosition from "@ckeditor/ckeditor5-engine/src/model/position";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import ContentDropDataCache from "./ContentDropDataCache";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
-type MarkerFilterFunction = (markerData: MarkerData, otherMarker: Marker) => boolean;
+type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
 
 export default class MarkerUtils {
   static repositionMarkers(
@@ -20,60 +19,61 @@ export default class MarkerUtils {
   }
 
   static #moveMarkerForPreviousItemsToLeft(editor: Editor, beforeItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<Marker> = MarkerUtils.#findMarkers(
+    const markers: Array<MarkerData> = MarkerUtils.#findMarkers(
       editor,
       markerData,
       MarkerUtils.#markerBeforeFilterPredicate
     );
-    markers.forEach((markerToMoveToLeft: Marker) => {
+    markers.forEach((markerToMoveToLeft: MarkerData) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
+      const markerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerToMoveToLeft);
+      const currentData = ContentDropDataCache.lookupData(markerName);
       if (!currentData) {
         return;
       }
       editor.model.enqueueChange("transparent", (writer: Writer): void => {
         const newRange = writer.createRange(beforeItemPosition, beforeItemPosition);
-        writer.updateMarker(markerToMoveToLeft, { range: newRange });
+        writer.updateMarker(markerName, { range: newRange });
       });
     });
   }
 
   static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<Marker> = MarkerUtils.#findMarkers(
+    const markers: Array<MarkerData> = MarkerUtils.#findMarkers(
       editor,
       markerData,
       MarkerUtils.#markerAfterFilterPredicate
     );
-    markers.forEach((markerToMoveToLeft: Marker) => {
+    markers.forEach((markerDataToRight: MarkerData) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
+      const markerNameToRight = ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerDataToRight);
+      const currentData = ContentDropDataCache.lookupData(markerNameToRight);
       if (!currentData) {
         return;
       }
       editor.model.enqueueChange("transparent", (writer: Writer): void => {
         const newRange = writer.createRange(afterItemPosition, afterItemPosition);
-        writer.updateMarker(markerToMoveToLeft, { range: newRange });
+        writer.updateMarker(markerNameToRight, { range: newRange });
       });
     });
   }
 
-  static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): Array<Marker> {
+  static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): Array<MarkerData> {
     const marker = editor.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
     if (!marker) {
       return [];
     }
     const markersAtSamePosition = MarkerUtils.#markersAtPosition(editor, marker.getStart());
 
-    return markersAtSamePosition.filter((otherMarker: Marker) => {
-      filterFunction(markerData, otherMarker);
+    return markersAtSamePosition.filter((otherMarkerData: MarkerData) => {
+      filterFunction(markerData, otherMarkerData);
     });
   }
 
-  static #markerBeforeFilterPredicate: MarkerFilterFunction = (markerData, otherMarker) => {
+  static #markerBeforeFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
     const dropId = markerData.dropId;
 
-    const otherMarkerData = ContentClipboardMarkerDataUtils.splitMarkerName(otherMarker.name);
     //dropId = Timestamp when a group of marker have been created.
     //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
     //smaller index.
@@ -86,11 +86,10 @@ export default class MarkerUtils {
     return otherMarkerData.dropId > dropId;
   };
 
-  static #markerAfterFilterPredicate: MarkerFilterFunction = (markerData, otherMarker) => {
+  static #markerAfterFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
     const dropId = markerData.dropId;
 
-    const otherMarkerData = ContentClipboardMarkerDataUtils.splitMarkerName(otherMarker.name);
     //dropId = Timestamp when a group of marker have been created.
     //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
     //bigger index.
@@ -103,11 +102,13 @@ export default class MarkerUtils {
     return otherMarkerData.dropId < dropId;
   };
 
-  static #markersAtPosition(editor: Editor, position: Position): Array<Marker> {
-    return Array.from(
-      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
-    ).filter((value) => {
-      return value.getStart().isEqual(position);
-    });
+  static #markersAtPosition(editor: Editor, position: Position): Array<MarkerData> {
+    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
+      .filter((value) => {
+        return value.getStart().isEqual(position);
+      })
+      .map((value) => {
+        return ContentClipboardMarkerDataUtils.splitMarkerName(value.name);
+      });
   }
 }
