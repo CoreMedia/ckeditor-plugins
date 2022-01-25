@@ -24,18 +24,8 @@ export default class MarkerUtils {
       markerData,
       MarkerUtils.#markerBeforeFilterPredicate
     );
-    markers.forEach((markerToMoveToLeft: MarkerData) => {
-      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const markerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerToMoveToLeft);
-      const currentData = ContentDropDataCache.lookupData(markerName);
-      if (!currentData) {
-        return;
-      }
-      editor.model.enqueueChange("transparent", (writer: Writer): void => {
-        const newRange = writer.createRange(beforeItemPosition, beforeItemPosition);
-        writer.updateMarker(markerName, { range: newRange });
-      });
-    });
+
+    MarkerUtils.#moveMarkersTo(editor, markers, beforeItemPosition);
   }
 
   static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: Position, markerData: MarkerData) {
@@ -44,18 +34,7 @@ export default class MarkerUtils {
       markerData,
       MarkerUtils.#markerAfterFilterPredicate
     );
-    markers.forEach((markerDataToRight: MarkerData) => {
-      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
-      const markerNameToRight = ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerDataToRight);
-      const currentData = ContentDropDataCache.lookupData(markerNameToRight);
-      if (!currentData) {
-        return;
-      }
-      editor.model.enqueueChange("transparent", (writer: Writer): void => {
-        const newRange = writer.createRange(afterItemPosition, afterItemPosition);
-        writer.updateMarker(markerNameToRight, { range: newRange });
-      });
-    });
+    MarkerUtils.#moveMarkersTo(editor, markers, afterItemPosition);
   }
 
   static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): Array<MarkerData> {
@@ -67,6 +46,33 @@ export default class MarkerUtils {
 
     return markersAtSamePosition.filter((otherMarkerData: MarkerData) => {
       filterFunction(markerData, otherMarkerData);
+    });
+  }
+
+  static #markersAtPosition(editor: Editor, position: Position): Array<MarkerData> {
+    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
+      .filter((value) => {
+        return value.getStart().isEqual(position);
+      })
+      .map((value) => {
+        return ContentClipboardMarkerDataUtils.splitMarkerName(value.name);
+      });
+  }
+
+  static #moveMarkersTo(editor: Editor, markerData: Array<MarkerData>, position: Position): void {
+    markerData.forEach((moveMarkerData: MarkerData) => {
+      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
+      const moveMarkerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(moveMarkerData);
+
+      //Check if the marker we want to move still exists.
+      const currentData = ContentDropDataCache.lookupData(moveMarkerName);
+      if (!currentData) {
+        return;
+      }
+      editor.model.enqueueChange("transparent", (writer: Writer): void => {
+        const newRange = writer.createRange(position, position);
+        writer.updateMarker(moveMarkerName, { range: newRange });
+      });
     });
   }
 
@@ -101,14 +107,4 @@ export default class MarkerUtils {
     //items stay on the right of the marker.
     return otherMarkerData.dropId < dropId;
   };
-
-  static #markersAtPosition(editor: Editor, position: Position): Array<MarkerData> {
-    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
-      .filter((value) => {
-        return value.getStart().isEqual(position);
-      })
-      .map((value) => {
-        return ContentClipboardMarkerDataUtils.splitMarkerName(value.name);
-      });
-  }
 }
