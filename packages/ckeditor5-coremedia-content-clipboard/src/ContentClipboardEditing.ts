@@ -139,20 +139,10 @@ export default class ContentClipboardEditing extends Plugin {
       }
 
       let insertPosition = markerPosition;
-      if(!markerPosition.isAtStart && !isInline) {
+      if (!markerPosition.isAtStart && !isInline) {
         insertPosition = writer.split(markerPosition).range.end;
       }
 
-      const gravityRestore = writer.overrideSelectionGravity();
-      writer.model.document.selection.on(
-        "change:range",
-        (evtInfo: EventInfo, directChange: SelectionRangeChangeEventData) => {
-          if (directChange.directChange) {
-            writer.restoreSelectionGravity(gravityRestore);
-            evtInfo.off();
-          }
-        }
-      );
       const range = writer.model.insertContent(item, insertPosition);
       ContentClipboardEditing.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
 
@@ -174,6 +164,7 @@ export default class ContentClipboardEditing extends Plugin {
       }
       writer.removeMarker(marker);
       ContentDropDataCache.removeData(marker.name);
+      writer.removeSelectionAttribute("linkHref");
     });
   }
 
@@ -255,11 +246,11 @@ export default class ContentClipboardEditing extends Plugin {
     });
   }
   /**
-   * Applies selection attributes to the given ranges.
+   * Applies attributes to the given ranges.
    *
    * @param writer writer to use
-   * @param textRanges ranges to apply selection attributes to
-   * @param attributes selection attributes to apply
+   * @param textRanges ranges to apply attributes to
+   * @param attributes attributes to apply
    * @private
    */
   static #setSelectionAttributes(
