@@ -111,7 +111,7 @@ export default class InputContentResolver {
       if (!range.end.isAtEnd && !contentDropData.itemContext.isInline) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
       }
-      MarkerUtils.repositionMarkers(editor, marker, markerData, markerPosition, finalAfterInsertPosition);
+      MarkerUtils.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);
     });
 
     editor.model.enqueueChange("transparent", (writer: Writer): void => {

@@ -9,22 +9,16 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 export default class MarkerUtils {
   static repositionMarkers(
     editor: Editor,
-    marker: Marker,
     markerData: MarkerData,
     beforeItemPosition: ModelPosition,
     afterItemPosition: ModelPosition
   ): void {
-    MarkerUtils.#moveMarkerForNextItemsToTheRight(editor, afterItemPosition, marker, markerData);
-    MarkerUtils.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, marker, markerData);
+    MarkerUtils.#moveMarkerForNextItemsToTheRight(editor, afterItemPosition, markerData);
+    MarkerUtils.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, markerData);
   }
 
-  static #moveMarkerForPreviousItemsToLeft(
-    editor: Editor,
-    beforeItemPosition: Position,
-    marker: Marker,
-    markerData: MarkerData
-  ) {
-    const markers: Array<Marker> = MarkerUtils.#findMarkersBefore(editor, marker, markerData);
+  static #moveMarkerForPreviousItemsToLeft(editor: Editor, beforeItemPosition: Position, markerData: MarkerData) {
+    const markers: Array<Marker> = MarkerUtils.#findMarkersBefore(editor, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
       const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
@@ -38,13 +32,8 @@ export default class MarkerUtils {
     });
   }
 
-  static #moveMarkerForNextItemsToTheRight(
-    editor: Editor,
-    afterItemPosition: Position,
-    marker: Marker,
-    markerData: MarkerData
-  ) {
-    const markers: Array<Marker> = MarkerUtils.#findMarkersAfter(editor, marker, markerData);
+  static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: Position, markerData: MarkerData) {
+    const markers: Array<Marker> = MarkerUtils.#findMarkersAfter(editor, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
       const currentData = ContentDropDataCache.lookupData(markerToMoveToLeft.name);
@@ -58,7 +47,11 @@ export default class MarkerUtils {
     });
   }
 
-  static #findMarkersBefore(editor: Editor, marker: Marker, markerData: MarkerData): Array<Marker> {
+  static #findMarkersBefore(editor: Editor, markerData: MarkerData): Array<Marker> {
+    const marker = editor.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
+    if (!marker) {
+      return [];
+    }
     const markersAtSamePosition = MarkerUtils.#markersAtPosition(editor, marker.getStart());
     const itemIndex = markerData.itemIndex;
     const dropId = markerData.dropId;
@@ -78,7 +71,11 @@ export default class MarkerUtils {
     });
   }
 
-  static #findMarkersAfter(editor: Editor, marker: Marker, markerData: MarkerData) {
+  static #findMarkersAfter(editor: Editor, markerData: MarkerData): Array<Marker> {
+    const marker = editor.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
+    if (!marker) {
+      return [];
+    }
     const markersAtSamePosition = MarkerUtils.#markersAtPosition(editor, marker.getStart());
     const itemIndex = markerData.itemIndex;
     const dropId = markerData.dropId;
