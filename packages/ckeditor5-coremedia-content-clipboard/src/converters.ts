@@ -25,7 +25,7 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
     }
 
     const loadMaskClasses = ["cm-load-mask"];
-    if (!contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped) {
+    if (contentDropData.itemContext.isInline) {
       loadMaskClasses.push("cm-load-mask--inline");
     }
     const viewContainer = conversionApi.writer.createUIElement("div", { class: loadMaskClasses.join(" ") });

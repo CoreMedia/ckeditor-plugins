@@ -84,9 +84,6 @@ export default class InputContentResolver {
     markerData: MarkerData,
     createItemFunction: (writer: Writer) => Node
   ): void {
-    const isInline =
-      !contentDropData.itemContext.isEmbeddableContent && !contentDropData.dropContext.multipleItemsDropped;
-
     editor.model.enqueueChange(contentDropData.dropContext.batch, (writer: Writer): void => {
       const item: Node = createItemFunction(writer);
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
@@ -100,7 +97,7 @@ export default class InputContentResolver {
       }
 
       let insertPosition = markerPosition;
-      if (!markerPosition.isAtStart && !isInline) {
+      if (!markerPosition.isAtStart && !contentDropData.itemContext.isInline) {
         insertPosition = writer.split(markerPosition).range.end;
       }
 
@@ -111,7 +108,7 @@ export default class InputContentResolver {
       //Split is necessary if the link is not rendered inline and if we are not at the end of a container/document.
       //This prevents empty paragraphs after the inserted element.
       let finalAfterInsertPosition: Position = range.end;
-      if (!range.end.isAtEnd && !isInline) {
+      if (!range.end.isAtEnd && !contentDropData.itemContext.isInline) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
       }
       MarkerUtils.repositionMarkers(editor, marker, markerData, markerPosition, finalAfterInsertPosition);

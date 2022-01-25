@@ -171,10 +171,10 @@ export default class ContentClipboard extends Plugin {
     // use the current timestamp as the dropId to have increasing drop indexes. needed to keep the order when muliple inputs happen simultaneously
     // on the same position
     const dropId = Date.now();
+    const multipleItemsDropped = cmDataUris.length > 1;
     const dropContext: DropContext = {
       dropId,
       batch,
-      multipleItemsDropped: cmDataUris.length > 1,
       selectedAttributes: attributes,
     };
 
@@ -184,7 +184,7 @@ export default class ContentClipboard extends Plugin {
       const contentDropData = ContentClipboard.#createContentDropData(
         dropContext,
         contentUri,
-        isEmbeddableContent,
+        !isEmbeddableContent && !multipleItemsDropped,
         index
       );
       ContentClipboard.#addContentDropMarker(editor, targetRange, contentDropData);
@@ -248,14 +248,14 @@ export default class ContentClipboard extends Plugin {
    *
    * @param dropContext - dropContext
    * @param contentUri - the contenturi of the input item
-   * @param isEmbeddableContent - determines whether the item will be displayed inline or as new paragraph
+   * @param isInline - determines whether the item will be displayed inline or as new paragraph
    * @param itemIndex - the position of the item inside the drop
    * @returns ContentDropData
    */
   static #createContentDropData(
     dropContext: DropContext,
     contentUri: string,
-    isEmbeddableContent: boolean,
+    isInline: boolean,
     itemIndex: number
   ): ContentDropData {
     return {
@@ -263,7 +263,7 @@ export default class ContentClipboard extends Plugin {
       itemContext: {
         contentUri,
         itemIndex,
-        isEmbeddableContent,
+        isInline,
       },
     };
   }
