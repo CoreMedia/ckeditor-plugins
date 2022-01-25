@@ -102,7 +102,7 @@ export default class InputContentResolver {
       }
 
       const range = writer.model.insertContent(item, insertPosition);
-      InputContentResolver.#setSelectionAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
+      InputContentResolver.#applyAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
 
       //Evaluate if a the container element has to be split after the element has been inserted.
       //Split is necessary if the link is not rendered inline and if we are not at the end of a container/document.
@@ -133,7 +133,7 @@ export default class InputContentResolver {
    * @param attributes attributes to apply
    * @private
    */
-  static #setSelectionAttributes(
+  static #applyAttributes(
     writer: Writer,
     textRanges: Range[],
     attributes: [string, string | number | boolean][]
