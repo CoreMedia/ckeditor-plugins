@@ -13,7 +13,7 @@ import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import MarkerUtils from "./MarkerUtils";
+import MarkerRepositionUtil from "./MarkerRepositionUtil";
 
 export default class InputContentResolver {
   static #LOGGER: Logger = LoggerProvider.getLogger("InputContentResolver");
@@ -111,7 +111,7 @@ export default class InputContentResolver {
       if (!range.end.isAtEnd && !contentDropData.itemContext.isInline) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
       }
-      MarkerUtils.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);
+      MarkerRepositionUtil.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);
     });
 
     editor.model.enqueueChange("transparent", (writer: Writer): void => {

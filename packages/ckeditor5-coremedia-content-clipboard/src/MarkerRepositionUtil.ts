@@ -7,34 +7,34 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
 type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
 
-export default class MarkerUtils {
+export default class MarkerRepositionUtil {
   static repositionMarkers(
     editor: Editor,
     markerData: MarkerData,
     beforeItemPosition: ModelPosition,
     afterItemPosition: ModelPosition
   ): void {
-    MarkerUtils.#moveMarkerForNextItemsToTheRight(editor, afterItemPosition, markerData);
-    MarkerUtils.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, markerData);
+    MarkerRepositionUtil.#moveMarkerForNextItemsToTheRight(editor, afterItemPosition, markerData);
+    MarkerRepositionUtil.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, markerData);
   }
 
   static #moveMarkerForPreviousItemsToLeft(editor: Editor, beforeItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<MarkerData> = MarkerUtils.#findMarkers(
+    const markers: Array<MarkerData> = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
-      MarkerUtils.#markerBeforeFilterPredicate
+      MarkerRepositionUtil.#markerBeforeFilterPredicate
     );
 
-    MarkerUtils.#moveMarkersTo(editor, markers, beforeItemPosition);
+    MarkerRepositionUtil.#moveMarkersTo(editor, markers, beforeItemPosition);
   }
 
   static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<MarkerData> = MarkerUtils.#findMarkers(
+    const markers: Array<MarkerData> = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
-      MarkerUtils.#markerAfterFilterPredicate
+      MarkerRepositionUtil.#markerAfterFilterPredicate
     );
-    MarkerUtils.#moveMarkersTo(editor, markers, afterItemPosition);
+    MarkerRepositionUtil.#moveMarkersTo(editor, markers, afterItemPosition);
   }
 
   static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): Array<MarkerData> {
@@ -42,7 +42,7 @@ export default class MarkerUtils {
     if (!marker) {
       return [];
     }
-    const markersAtSamePosition = MarkerUtils.#markersAtPosition(editor, marker.getStart());
+    const markersAtSamePosition = MarkerRepositionUtil.#markersAtPosition(editor, marker.getStart());
 
     return markersAtSamePosition.filter((otherMarkerData: MarkerData) => {
       filterFunction(markerData, otherMarkerData);
