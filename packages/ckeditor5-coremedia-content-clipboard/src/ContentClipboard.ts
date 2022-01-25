@@ -12,7 +12,7 @@ import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobser
 import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
 import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentClipboardEditing from "./ContentClipboardEditing";
-import { ContentClipboardMarkerUtils } from "./ContentClipboardMarkerUtils";
+import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
@@ -212,7 +212,7 @@ export default class ContentClipboard extends Plugin {
    * @param contentDropData - content drop data
    */
   static #addContentDropMarker(editor: Editor, markerRange: Range, contentDropData: ContentDropData): void {
-    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(
+    const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
       contentDropData.dropContext.dropId,
       contentDropData.itemContext.itemIndex
     );

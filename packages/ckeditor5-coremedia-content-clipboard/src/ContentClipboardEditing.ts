@@ -3,16 +3,16 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import "../theme/loadmask.css";
 
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
+import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import InputContentResolver from "./InputContentResolver";
 
 export default class ContentClipboardEditing extends Plugin {
   static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
   static readonly #CONTENT_DROP_ADD_MARKER_EVENT =
-    "addMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
+    "addMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
   static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT =
-    "removeMarker:" + ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX;
+    "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
   static get pluginName(): string {
     return ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME;
   }

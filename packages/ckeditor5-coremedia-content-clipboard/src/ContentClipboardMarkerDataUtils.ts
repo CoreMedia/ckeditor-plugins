@@ -10,7 +10,7 @@
  * Example:
  * "content-drop:1642076134128:2"
  */
-export class ContentClipboardMarkerUtils {
+export class ContentClipboardMarkerDataUtils {
   static readonly CONTENT_DROP_MARKER_PREFIX = "content-drop";
 
   /**
@@ -36,7 +36,7 @@ export class ContentClipboardMarkerUtils {
    * @returns the name of the marker
    */
   static toMarkerName(dropId: number, itemIndex: number): string {
-    return `${ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX}:${dropId}:${itemIndex}`;
+    return `${ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX}:${dropId}:${itemIndex}`;
   }
 
   /**
@@ -46,7 +46,7 @@ export class ContentClipboardMarkerUtils {
    * @returns the name of the marker
    */
   static toMarkerNameFromData(markerData: MarkerData): string {
-    return `${ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX}:${markerData.dropId}:${markerData.itemIndex}`;
+    return `${ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX}:${markerData.dropId}:${markerData.itemIndex}`;
   }
 }
 

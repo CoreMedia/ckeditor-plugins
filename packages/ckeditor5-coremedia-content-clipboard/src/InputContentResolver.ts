@@ -1,5 +1,5 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
+import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
@@ -19,7 +19,7 @@ export default class InputContentResolver {
   static #LOGGER: Logger = LoggerProvider.getLogger("InputContentResolver");
 
   static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
-    const markerName: string = ContentClipboardMarkerUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
+    const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
     const contentDropData = ContentDropDataCache.lookupData(markerName);
     if (!contentDropData) {
       return;
@@ -71,7 +71,7 @@ export default class InputContentResolver {
 
   static #reenableUndo(editor: Editor): void {
     const markers = Array.from(
-      editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)
+      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     );
     if (markers.length === 0) {
       CommandUtils.enableCommand(editor, "undo");
@@ -89,7 +89,7 @@ export default class InputContentResolver {
 
     editor.model.enqueueChange(contentDropData.dropContext.batch, (writer: Writer): void => {
       const item: Node = createItemFunction(writer);
-      const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
+      const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
       }
@@ -119,7 +119,7 @@ export default class InputContentResolver {
     });
 
     editor.model.enqueueChange("transparent", (writer: Writer): void => {
-      const marker = writer.model.markers.get(ContentClipboardMarkerUtils.toMarkerNameFromData(markerData));
+      const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
       }
@@ -165,7 +165,7 @@ export default class InputContentResolver {
     const dropId = markerData.dropId;
 
     return markersAtSamePosition.filter((otherMarker: Marker) => {
-      const otherMarkerData = ContentClipboardMarkerUtils.splitMarkerName(otherMarker.name);
+      const otherMarkerData = ContentClipboardMarkerDataUtils.splitMarkerName(otherMarker.name);
       //dropId = Timestamp when a group of marker have been created.
       //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
       //smaller index.
@@ -181,7 +181,7 @@ export default class InputContentResolver {
 
   static #markersAtPosition(editor: Editor, position: Position): Array<Marker> {
     return Array.from(
-      editor.model.markers.getMarkersGroup(ContentClipboardMarkerUtils.CONTENT_DROP_MARKER_PREFIX)
+      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     ).filter((value) => {
       return value.getStart().isEqual(position);
     });
@@ -193,7 +193,7 @@ export default class InputContentResolver {
     const dropId = markerData.dropId;
 
     return markersAtSamePosition.filter((otherMarker: Marker) => {
-      const otherMarkerData = ContentClipboardMarkerUtils.splitMarkerName(otherMarker.name);
+      const otherMarkerData = ContentClipboardMarkerDataUtils.splitMarkerName(otherMarker.name);
       //dropId = Timestamp when a group of marker have been created.
       //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
       //bigger index.

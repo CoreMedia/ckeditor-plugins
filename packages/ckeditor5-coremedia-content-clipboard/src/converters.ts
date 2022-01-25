@@ -5,7 +5,7 @@ import {
   RemoveMarkerEventData,
 } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentDropDataCache from "./ContentDropDataCache";
-import { ContentClipboardMarkerUtils, MarkerData } from "./ContentClipboardMarkerUtils";
+import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 
 /**
  * Conversion function used in DowncastDispatcher event listeners.
@@ -31,7 +31,7 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
     const viewContainer = conversionApi.writer.createUIElement("div", { class: loadMaskClasses.join(" ") });
     conversionApi.writer.insert(viewPosition, viewContainer);
     conversionApi.mapper.bindElementToMarker(viewContainer, data.markerName);
-    const markerData = ContentClipboardMarkerUtils.splitMarkerName(data.markerName);
+    const markerData = ContentClipboardMarkerDataUtils.splitMarkerName(data.markerName);
     callback(markerData);
 
     evt.stop();
