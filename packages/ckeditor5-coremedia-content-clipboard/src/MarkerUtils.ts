@@ -11,14 +11,19 @@ export default class MarkerUtils {
     editor: Editor,
     marker: Marker,
     markerData: MarkerData,
-    markerPosition: ModelPosition,
-    finalAfterInsertPosition: ModelPosition
+    beforeItemPosition: ModelPosition,
+    afterItemPosition: ModelPosition
   ): void {
-    MarkerUtils.#moveMarkerForNextItemsToTheRight(editor, finalAfterInsertPosition, marker, markerData);
-    MarkerUtils.#moveMarkerForPreviousItemsToLeft(editor, markerPosition, marker, markerData);
+    MarkerUtils.#moveMarkerForNextItemsToTheRight(editor, afterItemPosition, marker, markerData);
+    MarkerUtils.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, marker, markerData);
   }
 
-  static #moveMarkerForPreviousItemsToLeft(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
+  static #moveMarkerForPreviousItemsToLeft(
+    editor: Editor,
+    beforeItemPosition: Position,
+    marker: Marker,
+    markerData: MarkerData
+  ) {
     const markers: Array<Marker> = MarkerUtils.#findMarkersBefore(editor, marker, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
@@ -27,13 +32,18 @@ export default class MarkerUtils {
         return;
       }
       editor.model.enqueueChange("transparent", (writer: Writer): void => {
-        const newRange = writer.createRange(start, start);
+        const newRange = writer.createRange(beforeItemPosition, beforeItemPosition);
         writer.updateMarker(markerToMoveToLeft, { range: newRange });
       });
     });
   }
 
-  static #moveMarkerForNextItemsToTheRight(editor: Editor, start: Position, marker: Marker, markerData: MarkerData) {
+  static #moveMarkerForNextItemsToTheRight(
+    editor: Editor,
+    afterItemPosition: Position,
+    marker: Marker,
+    markerData: MarkerData
+  ) {
     const markers: Array<Marker> = MarkerUtils.#findMarkersAfter(editor, marker, markerData);
     markers.forEach((markerToMoveToLeft: Marker) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
@@ -42,7 +52,7 @@ export default class MarkerUtils {
         return;
       }
       editor.model.enqueueChange("transparent", (writer: Writer): void => {
-        const newRange = writer.createRange(start, start);
+        const newRange = writer.createRange(afterItemPosition, afterItemPosition);
         writer.updateMarker(markerToMoveToLeft, { range: newRange });
       });
     });
