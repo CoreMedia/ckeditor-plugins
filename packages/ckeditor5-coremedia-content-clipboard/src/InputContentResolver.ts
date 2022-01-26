@@ -42,8 +42,8 @@ export default class InputContentResolver {
       .then((type): Promise<CreateItemFunction> => {
         return this.lookupCreateItemFunction(contentDropData.itemContext.contentUri, type);
       })
-      .then((value: CreateItemFunction): void => {
-        InputContentResolver.#writeItemToModel(editor, contentDropData, markerData, value);
+      .then((createItemFunction: CreateItemFunction): void => {
+        InputContentResolver.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
       })
       .catch((reason) => {
         InputContentResolver.#markerCleanup(editor, markerData);
@@ -85,7 +85,7 @@ export default class InputContentResolver {
     // it would be possible to provide another model rendering.
     return serviceAgent
       .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
-      .then((value) => value.isEmbeddableType(contentUri))
+      .then((service) => service.isEmbeddableType(contentUri))
       .then((isEmbeddable): Promise<string> => {
         if (isEmbeddable) {
           return new Promise<string>((resolve) => {
