@@ -73,34 +73,24 @@ export default class InputContentResolver {
   }
 
   static getType(contentUri: string): Promise<string> {
-    let resolveFunction: (value: string) => void;
-    const returnPromise = new Promise<string>((resolve) => {
-      resolveFunction = resolve;
-    });
     // This would probably be replaced with another service agent call which asks studio for the type.
     // There we can implement a legacy service which works like below and a new one which can be more fine grained.
     // Do we need embeddable/linkable still at this point if we ask studio for more data?
     // This point is not extendable here but in studio. If the studio response delivers another type then link or image
     // it would be possible to provide another model rendering.
-    const isEmbeddablePromise = serviceAgent
+    return serviceAgent
       .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
-      .then((value) => value.isEmbeddableType(contentUri));
-    const isLinkablePromise = serviceAgent
-      .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
-      .then((value) => value.hasLinkableType(contentUri));
-    const promise = Promise.all([isEmbeddablePromise, isLinkablePromise]);
-    promise.then((values) => {
-      if (values[0]) {
-        resolveFunction("image");
-        return;
-      }
-      if (values[1]) {
-        resolveFunction("link");
-        return;
-      }
-    });
-
-    return returnPromise;
+      .then((value) => value.isEmbeddableType(contentUri))
+      .then((isEmbeddable): Promise<string> => {
+        if (isEmbeddable) {
+          return new Promise<string>((resolve) => {
+            resolve("image");
+          });
+        }
+        return new Promise<string>((resolve) => {
+          resolve("link");
+        });
+      });
   }
 
   static #createLink(writer: Writer, contentUri: string, name: string): Node {
