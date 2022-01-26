@@ -45,7 +45,11 @@ export default class InputContentResolver {
       .then((value: CreateItemFunction): void => {
         InputContentResolver.#writeItemToModel(editor, contentDropData, markerData, value);
       })
-      .finally(() => InputContentResolver.#reenableUndo(editor));
+      .catch((reason) => {
+        InputContentResolver.#markerCleanup(editor, markerData);
+        InputContentResolver.#LOGGER.error("Error occurred in promise", reason);
+      })
+      .finally(() => InputContentResolver.#finishDrop(editor));
   }
 
   static lookupCreateItemFunction(contentUri: string, type: string): Promise<CreateItemFunction> {
@@ -99,7 +103,7 @@ export default class InputContentResolver {
     });
   }
 
-  static #reenableUndo(editor: Editor): void {
+  static #finishDrop(editor: Editor): void {
     const markers = Array.from(
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     );
@@ -145,13 +149,19 @@ export default class InputContentResolver {
     });
 
     editor.model.enqueueChange("transparent", (writer: Writer): void => {
+      writer.removeSelectionAttribute("linkHref");
+    });
+    InputContentResolver.#markerCleanup(editor, markerData);
+  }
+
+  static #markerCleanup(editor: Editor, markerData: MarkerData) {
+    editor.model.enqueueChange("transparent", (writer: Writer): void => {
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
       }
       writer.removeMarker(marker);
       ContentDropDataCache.removeData(marker.name);
-      writer.removeSelectionAttribute("linkHref");
     });
   }
 
