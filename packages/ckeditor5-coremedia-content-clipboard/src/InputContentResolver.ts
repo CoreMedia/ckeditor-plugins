@@ -63,12 +63,13 @@ export default class InputContentResolver {
     if (type === "link" || type === "image") {
       serviceAgent
         .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-        .then((contentDisplayService: ContentDisplayService): void => {
-          contentDisplayService.name(contentUri).then((name: string): void => {
-            resolveFunction((writer: Writer): Node => {
-              const nameToPass = name ? name : ROOT_NAME;
-              return InputContentResolver.#createLink(writer, contentUri, nameToPass);
-            });
+        .then((contentDisplayService: ContentDisplayService): Promise<string> => {
+          return contentDisplayService.name(contentUri);
+        })
+        .then((name: string): void => {
+          resolveFunction((writer: Writer): Node => {
+            const nameToPass = name ? name : ROOT_NAME;
+            return InputContentResolver.#createLink(writer, contentUri, nameToPass);
           });
         });
     }
