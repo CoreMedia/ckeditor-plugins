@@ -44,8 +44,8 @@ export default class MarkerRepositionUtil {
     }
     const markersAtSamePosition = MarkerRepositionUtil.#markersAtPosition(editor, marker.getStart());
 
-    return markersAtSamePosition.filter((otherMarkerData: MarkerData) => {
-      filterFunction(markerData, otherMarkerData);
+    return markersAtSamePosition.filter((otherMarkerData: MarkerData): boolean => {
+      return filterFunction(markerData, otherMarkerData);
     });
   }
 
