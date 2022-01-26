@@ -14,6 +14,10 @@ import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
+import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
+import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+
+type CreateItemFunction = (writer: Writer) => Node;
 
 export default class InputContentResolver {
   static #LOGGER: Logger = LoggerProvider.getLogger("InputContentResolver");
@@ -28,39 +32,75 @@ export default class InputContentResolver {
       `Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`
     );
 
-    serviceAgent
-      .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-      .then((contentDisplayService: ContentDisplayService): void => {
-        contentDisplayService
-          .name(contentDropData.itemContext.contentUri)
-          .then(
-            (name) => {
-              InputContentResolver.#writeItemToModel(
-                editor,
-                contentDropData,
-                markerData,
-                (writer: Writer): Node =>
-                  InputContentResolver.#createLink(
-                    writer,
-                    contentDropData.itemContext.contentUri,
-                    name ? name : ROOT_NAME
-                  )
-              );
-            },
-            (reason) => {
-              InputContentResolver.#LOGGER.warn(
-                "An error occurred on request to ContentDisplayService.name()",
-                contentDropData.itemContext.contentUri,
-                reason
-              );
-              ContentDropDataCache.removeData(markerName);
-              editor.model.enqueueChange("transparent", (writer: Writer): void => {
-                writer.removeMarker(markerName);
-              });
-            }
-          )
-          .finally(() => InputContentResolver.#reenableUndo(editor));
-      });
+    //Fetch Object Type (e.g. document, image, video) Maybe this should be a string which is not related to content type.
+    //I guess it has to be something that is unrelated to content type to make it possible for customers to map there own content types.
+    //As soon as we do it like this it is a breaking change as customers with own doc type models have to provide the mapping.
+    //We could implement a legacy mode where we assume embedded contents are images. The only two attributes to distinguish contents are linkable and embeddable.
+    //Lookup an extender with the object type, call the create model stuff.
+    //take a promise and execute writeItemToModel
+    this.getType(contentDropData.itemContext.contentUri)
+      .then((type): Promise<CreateItemFunction> => {
+        return this.lookupCreateItemFunction(contentDropData.itemContext.contentUri, type);
+      })
+      .then((value: CreateItemFunction): void => {
+        InputContentResolver.#writeItemToModel(editor, contentDropData, markerData, value);
+      })
+      .finally(() => InputContentResolver.#reenableUndo(editor));
+  }
+
+  static lookupCreateItemFunction(contentUri: string, type: string): Promise<CreateItemFunction> {
+    let resolveFunction: (value: CreateItemFunction) => void;
+    const returnPromise = new Promise<CreateItemFunction>((resolve) => {
+      resolveFunction = resolve;
+    });
+
+    // This would be a lookup in an extension point registry and the service agent call would be implemented
+    // in the extender
+    if (type === "link" || type === "image") {
+      serviceAgent
+        .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
+        .then((contentDisplayService: ContentDisplayService): void => {
+          contentDisplayService.name(contentUri).then((name: string): void => {
+            resolveFunction((writer: Writer): Node => {
+              const nameToPass = name ? name : ROOT_NAME;
+              return InputContentResolver.#createLink(writer, contentUri, nameToPass);
+            });
+          });
+        });
+    }
+
+    return returnPromise;
+  }
+
+  static getType(contentUri: string): Promise<string> {
+    let resolveFunction: (value: string) => void;
+    const returnPromise = new Promise<string>((resolve) => {
+      resolveFunction = resolve;
+    });
+    // This would probably be replaced with another service agent call which asks studio for the type.
+    // There we can implement a legacy service which works like below and a new one which can be more fine grained.
+    // Do we need embeddable/linkable still at this point if we ask studio for more data?
+    // This point is not extendable here but in studio. If the studio response delivers another type then link or image
+    // it would be possible to provide another model rendering.
+    const isEmbeddablePromise = serviceAgent
+      .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
+      .then((value) => value.isEmbeddableType(contentUri));
+    const isLinkablePromise = serviceAgent
+      .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
+      .then((value) => value.hasLinkableType(contentUri));
+    const promise = Promise.all([isEmbeddablePromise, isLinkablePromise]);
+    promise.then((values) => {
+      if (values[0]) {
+        resolveFunction("image");
+        return;
+      }
+      if (values[1]) {
+        resolveFunction("link");
+        return;
+      }
+    });
+
+    return returnPromise;
   }
 
   static #createLink(writer: Writer, contentUri: string, name: string): Node {
