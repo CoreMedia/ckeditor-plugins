@@ -2,12 +2,8 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
-import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
-import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
-import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import CommandUtils from "./CommandUtils";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
@@ -16,8 +12,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
-
-type CreateItemFunction = (writer: Writer) => Node;
+import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 
 export default class InputContentResolver {
   static #LOGGER: Logger = LoggerProvider.getLogger("InputContentResolver");
@@ -39,10 +34,10 @@ export default class InputContentResolver {
     //Lookup an extender with the object type, call the create model stuff.
     //take a promise and execute writeItemToModel
     this.getType(contentDropData.itemContext.contentUri)
-      .then((type): Promise<CreateItemFunction> => {
-        return this.lookupCreateItemFunction(contentDropData.itemContext.contentUri, type);
+      .then((type): Promise<CreateModelFunction> => {
+        return this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri);
       })
-      .then((createItemFunction: CreateItemFunction): void => {
+      .then((createItemFunction: CreateModelFunction): void => {
         InputContentResolver.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
       })
       .catch((reason) => {
@@ -52,29 +47,15 @@ export default class InputContentResolver {
       .finally(() => InputContentResolver.#finishDrop(editor));
   }
 
-  static lookupCreateItemFunction(contentUri: string, type: string): Promise<CreateItemFunction> {
-    let resolveFunction: (value: CreateItemFunction) => void;
-    const returnPromise = new Promise<CreateItemFunction>((resolve) => {
-      resolveFunction = resolve;
-    });
-
-    // This would be a lookup in an extension point registry and the service agent call would be implemented
-    // in the extender
-    if (type === "link" || type === "image") {
-      serviceAgent
-        .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-        .then((contentDisplayService: ContentDisplayService): Promise<string> => {
-          return contentDisplayService.name(contentUri);
-        })
-        .then((name: string): void => {
-          resolveFunction((writer: Writer): Node => {
-            const nameToPass = name ? name : ROOT_NAME;
-            return InputContentResolver.#createLink(writer, contentUri, nameToPass);
-          });
-        });
+  static lookupCreateItemFunction(type: string, contentUri: string): Promise<CreateModelFunction> {
+    const toModelFunction = ContentToModelRegistry.getToModelFunction(type, contentUri);
+    if (toModelFunction) {
+      return toModelFunction;
     }
 
-    return returnPromise;
+    return new Promise<CreateModelFunction>((resolve, reject) => {
+      reject("No function to create the model found.");
+    });
   }
 
   static getType(contentUri: string): Promise<string> {
@@ -96,12 +77,6 @@ export default class InputContentResolver {
           resolve("link");
         });
       });
-  }
-
-  static #createLink(writer: Writer, contentUri: string, name: string): Node {
-    return writer.createText(name, {
-      linkHref: requireContentCkeModelUri(contentUri),
-    });
   }
 
   static #finishDrop(editor: Editor): void {
