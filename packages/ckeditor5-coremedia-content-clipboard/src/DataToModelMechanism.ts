@@ -33,7 +33,7 @@ export default class InputContentResolver {
     //We could implement a legacy mode where we assume embedded contents are images. The only two attributes to distinguish contents are linkable and embeddable.
     //Lookup an extender with the object type, call the create model stuff.
     //take a promise and execute writeItemToModel
-    this.getType(contentDropData.itemContext.contentUri)
+    this.#getType(contentDropData.itemContext.contentUri)
       .then((type): Promise<CreateModelFunction> => {
         return this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri);
       })
@@ -58,7 +58,7 @@ export default class InputContentResolver {
     });
   }
 
-  static getType(contentUri: string): Promise<string> {
+  static #getType(contentUri: string): Promise<string> {
     // This would probably be replaced with another service agent call which asks studio for the type.
     // There we can implement a legacy service which works like below and a new one which can be more fine grained.
     // Do we need embeddable/linkable still at this point if we ask studio for more data?
