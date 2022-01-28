@@ -10,12 +10,14 @@ import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
-import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import RichtextConfigurationService
+  from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
+import RichtextConfigurationServiceDescriptor
+  from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 
-export default class InputContentResolver {
-  static #LOGGER: Logger = LoggerProvider.getLogger("InputContentResolver");
+export default class DataToModelMechanism {
+  static #LOGGER: Logger = LoggerProvider.getLogger("DataToModelMechanism");
 
   static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
@@ -23,7 +25,7 @@ export default class InputContentResolver {
     if (!contentDropData) {
       return;
     }
-    InputContentResolver.#LOGGER.debug(
+    DataToModelMechanism.#LOGGER.debug(
       `Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`
     );
 
@@ -38,13 +40,13 @@ export default class InputContentResolver {
         return this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri);
       })
       .then((createItemFunction: CreateModelFunction): void => {
-        InputContentResolver.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
+        DataToModelMechanism.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
       })
       .catch((reason) => {
-        InputContentResolver.#markerCleanup(editor, markerData);
-        InputContentResolver.#LOGGER.error("Error occurred in promise", reason);
+        DataToModelMechanism.#markerCleanup(editor, markerData);
+        DataToModelMechanism.#LOGGER.error("Error occurred in promise", reason);
       })
-      .finally(() => InputContentResolver.#finishDrop(editor));
+      .finally(() => DataToModelMechanism.#finishDrop(editor));
   }
 
   static lookupCreateItemFunction(type: string, contentUri: string): Promise<CreateModelFunction> {
@@ -112,7 +114,7 @@ export default class InputContentResolver {
       }
 
       const range = writer.model.insertContent(item, insertPosition);
-      InputContentResolver.#applyAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
+      DataToModelMechanism.#applyAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
 
       //Evaluate if a the container element has to be split after the element has been inserted.
       //Split is necessary if the link is not rendered inline and if we are not at the end of a container/document.
@@ -127,7 +129,7 @@ export default class InputContentResolver {
     editor.model.enqueueChange("transparent", (writer: Writer): void => {
       writer.removeSelectionAttribute("linkHref");
     });
-    InputContentResolver.#markerCleanup(editor, markerData);
+    DataToModelMechanism.#markerCleanup(editor, markerData);
   }
 
   static #markerCleanup(editor: Editor, markerData: MarkerData) {

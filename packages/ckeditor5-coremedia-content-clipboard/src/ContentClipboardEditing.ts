@@ -5,7 +5,7 @@ import "../theme/loadmask.css";
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
-import InputContentResolver from "./InputContentResolver";
+import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry from "./ContentToModelRegistry";
 import { createLinkModelFunctionCreator } from "./createmodelfunctions";
 
@@ -42,7 +42,7 @@ export default class ContentClipboardEditing extends Plugin {
 
   #onAddMarker(editor: Editor) {
     return addContentMarkerConversion((markerData: MarkerData): void => {
-      InputContentResolver.triggerLoadAndWriteToModel(editor, markerData);
+      DataToModelMechanism.triggerLoadAndWriteToModel(editor, markerData);
     });
   }
 
