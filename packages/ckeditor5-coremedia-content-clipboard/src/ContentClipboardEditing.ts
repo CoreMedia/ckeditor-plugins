@@ -35,13 +35,14 @@ export default class ContentClipboardEditing extends Plugin {
     const conversion = editor.conversion;
 
     conversion.for("editingDowncast").add((dispatcher: DowncastDispatcher) => {
-      dispatcher.on(
-        ContentClipboardEditing.#CONTENT_DROP_ADD_MARKER_EVENT,
-        addContentMarkerConversion((markerData: MarkerData): void => {
-          InputContentResolver.triggerLoadAndWriteToModel(editor, markerData);
-        })
-      );
+      dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_ADD_MARKER_EVENT, this.#onAddMarker(editor));
       dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
+    });
+  }
+
+  #onAddMarker(editor: Editor) {
+    return addContentMarkerConversion((markerData: MarkerData): void => {
+      InputContentResolver.triggerLoadAndWriteToModel(editor, markerData);
     });
   }
 
