@@ -9,19 +9,14 @@ import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 
-export const createLinkModelFunctionCreator: CreateModelFunctionCreator = (
+export const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
   contentUri: string
 ): Promise<CreateModelFunction> => {
-  return serviceAgent
-    .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-    .then((contentDisplayService: ContentDisplayService): Promise<string> => {
-      return contentDisplayService.name(contentUri);
-    })
-    .then((name: string): Promise<CreateModelFunction> => {
-      return new Promise<CreateModelFunction>((resolve) => {
-        resolve(createLinkModelFunction(contentUri, name));
-      });
-    });
+  const contentDisplayService = await serviceAgent.fetchService<ContentDisplayService>(
+    new ContentDisplayServiceDescriptor()
+  );
+  const contentName = await contentDisplayService.name(contentUri);
+  return new Promise<CreateModelFunction>((resolve) => resolve(createLinkModelFunction(contentUri, contentName)));
 };
 
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {
