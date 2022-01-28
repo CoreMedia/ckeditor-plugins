@@ -1,9 +1,9 @@
 import {
-  createContentUriPath,
+  changing$,
   ContentIdPrefix,
-  changing$
+  createContentUriPath
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentDisplayService";
-import { serviceAgent } from "@coremedia/service-agent";
+import {serviceAgent} from "@coremedia/service-agent";
 import MockDragDropService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropService";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
@@ -259,17 +259,6 @@ const initDragExamples = () => {
       items: slowDocuments.concat(singleDroppableDocuments).flatMap((item) => item.items),
     },
   ];
-  const embeddables = [
-    {
-      label: `Embeddable Content`,
-      tooltip: `1 contents which is embeddable`,
-      classes: ["linkable", "type-collection"],
-      items: [{
-        id: 40810006,
-        name: false
-      }]
-    },
-  ];
 
   const allData = [
     ...singleDroppables,
@@ -277,8 +266,7 @@ const initDragExamples = () => {
     ...slowDocuments,
     ...pairedExamples,
     ...allDroppables,
-    ...unreadables,
-    ...embeddables
+    ...unreadables
   ];
 
   const generateUriPath = (item) => {
