@@ -38,10 +38,11 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
 
   isEmbeddableType(uripath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      if (uripath.startsWith("content")) {
-        resolve(true);
+      if (!uripath.startsWith("content")) {
+        resolve(false);
+        return;
       }
-      resolve(true);
+      resolve(false);
     });
   }
 

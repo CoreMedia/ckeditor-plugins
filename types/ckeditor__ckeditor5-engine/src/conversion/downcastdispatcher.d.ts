@@ -2,6 +2,13 @@ import Position from "../model/position";
 import Element from "../model/element";
 import Schema from "../model/schema";
 import DowncastWriter from "../view/downcastwriter";
+import ViewConsumable from "./viewconsumable";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import eventinfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import Range from "../model/range";
+import { Item } from "../model/item";
+import Mapper from "./mapper";
 
 /**
  * The downcast dispatcher is a central point of downcasting (conversion from the model to the view), which is a process of reacting
@@ -9,10 +16,24 @@ import DowncastWriter from "../view/downcastwriter";
  *
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_conversion_downcastdispatcher-DowncastDispatcher.html">Class DowncastDispatcher (engine/conversion/downcastdispatcher~DowncastDispatcher) - CKEditor 5 API docs</a>
  */
-export default class DowncastDispatcher {
+export default class DowncastDispatcher implements Emitter {
   conversionApi: DowncastConversionApi;
 
   constructor(conversionApi: DowncastConversionApi);
+
+  on(event: string, callback: CallbackFunction, options?: { priority: number | PriorityString; }): void;
+
+  off(event: string, callback?: CallbackFunction): void;
+
+  delegate(...events: string[]): EmitterMixinDelegateChain;
+
+  once(event: string, callback: CallbackFunction, options?: { priority: number | PriorityString; }): void;
+
+  listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority?: number | PriorityString | undefined; }): void;
+
+  fire(eventOrInfo: string | eventinfo, ...args: any[]): any;
+
+  stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   convertAttribute(range: any, key: string, oldValue: any, newValue: any, writer: any): void;
 
@@ -35,10 +56,21 @@ export default class DowncastDispatcher {
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_conversion_downcastdispatcher-DowncastConversionApi.html">Interface DowncastConversionApi (engine/conversion/downcastdispatcher~DowncastConversionApi) - CKEditor 5 API docs</a>
  */
 export interface DowncastConversionApi {
-  consumable: any;
+  consumable: ViewConsumable;
   dispatcher: DowncastDispatcher;
-  mapper: any;
+  mapper: Mapper;
   options: Object;
   schema: Schema;
   writer: DowncastWriter;
+}
+
+export type AddMarkerEventData = {
+  markerName: string,
+  range?: Range,
+  markerRange: Range,
+  item: Item
+}
+export type RemoveMarkerEventData = {
+  markerName: string,
+  markerRange: Range,
 }

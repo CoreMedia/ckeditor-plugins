@@ -4,6 +4,8 @@ import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import ViewDocument from "./document"
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "./observer/domeventdata";
+import { Item } from "./item";
+import Position from "./position";
 
 /**
  * Editor's view controller class. Its main responsibility is DOM - View
@@ -39,4 +41,8 @@ export default class View implements Emitter, Observable {
   decorate(methodName: string): void;
 
   delegate(...events: string[]): EmitterMixinDelegateChain;
+
+  createPositionAt(itemOrPosition: Item | Position, offset: number | "end" | "before" | "after"): Position;
+  createPositionAfter(itemOrPosition: Item): Position;
+  change(callback:Function): any;
 }

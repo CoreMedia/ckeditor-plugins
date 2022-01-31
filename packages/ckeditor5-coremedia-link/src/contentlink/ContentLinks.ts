@@ -28,7 +28,6 @@ export default class ContentLinks extends Plugin {
       ContentLinkActionsViewExtension,
       ContentLinkFormViewExtension,
       ContentLinkCommandHook,
-      ContentLinkClipboard,
     ];
   }
 
