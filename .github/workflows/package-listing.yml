@@ -25,4 +25,12 @@ jobs:
             echo $i
             npm view "$i" versions --registry https://npm.coremedia.io
           done
+      - name: List all @coremedia/types-ckeditor__ packages with all versions
+        run: |
+          cmcke5packages=$(npm search "@coremedia/types-ckeditor__" --json --registry https://npm.coremedia.io)
+          for i in $(jq -r ".[].name" <(echo "$cmcke5packages"))
+          do
+            echo $i
+            npm view "$i" versions --registry https://npm.coremedia.io
+          done
 
