@@ -1,15 +1,15 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-link",
-  "version": "2.0.0",
+  "version": "2.0.1-rc.1",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "^2.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "^2.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "^2.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-typing": "^2.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-ui": "^2.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "^2.0.0"
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "2.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-core": "2.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "2.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-typing": "2.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-ui": "2.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "2.0.1-rc.1"
   },
   "scripts": {
     "npm-check-updates": "npm-check-updates --upgrade"
