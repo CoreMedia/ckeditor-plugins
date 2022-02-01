@@ -16,6 +16,9 @@
       "@ckeditor/ckeditor5-link/*": [
         "../../../types/ckeditor__ckeditor5-link/*"
       ],
+      "@ckeditor/ckeditor5-typing/*": [
+        "../../../types/ckeditor__ckeditor5-typing/*"
+      ],
       "@ckeditor/ckeditor5-paste-from-office/*": [
         "../../../types/ckeditor__ckeditor5-paste-from-office/*"
       ],
@@ -28,32 +31,23 @@
       "@ckeditor/ckeditor5-utils/*": [
         "../../../types/ckeditor__ckeditor5-utils/*"
       ],
-      "@coremedia/ckeditor5-coremedia-link/*": [
-        "../../ckeditor5-coremedia-link/src/*"
+      "@ckeditor/ckeditor5-image/*": [
+        "../../../types/ckeditor__ckeditor5-image/*"
       ],
-      "@coremedia/ckeditor5-coremedia-richtext/*": [
-        "../../ckeditor5-coremedia-richtext/src/*"
+      "@coremedia/ckeditor5-logging/*": [
+        "../../ckeditor5-logging/src/*"
       ],
-      "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
-        "../../ckeditor5-coremedia-content-clipboard/src/*"
-      ],
-      "@coremedia/ckeditor5-coremedia-images/*": [
-        "../../ckeditor5-coremedia-images/src/*"
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
+        "../../ckeditor5-coremedia-studio-integration/src/*"
       ]
     }
   },
   "references": [
     {
-      "path": "../../ckeditor5-coremedia-link/src"
+      "path": "../../ckeditor5-logging/src"
     },
     {
-      "path": "../../ckeditor5-coremedia-richtext/src"
-    },
-    {
-      "path": "../../ckeditor5-coremedia-content-clipboard/src"
-    },
-    {
-      "path": "../../ckeditor5-coremedia-images/src"
+      "path": "../../ckeditor5-coremedia-studio-integration/src"
     }
   ],
   "extends": "../../../tsconfig.json"
