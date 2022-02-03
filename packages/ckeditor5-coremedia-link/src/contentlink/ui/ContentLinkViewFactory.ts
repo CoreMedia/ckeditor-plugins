@@ -9,10 +9,10 @@ import { openInTab } from "../ContentLinkViewUtils";
  * Creates an ContentLinkView that renders content links in the link form-view.
  * It is initially hidden and must be revealed by removing its hidden class manually.
  *
- * The ContentLinkView is a LabeledFieldView which contains a ContentView.
+ * The ContentLinkView is a LabeledFieldView, which contains a ContentView.
  *
- * @param locale the editor's locale
- * @param linkUI the linkUI plugin
+ * @param locale - the editor's locale
+ * @param linkUI - the linkUI plugin
  */
 const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView<ContentLinkView> => {
   const { t } = locale;

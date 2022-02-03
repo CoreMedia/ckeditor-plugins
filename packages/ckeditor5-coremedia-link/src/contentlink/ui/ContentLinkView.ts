@@ -44,7 +44,7 @@ export default class ContentLinkView extends ButtonView {
     const bind = this.bindTemplate;
     this.renderOptions = renderOptions;
 
-    /**
+    /*
      * The value of the content uri path.
      *
      * @observable
@@ -53,7 +53,7 @@ export default class ContentLinkView extends ButtonView {
      */
     this.set("uriPath", undefined);
 
-    /**
+    /*
      * The value of the content name.
      *
      * @observable
@@ -62,7 +62,7 @@ export default class ContentLinkView extends ButtonView {
      */
     this.set("contentName", undefined);
 
-    /**
+    /*
      * Renders the link as a simple text link
      *
      * @observable

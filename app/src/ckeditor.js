@@ -34,11 +34,11 @@ import CoreMediaStudioEssentials, {
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
-import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-general-richtext-support/GeneralRichTextSupport";
+import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY
-} from "@coremedia/ckeditor5-coremedia-general-richtext-support/CoreMediaRichTextSupportConfig";
+} from "@coremedia/ckeditor5-coremedia-richtext-support/CoreMediaRichTextSupportConfig";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 

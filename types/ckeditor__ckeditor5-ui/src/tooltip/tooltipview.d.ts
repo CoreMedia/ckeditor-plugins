@@ -1,7 +1,7 @@
 /**
  * @module ui/tooltip/tooltipview
  */
-import View from '../view/view';
+import View from '../view';
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 
 /**

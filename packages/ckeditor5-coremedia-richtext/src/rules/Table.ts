@@ -1,7 +1,7 @@
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { replaceByElementAndClassBackAndForth } from "./ReplaceBy";
 import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import {langMapper, langMapperConfiguration, langViewFilterRule} from "./Lang";
+import { langMapper, langMapperConfiguration, langViewFilterRule } from "./Lang";
 
 /**
  * Reserved class to denote tables cells in CoreMedia RichText, which are
@@ -62,9 +62,9 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
    * tr/tables rules:
    * ----------------
    *
-   * In CKEditor 4 we also had to handle tr and table which may have been
+   * In CKEditor 4 we also had to handle tr and table, which may have been
    * emptied during the process. This behavior moved to the after-children
-   * behavior, which checks for elements which must not be empty but now
+   * behavior, which checks for elements, which must not be empty but now
    * are empty.
    */
   tbody: {
@@ -91,14 +91,14 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
 };
 
 class ElementWrapper {
-  private readonly _delegate: Element;
+  readonly #delegate: Element;
 
   constructor(delegate: Element) {
-    this._delegate = delegate;
+    this.#delegate = delegate;
   }
 
   get delegate(): Element {
-    return this._delegate;
+    return this.#delegate;
   }
 
   getDirectElementByTagName(tagName: string): Element | undefined {
@@ -164,7 +164,7 @@ class TableWrapper extends ElementWrapper {
   }
 
   /**
-   * Returns all `<tbody>` elements which are available as snapshot.
+   * Returns all `<tbody>` elements, which are available as snapshot.
    * Note, that while in HTML a table may have multiple `<tbody>` elements,
    * CoreMedia RichText 1.0 may have only one element.
    */
@@ -259,8 +259,8 @@ class TableWrapper extends ElementWrapper {
 
   /**
    * Removes the given child element.
-   * @param oldChild child element to remove
-   * @return removed child
+   * @param oldChild - child element to remove
+   * @returns removed child
    */
   removeChild(oldChild: Node): Node {
     return this.delegate.removeChild(oldChild);
@@ -291,7 +291,7 @@ class TableWrapper extends ElementWrapper {
  * element, which just shares the same tagName as a `HTMLTableElement`. That's
  * why implementation needs to be more complex.
  *
- * @param tableElement table element to process
+ * @param tableElement - table element to process
  */
 function toDataProcessTableContents(tableElement: TableWrapper): void {
   function addClassToRows(section: Element | undefined | null, className: string): void {
@@ -333,7 +333,7 @@ function toDataProcessTableContents(tableElement: TableWrapper): void {
  * why it is important to remember and restore the state of a row being part
  * of `<thead>` in view.
  *
- * @param tableElement table element to process
+ * @param tableElement - table element to process
  */
 function toViewProcessTableContents(tableElement: TableWrapper): void {
   const rowsSnapshot = tableElement.rows;

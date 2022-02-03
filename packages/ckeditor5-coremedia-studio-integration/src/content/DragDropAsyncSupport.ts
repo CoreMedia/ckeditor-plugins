@@ -21,16 +21,15 @@ export default class DragDropAsyncSupport {
    * Short-term cache required to resolve asynchronous responses in
    * synchronous environment. Responses are meant to be cached only for the
    * short time between drag-start and drag-end.
-   * @private
    */
   static readonly #isLinkableCache: Cache = new Map<string, IsLinkableResponse>();
   static readonly #isEmbeddableTypeCache: Cache = new Map<string, IsEmbeddableResponse>();
 
   /**
-   * Workaround for the HTML 5 behaviour that drag over is always synchronous
+   * Workaround for the HTML 5 behaviour that drag over is always synchronous,
    * but we have to call an asynchronous service.
    *
-   * When the method is called the first time for an URI-Path, the method calls
+   * When the method is called the first time for a URI-Path, the method calls
    * the asynchronous `RichtextConfigurationService` and stores the actual state
    * of the call in a map and returns probably `false` because the service call
    * is probably still in progress.
@@ -41,8 +40,8 @@ export default class DragDropAsyncSupport {
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
    *
-   * @param uriPath the URI-Path of the content, e.g. `content/42`
-   * @param evictImmediately `true` to immediately evict the response from
+   * @param uriPath - the URI-Path of the content, e.g., `content/42`
+   * @param evictImmediately - `true` to immediately evict the response from
    * cache; defaults to `false`
    * immediate response; defaults to `false`.
    */
@@ -125,14 +124,13 @@ export default class DragDropAsyncSupport {
   /**
    * Triggers cache-update.
    *
-   * @param uriPath the URI-Path of the content, e.g. `content/42`
-   * @param evictImmediately `true` to immediately evict the response from
+   * @param uriPath - the URI-Path of the content, e.g., `content/42`
+   * @param evictImmediately - `true` to immediately evict the response from
    * cache; defaults to `false`
-   * @param cache the cache to update
-   * @param loadFunction a function to load the value from
-   * @return `false`, if either the value is false or a different response is not
+   * @param cache - the cache to update
+   * @param loadFunction - a function to load the value from
+   * @returns `false`, if either the value is false or a different response is not
    * available yet; `true` if response is true
-   * @private
    */
   static #evaluate(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
     const logger = DragDropAsyncSupport.#logger;
@@ -178,6 +176,25 @@ export default class DragDropAsyncSupport {
     });
 
     return actualValue;
+  }
+
+  /**
+   * Validates, if all URI-Paths represent linkable contents.
+   *
+   * This method triggers asynchronous updates, so that repetitive calls
+   * for the same URI-Paths may result in different responses. A positive
+   * answer (`=== true`) is only returned, when all responses are available
+   * and positive.
+   *
+   * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
+   */
+  static containsOnlyLinkables(uriPaths: string[]): boolean {
+    for (const uriPath of uriPaths) {
+      if (!DragDropAsyncSupport.isLinkable(uriPath)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

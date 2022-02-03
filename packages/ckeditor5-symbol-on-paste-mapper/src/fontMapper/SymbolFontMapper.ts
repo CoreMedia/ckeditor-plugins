@@ -4,7 +4,6 @@ export default class SymbolFontMapper implements FontMapper {
   /**
    * Helper element for decoding HTML entities like &amp;quot; which are contained in the MS Word clipboard
    * content. For processing in here we require the real characters instead of their HTML entities.
-   * @type {Element}
    */
   private static DECODE_ELEMENT_HELP = document.createElement("div");
 

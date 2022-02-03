@@ -118,7 +118,7 @@ describe("ElementProxy.classList", () => {
    * Sets the class attribute value for both, DOM reference as
    * proxied DOM element. If `null`, the class attribute is removed
    * instead.
-   * @param domClass class to set; `null`to remove class attribute
+   * @param domClass - class to set; `null`to remove class attribute
    */
   const setClass = (domClass: string | null): void => {
     if (typeof domClass === "string") {
@@ -134,11 +134,11 @@ describe("ElementProxy.classList", () => {
    * Runs several validations on proxy and the proxied DOM element. In addition
    * to that, provides a comparison of proxy and real DOM element behavior.
    *
-   * @param valueBefore the value, the class attribute had before; used to validate,
+   * @param valueBefore - the value, the class attribute had before; used to validate,
    * that the proxied DOM element did not change
-   * @param expectedValue expected value of class attribute; will be validated on proxy as well as on reference
+   * @param expectedValue - expected value of class attribute; will be validated on proxy as well as on reference
    * DOM element
-   * @param expectedCount number of class entries we expect
+   * @param expectedCount - number of class entries we expect
    */
   const validate = (valueBefore: string | null, expectedValue: string, expectedCount: number): void => {
     // Proxy: Should represent expected classList.value.
@@ -786,7 +786,7 @@ describe("ElementProxy.applyRules()", () => {
         ],
         from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
         to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        restart: "//new",
       },
     ],
     [
@@ -800,7 +800,7 @@ describe("ElementProxy.applyRules()", () => {
         ],
         from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
         to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        restart: "//new",
       },
     ],
     [
@@ -814,11 +814,17 @@ describe("ElementProxy.applyRules()", () => {
         ],
         from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
         to: '<parent><before>Lorem </before><new attr="value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        restart: "//new",
       },
     ],
     [
-      "should execute subsequent rules even after replacing by new element",
+      "should stop executing subsequent rules after replacement by new element",
+      /*
+       * For example children must not be processed, as they will be processed
+       * with the new identity of the node. Also, the generic `$` goal should
+       * be executed for the replaced element only, not as part of the current
+       * replacement iteration.
+       */
       {
         rules: [
           (me) => {
@@ -832,8 +838,8 @@ describe("ElementProxy.applyRules()", () => {
           },
         ],
         from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
-        to: '<parent><before>Lorem </before><new attr="before-value-after"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
-        restart: "//after",
+        to: '<parent><before>Lorem </before><new attr="before-value"><c1>Child 1</c1><c2>Child 1</c2></new><after> Ipsum</after></parent>',
+        restart: "//new",
       },
     ],
   ])("(%#) %s", (name, testData) => {

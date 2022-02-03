@@ -5,28 +5,28 @@ import { COREMEDIA_RICHTEXT_NAMESPACE_URI } from "./Constants";
  * This class is responsible for the `toData` processing.
  */
 export default class ToDataProcessor {
-  private readonly _toDataFilter: HtmlFilter;
+  readonly #toDataFilter: HtmlFilter;
 
   /**
    * Filter to use for `toData` processing.
-   * @param toDataFilter filter
+   * @param toDataFilter - filter
    */
   constructor(toDataFilter: HtmlFilter) {
-    this._toDataFilter = toDataFilter;
+    this.#toDataFilter = toDataFilter;
   }
 
   /**
    * Internal `toData` transformation, especially meant for testing purpose.
    *
-   * @param fromView the fragment created from view
-   * @param targetDocument the target document which will get the elements added
+   * @param fromView - the fragment created from view
+   * @param targetDocument - the target document, which will get the elements added
    * and will be transformed according to the rules
-   * @return the transformed CoreMedia RichText XML
+   * @returns the transformed CoreMedia RichText XML
    */
   toData(fromView: Node | DocumentFragment, targetDocument?: Document): Document {
     const document: Document = targetDocument || ToDataProcessor.createCoreMediaRichTextDocument();
     document.documentElement.appendChild(fromView);
-    this._toDataFilter.applyTo(document.documentElement);
+    this.#toDataFilter.applyTo(document.documentElement);
     return document;
   }
 

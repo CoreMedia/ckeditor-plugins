@@ -3,11 +3,14 @@ import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
    * A content id is linkable if
-   * * it is not a folder (even number)
-   * * it the last digit is not dividable by 4.
-   *     This represents any content which is not linkable.
    *
-   * @param uripath an uripath in the format 'content/content-id'
+   * * it is not a folder (even number)
+   *
+   * * it is the last digit, and it is not dividable by 4.
+   *
+   *     This represents any content, which is not linkable.
+   *
+   * @param uripath - an uripath in the format 'content/content-id'
    */
   hasLinkableType(uripath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -71,8 +74,8 @@ interface DroppableConfig {
  * Modifies the given contentId, so that it signals droppable or undroppable
  * state. contentIds for folders are not modified.
  *
- * @param contentId content ID to possibly adapt
- * @param undroppable if to provide an undroppable (= `true`) or droppable ID (= `false`)
+ * @param contentId - content ID to possibly adapt
+ * @param undroppable - if to provide an undroppable (= `true`) or droppable ID (= `false`)
  */
 const applyDroppable = (contentId: number, undroppable: boolean): number => {
   if (contentId % 2 === 1) {

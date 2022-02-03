@@ -2,45 +2,39 @@ import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataproc
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { xLinkActuateMapper, xLinkTitleMapper, xLinkTypeMapper } from "./XLink";
 import { langMapper } from "./Lang";
+import { formatLink } from "./IdHelper";
 
 const CONTENT_LINK_DATA_REGEXP = /^content\/(?<id>\d+)*/;
 const CONTENT_LINK_DATA_PREFIX = "content/";
 const CONTENT_LINK_MODEL_REGEXP = /^content:(?<id>\d+)*/;
 const CONTENT_LINK_MODEL_PREFIX = "content:";
 
-function hasHref({ attributes }: ElementProxy): boolean {
+const hasHref = ({ attributes }: ElementProxy): boolean => {
   const href = attributes["href"];
   return href === "" || !!href;
-}
-
-function hrefToXLinkHref({ attributes }: ElementProxy): void {
-  // It should have been checked before, that we have a href attribute set.
-  const href: string = <string>attributes["href"];
-  delete attributes["href"];
-  attributes["xlink:href"] = contentLinkToData(href);
-}
-
-function xLinkHrefToHref({ attributes }: ElementProxy): void {
-  // It should have been checked before, that we have a href attribute set.
-  const href = <string>attributes["xlink:href"];
-  delete attributes["xlink:href"];
-  attributes["href"] = contentLinkToModel(href);
-}
+};
 
 /**
  * Transforms any possible occurrence of `content:123` to `content/123` as this
  * is the required representation for Studio REST Backend. Any unmatched href
  * will be returned unmodified.
  *
- * @param href href to transform
+ * @param href - href to transform
  */
-function contentLinkToData(href: string): string {
+const contentLinkToData = (href: string): string => {
   const match = CONTENT_LINK_MODEL_REGEXP.exec(href);
   if (!match) {
     return href;
   }
   return `${CONTENT_LINK_DATA_PREFIX}${match[1]}`;
-}
+};
+
+const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
+  // It should have been checked before, that we have a href attribute set.
+  const href: string = <string>attributes["href"];
+  delete attributes["href"];
+  attributes["xlink:href"] = contentLinkToData(href);
+};
 
 /**
  * Transforms any possible occurrence of `content/123` to `content:123` as this
@@ -52,17 +46,28 @@ function contentLinkToData(href: string): string {
  * Any unmatched href will be returned unmodified, assuming that it is an
  * external link.
  *
- * @param href href to transform
+ * @param href - href to transform
  */
-function contentLinkToModel(href: string): string {
-  const match = CONTENT_LINK_DATA_REGEXP.exec(href);
+const contentLinkToModel = (href: string): string => {
+  // If data or not retrieved via CoreMedia Studio Server, we may have
+  // UAPI Links in our data (for example from source editing). `formatLink`
+  // will respect such URIs and transform them according to our expectations.
+  const link = formatLink(href);
+  const match = CONTENT_LINK_DATA_REGEXP.exec(link);
   if (!match) {
-    return href;
+    return link;
   }
   return `${CONTENT_LINK_MODEL_PREFIX}${match[1]}`;
-}
+};
 
-function targetToXLinkAttributes({ attributes }: ElementProxy): void {
+const xLinkHrefToHref = ({ attributes }: ElementProxy): void => {
+  // It should have been checked before, that we have a href attribute set.
+  const href = <string>attributes["xlink:href"];
+  delete attributes["xlink:href"];
+  attributes["href"] = contentLinkToModel(href);
+};
+
+const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
   const target = attributes["target"] || "";
   // Just ensure, that even no empty target is written.
   delete attributes["target"];
@@ -139,9 +144,9 @@ function targetToXLinkAttributes({ attributes }: ElementProxy): void {
   if (!!newAttrs.role) {
     attributes["xlink:role"] = newAttrs.role;
   }
-}
+};
 
-function xLinkShowAndRoleToTarget(node: ElementProxy): void {
+const xLinkShowAndRoleToTarget = (node: ElementProxy): void => {
   const show = node.attributes["xlink:show"];
   const role = node.attributes["xlink:role"];
 
@@ -186,6 +191,7 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
       default:
         if (handleRole) {
           target = `_role_${role}`;
+          handleRole = false;
           console.warn(
             `Invalid value for xlink:show="${show}". Only xlink:role respected in target attribute. Node:`,
             node
@@ -206,9 +212,9 @@ function xLinkShowAndRoleToTarget(node: ElementProxy): void {
   if (!!target) {
     node.attributes["target"] = target;
   }
-}
+};
 
-export const handleAnchor: ToDataAndViewElementConfiguration = {
+const handleAnchor: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
     if (!hasHref(node)) {
@@ -234,3 +240,5 @@ export const handleAnchor: ToDataAndViewElementConfiguration = {
     langMapper.toView(params);
   },
 };
+
+export { handleAnchor };

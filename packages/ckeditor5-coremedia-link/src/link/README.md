@@ -11,8 +11,8 @@ CKEditor plugins provided here.
 attribute got removed by the `UnlinkCommand` for example.
 
 Yet, you want only one Undo-step for the removal of both attributes, i.e.,
-undoing one `unlink` action has to restore both attributes, your custom one as
-well as `linkHref`.
+undoing one `unlink` action has to restore both attributes, your custom one
+and `linkHref`.
 
 **Solution:** The solution is registering a post-fixer at CKEditor's document
 instance. And to ease this approach, you may use the `LinkCleanup` plugin. You

@@ -10,9 +10,10 @@ import {
 } from "./XLink";
 import { langMapper } from "./Lang";
 
+// noinspection SpellCheckingInspection
 /**
  * Placeholder image as long as we have no image support yet.
- * The placeholder is a 10x10 red PNG image.
+ * The placeholder is a 10×10 red PNG image.
  */
 // TODO[cke] Remove, as soon as images are supported.
 const INLINE_IMG =
@@ -38,7 +39,7 @@ export const handleImage: ToDataAndViewElementConfiguration = {
     langMapper.toData(params);
 
     if (!hasHref(node)) {
-      // Invalid state: We have an img-element without href which is not
+      // Invalid state: We have an img-element without href, which is not
       // supported by CoreMedia RichText DTD.
       node.replaceByChildren = true;
     }

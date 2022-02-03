@@ -19,17 +19,17 @@ import ToDataProcessor from "./ToDataProcessor";
 export default class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
-  private readonly _delegate: HtmlDataProcessor;
-  private readonly _domConverter: DomConverter;
-  private readonly _richTextXmlWriter: RichTextXmlWriter;
-  private readonly _htmlWriter: HtmlWriter;
+  readonly #delegate: HtmlDataProcessor;
+  readonly #domConverter: DomConverter;
+  readonly #richTextXmlWriter: RichTextXmlWriter;
+  readonly #htmlWriter: HtmlWriter;
 
-  private readonly _toDataProcessor: ToDataProcessor;
-  private readonly _toViewFilter: HtmlFilter;
+  readonly #toDataProcessor: ToDataProcessor;
+  readonly #toViewFilter: HtmlFilter;
 
-  private readonly _richTextSchema: RichTextSchema;
+  readonly #richTextSchema: RichTextSchema;
 
-  private readonly _domParser: DOMParser;
+  readonly #domParser: DOMParser;
   readonly #noParserErrorNamespace: boolean;
 
   constructor(editor: Editor) {
@@ -37,26 +37,26 @@ export default class RichTextDataProcessor implements DataProcessor {
 
     const { schema, toData, toView } = getConfig(editor.config);
 
-    this._delegate = new HtmlDataProcessor(document);
-    this._domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
-    this._richTextXmlWriter = new RichTextXmlWriter();
-    this._htmlWriter = new BasicHtmlWriter();
-    this._domParser = new DOMParser();
+    this.#delegate = new HtmlDataProcessor(document);
+    this.#domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
+    this.#richTextXmlWriter = new RichTextXmlWriter();
+    this.#htmlWriter = new BasicHtmlWriter();
+    this.#domParser = new DOMParser();
 
-    this._richTextSchema = schema;
+    this.#richTextSchema = schema;
 
-    this._toViewFilter = new HtmlFilter(toView, editor);
-    this._toDataProcessor = new ToDataProcessor(new HtmlFilter(toData, editor));
+    this.#toViewFilter = new HtmlFilter(toView, editor);
+    this.#toDataProcessor = new ToDataProcessor(new HtmlFilter(toData, editor));
 
-    const parserErrorDocument = this._domParser.parseFromString("<", "text/xml");
+    const parserErrorDocument = this.#domParser.parseFromString("<", "text/xml");
     this.#noParserErrorNamespace =
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
-    this._delegate.registerRawContentMatcher(pattern);
-    this._domConverter.registerRawContentMatcher(pattern);
+    this.#delegate.registerRawContentMatcher(pattern);
+    this.#domConverter.registerRawContentMatcher(pattern);
   }
 
   /**
@@ -68,16 +68,16 @@ export default class RichTextDataProcessor implements DataProcessor {
     // is to use the RichTextSchema with Strict mode. This should be enough
     // for testing, so that it should not be necessary to mock this call during
     // tests.
-    return this._richTextSchema;
+    return this.#richTextSchema;
   }
 
   /**
-   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note, that in order
+   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note, that
    * to trigger data processor for empty text as well, you have to set the
    * option `trim: 'none'` on `CKEditor.getData()`.
    *
-   * @param viewFragment fragment from view model to process
-   * @return CoreMedia RichText 1.0 XML as string
+   * @param viewFragment - fragment from view model to process
+   * @returns CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
     const logger = RichTextDataProcessor.#logger;
@@ -96,10 +96,10 @@ export default class RichTextDataProcessor implements DataProcessor {
   /**
    * Prepares toData transformation.
    *
-   * @param viewFragment view fragment to transform
-   * @return `richTextDocument` the (empty) document which shall receive the transformed data;
-   * `domFragment` the view DOM structure to transform;
-   * `fragmentAsStringForDebugging` some representation of `domFragment` to be used for debugging - it will only
+   * @param viewFragment - view fragment to transform
+   * @returns `richTextDocument` the (empty) document, which shall receive the transformed data;
+   * `domFragment` the view DOM-structure to transform;
+   * `fragmentAsStringForDebugging` some representation of `domFragment` to be used for debugging — it will only
    * be initialized, if debug logging is turned on.
    */
   initToData(viewFragment: ViewDocumentFragment): {
@@ -110,11 +110,11 @@ export default class RichTextDataProcessor implements DataProcessor {
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
     // We use the RichTextDocument at this early stage, so that all created elements
     // already have the required namespace. This eases subsequent processing.
-    const domFragment: Node | DocumentFragment = this._domConverter.viewToDom(viewFragment, richTextDocument);
+    const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment, richTextDocument);
     let fragmentAsStringForDebugging = "uninitialized";
 
     if (RichTextDataProcessor.#logger.isDebugEnabled()) {
-      fragmentAsStringForDebugging = this.fragmentToString(domFragment);
+      fragmentAsStringForDebugging = this.#fragmentToString(domFragment);
 
       RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
@@ -132,22 +132,21 @@ export default class RichTextDataProcessor implements DataProcessor {
   /**
    * Internal `toData` transformation, especially meant for testing purpose.
    *
-   * @param fromView the fragment created from view
-   * @param targetDocument the target document which will get the elements added
+   * @param fromView - the fragment created from view
+   * @param targetDocument - the target document, which will get the elements added
    * and will be transformed according to the rules
-   * @return the transformed CoreMedia RichText XML
+   * @returns the transformed CoreMedia RichText XML
    */
   toDataInternal(fromView: Node | DocumentFragment, targetDocument?: Document): string {
-    const dataDocument = this._toDataProcessor.toData(fromView, targetDocument);
-    return this._richTextXmlWriter.getXml(dataDocument);
+    const dataDocument = this.#toDataProcessor.toData(fromView, targetDocument);
+    return this.#richTextXmlWriter.getXml(dataDocument);
   }
 
   /**
    * Transform a fragment into an HTML string for debugging purpose.
-   * @param domFragment fragment to transform
-   * @private
+   * @param domFragment - fragment to transform
    */
-  private fragmentToString(domFragment: Node | DocumentFragment): string {
+  #fragmentToString(domFragment: Node | DocumentFragment): string {
     return (
       Array.from(domFragment.childNodes)
         .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
@@ -176,7 +175,7 @@ export default class RichTextDataProcessor implements DataProcessor {
     // need any parsing but may directly forward the empty data to the delegate
     // `toView` handler.
     if (!!data) {
-      const dataDocument = this._domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
+      const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
       if (this.#isParserError(dataDocument)) {
         logger.error("Failed parsing data. See debug messages for details.", { data });
         if (logger.isDebugEnabled()) {
@@ -186,14 +185,14 @@ export default class RichTextDataProcessor implements DataProcessor {
         }
       } else {
         // Only apply filters, if we received valid data.
-        this._toViewFilter.applyTo(dataDocument.documentElement);
+        this.#toViewFilter.applyTo(dataDocument.documentElement);
       }
 
       const documentFragment = dataDocument.createDocumentFragment();
       const nodes: Node[] = Array.from(dataDocument.documentElement.childNodes);
       documentFragment.append(...nodes);
 
-      const html: string = this._htmlWriter.getHtml(documentFragment);
+      const html: string = this.#htmlWriter.getHtml(documentFragment);
 
       // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
       // for singleton elements such as `<img>` and `<br>`. A better fix would
@@ -203,7 +202,7 @@ export default class RichTextDataProcessor implements DataProcessor {
       dataView = html.replaceAll(/<\/(?:img|br)>/g, "");
     }
 
-    const viewFragment = this._delegate.toView(dataView);
+    const viewFragment = this.#delegate.toView(dataView);
 
     if (logger.isDebugEnabled()) {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
@@ -223,7 +222,7 @@ export default class RichTextDataProcessor implements DataProcessor {
  * makes use of Parameter Entities (to shorten the DTD). These are not supported
  * in inline DTDs.
  *
- * @param xml XML to parse.
+ * @param xml - XML to parse.
  */
 export function declareCoreMediaRichText10Entities(xml: string): string {
   if (!xml) {

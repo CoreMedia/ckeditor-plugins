@@ -10,9 +10,9 @@ import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/C
  *
  * The CoreMediaStudioEssentials Plugin exposed by this package enables the following features:
  *
- * - Link targets on external links
- * - Content links
- * - CoreMedia RichText
+ * * Link targets on external links
+ * * Content links
+ * * CoreMedia RichText
  *
  */
 export default class CoreMediaStudioEssentials extends Plugin {

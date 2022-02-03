@@ -22,7 +22,7 @@ const serializer = new XMLSerializer();
 
 type CommentableTestData = {
   /**
-   * Some comment which may help understanding the test case better.
+   * Some comment, which may help to understand the test case better.
    */
   comment?: string;
 };
@@ -74,6 +74,7 @@ describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No Defaults)", () => {
   type TestData = CommentableTestData & DisablableTestCase & ParseFilterRuleSetConfigurationTestData;
   type TestFixture = [string, TestData];
+  // noinspection RequiredAttributes,HtmlUnknownAttribute
   const testFixtures: TestFixture[] = [
     [
       "#empty: Should do no processing on empty rules.",
@@ -186,6 +187,32 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
         },
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
         data: "<root>Lorem <data>Ipsum</data> Dolor</root>",
+        view: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+      },
+    ],
+    [
+      "#elementAndtextMapping: Should transform texts and elements back and forth.",
+      {
+        config: {
+          text: {
+            toData: reverseText,
+            toView: reverseText,
+          },
+          elements: {
+            el: {
+              toData: (p) => {
+                p.node.name = "data";
+              },
+              toView: {
+                data: (p) => {
+                  p.node.name = "el";
+                },
+              },
+            },
+          },
+        },
+        from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
+        data: "<root> meroL<data>muspI</data>roloD </root>",
         view: "<root>Lorem <el>Ipsum</el> Dolor</root>",
       },
     ],
@@ -320,6 +347,9 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     ParseFilterRuleSetConfigurationTestData &
     WithDefaultsTestData;
   type TestFixture = [string, TestData];
+  // Index if we want to trace processing order.
+  let currentStepIdx = 0;
+  // noinspection RequiredAttributes,HtmlUnknownAttribute
   const testFixtures: TestFixture[] = [
     [
       "#empty: Should do no processing on empty rules.",
@@ -412,44 +442,77 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     ],
     [
       "#fullExample: Should apply all rules from default, override and elements as well as texts.",
+      // The test is rather artificial and is meant to test and demonstrate processing order.
       {
         default: {
           text: {
-            toData: reverseText,
-            toView: reverseText,
+            toData: (p) => {
+              currentStepIdx++;
+              p.node.textContent = `${p.node.textContent}/data.text.default#${currentStepIdx}`;
+            },
+            toView: (p) => {
+              currentStepIdx++;
+              p.node.textContent = `${p.node.textContent}/view.text.default#${currentStepIdx}`;
+            },
           },
           elements: {
             el: {
-              toData: (p) => (p.node.name = "data"),
+              toData: (p) => {
+                currentStepIdx++;
+                p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/data.el.default#${currentStepIdx}`;
+                p.node.name = "data";
+              },
               toView: {
-                data: (p) => (p.node.name = "view"),
+                data: (p) => {
+                  currentStepIdx++;
+                  p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/view.el.default#${currentStepIdx}`;
+                  p.node.name = "view";
+                },
               },
             },
           },
         },
         config: {
           text: (p) => {
+            currentStepIdx++;
+            p.node.textContent = `${p.node.textContent}/data.text.parent#${currentStepIdx}`;
             p.parentRule(p);
-            p.node.textContent = p.node.textContent.split(/[aeiou]/i).join("V");
+            currentStepIdx++;
+            p.node.textContent = `${p.node.textContent}/data.text.config#${currentStepIdx}`;
           },
           elements: {
             el: {
               toData: (p) => {
+                currentStepIdx++;
+                p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/data.el.parent#${currentStepIdx}`;
                 p.parentRule(p);
-                p.node.attributes["as"] = "data";
+                currentStepIdx++;
+                p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/data.el.config#${currentStepIdx}`;
               },
               toView: {
                 data: (p) => {
+                  currentStepIdx++;
+                  p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/view.el.parent#${currentStepIdx}`;
                   p.parentRule(p);
-                  p.node.attributes["as"] = "view";
+                  currentStepIdx++;
+                  p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/view.el.config#${currentStepIdx}`;
                 },
               },
             },
           },
         },
+        /*
+         * The following test-data are rather artificial, as toView does not try
+         * to undo previous data-processing. Instead, the artificial processing
+         * tracking _Step-IDs_ helps to understand data-processing order and having
+         * a look at potential bugs like "reprocessing already processed".
+         * For a certain state, we observed, for example, that the text node of
+         * a nested, replaced element got processed twice, which could lead to
+         * bugs like for example double-encoded entities.
+         */
         from: "<root>Lorem <el>Ipsum</el> Dolor</root>",
-        data: `<root> mVrVL<data as="data">mVspV</data>rVlVD </root>`,
-        view: `<root>LVrVm <view as="view">VpsVm</view> DVlVr</root>`,
+        data: `<root>Lorem /data.text.parent#1/data.text.default#2/data.text.config#3<data path="//data.el.parent#4/data.el.default#5/data.el.config#6">Ipsum/data.text.parent#7/data.text.default#8/data.text.config#9</data> Dolor/data.text.parent#10/data.text.default#11/data.text.config#12</root>`,
+        view: `<root>Lorem /data.text.parent#1/data.text.default#2/data.text.config#3/view.text.default#13<view path="//data.el.parent#4/data.el.default#5/data.el.config#6/view.el.default#14/view.el.parent#15/view.el.config#16">Ipsum/data.text.parent#7/data.text.default#8/data.text.config#9/view.text.default#17</view> Dolor/data.text.parent#10/data.text.default#11/data.text.config#12/view.text.default#18</root>`,
       },
     ],
   ];
@@ -469,6 +532,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
 
+    currentStepIdx = 0;
     toDataFilter.applyTo(from.documentElement);
 
     const dataXml: string = serializer.serializeToString(from.documentElement);
@@ -479,6 +543,8 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
 
     const data: Document = parser.parseFromString(dataXml, "text/xml");
 
+    // We continue using currentStepIdx also for view filter, so that we may get
+    // a complete overview on processing (when used in test-data).
     toViewFilter.applyTo(data.documentElement);
 
     const viewXml: string = serializer.serializeToString(data.documentElement);

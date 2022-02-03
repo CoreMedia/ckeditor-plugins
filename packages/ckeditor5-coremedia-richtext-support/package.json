@@ -1,0 +1,67 @@
+{
+  "name": "@coremedia/ckeditor5-coremedia-richtext-support",
+  "version": "2.0.1-rc.3",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "clean": "rimraf ./dist",
+    "jest": "jest --passWithNoTests",
+    "jest:coverage": "jest --collect-coverage",
+    "lint": "eslint --fix \"src/**\"",
+    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
+    "npm-check-updates": "npm-check-updates --upgrade"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-arrow-functions": "^7.16.0",
+    "@babel/plugin-transform-computed-properties": "^7.16.0",
+    "@babel/plugin-transform-for-of": "^7.16.0",
+    "@babel/plugin-transform-parameters": "^7.16.3",
+    "@babel/plugin-transform-shorthand-properties": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@ckeditor/ckeditor5-core": "^31.0.0",
+    "@ckeditor/ckeditor5-engine": "^31.0.0",
+    "@ckeditor/ckeditor5-html-support": "^31.0.0",
+    "@ckeditor/ckeditor5-utils": "^31.0.0",
+    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "2.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "2.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-html-support": "2.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "2.0.1-rc.3",
+    "@types/jest": "^27.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "babel-jest": "^27.3.1",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "jest": "^27.3.1",
+    "jest-each": "^27.3.1",
+    "jest-transform-stub": "^2.0.0",
+    "jest-xml-matcher": "^1.2.0",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.4"
+  },
+  "exports": {
+    "./*": "./dist/*.js"
+  },
+  "peerDependencies": {
+    "@ckeditor/ckeditor5-core": "^31.0.0",
+    "@ckeditor/ckeditor5-engine": "^31.0.0",
+    "@ckeditor/ckeditor5-html-support": "^31.0.0",
+    "@ckeditor/ckeditor5-utils": "^31.0.0"
+  },
+  "dependencies": {
+    "@coremedia/ckeditor5-logging": "2.0.1-rc.3"
+  }
+}

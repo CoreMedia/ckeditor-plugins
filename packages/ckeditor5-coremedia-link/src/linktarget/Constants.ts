@@ -1,5 +1,5 @@
 /**
- * Name of model property which holds the selected link behavior.
+ * Name of model property, which holds the selected link behavior.
  */
 export const LINK_TARGET_MODEL = "linkTarget";
 /**

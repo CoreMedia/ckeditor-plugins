@@ -39,9 +39,9 @@ export enum Strictness {
 
 /**
  * Validator type for attribute values.
- * @param value the attribute value to validate
- * @param strictness mode for checking validity
- * @return `true` if attribute value is considered valid; `false` if not
+ * @param value - the attribute value to validate
+ * @param strictness - mode for checking validity
+ * @returns `true` if attribute value is considered valid; `false` if not
  */
 type AttributeValueValidator = (value: string, strictness?: Strictness) => boolean;
 
@@ -91,8 +91,8 @@ interface Attributes {
 
 /**
  * Similar to a Relax NG ModelGroup this specifies possible contents of
- * an element. This is not an exact mapping, but sufficient for the purpose
- * of the CoreMedia RichText 1.0 DTD validation.
+ * an element. This is not an exact mapping, but enough for the
+ * CoreMedia RichText 1.0 DTD validation.
  *
  * `nestedElementNames` is similar to `choice` et al.
  * `mayBeEmpty` is similar to `zeroOrMore`.
@@ -109,7 +109,7 @@ interface ModelGroup {
    */
   mayBeEmpty?: boolean;
   /**
-   * Signals if this very element may contain text nodes. This
+   * Signals if this element may contain text nodes. This
    * is not applied to child elements.
    * Defaults to `false` if unset.
    */
@@ -130,7 +130,7 @@ interface ElementSpecification extends ModelGroup {
    */
   attributeList: Attributes;
   /**
-   * Names of parent elements which may hold this very element. Not meant
+   * Names of parent elements, which may hold this element. Not meant
    * to be filled manually, but to be registered on initialization.
    */
   parentElementNames?: string[];
@@ -154,6 +154,7 @@ const REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (att
 
 const NOTHING_TODO_ON_MISSING_ATTRIBUTE: MissingAttributeAction = () => undefined;
 
+// noinspection HttpUrlsUsage
 const COREMEDIA_RICHTEXT_1_0_NAMESPACE = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
 
@@ -178,7 +179,7 @@ const NUMBER: AttributeValueValidator = (v, s) => (s === Strictness.STRICT ? /^\
 /**
  * a Uniform Resource Identifier, see [RFC2396]
  *
- * Note: While we may validate a URI to some extend, we experienced CKEditor
+ * Note: While we may validate a URI to some extent, we experienced CKEditor
  * not doing much validation here and thus, `href` may be any string. Because
  * of this we don't apply strict checking here, even if requested by configuration.
  */
@@ -571,11 +572,11 @@ const ELEMENTS: Elements = {
  */
 export default class RichTextSchema {
   static readonly #logger: Logger = LoggerProvider.getLogger("RichTextSchema");
-  private readonly strictness: Strictness;
+  readonly #strictness: Strictness;
 
   constructor(strictness: Strictness) {
-    this.strictness = strictness;
-    RichTextSchema.initParentElementNames(ELEMENTS);
+    this.#strictness = strictness;
+    RichTextSchema.#initParentElementNames(ELEMENTS);
   }
 
   /**
@@ -583,9 +584,9 @@ export default class RichTextSchema {
    * relationship parent to child. Thus, add a reverse mapping for easier
    * lookup.
    *
-   * @param elements element schema to process
+   * @param elements - element schema to process
    */
-  private static initParentElementNames(elements: Elements): void {
+  static #initParentElementNames(elements: Elements): void {
     const logger = RichTextSchema.#logger;
 
     Object.keys(elements).forEach((elementName) => {
@@ -606,10 +607,7 @@ export default class RichTextSchema {
     if (logger.isDebugEnabled()) {
       logger.debug("Initialized child-parent relationship.");
       Object.keys(elements).forEach((elementName) => {
-        logger.debug(
-          `    Initialized <${elementName}> to be child of:`,
-          elements[elementName].parentElementNames
-        );
+        logger.debug(`    Initialized <${elementName}> to be child of:`, elements[elementName].parentElementNames);
       });
     }
   }
@@ -628,19 +626,14 @@ export default class RichTextSchema {
     const elementSpecification = ELEMENTS[parentName];
     if (!elementSpecification) {
       // Element not specified. Not allowed at all.
-      logger.debug(
-        `Element <${parentName}> not specified and thus, not allowed as parent of text-node.`
-      );
+      logger.debug(`Element <${parentName}> not specified and thus, not allowed as parent of text-node.`);
       return false;
     }
 
     const isAllowed = elementSpecification.mayContainText || false;
 
     if (!isAllowed) {
-      logger.debug(
-        `Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`,
-        text
-      );
+      logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
     }
     return isAllowed;
   }
@@ -648,8 +641,8 @@ export default class RichTextSchema {
   /**
    * Checks, if the given element is known to be valid at current parent.
    *
-   * @param element element to validate
-   * @return `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
+   * @param element - element to validate
+   * @returns `true` if element is allowed at parent or if element has no parent; `false` if element is already marked
    * for removal (name is empty or null) or if the given element is not allowed at parent.
    */
   isElementAllowedAtParent(element: ElementProxy): boolean {
@@ -698,7 +691,7 @@ export default class RichTextSchema {
    * Note, that changes are only applied to the mutable element. It is required
    * to persist these changes to propagate it to the wrapped delegate element.
    *
-   * @param element element to process
+   * @param element - element to process
    */
   adjustHierarchy(element: ElementProxy): void {
     const logger = RichTextSchema.#logger;
@@ -725,7 +718,7 @@ export default class RichTextSchema {
    * Note, that changes are only applied to the mutable element. It is required
    * to persist these changes to propagate it to the wrapped delegate element.
    *
-   * @param element element to process
+   * @param element - element to process
    */
   adjustAttributes(element: ElementProxy): void {
     const elementName = element.name;
@@ -740,12 +733,12 @@ export default class RichTextSchema {
     }
     const attributeSpecifications = elementSpecification.attributeList;
     const specifiedAttributes = Object.keys(attributeSpecifications);
-    this.deleteNotAllowedAttributes(element, specifiedAttributes);
-    this.fixOrDeleteAttributesHavingInvalidValues(element, attributeSpecifications);
-    this.setDefaultForMissingRequiredAttributes(element, specifiedAttributes, attributeSpecifications);
+    this.#deleteNotAllowedAttributes(element, specifiedAttributes);
+    this.#fixOrDeleteAttributesHavingInvalidValues(element, attributeSpecifications);
+    this.#setDefaultForMissingRequiredAttributes(element, specifiedAttributes, attributeSpecifications);
   }
 
-  private deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
+  #deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
     const notAllowedAttributes: string[] = actualAttributes.filter(
       (a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0
@@ -763,7 +756,7 @@ export default class RichTextSchema {
     }
   }
 
-  private fixOrDeleteAttributesHavingInvalidValues(element: ElementProxy, attributeSpecifications: Attributes) {
+  #fixOrDeleteAttributesHavingInvalidValues(element: ElementProxy, attributeSpecifications: Attributes) {
     const allowedActualAttributes = Object.keys(element.attributes);
 
     allowedActualAttributes.forEach((attributeName) => {
@@ -771,12 +764,12 @@ export default class RichTextSchema {
       // null = to be deleted; nothing to validate then
       if (attributeValue !== null) {
         const specification = attributeSpecifications[attributeName.toLowerCase()];
-        const attributeValid = specification.valueValidator(attributeValue, this.strictness);
-        // Note, that this may also remove required attributes - but having invalid values.
+        const attributeValid = specification.valueValidator(attributeValue, this.#strictness);
+        // Note, that this may also remove required attributes — but having invalid values.
         // This is important for subsequent processing.
         if (!attributeValid) {
           const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY;
-          const suggestedValue = invalidValueHandler(attributeValue, this.strictness);
+          const suggestedValue = invalidValueHandler(attributeValue, this.#strictness);
           if (suggestedValue === undefined) {
             RichTextSchema.#logger.debug(
               `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
@@ -793,7 +786,7 @@ export default class RichTextSchema {
     });
   }
 
-  private setDefaultForMissingRequiredAttributes(
+  #setDefaultForMissingRequiredAttributes(
     element: ElementProxy,
     specifiedAttributes: string[],
     attributeSpecifications: Attributes

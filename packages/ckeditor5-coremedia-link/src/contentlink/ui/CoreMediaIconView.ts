@@ -6,15 +6,12 @@ import View from "@ckeditor/ckeditor5-ui/src/view";
  * Renders a span with css icon classes.
  */
 export default class CoreMediaIconView extends View {
-  /**
-   * @inheritDoc
-   */
   constructor() {
     super();
 
     const bind = this.bindTemplate;
 
-    /**
+    /*
      * The additional css class of the icon element.
      *
      * @observable
@@ -23,7 +20,7 @@ export default class CoreMediaIconView extends View {
      */
     this.set("iconClass", undefined);
 
-    /**
+    /*
      * The id of the icon element.
      *
      * @observable

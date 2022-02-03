@@ -2,26 +2,23 @@
  * A wrapper for DOM nodes, to store changes to be applied to the DOM structure
  * later on.
  */
-export default class NodeProxy<N extends Node = Node> {
+class NodeProxy<N extends Node = Node> {
   private readonly _delegate: N;
   /**
    * Flag to signal if this instance is meant to be mutable. Typically, you
    * don't want to make nested instances to be mutable, as the framework will
    * not take care of persisting possibly applied changes.
-   *
-   * @private
    */
   private readonly _mutable: boolean;
   /**
    * Represents the state the node should take when persisting to DOM.
-   * @private
    */
   private _state: NodeState = NodeState.KEEP_OR_REPLACE;
 
   /**
    * Constructor.
-   * @param delegate delegate to wrap
-   * @param mutable signals, if this representation is mutable or not
+   * @param delegate - delegate to wrap
+   * @param mutable - signals, if this representation is mutable or not
    */
   constructor(delegate: N, mutable = true) {
     this._delegate = delegate;
@@ -32,9 +29,9 @@ export default class NodeProxy<N extends Node = Node> {
    * Wraps the given node into a NodeProxy. If the node is falsy, `null`
    * will be returned.
    *
-   * @param node node to wrap
-   * @param mutable signals, if this representation is mutable or not
-   * @return NodeProxy for given node; `null` for falsy values
+   * @param node - node to wrap
+   * @param mutable - signals, if this representation is mutable or not
+   * @returns NodeProxy for given node; `null` for falsy values
    */
   public static proxy<T extends Node>(node: T | undefined | null, mutable = true): NodeProxy<T> | null {
     if (!!node) {
@@ -59,7 +56,6 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Will raise an error, if this element is not mutable.
-   * @protected
    */
   protected requireMutable(): void {
     if (!this.mutable) {
@@ -75,7 +71,7 @@ export default class NodeProxy<N extends Node = Node> {
    *
    * If a manipulation is done, it must be ensured, that previously run rules
    * on this node may be rerun. It is generally considered safe to do manipulation
-   * to child elements, as these are processed after this very node, so that
+   * to child elements, as these are processed after this node, so that
    * all applicable rules have a chance to modify these nodes again.
    */
   public get delegate(): N {
@@ -138,7 +134,7 @@ export default class NodeProxy<N extends Node = Node> {
   /**
    * Signals, if this element is empty.
    *
-   * @param considerChildNode signals, if a given node shall be considered while determining empty state
+   * @param considerChildNode - signals, if a given node shall be considered while determining empty state
    */
   public isEmpty(considerChildNode?: ChildPredicate): boolean {
     if (!considerChildNode) {
@@ -158,7 +154,7 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Get first (matching) child node of the given element.
-   * @param condition string: the node name to match (ignoring case), predicate:
+   * @param condition - string: the node name to match (ignoring case), predicate:
    * the predicate to apply.
    */
   public findFirst(condition?: string | ChildPredicate): NodeProxy<ChildNode> | null {
@@ -178,7 +174,7 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Signals, if this node is meant to be removed. This includes recursive
-   * removal (including children) as well as just removing this very node
+   * removal (including children) as well as just removing this node
    * (replacing it by its children).
    */
   public get remove(): boolean {
@@ -232,7 +228,7 @@ export default class NodeProxy<N extends Node = Node> {
    * {@link NodeProxy#state}, thus setting this overrides any other decisions
    * upon the state of the node.
    *
-   * @param remove `true` to mark as <em>remove children</em>; `false` otherwise.
+   * @param remove - `true` to mark as <em>remove children</em>; `false` otherwise.
    */
   public set removeChildren(remove: boolean) {
     this.requireMutable();
@@ -259,7 +255,7 @@ export default class NodeProxy<N extends Node = Node> {
    * {@link NodeProxy#state}, thus setting this overrides any other decisions
    * upon the state of the node.
    *
-   * @param replace `true` to mark as <em>replace with children</em>; `false` otherwise.
+   * @param replace - `true` to mark as <em>replace with children</em>; `false` otherwise.
    */
   public set replaceByChildren(replace: boolean) {
     this.requireMutable();
@@ -272,8 +268,16 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Persists the applied changes to the DOM.
+   */
+  public persist(): void {
+    this.persistToDom();
+  }
+
+  /**
+   * Persists the applied changes to the DOM.
    *
-   * @return {PersistResponse} which signals, how to continue persisting other nodes
+   * @returns `PersistResponse` which signals, how to continue persisting other nodes
+   * @internal Public only for testing purpose.
    */
   public persistToDom(): PersistResponse {
     switch (this.state) {
@@ -292,10 +296,9 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Helper function for return value, which signals to continue with
-   * another node, but to do not abort current processing. This is
-   * typically used, if a node just changed its identity.
-   * @param node node to continue with
-   * @protected
+   * another node, but to do not abort current processing.
+   *
+   * @param node - node to continue with
    */
   protected continueFrom(node: Node | null | undefined): PersistResponse {
     return {
@@ -306,8 +309,8 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Helper function for return value, which signals "restart from".
-   * @param node node to restart from
-   * @protected
+   *
+   * @param node - node to restart from
    */
   protected restartFrom(node: Node | null | undefined): PersistResponse {
     return {
@@ -320,8 +323,6 @@ export default class NodeProxy<N extends Node = Node> {
    * Persists, to keep the current node. May be overwritten for example to
    * apply additional changes to the node like changing attributes of an
    * element.
-   *
-   * @protected
    */
   protected persistKeepOrReplace(): PersistResponse {
     return RESPONSE_CONTINUE;
@@ -329,8 +330,6 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Persists the deletion of this node and all its child nodes.
-   *
-   * @protected
    */
   protected persistRemoveRecursively(): PersistResponse {
     this.delegate.parentNode?.removeChild(this.delegate);
@@ -338,10 +337,8 @@ export default class NodeProxy<N extends Node = Node> {
   }
 
   /**
-   * Persists, that only the very node itself shall be removed.
+   * Persists, that only the node itself shall be removed.
    * The default implementation will replace the node with its child nodes.
-   *
-   * @protected
    */
   protected persistRemoveSelf(): PersistResponse {
     const parentNode = this.delegate.parentNode;
@@ -377,7 +374,6 @@ export default class NodeProxy<N extends Node = Node> {
 
   /**
    * Persists removal of all child nodes.
-   * @protected
    */
   protected persistRemoveChildren(): PersistResponse {
     while (this.delegate.firstChild) {
@@ -397,23 +393,23 @@ export default class NodeProxy<N extends Node = Node> {
  * Signals to abort handling the current node during data processing.
  * May be enriched with the node to restart from via object destruction.
  */
-export const RESPONSE_ABORT = { abort: true };
+const RESPONSE_ABORT = { abort: true };
 /**
  * Signals, that data processing for current node should be continued.
  */
-export const RESPONSE_CONTINUE = { abort: false };
+const RESPONSE_CONTINUE = { abort: false };
 
 /**
  * Response when persisting node changes.
  */
-export interface PersistResponse {
+interface PersistResponse {
   /**
    * Node to possibly continue from. Typically used, when a node got replaced.
    * `undefined` signals, that processing may just continue with next nodes.
    */
   continueWith?: Node;
   /**
-   * Signals if further rules should/may be applied to this node. Typically
+   * Signals if further rules should/may be applied to this node. Typically,
    * `true`, if processing should continue with different node. `true` is
    * also returned, when the current node just got deleted, as it does not make
    * sense to continue processing this node.
@@ -424,7 +420,7 @@ export interface PersistResponse {
 /**
  * Predicate to select children.
  */
-export interface ChildPredicate {
+interface ChildPredicate {
   /**
    * <p>
    * <strong>As function declaration:</strong>
@@ -432,9 +428,9 @@ export interface ChildPredicate {
    * <pre>
    * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
    * </pre>
-   * @param child the child node to validate
-   * @param index child node index
-   * @param array list of all sibling child nodes (including the child itself)
+   * @param child - the child node to validate
+   * @param index - child node index
+   * @param array - list of all sibling child nodes (including the child itself)
    */
   (child: ChildNode, index: number, array: ChildNode[]): boolean;
 }
@@ -443,9 +439,9 @@ export interface ChildPredicate {
  * Represents the state of a given node, it should reach after persisting it
  * to the DOM.
  */
-export enum NodeState {
+enum NodeState {
   /**
-   * Keep the node or replace it at the very same position.
+   * Keep the node or replace it at the same position.
    */
   KEEP_OR_REPLACE,
   /**
@@ -461,3 +457,6 @@ export enum NodeState {
    */
   REMOVE_CHILDREN,
 }
+
+export default NodeProxy;
+export { ChildPredicate, NodeState, PersistResponse, RESPONSE_ABORT, RESPONSE_CONTINUE };

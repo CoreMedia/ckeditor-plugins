@@ -15,8 +15,8 @@ type UriPath = string;
 type ModelUri = string;
 
 /**
- * Returns the numeric ID from an URI path.
- * @param uriPath URI path to return numeric ID from
+ * Returns the numeric ID from a URI path.
+ * @param uriPath - URI path to return numeric ID from
  */
 const numericId = (uriPath: UriPath): number => {
   const match = CONTENT_URI_PATH_REGEXP.exec(uriPath);
@@ -32,7 +32,7 @@ const numericId = (uriPath: UriPath): number => {
  * colon within the content identifier, this is magically transformed to
  * a valid URI Path.
  *
- * @param str string to validate and possibly transform
+ * @param str - string to validate and possibly transform
  * @throws InvalidUriPathError in case of unmatched string
  */
 const requireContentUriPath = (str: string): UriPath => {
@@ -59,7 +59,7 @@ const requireContentUriPath = (str: string): UriPath => {
  * content. In case of a Content URI path as used within CoreMedia Studio,
  * it will be magically transformed to a valid CKEditor Model URI.
  *
- * @param uriPaths string to validate and possibly transform
+ * @param uriPaths - string to validate and possibly transform
  * @throws InvalidCkeModelUriError in case of unmatched string
  */
 const requireContentCkeModelUris = (uriPaths: Array<string>): Array<ModelUri> => {

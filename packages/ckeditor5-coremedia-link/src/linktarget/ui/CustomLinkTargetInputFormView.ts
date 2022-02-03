@@ -136,11 +136,10 @@ export default class CustomLinkTargetInputFormView extends View {
   /**
    * Creates the button view.
    *
-   * @private
-   * @param {String} label The button label
-   * @param {String} icon The button's icon.
-   * @param {String} className The additional button CSS class name.
-   * @param {String} eventName? The event name that the ButtonView#execute event will be delegated to.
+   * @param label - The button label
+   * @param icon - The button's icon.
+   * @param className - The additional button CSS class name.
+   * @param eventName - The event name that the ButtonView#execute event will be delegated to.
    * @returns {@link ButtonView} The button view instance.
    */
   #createButton(label: string, icon: string, className: string, eventName?: string): ButtonView {
@@ -168,7 +167,6 @@ export default class CustomLinkTargetInputFormView extends View {
   /**
    * Creates the target input with a corresponding label.
    *
-   * @private
    * @returns {@link LabeledFieldView} Labeled field view instance.
    */
   #createLabeledInputView(): LabeledFieldView<InputTextView> {

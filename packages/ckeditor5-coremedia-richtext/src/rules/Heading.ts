@@ -39,12 +39,12 @@ export const paragraphToHeading: ElementFilterRule = (params) => {
   }
   const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(matchedHeading);
   if (!match) {
-    // Should not happen, as we matched before.
+    // Should not happen, as we matched array of headings before.
     return;
   }
   const headingLevel: number = +match[1];
   if (headingLevel < 1 || headingLevel > 6) {
-    // Someone "messed" with our classes. Just do nothing.
+    // Should not happen, as we matched array of headings before.
     return;
   }
   node.name = `h${headingLevel}`;

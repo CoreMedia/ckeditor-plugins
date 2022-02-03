@@ -29,7 +29,7 @@ type ContentName = string;
  */
 interface Replacement {
   /**
-   * The URI as stored in the model, i.e. `content:123`.
+   * The URI as stored in the model, i.e., `content:123`.
    */
   modelUri: ModelUri;
   /**
@@ -44,14 +44,12 @@ interface Replacement {
 class TrackingData {
   /**
    * The recorded replacement, if any.
-   * @private
    */
   #replacement: Replacement | undefined;
 
   /**
    * Write-only for replacement. It can only be read via `clear()` with
-   * corresponding side-effect.
-   * @param replacement
+   * corresponding side effect.
    */
   set replacement(replacement: Replacement) {
     this.#replacement = replacement;
@@ -59,11 +57,11 @@ class TrackingData {
 
   /**
    * Signals, if a given diff item matches a previously recorded replacement.
-   * @param diffItem diff item to compare
+   * @param diffItem - diff item to compare
    */
   matches(diffItem: DiffItemInsert): boolean {
     // The length should match, we are not interested in it otherwise,
-    // as obviously not the URI has been written to the text.
+    // as not the URI has been written to the text.
     return !!this.#replacement && diffItem.length === this.#replacement.modelUri.length;
   }
 
@@ -86,7 +84,7 @@ class TrackingData {
 
 /**
  * Gets shallow items from a given range.
- * @param range range to get included items for
+ * @param range - range to get included items for
  */
 const getItems = (range: Range): Item[] => {
   return [...range.getItems({ shallow: true })];
@@ -100,7 +98,7 @@ const getItems = (range: Range): Item[] => {
  *
  * For content-links this is no valid approach. We don't want `content:123`
  * to be written into the CKEditor text field. We want the content's name
- * to be written (and, perhaps, if not available because of concurrent changes,
+ * to be written, and, perhaps, if not available because of concurrent changes,
  * fallback to the `content:123` form.
  *
  * **Approach:** While several approaches exist, the given approach ensures
@@ -114,7 +112,7 @@ const getItems = (range: Range): Item[] => {
  * be retrieved asynchronously, while a post-fixer needs to evaluate
  * synchronously.
  *
- * The suggest approach is, that the _Save_ button is disabled until the
+ * The suggested approach is, that the _Save_ button is disabled until the
  * `FormView` has a valid name to hand over to this plugin, which will then
  * use this name for replacement.
  *
@@ -131,12 +129,12 @@ const getItems = (range: Range): Item[] => {
  * **Important:** The name must be registered, before `LinkCommand` is executed.
  *
  * **No need to check if replacement required on registration:**
- * It is this plugin which decides, if a replacement is required or not. More
+ * It is this plugin, which decides, if a replacement is required or not. More
  * specifically, it will only respond to content insertion events (via
- * document.differ) and not to attribute changes. I.e. with the current
+ * `document.differ`) and not to attribute changes. I.e., with the current
  * implementation of `LinkCommand` (as of CKEditor 29.x) it will be triggered
  * if the `LinkCommands` calls `insertContent` for a collapsed selection outside
- * of an existing link – which again triggers the `linkHref` attribute to be
+ * an existing link — which again triggers the `linkHref` attribute to be
  * written to the text, which is the scenario, we want to prevent for
  * content-links.
  */
@@ -151,7 +149,7 @@ class ContentLinkCommandHook extends Plugin {
    * Thus, the data are strongly bound to the link command only and
    * may not be used in other contexts.
    *
-   * @return previously stored value, if any
+   * @returns previously stored value, if any
    */
   readonly #clearTrackingData = (): Replacement | undefined => {
     return this.#trackingData.clear();
@@ -205,7 +203,7 @@ class ContentLinkCommandHook extends Plugin {
   }
 
   /**
-   * Clears resources, i.e. the name cache.
+   * Clears resources, i.e., the name cache.
    */
   destroy(): null {
     const editor = this.editor;
@@ -219,7 +217,7 @@ class ContentLinkCommandHook extends Plugin {
   }
 
   /**
-   * Hook for FormView to register a content-name which is about to be replaced
+   * Hook for FormView to register a content-name, which is about to be replaced
    * as soon as CKEditor's Link Features tries to insert the "raw link" into
    * CKEditor text.
    *
@@ -227,16 +225,16 @@ class ContentLinkCommandHook extends Plugin {
    * Feature won't be vetoed.
    *
    * Subsequent calls to this method will override a previous replacement,
-   * i.e. only one replacement is remembered at a time.
+   * i.e., only one replacement is remembered at a time.
    *
    * The registration must be done prior to the execution of `LinkCommand`.
    *
    * The replacement cache is cleared as soon as `LinkCommand` finished
    * execution.
    *
-   * @param uriOrPath URI path of the content (`content/123`) or content URI
+   * @param uriOrPath - URI path of the content (`content/123`) or content URI
    * as stored in the model (`content:123`).
-   * @param name resolved name
+   * @param name - resolved name
    */
   registerContentName(uriOrPath: UriPath | ModelUri, name: string): void {
     this.#trackingData.replacement = {
@@ -249,14 +247,13 @@ class ContentLinkCommandHook extends Plugin {
    * Identifies, if the given DiffItem is of type `DiffItemInsert` and
    * if it represents a text node insertion.
    *
-   * @param value DiffItem to validate
-   * @private
+   * @param value - DiffItem to validate
    */
   static #isTextNodeInsertion(value: DiffItem): boolean {
     if (value.type === "insert") {
       const insertion = <DiffItemInsert>value;
       // Unfortunately, insertion.position.textNode does not (yet) represent
-      // the currently added text node, but the text node the inserted one
+      // the now added text node, but the text node the inserted one
       // may have been merged with.
       return insertion.name === "$text";
     }
@@ -266,8 +263,7 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Just cast to `DiffItemInsert`, expecting that it has been validated before,
    * that the cast is valid.
-   * @param value value to cast
-   * @private
+   * @param value - value to cast
    */
   static #asDiffItemInsert(value: DiffItem): DiffItemInsert {
     return <DiffItemInsert>value;
@@ -277,11 +273,10 @@ class ContentLinkCommandHook extends Plugin {
    * Replaces the given raw content-link with the name of the content, if
    * it has been previously registered to the name cache.
    *
-   * @param writer used to apply the change
-   * @param textProxy the representation for the text which got inserted
-   * @param range range for the text
-   * @return `true` iff. the text node has been replaced; `false` otherwise
-   * @private
+   * @param writer - used to apply the change
+   * @param textProxy - the representation for the text, which got inserted
+   * @param range - range for the text
+   * @returns `true` iff. the text node has been replaced; `false` otherwise
    */
   #replaceRawLink(writer: Writer, textProxy: TextProxy, range: Range): boolean {
     const logger = ContentLinkCommandHook.#logger;
@@ -303,7 +298,7 @@ class ContentLinkCommandHook extends Plugin {
     const name: ContentName = replacement.name || ROOT_NAME;
 
     /*
-     * name !== href: Corner case, when the name really matches the model
+     * name !== href: Corner case, when the name matches the model
      * representation. There is nothing to do then.
      */
     if (name !== href) {
@@ -315,7 +310,7 @@ class ContentLinkCommandHook extends Plugin {
        * Prevent to do that again.
        */
       const position = range.start;
-      // We want to apply the very same attributes.
+      // We want to apply the same attributes.
       const attrs = textProxy.getAttributes();
 
       // We first need to remove the text, as otherwise it will be merged with
@@ -334,8 +329,7 @@ class ContentLinkCommandHook extends Plugin {
    * to do. Otherwise, it will replace a raw content-Model-URI written by
    * `LinkCommand` for collapsed selections by the content name.
    *
-   * @param writer writer to possibly apply changes
-   * @private
+   * @param writer - writer to possibly apply changes
    */
   #postFix(writer: Writer): boolean {
     if (this.#trackingData.empty()) {
@@ -366,11 +360,10 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Applies the change to map the raw content link model URI to the content's
    * name. Some consistency checks are made before, so that the change is only
-   * applied, when we are very sure, to be doing _the right thing_.
+   * applied, when we are sure, to be doing _the right thing_.
    *
-   * @param writer writer to apply changes
-   * @param matchedDiffItem diff item which represents the link insertion
-   * @private
+   * @param writer - writer to apply changes
+   * @param matchedDiffItem - diff item, which represents the link insertion
    */
   #postFixMatchedItem(writer: Writer, matchedDiffItem: DiffItemInsert): boolean {
     const toRange = (diffItem: DiffItemInsert): Range => {
@@ -386,7 +379,7 @@ class ContentLinkCommandHook extends Plugin {
       /*
        * As we only want to deal with one atomic `insertContent` triggered
        * by `LinkCommand` we don't have to deal with any ranges that cross
-       * several items. And obviously, there is nothing to do, if no items
+       * several items. And there is nothing to do, if no items
        * are covered by the given range.
        */
       return false;

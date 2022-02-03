@@ -26,14 +26,14 @@ type DefaultTargetOptions = {
  *     Open in current tab.
  *     This is also the assumed default, if no `linkTarget` is set.
  *
- * * **`_blank:**
+ * * **`_blank`:**
  *     Open in new tab.
  *
- * * **`_embed:**
+ * * **`_embed`:**
  *     Show Embedded.
  *     Artificial target for `xlink:show="embed"`.
  *
- * * **`_other:**
+ * * **`_other`:**
  *     Open in named frame.
  *
  *     `_other` is the fallback, when no other of the configured targets match.
@@ -83,7 +83,7 @@ const DEFAULT_TARGETS: DefaultTargetOptions = {
  * Transforms @see {@link DEFAULT_TARGETS} to a map from target name to target
  * configuration.
  *
- * @param targets default target options
+ * @param targets - default target options
  */
 const asMap = (targets: DefaultTargetOptions): Map<string, Required<LinkTargetOptionDefinition>> => {
   const result = new Map<string, Required<LinkTargetOptionDefinition>>();
@@ -101,7 +101,7 @@ const asMap = (targets: DefaultTargetOptions): Map<string, Required<LinkTargetOp
  * Transforms @see {@link DEFAULT_TARGETS} to an array of definition objects,
  * as it is used in editor configuration for example.
  *
- * @param targets default target options
+ * @param targets - default target options
  */
 const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<LinkTargetOptionDefinition>[] => {
   const result: Required<LinkTargetOptionDefinition>[] = [];
@@ -121,7 +121,7 @@ const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTarg
 /**
  * Gets a default target definition for the given key, if available.
  *
- * @param key name of the definition to get
+ * @param key - name of the definition to get
  * @returns default target definition; `undefined` if not available
  */
 const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
@@ -131,7 +131,7 @@ const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefin
 /**
  * Gets a required default target definition for the given key.
  *
- * @param key name of the definition to get
+ * @param key - name of the definition to get
  * @returns default target definition
  * @throws Error when default target definition of given name is not available
  */

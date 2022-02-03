@@ -88,9 +88,9 @@ interface UriPath2ContentAsLink {
  * Supports modal test execution for debugging or known issues. Provides
  * the actual test function to use.
  *
- * @param skip `true` to mark a test as skipped
- * @param only `true` to only execute this test
- * @return test function
+ * @param skip - `true` to mark a test as skipped
+ * @param only - `true` to only execute this test
+ * @returns test function
  */
 const modalTest = ({ skip, only }: TestMode): jest.It => {
   if (skip) {

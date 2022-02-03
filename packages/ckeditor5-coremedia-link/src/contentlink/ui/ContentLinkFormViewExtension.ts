@@ -95,9 +95,8 @@ class ContentLinkFormViewExtension extends Plugin {
    * enabled/disabled state of Save-Button. Which is: We must only activate the
    * save-button when we know the content-name to write for collapsed selections.
    *
-   * @param linkCommand command which is originally bound to enabled state
-   * @param formView formView to rebind enabled state of saveButtonView for
-   * @private
+   * @param linkCommand - command, which is originally bound to enabled state
+   * @param formView - formView to rebind enabled state of saveButtonView for
    */
   #rebindSaveEnabled(linkCommand: Command, formView: LinkFormView): void {
     // We have to extend the algorithm of LinkUI to calculate the enabled state of
@@ -215,12 +214,11 @@ class ContentLinkFormViewExtension extends Plugin {
 
   /**
    * On dragover we have to decide if a drop is allowed here or not.
-   * A drop must be allowed if it is any URL (for external links) or if it is a content which is allowed to drop.
+   * A drop must be allowed if it is any URL (for external links) or if it is a content, which is allowed to drop.
    * A content is allowed to drop if the DragDropService has any data and if the given content from DragDropService is
    * a CMLinkable.
    *
-   * @param dragEvent the drag event.
-   * @private
+   * @param dragEvent - the drag event.
    */
   static #onDragOverLinkField(dragEvent: DragEvent): void {
     dragEvent.preventDefault();
