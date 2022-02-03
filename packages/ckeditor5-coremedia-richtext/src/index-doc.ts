@@ -11,7 +11,6 @@
 export * as rules from "./rules/index-doc";
 
 export * from "./Constants";
-//export { default as Constants } from "./Constants";
 
 export * from "./CoreMediaRichText";
 export { default as CoreMediaRichText } from "./CoreMediaRichText";

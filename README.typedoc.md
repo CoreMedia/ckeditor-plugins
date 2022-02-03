@@ -9,6 +9,7 @@ All packages are published with scope `@coremedia/` as for example
 
 | Name                                     | Description                                                |
 |------------------------------------------|------------------------------------------------------------|
+| `ckeditor5-coremedia-content-clipboard`  | Extension to CKEditor 5 Clipboard Feature for CoreMedia Contents  |
 | `ckeditor5-coremedia-link`               | Extension to CKEditor 5 Link Feature                       |
 | `ckeditor5-coremedia-richtext`           | Data-Processing for CoreMedia RichText 1.0 DTD             |
 | `ckeditor5-coremedia-richtext-support`   | Support for CoreMedia RichText 1.0 DTD                     |
