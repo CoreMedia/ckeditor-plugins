@@ -1,9 +1,9 @@
 import {
-  createContentUriPath,
+  changing$,
   ContentIdPrefix,
-  changing$
+  createContentUriPath
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentDisplayService";
-import { serviceAgent } from "@coremedia/service-agent";
+import {serviceAgent} from "@coremedia/service-agent";
 import MockDragDropService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropService";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
@@ -21,6 +21,7 @@ const setDragData = (dragEvent) => {
     dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
     serviceAgent.registerService(dragDropService);
     dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
+    dragEvent.dataTransfer.setData('text', JSON.stringify(contentList(...idsArray)));
     return;
   }
   dragEvent.dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
@@ -219,6 +220,16 @@ const initDragExamples = () => {
       ],
     },
     {
+      label: "3 Documents[Slow/Fast/Slow]",
+      tooltip: "Slow/Fast/Slow for testing drop order after lazy loading",
+      classes: ["linkable", "type-collection"],
+      items: [
+        {name: true, prefix: ContentIdPrefix.slow},
+        {name: true},
+        {name: true, prefix: ContentIdPrefix.slow},
+      ],
+    },
+    {
       label: "2 Documents (1 nodrop)",
       tooltip: "Two documents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],
@@ -255,7 +266,7 @@ const initDragExamples = () => {
     ...slowDocuments,
     ...pairedExamples,
     ...allDroppables,
-    ...unreadables,
+    ...unreadables
   ];
 
   const generateUriPath = (item) => {

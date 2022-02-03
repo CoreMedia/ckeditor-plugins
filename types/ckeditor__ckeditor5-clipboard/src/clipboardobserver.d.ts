@@ -12,6 +12,7 @@ export default class ClipboardEventData extends DomEventData {
   //   Is this really a CK-DocumentFragment? Or is it a standard DocumentFragment?
   content: DocumentFragment;
   targetRanges: Array<Range>;
+  method: "paste" | "drop";
 }
 
 /**

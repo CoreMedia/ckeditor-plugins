@@ -14,7 +14,7 @@ import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/d
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import { LINK_COMMAND_NAME } from "../link/Constants";
 import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
-import { ROOT_NAME } from "./Constants";
+import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 
 /**
  * Alias for easier readable code.

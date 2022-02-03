@@ -15,6 +15,8 @@ export default class DocumentFragment {
    */
   readonly document: ViewDocument;
 
+  readonly isEmpty: boolean;
+
   /**
    * Gets child nodes iterator.
    *

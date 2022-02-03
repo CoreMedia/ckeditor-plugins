@@ -8,8 +8,6 @@
 export * as clipboard from "./clipboard/index-doc";
 export * as ui from "./ui/index-doc";
 
-export * as Constants from "./Constants";
-
 export * from "./ContentLinkCommandHook";
 export { default as ContentLinkCommandHook } from "./ContentLinkCommandHook";
 

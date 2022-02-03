@@ -81,3 +81,5 @@ export default class DocumentSelection implements Emitter {
 
   delegate(...events: string[]): EmitterMixinDelegateChain;
 }
+
+export type SelectionRangeChangeEventData = {directChange: boolean}

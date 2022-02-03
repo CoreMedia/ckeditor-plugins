@@ -26,8 +26,9 @@ All packages are published with scope `@coremedia/` as for example
 `@coremedia/ckeditor5-coremedia-link`.
 
 | Name                                         | Description                                                |
-|----------------------------------------------|------------------------------------------------------------|
-| [`ckeditor5-coremedia-link`][]               | Extension to CKEditor 5 Link Feature                       |
+|----------------------------------------------|------------------------------------------------------------------- |
+| [`ckeditor5-coremedia-content-clipboard`][]  | Extension to CKEditor 5 Clipboard Feature for CoreMedia Contents  |
+| [`ckeditor5-coremedia-link`][]               | Extension to CKEditor 5 Link Feature                              |
 | [`ckeditor5-coremedia-richtext`][]           | Data-Processing for CoreMedia RichText 1.0 DTD             |
 | [`ckeditor5-coremedia-richtext-support`][]   | Support for CoreMedia RichText 1.0 DTD                     |
 | [`ckeditor5-coremedia-studio-essentials`][]  | Aggregator for essential plugins in CoreMedia Studio       |
@@ -72,6 +73,7 @@ The following packages are not published, and thus, may only be used as
 
 <!-- ===========================================================[References] -->
 
+[`ckeditor5-coremedia-content-clipboard`]: <./packages/ckeditor5-coremedia-content-clipboard/>
 [`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link/>
 [`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext/>
 [`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support/>

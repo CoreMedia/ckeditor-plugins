@@ -5,6 +5,10 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IsLinkableResponse = boolean | "IN_PROGRESS";
+type IsEmbeddableResponse = boolean | "IN_PROGRESS";
+type Cache = Map<string, IsLinkableResponse | IsEmbeddableResponse>;
+type LoadFunction = (uriPath: string, service: RichtextConfigurationService, callback: EvaluationCallback) => void;
+type EvaluationCallback = (cacheValue: boolean) => void;
 
 /**
  * Provides support for asynchronous API called within synchronous drag and
@@ -18,7 +22,8 @@ export default class DragDropAsyncSupport {
    * synchronous environment. Responses are meant to be cached only for the
    * short time between drag-start and drag-end.
    */
-  static readonly #isLinkableCache: Map<string, IsLinkableResponse> = new Map<string, IsLinkableResponse>();
+  static readonly #isLinkableCache: Cache = new Map<string, IsLinkableResponse>();
+  static readonly #isEmbeddableTypeCache: Cache = new Map<string, IsEmbeddableResponse>();
 
   /**
    * Workaround for the HTML 5 behaviour that drag over is always synchronous,
@@ -41,8 +46,64 @@ export default class DragDropAsyncSupport {
    * immediate response; defaults to `false`.
    */
   static isLinkable(uriPath: string, evictImmediately = false): boolean {
+    const loadFunction: LoadFunction = (
+      uriPath: string,
+      service: RichtextConfigurationService,
+      callback: EvaluationCallback
+    ): void => {
+      service.hasLinkableType(uriPath).then((hasLinkableType: boolean) => {
+        callback(hasLinkableType);
+      });
+    };
+    return DragDropAsyncSupport.#loadFromCache(
+      uriPath,
+      evictImmediately,
+      DragDropAsyncSupport.#isLinkableCache,
+      loadFunction
+    );
+  }
+
+  static isEmbeddable(uriPath: string, evictImmediately = false): boolean {
+    const loadFunction: LoadFunction = (
+      uriPath: string,
+      service: RichtextConfigurationService,
+      callback: EvaluationCallback
+    ): void => {
+      service.isEmbeddableType(uriPath).then((isEmbeddable: boolean) => {
+        callback(isEmbeddable);
+      });
+    };
+    return DragDropAsyncSupport.#loadFromCache(
+      uriPath,
+      evictImmediately,
+      DragDropAsyncSupport.#isEmbeddableTypeCache,
+      loadFunction
+    );
+  }
+
+  /**
+   * Validates, if all URI-Paths represent displayable contents.
+   * A content is displayable if there is a represenation to visualize in ckeditor (e.g. as a link or as an embedded image).
+   *
+   * This method triggers asynchronous updates, so that repetitive calls
+   * for the same URI-Paths may result in different responses. A positive
+   * answer (=== `true`) is only returned, when all responses are available
+   * and positive.
+   *
+   * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
+   * @param uriPaths
+   */
+  static containsDisplayableContents(uriPaths: string[]): boolean {
+    for (const uriPath of uriPaths) {
+      if (!DragDropAsyncSupport.isLinkable(uriPath) && !DragDropAsyncSupport.isEmbeddable(uriPath)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static #loadFromCache(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
     const logger = DragDropAsyncSupport.#logger;
-    const cache = DragDropAsyncSupport.#isLinkableCache;
 
     const actualValue = cache.get(uriPath);
 
@@ -57,8 +118,7 @@ export default class DragDropAsyncSupport {
       });
       return actualValue !== IN_PROGRESS && actualValue;
     }
-
-    return this.#evaluateIsLinkable(uriPath, evictImmediately);
+    return DragDropAsyncSupport.#evaluate(uriPath, evictImmediately, cache, loadFunction);
   }
 
   /**
@@ -67,12 +127,13 @@ export default class DragDropAsyncSupport {
    * @param uriPath - the URI-Path of the content, e.g., `content/42`
    * @param evictImmediately - `true` to immediately evict the response from
    * cache; defaults to `false`
-   * @returns `false`, if either not linkable are a different response is not
-   * available yet; `true` if known to be linkable
+   * @param cache - the cache to update
+   * @param loadFunction - a function to load the value from
+   * @returns `false`, if either the value is false or a different response is not
+   * available yet; `true` if response is true
    */
-  static #evaluateIsLinkable(uriPath: string, evictImmediately = false): boolean {
+  static #evaluate(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
     const logger = DragDropAsyncSupport.#logger;
-    const cache = DragDropAsyncSupport.#isLinkableCache;
 
     const service = serviceAgent.getService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor());
 
@@ -88,23 +149,21 @@ export default class DragDropAsyncSupport {
     }
 
     cache.set(uriPath, IN_PROGRESS);
-
-    service.hasLinkableType(uriPath).then((isLinkable: boolean) => {
-      // Only update cache, if anyone is still interested in the answer.
+    loadFunction(uriPath, service, (cacheValue: boolean) => {
       if (cache.get(uriPath) !== undefined) {
         logger.debug("isLinkable: Updating cache.", {
-          value: isLinkable,
+          value: cacheValue,
           uriPath: uriPath,
           evictImmediately: evictImmediately,
         });
-        cache.set(uriPath, isLinkable);
+        cache.set(uriPath, cacheValue);
       }
     });
 
     // || false -> required for possible undefined response from get() which
     // cannot happen here.
-    const isLinkable = cache.get(uriPath) || false;
-    const actualValue = isLinkable === IN_PROGRESS ? false : isLinkable;
+    const cacheValue = cache.get(uriPath) || false;
+    const actualValue = cacheValue === IN_PROGRESS ? false : cacheValue;
 
     if (evictImmediately) {
       cache.delete(uriPath);
@@ -146,5 +205,6 @@ export default class DragDropAsyncSupport {
    */
   static resetCache(): void {
     DragDropAsyncSupport.#isLinkableCache.clear();
+    DragDropAsyncSupport.#isEmbeddableTypeCache.clear();
   }
 }

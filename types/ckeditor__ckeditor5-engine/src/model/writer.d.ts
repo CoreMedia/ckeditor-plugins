@@ -105,7 +105,7 @@ export default class Writer {
 
   split(position: Position, limitElement?: Node): {
     position: Position;
-    range: any;
+    range: Range;
   };
 
   updateMarker(markerOrName: Marker | string, options?: {

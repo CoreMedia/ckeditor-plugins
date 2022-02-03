@@ -1,0 +1,15 @@
+{
+  "name": "@coremedia/types-ckeditor__ckeditor5-widget",
+  "version": "2.0.1-rc.3",
+  "license": "Apache-2.0",
+  "private": true,
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "npm-check-updates": "npm-check-updates --upgrade"
+  },
+  "dependencies": {
+    "@coremedia/types-ckeditor__ckeditor5-engine": "2.0.1-rc.3"
+  }
+}

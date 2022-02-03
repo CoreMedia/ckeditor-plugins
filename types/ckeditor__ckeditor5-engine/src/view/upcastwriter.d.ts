@@ -52,4 +52,6 @@ export default class UpcastWriter {
   createElement( name: string, attrs?: Object | Iterable<any> , children?: Node | Iterable<Node> | string): Element
 
   replace(oldElement: Element, newElement: Element): boolean;
+
+  insertChild(index: number, items: Item | Iterable<Item>, element: Element | DocumentFragment): number;
 }
