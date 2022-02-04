@@ -224,6 +224,7 @@ importers:
       '@ckeditor/ckeditor5-core': 31.0.0
       '@ckeditor/ckeditor5-engine': 31.0.0
       '@ckeditor/ckeditor5-image': 31.0.0
+      '@ckeditor/ckeditor5-utils': 31.0.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 2.0.1-rc.2
       '@coremedia/ckeditor5-logging': 2.0.1-rc.2
       '@coremedia/service-agent': ^1.0.0
@@ -265,6 +266,7 @@ importers:
       '@ckeditor/ckeditor5-core': 31.0.0
       '@ckeditor/ckeditor5-engine': 31.0.0
       '@ckeditor/ckeditor5-image': 31.0.0
+      '@ckeditor/ckeditor5-utils': 31.0.0
       '@coremedia/service-agent': 1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
@@ -2620,24 +2622,24 @@ packages:
     dev: false
 
   /@ckeditor/ckeditor5-html-support/31.0.0:
-    resolution: { integrity: sha512-ayNDdGqmhQLqUvbNGv4c+4qtzfOFrQsO8OqIsn1TLbCLjyIzHKrVHpAVUWIQCxJBZDUPJKQ/McGLIS2R37LIrQ== }
-    engines: { node: '>=12.0.0', npm: '>=5.7.1' }
+    resolution: {integrity: sha512-ayNDdGqmhQLqUvbNGv4c+4qtzfOFrQsO8OqIsn1TLbCLjyIzHKrVHpAVUWIQCxJBZDUPJKQ/McGLIS2R37LIrQ==}
+    engines: {node: '>=12.0.0', npm: '>=5.7.1'}
     dependencies:
       ckeditor5: 31.0.0
       lodash-es: 4.17.21
     dev: true
 
   /@ckeditor/ckeditor5-image/31.0.0:
-    resolution: { integrity: sha512-t7eYiRx4fLbSrBuSV7DoRC8zmTyzUQyind5gWQNWWDq/nF+bEaMkijOmbvak/gKQIl/C15Eo3jV6dPbzDdwgbg== }
-    engines: { node: '>=12.0.0', npm: '>=5.7.1' }
+    resolution: {integrity: sha512-t7eYiRx4fLbSrBuSV7DoRC8zmTyzUQyind5gWQNWWDq/nF+bEaMkijOmbvak/gKQIl/C15Eo3jV6dPbzDdwgbg==}
+    engines: {node: '>=12.0.0', npm: '>=5.7.1'}
     dependencies:
       '@ckeditor/ckeditor5-ui': 31.0.0
       ckeditor5: 31.0.0
       lodash-es: 4.17.21
 
   /@ckeditor/ckeditor5-indent/31.0.0:
-    resolution: { integrity: sha512-3WuQFMvbxTzGJkAlNhmXaCqwyrSb0k/8HpTw3M9ef7nu0J0eutwT09bJQrfdyeyZ9I7thOXKjh00wTOAni8y2Q== }
-    engines: { node: '>=12.0.0', npm: '>=5.7.1' }
+    resolution: {integrity: sha512-3WuQFMvbxTzGJkAlNhmXaCqwyrSb0k/8HpTw3M9ef7nu0J0eutwT09bJQrfdyeyZ9I7thOXKjh00wTOAni8y2Q==}
+    engines: {node: '>=12.0.0', npm: '>=5.7.1'}
     dependencies:
       ckeditor5: 31.0.0
 
