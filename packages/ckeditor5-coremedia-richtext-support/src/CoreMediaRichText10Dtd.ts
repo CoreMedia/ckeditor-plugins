@@ -165,7 +165,6 @@ const COREMEDIA_RICHTEXT_1_0_CONFIG = [
   CoreMediaRichText10Dtd.blockquote,
   CoreMediaRichText10Dtd.a,
   CoreMediaRichText10Dtd.br,
-  CoreMediaRichText10Dtd.img,
   CoreMediaRichText10Dtd.table,
   CoreMediaRichText10Dtd.tbody,
   CoreMediaRichText10Dtd.tr,
