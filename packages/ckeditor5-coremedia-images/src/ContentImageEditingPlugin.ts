@@ -9,7 +9,7 @@ export default class ContentImageEditingPlugin extends Plugin {
     return [Image];
   }
 
-  init(): null {
+  afterInit(): null {
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-href", "data-xlink-href");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-role", "data-xlink-role");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-show", "data-xlink-show");
