@@ -81,6 +81,33 @@ export const editingDowncastCustomClasses = (
     );
 };
 
+export const editingDowncastXlinkHref = (
+  modelElementName: string,
+  modelAttributeName: string
+): DowncastConversionHelperFunction => {
+  return (dispatcher: DowncastDispatcher) => {
+    dispatcher.on(
+      `attribute:${modelAttributeName}:${modelElementName}`,
+      (eventInfo: EventInfo, data: DowncastEventData, conversionApi: DowncastConversionApi): void => {
+        onImageInlineXlinkHrefEditingDowncast(eventInfo, data, conversionApi);
+      }
+    );
+  };
+};
+
+const onImageInlineXlinkHrefEditingDowncast = (
+  eventInfo: EventInfo,
+  data: DowncastEventData,
+  conversionApi: DowncastConversionApi
+): void => {
+  const toViewElement = conversionApi.mapper.toViewElement(data.item);
+  if (!toViewElement) {
+    return;
+  }
+  const imgTag = findViewChild(toViewElement, "img", conversionApi);
+  conversionApi.writer.setAttribute("src", "broken image url", imgTag);
+};
+
 const onImageInlineEditingDowncast = (
   viewElementName: string,
   data: DowncastEventData,

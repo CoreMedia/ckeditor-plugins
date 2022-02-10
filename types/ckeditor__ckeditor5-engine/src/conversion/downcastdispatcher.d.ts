@@ -75,4 +75,4 @@ export type RemoveMarkerEventData = {
   markerRange: Range,
 }
 
-export type DowncastEventData = { item: Element };
+export type DowncastEventData = { item: Element, attributeOldValue: string | null, attributeNewValue: string | null };

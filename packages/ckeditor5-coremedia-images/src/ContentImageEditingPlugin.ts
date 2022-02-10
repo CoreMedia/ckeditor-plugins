@@ -1,7 +1,12 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Image from "@ckeditor/ckeditor5-image/src/image";
-import { dataDowncastCustomClasses, editingDowncastCustomClasses, upcastCustomClasses } from "./converters";
+import {
+  dataDowncastCustomClasses,
+  editingDowncastCustomClasses,
+  editingDowncastXlinkHref,
+  upcastCustomClasses,
+} from "./converters";
 
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
@@ -11,7 +16,6 @@ export default class ContentImageEditingPlugin extends Plugin {
   }
 
   afterInit(): null {
-    ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-href", "data-xlink-href");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-role", "data-xlink-role");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-show", "data-xlink-show");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-actuate", "data-xlink-actuate");
@@ -21,8 +25,24 @@ export default class ContentImageEditingPlugin extends Plugin {
     ContentImageEditingPlugin.#setupAttribute(this.editor, "lang", "lang");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "height", "height");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "width", "width");
+    ContentImageEditingPlugin.#setupXlinkHrefConversion(this.editor, "xlink-href", "data-xlink-href");
     ContentImageEditingPlugin.#setupCustomClassConversion(this.editor, "img", "imageInline");
     return null;
+  }
+
+  static #setupXlinkHrefConversion(editor: Editor, modelAttributeName: string, dataAttributeName: string): void {
+    editor.model.schema.extend("imageInline", {
+      allowAttributes: [modelAttributeName],
+    });
+    editor.conversion.for("upcast").attributeToAttribute({
+      model: modelAttributeName,
+      view: { name: "img", key: dataAttributeName },
+    });
+    editor.conversion.for("dataDowncast").attributeToAttribute({
+      model: modelAttributeName,
+      view: dataAttributeName,
+    });
+    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref("imageInline", modelAttributeName));
   }
 
   static #setupAttribute(editor: Editor, model: string, view: string): void {
