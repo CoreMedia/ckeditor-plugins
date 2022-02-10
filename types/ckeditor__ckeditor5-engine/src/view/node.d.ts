@@ -6,4 +6,6 @@
 export default class Node {
 
   getAttribute(key: string): string | undefined;
+
+  is(type: string, name?: string): boolean;
 }

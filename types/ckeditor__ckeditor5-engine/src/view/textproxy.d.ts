@@ -5,4 +5,6 @@
  */
 export default class TextProxy {
   getAttribute(key: string): string | undefined;
+
+  is(type: string): boolean;
 }

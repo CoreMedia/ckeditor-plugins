@@ -10,6 +10,7 @@ import { Item } from "../view/item";
 import Position from "../model/position";
 import Element from "../model/element";
 import Range from "../model/range";
+import ModelRange from "../model/range";
 import ViewConsumable from "./viewconsumable";
 
 /**
@@ -51,4 +52,9 @@ export interface UpcastConversionApi {
   convertChildren(viewItem: Item, positionOrElement: Position | Element): { modelRange: Range, modelCursor: Position };
 
   convertItem(viewItem: Item, positionOrElement: Position | Element): { modelRange: Range | null, modelCursor: Position }
+}
+
+export type UpcastEventData = {
+  viewItem: ViewElement,
+  modelRange: ModelRange
 }
