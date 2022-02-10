@@ -36,7 +36,7 @@ const onImgTagUpcast = (evt: EventInfo, data: UpcastEventData, conversionApi: Up
   conversionApi.writer.setAttribute("cmClass", currentAttributeValue, modelElement);
 };
 
-export const downcastCustomClasses = (
+export const dataDowncastCustomClasses = (
   viewElementName: string,
   modelElementName: string
 ): DowncastConversionHelperFunction => {
@@ -44,13 +44,44 @@ export const downcastCustomClasses = (
     dispatcher.on(
       `insert:${modelElementName}`,
       (evt: EventInfo, data: DowncastEventData, conversionApi: DowncastConversionApi) => {
-        onImageInlineDowncast(viewElementName, data, conversionApi);
+        onImageInlineDataDowncast(viewElementName, data, conversionApi);
       },
       { priority: "low" }
     );
 };
 
-const onImageInlineDowncast = (
+const onImageInlineDataDowncast = (
+  viewElementName: string,
+  data: DowncastEventData,
+  conversionApi: DowncastConversionApi
+): void => {
+  const modelElement = data.item;
+  const viewImage = conversionApi.mapper.toViewElement(modelElement);
+  if (!viewImage) {
+    return;
+  }
+
+  if (!viewImage.is("element", viewElementName)) {
+    return;
+  }
+  conversionApi.writer.addClass(modelElement.getAttribute("cmClass"), viewImage);
+};
+
+export const editingDowncastCustomClasses = (
+  viewElementName: string,
+  modelElementName: string
+): DowncastConversionHelperFunction => {
+  return (dispatcher: DowncastDispatcher) =>
+    dispatcher.on(
+      `insert:${modelElementName}`,
+      (evt: EventInfo, data: DowncastEventData, conversionApi: DowncastConversionApi) => {
+        onImageInlineEditingDowncast(viewElementName, data, conversionApi);
+      },
+      { priority: "low" }
+    );
+};
+
+const onImageInlineEditingDowncast = (
   viewElementName: string,
   data: DowncastEventData,
   conversionApi: DowncastConversionApi
@@ -61,9 +92,6 @@ const onImageInlineDowncast = (
     return;
   }
 
-  //image inline consists of two elements (span, img) and therefore the method gets called once with the span element and once
-  //The span element events are first, afterwards img events. I suppose something is happening between those events which is necessary
-  //to make it work. Classes added to the img are ignored. => We don't do anything if it is not the span element.
   if (!viewSpan.is("element", "span")) {
     return;
   }
@@ -75,8 +103,12 @@ const onImageInlineDowncast = (
   conversionApi.writer.addClass(modelElement.getAttribute("cmClass"), viewImageElement);
 };
 
-const findViewChild = (viewElement: ViewElement, viewElementName: string, conversionApi: DowncastConversionApi) => {
+const findViewChild = (
+  viewElement: ViewElement,
+  viewElementName: string,
+  conversionApi: DowncastConversionApi
+): ViewElement | null => {
   const viewChildren = Array.from(conversionApi.writer.createRangeIn(viewElement).getItems());
 
-  return viewChildren.find((item) => item.is("element", viewElementName));
+  return viewChildren.find((item) => item.is("element", viewElementName)) as ViewElement;
 };

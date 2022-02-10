@@ -1,7 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Image from "@ckeditor/ckeditor5-image/src/image";
-import { downcastCustomClasses, upcastCustomClasses } from "./converters";
+import { dataDowncastCustomClasses, editingDowncastCustomClasses, upcastCustomClasses } from "./converters";
 
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
@@ -38,6 +38,7 @@ export default class ContentImageEditingPlugin extends Plugin {
   static #setupCustomClassConversion(editor: Editor, viewElementName: string, modelElementName: string): void {
     editor.model.schema.extend(modelElementName, { allowAttributes: ["cmClass"] });
     editor.conversion.for("upcast").add(upcastCustomClasses(viewElementName));
-    editor.conversion.for("downcast").add(downcastCustomClasses(viewElementName, modelElementName));
+    editor.conversion.for("editingDowncast").add(editingDowncastCustomClasses(viewElementName, modelElementName));
+    editor.conversion.for("dataDowncast").add(dataDowncastCustomClasses(viewElementName, modelElementName));
   }
 }
