@@ -225,6 +225,7 @@ importers:
       '@ckeditor/ckeditor5-engine': 31.0.0
       '@ckeditor/ckeditor5-image': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 2.0.1-rc.2
       '@coremedia/ckeditor5-logging': 2.0.1-rc.2
       '@coremedia/service-agent': ^1.0.0
@@ -267,6 +268,7 @@ importers:
       '@ckeditor/ckeditor5-engine': 31.0.0
       '@ckeditor/ckeditor5-image': 31.0.0
       '@ckeditor/ckeditor5-utils': 31.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.0.0
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
