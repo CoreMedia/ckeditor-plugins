@@ -15,6 +15,12 @@ import DowncastDispatcher, {
   DowncastEventData,
 } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
+import { serviceAgent } from "@coremedia/service-agent";
+import BlobDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
+import BlobDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
+import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
 
 export const upcastCustomClasses = (viewElementName: string): UpcastConversionHelperFunction => {
   return (dispatcher: UpcastDispatcher): void =>
@@ -82,6 +88,7 @@ export const editingDowncastCustomClasses = (
 };
 
 export const editingDowncastXlinkHref = (
+  editor: Editor,
   modelElementName: string,
   modelAttributeName: string
 ): DowncastConversionHelperFunction => {
@@ -89,13 +96,14 @@ export const editingDowncastXlinkHref = (
     dispatcher.on(
       `attribute:${modelAttributeName}:${modelElementName}`,
       (eventInfo: EventInfo, data: DowncastEventData, conversionApi: DowncastConversionApi): void => {
-        onImageInlineXlinkHrefEditingDowncast(eventInfo, data, conversionApi);
+        onImageInlineXlinkHrefEditingDowncast(editor, eventInfo, data, conversionApi);
       }
     );
   };
 };
 
 const onImageInlineXlinkHrefEditingDowncast = (
+  editor: Editor,
   eventInfo: EventInfo,
   data: DowncastEventData,
   conversionApi: DowncastConversionApi
@@ -104,8 +112,29 @@ const onImageInlineXlinkHrefEditingDowncast = (
   if (!toViewElement) {
     return;
   }
+
   const imgTag = findViewChild(toViewElement, "img", conversionApi);
   conversionApi.writer.setAttribute("src", "broken image url", imgTag);
+  const xlinkHref = data.item.getAttribute("xlink-href");
+  const uriPath: UriPath = toUriPath(xlinkHref);
+  const property: string = toProperty(xlinkHref);
+  serviceAgent
+    .fetchService<BlobDisplayService>(new BlobDisplayServiceDescriptor())
+    .then((blobDisplayService) => blobDisplayService.srcAttribute(uriPath, property))
+    .then((srcAttribute) => {
+      editor.editing.view.change((writer: DowncastWriter) => {
+        writer.setAttribute("src", srcAttribute, imgTag);
+      });
+    });
+};
+
+const toUriPath = (xlinkHref: string): string => {
+  const contentUriPart = xlinkHref.split("#")[0];
+  return requireContentUriPath(contentUriPart);
+};
+
+const toProperty = (xlinkHref: string): string => {
+  return xlinkHref.split("#")[1];
 };
 
 const onImageInlineEditingDowncast = (

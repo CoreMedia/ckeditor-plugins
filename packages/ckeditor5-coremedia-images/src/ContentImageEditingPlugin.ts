@@ -42,7 +42,7 @@ export default class ContentImageEditingPlugin extends Plugin {
       model: modelAttributeName,
       view: dataAttributeName,
     });
-    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref("imageInline", modelAttributeName));
+    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref(editor, "imageInline", modelAttributeName));
   }
 
   static #setupAttribute(editor: Editor, model: string, view: string): void {
