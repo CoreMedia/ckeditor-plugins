@@ -120,10 +120,12 @@ const onImageInlineXlinkHrefEditingDowncast = (
   const property: string = toProperty(xlinkHref);
   serviceAgent
     .fetchService<BlobDisplayService>(new BlobDisplayServiceDescriptor())
-    .then((blobDisplayService) => blobDisplayService.srcAttribute(uriPath, property))
-    .then((srcAttribute) => {
-      editor.editing.view.change((writer: DowncastWriter) => {
-        writer.setAttribute("src", srcAttribute, imgTag);
+    .then((blobDisplayService: BlobDisplayService) => blobDisplayService.observe_srcAttribute(uriPath, property))
+    .then((srcAttributeObservable) => {
+      const subscription = srcAttributeObservable.subscribe((srcAttribute) => {
+        editor.editing.view.change((writer: DowncastWriter) => {
+          writer.setAttribute("src", srcAttribute, imgTag);
+        });
       });
     });
 };

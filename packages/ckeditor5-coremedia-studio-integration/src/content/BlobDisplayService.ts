@@ -1,5 +1,6 @@
 import { ServiceObject } from "@coremedia/service-agent";
 import { UriPath } from "./UriPath";
+import { Observable } from "rxjs";
 
 interface BlobDisplayService extends ServiceObject {
   /**
@@ -13,7 +14,7 @@ interface BlobDisplayService extends ServiceObject {
    * @param property - the property which contains the blob data
    * @returns Promise which resolves to the src attribute data or is rejected, if it can't be resolved.
    */
-  srcAttribute(uriPath: UriPath, property: string): Promise<string>;
+  observe_srcAttribute(uriPath: UriPath, property: string): Observable<string>;
 }
 
 export default BlobDisplayService;
