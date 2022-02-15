@@ -17,7 +17,9 @@ import DowncastDispatcher, {
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
 import { serviceAgent } from "@coremedia/service-agent";
 import BlobDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
-import BlobDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
+import BlobDisplayService, {
+  InlinePreview,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
@@ -109,16 +111,19 @@ export const editingDowncastXlinkHref = (
 };
 
 const onImageInlineXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: DowncastEventData): void => {
-  updateSrcAttribute(editor, data.item, "broken image url");
+  updateImagePreviewAttributes(editor, data.item, {
+    thumbnailSrc: "placeholder image url",
+    thumbnailTitle: "placeholder",
+  });
   const xlinkHref = data.item.getAttribute("xlink-href");
   const uriPath: UriPath = toUriPath(xlinkHref);
   const property: string = toProperty(xlinkHref);
   serviceAgent
     .fetchService<BlobDisplayService>(new BlobDisplayServiceDescriptor())
-    .then((blobDisplayService: BlobDisplayService) => blobDisplayService.observe_srcAttribute(uriPath, property))
-    .then((srcAttributeObservable) => {
-      const subscription = srcAttributeObservable.subscribe((srcAttribute) => {
-        updateSrcAttribute(editor, data.item, srcAttribute);
+    .then((blobDisplayService: BlobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
+    .then((inlinePreviewObservable) => {
+      const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
+        updateImagePreviewAttributes(editor, data.item, inlinePreview);
       });
     });
 };
@@ -132,14 +137,19 @@ const findImgTag = (editor: Editor, modelItem: ModelElement): ViewElement | null
   return findViewChild(editor, toViewElement, "img");
 };
 
-const updateSrcAttribute = (editor: Editor, modelElement: ModelElement, srcAttributeValue: string): void => {
+const updateImagePreviewAttributes = (
+  editor: Editor,
+  modelElement: ModelElement,
+  inlinePreview: InlinePreview
+): void => {
   const imgTag = findImgTag(editor, modelElement);
   if (!imgTag) {
     LOGGER.debug("Model Element can't be mapped to view, probably meanwhile removed by an editor", modelElement);
     return;
   }
   editor.editing.view.change((writer: DowncastWriter) => {
-    writer.setAttribute("src", srcAttributeValue, imgTag);
+    writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);
+    writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
   });
 };
 

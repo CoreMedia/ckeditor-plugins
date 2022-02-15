@@ -2,19 +2,20 @@ import { ServiceObject } from "@coremedia/service-agent";
 import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
 
+export type InlinePreview = { thumbnailSrc: string; thumbnailTitle: string };
+
 interface BlobDisplayService extends ServiceObject {
   /**
-   * Provides the src attribute for a blob of a content, which must not be observed, but directly
-   * used when resolved.
+   * Provides information to render a preview of the given blob.
    *
-   * For unreadable or not existing content or not existing data, it is expected, that the promise is
-   * rejected instead.
+   * For unreadable or not existing content or not existing data, it is expected, that the response contains
+   * some kind of visualization for authors about the state (e.g. unreadable - some image which visualizes that the content is unreadable).
    *
    * @param uriPath - URI path of the content, such as `content/120`
    * @param property - the property which contains the blob data
-   * @returns Promise which resolves to the src attribute data or is rejected, if it can't be resolved.
+   * @returns Observable which resolves to the InlinePreview.
    */
-  observe_srcAttribute(uriPath: UriPath, property: string): Observable<string>;
+  observe_asInlinePreview(uriPath: UriPath, property: string): Observable<InlinePreview>;
 }
 
 export default BlobDisplayService;
