@@ -58,7 +58,9 @@ export default class ContentImageEditingPlugin extends Plugin {
   static #setupCustomClassConversion(editor: Editor, viewElementName: string, modelElementName: string): void {
     editor.model.schema.extend(modelElementName, { allowAttributes: ["cmClass"] });
     editor.conversion.for("upcast").add(upcastCustomClasses(viewElementName));
-    editor.conversion.for("editingDowncast").add(editingDowncastCustomClasses(viewElementName, modelElementName));
+    editor.conversion
+      .for("editingDowncast")
+      .add(editingDowncastCustomClasses(editor, viewElementName, modelElementName));
     editor.conversion.for("dataDowncast").add(dataDowncastCustomClasses(viewElementName, modelElementName));
   }
 }

@@ -21,6 +21,11 @@ import BlobDisplayService from "@coremedia/ckeditor5-coremedia-studio-integratio
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
+import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { IMAGE_PLUGIN_NAME } from "./constants";
+
+const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
 export const upcastCustomClasses = (viewElementName: string): UpcastConversionHelperFunction => {
   return (dispatcher: UpcastDispatcher): void =>
@@ -74,6 +79,7 @@ const onImageInlineDataDowncast = (
 };
 
 export const editingDowncastCustomClasses = (
+  editor: Editor,
   viewElementName: string,
   modelElementName: string
 ): DowncastConversionHelperFunction => {
@@ -81,7 +87,7 @@ export const editingDowncastCustomClasses = (
     dispatcher.on(
       `insert:${modelElementName}`,
       (evt: EventInfo, data: DowncastEventData, conversionApi: DowncastConversionApi) => {
-        onImageInlineEditingDowncast(viewElementName, data, conversionApi);
+        onImageInlineEditingDowncast(editor, viewElementName, data, conversionApi);
       },
       { priority: "low" }
     );
@@ -95,26 +101,15 @@ export const editingDowncastXlinkHref = (
   return (dispatcher: DowncastDispatcher) => {
     dispatcher.on(
       `attribute:${modelAttributeName}:${modelElementName}`,
-      (eventInfo: EventInfo, data: DowncastEventData, conversionApi: DowncastConversionApi): void => {
-        onImageInlineXlinkHrefEditingDowncast(editor, eventInfo, data, conversionApi);
+      (eventInfo: EventInfo, data: DowncastEventData): void => {
+        onImageInlineXlinkHrefEditingDowncast(editor, eventInfo, data);
       }
     );
   };
 };
 
-const onImageInlineXlinkHrefEditingDowncast = (
-  editor: Editor,
-  eventInfo: EventInfo,
-  data: DowncastEventData,
-  conversionApi: DowncastConversionApi
-): void => {
-  const toViewElement = conversionApi.mapper.toViewElement(data.item);
-  if (!toViewElement) {
-    return;
-  }
-
-  const imgTag = findViewChild(toViewElement, "img", conversionApi);
-  conversionApi.writer.setAttribute("src", "broken image url", imgTag);
+const onImageInlineXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: DowncastEventData): void => {
+  updateSrcAttribute(editor, data.item, "broken image url");
   const xlinkHref = data.item.getAttribute("xlink-href");
   const uriPath: UriPath = toUriPath(xlinkHref);
   const property: string = toProperty(xlinkHref);
@@ -123,11 +118,29 @@ const onImageInlineXlinkHrefEditingDowncast = (
     .then((blobDisplayService: BlobDisplayService) => blobDisplayService.observe_srcAttribute(uriPath, property))
     .then((srcAttributeObservable) => {
       const subscription = srcAttributeObservable.subscribe((srcAttribute) => {
-        editor.editing.view.change((writer: DowncastWriter) => {
-          writer.setAttribute("src", srcAttribute, imgTag);
-        });
+        updateSrcAttribute(editor, data.item, srcAttribute);
       });
     });
+};
+
+const findImgTag = (editor: Editor, modelItem: ModelElement): ViewElement | null => {
+  const toViewElement = editor.editing.mapper.toViewElement(modelItem);
+  if (!toViewElement) {
+    return null;
+  }
+
+  return findViewChild(editor, toViewElement, "img");
+};
+
+const updateSrcAttribute = (editor: Editor, modelElement: ModelElement, srcAttributeValue: string): void => {
+  const imgTag = findImgTag(editor, modelElement);
+  if (!imgTag) {
+    LOGGER.debug("Model Element can't be mapped to view, probably meanwhile removed by an editor", modelElement);
+    return;
+  }
+  editor.editing.view.change((writer: DowncastWriter) => {
+    writer.setAttribute("src", srcAttributeValue, imgTag);
+  });
 };
 
 const toUriPath = (xlinkHref: string): string => {
@@ -140,6 +153,7 @@ const toProperty = (xlinkHref: string): string => {
 };
 
 const onImageInlineEditingDowncast = (
+  editor: Editor,
   viewElementName: string,
   data: DowncastEventData,
   conversionApi: DowncastConversionApi
@@ -154,19 +168,16 @@ const onImageInlineEditingDowncast = (
     return;
   }
 
-  const viewImageElement = findViewChild(viewSpan, viewElementName, conversionApi);
+  const viewImageElement = findViewChild(editor, viewSpan, viewElementName);
   if (!viewImageElement) {
     return;
   }
   conversionApi.writer.addClass(modelElement.getAttribute("cmClass"), viewImageElement);
 };
 
-const findViewChild = (
-  viewElement: ViewElement,
-  viewElementName: string,
-  conversionApi: DowncastConversionApi
-): ViewElement | null => {
-  const viewChildren = Array.from(conversionApi.writer.createRangeIn(viewElement).getItems());
+const findViewChild = (editor: Editor, viewElement: ViewElement, viewElementName: string): ViewElement | null => {
+  const rangeInElement = editor.editing.view.createRangeIn(viewElement);
+  const viewChildren = Array.from(rangeInElement.getItems());
 
   return viewChildren.find((item) => item.is("element", viewElementName)) as ViewElement;
 };

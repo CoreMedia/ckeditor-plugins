@@ -1,11 +1,12 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import ViewDocument from "./document"
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "./observer/domeventdata";
 import { Item } from "./item";
 import Position from "./position";
+import Element from "./element";
+import Range from "./range";
 
 /**
  * Editor's view controller class. Its main responsibility is DOM - View
@@ -43,6 +44,10 @@ export default class View implements Emitter, Observable {
   delegate(...events: string[]): EmitterMixinDelegateChain;
 
   createPositionAt(itemOrPosition: Item | Position, offset: number | "end" | "before" | "after"): Position;
+
   createPositionAfter(itemOrPosition: Item): Position;
-  change(callback:Function): any;
+
+  createRangeIn(element: Element): Range;
+
+  change(callback: Function): any;
 }
