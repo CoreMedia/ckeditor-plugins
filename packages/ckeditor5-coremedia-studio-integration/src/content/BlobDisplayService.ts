@@ -2,7 +2,7 @@ import { ServiceObject } from "@coremedia/service-agent";
 import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
 
-export type InlinePreview = { thumbnailSrc: string; thumbnailTitle: string };
+export type InlinePreview = { thumbnailSrc: string; thumbnailTitle: string; isPlaceholder: boolean };
 
 interface BlobDisplayService extends ServiceObject {
   /**

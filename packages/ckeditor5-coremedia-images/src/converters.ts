@@ -114,6 +114,7 @@ const onImageInlineXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventI
   updateImagePreviewAttributes(editor, data.item, {
     thumbnailSrc: "placeholder image url",
     thumbnailTitle: "placeholder",
+    isPlaceholder: true,
   });
   const xlinkHref = data.item.getAttribute("xlink-href");
   const uriPath: UriPath = toUriPath(xlinkHref);
@@ -150,6 +151,9 @@ const updateImagePreviewAttributes = (
   editor.editing.view.change((writer: DowncastWriter) => {
     writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);
     writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
+    if (inlinePreview.isPlaceholder) {
+      writer.setStyle("width", "24px", imgTag);
+    }
   });
 };
 

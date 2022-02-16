@@ -12,7 +12,7 @@ export default class MockBlobDisplayService implements BlobDisplayService {
   observe_asInlinePreview(uriPath: UriPath, property: string): Observable<InlinePreview> {
     return new Observable((subscriber) => {
       setTimeout(() => {
-        subscriber.next({ thumbnailSrc: INLINE_IMG, thumbnailTitle: "My inline image" });
+        subscriber.next({ thumbnailSrc: INLINE_IMG, thumbnailTitle: "My inline image", isPlaceholder: false });
       }, 3000);
     });
   }
