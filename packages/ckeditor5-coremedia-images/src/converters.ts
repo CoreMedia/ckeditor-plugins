@@ -153,6 +153,8 @@ const updateImagePreviewAttributes = (
     writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
     if (inlinePreview.isPlaceholder) {
       writer.setStyle("width", "24px", imgTag);
+    } else {
+      writer.removeStyle("width", imgTag);
     }
   });
 };
