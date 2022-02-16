@@ -10,15 +10,6 @@ import {
 } from "./XLink";
 import { langMapper } from "./Lang";
 
-// noinspection SpellCheckingInspection
-/**
- * Placeholder image as long as we have no image support yet.
- * The placeholder is a 10×10 red PNG image.
- */
-// TODO[cke] Remove, as soon as images are supported.
-const INLINE_IMG =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8AARIQB46hC+ioEAGX8E/cKr6qsAAAAAElFTkSuQmCC";
-
 function hasHref({ attributes }: ElementProxy): boolean {
   const href = attributes["xlink:href"];
   return href === "" || !!href;
@@ -27,7 +18,6 @@ function hasHref({ attributes }: ElementProxy): boolean {
 export const handleImage: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
-    delete node.attributes["src"];
     // Just ensure, that we have the required alt Attribute if it is unset.
     node.attributes["alt"] = node.attributes["alt"] || "";
     xLinkActuateMapper.toData(params);
@@ -45,8 +35,6 @@ export const handleImage: ToDataAndViewElementConfiguration = {
     }
   },
   toView: (params) => {
-    const { node } = params;
-    node.attributes["src"] = INLINE_IMG;
     xLinkActuateMapper.toView(params);
     xLinkHrefMapper.toView(params);
     xLinkRoleMapper.toView(params);
