@@ -47,6 +47,8 @@ export default class View implements Emitter, Observable {
 
   createPositionAfter(itemOrPosition: Item): Position;
 
+  createRange(start: Position, end?: Position): Range;
+
   createRangeIn(element: Element): Range;
 
   change(callback: Function): any;

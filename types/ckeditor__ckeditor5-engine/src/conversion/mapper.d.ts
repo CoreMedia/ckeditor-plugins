@@ -12,8 +12,11 @@ import ViewRange from "../view/range";
  */
 export default class Mapper {
   toViewElement(modelElement: ModelElement): ViewElement | undefined;
-  toViewPosition( modelPosition: ModelPosition): ViewPosition;
-  bindElementToMarker( element: ViewElement, name: string ): void;
+  toViewPosition(modelPosition: ModelPosition): ViewPosition;
+
+  toModelElement(viewElement: ViewElement): ModelElement | undefined;
+
+  bindElementToMarker(element: ViewElement, name: string): void;
   markerNameToElements(name: string): Set<ViewElement> | null;
   unbindElementFromMarkerName(element: ViewElement, name: string): void;
   toViewRange(modelRange:ModelRange): ViewRange;

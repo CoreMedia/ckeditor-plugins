@@ -30,6 +30,8 @@ export default class DocumentFragment {
   // TODO[cke] This is a protected method! Do we really need to use it?
   _removeChildren(index: number, howMany?: number): Array<ViewNode>;
 
+  getChild(index: number): ViewNode;
+
   /**
    * Gets index of the given child node. Returns `-1` if child node is not found.
    *

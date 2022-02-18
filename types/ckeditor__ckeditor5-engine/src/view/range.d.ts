@@ -10,4 +10,8 @@ export default class Range {
   end: Position;
 
   getItems(options?: TreeWalkerOptions): Iterable<Item>;
+
+  getContainedElement(): Element | null;
+
+  getEnlarged(): Range;
 }

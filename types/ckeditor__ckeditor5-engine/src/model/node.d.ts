@@ -42,7 +42,7 @@ export default class Node {
 
   hasAttribute(key: string): boolean;
 
-  is(type: string): boolean;
+  is(type: string, name?: string): boolean;
 
   isAfter(node: Node): boolean;
 
