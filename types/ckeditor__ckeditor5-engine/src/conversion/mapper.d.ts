@@ -15,6 +15,7 @@ export default class Mapper {
   toViewPosition(modelPosition: ModelPosition): ViewPosition;
 
   toModelElement(viewElement: ViewElement): ModelElement | undefined;
+  toModelRange(viewRange: ViewRange): ModelRange;
 
   bindElementToMarker(element: ViewElement, name: string): void;
   markerNameToElements(name: string): Set<ViewElement> | null;

@@ -1,6 +1,6 @@
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range"
+import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range"
 
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_clipboard_clipboardobserver-ClipboardEventData.html">Class ClipboardEventData (clipboard/clipboardobserver~ClipboardEventData) - CKEditor 5 API docs</a>
@@ -11,7 +11,7 @@ export default class ClipboardEventData extends DomEventData {
   //   If required, document, where this property originates from. And:
   //   Is this really a CK-DocumentFragment? Or is it a standard DocumentFragment?
   content: DocumentFragment;
-  targetRanges: Array<Range>;
+  targetRanges: Array<ViewRange>;
   method: "paste" | "drop";
 }
 

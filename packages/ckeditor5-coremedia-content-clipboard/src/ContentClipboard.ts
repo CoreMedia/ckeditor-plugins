@@ -6,7 +6,8 @@ import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
+import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
@@ -211,7 +212,7 @@ export default class ContentClipboard extends Plugin {
    * @param markerRange - the marker range
    * @param contentDropData - content drop data
    */
-  static #addContentDropMarker(editor: Editor, markerRange: Range, contentDropData: ContentDropData): void {
+  static #addContentDropMarker(editor: Editor, markerRange: ModelRange, contentDropData: ContentDropData): void {
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
       contentDropData.dropContext.dropId,
       contentDropData.itemContext.itemIndex
@@ -230,11 +231,11 @@ export default class ContentClipboard extends Plugin {
    * @param data event data
    * @private
    */
-  static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): Range | null {
+  static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): ModelRange | null {
     if (!data.targetRanges) {
       return editor.model.document.selection.getFirstRange();
     }
-    const targetRanges: Range[] = data.targetRanges.map((viewRange: Range): Range => {
+    const targetRanges: ModelRange[] = data.targetRanges.map((viewRange: ViewRange): ModelRange => {
       return editor.editing.mapper.toModelRange(viewRange);
     });
     if (targetRanges.length > 0) {
