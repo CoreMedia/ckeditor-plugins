@@ -7,6 +7,8 @@ import Document from "./document";
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_rootelement-RootElement.html">Class RootElement (engine/model/rootelement~RootElement) - CKEditor 5 API docs</a>
  */
 export default class RootElement extends Element {
+  rootName: string;
+
   get document(): Document | null;
 
   constructor(document: Document, name: string, rootName?: string);

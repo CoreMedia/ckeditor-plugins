@@ -26,6 +26,7 @@ import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
 import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { IMAGE_PLUGIN_NAME } from "./constants";
+import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -126,6 +127,12 @@ const onImageInlineXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventI
       const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
         updateImagePreviewAttributes(editor, data.item, inlinePreview);
       });
+      const modelBoundSubscriptionPlugin = <ModelBoundSubscriptionPlugin>(
+        editor.plugins.get(ModelBoundSubscriptionPlugin.PLUGIN_NAME)
+      );
+      if (modelBoundSubscriptionPlugin) {
+        modelBoundSubscriptionPlugin.addSubscription(data.item, subscription);
+      }
     });
 };
 

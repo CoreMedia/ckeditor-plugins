@@ -7,15 +7,23 @@ import {
   editingDowncastXlinkHref,
   upcastCustomClasses,
 } from "./converters";
+import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
+import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Image];
+    return [Image, ImageUtils, ModelBoundSubscriptionPlugin];
   }
 
   afterInit(): null {
+    const subscriptionPlugin = <ModelBoundSubscriptionPlugin>(
+      this.editor.plugins.get(ModelBoundSubscriptionPlugin.PLUGIN_NAME)
+    );
+    if (subscriptionPlugin) {
+      subscriptionPlugin.registerModelElement("imageInline");
+    }
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-role", "data-xlink-role");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-show", "data-xlink-show");
     ContentImageEditingPlugin.#setupAttribute(this.editor, "xlink-actuate", "data-xlink-actuate");
