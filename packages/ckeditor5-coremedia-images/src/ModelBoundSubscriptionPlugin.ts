@@ -10,7 +10,7 @@ import { Subscription } from "rxjs";
 export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly #modelElements: Array<string> = [];
   static readonly ID_MODEL_ATTRIBUTE_NAME = "cmSubscriptionId";
-  static readonly SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
+  static readonly #SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
   static readonly PLUGIN_NAME = "ModelBoundSubscriptionPlugin";
 
   static get pluginName(): string {
@@ -27,12 +27,17 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return null;
   }
 
+  destroy(): null {
+    ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribeAll();
+    return null;
+  }
+
   addSubscription(modelElement: ModelElement, subscription: Subscription): void {
     const subscriptionId = modelElement.getAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME);
     if (!subscriptionId) {
       return;
     }
-    ModelBoundSubscriptionPlugin.SUBSCRIPTION_CACHE.addSubscription(subscriptionId, subscription);
+    ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.addSubscription(subscriptionId, subscription);
   }
 
   registerModelElement(modelElementName: string): void {
@@ -61,7 +66,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
       }
       for (const modelElement of allRemovedElementsWithSubscriptions) {
         const id = modelElement.getAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME);
-        ModelBoundSubscriptionPlugin.SUBSCRIPTION_CACHE.unsubscribe(id);
+        ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribe(id);
       }
     });
   }

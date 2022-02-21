@@ -20,4 +20,12 @@ export default class SubscriptionCache {
     });
     this.subscriptionCache.delete(cmId);
   }
+
+  unsubscribeAll(): void {
+    this.subscriptionCache.forEach((subscriptions) => {
+      subscriptions.forEach((subscription) => {
+        subscription.unsubscribe();
+      });
+    });
+  }
 }
