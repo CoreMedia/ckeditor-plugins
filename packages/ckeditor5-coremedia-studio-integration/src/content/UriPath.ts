@@ -27,6 +27,15 @@ const numericId = (uriPath: UriPath): number => {
 };
 
 /**
+ * Returns the content URI path for a given content ID.
+ *
+ * @param contentId - id to add to URI path
+ */
+const contentUriPath = (contentId: number): string => {
+  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
+};
+
+/**
  * Requires a Content URI Path, which can be handled by CoreMedia Studio to
  * represent a content. In case of the CKEditor model representation using a
  * colon within the content identifier, this is magically transformed to
@@ -108,6 +117,7 @@ export {
   CONTENT_CKE_MODEL_URI_REGEXP,
   CONTENT_URI_PATH_PREFIX,
   CONTENT_URI_PATH_REGEXP,
+  contentUriPath,
   numericId,
   requireContentUriPath,
   requireContentCkeModelUri,
