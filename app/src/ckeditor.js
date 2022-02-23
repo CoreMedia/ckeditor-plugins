@@ -39,6 +39,9 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY
 } from "@coremedia/ckeditor5-coremedia-richtext-support/CoreMediaRichTextSupportConfig";
+import {
+  COREMEDIA_MOCK_CONTENT_PLUGIN
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -208,6 +211,12 @@ ClassicEditor.create(document.querySelector('.editor'), {
       // dir-attribute, which is valid for `<span>` must not be removed just
       // because CKEditor is not configured to handle it.
       {name: "mark", inherit: "span"},
+    ],
+  },
+  [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
+    // Demonstrates, how you may add more contents on the fly.
+    contents: [
+      { id: 2, name: "Some Example Document", type: "document" },
     ],
   },
 }).then(newEditor => {

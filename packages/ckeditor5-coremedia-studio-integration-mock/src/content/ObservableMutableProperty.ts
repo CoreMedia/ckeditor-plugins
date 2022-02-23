@@ -71,7 +71,7 @@ class MutablePropertyObservationHandler<T> {
    * @param subscriber - will receive the provided values or completed-state
    * @returns a handler to stop iterating when subscription is ended
    */
-  #iteratingSubscription(subscriber: Subscriber<T>): TeardownLogic {
+  readonly #iteratingSubscription = (subscriber: Subscriber<T>): TeardownLogic => {
     const values = this.#values;
     const valuesLength = this.#valuesLength;
     const anyValue = this.#anyValue;
@@ -119,13 +119,13 @@ class MutablePropertyObservationHandler<T> {
       // see https://developer.mozilla.org/en-US/docs/Web/API/clearTimeout#notes
       clearTimeout(timerId);
     };
-  }
+  };
 
   /**
    * Provides a subscription to be used by RxJS based on the
    * initial configuration.
    */
-  asSubscription(): Subscription<T> {
+  get subscription(): Subscription<T> {
     return this.#iteratingSubscription;
   }
 }
@@ -141,7 +141,7 @@ class MutablePropertyObservationHandler<T> {
  */
 class ObservableMutableProperty<T> extends Observable<T> {
   constructor(delays: Delayed, property: AtomicOrArray<T>) {
-    super(new MutablePropertyObservationHandler(delays, property).asSubscription);
+    super(new MutablePropertyObservationHandler(delays, property).subscription);
   }
 }
 

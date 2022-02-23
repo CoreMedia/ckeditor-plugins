@@ -39,3 +39,5 @@ class NamePromise extends Promise<string> {
     });
   }
 }
+
+export default NamePromise;

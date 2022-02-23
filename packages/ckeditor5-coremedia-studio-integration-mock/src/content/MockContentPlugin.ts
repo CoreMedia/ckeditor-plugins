@@ -1,7 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import MockContent, {
   asStaticContent,
   isMockContentConfigs,
@@ -11,6 +10,7 @@ import MockContent, {
 import Delayed from "./Delayed";
 import { isObject } from "./MockContentUtils";
 import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { PREDEFINED_MOCK_CONTENTS } from "./PredefinedMockContents";
 
 /**
  * If states shall change, it will be done with this fixed
@@ -25,23 +25,14 @@ const DEFAULTS_CONFIG_PATH = `${CONFIG_KEY}.${DEFAULTS_CONFIG_KEY}`;
 const CONTENTS_CONFIG_KEY = "contents";
 const CONTENTS_CONFIG_PATH = `${CONFIG_KEY}.${CONTENTS_CONFIG_KEY}`;
 
-/**
- * Example Blob Fixture for 10×10 red PNG.
- */
-const PNG_RED_10x10_2 =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAABJJREFUGNNj/M+ADzAxjEpjAQBBLAETZWIQMwAAAABJRU5ErkJggg==";
-/**
- * Example Blob Fixture for 10×10 green PNG.
- */
-const PNG_GREEN_10x10 =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAABRJREFUGNNjZPjPgAcwMTCMSmMCAEAtARMGRTsOAAAAAElFTkSuQmCC";
-/**
- * Example Blob Fixture for 10×10 blue PNG.
- */
-const PNG_BLUE_10x10 =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAABVJREFUGNNjZGD4z4AbMDHgBSNVGgA/LgETzitWmwAAAABJRU5ErkJggg==";
-
 type ContentsById = Map<number, MockContentConfig>;
+
+/**
+ * Function to resolve an ID or URI Path to a `MockContent`.
+ */
+interface MockContentProvider {
+  (idOrUriPath: number | UriPath): MockContent;
+}
 
 /**
  * Plugin, which manages mocking contents. Contents may be pre-defined by ID
@@ -105,7 +96,11 @@ class MockContentPlugin extends Plugin {
   /**
    * The pre-defined contents we provide by default.
    */
-  static readonly #defaultContents: MockContentConfig[] = [MockContentPlugin.#rootFolderConfig];
+  static readonly #defaultContents: MockContentConfig[] = [
+    MockContentPlugin.#rootFolderConfig,
+    // Easier to prefill some mock contents here.
+    ...PREDEFINED_MOCK_CONTENTS,
+  ];
   /**
    * All registered contents.
    */
@@ -115,18 +110,6 @@ class MockContentPlugin extends Plugin {
    * delay.
    */
   #defaults = MockContentPlugin.#defaultDefaults;
-
-  /**
-   * Plugin constructor.
-   */
-  constructor(editor: Editor) {
-    super(editor);
-
-    editor.config.define(CONFIG_KEY, {
-      [CONTENTS_CONFIG_KEY]: MockContentPlugin.#defaultContents,
-      [DEFAULTS_CONFIG_KEY]: MockContentPlugin.#defaultDefaults,
-    });
-  }
 
   /**
    * Initialize Plugin.
@@ -154,22 +137,35 @@ class MockContentPlugin extends Plugin {
     const logger = MockContentPlugin.#logger;
     const { editor } = this;
     const config = editor.config.get(CONTENTS_CONFIG_PATH);
-    const ids: number[] = [];
+    let combinedConfigs: MockContentConfig[];
 
-    if (!isMockContentConfigs(config)) {
-      throw new Error(`Invalid configuration at ${CONTENTS_CONFIG_PATH}.`);
+    if (isMockContentConfigs(config)) {
+      // The order is important, as we want to allow overriding default contents by config.
+      combinedConfigs = [...MockContentPlugin.#defaultContents, ...config];
+    } else {
+      logger.error(`Ignoring invalid configuration at ${CONTENTS_CONFIG_PATH}.`, config);
+      combinedConfigs = MockContentPlugin.#defaultContents;
     }
 
-    config.forEach((contentConfig: MockContentConfig): void => {
+    combinedConfigs.forEach((contentConfig: MockContentConfig): void => {
       const { id } = contentConfig;
       this.#registeredContents.set(id, contentConfig);
-      ids.push(id);
     });
 
-    if (ids.length > 0) {
-      logger.debug("No custom content mocks configured.");
-    } else {
-      logger.info(`Custom Content Mocks for ${ids.length} IDs: ${ids.sort().join(", ")}`);
+    const pluralize = (term: string, count: number): string => `${term}${count === 1 ? "" : "s"}`;
+
+    if (logger.isDebugEnabled()) {
+      // Sorted by ID is more convenient to lookup possible IDs to use.
+      const sortedMocks = new Map<number, MockContentConfig>(
+        [...this.#registeredContents].sort(([id1], [id2]) => id1 - id2)
+      );
+      const len = sortedMocks.size;
+      // Intentional logging-guard quirk: We want to be more verbose, when debug logging is activated.
+      logger.info(`Initially available Custom Content ${pluralize("Mock", len)} (${len}):`, [...sortedMocks.values()]);
+    } else if (logger.isInfoEnabled()) {
+      const sortedMocks = [...this.#registeredContents.keys()].sort();
+      const len = sortedMocks.length;
+      logger.info(`Initially available Custom Content ${pluralize("Mock", len)} (${len}) with IDs:`, sortedMocks);
     }
   }
 
@@ -199,11 +195,11 @@ class MockContentPlugin extends Plugin {
   }
 
   /**
-   * Add a well-known content by ID. This overrides any possible default or
+   * Add well-known contents by ID. This overrides any possible default or
    * previously registered content state.
    */
-  addContent(config: MockContentConfig): void {
-    this.#registeredContents.set(config.id, config);
+  addContents(...configs: MockContentConfig[]): void {
+    configs.forEach((config) => this.#registeredContents.set(config.id, config));
   }
 
   /**
@@ -211,17 +207,17 @@ class MockContentPlugin extends Plugin {
    * from configuration or some static content with reasonable defaults is
    * provided.
    */
-  getContent(idOrUriPath: number | UriPath): MockContent {
+  readonly getContent = (idOrUriPath: number | UriPath): MockContent => {
+    const registeredContents = this.#registeredContents;
     let id: number;
     if (typeof idOrUriPath === "string") {
       id = numericId(idOrUriPath);
     } else {
       id = idOrUriPath;
     }
-    const addDefaults = this.#addDefaults;
-    return addDefaults(this.#registeredContents.get(id)) ?? asStaticContent(id);
-  }
+    return this.#addDefaults(registeredContents.get(id)) ?? asStaticContent(id);
+  };
 }
 
 export default MockContentPlugin;
-export { CONFIG_KEY as MOCK_CONTENT_PLUGIN, PNG_RED_10x10_2, PNG_GREEN_10x10, PNG_BLUE_10x10 };
+export { CONFIG_KEY as COREMEDIA_MOCK_CONTENT_PLUGIN, MockContentProvider };
