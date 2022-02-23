@@ -2,13 +2,13 @@ import Position from "../model/position";
 import Element from "../model/element";
 import Schema from "../model/schema";
 import DowncastWriter from "../view/downcastwriter";
-import ViewConsumable from "./viewconsumable";
 import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import eventinfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Range from "../model/range";
 import { Item } from "../model/item";
 import Mapper from "./mapper";
+import ModelConsumable from "./modelconsumable";
 
 /**
  * The downcast dispatcher is a central point of downcasting (conversion from the model to the view), which is a process of reacting
@@ -56,7 +56,7 @@ export default class DowncastDispatcher implements Emitter {
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_conversion_downcastdispatcher-DowncastConversionApi.html">Interface DowncastConversionApi (engine/conversion/downcastdispatcher~DowncastConversionApi) - CKEditor 5 API docs</a>
  */
 export interface DowncastConversionApi {
-  consumable: ViewConsumable;
+  consumable: ModelConsumable;
   dispatcher: DowncastDispatcher;
   mapper: Mapper;
   options: Object;

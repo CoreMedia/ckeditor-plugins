@@ -9,9 +9,16 @@ import { Item } from "../view/item";
 export default class ViewConsumable {
   add(element: Element | Text | DocumentFragment): void;
 
-  test(item: Item, consumables?: { attributes: Array<string> | string }): boolean;
+  test(item: Item, consumables?: ViewConsumables): boolean;
 
-  consume(item: Item, consumables?: { attributes: Array<string> | string }): boolean;
+  consume(item: Item, consumables?: ViewConsumables): boolean;
 
-  revert(item: Item, consumables?: { attributes: Array<string> | string }): boolean;
+  revert(item: Item, consumables?: ViewConsumables): boolean;
+}
+
+export type ViewConsumables = {
+  attributes?: Array<string> | string;
+  classes?: Array<string> | string;
+  name?: boolean;
+  styles?: Array<string> | string;
 }
