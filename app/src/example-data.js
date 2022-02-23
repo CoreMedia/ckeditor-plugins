@@ -138,85 +138,77 @@ function contentLinkExamples() {
     },
     {
       comment: "Folder 1",
-      id: 10001,
+      id: 11,
     },
     {
       comment: "Folder 2",
-      id: 11003,
+      id: 13,
     },
     {
       comment: "Document 1",
-      id: 10000,
+      id: 10,
     },
     {
       comment: "Document 2",
-      id: 11002,
+      id: 12,
     },
   ];
   const nameChangeScenarios = [
     {
       comment: "Folder (changing names)",
-      id: 12001,
+      id: 103,
     },
     {
       comment: "Document (changing names)",
-      id: 12000,
+      id: 102,
     },
   ];
   const unreadableScenarios = [
     {
       comment: "Folder 1 (unreadable)",
-      id: 10101,
+      id: 105,
     },
     {
       comment: "Folder 2 (unreadable/readable toggle)",
-      id: 11201,
+      id: 107,
     },
     {
       comment: "Document 1 (unreadable)",
-      id: 10100,
+      id: 104,
     },
     {
       comment: "Document 2 (unreadable/readable toggle)",
-      id: 11202,
+      id: 106,
     },
   ];
   const stateScenarios = [
     {
       comment: "Document 1 (checked-in)",
-      id: 10010,
+      id: 100,
     },
     {
       comment: "Document 2 (checked-out)",
-      id: 11002,
+      id: 108,
     },
     {
       comment: "Document (being edited; toggles checked-out/-in)",
-      id: 10026,
+      id: 110,
     },
   ];
   const xssScenarios = [
     {
       comment: "Document 1",
-      id: 6660000,
-    },
-    {
-      comment: "Document 2",
-      id: 6661002,
-    },
-    {
-      comment: "Document (toggling name)",
-      id: 6662006,
+      id: 606,
     },
   ];
   const slowScenarios = [
     {
-      comment: "Slow Document 1",
-      id: 4080000,
+      comment: "Slow Document",
+      id: 800,
     },
     {
-      comment: "Slow Document 2",
-      id: 4081002,
+      comment: "Very Slow Document",
+      id: 802,
     },
   ];
   const scenarios = [

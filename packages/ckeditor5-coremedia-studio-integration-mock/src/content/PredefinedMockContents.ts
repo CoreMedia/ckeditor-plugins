@@ -33,6 +33,12 @@ const FOLDER_MOCKS: PredefinedMockContentConfig[] = [
     name: "Unreadable Folder",
     readable: false,
   },
+  {
+    id: 107,
+    type: "folder",
+    name: "Folder, sometimes Unreadable",
+    readable: [false, true],
+  },
 ];
 const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
   {
