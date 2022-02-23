@@ -106,6 +106,21 @@ const updateImagePreviewAttributes = (
     LOGGER.debug("Model Element can't be mapped to view, probably meanwhile removed by an editor", modelElement);
     return;
   }
+  if (withSpinnerClass) {
+    writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
+    return;
+  }
+  const image = new Image();
+  image.onload = () => writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
+  image.src = inlinePreview.thumbnailSrc;
+};
+
+const writeImageToView = (
+  editor: Editor,
+  inlinePreview: InlinePreview,
+  imgTag: ViewElement,
+  withSpinnerClass: boolean
+): void => {
   editor.editing.view.change((writer: DowncastWriter) => {
     writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);
     writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
