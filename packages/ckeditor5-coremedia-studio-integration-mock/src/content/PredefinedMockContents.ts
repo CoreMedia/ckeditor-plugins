@@ -76,6 +76,14 @@ const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
     name: "Document, sometimes edited",
     editing: [true, false],
   },
+  {
+    id: 112,
+    type: "document",
+    comment: "Document which is actively edited, renamed, moved.",
+    name: Array.from(Array(10).keys()).map((idx) => `Name No. ${idx}`),
+    editing: [true, false],
+    readable: [true, true, true, false, false, false],
+  },
 ];
 const NAME_CHALLENGE_MOCKS: PredefinedMockContentConfig[] = [
   {
@@ -141,6 +149,12 @@ const SLOW_CONTENTS: PredefinedMockContentConfig[] = [
     type: "document",
     initialDelayMs: hoursInMs(1),
     name: "Nearly Endless Loading Content",
+  },
+  {
+    id: 804,
+    type: "document",
+    initialDelayMs: 5000,
+    name: "Not so slow Loading Content",
   },
 ];
 /**

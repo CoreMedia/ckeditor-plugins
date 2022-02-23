@@ -42,7 +42,7 @@ const initDragExamples = () => {
       tooltip: "Some Document",
       classes: ["linkable", "type-document"],
       items: [{
-        name: false,
+        id: 30,
       }],
     },
     {
@@ -50,7 +50,7 @@ const initDragExamples = () => {
       tooltip: "Some Other Document",
       classes: ["linkable", "type-document"],
       items: [{
-        name: true,
+        id: 32,
       }],
     },
     {
@@ -58,36 +58,47 @@ const initDragExamples = () => {
       tooltip: "Document which is actively edited",
       classes: ["linkable", "type-document"],
       items: [{
-        name: changing$,
-        checkedIn: changing$,
+        id: 112,
       }],
     },
     {
-      label: "Document 1 (XSS)",
-      tooltip: "Document, XSS attack type 1",
+      label: "Entities",
+      tooltip: "Entities in name",
       classes: ["linkable", "type-document"],
       items: [{
-        name: false,
-        prefix: ContentIdPrefix.evil,
+        id: 600,
       }],
     },
     {
-      label: "Document 2 (XSS)",
-      tooltip: "Document, XSS attack type 2",
+      label: "Characters",
+      tooltip: "Various characters in name",
       classes: ["linkable", "type-document"],
       items: [{
-        name: true,
-        prefix: ContentIdPrefix.evil,
+        id: 602,
       }],
     },
     {
-      label: "Document (XSS, edit)",
-      tooltip: "Document, actively edited and names to possibly trigger XSS-attack",
+      label: "RTL",
+      tooltip: "Left-to-Right name",
       classes: ["linkable", "type-document"],
       items: [{
-        name: changing$,
-        prefix: ContentIdPrefix.evil,
-        checkedIn: changing$,
+        id: 604,
+      }],
+    },
+    {
+      label: "XSS",
+      tooltip: "Some possible Cross-Site-Scripting Attack",
+      classes: ["linkable", "type-document"],
+      items: [{
+        id: 606,
+      }],
+    },
+    {
+      label: "Long",
+      tooltip: "Very long name",
+      classes: ["linkable", "type-document"],
+      items: [{
+        id: 608,
       }],
     },
   ];
@@ -106,58 +117,34 @@ const initDragExamples = () => {
   ];
   const unreadables = [
     {
-      label: "Unreadable Document",
+      label: "Unreadable",
       tooltip: "Document cannot be read.",
       classes: ["linkable", "type-document"],
       items: [{
-        name: false,
-        unreadable: true,
+        id: 104,
       }],
     },
     {
-      label: "(Un-)readable Document (edit)",
-      tooltip: "Document which is sometimes in a readable folder, sometimes not.",
+      label: "Sometimes Unreadable",
+      tooltip: "Document cannot be read sometimes.",
       classes: ["linkable", "type-document"],
       items: [{
-        name: false,
-        unreadable: changing$,
+        id: 106,
       }],
     },
     {
-      label: "Unreadable & Readable Document",
+      label: "Some Unreadable",
       tooltip: "One document can be read, the other cannot be read.",
       classes: ["linkable", "type-collection"],
       items: [
         {
-          name: false,
-          unreadable: true,
+          id: 30,
         },
         {
-          name: true,
-          unreadable: false,
-        },
-      ],
-    },
-    {
-      label: "Mixed Unreadable & Readable Documents",
-      tooltip: "Two readable, two unreadable documents.",
-      classes: ["linkable", "type-collection"],
-      items: [
-        {
-          name: false,
-          unreadable: true,
+          id: 104,
         },
         {
-          name: false,
-          unreadable: false,
-        },
-        {
-          name: true,
-          unreadable: true,
-        },
-        {
-          name: true,
-          unreadable: false,
+          id: 32,
         },
       ],
     },
@@ -168,74 +155,73 @@ const initDragExamples = () => {
       tooltip: "Some Folder",
       classes: ["non-linkable", "type-folder"],
       items: [{
-        isFolder: true,
-      }],
-    },
-    {
-      label: "Document (nodrop)",
-      tooltip: "Some Document of a type forbidden to be dropped.",
-      classes: ["non-linkable", "type-document"],
-      items: [{
-        undroppable: true,
+        id: 31,
       }],
     },
   ];
   const slowDocuments = [
     {
-      label: "Slow Document 1",
-      tooltip: "Some Document which takes long to load.",
+      label: "Slow",
+      tooltip: "Slowed down access to content",
       classes: ["linkable", "type-document"],
       items: [{
-        name: false,
-        prefix: ContentIdPrefix.slow,
+        id: 800,
       }],
     },
     {
-      label: "Slow Document 2",
-      tooltip: "Some Other Document which takes long to load.",
+      label: "Very Slow",
+      tooltip: "Content takes more than just minutes to load.",
       classes: ["linkable", "type-document"],
       items: [{
-        name: true,
-        prefix: ContentIdPrefix.slow,
+        id: 802,
       }],
     },
   ];
   const pairedExamples = [
     {
-      label: "2 Documents",
+      label: "Two",
       tooltip: "Two documents, which are valid to drop.",
       classes: ["linkable", "type-collection"],
       items: [
-        {name: false},
-        {name: true},
+        {id: 30},
+        {id: 32},
       ],
     },
     {
-      label: "2 Documents[Slow/Fast]",
-      tooltip: "Slow/Fast",
+      label: "Slow/Fast",
+      tooltip: "Two documents, the first one slow to load, the other fast to load.",
       classes: ["linkable", "type-collection"],
       items: [
-        {name: true, prefix: ContentIdPrefix.slow},
-        {name: true},
+        {id: 800},
+        {id: 32},
       ],
     },
     {
-      label: "3 Documents[Slow/Fast/Slow]",
+      label: "Fast/Slow",
+      tooltip: "Two documents, the first one fast to load, the other slow to load.",
+      classes: ["linkable", "type-collection"],
+      items: [
+        {id: 32},
+        {id: 800},
+      ],
+    },
+    {
+      label: "Slow/Fast/Slow",
       tooltip: "Slow/Fast/Slow for testing drop order after lazy loading",
       classes: ["linkable", "type-collection"],
       items: [
-        {name: true, prefix: ContentIdPrefix.slow},
-        {name: true},
-        {name: true, prefix: ContentIdPrefix.slow},
+        {id: 800},
+        {id: 32},
+        {id: 804},
       ],
     },
     {
-      label: "2 Documents (1 nodrop)",
-      tooltip: "Two documents, one of them is not allowed to be dropped.",
+      label: "One Not Droppable",
+      tooltip: "Two contents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],
       items: [
-        {name: false},
-        {name: true, undroppable: true},
+        {id: 31},
+        {id: 32},
       ],
     },
   ];
@@ -270,10 +256,7 @@ const initDragExamples = () => {
   ];
 
   const generateUriPath = (item) => {
-    if (typeof item.id === "number") {
-      return `content/${item.id}`;
-    }
-    return createContentUriPath(item);
+    return `content/${item.id}`;
   };
 
   const generateUriPathCsv = (items) => {
