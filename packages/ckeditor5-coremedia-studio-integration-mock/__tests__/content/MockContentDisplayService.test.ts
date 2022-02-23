@@ -1,11 +1,4 @@
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
-import MockContentDisplayService, {
-  CONTENT_NAME_FALSY,
-  CONTENT_NAME_TRUTHY,
-  CONTENT_NAME_UNREADABLE,
-  EVIL_CONTENT_NAME_FALSY,
-  EVIL_CONTENT_NAME_TRUTHY
-} from "../../src/content/MockContentDisplayService";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { Observable } from "rxjs";
 import { serviceAgent } from "@coremedia/service-agent";
@@ -13,6 +6,32 @@ import ContentDisplayServiceDescriptor
   from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
 import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
+
+/**
+ * Part of an unreadable content's name (along with its ID).
+ */
+const CONTENT_NAME_UNREADABLE = "Unreadable";
+/**
+ * Content name, if name state is truthy (either explicitly
+ * or while name toggling mock).
+ */
+const CONTENT_NAME_TRUTHY = "Lorem";
+/**
+ * Content name, if name state is falsy (either explicitly
+ * or while name toggling mock).
+ */
+const CONTENT_NAME_FALSY = "Ipsum";
+/**
+ * Evil form (1st) of some content name.
+ */
+// <iframe src="javascript:alert('Buh!')" width="1px" height="1px">
+const EVIL_CONTENT_NAME_TRUTHY = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;
+/**
+ * Evil form (2nd) of some content name.
+ * Arabic: Year
+ * Chinese: Year
+ */
+const EVIL_CONTENT_NAME_FALSY = "&lt; عام &amp; 年 &gt;";
 
 const MOCK_SERVICE_TEST_CONFIG = {
   maxFirstDelayMs: 0,
