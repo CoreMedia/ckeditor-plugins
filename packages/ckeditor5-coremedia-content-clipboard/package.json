@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-content-clipboard",
-  "version": "2.0.1-rc.4",
+  "version": "3.0.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -27,18 +27,18 @@
     "@babel/plugin-transform-shorthand-properties": "^7.16.0",
     "@babel/preset-env": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
-    "@ckeditor/ckeditor5-core": "31.0.0",
-    "@ckeditor/ckeditor5-clipboard": "31.0.0",
-    "@ckeditor/ckeditor5-engine": "31.0.0",
-    "@ckeditor/ckeditor5-html-support": "31.0.0",
-    "@ckeditor/ckeditor5-utils": "31.0.0",
-    "@ckeditor/ckeditor5-undo": "31.0.0",
+    "@ckeditor/ckeditor5-core": "^31.0.0",
+    "@ckeditor/ckeditor5-clipboard": "^31.0.0",
+    "@ckeditor/ckeditor5-engine": "^31.0.0",
+    "@ckeditor/ckeditor5-html-support": "^31.0.0",
+    "@ckeditor/ckeditor5-utils": "^31.0.0",
+    "@ckeditor/ckeditor5-undo": "^31.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "2.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "2.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-html-support": "2.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "2.0.1-rc.4",
-    "@coremedia/types-ckeditor__ckeditor5-undo": "2.0.1-rc.4",
+    "@coremedia/types-ckeditor__ckeditor5-core": "^3.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "^3.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-html-support": "^3.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "^3.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-undo": "^3.0.0",
     "@coremedia/service-agent": "^1.0.0",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
@@ -60,16 +60,16 @@
     "./*": "./dist/*.js"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "31.0.0",
-    "@ckeditor/ckeditor5-engine": "31.0.0",
-    "@ckeditor/ckeditor5-html-support": "31.0.0",
-    "@ckeditor/ckeditor5-utils": "31.0.0",
-    "@ckeditor/ckeditor5-clipboard": "31.0.0",
-    "@ckeditor/ckeditor5-undo": "31.0.0",
+    "@ckeditor/ckeditor5-core": "^31.0.0",
+    "@ckeditor/ckeditor5-engine": "^31.0.0",
+    "@ckeditor/ckeditor5-html-support": "^31.0.0",
+    "@ckeditor/ckeditor5-utils": "^31.0.0",
+    "@ckeditor/ckeditor5-clipboard": "^31.0.0",
+    "@ckeditor/ckeditor5-undo": "^31.0.0",
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "2.0.1-rc.4",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "2.0.1-rc.4"
+    "@coremedia/ckeditor5-logging": "^3.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^3.0.0"
   }
 }
