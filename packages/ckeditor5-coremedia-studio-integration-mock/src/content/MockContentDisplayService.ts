@@ -1,28 +1,13 @@
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
 import { combineLatest, Observable, OperatorFunction } from "rxjs";
 import { map } from "rxjs/operators";
-import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
 import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
-import { MockContentProvider } from "./MockContentPlugin";
-import MockContent, { asStaticContent } from "./MockContent";
+import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import NamePromise from "./NamePromise";
 import { observeEditingHint, observeNameHint, observeTypeHint } from "./DisplayHints";
-
-/**
- * Default provider will just serve static contents without respecting any
- * configuration.
- */
-const defaultMockContentProvider: MockContentProvider = (idOrUriPath: number | UriPath): MockContent => {
-  let id: number;
-  if (typeof idOrUriPath === "string") {
-    id = numericId(idOrUriPath);
-  } else {
-    id = idOrUriPath;
-  }
-  return asStaticContent(id);
-};
 
 /**
  * Mock Display Service for use in example app. The display of contents

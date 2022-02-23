@@ -35,6 +35,20 @@ interface MockContentProvider {
 }
 
 /**
+ * Default provider will just serve static contents without respecting any
+ * configuration.
+ */
+const defaultMockContentProvider: MockContentProvider = (idOrUriPath: number | UriPath): MockContent => {
+  let id: number;
+  if (typeof idOrUriPath === "string") {
+    id = numericId(idOrUriPath);
+  } else {
+    id = idOrUriPath;
+  }
+  return asStaticContent(id);
+};
+
+/**
  * Plugin, which manages mocking contents. Contents may be pre-defined by ID
  * in CKEditor configuration, or they may be defined on the fly via
  * `addContent`.
@@ -220,4 +234,4 @@ class MockContentPlugin extends Plugin {
 }
 
 export default MockContentPlugin;
-export { CONFIG_KEY as COREMEDIA_MOCK_CONTENT_PLUGIN, MockContentProvider };
+export { CONFIG_KEY as COREMEDIA_MOCK_CONTENT_PLUGIN, MockContentProvider, defaultMockContentProvider };
