@@ -1,20 +1,22 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import Image from "@ckeditor/ckeditor5-image/src/image";
 import {
   dataDowncastCustomClasses,
   editingDowncastCustomClasses,
   editingDowncastXlinkHref,
+  preventUpcastImageSrc,
   upcastCustomClasses,
 } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
+import { imageInlineElementToElementConversionPatch } from "./patches";
+import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Image, ImageUtils, ModelBoundSubscriptionPlugin];
+    return [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
   }
 
   afterInit(): null {
@@ -35,6 +37,11 @@ export default class ContentImageEditingPlugin extends Plugin {
     ContentImageEditingPlugin.#setupAttribute(this.editor, "width", "width");
     ContentImageEditingPlugin.#setupXlinkHrefConversion(this.editor, "xlink-href", "data-xlink-href");
     ContentImageEditingPlugin.#setupCustomClassConversion(this.editor, "img", "imageInline");
+    imageInlineElementToElementConversionPatch(this.editor);
+
+    // We have to prevent to write src-attribute to model because we fetch the src attribute for the editing view asynchronously.
+    // If not prevented the src-attribute from GRS would be written to the model.
+    this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
     return null;
   }
 

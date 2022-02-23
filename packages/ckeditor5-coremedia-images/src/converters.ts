@@ -32,6 +32,18 @@ import "./lang/contentimage";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
+export const preventUpcastImageSrc = () => {
+  return (dispatcher: UpcastDispatcher): void => {
+    dispatcher.on(
+      `element:img`,
+      (evt: EventInfo, data: UpcastEventData, conversionApi: UpcastConversionApi) => {
+        conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
+      },
+      { priority: "highest" }
+    );
+  };
+};
+
 export const upcastCustomClasses = (viewElementName: string): UpcastConversionHelperFunction => {
   return (dispatcher: UpcastDispatcher): void =>
     dispatcher.on(`element:${viewElementName}`, onImgTagUpcast, { priority: "low" });
