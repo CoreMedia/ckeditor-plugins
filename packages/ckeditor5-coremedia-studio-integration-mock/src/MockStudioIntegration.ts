@@ -31,10 +31,12 @@ class MockStudioIntegration extends Plugin {
 
     logger.info(`Initializing ${MockStudioIntegration.pluginName}...`);
 
-    const contentDisplayService = new MockContentDisplayService(this.#initContents());
+    const contentProvider = this.#initContents();
+
+    const contentDisplayService = new MockContentDisplayService(contentProvider);
     serviceAgent.registerService(contentDisplayService);
 
-    const richtextConfigurationService = new MockRichtextConfigurationService();
+    const richtextConfigurationService = new MockRichtextConfigurationService(contentProvider);
     serviceAgent.registerService(richtextConfigurationService);
 
     const dragDropService = new MockDragDropService();

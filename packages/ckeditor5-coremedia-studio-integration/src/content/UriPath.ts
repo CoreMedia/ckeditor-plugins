@@ -16,9 +16,17 @@ type ModelUri = string;
 
 /**
  * Returns the numeric ID from a URI path.
+ *
+ * For convenience, it will provide any number unmodified, so that you can
+ * use this method to resolve a possible URI path, if required.
+ *
  * @param uriPath - URI path to return numeric ID from
  */
-const numericId = (uriPath: UriPath): number => {
+const numericId = (uriPath: number | UriPath): number => {
+  if (typeof uriPath === "number") {
+    // Convenience, just return the number.
+    return uriPath;
+  }
   const match = CONTENT_URI_PATH_REGEXP.exec(uriPath);
   if (!match) {
     return -1;

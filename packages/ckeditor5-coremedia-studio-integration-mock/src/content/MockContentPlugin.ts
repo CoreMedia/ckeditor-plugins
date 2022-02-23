@@ -217,18 +217,45 @@ class MockContentPlugin extends Plugin {
   }
 
   /**
+   * Validates, if a content of given ID or URI path is explicitly available.
+   * If not, methods such as `getContent` will provide some default content
+   * instead.
+   *
+   * @param idOrUriPath - numeric ID or URI path to validate
+   */
+  readonly hasExplicitContent = (idOrUriPath: number | UriPath): boolean => {
+    const registeredContents = this.#registeredContents;
+    const id = numericId(idOrUriPath);
+    return registeredContents.has(id);
+  };
+
+  /**
+   * Validates, if a content of given ID or URI path is explicitly available.
+   * If not, this method will escalate with an Error.
+   *
+   * If this method fails, you should validate, if the default mock contents
+   * provided here have been modified, or if you forgot calling `addContents`
+   * before.
+   *
+   * @param idOrUriPath - numeric ID or URI path to validate
+   * @returns the provided ID or URI path to validate as is
+   * @throws Error if the content is not explicitly defined.
+   */
+  readonly requireExplicitContent = <T extends number | UriPath>(idOrUriPath: T): T => {
+    if (!this.hasExplicitContent(idOrUriPath)) {
+      throw new Error(`Required explicitly defined content ${idOrUriPath} is missing.`);
+    }
+    return idOrUriPath;
+  };
+
+  /**
    * Retrieve a content representation. The representation is either retrieved
    * from configuration or some static content with reasonable defaults is
    * provided.
    */
   readonly getContent = (idOrUriPath: number | UriPath): MockContent => {
     const registeredContents = this.#registeredContents;
-    let id: number;
-    if (typeof idOrUriPath === "string") {
-      id = numericId(idOrUriPath);
-    } else {
-      id = idOrUriPath;
-    }
+    const id = numericId(idOrUriPath);
     return this.#addDefaults(registeredContents.get(id)) ?? asStaticContent(id);
   };
 }

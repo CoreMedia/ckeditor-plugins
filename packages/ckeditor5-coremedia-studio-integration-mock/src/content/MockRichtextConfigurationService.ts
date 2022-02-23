@@ -1,7 +1,16 @@
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
-import { numericId } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
+  readonly #contentProvider: MockContentProvider;
+
+  /**
+   * Constructor with some configuration options for the mock service.
+   */
+  constructor(contentProvider: MockContentProvider = defaultMockContentProvider) {
+    this.#contentProvider = contentProvider;
+  }
+
   /**
    * A content id is linkable if
    *
@@ -19,29 +28,20 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
         resolve(false);
         return;
       }
-      const contentId: number = numericId(uriPath);
-      const typeId: number = contentId % 10;
+      const mockContent = this.#contentProvider(uriPath);
 
-      if (typeId % 4 === 0) {
-        //not linkable content
-        resolve(false);
-        return;
+      if (mockContent.id === 1 || mockContent.type === "document") {
+        // We want to allow dropping the root folder (as special case)
+        // and any documents of standard type.
+        return resolve(true);
       }
-
-      if (typeId % 2 === 0) {
-        //linkable content
-        resolve(true);
-      } else {
-        // Folder
-        // For testing reasons, we want to allow the root folder to be dropped.
-        resolve(contentId === 1);
-      }
+      resolve(false);
     });
   }
 
-  isEmbeddableType(uripath: string): Promise<boolean> {
+  isEmbeddableType(uriPath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      if (!uripath.startsWith("content")) {
+      if (!uriPath.startsWith("content")) {
         resolve(false);
         return;
       }
@@ -54,46 +54,4 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
   }
 }
 
-/**
- * Configuration for ID generation.
- */
-interface DroppableConfig {
-  /**
-   * `true` signals, that the content may not be dropped. `false` signals,
-   * that the content may not be dropped.
-   *
-   * Ignored for folders, which are all assumed to be undroppable (despite
-   * the root-folder for testing reasons).
-   *
-   * Defaults to `false`.
-   */
-  undroppable?: boolean;
-}
-
-/**
- * Modifies the given contentId, so that it signals droppable or undroppable
- * state. contentIds for folders are not modified.
- *
- * @param contentId - content ID to possibly adapt
- * @param undroppable - if to provide an undroppable (= `true`) or droppable ID (= `false`)
- */
-const applyDroppable = (contentId: number, undroppable: boolean): number => {
-  if (contentId % 2 === 1) {
-    // We don't mangle with folders, they are all (but one) assumed to be
-    // non-droppable.
-    return contentId;
-  }
-  const typeId: number = contentId % 10;
-  const initialUndroppableState = typeId % 4 === 0;
-  if (initialUndroppableState === undroppable) {
-    // We don't need to change anything.
-    return contentId;
-  }
-  // Replace type identifier (last digit) by either 2 (droppable) or 4
-  // (not droppable).
-  const lastDigit = contentId % 10;
-  return contentId - lastDigit + (undroppable ? 4 : 2);
-};
-
 export default MockRichtextConfigurationService;
-export { applyDroppable, DroppableConfig };

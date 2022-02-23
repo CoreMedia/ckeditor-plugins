@@ -226,7 +226,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     isCollapsed: true,
   });
   initExamples(newEditor);
-  initDragExamples();
+  initDragExamples(newEditor);
   editor = newEditor;
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");
