@@ -7,6 +7,11 @@ import RootElement from "@ckeditor/ckeditor5-engine/src/model/rootelement";
 import SubscriptionCache from "./SubscriptionCache";
 import { Subscription } from "rxjs";
 
+/**
+ * The ModelBoundSubscriptionPlugin enables to store subscriptions for a model element.
+ * If a ModelElement has a subscription to an asynchronous service (e.g. image xlink-href which resolves the src attribute asynchronously)
+ * this plugin can be used to track all subscriptions. Tracked subscriptions will be unsubscribed on destroy or when the ModelElement has been removed from the document.
+ */
 export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly #modelElements: Array<string> = [];
   static readonly ID_MODEL_ATTRIBUTE_NAME = "cmSubscriptionId";
