@@ -1,4 +1,5 @@
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
+import { numericId } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   /**
@@ -10,16 +11,15 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
    *
    *     This represents any content, which is not linkable.
    *
-   * @param uripath - an uripath in the format 'content/content-id'
+   * @param uriPath - an uripath in the format 'content/content-id'
    */
-  hasLinkableType(uripath: string): Promise<boolean> {
+  hasLinkableType(uriPath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      if (!uripath.startsWith("content/")) {
+      if (!uriPath.startsWith("content/")) {
         resolve(false);
         return;
       }
-      const contentIdString: string = uripath.replace("content/", "");
-      const contentId: number = parseInt(contentIdString);
+      const contentId: number = numericId(uriPath);
       const typeId: number = contentId % 10;
 
       if (typeId % 4 === 0) {
