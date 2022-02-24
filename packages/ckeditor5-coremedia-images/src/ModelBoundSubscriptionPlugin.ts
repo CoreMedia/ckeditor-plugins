@@ -32,12 +32,18 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return [];
   }
 
+  /**
+   * Registers `change:data` listeners.
+   */
   afterInit(): null {
     this.#addSubscriptionIdToInsertedElementListener();
     this.#unsubscribeOnElementRemoval();
     return null;
   }
 
+  /**
+   * Makes sure to unsubscribe all subscriptions when the editor is destroyed.
+   */
   destroy(): null {
     ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribeAll();
     return null;
@@ -60,7 +66,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   /**
    * Registers a model element to be tracked by the plugin.
    * This means for the model elements the attribute `cmSubscriptionId` will be generated on insertion and
-   * added subscriptions will be unsubscribed on element removal and document desotrying.
+   * added subscriptions will be unsubscribed on element removal and document destroying.
    *
    * @param modelElementName - the model element name which is tracked.
    */
@@ -71,11 +77,18 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     });
   }
 
+  /**
+   * Adds a `change:data` listener to the model document which searches for removed registered model elements on the graveyard (removed elements)
+   * If a registered model element is found on the graveyard it unsubscribes all added subscriptions.
+   *
+   * The search is recursively if a container gets removed. Elements contained in the container are not an explicit change in the change set.
+   * @private
+   */
   #unsubscribeOnElementRemoval(): void {
     this.editor.model.document.on("change:data", () => {
       const changes = this.editor.model.document.differ.getChanges({ includeChangesInGraveyard: true });
       const insertsOnGraveyard = changes
-        .filter((change) => change.type === "insert")
+        .filter((change) => change.type === "insert") // an insert on the graveyard means a removal on the root document
         .map((value) => value as DiffItemInsert)
         .filter(ModelBoundSubscriptionPlugin.#isOnGraveyard);
       const allRemovedElementsWithSubscriptions: Array<ModelElement> = [];
@@ -95,6 +108,13 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     });
   }
 
+  /**
+   * Adds a `change:data` listener to the model document which adds a `cmSubscriptionId` for registered model
+   * elements.
+   *
+   * The search is recursively if a container gets removed. Elements contained in the container are not an explicit change in the change set.
+   * @private
+   */
   #addSubscriptionIdToInsertedElementListener(): void {
     this.editor.model.document.on("change:data", () => {
       const changes = this.editor.model.document.differ.getChanges();
@@ -118,6 +138,12 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     });
   }
 
+  /**
+   * Checks if the given change is an element on the graveyard.
+   *
+   * @param insert - the insert change.
+   * @private
+   */
   static #isOnGraveyard(insert: DiffItemInsert): boolean {
     const rootElement = insert.position.root;
     if (rootElement.is("rootElement")) {
