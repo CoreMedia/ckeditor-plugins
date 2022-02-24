@@ -1349,6 +1349,7 @@ const initExamples = (editor) => {
   const xmpInput = document.getElementById("xmp-input");
   const xmpData = document.getElementById("xmp-data");
   const reloadBtn = document.getElementById("xmp-reload");
+  const clearBtn = document.getElementById("xmp-clear");
 
   if (!(xmpInput && xmpData && reloadBtn)) {
     throw new Error("Required components for Example-Data Loading missing.");
@@ -1378,6 +1379,11 @@ const initExamples = (editor) => {
       setExampleData(editor, newValue);
       xmpInput.blur();
     }
+  });
+
+  clearBtn.addEventListener("click", () => {
+    xmpInput.blur();
+    editor.setData("");
   });
 
   // Now add all examples
