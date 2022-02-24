@@ -10,35 +10,14 @@ import { observeEditingHint, observeNameHint, observeTypeHint } from "./DisplayH
 import { observeName, observeReadable } from "./MutableProperties";
 
 /**
- * Mock Display Service for use in example app. The display of contents
- * is controlled by their ID, which has some magic parts. The content ID
- * (represented as URI path) is expected to be as follows:
+ * Mock Display Service for use in example app.
  *
- * ```
- * content/
- *   <some numbers>
- *   <name: 0|1|2>
- *   <unreadable: 0|1|2>
- *   <checkedIn: 0|1|2>
- *   <folderType: 0-9>
- * ```
+ * By default, the service provides just some static content with some
+ * predefined settings given a content-ID or the content's URI path.
  *
- * **prefix:** _some numbers_ is any set of numbers as prefix (maybe empty).
- * If you set `666` as start of the prefix, it will trigger some evil behavior,
- * which is meant to test cross-site-scripting attacks.
- *
- * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
- *
- * **name:** 0 = some name, 1 = some other name, 2 = changing name
- *
- * **unreadable:** 0 = readable, 1 = unreadable, 2 = changing
- *
- * **checkedIn:** 0 = checked out, 1 = checked in, 2 = changing
- *
- * **folderType:** even number = document, odd number = folder
- *
- * If any of these is unmatched, the default state will be chosen, which is:
- * checked out, some name, readable, document.
+ * For custom contents, like for example to simulate actively modified
+ * contents, simulate slow loading contents, you may register such contents
+ * with a given ID at `MockContentPlugin`.
  */
 class MockContentDisplayService implements ContentDisplayService {
   readonly #contentProvider: MockContentProvider;
