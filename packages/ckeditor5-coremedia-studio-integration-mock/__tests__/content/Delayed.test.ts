@@ -1,5 +1,4 @@
-import { withDelayDefaults } from "../../src/content/Delayed";
-import { DelayedConfig, DelayedDefaults } from "../../dist/content/Delayed";
+import { withDelayDefaults, DelayedConfig, DelayedDefaults } from "../../src/content/Delayed";
 
 describe("Delayed", () => {
   describe("withDelayDefaults", () => {
