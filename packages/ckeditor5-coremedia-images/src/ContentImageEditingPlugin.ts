@@ -8,19 +8,22 @@ import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
+  static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
+  static readonly IMAGE_INLINE_VIEW_ELEMENT_NAME = "img";
+  static readonly XLINK_HREF_MODEL_ATTRIBUTE_NAME = "xlink-href";
+  static readonly XLINK_HREF_DATA_ATTRIBUTE_NAME = "data-xlink-href";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
   }
 
   afterInit(): null {
-    const subscriptionPlugin = <ModelBoundSubscriptionPlugin>(
-      this.editor.plugins.get(ModelBoundSubscriptionPlugin.PLUGIN_NAME)
+    ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
+    ContentImageEditingPlugin.#setupXlinkHrefConversion(
+      this.editor,
+      ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
+      ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME
     );
-    if (subscriptionPlugin) {
-      subscriptionPlugin.registerModelElement("imageInline");
-    }
-    ContentImageEditingPlugin.#setupXlinkHrefConversion(this.editor, "xlink-href", "data-xlink-href");
     imageInlineElementToElementConversionPatch(this.editor);
 
     // We have to prevent to write src-attribute to model because we fetch the src attribute for the editing view asynchronously.
@@ -30,10 +33,15 @@ export default class ContentImageEditingPlugin extends Plugin {
   }
 
   static #setupXlinkHrefConversion(editor: Editor, modelAttributeName: string, dataAttributeName: string): void {
-    this.#setupXlinkHrefConversionDowncast(editor, "imageInline", modelAttributeName, dataAttributeName);
+    ContentImageEditingPlugin.#setupXlinkHrefConversionDowncast(
+      editor,
+      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME,
+      modelAttributeName,
+      dataAttributeName
+    );
     editor.conversion.for("upcast").attributeToAttribute({
       model: modelAttributeName,
-      view: { name: "img", key: dataAttributeName },
+      view: { name: ContentImageEditingPlugin.IMAGE_INLINE_VIEW_ELEMENT_NAME, key: dataAttributeName },
     });
   }
 
@@ -53,8 +61,23 @@ export default class ContentImageEditingPlugin extends Plugin {
       },
       view: dataAttributeName,
     });
-    editor.conversion
-      .for("editingDowncast")
-      .add(editingDowncastXlinkHref(editor, modelElementName, modelAttributeName));
+
+    //For editing-view the xlink-href attribute has to be converted to a src-attribute.
+    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref(editor, modelElementName));
+  }
+
+  /**
+   * Register <code>imageInline</code> model elements for subscription cleanup on model changes.
+   *
+   * @param editor - Editor
+   * @private
+   */
+  static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
+    const subscriptionPlugin = <ModelBoundSubscriptionPlugin>(
+      editor.plugins.get(ModelBoundSubscriptionPlugin.PLUGIN_NAME)
+    );
+    if (subscriptionPlugin) {
+      subscriptionPlugin.registerModelElement("imageInline");
+    }
   }
 }
