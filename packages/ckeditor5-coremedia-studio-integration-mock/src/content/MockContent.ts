@@ -6,17 +6,11 @@ import {
 import Delayed, { DelayedConfig, withDelayDefaults } from "./Delayed";
 import { MutableProperties, MutablePropertiesConfig, withPropertiesDefaults } from "./MutableProperties";
 import { capitalize, isObject } from "./MockContentUtils";
+import MockContentObject, { isMockContentObject } from "./MockContentObject";
 
-interface MockContentBase {
-  /**
-   * Numeric ID of the content.
-   */
-  id: number;
-}
+interface MockContent extends MockContentObject, Delayed, MockContentTypeSpecificProperties, MutableProperties {}
 
-interface MockContent extends MockContentBase, Delayed, MockContentTypeSpecificProperties, MutableProperties {}
-
-type MockContentConfig = MockContentBase &
+type MockContentConfig = MockContentObject &
   DelayedConfig &
   MockContentTypeSpecificPropertiesConfig &
   MutablePropertiesConfig;
@@ -40,7 +34,7 @@ const isMockContentConfigs = (value: unknown): value is MockContentConfig[] => {
   if (!Array.isArray(value)) {
     return false;
   }
-  return value.every<unknown>(isMockContentConfig);
+  return value.every<unknown>(isMockContentObject);
 };
 
 /**
@@ -49,9 +43,7 @@ const isMockContentConfigs = (value: unknown): value is MockContentConfig[] => {
  *
  * @param input - mock content configuration
  */
-const defaultNameSupplier = (
-  input: MockContentBase & Pick<MockContentTypeSpecificPropertiesConfig, "type">
-): string => {
+const defaultNameSupplier = (input: MockContentObject & Pick<MockContentTypeSpecificProperties, "type">): string => {
   if (input.id === 1) {
     // Special handling for root folder.
     return "";

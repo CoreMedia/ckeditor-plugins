@@ -2,6 +2,9 @@
  * @packageDocumentation
  * @category Virtual
  */
+export * from "./MockContentObject";
+export { default as MockContentObject } from "./MockContentObject";
+
 export * from "./MockContentPlugin";
 export { default as MockContentPlugin } from "./MockContentPlugin";
 
