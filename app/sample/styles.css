@@ -11,6 +11,8 @@
   --ck-sample-container-width: 1285px;
   --ck-sample-sidebar-width: 350px;
   --ck-sample-editor-min-height: 400px;
+  /* We are not ready for dark/light color-scheme support, yet. Let's tell that to the browser. */
+  color-scheme: normal !important;
 }
 
 /* --------- NOTIFICATIONS ------------------------------------------------------------------------------------------ */
