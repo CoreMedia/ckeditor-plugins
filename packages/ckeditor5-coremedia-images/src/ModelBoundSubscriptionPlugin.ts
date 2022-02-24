@@ -12,6 +12,11 @@ import { Subscription } from "rxjs";
  * If a ModelElement has a subscription to an asynchronous service (e.g. image xlink-href which resolves the src attribute asynchronously)
  * this plugin can be used to track those subscriptions.
  * Tracked subscriptions will be unsubscribed on destroy or when the ModelElement has been removed from the document.
+ *
+ * The plugin generates an attribute `cmSubscriptionId` for inserted registered model elements.
+ * Listens to changes in the document regarding the registered model elements.
+ * If a registered model element is removed all subscriptions will be unsubscribed.
+ * Subscriptions have to be added manually to the `ModelBoundSubscriptionPlugin` by calling `addSubscription`.
  */
 export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly #modelElements: Array<string> = [];
@@ -38,6 +43,12 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return null;
   }
 
+  /**
+   * Add a subscription to the subscription cache for unsubscription on related model changes.
+   *
+   * @param modelElement - the model element related to the subscription (must contain the `cmSubscriptionId`).
+   * @param subscription - the subscription
+   */
   addSubscription(modelElement: ModelElement, subscription: Subscription): void {
     const subscriptionId = modelElement.getAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME);
     if (!subscriptionId) {
@@ -46,6 +57,13 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.addSubscription(subscriptionId, subscription);
   }
 
+  /**
+   * Registers a model element to be tracked by the plugin.
+   * This means for the model elements the attribute `cmSubscriptionId` will be generated on insertion and
+   * added subscriptions will be unsubscribed on element removal and document desotrying.
+   *
+   * @param modelElementName - the model element name which is tracked.
+   */
   registerModelElement(modelElementName: string): void {
     ModelBoundSubscriptionPlugin.#modelElements.push(modelElementName);
     this.editor.model.schema.extend(modelElementName, {
@@ -80,6 +98,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   #addSubscriptionIdToInsertedElementListener(): void {
     this.editor.model.document.on("change:data", () => {
       const changes = this.editor.model.document.differ.getChanges();
+      //find all elements which have been inserted in the current change set.
       const insertions = changes
         .filter((diffItem) => diffItem.type === "insert")
         .map((diffItem) => diffItem as DiffItemInsert)
@@ -135,6 +154,12 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return modelElements;
   }
 
+  /**
+   * Determines if a element is registered.
+   *
+   * @param element - the model element to check
+   * @private
+   */
   static #isSubscribedModel(element: ModelElement): boolean {
     for (const subscribedElement of this.#modelElements) {
       if (element.is("element", subscribedElement)) {

@@ -17,6 +17,11 @@ export default class ContentImageEditingPlugin extends Plugin {
     return [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
   }
 
+  /**
+   * Registers support for the `xlink:href` attribute for element `img` in richtext.
+   * `xlink:href` is represented in the data-view as `data-xlink-href` and in model as `xlink-href`.
+   * When downcasted to the editing-view it will be resolved to the image src-attribute by fetching the url from the `BlobDisplayService`
+   */
   afterInit(): null {
     ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
     ContentImageEditingPlugin.#setupXlinkHrefConversion(
