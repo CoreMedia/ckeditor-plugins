@@ -80,6 +80,7 @@ const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
     id: 112,
     type: "document",
     comment: "Document which is actively edited, renamed, moved.",
+    changeDelayMs: 1000,
     name: Array.from(Array(10).keys()).map((idx) => `Name No. ${idx}`),
     editing: [true, false],
     readable: [true, true, true, false, false, false],
