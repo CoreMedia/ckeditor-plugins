@@ -1,13 +1,13 @@
 import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
-import { combineLatest, Observable, OperatorFunction } from "rxjs";
-import { map } from "rxjs/operators";
-import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { combineLatest, Observable, OperatorFunction, Subscription } from "rxjs";
+import { first, map } from "rxjs/operators";
+import { contentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
 import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
-import NamePromise from "./NamePromise";
 import { observeEditingHint, observeNameHint, observeTypeHint } from "./DisplayHints";
+import { observeName, observeReadable } from "./MutableProperties";
 
 /**
  * Mock Display Service for use in example app. The display of contents
@@ -62,7 +62,35 @@ class MockContentDisplayService implements ContentDisplayService {
    * For unreadable contents the promise is rejected.
    */
   name(uriPath: UriPath): Promise<string> {
-    return new NamePromise(this.#contentProvider(uriPath));
+    const config = this.#contentProvider(uriPath);
+    return new Promise<string>((resolve, reject) => {
+      const { id } = config;
+      const uriPath = contentUriPath(id);
+      const observableReadable = observeReadable(config);
+      const observableName = observeName(config);
+
+      const combinedObservable = combineLatest([observableName, observableReadable]).pipe(first());
+
+      let subscription: Subscription | undefined;
+
+      subscription = combinedObservable.subscribe(([receivedName, receivedReadable]): void => {
+        // We only want to receive one update. Unsure, if necessary — but it does no harm.
+        subscription?.unsubscribe();
+        subscription = undefined;
+        if (receivedReadable === undefined) {
+          return reject(`Failed accessing ${uriPath} (readable state).`);
+        }
+        if (receivedName === undefined) {
+          return reject(`Failed accessing ${uriPath} (name).`);
+        }
+        // By intention also delays rejection, as the result for unreadable
+        // may take some time.
+        if (!receivedReadable) {
+          return reject(`Content ${uriPath} is unreadable.`);
+        }
+        resolve(receivedName);
+      });
+    });
   }
 
   /**
