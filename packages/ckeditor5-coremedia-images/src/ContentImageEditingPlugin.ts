@@ -6,6 +6,12 @@ import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { imageInlineElementToElementConversionPatch } from "./patches";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 
+/**
+ * Plugin to support images from CoreMedia RichText.
+ *
+ * The plugin takes the `xlink:href` represented in the data-view by `data-xlink-href` and writes it to the model.
+ * The model attribute afterwards will be downcasted to the editing-view where it is represented by the src-attribute of the `img`-tag.
+ */
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
@@ -14,6 +20,7 @@ export default class ContentImageEditingPlugin extends Plugin {
   static readonly XLINK_HREF_DATA_ATTRIBUTE_NAME = "data-xlink-href";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
+    //It only requires ImageInline as we do not support ImageBlock. ImageBlock won't work.
     return [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
   }
 
