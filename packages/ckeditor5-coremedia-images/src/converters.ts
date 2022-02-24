@@ -112,6 +112,8 @@ const updateImagePreviewAttributes = (
     writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
     return;
   }
+
+  //preload the image. An image ca be multile megabytes. Preloading ensures that the spinner will stay until the image is loaded.
   const image = new Image();
   image.onload = () => writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
   image.src = inlinePreview.thumbnailSrc;
@@ -126,6 +128,8 @@ const writeImageToView = (
   editor.editing.view.change((writer: DowncastWriter) => {
     writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);
     writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
+
+    // placeholders needs a width to be shown as the image itself does not have a width.
     if (inlinePreview.isPlaceholder) {
       writer.setStyle("width", "24px", imgTag);
     } else {
