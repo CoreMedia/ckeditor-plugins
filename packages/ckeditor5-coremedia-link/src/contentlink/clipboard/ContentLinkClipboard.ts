@@ -11,7 +11,8 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
+import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
@@ -303,7 +304,7 @@ export default class ContentLinkClipboard extends Plugin {
     cursorPosition: Position,
     dropCondition: DropCondition,
     linkData: ContentLinkData
-  ): Range {
+  ): ModelRange {
     const isFirstDocumentPosition = ContentLinkClipboard.#isFirstPositionOfDocument(cursorPosition);
     const text = writer.createText(linkData.text, {
       linkHref: linkData.href,
@@ -330,7 +331,7 @@ export default class ContentLinkClipboard extends Plugin {
    */
   static #setSelectionAttributes(
     writer: Writer,
-    textRanges: Range[],
+    textRanges: ModelRange[],
     attributes: [string, string | number | boolean][]
   ): void {
     for (const attribute of attributes) {
@@ -382,11 +383,11 @@ export default class ContentLinkClipboard extends Plugin {
    * @param editor - current editor instance
    * @param data - event data
    */
-  static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): Range | null {
+  static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): ModelRange | null {
     if (!data.targetRanges) {
       return null;
     }
-    const targetRanges: Range[] = data.targetRanges.map((viewRange: Range): Range => {
+    const targetRanges: ModelRange[] = data.targetRanges.map((viewRange: ViewRange): ModelRange => {
       return editor.editing.mapper.toModelRange(viewRange);
     });
     if (targetRanges.length > 0) {

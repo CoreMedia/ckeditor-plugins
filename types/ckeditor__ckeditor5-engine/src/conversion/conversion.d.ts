@@ -19,11 +19,7 @@ export default class Conversion {
 
   addAlias(alias: string, dispatcher: DowncastDispatcher | UpcastDispatcher): void;
 
-  attributeToAttribute(definition: {
-    model: string | Object,
-    view: string | Object,
-    upcastAlso?: MatcherPattern | MatcherPattern[],
-  }): void;
+  attributeToAttribute(definition: AttributeToAttributeDefinition): void;
 
   attributeToElement(definition: ConverterDefinition): void;
 
@@ -49,3 +45,31 @@ export type ConverterDefinition = {
   upcastAlso: MatcherPattern | MatcherPattern[],
   view: ElementDefinition | Object,
 };
+export type AttributeToAttributeDefinition = {
+  model: string | AttributeModelDefinition,
+  view: string | Object,
+  upcastAlso?: MatcherPattern | MatcherPattern[],
+}
+
+export type AttributeModelDefinition = {
+  key: string,
+  name?: string,
+  values?: Array<string>
+}
+
+/**
+ * The definition.view parameter specifies which view attribute should be converted from and to.
+ * It can be a { key, value, [ name ] } object or a String, which will be treated like { key: definition.view }.
+ * The key property is the view attribute key to convert from and to.
+ * The value is the view attribute value to convert from and to.
+ * If definition.value is not set, the view attribute value will be the same as the model attribute value.
+ * If key is 'class', value can be a String or an array of Strings.
+ * If key is 'style', value is an object with key-value pairs. In other cases, value is a String.
+ * If name is set, the conversion will be set up only for model elements with the given name.
+ * If definition.model.values is set, definition.view is an object that assigns values from definition.model.values to { key, value, [ name ] } objects.
+ */
+export type AttributeViewDefinition = {
+  key: string,
+  name?: string,
+  value?: string | Array<string> | Object
+}

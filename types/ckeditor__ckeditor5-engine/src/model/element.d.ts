@@ -1,4 +1,5 @@
 import Node from './node';
+import Text from "./text";
 
 /**
  * Model element.

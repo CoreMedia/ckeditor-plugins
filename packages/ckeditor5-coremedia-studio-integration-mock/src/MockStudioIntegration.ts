@@ -7,6 +7,7 @@ import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
+import MockBlobDisplayService from "./content/MockBlobDisplayService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -35,6 +36,9 @@ class MockStudioIntegration extends Plugin {
 
     const workAreaService = new MockWorkAreaService();
     serviceAgent.registerService(workAreaService);
+
+    const blobDisplayService = new MockBlobDisplayService();
+    serviceAgent.registerService(blobDisplayService);
 
     logger.info(`Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`);
 

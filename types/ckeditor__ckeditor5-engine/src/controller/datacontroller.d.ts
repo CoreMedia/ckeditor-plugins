@@ -1,12 +1,13 @@
 import ViewDocument from "../view/document"
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin"
-import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 import DataProcessor from "../dataprocessor/dataprocessor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import Element from "../view/element";
 import Mapper from "../conversion/mapper";
 import { SchemaContextDefinition } from "../model/schema";
+import UpcastDispatcher from "../conversion/upcastdispatcher";
 
 /**
  * Controller for the data pipeline.
@@ -15,7 +16,9 @@ import { SchemaContextDefinition } from "../model/schema";
  */
 export default class DataController implements Emitter, Observable {
   delegate(...events: string[]): EmitterMixinDelegateChain;
+
   processor: DataProcessor;
+  upcastDispatcher: UpcastDispatcher;
   readonly viewDocument: ViewDocument;
   mapper: Mapper;
 

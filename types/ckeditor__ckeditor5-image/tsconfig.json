@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom",
+      "es2015.promise"
+    ],
+    "baseUrl": ".",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "rootDir": "./src",
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@ckeditor/ckeditor5-core/*": [
+        "../ckeditor__ckeditor5-core/*"
+      ],
+      "@ckeditor/ckeditor5-engine/*": [
+        "../ckeditor__ckeditor5-engine/*"
+      ],
+      "@ckeditor/ckeditor5-utils/*": [
+        "../ckeditor__ckeditor5-utils/*"
+      ]
+    }
+  }
+}

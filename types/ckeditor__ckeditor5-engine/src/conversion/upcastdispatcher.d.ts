@@ -1,4 +1,4 @@
-import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import ViewDocumentFragment from "../view/documentfragment";
 import ViewElement from "../view/element";
 import Writer from "../model/writer";
@@ -6,7 +6,12 @@ import Schema, { SchemaContextDefinition } from "../model/schema";
 import DocumentFragment from "../model/documentfragment";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "../view/observer/domeventdata";
+import { Item } from "../view/item";
+import Position from "../model/position";
+import Element from "../model/element";
+import Range from "../model/range";
+import ModelRange from "../model/range";
+import ViewConsumable from "./viewconsumable";
 
 /**
  * Upcast dispatcher is a central point of the view-to-model conversion
@@ -39,8 +44,17 @@ export default class UpcastDispatcher implements Emitter {
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_conversion_upcastdispatcher-UpcastConversionApi.html">Interface UpcastConversionApi (engine/conversion/upcastdispatcher~UpcastConversionApi) - CKEditor 5 API docs</a>
  */
 export interface UpcastConversionApi {
-  consumable : any;
-  schema : Schema;
-  store : Object;
-  writer : Writer;
+  consumable: ViewConsumable;
+  schema: Schema;
+  store: Object;
+  writer: Writer;
+
+  convertChildren(viewItem: Item, positionOrElement: Position | Element): { modelRange: Range, modelCursor: Position };
+
+  convertItem(viewItem: Item, positionOrElement: Position | Element): { modelRange: Range | null, modelCursor: Position }
+}
+
+export type UpcastEventData = {
+  viewItem: ViewElement,
+  modelRange: ModelRange
 }

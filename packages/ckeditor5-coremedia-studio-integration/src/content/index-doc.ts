@@ -6,6 +6,12 @@
  */
 export * as studioservices from "./studioservices/index-doc";
 
+export * from "./BlobDisplayService";
+export { default as BlobDisplayService } from "./BlobDisplayService";
+
+export * from "./BlobDisplayServiceDescriptor";
+export { default as BlobDisplayServiceDescriptor } from "./BlobDisplayServiceDescriptor";
+
 export * from "./ContentAsLink";
 export { default as ContentAsLink } from "./ContentAsLink";
 
