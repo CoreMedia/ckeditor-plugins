@@ -1,7 +1,7 @@
 /**
  * Example Blob Fixture for 10×10 red PNG.
  */
-export const PNG_RED_10x10_2 =
+export const PNG_RED_10x10 =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAABJJREFUGNNj/M+ADzAxjEpjAQBBLAETZWIQMwAAAABJRU5ErkJggg==";
 /**
  * Example Blob Fixture for 10×10 green PNG.
