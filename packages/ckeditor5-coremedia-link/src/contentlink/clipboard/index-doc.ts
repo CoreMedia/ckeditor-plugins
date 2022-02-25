@@ -6,9 +6,6 @@
  * @category Virtual
  */
 
-export * from "./ContentLinkClipboard";
-export { default as ContentLinkClipboard } from "./ContentLinkClipboard";
-
 export * as ContentLinkData from "./ContentLinkData";
 
 export * as DropCondition from "./DropCondition";
