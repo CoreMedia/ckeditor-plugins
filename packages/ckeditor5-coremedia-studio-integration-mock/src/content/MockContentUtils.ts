@@ -1,15 +1,4 @@
 /**
- * If the given number is less than the lower bound, the lower bound
- * will be returned instead.
- *
- * @param input - value to possibly normalize
- * @param lowerBoundIncluding - lower bound to set to, if applicable
- */
-const notLessThan = (input: number, lowerBoundIncluding: number): number => {
-  return input < lowerBoundIncluding ? lowerBoundIncluding : input;
-};
-
-/**
  * Response from `increaseUpToAndRestart`.
  */
 interface IncreaseUpToAndRestartResponse {
@@ -43,7 +32,7 @@ const increaseUpToAndRestart = (input: number, upperBoundExcluding: number): Inc
   }
 
   const value = (input + 1) % upperBoundExcluding;
-  const restart = input > value;
+  const restart = input >= value;
   return { value, restart };
 };
 
@@ -68,4 +57,4 @@ type AtomicOrArray<T> = T | T[];
  */
 const capitalize = (str: string): string => str.slice(0, 1).toUpperCase() + str.slice(1);
 
-export { capitalize, notLessThan, increaseUpToAndRestart, isObject, AtomicOrArray, IncreaseUpToAndRestartResponse };
+export { capitalize, increaseUpToAndRestart, isObject, AtomicOrArray, IncreaseUpToAndRestartResponse };

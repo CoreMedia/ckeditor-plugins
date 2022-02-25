@@ -1,5 +1,5 @@
 import Delayed from "./Delayed";
-import { AtomicOrArray, increaseUpToAndRestart, notLessThan } from "./MockContentUtils";
+import { AtomicOrArray, increaseUpToAndRestart } from "./MockContentUtils";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";
 import { Subscription } from "./RxJsConvenience";
 
@@ -60,8 +60,8 @@ class MutablePropertyObservationHandler<T> {
     this.#valuesLength = this.#values.length;
     this.#anyValue = this.#valuesLength > 0;
     this.#iterating = this.#valuesLength > 1;
-    this.#initialDelayMs = notLessThan(initialDelayMs, 0);
-    this.#changeDelayMs = notLessThan(changeDelayMs, 1);
+    this.#initialDelayMs = Math.max(initialDelayMs, 0);
+    this.#changeDelayMs = Math.max(changeDelayMs, 1);
     this.#iterateOnlyOnce = changeDelayMs < 1 || this.#valuesLength < 2;
   }
 
