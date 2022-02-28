@@ -1,2 +1,4 @@
-* text eol=lf
 *.docx diff=word
+*.mp3 binary
+*.png binary
+* text eol=lf
