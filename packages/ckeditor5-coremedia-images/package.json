@@ -30,10 +30,10 @@
     "@babel/plugin-transform-shorthand-properties": "^7.16.0",
     "@babel/preset-env": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
-    "@ckeditor/ckeditor5-core": "^31.0.0",
-    "@ckeditor/ckeditor5-engine": "^31.0.0",
-    "@ckeditor/ckeditor5-image": "^31.0.0",
-    "@ckeditor/ckeditor5-utils": "^31.0.0",
+    "@ckeditor/ckeditor5-core": "^32.0.0",
+    "@ckeditor/ckeditor5-engine": "^32.0.0",
+    "@ckeditor/ckeditor5-image": "^32.0.0",
+    "@ckeditor/ckeditor5-utils": "^32.0.0",
     "@coremedia/service-agent": "^1.0.0",
     "@coremedia/types-ckeditor__ckeditor5-core": "^3.1.0",
     "@coremedia/types-ckeditor__ckeditor5-engine": "^3.1.0",
@@ -55,10 +55,10 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^31.0.0",
-    "@ckeditor/ckeditor5-engine": "^31.0.0",
-    "@ckeditor/ckeditor5-image": "^31.0.0",
-    "@ckeditor/ckeditor5-utils": "^31.0.0",
+    "@ckeditor/ckeditor5-core": "^32.0.0",
+    "@ckeditor/ckeditor5-engine": "^32.0.0",
+    "@ckeditor/ckeditor5-image": "^32.0.0",
+    "@ckeditor/ckeditor5-utils": "^32.0.0",
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
