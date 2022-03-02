@@ -130,7 +130,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
       for (const insertion of insertions) {
         insertedRegisteredElements.push(...ModelBoundSubscriptionPlugin.#findRegisteredModelElements(insertion));
       }
-      this.editor.model.enqueueChange("transparent", (writer: Writer) => {
+      this.editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
         for (const insertedElement of insertedRegisteredElements) {
           writer.setAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME, Math.random(), insertedElement);
         }
