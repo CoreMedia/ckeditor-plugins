@@ -157,10 +157,10 @@ export default class ContentClipboard extends Plugin {
 
     // we might run into trouble during complex input scenarios
     // e.g. a drop with multiple items will result in different requests that might differ in response time
-    // an undo/redo when only a part of the input has already been resolved, will cause an unsyncted state between content and placeholder elements
+    // an undo/redo when only a part of the input has already been resolved, will cause an unsynced state between content and placeholder elements
     // the best solution for this seems to disable the undo command before the input and enable it again afterwards
     CommandUtils.disableCommand(editor, "undo");
-    editor.model.enqueueChange("transparent", (writer: Writer) => {
+    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.setSelection(targetRange);
     });
 
@@ -218,7 +218,7 @@ export default class ContentClipboard extends Plugin {
       contentDropData.itemContext.itemIndex
     );
     ContentClipboard.#LOGGER.debug("Adding content-drop marker", markerName, contentDropData);
-    editor.model.enqueueChange("transparent", (writer: Writer) => {
+    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
       ContentDropDataCache.storeData(markerName, contentDropData);
     });

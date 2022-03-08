@@ -69,7 +69,7 @@ export default class MarkerRepositionUtil {
       if (!currentData) {
         return;
       }
-      editor.model.enqueueChange("transparent", (writer: Writer): void => {
+      editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
         const newRange = writer.createRange(position, position);
         writer.updateMarker(moveMarkerName, { range: newRange });
       });

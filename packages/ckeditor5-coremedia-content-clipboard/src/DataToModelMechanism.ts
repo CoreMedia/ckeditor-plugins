@@ -126,14 +126,14 @@ export default class DataToModelMechanism {
       MarkerRepositionUtil.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);
     });
 
-    editor.model.enqueueChange("transparent", (writer: Writer): void => {
+    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
       writer.removeSelectionAttribute("linkHref");
     });
     DataToModelMechanism.#markerCleanup(editor, markerData);
   }
 
   static #markerCleanup(editor: Editor, markerData: MarkerData) {
-    editor.model.enqueueChange("transparent", (writer: Writer): void => {
+    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;

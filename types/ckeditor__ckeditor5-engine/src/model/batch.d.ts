@@ -6,10 +6,13 @@ import Operation from "./operation/operation";
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_batch-Batch.html">Class Batch (engine/model/batch~Batch) - CKEditor 5 API docs</a>
  */
 export default class Batch {
-  constructor(type?: 'transparent' | 'default');
+  constructor(type?: { isUndo?: boolean, isUndoable?: boolean, isLocal?: boolean, isTyping?: boolean });
 
   readonly operations: Array<Operation>;
-  readonly type: 'transparent' | 'default';
+  readonly isLocal: boolean;
+  readonly isTyping: boolean;
+  readonly isUndo: boolean;
+  readonly isUndoable: boolean;
 
   get baseVersion(): number | null;
 

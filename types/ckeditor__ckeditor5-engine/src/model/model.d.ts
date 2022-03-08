@@ -33,9 +33,7 @@ export default class Model implements Emitter, Observable {
 
   delegate(...events: string[]): EmitterMixinDelegateChain;
 
-  enqueueChange(batchOrType: any, callback: Function): void;
-
-  createBatch(type?: 'transparent' | 'default'): Batch;
+  createBatch(type?: { isUndo?: boolean, isUndoable?: boolean, isLocal?: boolean, isTyping?: boolean }): Batch;
 
   createOperationFromJSON(json: Object): Operation;
 
@@ -64,7 +62,8 @@ export default class Model implements Emitter, Observable {
     direction?: 'forward' | 'backward';
   }): void;
 
-  enqueueChange(batchOrType: Batch | 'transparent' | 'default', callback: (writer: Writer) => void): void;
+
+  enqueueChange(batchOrType: Batch | { isUndo?: boolean, isUndoable?: boolean, isLocal?: boolean, isTyping?: boolean }, callback: (writer: Writer) => void): void;
 
   getSelectedContent(selection: Selection | DocumentSelection): DocumentFragment;
 
