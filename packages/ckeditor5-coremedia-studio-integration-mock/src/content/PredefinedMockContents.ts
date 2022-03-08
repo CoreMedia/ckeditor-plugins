@@ -8,6 +8,7 @@ import {
 } from "./MockFixtures";
 import { capitalize } from "./MockContentUtils";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { defaultTypeById } from "./MockContentType";
 
 type PredefinedMockContentConfig = { comment?: string } & MockContentConfig;
 
@@ -18,24 +19,20 @@ const hoursInMs = (hours: number): number => {
 const FOLDER_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 101,
-    type: "folder",
     name: "Some Folder",
   },
   {
     id: 103,
-    type: "folder",
     comment: "Folder, renamed from time to time.",
     name: ["Renaming Folder, It. 1", "Renaming Folder, It. 2"],
   },
   {
     id: 105,
-    type: "folder",
     name: "Unreadable Folder",
     readable: false,
   },
   {
     id: 107,
-    type: "folder",
     name: "Folder, sometimes Unreadable",
     readable: [false, true],
   },
@@ -43,42 +40,35 @@ const FOLDER_MOCKS: PredefinedMockContentConfig[] = [
 const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 100,
-    type: "document",
     name: "Some Document",
   },
   {
     id: 102,
-    type: "document",
     comment: "Document, renamed from time to time.",
     name: ["Renaming Document, It. 1", "Renaming Document, It. 2"],
   },
   {
     id: 104,
-    type: "document",
     name: "Unreadable Document",
     readable: false,
   },
   {
     id: 106,
-    type: "document",
     name: "Document, sometimes Unreadable",
     readable: [false, true],
   },
   {
     id: 108,
-    type: "document",
     name: "Edited Document",
     editing: true,
   },
   {
     id: 110,
-    type: "document",
     name: "Document, sometimes edited",
     editing: [true, false],
   },
   {
     id: 112,
-    type: "document",
     comment: "Document which is actively edited, renamed, moved.",
     changeDelayMs: 1000,
     name: Array.from(Array(10).keys()).map((idx) => `Name No. ${idx}`),
@@ -89,50 +79,42 @@ const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
 const NAME_CHALLENGE_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 600,
-    type: "document",
     comment: "Challenges escaping having entities inside its name.",
     name: CONTENT_NAME_CHALLENGE_ENTITIES,
   },
   {
     id: 602,
-    type: "document",
     comment: "Challenges name display with different characters inside.",
     name: CONTENT_NAME_CHALLENGE_CHARSETS,
   },
   {
     id: 604,
-    type: "document",
     comment: "Challenges name display with RTL text.",
     name: CONTENT_NAME_CHALLENGE_RTL,
   },
   {
     id: 606,
-    type: "document",
     comment: "Challenges name display with a possible XSS attack.",
     name: CONTENT_NAME_CHALLENGE_XSS,
   },
   {
     id: 608,
-    type: "document",
     comment: "Challenges name display with some lengthy name.",
     name: CONTENT_NAME_CHALLENGE_LENGTH,
   },
   {
     id: 610,
-    type: "document",
     comment: "Challenge by having a very short and a very long name.",
     name: ["Α", CONTENT_NAME_CHALLENGE_LENGTH, "Ω"],
   },
   {
     id: 612,
-    type: "document",
     comment: "Fast toggle: Challenge by having a very short and a very long name.",
     changeDelayMs: 1000,
     name: ["Α", CONTENT_NAME_CHALLENGE_LENGTH, "Ω"],
   },
   {
     id: 614,
-    type: "document",
     comment: "Challenge, because it toggles from long name display to unreadable state back and forth.",
     name: CONTENT_NAME_CHALLENGE_LENGTH,
     readable: [true, false],
@@ -141,23 +123,21 @@ const NAME_CHALLENGE_MOCKS: PredefinedMockContentConfig[] = [
 const SLOW_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 800,
-    type: "document",
     initialDelayMs: 10000,
     name: "Slow Loading Content",
   },
   {
     id: 802,
-    type: "document",
     initialDelayMs: hoursInMs(1),
     name: "Nearly Endless Loading Content",
   },
   {
     id: 804,
-    type: "document",
     initialDelayMs: 5000,
     name: "Not so slow Loading Content",
   },
 ];
+
 /**
  * Some set of contents we provide right from the start for easier testing.
  */
@@ -192,7 +172,8 @@ const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
     .filter((c) => (c.blob?.length || 0) === 0)
     // Get some useful name and the URI Path for the link.
     .map((c) => {
-      const { id, name: mockName, type, comment } = c;
+      const { id, name: mockName, type: configType, comment } = c;
+      const type = configType ?? defaultTypeById(id);
       const uriPath = contentUriPath(id);
       let name: string;
       if (!!comment) {
