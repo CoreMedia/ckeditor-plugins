@@ -31,9 +31,10 @@ Describe the actual observed behavior, including console logs, if applicable. Pr
 
  - OS: [e.g. iOS]
  - Browser: [e.g. chrome, safari]
- - Browser Version: [e.g. 22]
- - Plugins Version: [e.g. 4.0.1]
+ - Browser Version: [e.g. 99.0]
+ - CKEditor Version: [e.g. 32.0.0]
+ - CoreMedia's CKEditor Plugins Version: [e.g. 4.0.1]
 
 **Additional context**
 
-Add any other context about the problem here.
+Add any other context about the problem here, like for example installed CKEditor plugins which may be involved.
