@@ -2,13 +2,12 @@ import {
   MutableProperties,
   MutablePropertiesConfig,
   observeEditing,
-  observeReadable,
   observeName,
+  observeReadable,
   withPropertiesDefaults,
 } from "../../src/content/MutableProperties";
 import Delayed from "../../src/content/Delayed";
-import { take } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
 describe("MutableProperties", () => {
   describe("withPropertiesDefaults", () => {
@@ -123,59 +122,43 @@ describe("MutableProperties", () => {
   });
 
   describe("Observables", () => {
-    // Ensure calling with `await`
-    const observeAndAssert = <T>(observable: Observable<T>, expectedValues: T[], done: jest.DoneCallback) => {
-      const receivedValues: T[] = [];
-      expect.hasAssertions();
-      observable.subscribe({
-        next: (received) => receivedValues.push(received),
-        error: (error) => done(error),
-        complete: () => {
-          expect(receivedValues).toStrictEqual(expectedValues);
-          done();
-        },
-      });
-    };
-
     describe("observeName", () => {
       type NameConfig = Delayed & Pick<MutableProperties, "name">;
 
-      test("Should provide single name and complete", (done) => {
+      describe("Should provide single name and complete", () => {
+        const values = ["Lorem"];
         const config: NameConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          name: ["Lorem"],
+          name: values,
         };
-        const expectedValues = ["Lorem"];
         const observable = observeName(config);
-
-        observeAndAssert(observable, expectedValues, done);
+        testShouldRetrieveValues(observable, values);
       });
 
-      test("Should just complete for no names to provide", (done) => {
+      describe("Should just complete for no names to provide", () => {
+        const values: string[] = [];
         const config: NameConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          name: [],
+          name: values,
         };
-        const expectedValues: string[] = [];
         const observable = observeName(config);
-
-        observeAndAssert(observable, expectedValues, done);
+        testShouldRetrieveValues(observable, values);
       });
 
-      test("Should provide names and restart", (done) => {
+      describe("Should provide names and restart", () => {
+        const values = ["Lorem", "Ipsum"];
         const config: NameConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          name: ["Lorem", "Ipsum"],
+          name: values,
         };
-        const expectedValues = ["Lorem", "Ipsum", "Lorem"];
+        const expectedValues = [...values, ...values.slice(0, 1)];
         // We only take values from first iteration, and the first of
         // the second, to see looping behavior.
-        const observable = observeName(config).pipe(take(expectedValues.length));
-
-        observeAndAssert(observable, expectedValues, done);
+        const observable = observeName(config);
+        testShouldRetrieveValues(observable, expectedValues);
       });
     });
 
@@ -188,44 +171,46 @@ describe("MutableProperties", () => {
         ${false}
       `("[$#] Should provide single value `$value` and complete", (data) => {
         const { value } = data;
+        const values = [value];
         const config: EditingConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          editing: [value],
+          editing: values,
         };
-        const expectedValues = [value];
+
         const observable = observeEditing(config);
 
-        // Workaround, to not mix test.each with async tests.
-        test("Observe and Assert", (done) => observeAndAssert(observable, expectedValues, done));
+        testShouldRetrieveValues(observable, values);
       });
 
-      test("Should just complete for no values to provide", (done) => {
+      describe("Should just complete for no values to provide", () => {
+        const values: boolean[] = [];
         const config: EditingConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          editing: [],
+          editing: values,
         };
-        const expectedValues: boolean[] = [];
+
         const observable = observeEditing(config);
 
-        observeAndAssert(observable, expectedValues, done);
+        testShouldRetrieveValues(observable, values);
       });
 
-      test("Should provide values and restart", (done) => {
+      describe("Should provide values and restart", () => {
+        const values = [true, false];
         const config: EditingConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          editing: [true, false],
+          editing: values,
         };
-        const expectedValues = [true, false, true];
-        // We only take values from first iteration, and the first of
-        // the second, to see looping behavior.
-        const observable = observeEditing(config).pipe(take(expectedValues.length));
+        const expectedValues = [...values, ...values.slice(0, 1)];
 
-        observeAndAssert(observable, expectedValues, done);
+        const observable = observeEditing(config);
+
+        testShouldRetrieveValues(observable, expectedValues);
       });
     });
+
     describe("observeReadable", () => {
       type ReadableConfig = Delayed & Pick<MutableProperties, "readable">;
 
@@ -235,42 +220,41 @@ describe("MutableProperties", () => {
         ${false}
       `("[$#] Should provide single value `$value` and complete", (data) => {
         const { value } = data;
+        const values = [value];
         const config: ReadableConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          readable: [value],
+          readable: values,
         };
-        const expectedValues = [value];
         const observable = observeReadable(config);
 
-        // Workaround, to not mix test.each with async tests.
-        test("Observe and Assert", (done) => observeAndAssert(observable, expectedValues, done));
+        testShouldRetrieveValues(observable, values);
       });
 
-      test("Should just complete for no values to provide", (done) => {
+      describe("Should just complete for no values to provide", () => {
+        const values: boolean[] = [];
         const config: ReadableConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          readable: [],
+          readable: values,
         };
-        const expectedValues: boolean[] = [];
         const observable = observeReadable(config);
 
-        observeAndAssert(observable, expectedValues, done);
+        testShouldRetrieveValues(observable, values);
       });
 
-      test("Should provide values and restart", (done) => {
+      describe("Should provide values and restart", () => {
+        const values = [true, false];
         const config: ReadableConfig = {
           initialDelayMs: 0,
           changeDelayMs: 1,
-          readable: [true, false],
+          readable: values,
         };
-        const expectedValues = [true, false, true];
-        // We only take values from first iteration, and the first of
-        // the second, to see looping behavior.
-        const observable = observeReadable(config).pipe(take(expectedValues.length));
+        const expectedValues = [...values, ...values.slice(0, 1)];
 
-        observeAndAssert(observable, expectedValues, done);
+        const observable = observeReadable(config);
+
+        testShouldRetrieveValues(observable, expectedValues);
       });
     });
   });
