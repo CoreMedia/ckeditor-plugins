@@ -45,7 +45,7 @@ class MockStudioIntegration extends Plugin {
     const workAreaService = new MockWorkAreaService();
     serviceAgent.registerService(workAreaService);
 
-    const blobDisplayService = new MockBlobDisplayService();
+    const blobDisplayService = new MockBlobDisplayService(contentProvider);
     serviceAgent.registerService(blobDisplayService);
 
     logger.info(`Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`);
