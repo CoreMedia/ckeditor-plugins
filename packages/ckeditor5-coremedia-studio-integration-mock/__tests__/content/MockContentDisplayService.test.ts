@@ -2,7 +2,8 @@ import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integra
 import { serviceAgent } from "@coremedia/service-agent";
 import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
-import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
+import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
+import { first } from "rxjs/operators";
 
 describe("MockContentDisplayService", () => {
   describe("serviceAgent Integration", () => {
@@ -25,27 +26,20 @@ describe("MockContentDisplayService", () => {
   });
 
   describe("observe_asLink(UriPath): Observable<ContentAsLink>", () => {
-    it("should provide some static content representation by default", (done) => {
-      const service = new MockContentDisplayService();
+    const service = new MockContentDisplayService();
+    const observable = service.observe_asLink("content/42").pipe(first());
 
-      let result: ContentAsLink | undefined = undefined;
-
-      service.observe_asLink("content/42").subscribe({
-        next: (received: ContentAsLink) => (result = received),
-        error: (error: unknown) => {
-          done(error);
-        },
-        complete: () => {
-          // The following checks are more about "have any result" and may be
-          // adapted, if the actual result changes.
-          expect(result?.content?.name).toMatch(/.*42.*/);
-          expect(result?.type?.name).toStrictEqual("Document");
-          expect(result?.type?.classes).toContain("icon--document-document");
-          expect(result?.state?.name).toStrictEqual("Checked In");
-          expect(result?.state?.classes).toContain("icon--checked-in");
-          done();
-        },
-      });
-    });
+    testShouldRetrieveValuesThat(
+      "should provide some static content representation by default",
+      observable,
+      (values) => {
+        const result = values.pop();
+        expect(result?.content?.name).toMatch(/.*42.*/);
+        expect(result?.type?.name).toStrictEqual("Document");
+        expect(result?.type?.classes).toContain("icon--document-document");
+        expect(result?.state?.name).toStrictEqual("Checked In");
+        expect(result?.state?.classes).toContain("icon--checked-in");
+      }
+    );
   });
 });

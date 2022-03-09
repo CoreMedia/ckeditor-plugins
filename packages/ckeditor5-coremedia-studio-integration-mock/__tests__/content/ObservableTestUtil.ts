@@ -5,18 +5,44 @@ import { take } from "rxjs/operators";
  * Assertions to run when done.
  */
 export interface ObservableAssertions<T> {
-  (actual: T[], expected: T[]): void;
+  (actual: T[]): void;
 }
 
 /**
- * The default assertion to apply, which is a strict equals check on the arrays.
+ * Tests the given observable and hands over the retrieved values
+ * to the assertions after `complete`. Note, that if your observable
+ * does not `complete` you must limit the value retrieval for example by
+ * `observable.pipe(take(42))`.
  *
- * @param actual - actual values retrieved
- * @param expected - expected values
+ * The method wraps the assertion into a JEST test, so that the `DoneCallback`
+ * can be used. As such, you must not use this method within `test` or `it`
+ * but `describe` instead.
+ *
+ * @param name - name of the test
+ * @param observable - observable under test
+ * @param assertions - assertions to apply on retrieved values when `complete`
  */
-const defaultAssertions: ObservableAssertions<unknown> = (actual, expected) => {
-  expect(actual).toHaveLength(expected.length);
-  expect(actual).toStrictEqual(expected);
+export const testShouldRetrieveValuesThat = <T>(
+  name: string,
+  observable: Observable<T>,
+  assertions: ObservableAssertions<T>
+) => {
+  const retrievedValues: T[] = [];
+
+  expect.hasAssertions();
+
+  test(name, (done) => {
+    observable.subscribe({
+      next: (value) => {
+        retrievedValues.push(value);
+      },
+      error: (error) => done(error),
+      complete: () => {
+        assertions(retrievedValues);
+        done();
+      },
+    });
+  });
 };
 
 /**
@@ -30,27 +56,11 @@ const defaultAssertions: ObservableAssertions<unknown> = (actual, expected) => {
  *
  * @param observable - observable to validate
  * @param expectedValues - values to expect
- * @param assertions - assertions to apply; defaults to strict equals
  */
-export const testShouldRetrieveValues = <T>(
-  observable: Observable<T>,
-  expectedValues: T[],
-  assertions: ObservableAssertions<T> = defaultAssertions
-): void => {
-  const retrievedValues: T[] = [];
-
-  expect.hasAssertions();
-
-  test(`Should retrieve values: ${JSON.stringify(expectedValues)}`, (done) => {
-    observable.pipe(take(expectedValues.length)).subscribe({
-      next: (value) => {
-        retrievedValues.push(value);
-      },
-      error: (error) => done(error),
-      complete: () => {
-        assertions(retrievedValues, expectedValues);
-        done();
-      },
-    });
+export const testShouldRetrieveValues = <T>(observable: Observable<T>, expectedValues: T[]): void => {
+  const name = `Should retrieve values: ${JSON.stringify(expectedValues)}`;
+  const limitedObservable = observable.pipe(take(expectedValues.length));
+  testShouldRetrieveValuesThat(name, limitedObservable, (retrievedValues) => {
+    expect(retrievedValues).toStrictEqual(expectedValues);
   });
 };
