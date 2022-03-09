@@ -1,0 +1,95 @@
+import { Observable } from "rxjs";
+import Delayed from "../../src/content/Delayed";
+import { NameHintConfig, unreadableNameHint } from "../../src/content/DisplayHints";
+import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
+import { observeNameHint } from "../../dist/content/DisplayHints";
+import { take } from "rxjs/operators";
+
+const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };
+
+const shouldRetrieveValues = <T>(observable: Observable<T>, expectedValues: T[]): void => {
+  test(`Should retrieve values: ${JSON.stringify(expectedValues)}`, (done) => {
+    const retrievedValues: T[] = [];
+    expect.hasAssertions();
+
+    observable.pipe(take(expectedValues.length)).subscribe({
+      next: (value) => {
+        retrievedValues.push(value);
+      },
+      error: (error) => done(error),
+      complete: () => {
+        // We don't expect any value to be retrieved.
+        expect(retrievedValues).toHaveLength(retrievedValues.length);
+        expect(retrievedValues).toStrictEqual(expectedValues);
+        done();
+      },
+    });
+  });
+};
+
+describe("DisplayHints", () => {
+  describe("observeNameHint", () => {
+    describe.each`
+      names                 | loop
+      ${["Lorem"]}          | ${false}
+      ${["Lorem", "ipsum"]} | ${false}
+      ${["Lorem", "ipsum"]} | ${true}
+    `("[$#] Should retrieve hints for names: $names (loop? $loop)", ({ names, loop }) => {
+      const classes: string[] = [];
+
+      const config: NameHintConfig = {
+        ...delays,
+        name: names,
+        readable: [true],
+      };
+
+      const expectedNames = [...names, ...names.slice(0, loop ? 1 : 0)];
+      const expectedValues: DisplayHint[] = expectedNames.map(
+        (name: string): DisplayHint => ({
+          name,
+          classes,
+        })
+      );
+      shouldRetrieveValues(observeNameHint(config), expectedValues);
+    });
+
+    describe.each`
+      readableStates          | loop
+      ${[true]}               | ${false}
+      ${[true, false]}        | ${false}
+      ${[true, false]}        | ${true}
+      ${[false, true]}        | ${false}
+      ${[false, true]}        | ${true}
+      ${[true, false, true]}  | ${false}
+      ${[true, false, true]}  | ${true}
+      ${[false, true, false]} | ${false}
+      ${[false, true, false]} | ${true}
+    `(
+      "[$#] Should retrieve name hints respecting readable states: $readableStates (loop? $loop)",
+      ({ readableStates, loop }) => {
+        const name = "Lorem";
+        const classes: string[] = [];
+
+        const config: NameHintConfig = {
+          ...delays,
+          id: 42,
+          type: "document",
+          name: [name],
+          readable: readableStates,
+        };
+
+        const expectedReadableHint: DisplayHint = {
+          name,
+          classes,
+        };
+        const expectedUnreadableHint: DisplayHint = unreadableNameHint(config, classes);
+
+        const expectedReadableStates = [...readableStates, ...readableStates.slice(0, loop ? 1 : 0)];
+        const expectedValues: DisplayHint[] = expectedReadableStates.map(
+          (readable: boolean): DisplayHint => (readable ? expectedReadableHint : expectedUnreadableHint)
+        );
+        shouldRetrieveValues(observeNameHint(config), expectedValues);
+      }
+    );
+  });
+});
