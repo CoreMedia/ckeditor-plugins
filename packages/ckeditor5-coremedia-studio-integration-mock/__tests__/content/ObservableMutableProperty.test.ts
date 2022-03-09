@@ -1,28 +1,6 @@
 import { observeMutableProperty } from "../../src/content/ObservableMutableProperty";
 import Delayed from "../../src/content/Delayed";
-import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
-
-const shouldRetrieveValues = <T>(observable: Observable<T>, expectedValues: T[]): void => {
-  const retrievedValues: T[] = [];
-
-  expect.hasAssertions();
-
-  test(`Should retrieve values: [${expectedValues.join(", ")}]`, (done) => {
-    observable.subscribe({
-      next: (value) => {
-        retrievedValues.push(value);
-      },
-      error: (error) => done(error),
-      complete: () => {
-        // We don't expect any value to be retrieved.
-        expect(retrievedValues).toHaveLength(retrievedValues.length);
-        expect(retrievedValues).toStrictEqual(expectedValues);
-        done();
-      },
-    });
-  });
-};
+import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
 describe("ObservableMutableProperty", () => {
   describe.each`
@@ -37,7 +15,7 @@ describe("ObservableMutableProperty", () => {
 
       const observable = observeMutableProperty(delays, values);
 
-      shouldRetrieveValues(observable, values);
+      testShouldRetrieveValues(observable, values);
     }
   );
 
@@ -53,7 +31,7 @@ describe("ObservableMutableProperty", () => {
 
       const observable = observeMutableProperty(delays, values);
 
-      shouldRetrieveValues(observable, values);
+      testShouldRetrieveValues(observable, values);
     }
   );
 
@@ -69,7 +47,7 @@ describe("ObservableMutableProperty", () => {
 
     const observable = observeMutableProperty(delays, values);
 
-    shouldRetrieveValues(observable, values);
+    testShouldRetrieveValues(observable, values);
   });
 
   describe.each`
@@ -81,10 +59,8 @@ describe("ObservableMutableProperty", () => {
     // Add one more element from top, to see it looping.
     const expectedValues: string[] = [...values, ...values.slice(0, 1)];
 
-    const observable = observeMutableProperty(delays, values)
-      // Limit observation to the number of values we want to validate.
-      .pipe(take(expectedValues.length));
+    const observable = observeMutableProperty(delays, values);
 
-    shouldRetrieveValues(observable, expectedValues);
+    testShouldRetrieveValues(observable, expectedValues);
   });
 });
