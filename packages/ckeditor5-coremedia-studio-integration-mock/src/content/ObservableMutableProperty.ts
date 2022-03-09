@@ -61,7 +61,10 @@ class MutablePropertyObservationHandler<T> {
     this.#anyValue = this.#valuesLength > 0;
     this.#iterating = this.#valuesLength > 1;
     this.#initialDelayMs = Math.max(initialDelayMs, 0);
+    // Change delay for scheduling must not be less than 1 millisecond.
     this.#changeDelayMs = Math.max(changeDelayMs, 1);
+    // Nevertheless, a change delay of 0 or less is meant for testing purpose
+    // to trigger only one iteration through all values.
     this.#iterateOnlyOnce = changeDelayMs < 1 || this.#valuesLength < 2;
   }
 
@@ -98,7 +101,13 @@ class MutablePropertyObservationHandler<T> {
       // Test-scenario: Stop once we iterated through all values for change delay less than 1.
       // Single/No Value: Stop if there was only one or none value to provide.
       if (restart && iterateOnlyOnce) {
-        return subscriber.complete();
+        // As we don't retrieve the service with `{ fixed: true }` we must not
+        // send `complete()` here, as otherwise the service agent will create
+        // a new observable automatically.
+        //
+        // Tests need to ensure, to trigger completion on their own, for
+        // example by limiting the retrieved values via `take(number)` operator.
+        return;
       }
 
       // Start looping.
