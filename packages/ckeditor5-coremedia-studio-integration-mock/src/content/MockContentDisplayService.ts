@@ -84,29 +84,11 @@ class MockContentDisplayService implements ContentDisplayService {
     type Hints = readonly [DisplayHint, DisplayHint, DisplayHint];
 
     const toContentAsLink: OperatorFunction<Hints, ContentAsLink> = map<Hints, ContentAsLink>(
-      ([n, t, s]: Hints): ContentAsLink => {
-        const content = {
-          content: {
-            name: n.name,
-            classes: n.classes,
-          },
-        };
-        const type = {
-          type: {
-            name: t.name,
-            classes: t.classes,
-          },
-        };
-        const state = {
-          state: {
-            name: s.name,
-            classes: s.classes,
-          },
-        };
+      ([nameHint, typeHint, stateHint]: Hints): ContentAsLink => {
         return {
-          ...content,
-          ...type,
-          ...state,
+          content: nameHint,
+          type: typeHint,
+          state: stateHint,
         };
       }
     );
