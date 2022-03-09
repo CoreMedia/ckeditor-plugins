@@ -1,10 +1,12 @@
 /**
  * Example Blob Fixture for 10×10 red PNG.
+ * @see https://www.base64-image.de/
  */
 export const PNG_RED_10x10 =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEX/AAAZ4gk3AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQIHWPACwAAHgAB95hMXAAAAABJRU5ErkJggg==";
 /**
  * Example Blob Fixture for 10×10 green PNG.
+ * @see https://www.base64-image.de/
  */
 export const PNG_GREEN_10x10 =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUA/wA0XsCoAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQIHWPACwAAHgAB95hMXAAAAABJRU5ErkJggg==";
@@ -14,6 +16,19 @@ export const PNG_GREEN_10x10 =
  */
 export const PNG_BLUE_10x10 =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAP+KeNJXAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQIHWPACwAAHgAB95hMXAAAAABJRU5ErkJggg==";
+/**
+ * Example Blob Fixture for 10×10 gray PNG. Especially meant to be used to
+ * represent an unset Blob property value.
+ * @see https://www.base64-image.de/
+ */
+export const PNG_GRAY_10x10 =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAMFBMVEXIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMgyCeFrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAC0lEQVQIHWOgAAAAADwAAZFvo9AAAAAASUVORK5CYII=";
+/**
+ * Example Blob Fixture for unreadable state as 10×10 lock-symbol PNG.
+ * @see https://www.base64-image.de/
+ */
+export const PNG_LOCK_10x10 =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAOElEQVQIW2M4AAcMBw6s92PwWw9h9i0+sLgPwmybunJqG5i5ngEE1oOYK8HMlbiZB1aCAMQEGAAARKk3nTzpQ0wAAAAASUVORK5CYII=";
 
 /**
  * A content name containing several entities.

@@ -1,13 +1,47 @@
-import { AtomicOrArray } from "./MockContentUtils";
+import { AtomicOrArray, isObject } from "./MockContentUtils";
 import MigrateTo from "./MigrateTo";
 import { observeMutableProperty } from "./ObservableMutableProperty";
 import Delayed from "./Delayed";
 import { Observable } from "rxjs";
 
 /**
+ * Represents BLOB data, which are stored as content-property.
+ */
+interface BlobData {
+  /**
+   * The URL to retrieve the blob data from. In CoreMedia Studio,
+   * this would be the data-URL to be read from Studio Server.
+   */
+  value: string;
+  /**
+   * The MIME-type of the blob.
+   */
+  mime: string;
+}
+
+/**
+ * Type guard to check, if the given value represents `BlobData`.
+ *
+ * @param value - value to validate
+ */
+const isBlobData = (value: unknown): value is BlobData => {
+  if (!isObject(value)) {
+    return false;
+  }
+  const hasValue = () => value.hasOwnProperty("value") && typeof value["value"] === "string";
+  const hasMime = () => value.hasOwnProperty("mime") && typeof value["mime"] === "string";
+  return hasValue() && hasMime();
+};
+
+/**
  * Type to represent blob properties.
  */
-type BlobType = string | null;
+type BlobType = BlobData | null;
+/**
+ * Represents the BLOB at configuration time. A string will be transformed
+ * to `BlobData` with corresponding value and default MIME-type `image/png`.
+ */
+type BlobTypeConfig = BlobData | string | null;
 /**
  * Type to represent editing state.
  */
@@ -39,7 +73,7 @@ interface MutablePropertiesConfig {
   name?: AtomicOrArray<NameType>;
   editing?: AtomicOrArray<EditingType>;
   readable?: AtomicOrArray<ReadableType>;
-  blob?: AtomicOrArray<BlobType>;
+  blob?: AtomicOrArray<BlobTypeConfig>;
 }
 
 /**
@@ -64,7 +98,7 @@ interface MutablePropertiesDefaultProviders<T extends MutablePropertiesConfig = 
   /**
    * Provider for blob property value (or just provided as static value).
    */
-  blob?: BlobType | ((input: Omit<T, "blob">) => BlobType);
+  blob?: BlobTypeConfig | ((input: Omit<T, "blob">) => BlobTypeConfig);
 }
 
 /**
@@ -74,7 +108,7 @@ interface InternalMutablePropertiesDefaultProviders<T extends MutablePropertiesC
   name: (input: Omit<T, "name">) => NameType;
   editing: (input: Omit<T, "editing">) => EditingType;
   readable: (input: Omit<T, "readable">) => ReadableType;
-  blob: (input: Omit<T, "blob">) => BlobType;
+  blob: (input: Omit<T, "blob">) => BlobTypeConfig;
 }
 
 /**
@@ -101,8 +135,34 @@ const transformDefaultProviders = <T extends MutablePropertiesConfig>(
     name: typeof defaultName === "string" ? () => defaultName : defaultName,
     editing: typeof defaultEditing === "boolean" ? () => defaultEditing : defaultEditing,
     readable: typeof defaultReadable === "boolean" ? () => defaultReadable : defaultReadable,
-    blob: defaultBlob === null || typeof defaultBlob === "string" ? () => defaultBlob : defaultBlob,
+    blob:
+      defaultBlob === null || typeof defaultBlob === "string" || isBlobData(defaultBlob)
+        ? () => defaultBlob
+        : defaultBlob,
   };
+};
+
+/**
+ * Transforms Blob configurations. Especially handles shortcuts of blobs just
+ * given as plain strings, which are now wrapped into a `BlobData`
+ * representation with default MIME-type `image/png`.
+ *
+ * @param config - blob configuration to transform
+ */
+const transformBlobConfig = (config: AtomicOrArray<BlobTypeConfig>): BlobType[] => {
+  const configs = (<BlobTypeConfig[]>[]).concat(config);
+  return configs.map((c) => {
+    if (!c) {
+      return null;
+    }
+    if (typeof c === "string") {
+      return {
+        value: c,
+        mime: "image/png",
+      };
+    }
+    return c;
+  });
 };
 
 /**
@@ -128,7 +188,7 @@ const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
     name: (<NameType[]>[]).concat(intermediateName),
     editing: (<EditingType[]>[]).concat(intermediateEditing),
     readable: (<ReadableType[]>[]).concat(intermediateReadable),
-    blob: (<BlobType[]>[]).concat(intermediateBlob),
+    blob: transformBlobConfig(intermediateBlob),
   };
 };
 
@@ -170,13 +230,14 @@ const observeReadable = (config: Delayed & Pick<MutableProperties, "readable">):
  *
  * @param config - delay and value configuration
  */
-// TODO: PoC yet. Unsure, if this is enough for BLOBS (here we just get the resolved BLOB reference).
 const observeBlob = (config: Delayed & Pick<MutableProperties, "blob">): Observable<BlobType> => {
   const { blob } = config;
   return observeMutableProperty(config, blob);
 };
 
 export {
+  BlobTypeConfig,
+  BlobData,
   BlobType,
   EditingType,
   MutableProperties,

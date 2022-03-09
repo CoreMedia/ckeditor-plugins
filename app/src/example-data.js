@@ -1,6 +1,7 @@
 // noinspection HttpUrlsUsage
 import {
-  PREDEFINED_MOCK_LINK_DATA
+  PREDEFINED_MOCK_BLOB_DATA,
+  PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
@@ -1299,7 +1300,8 @@ const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("X
 
 const exampleData = {
   "Content Links": contentLinkExamples(),
-  "Content Link Challenges": PREDEFINED_MOCK_LINK_DATA,
+  "Various Links": PREDEFINED_MOCK_LINK_DATA,
+  "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   "CoreMedia RichText": coreMediaRichTextPoC(),
   "Empty": "",
   "Entities": entitiesExample,

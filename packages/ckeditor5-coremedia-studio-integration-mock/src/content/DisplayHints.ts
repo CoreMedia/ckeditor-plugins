@@ -27,15 +27,24 @@ type ReadableNameHintConfig = Pick<MockContent, "name" | "readable">;
 type NameHintConfig = Delayed & ReadableNameHintConfig & UnreadableNameHintConfig;
 
 /**
+ * Creates a representation for an unreadable content's name.
+ *
+ * @param config - configuration to create name from
+ */
+const unreadableName = (config: UnreadableNameHintConfig): string => {
+  const { id, type } = config;
+  return `${CONTENT_NAME_UNREADABLE} ${capitalize(type ?? "Unknown")} #${id ?? "unset"}`;
+};
+
+/**
  * Generates a name hint for unreadable state.
  *
  * @param config - configuration to create display hint
  * @param classes - classes to apply
  */
 const unreadableNameHint = (config: UnreadableNameHintConfig, classes: string[] = []): DisplayHint => {
-  const { id, type } = config;
   return {
-    name: `${CONTENT_NAME_UNREADABLE} ${capitalize(type ?? "Unknown")} #${id ?? "unset"}`,
+    name: unreadableName(config),
     classes,
   };
 };
@@ -162,6 +171,7 @@ export {
   observeNameHint,
   observeTypeHint,
   unreadableEditingHint,
+  unreadableName,
   unreadableNameHint,
   unreadableTypeHint,
 };

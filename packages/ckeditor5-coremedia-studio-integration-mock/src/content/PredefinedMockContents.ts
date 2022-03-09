@@ -5,6 +5,9 @@ import {
   CONTENT_NAME_CHALLENGE_LENGTH,
   CONTENT_NAME_CHALLENGE_RTL,
   CONTENT_NAME_CHALLENGE_XSS,
+  PNG_BLUE_10x10,
+  PNG_GREEN_10x10,
+  PNG_RED_10x10,
 } from "./MockFixtures";
 import { capitalize } from "./MockContentUtils";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
@@ -137,6 +140,68 @@ const SLOW_CONTENTS: PredefinedMockContentConfig[] = [
     name: "Not so slow Loading Content",
   },
 ];
+const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
+  {
+    id: 900,
+    name: "Red Image",
+    embeddable: true,
+    blob: PNG_RED_10x10,
+  },
+  {
+    id: 902,
+    name: "Green Image",
+    embeddable: true,
+    blob: PNG_GREEN_10x10,
+  },
+  {
+    id: 904,
+    name: "Blue Image",
+    embeddable: true,
+    blob: PNG_BLUE_10x10,
+  },
+  {
+    id: 906,
+    name: "Red, Green, Blue Updated Image",
+    embeddable: true,
+    blob: [PNG_RED_10x10, PNG_GREEN_10x10, PNG_BLUE_10x10],
+  },
+  {
+    id: 908,
+    initialDelayMs: 10000,
+    name: "Slow Loading Red Image Content",
+    embeddable: true,
+    blob: PNG_RED_10x10,
+  },
+  {
+    id: 910,
+    name: "Unset Image Blob",
+    readable: true,
+    embeddable: true,
+    blob: [null],
+  },
+  {
+    id: 912,
+    name: "Sometimes Unset Image Blob",
+    readable: true,
+    embeddable: true,
+    changeDelayMs: 5000,
+    blob: [PNG_RED_10x10, null],
+  },
+  {
+    id: 914,
+    name: "Unreadable Image",
+    readable: false,
+    embeddable: true,
+    blob: PNG_RED_10x10,
+  },
+  {
+    id: 916,
+    name: "Sometimes Unreadable Image",
+    readable: [false, true],
+    embeddable: true,
+    blob: PNG_RED_10x10,
+  },
+];
 
 /**
  * Some set of contents we provide right from the start for easier testing.
@@ -146,6 +211,7 @@ const PREDEFINED_MOCK_CONTENTS: PredefinedMockContentConfig[] = [
   ...DOCUMENT_MOCKS,
   ...NAME_CHALLENGE_MOCKS,
   ...SLOW_CONTENTS,
+  ...BLOB_CONTENTS,
 ];
 
 const wrapInRichText = (rawData: string): string => {
@@ -169,7 +235,7 @@ const truncateName = (str: string, maxLength = 40): string => {
 const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
   PREDEFINED_MOCK_CONTENTS
     // Don't use mocks with blob data.
-    .filter((c) => (c.blob?.length || 0) === 0)
+    .filter((c) => !c.blob)
     // Get some useful name and the URI Path for the link.
     .map((c) => {
       const { id, name: mockName, type: configType, comment } = c;
@@ -191,4 +257,38 @@ const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
     .join("")
 );
 
-export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA };
+// noinspection HtmlUnknownAttribute
+/**
+ * A CoreMedia RichText 1.0 document, which contains all predefined
+ * mock blob contents.
+ */
+const PREDEFINED_MOCK_BLOB_DATA = wrapInRichText(
+  PREDEFINED_MOCK_CONTENTS
+    // Only use mocks with blob data.
+    .filter((c) => !!c.blob)
+    // Get some useful name and the URI Path for the link.
+    .map((c) => {
+      const { id, name: mockName, type: configType, comment } = c;
+      const type = configType ?? defaultTypeById(id);
+      const uriPath = contentUriPath(id);
+      let name: string;
+      if (!!comment) {
+        name = comment;
+      } else if (Array.isArray(mockName)) {
+        name = `${capitalize(type)} with name toggle`;
+      } else if (typeof mockName === "string") {
+        name = truncateName(mockName);
+      } else {
+        name = `Some ${capitalize(type)}`;
+      }
+      return { name, uriPath };
+    })
+    // Property is irrelevant for mocking.
+    .map(
+      ({ name, uriPath }) =>
+        `<p>${name}:<br/><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></p>`
+    )
+    .join("")
+);
+
+export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA, PREDEFINED_MOCK_BLOB_DATA };
