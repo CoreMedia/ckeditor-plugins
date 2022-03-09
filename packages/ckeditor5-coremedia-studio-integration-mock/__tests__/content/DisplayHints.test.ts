@@ -1,31 +1,10 @@
-import { Observable } from "rxjs";
 import Delayed from "../../src/content/Delayed";
 import { NameHintConfig, unreadableNameHint } from "../../src/content/DisplayHints";
 import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
 import { observeNameHint } from "../../dist/content/DisplayHints";
-import { take } from "rxjs/operators";
+import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
 const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };
-
-const shouldRetrieveValues = <T>(observable: Observable<T>, expectedValues: T[]): void => {
-  test(`Should retrieve values: ${JSON.stringify(expectedValues)}`, (done) => {
-    const retrievedValues: T[] = [];
-    expect.hasAssertions();
-
-    observable.pipe(take(expectedValues.length)).subscribe({
-      next: (value) => {
-        retrievedValues.push(value);
-      },
-      error: (error) => done(error),
-      complete: () => {
-        // We don't expect any value to be retrieved.
-        expect(retrievedValues).toHaveLength(retrievedValues.length);
-        expect(retrievedValues).toStrictEqual(expectedValues);
-        done();
-      },
-    });
-  });
-};
 
 describe("DisplayHints", () => {
   describe("observeNameHint", () => {
@@ -50,7 +29,7 @@ describe("DisplayHints", () => {
           classes,
         })
       );
-      shouldRetrieveValues(observeNameHint(config), expectedValues);
+      testShouldRetrieveValues(observeNameHint(config), expectedValues);
     });
 
     describe.each`
@@ -88,7 +67,7 @@ describe("DisplayHints", () => {
         const expectedValues: DisplayHint[] = expectedReadableStates.map(
           (readable: boolean): DisplayHint => (readable ? expectedReadableHint : expectedUnreadableHint)
         );
-        shouldRetrieveValues(observeNameHint(config), expectedValues);
+        testShouldRetrieveValues(observeNameHint(config), expectedValues);
       }
     );
   });
