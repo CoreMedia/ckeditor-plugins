@@ -22,6 +22,12 @@ import CancelButtonView from "./CancelButtonView";
 export default class ContentLinkView extends ButtonView {
   readonly renderOptions;
 
+  /**
+   * Signals, if subscriptions are still accepted. Set to
+   * `false` when destruction got triggered.
+   */
+  #acceptSubscriptions = true;
+
   #contentSubscription: Subscription | undefined = undefined;
   readonly #typeIcon: CoreMediaIconView | undefined = undefined;
   readonly #statusIcon: CoreMediaIconView | undefined = undefined;
@@ -129,10 +135,7 @@ export default class ContentLinkView extends ButtonView {
         iconClass: undefined,
       });
 
-      // unsubscribe the currently running subscription
-      if (this.#contentSubscription) {
-        this.#contentSubscription.unsubscribe();
-      }
+      this.#endContentSubscription();
 
       const value = evt.source.uriPath;
       if (CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
@@ -152,25 +155,41 @@ export default class ContentLinkView extends ButtonView {
     }
   }
 
+  #endContentSubscription(): void {
+    this.#contentSubscription?.unsubscribe();
+    this.#contentSubscription = undefined;
+  }
+
+  #registerSubscription(subscriptionSupplier: () => Subscription): void {
+    if (!this.#acceptSubscriptions) {
+      return;
+    }
+    // Ensure that there is no other existing subscription.
+    this.#endContentSubscription();
+    this.#contentSubscription = subscriptionSupplier();
+  }
+
   #subscribeToContent(uriPath: UriPath): void {
     serviceAgent
       .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
       .then((contentDisplayService: ContentDisplayService): void => {
         // save the subscription to be able to unsubscribe later
-        this.#contentSubscription = contentDisplayService.observe_asLink(uriPath).subscribe({
-          next: (received: ContentAsLink) => {
-            this.#typeIcon?.set({
-              iconClass: received.type.classes?.join(" "),
-            });
-            this.#statusIcon?.set({
-              iconClass: received.state.classes?.join(" "),
-            });
-            this.set({
-              tooltip: received.content.name,
-              contentName: received.content.name,
-            });
-          },
-        });
+        this.#registerSubscription(() =>
+          contentDisplayService.observe_asLink(uriPath).subscribe({
+            next: (received: ContentAsLink) => {
+              this.#typeIcon?.set({
+                iconClass: received.type.classes?.join(" "),
+              });
+              this.#statusIcon?.set({
+                iconClass: received.state.classes?.join(" "),
+              });
+              this.set({
+                tooltip: received.content.name,
+                contentName: received.content.name,
+              });
+            },
+          })
+        );
       })
       .catch((reason): void => {
         console.warn("ContentDisplayService not available.", reason);
@@ -178,9 +197,9 @@ export default class ContentLinkView extends ButtonView {
   }
 
   destroy(): Promise<never> | null {
-    if (this.#contentSubscription) {
-      this.#contentSubscription.unsubscribe();
-    }
+    // Prevent possible asynchronous events from re-triggering subscription.
+    this.#acceptSubscriptions = false;
+    this.#endContentSubscription();
     super.destroy();
     return null;
   }
