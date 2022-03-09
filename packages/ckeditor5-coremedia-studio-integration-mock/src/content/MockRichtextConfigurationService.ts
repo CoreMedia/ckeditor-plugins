@@ -1,5 +1,6 @@
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
+import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   readonly #contentProvider: MockContentProvider;
@@ -24,25 +25,21 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
    */
   hasLinkableType(uriPath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      if (!uriPath.startsWith("content/")) {
-        resolve(false);
-        return;
+      if (isUriPath(uriPath)) {
+        const mockContent = this.#contentProvider(uriPath);
+        return resolve(mockContent.linkable);
       }
-
-      const mockContent = this.#contentProvider(uriPath);
-      resolve(mockContent.linkable);
+      resolve(false);
     });
   }
 
   isEmbeddableType(uriPath: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      if (!uriPath.startsWith("content")) {
-        resolve(false);
-        return;
+      if (isUriPath(uriPath)) {
+        const mockContent = this.#contentProvider(uriPath);
+        return resolve(mockContent.embeddable);
       }
-
-      const mockContent = this.#contentProvider(uriPath);
-      resolve(mockContent.embeddable);
+      resolve(false);
     });
   }
 

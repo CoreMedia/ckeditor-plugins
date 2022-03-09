@@ -15,6 +15,15 @@ type UriPath = string;
 type ModelUri = string;
 
 /**
+ * Validates, if the given value represents a URI path.
+ *
+ * @param value - value to validate
+ */
+const isUriPath = (value: unknown): value is string => {
+  return typeof value === "string" && CONTENT_URI_PATH_REGEXP.test(value);
+};
+
+/**
  * Returns the numeric ID from a URI path.
  *
  * For convenience, it will provide any number unmodified, so that you can
@@ -126,6 +135,7 @@ export {
   CONTENT_URI_PATH_PREFIX,
   CONTENT_URI_PATH_REGEXP,
   contentUriPath,
+  isUriPath,
   numericId,
   requireContentUriPath,
   requireContentCkeModelUri,
