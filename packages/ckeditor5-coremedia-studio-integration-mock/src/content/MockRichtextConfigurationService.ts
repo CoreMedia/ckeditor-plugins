@@ -28,14 +28,9 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
         resolve(false);
         return;
       }
-      const mockContent = this.#contentProvider(uriPath);
 
-      if (mockContent.id === 1 || mockContent.type === "document") {
-        // We want to allow dropping the root folder (as special case)
-        // and any documents of standard type.
-        return resolve(true);
-      }
-      resolve(false);
+      const mockContent = this.#contentProvider(uriPath);
+      resolve(mockContent.linkable);
     });
   }
 
@@ -45,7 +40,9 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
         resolve(false);
         return;
       }
-      resolve(false);
+
+      const mockContent = this.#contentProvider(uriPath);
+      resolve(mockContent.embeddable);
     });
   }
 
