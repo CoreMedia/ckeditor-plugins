@@ -1,27 +1,25 @@
-import BlobDisplayService, {
-  InlinePreview,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
+import BlobDisplayService, { InlinePreview, } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import BlobDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
 import { map } from "rxjs/operators";
 import { combineLatest, Observable } from "rxjs";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { BlobData, observeBlob, observeName, observeReadable } from "./MutableProperties";
-import { PNG_GRAY_10x10, PNG_LOCK_10x10 } from "./MockFixtures";
+import { PNG_EMPTY_24x24, PNG_LOCK_24x24 } from "./MockFixtures";
 import { unreadableName } from "./DisplayHints";
 
 /**
  * Represents an unreadable blob-state.
  */
 const unreadableBlob: Pick<BlobData, "value"> = {
-  value: PNG_LOCK_10x10,
+  value: PNG_LOCK_24x24,
 };
 
 /**
  * Represents an unset Blob value.
  */
 const unsetBlob: BlobData = {
-  value: PNG_GRAY_10x10,
+  value: PNG_EMPTY_24x24,
   mime: "image/png",
 };
 
