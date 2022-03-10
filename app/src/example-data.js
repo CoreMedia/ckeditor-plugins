@@ -1389,7 +1389,7 @@ const initExamples = (editor) => {
   });
 
   // Now add all examples
-  for (let exampleKey in exampleData) {
+  for (let exampleKey of Object.keys(exampleData).sort()) {
     const option = document.createElement("option");
     // noinspection InnerHTMLJS
     option.innerHTML = exampleKey;
