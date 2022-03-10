@@ -101,8 +101,8 @@ describe("MutableProperties", () => {
       ${[null]}                                                                  | ${[null]}
       ${null}                                                                    | ${[null]}
       ${[]}                                                                      | ${[]}
-      ${"data:image/png;base64,theData"}                                         | ${["data:image/png;base64,theData"]}
-      ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"]} | ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"]}
+      ${"data:image/png;base64,theData"}                                         | ${[{ value: "data:image/png;base64,theData", mime: "image/png" }]}
+      ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"]} | ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"].map((s) => ({ value: s, mime: "image/png" }))}
     `("[$#] Should respect blob value: $blob", (data) => {
       const { blob, expected } = data;
       const config: MutablePropertiesConfig = { blob };
