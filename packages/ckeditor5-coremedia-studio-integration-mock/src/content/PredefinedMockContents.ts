@@ -303,7 +303,7 @@ const PREDEFINED_MOCK_BLOB_DATA = wrapInRichText(
     // Property is irrelevant for mocking.
     .map(
       ({ name, uriPath }) =>
-        `<p>${name}:<br/><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></p>`
+        `<p>${name}:<br/><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></p><p>${name} with link to self:<br/><a xlink:href="${uriPath}"><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></a></p>`
     )
     .join("")
 );
