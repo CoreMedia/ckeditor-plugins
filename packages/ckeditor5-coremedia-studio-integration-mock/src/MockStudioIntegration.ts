@@ -7,6 +7,8 @@ import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
@@ -18,6 +20,10 @@ class MockStudioIntegration extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
+  static get requires(): Array<new (editor: Editor) => Plugin> {
+    return [MockContentPlugin];
+  }
+
   init(): Promise<void> | null {
     const logger = MockStudioIntegration.#logger;
 
@@ -25,10 +31,12 @@ class MockStudioIntegration extends Plugin {
 
     logger.info(`Initializing ${MockStudioIntegration.pluginName}...`);
 
-    const contentDisplayService = new MockContentDisplayService();
+    const contentProvider = this.#initContents();
+
+    const contentDisplayService = new MockContentDisplayService(contentProvider);
     serviceAgent.registerService(contentDisplayService);
 
-    const richtextConfigurationService = new MockRichtextConfigurationService();
+    const richtextConfigurationService = new MockRichtextConfigurationService(contentProvider);
     serviceAgent.registerService(richtextConfigurationService);
 
     const dragDropService = new MockDragDropService();
@@ -37,12 +45,18 @@ class MockStudioIntegration extends Plugin {
     const workAreaService = new MockWorkAreaService();
     serviceAgent.registerService(workAreaService);
 
-    const blobDisplayService = new MockBlobDisplayService();
+    const blobDisplayService = new MockBlobDisplayService(contentProvider);
     serviceAgent.registerService(blobDisplayService);
 
     logger.info(`Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
+  }
+
+  #initContents(): MockContentProvider {
+    const editor = this.editor;
+    const contentPlugin = editor.plugins.get(MockContentPlugin);
+    return contentPlugin.getContent;
   }
 
   static getServiceAgent(): ServiceAgent {

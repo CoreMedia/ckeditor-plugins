@@ -39,6 +39,9 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY
 } from "@coremedia/ckeditor5-coremedia-richtext-support/CoreMediaRichTextSupportConfig";
+import {
+  COREMEDIA_MOCK_CONTENT_PLUGIN
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -210,6 +213,12 @@ ClassicEditor.create(document.querySelector('.editor'), {
       {name: "mark", inherit: "span"},
     ],
   },
+  [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
+    // Demonstrates, how you may add more contents on the fly.
+    contents: [
+      { id: 2, name: "Some Example Document", type: "document" },
+    ],
+  },
 }).then(newEditor => {
   CKEditorInspector.attach({
     'main-editor': newEditor,
@@ -217,7 +226,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     isCollapsed: true,
   });
   initExamples(newEditor);
-  initDragExamples();
+  initDragExamples(newEditor);
   editor = newEditor;
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");

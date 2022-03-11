@@ -15,15 +15,41 @@ type UriPath = string;
 type ModelUri = string;
 
 /**
+ * Validates, if the given value represents a URI path.
+ *
+ * @param value - value to validate
+ */
+const isUriPath = (value: unknown): value is string => {
+  return typeof value === "string" && CONTENT_URI_PATH_REGEXP.test(value);
+};
+
+/**
  * Returns the numeric ID from a URI path.
+ *
+ * For convenience, it will provide any number unmodified, so that you can
+ * use this method to resolve a possible URI path, if required.
+ *
  * @param uriPath - URI path to return numeric ID from
  */
-const numericId = (uriPath: UriPath): number => {
+const numericId = (uriPath: number | UriPath): number => {
+  if (typeof uriPath === "number") {
+    // Convenience, just return the number.
+    return uriPath;
+  }
   const match = CONTENT_URI_PATH_REGEXP.exec(uriPath);
   if (!match) {
     return -1;
   }
   return parseInt(match[1]);
+};
+
+/**
+ * Returns the content URI path for a given content ID.
+ *
+ * @param contentId - id to add to URI path
+ */
+const contentUriPath = (contentId: number): string => {
+  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
 };
 
 /**
@@ -108,6 +134,8 @@ export {
   CONTENT_CKE_MODEL_URI_REGEXP,
   CONTENT_URI_PATH_PREFIX,
   CONTENT_URI_PATH_REGEXP,
+  contentUriPath,
+  isUriPath,
   numericId,
   requireContentUriPath,
   requireContentCkeModelUri,

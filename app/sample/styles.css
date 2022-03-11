@@ -3,14 +3,16 @@
  * This file is licensed under the terms of the MIT License (see LICENSE.md).
  */
 
- :root {
-	--ck-sample-base-spacing: 2em;
-	--ck-sample-color-white: #fff;
-	--ck-sample-color-green: #279863;
-	--ck-sample-color-blue: #1a9aef;
-	--ck-sample-container-width: 1285px;
-	--ck-sample-sidebar-width: 350px;
-	--ck-sample-editor-min-height: 400px;
+:root {
+  --ck-sample-base-spacing: 2em;
+  --ck-sample-color-white: #fff;
+  --ck-sample-color-green: #279863;
+  --ck-sample-color-blue: #1a9aef;
+  --ck-sample-container-width: 1285px;
+  --ck-sample-sidebar-width: 350px;
+  --ck-sample-editor-min-height: 400px;
+  /* We are not ready for dark/light color-scheme support, yet. Let's tell that to the browser. */
+  color-scheme: normal !important;
 }
 
 /* --------- NOTIFICATIONS ------------------------------------------------------------------------------------------ */
@@ -28,7 +30,7 @@
   background-color: var(--ck-sample-color-green);
   color: white;
   border-radius: 2px;
-  box-shadow: 0 4px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* --------- EXAMPLE DATA ------------------------------------------------------------------------------------------- */
@@ -37,19 +39,23 @@ input.error {
   border-color: red;
   background-color: #ff000044;
 }
+
 .ck-content .grs.xmp {
   color: #880000;
 }
+
 .ck-content .grs.xmp1 {
   color: #004444;
 }
+
 .ck-content [lang="de"] {
-  background: rgba(0,0,0,0.3) !important;
-  background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(255,0,0,0.3) 50%, rgba(255,204,0,0.3) 100%) !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 50%, rgba(255, 204, 0, 0.3) 100%) !important;
 }
+
 .ck-content [lang="en"] {
-  background: rgba(0,36,125,0.3) !important;
-  background: linear-gradient(135deg, rgba(0,36,125,0.3) 0%, rgba(255,255,255,0.3) 50%, rgba(207,20,43,0.3) 100%) !important;
+  background: rgba(0, 36, 125, 0.3) !important;
+  background: linear-gradient(135deg, rgba(0, 36, 125, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(207, 20, 43, 0.3) 100%) !important;
 }
 
 /* --------- DND  --------------------------------------------------------------------------------------------------- */
@@ -71,7 +77,7 @@ input.error {
   padding: 2px 2em;
   border: 1px solid #c4c4c4;
   white-space: pre-wrap;
-  font-family: Monaco,Menlo,Consolas,"Roboto Mono","Courier New","Ubuntu Mono",monospace;
+  font-family: Monaco, Menlo, Consolas, "Roboto Mono", "Courier New", "Ubuntu Mono", monospace;
   overflow-y: scroll;
   max-height: calc(50vh + 38.67px);
   width: calc(50% - 8px);
@@ -115,9 +121,9 @@ main .ck-editor[role='application'] .ck.ck-content,
 .ck.ck-editor__editable[role='textbox'],
   /* Inline & Balloon build. */
 .ck.editor[role='textbox'] {
-	line-height: 1.6em;
-	min-height: var(--ck-sample-editor-min-height);
-	padding: 1.5em 2em;
+  line-height: 1.6em;
+  min-height: var(--ck-sample-editor-min-height);
+  padding: 1.5em 2em;
 }
 
 .ck.ck-editor.with-preview {
@@ -128,140 +134,140 @@ main .ck-editor[role='application'] .ck.ck-content,
 
 /* Because of sidebar `position: relative`, Edge is overriding the outline of a focused editor. */
 .ck.ck-editor__editable {
-	position: relative;
+  position: relative;
   max-height: 50vh;
-	z-index: 10;
+  z-index: 10;
 }
 
 /* --------- SAMPLE GENERIC STYLES (not related to CKEditor) ------------------------------------------------------- */
 body, html {
-	padding: 0;
-	margin: 0;
+  padding: 0;
+  margin: 0;
 
-	font-family: sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	font-size: 16px;
-	line-height: 1.5;
+  font-family: sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 body {
-	height: 100%;
-	color: #2D3A4A;
+  height: 100%;
+  color: #2D3A4A;
 }
 
 body * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 a {
-	color: #38A5EE;
+  color: #38A5EE;
 }
 
 header .centered {
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: space-between;
-	align-items: center;
-	min-height: 8em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 8em;
 }
 
 header h1 a {
-	font-size: 20px;
-	display: flex;
-	align-items: center;
-	color: #2D3A4A;
-	text-decoration: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  color: #2D3A4A;
+  text-decoration: none;
 }
 
 header h1 img {
-	display: block;
-	height: 64px;
+  display: block;
+  height: 64px;
 }
 
 header nav ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 header nav ul li {
-	display: inline-block;
+  display: inline-block;
 }
 
 header nav ul li + li {
-	margin-left: 1em;
+  margin-left: 1em;
 }
 
 header nav ul li a {
-	font-weight: bold;
-	text-decoration: none;
-	color: #2D3A4A;
+  font-weight: bold;
+  text-decoration: none;
+  color: #2D3A4A;
 }
 
 header nav ul li a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 main .message {
-	padding: 0 0 var(--ck-sample-base-spacing);
-	background: var(--ck-sample-color-green);
-	color: var(--ck-sample-color-white);
+  padding: 0 0 var(--ck-sample-base-spacing);
+  background: var(--ck-sample-color-green);
+  color: var(--ck-sample-color-white);
 }
 
 main .message::after {
-	content: "";
-	z-index: -1;
-	display: block;
-	height: 10em;
-	width: 100%;
-	background: var(--ck-sample-color-green);
-	position: absolute;
-	left: 0;
+  content: "";
+  z-index: -1;
+  display: block;
+  height: 10em;
+  width: 100%;
+  background: var(--ck-sample-color-green);
+  position: absolute;
+  left: 0;
 }
 
 main .message h2 {
-	position: relative;
-	padding-top: 1em;
-	font-size: 2em;
+  position: relative;
+  padding-top: 1em;
+  font-size: 2em;
 }
 
 .centered {
-	/* Hide overlapping comments. */
-	overflow: hidden;
-	max-width: var(--ck-sample-container-width);
-	margin: 0 auto;
-	padding: 0 var(--ck-sample-base-spacing);
+  /* Hide overlapping comments. */
+  overflow: hidden;
+  max-width: var(--ck-sample-container-width);
+  margin: 0 auto;
+  padding: 0 var(--ck-sample-base-spacing);
 }
 
 .row {
-	position: relative;
+  position: relative;
 }
 
 footer {
-	margin: calc(2*var(--ck-sample-base-spacing)) var(--ck-sample-base-spacing);
-	font-size: .8em;
-	text-align: center;
-	color: rgba(0,0,0,.4);
+  margin: calc(2 * var(--ck-sample-base-spacing)) var(--ck-sample-base-spacing);
+  font-size: .8em;
+  text-align: center;
+  color: rgba(0, 0, 0, .4);
 }
 
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
 @media screen and ( max-width: 800px ) {
-	:root {
-		--ck-sample-base-spacing: 1em;
-	}
+  :root {
+    --ck-sample-base-spacing: 1em;
+  }
 
-	header h1 {
-		width: 100%;
-	}
+  header h1 {
+    width: 100%;
+  }
 
-	header h1 img {
-		height: 40px;
-	}
+  header h1 img {
+    height: 40px;
+  }
 
-	header nav ul {
-		text-align: right;
-	}
+  header nav ul {
+    text-align: right;
+  }
 
-	main .message h2 {
-		font-size: 1.5em;
-	}
+  main .message h2 {
+    font-size: 1.5em;
+  }
 }

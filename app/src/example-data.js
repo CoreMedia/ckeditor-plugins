@@ -1,4 +1,9 @@
 // noinspection HttpUrlsUsage
+import {
+  PREDEFINED_MOCK_BLOB_DATA,
+  PREDEFINED_MOCK_LINK_DATA,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
+
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
@@ -11,7 +16,7 @@ const EXAMPLE_URL = "https://example.org/";
  * can be displayed.
  * @type {string}
  */
-const INLINE_IMG = "content/42#properties.data";
+const INLINE_IMG = "content/900#properties.data";
 const LINK_TEXT = "Link";
 const UNSET = "—";
 const parser = new DOMParser();
@@ -134,85 +139,77 @@ function contentLinkExamples() {
     },
     {
       comment: "Folder 1",
-      id: 10001,
+      id: 11,
     },
     {
       comment: "Folder 2",
-      id: 11003,
+      id: 13,
     },
     {
       comment: "Document 1",
-      id: 10000,
+      id: 10,
     },
     {
       comment: "Document 2",
-      id: 11002,
+      id: 12,
     },
   ];
   const nameChangeScenarios = [
     {
       comment: "Folder (changing names)",
-      id: 12001,
+      id: 103,
     },
     {
       comment: "Document (changing names)",
-      id: 12000,
+      id: 102,
     },
   ];
   const unreadableScenarios = [
     {
       comment: "Folder 1 (unreadable)",
-      id: 10101,
+      id: 105,
     },
     {
       comment: "Folder 2 (unreadable/readable toggle)",
-      id: 11201,
+      id: 107,
     },
     {
       comment: "Document 1 (unreadable)",
-      id: 10100,
+      id: 104,
     },
     {
       comment: "Document 2 (unreadable/readable toggle)",
-      id: 11202,
+      id: 106,
     },
   ];
   const stateScenarios = [
     {
       comment: "Document 1 (checked-in)",
-      id: 10010,
+      id: 100,
     },
     {
       comment: "Document 2 (checked-out)",
-      id: 11002,
+      id: 108,
     },
     {
       comment: "Document (being edited; toggles checked-out/-in)",
-      id: 10026,
+      id: 110,
     },
   ];
   const xssScenarios = [
     {
       comment: "Document 1",
-      id: 6660000,
-    },
-    {
-      comment: "Document 2",
-      id: 6661002,
-    },
-    {
-      comment: "Document (toggling name)",
-      id: 6662006,
+      id: 606,
     },
   ];
   const slowScenarios = [
     {
-      comment: "Slow Document 1",
-      id: 4080000,
+      comment: "Slow Document",
+      id: 800,
     },
     {
-      comment: "Slow Document 2",
-      id: 4081002,
+      comment: "Very Slow Document",
+      id: 802,
     },
   ];
   const scenarios = [
@@ -1303,6 +1300,8 @@ const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("X
 
 const exampleData = {
   "Content Links": contentLinkExamples(),
+  "Various Links": PREDEFINED_MOCK_LINK_DATA,
+  "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   "CoreMedia RichText": coreMediaRichTextPoC(),
   "Empty": "",
   "Entities": entitiesExample,
@@ -1352,6 +1351,7 @@ const initExamples = (editor) => {
   const xmpInput = document.getElementById("xmp-input");
   const xmpData = document.getElementById("xmp-data");
   const reloadBtn = document.getElementById("xmp-reload");
+  const clearBtn = document.getElementById("xmp-clear");
 
   if (!(xmpInput && xmpData && reloadBtn)) {
     throw new Error("Required components for Example-Data Loading missing.");
@@ -1383,8 +1383,13 @@ const initExamples = (editor) => {
     }
   });
 
+  clearBtn.addEventListener("click", () => {
+    xmpInput.blur();
+    editor.setData("");
+  });
+
   // Now add all examples
-  for (let exampleKey in exampleData) {
+  for (let exampleKey of Object.keys(exampleData).sort()) {
     const option = document.createElement("option");
     // noinspection InnerHTMLJS
     option.innerHTML = exampleKey;

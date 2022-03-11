@@ -1,10 +1,6 @@
-import {
-  changing$,
-  ContentIdPrefix,
-  createContentUriPath
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentDisplayService";
 import {serviceAgent} from "@coremedia/service-agent";
 import MockDragDropService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropService";
+import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
 
@@ -34,61 +30,69 @@ const removeDropData = () => {
   serviceAgent.unregisterServices('dragDropService');
 };
 
-const initDragExamples = () => {
+const initDragExamples = (editor) => {
+
+  const mockContentPlugin = editor.plugins.get(MockContentPlugin);
+  // Just ensure, that the default content provided by MockContentPlugin
+  // still fulfills our expectations.
+  const requireExplicitContent = mockContentPlugin.requireExplicitContent;
+
+  // Add some content of undroppable type. (By default only contents of type 'document'
+  // are considered droppable.
+  mockContentPlugin.addContents({
+    id: 40,
+    type: "undroppable",
+    name: "Undroppable Content Type",
+  });
 
   const singleDroppableDocuments = [
     {
       label: "Document 1",
       tooltip: "Some Document",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: false,
-      }],
+      items: [30],
     },
     {
       label: "Document 2",
       tooltip: "Some Other Document",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: true,
-      }],
+      items: [32],
     },
     {
       label: "Document (edit)",
       tooltip: "Document which is actively edited",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: changing$,
-        checkedIn: changing$,
-      }],
+      items: [requireExplicitContent(112)],
     },
     {
-      label: "Document 1 (XSS)",
-      tooltip: "Document, XSS attack type 1",
+      label: "Entities",
+      tooltip: "Entities in name",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: false,
-        prefix: ContentIdPrefix.evil,
-      }],
+      items: [requireExplicitContent(600)],
     },
     {
-      label: "Document 2 (XSS)",
-      tooltip: "Document, XSS attack type 2",
+      label: "Characters",
+      tooltip: "Various characters in name",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: true,
-        prefix: ContentIdPrefix.evil,
-      }],
+      items: [requireExplicitContent(602)],
     },
     {
-      label: "Document (XSS, edit)",
-      tooltip: "Document, actively edited and names to possibly trigger XSS-attack",
+      label: "RTL",
+      tooltip: "Left-to-Right name",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: changing$,
-        prefix: ContentIdPrefix.evil,
-        checkedIn: changing$,
-      }],
+      items: [requireExplicitContent(604)],
+    },
+    {
+      label: "XSS",
+      tooltip: "Some possible Cross-Site-Scripting Attack",
+      classes: ["linkable", "type-document"],
+      items: [requireExplicitContent(606)],
+    },
+    {
+      label: "Long",
+      tooltip: "Very long name",
+      classes: ["linkable", "type-document"],
+      items: [requireExplicitContent(608)],
     },
   ];
 
@@ -98,68 +102,28 @@ const initDragExamples = () => {
       tooltip: "Root Folder; droppable for test-scenarios with empty name",
       classes: ["linkable", "type-folder"],
       // id is an extra option, which overrides any ID calculation.
-      items: [{
-        id: 1,
-      }],
+      items: [requireExplicitContent(1)],
     },
     ...singleDroppableDocuments,
   ];
   const unreadables = [
     {
-      label: "Unreadable Document",
+      label: "Unreadable",
       tooltip: "Document cannot be read.",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: false,
-        unreadable: true,
-      }],
+      items: [requireExplicitContent(104)],
     },
     {
-      label: "(Un-)readable Document (edit)",
-      tooltip: "Document which is sometimes in a readable folder, sometimes not.",
+      label: "Sometimes Unreadable",
+      tooltip: "Document cannot be read sometimes.",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: false,
-        unreadable: changing$,
-      }],
+      items: [requireExplicitContent(106)],
     },
     {
-      label: "Unreadable & Readable Document",
+      label: "Some Unreadable",
       tooltip: "One document can be read, the other cannot be read.",
       classes: ["linkable", "type-collection"],
-      items: [
-        {
-          name: false,
-          unreadable: true,
-        },
-        {
-          name: true,
-          unreadable: false,
-        },
-      ],
-    },
-    {
-      label: "Mixed Unreadable & Readable Documents",
-      tooltip: "Two readable, two unreadable documents.",
-      classes: ["linkable", "type-collection"],
-      items: [
-        {
-          name: false,
-          unreadable: true,
-        },
-        {
-          name: false,
-          unreadable: false,
-        },
-        {
-          name: true,
-          unreadable: true,
-        },
-        {
-          name: true,
-          unreadable: false,
-        },
-      ],
+      items: [30, requireExplicitContent(104), 32],
     },
   ];
   const singleUndroppables = [
@@ -167,76 +131,59 @@ const initDragExamples = () => {
       label: "Folder",
       tooltip: "Some Folder",
       classes: ["non-linkable", "type-folder"],
-      items: [{
-        isFolder: true,
-      }],
+      items: [31],
     },
     {
-      label: "Document (nodrop)",
-      tooltip: "Some Document of a type forbidden to be dropped.",
-      classes: ["non-linkable", "type-document"],
-      items: [{
-        undroppable: true,
-      }],
+      label: "Undroppable",
+      tooltip: "Content of undroppable type.",
+      classes: ["non-linkable", "type-folder"],
+      items: [requireExplicitContent(40)],
     },
   ];
   const slowDocuments = [
     {
-      label: "Slow Document 1",
-      tooltip: "Some Document which takes long to load.",
+      label: "Slow",
+      tooltip: "Slowed down access to content",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: false,
-        prefix: ContentIdPrefix.slow,
-      }],
+      items: [requireExplicitContent(800)],
     },
     {
-      label: "Slow Document 2",
-      tooltip: "Some Other Document which takes long to load.",
+      label: "Very Slow",
+      tooltip: "Content takes more than just minutes to load.",
       classes: ["linkable", "type-document"],
-      items: [{
-        name: true,
-        prefix: ContentIdPrefix.slow,
-      }],
+      items: [requireExplicitContent(802)],
     },
   ];
   const pairedExamples = [
     {
-      label: "2 Documents",
+      label: "Two",
       tooltip: "Two documents, which are valid to drop.",
       classes: ["linkable", "type-collection"],
-      items: [
-        {name: false},
-        {name: true},
-      ],
+      items: [30, 32],
     },
     {
-      label: "2 Documents[Slow/Fast]",
-      tooltip: "Slow/Fast",
+      label: "Slow/Fast",
+      tooltip: "Two documents, the first one slow to load, the other fast to load.",
       classes: ["linkable", "type-collection"],
-      items: [
-        {name: true, prefix: ContentIdPrefix.slow},
-        {name: true},
-      ],
+      items: [requireExplicitContent(800), 32],
     },
     {
-      label: "3 Documents[Slow/Fast/Slow]",
+      label: "Fast/Slow",
+      tooltip: "Two documents, the first one fast to load, the other slow to load.",
+      classes: ["linkable", "type-collection"],
+      items: [32, requireExplicitContent(800)],
+    },
+    {
+      label: "Slow/Fast/Slow",
       tooltip: "Slow/Fast/Slow for testing drop order after lazy loading",
       classes: ["linkable", "type-collection"],
-      items: [
-        {name: true, prefix: ContentIdPrefix.slow},
-        {name: true},
-        {name: true, prefix: ContentIdPrefix.slow},
-      ],
+      items: [requireExplicitContent(800), 32, requireExplicitContent(804)],
     },
     {
-      label: "2 Documents (1 nodrop)",
-      tooltip: "Two documents, one of them is not allowed to be dropped.",
+      label: "Droppable/Not Droppable",
+      tooltip: "Two contents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],
-      items: [
-        {name: false},
-        {name: true, undroppable: true},
-      ],
+      items: [31, 32],
     },
   ];
   const allDroppables = [
@@ -270,10 +217,7 @@ const initDragExamples = () => {
   ];
 
   const generateUriPath = (item) => {
-    if (typeof item.id === "number") {
-      return `content/${item.id}`;
-    }
-    return createContentUriPath(item);
+    return `content/${item}`;
   };
 
   const generateUriPathCsv = (items) => {
