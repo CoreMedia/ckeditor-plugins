@@ -13,6 +13,7 @@ export default class ClipboardEventData extends DomEventData {
   content: DocumentFragment;
   targetRanges: Array<ViewRange>;
   method: "paste" | "drop";
+  preventDefault(): void;
 }
 
 /**

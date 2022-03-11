@@ -91,6 +91,8 @@ export default class ContentClipboard extends Plugin {
     if (!cmDataUris) {
       return;
     }
+
+    data.preventDefault();
     const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
     if (containsDisplayableContents) {
       data.dataTransfer.dropEffect = "copy";
@@ -155,6 +157,10 @@ export default class ContentClipboard extends Plugin {
     // do not trigger the default inputTransformation event listener to avoid rendering the text of the input data
     evt.stop();
 
+    const containsOnlyDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
+    if (!containsOnlyDisplayableContents) {
+      return;
+    }
     // we might run into trouble during complex input scenarios
     // e.g. a drop with multiple items will result in different requests that might differ in response time
     // an undo/redo when only a part of the input has already been resolved, will cause an unsynced state between content and placeholder elements
