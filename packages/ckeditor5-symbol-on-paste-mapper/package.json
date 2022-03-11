@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
-  "version": "4.0.1-rc.2",
+  "version": "4.0.1-rc.3",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -42,11 +42,11 @@
     "@ckeditor/ckeditor5-theme-lark": "^32.0.0",
     "@ckeditor/ckeditor5-ui": "^32.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-clipboard": "4.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-core": "4.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "4.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "4.0.1-rc.2",
-    "@coremedia/types-ckeditor__ckeditor5-utils": "4.0.1-rc.2",
+    "@coremedia/types-ckeditor__ckeditor5-clipboard": "4.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-core": "4.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "4.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-paste-from-office": "4.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-utils": "4.0.1-rc.3",
     "@types/jest": "^27.0.2",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
@@ -72,7 +72,7 @@
     "@ckeditor/ckeditor5-ui": "^32.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "4.0.1-rc.2"
+    "@coremedia/ckeditor5-logging": "4.0.1-rc.3"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
