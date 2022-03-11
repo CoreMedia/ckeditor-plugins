@@ -16,7 +16,7 @@ const EXAMPLE_URL = "https://example.org/";
  * can be displayed.
  * @type {string}
  */
-const INLINE_IMG = "content/42#properties.data";
+const INLINE_IMG = "content/900#properties.data";
 const LINK_TEXT = "Link";
 const UNSET = "—";
 const parser = new DOMParser();
