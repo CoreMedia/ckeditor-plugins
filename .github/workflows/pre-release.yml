@@ -1,4 +1,4 @@
-name: Feature Branches
+name: Pre-Release
 
 on:
   # On push on a PR we want to trigger a normal build without publishing anything
@@ -75,4 +75,3 @@ jobs:
           pnpm install --production
           echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall -- --registry=https://npm.coremedia.io --no-git-checks --tag pullrequest
-
