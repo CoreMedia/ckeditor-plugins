@@ -1,6 +1,7 @@
-name: Releases
-# ensure that for one branch the workflow is not running multiple times at the same time as we will get trouble
-# with the versions and pushes.
+name: Release
+
+# concurrency: Ensures that for one branch the workflow is not running multiple
+# times at the same time as we will get trouble with the versions and pushes.
 concurrency: ci-${{ github.ref }}
 on:
   push:
