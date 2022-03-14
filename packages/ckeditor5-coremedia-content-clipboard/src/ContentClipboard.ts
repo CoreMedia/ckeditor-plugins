@@ -26,7 +26,7 @@ import CommandUtils from "./CommandUtils";
  */
 export default class ContentClipboard extends Plugin {
   static #CONTENT_CLIPBOARD_PLUGIN_NAME = "ContentClipboardPlugin";
-  static #LOGGER: Logger = LoggerProvider.getLogger(ContentClipboard.#CONTENT_CLIPBOARD_PLUGIN_NAME);
+  static #logger: Logger = LoggerProvider.getLogger(ContentClipboard.#CONTENT_CLIPBOARD_PLUGIN_NAME);
 
   static get pluginName(): string {
     return ContentClipboard.#CONTENT_CLIPBOARD_PLUGIN_NAME;
@@ -219,11 +219,12 @@ export default class ContentClipboard extends Plugin {
    * @param contentDropData - content drop data
    */
   static #addContentDropMarker(editor: Editor, markerRange: ModelRange, contentDropData: ContentDropData): void {
+    const logger = ContentClipboard.#logger;
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
       contentDropData.dropContext.dropId,
       contentDropData.itemContext.itemIndex
     );
-    ContentClipboard.#LOGGER.debug("Adding content-drop marker", markerName, contentDropData);
+    logger.debug("Adding content-drop marker", markerName, contentDropData);
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.addMarker(markerName, { usingOperation: true, range: markerRange });
       ContentDropDataCache.storeData(markerName, contentDropData);
