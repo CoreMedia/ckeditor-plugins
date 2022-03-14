@@ -43,8 +43,6 @@ export default class ContentClipboard extends Plugin {
 
   /**
    * Adds a listener to `dragover` and `clipboardInput` to process possibly dragged contents.
-   *
-   * @private
    */
   #initEventListeners(): void {
     const editor = this.editor;
@@ -234,9 +232,8 @@ export default class ContentClipboard extends Plugin {
   /**
    * Evaluate target range. `null` if no range could be determined.
    *
-   * @param editor current editor instance
-   * @param data event data
-   * @private
+   * @param editor - current editor instance
+   * @param data - event data
    */
   static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): ModelRange | null {
     if (!data.targetRanges) {
