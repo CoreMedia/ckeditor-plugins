@@ -52,7 +52,8 @@ export default class ContentClipboard extends Plugin {
 
     // Processing pasted or dropped content.
     this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
-    this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
+    // Priority `low` required, so that we can control the `dropEffect`.
+    this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
     if (clipboardPipelinePlugin) {
       this.listenTo(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
     }
@@ -92,11 +93,14 @@ export default class ContentClipboard extends Plugin {
 
     data.preventDefault();
     const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
+    // Applying dropEffects required to be run *after* CKEditor's normal listeners,
+    // which almost always enforce `move` as dropEffect. We also must not `stop`
+    // processing (at least at normal priority), as otherwise the range indicator
+    // won't be updated.
     if (containsDisplayableContents) {
       data.dataTransfer.dropEffect = "copy";
     } else {
       data.dataTransfer.dropEffect = "none";
-      evt.stop();
     }
   }
 
