@@ -21,7 +21,7 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import CommandUtils from "./CommandUtils";
 
 /**
- * This plugin takes care of linkable Studio contents which are dropped directly into the editor
+ * This plugin takes care of linkable Studio contents, which are dropped directly into the editor
  * or pasted from the clipboard.
  */
 export default class ContentClipboard extends Plugin {
@@ -74,7 +74,7 @@ export default class ContentClipboard extends Plugin {
 
   /**
    * Drag-over handler to control drop-effect icons, which is, to forbid for
-   * any content-sets containing types which are not allowed to be linked.
+   * any content-sets containing types, which are not allowed to be linked.
    *
    * @param evt - event information
    * @param data - clipboard data
@@ -100,6 +100,7 @@ export default class ContentClipboard extends Plugin {
     }
   }
 
+  // noinspection JSUnusedLocalSymbols
   /**
    * Handler for the clipboardInput event. This function gets called when
    * an item is dropped or pasted into the editor.
@@ -116,7 +117,7 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    // this is kinda hacky, we need to set content in order to skip the default clipboardInputHandler
+    // this is kinda hacky, we need to set content to skip the default clipboardInputHandler
     // by setting content, we mark this event as "already resolved"
     data.content = new ViewDocumentFragment();
   };
@@ -160,8 +161,8 @@ export default class ContentClipboard extends Plugin {
       return;
     }
     // we might run into trouble during complex input scenarios
-    // e.g. a drop with multiple items will result in different requests that might differ in response time
-    // an undo/redo when only a part of the input has already been resolved, will cause an unsynced state between content and placeholder elements
+    // e.g., a drop with multiple items will result in different requests that might differ in response time
+    // an undo/redo when only a part of the input has already been resolved, will cause an unsynchronized state between content and placeholder elements
     // the best solution for this seems to disable the undo command before the input and enable it again afterwards
     CommandUtils.disableCommand(editor, "undo");
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
@@ -170,10 +171,10 @@ export default class ContentClipboard extends Plugin {
 
     const batch = editor.model.createBatch();
 
-    // save the attribues of the current selection to apply them later on the input element
+    // save the attributes of the current selection to apply them later on the input element
     const attributes = Array.from(editor.model.document.selection.getAttributes());
 
-    // use the current timestamp as the dropId to have increasing drop indexes. needed to keep the order when muliple inputs happen simultaneously
+    // use the current timestamp as the dropId to have increasing drop indexes. needed to keep the order when multiple inputs happen simultaneously
     // on the same position
     const dropId = Date.now();
     const multipleItemsDropped = cmDataUris.length > 1;
@@ -252,7 +253,7 @@ export default class ContentClipboard extends Plugin {
    * Creates a ContentDropData object.
    *
    * @param dropContext - dropContext
-   * @param contentUri - the contenturi of the input item
+   * @param contentUri - the content-URI of the input item
    * @param isInline - determines whether the item will be displayed inline or as new paragraph
    * @param itemIndex - the position of the item inside the drop
    * @returns ContentDropData
