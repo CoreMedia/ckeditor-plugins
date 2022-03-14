@@ -62,7 +62,7 @@ export default class ContentClipboard extends Plugin {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-    const clipboardPipelinePlugin = editor.plugins.get("ClipboardPipeline");
+    const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
 
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
