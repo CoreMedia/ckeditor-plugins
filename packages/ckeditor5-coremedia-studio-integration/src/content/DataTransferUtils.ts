@@ -63,9 +63,7 @@ export const isHasDataTransfer = (value: unknown): value is HasDataTransfer => {
  * @returns `DataTransfer` compatible object; `undefined` if it is not
  * compatible (especially, if it is `null`).
  */
-export const toDataTransfer = (
-  dataTransferOrHolder: HasData | HasNullableDataTransfer | null
-): HasData | undefined => {
+export const toDataTransfer = (dataTransferOrHolder: HasData | HasNullableDataTransfer | null): HasData | undefined => {
   if (isHasDataTransfer(dataTransferOrHolder)) {
     return dataTransferOrHolder.dataTransfer;
   }
