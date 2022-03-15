@@ -29,6 +29,8 @@ export const isBeanReference = (value: unknown): value is BeanReference => {
  * Type-Guard, if the given value is an array of references to some CoreMedia
  * CMS Bean.
  *
+ * Note, that an empty array is considered an array of BeanReferences, too.
+ *
  * @param value - object to validate
  */
 export const isBeanReferences = (value: unknown): value is BeanReference[] => {
@@ -36,27 +38,6 @@ export const isBeanReferences = (value: unknown): value is BeanReference[] => {
     return false;
   }
   return value.every(isBeanReference);
-};
-
-/**
- * Parses a bean-reference given as JSON-string.
- *
- * @param value - JSON string to parse
- * @returns bean reference; `undefined` if string does not represent a valid bean-reference
- */
-export const parseBeanReference = (value: string): BeanReference | undefined => {
-  if (!value) {
-    return undefined;
-  }
-  try {
-    const parsed = JSON.parse(value);
-    if (isBeanReference(parsed)) {
-      return parsed;
-    }
-  } catch (e) {
-    logger.debug("Failed parsing bean reference from value.", { value }, e);
-  }
-  return undefined;
 };
 
 /**
