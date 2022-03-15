@@ -11,3 +11,9 @@
  * alternative display should be added as part of CMS-19873.
  */
 export const ROOT_NAME = "<root>";
+
+/**
+ * Data-Type used in instances of `DataTransfer` objects to denote a list of
+ * contained URI-Paths.
+ */
+export const URI_LIST_DATA = "cm/uri-list";

@@ -4,13 +4,12 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import createContentLinkView from "./ContentLinkViewFactory";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import {
-  extractContentCkeModelUri,
-  extractContentUriPaths,
-  receiveUriPathsFromDragDropService,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
+  CONTENT_CKE_MODEL_URI_REGEXP,
+  requireContentCkeModelUris,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
+import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkView from "./ContentLinkView";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
@@ -18,6 +17,7 @@ import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import ContentLinkFormViewPropertyAccessor from "./ContentLinkFormViewPropertyAccessor";
+import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -165,15 +165,17 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
-    const contentUriPaths: Array<string> | null = extractContentUriPaths(dragEvent);
-    if (contentUriPaths) {
+    const contentUriPaths: string[] | undefined = getUriListValues(dragEvent);
+
+    if (!!contentUriPaths) {
       DragDropAsyncSupport.resetCache();
     }
-    const contentCkeModelUris = extractContentCkeModelUri(dragEvent);
+
+    const contentCkeModelUris = requireContentCkeModelUris(contentUriPaths ?? []);
     dragEvent.preventDefault();
 
     //handle content links
-    if (contentCkeModelUris !== null && contentCkeModelUris.length > 0) {
+    if (contentCkeModelUris.length > 0) {
       if (contentCkeModelUris.length !== 1) {
         this.#logger.warn(
           "Received multiple contents on drop. Should not happen as the drag over should prevent drop of multiple contents."

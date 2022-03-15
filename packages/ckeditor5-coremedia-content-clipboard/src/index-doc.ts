@@ -23,9 +23,6 @@ export { default as ContentToModelRegistry } from "./ContentToModelRegistry";
 
 export * from "./converters";
 
-export * from "./CoreMediaClipboardUtils";
-export { default as CoreMediaClipboardUtils } from "./CoreMediaClipboardUtils";
-
 export * from "./createmodelfunctions";
 
 export * from "./DataToModelMechanism";

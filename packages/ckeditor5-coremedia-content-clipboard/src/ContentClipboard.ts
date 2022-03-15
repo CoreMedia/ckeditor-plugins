@@ -11,7 +11,6 @@ import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
-import CoreMediaClipboardUtils from "./CoreMediaClipboardUtils";
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
@@ -19,10 +18,11 @@ import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import CommandUtils from "./CommandUtils";
+import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 
 /**
- * This plugin takes care of linkable Studio contents, which are dropped directly into the editor
- * or pasted from the clipboard.
+ * This plugin takes care of linkable Studio contents, which are dropped
+ * directly into the editor or pasted from the clipboard.
  */
 export default class ContentClipboard extends Plugin {
   static #CONTENT_CLIPBOARD_PLUGIN_NAME = "ContentClipboardPlugin";
@@ -117,7 +117,7 @@ export default class ContentClipboard extends Plugin {
    */
   #clipboardInputHandler = (evt: EventInfo, data: ClipboardEventData): void => {
     // return if this is no CoreMedia content drop
-    if (!CoreMediaClipboardUtils.isContentInput(data)) {
+    if ((getUriListValues(data) ?? []).length === 0) {
       return;
     }
 
@@ -137,8 +137,9 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   #inputTransformation = (evt: EventInfo, data: ClipboardEventData): void => {
+    const cmDataUris: string[] = getUriListValues(data) ?? [];
     // return if this is no CoreMedia content drop
-    if (!CoreMediaClipboardUtils.isContentInput(data)) {
+    if (cmDataUris.length === 0) {
       return;
     }
 
@@ -147,13 +148,6 @@ export default class ContentClipboard extends Plugin {
     // return if no range has been set (usually indicated by a blue cursor during the drag)
     const targetRange = ContentClipboard.#evaluateTargetRange(editor, data);
     if (!targetRange) {
-      return;
-    }
-
-    const cmDataUris: string[] | null = CoreMediaClipboardUtils.extractContentUris(data);
-
-    // return if this input does not contain content items
-    if (!cmDataUris || cmDataUris.length === 0) {
       return;
     }
 
