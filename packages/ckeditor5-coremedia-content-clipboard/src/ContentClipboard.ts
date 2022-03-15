@@ -98,7 +98,7 @@ export default class ContentClipboard extends Plugin {
     // processing (at least at normal priority), as otherwise the range indicator
     // won't be updated.
     if (containsDisplayableContents) {
-      data.dataTransfer.dropEffect = "copy";
+      data.dataTransfer.dropEffect = "link";
     } else {
       data.dataTransfer.dropEffect = "none";
     }

@@ -253,7 +253,7 @@ class ContentLinkFormViewExtension extends Plugin {
       linkable: isLinkable,
     });
 
-    dragEvent.dataTransfer.dropEffect = isLinkable ? "copy" : "none";
+    dragEvent.dataTransfer.dropEffect = isLinkable ? "link" : "none";
   }
 }
 
