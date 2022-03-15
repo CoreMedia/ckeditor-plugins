@@ -83,7 +83,7 @@ export default class DragDropAsyncSupport {
 
   /**
    * Validates, if all URI-Paths represent displayable contents.
-   * A content is displayable if there is a represenation to visualize in ckeditor (e.g. as a link or as an embedded image).
+   * A content is displayable if there is a representation to visualize in ckeditor (e.g., as a link or as an embedded image).
    *
    * This method triggers asynchronous updates, so that repetitive calls
    * for the same URI-Paths may result in different responses. A positive
@@ -91,7 +91,7 @@ export default class DragDropAsyncSupport {
    * and positive.
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
-   * @param uriPaths
+   * @param uriPaths - URI paths to validate
    */
   static containsDisplayableContents(uriPaths: string[]): boolean {
     for (const uriPath of uriPaths) {
