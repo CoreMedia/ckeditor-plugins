@@ -95,6 +95,18 @@ const initDragExamples = (editor) => {
       classes: ["linkable", "type-document"],
       items: [requireExplicitContent(608)],
     },
+    {
+      label: "Image",
+      tooltip: "Content with some red image blob.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(900)],
+    },
+    {
+      label: "Only Embeddable",
+      tooltip: "An image document which may only be embedded but not linked.",
+      classes: ["embeddable", "type-document"],
+      items: [requireExplicitContent(922)],
+    },
   ];
 
   const singleDroppables = [
@@ -185,6 +197,12 @@ const initDragExamples = (editor) => {
       tooltip: "Two contents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],
       items: [31, 32],
+    },
+    {
+      label: "Three Images",
+      tooltip: "Three images, which are valid to drop.",
+      classes: ["linkable", "embeddable", "type-collection"],
+      items: [requireExplicitContent(900), requireExplicitContent(902), requireExplicitContent(904)],
     },
   ];
   const allDroppables = [

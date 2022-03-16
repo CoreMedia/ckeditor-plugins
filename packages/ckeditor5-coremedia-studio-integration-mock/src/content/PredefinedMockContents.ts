@@ -147,24 +147,28 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 900,
     name: "Red Image",
+    linkable: true,
     embeddable: true,
     blob: PNG_RED_240x135,
   },
   {
     id: 902,
     name: "Green Image",
+    linkable: true,
     embeddable: true,
     blob: PNG_GREEN_240x135,
   },
   {
     id: 904,
     name: "Blue Image",
+    linkable: true,
     embeddable: true,
     blob: PNG_BLUE_240x135,
   },
   {
     id: 906,
     name: "Red, Green, Blue Updated Image",
+    linkable: true,
     embeddable: true,
     blob: [PNG_RED_240x135, PNG_GREEN_240x135, PNG_BLUE_240x135],
   },
@@ -172,6 +176,7 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
     id: 908,
     initialDelayMs: 10000,
     name: "Slow Loading Red Image Content",
+    linkable: true,
     embeddable: true,
     blob: PNG_RED_240x135,
   },
@@ -179,6 +184,7 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
     id: 910,
     name: "Unset Image Blob",
     readable: true,
+    linkable: true,
     embeddable: true,
     blob: [null],
   },
@@ -186,6 +192,7 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
     id: 912,
     name: "Sometimes Unset Image Blob",
     readable: true,
+    linkable: true,
     embeddable: true,
     changeDelayMs: 5000,
     blob: [PNG_RED_240x135, null],
@@ -193,6 +200,7 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 914,
     name: "Unreadable Image",
+    linkable: true,
     readable: false,
     embeddable: true,
     blob: PNG_RED_240x135,
@@ -200,6 +208,7 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 916,
     name: "Sometimes Unreadable Image",
+    linkable: true,
     readable: [false, true],
     embeddable: true,
     blob: PNG_RED_240x135,
@@ -210,6 +219,7 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
     comment: "Frequently Edited Image",
     readable: [false, true, true, true, true],
     editing: [false, false, true, false, false, false, false],
+    linkable: true,
     embeddable: true,
     changeDelayMs: 3000,
     blob: [PNG_RED_240x135, PNG_GREEN_240x135, null, PNG_BLUE_240x135, null],
@@ -217,9 +227,20 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 920,
     name: "Frequently Updated Small Image",
+    linkable: true,
     embeddable: true,
     changeDelayMs: 2000,
     blob: [PNG_RED_10x10, PNG_GREEN_10x10, PNG_BLUE_10x10, PNG_GREEN_10x10],
+  },
+  {
+    id: 922,
+    name: "Green Image (not linkable)",
+    // In standard setups in Blueprint CoreMedia Studio, image documents are
+    // always also linkable. But in theory, this is not required, so that we
+    // produce an artificial state here.
+    linkable: false,
+    embeddable: true,
+    blob: PNG_GREEN_240x135,
   },
 ];
 
