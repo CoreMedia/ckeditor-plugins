@@ -7,7 +7,7 @@ import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardM
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry from "./ContentToModelRegistry";
-import { createLinkModelFunctionCreator } from "./createmodelfunctions";
+import { createImageModelFunctionCreator, createLinkModelFunctionCreator } from "./createmodelfunctions";
 
 export default class ContentClipboardEditing extends Plugin {
   static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
@@ -48,6 +48,6 @@ export default class ContentClipboardEditing extends Plugin {
 
   static #setupContentToModelRegistry() {
     ContentToModelRegistry.registerToModelFunction("link", createLinkModelFunctionCreator);
-    ContentToModelRegistry.registerToModelFunction("image", createLinkModelFunctionCreator);
+    ContentToModelRegistry.registerToModelFunction("image", createImageModelFunctionCreator);
   }
 }
