@@ -144,6 +144,12 @@ const initDragExamples = (editor) => {
       classes: ["linkable", "type-collection"],
       items: [30, requireExplicitContent(104), 32],
     },
+    {
+      label: "Image (unreadable)",
+      tooltip: "Image document cannot be read.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(914)],
+    },
   ];
   const singleUndroppables = [
     {
