@@ -164,10 +164,10 @@ export default class ContentClipboard extends Plugin {
     // rendering the text of the input data.
     evt.stop();
 
-    const containsOnlyDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
-    if (!containsOnlyDisplayableContents) {
+    if (!DragDropAsyncSupport.containsDisplayableContents(cmDataUris)) {
       return;
     }
+
     // We might run into trouble during complex input scenarios.
     // A drop with multiple items will result in different requests that might
     // differ in response time, for example.
