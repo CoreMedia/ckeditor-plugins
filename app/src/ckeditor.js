@@ -7,6 +7,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
+import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
@@ -69,6 +72,9 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Essentials,
     Heading,
     Highlight,
+    ImageInline,
+    ImageStyle,
+    ImageToolbar,
     Indent,
     Italic,
     AutoLink,
@@ -145,7 +151,18 @@ ClassicEditor.create(document.querySelector('.editor'), {
         className: "align--justify",
       },
     ],
-  }, heading: {
+  },
+  // TODO: This is just for demonstration purpose, to have some toolbar for the images, yet. Further adaptions expected.
+  image: {
+    styles: {
+      options: [ 'alignLeft', 'alignRight' ]
+    },
+    toolbar: [
+      'imageStyle:alignLeft',
+      'imageStyle:alignRight',
+    ],
+  },
+  heading: {
     options: [
       {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
       {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
