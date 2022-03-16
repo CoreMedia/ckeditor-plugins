@@ -99,6 +99,8 @@ class MockContentPlugin extends Plugin {
     id: 1,
     name: "",
     type: "folder",
+    // For testing with empty names, we ensure, that this folder is linkable.
+    linkable: true,
   };
   /**
    * Default timings to apply.

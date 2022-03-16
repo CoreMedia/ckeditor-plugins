@@ -43,6 +43,7 @@ const initDragExamples = (editor) => {
     id: 40,
     type: "undroppable",
     name: "Undroppable Content Type",
+    linkable: false,
   });
 
   const singleDroppableDocuments = [
