@@ -13,18 +13,31 @@ interface RichtextConfigurationService extends ServiceObject {
    * Signals, if the entity described by the given URI path (typically
    * a content) can be linked to from within Richtext.
    *
-   * @param uripath - URI path of the entity such as `content/42`
+   * @param uriPath - URI path of the entity such as `content/42`
    */
-  hasLinkableType(uripath: UriPath): Promise<boolean>;
+  hasLinkableType(uriPath: UriPath): Promise<boolean>;
 
   /**
    * Signals, if the entity described by the given URI path (typically
    * a content) can be embedded into Richtext. This typically applies to
    * contents holding media blobs such as images.
    *
-   * @param uripath - URI path of the entity such as `content/42`
+   * @param uriPath - URI path of the entity such as `content/42`
    */
-  isEmbeddableType(uripath: UriPath): Promise<boolean>;
+  isEmbeddableType(uriPath: UriPath): Promise<boolean>;
+
+  /**
+   * Resolves the URI-Path to a Blob-Property reference, which then
+   * may be used as `xlink:href` for `<img>` elements.
+   *
+   * Producers have to transform the given URI-path like `content/42`
+   * to some blob-property reference, such as `content/42#properties.data`.
+   * In general, the method is only called, when a content has previously
+   * been identified as being _embeddable_.
+   *
+   * @param uriPath - URI path of the entity such as `content/42`
+   */
+  resolveBlobPropertyReference(uriPath: UriPath): Promise<string>;
 }
 
 export default RichtextConfigurationService;

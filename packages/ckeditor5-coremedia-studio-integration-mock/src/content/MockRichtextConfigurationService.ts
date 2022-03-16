@@ -1,6 +1,6 @@
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   readonly #contentProvider: MockContentProvider;
@@ -23,7 +23,7 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
    *
    * @param uriPath - an uripath in the format 'content/content-id'
    */
-  hasLinkableType(uriPath: string): Promise<boolean> {
+  hasLinkableType(uriPath: UriPath): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (isUriPath(uriPath)) {
         const mockContent = this.#contentProvider(uriPath);
@@ -33,13 +33,28 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     });
   }
 
-  isEmbeddableType(uriPath: string): Promise<boolean> {
+  isEmbeddableType(uriPath: UriPath): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (isUriPath(uriPath)) {
         const mockContent = this.#contentProvider(uriPath);
         return resolve(mockContent.embeddable);
       }
       resolve(false);
+    });
+  }
+
+  resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (isUriPath(uriPath)) {
+        const mockContent = this.#contentProvider(uriPath);
+        if (!mockContent.embeddable) {
+          // The "should not happen" code.
+          return reject(`Content '${uriPath}' is not embeddable.`);
+        }
+        // The actual property does not matter in this mock scenario.
+        return resolve(`${uriPath}#properties.data`);
+      }
+      reject(`'${uriPath}' is not a valid URI-path.`);
     });
   }
 
