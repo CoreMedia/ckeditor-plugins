@@ -113,12 +113,6 @@ const initDragExamples = (editor) => {
       classes: ["linkable", "embeddable", "type-document"],
       items: [requireExplicitContent(906)],
     },
-    {
-      label: "Image (slow)",
-      tooltip: "An image, which takes some time to load.",
-      classes: ["linkable", "embeddable", "type-document"],
-      items: [requireExplicitContent(908)],
-    },
   ];
 
   const singleDroppables = [
@@ -177,6 +171,12 @@ const initDragExamples = (editor) => {
       tooltip: "Content takes more than just minutes to load.",
       classes: ["linkable", "type-document"],
       items: [requireExplicitContent(802)],
+    },
+    {
+      label: "Image (slow)",
+      tooltip: "An image, which takes some time to load.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(908)],
     },
   ];
   const pairedExamples = [
