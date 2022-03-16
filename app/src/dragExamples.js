@@ -107,6 +107,18 @@ const initDragExamples = (editor) => {
       classes: ["embeddable", "type-document"],
       items: [requireExplicitContent(922)],
     },
+    {
+      label: "Image (edit)",
+      tooltip: "An image, whose blob frequently changes.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(906)],
+    },
+    {
+      label: "Image (slow)",
+      tooltip: "An image, which takes some time to load.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(908)],
+    },
   ];
 
   const singleDroppables = [
