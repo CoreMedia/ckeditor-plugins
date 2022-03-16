@@ -124,12 +124,9 @@ export default class DragDropAsyncSupport {
    * @param uriPaths - URI paths to validate
    */
   static containsDisplayableContents(uriPaths: string[]): boolean {
-    for (const uriPath of uriPaths) {
-      if (!DragDropAsyncSupport.isLinkable(uriPath) && !DragDropAsyncSupport.isEmbeddable(uriPath)) {
-        return false;
-      }
-    }
-    return true;
+    const isLinkable = DragDropAsyncSupport.isLinkable;
+    const isEmbeddable = DragDropAsyncSupport.isEmbeddable;
+    return uriPaths.every((uriPath) => isLinkable(uriPath) || isEmbeddable(uriPath));
   }
 
   static #loadFromCache(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
@@ -220,12 +217,8 @@ export default class DragDropAsyncSupport {
    * eternally.**
    */
   static containsOnlyLinkables(uriPaths: string[]): boolean {
-    for (const uriPath of uriPaths) {
-      if (!DragDropAsyncSupport.isLinkable(uriPath)) {
-        return false;
-      }
-    }
-    return true;
+    const isLinkable = DragDropAsyncSupport.isLinkable;
+    return uriPaths.every((uriPath) => isLinkable(uriPath));
   }
 
   /**
