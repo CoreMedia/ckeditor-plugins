@@ -42,11 +42,35 @@
     "xml-formatter": "^2.5.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-arrow-functions": "^7.16.0",
+    "@babel/plugin-transform-computed-properties": "^7.16.0",
+    "@babel/plugin-transform-for-of": "^7.16.0",
+    "@babel/plugin-transform-parameters": "^7.16.3",
+    "@babel/plugin-transform-shorthand-properties": "^7.16.0",
+    "@babel/plugin-transform-typescript": "^7.16.1",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
     "@ckeditor/ckeditor5-dev-utils": "^28.1.0",
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^28.1.0",
     "@ckeditor/ckeditor5-inspector": "^3.1.0",
+    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^16.11.26",
+    "babel-jest": "^27.3.1",
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.5.1",
+    "expect-playwright": "^0.8.0",
+    "express": "^4.17.3",
+    "get-port": "^6.1.2",
+    "jest": "^27.3.1",
+    "jest-playwright-preset": "^1.7.0",
+    "jest-transform-stub": "^2.0.0",
+    "playwright": "^1.20.2",
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
     "raw-loader": "^4.0.2",
@@ -61,6 +85,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "webpack --mode production --stats-error-details",
+    "ui-test": "jest --config playwright/jest.config.js",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }
