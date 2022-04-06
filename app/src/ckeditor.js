@@ -27,6 +27,11 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
+import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
+import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
+import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
+import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
+
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
 
@@ -34,14 +39,11 @@ import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
 import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
+  COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
-import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
-import {
-  COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY
-} from "@coremedia/ckeditor5-coremedia-richtext-support/CoreMediaRichTextSupportConfig";
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
@@ -69,6 +71,9 @@ ClassicEditor.create(document.querySelector('.editor'), {
     BlockQuote,
     Bold,
     CodeBlock,
+    ContentLinks,
+    ContentClipboard,
+    ContentImagePlugin,
     Essentials,
     Heading,
     Highlight,
@@ -79,8 +84,8 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Italic,
     AutoLink,
     Link,
+    LinkTarget,
     CoreMediaStudioEssentials,
-    GeneralRichTextSupport,
     List,
     Paragraph,
     PasteFromOffice,
@@ -152,16 +157,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
       },
     ],
   },
-  // TODO: This is just for demonstration purpose, to have some toolbar for the images, yet. Further adaptions expected.
-  image: {
-    styles: {
-      options: [ 'alignLeft', 'alignRight' ]
-    },
-    toolbar: [
-      'imageStyle:alignLeft',
-      'imageStyle:alignRight',
-    ],
-  },
+
   heading: {
     options: [
       {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
