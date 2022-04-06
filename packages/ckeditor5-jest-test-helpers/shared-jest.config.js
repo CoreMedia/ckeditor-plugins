@@ -1,4 +1,4 @@
-const babelConfig = require("../../shared-babel.config.js");
+const babelConfig = require("@coremedia-internal/ckeditor5-babel-config");
 
 module.exports = {
   // https://github.com/facebook/jest/issues/8896

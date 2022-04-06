@@ -5,6 +5,7 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
+    "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@babel/core": "^7.16.0",
     "babel-jest": "^27.3.1",
     "enhanced-resolve": "^5.8.3",
