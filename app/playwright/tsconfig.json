@@ -5,9 +5,15 @@
     "types": [
       "jest",
       "playwright",
+      "wait-for-expect",
       "jest-playwright-preset",
       "expect-playwright",
       "node"
-    ]
+    ],
+    "paths": {
+      "@ckeditor/ckeditor5-editor-classic/*": [
+        "../../types/ckeditor__ckeditor5-editor-classic/*"
+      ]
+    }
   }
 }

@@ -1,11 +1,11 @@
 import path from "path";
 import { start } from "./utils";
 
-let shutdown: () => Promise<void>;
-let baseUrl: URL;
-let indexUrl: URL;
-
 describe("HelloWorld", () => {
+  let shutdown: () => Promise<void>;
+  let baseUrl: URL;
+  let indexUrl: URL;
+
   beforeAll(async () => {
     const startResult = await start(path.resolve("../"));
     shutdown = startResult.shutdown;
