@@ -3,4 +3,9 @@ module.exports = {
   launchOptions: {
     headless: false
   },
+  contextOptions: {
+    recordVideo: {
+      dir: 'videos/'
+    }
+  }
 };
