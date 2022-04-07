@@ -3,6 +3,6 @@ const jestConfig = require("@coremedia-internal/ckeditor5-jest-test-helpers/shar
 module.exports = {
   ...jestConfig,
   preset: "jest-playwright-preset",
-  testEnvironment: "node",
+  testEnvironment: "./CustomPlaywrightEnvironment.js",
   resolver: undefined, // for some reasons the custom resolved in the shared config does not work here...
 };

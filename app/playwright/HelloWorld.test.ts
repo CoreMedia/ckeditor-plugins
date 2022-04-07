@@ -1,24 +1,31 @@
 import path from "path";
-import { Page } from "playwright";
 import { start } from "./utils";
 
 let shutdown: () => Promise<void>;
-let page: Page;
 let baseUrl: URL;
+let indexUrl: URL;
 
-beforeAll(async () => {
-  const startResult = await start(path.resolve("../"));
-  shutdown = startResult.shutdown;
-  page = startResult.page;
-  baseUrl = startResult.baseUrl;
-});
+describe("HelloWorld", () => {
+  beforeAll(async () => {
+    const startResult = await start(path.resolve("../"));
+    shutdown = startResult.shutdown;
+    baseUrl = startResult.baseUrl;
+    indexUrl = startResult.indexUrl;
+  });
 
-test('should have the correct lang attribute', async () => {
-  await page.goto(new URL("/sample/index.html", baseUrl).toString());
-  const lang = await page.$eval(".ck-editor", (el) => el.getAttribute("lang"));
-  expect(lang).toBe("en");
-});
+  it("should have the correct lang attribute", async () => {
+    await page.goto(indexUrl.toString());
+    const lang = await page.$eval(".ck-editor", (el) => el.getAttribute("lang"));
+    expect(lang).toBe("en");
+  });
 
-afterAll(async () => {
-  shutdown && await shutdown();
+  it.skip("should have the correct lang attribute (failure provoked)", async () => {
+    await page.goto(indexUrl.toString());
+    const lang = await page.$eval(".ck-editor", (el) => el.getAttribute("lang"));
+    expect(lang).toBe("de");
+  });
+
+  afterAll(async () => {
+    shutdown && await shutdown();
+  });
 });

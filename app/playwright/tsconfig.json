@@ -4,6 +4,9 @@
     "esModuleInterop": true,
     "types": [
       "jest",
+      "playwright",
+      "jest-playwright-preset",
+      "expect-playwright",
       "node"
     ]
   }
