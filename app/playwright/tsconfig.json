@@ -13,6 +13,9 @@
     "paths": {
       "@ckeditor/ckeditor5-editor-classic/*": [
         "../../types/ckeditor__ckeditor5-editor-classic/*"
+      ],
+      "@ckeditor/ckeditor5-core/*": [
+        "../../types/ckeditor__ckeditor5-core/*"
       ]
     }
   }

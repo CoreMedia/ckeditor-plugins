@@ -1,5 +1,6 @@
-import { JSHandle, Page, Response } from "playwright";
+import { ElementHandle, JSHandle, Locator, Page, Response } from "playwright";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
 
 export class ClassicEditorWrapper {
   readonly #page: Page;
@@ -10,6 +11,9 @@ export class ClassicEditorWrapper {
     this.#url = url;
   }
 
+  /**
+   * Go to CKEditor example app page.
+   */
   async goto(): Promise<null | Response> {
     return this.#page.goto(this.#url.toString());
   }
@@ -50,14 +54,76 @@ export class ClassicEditorWrapper {
     });
   }
 
+  /**
+   * Retrieves the data from current CKEditor instance.
+   */
   async getData(): Promise<string> {
     const editor = await this.editor();
     return editor.evaluate((editor) => editor.getData());
   }
 
+  /**
+   * Sets CKEditor data to the given value.
+   * @param value value to set
+   */
   async setData(value: string): Promise<void> {
     const editor = await this.editor();
     return editor.evaluate((editor, value) => editor.setData(value), value);
+  }
+
+  /**
+   * Clears data in CKEditor.
+   */
+  async clear(): Promise<void> {
+    return this.setData("");
+  }
+
+  /**
+   * Focuses the editor.
+   */
+  async focus(): Promise<void> {
+    const editor = await this.editor();
+    return editor.evaluate((editor) => editor.focus());
+  }
+
+  /**
+   * Handle to UI of CKEditor.
+   */
+  async ui(): Promise<JSHandle<EditorUI>> {
+    const editor = await this.editor();
+    return editor.evaluateHandle((editor) => editor.ui);
+  }
+
+  /**
+   * Handle to ContentEditable of CKEditor.
+   */
+  async editable(): Promise<ElementHandle<HTMLElement>> {
+    const ui = await this.ui();
+    return ui.evaluateHandle((ui): Promise<HTMLElement> => new Promise<HTMLElement>((resolve, reject) => {
+      const element = ui.getEditableElement();
+      if (!element) {
+        return reject(`Cannot find editable element. Available: ${[...ui.getEditableElementsNames()].join(", ")}`);
+      }
+      resolve(element);
+    }));
+  }
+
+  /**
+   * Provides locator object for the content editable.
+   */
+  editableLocator(): Locator {
+    return page.locator(`div.ck[contenteditable="true"]`);
+  }
+
+  /**
+   * Provides access to HTML of editable. Defaults to `innerHTML`, but `outerHTML`
+   * may be selected as well.
+   *
+   * @param location - what type of HTML to retrieve
+   */
+  async editableHtml(location: keyof Pick<HTMLElement, "innerHTML" | "outerHTML"> = "innerHTML"): Promise<string> {
+    const editable = await this.editable();
+    return editable.evaluate((editable, location) => editable[location], location);
   }
 
   /**
