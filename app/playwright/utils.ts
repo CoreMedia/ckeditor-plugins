@@ -1,5 +1,6 @@
 import express from "express";
 import { chromium, Page } from "playwright";
+import { AddressInfo } from "net";
 
 interface StartResult {
   shutdown: () => Promise<void>;
@@ -7,11 +8,19 @@ interface StartResult {
   baseUrl: URL;
 }
 
+const isAddressInfo = (value: unknown): value is AddressInfo => {
+  return typeof value === "object" && value !== null && value.hasOwnProperty("port");
+}
+
 export async function start(appDir: string): Promise<StartResult> {
   const app = express();
   app.use("/", express.static(appDir));
-  const port = 3001; // TODO: use a helper package (or own function to generate a random port)
-  const server = app.listen(port);
+  const server = app.listen(0);
+  const address = server.address();
+  if (!isAddressInfo(address)) {
+    throw new Error(`Incompatible address information. Expected AddressInfo but is: ${address} (${typeof address})`);
+  }
+  const port = address.port
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
