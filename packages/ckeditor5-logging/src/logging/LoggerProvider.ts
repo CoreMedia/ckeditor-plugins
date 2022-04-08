@@ -127,7 +127,9 @@ export default class LoggerProvider {
     if (key === undefined) {
       return false;
     }
-    if (window.location && window.location.hash) {
+    // If JSDOM is missing, we may not even have `window`. This may occur in
+    // test contexts, so that it is safe to just don't log.
+    if (typeof window !== "undefined" && window.location && window.location.hash) {
       // substring: Remove hash
       const hash: string = window.location.hash.substring(1);
       const hashParams: string[] = hash.split(/[&]/);
