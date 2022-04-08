@@ -1,6 +1,10 @@
 import { ElementHandle, JSHandle, Locator, Page, Response } from "playwright";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
+// @ts-ignore: TODO - TSConfig seems to be broken
+import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+// @ts-ignore: TODO - TSConfig seems to be broken
+import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
 
 export class ClassicEditorWrapper {
   readonly #page: Page;
@@ -52,6 +56,25 @@ export class ClassicEditorWrapper {
 
       throw new Error("window.editor does not provide a CKEditor instance.");
     });
+  }
+
+  async mockContent(): Promise<JSHandle<MockContentPlugin>> {
+    const editor = await this.editor();
+    const pluginName = MockContentPlugin.pluginName;
+    return editor.evaluateHandle(async (editor, pluginName): Promise<MockContentPlugin> => {
+      const plugin = editor.plugins.get(pluginName);
+      if (!plugin) {
+        throw new Error(`Required plugin not found: ${pluginName}`)
+      }
+      return plugin;
+    }, pluginName);
+  }
+
+  async addContents(...data: MockContentConfig[]): Promise<void> {
+    const mockContent = await this.mockContent();
+    await mockContent.evaluate((plugin, data) => {
+      plugin.addContents(...data);
+    }, data);
   }
 
   /**
@@ -112,6 +135,9 @@ export class ClassicEditorWrapper {
    * Provides locator object for the content editable.
    */
   editableLocator(): Locator {
+    // This is actually the "poor man's solution". Instead, for more robust
+    // approach, we should rather find a way to build a locator object
+    // from `editor.ui.getEditableElement()`. Or decide not to use locators.
     return page.locator(`div.ck[contenteditable="true"]`);
   }
 

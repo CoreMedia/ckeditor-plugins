@@ -2,6 +2,8 @@ import { start } from "./utils";
 import path from "path";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import waitForExpect from "wait-for-expect";
+import { Images } from "./Images";
+import { RichTexts } from "./RichTexts";
 
 /**
  * Demonstrate how to access the `ClassicEditor` instance, which we store
@@ -84,9 +86,9 @@ describe("HelloClassicEditor", () => {
     expect(await wrapper.editableHtml("outerHTML")).toContain("ck-content");
   });
 
-  it("should provide convenience access to remote content editable DOM (as locator)", () => {
-    expect(wrapper.editableLocator()).toHaveText("CoreMedia");
-    expect(wrapper.editableLocator().locator("h1")).toHaveText("CoreMedia");
+  it("should provide convenience access to remote content editable DOM (as locator)", async () => {
+    await expect(wrapper.editableLocator()).toHaveText("CoreMedia");
+    await expect(wrapper.editableLocator().locator("h1")).toHaveText("CoreMedia");
   });
 
   it("should be able to type to content editable", async () => {
@@ -110,6 +112,21 @@ describe("HelloClassicEditor", () => {
     await wrapper.focus();
     await wrapper.editableLocator().type(text);
     expect(await wrapper.getData()).toContain(textInData);
+  });
+
+  it("should display image", async () => {
+    const images = new Images(page);
+    const base64ImageUrl = await images.rectangle();
+    const imageId = 42;
+    await wrapper.addContents({
+      id: imageId,
+      name: "Some Image",
+      blob: base64ImageUrl,
+    });
+    const richtext = RichTexts.richtext(RichTexts.p([RichTexts.img(42)]));
+    await wrapper.setData(richtext);
+    const locator = wrapper.editableLocator().locator("img");
+    await expect(locator).toMatchAttribute("src", base64ImageUrl);
   });
 
   afterAll(async () => {

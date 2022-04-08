@@ -35,6 +35,7 @@
     "@ckeditor/ckeditor5-utils": "32.0.0",
     "@coremedia/ckeditor5-coremedia-richtext": "4.0.1-rc.5",
     "@coremedia/ckeditor5-coremedia-richtext-support": "4.0.1-rc.5",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "4.0.1-rc.5",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "4.0.1-rc.5",
     "@coremedia/ckeditor5-studio-essentials": "4.0.1-rc.5",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "4.0.1-rc.5",

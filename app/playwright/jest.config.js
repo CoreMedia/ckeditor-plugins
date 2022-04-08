@@ -4,5 +4,5 @@ module.exports = {
   ...jestConfig,
   preset: "jest-playwright-preset",
   testEnvironment: "./CustomPlaywrightEnvironment.js",
-  resolver: undefined, // for some reasons the custom resolved in the shared config does not work here...
+  setupFilesAfterEnv: ["expect-playwright"],
 };

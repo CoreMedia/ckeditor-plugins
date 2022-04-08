@@ -1,6 +1,8 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../dist",
     "esModuleInterop": true,
     "types": [
       "jest",
@@ -16,7 +18,28 @@
       ],
       "@ckeditor/ckeditor5-core/*": [
         "../../types/ckeditor__ckeditor5-core/*"
+      ],
+      "@coremedia/ckeditor5-logging/*": [
+        "../../packages/ckeditor5-logging/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
+        "../../packages/ckeditor5-coremedia-studio-integration/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
+        "../../packages/ckeditor5-coremedia-studio-integration/src/*"
       ]
     }
-  }
+  },
+  "references": [
+    {
+      "path": "../../packages/ckeditor5-logging/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-studio-integration/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-studio-integration-mock/src"
+    }
+  ],
+  "extends": "../../tsconfig.json"
 }
