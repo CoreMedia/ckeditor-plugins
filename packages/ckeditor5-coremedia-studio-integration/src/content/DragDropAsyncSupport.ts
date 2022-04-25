@@ -73,7 +73,7 @@ export default class DragDropAsyncSupport {
    * reference a BLOB-property of the given content.
    *
    * The implementation contains a workaround for the HTML 5 drag and drop
-   * behaviour that drag over is always synchronous, but we have to call an
+   * behavior that drag over is always synchronous, but we have to call an
    * asynchronous service.
    *
    * When the method is called the first time for a URI-Path, the method calls
@@ -126,7 +126,19 @@ export default class DragDropAsyncSupport {
   static containsDisplayableContents(uriPaths: string[]): boolean {
     const isLinkable = DragDropAsyncSupport.isLinkable;
     const isEmbeddable = DragDropAsyncSupport.isEmbeddable;
-    return uriPaths.every((uriPath) => isLinkable(uriPath) || isEmbeddable(uriPath));
+    return uriPaths.every((uriPath) => {
+      // It's important to execute both functions and not just return (isLinkable() || isEmbedabble()) here.
+      // Doing so would not guarantee to call isEmbeddable() each time this function is called.
+      // (It would directly return if isLinkable() is true and not compute the second part of the OR statement.)
+      //
+      // This is important because the initial call of isLinkable() or isEmbeddable() might return a wrong value.
+      // On each consecutive call, the correct value will be returned from the cache.
+      // And thats why we should make sure isLinkable() and isEmbeddable() are called at least once while dragging
+      // to have the correct (cached) result when calling these functions when we finally drop.
+      const linkableValue = isLinkable(uriPath);
+      const embeddableValue = isEmbeddable(uriPath);
+      return linkableValue || embeddableValue;
+    });
   }
 
   static #loadFromCache(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {

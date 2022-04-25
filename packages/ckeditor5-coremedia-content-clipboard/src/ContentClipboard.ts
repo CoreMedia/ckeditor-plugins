@@ -200,6 +200,8 @@ export default class ContentClipboard extends Plugin {
 
     // Add a drop marker for each item.
     cmDataUris.forEach((contentUri: string, index: number): void => {
+      // This only works because we are in a drag context and the result has already been computed and cached.
+      // Calling this function without a present cache entry for the given contentUri will probably result in a wrong value.
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const contentDropData = ContentClipboard.#createContentDropData(
         dropContext,
