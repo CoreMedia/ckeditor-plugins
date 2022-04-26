@@ -23,8 +23,6 @@ export { default as ContentToModelRegistry } from "./ContentToModelRegistry";
 
 export * from "./converters";
 
-export * from "./createmodelfunctions";
-
 export * from "./DataToModelMechanism";
 export { default as DataToModelMechanism } from "./DataToModelMechanism";
 

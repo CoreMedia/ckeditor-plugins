@@ -10,10 +10,8 @@ import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import RichtextConfigurationService
-  from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
-import RichtextConfigurationServiceDescriptor
-  from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
+import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 
 export default class DataToModelMechanism {
@@ -53,6 +51,15 @@ export default class DataToModelMechanism {
     const toModelFunction = ContentToModelRegistry.getToModelFunction(type, contentUri);
     if (toModelFunction) {
       return toModelFunction;
+    }
+
+    // In case no "toModel" function for the given type is provided, the lookup will
+    // try to render the contentUri as a link to the referenced content.
+    // This should work if the ContentLinks plugin is enabled.
+    // If this is not the case and no matching function is registered, an error will be thrown.
+    const fallbackFunction = ContentToModelRegistry.getToModelFunction("link", contentUri);
+    if (fallbackFunction) {
+      return fallbackFunction;
     }
 
     return new Promise<CreateModelFunction>((resolve, reject) => {

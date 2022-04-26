@@ -6,8 +6,7 @@ import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downca
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";
-import ContentToModelRegistry from "./ContentToModelRegistry";
-import { createImageModelFunctionCreator, createLinkModelFunctionCreator } from "./createmodelfunctions";
+import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 
 export default class ContentClipboardEditing extends Plugin {
   static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
@@ -26,7 +25,6 @@ export default class ContentClipboardEditing extends Plugin {
 
   init(): Promise<void> | null {
     this.#defineConverters();
-    ContentClipboardEditing.#setupContentToModelRegistry();
     return null;
   }
 
@@ -46,8 +44,16 @@ export default class ContentClipboardEditing extends Plugin {
     });
   }
 
-  static #setupContentToModelRegistry() {
-    ContentToModelRegistry.registerToModelFunction("link", createLinkModelFunctionCreator);
-    ContentToModelRegistry.registerToModelFunction("image", createImageModelFunctionCreator);
+  /**
+   * This function is used to register "toModel" functions in other plugins.
+   * These functions are held in the {@link ContentToModelRegistry} and are used to insert dropped content into the editor.
+   *
+   * Please note: Types that are not supported by the {@link DataToModelMechanism} will fallback to the default "toModel" function or throw an error.
+   *
+   * @param type - the identifier for the dropped content (e.g. "link" or "image")
+   * @param createModelFunctionCreator - a function that expects a contentUri as parameter and returns a promise of type CreateModelFunction
+   */
+  registerToModelFunction(type: string, createModelFunctionCreator: CreateModelFunctionCreator): void {
+    ContentToModelRegistry.registerToModelFunction(type, createModelFunctionCreator);
   }
 }
