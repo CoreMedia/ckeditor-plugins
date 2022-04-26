@@ -8,12 +8,18 @@ The `ckeditor5-coremedia-images` package is responsible for showing and editing 
 ### Plugins:
 
 * ContentImageEditingPlugin
+* ContentImageClipboardPlugin
+* ModelBoundSubscriptionPlugin
 
-#### ContentImageEditingPlugin
+**ContentImageEditingPlugin**
 
 Plugin to support images from CoreMedia RichText.
 
-#### ModelBoundSubscriptionPlugin
+**ContentImageClipboardPlugin**
+
+Plugin that registers a creator function to support images in the **ContentClipboard** plugin.
+
+**ModelBoundSubscriptionPlugin**
 
 Plugin to register active subscriptions for cleanup.
 
