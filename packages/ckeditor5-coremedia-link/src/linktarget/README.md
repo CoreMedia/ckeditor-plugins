@@ -46,8 +46,6 @@ ClassicEditor
   .catch(...);
 ```
 
-**Essentials Plugin:** This Plugin is part of CoreMedia Essentials Plugin.
-
 ## Configuration
 
 [Configuration]: <#configuration>

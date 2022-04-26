@@ -12,6 +12,7 @@ import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-stu
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import "../lang/contentlink";
+import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -21,7 +22,13 @@ export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Link, ContentLinkActionsViewExtension, ContentLinkFormViewExtension, ContentLinkCommandHook];
+    return [
+      Link,
+      ContentLinkActionsViewExtension,
+      ContentLinkFormViewExtension,
+      ContentLinkCommandHook,
+      ContentLinkClipboardPlugin,
+    ];
   }
 
   init(): Promise<void> | null {
