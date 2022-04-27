@@ -9,5 +9,5 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 export default class MediaEmbedElementSupport extends Plugin {
   static get requires(): Array<new(editor: Editor) => Plugin>;
 
-  init(): null;
+  init(): void;
 }

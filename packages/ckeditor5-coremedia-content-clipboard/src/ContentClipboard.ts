@@ -36,9 +36,8 @@ export default class ContentClipboard extends Plugin {
     return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoEditing];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     this.#initEventListeners();
-    return null;
   }
 
   /**

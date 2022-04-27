@@ -31,7 +31,7 @@ export default class ContentLinks extends Plugin {
     ];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const editor = this.editor;
     const linkCommand = <LinkCommand>editor.commands.get("link");
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
@@ -50,7 +50,6 @@ export default class ContentLinks extends Plugin {
       },
       this
     );
-    return null;
   }
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {

@@ -23,7 +23,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     return [LinkUI];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = ContentLinkActionsViewExtension.#logger;
     const startTimestamp = performance.now();
 
@@ -66,8 +66,6 @@ class ContentLinkActionsViewExtension extends Plugin {
     logger.debug(
       `Initialized ${ContentLinkActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
-
-    return null;
   }
 
   #extendView(linkUI: LinkUI): void {

@@ -163,7 +163,7 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Registers the post-fixer.
    */
-  init(): null {
+  init(): void {
     const logger = ContentLinkCommandHook.#logger;
     const startTimestamp = performance.now();
     const pluginName = ContentLinkCommandHook.pluginName;
@@ -180,7 +180,7 @@ class ContentLinkCommandHook extends Plugin {
       logger.warn(
         `Required command named '${LINK_COMMAND_NAME}' is not available. Content-Links names won't be replaced in text.`
       );
-      return null;
+      return;
     }
 
     /*
@@ -198,8 +198,6 @@ class ContentLinkCommandHook extends Plugin {
     document.registerPostFixer((writer) => this.#postFix(writer));
 
     logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 
   /**

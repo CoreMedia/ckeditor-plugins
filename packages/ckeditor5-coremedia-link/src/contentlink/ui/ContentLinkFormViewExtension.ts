@@ -34,7 +34,7 @@ class ContentLinkFormViewExtension extends Plugin {
     return [LinkUI, ContentLinkCommandHook];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = ContentLinkFormViewExtension.#logger;
     const startTimestamp = performance.now();
 
@@ -86,8 +86,6 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug(
       `Initialized ${ContentLinkFormViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
-
-    return null;
   }
 
   /**

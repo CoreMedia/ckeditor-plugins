@@ -29,5 +29,5 @@ export default class DualContentModelElementSupport extends Plugin {
   /**
    * @inheritDoc
    */
-  init(): null;
+  init(): void;
 }

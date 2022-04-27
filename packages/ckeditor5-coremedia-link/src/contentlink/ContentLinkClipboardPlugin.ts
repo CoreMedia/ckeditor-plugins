@@ -46,7 +46,7 @@ export default class ContentLinkClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentLinkClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkClipboardPlugin.pluginName);
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const pluginName = ContentLinkClipboardPlugin.pluginName;
     const contentClipboardEditingName = ContentClipboardEditing.pluginName;
     const logger = ContentLinkClipboardPlugin.#logger;
@@ -65,7 +65,5 @@ export default class ContentLinkClipboardPlugin extends Plugin {
     }
 
     logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 }

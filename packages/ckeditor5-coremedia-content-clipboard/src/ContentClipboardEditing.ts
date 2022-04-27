@@ -23,9 +23,8 @@ export default class ContentClipboardEditing extends Plugin {
     return [];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     this.#defineConverters();
-    return null;
   }
 
   #defineConverters(): void {

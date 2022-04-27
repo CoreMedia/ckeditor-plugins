@@ -40,7 +40,7 @@ export default class LinkTargetModelView extends Plugin {
    * Defines `linkTarget` model-attribute, which is represented on downcast
    * (to data and for editing) as `target` attribute.
    */
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = LinkTargetModelView.#logger;
     const startTimestamp = performance.now();
 
@@ -83,8 +83,6 @@ export default class LinkTargetModelView extends Plugin {
     editor.commands.add("linkTarget", new LinkTargetCommand(editor));
 
     logger.debug(`Initialized ${LinkTargetModelView.pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 }
 /**

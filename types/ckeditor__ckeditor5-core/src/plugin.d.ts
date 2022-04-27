@@ -18,7 +18,7 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 
   destroy?(): null | Promise<any>;
 
-  init?(): null | Promise<T>;
+  init?(): void | Promise<T>;
 
   listenTo(
     emitter: Emitter,

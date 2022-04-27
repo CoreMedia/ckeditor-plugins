@@ -43,7 +43,7 @@ export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const pluginName = ContentImageClipboardPlugin.pluginName;
     const contentClipboardEditingName = ContentClipboardEditing.pluginName;
     const logger = ContentImageClipboardPlugin.#logger;
@@ -62,7 +62,5 @@ export default class ContentImageClipboardPlugin extends Plugin {
     }
 
     logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 }

@@ -130,7 +130,7 @@ class MockContentPlugin extends Plugin {
   /**
    * Initialize Plugin.
    */
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = MockContentPlugin.#logger;
     const pluginName = MockContentPlugin.pluginName;
 
@@ -142,8 +142,6 @@ class MockContentPlugin extends Plugin {
     this.#initDefaults();
 
     logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 
   /**
