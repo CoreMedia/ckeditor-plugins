@@ -13,7 +13,7 @@ const emptyRichText = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"/>`;
 const wrapContent = (content: string): string =>
   `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}">${content}</div>`;
 
-describe("CoreMediaRichTextConfig: Text Fixtures", () => {
+describe.skip("CoreMediaRichTextConfig: Text Fixtures", () => {
   const textEntityFixtures: DataProcessingTestCase[] = flatten(
     [
       "&nbsp;",
