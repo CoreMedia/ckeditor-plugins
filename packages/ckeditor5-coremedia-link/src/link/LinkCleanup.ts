@@ -67,10 +67,9 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     logger.debug(`Initialized ${LinkCleanup.pluginName} within ${performance.now() - startTimestamp} ms.`);
   }
 
-  destroy(): null {
+  destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
-    return null;
   }
 
   registerDependentAttribute(modelAttributeName: string): void {

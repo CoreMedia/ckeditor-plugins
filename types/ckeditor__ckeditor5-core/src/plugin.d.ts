@@ -16,7 +16,7 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 
   delegate(...events: string[]): EmitterMixinDelegateChain;
 
-  destroy?(): null | Promise<any>;
+  destroy?(): void;
 
   init?(): void | Promise<T>;
 

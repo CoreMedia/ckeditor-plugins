@@ -203,15 +203,13 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Clears resources, i.e., the name cache.
    */
-  destroy(): null {
+  destroy(): void {
     const editor = this.editor;
     const linkCommand = editor.commands.get(LINK_COMMAND_NAME);
 
     linkCommand?.off("execute", this.#clearTrackingData);
 
     this.#trackingData.clear();
-
-    return null;
   }
 
   /**

@@ -44,9 +44,8 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   /**
    * Makes sure to unsubscribe all subscriptions when the editor is destroyed.
    */
-  destroy(): null {
+  destroy(): void {
     ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribeAll();
-    return null;
   }
 
   /**

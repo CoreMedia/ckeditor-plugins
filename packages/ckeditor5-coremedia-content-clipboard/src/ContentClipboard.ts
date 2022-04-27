@@ -59,7 +59,7 @@ export default class ContentClipboard extends Plugin {
     }
   }
 
-  destroy(): null {
+  destroy(): void {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
@@ -70,7 +70,6 @@ export default class ContentClipboard extends Plugin {
     if (clipboardPipelinePlugin) {
       this.stopListening(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
     }
-    return null;
   }
 
   /**

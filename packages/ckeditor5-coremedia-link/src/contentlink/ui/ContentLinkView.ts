@@ -196,11 +196,10 @@ export default class ContentLinkView extends ButtonView {
       });
   }
 
-  destroy(): Promise<never> | null {
+  destroy(): void {
     // Prevent possible asynchronous events from re-triggering subscription.
     this.#acceptSubscriptions = false;
     this.#endContentSubscription();
     super.destroy();
-    return null;
   }
 }
