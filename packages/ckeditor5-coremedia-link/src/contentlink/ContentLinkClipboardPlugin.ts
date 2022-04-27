@@ -8,12 +8,11 @@ import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-
-type CreateModelFunction = (writer: Writer) => Node;
-type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
-interface ContentClipboardEditingPlugin extends Plugin {
-  registerToModelFunction: (type: string, createModelFunctionCreator: CreateModelFunctionCreator) => void;
-}
+import {
+  CreateModelFunction,
+  CreateModelFunctionCreator,
+} from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
+import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 
@@ -42,17 +41,15 @@ export default class ContentLinkClipboardPlugin extends Plugin {
 
   init(): Promise<void> | null {
     const pluginName = ContentLinkClipboardPlugin.pluginName;
-    const contentClipboardEditingName = "ContentClipboardEditing";
+    const contentClipboardEditingName = ContentClipboardEditing.pluginName;
     const logger = ContentLinkClipboardPlugin.#logger;
     const startTimestamp = performance.now();
 
     logger.info(`Initializing ${pluginName}...`);
 
     const editor = this.editor;
-    if (editor.plugins.has(contentClipboardEditingName)) {
-      const contentClipboardEditingPlugin: ContentClipboardEditingPlugin = <ContentClipboardEditingPlugin>(
-        editor.plugins.get(contentClipboardEditingName)
-      );
+    if (editor.plugins.has(ContentClipboardEditing)) {
+      const contentClipboardEditingPlugin: ContentClipboardEditing = editor.plugins.get(ContentClipboardEditing);
       contentClipboardEditingPlugin.registerToModelFunction("link", createLinkModelFunctionCreator);
     } else {
       logger.info(

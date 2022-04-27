@@ -16,12 +16,16 @@
       "@ckeditor/ckeditor5-engine/*": ["../../../types/ckeditor__ckeditor5-engine/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
+      "@coremedia/ckeditor5-coremedia-content-clipboard/*": ["../../ckeditor5-coremedia-content-clipboard/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
     }
   },
   "references": [
     {
       "path": "../../ckeditor5-logging/src"
+    },
+    {
+      "path": "../../ckeditor5-coremedia-content-clipboard/src"
     },
     {
       "path": "../../ckeditor5-coremedia-studio-integration/src"
