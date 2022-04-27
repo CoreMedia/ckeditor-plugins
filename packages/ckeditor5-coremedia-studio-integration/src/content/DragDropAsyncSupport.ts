@@ -127,14 +127,20 @@ export default class DragDropAsyncSupport {
     const isLinkable = DragDropAsyncSupport.isLinkable;
     const isEmbeddable = DragDropAsyncSupport.isEmbeddable;
     return uriPaths.every((uriPath) => {
-      // It's important to execute both functions and not just return (isLinkable() || isEmbedabble()) here.
-      // Doing so would not guarantee to call isEmbeddable() each time this function is called.
-      // (It would directly return if isLinkable() is true and not compute the second part of the OR statement.)
+      // Do not use short-circuit (McCarthy) evaluation!
       //
-      // This is important because the initial call of isLinkable() or isEmbeddable() might return a wrong value.
-      // On each consecutive call, the correct value will be returned from the cache.
-      // And thats why we should make sure isLinkable() and isEmbeddable() are called at least once while dragging
-      // to have the correct (cached) result when calling these functions when we finally drop.
+      // It is important invoking both functions, isLinkable and isEmbeddable,
+      // so that caching mechanism to deal with synchronous drag and drop
+      // vs. asynchronous responses works correctly. Thus, a short-circuit
+      // evaluation like (isLinkable() || isEmbedabble()) must not be used.
+      //
+      // Invoking both is crucial, because the initial call of isLinkable() or
+      // isEmbeddable() might return a wrong value due to asynchronous behavior.
+      //
+      // On each consecutive call, the correct value will be returned from the
+      // cache. That is why we should make sure isLinkable() and isEmbeddable()
+      // are called at least once while dragging to have the correct (cached)
+      // result when calling these functions when we finally drop.
       const linkableValue = isLinkable(uriPath);
       const embeddableValue = isEmbeddable(uriPath);
       return linkableValue || embeddableValue;
