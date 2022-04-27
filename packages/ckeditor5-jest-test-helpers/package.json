@@ -7,8 +7,9 @@
   "dependencies": {
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@babel/core": "^7.16.0",
-    "babel-jest": "^27.3.1",
+    "babel-jest": "^28.0.2",
     "enhanced-resolve": "^5.8.3",
+    "jest-environment-jsdom": "^28.0.2",
     "jest-transform-stub": "^2.0.0",
     "tslib": "^2.3.0"
   },

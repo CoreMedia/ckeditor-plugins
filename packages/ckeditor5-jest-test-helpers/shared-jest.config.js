@@ -3,7 +3,7 @@ const babelConfig = require("@coremedia-internal/ckeditor5-babel-config");
 module.exports = {
   // https://github.com/facebook/jest/issues/8896
   // passWithNoTests: true,
-  testEnvironment: 'jsdom',
+  testEnvironment: "jsdom",
   // Don't detect utility files as tests, i.e. require `test` in name.
   testMatch: [
     "**/?(*.)+(test).[jt]s?(x)",
