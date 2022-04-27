@@ -21,5 +21,4 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/.pnpm/(?!@ckeditor|lodash-es|ckeditor5|rxjs)"
   ],
-  resolver: require.resolve("./enhanced-resolve.js"),
 };

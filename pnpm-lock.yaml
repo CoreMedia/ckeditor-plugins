@@ -684,7 +684,6 @@ importers:
       '@babel/core': ^7.16.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       babel-jest: ^28.0.2
-      enhanced-resolve: ^5.8.3
       jest-environment-jsdom: ^28.0.2
       jest-transform-stub: ^2.0.0
       tslib: ^2.3.0
@@ -692,7 +691,6 @@ importers:
       '@babel/core': 7.16.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       babel-jest: 28.0.2_@babel+core@7.16.0
-      enhanced-resolve: 5.8.3
       jest-environment-jsdom: 28.0.2
       jest-transform-stub: 2.0.0
       tslib: 2.3.1
