@@ -709,7 +709,6 @@ importers:
       eslint-plugin-prettier: ^4.0.0
       eslint-plugin-tsdoc: ^0.2.14
       jest: ^28.0.2
-      jest-config: ^28.0.2
       prettier: ^2.4.1
       rimraf: ^3.0.2
       typescript: ^4.4.4
@@ -731,7 +730,6 @@ importers:
       eslint-plugin-prettier: 4.0.0_4a0e5de4f03066b3e41f4686fcb460f0
       eslint-plugin-tsdoc: 0.2.14
       jest: 28.0.2
-      jest-config: 28.0.2
       prettier: 2.4.1
       rimraf: 3.0.2
       typescript: 4.4.4
