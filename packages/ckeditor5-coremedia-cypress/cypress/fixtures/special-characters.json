@@ -1,0 +1,14 @@
+[
+  {
+    "input": "<",
+    "expectedData": "&lt;"
+  },
+  {
+    "input": ">",
+    "expectedData": "&gt;"
+  },
+  {
+    "input": "&",
+    "expectedData": "&amp;"
+  }
+]

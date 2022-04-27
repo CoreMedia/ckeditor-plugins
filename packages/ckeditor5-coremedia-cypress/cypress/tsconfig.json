@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "sourceMap": true,
+    "outDir": "../__itests__-out",
+    "paths": {
+      "@ckeditor/ckeditor5-core/*": [
+        "../../../types/ckeditor__ckeditor5-core/*"
+      ],
+      "@ckeditor/ckeditor5-editor-classic/*": [
+        "../../../types/ckeditor__ckeditor5-editor-classic/*"
+      ],
+      "@ckeditor/ckeditor5-engine/*": [
+        "../../../types/ckeditor__ckeditor5-engine/*"
+      ],
+      "@ckeditor/ckeditor5-utils/*": [
+        "../../../types/ckeditor__ckeditor5-utils/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
+        "../../ckeditor5-coremedia-studio-integration-mock/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
+        "../../ckeditor5-coremedia-studio-integration/src/*"
+      ]
+    }
+  },
+  "types": [
+    "cypress",
+    "cypress-wait-until",
+    "@percy/cypress",
+    "cypress-plugin-snapshots",
+    "@4tw/cypress-drag-drop"
+  ],
+  "references": [
+    {
+      "path": "../../ckeditor5-coremedia-studio-integration-mock/src"
+    },
+    {
+      "path": "../../ckeditor5-coremedia-studio-integration/src"
+    }
+  ],
+  "extends": "../../../tsconfig.json"
+}

@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="https://c.cksource.com/a/1/logos/ckeditor5.png">
-  <link rel="stylesheet" type="text/css" href="styles.css">
-  <link rel="stylesheet" type="text/css" href="coremedia.css">
+  <link rel="stylesheet" type="text/css" href="sample/styles.css">
+  <link rel="stylesheet" type="text/css" href="sample/coremedia.css">
 </head>
 <body data-editor="ClassicEditor" data-collaboration="false">
 
@@ -97,14 +97,14 @@
       console.log("Default locale. No need to load further resources.");
     } else {
       const scriptEl = document.createElement("script");
-      scriptEl.src = "../dist/translations/" + locale + ".js";
+      scriptEl.src = "./dist/translations/" + locale + ".js";
       document.body.appendChild(scriptEl);
     }
   };
 
   const loadCKEditor = (locale) => {
     const scriptEl = document.createElement("script");
-    scriptEl.src = "../dist/ckeditor.js";
+    scriptEl.src = "./dist/ckeditor.js";
     scriptEl.dataset["lang"] = locale;
     document.body.appendChild(scriptEl);
   };

@@ -1,0 +1,7 @@
+__itests__-out/
+allure-report/
+allure-results/
+playwright-report/
+test-results/
+results.json
+results.xml
