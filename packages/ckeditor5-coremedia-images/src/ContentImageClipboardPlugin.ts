@@ -4,12 +4,13 @@ import Node from "@ckeditor/ckeditor5-engine/src/model/node";
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
-
-type CreateModelFunction = (writer: Writer) => Node;
-type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
-interface ContentClipboardEditingPlugin extends Plugin {
-  registerToModelFunction: (type: string, createModelFunctionCreator: CreateModelFunctionCreator) => void;
-}
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import {
+  CreateModelFunction,
+  CreateModelFunctionCreator,
+} from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
+import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -33,15 +34,27 @@ const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string)
 
 export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageClipboardPlugin";
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
   init(): Promise<void> | null {
+    const pluginName = ContentImageClipboardPlugin.pluginName;
+    const contentClipboardEditingName = ContentClipboardEditing.pluginName;
+    const logger = ContentImageClipboardPlugin.#logger;
+    const startTimestamp = performance.now();
+
+    logger.info(`Initializing ${pluginName}...`);
+
     const editor = this.editor;
-    if (editor.plugins.has("ContentClipboardEditing")) {
-      const contentClipboardEditingPlugin: ContentClipboardEditingPlugin = <ContentClipboardEditingPlugin>(
-        editor.plugins.get("ContentClipboardEditing")
-      );
+    if (editor.plugins.has(ContentClipboardEditing)) {
+      const contentClipboardEditingPlugin: ContentClipboardEditing = editor.plugins.get(ContentClipboardEditing);
       contentClipboardEditingPlugin.registerToModelFunction("image", createImageModelFunctionCreator);
+    } else {
+      logger.info(
+        `Recommended plugin ${contentClipboardEditingName} missing. Creating Content Images from Clipboard not activated.`
+      );
     }
+
+    logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
   }
