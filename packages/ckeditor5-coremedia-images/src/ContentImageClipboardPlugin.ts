@@ -32,6 +32,13 @@ const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string)
   };
 };
 
+/**
+ * This plugin registers a "toModel" function for the ContentClipboardEditing plugin.
+ * Initially, the ContentClipboardEditing plugin does not know how to handle insertions (e.g. via drag and drop)
+ * of contents into the editor. Therefore, each feature has to provide this information to the plugin manually.
+ *
+ * This particular plugin provides a strategy on how to insert contents that should be displayed as a preview image.
+ */
 export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
