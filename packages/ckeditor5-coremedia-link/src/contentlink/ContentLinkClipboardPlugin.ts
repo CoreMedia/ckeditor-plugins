@@ -6,6 +6,8 @@ import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-stud
 import { serviceAgent } from "@coremedia/service-agent";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 type CreateModelFunction = (writer: Writer) => Node;
 type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
@@ -36,15 +38,29 @@ const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, na
 
 export default class ContentLinkClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentLinkClipboardPlugin";
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkClipboardPlugin.pluginName);
 
   init(): Promise<void> | null {
+    const pluginName = ContentLinkClipboardPlugin.pluginName;
+    const contentClipboardEditingName = "ContentClipboardEditing";
+    const logger = ContentLinkClipboardPlugin.#logger;
+    const startTimestamp = performance.now();
+
+    logger.info(`Initializing ${pluginName}...`);
+
     const editor = this.editor;
-    if (editor.plugins.has("ContentClipboardEditing")) {
+    if (editor.plugins.has(contentClipboardEditingName)) {
       const contentClipboardEditingPlugin: ContentClipboardEditingPlugin = <ContentClipboardEditingPlugin>(
-        editor.plugins.get("ContentClipboardEditing")
+        editor.plugins.get(contentClipboardEditingName)
       );
       contentClipboardEditingPlugin.registerToModelFunction("link", createLinkModelFunctionCreator);
+    } else {
+      logger.info(
+        `Recommended plugin ${contentClipboardEditingName} missing. Creating Content Links from Clipboard not activated.`
+      );
     }
+
+    logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
 
     return null;
   }
