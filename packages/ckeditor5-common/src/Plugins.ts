@@ -17,6 +17,17 @@ export const optionalPluginNotFound = (e: Error) => logger.debug("Optional plugi
  * Promise, which either resolves immediately to the given plugin or rejects
  * with `Error` if not available.
  *
+ * If you refer to a required plugin, skipping `catch` for the promise
+ * may be fine. For optional plugins (trigger an action if plugin is available)
+ * you may want to use {@link optionalPluginNotFound} as handler, which just
+ * logs a debug note on a not existing plugin.
+ *
+ * @example
+ * ```typescript
+ * ifPlugin(editor, OptionalPlugin)
+ *   .then(...)
+ *   .catch(optionalPluginNotFound);
+ * ```
  * @param editor - editor to find requested plugin
  * @param key - plugin key
  * @returns `Promise` for requested plugin
