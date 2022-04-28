@@ -27,8 +27,8 @@ const PLUGIN_NAME = "ContentClipboardPlugin";
  * directly into the editor or pasted from the clipboard.
  */
 export default class ContentClipboard extends Plugin {
-  static pluginName = PLUGIN_NAME;
-  static #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
+  static readonly pluginName = PLUGIN_NAME;
+  static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
