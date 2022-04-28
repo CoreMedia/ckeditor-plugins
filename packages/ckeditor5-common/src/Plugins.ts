@@ -6,16 +6,16 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 const logger: Logger = LoggerProvider.getLogger("Plugins");
 
 /**
- * Suggested alternative `catch` handler, if a plugin is not found. It will
- * trigger a debug log statement of the plugin not found.
+ * Suggested alternative `catch` handler, if a plugin is not found.
+ * It will trigger a debug log statement.
  *
  * @param e - error to ignore
  */
 export const optionalPluginNotFound = (e: Error) => logger.debug("Optional plugin not found.", e);
 
 /**
- * Suggested alternative `catch` handler, if a plugin is not found. It will
- * trigger a warning log statement of the plugin not found.
+ * Suggested alternative `catch` handler, if a plugin is not found.
+ * It will trigger a warning log statement.
  *
  * @param e - error to ignore
  */

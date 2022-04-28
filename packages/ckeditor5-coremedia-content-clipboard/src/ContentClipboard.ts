@@ -19,7 +19,7 @@ import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/document
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
-import { disableCommand } from "@coremedia/ckeditor5-common/Commands";
+import { disableCommand, ifCommand, optionalCommandNotFound } from "@coremedia/ckeditor5-common/Commands";
 
 /**
  * This plugin takes care of linkable Studio contents, which are dropped
@@ -172,7 +172,7 @@ export default class ContentClipboard extends Plugin {
     // placeholder elements.
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterwards.
-    disableCommand(editor, "undo");
+    ifCommand(editor, "undo").then(disableCommand).catch(optionalCommandNotFound);
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.setSelection(targetRange);
     });
