@@ -41,7 +41,6 @@ export default class CommandUtils {
    * and setting the return value to false
    *
    * @param evt - eventinfo
-   * @private
    */
   static #forceDisable(evt: EventInfo) {
     evt.return = false;
