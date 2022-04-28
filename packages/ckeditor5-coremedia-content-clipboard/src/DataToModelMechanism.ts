@@ -28,16 +28,19 @@ export default class DataToModelMechanism {
     if (!contentDropData) {
       return;
     }
-    logger.debug(
-      `Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`
-    );
+    logger.debug(`Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`);
 
-    //Fetch Object Type (e.g. document, image, video) Maybe this should be a string which is not related to content type.
-    //I guess it has to be something that is unrelated to content type to make it possible for customers to map there own content types.
-    //As soon as we do it like this it is a breaking change as customers with own doc type models have to provide the mapping.
-    //We could implement a legacy mode where we assume embedded contents are images. The only two attributes to distinguish contents are linkable and embeddable.
-    //Lookup an extender with the object type, call the create model stuff.
-    //take a promise and execute writeItemToModel
+    // Fetch Object Type (e.g. document, image, video) Maybe this should be a
+    // string, which is unrelated to content type. I guess it has to be
+    // something that is unrelated to content type to make it possible
+    // to map custom content types. As soon as we do it like this
+    // it is a breaking change as implementors with own doc type models have to
+    // provide the mapping.
+    //
+    // We could implement a legacy mode where we assume embedded contents are
+    // images. The only two attributes to distinguish contents are linkable and
+    // embeddable. Lookup an extender with the object type, call the `create`
+    // model stuff. take a promise and execute writeItemToModel
     this.#getType(contentDropData.itemContext.contentUri)
       .then((type): Promise<CreateModelFunction> => {
         return this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri);
@@ -71,10 +74,15 @@ export default class DataToModelMechanism {
   }
 
   static #getType(contentUri: string): Promise<string> {
-    // This would probably be replaced with another service agent call which asks studio for the type.
-    // There we can implement a legacy service which works like below and a new one which can be more fine grained.
-    // Do we need embeddable/linkable still at this point if we ask studio for more data?
-    // This point is not extendable here but in studio. If the studio response delivers another type then link or image
+    // This would probably be replaced with another service agent call, which
+    // asks studio for the type.
+    //
+    // There we can implement a legacy service, which works like below and a
+    // new one, which can be more fine-grained.
+    //
+    // Do we need embeddable/linkable still at this point if we ask studio for
+    // more data? This point is not extendable here but in CoreMedia Studio.
+    // If the studio response delivers another type then link or image
     // it would be possible to provide another model rendering.
     return serviceAgent
       .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
@@ -126,9 +134,12 @@ export default class DataToModelMechanism {
       const range = writer.model.insertContent(item, insertPosition);
       DataToModelMechanism.#applyAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
 
-      //Evaluate if a the container element has to be split after the element has been inserted.
-      //Split is necessary if the link is not rendered inline and if we are not at the end of a container/document.
-      //This prevents empty paragraphs after the inserted element.
+      // Evaluate if the container element has to be split after the element has
+      // been inserted.
+      //
+      // Split is necessary if the link is not rendered inline and if we are not
+      // at the end of a container/document. This prevents empty paragraphs
+      // after the inserted element.
       let finalAfterInsertPosition: Position = range.end;
       if (!range.end.isAtEnd && !contentDropData.itemContext.isInline) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
