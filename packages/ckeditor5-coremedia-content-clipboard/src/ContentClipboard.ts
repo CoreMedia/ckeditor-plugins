@@ -18,7 +18,7 @@ import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
-import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
 import { disableCommand } from "@coremedia/ckeditor5-common/Commands";
 
 /**
@@ -55,21 +55,19 @@ export default class ContentClipboard extends Plugin {
     // Priority `low` required, so that we can control the `dropEffect`.
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
 
-    ifPlugin(editor, ClipboardPipeline)
-      .then((p) => this.listenTo(p, "inputTransformation", this.#inputTransformation));
+    ifPlugin(editor, ClipboardPipeline).then((p) => this.listenTo(p, "inputTransformation", this.#inputTransformation));
   }
 
   destroy(): void {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-    const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
 
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
-    if (clipboardPipelinePlugin) {
-      this.stopListening(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
-    }
+    ifPlugin(editor, ClipboardPipeline)
+      .then((p) => this.stopListening(p, "inputTransformation", this.#inputTransformation))
+      .catch(optionalPluginNotFound);
   }
 
   /**

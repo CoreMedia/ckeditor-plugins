@@ -5,10 +5,6 @@
   "keywords": [
     "coremedia"
   ],
-  "dependencies": {
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.1"
-  },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=5.7.1"
@@ -50,6 +46,9 @@
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^32.0.0"
+  },
+  "dependencies": {
+    "@coremedia/ckeditor5-logging": "4.0.1-rc.5"
   },
   "scripts": {
     "clean": "rimraf ./dist",

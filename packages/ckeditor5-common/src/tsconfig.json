@@ -15,8 +15,16 @@
       ],
       "@ckeditor/ckeditor5-utils/*": [
         "../../../types/ckeditor__ckeditor5-utils/*"
+      ],
+      "@coremedia/ckeditor5-logging/*": [
+        "../../ckeditor5-logging/src/*"
       ]
     }
   },
+  "references": [
+    {
+      "path": "../../ckeditor5-logging/src"
+    }
+  ],
   "extends": "../../../tsconfig.json"
 }

@@ -1,5 +1,25 @@
 import Plugin, { PluginInterface } from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+
+const logger: Logger = LoggerProvider.getLogger("Plugins");
+
+/**
+ * Suggested alternative `catch` handler, if a plugin is not found. It will
+ * trigger a debug log statement of the plugin not found.
+ *
+ * @param e - error to ignore
+ */
+export const optionalPluginNotFound = (e: Error) => logger.debug("Optional plugin not found.", e);
+
+/**
+ * Suggested alternative `catch` handler, if a plugin is not found. It will
+ * trigger a warning log statement of the plugin not found.
+ *
+ * @param e - error to ignore
+ */
+export const recommendedPluginNotFound = (e: Error) => logger.warn("Recommended plugin not found.", e);
 
 /**
  * Promise, which either resolves immediately to the given plugin or rejects
@@ -9,12 +29,10 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
  * @param key - plugin key
  * @returns `Promise` for requested plugin
  */
-export const ifPlugin = <T extends Plugin>(editor: Editor, key: PluginInterface<T>): Promise<T> => {
-  return new Promise<T>((resolve, reject) => {
-    if (editor.plugins.has(key)) {
-      resolve(editor.plugins.get(key));
-    } else {
-      reject(new Error(`Plugin ${key.name} unavailable.`));
-    }
-  });
+export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInterface<T>): Promise<T> => {
+  if (editor.plugins.has(key)) {
+    return editor.plugins.get(key);
+  } else {
+    throw new Error(`Plugin ${key.name} unavailable.`);
+  }
 };
