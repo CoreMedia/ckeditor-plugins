@@ -34,9 +34,12 @@
       "@ckeditor/ckeditor5-image/*": [
         "../../../types/ckeditor__ckeditor5-image/*"
       ],
+      "@coremedia/ckeditor5-common/*": [
+        "../../ckeditor5-common/src/*"
+      ],
       "@coremedia/ckeditor5-logging/*": [
         "../../ckeditor5-logging/src/*"
-      ],      
+      ],
       "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
         "../../ckeditor5-coremedia-content-clipboard/src/*"
       ],
@@ -47,8 +50,11 @@
   },
   "references": [
     {
+      "path": "../../ckeditor5-common/src"
+    },
+    {
       "path": "../../ckeditor5-logging/src"
-    },    
+    },
     {
       "path": "../../ckeditor5-coremedia-content-clipboard/src"
     },

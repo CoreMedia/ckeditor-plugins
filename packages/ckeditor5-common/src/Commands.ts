@@ -6,12 +6,35 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 const logger: Logger = LoggerProvider.getLogger("Commands");
 
 /**
+ * Error, which signals that a requested command could not be found.
+ */
+export class CommandNotFoundError extends Error {
+  readonly #name: string;
+
+  constructor(commandName: string, message: string) {
+    super(message);
+    Object.setPrototypeOf(this, CommandNotFoundError.prototype);
+    this.#name = commandName;
+  }
+
+  get name(): string {
+    return this.#name;
+  }
+}
+
+/**
+ * Error handler, if command could not be found.
+ */
+export type CommandNotFoundErrorHandler = (e: CommandNotFoundError) => void;
+
+/**
  * Suggested alternative `catch` handler, if a command is not found.
  * It will trigger a debug log statement.
  *
  * @param e - error to ignore
  */
-export const optionalCommandNotFound = (e: Error) => logger.debug("Optional command not found.", e);
+export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandNotFoundError) =>
+  logger.debug(`Optional command '${e.name}' not found.`, e);
 
 /**
  * Immediately resolving promise to retrieve command. Rejected with `Error`
@@ -19,11 +42,12 @@ export const optionalCommandNotFound = (e: Error) => logger.debug("Optional comm
  *
  * @param editor - editor instance
  * @param commandName - command name to search for
+ * @throws CommandNotFoundError if command could not be found
  */
 export const ifCommand = async (editor: Editor, commandName: string): Promise<Command> => {
   const command = editor.commands.get(commandName);
   if (!command) {
-    throw new Error(`Command '${commandName}' unavailable.`);
+    throw new CommandNotFoundError(commandName, `Command '${commandName}' unavailable.`);
   }
   return command;
 };

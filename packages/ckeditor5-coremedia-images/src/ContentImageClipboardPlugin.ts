@@ -11,6 +11,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
+import { ifPlugin, PluginNotFoundError, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -43,24 +44,21 @@ export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const pluginName = ContentImageClipboardPlugin.pluginName;
-    const contentClipboardEditingName = ContentClipboardEditing.pluginName;
     const logger = ContentImageClipboardPlugin.#logger;
     const startTimestamp = performance.now();
 
-    logger.info(`Initializing ${pluginName}...`);
+    logger.debug(`Initializing ${pluginName}...`);
 
-    const editor = this.editor;
-    if (editor.plugins.has(ContentClipboardEditing)) {
-      const contentClipboardEditingPlugin: ContentClipboardEditing = editor.plugins.get(ContentClipboardEditing);
-      contentClipboardEditingPlugin.registerToModelFunction("image", createImageModelFunctionCreator);
-    } else {
-      logger.info(
-        `Recommended plugin ${contentClipboardEditingName} missing. Creating Content Images from Clipboard not activated.`
-      );
-    }
+    const { editor } = this;
 
-    logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    await ifPlugin(editor, ContentClipboardEditing)
+      .then((plugin) => {
+        plugin.registerToModelFunction("image", createImageModelFunctionCreator);
+      })
+      .catch(recommendPlugin("Creating Content Images from Clipboard not activated.", logger));
+
+    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
   }
 }
