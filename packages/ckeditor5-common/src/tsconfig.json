@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../dist",
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+    "paths": {
+      "@ckeditor/ckeditor5-core/*": [
+        "../../../types/ckeditor__ckeditor5-core/*"
+      ],
+      "@ckeditor/ckeditor5-engine/*": [
+        "../../../types/ckeditor__ckeditor5-engine/*"
+      ],
+      "@ckeditor/ckeditor5-utils/*": [
+        "../../../types/ckeditor__ckeditor5-utils/*"
+      ]
+    }
+  },
+  "extends": "../../../tsconfig.json"
+}

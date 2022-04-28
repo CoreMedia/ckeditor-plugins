@@ -14,12 +14,16 @@
       "@ckeditor/ckeditor5-undo/*": ["../../../types/ckeditor__ckeditor5-undo/*"],
       "@ckeditor/ckeditor5-html-support/*": ["../../../types/ckeditor__ckeditor5-html-support/*"],
       "@ckeditor/ckeditor5-utils/*": ["../../../types/ckeditor__ckeditor5-utils/*"],
+      "@coremedia/ckeditor5-common/*": ["../../ckeditor5-common/src/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
       "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
     }
   },
   "references": [
+    {
+      "path": "../../ckeditor5-common/src"
+    },
     {
       "path": "../../ckeditor5-logging/src"
     },

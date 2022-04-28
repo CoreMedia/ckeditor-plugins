@@ -19,6 +19,7 @@ import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/document
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import CommandUtils from "./CommandUtils";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
+import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
 /**
  * This plugin takes care of linkable Studio contents, which are dropped
@@ -48,15 +49,14 @@ export default class ContentClipboard extends Plugin {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-    const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
 
     // Processing pasted or dropped content.
     this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     // Priority `low` required, so that we can control the `dropEffect`.
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
-    if (clipboardPipelinePlugin) {
-      this.listenTo(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
-    }
+
+    ifPlugin(editor, ClipboardPipeline)
+      .then((p) => this.listenTo(p, "inputTransformation", this.#inputTransformation));
   }
 
   destroy(): void {
