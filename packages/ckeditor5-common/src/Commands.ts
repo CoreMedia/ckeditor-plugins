@@ -11,13 +11,23 @@ const logger: Logger = LoggerProvider.getLogger("Commands");
 export class CommandNotFoundError extends Error {
   readonly #name: string;
 
+  /**
+   * Constructor.
+   *
+   * @param commandName - name of the command, which could not be found
+   * @param message - error message
+   */
   constructor(commandName: string, message: string) {
     super(message);
     Object.setPrototypeOf(this, CommandNotFoundError.prototype);
     this.#name = commandName;
   }
 
-  get name(): string {
+  /**
+   * Provides the name of the command, which was searched
+   * for unsuccessfully.
+   */
+  get commandName(): string {
     return this.#name;
   }
 }
@@ -34,7 +44,7 @@ export type CommandNotFoundErrorHandler = (e: CommandNotFoundError) => void;
  * @param e - error to ignore
  */
 export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandNotFoundError) =>
-  logger.debug(`Optional command '${e.name}' not found.`, e);
+  logger.debug(`Optional command '${e.commandName}' not found.`, e);
 
 /**
  * Immediately resolving promise to retrieve command. Rejected with `Error`

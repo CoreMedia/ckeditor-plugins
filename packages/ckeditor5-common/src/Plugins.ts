@@ -11,18 +11,32 @@ const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 export class PluginNotFoundError extends Error {
   readonly #key: PluginInterface;
 
+  /**
+   * Constructor.
+   *
+   * @param key - key of the plugin, which could not be found
+   * @param message - error message
+   */
   constructor(key: PluginInterface, message: string) {
     super(message);
     Object.setPrototypeOf(this, PluginNotFoundError.prototype);
     this.#key = key;
   }
 
-  get key(): PluginInterface {
+  /**
+   * Provides the key of the plugin, which was searched
+   * for unsuccessfully.
+   */
+  get pluginKey(): PluginInterface {
     return this.#key;
   }
 
-  get name(): string {
-    return this.#key.name;
+  /**
+   * Provides the name of the plugin, which was searched
+   * for unsuccessfully.
+   */
+  get pluginName(): string {
+    return this.pluginKey.name;
   }
 }
 
@@ -38,7 +52,7 @@ export type PluginNotFoundErrorHandler = (e: PluginNotFoundError) => void;
  * @param e - error to ignore
  */
 export const optionalPluginNotFound: PluginNotFoundErrorHandler = (e: PluginNotFoundError) =>
-  pluginsLogger.debug(`Optional plugin '${e.name}' not found.`, e);
+  pluginsLogger.debug(`Optional plugin '${e.pluginName}' not found.`, e);
 
 /**
  * Provides a `catch` handler, if a recommended plugin is not found.
@@ -52,7 +66,7 @@ export const recommendPlugin = (
 ): PluginNotFoundErrorHandler => {
   const messageSuffix = effectIfMissingMessage ? ` ${effectIfMissingMessage}` : "";
   return (e) => {
-    const message = `Recommended plugin '${e.name}' not found.${messageSuffix}`;
+    const message = `Recommended plugin '${e.pluginName}' not found.${messageSuffix}`;
     logger.warn(message);
     logger.debug(`Details on: ${message}`, e);
   };
