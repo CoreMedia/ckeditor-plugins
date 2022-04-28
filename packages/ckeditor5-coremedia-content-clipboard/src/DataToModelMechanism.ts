@@ -4,7 +4,6 @@ import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
-import CommandUtils from "./CommandUtils";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
@@ -13,6 +12,7 @@ import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
+import { enableCommand } from "@coremedia/ckeditor5-common/Commands";
 
 export default class DataToModelMechanism {
   static #LOGGER: Logger = LoggerProvider.getLogger("DataToModelMechanism");
@@ -93,7 +93,7 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      CommandUtils.enableCommand(editor, "undo");
+      enableCommand(editor, "undo");
     }
   }
 

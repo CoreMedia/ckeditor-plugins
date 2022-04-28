@@ -3,10 +3,6 @@
  *
  * @module ckeditor5-coremedia-content-clipboard
  */
-
-export * from "./CommandUtils";
-export { default as CommandUtils } from "./CommandUtils";
-
 export * from "./ContentClipboard";
 export { default as ContentClipboard } from "./ContentClipboard";
 
