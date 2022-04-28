@@ -49,12 +49,12 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
         const mockContent = this.#contentProvider(uriPath);
         if (!mockContent.embeddable) {
           // The "should not happen" code.
-          return reject(`Content '${uriPath}' is not embeddable.`);
+          return reject(new Error(`Content '${uriPath}' is not embeddable.`));
         }
         // The actual property does not matter in this mock scenario.
         return resolve(`${uriPath}#properties.data`);
       }
-      reject(`'${uriPath}' is not a valid URI-path.`);
+      reject(new Error(`'${uriPath}' is not a valid URI-path.`));
     });
   }
 
