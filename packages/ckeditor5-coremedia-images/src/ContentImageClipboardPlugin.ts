@@ -11,7 +11,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { ifPlugin, PluginNotFoundError, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
