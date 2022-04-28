@@ -15,16 +15,20 @@ import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelReg
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 
+const UTILITY_NAME = "DataToModelMechanism";
+
 export default class DataToModelMechanism {
-  static #LOGGER: Logger = LoggerProvider.getLogger("DataToModelMechanism");
+  static readonly #logger: Logger = LoggerProvider.getLogger(UTILITY_NAME);
 
   static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
+    const logger = DataToModelMechanism.#logger;
+
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
     const contentDropData = ContentDropDataCache.lookupData(markerName);
     if (!contentDropData) {
       return;
     }
-    DataToModelMechanism.#LOGGER.debug(
+    logger.debug(
       `Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`
     );
 
@@ -43,7 +47,7 @@ export default class DataToModelMechanism {
       })
       .catch((reason) => {
         DataToModelMechanism.#markerCleanup(editor, markerData);
-        DataToModelMechanism.#LOGGER.error("Error occurred in promise", reason);
+        logger.error("Error occurred in promise", reason);
       })
       .finally(() => DataToModelMechanism.#finishDrop(editor));
   }
