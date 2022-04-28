@@ -63,9 +63,7 @@ export default class DataToModelMechanism {
       return fallbackFunction;
     }
 
-    return new Promise<CreateModelFunction>((resolve, reject) => {
-      reject("No function to create the model found.");
-    });
+    return Promise.reject(new Error(`No function to create the model found for type: ${type}`));
   }
 
   static #getType(contentUri: string): Promise<string> {
