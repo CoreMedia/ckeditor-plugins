@@ -3,5 +3,4 @@
  * @module ckeditor5-common
  */
 export * from "./Commands";
-export * from "./Events";
 export * from "./Plugins";

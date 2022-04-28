@@ -14,14 +14,6 @@ const logger: Logger = LoggerProvider.getLogger("Plugins");
 export const optionalPluginNotFound = (e: Error) => logger.debug("Optional plugin not found.", e);
 
 /**
- * Suggested alternative `catch` handler, if a plugin is not found.
- * It will trigger a warning log statement.
- *
- * @param e - error to ignore
- */
-export const recommendedPluginNotFound = (e: Error) => logger.warn("Recommended plugin not found.", e);
-
-/**
  * Promise, which either resolves immediately to the given plugin or rejects
  * with `Error` if not available.
  *

@@ -14,12 +14,11 @@ import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDro
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
-import { disableCommand, ifCommand, optionalCommandNotFound } from "@coremedia/ckeditor5-common/Commands";
+import { disableUndo, UndoSupport } from "./integrations/Undo";
 
 /**
  * This plugin takes care of linkable Studio contents, which are dropped
@@ -34,7 +33,7 @@ export default class ContentClipboard extends Plugin {
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoEditing];
+    return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
   }
 
   init(): Promise<void> | void {
@@ -172,7 +171,7 @@ export default class ContentClipboard extends Plugin {
     // placeholder elements.
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterwards.
-    ifCommand(editor, "undo").then(disableCommand).catch(optionalCommandNotFound);
+    ifPlugin(editor, UndoSupport).then(disableUndo);
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.setSelection(targetRange);
     });

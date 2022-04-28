@@ -1,5 +1,4 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { forceDisable } from "./Events";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Command from "@ckeditor/ckeditor5-core/src/command";
@@ -13,14 +12,6 @@ const logger: Logger = LoggerProvider.getLogger("Commands");
  * @param e - error to ignore
  */
 export const optionalCommandNotFound = (e: Error) => logger.debug("Optional command not found.", e);
-
-/**
- * Suggested alternative `catch` handler, if a command is not found.
- * It will trigger a warning log statement.
- *
- * @param e - error to ignore
- */
-export const recommendedCommandNotFound = (e: Error) => logger.warn("Recommended command not found.", e);
 
 /**
  * Immediately resolving promise to retrieve command. Rejected with `Error`
@@ -38,19 +29,26 @@ export const ifCommand = async (editor: Editor, commandName: string): Promise<Co
 };
 
 /**
- * Disables the given command.
- * @param command - command to disable
+ * Handler for resolved plugins.
  */
-export const disableCommand = (command: Command): void => {
-  command.on("set:isEnabled", forceDisable, { priority: "highest" });
-  command.isEnabled = false;
+export type CommandHandler = (command: Command) => void;
+
+/**
+ * Handler to disable given command.
+ *
+ * @param id - Unique identifier for disabling. Use the same id when enabling back the command.
+ * @returns identifiable handler to disable a command
+ */
+export const disableCommand = (id: string): CommandHandler => {
+  return (command) => command.forceDisabled(id);
 };
 
 /**
- * Enables the given command.
- * @param command - command to disable
+ * Handler to enable given commands.
+ *
+ * @param id - Unique identifier for enabling. Use the same id as when requested to disable command.
+ * @returns identifiable handler to enable a command
  */
-export const enableCommand = (command: Command): void => {
-  command.off("set:isEnabled", forceDisable);
-  command.refresh();
+export const enableCommand = (id: string): CommandHandler => {
+  return (command) => command.clearForceDisabled(id);
 };

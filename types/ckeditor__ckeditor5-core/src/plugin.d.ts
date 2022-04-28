@@ -1,6 +1,6 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin"
-import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import Editor from "./editor/editor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
@@ -15,6 +15,10 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
   constructor(editor: Editor);
 
   delegate(...events: string[]): EmitterMixinDelegateChain;
+
+  forceDisabled(id: string): void;
+
+  clearForceDisabled(id: string): void;
 
   destroy?(): void;
 

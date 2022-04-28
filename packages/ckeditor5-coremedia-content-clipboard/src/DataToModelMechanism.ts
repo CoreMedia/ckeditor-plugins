@@ -12,8 +12,8 @@ import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
-import { enableCommand, ifCommand, optionalCommandNotFound } from "@coremedia/ckeditor5-common/Commands";
-import { optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
+import { enableUndo, UndoSupport } from "./integrations/Undo";
 
 export default class DataToModelMechanism {
   static #LOGGER: Logger = LoggerProvider.getLogger("DataToModelMechanism");
@@ -94,7 +94,7 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      ifCommand(editor, "undo").then(enableCommand).catch(optionalCommandNotFound);
+      ifPlugin(editor, UndoSupport).then(enableUndo);
     }
   }
 
@@ -154,10 +154,9 @@ export default class DataToModelMechanism {
   /**
    * Applies attributes to the given ranges.
    *
-   * @param writer writer to use
-   * @param textRanges ranges to apply attributes to
-   * @param attributes attributes to apply
-   * @private
+   * @param writer - writer to use
+   * @param textRanges - ranges to apply attributes to
+   * @param attributes - attributes to apply
    */
   static #applyAttributes(
     writer: Writer,
