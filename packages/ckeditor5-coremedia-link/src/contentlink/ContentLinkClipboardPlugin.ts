@@ -8,7 +8,10 @@ import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { CreateModelFunction, CreateModelFunctionCreator, } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
+import {
+  CreateModelFunction,
+  CreateModelFunctionCreator,
+} from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
 import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
@@ -21,7 +24,7 @@ const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
     new ContentDisplayServiceDescriptor()
   );
   const contentName = await contentDisplayService.name(contentUri);
-  return new Promise<CreateModelFunction>((resolve) => resolve(createLinkModelFunction(contentUri, contentName)));
+  return createLinkModelFunction(contentUri, contentName);
 };
 
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {

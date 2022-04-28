@@ -22,7 +22,7 @@ const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
     new RichtextConfigurationServiceDescriptor()
   );
   const blobUriPath = await configurationService.resolveBlobPropertyReference(contentUri);
-  return new Promise<CreateModelFunction>((resolve) => resolve(createImageModelFunction(blobUriPath)));
+  return createImageModelFunction(blobUriPath);
 };
 
 const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string): CreateModelFunction => {
