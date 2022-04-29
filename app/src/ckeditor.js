@@ -198,7 +198,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
       console.log("Save triggered...");
       const start = performance.now();
       const data = currentEditor.getData({
-        // set to none, to trigger data-processing for empty text, too
+        // set to `none`, to trigger data-processing for empty text, too
         // possible values: empty, none (default: empty)
         trim: 'empty',
       });
