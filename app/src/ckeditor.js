@@ -14,7 +14,7 @@ import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Link from '@ckeditor/ckeditor5-link/src/link';
-import List from '@ckeditor/ckeditor5-list/src/list';
+import DocumentList from '@ckeditor/ckeditor5-list/src/documentlist';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
@@ -86,7 +86,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Link,
     LinkTarget,
     CoreMediaStudioEssentials,
-    List,
+    DocumentList,
     Paragraph,
     PasteFromOffice,
     RemoveFormat,
