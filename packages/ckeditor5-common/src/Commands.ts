@@ -2,8 +2,9 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Command from "@ckeditor/ckeditor5-core/src/command";
+import { PluginNotFoundErrorHandler } from "./Plugins";
 
-const logger: Logger = LoggerProvider.getLogger("Commands");
+const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 
 /**
  * Error, which signals that a requested command could not be found.
@@ -44,7 +45,25 @@ export type CommandNotFoundErrorHandler = (e: CommandNotFoundError) => void;
  * @param e - error to ignore
  */
 export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandNotFoundError) =>
-  logger.debug(`Optional command '${e.commandName}' not found.`, e);
+  commandsLogger.debug(`Optional command '${e.commandName}' not found.`, e);
+
+/**
+ * Provides a `catch` handler, if a recommended command is not found.
+ * It will trigger a warning log statement and a debug log statement with more details.
+ * @param effectIfMissingMessage - optional effect, what will happen if the plugin is missing
+ * @param logger - optional logger to use instead of default
+ */
+export const recommendCommand = (
+  effectIfMissingMessage = "",
+  logger: Logger = commandsLogger
+): CommandNotFoundErrorHandler => {
+  const messageSuffix = effectIfMissingMessage ? ` ${effectIfMissingMessage}` : "";
+  return (e) => {
+    const message = `Recommended command '${e.commandName}' not found.${messageSuffix}`;
+    logger.warn(message);
+    logger.debug(`Details on: ${message}`, e);
+  };
+};
 
 /**
  * Immediately resolving promise to retrieve command. Rejected with `Error`
