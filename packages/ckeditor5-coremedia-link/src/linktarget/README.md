@@ -88,7 +88,7 @@ It will create buttons in the `LinkActionsView` of CKEditor's Link Feature in
 the order as given in the array:
 
 | Target   | Label                 |
-| -------- | --------------------- |
+|----------|-----------------------|
 | `_self`  | _Open in Current Tab_ |
 | `_blank` | _Open in New Tab_     |
 | `_embed` | _Show Embedded_       |
@@ -321,7 +321,7 @@ The general contract for mapping `target` attributes during RichText
 data-processing is as follows:
 
 | `xlink:show` | `xlink:role` | `target`    |
-| ------------ | ------------ | ----------- |
+|--------------|--------------|-------------|
 | `new`        |              | `_blank`    |
 | `replace`    |              | `_self`     |
 | `embed`      |              | `_embed`    |
@@ -340,10 +340,10 @@ the [Advanced Configuration][].
 For other well-known values regarding the `target` attribute, these will be
 mapped with `xlink:show="other"`:
 
-| `xlink:show` | `xlink:role` | `target`    |
-| ------------ | ------------ | ----------- |
-| `other`      | `_parent`    | `_parent`   |
-| `other`      | `_top`       | `_top`      |
+| `xlink:show` | `xlink:role` | `target`  |
+|--------------|--------------|-----------|
+| `other`      | `_parent`    | `_parent` |
+| `other`      | `_top`       | `_top`    |
 
 Mappings in data processing should ensure, that more artificial states
 (from CoreMedia CMS) perspective are also represented meaningfully.
@@ -357,7 +357,7 @@ represented as `_self_frameName`, where `_self` is the default mapping for
 The following artificial states may occur:
 
 | `xlink:show` | `xlink:role` | `target`           |
-| ------------ | ------------ | ------------------ |
+|--------------|--------------|--------------------|
 | `new`        | `frameName`  | `_blank_frameName` |
 | `replace`    | `frameName`  | `_self_frameName`  |
 | `embed`      | `frameName`  | `_embed_frameName` |
