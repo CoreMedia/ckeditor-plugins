@@ -23,14 +23,12 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
    *
    * @param uriPath - an uripath in the format 'content/content-id'
    */
-  hasLinkableType(uriPath: UriPath): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      if (isUriPath(uriPath)) {
-        const mockContent = this.#contentProvider(uriPath);
-        return resolve(mockContent.linkable);
-      }
-      resolve(false);
-    });
+  async hasLinkableType(uriPath: UriPath): Promise<boolean> {
+    if (isUriPath(uriPath)) {
+      const mockContent = this.#contentProvider(uriPath);
+      return mockContent.linkable;
+    }
+    return false;
   }
 
   isEmbeddableType(uriPath: UriPath): Promise<boolean> {
