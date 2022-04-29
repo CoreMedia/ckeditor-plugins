@@ -82,11 +82,11 @@ jobs:
           echo "${next_version}" > .release-version
           git commit -am "Set release version ${next_version}"
       # Set prerelease version.
-      # On push we only want to provide a possible rc which is testable and maybe already testable by our customers.
+      # On push, we only want to provide a possible rc, which is testable and maybe already testable by our customers.
       # Make sure to set the dependency versions to the concrete version as prerelease versions are not referenced by semver ranges.
       - name: Create Prerelease Version
         if: github.event_name == 'push'
-        # Make sure to not commit anything which has been changed in one of the previous steps.
+        # Make sure to not commit anything, which has been changed in one of the previous steps.
         # Update the version, afterwards commit and push.
         run: |
           if [ -n "$(git status --porcelain)" ]; then
