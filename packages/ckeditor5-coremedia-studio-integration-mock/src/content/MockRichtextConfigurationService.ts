@@ -41,19 +41,17 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     });
   }
 
-  resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      if (isUriPath(uriPath)) {
-        const mockContent = this.#contentProvider(uriPath);
-        if (!mockContent.embeddable) {
-          // The "should not happen" code.
-          return reject(new Error(`Content '${uriPath}' is not embeddable.`));
-        }
-        // The actual property does not matter in this mock scenario.
-        return resolve(`${uriPath}#properties.data`);
+  async resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
+    if (isUriPath(uriPath)) {
+      const mockContent = this.#contentProvider(uriPath);
+      if (!mockContent.embeddable) {
+        // The "should not happen" code.
+        throw new Error(`Content '${uriPath}' is not embeddable.`);
       }
-      reject(new Error(`'${uriPath}' is not a valid URI-path.`));
-    });
+      // The actual property does not matter in this mock scenario.
+      return `${uriPath}#properties.data`;
+    }
+    throw new Error(`'${uriPath}' is not a valid URI-path.`);
   }
 
   getName(): string {
