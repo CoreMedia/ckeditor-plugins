@@ -70,15 +70,15 @@ export default class CustomLinkTargetInputFormView extends View {
     this.cancelButtonView = this.#createButton(t("Cancel"), icons.cancel, "ck-button-cancel", "cancel");
 
     /**
-     * A collection of views which can be focused in the form.
+     * A collection of views, which can be focused in the form.
      *
      * @readonly
      */
     this.#focusables = new ViewCollection();
 
     /**
-     * Helps cycling over focusables in the form.
-     * The focusCycler determines which focusables exist and how to cycle between them.
+     * Helps to cycle over focusables in the form.
+     * The focusCycler determines, which focusables exist and how to cycle between them.
      *
      * @readonly
      */
