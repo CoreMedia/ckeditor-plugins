@@ -62,7 +62,7 @@ The following packages are not published, and thus, may only be used as
 `@coremedia/ckeditor5-jest-test-helpers`.
 
 | Name                                              | Description                                 |
-| ------------------------------------------------- | ------------------------------------------- |
+|---------------------------------------------------|---------------------------------------------|
 | [`ckeditor5-coremedia-studio-integration-mock`][] | Simulates integration into CoreMedia Studio |
 | [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                      |
 
