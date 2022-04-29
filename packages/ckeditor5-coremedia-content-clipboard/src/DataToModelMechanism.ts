@@ -17,9 +17,44 @@ import { enableUndo, UndoSupport } from "./integrations/Undo";
 
 const UTILITY_NAME = "DataToModelMechanism";
 
+/**
+ * The DataToModelMechanism is a utility class that handles content insertions into the editor
+ * and adjusts the editor's model accordingly. To be precise, it actually receives information
+ * about a previously added marker, fetches the required data and displays it at the marker position.
+ *
+ * **How this works with other ContentClipboard Plugins:**
+ *
+ * The {@link ContentClipboard} plugin integrates into the CKEditor's Input Pipeline and evaluates
+ * input events for CoreMedia Content inputs. Whenever an input is received, a placeholder
+ * marker gets inserted at the corresponding cursor position.
+ *
+ * Markers are used to indicate or highlight different things in the editor's view and in this case
+ * are used to display a loading animation since the actual contents might take a while to
+ * load. The {@link ContentClipboardEditing} plugin listens to markers getting added and triggers the
+ * {@link DataToModelMechanism} if needed.
+ *
+ * **DataToModelMechanism in Detail:**
+ *
+ * The DataToModelMechanism is executed whenever a marker is added and receives the corresponding MarkerData object.
+ * The MarkerData holds information about the dropped data, such as the contentUri or the size of the drop.
+ * Now, the DataToModelMechanism uses a Studio service to resolve the type of the content object from the given
+ * contentUri. The type is needed to figure out how to render the content in the editor, or more precise, how
+ * the model the content type is defined. This information is provided by the {@link ContentToModelRegistry}, which
+ * allows other plugins to register model creator strategies for different content types.
+ *
+ * Now, the model then is written, the view updates accordingly and the marker (loading animation) gets removed.
+ */
 export default class DataToModelMechanism {
   static readonly #logger: Logger = LoggerProvider.getLogger(UTILITY_NAME);
 
+  /**
+   * This method is called when a marker is added to the editor.
+   * It receives a markerData object and fetches the data to render the content.
+   * It then renders the content in the editor and finally removes the marker.
+   *
+   * @param editor - the editor
+   * @param markerData - object that holds information about the marker and the associated content drop
+   */
   static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
     const logger = DataToModelMechanism.#logger;
 
@@ -55,6 +90,14 @@ export default class DataToModelMechanism {
       .finally(() => DataToModelMechanism.#finishDrop(editor));
   }
 
+  /**
+   * Uses the {@link ContentToModelRegistry} to lookup a strategy to create a model element
+   * for the given contentUri.
+   *
+   * @param type - the type of the dropped content object
+   * @param contentUri - the contentUri of the content object
+   * @returns a Promise containing the function that creates the model element
+   */
   static lookupCreateItemFunction(type: string, contentUri: string): Promise<CreateModelFunction> {
     const toModelFunction = ContentToModelRegistry.getToModelFunction(type, contentUri);
     if (toModelFunction) {
@@ -73,6 +116,13 @@ export default class DataToModelMechanism {
     return Promise.reject(new Error(`No function to create the model found for type: ${type}`));
   }
 
+  /**
+   * Uses the {@link RichtextConfigurationService} to asynchronously fetch the content type
+   * of a given contentUri.
+   *
+   * @param contentUri - the contentUri
+   * @returns a Promise containing the type of the content
+   */
   static #getType(contentUri: string): Promise<string> {
     // This would probably be replaced with another service agent call, which
     // asks studio for the type.
@@ -90,6 +140,13 @@ export default class DataToModelMechanism {
       .then((isEmbeddable) => (isEmbeddable ? "image" : "link"));
   }
 
+  /**
+   * Verifies if this was the last marker of the content drop.
+   * If this is the case, the disabled undo action gets enabled again.
+   * This is important because the undo action is disabled at the start of a drop.
+   *
+   * @param editor - the editor
+   */
   static #finishDrop(editor: Editor): void {
     const markers = Array.from(
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
@@ -99,6 +156,16 @@ export default class DataToModelMechanism {
     }
   }
 
+  /**
+   * Calculates the location of the marker and inserts the content via the provided
+   * createItemFunction at that position.
+   * Please note: This method might split the parent container.
+   *
+   * @param editor - the editor
+   * @param contentDropData - the contentDropData object
+   * @param markerData - the markerData object
+   * @param createItemFunction - the function to create the model element
+   */
   static #writeItemToModel(
     editor: Editor,
     contentDropData: ContentDropData,
@@ -144,7 +211,14 @@ export default class DataToModelMechanism {
     DataToModelMechanism.#markerCleanup(editor, markerData);
   }
 
-  static #markerCleanup(editor: Editor, markerData: MarkerData) {
+  /**
+   * Removes the marker in the editor view. Also removes the corresponding data from
+   * the {@link ContentDropDataCache}.
+   *
+   * @param editor - the editor
+   * @param markerData - the markerData object
+   */
+  static #markerCleanup(editor: Editor, markerData: MarkerData): void {
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
