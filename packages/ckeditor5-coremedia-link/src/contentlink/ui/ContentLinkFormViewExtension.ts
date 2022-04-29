@@ -41,11 +41,9 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug(`Initializing ${ContentLinkFormViewExtension.pluginName}...`);
 
     const editor = this.editor;
-    const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
+    const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const formView = linkUI.formView;
-    const contentLinkCommandHook: ContentLinkCommandHook = <ContentLinkCommandHook>(
-      editor.plugins.get(ContentLinkCommandHook)
-    );
+    const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = <Command>editor.commands.get("link");
 
     formView.set({
