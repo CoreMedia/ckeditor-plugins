@@ -12,17 +12,6 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     this.#contentProvider = contentProvider;
   }
 
-  /**
-   * A content id is linkable if
-   *
-   * * it is not a folder (even number)
-   *
-   * * it is the last digit, and it is not dividable by 4.
-   *
-   *     This represents any content, which is not linkable.
-   *
-   * @param uriPath - an uripath in the format 'content/content-id'
-   */
   async hasLinkableType(uriPath: UriPath): Promise<boolean> {
     if (isUriPath(uriPath)) {
       const mockContent = this.#contentProvider(uriPath);
