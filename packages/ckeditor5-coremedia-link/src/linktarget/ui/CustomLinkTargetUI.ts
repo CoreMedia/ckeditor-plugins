@@ -43,14 +43,13 @@ export default class CustomLinkTargetUI extends Plugin {
     return [ContextualBalloon, LinkUI];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const editor = this.editor;
     const { otherNames, myConfig } = this.#parseConfig(editor.config);
     this.linkUI = <LinkUI>editor.plugins.get(LinkUI);
     this.#reservedTargetNames = new Set<string>(otherNames);
     this.#createButton(myConfig);
     this.#createForm();
-    return null;
   }
 
   /**

@@ -6,6 +6,8 @@
  */
 export * as studioservices from "./studioservices/index-doc";
 
+export * from "./BeanReference";
+
 export * from "./BlobDisplayService";
 export { default as BlobDisplayService } from "./BlobDisplayService";
 
@@ -20,6 +22,8 @@ export { default as ContentDisplayService } from "./ContentDisplayService";
 
 export * from "./ContentDisplayServiceDescriptor";
 export { default as ContentDisplayServiceDescriptor } from "./ContentDisplayServiceDescriptor";
+
+export * from "./DataTransferUtils";
 
 export * from "./DisplayHint";
 export { default as DisplayHint } from "./DisplayHint";

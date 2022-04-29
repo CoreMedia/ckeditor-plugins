@@ -69,6 +69,7 @@
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
+    "@coremedia/ckeditor5-common": "4.0.1-rc.5",
     "@coremedia/ckeditor5-logging": "4.0.1-rc.5",
     "@coremedia/ckeditor5-coremedia-studio-integration": "4.0.1-rc.5"
   }

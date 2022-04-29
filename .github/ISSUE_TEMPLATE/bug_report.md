@@ -1,5 +1,5 @@
 ---
-name: Bug report
+name: Bug Report
 about: Create a report to help us improve
 title: ''
 labels: bug
@@ -37,4 +37,4 @@ Describe the actual observed behavior, including console logs, if applicable. Pr
 
 **Additional context**
 
-Add any other context about the problem here, like for example installed CKEditor plugins which may be involved.
+Add any other context about the problem here, like for example installed CKEditor plugins, which may be involved.

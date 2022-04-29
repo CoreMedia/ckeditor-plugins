@@ -34,7 +34,7 @@ class RichTextDataFilter extends Plugin {
   #delegate?: DataFilter;
   #config: ReducedMatcherPattern[] = [];
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = RichTextDataFilter.#logger;
     const startTimestamp = performance.now();
 
@@ -96,8 +96,6 @@ class RichTextDataFilter extends Plugin {
     }
 
     logger.info(`Initialized ${RichTextDataFilter.pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 
   /**

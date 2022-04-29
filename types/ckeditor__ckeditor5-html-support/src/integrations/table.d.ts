@@ -15,5 +15,5 @@ export default class TableElementSupport extends Plugin {
   /**
    * @inheritDoc
    */
-  init(): null;
+  init(): void;
 }

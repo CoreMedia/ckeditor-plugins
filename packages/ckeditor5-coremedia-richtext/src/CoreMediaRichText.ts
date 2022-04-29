@@ -13,7 +13,7 @@ export default class CoreMediaRichText extends Plugin {
     super(editor);
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const startTimestamp = performance.now();
 
     CoreMediaRichText.#logger.info(`Initializing ${CoreMediaRichText.pluginName}...`);
@@ -23,7 +23,5 @@ export default class CoreMediaRichText extends Plugin {
     CoreMediaRichText.#logger.info(
       `Initialized ${CoreMediaRichText.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
-
-    return null;
   }
 }

@@ -23,5 +23,5 @@ export default class GeneralHtmlSupport extends Plugin {
   /**
    * @inheritDoc
    */
-  init(): null;
+  init(): void;
 }

@@ -318,7 +318,7 @@ describe("RichTextDataProcessor.toData", () => {
       );
 
       if (maximumMilliseconds >= 0) {
-        // Otherwise we just measure.
+        // Otherwise, we just measure.
         expect(actualTime).toBeLessThanOrEqual(maximumMilliseconds);
       }
     });

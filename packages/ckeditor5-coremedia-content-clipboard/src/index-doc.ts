@@ -3,9 +3,7 @@
  *
  * @module ckeditor5-coremedia-content-clipboard
  */
-
-export * from "./CommandUtils";
-export { default as CommandUtils } from "./CommandUtils";
+export * as integrations from "./integrations/index-doc";
 
 export * from "./ContentClipboard";
 export { default as ContentClipboard } from "./ContentClipboard";
@@ -22,11 +20,6 @@ export * from "./ContentToModelRegistry";
 export { default as ContentToModelRegistry } from "./ContentToModelRegistry";
 
 export * from "./converters";
-
-export * from "./CoreMediaClipboardUtils";
-export { default as CoreMediaClipboardUtils } from "./CoreMediaClipboardUtils";
-
-export * from "./createmodelfunctions";
 
 export * from "./DataToModelMechanism";
 export { default as DataToModelMechanism } from "./DataToModelMechanism";

@@ -14,7 +14,8 @@ The plugins provided in `ckeditor5-link` extend the
 
   Adds support for links to contents within CoreMedia CMS. It extends
   the `LinkFormView` to be able to represent links to contents and to accept
-  contents dropped from within CoreMedia Studio.
+  contents dropped from within CoreMedia Studio. It also registers a creator
+  function to support ContentLinks in the **ContentClipboard** plugin.
 
 See Also
 --------------------------------------------------------------------------------

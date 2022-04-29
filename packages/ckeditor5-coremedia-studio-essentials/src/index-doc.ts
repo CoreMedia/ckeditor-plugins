@@ -4,9 +4,8 @@
  *
  * Plugins contained:
  *
- * * `LinkTarget` from `@coremedia/ckeditor5-coremedia-link`
- * * `ContentLinks` from `@coremedia/ckeditor5-coremedia-link`
- * * `CoreMediaRichText` from `@coremedia/ckeditor5-dataprocessor-support`
+ * * `CoreMediaRichText` from `@coremedia/ckeditor5-richtext`
+ * * `CoreMediaRichTextSupport` from `@coremedia/ckeditor5-richtext-support`
  *
  * @module ckeditor5-coremedia-studio-essentials
  */

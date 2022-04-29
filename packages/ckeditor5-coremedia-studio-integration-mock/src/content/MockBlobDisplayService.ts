@@ -1,4 +1,6 @@
-import BlobDisplayService, { InlinePreview, } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
+import BlobDisplayService, {
+  InlinePreview,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import BlobDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
 import { map } from "rxjs/operators";

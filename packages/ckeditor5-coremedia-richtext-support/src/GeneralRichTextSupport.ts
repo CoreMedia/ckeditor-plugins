@@ -21,12 +21,10 @@ class GeneralRichTextSupport extends Plugin {
     super(editor);
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = GeneralRichTextSupport.#logger;
 
     logger.info(`Initialized ${GeneralRichTextSupport.pluginName}.`);
-
-    return null;
   }
 }
 

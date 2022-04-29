@@ -52,7 +52,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     return [LinkUI];
   }
 
-  init(): null {
+  init(): void {
     const logger = LinkCleanup.#logger;
     const startTimestamp = performance.now();
 
@@ -65,14 +65,11 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     document.registerPostFixer(this.#fixOrphanedAttributes);
 
     logger.debug(`Initialized ${LinkCleanup.pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 
-  destroy(): null {
+  destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
-    return null;
   }
 
   registerDependentAttribute(modelAttributeName: string): void {

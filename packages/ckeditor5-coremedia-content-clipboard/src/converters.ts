@@ -23,11 +23,19 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
     if (!contentDropData) {
       return;
     }
-    //Possible extension point. Do we want to fetch the object type here to render something more specific.
-    //The problem might be that we are asynchron and that the spinner has to be shown before all requests are done.
-    //It might be possible to show a spinner until the first request is done and then render something more specific
-    //What would be the allowed specific thing? CSS-Class or a whole view? I guess we are not that flexible and a css class might be enough.
-    //We can simply add classes to the view container.
+    /*
+     * Possible extension point. Do we want to fetch the object type here to
+     * render something more specific?
+     *
+     * The problem might be that we are asynchronous and that the spinner has to
+     * be shown before all requests are done. It might be possible to show a
+     * spinner until the first request is done and then render something more
+     * specific
+     *
+     * What would be the allowed specific thing? CSS-Class or a whole view?
+     * I guess we are not that flexible and a css class might be enough. We can
+     * simply add classes to the view container.
+     */
     const loadMaskClasses = ["cm-load-mask"];
     if (contentDropData.itemContext.isInline) {
       loadMaskClasses.push("cm-load-mask--inline");

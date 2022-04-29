@@ -46,8 +46,6 @@ ClassicEditor
   .catch(...);
 ```
 
-**Essentials Plugin:** This Plugin is part of CoreMedia Essentials Plugin.
-
 ## Configuration
 
 [Configuration]: <#configuration>
@@ -90,7 +88,7 @@ It will create buttons in the `LinkActionsView` of CKEditor's Link Feature in
 the order as given in the array:
 
 | Target   | Label                 |
-| -------- | --------------------- |
+|----------|-----------------------|
 | `_self`  | _Open in Current Tab_ |
 | `_blank` | _Open in New Tab_     |
 | `_embed` | _Show Embedded_       |
@@ -290,7 +288,7 @@ ClassicEditor
 **title:** As can be seen in the example, you may also provide a text for the
 tooltip. The text is handed over to `Locale.t()` for translation, so that you
 may provide labels translated to your UI language. Translations must be provided 
-by using the function `translation-service.add()`. For more informations regarding 
+by using the function `translation-service.add()`. For more information regarding 
 `translation-service.add()` consult the CKEditor 5 documentation.
 
 The title defaults to the name of the target option if unset.
@@ -323,7 +321,7 @@ The general contract for mapping `target` attributes during RichText
 data-processing is as follows:
 
 | `xlink:show` | `xlink:role` | `target`    |
-| ------------ | ------------ | ----------- |
+|--------------|--------------|-------------|
 | `new`        |              | `_blank`    |
 | `replace`    |              | `_self`     |
 | `embed`      |              | `_embed`    |
@@ -342,10 +340,10 @@ the [Advanced Configuration][].
 For other well-known values regarding the `target` attribute, these will be
 mapped with `xlink:show="other"`:
 
-| `xlink:show` | `xlink:role` | `target`    |
-| ------------ | ------------ | ----------- |
-| `other`      | `_parent`    | `_parent`   |
-| `other`      | `_top`       | `_top`      |
+| `xlink:show` | `xlink:role` | `target`  |
+|--------------|--------------|-----------|
+| `other`      | `_parent`    | `_parent` |
+| `other`      | `_top`       | `_top`    |
 
 Mappings in data processing should ensure, that more artificial states
 (from CoreMedia CMS) perspective are also represented meaningfully.
@@ -359,7 +357,7 @@ represented as `_self_frameName`, where `_self` is the default mapping for
 The following artificial states may occur:
 
 | `xlink:show` | `xlink:role` | `target`           |
-| ------------ | ------------ | ------------------ |
+|--------------|--------------|--------------------|
 | `new`        | `frameName`  | `_blank_frameName` |
 | `replace`    | `frameName`  | `_self_frameName`  |
 | `embed`      | `frameName`  | `_embed_frameName` |

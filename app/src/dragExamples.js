@@ -43,6 +43,7 @@ const initDragExamples = (editor) => {
     id: 40,
     type: "undroppable",
     name: "Undroppable Content Type",
+    linkable: false,
   });
 
   const singleDroppableDocuments = [
@@ -94,6 +95,24 @@ const initDragExamples = (editor) => {
       classes: ["linkable", "type-document"],
       items: [requireExplicitContent(608)],
     },
+    {
+      label: "Image",
+      tooltip: "Content with some red image blob.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(900)],
+    },
+    {
+      label: "Only Embeddable",
+      tooltip: "An image document which may only be embedded but not linked.",
+      classes: ["embeddable", "type-document"],
+      items: [requireExplicitContent(922)],
+    },
+    {
+      label: "Image (edit)",
+      tooltip: "An image, whose blob frequently changes.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(906)],
+    },
   ];
 
   const singleDroppables = [
@@ -125,6 +144,12 @@ const initDragExamples = (editor) => {
       classes: ["linkable", "type-collection"],
       items: [30, requireExplicitContent(104), 32],
     },
+    {
+      label: "Image (unreadable)",
+      tooltip: "Image document cannot be read.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(914)],
+    },
   ];
   const singleUndroppables = [
     {
@@ -152,6 +177,12 @@ const initDragExamples = (editor) => {
       tooltip: "Content takes more than just minutes to load.",
       classes: ["linkable", "type-document"],
       items: [requireExplicitContent(802)],
+    },
+    {
+      label: "Image (slow)",
+      tooltip: "An image, which takes some time to load.",
+      classes: ["linkable", "embeddable", "type-document"],
+      items: [requireExplicitContent(908)],
     },
   ];
   const pairedExamples = [
@@ -184,6 +215,12 @@ const initDragExamples = (editor) => {
       tooltip: "Two contents, one of them is not allowed to be dropped.",
       classes: ["non-linkable", "type-collection"],
       items: [31, 32],
+    },
+    {
+      label: "Three Images",
+      tooltip: "Three images, which are valid to drop.",
+      classes: ["linkable", "embeddable", "type-collection"],
+      items: [requireExplicitContent(900), requireExplicitContent(902), requireExplicitContent(904)],
     },
   ];
   const allDroppables = [

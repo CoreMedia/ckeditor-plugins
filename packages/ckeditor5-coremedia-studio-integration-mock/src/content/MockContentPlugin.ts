@@ -99,6 +99,8 @@ class MockContentPlugin extends Plugin {
     id: 1,
     name: "",
     type: "folder",
+    // For testing with empty names, we ensure, that this folder is linkable.
+    linkable: true,
   };
   /**
    * Default timings to apply.
@@ -128,7 +130,7 @@ class MockContentPlugin extends Plugin {
   /**
    * Initialize Plugin.
    */
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = MockContentPlugin.#logger;
     const pluginName = MockContentPlugin.pluginName;
 
@@ -140,8 +142,6 @@ class MockContentPlugin extends Plugin {
     this.#initDefaults();
 
     logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 
   /**

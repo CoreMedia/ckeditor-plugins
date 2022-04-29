@@ -62,15 +62,12 @@
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^32.0.0",
     "@ckeditor/ckeditor5-engine": "^32.0.0",
-    "@ckeditor/ckeditor5-link": "^32.0.0",
     "@ckeditor/ckeditor5-typing": "^32.0.0",
     "@ckeditor/ckeditor5-ui": "^32.0.0",
     "@ckeditor/ckeditor5-utils": "^32.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "4.0.1-rc.5",
     "@coremedia/ckeditor5-coremedia-richtext": "4.0.1-rc.5",
-    "@coremedia/ckeditor5-coremedia-link": "4.0.1-rc.5",
-    "@coremedia/ckeditor5-coremedia-images": "4.0.1-rc.5"
+    "@coremedia/ckeditor5-coremedia-richtext-support": "4.0.1-rc.5"
   }
 }

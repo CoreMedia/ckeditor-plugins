@@ -11,8 +11,8 @@ type LoadFunction = (uriPath: string, service: RichtextConfigurationService, cal
 type EvaluationCallback = (cacheValue: boolean) => void;
 
 /**
- * Provides support for asynchronous API called within synchronous drag and
- * drop event handling.
+ * Provides support for asynchronous API called within synchronous HTML5 drag
+ * and drop event handling.
  */
 export default class DragDropAsyncSupport {
   static readonly #logger = LoggerProvider.getLogger("DragDropAsyncSupport");
@@ -26,8 +26,12 @@ export default class DragDropAsyncSupport {
   static readonly #isEmbeddableTypeCache: Cache = new Map<string, IsEmbeddableResponse>();
 
   /**
-   * Workaround for the HTML 5 behaviour that drag over is always synchronous,
-   * but we have to call an asynchronous service.
+   * States if the content denoted by the given URI-path is configured, that it
+   * may be referenced by an anchor-element `<a>` as so-called content-link.
+   *
+   * The implementation contains a workaround for the HTML 5 drag and drop
+   * behaviour that drag over is always synchronous, but we have to call an
+   * asynchronous service.
    *
    * When the method is called the first time for a URI-Path, the method calls
    * the asynchronous `RichtextConfigurationService` and stores the actual state
@@ -38,12 +42,12 @@ export default class DragDropAsyncSupport {
    * returned and the result is `true` if the given URI-path is a linkable,
    * `false` otherwise.
    *
-   * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
+   * **On drop the cache has to be cleared so the short-term cache does not grow
+   * eternally.**
    *
    * @param uriPath - the URI-Path of the content, e.g., `content/42`
    * @param evictImmediately - `true` to immediately evict the response from
-   * cache; defaults to `false`
-   * immediate response; defaults to `false`.
+   * cache; defaults to `false` immediate response; defaults to `false`.
    */
   static isLinkable(uriPath: string, evictImmediately = false): boolean {
     const loadFunction: LoadFunction = (
@@ -63,6 +67,31 @@ export default class DragDropAsyncSupport {
     );
   }
 
+  /**
+   * States if the content denoted by the given URI-path is configured, that it
+   * may be referenced by an image-element `<img>`, which again is meant to
+   * reference a BLOB-property of the given content.
+   *
+   * The implementation contains a workaround for the HTML 5 drag and drop
+   * behavior that drag over is always synchronous, but we have to call an
+   * asynchronous service.
+   *
+   * When the method is called the first time for a URI-Path, the method calls
+   * the asynchronous `RichtextConfigurationService` and stores the actual state
+   * of the call in a map and returns probably `false` because the service call
+   * is probably still in progress.
+   *
+   * When the method is called next time the service call might have been
+   * returned and the result is `true` if the given URI-path is a linkable,
+   * `false` otherwise.
+   *
+   * **On drop the cache has to be cleared so the short-term cache does not grow
+   * eternally.**
+   *
+   * @param uriPath - the URI-Path of the content, e.g., `content/42`
+   * @param evictImmediately - `true` to immediately evict the response from
+   * cache; defaults to `false` immediate response; defaults to `false`.
+   */
   static isEmbeddable(uriPath: string, evictImmediately = false): boolean {
     const loadFunction: LoadFunction = (
       uriPath: string,
@@ -83,23 +112,39 @@ export default class DragDropAsyncSupport {
 
   /**
    * Validates, if all URI-Paths represent displayable contents.
-   * A content is displayable if there is a represenation to visualize in ckeditor (e.g. as a link or as an embedded image).
+   * A content is displayable if there is a representation to visualize in
+   * CKEditor (e.g., as a link or as an embedded image).
    *
    * This method triggers asynchronous updates, so that repetitive calls
    * for the same URI-Paths may result in different responses. A positive
-   * answer (=== `true`) is only returned, when all responses are available
+   * answer (`=== true`) is only returned, when all responses are available
    * and positive.
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
-   * @param uriPaths
+   * @param uriPaths - URI paths to validate
    */
   static containsDisplayableContents(uriPaths: string[]): boolean {
-    for (const uriPath of uriPaths) {
-      if (!DragDropAsyncSupport.isLinkable(uriPath) && !DragDropAsyncSupport.isEmbeddable(uriPath)) {
-        return false;
-      }
-    }
-    return true;
+    const isLinkable = DragDropAsyncSupport.isLinkable;
+    const isEmbeddable = DragDropAsyncSupport.isEmbeddable;
+    return uriPaths.every((uriPath) => {
+      // Do not use short-circuit (McCarthy) evaluation!
+      //
+      // It is important invoking both functions, isLinkable and isEmbeddable,
+      // so that caching mechanism to deal with synchronous drag and drop
+      // vs. asynchronous responses works correctly. Thus, a short-circuit
+      // evaluation like (isLinkable() || isEmbeddable()) must not be used.
+      //
+      // Invoking both is crucial, because the initial call of isLinkable() or
+      // isEmbeddable() might return a wrong value due to asynchronous behavior.
+      //
+      // On each consecutive call, the correct value will be returned from the
+      // cache. That is why we should make sure isLinkable() and isEmbeddable()
+      // are called at least once while dragging to have the correct (cached)
+      // result when calling these functions when we finally drop.
+      const linkableValue = isLinkable(uriPath);
+      const embeddableValue = isEmbeddable(uriPath);
+      return linkableValue || embeddableValue;
+    });
   }
 
   static #loadFromCache(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
@@ -129,8 +174,8 @@ export default class DragDropAsyncSupport {
    * cache; defaults to `false`
    * @param cache - the cache to update
    * @param loadFunction - a function to load the value from
-   * @returns `false`, if either the value is false or a different response is not
-   * available yet; `true` if response is true
+   * @returns `false`, if either the value is false or a different response is
+   * not available yet; `true` if response is true
    */
   static #evaluate(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
     const logger = DragDropAsyncSupport.#logger;
@@ -186,15 +231,12 @@ export default class DragDropAsyncSupport {
    * answer (`=== true`) is only returned, when all responses are available
    * and positive.
    *
-   * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
+   * **On drop the cache has to be cleared so the short-term cache does not grow
+   * eternally.**
    */
   static containsOnlyLinkables(uriPaths: string[]): boolean {
-    for (const uriPath of uriPaths) {
-      if (!DragDropAsyncSupport.isLinkable(uriPath)) {
-        return false;
-      }
-    }
-    return true;
+    const isLinkable = DragDropAsyncSupport.isLinkable;
+    return uriPaths.every((uriPath) => isLinkable(uriPath));
   }
 
   /**

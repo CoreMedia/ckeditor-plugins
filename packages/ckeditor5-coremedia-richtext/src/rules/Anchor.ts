@@ -218,7 +218,7 @@ const handleAnchor: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
     if (!hasHref(node)) {
-      // Invalid state: We have an a-element without href which is not
+      // Invalid state: We have an a-element without href, which is not
       // supported by CoreMedia RichText DTD.
       node.replaceByChildren = true;
       return;

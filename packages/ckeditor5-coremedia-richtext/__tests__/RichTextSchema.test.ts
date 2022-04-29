@@ -4,7 +4,7 @@ import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProx
 
 type CommentableTestData = {
   /**
-   * Some comment which may help understanding the test case better.
+   * Some comment, which may help to understand the test case better.
    */
   comment?: string;
 };
@@ -316,7 +316,7 @@ describe("RichTextSchema.adjustAttributes", () => {
       },
     ],
     [
-      "BLOCKQUOTE#4: <blockquote> - Should keep cite although it is no valid URI.",
+      "BLOCKQUOTE#4: <blockquote> - Should keep cite, although it is no valid URI.",
       {
         comment: "We had to be less strict, as CKEditor doesn't do strict URI checks. If we agree on this eventually, could be merged with BLOCKQUOTE#5 test.",
         strictness: [Strictness.STRICT],
@@ -843,7 +843,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
 
   /**
    * Test-Fixture for validation tests. The name only serves for output.
-   * It is recommend adding some ID to this string, as it may be used for
+   * It is recommended adding some ID to this string, as it may be used for
    * conditional breakpoints then.
    */
   type ValidateTestFixture = [string, ValidateParentData];

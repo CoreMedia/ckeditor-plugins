@@ -15,5 +15,5 @@ export default class CodeBlockElementSupport extends Plugin {
   /**
    * @inheritDoc
    */
-  init(): null;
+  init(): void;
 }

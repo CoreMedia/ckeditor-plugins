@@ -43,7 +43,7 @@ export default class DataSchema extends Plugin {
   /**
    * @inheritDoc
    */
-  init(): null;
+  init(): void;
 
   /**
    * Add new data schema definition describing block element.
