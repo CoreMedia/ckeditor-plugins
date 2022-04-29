@@ -25,15 +25,16 @@ plugins enabled.
 All packages are published with scope `@coremedia/` as for example
 `@coremedia/ckeditor5-coremedia-link`.
 
-| Name                                         | Description                                                |
-|----------------------------------------------|------------------------------------------------------------------- |
-| [`ckeditor5-coremedia-content-clipboard`][]  | Extension to CKEditor 5 Clipboard Feature for CoreMedia Contents  |
-| [`ckeditor5-coremedia-link`][]               | Extension to CKEditor 5 Link Feature                              |
-| [`ckeditor5-coremedia-richtext`][]           | Data-Processing for CoreMedia RichText 1.0 DTD             |
-| [`ckeditor5-coremedia-richtext-support`][]   | Support for CoreMedia RichText 1.0 DTD                     |
-| [`ckeditor5-coremedia-studio-essentials`][]  | Aggregator for essential plugins in CoreMedia Studio       |
-| [`ckeditor5-coremedia-studio-integration`][] | Communication Facade for integration into CoreMedia Studio |
-| [`ckeditor5-symbol-on-paste-mapper`][]       | Extension to CKEditor 5 Paste-from-Office                  |
+| Name                                         | Description                                                      |
+|----------------------------------------------|------------------------------------------------------------------|
+| [`ckeditor5-coremedia-content-clipboard`][]  | Extension to CKEditor 5 Clipboard Feature for CoreMedia Contents |
+| [`ckeditor5-coremedia-images`][]             | Support for CMS Blob References like Images                      |
+| [`ckeditor5-coremedia-link`][]               | Extension to CKEditor 5 Link Feature                             |
+| [`ckeditor5-coremedia-richtext`][]           | Data-Processing for CoreMedia RichText 1.0 DTD                   |
+| [`ckeditor5-coremedia-richtext-support`][]   | Support for CoreMedia RichText 1.0 DTD                           |
+| [`ckeditor5-coremedia-studio-essentials`][]  | Aggregator for essential plugins in CoreMedia Studio             |
+| [`ckeditor5-coremedia-studio-integration`][] | Communication Facade for integration into CoreMedia Studio       |
+| [`ckeditor5-symbol-on-paste-mapper`][]       | Extension to CKEditor 5 Paste-from-Office                        |
 
 The subtle difference between `ckeditor5-coremedia-richtext` and
 `ckeditor5-coremedia-richtext-support` is, that the latter one just adds support
@@ -49,7 +50,8 @@ All packages are published with scope `@coremedia/` as for example
 `@coremedia/ckeditor5-logging`.
 
 | Name                                  | Description                                      |
-| ------------------------------------- | ------------------------------------------------ |
+|---------------------------------------|--------------------------------------------------|
+| [`ckeditor5-common`][]                | Common Utilities                                 |
 | [`ckeditor5-dataprocessor-support`][] | Support for providing a CKEditor 5 DataProcessor |
 | [`ckeditor5-logging`][]               | Logging Facade                                   |
 
@@ -73,17 +75,19 @@ The following packages are not published, and thus, may only be used as
 
 <!-- ===========================================================[References] -->
 
-[`ckeditor5-coremedia-content-clipboard`]: <./packages/ckeditor5-coremedia-content-clipboard/>
-[`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link/>
-[`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext/>
-[`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support/>
-[`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials/>
-[`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration/>
-[`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock/>
-[`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support/>
+[`ckeditor5-common`]: <./packages/ckeditor5-coremedia-content-clipboard>
+[`ckeditor5-coremedia-content-clipboard`]: <./packages/ckeditor5-coremedia-content-clipboard>
+[`ckeditor5-coremedia-images`]: <./packages/ckeditor5-coremedia-images>
+[`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link>
+[`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext>
+[`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support>
+[`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials>
+[`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration>
+[`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock>
+[`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support>
 [`ckeditor5-jest-test-helpers`]: <./packages/ckeditor5-jest-test-helpers>
-[`ckeditor5-logging`]: <./packages/ckeditor5-logging/>
-[`ckeditor5-symbol-on-paste-mapper`]: <./packages/ckeditor5-symbol-on-paste-mapper/>
+[`ckeditor5-logging`]: <./packages/ckeditor5-logging>
+[`ckeditor5-symbol-on-paste-mapper`]: <./packages/ckeditor5-symbol-on-paste-mapper>
 [badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-blue?style=for-the-badge>
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
 [CKEditor 5]: <https://ckeditor.com/ckeditor-5/> "CKEditor 5 | Powerful Framework with Modular Architecture"
