@@ -132,7 +132,7 @@ export default class DragDropAsyncSupport {
       // It is important invoking both functions, isLinkable and isEmbeddable,
       // so that caching mechanism to deal with synchronous drag and drop
       // vs. asynchronous responses works correctly. Thus, a short-circuit
-      // evaluation like (isLinkable() || isEmbedabble()) must not be used.
+      // evaluation like (isLinkable() || isEmbeddable()) must not be used.
       //
       // Invoking both is crucial, because the initial call of isLinkable() or
       // isEmbeddable() might return a wrong value due to asynchronous behavior.
