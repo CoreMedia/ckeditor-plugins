@@ -87,16 +87,7 @@ export default class DataToModelMechanism {
     return serviceAgent
       .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
       .then((service) => service.isEmbeddableType(contentUri))
-      .then((isEmbeddable): Promise<string> => {
-        if (isEmbeddable) {
-          return new Promise<string>((resolve) => {
-            resolve("image");
-          });
-        }
-        return new Promise<string>((resolve) => {
-          resolve("link");
-        });
-      });
+      .then((isEmbeddable) => (isEmbeddable ? "image" : "link"));
   }
 
   static #finishDrop(editor: Editor): void {
