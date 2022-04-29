@@ -6,7 +6,7 @@ import Editor from "./editor/editor";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { EditorWithUI } from "./editor/editorwithui";
 
-export default abstract class Plugin<T = void> implements Emitter, Observable {
+export default abstract class Plugin implements Emitter, Observable {
   readonly editor: Editor & EditorWithUI;
 
   static readonly pluginName?: string;
@@ -22,7 +22,7 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 
   destroy?(): void;
 
-  init?(): void | Promise<T>;
+  init?(): void | Promise<void>;
 
   listenTo(
     emitter: Emitter,
@@ -31,7 +31,7 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
     options?: { priority?: number | PriorityString },
   ): void;
 
-  afterInit?(): null | Promise<T>;
+  afterInit?(): Promise<void> | void;
 
   on(event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
@@ -53,4 +53,10 @@ export default abstract class Plugin<T = void> implements Emitter, Observable {
 // Beware that this defines a class constructor, not the class instance.
 export interface PluginInterface<T = Plugin> {
   new(editor: Editor): T;
+
+  init?(): Promise<void> | void;
+
+  afterInit?(): Promise<void> | void;
+
+  destroy?(): Promise<void> | void;
 }
