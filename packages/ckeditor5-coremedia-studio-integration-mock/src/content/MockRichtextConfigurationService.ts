@@ -31,14 +31,12 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     return false;
   }
 
-  isEmbeddableType(uriPath: UriPath): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      if (isUriPath(uriPath)) {
-        const mockContent = this.#contentProvider(uriPath);
-        return resolve(mockContent.embeddable);
-      }
-      resolve(false);
-    });
+  async isEmbeddableType(uriPath: UriPath): Promise<boolean> {
+    if (isUriPath(uriPath)) {
+      const mockContent = this.#contentProvider(uriPath);
+      return mockContent.embeddable;
+    }
+    return false;
   }
 
   async resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
