@@ -1,8 +1,8 @@
 # Styleguide
 
-While the codestyle is mostly controlled by [ESLint][], there are some
-exceptions which are not controlled by the linter. This purpose of this
-styleguide is to provide some consistent appearence of the code, so that
+While the code-style is mostly controlled by [ESLint][], there are some
+exceptions, which are not controlled by the linter. This purpose of this
+styleguide is to provide some consistent appearance of the code, so that
 you can get used to the patterns while reading it.
 
 > The styleguide is open for discussion.
