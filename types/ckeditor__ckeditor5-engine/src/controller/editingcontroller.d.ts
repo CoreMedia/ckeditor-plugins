@@ -6,6 +6,7 @@ import Model from "../model/model";
 import DowncastDispatcher from "../conversion/downcastdispatcher";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import Mapper from "../conversion/mapper";
+import { Item } from "../model/item";
 
 // TODO[typing]
 type StylesProcessor = any;
@@ -40,6 +41,8 @@ export default class EditingController implements Emitter, Observable {
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
+
+  reconvertItem(item: Item): void;
 
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 }

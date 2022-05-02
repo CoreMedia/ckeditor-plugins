@@ -17,8 +17,6 @@ import ModelConsumable from "./modelconsumable";
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_conversion_downcastdispatcher-DowncastDispatcher.html">Class DowncastDispatcher (engine/conversion/downcastdispatcher~DowncastDispatcher) - CKEditor 5 API docs</a>
  */
 export default class DowncastDispatcher implements Emitter {
-  conversionApi: DowncastConversionApi;
-
   constructor(conversionApi: DowncastConversionApi);
 
   on(event: string, callback: CallbackFunction, options?: { priority: number | PriorityString; }): void;
@@ -39,7 +37,7 @@ export default class DowncastDispatcher implements Emitter {
 
   convertChanges(differ: any, markers: any, writer: any): void;
 
-  convertInsert(range: any, writer: any): void;
+  convert(range: any, markers: any, writer: any, options?: any): void;
 
   convertMarkerAdd(markerName: string, markerRange: any, writer: any): void;
 

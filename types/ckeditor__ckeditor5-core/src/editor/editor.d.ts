@@ -13,7 +13,6 @@ import CommandCollection from "../commandcollection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Conversion from "@ckeditor/ckeditor5-engine/src/conversion/conversion";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 // TODO[typing]
 type EditorConfig = any;
@@ -28,7 +27,7 @@ export default class Editor implements Emitter, Observable {
   readonly conversion: Conversion;
   readonly data: DataController;
   readonly editing: EditingController;
-  isReadOnly: boolean;
+  readonly isReadOnly: boolean;
   readonly keystrokes: EditingKeystrokeHandler;
   readonly locale: Locale;
   readonly model: Model;
@@ -60,6 +59,10 @@ export default class Editor implements Emitter, Observable {
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
+
+  enableReadOnlyMode(lockId: string | symbol): void;
+
+  disableReadOnlyMode(lockId: string | symbol): void;
 
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
 
