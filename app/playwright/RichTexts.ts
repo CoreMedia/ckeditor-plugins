@@ -28,8 +28,7 @@ export class RichTexts {
       .join(" ");
   }
 
-  static richtext(...contents: string[]): string {
-    const content = contents.join();
+  static richtext(content: string): string {
     const hasXLink = content.indexOf("xlink:") >= 0;
     const attrs = RichTexts.#joinAttributes(RichTexts.#divAttrs, (k) => k !== "xmlns:xlink" || hasXLink);
     return `<?xml version="1.0" encoding="utf-8"?><div ${attrs}>${content}</div>`;
@@ -49,8 +48,28 @@ export class RichTexts {
     return `<img ${imgElementAttrs}/>`;
   }
 
-  static p(contents: string[], attrs: Partial<CommonAttributes> = {}): string {
-    const content = contents.join();
+  static th(content = ""): string {
+    return `<td class="td--header">${content}</td>`;
+  }
+
+  static td(content = "", attrs: Partial<CommonAttributes> = {}): string {
+    const elemAttrs = RichTexts.#joinAttributes(attrs);
+    return `<td${elemAttrs ? ` ${elemAttrs}` : ""}>${content}</td>`;
+  }
+
+  static tr(content: string): string {
+    return `<tr>${content}</tr>`;
+  }
+
+  static trHeader(content: string): string {
+    return `<tr class="tr--header">${content}</tr>`;
+  }
+
+  static table(content: string): string {
+    return `<table><tbody>${content}</tbody></table>`;
+  }
+
+  static p(content = "", attrs: Partial<CommonAttributes> = {}): string {
     const elemAttrs = RichTexts.#joinAttributes(attrs);
     return `<p${elemAttrs ? ` ${elemAttrs}` : ""}>${content}</p>`
   }

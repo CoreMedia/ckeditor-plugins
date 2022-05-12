@@ -2,6 +2,7 @@ const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvi
         .default
 const pwConfig = require("./jest-playwright.config")
 const fs = require("fs");
+const fsPromises = require("fs").promises;
 
 /**
  * Custom configuration:
@@ -22,25 +23,27 @@ class CustomPlaywrightEnvironment extends PlaywrightEnvironment {
     // Your teardown
     await super.teardown()
 
-    if (this.videos.length !== 0) {
-      const {recordVideo} = pwConfig.contextOptions;
+    // Skipped, because it now fails on Windows with EBUSY (see below)
+    // await Promise.all(this.videos.map(this.renameVideo));
+  }
 
-      this.videos.forEach(video => {
-        const exists = fs.existsSync(video.videoName)
-        if (exists) {
-          try {
-            const newVideoName = `${recordVideo.dir}/${video.fullTestName}.webm`;
-            if (fs.existsSync(newVideoName)) {
-              fs.rmSync(newVideoName);
-            }
-            fs.renameSync(video.videoName, newVideoName);
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log(error)
-          }
+  async renameVideo(video) {
+    const {recordVideo} = pwConfig.contextOptions;
+    const exists = fs.existsSync(video.videoName)
+    if (exists) {
+      try {
+        const newVideoName = `${recordVideo.dir}/${video.fullTestName}`;
+        if (fs.existsSync(newVideoName)) {
+          fs.rmSync(newVideoName);
         }
-
-      })
+        // May fail with
+        // Error: EBUSY: resource busy or locked, rename 'videos\55b917798d1406deb27976bcf3cf2829.webm' -> 'videos//HelloClassicEditor_should-drag-and-drop-image_chromium_failure.webm'
+        // fs.renameSync(video.videoName, newVideoName);
+        await fsPromises.rename(video.videoName, newVideoName);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
     }
   }
 

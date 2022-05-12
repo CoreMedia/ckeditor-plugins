@@ -5,6 +5,8 @@ import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
 import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 // @ts-ignore: TODO - TSConfig seems to be broken
 import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
+import CommandCollection from "@ckeditor/ckeditor5-core/src/commandcollection";
+import Command from "@ckeditor/ckeditor5-core/src/command";
 
 export class ClassicEditorWrapper {
   readonly #page: Page;
@@ -99,6 +101,29 @@ export class ClassicEditorWrapper {
    */
   async clear(): Promise<void> {
     return this.setData("");
+  }
+
+  async commands(): Promise<JSHandle<CommandCollection>> {
+    const editor = await this.editor();
+    return editor.evaluateHandle((editor) => editor.commands);
+  }
+
+  async command(commandName: string): Promise<JSHandle<Command>> {
+    const commands = await this.commands();
+    return commands.evaluateHandle((commands, commandName) => {
+      const command = commands.get(commandName);
+      if (!command) {
+        throw new Error(`Command '${commandName}' not available. Available commands: ${[...commands.names()].join(", ")}`);
+      }
+      return command;
+      }, commandName);
+  }
+
+  async execute(commandName: string, args: unknown[] = []): Promise<void> {
+    const command = await this.command(commandName);
+    return command.evaluate((command, args) => {
+      command.execute(args);
+    }, args);
   }
 
   /**
