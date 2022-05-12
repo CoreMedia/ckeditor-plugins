@@ -25,7 +25,7 @@ export class ClassicEditorWrapper {
 
   // TODO: Use utility types for parameter types.
   invokeUi<T>(fn: keyof EditorUI, ...args: unknown[]): Cypress.Chainable<T> {
-    return this.get().invoke(fn, ...args);
+    return this.ui().invoke(fn, ...args);
   }
 
   getData(): Cypress.Chainable<string> {

@@ -10,17 +10,21 @@ const DRAG_EXAMPLES_ID = "dragExamplesDiv";
  * @param dragEvent the drag event
  */
 const setDragData = (dragEvent) => {
+  const { dataTransfer } = dragEvent;
+  if (!dataTransfer) {
+    throw new Error("DragEvent misses required `dataTransfer`.");
+  }
   const contentId = dragEvent.target.getAttribute("data-cmuripath");
   const idsArray = contentId.split(',');
   if (contentId) {
     const dragDropService = new MockDragDropService();
     dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
     serviceAgent.registerService(dragDropService);
-    dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
-    dragEvent.dataTransfer.setData('text', JSON.stringify(contentList(...idsArray)));
+    dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
+    dataTransfer.setData('text', JSON.stringify(contentList(...idsArray)));
     return;
   }
-  dragEvent.dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
+  dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
 };
 
 /**

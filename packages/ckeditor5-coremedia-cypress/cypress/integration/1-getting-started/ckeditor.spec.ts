@@ -3,6 +3,7 @@
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
+import { MockDataTransfer } from "./MockDataTransfer";
 
 // Getting Webpack Compilation Error for the following:
 // import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
@@ -243,6 +244,8 @@ describe("CKEditor Proof-of-Concept", () => {
       wrapper.editableElement
         .find("img")
         .first()
+        .parent()
+        .click()
         .drag(".target", {
           source: { position: "center" },
         })
@@ -258,5 +261,24 @@ describe("CKEditor Proof-of-Concept", () => {
       // Validate, what matters: The data written to server.
       wrapper.getData().should("eq", expected);
     });
+  });
+
+  it("should be able to drag and drop image from external", () => {
+    const wrapper = new ClassicEditorWrapper();
+    wrapper.clear();
+
+    cy.get("#dragExamplesButton").click();
+    // https://github.com/cypress-io/cypress/issues/649
+    // We need to mock the DataTransfer object.
+    const dataTransfer = new MockDataTransfer();
+    cy.get("div.drag-example").contains("Image")
+      .trigger("dragstart", { dataTransfer })
+      .trigger("dragleave", { dataTransfer });
+    wrapper.editableElement.trigger("dragenter", { dataTransfer })
+      .trigger("dragover", { dataTransfer })
+      .trigger("drop", { dataTransfer })
+      .trigger("dragend", { dataTransfer });
+
+    wrapper.editableElement.find("img").invoke("attr", "src").should("contain", "data:image/svg+xml;utf8");
   });
 });
