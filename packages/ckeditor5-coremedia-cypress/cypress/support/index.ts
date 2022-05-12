@@ -7,7 +7,6 @@ import "@percy/cypress";
 import "cypress-plugin-snapshots/commands";
 import "@4tw/cypress-drag-drop";
 import { getData, getEditor, setData, setDataSlow } from "./commands/getEditor";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -28,7 +27,6 @@ declare global {
 */
 
 const horst = (): Cypress.Chainable<string> => cy.wrap("Horst");
-const helmuth = (): Cypress.Chainable<ClassicEditor> => cy.window().its("editor").as("@editor");
 
 Cypress.Commands.add("getEditor", getEditor);
 Cypress.Commands.add("getData", getData);
