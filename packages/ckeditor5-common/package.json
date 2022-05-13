@@ -1,0 +1,62 @@
+{
+  "name": "@coremedia/ckeditor5-common",
+  "version": "5.0.0",
+  "description": "tooling to help with CKEditor 5 Plugin implementations.",
+  "keywords": [
+    "coremedia"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=5.7.1"
+  },
+  "exports": {
+    "./*": "./dist/*.js"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-arrow-functions": "^7.16.0",
+    "@babel/plugin-transform-computed-properties": "^7.16.0",
+    "@babel/plugin-transform-for-of": "^7.16.0",
+    "@babel/plugin-transform-parameters": "^7.16.3",
+    "@babel/plugin-transform-shorthand-properties": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@ckeditor/ckeditor5-core": "^32.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "^5.0.0",
+    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
+    "@types/jest": "^27.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "babel-jest": "^27.3.1",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "jest": "^27.3.1",
+    "jest-config": "^27.3.1",
+    "jest-transform-stub": "^2.0.0",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.4"
+  },
+  "peerDependencies": {
+    "@ckeditor/ckeditor5-core": "^32.0.0"
+  },
+  "dependencies": {
+    "@coremedia/ckeditor5-logging": "^5.0.0"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "jest": "jest --passWithNoTests",
+    "jest:coverage": "jest --collect-coverage --passWithNoTests",
+    "lint": "eslint --fix \"src/**\"",
+    "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
+    "npm-check-updates": "npm-check-updates --upgrade"
+  }
+}

@@ -7,6 +7,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
+import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
@@ -24,6 +26,11 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
+import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
+import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
+import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
+import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
+
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
 
@@ -31,14 +38,11 @@ import {setupPreview, updatePreview} from './preview'
 import {initExamples} from './example-data'
 import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
+  COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness
 } from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import {initDragExamples} from "./dragExamples";
-import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
 import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
-import {
-  COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY
-} from "@coremedia/ckeditor5-coremedia-richtext-support/CoreMediaRichTextSupportConfig";
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
@@ -66,15 +70,20 @@ ClassicEditor.create(document.querySelector('.editor'), {
     BlockQuote,
     Bold,
     CodeBlock,
+    ContentLinks,
+    ContentClipboard,
+    ContentImagePlugin,
     Essentials,
     Heading,
     Highlight,
+    ImageInline,
+    ImageStyle,
     Indent,
     Italic,
     AutoLink,
     Link,
+    LinkTarget,
     CoreMediaStudioEssentials,
-    GeneralRichTextSupport,
     List,
     Paragraph,
     PasteFromOffice,
@@ -145,7 +154,9 @@ ClassicEditor.create(document.querySelector('.editor'), {
         className: "align--justify",
       },
     ],
-  }, heading: {
+  },
+
+  heading: {
     options: [
       {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
       {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
@@ -187,7 +198,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
       console.log("Save triggered...");
       const start = performance.now();
       const data = currentEditor.getData({
-        // set to none, to trigger data-processing for empty text, too
+        // set to `none`, to trigger data-processing for empty text, too
         // possible values: empty, none (default: empty)
         trim: 'empty',
       });

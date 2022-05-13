@@ -35,7 +35,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     return [LinkUI, CustomLinkTargetUI];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = LinkTargetActionsViewExtension.#logger;
     const startTimestamp = performance.now();
 
@@ -49,8 +49,6 @@ class LinkTargetActionsViewExtension extends Plugin {
     logger.debug(
       `Initialized ${LinkTargetActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
     );
-
-    return null;
   }
 
   /**

@@ -1,9 +1,9 @@
 import EditingController from "@ckeditor/ckeditor5-engine/src/controller/editingcontroller";
 import DataController from "@ckeditor/ckeditor5-engine/src/controller/datacontroller";
 
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin"
-import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin"
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities"
+import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
 import PluginCollection from "../plugincollection";
 import Plugin from "../plugin";
@@ -13,7 +13,6 @@ import CommandCollection from "../commandcollection";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Conversion from "@ckeditor/ckeditor5-engine/src/conversion/conversion";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
 
 // TODO[typing]
 type EditorConfig = any;
@@ -34,7 +33,7 @@ export default class Editor implements Emitter, Observable {
   readonly model: Model;
   readonly plugins: PluginCollection;
 
-  static builtinPlugins: Array<Plugin<any>>;
+  static builtinPlugins: Array<Plugin>;
   static defaultConfig: object;
 
   constructor(config?: EditorConfig);

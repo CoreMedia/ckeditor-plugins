@@ -19,7 +19,7 @@ module.exports = {
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: "module", // Allows for the use of imports
   },
-  ignorePatterns: ["dist/", "node_modules/", "src/**/*.css", "**/*.md", "*.svg"],
+  ignorePatterns: ["dist/", "node_modules/", "src/**/*.css", "**/*.md", "*.svg", "*.orig"],
   rules: {
     "tsdoc/syntax": "warn",
   },

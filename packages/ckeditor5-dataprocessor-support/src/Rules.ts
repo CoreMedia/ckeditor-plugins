@@ -262,7 +262,7 @@ class FilterRuleSetConfigurationParser {
     const toDataKeyOrUnbound: string = hasToData ? toDataKey : FilterRuleSetConfigurationParser.#UNBOUND_TO_VIEW_KEY;
     if (typeof toViewConfig === "function") {
       // We add to the same key as for the toData mapping. Typical use case are
-      // elements which just get their elements mapped back and forth.
+      // elements, which just get their elements mapped back and forth.
       const filterRule: ElementFilterRule = toViewConfig;
       const toViewKey: string = toDataKey;
       this.#addPreParsedToViewElementsRule(toViewKey, toDataKeyOrUnbound, filterRule);

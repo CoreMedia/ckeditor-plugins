@@ -24,7 +24,7 @@ class MockStudioIntegration extends Plugin {
     return [MockContentPlugin];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = MockStudioIntegration.#logger;
 
     const startTimestamp = performance.now();
@@ -49,8 +49,6 @@ class MockStudioIntegration extends Plugin {
     serviceAgent.registerService(blobDisplayService);
 
     logger.info(`Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`);
-
-    return null;
   }
 
   #initContents(): MockContentProvider {

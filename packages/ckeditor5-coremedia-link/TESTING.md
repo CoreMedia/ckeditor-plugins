@@ -86,7 +86,7 @@ Testing binding of `LinkTargetCommand` to model and mapping into the UI.
 8. Now test for several custom texts:
 
    | Text      | Expected UI State     | Expected `linkTarget` |
-       | --------- | --------------------- | --------------------- |
+   |-----------|-----------------------|-----------------------|
    | somewhere | _Open in Frame_       | somewhere             |
    | _blank    | _Open in New Tab_     | _blank                |
    | _empty_   | _Open in Current Tab_ | _unset_               |

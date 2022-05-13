@@ -84,7 +84,10 @@ export default class ContentLinkView extends ButtonView {
       this.children.add(this.#typeIcon);
     }
 
-    /*We need these, but will only add them in the render phase to make them appear behind all other children*/
+    /*
+     * We need these, but will only add them in the render phase to make them
+     * appear behind all other children.
+     */
     if (this.renderOptions?.renderStatusIcon) {
       this.#statusIcon = new CoreMediaIconView();
     }
@@ -196,11 +199,10 @@ export default class ContentLinkView extends ButtonView {
       });
   }
 
-  destroy(): Promise<never> | null {
+  destroy(): void {
     // Prevent possible asynchronous events from re-triggering subscription.
     this.#acceptSubscriptions = false;
     this.#endContentSubscription();
     super.destroy();
-    return null;
   }
 }

@@ -15,5 +15,5 @@ export default class ImageElementSupport extends Plugin {
   /**
    * @inheritDoc
    */
-  init(): null;
+  init(): void;
 }

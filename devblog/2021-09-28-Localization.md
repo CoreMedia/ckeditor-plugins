@@ -15,7 +15,7 @@ add("de", {
 });
 ```
 
-# Providing localized texts - Decisions
+# Providing localized texts — Decisions
 
 *Decision*: Localization in plugins must be provided as `*.ts` files.
 
@@ -35,5 +35,3 @@ Example:
     label: t("Link")
  });
 ```
-
-

@@ -31,7 +31,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     return [Clipboard];
   }
 
-  init(): Promise<void> | null {
+  init(): Promise<void> | void {
     const logger = SymbolOnPasteMapper.#logger;
 
     logger.info("Initializing FontMapper Plugin");
@@ -47,7 +47,6 @@ export default class SymbolOnPasteMapper extends Plugin {
     } else {
       logger.error("Unexpected Clipboard plugin.");
     }
-    return null;
   }
 
   static #applyPluginConfig(config: FontMapperPluginConfig): void {

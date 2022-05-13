@@ -32,8 +32,6 @@ ClassicEditor
   .catch(...);
 ```
 
-**Essentials Plugin:** This Plugin is part of CoreMedia Essentials Plugin.
-
 ### Service Agent
 
 [Service Agent]: <#service-agent>
