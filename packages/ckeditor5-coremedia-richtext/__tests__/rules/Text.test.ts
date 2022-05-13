@@ -13,7 +13,7 @@ const emptyRichText = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"/>`;
 const wrapContent = (content: string): string =>
   `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}">${content}</div>`;
 
-describe.skip("CoreMediaRichTextConfig: Text Fixtures", () => {
+describe("CoreMediaRichTextConfig: Text Fixtures", () => {
   const textEntityFixtures: DataProcessingTestCase[] = flatten(
     [
       "&nbsp;",
@@ -28,8 +28,6 @@ describe.skip("CoreMediaRichTextConfig: Text Fixtures", () => {
       "&harr;",
       "&sum;",
       "&loz;",
-      // Pile of Poo, testers favorite character
-      "&#128169;",
     ].map((entity, index): DataProcessingTestCase[] => {
       const dataView = wrapContent(`<p>${text}${encodeString(entity)}${text}</p>`);
       const dataFromDataView = wrapContent(`<p>${text}${decodeEntity(entity)}${text}</p>`);
