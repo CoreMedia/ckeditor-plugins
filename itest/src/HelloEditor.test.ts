@@ -22,7 +22,7 @@ describe("Hello Editor", () => {
   });
 
   it("Example Application should expose CKEditor as global `editor`", async () => {
-    await waitForExpect(async () => expect(await application.editor.exists()).toBe(true));
+    await expect(application).toReferenceCKEditor();
   });
 
   it("Should update data when cleared.", async () => {

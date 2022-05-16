@@ -4,6 +4,7 @@ import { Response } from "playwright";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
+import waitForExpect from "wait-for-expect";
 
 /**
  * Represents result from starting the server.
@@ -105,5 +106,46 @@ export class ApplicationWrapper {
    */
   get editor(): ClassicEditorWrapper {
     return ClassicEditorWrapper.fromPage(page);
+  }
+}
+
+/**
+ * JEST Extension: Add matchers for `ApplicationConsole`.
+ */
+expect.extend({
+  toReferenceCKEditor: async (a: ApplicationWrapper): Promise<jest.CustomMatcherResult> => {
+    return waitForExpect(async () => expect(await a.editor.exists()).toBe(true))
+      .then(() => ({
+        message: () => "expected CKEditor not to be available at `window.editor` but it is",
+        pass: true,
+      }))
+      .catch(() => ({
+        message: () => "expected CKEditor not to be available at `window.editor` but it is",
+        pass: true,
+      }));
+  },
+});
+
+/**
+ * Extension to matchers for Application Console.
+ */
+export interface ApplicationWrapperMatchers<R = unknown> {
+  toReferenceCKEditor(): R;
+}
+
+/**
+ * Tell TypeScript to know of new matchers.
+ */
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace jest {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Expect extends ApplicationWrapperMatchers {}
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Matchers<R> extends ApplicationWrapperMatchers<R> {}
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface InverseAsymmetricMatchers extends ApplicationWrapperMatchers {}
   }
 }
