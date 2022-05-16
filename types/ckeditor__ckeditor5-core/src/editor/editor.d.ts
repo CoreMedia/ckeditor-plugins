@@ -58,6 +58,8 @@ export default class Editor implements Emitter, Observable {
 
   fire(eventOrInfo: string | EventInfo, ...args: any[]): any;
 
+  focus(): void;
+
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 
   listenTo(emitter: Emitter, event: string, callback: CallbackFunction, options?: { priority: PriorityString | number }): void;
