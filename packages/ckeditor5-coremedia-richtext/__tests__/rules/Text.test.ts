@@ -28,8 +28,6 @@ describe("CoreMediaRichTextConfig: Text Fixtures", () => {
       "&harr;",
       "&sum;",
       "&loz;",
-      // Pile of Poo, testers favorite character
-      "&#128169;",
     ].map((entity, index): DataProcessingTestCase[] => {
       const dataView = wrapContent(`<p>${text}${encodeString(entity)}${text}</p>`);
       const dataFromDataView = wrapContent(`<p>${text}${decodeEntity(entity)}${text}</p>`);
