@@ -1,5 +1,4 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import waitForExpect from "wait-for-expect";
 
 /**
  * Provides some first test mainly for demonstration purpose of the test API.
@@ -27,7 +26,7 @@ describe("Hello Editor", () => {
 
   it("Should update data when cleared.", async () => {
     await application.editor.setData("");
-    await waitForExpect(async () => expect(await application.editor.getData()).toBe(""));
+    await expect(application.editor).toHaveDataEqualTo("");
   });
 
   afterAll(async () => {

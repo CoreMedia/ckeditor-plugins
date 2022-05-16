@@ -5,6 +5,7 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import waitForExpect from "wait-for-expect";
+import { extendingWaitForExpect } from "./Expectations";
 
 /**
  * Represents result from starting the server.
@@ -113,16 +114,14 @@ export class ApplicationWrapper {
  * JEST Extension: Add matchers for `ApplicationConsole`.
  */
 expect.extend({
-  toReferenceCKEditor: async (a: ApplicationWrapper): Promise<jest.CustomMatcherResult> => {
-    return waitForExpect(async () => expect(await a.editor.exists()).toBe(true))
-      .then(() => ({
-        message: () => "expected CKEditor not to be available at `window.editor` but it is",
-        pass: true,
-      }))
-      .catch(() => ({
-        message: () => "expected CKEditor not to be available at `window.editor` but it is",
-        pass: true,
-      }));
+  async toReferenceCKEditor(a: ApplicationWrapper): Promise<jest.CustomMatcherResult> {
+    return extendingWaitForExpect(
+      "toReferenceCKEditor",
+      async () => expect(await a.editor.exists()).toBe(true),
+      "window.editor exists",
+      "window.editor does not exist",
+      this
+    );
   },
 });
 
