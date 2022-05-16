@@ -51,14 +51,24 @@ expect.extend({
 });
 
 /**
- * JEST Extension: Declare extension for TypeScript.
+ * Extension to matchers for Application Console.
+ */
+export interface ApplicationConsoleMatchers<R = unknown> {
+  toHaveNoErrorsOrWarnings(): R;
+}
+
+/**
+ * Tell TypeScript to know of new matchers.
  */
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
-    interface Matchers<R> {
-      toHaveNoErrorsOrWarnings(): CustomMatcherResult;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Expect extends ApplicationConsoleMatchers {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Matchers<R> extends ApplicationConsoleMatchers<R> {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface InverseAsymmetricMatchers extends ApplicationConsoleMatchers {}
   }
 }
 
