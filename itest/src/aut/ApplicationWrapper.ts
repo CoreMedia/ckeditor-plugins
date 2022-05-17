@@ -128,8 +128,10 @@ expect.extend({
 /**
  * Extension to matchers for Application Console.
  */
-export interface ApplicationWrapperMatchers<R = unknown> {
-  toReferenceCKEditor(): R;
+export interface ApplicationWrapperMatchers<R = unknown, T = unknown> {
+  toReferenceCKEditor: T extends ApplicationWrapper
+    ? () => R
+    : "Type-level Error: Received value must be an ApplicationWrapper.";
 }
 
 /**
@@ -141,8 +143,8 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface Expect extends ApplicationWrapperMatchers {}
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface Matchers<R> extends ApplicationWrapperMatchers<R> {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface,@typescript-eslint/ban-types
+    interface Matchers<R = unknown, T = {}> extends ApplicationWrapperMatchers<R, T> {}
 
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface InverseAsymmetricMatchers extends ApplicationWrapperMatchers {}

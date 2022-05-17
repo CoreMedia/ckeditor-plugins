@@ -69,8 +69,10 @@ expect.extend({
 /**
  * Extension to matchers for Application Console.
  */
-export interface ClassicEditorWrapperMatchers<R = unknown> {
-  toHaveDataEqualTo(expectedData: string): R;
+export interface ClassicEditorWrapperMatchers<R = unknown, T = unknown> {
+  toHaveDataEqualTo: T extends ClassicEditorWrapper
+    ? (expectedData: string) => R
+    : "Type-level Error: Received value must be a ClassicEditorWrapper";
 }
 
 /**
@@ -82,8 +84,8 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface Expect extends ClassicEditorWrapperMatchers {}
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface Matchers<R> extends ClassicEditorWrapperMatchers<R> {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface,@typescript-eslint/ban-types
+    interface Matchers<R = unknown, T = {}> extends ClassicEditorWrapperMatchers<R, T> {}
 
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface InverseAsymmetricMatchers extends ClassicEditorWrapperMatchers {}
