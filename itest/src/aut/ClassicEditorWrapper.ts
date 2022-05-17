@@ -3,6 +3,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor"
 import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { extendingWaitForExpect } from "./Expectations";
+import { EditorUiWrapper } from "./EditorUiWrapper";
 
 /**
  * Provides access to the editor within the example application. It requires
@@ -32,6 +33,13 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
   }
 
   /**
+   * Provides a handle to the `EditorUI` of the CKEditor.
+   */
+  get ui(): EditorUiWrapper {
+    return EditorUiWrapper.fromClassicEditor(this);
+  }
+
+  /**
    * Provide access to ClassicEditor via Page.
    * @param page - page to evaluate handle for ClassicEditor
    * @param name - name of the editor instance, stored at `window`
@@ -54,6 +62,14 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
  * JEST Extension: Add matchers for `ClassicEditorWrapper`.
  */
 expect.extend({
+  async toHaveDataContaining(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
+    return extendingWaitForExpect(
+      "toHaveDataContaining",
+      async () => expect(await w.getData()).toContain(expectedData),
+      async () => expect(await w.getData()).not.toContain(expectedData),
+      this
+    );
+  },
   async toHaveDataEqualTo(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
     return extendingWaitForExpect(
       "toHaveDataEqualTo",
@@ -68,6 +84,9 @@ expect.extend({
  * Extension to matchers for Application Console.
  */
 export interface ClassicEditorWrapperMatchers<R = unknown, T = unknown> {
+  toHaveDataContaining: T extends ClassicEditorWrapper
+    ? (expectedData: string) => R
+    : "Type-level Error: Received value must be a ClassicEditorWrapper";
   toHaveDataEqualTo: T extends ClassicEditorWrapper
     ? (expectedData: string) => R
     : "Type-level Error: Received value must be a ClassicEditorWrapper";
