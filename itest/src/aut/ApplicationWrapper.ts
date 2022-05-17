@@ -118,8 +118,7 @@ expect.extend({
     return extendingWaitForExpect(
       "toReferenceCKEditor",
       async () => expect(await a.editor.exists()).toBe(true),
-      "window.editor exists",
-      "window.editor does not exist",
+      async () => expect(await a.editor.exists()).toBe(false),
       this
     );
   },

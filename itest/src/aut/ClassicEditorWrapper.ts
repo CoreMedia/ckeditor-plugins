@@ -58,9 +58,7 @@ expect.extend({
     return extendingWaitForExpect(
       "toHaveDataEqualTo",
       async () => expect(await w.getData()).toStrictEqual(expectedData),
-      expectedData,
-      // Needs careful analysis on flaky behavior, as this is not the last data used for comparison.
-      w.getData(),
+      async () => expect(await w.getData()).not.toStrictEqual(expectedData),
       this
     );
   },
