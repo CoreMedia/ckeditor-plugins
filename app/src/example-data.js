@@ -1321,6 +1321,47 @@ const exampleData = {
   CoreMedia RichText 1.0 (and HTML) lists within CKEditor 5.
   </p>
   <ul><li>Lorem</li><li><p>Ipsum</p></li><li>Dolor</li></ul>`),
+
+  "Valid List Elements": richText(`
+  ${h1("Valid List Elements")}
+  <p>
+    The following example shows an overview of valid elements in lists. List elements can either be
+    inline-, block- or plain text elements. Please see the lists below.
+  </p>
+  <p>
+    These lists show a symptom of the document lists, described in
+    <a xlink:href="https://github.com/ckeditor/ckeditor5/issues/11786">ckeditor/ckeditor5#11786</a>.
+    CKEditor 5 adds an additional &lt;span class="ck-list-bogus-paragraph"> element inside the &lt;li> element.
+    This can be observed for all inline elements in the SourceEditing view.
+  </p>
+  <p>
+    It can also be observed for paragraphs, images, nested lists (an empty span appears before the list) and plain text.
+  </p>
+  <p>
+    The first list contains inline elements (&lt;/br>, &lt;span>, &lt;em>, &lt;strong>, &lt;sup>, &lt;sub> and &lt;a>).
+  </p>
+  <ul>
+    <li><br/>Lorem Linebreak</li>
+    <li><span>Lorem Ipusum in additional span tag</span></li>
+    <li><em>Italic Lorem Ipsum in em tag</em></li>
+    <li><strong>Bold Lorem Ipsum in strong tag</strong></li>
+    <li>Lorem <sup>Ipsum</sup> (sup tag)</li>
+    <li>Lorem <sub>Ipsum</sub> (sub tag)</li>
+    <li><a xlink:href="https://example.org/">Link to example.org</a></li>
+  </ul>
+  <p>The next list contains block elements (&lt;p>, &lt;ol>, &lt;blockquote>, &lt;pre>, &lt;table> and &lt;img>). </p>
+  <ul>
+    <li><p>Lorem Ipsum in Paragraph</p></li>
+    <li><ol><li>Lorem Ipsum List Element</li></ol></li>
+    <li><pre>Lorem Ipsum Blocktext</pre></li>
+    <li><blockquote>Lorem Ipsum Blockquote</blockquote></li>
+    <li><table><tr><td>Lorem Ipsum Table Cell</td></tr></table></li>
+    <li><img xlink:href="${INLINE_IMG}" alt="inline image"/></li>
+  </ul>
+  <p>The next list contains plain text without any tags (PCDATA).</p>
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisici elit</li>
+  </ul>`)
 };
 
 const setExampleData = (editor, exampleKey) => {
