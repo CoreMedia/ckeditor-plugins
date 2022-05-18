@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { a, p, richtext } from "./aut/Richtext";
+import { a, p, richtext } from "./fixture/Richtext";
 import waitForExpect from "wait-for-expect";
 
 /**
