@@ -1,3 +1,17 @@
+/**
+ * Example Usage:
+ * ```
+ * const text = richtext([
+ *   p("This is an introduction."),
+ *   ul([
+ *     li("Simple List Item"),
+ *     li(p("List Item with Paragraph")),
+ *     li("List Item with class", { class: "some--class" }),
+ *   ]),
+ * ]);
+ * ```
+ * @packageDocumentation
+ */
 // noinspection HttpUrlsUsage
 export const defaultNamespaceUri = "http://www.coremedia.com/2003/richtext-1.0";
 export const xlinkNamespace = {
