@@ -1,4 +1,6 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
+import { a, p, richtext } from "./aut/Richtext";
+import waitForExpect from "wait-for-expect";
 
 /**
  * Provides some first test mainly for demonstration purpose of the test API.
@@ -62,5 +64,27 @@ describe("Hello Editor", () => {
     await handle.type(currentTestName);
 
     await expect(editor).toHaveDataContaining(currentTestName);
+  });
+
+  it("Should render external links.", async () => {
+    const { currentTestName } = expect.getState();
+    const { editor } = application;
+    const { ui } = editor;
+    const handle = await ui.getEditableElement();
+
+    const linkTarget = "https://example.org";
+    const data = richtext(p(a(currentTestName, { "xlink:href": "https://example.org" })));
+    await editor.setData(data);
+
+    // waitForExpect: If we feel, this gets to complex, repeated too often we
+    // may instead want to hide this in custom matchers or within the wrappers.
+    //
+    // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
+    // for display purpose to the UI. Nevertheless, this serves as example, how
+    // we may test the rendered editing view.
+    // noinspection InnerHTMLJS
+    await waitForExpect(async () =>
+      expect(await handle.innerHTML()).toContain(` href="${linkTarget}">${currentTestName}</>`)
+    );
   });
 });
