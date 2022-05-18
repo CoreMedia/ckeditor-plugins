@@ -4,7 +4,7 @@ import { Response } from "playwright";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
-import { extendingWaitForExpect } from "./Expectations";
+import { extendingWaitForExpect } from "../expect/Expectations";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 
 /**

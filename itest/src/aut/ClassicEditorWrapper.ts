@@ -2,7 +2,7 @@ import { Page } from "playwright";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
-import { extendingWaitForExpect } from "./Expectations";
+import { extendingWaitForExpect } from "../expect/Expectations";
 import { EditorUiWrapper } from "./EditorUiWrapper";
 
 /**
