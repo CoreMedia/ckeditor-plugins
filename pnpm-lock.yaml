@@ -129,12 +129,16 @@ importers:
       '@ckeditor/ckeditor5-core': ^32.0.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-coremedia-studio-integration': ^5.0.1-rc.0
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock': ^5.0.1-rc.0
+      '@coremedia/ckeditor5-logging': ^5.0.1-rc.0
       '@coremedia/types-ckeditor__ckeditor5-core': ^5.0.1-rc.0
       '@types/express': ^4.17.13
       '@types/jest': ^27.0.2
       '@types/node': ^16.11.26
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
+      enhanced-resolve: ^5.9.3
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
@@ -152,6 +156,7 @@ importers:
       playwright-core: ^1.22.0
       prettier: ^2.4.1
       rimraf: ^3.0.2
+      tslib: ^2.4.0
       typescript: ^4.4.4
       wait-for-expect: ^3.0.2
     devDependencies:
@@ -160,12 +165,16 @@ importers:
       '@ckeditor/ckeditor5-core': 32.0.0
       '@coremedia-internal/ckeditor5-babel-config': link:../packages/ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../packages/ckeditor5-jest-test-helpers
+      '@coremedia/ckeditor5-coremedia-studio-integration': link:../packages/ckeditor5-coremedia-studio-integration
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
+      '@coremedia/ckeditor5-logging': link:../packages/ckeditor5-logging
       '@coremedia/types-ckeditor__ckeditor5-core': link:../types/ckeditor__ckeditor5-core
       '@types/express': 4.17.13
       '@types/jest': 27.0.2
       '@types/node': 16.11.35
       '@typescript-eslint/eslint-plugin': 5.10.2_ef898d455f9b0babfb845561449ef0a9
       '@typescript-eslint/parser': 5.10.2_eslint@8.8.0+typescript@4.4.4
+      enhanced-resolve: 5.9.3
       eslint: 8.8.0
       eslint-config-prettier: 8.3.0_eslint@8.8.0
       eslint-plugin-prettier: 4.0.0_4a0e5de4f03066b3e41f4686fcb460f0
@@ -183,6 +192,7 @@ importers:
       playwright-core: 1.22.0
       prettier: 2.4.1
       rimraf: 3.0.2
+      tslib: 2.4.0
       typescript: 4.4.4
       wait-for-expect: 3.0.2
 
@@ -6323,6 +6333,14 @@ packages:
     dependencies:
       graceful-fs: 4.2.8
       tapable: 2.2.0
+
+  /enhanced-resolve/5.9.3:
+    resolution: {integrity: sha512-Bq9VSor+kjvW3f9/MiiR4eE3XYgOl7/rS8lnSxbRbF3kS0B2r+Y9w5krBWxZgDxASVZbdYrn5wT4j/Wb0J9qow==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      graceful-fs: 4.2.9
+      tapable: 2.2.0
+    dev: true
 
   /enquirer/2.3.6:
     resolution: {integrity: sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==}
@@ -12923,6 +12941,10 @@ packages:
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
     dev: false
+
+  /tslib/2.4.0:
+    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+    dev: true
 
   /tsutils/3.21.0_typescript@4.4.4:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

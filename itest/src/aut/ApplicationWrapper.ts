@@ -5,6 +5,7 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { extendingWaitForExpect } from "./Expectations";
+import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 
 /**
  * Represents result from starting the server.
@@ -106,6 +107,17 @@ export class ApplicationWrapper {
    */
   get editor(): ClassicEditorWrapper {
     return ClassicEditorWrapper.fromPage(page);
+  }
+
+  /**
+   * Provides access to mock content plugin.
+   *
+   * While essentially being configured as plugin to CKEditor, this getter
+   * is meant has high-level shortcut for mocking contents right from the
+   * application wrapper.
+   */
+  get mockContent(): MockContentPluginWrapper {
+    return MockContentPluginWrapper.fromClassicEditor(this.editor);
   }
 }
 

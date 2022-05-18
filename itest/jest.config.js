@@ -9,4 +9,6 @@ module.exports = {
   preset: "jest-playwright-preset",
   testEnvironment: "./playwright.environment.js",
   setupFilesAfterEnv: ["expect-playwright"],
+  // We still have to use Jest 27 in this module, affected by https://github.com/facebook/jest/issues/9771
+  resolver: require.resolve("./jest-9771-workaround-resolve.js"),
 };
