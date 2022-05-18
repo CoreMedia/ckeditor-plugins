@@ -84,7 +84,7 @@ describe("Hello Editor", () => {
     // we may test the rendered editing view.
     // noinspection InnerHTMLJS
     await waitForExpect(async () =>
-      expect(await handle.innerHTML()).toContain(` href="${linkTarget}">${currentTestName}</>`)
+      expect(await handle.innerHTML()).toContain(` href="${linkTarget}">${currentTestName}</a>`)
     );
   });
 });
