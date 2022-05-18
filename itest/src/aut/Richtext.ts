@@ -84,15 +84,35 @@ export const joinAttributes = (attrs: AnyAttributes, keyFilter: (k: string) => b
 };
 
 /**
+ * We may provide contents as single string or as array of strings.
+ * An array of strings will be joined without separator (thus, attached
+ * to each other).
+ */
+export type Content = string | string[];
+
+/**
+ * Validates, that content must not be empty.
+ * @param content - content to validate
+ */
+export const nonEmptyContent = (content: Content): Content => {
+  // This would still allow passing `[""]`, but no need for further checks for now.
+  if (content.length === 0) {
+    throw new Error("Content must not be empty.");
+  }
+  return content;
+};
+
+/**
  * Support for any non-empty element.
  *
  * @param element - non-empty element to create
  * @param content - content to wrap by element
  * @param attrs - attributes to apply to element
  */
-export const nonEmptyElement = (element: string, content = "", attrs: string | AnyAttributes = ""): string => {
+export const nonEmptyElement = (element: string, content: Content = "", attrs: string | AnyAttributes = ""): string => {
   const elemAttrs = typeof attrs === "string" ? attrs : joinAttributes(attrs);
-  return `<${element}${elemAttrs ? ` ${elemAttrs}` : ""}>${content}</${element}>`;
+  const joinedContent = Array.isArray(content) ? content.join("") : content;
+  return `<${element}${elemAttrs ? ` ${elemAttrs}` : ""}>${joinedContent}</${element}>`;
 };
 
 /**
@@ -116,7 +136,7 @@ export const emptyElement = (element: string, attrs: string | AnyAttributes = ""
  * `<?xml version="1.0" encoding="utf-8"?>`; the richtext `<div>` will be
  * directly appended without any additional whitespace
  */
-export const richtext = (content = "", xmlDeclaration = defaultXmlDeclaration): string => {
+export const richtext = (content: Content = "", xmlDeclaration = defaultXmlDeclaration): string => {
   const hasXLink = content.includes(xlinkNamespace.prefix);
   const attrs = joinAttributes(defaultRichtextAttributes, (k) => k !== xlinkNamespace.attr || hasXLink);
   return `${xmlDeclaration}${nonEmptyElement("div", content, attrs)}`;
@@ -130,7 +150,7 @@ export const richtext = (content = "", xmlDeclaration = defaultXmlDeclaration): 
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const p = (content = "", attrs: Attributes = {}): string => {
+export const p = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("p", content, { ...attrs });
 };
 
@@ -142,8 +162,8 @@ export const p = (content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const ul = (content: string, attrs: Attributes = {}): string => {
-  return nonEmptyElement("ul", content, { ...attrs });
+export const ul = (content: Content, attrs: Attributes = {}): string => {
+  return nonEmptyElement("ul", nonEmptyContent(content), { ...attrs });
 };
 
 /**
@@ -154,8 +174,8 @@ export const ul = (content: string, attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const ol = (content: string, attrs: Attributes = {}): string => {
-  return nonEmptyElement("ol", content, { ...attrs });
+export const ol = (content: Content, attrs: Attributes = {}): string => {
+  return nonEmptyElement("ol", nonEmptyContent(content), { ...attrs });
 };
 
 /**
@@ -166,7 +186,7 @@ export const ol = (content: string, attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const li = (content = "", attrs: Attributes = {}): string => {
+export const li = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("li", content, { ...attrs });
 };
 
@@ -185,7 +205,7 @@ export interface PreAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const pre = (content = "", attrs: PreAttributes = {}): string => {
+export const pre = (content: Content = "", attrs: PreAttributes = {}): string => {
   return nonEmptyElement("pre", content, { ...attrs });
 };
 
@@ -204,7 +224,7 @@ export interface BlockquoteAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const blockquote = (content = "", attrs: BlockquoteAttributes = {}): string => {
+export const blockquote = (content: Content = "", attrs: BlockquoteAttributes = {}): string => {
   return nonEmptyElement("pre", content, { ...attrs });
 };
 
@@ -228,7 +248,7 @@ export interface AnchorAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const a = (content: string, attrs: AnchorAttributes): string => {
+export const a = (content: Content = "", attrs: AnchorAttributes): string => {
   return nonEmptyElement("a", content, { ...attrs });
 };
 
@@ -240,7 +260,7 @@ export const a = (content: string, attrs: AnchorAttributes): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const span = (content = "", attrs: Attributes = {}): string => {
+export const span = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("span", content, { ...attrs });
 };
 
@@ -250,7 +270,7 @@ export const span = (content = "", attrs: Attributes = {}): string => {
  * @param attrs - attributes to apply to element
  */
 export const br = (attrs: CoreAttributes = {}): string => {
-  return emptyElement("span", { ...attrs });
+  return emptyElement("br", { ...attrs });
 };
 
 /**
@@ -261,7 +281,7 @@ export const br = (attrs: CoreAttributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const em = (content = "", attrs: Attributes = {}): string => {
+export const em = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("em", content, { ...attrs });
 };
 
@@ -273,7 +293,7 @@ export const em = (content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const strong = (content = "", attrs: Attributes = {}): string => {
+export const strong = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("strong", content, { ...attrs });
 };
 
@@ -285,7 +305,7 @@ export const strong = (content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const sub = (content = "", attrs: Attributes = {}): string => {
+export const sub = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("sub", content, { ...attrs });
 };
 
@@ -297,7 +317,7 @@ export const sub = (content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const sup = (content = "", attrs: Attributes = {}): string => {
+export const sup = (content: Content = "", attrs: Attributes = {}): string => {
   return nonEmptyElement("sup", content, { ...attrs });
 };
 
@@ -325,6 +345,90 @@ export const img = (attrs: ImageAttributes): string => {
   return emptyElement("img", { ...attrs });
 };
 
-/*
- * TODO: Add Tables
+/**
+ * Horizontal Alignment Attribute.
  */
+export interface CellHAlign {
+  align?: "left" | "center" | "right";
+}
+
+/**
+ * Vertical Alignment Attribute.
+ */
+export interface CellVAlign {
+  valign?: "top" | "middle" | "bottom" | "baseline";
+}
+
+/**
+ * Attributes applicable to `<table>`.
+ */
+export interface TableAttributes extends Attributes {
+  summary?: Text;
+}
+
+/**
+ * Wraps given content into `<table>` with given attributes.
+ *
+ * **Content:** `(tbody|tr+)`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const table = (content: Content, attrs: TableAttributes = {}) => {
+  return nonEmptyElement("table", nonEmptyContent(content), { ...attrs });
+};
+
+/**
+ * Attributes applicable to `<tbody>`.
+ */
+export interface TableBodyAttributes extends Attributes, CellHAlign, CellVAlign {}
+
+/**
+ * Wraps given content into `<tbody>` with given attributes.
+ *
+ * **Content:** `(tr)+`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const tbody = (content: Content, attrs: TableBodyAttributes = {}) => {
+  return nonEmptyElement("tbody", nonEmptyContent(content), { ...attrs });
+};
+
+/**
+ * Attributes applicable to `<tr>`.
+ */
+export interface TableRowAttributes extends Attributes, CellHAlign, CellVAlign {}
+
+/**
+ * Wraps given content into `<tr>` with given attributes.
+ *
+ * **Content:** `(td)+`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const tr = (content: Content, attrs: TableRowAttributes = {}) => {
+  return nonEmptyElement("tr", nonEmptyContent(content), { ...attrs });
+};
+
+/**
+ * Attributes applicable to `<td>`.
+ */
+export interface TableDataAttributes extends Attributes, CellHAlign, CellVAlign {
+  abbr?: Text;
+  rowspan?: number;
+  colspan?: number;
+}
+
+/**
+ * Wraps given content into `<td>` with given attributes.
+ *
+ * **Content:** `(td)+`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const td = (content: Content, attrs: TableDataAttributes = {}) => {
+  return nonEmptyElement("td", nonEmptyContent(content), { ...attrs });
+};
