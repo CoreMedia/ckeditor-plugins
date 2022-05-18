@@ -8,7 +8,7 @@ expect.extend({
   async waitForInnerHtmlToContain(handle: ElementHandle, expected: string): Promise<jest.CustomMatcherResult> {
     // noinspection InnerHTMLJS
     return extendingWaitForExpect(
-      "innerHtmlToContain",
+      "waitForInnerHtmlToContain",
       async () => expect(await handle.innerHTML()).toContain(expected),
       async () => expect(await handle.innerHTML()).not.toContain(expected),
       this

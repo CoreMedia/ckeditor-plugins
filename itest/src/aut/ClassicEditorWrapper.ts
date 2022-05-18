@@ -62,17 +62,17 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
  * JEST Extension: Add matchers for `ClassicEditorWrapper`.
  */
 expect.extend({
-  async toHaveDataContaining(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
+  async waitForDataContaining(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
     return extendingWaitForExpect(
-      "toHaveDataContaining",
+      "waitForDataContaining",
       async () => expect(await w.getData()).toContain(expectedData),
       async () => expect(await w.getData()).not.toContain(expectedData),
       this
     );
   },
-  async toHaveDataEqualTo(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
+  async waitForDataEqualTo(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
     return extendingWaitForExpect(
-      "toHaveDataEqualTo",
+      "waitForDataEqualTo",
       async () => expect(await w.getData()).toStrictEqual(expectedData),
       async () => expect(await w.getData()).not.toStrictEqual(expectedData),
       this
@@ -84,10 +84,16 @@ expect.extend({
  * Extension to matchers for Application Console.
  */
 export interface ClassicEditorWrapperMatchers<R = unknown, T = unknown> {
-  toHaveDataContaining: T extends ClassicEditorWrapper
+  /**
+   * Waits for CKEditor data to contain the given substring.
+   */
+  waitForDataContaining: T extends ClassicEditorWrapper
     ? (expectedData: string) => R
     : "Type-level Error: Received value must be a ClassicEditorWrapper";
-  toHaveDataEqualTo: T extends ClassicEditorWrapper
+  /**
+   * Waits for CKEditor data to be equal to the given string.
+   */
+  waitForDataEqualTo: T extends ClassicEditorWrapper
     ? (expectedData: string) => R
     : "Type-level Error: Received value must be a ClassicEditorWrapper";
 }

@@ -11,7 +11,7 @@ describe("Hello Editor", () => {
   const reload = async () => {
     await application.goto();
     // Wait for CKEditor to be available prior to executing/continuing the tests.
-    await expect(application).toReferenceCKEditor();
+    await expect(application).waitForCKEditorToBeAvailable();
   };
 
   beforeAll(async () => {
@@ -34,7 +34,7 @@ describe("Hello Editor", () => {
 
   it("Should update data when cleared.", async () => {
     await application.editor.setData("");
-    await expect(application.editor).toHaveDataEqualTo("");
+    await expect(application.editor).waitForDataEqualTo("");
   });
 
   it("Should initially load with some welcome text rendered.", async () => {
@@ -58,12 +58,12 @@ describe("Hello Editor", () => {
 
     await editor.setData("");
     // Wait for pre-condition to be fulfilled.
-    await expect(editor).toHaveDataEqualTo("");
+    await expect(editor).waitForDataEqualTo("");
 
     const handle = await ui.getEditableElement();
     await handle.type(currentTestName);
 
-    await expect(editor).toHaveDataContaining(currentTestName);
+    await expect(editor).waitForDataContaining(currentTestName);
   });
 
   it("Should render external links.", async () => {

@@ -125,9 +125,9 @@ export class ApplicationWrapper {
  * JEST Extension: Add matchers for `ApplicationConsole`.
  */
 expect.extend({
-  async toReferenceCKEditor(a: ApplicationWrapper): Promise<jest.CustomMatcherResult> {
+  async waitForCKEditorToBeAvailable(a: ApplicationWrapper): Promise<jest.CustomMatcherResult> {
     return extendingWaitForExpect(
-      "toReferenceCKEditor",
+      "waitForCKEditorToBeAvailable",
       async () => expect(await a.editor.exists()).toBe(true),
       async () => expect(await a.editor.exists()).toBe(false),
       this
@@ -139,7 +139,7 @@ expect.extend({
  * Extension to matchers for Application Console.
  */
 export interface ApplicationWrapperMatchers<R = unknown, T = unknown> {
-  toReferenceCKEditor: T extends ApplicationWrapper
+  waitForCKEditorToBeAvailable: T extends ApplicationWrapper
     ? () => R
     : "Type-level Error: Received value must be an ApplicationWrapper.";
 }
