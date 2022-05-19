@@ -31,10 +31,6 @@ export default class DowncastHelpers extends ConversionHelpers {
   elementToElement(config: {
     model: string | Object,
     view: any | Function,
-    triggerBy?: {
-      attributes: string[],
-      children: string[],
-    },
   }): DowncastHelpers;
 
   markerToData(config: {
