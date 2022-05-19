@@ -32,7 +32,7 @@
         "../../packages/ckeditor5-coremedia-studio-integration/src/*"
       ],
       "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
-        "../../packages/ckeditor5-coremedia-studio-integration/src/*"
+        "../../packages/ckeditor5-coremedia-studio-integration-mock/src/*"
       ]
     }
   },
