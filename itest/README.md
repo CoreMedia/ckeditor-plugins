@@ -40,6 +40,11 @@ headed mode), you can configure `jest` accordingly with these Jest CLI Option:
 --config ./jest.local.js
 ```
 
+> **Note on updating `jest.local.js` as well as `jest-playwright.local.js`:**
+>
+> Both files are by default "git-ignored", so that you may do local changes
+> To propagate adaptions, you need to call `git add` with `--force` flag.
+
 [Jest]: <https://jestjs.io/>
 [Jest Playwright]: <https://github.com/playwright-community/jest-playwright>
 [Playwright]: <https://playwright.dev/>
