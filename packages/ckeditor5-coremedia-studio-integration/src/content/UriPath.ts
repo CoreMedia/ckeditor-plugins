@@ -53,6 +53,16 @@ export const contentUriPath = (contentId: number): string => {
 };
 
 /**
+ * Returns the content URI as used within CKEditor model for a
+ * given content ID.
+ *
+ * @param contentId - id to create content URI for CKEditor model
+ */
+export const contentCkeModelUri = (contentId: number): string => {
+  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
+};
+
+/**
  * Requires a Content URI Path, which can be handled by CoreMedia Studio to
  * represent a content. In case of the CKEditor model representation using a
  * colon within the content identifier, this is magically transformed to
@@ -77,7 +87,7 @@ export const requireContentUriPath = (str: string): UriPath => {
     throw new InvalidUriPathError(`Invalid Content URI path or cannot convert to URI path: '${str}'.`);
   }
 
-  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
+  return contentCkeModelUri(~~contentId);
 };
 
 /**
