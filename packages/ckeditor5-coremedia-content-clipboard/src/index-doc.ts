@@ -3,6 +3,8 @@
  *
  * @module ckeditor5-coremedia-content-clipboard
  */
+export * as integrations from "./integrations/index-doc";
+
 export * from "./ContentClipboard";
 export { default as ContentClipboard } from "./ContentClipboard";
 

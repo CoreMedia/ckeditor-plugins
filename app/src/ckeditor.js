@@ -9,7 +9,6 @@ import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
@@ -79,7 +78,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Highlight,
     ImageInline,
     ImageStyle,
-    ImageToolbar,
     Indent,
     Italic,
     AutoLink,
@@ -200,7 +198,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
       console.log("Save triggered...");
       const start = performance.now();
       const data = currentEditor.getData({
-        // set to none, to trigger data-processing for empty text, too
+        // set to `none`, to trigger data-processing for empty text, too
         // possible values: empty, none (default: empty)
         trim: 'empty',
       });

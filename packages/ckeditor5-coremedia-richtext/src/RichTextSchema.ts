@@ -2,7 +2,7 @@
  * =============================================================================
  * This is a straightforward implementation of `coremedia-richtext-1.0.dtd`.
  * It is meant for validation and filtering. The structure of the definitions
- * is very similar to the DTD, so that it should be easy detecting similarities.
+ * is similar to the DTD, so that it should be easy detecting similarities.
  * =============================================================================
  */
 
@@ -90,7 +90,7 @@ interface Attributes {
 }
 
 /**
- * Similar to a Relax NG ModelGroup this specifies possible contents of
+ * Similar to a Relax-NG ModelGroup this specifies possible contents of
  * an element. This is not an exact mapping, but enough for the
  * CoreMedia RichText 1.0 DTD validation.
  *

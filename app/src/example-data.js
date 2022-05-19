@@ -239,7 +239,7 @@ function linkTargetExamples() {
      */
     new: "_blank",
     /**
-     * May be either `_top` or `_self`. In CoreMedia CAE context we decided to
+     * Maybe either `_top` or `_self`. In CoreMedia CAE context we decided to
      * map `replace` to `_self` as this is, what is documented for example
      * at MDN.
      */
@@ -537,7 +537,7 @@ const lorem = (words, paragraphs) => {
 };
 
 /**
- * Provides several examples of valid CoreMedia RichText which should be able
+ * Provides several examples of valid CoreMedia RichText, which should be able
  * to be represented within CKEditor View, as well as it should be stored without
  * changes back to data.
  */
@@ -742,7 +742,7 @@ const grsExampleData = () => {
   /**
    * Example data for General RichText Support (based on CKEditor's General
    * HTML Support). Only the existence of elements and attributes is important
-   * for these scenarios, not the structure, as this is not covered by GHS/GRS.
+   * for these scenarios, not the structure, as this is uncovered by GHS/GRS.
    */
   return {
     // <a> – Anchor
@@ -1402,7 +1402,7 @@ const initExamples = (editor) => {
   xmpInput.addEventListener("focus", () => {
     xmpInput.value = "";
   });
-  // On change, set the data - or show an error, if data are unknown.
+  // On change, set the data – or show an error, if data are unknown.
   xmpInput.addEventListener("change", () => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {

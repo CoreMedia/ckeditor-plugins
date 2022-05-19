@@ -14,27 +14,24 @@ import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDro
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
-import { disableCommand } from "@coremedia/ckeditor5-common/Commands";
+import { disableUndo, UndoSupport } from "./integrations/Undo";
+
+const PLUGIN_NAME = "ContentClipboardPlugin";
 
 /**
  * This plugin takes care of linkable Studio contents, which are dropped
  * directly into the editor or pasted from the clipboard.
  */
 export default class ContentClipboard extends Plugin {
-  static #CONTENT_CLIPBOARD_PLUGIN_NAME = "ContentClipboardPlugin";
-  static #logger: Logger = LoggerProvider.getLogger(ContentClipboard.#CONTENT_CLIPBOARD_PLUGIN_NAME);
-
-  static get pluginName(): string {
-    return ContentClipboard.#CONTENT_CLIPBOARD_PLUGIN_NAME;
-  }
+  static readonly pluginName = PLUGIN_NAME;
+  static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoEditing];
+    return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
   }
 
   init(): Promise<void> | void {
@@ -147,7 +144,7 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const editor = this.editor;
+    const { editor } = this;
 
     // Return if no range has been set (usually indicated by a blue cursor
     // during the drag)
@@ -164,24 +161,30 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    // We might run into trouble during complex input scenarios.
+    // We might run into trouble during complex input scenarios:
+    //
     // A drop with multiple items will result in different requests that might
     // differ in response time, for example.
+    //
     // Triggering undo/redo while only a part of the input has already been
-    // resolved, will cause an unsynchronized state between content and
+    // resolved, will cause an inconsistent state between content and
     // placeholder elements.
+    //
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterwards.
-    disableCommand(editor, "undo");
-    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
+    ifPlugin(editor, UndoSupport).then(disableUndo);
+
+    const { model } = editor;
+
+    model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.setSelection(targetRange);
     });
 
-    const batch = editor.model.createBatch();
+    const batch = model.createBatch();
 
     // Save the attributes of the current selection to apply them later on the
     // input element.
-    const attributes = Array.from(editor.model.document.selection.getAttributes());
+    const attributes = Array.from(model.document.selection.getAttributes());
 
     // Use the current timestamp as the dropId to have increasing drop indexes.
     // Needed to keep the order when multiple inputs happen simultaneously
@@ -196,8 +199,10 @@ export default class ContentClipboard extends Plugin {
 
     // Add a drop marker for each item.
     cmDataUris.forEach((contentUri: string, index: number): void => {
-      // This only works because we are in a drag context and the result has already been computed and cached.
-      // Calling this function without a present cache entry for the given contentUri will probably result in a wrong value.
+      // This only works because we are in a drag context and the result has
+      // already been computed and cached. Calling this function without a
+      // present cache entry for the given contentUri will probably result in a
+      // wrong value.
       const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
       const contentDropData = ContentClipboard.#createContentDropData(
         dropContext,
@@ -211,7 +216,7 @@ export default class ContentClipboard extends Plugin {
     // Fire content insertion event in a single change block to allow other
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).
-    this.editor.model.change(() => {
+    model.change(() => {
       this.fire("contentInsertion", {
         content: new ModelDocumentFragment(),
         method: data.method,

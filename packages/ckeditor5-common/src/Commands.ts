@@ -1,32 +1,107 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { forceDisable } from "./Events";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Command from "@ckeditor/ckeditor5-core/src/command";
+import { PluginNotFoundErrorHandler } from "./Plugins";
+
+const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 
 /**
- * Disables a command with the given command name
- *
- * @param editor - the editor
- * @param commandName - the command name
+ * Error, which signals that a requested command could not be found.
  */
-export const disableCommand = (editor: Editor, commandName: string): void => {
-  const command = editor.commands.get(commandName);
-  if (!command) {
-    return;
+export class CommandNotFoundError extends Error {
+  readonly #name: string;
+
+  /**
+   * Constructor.
+   *
+   * @param commandName - name of the command, which could not be found
+   * @param message - error message
+   */
+  constructor(commandName: string, message: string) {
+    super(message);
+    Object.setPrototypeOf(this, CommandNotFoundError.prototype);
+    this.#name = commandName;
   }
-  command.on("set:isEnabled", forceDisable, { priority: "highest" });
-  command.isEnabled = false;
+
+  /**
+   * Provides the name of the command, which was searched
+   * for unsuccessfully.
+   */
+  get commandName(): string {
+    return this.#name;
+  }
+}
+
+/**
+ * Error handler, if command could not be found.
+ */
+export type CommandNotFoundErrorHandler = (e: CommandNotFoundError) => void;
+
+/**
+ * Suggested alternative `catch` handler, if a command is not found.
+ * It will trigger a debug log statement.
+ *
+ * @param e - error to ignore
+ */
+export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandNotFoundError) =>
+  commandsLogger.debug(`Optional command '${e.commandName}' not found.`, e);
+
+/**
+ * Provides a `catch` handler, if a recommended command is not found.
+ * It will trigger a warning log statement and a debug log statement with more details.
+ * @param effectIfMissingMessage - optional effect, what will happen if the plugin is missing
+ * @param logger - optional logger to use instead of default
+ */
+export const recommendCommand = (
+  effectIfMissingMessage = "",
+  logger: Logger = commandsLogger
+): CommandNotFoundErrorHandler => {
+  const messageSuffix = effectIfMissingMessage ? ` ${effectIfMissingMessage}` : "";
+  return (e) => {
+    const message = `Recommended command '${e.commandName}' not found.${messageSuffix}`;
+    logger.warn(message);
+    logger.debug(`Details on: ${message}`, e);
+  };
 };
 
 /**
- * Enables a command with the given command name
+ * Immediately resolving promise to retrieve command. Rejected with `Error`
+ * when command is not found.
  *
- * @param editor - the editor
- * @param commandName - the command name
+ * @param editor - editor instance
+ * @param commandName - command name to search for
+ * @throws CommandNotFoundError if command could not be found
  */
-export const enableCommand = (editor: Editor, commandName: string): void => {
+export const ifCommand = async (editor: Editor, commandName: string): Promise<Command> => {
   const command = editor.commands.get(commandName);
   if (!command) {
-    return;
+    throw new CommandNotFoundError(commandName, `Command '${commandName}' unavailable.`);
   }
-  command.off("set:isEnabled", forceDisable);
-  command.refresh();
+  return command;
+};
+
+/**
+ * Handler for resolved plugins.
+ */
+export type CommandHandler = (command: Command) => void;
+
+/**
+ * Handler to disable given command.
+ *
+ * @param id - Unique identifier for disabling. Use the same id when enabling back the command.
+ * @returns identifiable handler to disable a command
+ */
+export const disableCommand = (id: string): CommandHandler => {
+  return (command) => command.forceDisabled(id);
+};
+
+/**
+ * Handler to enable given commands.
+ *
+ * @param id - Unique identifier for enabling. Use the same id as when requested to disable command.
+ * @returns identifiable handler to enable a command
+ */
+export const enableCommand = (id: string): CommandHandler => {
+  return (command) => command.clearForceDisabled(id);
 };

@@ -13,6 +13,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
+import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 
@@ -23,7 +24,7 @@ const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
     new ContentDisplayServiceDescriptor()
   );
   const contentName = await contentDisplayService.name(contentUri);
-  return new Promise<CreateModelFunction>((resolve) => resolve(createLinkModelFunction(contentUri, contentName)));
+  return createLinkModelFunction(contentUri, contentName);
 };
 
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {
@@ -36,34 +37,35 @@ const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, na
 };
 
 /**
- * This plugin registers a "toModel" function for the ContentClipboardEditing plugin.
- * Initially, the ContentClipboardEditing plugin does not know how to handle insertions (e.g. via drag and drop)
- * of contents into the editor. Therefore, each feature has to provide this information to the plugin manually.
+ * This plugin registers a "toModel" function for the ContentClipboardEditing
+ * plugin.
  *
- * This particular plugin provides a strategy on how to insert contents that should be displayed as a link.
+ * Initially, the ContentClipboardEditing plugin does not know how to handle
+ * insertions (e.g., via drag and drop) of contents into the editor. Therefore,
+ * each feature has to provide this information to the plugin manually.
+ *
+ * This particular plugin provides a strategy on how to insert contents that
+ * should be displayed as a link.
  */
 export default class ContentLinkClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentLinkClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkClipboardPlugin.pluginName);
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const pluginName = ContentLinkClipboardPlugin.pluginName;
-    const contentClipboardEditingName = ContentClipboardEditing.pluginName;
     const logger = ContentLinkClipboardPlugin.#logger;
     const startTimestamp = performance.now();
 
-    logger.info(`Initializing ${pluginName}...`);
+    logger.debug(`Initializing ${pluginName}...`);
 
-    const editor = this.editor;
-    if (editor.plugins.has(ContentClipboardEditing)) {
-      const contentClipboardEditingPlugin: ContentClipboardEditing = editor.plugins.get(ContentClipboardEditing);
-      contentClipboardEditingPlugin.registerToModelFunction("link", createLinkModelFunctionCreator);
-    } else {
-      logger.info(
-        `Recommended plugin ${contentClipboardEditingName} missing. Creating Content Links from Clipboard not activated.`
-      );
-    }
+    const { editor } = this;
 
-    logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    await ifPlugin(editor, ContentClipboardEditing)
+      .then((plugin) => {
+        plugin.registerToModelFunction("link", createLinkModelFunctionCreator);
+      })
+      .catch(recommendPlugin("Creating Content Links from Clipboard not activated.", logger));
+
+    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
   }
 }

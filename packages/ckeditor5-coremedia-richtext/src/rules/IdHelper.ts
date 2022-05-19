@@ -13,7 +13,7 @@ const CONTENT_BLOB_ID_PATTERN = new RegExp(`^${CONTENT_BLOB_ID_PREFIX}(?<id>\\d+
  */
 interface ContentIdParseResult {
   /**
-   * Content ID number as string.
+   * Content ID number represented as string.
    */
   id: string;
 }
@@ -23,7 +23,7 @@ interface ContentIdParseResult {
  */
 interface ContentBlobIdParseResult {
   /**
-   * Content ID number as string.
+   * Content ID number represented as string.
    */
   id: string;
   /**

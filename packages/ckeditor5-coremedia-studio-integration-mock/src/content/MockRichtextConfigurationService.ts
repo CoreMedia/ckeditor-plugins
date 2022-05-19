@@ -12,50 +12,33 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     this.#contentProvider = contentProvider;
   }
 
-  /**
-   * A content id is linkable if
-   *
-   * * it is not a folder (even number)
-   *
-   * * it is the last digit, and it is not dividable by 4.
-   *
-   *     This represents any content, which is not linkable.
-   *
-   * @param uriPath - an uripath in the format 'content/content-id'
-   */
-  hasLinkableType(uriPath: UriPath): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      if (isUriPath(uriPath)) {
-        const mockContent = this.#contentProvider(uriPath);
-        return resolve(mockContent.linkable);
-      }
-      resolve(false);
-    });
+  async hasLinkableType(uriPath: UriPath): Promise<boolean> {
+    if (isUriPath(uriPath)) {
+      const mockContent = this.#contentProvider(uriPath);
+      return mockContent.linkable;
+    }
+    return false;
   }
 
-  isEmbeddableType(uriPath: UriPath): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      if (isUriPath(uriPath)) {
-        const mockContent = this.#contentProvider(uriPath);
-        return resolve(mockContent.embeddable);
-      }
-      resolve(false);
-    });
+  async isEmbeddableType(uriPath: UriPath): Promise<boolean> {
+    if (isUriPath(uriPath)) {
+      const mockContent = this.#contentProvider(uriPath);
+      return mockContent.embeddable;
+    }
+    return false;
   }
 
-  resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      if (isUriPath(uriPath)) {
-        const mockContent = this.#contentProvider(uriPath);
-        if (!mockContent.embeddable) {
-          // The "should not happen" code.
-          return reject(`Content '${uriPath}' is not embeddable.`);
-        }
-        // The actual property does not matter in this mock scenario.
-        return resolve(`${uriPath}#properties.data`);
+  async resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
+    if (isUriPath(uriPath)) {
+      const mockContent = this.#contentProvider(uriPath);
+      if (!mockContent.embeddable) {
+        // The "should not happen" code.
+        throw new Error(`Content '${uriPath}' is not embeddable.`);
       }
-      reject(`'${uriPath}' is not a valid URI-path.`);
-    });
+      // The actual property does not matter in this mock scenario.
+      return `${uriPath}#properties.data`;
+    }
+    throw new Error(`'${uriPath}' is not a valid URI-path.`);
   }
 
   getName(): string {

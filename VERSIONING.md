@@ -12,7 +12,7 @@ releasing them, we use the following rules:
     versioning.
 
 * All packages are always in the same version (different to semantic versioning,
-    i.e. specific package updates may contain no changes).
+    i.e., specific package updates may contain no changes).
 
 * A major release of CKEditor 5 Plugins is published when at least one of its
     packages must have a major release.
@@ -30,7 +30,7 @@ releasing them, we use the following rules:
 
     * If a package contains a new feature, a `MINOR` version is increased.
 
-    * If a package contains only bug fixes, unrelated changes (e.g. updated
+    * If a package contains only bug fixes, unrelated changes (e.g., updated
         translations), documentation or other internal changes, a `PATCH`
         version is increased.
 
@@ -49,7 +49,7 @@ Major and Minor Breaking Changes
         considered a **major breaking change** for CKEditor 5 plugins.
 
     * If CKEditor 5 plugins update to a new minor of CKEditor 5, it is
-        considered a **at least a minor breaking change** for CKEditor 5
+        considered an **at least a minor breaking change** for CKEditor 5
         plugins.
 
     * If CKEditor 5 plugins update to a new patch version of CKEditor 5, at
@@ -67,7 +67,7 @@ Major and Minor Breaking Changes
         plugins.
 
     * If CKEditor 5 plugins update to a new minor of CoreMedia Services,
-        it is considered a **at least a minor breaking change** for
+        it is considered an **at least a minor breaking change** for
         CKEditor 5 plugins.
 
     * If CKEditor 5 plugins update to a new patch version of CoreMedia

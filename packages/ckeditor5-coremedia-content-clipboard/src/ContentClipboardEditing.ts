@@ -7,20 +7,20 @@ import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardM
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
+import { UndoSupport } from "./integrations/Undo";
+
+const PLUGIN_NAME = "ContentClipboardEditing";
 
 export default class ContentClipboardEditing extends Plugin {
-  static #CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME = "ContentClipboardEditing";
+  static readonly pluginName = PLUGIN_NAME;
+
   static readonly #CONTENT_DROP_ADD_MARKER_EVENT =
     "addMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
   static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT =
     "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
 
-  static get pluginName(): string {
-    return ContentClipboardEditing.#CONTENT_CLIPBOARD_EDITING_PLUGIN_NAME;
-  }
-
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [];
+    return [UndoSupport];
   }
 
   init(): Promise<void> | void {
@@ -45,12 +45,16 @@ export default class ContentClipboardEditing extends Plugin {
 
   /**
    * This function is used to register "toModel" functions in other plugins.
-   * These functions are held in the {@link ContentToModelRegistry} and are used to insert dropped content into the editor.
+   * These functions are held in the {@link ContentToModelRegistry} and are
+   * used to insert dropped content into the editor.
    *
-   * Please note: Types that are not supported by the {@link DataToModelMechanism} will fallback to the default "toModel" function or throw an error.
+   * Please note: Types that are not supported by the
+   * {@link DataToModelMechanism} will fall back to the default "toModel"
+   * function or throw an error.
    *
    * @param type - the identifier for the dropped content (e.g. "link" or "image")
-   * @param createModelFunctionCreator - a function that expects a contentUri as parameter and returns a promise of type CreateModelFunction
+   * @param createModelFunctionCreator - a function that expects a contentUri as
+   * parameter and returns a promise of type CreateModelFunction
    */
   registerToModelFunction(type: string, createModelFunctionCreator: CreateModelFunctionCreator): void {
     ContentToModelRegistry.registerToModelFunction(type, createModelFunctionCreator);

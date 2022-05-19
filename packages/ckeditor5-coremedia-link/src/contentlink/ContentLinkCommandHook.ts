@@ -15,6 +15,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import { LINK_COMMAND_NAME } from "../link/Constants";
 import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
+import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-common/Commands";
 
 /**
  * Alias for easier readable code.
@@ -163,33 +164,26 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Registers the post-fixer.
    */
-  init(): void {
+  async init(): Promise<void> {
     const logger = ContentLinkCommandHook.#logger;
     const startTimestamp = performance.now();
     const pluginName = ContentLinkCommandHook.pluginName;
 
     logger.debug(`Initializing ${pluginName}...`);
 
-    const editor = this.editor;
-    const model = editor.model;
-    const document = model.document;
-
-    const linkCommand = editor.commands.get(LINK_COMMAND_NAME);
-
-    if (!linkCommand) {
-      logger.warn(
-        `Required command named '${LINK_COMMAND_NAME}' is not available. Content-Links names won't be replaced in text.`
-      );
-      return;
-    }
+    const { editor } = this;
+    const { model } = editor;
+    const { document } = model;
 
     /*
-     * When LinkCommand finished executing, we don't want to apply any more
+     * When LinkCommand finished executing, we don't want to apply additional
      * changes. Thus, we may safely clear the tracked data. Note, that this
      * requires that the replacement is registered **before** LinkCommand is
      * executed.
      */
-    linkCommand.on("execute", this.#clearTrackingData);
+    await ifCommand(editor, LINK_COMMAND_NAME)
+      .then((command) => command.on("execute", this.#clearTrackingData))
+      .catch(recommendCommand("Content-Links names won't be replaced in text.", logger));
 
     /*
      * Callbacks: We need to create an extra "redirection" as otherwise, we
@@ -204,10 +198,11 @@ class ContentLinkCommandHook extends Plugin {
    * Clears resources, i.e., the name cache.
    */
   destroy(): void {
-    const editor = this.editor;
-    const linkCommand = editor.commands.get(LINK_COMMAND_NAME);
+    const { editor } = this;
 
-    linkCommand?.off("execute", this.#clearTrackingData);
+    ifCommand(editor, LINK_COMMAND_NAME)
+      .then((command) => command.off("execute", this.#clearTrackingData))
+      .catch(optionalCommandNotFound);
 
     this.#trackingData.clear();
   }

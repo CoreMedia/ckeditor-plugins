@@ -5,12 +5,15 @@ import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { imageInlineElementToElementConversionPatch } from "./patches";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
 
 /**
  * Plugin to support images from CoreMedia RichText.
  *
- * The plugin takes the `xlink:href` represented in the data-view by `data-xlink-href` and writes it to the model.
- * The model attribute afterwards will be downcasted to the editing-view where it is represented by the src-attribute of the `img`-tag.
+ * The plugin takes the `xlink:href` represented in the data-view by
+ * `data-xlink-href` and writes it to the model.
+ * The model attribute afterwards will be downcast to the editing-view where it
+ * is represented by the src-attribute of the `img`-tag.
  */
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
@@ -25,12 +28,16 @@ export default class ContentImageEditingPlugin extends Plugin {
   }
 
   /**
-   * Registers support for the `xlink:href` attribute for element `img` in richtext.
-   * `xlink:href` is represented in the data-view as `data-xlink-href` and in model as `xlink-href`.
-   * When downcasted to the editing-view it will be resolved to the image src-attribute by fetching the url from the `BlobDisplayService`
+   * Registers support for the `xlink:href` attribute for element `img` in
+   * richtext.
+   *
+   * `xlink:href` is represented in the data-view as `data-xlink-href` and in
+   * model as `xlink-href`. When downcast to the editing-view it will be
+   * resolved to the image src-attribute by fetching the url from the
+   * `BlobDisplayService`
    */
-  afterInit(): null {
-    ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
+  async afterInit(): Promise<void> {
+    await ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
     ContentImageEditingPlugin.#setupXlinkHrefConversion(
       this.editor,
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
@@ -38,10 +45,10 @@ export default class ContentImageEditingPlugin extends Plugin {
     );
     imageInlineElementToElementConversionPatch(this.editor);
 
-    // We have to prevent to write src-attribute to model because we fetch the src attribute for the editing view asynchronously.
+    // We have to prevent to write src-attribute to model because we fetch the
+    // src attribute for the editing view asynchronously.
     // If not prevented the src-attribute from GRS would be written to the model.
     this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
-    return null;
   }
 
   static #setupXlinkHrefConversion(editor: Editor, modelAttributeName: string, dataAttributeName: string): void {
@@ -79,17 +86,14 @@ export default class ContentImageEditingPlugin extends Plugin {
   }
 
   /**
-   * Register <code>imageInline</code> model elements for subscription cleanup on model changes.
+   * Register <code>imageInline</code> model elements for subscription cleanup
+   * on model changes.
    *
    * @param editor - Editor
-   * @private
    */
-  static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
-    const subscriptionPlugin = <ModelBoundSubscriptionPlugin>(
-      editor.plugins.get(ModelBoundSubscriptionPlugin.PLUGIN_NAME)
-    );
-    if (subscriptionPlugin) {
-      subscriptionPlugin.registerModelElement("imageInline");
-    }
+  static async #initializeModelBoundSubscriptionPlugin(editor: Editor): Promise<void> {
+    await ifPlugin(editor, ModelBoundSubscriptionPlugin)
+      .then((plugin) => plugin.registerModelElement("imageInline"))
+      .catch(optionalPluginNotFound);
   }
 }

@@ -11,6 +11,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
+import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -21,7 +22,7 @@ const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
     new RichtextConfigurationServiceDescriptor()
   );
   const blobUriPath = await configurationService.resolveBlobPropertyReference(contentUri);
-  return new Promise<CreateModelFunction>((resolve) => resolve(createImageModelFunction(blobUriPath)));
+  return createImageModelFunction(blobUriPath);
 };
 
 const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string): CreateModelFunction => {
@@ -34,7 +35,7 @@ const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string)
 
 /**
  * This plugin registers a "toModel" function for the ContentClipboardEditing plugin.
- * Initially, the ContentClipboardEditing plugin does not know how to handle insertions (e.g. via drag and drop)
+ * Initially, the ContentClipboardEditing plugin does not know how to handle insertions (e.g., via drag and drop)
  * of contents into the editor. Therefore, each feature has to provide this information to the plugin manually.
  *
  * This particular plugin provides a strategy on how to insert contents that should be displayed as a preview image.
@@ -43,24 +44,21 @@ export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const pluginName = ContentImageClipboardPlugin.pluginName;
-    const contentClipboardEditingName = ContentClipboardEditing.pluginName;
     const logger = ContentImageClipboardPlugin.#logger;
     const startTimestamp = performance.now();
 
-    logger.info(`Initializing ${pluginName}...`);
+    logger.debug(`Initializing ${pluginName}...`);
 
-    const editor = this.editor;
-    if (editor.plugins.has(ContentClipboardEditing)) {
-      const contentClipboardEditingPlugin: ContentClipboardEditing = editor.plugins.get(ContentClipboardEditing);
-      contentClipboardEditingPlugin.registerToModelFunction("image", createImageModelFunctionCreator);
-    } else {
-      logger.info(
-        `Recommended plugin ${contentClipboardEditingName} missing. Creating Content Images from Clipboard not activated.`
-      );
-    }
+    const { editor } = this;
 
-    logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    await ifPlugin(editor, ContentClipboardEditing)
+      .then((plugin) => {
+        plugin.registerToModelFunction("image", createImageModelFunctionCreator);
+      })
+      .catch(recommendPlugin("Creating Content Images from Clipboard not activated.", logger));
+
+    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
   }
 }

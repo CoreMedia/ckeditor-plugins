@@ -10,7 +10,7 @@ contexts such as CoreMedia Studio.
 
 Creates a release from either `main` or some `maintenance/*` branch.
 
-Prior to running, you will be asked, whether the release will be of type
+Prior to running, you will be asked whether the release will be of type
 _major_, _minor_ or _patch_. Depending on the selected type the version number
 will be increased according to semantic versioning.
 
