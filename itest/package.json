@@ -53,7 +53,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
-    "playwright": "jest --passWithNoTests",
+    "playwright": "jest",
+    "playwright-local": "jest --config ./jest.local.js",
     "jest": "exit 0",
     "jest:coverage": "exit 0",
     "lint": "eslint --fix \"src/**\"",
