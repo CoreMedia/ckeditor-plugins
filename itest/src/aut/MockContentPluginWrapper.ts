@@ -1,15 +1,8 @@
 import { Wrapper } from "./Wrapper";
-//import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
-//import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContent";
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
 
-// TODO: Workaround: We cannot resolve modules currently.
-declare interface MockContentConfig {
-}
-declare class MockContentPlugin extends Plugin {
-  addContents(...data: MockContentConfig[]): void;
-}
 /**
  * Provides access to the `MockContentPlugin`.
  */
