@@ -15,13 +15,28 @@
  * `enhanced-resolve-jest` did not work, so that we had to copy the sources.
  */
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require("fs");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const enhanced_resolve = require("enhanced-resolve");
 const { ResolverFactory, CachedInputFileSystem } = enhanced_resolve;
 const EMPTY_FILE = require.resolve("./empty");
 const cachedInputFileSystem = new CachedInputFileSystem(fs, 60000);
 let queuedPurge = false;
 exports.default = module.exports = exports = create(getDefaultConfig);
+
+const ignoredModuleFailures = [
+  // For some reason this is tried to be resolved and fails. Ignoring
+  // for now. We may get rid of the failure as soon as we can use
+  // Jest 28 (which would also make this workaround file
+  // obsolete).
+  "jest-runner-jest-playwright-preset/runner.js",
+];
+const ignoredModulePatterns = [
+  // For some reason cannot be resolved. Ignoring for now, unless we
+  // feel there is an issue with that.
+  "jest-sequencer",
+];
 
 function create(getConfig /* (opts: getConfigOpts) => ResolverOpts */) {
   const resolverCache /* { [x: string]: Resolver } */ = Object.create(null);
@@ -52,8 +67,13 @@ function create(getConfig /* (opts: getConfigOpts) => ResolverOpts */) {
     try {
       resolved = resolver.resolveSync({}, jestOpts.basedir, modulePath);
     } catch (e) {
+      const doReport = !(
+        ignoredModuleFailures.includes(modulePath) || ignoredModulePatterns.some((p) => modulePath.includes(p))
+      );
+      if (doReport) {
+        console.warn(`Failed to resolve with error: '${modulePath}'`, e);
+      }
       // Patch customization: Provide more details on failure.
-      console.warn(`Failed to resolve with error: '${modulePath}'`, e);
       throw e;
     }
     if (resolved === false) {
