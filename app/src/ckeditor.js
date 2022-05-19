@@ -239,14 +239,17 @@ ClassicEditor.create(document.querySelector('.editor'), {
   initExamples(newEditor);
   initDragExamples(newEditor);
   editor = newEditor;
-  window['editor'] = newEditor;
-  console.log("Exposed editor instance as `editor`.");
 
   let undoCommand = newEditor.commands.get("undo");
   if (!!undoCommand) {
     newEditor['resetUndo'] = () => undoCommand.clearStack();
     console.log("Registered `editor.resetUndo()` to clear undo history.");
   }
+
+  // Do it late, so that we also have a clear signal (e.g., to integration
+  // tests), that the editor is ready.
+  window['editor'] = newEditor;
+  console.log("Exposed editor instance as `editor`.");
 }).catch(error => {
   console.error(error);
 });
