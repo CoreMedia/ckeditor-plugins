@@ -124,7 +124,9 @@ export default class LoggerProvider {
    * arguments; string value otherwise
    */
   static #getHashParam(key: string | undefined): string | boolean {
-    if (key === undefined) {
+    // Check for `window`: Required when used from within Jest tests, where
+    // 'jsdom' is not available.
+    if (key === undefined || typeof window === "undefined") {
       return false;
     }
     if (window.location && window.location.hash) {
