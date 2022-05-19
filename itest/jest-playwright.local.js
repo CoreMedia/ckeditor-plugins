@@ -16,7 +16,12 @@ const base = require("./jest-playwright.config.js");
  */
 const launchOptions = {
   ...base.launchOptions,
+  // Run in headed mode.
   headless: false,
+  // Open Chromium DevTools; enforces headless: false
+  // devtools: true,
+  // Run in slow motion:
+  // slowMo: 20,
 };
 
 module.exports = {
