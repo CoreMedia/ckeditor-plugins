@@ -109,8 +109,8 @@ export type Content = string | string[];
  * @param content - content to validate
  */
 export const nonEmptyContent = (content: Content): Content => {
-  // This would still allow passing `[""]`, but no need for further checks for now.
-  if (content.length === 0) {
+  const merged = "".concat(...content);
+  if (merged.length === 0) {
     throw new Error("Content must not be empty.");
   }
   return content;
