@@ -21,9 +21,17 @@ export class MockContentPluginWrapper extends Wrapper<MockContentPlugin> {
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {
     return new MockContentPluginWrapper(
-      wrapper.evaluateHandle((editor) => {
-        return editor.plugins.get(MockContentPlugin);
-      })
+      wrapper.evaluateHandle((editor, pluginName) => {
+        if (!editor.plugins.has(pluginName)) {
+          const available = [...editor.plugins]
+            .map(([t, p]) => t.pluginName || `noname:${p.constructor.name}`)
+            .join(", ");
+          throw new Error(`Plugin ${pluginName} not available. Available plugins: ${available}`);
+        }
+        // We need to access the plugin via its name rather than via descriptor,
+        // as the descriptor is unknown in remote context.
+        return editor.plugins.get(pluginName) as MockContentPlugin;
+      }, MockContentPlugin.pluginName)
     );
   }
 }

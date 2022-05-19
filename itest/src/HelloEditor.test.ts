@@ -1,6 +1,7 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { a, p, richtext } from "./fixture/Richtext";
 import "./expect/ElementHandleExpectations";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 /**
  * Provides some first test mainly for demonstration purpose of the test API.
@@ -73,13 +74,36 @@ describe("Hello Editor", () => {
     const handle = await ui.getEditableElement();
 
     const linkTarget = "https://example.org";
-    const data = richtext(p(a(currentTestName, { "xlink:href": "https://example.org" })));
+    const data = richtext(p(a(currentTestName, { "xlink:href": linkTarget })));
     await editor.setData(data);
 
     // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
     // for display purpose to the UI. Nevertheless, this serves as example, how
     // we may test the rendered editing view.
-    // noinspection InnerHTMLJS
     await expect(handle).waitForInnerHtmlToContain(` href="${linkTarget}">${currentTestName}</a>`);
+  });
+
+  it("Should render internal links.", async () => {
+    const { currentTestName } = expect.getState();
+    const { editor, mockContent } = application;
+    const { ui } = editor;
+    const handle = await ui.getEditableElement();
+    const id = 42;
+    await mockContent.addContents({
+      id,
+      name: `Document for test ${currentTestName}`,
+    });
+
+    const dataLink = contentUriPath(id);
+    const data = richtext(p(a(currentTestName, { "xlink:href": dataLink })));
+    await editor.setData(data);
+
+    // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
+    // for display purpose to the UI. Nevertheless, this serves as example, how
+    // we may test the rendered editing view.
+    //
+    // `#`: For internal links, there is no representation in view. The reference
+    // only exists on model layer.
+    await expect(handle).waitForInnerHtmlToContain(` href="#">${currentTestName}</a>`);
   });
 });
