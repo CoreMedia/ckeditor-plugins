@@ -130,8 +130,10 @@ declare global {
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface Expect extends ApplicationConsoleMatchers {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface,@typescript-eslint/ban-types
     interface Matchers<R = unknown, T = {}> extends ApplicationConsoleMatchers<R, T> {}
+
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface InverseAsymmetricMatchers extends ApplicationConsoleMatchers {}
   }
