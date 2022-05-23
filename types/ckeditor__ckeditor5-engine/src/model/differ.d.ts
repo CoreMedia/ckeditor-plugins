@@ -1,7 +1,6 @@
 import Range from "./range";
 import Operation from "./operation/operation";
 import Position from "./position";
-import { Item } from "./item";
 import MarkerCollection from "./markercollection";
 
 /**
@@ -27,8 +26,6 @@ export default class Differ {
   getMarkersToRemove(): { name: string; range: Range; }[];
 
   hasDataChanges(): boolean;
-
-  refreshItem(item: Item): void;
 
   reset(): void;
 }

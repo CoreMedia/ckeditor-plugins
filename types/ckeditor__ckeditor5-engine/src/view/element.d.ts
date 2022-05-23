@@ -14,8 +14,6 @@ export default class Element extends ViewNode {
 
   get isEmpty(): boolean;
 
-  get isAllowedInsideAttributeElement(): boolean;
-
   constructor(document: ViewDocument, name: string, attrs: any, children: Node | Iterable<Node>);
 
   findAncestor(...patterns: any[]): Element;

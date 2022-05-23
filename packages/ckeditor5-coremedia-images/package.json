@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-images",
-  "version": "5.0.1-rc.0",
+  "version": "6.0.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -20,15 +20,15 @@
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
-    "@ckeditor/ckeditor5-core": "^32.0.0",
-    "@ckeditor/ckeditor5-engine": "^32.0.0",
-    "@ckeditor/ckeditor5-image": "^32.0.0",
-    "@ckeditor/ckeditor5-utils": "^32.0.0",
+    "@ckeditor/ckeditor5-core": "^34.0.0",
+    "@ckeditor/ckeditor5-engine": "^34.0.0",
+    "@ckeditor/ckeditor5-image": "^34.0.0",
+    "@ckeditor/ckeditor5-utils": "^34.0.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia/service-agent": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "5.0.1-rc.0",
-    "@coremedia/types-ckeditor__ckeditor5-engine": "5.0.1-rc.0",
-    "@coremedia/types-ckeditor__ckeditor5-image": "5.0.1-rc.0",
+    "@coremedia/types-ckeditor__ckeditor5-core": "^6.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-engine": "^6.0.0",
+    "@coremedia/types-ckeditor__ckeditor5-image": "^6.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
@@ -44,17 +44,17 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^32.0.0",
-    "@ckeditor/ckeditor5-engine": "^32.0.0",
-    "@ckeditor/ckeditor5-image": "^32.0.0",
-    "@ckeditor/ckeditor5-utils": "^32.0.0",
+    "@ckeditor/ckeditor5-core": "^34.0.0",
+    "@ckeditor/ckeditor5-engine": "^34.0.0",
+    "@ckeditor/ckeditor5-image": "^34.0.0",
+    "@ckeditor/ckeditor5-utils": "^34.0.0",
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "5.0.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "5.0.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "5.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "5.0.1-rc.0",
+    "@coremedia/ckeditor5-common": "^6.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^6.0.0",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "^6.0.0",
+    "@coremedia/ckeditor5-logging": "^6.0.0",
     "rxjs": "^6.5.4"
   }
 }
