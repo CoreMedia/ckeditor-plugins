@@ -1,0 +1,7 @@
+screenshots/
+videos/
+
+# Ignore updates for local adaptions.
+# Use `git add --force` if you want to still commit changes.
+./jest.local.js
+./jest-playwright.local.js

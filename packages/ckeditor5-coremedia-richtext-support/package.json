@@ -34,7 +34,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tsdoc": "^0.2.14",
-    "jest": "^28.0.2",
+    "jest": "^28.1.0",
     "jest-each": "^28.0.2",
     "jest-xml-matcher": "^1.2.0",
     "prettier": "^2.4.1",
