@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration",
-  "version": "6.0.0",
+  "version": "6.0.1-rc.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -43,7 +43,7 @@
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "^6.0.0",
+    "@coremedia/ckeditor5-logging": "6.0.1-rc.0",
     "rxjs": "^6.5.4"
   }
 }
