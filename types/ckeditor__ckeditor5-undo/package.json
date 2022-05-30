@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/types-ckeditor__ckeditor5-undo",
-  "version": "6.0.1-rc.0",
+  "version": "6.0.1-rc.1",
   "license": "Apache-2.0",
   "private": true,
   "engines": {
@@ -10,7 +10,7 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "dependencies": {
-    "@coremedia/types-ckeditor__ckeditor5-engine": "6.0.1-rc.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.0"
+    "@coremedia/types-ckeditor__ckeditor5-engine": "6.0.1-rc.1",
+    "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.1"
   }
 }
