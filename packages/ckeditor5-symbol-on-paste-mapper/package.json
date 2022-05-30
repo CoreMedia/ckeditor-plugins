@@ -2,7 +2,7 @@
   "name": "@coremedia/ckeditor5-symbol-on-paste-mapper",
   "version": "6.0.1-rc.0",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.19.0"
   },
   "exports": {
     "./*": "./dist/*.js"

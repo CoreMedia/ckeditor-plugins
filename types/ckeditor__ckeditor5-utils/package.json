@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "private": true,
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.19.0"
   },
   "scripts": {
     "npm-check-updates": "npm-check-updates --upgrade"

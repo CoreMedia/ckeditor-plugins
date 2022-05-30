@@ -2,7 +2,8 @@
   "name": "@coremedia/ckeditor5",
   "version": "1.0.0",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.19.0",
+    "pnpm": "^7.1.5"
   },
   "private": true,
   "description": "Plugins required or recommended to use CKEditor 5 within CoreMedia Studio.",
@@ -35,7 +36,7 @@
     "build": "pnpm -r build",
     "doc": "typedoc",
     "doc:config": "typedoc --showConfig",
-    "playwright": "pnpm -r playwright --filter \"@coremedia/ckeditor5-coremedia-itest\"",
+    "playwright": "pnpm -r --filter \"@coremedia/ckeditor5-coremedia-itest\" run playwright",
     "jest": "pnpm -r jest",
     "jest:coverage": "pnpm -r jest:coverage",
     "test:integration": "node --max_old_space_size=8192 node_modules/@ckeditor/ckeditor5-dev-tests/bin/test.js",
@@ -49,7 +50,6 @@
     "@coremedia/set-version": "1.1.1"
   },
   "devDependencies": {
-    "pnpm": "^6.20.4",
     "rimraf": "^3.0.2",
     "typedoc": "^0.22.10",
     "typedoc-plugin-merge-modules": "^3.1.0",
