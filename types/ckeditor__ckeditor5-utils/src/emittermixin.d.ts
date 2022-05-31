@@ -6,7 +6,7 @@ export type CallbackFunction = (evt: EventInfo, ...args: any[]) => void;
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_emittermixin-Emitter.html">Interface Emitter (utils/emittermixin~Emitter) - CKEditor 5 API docs</a>
  */
-export default interface Emitter {
+export interface Emitter {
   /**
    * Registers a callback function to be executed when an event is fired.
    *
@@ -43,7 +43,10 @@ export default interface Emitter {
   stopListening(emitter?: Emitter, event?: string, callback?: CallbackFunction): void;
 }
 
-
 export interface EmitterMixinDelegateChain {
   to(emitter: Emitter, nameOrFunction?: string | ((name: string) => string)): void;
 }
+
+declare const EmitterMixin: Emitter;
+
+export default EmitterMixin;

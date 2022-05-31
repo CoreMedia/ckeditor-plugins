@@ -1,4 +1,4 @@
-import Emitter from "./emittermixin";
+import { Emitter } from "./emittermixin";
 import { PriorityString } from "./priorities";
 
 export type BindReturnValue = {

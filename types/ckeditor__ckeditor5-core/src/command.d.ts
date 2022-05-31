@@ -1,15 +1,15 @@
+import Editor from "./editor/editor";
+import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
+
 /**
  * The base class for CKEditor commands.
  *
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_core_command-Command.html">Class Command (core/command~Command) - CKEditor 5 API docs</a>
  */
-import Editor from "./editor/editor";
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
-
 export default class Command implements Observable {
   value?: unknown;
   readonly editor: Editor;

@@ -1,4 +1,4 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
 import Model from "./model";
 import Writer from "./writer";

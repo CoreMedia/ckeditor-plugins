@@ -1,4 +1,4 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import ViewDocumentFragment from "../view/documentfragment";
 import ViewElement from "../view/element";
 import Writer from "../model/writer";

@@ -1,5 +1,5 @@
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import Emitter, { CallbackFunction } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { CallbackFunction, Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";

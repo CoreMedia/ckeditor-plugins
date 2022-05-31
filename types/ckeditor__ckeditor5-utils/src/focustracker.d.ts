@@ -1,4 +1,4 @@
-import Emitter, { EmitterMixinDelegateChain } from "./emittermixin";
+import { Emitter, EmitterMixinDelegateChain } from "./emittermixin";
 import { Emitter as DomEmitter } from "./dom/emittermixin";
 import Observable, { BindChain } from "./observablemixin";
 import { PriorityString } from "./priorities";

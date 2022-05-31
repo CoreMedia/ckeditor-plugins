@@ -1,5 +1,5 @@
 import ViewDocument from "../view/document"
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 import DataProcessor from "../dataprocessor/dataprocessor";

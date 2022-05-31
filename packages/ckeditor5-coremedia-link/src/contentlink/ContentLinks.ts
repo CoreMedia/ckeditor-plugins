@@ -5,7 +5,7 @@ import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtensio
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { addClassToTemplate, createDecoratorHook } from "../utils";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";

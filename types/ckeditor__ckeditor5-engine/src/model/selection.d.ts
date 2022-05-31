@@ -1,4 +1,4 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import Position from "./position";
 import DocumentSelection from "./documentselection";
 import Element from "./element";

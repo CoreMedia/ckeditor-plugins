@@ -1,4 +1,4 @@
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain} from "./emittermixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain} from "./emittermixin";
 import {PriorityString} from "./priorities";
 import EventInfo from "./eventinfo";
 

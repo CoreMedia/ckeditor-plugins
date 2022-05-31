@@ -1,7 +1,7 @@
 import EditingController from "@ckeditor/ckeditor5-engine/src/controller/editingcontroller";
 import DataController from "@ckeditor/ckeditor5-engine/src/controller/datacontroller";
 
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin"
 import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin"
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities"
 
