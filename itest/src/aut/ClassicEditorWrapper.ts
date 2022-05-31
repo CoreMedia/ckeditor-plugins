@@ -81,7 +81,7 @@ expect.extend({
 });
 
 /**
- * Extension to matchers for Application Console.
+ * Extension to matchers for `ClassicEditorWrapper`.
  */
 export interface ClassicEditorWrapperMatchers<R = unknown, T = unknown> {
   /**
