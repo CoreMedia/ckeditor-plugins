@@ -17,12 +17,12 @@
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
-    "@ckeditor/ckeditor5-core": "^34.0.0",
-    "@ckeditor/ckeditor5-clipboard": "^34.0.0",
-    "@ckeditor/ckeditor5-engine": "^34.0.0",
-    "@ckeditor/ckeditor5-html-support": "^34.0.0",
-    "@ckeditor/ckeditor5-utils": "^34.0.0",
-    "@ckeditor/ckeditor5-undo": "^34.0.0",
+    "@ckeditor/ckeditor5-core": "^34.1.0",
+    "@ckeditor/ckeditor5-clipboard": "^34.1.0",
+    "@ckeditor/ckeditor5-engine": "^34.1.0",
+    "@ckeditor/ckeditor5-html-support": "^34.1.0",
+    "@ckeditor/ckeditor5-utils": "^34.1.0",
+    "@ckeditor/ckeditor5-undo": "^34.1.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.1",
@@ -49,12 +49,12 @@
     "./*": "./dist/*.js"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^34.0.0",
-    "@ckeditor/ckeditor5-engine": "^34.0.0",
-    "@ckeditor/ckeditor5-html-support": "^34.0.0",
-    "@ckeditor/ckeditor5-utils": "^34.0.0",
-    "@ckeditor/ckeditor5-clipboard": "^34.0.0",
-    "@ckeditor/ckeditor5-undo": "^34.0.0",
+    "@ckeditor/ckeditor5-core": "^34.1.0",
+    "@ckeditor/ckeditor5-engine": "^34.1.0",
+    "@ckeditor/ckeditor5-html-support": "^34.1.0",
+    "@ckeditor/ckeditor5-utils": "^34.1.0",
+    "@ckeditor/ckeditor5-clipboard": "^34.1.0",
+    "@ckeditor/ckeditor5-undo": "^34.1.0",
     "@coremedia/service-agent": "^1.0.0"
   },
   "dependencies": {
