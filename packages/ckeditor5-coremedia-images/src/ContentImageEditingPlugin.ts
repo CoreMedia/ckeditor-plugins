@@ -86,14 +86,14 @@ export default class ContentImageEditingPlugin extends Plugin {
   }
 
   /**
-   * Register <code>imageInline</code> model elements for subscription cleanup
+   * Register `imageInline` model elements for subscription cleanup
    * on model changes.
    *
    * @param editor - Editor
    */
   static async #initializeModelBoundSubscriptionPlugin(editor: Editor): Promise<void> {
     await ifPlugin(editor, ModelBoundSubscriptionPlugin)
-      .then((plugin) => plugin.registerModelElement("imageInline"))
+      .then((plugin) => plugin.registerModelElement(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME))
       .catch(optionalPluginNotFound);
   }
 }
