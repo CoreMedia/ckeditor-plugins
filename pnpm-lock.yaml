@@ -57,8 +57,8 @@ importers:
       '@coremedia/service-agent': ^1.1.0
       circular-dependency-plugin: ^5.2.2
       css-loader: ^6.7.1
-      postcss: ^8.3.11
-      postcss-loader: ^6.2.0
+      postcss: ^8.4.14
+      postcss-loader: ^7.0.0
       raw-loader: ^4.0.2
       rimraf: ^3.0.2
       style-loader: ^3.3.1
@@ -109,8 +109,8 @@ importers:
       '@ckeditor/ckeditor5-inspector': 4.0.0
       circular-dependency-plugin: 5.2.2_webpack@5.72.1
       css-loader: 6.7.1_webpack@5.72.1
-      postcss: 8.3.11
-      postcss-loader: 6.2.0_ptio5474ekjkmwo6aaw6gutc64
+      postcss: 8.4.14
+      postcss-loader: 7.0.0_xvg4ntyrrwt57qzvggqcbeozu4
       raw-loader: 4.0.2_webpack@5.72.1
       rimraf: 3.0.2
       style-loader: 3.3.1_webpack@5.72.1
@@ -8412,7 +8412,7 @@ packages:
     dev: true
 
   /is-arrayish/0.2.1:
-    resolution: {integrity: sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=}
+    resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
     dev: true
 
   /is-arrayish/0.3.2:
@@ -10240,6 +10240,11 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
+  /klona/2.0.5:
+    resolution: {integrity: sha512-pJiBpiXMbt7dkzXe8Ghj/u4FfXOOa98fPW+bihOJ4SjnoijweJrNThJfd3ifXpXhREjpoF2mZVH1GfS9LV3kHQ==}
+    engines: {node: '>= 8'}
+    dev: true
+
   /leven/3.1.0:
     resolution: {integrity: sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==}
     engines: {node: '>=6'}
@@ -10265,8 +10270,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /lines-and-columns/1.1.6:
-    resolution: {integrity: sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=}
+  /lines-and-columns/1.2.4:
+    resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
 
   /loader-runner/2.4.0:
@@ -11206,10 +11211,10 @@ packages:
     resolution: {integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==}
     engines: {node: '>=8'}
     dependencies:
-      '@babel/code-frame': 7.16.0
+      '@babel/code-frame': 7.16.7
       error-ex: 1.3.2
       json-parse-even-better-errors: 2.3.1
-      lines-and-columns: 1.1.6
+      lines-and-columns: 1.2.4
     dev: true
 
   /parse-passwd/1.0.0:
@@ -11582,17 +11587,17 @@ packages:
       webpack: 5.72.1_webpack-cli@4.9.2
     dev: true
 
-  /postcss-loader/6.2.0_ptio5474ekjkmwo6aaw6gutc64:
-    resolution: {integrity: sha512-H9hv447QjQJVDbHj3OUdciyAXY3v5+UDduzEytAlZCVHCpNAAg/mCSwhYYqZr9BiGYhmYspU8QXxZwiHTLn3yA==}
-    engines: {node: '>= 12.13.0'}
+  /postcss-loader/7.0.0_xvg4ntyrrwt57qzvggqcbeozu4:
+    resolution: {integrity: sha512-IDyttebFzTSY6DI24KuHUcBjbAev1i+RyICoPEWcAstZsj03r533uMXtDn506l6/wlsRYiS5XBdx7TpccCsyUg==}
+    engines: {node: '>= 14.15.0'}
     peerDependencies:
       postcss: ^7.0.0 || ^8.0.1
       webpack: ^5.0.0
     dependencies:
       cosmiconfig: 7.0.1
-      klona: 2.0.4
-      postcss: 8.3.11
-      semver: 7.3.5
+      klona: 2.0.5
+      postcss: 8.4.14
+      semver: 7.3.7
       webpack: 5.72.1_webpack-cli@4.9.2
     dev: true
 
