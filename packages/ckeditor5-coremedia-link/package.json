@@ -29,7 +29,7 @@
     "@ckeditor/ckeditor5-utils": "^34.0.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.0.0",
+    "@coremedia/service-agent": "^1.1.0",
     "@coremedia/types-ckeditor__ckeditor5-clipboard": "6.0.1-rc.1",
     "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.1",
     "@coremedia/types-ckeditor__ckeditor5-engine": "6.0.1-rc.1",
@@ -59,7 +59,7 @@
     "@ckeditor/ckeditor5-typing": "^34.0.0",
     "@ckeditor/ckeditor5-ui": "^34.0.0",
     "@ckeditor/ckeditor5-utils": "^34.0.0",
-    "@coremedia/service-agent": "^1.0.0"
+    "@coremedia/service-agent": "^1.1.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "6.0.1-rc.1",
