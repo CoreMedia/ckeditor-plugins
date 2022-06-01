@@ -66,6 +66,6 @@
     "@coremedia/ckeditor5-coremedia-content-clipboard": "6.0.1-rc.1",
     "@coremedia/ckeditor5-coremedia-studio-integration": "6.0.1-rc.1",
     "@coremedia/ckeditor5-logging": "6.0.1-rc.1",
-    "rxjs": "^6.5.4"
+    "rxjs": "^7.5.5"
   }
 }
