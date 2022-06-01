@@ -33,7 +33,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tsdoc": "^0.2.16",
     "jest": "^28.1.0",
-    "jest-each": "^28.0.2",
+    "jest-each": "^28.1.0",
     "jest-xml-matcher": "^1.2.0",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",

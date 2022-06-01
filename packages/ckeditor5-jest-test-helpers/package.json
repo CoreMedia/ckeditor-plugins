@@ -8,7 +8,7 @@
     "@babel/core": "^7.18.2",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "babel-jest": "^28.0.2",
-    "jest-environment-jsdom": "^28.0.2",
+    "jest-environment-jsdom": "^28.1.0",
     "jest-transform-stub": "^2.0.0",
     "tslib": "^2.4.0"
   },
