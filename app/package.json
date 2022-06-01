@@ -1,7 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-app",
   "description": "A custom CKEditor 5 build made by the CKEditor 5 online builder.",
-  "version": "6.0.1-rc.1",
+  "version": "6.0.1-rc.2",
   "engines": {
     "node": ">=14.19.0"
   },
@@ -33,32 +33,32 @@
     "@ckeditor/ckeditor5-typing": "34.1.0",
     "@ckeditor/ckeditor5-ui": "34.1.0",
     "@ckeditor/ckeditor5-utils": "34.1.0",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "6.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-link": "6.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-images": "6.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-richtext": "6.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "6.0.1-rc.1",
-    "@coremedia/ckeditor5-studio-essentials": "6.0.1-rc.1",
-    "@coremedia/ckeditor5-symbol-on-paste-mapper": "6.0.1-rc.1",
-    "@coremedia/service-agent": "^1.0.0",
-    "xml-formatter": "^2.5.1"
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "6.0.1-rc.2",
+    "@coremedia/ckeditor5-coremedia-images": "6.0.1-rc.2",
+    "@coremedia/ckeditor5-coremedia-link": "6.0.1-rc.2",
+    "@coremedia/ckeditor5-coremedia-richtext": "6.0.1-rc.2",
+    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "6.0.1-rc.2",
+    "@coremedia/ckeditor5-studio-essentials": "6.0.1-rc.2",
+    "@coremedia/ckeditor5-symbol-on-paste-mapper": "6.0.1-rc.2",
+    "@coremedia/service-agent": "^1.1.0",
+    "xml-formatter": "^2.6.1"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^30.1.5",
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^30.1.5",
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "circular-dependency-plugin": "^5.2.2",
-    "css-loader": "^6.5.1",
-    "postcss": "^8.3.11",
-    "postcss-loader": "^6.2.0",
+    "css-loader": "^6.7.1",
+    "postcss": "^8.4.14",
+    "postcss-loader": "^7.0.0",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
     "style-loader": "^3.3.1",
-    "terser-webpack-plugin": "^5.2.5",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.4.4",
-    "webpack": "^5.63.0",
-    "webpack-cli": "^4.9.1"
+    "terser-webpack-plugin": "^5.3.1",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
   },
   "scripts": {
     "clean": "rimraf ./dist",

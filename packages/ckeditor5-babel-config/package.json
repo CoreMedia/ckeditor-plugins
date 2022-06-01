@@ -5,16 +5,16 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-typescript": "^7.16.8",
-    "@babel/plugin-transform-parameters": "^7.16.3",
-    "@babel/plugin-transform-computed-properties": "^7.16.0",
-    "@babel/plugin-transform-shorthand-properties": "^7.16.0",
-    "@babel/plugin-transform-arrow-functions": "^7.16.0",
-    "@babel/plugin-transform-for-of": "^7.16.0",
-    "@babel/plugin-proposal-class-properties": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
-    "@babel/preset-typescript": "^7.16.0"
+    "@babel/core": "^7.18.2",
+    "@babel/plugin-proposal-class-properties": "^7.17.12",
+    "@babel/plugin-transform-arrow-functions": "^7.17.12",
+    "@babel/plugin-transform-computed-properties": "^7.17.12",
+    "@babel/plugin-transform-for-of": "^7.18.1",
+    "@babel/plugin-transform-parameters": "^7.17.12",
+    "@babel/plugin-transform-typescript": "^7.18.4",
+    "@babel/plugin-transform-shorthand-properties": "^7.16.7",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12"
   },
   "exports": {
     ".": "./shared-babel.config.js"
