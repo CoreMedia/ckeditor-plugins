@@ -67,7 +67,7 @@ importers:
       typescript: ^4.7.2
       webpack: ^5.72.1
       webpack-cli: ^4.9.2
-      xml-formatter: ^2.5.1
+      xml-formatter: ^2.6.1
     dependencies:
       '@ckeditor/ckeditor5-alignment': 34.0.0
       '@ckeditor/ckeditor5-autosave': 34.0.0
@@ -102,7 +102,7 @@ importers:
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
       '@coremedia/service-agent': 1.1.0
-      xml-formatter: 2.5.1
+      xml-formatter: 2.6.1
     devDependencies:
       '@ckeditor/ckeditor5-dev-utils': 30.1.4_webpack@5.72.1
       '@ckeditor/ckeditor5-dev-webpack-plugin': 30.1.4_webpack@5.72.1
@@ -14763,11 +14763,11 @@ packages:
         optional: true
     dev: false
 
-  /xml-formatter/2.5.1:
-    resolution: {integrity: sha512-qJwnz5uNMs4mc7jX3UH80taCK4BHnXX91MvByple+iOS2P1eNeifGAfPnKuteyHg8pehbhTBHPBunGOQ53nKdQ==}
+  /xml-formatter/2.6.1:
+    resolution: {integrity: sha512-dOiGwoqm8y22QdTNI7A+N03tyVfBlQ0/oehAzxIZtwnFAHGeSlrfjF73YQvzSsa/Kt6+YZasKsrdu6OIpuBggw==}
     engines: {node: '>= 10'}
     dependencies:
-      xml-parser-xo: 3.1.2
+      xml-parser-xo: 3.2.0
     dev: false
 
   /xml-name-validator/3.0.0:
@@ -14779,8 +14779,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /xml-parser-xo/3.1.2:
-    resolution: {integrity: sha512-Qyttmiy305unyg1ONpArT4FPDL3J+ohXWpMI1ecopClGMw53lCRHJ4FV/fVYHFU6qfEzMV0frqSlNaLo2dw15Q==}
+  /xml-parser-xo/3.2.0:
+    resolution: {integrity: sha512-8LRU6cq+d7mVsoDaMhnkkt3CTtAs4153p49fRo+HIB3I1FD1o5CeXRjRH29sQevIfVJIcPjKSsPU/+Ujhq09Rg==}
     engines: {node: '>= 10'}
     dev: false
 

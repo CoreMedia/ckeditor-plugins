@@ -41,7 +41,7 @@
     "@coremedia/ckeditor5-studio-essentials": "6.0.1-rc.1",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "6.0.1-rc.1",
     "@coremedia/service-agent": "^1.1.0",
-    "xml-formatter": "^2.5.1"
+    "xml-formatter": "^2.6.1"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^30.1.3",
