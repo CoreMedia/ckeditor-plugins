@@ -1,10 +1,10 @@
-import { CallbackFunction, Emitter, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import Observable, {BindReturnValue} from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import {PriorityString} from "@ckeditor/ckeditor5-utils/src/priorities";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { BindReturnValue, Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Node from "./node";
 import Position from "./position";
 import Element from "./element";
-import {Item} from "./item";
+import { Item } from "./item";
 import Range from "./range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DomEventData from "../view/observer/domeventdata";

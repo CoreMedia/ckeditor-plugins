@@ -1,4 +1,4 @@
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { BindReturnValue, Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { CallbackFunction, Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Collection from "@ckeditor/ckeditor5-utils/src/collection";

@@ -1,5 +1,5 @@
 import View from "@ckeditor/ckeditor5-ui/src/view";
-import Observable from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import TemplateIfBinding from "@ckeditor/ckeditor5-ui/src/template/templateifbinding";

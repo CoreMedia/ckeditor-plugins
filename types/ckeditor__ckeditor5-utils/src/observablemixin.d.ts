@@ -9,7 +9,7 @@ export type BindReturnValue = {
 /**
  * @see <a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_utils_observablemixin-Observable.html">Interface Observable (utils/observablemixin~Observable) - CKEditor 5 API docs</a>
  */
-export default interface Observable extends Emitter {
+export interface Observable extends Emitter {
   bind(...bindProperties: any[]): BindReturnValue;
 
   decorate(methodName: string): void;
@@ -97,3 +97,7 @@ export interface BindChain {
     callback: (...values: Array<O[K]>) => void,
   ): void;
 }
+
+declare const ObservableMixin: Observable;
+
+export default ObservableMixin;
