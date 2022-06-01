@@ -131,7 +131,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
       '@types/express': ^4.17.13
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@types/node': ^16.11.26
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
@@ -167,7 +167,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/types-ckeditor__ckeditor5-core': link:../types/ckeditor__ckeditor5-core
       '@types/express': 4.17.13
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@types/node': 16.11.35
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
@@ -225,7 +225,7 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -246,7 +246,7 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -280,7 +280,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-html-support': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-undo': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.3.1
       '@typescript-eslint/parser': ^5.3.1
       eslint: ^8.2.0
@@ -314,7 +314,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
       '@coremedia/types-ckeditor__ckeditor5-undo': link:../../types/ckeditor__ckeditor5-undo
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.3.1_izj3pab3orj7l43xc636crefc4
       '@typescript-eslint/parser': 5.3.1_dpa3fc6zkz7v3bcs7pcctk7gra
       eslint: 8.2.0
@@ -346,7 +346,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-engine': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-image': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.3.1
       '@typescript-eslint/parser': ^5.3.1
       eslint: ^8.2.0
@@ -378,7 +378,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-image': link:../../types/ckeditor__ckeditor5-image
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -416,7 +416,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-typing': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-ui': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -456,7 +456,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
       '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -484,7 +484,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-engine': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -511,7 +511,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -540,7 +540,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-html-support': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -568,7 +568,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -602,7 +602,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-typing': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-ui': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -635,7 +635,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
       '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -657,7 +657,7 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.0.1-rc.1
       '@coremedia/service-agent': ^1.1.0
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       copyfiles: ^2.4.1
@@ -681,7 +681,7 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.1.0
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       copyfiles: 2.4.1
@@ -708,7 +708,7 @@ importers:
       '@coremedia/service-agent': ^1.1.0
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       copyfiles: ^2.4.1
@@ -736,7 +736,7 @@ importers:
       '@coremedia/service-agent': 1.1.0
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       copyfiles: 2.4.1
@@ -764,7 +764,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-engine': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -790,7 +790,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -826,7 +826,7 @@ importers:
       '@babel/core': ^7.18.2
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
       eslint: ^8.6.0
@@ -847,7 +847,7 @@ importers:
       '@babel/core': 7.18.2
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
       eslint: 8.8.0
@@ -890,7 +890,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-paste-from-office': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-utils': 6.0.1-rc.1
-      '@types/jest': ^27.0.2
+      '@types/jest': ^27.5.1
       '@types/webpack': ^5.28.0
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@typescript-eslint/parser': ^5.9.1
@@ -936,7 +936,7 @@ importers:
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
       '@coremedia/types-ckeditor__ckeditor5-paste-from-office': link:../../types/ckeditor__ckeditor5-paste-from-office
       '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
-      '@types/jest': 27.0.2
+      '@types/jest': 27.5.1
       '@types/webpack': 5.28.0_webpack-cli@4.9.1
       '@typescript-eslint/eslint-plugin': 5.10.2_56ey2rk7tmf2x64ekvqujhxqve
       '@typescript-eslint/parser': 5.10.2_ldmzsdklgvjf2peqrhsm2lzqru
@@ -3352,17 +3352,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@jest/types/27.2.5:
-    resolution: {integrity: sha512-nmuM4VuDtCZcY+eTpw+0nvstwReMsjPoj7ZR80/BbixulhLaiX+fbv8oeLW8WZlJMcsGQsTmMKT/iTZu1Uy/lQ==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      '@types/istanbul-lib-coverage': 2.0.3
-      '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.11.35
-      '@types/yargs': 16.0.4
-      chalk: 4.1.2
-    dev: true
-
   /@jest/types/27.5.1:
     resolution: {integrity: sha512-Cx46iJ9QpwQTjIdq5VJu2QTMMs3QlEjI0x1QbBP5W1+nMzyc2XmimiRR/CbX9TO0cPTeUlxWMOu8mslYsJ8DEw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -3661,11 +3650,11 @@ packages:
     dependencies:
       '@types/istanbul-lib-report': 3.0.0
 
-  /@types/jest/27.0.2:
-    resolution: {integrity: sha512-4dRxkS/AFX0c5XW6IPMNOydLn2tEhNhJV7DnYK+0bjoJZ+QTmfucBlihX7aoEsh/ocYtkLC73UbnBXBXIxsULA==}
+  /@types/jest/27.5.1:
+    resolution: {integrity: sha512-fUy7YRpT+rHXto1YlL+J9rs0uLGyiqVt3ZOTQR+4ROc47yNl8WLdVLgUloBRhOxP1PZvguHl44T3H0wAWxahYQ==}
     dependencies:
-      jest-diff: 27.2.0
-      pretty-format: 27.2.0
+      jest-matcher-utils: 27.5.1
+      pretty-format: 27.5.1
     dev: true
 
   /@types/jsdom/16.2.14:
@@ -6788,11 +6777,6 @@ packages:
     resolution: {integrity: sha1-gGZJMmzqp8qjMG112YXqJ0i6kTw=}
     dev: true
 
-  /diff-sequences/27.0.6:
-    resolution: {integrity: sha512-ag6wfpBFyNXZ0p8pcuIDS//D8H062ZQJ3fzYxjpmeKjnz8W4pekL3AI8VohmyZmsWW2PWaHgjsmqR6L13101VQ==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dev: true
-
   /diff-sequences/27.5.1:
     resolution: {integrity: sha512-k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -9360,16 +9344,6 @@ packages:
       - supports-color
     dev: true
 
-  /jest-diff/27.2.0:
-    resolution: {integrity: sha512-QSO9WC6btFYWtRJ3Hac0sRrkspf7B01mGrrQEiCW6TobtViJ9RWL0EmOs/WnBsZDsI/Y2IoSHZA2x6offu0sYw==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      chalk: 4.1.2
-      diff-sequences: 27.0.6
-      jest-get-type: 27.3.1
-      pretty-format: 27.3.1
-    dev: true
-
   /jest-diff/27.5.1:
     resolution: {integrity: sha512-m0NvkX55LDt9T4mctTEgnZk3fmEg3NRYutvMPWM/0iPnkFj2wIeF45O1718cMSOFO1vINkqmxqD8vE37uTEbqw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -9485,11 +9459,6 @@ packages:
       '@types/node': 16.11.35
       jest-mock: 28.1.0
       jest-util: 28.1.0
-    dev: true
-
-  /jest-get-type/27.3.1:
-    resolution: {integrity: sha512-+Ilqi8hgHSAdhlQ3s12CAVNd8H96ZkQBfYoXmArzZnOfAtVAJEiPDBirjByEblvG/4LPJmkL+nBqPO3A1YJAEg==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dev: true
 
   /jest-get-type/27.5.1:
@@ -12447,26 +12416,6 @@ packages:
 
   /pretty-data/0.40.0:
     resolution: {integrity: sha1-Vyqo6iNGdGerlLa1Jmpv2cj93XI=}
-    dev: true
-
-  /pretty-format/27.2.0:
-    resolution: {integrity: sha512-KyJdmgBkMscLqo8A7K77omgLx5PWPiXJswtTtFV7XgVZv2+qPk6UivpXXO+5k6ZEbWIbLoKdx1pZ6ldINzbwTA==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      '@jest/types': 27.2.5
-      ansi-regex: 5.0.1
-      ansi-styles: 5.2.0
-      react-is: 17.0.2
-    dev: true
-
-  /pretty-format/27.3.1:
-    resolution: {integrity: sha512-DR/c+pvFc52nLimLROYjnXPtolawm+uWDxr4FjuLDLUn+ktWnSN851KoHwHzzqq6rfCOjkzN8FLgDrSub6UDuA==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      '@jest/types': 27.5.1
-      ansi-regex: 5.0.1
-      ansi-styles: 5.2.0
-      react-is: 17.0.2
     dev: true
 
   /pretty-format/27.5.1:
