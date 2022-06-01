@@ -125,8 +125,10 @@ importers:
       '@babel/cli': ^7.16.0
       '@babel/core': ^7.16.0
       '@ckeditor/ckeditor5-core': ^34.1.0
+      '@ckeditor/ckeditor5-engine': ^34.1.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-coremedia-richtext': 6.0.1-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.0.1-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 6.0.1-rc.1
       '@coremedia/types-ckeditor__ckeditor5-core': 6.0.1-rc.1
@@ -148,7 +150,6 @@ importers:
       jest-circus: ^27.5.1
       jest-config: ^27.5.1
       jest-environment-jsdom: ^27.5.1
-      jest-environment-node: ^27.5.1
       jest-playwright-preset: ^1.7.0
       jest-runner: ^27.5.1
       playwright: ^1.22.0
@@ -162,8 +163,10 @@ importers:
       '@babel/cli': 7.16.0_@babel+core@7.16.0
       '@babel/core': 7.16.0
       '@ckeditor/ckeditor5-core': 34.1.0
+      '@ckeditor/ckeditor5-engine': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../packages/ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../packages/ckeditor5-jest-test-helpers
+      '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/types-ckeditor__ckeditor5-core': link:../types/ckeditor__ckeditor5-core
@@ -185,8 +188,7 @@ importers:
       jest-circus: 27.5.1
       jest-config: 27.5.1
       jest-environment-jsdom: 27.5.1
-      jest-environment-node: 27.5.1
-      jest-playwright-preset: 1.7.0_l32tkdczjgqxuqrrxonq2y4q5e
+      jest-playwright-preset: 1.7.0_waloe6hclecmligcypwuuyhhre
       jest-runner: 27.5.1
       playwright: 1.22.0
       playwright-core: 1.22.0
@@ -8256,7 +8258,7 @@ packages:
       '@jest/types': 28.1.0
       '@types/node': 16.11.35
 
-  /jest-playwright-preset/1.7.0_l32tkdczjgqxuqrrxonq2y4q5e:
+  /jest-playwright-preset/1.7.0_waloe6hclecmligcypwuuyhhre:
     resolution: {integrity: sha512-G25Nik+By0SNniMDdkouDL/yA1LdqjzsXNSVU4xnRX1typjXRmzRE0aSgqxas2sRi8cwG3M1ioHdkLLsp6sang==}
     peerDependencies:
       jest: '>=26.6.3'
@@ -8267,7 +8269,6 @@ packages:
       expect-playwright: 0.7.2
       jest: 27.5.1
       jest-circus: 27.5.1
-      jest-environment-node: 27.5.1
       jest-process-manager: 0.3.1
       jest-runner: 27.5.1
       nyc: 15.1.0
