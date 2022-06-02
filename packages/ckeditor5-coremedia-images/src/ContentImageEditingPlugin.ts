@@ -3,7 +3,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
-import { imageInlineElementToElementConversionPatch } from "./patches";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
 
@@ -43,7 +42,6 @@ export default class ContentImageEditingPlugin extends Plugin {
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
       ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME
     );
-    imageInlineElementToElementConversionPatch(this.editor);
 
     // We have to prevent to write src-attribute to model because we fetch the
     // src attribute for the editing view asynchronously.
