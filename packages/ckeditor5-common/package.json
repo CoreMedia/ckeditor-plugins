@@ -20,7 +20,7 @@
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.2",
-    "@types/jest": "^27.5.1",
+    "@types/jest": "^28.1.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.16.0",
