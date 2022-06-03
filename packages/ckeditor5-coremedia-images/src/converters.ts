@@ -27,12 +27,27 @@ import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Pl
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
+/**
+ * A method to prevent the upcast of the src-attribute of an image.
+ *
+ * The src-attribute for CoreMedia Images is not stored as an url but as a reference to a content property in a xlink:href attribute.
+ * In this case it does not make sense to work with src-attributes in the model and side effects of an existing src-attribute
+ * (like ghs) have to be prevented.
+ *
+ * Normally preventing the src-attribute to be part of the model means to consume the attribute but don't do anything with it.
+ * Unfortunately ckeditor does not check if the attribute has already been consumed (see https://github.com/ckeditor/ckeditor5/issues/11327).
+ * With https://github.com/ckeditor/ckeditor5/issues/11530 the src-attribute will be upcasted if the src-attribute exists as view attribute.
+ * To fully prevent the upcast we have to consume the attribute and remove the src-attribute from the view node.
+ */
 export const preventUpcastImageSrc = () => {
   return (dispatcher: UpcastDispatcher): void => {
     dispatcher.on(
       `element:img`,
       (evt: EventInfo, data: UpcastEventData, conversionApi: UpcastConversionApi) => {
-        conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
+        if (data.viewItem.hasAttribute("data-xlink-href")) {
+          conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
+          data.viewItem._removeAttribute("src");
+        }
       },
       { priority: "highest" }
     );

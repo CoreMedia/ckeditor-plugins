@@ -17,9 +17,9 @@
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.2",
-    "@ckeditor/ckeditor5-core": "^34.0.0",
-    "@ckeditor/ckeditor5-engine": "^34.0.0",
-    "@ckeditor/ckeditor5-utils": "^34.0.0",
+    "@ckeditor/ckeditor5-core": "^34.1.0",
+    "@ckeditor/ckeditor5-engine": "^34.1.0",
+    "@ckeditor/ckeditor5-utils": "^34.1.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.2",
@@ -32,8 +32,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tsdoc": "^0.2.16",
-    "jest": "^28.1.0",
-    "jest-each": "^28.0.2",
+    "jest": "^27.5.1",
+    "jest-each": "^27.5.1",
     "jest-xml-matcher": "^1.2.0",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
@@ -43,9 +43,9 @@
     "./*": "./dist/*.js"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^34.0.0",
-    "@ckeditor/ckeditor5-engine": "^34.0.0",
-    "@ckeditor/ckeditor5-utils": "^34.0.0"
+    "@ckeditor/ckeditor5-core": "^34.1.0",
+    "@ckeditor/ckeditor5-engine": "^34.1.0",
+    "@ckeditor/ckeditor5-utils": "^34.1.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-dataprocessor-support": "6.0.1-rc.2",

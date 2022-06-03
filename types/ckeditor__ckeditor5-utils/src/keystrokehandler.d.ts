@@ -1,4 +1,4 @@
-import Emitter from "./emittermixin";
+import { Emitter } from "./emittermixin";
 import { PriorityString } from "./priorities";
 
 // TODO we cannot import KeyEventData from ckeditor5-engine because it would result in a cyclic dependency

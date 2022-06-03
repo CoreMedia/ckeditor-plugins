@@ -8,7 +8,7 @@ import FocusTracker from "@ckeditor/ckeditor5-utils/src/focustracker";
 import KeystrokeHandler from "@ckeditor/ckeditor5-utils/src/keystrokehandler";
 import FocusCycler from "@ckeditor/ckeditor5-ui/src/focuscycler";
 import injectCssTransitionDisabler from "@ckeditor/ckeditor5-ui/src/bindings/injectcsstransitiondisabler";
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import submitHandler from "@ckeditor/ckeditor5-ui/src/bindings/submithandler";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";

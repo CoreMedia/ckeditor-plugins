@@ -1,4 +1,4 @@
-import Emitter from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 
 export default function clickOutsideHandler(options?: {
   emitter: Emitter;

@@ -3,7 +3,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
-import { imageInlineElementToElementConversionPatch } from "./patches";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
 
@@ -43,7 +42,6 @@ export default class ContentImageEditingPlugin extends Plugin {
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
       ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME
     );
-    imageInlineElementToElementConversionPatch(this.editor);
 
     // We have to prevent to write src-attribute to model because we fetch the
     // src attribute for the editing view asynchronously.
@@ -86,14 +84,14 @@ export default class ContentImageEditingPlugin extends Plugin {
   }
 
   /**
-   * Register <code>imageInline</code> model elements for subscription cleanup
+   * Register `imageInline` model elements for subscription cleanup
    * on model changes.
    *
    * @param editor - Editor
    */
   static async #initializeModelBoundSubscriptionPlugin(editor: Editor): Promise<void> {
     await ifPlugin(editor, ModelBoundSubscriptionPlugin)
-      .then((plugin) => plugin.registerModelElement("imageInline"))
+      .then((plugin) => plugin.registerModelElement(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME))
       .catch(optionalPluginNotFound);
   }
 }

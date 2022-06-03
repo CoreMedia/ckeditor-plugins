@@ -7,5 +7,7 @@ export default class Node {
 
   getAttribute(key: string): string | undefined;
 
+  _removeAttribute(key: string): boolean;
+
   is(type: string, name?: string): boolean;
 }

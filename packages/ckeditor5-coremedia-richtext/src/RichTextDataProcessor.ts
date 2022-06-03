@@ -15,8 +15,10 @@ import { getConfig } from "./CoreMediaRichTextConfig";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "./ToDataProcessor";
+import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import mix from "@ckeditor/ckeditor5-utils/src/mix";
 
-export default class RichTextDataProcessor implements DataProcessor {
+class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -212,9 +214,24 @@ export default class RichTextDataProcessor implements DataProcessor {
       });
     }
 
+    // Mainly for debugging/testing purpose, we provide the interim
+    // processing result with the original data and the intermediate
+    // _data view_ as provided after data-processing.
+    this.fire("richtext:toView", {
+      data,
+      dataView,
+    });
+
     return viewFragment;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface RichTextDataProcessor extends Observable {}
+
+mix(RichTextDataProcessor, ObservableMixin);
+
+export default RichTextDataProcessor;
 
 /**
  * We must ensure, that entities defined by CoreMedia RichText 1.0 are known

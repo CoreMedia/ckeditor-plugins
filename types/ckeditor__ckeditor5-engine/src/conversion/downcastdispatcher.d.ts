@@ -2,7 +2,7 @@ import Position from "../model/position";
 import Element from "../model/element";
 import Schema from "../model/schema";
 import DowncastWriter from "../view/downcastwriter";
-import Emitter, { CallbackFunction, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import eventinfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Range from "../model/range";

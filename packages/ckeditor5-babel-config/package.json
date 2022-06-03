@@ -11,6 +11,7 @@
     "@babel/plugin-transform-computed-properties": "^7.17.12",
     "@babel/plugin-transform-for-of": "^7.18.1",
     "@babel/plugin-transform-parameters": "^7.17.12",
+    "@babel/plugin-transform-typescript": "^7.18.4",
     "@babel/plugin-transform-shorthand-properties": "^7.16.7",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-typescript": "^7.17.12"

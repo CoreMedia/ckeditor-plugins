@@ -1,5 +1,5 @@
 import DomEventData from "@ckeditor/ckeditor5-engine/src/view/observer/domeventdata";
-import Emitter, { EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Editor from "./editor";

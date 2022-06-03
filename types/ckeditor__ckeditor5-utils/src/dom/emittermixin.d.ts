@@ -1,4 +1,4 @@
-import BaseEmitter, { EmitterMixinDelegateChain } from "../emittermixin";
+import { Emitter as BaseEmitter, EmitterMixinDelegateChain } from "../emittermixin";
 import EventInfo from "../eventinfo";
 import { PriorityString } from "../priorities";
 

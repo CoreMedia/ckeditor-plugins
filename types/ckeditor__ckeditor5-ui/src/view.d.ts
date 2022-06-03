@@ -1,6 +1,6 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import Observable, { BindReturnValue } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import Emitter, {CallbackFunction, EmitterMixinDelegateChain} from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { BindReturnValue, Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { CallbackFunction, Emitter, EmitterMixinDelegateChain } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import Template from "./template";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
