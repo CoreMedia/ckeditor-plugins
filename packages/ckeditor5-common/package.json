@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-common",
-  "version": "6.0.1-rc.3",
+  "version": "6.1.0",
   "description": "tooling to help with CKEditor 5 Plugin implementations.",
   "keywords": [
     "coremedia"
@@ -19,7 +19,7 @@
     "@ckeditor/ckeditor5-core": "^34.1.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/types-ckeditor__ckeditor5-core": "6.0.1-rc.3",
+    "@coremedia/types-ckeditor__ckeditor5-core": "^6.1.0",
     "@types/jest": "^27.5.1",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
@@ -37,7 +37,7 @@
     "@ckeditor/ckeditor5-core": "^34.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "6.0.1-rc.3"
+    "@coremedia/ckeditor5-logging": "^6.1.0"
   },
   "scripts": {
     "clean": "rimraf ./dist",
