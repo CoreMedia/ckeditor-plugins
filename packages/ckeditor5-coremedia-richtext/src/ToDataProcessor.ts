@@ -36,6 +36,7 @@ export default class ToDataProcessor {
    */
   static createCoreMediaRichTextDocument(): Document {
     const doc: Document = document.implementation.createDocument(COREMEDIA_RICHTEXT_NAMESPACE_URI, "div");
+    (doc.firstChild as Element).setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
     const pi = doc.createProcessingInstruction("xml", 'version="1.0" encoding="utf-8"');
     doc.insertBefore(pi, doc.firstChild);
     return doc;
