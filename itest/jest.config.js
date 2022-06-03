@@ -1,16 +1,5 @@
 const jestConfig = require("@coremedia-internal/ckeditor5-jest-test-helpers/shared-jest.config.js");
 
-// We still have to use Jest 27 in this module, affected by https://github.com/facebook/jest/issues/9771
-/**
- * Required workaround for Jest Module Resolution
- * (https://github.com/facebook/jest/issues/9771) as long as Jest Playwright
- * does not support Jest 28
- * (https://github.com/playwright-community/jest-playwright/issues/796).
- */
-const enhancedResolveJest27 = {
-  resolver: "./enhanced-resolve-jest27.js",
-};
-
 module.exports = {
   ...jestConfig,
   roots: ["<rootDir>/src/"],
@@ -21,5 +10,4 @@ module.exports = {
   preset: "jest-playwright-preset",
   testEnvironment: "./playwright.environment.js",
   setupFilesAfterEnv: ["expect-playwright"],
-  ...enhancedResolveJest27,
 };
