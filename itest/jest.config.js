@@ -8,6 +8,6 @@ module.exports = {
   // failures `Exceeded timeout`.
   testTimeout: 60000,
   preset: "jest-playwright-preset",
-  testEnvironment: "./playwright.environment.js",
-  setupFilesAfterEnv: ["expect-playwright"],
+  testEnvironment: require.resolve("./playwright.environment.js"),
+  setupFilesAfterEnv: [require.resolve("expect-playwright")],
 };
