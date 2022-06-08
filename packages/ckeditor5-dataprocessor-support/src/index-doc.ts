@@ -3,6 +3,8 @@
  */
 export * as Attributes from "./Attributes";
 
+export * from "./DataDiffer";
+
 export * from "./ElementProxy";
 export { default as ElementProxy } from "./ElementProxy";
 

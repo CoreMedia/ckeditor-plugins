@@ -17,6 +17,7 @@ import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basich
 import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
+import { XmlDataDiffer, XmlDataDifferMixin } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
 
 class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -231,9 +232,9 @@ class RichTextDataProcessor implements DataProcessor {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RichTextDataProcessor extends Observable {}
+interface RichTextDataProcessor extends Observable, XmlDataDiffer {}
 
-mix(RichTextDataProcessor, ObservableMixin);
+mix(RichTextDataProcessor, ObservableMixin, XmlDataDifferMixin);
 
 export default RichTextDataProcessor;
 
