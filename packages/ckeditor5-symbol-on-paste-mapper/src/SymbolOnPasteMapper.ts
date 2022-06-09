@@ -24,10 +24,6 @@ export default class SymbolOnPasteMapper extends Plugin {
   private static readonly clipboardEventName: string = "inputTransformation";
   private static readonly pluginNameClipboard: string = "Clipboard";
 
-  constructor(ed: Editor) {
-    super(ed);
-  }
-
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [ClipboardPipeline];
   }
