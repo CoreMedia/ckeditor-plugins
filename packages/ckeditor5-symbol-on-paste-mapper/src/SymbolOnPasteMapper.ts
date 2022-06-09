@@ -15,6 +15,12 @@ import FontMapperPluginConfig from "./FontMapperPluginConfig";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
+const CONFIG_KEY = "coremedia:symbol-font-mapper";
+const MODE_CONFIG_KEY = "mode";
+const MODE_CONFIG_PATH = `${CONFIG_KEY}.${MODE_CONFIG_KEY}`;
+const FONT_MAPPER_CONFIG_KEY = "fontMapper";
+const FONT_MAPPER_CONFIG_PATH = `${CONFIG_KEY}.${FONT_MAPPER_CONFIG_KEY}`;
+
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string = "SymbolOnPasteMapper";
   static readonly #logger: Logger = LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
@@ -22,25 +28,25 @@ export default class SymbolOnPasteMapper extends Plugin {
   private static readonly styleNameFontFamily = "font-family";
   private static readonly supportedDataFormat: string = "text/html";
   private static readonly clipboardEventName: string = "inputTransformation";
-  private static readonly pluginNameClipboard: string = "Clipboard";
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
     return [ClipboardPipeline];
   }
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const logger = SymbolOnPasteMapper.#logger;
+    const pluginName = SymbolOnPasteMapper.pluginName;
+    const startTimestamp = performance.now();
 
-    logger.info("Initializing FontMapper Plugin");
+    logger.debug(`Initializing ${pluginName}...`);
+
     const editor = this.editor;
-    const fontMapperPluginConfig: FontMapperPluginConfig = editor.config.get(
-      "fontMapperPlugin"
-    ) as FontMapperPluginConfig;
+    const fontMapperPluginConfig: FontMapperPluginConfig = editor.config.get(CONFIG_KEY) as FontMapperPluginConfig;
     SymbolOnPasteMapper.#applyPluginConfig(fontMapperPluginConfig);
 
     // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
     // We also need to use a priority higher then "low" in order to process the input in time.
-    ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
+    await ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
       this.listenTo(
         p,
         SymbolOnPasteMapper.clipboardEventName,
@@ -50,6 +56,8 @@ export default class SymbolOnPasteMapper extends Plugin {
         }
       )
     );
+
+    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
   }
 
   static #applyPluginConfig(config: FontMapperPluginConfig): void {
