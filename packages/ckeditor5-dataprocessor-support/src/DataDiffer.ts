@@ -1,16 +1,17 @@
 /**
  * Provides a way to get a difference of given data values. Typical usage is,
  * when two given data values are considered equivalent and a difference
- * when passing processing:
+ * when passing processing as workaround for
+ * https://github.com/ckeditor/ckeditor5/issues/11900:
  *
  * ```text
- * data →
+ * data (start) →
  *   data view →
  *   model →
  *   editing view →
  *   model →
  *   data view →
- *   data
+ *   data (and back again)
  * ```
  *
  * should not be perceived as difference, e.g., to see if updating data
