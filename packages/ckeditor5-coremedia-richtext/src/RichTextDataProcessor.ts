@@ -17,7 +17,35 @@ import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basich
 import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
-import { XmlDataDiffer, XmlDataDifferMixin } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
+import { DataDiffer, DataDifferMixin, Normalizer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
+
+const xmlDeclarationRegExp = /^\s*<\?.*?\?>\s*/s;
+/**
+ * Remove XML declaration, if considered irrelevant for comparison.
+ *
+ * @param value - value to normalize
+ */
+const normalizeXmlDeclaration: Normalizer = (value: string): string => {
+  return value.replace(xmlDeclarationRegExp, "");
+};
+
+const namespaceDeclarationRegExp = /(?<=<[^>]*)xmlns(?::\w+)?=['"][^'"]+['"]\s*(?=[^>]*>)/gs;
+const elementRegExp = /(?<=<)[^>]+(?=>)/gs;
+
+/**
+ * Remove XML namespace declarations, if considered irrelevant for comparison.
+ *
+ * @param value - value to normalize
+ */
+const normalizeNamespaceDeclarations: Normalizer = (value: string): string => {
+  return (
+    value
+      // First remove namespace declarations.
+      .replaceAll(namespaceDeclarationRegExp, "")
+      // Then we may have redundant spaces left: Remove.
+      .replace(elementRegExp, (s) => s.trim())
+  );
+};
 
 class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -55,6 +83,9 @@ class RichTextDataProcessor implements DataProcessor {
     this.#noParserErrorNamespace =
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
+
+    this.addNormalizer(normalizeXmlDeclaration);
+    this.addNormalizer(normalizeNamespaceDeclarations);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
@@ -232,9 +263,9 @@ class RichTextDataProcessor implements DataProcessor {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RichTextDataProcessor extends Observable, XmlDataDiffer {}
+interface RichTextDataProcessor extends Observable, DataDiffer {}
 
-mix(RichTextDataProcessor, ObservableMixin, XmlDataDifferMixin);
+mix(RichTextDataProcessor, ObservableMixin, DataDifferMixin);
 
 export default RichTextDataProcessor;
 
