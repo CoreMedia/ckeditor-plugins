@@ -1,6 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
+import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
@@ -13,6 +13,7 @@ import FontMapper from "./fontMapper/FontMapper";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import FontMapperPluginConfig from "./FontMapperPluginConfig";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 
 export default class SymbolOnPasteMapper extends Plugin {
   static readonly pluginName: string = "SymbolOnPasteMapper";
@@ -28,7 +29,7 @@ export default class SymbolOnPasteMapper extends Plugin {
   }
 
   static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard];
+    return [ClipboardPipeline];
   }
 
   init(): Promise<void> | void {
@@ -41,12 +42,18 @@ export default class SymbolOnPasteMapper extends Plugin {
     ) as FontMapperPluginConfig;
     SymbolOnPasteMapper.#applyPluginConfig(fontMapperPluginConfig);
 
-    const clipboard: Plugin | undefined = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
-    if (clipboard instanceof Clipboard) {
-      clipboard.on(SymbolOnPasteMapper.clipboardEventName, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
-    } else {
-      logger.error("Unexpected Clipboard plugin.");
-    }
+    // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
+    // We also need to use a priority higher then "low" in order to process the input in time.
+    ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
+      this.listenTo(
+        p,
+        SymbolOnPasteMapper.clipboardEventName,
+        SymbolOnPasteMapper.handleClipboardInputTransformationEvent,
+        {
+          priority: "normal",
+        }
+      )
+    );
   }
 
   static #applyPluginConfig(config: FontMapperPluginConfig): void {
@@ -125,7 +132,8 @@ export default class SymbolOnPasteMapper extends Plugin {
 
   private static findTextElement(element: Element): Text | null {
     const children: Iterable<Node> = element.getChildren();
-    for (const child of children) {
+    const childrenArray: Array<Node> = Array.from(children);
+    for (const child of childrenArray) {
       if (child instanceof Text) {
         return child;
       }
