@@ -41,7 +41,8 @@ const normalizeNamespaceDeclarations: Normalizer = (value: string): string => {
   return (
     value
       // First remove namespace declarations.
-      .replaceAll(namespaceDeclarationRegExp, "")
+      // lgtm: This is not about sanitation.
+      .replaceAll(namespaceDeclarationRegExp, "") // lgtm[js/incomplete-multi-character-sanitization]
       // Then we may have redundant spaces left: Remove.
       .replace(elementRegExp, (s) => s.trim())
   );
