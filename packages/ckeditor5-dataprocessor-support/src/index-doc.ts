@@ -17,6 +17,8 @@ export { default as Namespace } from "./Namespace";
 export * from "./NodeProxy";
 export { default as NodeProxy } from "./NodeProxy";
 
+export * from "./NormalizedData";
+
 export * from "./Rules";
 
 export * from "./TextProxy";

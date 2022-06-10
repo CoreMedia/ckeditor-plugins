@@ -1,4 +1,12 @@
-import { DataDifferMixin, Normalizer } from "../src/DataDiffer";
+import { DataDiffer, DataDifferMixin, isDataDiffer, Normalizer } from "../src/DataDiffer";
+
+type FakeDataDiffer = Record<keyof DataDiffer, unknown>;
+const fakeDataDiffer: FakeDataDiffer = {
+  addNormalizer: false,
+  normalize: "Lorem",
+  areDifferent: null,
+};
+const someDataDiffer: DataDiffer = new DataDifferMixin();
 
 const xmlDeclarationRegExp = /^\s*<\?.*?\?>\s*/s;
 /**
@@ -102,6 +110,49 @@ describe("DataDiffer", () => {
       ${`<root xmlns="https://example.org/default"><ex:child/></root>`}   | ${`<root xmlns="https://example.org/default" xmlns:ex="https://example.org/ex"><ex:child/></root>`} | ${false}  | ${"different namespace declarations ignored"}
     `("[$#] Should '$value1' be different to '$value2'? => $different ($comment)", ({ value1, value2, different }) => {
       expect(differ.areDifferent(value1, value2)).toStrictEqual(different);
+    });
+
+    // noinspection HtmlUnknownAttribute
+    test.each`
+      value1                                                              | value2                                                                                              | different | comment
+      ${`<?xml version="1.0"?>\n<root/>`}                                 | ${`<?xml version="1.0"?><root/>`}                                                                   | ${false}  | ${"ignoring declaration should ignore newlines"}
+      ${`<?xml version="1.0" encoding="utf-8" standalone="yes"?><root/>`} | ${`<?xml version="1.0"?><root/>`}                                                                   | ${false}  | ${"ignoring declaration should ignore different declarations"}
+      ${`<root xmlns="https://example.org/default"><ex:child/></root>`}   | ${`<root xmlns="https://example.org/default" xmlns:ex="https://example.org/ex"><ex:child/></root>`} | ${false}  | ${"different namespace declarations ignored"}
+    `(
+      "[$#] Should normalized '$value1' be different to '$value2'? => $different ($comment)",
+      ({ value1, value2, different }) => {
+        const normalized1 = differ.normalize(value1);
+        expect(differ.areDifferent(normalized1, value2)).toStrictEqual(different);
+      }
+    );
+
+    // noinspection HtmlUnknownAttribute
+    test.each`
+      value1                                                              | value2                                                                                              | different | comment
+      ${`<?xml version="1.0"?>\n<root/>`}                                 | ${`<?xml version="1.0"?><root/>`}                                                                   | ${false}  | ${"ignoring declaration should ignore newlines"}
+      ${`<?xml version="1.0" encoding="utf-8" standalone="yes"?><root/>`} | ${`<?xml version="1.0"?><root/>`}                                                                   | ${false}  | ${"ignoring declaration should ignore different declarations"}
+      ${`<root xmlns="https://example.org/default"><ex:child/></root>`}   | ${`<root xmlns="https://example.org/default" xmlns:ex="https://example.org/ex"><ex:child/></root>`} | ${false}  | ${"different namespace declarations ignored"}
+    `(
+      "[$#] Should normalized '$value1' be different to normalized '$value2'? => $different ($comment)",
+      ({ value1, value2, different }) => {
+        const normalized1 = differ.normalize(value1);
+        const normalized2 = differ.normalize(value2);
+        expect(differ.areDifferent(normalized1, normalized2)).toStrictEqual(different);
+      }
+    );
+  });
+
+  describe("isDataDiffer", () => {
+    test.each`
+      value             | expected
+      ${undefined}      | ${false}
+      ${null}           | ${false}
+      ${{}}             | ${false}
+      ${"lorem"}        | ${false}
+      ${fakeDataDiffer} | ${false}
+      ${someDataDiffer} | ${true}
+    `("[$#] Should `$value` by identified as DataDiffer? $expected", ({ value, expected }) => {
+      expect(isDataDiffer(value)).toStrictEqual(expected);
     });
   });
 });

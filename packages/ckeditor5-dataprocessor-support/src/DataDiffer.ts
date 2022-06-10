@@ -2,6 +2,11 @@
  * A normalizer to apply prior to calculate the difference of
  * two data values.
  */
+import { NormalizedData, toNormalizedData } from "./NormalizedData";
+
+/**
+ * A normalizer for data strings.
+ */
 export type Normalizer = (input: string) => string;
 
 /**
@@ -73,6 +78,14 @@ export interface DataDiffer {
   addNormalizer(normalizer: Normalizer): void;
 
   /**
+   * Normalize the given value according to the given options. Already
+   * normalized strings will be returned unmodified.
+   *
+   * @param value - value to normalize
+   */
+  normalize(value: string | NormalizedData): NormalizedData;
+
+  /**
    * Signals if the given values are not equivalent, applying
    * configured normalizers by `addNormalizer`.
    *
@@ -82,12 +95,48 @@ export interface DataDiffer {
    * there is no corresponding normalizer to remove an irrelevant difference,
    * the values will be considered different.
    *
+   * To reduce normalization overhead for repeated comparison, you may want to
+   * pre-process strings with `normalize` method and store them for later.
+   *
    * @param value1 - first value to compare
    * @param value2 - second value to compare
    * @returns if the given values are considered equivalent after normalization
    */
-  areDifferent(value1: string, value2: string): boolean;
+  areDifferent(value1: string | NormalizedData, value2: string | NormalizedData): boolean;
 }
+
+/**
+ * Checks, if the given property is contained in the string.
+ *
+ * This method mainly exists to help code inspections regarding irrelevant
+ * property checks, if `DataDiffer` gets refactored.
+ * @param value - object to validate
+ * @param functionName - property name to check
+ */
+const hasDataDifferFunction = <K extends keyof DataDiffer>(
+  value: Record<string, unknown>,
+  functionName: K
+): value is Pick<DataDiffer, K> => {
+  return functionName in value && typeof value[functionName] === "function";
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === "object" && !!value;
+};
+
+/**
+ * Validates if the given value represents a `DataDiffer`.
+ *
+ * @param value - value to validate
+ */
+export const isDataDiffer = (value: unknown): value is DataDiffer => {
+  return (
+    isRecord(value) &&
+    hasDataDifferFunction(value, "addNormalizer") &&
+    hasDataDifferFunction(value, "normalize") &&
+    hasDataDifferFunction(value, "areDifferent")
+  );
+};
 
 /**
  * Mixin providing the data differ functionality.
@@ -99,20 +148,15 @@ export class DataDifferMixin implements DataDiffer {
     this.#normalizers.push(normalizer);
   }
 
-  /**
-   * Normalize the given value according to the given options.
-   *
-   * @param value - value to normalize
-   */
-  #normalize(value: string): string {
+  normalize(value: string | NormalizedData): NormalizedData {
     let result = value;
     this.#normalizers.forEach((n) => (result = n(result)));
-    return result;
+    return toNormalizedData(result);
   }
 
-  areDifferent(value1: string, value2: string): boolean {
-    const normalized1 = this.#normalize(value1);
-    const normalized2 = this.#normalize(value2);
+  areDifferent(value1: string | NormalizedData, value2: string | NormalizedData): boolean {
+    const normalized1 = this.normalize(value1);
+    const normalized2 = this.normalize(value2);
     return normalized1 !== normalized2;
   }
 }
