@@ -1,4 +1,5 @@
 import { DataDiffer, DataDifferMixin, isDataDiffer, Normalizer } from "../src/DataDiffer";
+import { toNormalizedData } from "../src/NormalizedData";
 
 type FakeDataDiffer = Record<keyof DataDiffer, unknown>;
 const fakeDataDiffer: FakeDataDiffer = {
@@ -36,6 +37,9 @@ const normalizeNamespaceDeclarations: Normalizer = (value: string): string => {
   );
 };
 
+// Just don't corrupt the table indentation too much.
+const n = toNormalizedData;
+
 describe("DataDiffer", () => {
   describe("Without Normalization", () => {
     const differ = new DataDifferMixin();
@@ -48,6 +52,31 @@ describe("DataDiffer", () => {
       ${""}      | ${""}      | ${true}
     `("[$#] Should '$value1' be equal to '$value2'? => $equal", ({ value1, value2, equal }) => {
       expect(differ.areEqual(value1, value2)).toStrictEqual(equal);
+    });
+  });
+
+  describe("Normalization Respects Order Of Normalization", () => {
+    const differOrderOriginal = new DataDifferMixin();
+    const differOrderReversed = new DataDifferMixin();
+
+    beforeAll(() => {
+      const normalizer: Normalizer[] = [
+        (v) => v.replace("&", "&amp;"),
+        (v) => v.replace("<", "&lt;"),
+        (v) => v.replace(">", "&gt;"),
+      ];
+      normalizer.forEach((n) => differOrderOriginal.addNormalizer(n));
+      normalizer.reverse().forEach((n) => differOrderReversed.addNormalizer(n));
+    });
+
+    test.each`
+      input  | original      | reversed
+      ${"&"} | ${n("&amp;")} | ${n("&amp;")}
+      ${"<"} | ${n("&lt;")}  | ${n("&amp;lt;")}
+      ${">"} | ${n("&gt;")}  | ${n("&amp;gt;")}
+    `("[$#] Should respect the normalizer order when transforming `$input`.", ({ input, original, reversed }) => {
+      expect(differOrderOriginal.normalize(input)).toStrictEqual(original);
+      expect(differOrderReversed.normalize(input)).toStrictEqual(reversed);
     });
   });
 

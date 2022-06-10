@@ -65,8 +65,8 @@ export interface DataDiffer {
    * Adds a normalizer to apply prior to comparing both data values
    * at `addNormalizer`.
    *
-   * Normalizers should not rely on any given order in which they
-   * are applied.
+   * Normalizers are executed exactly in the given order in which
+   * they got added.
    *
    * Normalizers are typically added by data-processor implementations.
    *
