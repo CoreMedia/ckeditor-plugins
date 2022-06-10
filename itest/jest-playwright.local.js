@@ -28,7 +28,7 @@ const devtools = true;
 /**
  * Run tests in slow motion.
  */
-const slowMo = 20;
+const slowMo = 200;
 
 /**
  * Launch options for local run.
@@ -57,6 +57,7 @@ const recordVideo = {
  */
 const contextOptions = {
   ...base.contextOptions,
+  permissions: ["clipboard-read", "clipboard-write"],
   // recordVideo,
 };
 

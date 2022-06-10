@@ -131,6 +131,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext': 6.1.1-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 6.1.1-rc.0
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': 6.1.1-rc.0
       '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
       '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
       '@types/express': ^4.17.13
@@ -170,6 +171,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
+      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../types/ckeditor__ckeditor5-clipboard
       '@coremedia/types-ckeditor__ckeditor5-core': link:../types/ckeditor__ckeditor5-core
       '@coremedia/types-ckeditor__ckeditor5-engine': link:../types/ckeditor__ckeditor5-engine
       '@types/express': 4.17.13

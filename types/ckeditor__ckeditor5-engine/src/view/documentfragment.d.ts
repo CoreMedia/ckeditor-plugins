@@ -24,10 +24,8 @@ export default class DocumentFragment {
    */
   getChildren(): IterableIterator<ViewNode>;
 
-  // TODO[cke] This is a protected method! Do we really need to use it?
   _insertChild(index: number, items: Item | Iterable<Item>): number;
-
-  // TODO[cke] This is a protected method! Do we really need to use it?
+  
   _removeChildren(index: number, howMany?: number): Array<ViewNode>;
 
   getChild(index: number): ViewNode;

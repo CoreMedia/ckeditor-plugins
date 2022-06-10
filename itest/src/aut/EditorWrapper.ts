@@ -1,5 +1,6 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { Wrapper } from "./Wrapper";
+import { EditingControllerWrapper } from "./EditingControllerWrapper";
 
 /**
  * Wrapper for CKEditor instance.
@@ -10,5 +11,9 @@ export class EditorWrapper<T extends Editor = Editor> extends Wrapper<T> {
    */
   async focus(): Promise<void> {
     return this.evaluate((editor) => editor.focus());
+  }
+
+  get editing(): EditingControllerWrapper {
+    return EditingControllerWrapper.fromEditor(this);
   }
 }

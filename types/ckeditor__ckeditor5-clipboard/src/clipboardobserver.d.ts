@@ -24,7 +24,7 @@ export class DataTransfer {
   effectAllowed: "none" | "copy" | "copyLink" | "copyMove" | "link" | "linkMove" | "move" | "all" | "uninitialized";
   isCanceled: boolean;
   readonly types: string[];
-  readonly files: FileList;
+  readonly files: File[];
 
   getData(type: string): string;
 }
