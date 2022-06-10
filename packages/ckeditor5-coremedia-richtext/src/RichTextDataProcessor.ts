@@ -19,6 +19,10 @@ import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/obser
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { DataDiffer, DataDifferMixin, Normalizer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
 
+/**
+ * Matches XML declaration such as `<?xml version="1.0">` and ignores possible
+ * spacing around.
+ */
 const xmlDeclarationRegExp = /^\s*<\?.*?\?>\s*/s;
 /**
  * Remove XML declaration, if considered irrelevant for comparison.
@@ -29,7 +33,16 @@ const normalizeXmlDeclaration: Normalizer = (value: string): string => {
   return value.replace(xmlDeclarationRegExp, "");
 };
 
+/**
+ * Matches XML namespace declarations `xmlns=` as well as `xmlns:someName=`.
+ * Using lookahead/lookbehind to only strip within element context.
+ */
 const namespaceDeclarationRegExp = /(?<=<[^>]*)xmlns(?::\w+)?=['"][^'"]+['"]\s*(?=[^>]*>)/gs;
+/**
+ * Matches any element. Used to possibly trim the corresponding element,
+ * which may contain trailing spaces due to previous removal of namespace
+ * declaration.
+ */
 const elementRegExp = /(?<=<)[^>]+(?=>)/gs;
 
 /**
