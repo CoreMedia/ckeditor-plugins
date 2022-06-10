@@ -10,6 +10,12 @@ import { NormalizedData, toNormalizedData } from "./NormalizedData";
 export type Normalizer = (input: string) => string;
 
 /**
+ * For convenience, we support a bunch of types to `areEqual`, especially
+ * `undefined` and `null`.
+ */
+type AreEqualInputType = string | NormalizedData | undefined | null;
+
+/**
  * Provides a way to get a difference of given data values. Typical usage is,
  * when two given data values are considered equivalent and a difference
  * when passing processing as workaround for
@@ -86,7 +92,7 @@ export interface DataDiffer {
   normalize(value: string | NormalizedData): NormalizedData;
 
   /**
-   * Signals if the given values are not equivalent, applying
+   * Signals if the given values are equivalent, applying
    * configured normalizers by `addNormalizer`.
    *
    * Ideally, this method should signal equivalence, if both representations
@@ -100,9 +106,9 @@ export interface DataDiffer {
    *
    * @param value1 - first value to compare
    * @param value2 - second value to compare
-   * @returns if the given values are considered equivalent after normalization
+   * @returns if the given values are considered equivalent after normalization or not
    */
-  areDifferent(value1: string | NormalizedData, value2: string | NormalizedData): boolean;
+  areEqual(value1: AreEqualInputType, value2: AreEqualInputType): boolean;
 }
 
 /**
@@ -134,7 +140,7 @@ export const isDataDiffer = (value: unknown): value is DataDiffer => {
     isRecord(value) &&
     hasDataDifferFunction(value, "addNormalizer") &&
     hasDataDifferFunction(value, "normalize") &&
-    hasDataDifferFunction(value, "areDifferent")
+    hasDataDifferFunction(value, "areEqual")
   );
 };
 
@@ -154,9 +160,12 @@ export class DataDifferMixin implements DataDiffer {
     return toNormalizedData(result);
   }
 
-  areDifferent(value1: string | NormalizedData, value2: string | NormalizedData): boolean {
+  areEqual(value1: AreEqualInputType, value2: AreEqualInputType): boolean {
+    if (typeof value1 !== "string" || typeof value2 !== "string") {
+      return value1 === value2;
+    }
     const normalized1 = this.normalize(value1);
     const normalized2 = this.normalize(value2);
-    return normalized1 !== normalized2;
+    return normalized1 === normalized2;
   }
 }
