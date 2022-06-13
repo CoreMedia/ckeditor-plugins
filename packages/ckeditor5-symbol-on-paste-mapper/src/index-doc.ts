@@ -2,12 +2,9 @@
  * Provides plugin, which replaces symbol font characters by their corresponding
  * entities.
  *
- * @module ckeditor5-symbol-on-paste-mapper
+ * @module ckeditor5-font-mapper
  */
-export * as fontMapper from "./fontMapper/index-doc";
+export * as fontMapping from "./fontMapping/index-doc";
 
-export * from "./FontMapperPluginConfig";
-export { default as FontMapperPluginConfig } from "./FontMapperPluginConfig";
-
-export * from "./SymbolOnPasteMapper";
-export { default as SymbolOnPasteMapper } from "./SymbolOnPasteMapper";
+export * from "./FontMapper";
+export { default as FontMapper } from "./FontMapper";

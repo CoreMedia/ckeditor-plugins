@@ -1,7 +1,7 @@
-import FontMapperProvider from "../../src/fontMapper/FontMapperProvider";
-import FontMapper from "../../src/fontMapper/FontMapper";
+import FontMapperProvider from "../../src/fontMapping/FontMapperProvider";
+import FontMapping from "../../src/fontMapping/FontMapping";
 
 test("should return a FontMapper for symbols", () => {
-  const fontMapper: FontMapper | null = FontMapperProvider.getFontMapper("symbol");
+  const fontMapper: FontMapping | null = FontMapperProvider.getFontMapper("symbol");
   expect(fontMapper).toBeDefined();
 });
