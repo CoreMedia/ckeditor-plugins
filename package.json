@@ -2,7 +2,7 @@
   "name": "@coremedia/ckeditor5",
   "version": "1.0.0",
   "engines": {
-    "node": ">=14.19.0",
+    "node": ">=15.0.0",
     "pnpm": "^7.1.5"
   },
   "private": true,
