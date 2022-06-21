@@ -53,14 +53,14 @@ export class FontMappingRegistry {
    * Returns a FontMapping for a given font-family, if present in the registry.
    *
    * @param fontKey - the name of the font-family
-   * @returns a FontMapping or null if no Mapping exists for the given font
+   * @returns a FontMapping or undefined if no Mapping exists for the given font
    */
-  getFontMapping(fontKey: string): FontMapping | null {
+  getFontMapping(fontKey: string): FontMapping | undefined {
     const fontMapping = this.fontMappings.get(fontKey.toLowerCase());
     if (fontMapping) {
       return fontMapping;
     }
-    return null;
+    return undefined;
   }
 }
 

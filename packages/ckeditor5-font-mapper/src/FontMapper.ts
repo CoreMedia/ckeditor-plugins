@@ -4,15 +4,12 @@ import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeli
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import Node from "@ckeditor/ckeditor5-engine/src/view/node";
-import Element from "@ckeditor/ckeditor5-engine/src/view/element";
-import Text from "@ckeditor/ckeditor5-engine/src/view/text";
-import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
-import FontMapping, { UnpackFunction } from "./fontMapping/FontMapping";
+import { UnpackFunction } from "./fontMapping/FontMapping";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 import FontMappingRegistry from "./fontMapping/FontMappingRegistry";
+import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
 
 export const CONFIG_KEY = "coremedia:fontMapper";
 export type FontMapperConfigEntry = {
@@ -58,7 +55,6 @@ export default class FontMapper extends Plugin {
   static readonly pluginName: string = "FontMapper";
   static readonly #logger: Logger = LoggerProvider.getLogger(FontMapper.pluginName);
 
-  private static readonly styleNameFontFamily = "font-family";
   private static readonly supportedDataFormat: string = "text/html";
   private static readonly clipboardEventName: string = "inputTransformation";
 
@@ -115,72 +111,7 @@ export default class FontMapper extends Plugin {
       return;
     }
 
-    data.content = FontMapper.#replaceFontFamilies(eventContent);
-  }
-
-  static #replaceFontFamilies(htmlElement: DocumentFragment | Element): DocumentFragment {
-    const childrenElements: Array<Element> = Array.from<Node>(htmlElement.getChildren())
-      .filter((value) => value instanceof Element)
-      .map((value) => value as Element);
-
-    for (const child of childrenElements) {
-      const replacementElement: Element | null = this.#evaluateReplacement(child);
-      if (replacementElement) {
-        const childIndex: number = htmlElement.getChildIndex(child);
-        htmlElement._removeChildren(childIndex, 1);
-        htmlElement._insertChild(childIndex, replacementElement);
-      } else {
-        this.#replaceFontFamilies(child);
-      }
-    }
-    return htmlElement;
-  }
-
-  static #evaluateReplacement(element: Element): Element | null {
-    if (!element.hasStyle(FontMapper.styleNameFontFamily)) {
-      return null;
-    }
-
-    const fontFamily: string | undefined = element.getStyle(FontMapper.styleNameFontFamily);
-    if (!fontFamily) {
-      return null;
-    }
-
-    const fontMapper = FontMappingRegistry.getFontMapping(fontFamily);
-    if (!fontMapper) {
-      return null;
-    }
-
-    return this.#createElementCloneWithReplacedText(fontMapper, element);
-  }
-
-  static #createElementCloneWithReplacedText(fontMapper: FontMapping, element: Element) {
-    const clone: Element = new UpcastWriter(element.document).clone(element, true);
-    clone._removeStyle(FontMapper.styleNameFontFamily);
-    this.#replaceText(fontMapper, clone);
-    return clone;
-  }
-
-  static #replaceText(fontMapper: FontMapping, element: Element): void {
-    const textElement: Text | null = this.#findTextElement(element);
-    if (!textElement) {
-      return;
-    }
-    const oldTextData: string = textElement._textData;
-    textElement._textData = fontMapper.toEscapedHtml(oldTextData);
-  }
-
-  static #findTextElement(element: Element): Text | null {
-    const children: Iterable<Node> = element.getChildren();
-    const childrenArray: Array<Node> = Array.from(children);
-    for (const child of childrenArray) {
-      if (child instanceof Text) {
-        return child;
-      }
-      if (child instanceof Element) {
-        return this.#findTextElement(child);
-      }
-    }
-    return null;
+    replaceFontInDocumentFragment(eventContent);
+    data.content = eventContent;
   }
 }
