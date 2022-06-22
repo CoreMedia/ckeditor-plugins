@@ -97,7 +97,10 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
    * "Symbol" is converted to ["Symbol"]
    */
   const fontName = fontFamily.split(",")[0];
-  return FontMappingRegistry.getFontMapping(fontName);
+
+  // Replace quotes, since they are used for some fonts in the font-family string
+  const escapedFontName = fontName.replaceAll('"', "");
+  return FontMappingRegistry.getFontMapping(escapedFontName);
 };
 
 /**
