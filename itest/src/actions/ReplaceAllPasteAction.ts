@@ -1,4 +1,5 @@
-import WindowWrapper from "../browser/WindowWrapper";
+import WindowBrowserAccessor from "../browser/WindowBrowserAccessor";
+
 /**
  * An action which selects the content of the currently focused dom element and
  * replaces everything by pasting from the clipboard.
@@ -13,7 +14,7 @@ export default class ReplaceAllPasteAction {
    * Respects that Mac uses cmd + a and cmd + v for select all and paste.
    */
   static async execute(): Promise<void> {
-    const userAgent = await WindowWrapper.getUserAgent();
+    const userAgent = await WindowBrowserAccessor.getUserAgent();
     if (userAgent.indexOf("Mac") === -1) {
       await page.keyboard.down("Control");
       await page.keyboard.press("a");
