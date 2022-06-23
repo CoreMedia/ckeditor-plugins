@@ -9,11 +9,12 @@ import FontMappingRegistry from "./FontMappingRegistry";
 const fontFamilyPropertyName = "font-family";
 
 /**
- * Recursively replaces the characters in direct children and removes their font-family style property.
+ * Recursively replaces the characters in direct children and removes their font-family style property
+ * if a font mapping for the font-family exists.
  * The documentFragment given as the first parameter of this function will be altered directly.
  *
  * @param documentFragment - the document fragment
- * @param currentFontFamily - font-family style, inherited by parent
+ * @param parentFontMapping - parent font mapping to be respected in calculation of the applied font mapping.
  */
 export const replaceFontInDocumentFragment = (
   documentFragment: DocumentFragment,
@@ -57,18 +58,26 @@ const findChildren = (documentFragment: DocumentFragment): Array<Element> => {
 
 /**
  * Returns a registered {@link FontMapping} based on the given element.
- * Returns undefined if no fontMapping is registered for the element's font-family
- * or the defaultFontMapping if no font-family is found.
+ *
+ * A {@link FontMapping} will be looked up by first checking if a font-family exist
+ * on the element. If a font-family exists a font mapping for the font-family will be returned
+ * or undefined if no font mapping exists.
+ * If no font-family exists on the element the inherited font mapping will be returned.
  *
  * @param element - the element to inspect
+ * @param inheritedFontMapping - a font mapping inherited from parent hierarchy
+ *    or undefined if no font-family exist in the parent hierarchy
  * @returns the fontMapping based on the given element or undefined
  */
-const computeFontMappingForElement = (element: Element, defaultFontMapping?: FontMapping): FontMapping | undefined => {
+const computeFontMappingForElement = (
+  element: Element,
+  inheritedFontMapping?: FontMapping
+): FontMapping | undefined => {
   const fontFamily = evaluateFontFamily(element);
   if (fontFamily) {
     return getFontMappingForFontFamily(fontFamily);
   }
-  return defaultFontMapping;
+  return inheritedFontMapping;
 };
 
 /**
@@ -85,7 +94,21 @@ const evaluateFontFamily = (element: Element): string | undefined => {
  * Returns a mapping for the given font-family string from the {@link FontMappingRegistry}.
  * Only the first font in the font-family string will be taken into account.
  *
- * @param fontFamily - the font family
+ * Caution:
+ *
+ * This means that this might no be as precise as it should be. In a real css style
+ * the font-family string can contain fallbacks which means that if the searched <i>fontFamily</i> is
+ * part of the fallbacks won't be respected.
+ *
+ * This might cause problems in some scenarios.
+ * For example font-family style contains two font-families: SomeSpecialFont and the passed font-family.
+ * Now "SomeSpecialFont" is not supported by browsers and the fallback font-family is used to display
+ * the characters in the browser. But the algorithm returns undefined instead of the <i>FontMapping</i>
+ * for the passsed fontFamily.
+ * Reason for this is that we can not say when which style is really applied as it highly depends on the
+ * used browser and installed fonts.
+ *
+ * @param fontFamily - the font family to get a font mapping for.
  * @returns a {@link FontMapping} or undefined if no such mapping exists.
  */
 const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefined => {
