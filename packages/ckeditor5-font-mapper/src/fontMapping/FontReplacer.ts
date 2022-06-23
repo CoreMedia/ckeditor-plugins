@@ -6,7 +6,7 @@ import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragme
 import FontMapping from "./FontMapping";
 import FontMappingRegistry from "./FontMappingRegistry";
 
-const fontFamilyPropertyName = "font-family";
+const FONT_FAMILY_PROPERTY_NAME = "font-family";
 
 /**
  * Recursively replaces the characters in direct children and removes their font-family style property
@@ -87,7 +87,7 @@ const computeFontMappingForElement = (
  * @returns the font-family or undefined if no font-family style property is set
  */
 const evaluateFontFamily = (element: Element): string | undefined => {
-  return element.getStyle(fontFamilyPropertyName);
+  return element.getStyle(FONT_FAMILY_PROPERTY_NAME);
 };
 
 /**
@@ -137,7 +137,7 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
  */
 const createAlteredElementClone = (fontMapping: FontMapping, element: Element): Element => {
   const clone: Element = new UpcastWriter(element.document).clone(element, true);
-  clone._removeStyle(fontFamilyPropertyName);
+  clone._removeStyle(FONT_FAMILY_PROPERTY_NAME);
   replaceCharactersInTextNodeChildren(fontMapping, clone);
   return clone;
 };

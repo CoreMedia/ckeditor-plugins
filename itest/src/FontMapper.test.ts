@@ -4,9 +4,9 @@ import ClipboardBrowserAccessor from "./browser/ClipboardBrowserAccessor";
 import * as fs from "fs";
 import ReplaceAllPasteAction from "./actions/ReplaceAllPasteAction";
 
-const wordDocumentTemplatePath = "test-data/font-mapper/word-document-template.html";
-const wordDocumentTemplate = fs.readFileSync(wordDocumentTemplatePath).toString();
-const characterPlaceholder = "{PLACE_HOLDER}";
+const WORD_DOCUMENT_TEMPLATE_PATH = "test-data/font-mapper/word-document-template.html";
+const WORD_DOCUMENT_TEMPLATE = fs.readFileSync(WORD_DOCUMENT_TEMPLATE_PATH).toString();
+const CHARACTER_PLACEHOLDER = "{PLACE_HOLDER}";
 
 describe("Symbol on paste mapper features", () => {
   let application: ApplicationWrapper;
@@ -51,7 +51,7 @@ describe("Symbol on paste mapper features", () => {
   ])(`Should render %s when %s pasted from a word document`, async (expected, input) => {
     const { editor } = application;
     await editor.editing.view.focus();
-    const wordDocumentWithSymbol = wordDocumentTemplate.replace(characterPlaceholder, input);
+    const wordDocumentWithSymbol = WORD_DOCUMENT_TEMPLATE.replace(CHARACTER_PLACEHOLDER, input);
     await ClipboardBrowserAccessor.write({ type: "text/html", content: wordDocumentWithSymbol });
 
     await editor.editing.view.focus();
