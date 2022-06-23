@@ -22,7 +22,7 @@ export default class ClipboardBrowserAccessor {
    */
   static async write(itemConfig: ClipboardItemConfig): Promise<void> {
     return page.evaluate((itemToCopy): void => {
-      //Blob and ClipboardItem is only available in the browser, therefore we
+      //Blob and ClipboardItem are only available in the browser, therefore we
       //have to create Blob and ClipboardItem in the same function where we write
       //it to the clipboard.
       const blob = new Blob([itemToCopy.content], { type: itemToCopy.type });
