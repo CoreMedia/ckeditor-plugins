@@ -29,7 +29,7 @@ export class FontMappingRegistry {
     const registeredFontMapping = this.getFontMapping(fontKey);
 
     if (registeredFontMapping) {
-      registeredFontMapping.applyMapConfig(mode, configObjectMap);
+      registeredFontMapping.applyMapConfig(configObjectMap, mode);
     } else {
       const fontMapping = new FontMapping(configObjectMap, unpack);
       this.fontMappings.set(fontKey.toLowerCase(), fontMapping);

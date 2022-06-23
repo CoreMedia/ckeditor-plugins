@@ -54,7 +54,7 @@ export default class FontMapping {
    * @param mode - the apply mode (only "replace" is taken into account)
    * @param map - the custom map to alter the existing FontMap
    */
-  applyMapConfig(mode: string | undefined, map: FontMap): void {
+  applyMapConfig(map: FontMap, mode: string | undefined): void {
     if (mode && mode.toLowerCase() === "replace") {
       this.map = this.#mergeFontMaps(htmlEncodingMap, map);
     } else {
