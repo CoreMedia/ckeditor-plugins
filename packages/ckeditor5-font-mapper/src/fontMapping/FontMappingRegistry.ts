@@ -24,12 +24,15 @@ export class FontMappingRegistry {
 
   registerFontMapping(fontMapperConfigEntry: FontMapperConfigEntry): void {
     const { font: fontKey, map, mode, unpack } = fontMapperConfigEntry;
+    const configObjectMap = FontMappingRegistry.#configObjectToMap(map);
 
     const registeredFontMapping = this.getFontMapping(fontKey);
+
     if (registeredFontMapping) {
-      registeredFontMapping.applyMapConfig(mode, this.#configObjectToMap(map));
+      registeredFontMapping.applyMapConfig(mode, configObjectMap);
     } else {
-      this.fontMappings.set(fontKey.toLowerCase(), new FontMapping(this.#configObjectToMap(map), unpack));
+      const fontMapping = new FontMapping(configObjectMap, unpack);
+      this.fontMappings.set(fontKey.toLowerCase(), fontMapping);
     }
   }
 
@@ -41,7 +44,7 @@ export class FontMappingRegistry {
    * @param configMapObject - the object
    * @returns a FontMap
    */
-  #configObjectToMap(configMapObject: { [key: number]: string }): FontMap {
+  static #configObjectToMap(configMapObject: { [key: number]: string }): FontMap {
     const map: FontMap = new Map();
     for (const [key, value] of Object.entries(configMapObject)) {
       map.set(Number(key), value);
