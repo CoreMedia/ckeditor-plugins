@@ -47,12 +47,9 @@ pnpm run jest
 The CKEditor 5 plugins provided in this repository are developed with
 TypeScript.
 
-For typings, we use custom typings up to now, located in `types/` folder.
-
 Exception up to now: The example application is provided as JavaScript for
 CKEditor initialization.
 
 <!-- ===========================================================[References] -->
 
 [DefinitelyTyped]: <https://github.com/DefinitelyTyped/DefinitelyTyped> "DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions."
-[types/ckeditor__ckeditor5-core]: <https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/ckeditor__ckeditor5-core> "@ckeditor/ckeditor-core at DefinitelyTyped"

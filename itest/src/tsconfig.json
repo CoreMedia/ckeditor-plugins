@@ -6,10 +6,6 @@
     "esModuleInterop": true,
     "types": ["jest", "playwright", "wait-for-expect", "jest-playwright-preset", "expect-playwright", "node"],
     "paths": {
-      "@ckeditor/ckeditor5-editor-classic/*": ["../../types/ckeditor__ckeditor5-editor-classic/*"],
-      "@ckeditor/ckeditor5-core/*": ["../../types/ckeditor__ckeditor5-core/*"],
-      "@ckeditor/ckeditor5-engine/*": ["../../types/ckeditor__ckeditor5-engine/*"],
-      "@ckeditor/ckeditor5-utils/*": ["../../types/ckeditor__ckeditor5-utils/*"],
       "@coremedia/ckeditor5-logging/*": ["../../packages/ckeditor5-logging/src/*"],
       "@coremedia/ckeditor5-coremedia-richtext/*": ["../../packages/ckeditor5-coremedia-richtext/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": [

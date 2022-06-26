@@ -131,8 +131,9 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext': 6.1.1-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-editor-classic': ^27.1.2
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/express': ^4.17.13
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.38
@@ -170,8 +171,9 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../types/ckeditor__ckeditor5-engine
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-editor-classic': 27.1.2
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
       '@types/express': 4.17.13
       '@types/jest': 27.5.2
       '@types/node': 17.0.38
@@ -232,7 +234,7 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -253,7 +255,7 @@ importers:
       '@ckeditor/ckeditor5-core': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
+      '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -283,11 +285,12 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
       '@coremedia/service-agent': ^1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-html-support': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-undo': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-html-support': ^33.0.0
+      '@types/ckeditor__ckeditor5-undo': ^27.0.3
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -317,11 +320,12 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
-      '@coremedia/types-ckeditor__ckeditor5-undo': link:../../types/ckeditor__ckeditor5-undo
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-html-support': 33.0.0
+      '@types/ckeditor__ckeditor5-undo': 27.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -351,9 +355,10 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
       '@coremedia/service-agent': ^1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-image': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-image': ^33.0.0
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -383,9 +388,10 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-image': link:../../types/ckeditor__ckeditor5-image
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-image': 33.0.0
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -417,13 +423,13 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
       '@coremedia/service-agent': ^1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-link': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-typing': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-ui': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-link': ^32.0.3
+      '@types/ckeditor__ckeditor5-typing': ^32.0.1
+      '@types/ckeditor__ckeditor5-ui': ^32.0.2
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -457,13 +463,13 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
-      '@coremedia/types-ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
-      '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -489,9 +495,9 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-dataprocessor-support': 6.1.1-rc.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -516,9 +522,9 @@ importers:
       '@ckeditor/ckeditor5-utils': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -544,10 +550,10 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-html-support': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-html-support': ^33.0.0
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -572,10 +578,10 @@ importers:
       '@ckeditor/ckeditor5-utils': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-html-support': link:../../types/ckeditor__ckeditor5-html-support
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-html-support': 33.0.0
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -604,12 +610,12 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-coremedia-richtext': 6.1.1-rc.0
       '@coremedia/ckeditor5-coremedia-richtext-support': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-link': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-typing': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-ui': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-link': ^32.0.3
+      '@types/ckeditor__ckeditor5-typing': ^32.0.1
+      '@types/ckeditor__ckeditor5-ui': ^32.0.2
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -637,12 +643,12 @@ importers:
       '@ckeditor/ckeditor5-utils': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-link': link:../../types/ckeditor__ckeditor5-link
-      '@coremedia/types-ckeditor__ckeditor5-typing': link:../../types/ckeditor__ckeditor5-typing
-      '@coremedia/types-ckeditor__ckeditor5-ui': link:../../types/ckeditor__ckeditor5-ui
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -714,8 +720,8 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
       '@coremedia/service-agent': ^1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -742,8 +748,8 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.1.0
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -769,9 +775,9 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@typescript-eslint/eslint-plugin': ^5.27.0
       '@typescript-eslint/parser': ^5.27.0
@@ -795,9 +801,9 @@ importers:
       '@ckeditor/ckeditor5-utils': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
@@ -875,10 +881,10 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
+      '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^27.5.1
       '@types/webpack': ^5.28.0
       '@typescript-eslint/eslint-plugin': ^5.27.0
@@ -902,10 +908,10 @@ importers:
       '@ckeditor/ckeditor5-utils': 34.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../../types/ckeditor__ckeditor5-clipboard
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../../types/ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../../types/ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../../types/ckeditor__ckeditor5-utils
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 27.5.2
       '@types/webpack': 5.28.0
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
@@ -918,113 +924,6 @@ importers:
       prettier: 2.6.2
       rimraf: 3.0.2
       typescript: 4.7.2
-
-  types/ckeditor__ckeditor5-clipboard:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-
-  types/ckeditor__ckeditor5-core:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-
-  types/ckeditor__ckeditor5-editor-classic:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-
-  types/ckeditor__ckeditor5-engine:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-
-  types/ckeditor__ckeditor5-html-support:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-
-  types/ckeditor__ckeditor5-image:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-
-  types/ckeditor__ckeditor5-link:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-typing': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-ui': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-typing': link:../ckeditor__ckeditor5-typing
-      '@coremedia/types-ckeditor__ckeditor5-ui': link:../ckeditor__ckeditor5-ui
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-
-  types/ckeditor__ckeditor5-paste-from-office:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-clipboard': link:../ckeditor__ckeditor5-clipboard
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-
-  types/ckeditor__ckeditor5-typing:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-
-  types/ckeditor__ckeditor5-ui:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-utils': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-      '@coremedia/types-ckeditor__ckeditor5-utils': link:../ckeditor__ckeditor5-utils
-
-  types/ckeditor__ckeditor5-undo:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-core': 6.1.1-rc.0
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-core': link:../ckeditor__ckeditor5-core
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
-
-  types/ckeditor__ckeditor5-utils:
-    specifiers: {}
-
-  types/ckeditor__ckeditor5-widget:
-    specifiers:
-      '@coremedia/types-ckeditor__ckeditor5-engine': 6.1.1-rc.0
-    dependencies:
-      '@coremedia/types-ckeditor__ckeditor5-engine': link:../ckeditor__ckeditor5-engine
 
 packages:
 
@@ -2947,6 +2846,341 @@ packages:
     dependencies:
       '@types/connect': 3.4.35
       '@types/node': 17.0.38
+    dev: true
+
+  /@types/ckeditor__ckeditor5-adapter-ckfinder/29.0.4:
+    resolution: {integrity: sha512-baT+KeQG12qfu0iDu+TIy1BSM/OWzzvH8pTkSIckQhRwEt2mlW8jFNQMZGRi4kAmLabMoLvybiAn1yFDeepddw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-upload': 27.0.7
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-alignment/29.0.7:
+    resolution: {integrity: sha512-tZIF0svmHOHIvbnFM074b2CySBKKQxxZG5Y41UFAvkIYxel4LTZmFV3uTbdDTmniLRIbG219vOXtWHOJ5INB/A==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-autosave/32.0.0:
+    resolution: {integrity: sha512-auGeVgBG4HLXwPTbHQSsfGZcItntaBuBQN8LSreZea0ur4SJ6NKfh25USqIIQs1DUWYMDPiK6ODwSn2mhyfJ2A==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
+  /@types/ckeditor__ckeditor5-ckfinder/29.0.3:
+    resolution: {integrity: sha512-RQVFIg/RrJzaA19FHD9Qzzl36sVUyyqY9ozWhEUWAmlKMUZW0MQBBtMN3vX5dZ81JtOaPVcwklNAa2yw6dqlkg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-adapter-ckfinder': 29.0.4
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+    dev: true
+
+  /@types/ckeditor__ckeditor5-clipboard/29.0.5:
+    resolution: {integrity: sha512-AN7iniYu2C417LRNuOBIirBokStvPwXm/NG72o9Ivfn0/i7J0VZiJ8KGp7Wmvrcg/bhFYfZsTbEOVW2c/59Rjg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-widget': 33.0.1
+    dev: true
+
+  /@types/ckeditor__ckeditor5-cloud-services/29.0.4:
+    resolution: {integrity: sha512-fZOj+HBQbGFJg3SwUYqfdIQtFNnG2U2OCWkKDCIzUuejkdSeicF8P5GLSyNuDP0nTDdQMBqEWgzljqLZkJnkHg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-code-block/29.0.3:
+    resolution: {integrity: sha512-x3D3B8I21za6VShc3twNRzKBN4+1+pOrsXhb+TPgQLG2Q9oeRgPXhaHMhdXGAGebMWhdFlPs0lTNsQTCVjXm6A==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-enter': 27.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-collaboration-core/27.1.2:
+    resolution: {integrity: sha512-g0AKoJw820i/Biho6S9qYH1SaedjXr2P/gmnqO3k8/6HWiIMALaGDUkMgYvQC5nr+ZXIzLtv04Y0eb/9H1W3DQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-core/33.0.3:
+    resolution: {integrity: sha512-mVaU5+faOZ/2eR2jZb26H0JLqHLV/4a/p1/t7K9l8j5fMWTcubE5FRifjCk/TowazNW+/xcgRinyFnnUtNFUTQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-alignment': 29.0.7
+      '@types/ckeditor__ckeditor5-autosave': 32.0.0
+      '@types/ckeditor__ckeditor5-ckfinder': 29.0.3
+      '@types/ckeditor__ckeditor5-cloud-services': 29.0.4
+      '@types/ckeditor__ckeditor5-code-block': 29.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-export-pdf': 31.0.0
+      '@types/ckeditor__ckeditor5-export-word': 27.0.4
+      '@types/ckeditor__ckeditor5-font': 33.0.1
+      '@types/ckeditor__ckeditor5-heading': 29.0.3
+      '@types/ckeditor__ckeditor5-highlight': 29.0.3
+      '@types/ckeditor__ckeditor5-image': 33.0.0
+      '@types/ckeditor__ckeditor5-indent': 29.0.3
+      '@types/ckeditor__ckeditor5-language': 32.0.0
+      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-media-embed': 29.0.3
+      '@types/ckeditor__ckeditor5-mention': 31.0.0
+      '@types/ckeditor__ckeditor5-minimap': 33.0.0
+      '@types/ckeditor__ckeditor5-pagination': 27.0.3
+      '@types/ckeditor__ckeditor5-real-time-collaboration': 32.0.0
+      '@types/ckeditor__ckeditor5-restricted-editing': 32.0.0
+      '@types/ckeditor__ckeditor5-table': 33.0.0
+      '@types/ckeditor__ckeditor5-track-changes': 32.0.0
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-upload': 27.0.7
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+      '@types/ckeditor__ckeditor5-word-count': 29.0.2
+    dev: true
+
+  /@types/ckeditor__ckeditor5-editor-classic/27.1.2:
+    resolution: {integrity: sha512-Xrxav0Bq+rxr/H//nK4+n9o0GpHHMJpfe96wAm4EbjTI5mbBQYH5mCZmKdU8JzQTq6DUF8w9D92RIShqx0rvLw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-engine/32.0.11:
+    resolution: {integrity: sha512-mjP5DE+VvVdUqgn9SL1qTr5HRouG6xj+hiFu4Hzz3HWLLBaCEfK6dPUTc6/QM/nMNlNl8Ux9551qCYMoKanzvw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-enter/27.0.3:
+    resolution: {integrity: sha512-qFv9QXk/kXkHQaS748FnO+XZoLOp34x25hOWpOFgBGbrfSZxJ6rYE+vk6BbX+b7sakj7glMctYeitNfGRMcVDQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+    dev: true
+
+  /@types/ckeditor__ckeditor5-export-pdf/31.0.0:
+    resolution: {integrity: sha512-ZQdL2eI/zpPtmMB8Qd5VHqvDx8VNsnCs4SPMWgSG1lrwC7tM0cnyLkCcVxHQYcvZIlihzEF/QJJ+AV9waxT9Pg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-export-word/27.0.4:
+    resolution: {integrity: sha512-2cpRFCsTHUh3xlbr3IdqfxhRs2AnfvViT0qekhk3SnP9VsUBiqN9CPcgGkBvk3huv30w5kiIpT2UH8l1Ff5Biw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-font/33.0.1:
+    resolution: {integrity: sha512-Hllu+akGhKWRtdahWqkewbmRV4DwPxuXjYzjlvqKoPMNst6UcBOYxeLR/HKoIqI4bn4Vc/p7mZvzKJs0R7CNGw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-heading/29.0.3:
+    resolution: {integrity: sha512-GfitzATatW4/ZJZ10VFI2OU1nG+r+c7JDHC/s/+9NzkqAyOEd8XTScAX0Sape+vqoNvnMUSAHNa03/ktAjDIqQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-paragraph': 27.0.5
+    dev: true
+
+  /@types/ckeditor__ckeditor5-highlight/29.0.3:
+    resolution: {integrity: sha512-Akq45EwzdI/egK/5YpKkoyYkEvq0w1EaBZMNOaKn8HaNFmhI2mQPwNzGHfEjbGDpKalI9cNTo0ImvqcqNgF+hg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
+  /@types/ckeditor__ckeditor5-html-support/33.0.0:
+    resolution: {integrity: sha512-e75+htrKPgnGRrHNb4gVnpP6oLUcit8CLpNXv7dqzZSnu0eU/zkfBAvEF+QQoGtcKutdKG+mHWHMpbYn2S5SuA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-widget': 33.0.1
+    dev: true
+
+  /@types/ckeditor__ckeditor5-image/33.0.0:
+    resolution: {integrity: sha512-rEu93lPml8CuG8UesJa3BBH6Bi84eskeHXgH5kXCPi+lGQvhHd3VrNWa6XgihnO4Z/60i4IYhW48vdWZJ/Iv/A==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-undo': 27.0.3
+      '@types/ckeditor__ckeditor5-upload': 27.0.7
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+      '@types/ckeditor__ckeditor5-widget': 33.0.1
+    dev: true
+
+  /@types/ckeditor__ckeditor5-indent/29.0.3:
+    resolution: {integrity: sha512-ijVRz3hVR+KT4AmaHxOIyFd/Wi+XLtf5zDQuHP1DMAYgwudj6VGTfFl4vpebFB5wrWeY8EzkJZO1KsRlI21QdA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
+  /@types/ckeditor__ckeditor5-language/32.0.0:
+    resolution: {integrity: sha512-8vd0nRXXZgV5oUF0g6DdBfwWAj3KlQGjpMgxgp6cXBQJ86fINCyyGpqpSmd5L4iSrJHAN3OfQaKLlh9PHLcCVQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
+  /@types/ckeditor__ckeditor5-link/32.0.3:
+    resolution: {integrity: sha512-vFwxCrwuo2g8bKWStzh5LsFAmLkRucaVBVygiYRTdNbLGcjA28wQiXZ7C7TFLXkkFdgn5jEadMyLqcEwrC9U/w==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-image': 33.0.0
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-media-embed/29.0.3:
+    resolution: {integrity: sha512-Z1EAZ/s04KTh+MJHZ2Xj2ugwX8lOBmlga7BWdzO4/HkJVeNzozWjp4Kxj9bxVr3GA+EaGWS6MHqgnhtN4gqhfg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-undo': 27.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+      '@types/ckeditor__ckeditor5-widget': 33.0.1
+    dev: true
+
+  /@types/ckeditor__ckeditor5-mention/31.0.0:
+    resolution: {integrity: sha512-V2Xq+OrpegeKK6lWaJkpKLZNgW/nLZPhRl6p1rirKsEyVpxxjFO3qSZr3Byb7lxeRkyVLgR23hVgcvt8vfb5AQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-minimap/33.0.0:
+    resolution: {integrity: sha512-XLu/QyyWVMzQseSqo/hQDWoBKzpZS83pXUwUmJcnXoK+lxaxuh8hYxY8W9qY5vrhh2IHocyrNnjMsLJLtu9FTA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-pagination/27.0.3:
+    resolution: {integrity: sha512-2kyuvQyyi30aZbZHCh0wGpSVp9Q+v5N5AvEHAuSvj6/GOmPRdxK4YyAK/aO3FapUb3bxgvQilyIdA6JtIx1inQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
+  /@types/ckeditor__ckeditor5-paragraph/27.0.5:
+    resolution: {integrity: sha512-Clevh7N4G15uFZky505TIM+9qYh9Qwf1oULyh9ntsCxDUNMpqhbmRjC/9J+qcTNLLZ1xppEs75r3ejM01ZkcQg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+    dev: true
+
+  /@types/ckeditor__ckeditor5-real-time-collaboration/32.0.0:
+    resolution: {integrity: sha512-u93DiYz2Q2+0ILR4srrmabWYlBx1LTcEusSbE7ylvQrcTs4qmgWlio81FyEMEtn9G5hG4kqH/WN0WfhHjWoFTQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-collaboration-core': 27.1.2
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-restricted-editing/32.0.0:
+    resolution: {integrity: sha512-FCOqLUbMxHBaghkXuVHl6hJy9VmimlEXPiMSHeK1jmjq3prsCvavup31Ps+zhwPlo0Bd7aS7GBdUJPGuYkYP9w==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-table/33.0.0:
+    resolution: {integrity: sha512-a711hMOd4u/zqP/dTvEoP/bpnKLxfRasaZtiv3kepIAYub2Acz5ZOi9Gha71sWRwGK3Jeq+4q8gPuNJHYSRttQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+      '@types/ckeditor__ckeditor5-widget': 33.0.1
+    dev: true
+
+  /@types/ckeditor__ckeditor5-track-changes/32.0.0:
+    resolution: {integrity: sha512-fFe+Tnni2BzrnOYD46zSkAf/StCSAaClN+lILHlWGBKo1xMod1T+hcsrnPkVrFwYSlXraDIvJIEeArrXYCKGnA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-collaboration-core': 27.1.2
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-typing/32.0.1:
+    resolution: {integrity: sha512-DskFBdfcUACpxVjhdpZTCD8H3gnG/zu08kWyT6TczuBJEXTRoCfX/lZ0Dh7sd20/dxow21pLC4V9Uv/yNUquBA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-ui/32.0.2:
+    resolution: {integrity: sha512-0cAaEtXB+i8jnSQMVB50LqI91gJkmG8AnFsowpRPJczsnakMNYTlV+cEhPMe2RbwWxScler0jLmUNsbEORZOTw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-undo/27.0.3:
+    resolution: {integrity: sha512-UpbmO0V82XvoVsnIjdM1Cb9RE9lB9vxGYKkQUzGwtw4wZbMb1A+CMIYkZIXO3aNs6x42F562ymFpjjkHBzgLHA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+    dev: true
+
+  /@types/ckeditor__ckeditor5-upload/27.0.7:
+    resolution: {integrity: sha512-E8ubVL/94RX4qQe5M7OmSEmH1sTRfz0cwSmfe/vRlTedzM5pzwczXXMYzbnbz28UzOmraOS0Zgq+9WVBcPHJ6Q==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-utils/28.0.14:
+    resolution: {integrity: sha512-EJmGXoBOAxSwQIWdj3EEx4f7LWLkAP5P5RNYnWEUwBO3e3MdtLt/f8mTRyx1bnt1dmdrrAKD9hVJx1216vXOnQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+    dev: true
+
+  /@types/ckeditor__ckeditor5-widget/33.0.1:
+    resolution: {integrity: sha512-dHhFdVj2LFo0nCYJOYB5hohZiJNrkI0xICBBejbnzHxzyjxgYpaUoOKsItjxl49DeCdEJ82DU9Wu/cpmTJyCKw==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-enter': 27.0.3
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-word-count/29.0.2:
+    resolution: {integrity: sha512-eZ9NwCtTsWOLtNYxLfNvBLx6DfcPgYh4+2p9508zQbQ4x9jMOgs9Vx4tGbFVM501eIGCp4g1XjobbWGuBJqpMA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
     dev: true
 
   /@types/connect/3.4.35:
