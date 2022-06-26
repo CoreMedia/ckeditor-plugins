@@ -55,8 +55,9 @@ class LinkTargetCommand extends Command {
      * and `schema.checkAttribute(<element>, ...)`. For details see `SchemaContextDefinition`.
      */
     if (attributesAllowedFor(selectedElement, schema, LINK_HREF_MODEL, LINK_TARGET_MODEL)) {
-      this.value = selectedElement.getAttribute(LINK_TARGET_MODEL);
-      this.isEnabled = checkAttributes(selectedElement, schema, LINK_HREF_MODEL, LINK_TARGET_MODEL);
+      this.value = selectedElement?.getAttribute(LINK_TARGET_MODEL);
+      this.isEnabled =
+        !!selectedElement && checkAttributes(selectedElement, schema, LINK_HREF_MODEL, LINK_TARGET_MODEL);
     } else {
       this.value = selection.getAttribute(LINK_TARGET_MODEL);
       this.isEnabled = checkAttributeInSelection(selection, schema, LINK_HREF_MODEL, LINK_TARGET_MODEL);
@@ -174,12 +175,13 @@ class LinkTargetCommand extends Command {
       return findAttributeRanges(
         selection.getFirstPosition(),
         LINK_HREF_MODEL,
-        selection.getAttribute(LINK_HREF_MODEL),
+        // @ts-expect-error TODO Handle not yet handled types like number, etc.
+        selection?.getAttribute(LINK_HREF_MODEL),
         model
       );
     }
 
-    return [...model.schema.getValidRanges(selection.getRanges(), LINK_HREF_MODEL)];
+    return [...model.schema.getValidRanges([...selection.getRanges()], LINK_HREF_MODEL)];
   }
 
   /**

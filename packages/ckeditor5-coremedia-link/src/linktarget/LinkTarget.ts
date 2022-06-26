@@ -13,7 +13,5 @@ import "../lang/linktarget";
 export default class LinkTarget extends Plugin {
   static readonly pluginName: string = "LinkTarget";
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Link, LinkTargetModelView, LinkTargetActionsViewExtension];
-  }
+  static readonly requires = [Link, LinkTargetModelView, LinkTargetActionsViewExtension];
 }

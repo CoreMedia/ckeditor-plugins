@@ -27,9 +27,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     super(ed);
   }
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard];
-  }
+  static readonly requires = [Clipboard];
 
   init(): Promise<void> | void {
     const logger = SymbolOnPasteMapper.#logger;
@@ -41,6 +39,7 @@ export default class SymbolOnPasteMapper extends Plugin {
     ) as FontMapperPluginConfig;
     SymbolOnPasteMapper.#applyPluginConfig(fontMapperPluginConfig);
 
+    // @ts-expect-error Ignoring, as refactored anyway.
     const clipboard: Plugin | undefined = editor.plugins.get(SymbolOnPasteMapper.pluginNameClipboard);
     if (clipboard instanceof Clipboard) {
       clipboard.on(SymbolOnPasteMapper.clipboardEventName, SymbolOnPasteMapper.handleClipboardInputTransformationEvent);
@@ -66,12 +65,15 @@ export default class SymbolOnPasteMapper extends Plugin {
 
   // noinspection JSUnusedLocalSymbols
   private static handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardEventData): void {
+    // @ts-expect-error Ignoring, as refactored anyway.
     const pastedContent: string = data.dataTransfer.getData(SymbolOnPasteMapper.supportedDataFormat);
+    // @ts-expect-error Ignoring, as refactored anyway.
     const eventContent: DocumentFragment = data.content;
     if (!pastedContent) {
       return;
     }
 
+    // @ts-expect-error Ignoring, as refactored anyway.
     data.content = SymbolOnPasteMapper.replaceFontFamilies(eventContent);
   }
 
@@ -84,12 +86,15 @@ export default class SymbolOnPasteMapper extends Plugin {
       const replacementElement: Element | null = this.evaluateReplacement(child);
       if (replacementElement) {
         const childIndex: number = htmlElement.getChildIndex(child);
+        // @ts-expect-error Ignoring, as refactored anyway.
         htmlElement._removeChildren(childIndex, 1);
+        // @ts-expect-error Ignoring, as refactored anyway.
         htmlElement._insertChild(childIndex, replacementElement);
       } else {
         this.replaceFontFamilies(child);
       }
     }
+    // @ts-expect-error Ignoring, as refactored anyway.
     return htmlElement;
   }
 
@@ -109,6 +114,7 @@ export default class SymbolOnPasteMapper extends Plugin {
 
   private static createElementCloneWithReplacedText(fontMapper: FontMapper, element: Element) {
     const clone: Element = new UpcastWriter(element.document).clone(element, true);
+    // @ts-expect-error Ignoring, as refactored anyway.
     clone._removeStyle(SymbolOnPasteMapper.styleNameFontFamily);
     this.replaceText(fontMapper, clone);
     return clone;
@@ -119,7 +125,9 @@ export default class SymbolOnPasteMapper extends Plugin {
     if (!textElement) {
       return;
     }
+    // @ts-expect-error Ignoring, as refactored anyway.
     const oldTextData: string = textElement._textData;
+    // @ts-expect-error Ignoring, as refactored anyway.
     textElement._textData = fontMapper.toEscapedHtml(oldTextData);
   }
 

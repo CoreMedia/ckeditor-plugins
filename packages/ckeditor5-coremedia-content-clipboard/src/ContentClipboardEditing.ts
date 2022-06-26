@@ -19,9 +19,7 @@ export default class ContentClipboardEditing extends Plugin {
   static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT =
     "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [UndoSupport];
-  }
+  static readonly requires = [UndoSupport];
 
   init(): Promise<void> | void {
     this.#defineConverters();

@@ -18,6 +18,7 @@ export default class CoreMediaRichText extends Plugin {
 
     CoreMediaRichText.#logger.info(`Initializing ${CoreMediaRichText.pluginName}...`);
 
+    // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
     this.editor.data.processor = new RichTextDataProcessor(this.editor);
 
     CoreMediaRichText.#logger.info(

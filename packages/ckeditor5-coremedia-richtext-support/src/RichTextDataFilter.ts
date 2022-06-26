@@ -27,9 +27,7 @@ class RichTextDataFilter extends Plugin {
   static readonly pluginName: string = "GeneralRichTextDataFilter";
   static readonly #logger: Logger = LoggerProvider.getLogger(RichTextDataFilter.pluginName);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [DataFilter];
-  }
+  static readonly requires = [DataFilter];
 
   #delegate?: DataFilter;
   #config: ReducedMatcherPattern[] = [];

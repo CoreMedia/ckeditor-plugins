@@ -9,7 +9,7 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
+import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
@@ -23,6 +23,65 @@ import { disableUndo, UndoSupport } from "./integrations/Undo";
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
 /**
+ * Artificial interface of `ClipboardEventData`, which holds a content.
+ */
+declare interface ContentEventData<T> extends ClipboardEventData {
+  content: T;
+}
+
+/**
+ * Type-Guard for ContentEventData.
+ * @param value - value to validate
+ */
+const isContentEventData = (value: unknown): value is ContentEventData<unknown> => {
+  return typeof value === "object" && !!value && "content" in value;
+};
+
+/**
+ * Specifies the additional data provided by ClipboardPipeline's
+ * `contentInsertion` event.
+ */
+declare interface ContentInsertionEventData extends ContentEventData<ModelDocumentFragment> {
+  method: "paste" | "drop";
+  targetRanges: ViewRange[];
+  resultRange?: ModelRange;
+}
+
+/**
+ * Specifies the additional data provided by ClipboardPipeline's
+ * `inputTransformation` event.
+ */
+declare interface InputTransformationEventData extends ContentEventData<ViewDocumentFragment> {
+  /**
+   * Whether the event was triggered by a paste or drop operation.
+   */
+  method: "paste" | "drop";
+  /**
+   * The target drop ranges.
+   */
+  targetRanges: ViewRange[];
+}
+
+/**
+ * Event data of `clipboardInput` event in `view.Document`.
+ */
+declare interface ClipboardInputEvent extends ClipboardEventData {
+  /**
+   * Required for hack to mark event as consumed.
+   */
+  content?: ViewDocumentFragment;
+  // noinspection GrazieInspection - copied original description
+  /**
+   * Ranges which are the target of the operation (usually – into which the
+   * content should be inserted). If the clipboard input was triggered by a
+   * paste operation, this property is not set. If by a drop operation, then it
+   * is the drop position (which can be different than the selection
+   * at the moment of drop).
+   */
+  targetRanges: ViewRange[];
+}
+
+/**
  * This plugin takes care of linkable Studio contents, which are dropped
  * directly into the editor or pasted from the clipboard.
  */
@@ -30,9 +89,7 @@ export default class ContentClipboard extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
-  }
+  static readonly requires = [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
 
   init(): Promise<void> | void {
     this.#initEventListeners();
@@ -77,7 +134,7 @@ export default class ContentClipboard extends Plugin {
   static #dragOverHandler(evt: EventInfo, data: ClipboardEventData): void {
     // The clipboard content was already processed by the listener on the
     // higher priority (for example, while pasting into the code block).
-    if (data.content) {
+    if (isContentEventData(data) && !!data.content) {
       return;
     }
     const cmDataUris = receiveUriPathsFromDragDropService();
@@ -85,6 +142,7 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
+    // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
     data.preventDefault();
     const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
     // Applying dropEffects required to be run *after* CKEditor's normal
@@ -110,7 +168,7 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  #clipboardInputHandler = (evt: EventInfo, data: ClipboardEventData): void => {
+  #clipboardInputHandler = (evt: EventInfo, data: ClipboardInputEvent): void => {
     // Return if this is no CoreMedia content drop.
     if ((getUriListValues(data) ?? []).length === 0) {
       return;
@@ -137,7 +195,7 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  #inputTransformation = (evt: EventInfo, data: ClipboardEventData): void => {
+  #inputTransformation = (evt: EventInfo, data: InputTransformationEventData): void => {
     const cmDataUris: string[] = getUriListValues(data) ?? [];
     // Return if this is no CoreMedia content drop.
     if (cmDataUris.length === 0) {
@@ -217,7 +275,7 @@ export default class ContentClipboard extends Plugin {
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).
     model.change(() => {
-      this.fire("contentInsertion", {
+      this.fire("contentInsertion", <ContentInsertionEventData>{
         content: new ModelDocumentFragment(),
         method: data.method,
         dataTransfer: data.dataTransfer,
@@ -257,7 +315,7 @@ export default class ContentClipboard extends Plugin {
    * @param editor - current editor instance
    * @param data - event data
    */
-  static #evaluateTargetRange(editor: Editor, data: ClipboardEventData): ModelRange | null {
+  static #evaluateTargetRange(editor: Editor, data: InputTransformationEventData): ModelRange | null {
     if (!data.targetRanges) {
       return editor.model.document.selection.getFirstRange();
     }

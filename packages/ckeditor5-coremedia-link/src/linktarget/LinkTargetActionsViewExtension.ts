@@ -1,5 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
@@ -14,6 +13,7 @@ import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarsepa
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
+import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -31,9 +31,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   static readonly pluginName: string = "LinkTargetActionsViewExtension";
   static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI, CustomLinkTargetUI];
-  }
+  static readonly requires = [LinkUI, CustomLinkTargetUI];
 
   init(): Promise<void> | void {
     const logger = LinkTargetActionsViewExtension.#logger;
@@ -67,7 +65,9 @@ class LinkTargetActionsViewExtension extends Plugin {
     // convert button configurations to buttonView instances
     const buttons = linkTargetDefinitions.map((buttonConfig) => {
       if (buttonConfig.name === OTHER_TARGET_NAME) {
-        return <ButtonView>this.editor.ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
+        // @ts-expect-error TODO Check, how to deal with editor without UI.
+        const { ui }: EditorWithUI = editor;
+        return <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
       } else {
         return this.#createTargetButton(linkUI.editor.locale, buttonConfig, linkTargetCommand);
       }
@@ -124,13 +124,12 @@ class LinkTargetActionsViewExtension extends Plugin {
     });
 
     // Corner Case: `_self` is also on, if no target is set yet.
-    view
-      .bind("isOn")
-      .to(
-        linkTargetCommand,
-        "value",
-        (value: string) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self")
-      );
+    view.bind("isOn").to(
+      // @ts-expect-error TODO Check undefined handling
+      linkTargetCommand,
+      "value",
+      (value: string) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self")
+    );
 
     view.on("execute", () => {
       linkTargetCommand?.execute(buttonConfig.name);
@@ -147,6 +146,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    */
   #addButtons(actionsView: LinkActionsView, buttons: View[]): void {
     buttons.forEach((button) => {
+      // @ts-expect-error TODO Missing null-Handling
       actionsView.element.insertBefore(button.element, actionsView.unlinkButtonView.element);
     });
   }

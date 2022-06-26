@@ -1,5 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
@@ -7,6 +6,11 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { openInTab, showContentLinkField } from "../ContentLinkViewUtils";
+import { ifCommand } from "@coremedia/ckeditor5-common/Commands";
+import { LINK_COMMAND_NAME } from "../../link/Constants";
+import { Command } from "@ckeditor/ckeditor5-core";
+import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
+import { hasContentUriPath } from "./ViewExtensions";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -19,46 +23,55 @@ class ContentLinkActionsViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkActionsViewExtension";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI];
-  }
+  static readonly requires = [LinkUI];
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const logger = ContentLinkActionsViewExtension.#logger;
     const startTimestamp = performance.now();
 
     logger.debug(`Initializing ${ContentLinkActionsViewExtension.pluginName}...`);
 
     const editor = this.editor;
-    const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
-    const linkCommand = editor.commands.get("link");
+    const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
 
     linkUI.actionsView.set({
       contentUriPath: undefined,
     });
 
-    linkUI.actionsView.bind("contentUriPath").to(linkCommand, "value", (value: string) => {
-      return CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
-    });
+    const bindContentUriPathTo = (command: Command): void => {
+      linkUI.actionsView.bind("contentUriPath").to(command, "value", (value: unknown) => {
+        return typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
+      });
+    };
+
+    await ifCommand(editor, LINK_COMMAND_NAME).then((command) => bindContentUriPathTo(command));
 
     /*
      * We need to update the visibility of the inputs when the value of the content link changes
      * If the value was removed: show external link field, otherwise show the content link field
      */
     linkUI.actionsView.on("change:contentUriPath", (evt) => {
-      const value = evt.source.contentUriPath;
+      const { source } = evt;
+      if (!hasContentUriPath(source)) {
+        return;
+      }
+
+      const { contentUriPath: value } = source;
+
       // content link value has changed. set urlInputView accordingly
       // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
       // re-trigger a set of utlInputView here
       if (value !== null) {
-        linkUI.formView.urlInputView.fieldView.set({
+        formView.urlInputView.fieldView.set({
           value: value || "",
         });
       }
 
       // set visibility of url and content field
-      showContentLinkField(linkUI.formView, value);
-      showContentLinkField(linkUI.actionsView, value);
+      showContentLinkField(formView, !!value);
+      showContentLinkField(linkUI.actionsView, !!value);
     });
 
     this.#extendView(linkUI);
@@ -69,6 +82,8 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   #extendView(linkUI: LinkUI): void {
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
     const actionsView: LinkActionsView = linkUI.actionsView;
     const contentLinkView = new ContentLinkView(this.editor.locale, linkUI, {
       renderTypeIcon: true,
@@ -76,6 +91,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     contentLinkView.set({
       renderAsTextLink: true,
     });
+    // @ts-expect-error TODO: Check Typings or provide some workaround.
     contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
@@ -86,7 +102,7 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));
 
-    linkUI.formView.on("cancel", () => {
+    formView.on("cancel", () => {
       const initialValue: string = <string>this.editor.commands.get("link")?.value;
       linkUI.actionsView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
@@ -99,6 +115,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     if (!simpleContentLinkView.isRendered) {
       simpleContentLinkView.render();
     }
+    // @ts-expect-error TODO: Element may be null; we should check that
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
   }
 }

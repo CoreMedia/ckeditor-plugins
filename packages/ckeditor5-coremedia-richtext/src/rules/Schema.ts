@@ -2,7 +2,7 @@ import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/
 import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
 import RichTextSchema, { Strictness } from "../RichTextSchema";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import RichTextDataProcessor from "../RichTextDataProcessor";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);

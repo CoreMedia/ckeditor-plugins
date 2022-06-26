@@ -1,5 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -11,7 +10,6 @@ import {
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
 import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import { showContentLinkField } from "../ContentLinkViewUtils";
-import ContentLinkView from "./ContentLinkView";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
@@ -30,9 +28,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkFormViewExtension";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkFormViewExtension.pluginName);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [LinkUI, ContentLinkCommandHook];
-  }
+  static readonly requires = [LinkUI, ContentLinkCommandHook];
 
   init(): Promise<void> | void {
     const logger = ContentLinkFormViewExtension.#logger;
@@ -42,7 +38,8 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-    const formView = linkUI.formView;
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = <Command>editor.commands.get("link");
 
@@ -51,8 +48,8 @@ class ContentLinkFormViewExtension extends Plugin {
       contentName: undefined,
     });
 
-    formView.bind("contentUriPath").to(linkCommand, "value", (value: string) => {
-      return CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
+    formView.bind("contentUriPath").to(linkCommand, "value", (value: unknown) => {
+      return typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
     });
 
     this.#rebindSaveEnabled(linkCommand, formView);
@@ -110,25 +107,28 @@ class ContentLinkFormViewExtension extends Plugin {
     };
 
     saveButtonView.unbind("isEnabled");
+    // @ts-expect-error TODO Fix after Migrating to Types from DefinitelyTyped
     saveButtonView.bind("isEnabled").to(...enabledProperties, enabledHandler);
   }
 
   #extendView(linkUI: LinkUI): void {
-    const formView = linkUI.formView;
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
     const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
 
     formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
-    linkUI.formView.on("cancel", () => {
+    formView.on("cancel", () => {
       const initialValue: string = <string>this.editor.commands.get("link")?.value;
-      linkUI.formView.set({
+      formView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
+  static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
-    const formView = linkUI.formView;
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
 
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
@@ -138,22 +138,30 @@ class ContentLinkFormViewExtension extends Plugin {
       contentLinkView.render();
     }
 
+    // @ts-expect-error TODO We must check for null/undefined here.
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView<ContentLinkView>, linkUI: LinkUI): void {
+  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
+
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
+    // @ts-expect-error TODO We must check for null/undefined here.
     contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
+    // @ts-expect-error TODO We must check for null/undefined here.
     contentLinkView.fieldView.element.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
 
-    linkUI.formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+    // @ts-expect-error TODO We must check for null/undefined here.
+    formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
-    linkUI.formView.urlInputView.fieldView.element.addEventListener(
+    // @ts-expect-error TODO We must check for null/undefined here.
+    formView.urlInputView.fieldView.element.addEventListener(
       "dragover",
       ContentLinkFormViewExtension.#onDragOverLinkField
     );
@@ -195,18 +203,22 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
-    linkUI.formView.urlInputView.fieldView.set("value", data);
-    linkUI.formView.set("contentUriPath", null);
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
+    formView.urlInputView.fieldView.set("value", data);
+    formView.set("contentUriPath", null);
     linkUI.actionsView.set("contentUriPath", null);
-    showContentLinkField(linkUI.formView, false);
+    showContentLinkField(formView, false);
     showContentLinkField(linkUI.actionsView, false);
   }
 
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
-    linkUI.formView.urlInputView.fieldView.set("value", null);
-    linkUI.formView.set("contentUriPath", data);
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
+    formView.urlInputView.fieldView.set("value", null);
+    formView.set("contentUriPath", data);
     linkUI.actionsView.set("contentUriPath", data);
-    showContentLinkField(linkUI.formView, true);
+    showContentLinkField(formView, true);
     showContentLinkField(linkUI.actionsView, true);
   }
 

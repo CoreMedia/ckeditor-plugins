@@ -1,11 +1,21 @@
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import {
-  AddMarkerEventData,
-  DowncastConversionApi,
-  RemoveMarkerEventData,
-} from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentDropDataCache from "./ContentDropDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
+import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
+import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+
+export type AddMarkerEventData = {
+  markerName: string;
+  range?: Range;
+  markerRange: Range;
+  item: Item;
+};
+
+export type RemoveMarkerEventData = {
+  markerName: string;
+  markerRange: Range;
+};
 
 /**
  * Conversion function used in DowncastDispatcher event listeners.
