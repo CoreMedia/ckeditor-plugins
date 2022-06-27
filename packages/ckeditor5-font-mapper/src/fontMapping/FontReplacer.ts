@@ -4,7 +4,7 @@ import Text from "@ckeditor/ckeditor5-engine/src/view/text";
 import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { FontMapping } from "./FontMapping";
-import FontMappingRegistry from "./FontMappingRegistry";
+import { fontMappingRegistry } from "./FontMappingRegistry";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
 
@@ -123,7 +123,7 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
 
   // Replace quotes, since they are used for some fonts in the font-family string
   const escapedFontName = fontName.replaceAll('"', "");
-  return FontMappingRegistry.getFontMapping(escapedFontName);
+  return fontMappingRegistry.getFontMapping(escapedFontName);
 };
 
 /**

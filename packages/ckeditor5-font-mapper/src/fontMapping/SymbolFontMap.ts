@@ -1,6 +1,6 @@
 /**
- * Maps characters to their corresponding entity. Missing characters will be kept as is. Also includes
- * HTML_ENCODING_MAP automatically.
+ * Maps characters to their corresponding entity. Missing characters will be
+ * kept as is. Also includes HTML_ENCODING_MAP automatically.
  *
  * @see {@link http://www.alanwood.net/demos/symbol.html| Unicode alternatives for Greek and special characters in HTML}
  * @see {@link https://en.wikipedia.org/wiki/Symbol_(typeface)| Symbol (typeface) - Wikipedia}

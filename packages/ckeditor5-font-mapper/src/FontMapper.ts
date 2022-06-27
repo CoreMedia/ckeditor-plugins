@@ -7,7 +7,7 @@ import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragme
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
-import FontMappingRegistry from "./fontMapping/FontMappingRegistry";
+import { fontMappingRegistry } from "./fontMapping/FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
 
 export const CONFIG_KEY = "coremedia:fontMapper";
@@ -97,7 +97,7 @@ export default class FontMapper extends Plugin {
 
     config.forEach((configEntry: FontMapperConfigEntry) => {
       logger.debug(`Configuration: Register Mapping for ${configEntry.font}`);
-      FontMappingRegistry.registerFontMapping(configEntry);
+      fontMappingRegistry.registerFontMapping(configEntry);
     });
   }
 
