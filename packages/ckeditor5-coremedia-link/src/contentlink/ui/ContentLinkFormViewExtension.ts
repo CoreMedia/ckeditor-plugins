@@ -14,8 +14,8 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import ContentLinkFormViewPropertyAccessor from "./ContentLinkFormViewPropertyAccessor";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
+import { hasContentUriPathAndName } from "./ViewExtensions";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -62,12 +62,11 @@ class ContentLinkFormViewExtension extends Plugin {
       formView,
       "submit",
       () => {
-        const contentLinksProperties = formView as ContentLinkFormViewPropertyAccessor;
-        if (!!contentLinksProperties.contentUriPath && typeof contentLinksProperties.contentName === "string") {
-          contentLinkCommandHook.registerContentName(
-            contentLinksProperties.contentUriPath,
-            contentLinksProperties.contentName
-          );
+        if (hasContentUriPathAndName(formView)) {
+          const { contentUriPath, contentName } = formView;
+          if (!!contentUriPath) {
+            contentLinkCommandHook.registerContentName(contentUriPath, contentName);
+          }
         }
       },
       {
