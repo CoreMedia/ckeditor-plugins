@@ -19,6 +19,7 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
+import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -33,8 +34,8 @@ declare interface ContentEventData<T> extends ClipboardEventData {
  * Type-Guard for ContentEventData.
  * @param value - value to validate
  */
-const isContentEventData = (value: unknown): value is ContentEventData<unknown> => {
-  return typeof value === "object" && !!value && "content" in value;
+const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> => {
+  return isRaw<ContentEventData<unknown>>(value, "content");
 };
 
 /**
