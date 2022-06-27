@@ -1,26 +1,28 @@
-import Node from "@ckeditor/ckeditor5-engine/src/view/node";
-import Element from "@ckeditor/ckeditor5-engine/src/view/element";
-import Text from "@ckeditor/ckeditor5-engine/src/view/text";
+import ViewNode from "@ckeditor/ckeditor5-engine/src/view/node";
+import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
+import ViewText from "@ckeditor/ckeditor5-engine/src/view/text";
 import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
-import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
+import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
 
 /**
- * Recursively replaces the characters in direct children and removes their font-family style property
- * if a font mapping for the font-family exists.
- * The documentFragment given as the first parameter of this function will be altered directly.
+ * Recursively replaces the characters in direct children and removes their
+ * font-family style property if a font mapping for the font-family exists.
+ * The documentFragment given as the first parameter of this function will
+ * be altered directly.
  *
  * @param documentFragment - the document fragment
- * @param parentFontMapping - parent font mapping to be respected in calculation of the applied font mapping.
+ * @param parentFontMapping - parent font mapping to be respected in calculation
+ * of the applied font mapping.
  */
 export const replaceFontInDocumentFragment = (
-  documentFragment: DocumentFragment,
+  documentFragment: ViewDocumentFragment,
   parentFontMapping?: FontMapping
 ): void => {
-  const childElements = findChildren(documentFragment) as Array<Element>;
+  const childElements = findChildren(documentFragment);
 
   for (const child of childElements) {
     // get the font mapping for the child element or use the one inherited from the parent:
@@ -44,33 +46,37 @@ export const replaceFontInDocumentFragment = (
 
 /**
  * Returns all direct children of a document fragment.
- * Only returns elements of type {@link Element}.
+ * Only returns elements of type Element.
  *
  * @param documentFragment - the document fragment
  * @returns an array of child elements
  */
-const findChildren = (documentFragment: DocumentFragment): Array<Element> => {
-  const children: Array<Element> = Array.from<Node>(documentFragment.getChildren())
-    .filter((value) => value instanceof Element)
-    .map((value) => value as Element);
+const findChildren = (documentFragment: ViewDocumentFragment): Array<ViewElement> => {
+  const children: Array<ViewElement> = Array.from<ViewNode>(documentFragment.getChildren())
+    .filter((value) => value instanceof ViewElement)
+    .map((value) => value as ViewElement);
   return children;
 };
 
 /**
  * Returns a registered {@link FontMapping} based on the given element.
  *
- * A {@link FontMapping} will be looked up by first checking if a font-family exist
- * on the element. If a font-family exists a font mapping for the font-family will be returned
- * or undefined if no font mapping exists.
- * If no font-family exists on the element the inherited font mapping will be returned.
+ * A {@link FontMapping} will be looked up by first checking if a font-family
+ * exists on the element:
+ *
+ * * If a font-family exists, a font mapping for the font-family will be returned
+ *   or undefined if no font mapping exists.
+ *
+ * * If no font-family exists, on the element the inherited font mapping will be
+ *   returned.
  *
  * @param element - the element to inspect
  * @param inheritedFontMapping - a font mapping inherited from parent hierarchy
- *    or undefined if no font-family exist in the parent hierarchy
- * @returns the fontMapping based on the given element or undefined
+ *    or `undefined` if no font-family exist in the parent hierarchy
+ * @returns the fontMapping based on the given element or `undefined`
  */
 const computeFontMappingForElement = (
-  element: Element,
+  element: ViewElement,
   inheritedFontMapping?: FontMapping
 ): FontMapping | undefined => {
   const fontFamily = evaluateFontFamily(element);
@@ -86,27 +92,29 @@ const computeFontMappingForElement = (
  * @param element - the element
  * @returns the font-family or undefined if no font-family style property is set
  */
-const evaluateFontFamily = (element: Element): string | undefined => {
+const evaluateFontFamily = (element: ViewElement): string | undefined => {
   return element.getStyle(FONT_FAMILY_PROPERTY_NAME);
 };
 
 /**
- * Returns a mapping for the given font-family string from the {@link FontMappingRegistry}.
+ * Returns a mapping for the given font-family string from the
+ * {@link FontMappingRegistry}.
+ *
  * Only the first font in the font-family string will be taken into account.
  *
- * Caution:
+ * **Caution:**
  *
- * This means that this might no be as precise as it should be. In a real css style
- * the font-family string can contain fallbacks which means that if the searched <i>fontFamily</i> is
- * part of the fallbacks won't be respected.
+ * This means that this might not be as precise as it should be. In a real CSS
+ * style the font-family string can contain fallbacks which means that if the
+ * searched `fontFamily` is part of the fallbacks won't be respected.
  *
- * This might cause problems in some scenarios.
- * For example font-family style contains two font-families: SomeSpecialFont and the passed font-family.
- * Now "SomeSpecialFont" is not supported by browsers and the fallback font-family is used to display
- * the characters in the browser. But the algorithm returns undefined instead of the <i>FontMapping</i>
- * for the passsed fontFamily.
- * Reason for this is that we can not say when which style is really applied as it highly depends on the
- * used browser and installed fonts.
+ * This might cause problems in some scenarios. For example, font-family style
+ * contains two font-families: "SomeSpecialFont" and the specified font-family.
+ * Now "SomeSpecialFont" is not supported by browsers and the fallback font-family
+ * is used to display the characters in the browser. But the algorithm returns
+ * `undefined` instead of the `FontMapping` for the specified fontFamily. Reason
+ * for this is that we can not say when which style is really applied as it highly
+ * depends on the used browser and installed fonts.
  *
  * @param fontFamily - the font family to get a font mapping for.
  * @returns a {@link FontMapping} or undefined if no such mapping exists.
@@ -119,24 +127,35 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
    * "Symbol, Arial" is converted to ["Symbol", "Arial"]
    * "Symbol" is converted to ["Symbol"]
    */
-  const fontName = fontFamily.split(",")[0];
+  const fontFamilyArray = fontFamily.split(",").map(escapeFontFamily);
 
-  // Replace quotes, since they are used for some fonts in the font-family string
-  const escapedFontName = fontName.replaceAll('"', "");
-  return fontMappingRegistry.getFontMapping(escapedFontName);
+  return fontMappingRegistry.getFontMapping(fontFamilyArray[0]);
+};
+
+/**
+ * Escapes a font-family name to be used as a key in a FontMapping
+ *
+ * @param fontFamilyStyle - the font name
+ * @returns the escaped font name
+ */
+const escapeFontFamily = (fontFamilyStyle: string): string => {
+  return fontFamilyStyle
+    .split(/\s*(?:^,*|,|$)\s*/)
+    .map((s) => s.replace(/^"(.*)"$/, "$1"))
+    .filter((s) => !!s)[0];
 };
 
 /**
  * Creates a new element, based on an existing one.
  * The new element's font-family style property will be removed
- * and direct children of {@link Text} type will be changed according to the given {@link FontMapping}.
+ * and direct children of type Text will be changed according to the given {@link FontMapping}.
  *
  * @param fontMapping - the font mapping
  * @param element - the element to clone
  * @returns the element clone
  */
-const createAlteredElementClone = (fontMapping: FontMapping, element: Element): Element => {
-  const clone: Element = new UpcastWriter(element.document).clone(element, true);
+const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElement): ViewElement => {
+  const clone: ViewElement = new UpcastWriter(element.document).clone(element, true);
   clone._removeStyle(FONT_FAMILY_PROPERTY_NAME);
   replaceCharactersInTextNodeChildren(fontMapping, clone);
   return clone;
@@ -150,7 +169,7 @@ const createAlteredElementClone = (fontMapping: FontMapping, element: Element): 
  * @param fontMapping - the font mapping
  * @param element - the element to alter
  */
-const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: Element): void => {
+const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: ViewElement): void => {
   const textElements = findTextNodeChildren(element);
   if (!textElements) {
     return;
@@ -167,8 +186,8 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
  * @param element - the element
  * @returns all direct text node children or null
  */
-const findTextNodeChildren = (element: Element): Array<Text> => {
-  return Array.from<Node>(element.getChildren())
-    .filter((value) => value instanceof Text)
-    .map((value) => value as Text);
+const findTextNodeChildren = (element: ViewElement): Array<ViewText> => {
+  return Array.from<ViewNode>(element.getChildren())
+    .filter((value) => value instanceof ViewText)
+    .map((value) => value as ViewText);
 };
