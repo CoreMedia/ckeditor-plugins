@@ -11,9 +11,8 @@ import injectCssTransitionDisabler from "@ckeditor/ckeditor5-ui/src/bindings/inj
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import submitHandler from "@ckeditor/ckeditor5-ui/src/bindings/submithandler";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
-import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 import "../../../theme/customlinktargetform.css";
-import { icons } from "@ckeditor/ckeditor5-core/src/index";
+import { icons } from "@ckeditor/ckeditor5-core";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
@@ -24,7 +23,7 @@ import { icons } from "@ckeditor/ckeditor5-core/src/index";
 export default class CustomLinkTargetInputFormView extends View {
   readonly focusTracker: FocusTracker;
   readonly keystrokes: KeystrokeHandler;
-  readonly labeledInput: LabeledFieldView<InputTextView>;
+  readonly labeledInput: LabeledFieldView;
   readonly saveButtonView: ButtonView;
   readonly cancelButtonView: ButtonView;
   readonly #focusables: ViewCollection;
@@ -34,10 +33,10 @@ export default class CustomLinkTargetInputFormView extends View {
   declare enableCssTransitions: () => void;
   declare disableCssTransitions: () => void;
 
-  constructor(locale: Locale) {
+  constructor(locale?: Locale) {
     super(locale);
 
-    const t = this.locale.t;
+    const t = this.locale?.t;
 
     /**
      * Tracks information about the DOM focus in the form.
@@ -61,13 +60,13 @@ export default class CustomLinkTargetInputFormView extends View {
     /**
      * A button used to submit the form.
      */
-    this.saveButtonView = this.#createButton(t("Save"), icons.check, "ck-button-save");
+    this.saveButtonView = this.#createButton(t?.("Save") || "Save", icons.check, "ck-button-save");
     this.saveButtonView.type = "submit";
 
     /**
      * A button used to cancel the form.
      */
-    this.cancelButtonView = this.#createButton(t("Cancel"), icons.cancel, "ck-button-cancel", "cancel");
+    this.cancelButtonView = this.#createButton(t?.("Cancel") || "Cancel", icons.cancel, "ck-button-cancel", "cancel");
 
     /**
      * A collection of views, which can be focused in the form.
@@ -129,6 +128,7 @@ export default class CustomLinkTargetInputFormView extends View {
       this.#focusables.add(v);
 
       // Register the view in the focus tracker.
+      // @ts-expect-error TODO Handle Element being null.
       this.focusTracker.add(v.element);
     });
   }
@@ -169,10 +169,11 @@ export default class CustomLinkTargetInputFormView extends View {
    *
    * @returns {@link LabeledFieldView} Labeled field view instance.
    */
-  #createLabeledInputView(): LabeledFieldView<InputTextView> {
-    const t = this.locale.t;
-    const labeledInput: LabeledFieldView<InputTextView> = new LabeledFieldView(this.locale, createLabeledInputText);
-    labeledInput.label = t("Target");
+  #createLabeledInputView(): LabeledFieldView {
+    const t = this.locale?.t;
+    // @ts-expect-error TODO Possibly bad typing for Constructor of LabeledFieldView
+    const labeledInput: LabeledFieldView = new LabeledFieldView(this.locale, createLabeledInputText);
+    labeledInput.label = t?.("Target") || "Target";
     return labeledInput;
   }
 }

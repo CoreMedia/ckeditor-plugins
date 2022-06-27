@@ -9,6 +9,8 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 import { fontMappingRegistry } from "./fontMapping/FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
+import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
+import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 
 export const CONFIG_KEY = "coremedia:fontMapper";
 export type FontMapperConfigEntry = {
@@ -60,9 +62,7 @@ export default class FontMapper extends Plugin {
   private static readonly supportedDataFormat: string = "text/html";
   private static readonly clipboardEventName: string = "inputTransformation";
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [ClipboardPipeline];
-  }
+  static readonly requires = [ClipboardPipeline];
 
   async init(): Promise<void> {
     const logger = FontMapper.#logger;
@@ -106,14 +106,22 @@ export default class FontMapper extends Plugin {
   }
 
   // noinspection JSUnusedLocalSymbols
-  static #handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardEventData): void {
+  static #handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardInputEvent): void {
     const pastedContent: string = data.dataTransfer.getData(FontMapper.supportedDataFormat);
-    const eventContent: DocumentFragment = data.content;
-    if (!pastedContent) {
+    const eventContent: DocumentFragment | undefined = data.content;
+    if (!pastedContent || !eventContent) {
       return;
     }
 
     replaceFontInDocumentFragment(eventContent);
     data.content = eventContent;
   }
+}
+
+/**
+ * Event data of `clipboardInput` event in `view.Document`.
+ */
+declare interface ClipboardInputEvent extends ClipboardEventData {
+  dataTransfer: DataTransfer
+  content?: ViewDocumentFragment;
 }

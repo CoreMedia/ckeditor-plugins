@@ -19,7 +19,7 @@ const FONT_FAMILY_PROPERTY_NAME = "font-family";
  * of the applied font mapping.
  */
 export const replaceFontInDocumentFragment = (
-  documentFragment: ViewDocumentFragment,
+  documentFragment: ViewDocumentFragment | ViewElement,
   parentFontMapping?: FontMapping
 ): void => {
   const childElements = findChildren(documentFragment);
@@ -36,7 +36,9 @@ export const replaceFontInDocumentFragment = (
     const replacementElement = createAlteredElementClone(fontMapping, child);
     if (replacementElement) {
       const childIndex: number = documentFragment.getChildIndex(child);
+      //@ts-expect-error TODO _removeChildren is protected for Element
       documentFragment._removeChildren(childIndex, 1);
+      //@ts-expect-error TODO _insertChild is protected for Element
       documentFragment._insertChild(childIndex, replacementElement);
     }
 
@@ -51,7 +53,7 @@ export const replaceFontInDocumentFragment = (
  * @param documentFragment - the document fragment
  * @returns an array of child elements
  */
-const findChildren = (documentFragment: ViewDocumentFragment): Array<ViewElement> => {
+const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): Array<ViewElement> => {
   const children: Array<ViewElement> = Array.from<ViewNode>(documentFragment.getChildren())
     .filter((value) => value instanceof ViewElement)
     .map((value) => value as ViewElement);
@@ -156,6 +158,7 @@ const escapeFontFamily = (fontFamilyStyle: string): string => {
  */
 const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElement): ViewElement => {
   const clone: ViewElement = new UpcastWriter(element.document).clone(element, true);
+  //@ts-expect-error TODO _removeStyle is protected
   clone._removeStyle(FONT_FAMILY_PROPERTY_NAME);
   replaceCharactersInTextNodeChildren(fontMapping, clone);
   return clone;
@@ -175,7 +178,9 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
     return;
   }
   for (const textElement of textElements) {
+    //@ts-expect-error TODO _textData is protected
     const oldTextData: string = textElement._textData;
+    //@ts-expect-error TODO _textData is protected
     textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
   }
 };

@@ -47,10 +47,8 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
 
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
-    return [LinkUI];
-  }
+  // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
+  static readonly requires = [LinkUI];
 
   init(): void {
     const logger = LinkCleanup.#logger;
@@ -131,7 +129,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     modelAttributeName: string
   ): void => {
     const model = writer.model;
-    const validRanges = Array.from(model.schema.getValidRanges(relevantRanges, modelAttributeName));
+    const validRanges = Array.from(model.schema.getValidRanges([...relevantRanges], modelAttributeName));
     /*
      * We may not have applied all required attribute removals for given attribute
      * yet. Instead of checking for the uncovered ranges, yet, we just add

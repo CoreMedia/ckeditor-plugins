@@ -9,7 +9,5 @@ import ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
 export default class ContentImagePlugin extends Plugin {
   static readonly pluginName: string = "ContentImagePlugin";
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [ContentImageEditingPlugin, ContentImageClipboardPlugin];
-  }
+  static readonly requires = [ContentImageEditingPlugin, ContentImageClipboardPlugin];
 }

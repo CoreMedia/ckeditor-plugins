@@ -9,7 +9,7 @@ export default class CancelButtonView extends ButtonView {
   readonly #cancelIcon: CoreMediaIconView;
   static readonly iconId = "cancelButtonIcon";
 
-  constructor(locale: Locale) {
+  constructor(locale?: Locale) {
     super(locale);
 
     this.extendTemplate({

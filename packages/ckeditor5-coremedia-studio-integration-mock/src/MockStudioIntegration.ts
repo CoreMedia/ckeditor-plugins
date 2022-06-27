@@ -20,9 +20,7 @@ class MockStudioIntegration extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [MockContentPlugin];
-  }
+  static readonly requires = [MockContentPlugin];
 
   init(): Promise<void> | void {
     const logger = MockStudioIntegration.#logger;

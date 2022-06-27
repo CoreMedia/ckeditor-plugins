@@ -2,6 +2,7 @@ import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
 import { Wrapper } from "./Wrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { ElementHandle } from "playwright-core";
+import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 
 /**
  * Wrapper for `EditorUI`.
@@ -33,6 +34,6 @@ export class EditorUiWrapper extends Wrapper<EditorUI> {
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {
-    return new EditorUiWrapper(wrapper.evaluateHandle((editor) => editor.ui));
+    return new EditorUiWrapper(wrapper.evaluateHandle((editor) => (editor as EditorWithUI).ui));
   }
 }

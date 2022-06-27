@@ -2,7 +2,7 @@ import View from "@ckeditor/ckeditor5-ui/src/view";
 import { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import TemplateIfBinding from "@ckeditor/ckeditor5-ui/src/template/templateifbinding";
+import { TemplateIfBinding } from "@ckeditor/ckeditor5-ui/src/template";
 
 /**
  * Adds a CSS class, or an array of CSS classes to a view template.
@@ -12,6 +12,7 @@ import TemplateIfBinding from "@ckeditor/ckeditor5-ui/src/template/templateifbin
  * @param classNames - a classname or an array of classname strings
  */
 export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
+  // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
   const classes: Array<string | TemplateIfBinding> = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
@@ -31,6 +32,7 @@ export const addClassToTemplate = (view: View, classNames: string[] | string): v
  * @param classNames - a classname or an array of classname strings
  */
 export const removeClassFromTemplate = (view: View, classNames: string[] | string): void => {
+  // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
   const classes: Array<string | TemplateIfBinding> = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];

@@ -13,9 +13,7 @@ class GeneralRichTextSupport extends Plugin {
   static readonly pluginName: string = "GeneralRichTextSupport";
   static readonly #logger: Logger = LoggerProvider.getLogger(GeneralRichTextSupport.pluginName);
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [GeneralHtmlSupport, RichTextDataFilter];
-  }
+  static readonly requires = [GeneralHtmlSupport, RichTextDataFilter];
 
   constructor(editor: Editor) {
     super(editor);
