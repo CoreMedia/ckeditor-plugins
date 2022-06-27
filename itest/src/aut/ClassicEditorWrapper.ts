@@ -46,6 +46,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
      */
     return this.evaluate((editor, value): Promise<string> => {
       return new Promise<string>((resolve, reject) => {
+        // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
         const processor = editor.data.processor as RichTextDataProcessor;
         // Prior to setting data, wait for them being processed.
         processor.once("richtext:toView", (eventInfo, eventData) => {

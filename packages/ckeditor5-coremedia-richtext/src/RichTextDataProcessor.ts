@@ -1,7 +1,7 @@
 import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -12,7 +12,7 @@ import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "./CoreMediaRichTextConfig";
-import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
+import { HtmlWriter } from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
@@ -59,6 +59,10 @@ class RichTextDataProcessor implements DataProcessor {
   registerRawContentMatcher(pattern: MatcherPattern): void {
     this.#delegate.registerRawContentMatcher(pattern);
     this.#domConverter.registerRawContentMatcher(pattern);
+  }
+
+  useFillerType(type: "default" | "marked"): void {
+    this.#domConverter.blockFillerMode = type == "marked" ? "markedNbsp" : "nbsp";
   }
 
   /**

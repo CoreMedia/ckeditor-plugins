@@ -1,5 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
@@ -156,10 +155,8 @@ class ContentLinkCommandHook extends Plugin {
     return this.#trackingData.clear();
   };
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    // The LinkEditing registers the command, which we want to hook into.
-    return [LinkEditing];
-  }
+  // The LinkEditing registers the command, which we want to hook into.
+  static readonly requires = [LinkEditing];
 
   /**
    * Registers the post-fixer.
@@ -307,6 +304,7 @@ class ContentLinkCommandHook extends Plugin {
       // We first need to remove the text, as otherwise it will be merged with
       // the next text to add.
       writer.remove(textProxy);
+      // @ts-expect-error TODO Check Typings
       writer.insertText(name, attrs, position);
 
       return true;

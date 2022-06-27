@@ -31,10 +31,8 @@ export default class LinkTargetModelView extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetModelView.pluginName);
   private readonly TEXT_NAME = "$text";
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
-    return [LinkCleanup];
-  }
+  // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
+  static readonly requires = [LinkCleanup];
 
   /**
    * Defines `linkTarget` model-attribute, which is represented on downcast
