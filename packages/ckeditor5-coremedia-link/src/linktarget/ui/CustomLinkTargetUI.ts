@@ -10,8 +10,8 @@ import clickOutsideHandler from "@ckeditor/ckeditor5-ui/src/bindings/clickoutsid
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 import Command from "@ckeditor/ckeditor5-core/src/command";
+import { requireEditorWithUI } from "@coremedia/ckeditor5-common/Editors";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -89,8 +89,7 @@ export default class CustomLinkTargetUI extends Plugin {
     const linkTargetCommand: Command = editor.commands.get("linkTarget");
     const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
-    // @ts-expect-error TODO Check, how to deal with editor without UI.
-    const { ui }: EditorWithUI = editor;
+    const { ui } = requireEditorWithUI(this.editor);
 
     ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
       const view = new ButtonView(locale);

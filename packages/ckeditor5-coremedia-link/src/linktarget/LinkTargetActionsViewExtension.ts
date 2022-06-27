@@ -13,7 +13,7 @@ import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarsepa
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
+import { requireEditorWithUI } from "@coremedia/ckeditor5-common/Editors";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -65,8 +65,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     // convert button configurations to buttonView instances
     const buttons = linkTargetDefinitions.map((buttonConfig) => {
       if (buttonConfig.name === OTHER_TARGET_NAME) {
-        // @ts-expect-error TODO Check, how to deal with editor without UI.
-        const { ui }: EditorWithUI = editor;
+        const { ui } = requireEditorWithUI(this.editor);
         return <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
       } else {
         return this.#createTargetButton(linkUI.editor.locale, buttonConfig, linkTargetCommand);
