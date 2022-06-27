@@ -31,19 +31,15 @@ describe("Symbol on paste mapper features", () => {
   });
 
   /**
-   * <p>
-   *   Test for the FontMapper Plugin.
-   * </p>
-   * <p>
-   *   The FontMapper Plugin replaces characters for the Symbol-Font
-   *   (or a configured font) to be displayable in the browser.
-   * </p>
-   * <p>
-   *   For this test a word-document in html exists which contains a placeholder.
-   *   The placeholder is set to a location where the symbol font is applied and
-   *   has to be replaced with the symbol-character to test.
-   *   Those symbol-characters are the input for the test.
-   * </p>
+   * Test for the FontMapper Plugin.
+   *
+   * The FontMapper Plugin replaces characters for the Symbol-Font
+   * (or a configured font) to be displayable in the browser.
+   *
+   * For this test, a Word-document in HTML exists which contains a placeholder.
+   * The placeholder is set to a location where the symbol font is applied and
+   * has to be replaced with the symbol-character to test.
+   * Those symbol-characters are the input for the test.
    */
   it.each([
     ["∃", ""],
