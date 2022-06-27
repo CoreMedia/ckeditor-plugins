@@ -33,8 +33,6 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
 
     linkUI.actionsView.set({
       contentUriPath: undefined,
@@ -58,6 +56,8 @@ class ContentLinkActionsViewExtension extends Plugin {
         return;
       }
 
+      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+      const formView: LinkFormView = linkUI.formView;
       const { contentUriPath: value } = source;
 
       // content link value has changed. set urlInputView accordingly
