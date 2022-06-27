@@ -3,7 +3,7 @@ import Element from "@ckeditor/ckeditor5-engine/src/view/element";
 import Text from "@ckeditor/ckeditor5-engine/src/view/text";
 import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import FontMapping from "./FontMapping";
+import { FontMapping } from "./FontMapping";
 import FontMappingRegistry from "./FontMappingRegistry";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";

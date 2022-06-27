@@ -16,7 +16,7 @@ export type FontMap = Map<number, string>;
  * a minimum replacement map for custom mappings.
  *
  */
-export default class FontMapping {
+export class FontMapping {
   private map: FontMap;
   private DECODE_ELEMENT_HELP = document.createElement("div");
 

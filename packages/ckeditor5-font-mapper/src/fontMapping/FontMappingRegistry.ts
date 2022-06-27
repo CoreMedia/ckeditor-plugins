@@ -1,5 +1,5 @@
 import { FontMapperConfigEntry } from "FontMapper";
-import FontMapping, { FontMap } from "./FontMapping";
+import { FontMapping, FontMap } from "./FontMapping";
 import { symbolFontMap } from "./SymbolFontMap";
 
 /**
