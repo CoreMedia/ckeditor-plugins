@@ -1,4 +1,4 @@
-import { htmlEncodingMap } from "./SymbolFontMap";
+import { htmlEncodingMap } from "./HtmlEncodingMap";
 
 /**
  * A mapping table for a certain font.
@@ -7,13 +7,21 @@ import { htmlEncodingMap } from "./SymbolFontMap";
 export type FontMap = Map<number, string>;
 
 /**
+ * The mode for appending a FontMapping.
+ * New mappings will always be created with {@link htmlEncodingMap} as a base.
+ * Existing mappings can be overridden by using the `"replace"` `mode`.
+ * `"append"` is the default if no other `mode` is set.
+ */
+export type Mode = "replace" | "append";
+
+/**
  * A FontMapping defines a strategy on how to map characters of a given
  * font-family to their alternative representation.
  *
  * A FontMapping must be provided with a corresponding map that defines
  * the representation mapping for the font's characters.
- * Please note, that a given map will always be extended with an {@link htmlEncodingMap},
- * a minimum replacement map for custom mappings.
+ * Please note, that a given map will always be extended with an
+ * {@link htmlEncodingMap}, a minimum replacement map for custom mappings.
  *
  */
 export class FontMapping {
@@ -26,15 +34,21 @@ export class FontMapping {
 
   /**
    * Alters the FontMap of this FontMapping.
-   * This method is especially used to change the "Symbol" FontMapping after it has been registered
-   * with its default map. The custom configuration of this plugin might then change this map
-   * or replace it entirely.
+   * This method is especially used to change the "Symbol" FontMapping after
+   * it has been registered with its default map. The custom configuration of
+   * this plugin might then change this map or replace it entirely.
+   *
+   * If a config is applied to a FontMapping with "replace" `mode`,
+   * a new map, based on the {@link htmlEncodingMap} will be created.
+   * {@link htmlEncodingMap} is a minimum replacement map for custom mapping.
+   * As we decode the HTML prior to replacement we need to ensure, that the
+   * encoded characters are restored.
    *
    * @param mode - the apply mode (only "replace" is taken into account)
    * @param map - the custom map to alter the existing FontMap
    */
-  applyMapConfig(map: FontMap, mode: string | undefined): void {
-    if (mode && mode.toLowerCase() === "replace") {
+  applyMapConfig(map: FontMap, mode: Mode = "append"): void {
+    if (mode === "replace") {
       this.map = this.#mergeFontMaps(htmlEncodingMap, map);
     } else {
       this.map = this.#mergeFontMaps(this.map, map);
@@ -44,19 +58,15 @@ export class FontMapping {
   /**
    * Merges two FontMaps into one.
    * The first FontMap `baseFontMap` serves as the base for the output map.
-   * The contents of the second FontMap `additionalMap` will be added afterwards
-   * and override duplicate entries.
+   * The contents of the second FontMap `additionalMap` will be added
+   * afterwards and override duplicate entries.
    *
    * @param baseFontMap - the base fontMap
    * @param additionalMap - the additional mapping to apply to the fontMapping's map
    * @returns the merge result as a new map
    */
   #mergeFontMaps(baseFontMap: FontMap, additionalMap: FontMap): FontMap {
-    const baseFontMapCopy = new Map(baseFontMap);
-    additionalMap.forEach((value, key) => {
-      baseFontMapCopy.set(key, value);
-    });
-    return baseFontMapCopy;
+    return new Map([...baseFontMap.entries(), ...additionalMap.entries()]);
   }
 
   /**
