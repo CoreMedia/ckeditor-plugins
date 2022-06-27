@@ -157,7 +157,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
   }
   for (const textElement of textElements) {
     const oldTextData: string = textElement._textData;
-    textElement._textData = fontMapping.toEscapedHtml(oldTextData);
+    textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
   }
 };
 
@@ -167,7 +167,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
  * @param element - the element
  * @returns all direct text node children or null
  */
-const findTextNodeChildren = (element: Element): Array<Text> | null => {
+const findTextNodeChildren = (element: Element): Array<Text> => {
   return Array.from<Node>(element.getChildren())
     .filter((value) => value instanceof Text)
     .map((value) => value as Text);

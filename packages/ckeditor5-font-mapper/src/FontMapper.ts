@@ -4,7 +4,6 @@ import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeli
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import { UnpackFunction } from "./fontMapping/FontMapping";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
@@ -16,7 +15,6 @@ export type FontMapperConfigEntry = {
   font: string;
   mode?: "append" | "replace";
   map: { [key: number]: string };
-  unpack?: UnpackFunction;
 };
 
 type FontMapperConfig = Array<FontMapperConfigEntry>;

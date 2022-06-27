@@ -1,23 +1,10 @@
 import { htmlEncodingMap } from "./SymbolFontMap";
 
-export type FontMap = Map<number, string>;
-export type UnpackFunction = (data: string) => number;
-
 /**
- * An unpack function for utf8 encoded font families.
- * This is the default unpack function for FontMappings.
- *
- * @param data - input character
- * @returns the utf8 character code
+ * A mapping table for a certain font.
+ * This table maps a decimal code point value to a replacement string.
  */
-const unpackUtf8 = (data: string): number => {
-  if (data.length > 1 || data.length < 1) {
-    return -1;
-  }
-
-  const utf8charCode = data.charCodeAt(0);
-  return utf8charCode & 0xff;
-};
+export type FontMap = Map<number, string>;
 
 /**
  * A FontMapping defines a strategy on how to map characters of a given
@@ -28,21 +15,13 @@ const unpackUtf8 = (data: string): number => {
  * Please note, that a given map will always be extended with an {@link htmlEncodingMap},
  * a minimum replacement map for custom mappings.
  *
- * It also accepts an optional `unpackFct`. This function controls how input
- * characters are translated into their character codes.
- * By default, FontMappings will use the {@link unpackUtf8} function, which
- * work for utf8 character encoded fonts. Please provide a fitting unpack
- * function for fonts with different character encoding.
- *
  */
 export default class FontMapping {
   private map: FontMap;
-  private unpack: UnpackFunction;
   private DECODE_ELEMENT_HELP = document.createElement("div");
 
-  constructor(map: FontMap, unpackFct: UnpackFunction = unpackUtf8) {
+  constructor(map: FontMap) {
     this.map = this.#mergeFontMaps(htmlEncodingMap, map);
-    this.unpack = unpackFct;
   }
 
   /**
@@ -63,7 +42,7 @@ export default class FontMapping {
   }
 
   /**
-   * Merges 2 FontMaps into one.
+   * Merges two FontMaps into one.
    * The first FontMap `baseFontMap` serves as the base for the output map.
    * The contents of the second FontMap `additionalMap` will be added afterwards
    * and override duplicate entries.
@@ -86,23 +65,38 @@ export default class FontMapping {
    * @param input - a character or a string to be mapped to their corresponding entity
    * @returns the corresponding entity
    */
-  toEscapedHtml(input: string): string {
-    const chars: Array<string> = [...input];
-    const replaced: Array<string | null> = chars.map((value) => {
-      const textChar: number = this.unpack(value);
-      if (this.map.has(textChar)) {
-        const htmlReplacement: string | undefined = this.map.get(textChar);
-        if (htmlReplacement) {
-          return this.#decodeHtmlEntities(htmlReplacement);
-        }
+  toReplacementCharacter(input: string): string {
+    const decodedInput: string | null = this.#decodeHtmlEntities(input);
+    const characters: Array<string> = [...decodedInput];
+    const replacedInput: Array<string | null> = characters.map((value) => {
+      const charCode = value.charCodeAt(0);
+      const htmlEntity = this.map.get(charCode);
+      if (htmlEntity) {
+        return this.#decodeHtmlEntities(htmlEntity);
       }
-      return String.fromCharCode(textChar);
+      return String.fromCharCode(charCode);
     });
-    return replaced.join();
+    return replacedInput.join();
   }
 
-  #decodeHtmlEntities(str: string): string | null {
-    this.DECODE_ELEMENT_HELP.innerHTML = str;
-    return this.DECODE_ELEMENT_HELP.textContent;
+  /**
+   * Decodes all HTML entities of the content of a text node.
+   *
+   * Some characters like ", ' and non-breakable-space will be encoded when Word places the HTML
+   * into the clipboard. Thus to prevent for example &nbsp; to be transformed to &&nu;&beta;&sigma;&pi;; we
+   * need to first decode the HTML.
+   *
+   * @param inputString - text node content
+   * @see {@link https://stackoverflow.com/questions/5796718/html-entity-decode| javascript - HTML Entity Decode - Stack Overflow}
+   * @returns the decoded string
+   */
+  #decodeHtmlEntities(inputString: string): string {
+    this.DECODE_ELEMENT_HELP.innerHTML = inputString;
+    const textContent = this.DECODE_ELEMENT_HELP.textContent;
+    if (!textContent) {
+      // see https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
+      throw new Error("Error during decodeHtmlEntities: HTMLDivElement has no textContent");
+    }
+    return textContent;
   }
 }
