@@ -247,9 +247,6 @@ ClassicEditor.create(document.querySelector('.editor'), {
     console.log("Registered `editor.resetUndo()` to clear undo history.");
   }
 
-  // Provide some details, when data got set.
-  newEditor.data.on("set", dataSet);
-
   // Do it late, so that we also have a clear signal (e.g., to integration
   // tests), that the editor is ready.
   window['editor'] = newEditor;
@@ -258,35 +255,53 @@ ClassicEditor.create(document.querySelector('.editor'), {
   console.error(error);
 });
 
-const dataSet = (evt, [dataObj]) => {
+const LastData = Symbol("LastData");
+
+/**
+ * Save method with additional recognition, if there is an actual change.
+ * This represents, how we could prevent auto-checkout in CoreMedia
+ * Studio for irrelevant changes, because they are semantically equivalent.
+ *
+ * @param source - which editor stored the data
+ * @param data - data to be stored
+ */
+const saveData = (source, data) => {
   const processor = window.editor?.data.processor;
-  // Source-Editing, for example, will provide data as object.
-  const data = typeof dataObj === "string" ? dataObj : dataObj["main"];
-  const lastData = window["lastData"];
-  let hasDiff;
-  let diffStrategy;
+  const lastData = window[LastData];
+
+  // Provides some difference-details on console.
+  const diff = {
+    isDifferent: true,
+    strategy: {
+      by: "init",
+    },
+    data,
+    lastData,
+  };
+
   if (typeof lastData === "string") {
     if (isDataDiffer(processor)) {
-      const normalizedLast = processor.normalize(lastData);
-      const normalizedNew = processor.normalize(data);
-      // Let's compare via normalized data.
-      hasDiff = !processor.areEqual(normalizedNew, normalizedLast);
-      diffStrategy = {
+      const normalized = {
+        new: processor.normalize(data),
+        last: processor.normalize(lastData),
+      };
+      diff.isDifferent = !processor.areEqual(normalized.new, normalized.last);
+      diff.strategy = {
         by: "data-differ",
-        normalizedLast,
-        normalizedNew,
-      }
+        normalized,
+      };
     } else {
-      hasDiff = lastData !== data;
-      diffStrategy = {by: "strict-equals"};
+      diff.strategy.by = "strict-equals";
+      diff.isDifferent = lastData !== data;
     }
   }
-  const diffMsg = hasDiff === undefined ? "Unknown" : (hasDiff ? "Yes" : "No");
-  console.log(`Data set (different? ${diffMsg}):`, {data, lastData, diffStrategy});
-  window["lastData"] = data;
-};
 
-const saveData = (source, data) => {
-  console.log("Saving data triggered by " + source, {data: data});
-  updatePreview(data)
+  if (diff.isDifferent) {
+    console.log(`Saving data triggered by ${source}.`, {diff});
+    updatePreview(data)
+  } else {
+    console.log(`Not saving data triggered by ${source} as they are semantically equivalent to previous data.`, {diff});
+  }
+
+  window[LastData] = data;
 };

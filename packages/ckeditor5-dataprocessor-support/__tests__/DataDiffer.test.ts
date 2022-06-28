@@ -14,7 +14,7 @@ const noOperation: () => any = () => {
 /**
  * Just something, that looks like a data-differ.
  */
-const someDataDiffer: Omit<DataDiffer, "normalizers"> = {
+const someDataDiffer: DataDiffer = {
   addNormalizer: noOperation,
   normalize: noOperation,
   areEqual: noOperation,
@@ -66,9 +66,25 @@ describe("DataDiffer", () => {
     });
   });
 
-  describe("Normalization Respects Order Of Normalization", () => {
+  describe("Normalization Respects Order and Priority Of Normalization", () => {
+    /**
+     * Will have all normalizers at same priority.
+     */
     const differOrderOriginal = { ...DataDifferMixin };
+    /**
+     * Will have all normalizers at same priority but in reversed order to the
+     * original.
+     */
     const differOrderReversed = { ...DataDifferMixin };
+    /**
+     * Will have all normalizers at different priorities.
+     */
+    const differPrioritizedOrderOriginal = { ...DataDifferMixin };
+    /**
+     * Will have all normalizers at different priorities but with priorities
+     * reversed compared to original.
+     */
+    const differPrioritizedOrderReversed = { ...DataDifferMixin };
 
     beforeAll(() => {
       const normalizer: Normalizer[] = [
@@ -76,8 +92,14 @@ describe("DataDiffer", () => {
         (v) => v.replace("<", "&lt;"),
         (v) => v.replace(">", "&gt;"),
       ];
-      normalizer.forEach((n) => differOrderOriginal.addNormalizer(n));
-      normalizer.reverse().forEach((n) => differOrderReversed.addNormalizer(n));
+      normalizer.forEach((n, index) => {
+        differOrderOriginal.addNormalizer(n);
+        differPrioritizedOrderOriginal.addNormalizer(n, index);
+      });
+      normalizer.reverse().forEach((n, index) => {
+        differOrderReversed.addNormalizer(n);
+        differPrioritizedOrderReversed.addNormalizer(n, index);
+      });
     });
 
     test.each`
@@ -88,6 +110,8 @@ describe("DataDiffer", () => {
     `("[$#] Should respect the normalizer order when transforming `$input`.", ({ input, original, reversed }) => {
       expect(differOrderOriginal.normalize(input)).toStrictEqual(original);
       expect(differOrderReversed.normalize(input)).toStrictEqual(reversed);
+      expect(differPrioritizedOrderOriginal.normalize(input)).toStrictEqual(original);
+      expect(differPrioritizedOrderReversed.normalize(input)).toStrictEqual(reversed);
     });
   });
 

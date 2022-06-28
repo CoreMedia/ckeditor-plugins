@@ -22,6 +22,13 @@ type AreEqualInputType = string | NormalizedData | undefined | null;
 const normalizers = Symbol("normalizers");
 
 /**
+ * Prioritized normalizer map.
+ */
+interface NormalizerMap {
+  [priority: number]: Normalizer[];
+}
+
+/**
  * Provides a way to get a difference of given data values. Typical usage is,
  * when two given data values are considered equivalent and a difference
  * when passing processing as workaround for
@@ -70,14 +77,11 @@ export interface DataDiffer {
   /**
    * List of normalizers.
    */
-  [normalizers]?: Normalizer[];
+  [normalizers]?: NormalizerMap;
 
   /**
    * Adds a normalizer to apply prior to comparing both data values
    * at `addNormalizer`.
-   *
-   * Normalizers are executed exactly in the given order in which
-   * they got added.
    *
    * Normalizers are typically added by data-processor implementations.
    *
@@ -91,8 +95,11 @@ export interface DataDiffer {
    * value will be invalid XML, but still be suitable for comparison.
    *
    * @param normalizer - the normalizer to be called
+   * @param priority - priority of the normalizer, defaults to 0. Normalizers
+   * with lower priority are executed first. Normalizers of same priority will
+   * be executed in the given order in which they got added.
    */
-  addNormalizer(normalizer: Normalizer): void;
+  addNormalizer(normalizer: Normalizer, priority?: number): void;
 
   /**
    * Normalize the given value according to the given options. Already
@@ -162,11 +169,20 @@ const MixinToken: MixinTokenType = {
 export const DataDifferMixin: DataDiffer & MixinTokenType = {
   ...MixinToken,
 
-  addNormalizer(normalizer: Normalizer): void {
+  addNormalizer(normalizer: Normalizer, priority = 0): void {
     if (!this[normalizers]) {
-      this[normalizers] = [normalizer];
+      // First normalizer added.
+      this[normalizers] = { [priority]: [normalizer] };
     } else {
-      this[normalizers].push(normalizer);
+      // Add normalizer to existing.
+      const prioritized = this[normalizers][priority];
+      if (!!prioritized) {
+        // Priority already in use. Append.
+        prioritized.push(normalizer);
+      } else {
+        // New priority.
+        this[normalizers][priority] = [normalizer];
+      }
     }
   },
 
@@ -174,8 +190,17 @@ export const DataDifferMixin: DataDiffer & MixinTokenType = {
     if (isNormalizedData(value)) {
       return value;
     }
+    const allNormalizers: NormalizerMap = this[normalizers] || {};
+    const priorities = Object.keys(allNormalizers)
+      .map((k): number => Number(k))
+      .sort();
+
     let result = value;
-    this[normalizers]?.forEach((n) => (result = n(result)));
+
+    priorities.forEach((priority) => {
+      allNormalizers[priority]?.forEach((n) => (result = n(result)));
+    });
+
     return toNormalizedData(result);
   },
 

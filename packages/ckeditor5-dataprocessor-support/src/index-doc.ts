@@ -19,6 +19,8 @@ export { default as NodeProxy } from "./NodeProxy";
 
 export * from "./NormalizedData";
 
+export * from "./Normalizers";
+
 export * from "./Rules";
 
 export * from "./TextProxy";

@@ -18,6 +18,7 @@ import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { DataDiffer, DataDifferMixin, Normalizer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
+import { normalizeToHash } from "@coremedia/ckeditor5-dataprocessor-support/Normalizers";
 
 /**
  * Matches XML declaration such as `<?xml version="1.0">` and ignores possible
@@ -100,6 +101,9 @@ class RichTextDataProcessor implements DataProcessor {
 
     this.addNormalizer(normalizeXmlDeclaration);
     this.addNormalizer(normalizeNamespaceDeclarations);
+    // We want to do this last, so that patches may be applied, doing further
+    // normalization.
+    this.addNormalizer(normalizeToHash, Number.MAX_SAFE_INTEGER);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
