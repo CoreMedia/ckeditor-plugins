@@ -27,7 +27,7 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           prnumber=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{github.repository}}/pulls?head=${{github.repository_owner}}:${{github.ref}} | jq -r '.[] | .number' )
-          echo "Allocated pr number ${prnumber}"
+          echo "Allocated Pull Request number ${prnumber}"
           echo "::set-output name=prnumber::${prnumber}"
       - name: Setup NodeJS
         uses: actions/setup-node@v2
@@ -63,6 +63,7 @@ jobs:
           pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
           pnpm install --no-frozen-lockfile
           git commit -am "Set PR Version: ${next_version}"
+          echo "Chosen Pre-Release Version: ${next_version}"
       - name: Build
         run: pnpm build
       - name: Lint
