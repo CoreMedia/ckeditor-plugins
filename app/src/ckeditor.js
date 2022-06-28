@@ -9,6 +9,7 @@ import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
@@ -25,6 +26,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
+
 
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
@@ -46,6 +48,14 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+
+import { icons } from '@ckeditor/ckeditor5-core';
+
+const {
+	objectInline: inlineIcon,
+	objectLeft: alignLeftIcon,	
+  objectRight: alignRightIcon
+} = icons;
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -78,6 +88,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Highlight,
     ImageInline,
     ImageStyle,
+    ImageToolbar,
     Indent,
     Italic,
     AutoLink,
@@ -178,6 +189,35 @@ ClassicEditor.create(document.querySelector('.editor'), {
         },
       }
     },
+  },
+  image: {
+    styles: {
+        // Defining custom styling options for the images.
+        options: [ {
+            name: 'margin-left',
+            icon: alignLeftIcon,
+            title: 'Left-aligned',
+            className: 'float--left',
+            modelElements: [ 'imageInline' ]
+        }, {
+            name: 'margin-right',
+            icon: alignRightIcon,
+            title: 'Right-aligned',
+            className: 'float--right',
+            modelElements: [ 'imageInline' ]
+        },
+        {
+          name: 'inline',
+          title: 'Within Text',
+          icon: inlineIcon,
+          className: 'float--none'
+      } ]
+    },
+    toolbar: [ 
+      'imageStyle:margin-left',
+      'imageStyle:margin-right',
+      'imageStyle:inline'
+    ]
   },
   table: {
     contentToolbar: [
