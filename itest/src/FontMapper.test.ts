@@ -42,8 +42,8 @@ describe("Symbol on paste mapper features", () => {
    * Those symbol-characters are the input for the test.
    */
   it.each([
-    ["∃", ""],
-    ["∀", ""],
+    ["∃", "$"],
+    ["\u2200", "\""], // ∀
   ])(`Should render %s when %s pasted from a word document`, async (expected, input) => {
     const { editor } = application;
     await editor.editing.view.focus();
@@ -58,6 +58,6 @@ describe("Symbol on paste mapper features", () => {
      * Validating that the symbol is replaced the FontMapper plugin.
      * -----------------------------------------------------------------------
      */
-    expect(editor).waitForDataContaining(expected);
+    await expect(editor).waitForDataContaining(expected);
   });
 });
