@@ -1,16 +1,14 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
+import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 import { fontMappingRegistry } from "./fontMapping/FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 
 export const CONFIG_KEY = "coremedia:fontMapper";
 export type FontMapperConfigEntry = {
@@ -107,12 +105,15 @@ export default class FontMapper extends Plugin {
 
   // noinspection JSUnusedLocalSymbols
   static #handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardInputEvent): void {
+    FontMapper.#logger.debug("Event received with data", data);
     const pastedContent: string = data.dataTransfer.getData(FontMapper.supportedDataFormat);
     const eventContent: DocumentFragment | undefined = data.content;
     if (!pastedContent || !eventContent) {
+      FontMapper.#logger.debug(`No data for supported data Format ${FontMapper.supportedDataFormat} found.`);
       return;
     }
 
+    FontMapper.#logger.debug("Starting to replace fonts.");
     replaceFontInDocumentFragment(eventContent);
     data.content = eventContent;
   }
@@ -122,6 +123,6 @@ export default class FontMapper extends Plugin {
  * Event data of `clipboardInput` event in `view.Document`.
  */
 declare interface ClipboardInputEvent extends ClipboardEventData {
-  dataTransfer: DataTransfer
+  dataTransfer: DataTransfer;
   content?: ViewDocumentFragment;
 }

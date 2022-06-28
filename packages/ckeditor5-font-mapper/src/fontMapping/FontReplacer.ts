@@ -5,9 +5,11 @@ import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
-
+const logger: Logger = LoggerProvider.getLogger("FontMapper");
 /**
  * Recursively replaces the characters in direct children and removes their
  * font-family style property if a font mapping for the font-family exists.
@@ -23,7 +25,7 @@ export const replaceFontInDocumentFragment = (
   parentFontMapping?: FontMapping
 ): void => {
   const childElements = findChildren(documentFragment);
-
+  logger.debug("Starting to analyze children", childElements);
   for (const child of childElements) {
     // get the font mapping for the child element or use the one inherited from the parent:
     const fontMapping = computeFontMappingForElement(child, parentFontMapping);
@@ -31,6 +33,7 @@ export const replaceFontInDocumentFragment = (
       replaceFontInDocumentFragment(child, undefined);
       continue;
     }
+    logger.debug("Found a font mapping for child: ", child, fontMapping);
     // A new element will be cloned and font mappings will be applied to its
     // text node children:
     const replacementElement = createAlteredElementClone(fontMapping, child);
@@ -81,10 +84,13 @@ const computeFontMappingForElement = (
   element: ViewElement,
   inheritedFontMapping?: FontMapping
 ): FontMapping | undefined => {
+  logger.debug("Looking up fontFamily for element, respecting inheritedFontMapping", element, inheritedFontMapping);
   const fontFamily = evaluateFontFamily(element);
   if (fontFamily) {
+    logger.debug(`Found "${fontFamily}" as font family directly on element, looking up a font mapping`, element);
     return getFontMappingForFontFamily(fontFamily);
   }
+  logger.debug("No font family directly found on element, returning inherited font mapping", inheritedFontMapping);
   return inheritedFontMapping;
 };
 
@@ -175,11 +181,13 @@ const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElemen
 const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: ViewElement): void => {
   const textElements = findTextNodeChildren(element);
   if (!textElements) {
+    logger.debug("No text element found inside element: ", element);
     return;
   }
   for (const textElement of textElements) {
     //@ts-expect-error TODO _textData is protected
     const oldTextData: string = textElement._textData;
+    logger.debug("Searching replacement character for textElement:", textElement);
     //@ts-expect-error TODO _textData is protected
     textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
   }

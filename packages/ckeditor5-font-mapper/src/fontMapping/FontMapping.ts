@@ -1,4 +1,6 @@
 import { htmlEncodingMap } from "./HtmlEncodingMap";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import FontMapper from "../FontMapper";
 
 /**
  * A mapping table for a certain font.
@@ -25,6 +27,7 @@ export type Mode = "replace" | "append";
  *
  */
 export class FontMapping {
+  static readonly #logger = LoggerProvider.getLogger("FontMapper");
   private map: FontMap;
   private DECODE_ELEMENT_HELP = document.createElement("div");
 
@@ -76,14 +79,19 @@ export class FontMapping {
    * @returns the corresponding entity
    */
   toReplacementCharacter(input: string): string {
+    FontMapping.#logger.debug(`Replace characters in "${input}"`);
     const decodedInput: string | null = this.#decodeHtmlEntities(input);
+    FontMapping.#logger.debug(`Decoded html characters before replacing. New string to process: ${decodedInput}`);
+
     const characters: Array<string> = [...decodedInput];
     const replacedInput: Array<string | null> = characters.map((value) => {
       const charCode = value.charCodeAt(0);
       const htmlEntity = this.map.get(charCode);
       if (htmlEntity) {
+        FontMapping.#logger.debug(`Found a replacement for "${value}": ${htmlEntity}`);
         return this.#decodeHtmlEntities(htmlEntity);
       }
+      FontMapping.#logger.debug(`Did not find a replacement for "${value}", returning old character`);
       return String.fromCharCode(charCode);
     });
     return replacedInput.join();
