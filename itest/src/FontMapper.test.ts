@@ -4,11 +4,14 @@ import ClipboardBrowserAccessor from "./browser/ClipboardBrowserAccessor";
 import * as fs from "fs";
 import ReplaceAllPasteAction from "./actions/ReplaceAllPasteAction";
 
-const WORD_DOCUMENT_TEMPLATE_PATH = "test-data/font-mapper/word-document-template.html";
-const WORD_DOCUMENT_TEMPLATE = fs.readFileSync(WORD_DOCUMENT_TEMPLATE_PATH).toString();
 const CHARACTER_PLACEHOLDER = "{PLACE_HOLDER}";
 
-describe("Symbol on paste mapper features", () => {
+describe.each([
+  ["!", "!"],
+  ["∀", '"'],
+  ["#", "#"],
+  ["∃", "$"],
+])("Symbol on paste mapper features", (expected, input) => {
   let application: ApplicationWrapper;
 
   beforeAll(async () => {
@@ -42,14 +45,13 @@ describe("Symbol on paste mapper features", () => {
    * Those symbol-characters are the input for the test.
    */
   it.each([
-    ["!", "!"],
-    ["∀", '"'],
-    ["#", "#"],
-    ["∃", "$"],
-  ])(`Should render %s when %s pasted from a word document`, async (expected, input) => {
+    "test-data/font-mapper/word-document-template.html",
+    "test-data/font-mapper/word-document-template-table.html",
+  ])(`Should render %s when %s pasted from a word document`, async (wordDocumentTemplatePath: string) => {
+    const wordDocumentTemplate = fs.readFileSync(wordDocumentTemplatePath).toString();
+    const wordDocumentWithSymbol = wordDocumentTemplate.replace(CHARACTER_PLACEHOLDER, input);
     const { editor } = application;
     await editor.editing.view.focus();
-    const wordDocumentWithSymbol = WORD_DOCUMENT_TEMPLATE.replace(CHARACTER_PLACEHOLDER, input);
     await ClipboardBrowserAccessor.write({ type: "text/html", content: wordDocumentWithSymbol });
 
     await editor.editing.view.focus();
