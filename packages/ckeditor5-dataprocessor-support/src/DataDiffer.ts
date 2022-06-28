@@ -2,7 +2,8 @@
  * A normalizer to apply prior to calculate the difference of
  * two data values.
  */
-import { NormalizedData, toNormalizedData } from "./NormalizedData";
+import { isNormalizedData, NormalizedData, toNormalizedData } from "./NormalizedData";
+import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 
 /**
  * A normalizer for data strings.
@@ -14,6 +15,11 @@ export type Normalizer = (input: string) => string;
  * `undefined` and `null`.
  */
 type AreEqualInputType = string | NormalizedData | undefined | null;
+
+/**
+ * Property to hold normalizers.
+ */
+const normalizers = Symbol("normalizers");
 
 /**
  * Provides a way to get a difference of given data values. Typical usage is,
@@ -61,6 +67,11 @@ type AreEqualInputType = string | NormalizedData | undefined | null;
  * attribute order should signal a difference.
  */
 export interface DataDiffer {
+  /**
+   * List of normalizers.
+   */
+  [normalizers]?: Normalizer[];
+
   /**
    * Adds a normalizer to apply prior to comparing both data values
    * at `addNormalizer`.
@@ -112,53 +123,61 @@ export interface DataDiffer {
 }
 
 /**
- * Checks, if the given property is contained in the string.
- *
- * This method mainly exists to help code inspections regarding irrelevant
- * property checks, if `DataDiffer` gets refactored.
- * @param value - object to validate
- * @param functionName - property name to check
- */
-const hasDataDifferFunction = <K extends keyof DataDiffer>(
-  value: Record<string, unknown>,
-  functionName: K
-): value is Pick<DataDiffer, K> => {
-  return functionName in value && typeof value[functionName] === "function";
-};
-
-const isRecord = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === "object" && !!value;
-};
-
-/**
  * Validates if the given value represents a `DataDiffer`.
  *
  * @param value - value to validate
  */
 export const isDataDiffer = (value: unknown): value is DataDiffer => {
   return (
-    isRecord(value) &&
-    hasDataDifferFunction(value, "addNormalizer") &&
-    hasDataDifferFunction(value, "normalize") &&
-    hasDataDifferFunction(value, "areEqual")
+    typeof value === "object" &&
+    !!value &&
+    (mixinIdentifier in value ||
+      (isRaw<DataDiffer>(value, "addNormalizer", "normalize", "areEqual") &&
+        typeof value.addNormalizer === "function" &&
+        typeof value.normalize === "function" &&
+        typeof value.areEqual === "function"))
   );
+};
+
+/**
+ * Token to quickly identify matching mixin usages in type-guard.
+ */
+const mixinIdentifier: unique symbol = Symbol("DataDifferMixin");
+
+/**
+ * Type for holding the mixin token.
+ */
+type MixinTokenType = { [mixinIdentifier]: void };
+
+/**
+ * Mixin token to apply.
+ */
+const MixinToken: MixinTokenType = {
+  [mixinIdentifier]: undefined,
 };
 
 /**
  * Mixin providing the data differ functionality.
  */
-export class DataDifferMixin implements DataDiffer {
-  #normalizers: Normalizer[] = [];
+export const DataDifferMixin: DataDiffer & MixinTokenType = {
+  ...MixinToken,
 
   addNormalizer(normalizer: Normalizer): void {
-    this.#normalizers.push(normalizer);
-  }
+    if (!this[normalizers]) {
+      this[normalizers] = [normalizer];
+    } else {
+      this[normalizers].push(normalizer);
+    }
+  },
 
   normalize(value: string | NormalizedData): NormalizedData {
+    if (isNormalizedData(value)) {
+      return value;
+    }
     let result = value;
-    this.#normalizers.forEach((n) => (result = n(result)));
+    this[normalizers]?.forEach((n) => (result = n(result)));
     return toNormalizedData(result);
-  }
+  },
 
   areEqual(value1: AreEqualInputType, value2: AreEqualInputType): boolean {
     if (typeof value1 !== "string" || typeof value2 !== "string") {
@@ -167,5 +186,5 @@ export class DataDifferMixin implements DataDiffer {
     const normalized1 = this.normalize(value1);
     const normalized2 = this.normalize(value2);
     return normalized1 === normalized2;
-  }
-}
+  },
+};

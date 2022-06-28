@@ -1,13 +1,24 @@
 import { DataDiffer, DataDifferMixin, isDataDiffer, Normalizer } from "../src/DataDiffer";
 import { toNormalizedData } from "../src/NormalizedData";
 
-type FakeDataDiffer = Record<keyof DataDiffer, unknown>;
+type FakeDataDiffer = Record<keyof Pick<DataDiffer, "addNormalizer" | "normalize" | "areEqual">, unknown>;
 const fakeDataDiffer: FakeDataDiffer = {
   addNormalizer: false,
   normalize: "Lorem",
   areEqual: null,
 };
-const someDataDiffer: DataDiffer = new DataDifferMixin();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const noOperation: () => any = () => {
+  // No Operation
+};
+/**
+ * Just something, that looks like a data-differ.
+ */
+const someDataDiffer: Omit<DataDiffer, "normalizers"> = {
+  addNormalizer: noOperation,
+  normalize: noOperation,
+  areEqual: noOperation,
+};
 
 const xmlDeclarationRegExp = /^\s*<\?.*?\?>\s*/s;
 /**
@@ -42,7 +53,7 @@ const n = toNormalizedData;
 
 describe("DataDiffer", () => {
   describe("Without Normalization", () => {
-    const differ = new DataDifferMixin();
+    const differ = { ...DataDifferMixin };
 
     test.each`
       value1     | value2     | equal
@@ -56,8 +67,8 @@ describe("DataDiffer", () => {
   });
 
   describe("Normalization Respects Order Of Normalization", () => {
-    const differOrderOriginal = new DataDifferMixin();
-    const differOrderReversed = new DataDifferMixin();
+    const differOrderOriginal = { ...DataDifferMixin };
+    const differOrderReversed = { ...DataDifferMixin };
 
     beforeAll(() => {
       const normalizer: Normalizer[] = [
@@ -81,7 +92,7 @@ describe("DataDiffer", () => {
   });
 
   describe("With some XML Declaration Normalization", () => {
-    const differ = new DataDifferMixin();
+    const differ = { ...DataDifferMixin };
 
     beforeAll(() => {
       differ.addNormalizer(normalizeXmlDeclaration);
@@ -102,7 +113,7 @@ describe("DataDiffer", () => {
   });
 
   describe("With some Namespace Declaration Normalization", () => {
-    const differ = new DataDifferMixin();
+    const differ = { ...DataDifferMixin };
 
     beforeAll(() => {
       differ.addNormalizer(normalizeNamespaceDeclarations);
@@ -124,7 +135,7 @@ describe("DataDiffer", () => {
   });
 
   describe("With combined XML and Namespace Declaration Normalization", () => {
-    const differ = new DataDifferMixin();
+    const differ = { ...DataDifferMixin };
 
     beforeAll(() => {
       differ.addNormalizer(normalizeXmlDeclaration);
@@ -170,13 +181,14 @@ describe("DataDiffer", () => {
 
   describe("isDataDiffer", () => {
     test.each`
-      value             | expected
-      ${undefined}      | ${false}
-      ${null}           | ${false}
-      ${{}}             | ${false}
-      ${"lorem"}        | ${false}
-      ${fakeDataDiffer} | ${false}
-      ${someDataDiffer} | ${true}
+      value              | expected
+      ${undefined}       | ${false}
+      ${null}            | ${false}
+      ${{}}              | ${false}
+      ${"lorem"}         | ${false}
+      ${fakeDataDiffer}  | ${false}
+      ${DataDifferMixin} | ${true}
+      ${someDataDiffer}  | ${true}
     `("[$#] Should `$value` by identified as DataDiffer? $expected", ({ value, expected }) => {
       expect(isDataDiffer(value)).toStrictEqual(expected);
     });

@@ -46,6 +46,7 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+import { isDataDiffer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -246,6 +247,9 @@ ClassicEditor.create(document.querySelector('.editor'), {
     console.log("Registered `editor.resetUndo()` to clear undo history.");
   }
 
+  // Provide some details, when data got set.
+  newEditor.data.on("set", dataSet);
+
   // Do it late, so that we also have a clear signal (e.g., to integration
   // tests), that the editor is ready.
   window['editor'] = newEditor;
@@ -254,7 +258,35 @@ ClassicEditor.create(document.querySelector('.editor'), {
   console.error(error);
 });
 
-function saveData(source, data) {
+const dataSet = (evt, [dataObj]) => {
+  const processor = window.editor?.data.processor;
+  // Source-Editing, for example, will provide data as object.
+  const data = typeof dataObj === "string" ? dataObj : dataObj["main"];
+  const lastData = window["lastData"];
+  let hasDiff;
+  let diffStrategy;
+  if (typeof lastData === "string") {
+    if (isDataDiffer(processor)) {
+      const normalizedLast = processor.normalize(lastData);
+      const normalizedNew = processor.normalize(data);
+      // Let's compare via normalized data.
+      hasDiff = !processor.areEqual(normalizedNew, normalizedLast);
+      diffStrategy = {
+        by: "data-differ",
+        normalizedLast,
+        normalizedNew,
+      }
+    } else {
+      hasDiff = lastData !== data;
+      diffStrategy = {by: "strict-equals"};
+    }
+  }
+  const diffMsg = hasDiff === undefined ? "Unknown" : (hasDiff ? "Yes" : "No");
+  console.log(`Data set (different? ${diffMsg}):`, {data, lastData, diffStrategy});
+  window["lastData"] = data;
+};
+
+const saveData = (source, data) => {
   console.log("Saving data triggered by " + source, {data: data});
   updatePreview(data)
-}
+};
