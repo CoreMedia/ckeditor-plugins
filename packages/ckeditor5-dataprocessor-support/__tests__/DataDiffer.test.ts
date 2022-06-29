@@ -88,9 +88,9 @@ describe("DataDiffer", () => {
 
     beforeAll(() => {
       const normalizer: Normalizer[] = [
-        (v) => v.replace("&", "&amp;"),
-        (v) => v.replace("<", "&lt;"),
-        (v) => v.replace(">", "&gt;"),
+        (v) => v.replaceAll("&", "&amp;"),
+        (v) => v.replaceAll("<", "&lt;"),
+        (v) => v.replaceAll(">", "&gt;"),
       ];
       normalizer.forEach((n, index) => {
         differOrderOriginal.addNormalizer(n);
