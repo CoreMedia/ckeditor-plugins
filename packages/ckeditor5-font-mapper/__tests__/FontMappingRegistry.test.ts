@@ -1,5 +1,5 @@
-import { FontMappingRegistry } from "../../src/fontMapping/FontMappingRegistry";
-import { configToMap } from "../../src/fontMapping/ConfigToMapUtil";
+import { FontMappingRegistry } from "../../src/FontMappingRegistry";
+import { configToMap } from "../../src/ConfigToMapUtil";
 import { Mode } from "../../dist/fontMapping/FontMapping";
 
 test("Should return a FontMapper for symbol and ignore case", () => {

@@ -4,7 +4,8 @@
  *
  * @module ckeditor5-font-mapper
  */
-export * as fontMapping from "./fontMapping/index-doc";
-
+export * from "./FontMapping";
+export * from "./FontMappingRegistry";
+export * from "./SymbolFontMap";
 export * from "./FontMapper";
 export { default as FontMapper } from "./FontMapper";

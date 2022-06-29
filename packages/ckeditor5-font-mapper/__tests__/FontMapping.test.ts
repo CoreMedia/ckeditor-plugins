@@ -1,5 +1,5 @@
-import { FontMapping } from "../../src/fontMapping/FontMapping";
-import { symbolFontMap } from "../../src/fontMapping/SymbolFontMap";
+import { FontMapping } from "../src/FontMapping";
+import { symbolFontMap } from "../src/SymbolFontMap";
 
 /**
  * A list of characters which are used as test inputs and the matching expectation.

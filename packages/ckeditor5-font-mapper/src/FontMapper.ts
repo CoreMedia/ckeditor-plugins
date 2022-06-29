@@ -7,9 +7,9 @@ import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfr
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
-import { fontMappingRegistry } from "./fontMapping/FontMappingRegistry";
-import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
-import { Mode } from "./fontMapping/FontMapping";
+import { fontMappingRegistry } from "./FontMappingRegistry";
+import { replaceFontInDocumentFragment } from "./FontReplacer";
+import { Mode } from "./FontMapping";
 
 export const COREMEDIA_FONT_MAPPER_CONFIG_KEY = "coremedia:fontMapper";
 export type FontMapperConfigEntry = {
