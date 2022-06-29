@@ -9,11 +9,12 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
 import { fontMappingRegistry } from "./fontMapping/FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
+import { Mode } from "./fontMapping/FontMapping";
 
 export const CONFIG_KEY = "coremedia:fontMapper";
 export type FontMapperConfigEntry = {
   font: string;
-  mode?: "append" | "replace";
+  mode?: Mode;
   map: { [key: number]: string };
 };
 
