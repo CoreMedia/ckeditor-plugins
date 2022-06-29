@@ -17,50 +17,9 @@ import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basich
 import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
-import { DataDiffer, DataDifferMixin, Normalizer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
+import { DataDiffer, DataDifferMixin } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
 import { normalizeToHash } from "@coremedia/ckeditor5-dataprocessor-support/Normalizers";
-
-/**
- * Matches XML declaration such as `<?xml version="1.0">` and ignores possible
- * spacing around.
- */
-const xmlDeclarationRegExp = /^\s*<\?.*?\?>\s*/s;
-/**
- * Remove XML declaration, if considered irrelevant for comparison.
- *
- * @param value - value to normalize
- */
-const normalizeXmlDeclaration: Normalizer = (value: string): string => {
-  return value.replace(xmlDeclarationRegExp, "");
-};
-
-/**
- * Matches XML namespace declarations `xmlns=` as well as `xmlns:someName=`.
- * Using lookahead/lookbehind to only strip within element context.
- */
-const namespaceDeclarationRegExp = /(?<=<[^>]*)xmlns(?::\w+)?=['"][^'"]+['"]\s*(?=[^>]*>)/gs;
-/**
- * Matches any element. Used to possibly trim the corresponding element,
- * which may contain trailing spaces due to previous removal of namespace
- * declaration.
- */
-const elementRegExp = /(?<=<)[^>]+(?=>)/gs;
-
-/**
- * Remove XML namespace declarations, if considered irrelevant for comparison.
- *
- * @param value - value to normalize
- */
-const normalizeNamespaceDeclarations: Normalizer = (value: string): string => {
-  return (
-    value
-      // First remove namespace declarations.
-      // lgtm: This is not about sanitation.
-      .replaceAll(namespaceDeclarationRegExp, "") // lgtm[js/incomplete-multi-character-sanitization]
-      // Then we may have redundant spaces left: Remove.
-      .replace(elementRegExp, (s) => s.trim())
-  );
-};
+import { normalizeEmptyParagraphs, normalizeNamespaceDeclarations, normalizeXmlDeclaration } from "./Normalizers";
 
 class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -101,6 +60,7 @@ class RichTextDataProcessor implements DataProcessor {
 
     this.addNormalizer(normalizeXmlDeclaration);
     this.addNormalizer(normalizeNamespaceDeclarations);
+    this.addNormalizer(normalizeEmptyParagraphs);
     // We want to do this last, so that patches may be applied, doing further
     // normalization.
     this.addNormalizer(normalizeToHash, Number.MAX_SAFE_INTEGER);
