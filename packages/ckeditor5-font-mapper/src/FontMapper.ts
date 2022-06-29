@@ -11,7 +11,7 @@ import { fontMappingRegistry } from "./fontMapping/FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./fontMapping/FontReplacer";
 import { Mode } from "./fontMapping/FontMapping";
 
-export const CONFIG_KEY = "coremedia:fontMapper";
+export const COREMEDIA_FONT_MAPPER_CONFIG_KEY = "coremedia:fontMapper";
 export type FontMapperConfigEntry = {
   font: string;
   mode?: Mode;
@@ -71,7 +71,9 @@ export default class FontMapper extends Plugin {
     logger.debug(`Initializing ${pluginName}...`);
 
     const editor = this.editor;
-    const customFontMapperConfig: FontMapperConfig | undefined = editor.config.get(CONFIG_KEY) as FontMapperConfig;
+    const customFontMapperConfig: FontMapperConfig | undefined = editor.config.get(
+      COREMEDIA_FONT_MAPPER_CONFIG_KEY
+    ) as FontMapperConfig;
     FontMapper.#applyPluginConfig(customFontMapperConfig);
 
     // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
