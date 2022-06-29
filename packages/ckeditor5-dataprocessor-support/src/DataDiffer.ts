@@ -123,6 +123,13 @@ export interface DataDiffer {
    * To reduce normalization overhead for repeated comparison, you may want to
    * pre-process strings with `normalize` method and store them for later.
    *
+   * If both values represent normalized value, there is no difference to
+   * check for strict equivalence instead:
+   *
+   * ```
+   * normalizedValue1 === normalizedValue2
+   * ```
+   *
    * @param value1 - first value to compare
    * @param value2 - second value to compare
    * @returns if the given values are considered equivalent after normalization or not
