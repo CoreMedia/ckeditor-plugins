@@ -37,7 +37,12 @@ export const replaceFontInDocumentFragment = (
     // A new element will be cloned and font mappings will be applied to its
     // text node children:
     const replacementElement = createAlteredElementClone(fontMapping, child);
-    if (replacementElement) {
+
+    //replacementElement might be a container.
+    //If the container get replaced the current recursion has the element before
+    //the container gets replaced and therefore is adding the other replaced elements
+    //to the removed container. In reality we only have to replace elements with text.
+    if (hasTextChild(replacementElement)) {
       const childIndex: number = documentFragment.getChildIndex(child);
       //@ts-expect-error TODO _removeChildren is protected for Element
       documentFragment._removeChildren(childIndex, 1);
@@ -47,6 +52,20 @@ export const replaceFontInDocumentFragment = (
 
     replaceFontInDocumentFragment(child, fontMapping);
   }
+};
+
+/**
+ * Analyzes the direct children of the given element if one of the children is
+ * a text.
+ *
+ * @param element a view element
+ * @returns true if the given element has at least one child which is of type text.
+ */
+const hasTextChild = (element: ViewElement): boolean => {
+  const children = Array.from<ViewNode>(element.getChildren());
+  return children.some((node: ViewNode) => {
+    return node instanceof ViewText;
+  });
 };
 
 /**
@@ -87,7 +106,14 @@ const computeFontMappingForElement = (
   const fontFamily = evaluateFontFamily(element);
   if (fontFamily) {
     logger.debug(`Found "${fontFamily}" as font family directly on element, looking up a font mapping`, element);
-    return getFontMappingForFontFamily(fontFamily);
+    const fontMapping = getFontMappingForFontFamily(fontFamily);
+    if (fontMapping) {
+      //if a font mapping is available for the current font family the font family has to be removed.
+      logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element}`);
+      //@ts-expect-error TODO _removeStyle is protected
+      element._removeStyle(fontFamily);
+    }
+    return fontMapping;
   }
   logger.debug("No font family directly found on element, returning inherited font mapping", inheritedFontMapping);
   return inheritedFontMapping;

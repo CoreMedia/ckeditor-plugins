@@ -40,8 +40,9 @@ describe("Symbol on paste mapper features", () => {
    * Those symbol-characters are the input for the test.
    */
   it.each([
-    "test-data/font-mapper/word-document-template.html",
-    "test-data/font-mapper/word-document-template-table.html",
+    "test-data/font-mapper/word-template.html",
+    "test-data/font-mapper/word-template-table.html",
+    "test-data/font-mapper/word-template-table-inherit-font.html",
   ])(`Should render %s when %s pasted from a word document`, async (wordDocumentTemplatePath: string) => {
     const expected = "∃";
     const input = "$";
