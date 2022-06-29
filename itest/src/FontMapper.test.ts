@@ -6,12 +6,7 @@ import ReplaceAllPasteAction from "./user-interaction/ReplaceAllPasteAction";
 
 const CHARACTER_PLACEHOLDER = "{PLACE_HOLDER}";
 
-describe.each([
-  ["!", "!"],
-  ["∀", '"'],
-  ["#", "#"],
-  ["∃", "$"],
-])("Symbol on paste mapper features", (expected, input) => {
+describe("Symbol on paste mapper features", () => {
   let application: ApplicationWrapper;
 
   beforeAll(async () => {
@@ -48,6 +43,8 @@ describe.each([
     "test-data/font-mapper/word-document-template.html",
     "test-data/font-mapper/word-document-template-table.html",
   ])(`Should render %s when %s pasted from a word document`, async (wordDocumentTemplatePath: string) => {
+    const expected = "∃";
+    const input = "$";
     const wordDocumentTemplate = fs.readFileSync(wordDocumentTemplatePath).toString();
     const wordDocumentWithSymbol = wordDocumentTemplate.replace(CHARACTER_PLACEHOLDER, input);
     const { editor } = application;
