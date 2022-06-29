@@ -31,7 +31,7 @@ export class FontMapping {
   private DECODE_ELEMENT_HELP = document.createElement("div");
 
   constructor(map: FontMap) {
-    this.map = this.#mergeFontMaps(htmlEncodingMap, map);
+    this.map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
   }
 
   /**
@@ -51,9 +51,9 @@ export class FontMapping {
    */
   applyMapConfig(map: FontMap, mode: Mode = "append"): void {
     if (mode === "replace") {
-      this.map = this.#mergeFontMaps(htmlEncodingMap, map);
+      this.map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
     } else {
-      this.map = this.#mergeFontMaps(this.map, map);
+      this.map = FontMapping.#mergeFontMaps(this.map, map);
     }
   }
 
@@ -67,7 +67,7 @@ export class FontMapping {
    * @param additionalMap - the additional mapping to apply to the fontMapping's map
    * @returns the merge result as a new map
    */
-  #mergeFontMaps(baseFontMap: FontMap, additionalMap: FontMap): FontMap {
+  static #mergeFontMaps(baseFontMap: FontMap, additionalMap: FontMap): FontMap {
     return new Map([...baseFontMap.entries(), ...additionalMap.entries()]);
   }
 
