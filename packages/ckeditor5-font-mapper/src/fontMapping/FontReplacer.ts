@@ -57,10 +57,9 @@ export const replaceFontInDocumentFragment = (
  * @returns an array of child elements
  */
 const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): Array<ViewElement> => {
-  const children: Array<ViewElement> = Array.from<ViewNode>(documentFragment.getChildren())
+  return Array.from<ViewNode>(documentFragment.getChildren())
     .filter((value) => value instanceof ViewElement)
     .map((value) => value as ViewElement);
-  return children;
 };
 
 /**
