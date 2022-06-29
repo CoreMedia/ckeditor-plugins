@@ -59,7 +59,7 @@ describe.each([
 
     /*
      * -----------------------------------------------------------------------
-     * Validating that the symbol is replaced the FontMapper plugin.
+     * Validating that the symbol is replaced by the FontMapper plugin.
      * -----------------------------------------------------------------------
      */
     await expect(editor).waitForDataContaining(expected);
