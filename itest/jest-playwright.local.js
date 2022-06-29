@@ -57,7 +57,6 @@ const recordVideo = {
  */
 const contextOptions = {
   ...base.contextOptions,
-  permissions: ["clipboard-read", "clipboard-write"],
   // recordVideo,
 };
 
