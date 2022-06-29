@@ -180,10 +180,6 @@ const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElemen
  */
 const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: ViewElement): void => {
   const textElements = findTextNodeChildren(element);
-  if (!textElements) {
-    logger.debug("No text element found inside element: ", element);
-    return;
-  }
   for (const textElement of textElements) {
     //@ts-expect-error TODO _textData is protected
     const oldTextData: string = textElement._textData;
@@ -197,7 +193,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
  * Returns all direct text node children in the given element.
  *
  * @param element - the element
- * @returns all direct text node children or null
+ * @returns all direct text node children
  */
 const findTextNodeChildren = (element: ViewElement): Array<ViewText> => {
   return Array.from<ViewNode>(element.getChildren())
