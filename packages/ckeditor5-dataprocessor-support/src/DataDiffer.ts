@@ -4,6 +4,7 @@
  */
 import { isNormalizedData, NormalizedData, toNormalizedData } from "./NormalizedData";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * A normalizer for data strings.
@@ -19,7 +20,7 @@ type AreEqualInputType = string | NormalizedData | undefined | null;
 /**
  * Property to hold normalizers.
  */
-const normalizers = Symbol("normalizers");
+const Normalizers = Symbol("normalizers");
 
 /**
  * Prioritized normalizer map.
@@ -77,7 +78,7 @@ export interface DataDiffer {
   /**
    * List of normalizers.
    */
-  [normalizers]?: NormalizerMap;
+  [Normalizers]?: NormalizerMap;
 
   /**
    * Adds a normalizer to apply prior to comparing both data values
@@ -164,24 +165,31 @@ const MixinToken: MixinTokenType = {
 };
 
 /**
+ * Some logging should help to understand the normalization process.
+ */
+// Possibly a good idea, providing this logging as mixin? Then Mixins
+// could use logging as provided by their "mixed in class".
+const dataDifferLogger = LoggerProvider.getLogger("DataDiffer");
+
+/**
  * Mixin providing the data differ functionality.
  */
 export const DataDifferMixin: DataDiffer & MixinTokenType = {
   ...MixinToken,
 
   addNormalizer(normalizer: Normalizer, priority = 0): void {
-    if (!this[normalizers]) {
+    if (!this[Normalizers]) {
       // First normalizer added.
-      this[normalizers] = { [priority]: [normalizer] };
+      this[Normalizers] = { [priority]: [normalizer] };
     } else {
       // Add normalizer to existing.
-      const prioritized = this[normalizers][priority];
+      const prioritized = this[Normalizers][priority];
       if (!!prioritized) {
         // Priority already in use. Append.
         prioritized.push(normalizer);
       } else {
         // New priority.
-        this[normalizers][priority] = [normalizer];
+        this[Normalizers][priority] = [normalizer];
       }
     }
   },
@@ -190,16 +198,21 @@ export const DataDifferMixin: DataDiffer & MixinTokenType = {
     if (isNormalizedData(value)) {
       return value;
     }
-    const allNormalizers: NormalizerMap = this[normalizers] || {};
+    const allNormalizers: NormalizerMap = this[Normalizers] || {};
     const priorities = Object.keys(allNormalizers)
       .map((k): number => Number(k))
       .sort();
 
     let result = value;
 
+    dataDifferLogger.debug("Going to normalize data.", { data: result });
+
     priorities.forEach((priority) => {
       allNormalizers[priority]?.forEach((n) => (result = n(result)));
+      dataDifferLogger.debug(`Applied normalizers with priority ${priority}.`, { data: result });
     });
+
+    dataDifferLogger.debug("Finished normalizing data.", { data: result });
 
     return toNormalizedData(result);
   },
