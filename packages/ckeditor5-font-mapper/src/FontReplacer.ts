@@ -58,7 +58,7 @@ export const replaceFontInDocumentFragment = (
  * Analyzes the direct children of the given element if one of the children is
  * a text.
  *
- * @param element a view element
+ * @param element - a view element
  * @returns true if the given element has at least one child which is of type text.
  */
 const hasTextChild = (element: ViewElement): boolean => {
