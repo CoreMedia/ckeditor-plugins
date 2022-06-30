@@ -48,6 +48,8 @@ export const replaceFontInDocumentFragment = (
       documentFragment._removeChildren(childIndex, 1);
       //@ts-expect-error TODO _insertChild is protected for Element
       documentFragment._insertChild(childIndex, replacementElement);
+      replaceFontInDocumentFragment(replacementElement, fontMapping);
+      continue;
     }
 
     replaceFontInDocumentFragment(child, fontMapping);
