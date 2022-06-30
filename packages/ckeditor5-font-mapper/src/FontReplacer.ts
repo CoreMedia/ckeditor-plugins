@@ -168,10 +168,14 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
 /**
  * Escapes a font-family name to be used as a key in a FontMapping
  *
+ * The parameter fontFamilyStyle is a comma separated list of font families.
+ * The result is the first font family of the comma separated list without
+ * any leading and trailing special characters (like whitespace, quotes, comma).
+ *
  * @param fontFamilyStyle - the font name
  * @returns the escaped font name
  */
-const escapeFontFamily = (fontFamilyStyle: string): string => {
+export const escapeFontFamily = (fontFamilyStyle: string): string => {
   return fontFamilyStyle
     .split(/\s*(?:^,*|,|$)\s*/)
     .map((s) => s.replace(/^"(.*)"$/, "$1"))
