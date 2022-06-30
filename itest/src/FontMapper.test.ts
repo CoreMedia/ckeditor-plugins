@@ -43,7 +43,7 @@ describe("Symbol on paste mapper features", () => {
     "test-data/font-mapper/word-template.html",
     "test-data/font-mapper/word-template-table.html",
     "test-data/font-mapper/word-template-table-inherit-font.html",
-  ])(`Should render %s when %s pasted from a word document`, async (wordDocumentTemplatePath: string) => {
+  ])(`Should render ∃ when pasted from word document %s`, async (wordDocumentTemplatePath: string) => {
     const expected = "∃";
     const input = "$";
     const wordDocumentTemplate = fs.readFileSync(wordDocumentTemplatePath).toString();
