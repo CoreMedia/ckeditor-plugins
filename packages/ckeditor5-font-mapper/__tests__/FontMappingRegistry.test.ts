@@ -13,7 +13,7 @@ it.each([
   ["symbol", { 34: "&forall;" }, "replace"],
   ["symbol", { 34: "&forall;" }, "append"],
 ])(
-  "Should apply map config when font is already registered to be mapped",
+  "Should apply map %s with mode %s when font %s is already registered to be mapped",
   // @ts-expect-error somehow typescript does not recognize that "append" and "replace" are the defined options for mode.
   (font: string, fontMap: { [key: number]: string }, mode: Mode | undefined) => {
     const fontMappingRegistry = new FontMappingRegistry();
@@ -35,7 +35,7 @@ it.each([
   ["anotherFont", { 34: "&forall;" }, undefined],
   ["anotherFont", { 34: "&forall;" }, "append"],
 ])(
-  "Should add FontMapping when font is not registered yet, ignoring mode",
+  "Should add font '%s' with font mapping '%s' if font is not registered yet, ignoring mode '%s'",
   // @ts-expect-error somehow typescript does not recognize that "append" and "replace" are the defined options for mode.
   (font: string, fontMap: { [key: number]: string }, mode: Mode | undefined) => {
     const fontMappingRegistry = new FontMappingRegistry();
