@@ -52,9 +52,10 @@ import {
 import { icons } from '@ckeditor/ckeditor5-core';
 
 const {
-	objectInline: inlineIcon,
+	objectInline: withinTextIcon,
 	objectLeft: alignLeftIcon,	
-  objectRight: alignRightIcon
+  objectRight: alignRightIcon,
+  objectCenter: pageDefaultIcon
 } = icons;
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
@@ -192,31 +193,42 @@ ClassicEditor.create(document.querySelector('.editor'), {
   },
   image: {
     styles: {
-        // Defining custom styling options for the images.
-        options: [ {
-            name: 'margin-left',
-            icon: alignLeftIcon,
-            title: 'Left-aligned',
-            className: 'float--left',
-            modelElements: [ 'imageInline' ]
-        }, {
-            name: 'margin-right',
-            icon: alignRightIcon,
-            title: 'Right-aligned',
-            className: 'float--right',
-            modelElements: [ 'imageInline' ]
+      // Defining custom styling options for the images.
+      options: [ 
+        {
+          name: 'float-left',
+          icon: alignLeftIcon,
+          title: 'Left-aligned',
+          className: 'float--left',
+          modelElements: [ 'imageInline' ]
+        },
+        {
+          name: 'float-right',
+          icon: alignRightIcon,
+          title: 'Right-aligned',
+          className: 'float--right',
+          modelElements: [ 'imageInline' ]
+        },
+        {
+          name: 'float-none',
+          icon: withinTextIcon,
+          title: 'Within Text',
+          className: 'float--none',
+          modelElements: [ 'imageInline' ]
         },
         {
           name: 'inline',
-          title: 'Within Text',
-          icon: inlineIcon,
-          className: 'float--none'
-      } ]
+          title: 'Page default',
+          icon: pageDefaultIcon,
+        }
+      ]
     },
     toolbar: [ 
-      'imageStyle:margin-left',
-      'imageStyle:margin-right',
-      'imageStyle:inline'
+      'imageStyle:float-left',
+      'imageStyle:float-right',
+      'imageStyle:float-none',
+      "|",
+      'imageStyle:inline',
     ]
   },
   table: {
