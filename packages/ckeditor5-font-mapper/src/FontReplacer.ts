@@ -36,19 +36,22 @@ export const replaceFontInDocumentFragment = (
     logger.debug("Found a font mapping for child: ", child, fontMapping);
     // A new element will be cloned and font mappings will be applied to its
     // text node children:
-    const replacementElement = createAlteredElementClone(fontMapping, child);
+    const alteredChildElement = createAlteredElementClone(fontMapping, child);
 
-    //replacementElement might be a container.
-    //If the container get replaced the current recursion has the element before
-    //the container gets replaced and therefore is adding the other replaced elements
-    //to the removed container. In reality we only have to replace elements with text.
-    if (hasTextChild(replacementElement)) {
+    // We only have to replace elements with text node children.
+    // If this is an element with non-text children, the children of those
+    // children will be taken care of in the next recursion.
+    // So, if no text node child exists, we can skip the replacement for now
+    if (hasTextChild(alteredChildElement)) {
       const childIndex: number = documentFragment.getChildIndex(child);
       //@ts-expect-error TODO _removeChildren is protected for Element
       documentFragment._removeChildren(childIndex, 1);
       //@ts-expect-error TODO _insertChild is protected for Element
-      documentFragment._insertChild(childIndex, replacementElement);
-      replaceFontInDocumentFragment(replacementElement, fontMapping);
+      documentFragment._insertChild(childIndex, alteredChildElement);
+
+      // In this case, we just replaced the child element with a clone
+      // we therefore have to continue with the cloned element
+      replaceFontInDocumentFragment(alteredChildElement, fontMapping);
       continue;
     }
 

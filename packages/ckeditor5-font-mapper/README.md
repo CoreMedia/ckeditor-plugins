@@ -64,7 +64,7 @@ characters in the `map` configuration will be overridden.
 ```javascript
 ClassicEditor.create(document.querySelector('.editor'), {
   plugins: [
-    ContentClipboard,
+    Clipboard,
     FontMapper,
     // ...
   ],
