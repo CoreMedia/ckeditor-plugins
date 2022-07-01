@@ -1,4 +1,4 @@
-import { Normalizer } from "./DataDiffer";
+import { Normalizer } from "./DataNormalizer";
 
 /**
  * Transforms the given string into a hash.

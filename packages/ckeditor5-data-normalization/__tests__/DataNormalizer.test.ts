@@ -1,8 +1,8 @@
-import { DataDiffer, DataDifferMixin, isDataDiffer, Normalizer } from "../src/DataDiffer";
+import { DataNormalizer, DataNormalizerMixin, isDataNormalizer, Normalizer } from "../src/DataNormalizer";
 import { toNormalizedData } from "../src/NormalizedData";
 
-type FakeDataDiffer = Record<keyof Pick<DataDiffer, "addNormalizer" | "normalize" | "areEqual">, unknown>;
-const fakeDataDiffer: FakeDataDiffer = {
+type FakeDataNormalizer = Record<keyof Pick<DataNormalizer, "addNormalizer" | "normalize" | "areEqual">, unknown>;
+const fakeDataNormalizer: FakeDataNormalizer = {
   addNormalizer: false,
   normalize: "Lorem",
   areEqual: null,
@@ -14,7 +14,7 @@ const noOperation: () => any = () => {
 /**
  * Just something, that looks like a data-differ.
  */
-const someDataDiffer: DataDiffer = {
+const someDataNormalizer: DataNormalizer = {
   addNormalizer: noOperation,
   normalize: noOperation,
   areEqual: noOperation,
@@ -51,9 +51,9 @@ const normalizeNamespaceDeclarations: Normalizer = (value: string): string => {
 // Just don't corrupt the table indentation too much.
 const n = toNormalizedData;
 
-describe("DataDiffer", () => {
+describe("DataNormalizer", () => {
   describe("Without Normalization", () => {
-    const differ = { ...DataDifferMixin };
+    const differ = {...DataNormalizerMixin};
 
     test.each`
       value1     | value2     | equal
@@ -61,7 +61,7 @@ describe("DataDiffer", () => {
       ${"lorem"} | ${"ipsum"} | ${false}
       ${"ipsum"} | ${"lorem"} | ${false}
       ${""}      | ${""}      | ${true}
-    `("[$#] Should '$value1' be equal to '$value2'? => $equal", ({ value1, value2, equal }) => {
+    `("[$#] Should '$value1' be equal to '$value2'? => $equal", ({value1, value2, equal}) => {
       expect(differ.areEqual(value1, value2)).toStrictEqual(equal);
     });
   });
@@ -70,21 +70,21 @@ describe("DataDiffer", () => {
     /**
      * Will have all normalizers at same priority.
      */
-    const differOrderOriginal = { ...DataDifferMixin };
+    const differOrderOriginal = {...DataNormalizerMixin};
     /**
      * Will have all normalizers at same priority but in reversed order to the
      * original.
      */
-    const differOrderReversed = { ...DataDifferMixin };
+    const differOrderReversed = {...DataNormalizerMixin};
     /**
      * Will have all normalizers at different priorities.
      */
-    const differPrioritizedOrderOriginal = { ...DataDifferMixin };
+    const differPrioritizedOrderOriginal = {...DataNormalizerMixin};
     /**
      * Will have all normalizers at different priorities but with priorities
      * reversed compared to original.
      */
-    const differPrioritizedOrderReversed = { ...DataDifferMixin };
+    const differPrioritizedOrderReversed = {...DataNormalizerMixin};
 
     beforeAll(() => {
       const normalizer: Normalizer[] = [
@@ -116,7 +116,7 @@ describe("DataDiffer", () => {
   });
 
   describe("With some XML Declaration Normalization", () => {
-    const differ = { ...DataDifferMixin };
+    const differ = {...DataNormalizerMixin};
 
     beforeAll(() => {
       differ.addNormalizer(normalizeXmlDeclaration);
@@ -137,7 +137,7 @@ describe("DataDiffer", () => {
   });
 
   describe("With some Namespace Declaration Normalization", () => {
-    const differ = { ...DataDifferMixin };
+    const differ = {...DataNormalizerMixin};
 
     beforeAll(() => {
       differ.addNormalizer(normalizeNamespaceDeclarations);
@@ -159,7 +159,7 @@ describe("DataDiffer", () => {
   });
 
   describe("With combined XML and Namespace Declaration Normalization", () => {
-    const differ = { ...DataDifferMixin };
+    const differ = {...DataNormalizerMixin};
 
     beforeAll(() => {
       differ.addNormalizer(normalizeXmlDeclaration);
@@ -203,18 +203,18 @@ describe("DataDiffer", () => {
     );
   });
 
-  describe("isDataDiffer", () => {
+  describe("isDataNormalizer", () => {
     test.each`
       value              | expected
       ${undefined}       | ${false}
       ${null}            | ${false}
       ${{}}              | ${false}
       ${"lorem"}         | ${false}
-      ${fakeDataDiffer}  | ${false}
-      ${DataDifferMixin} | ${true}
-      ${someDataDiffer}  | ${true}
-    `("[$#] Should `$value` by identified as DataDiffer? $expected", ({ value, expected }) => {
-      expect(isDataDiffer(value)).toStrictEqual(expected);
+      ${fakeDataNormalizer}  | ${false}
+      ${DataNormalizerMixin} | ${true}
+      ${someDataNormalizer}  | ${true}
+    `("[$#] Should `$value` by identified as DataNormalizer? $expected", ({value, expected}) => {
+      expect(isDataNormalizer(value)).toStrictEqual(expected);
     });
   });
 });

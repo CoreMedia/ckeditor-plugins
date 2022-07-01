@@ -74,7 +74,7 @@ interface NormalizerMap {
  * an XML differ is not capable of ignoring attribute order, a different
  * attribute order should signal a difference.
  */
-export interface DataDiffer {
+export interface DataNormalizer {
   /**
    * List of normalizers.
    */
@@ -138,16 +138,16 @@ export interface DataDiffer {
 }
 
 /**
- * Validates if the given value represents a `DataDiffer`.
+ * Validates if the given value represents a `DataNormalizer`.
  *
  * @param value - value to validate
  */
-export const isDataDiffer = (value: unknown): value is DataDiffer => {
+export const isDataNormalizer = (value: unknown): value is DataNormalizer => {
   return (
     typeof value === "object" &&
     !!value &&
     (mixinIdentifier in value ||
-      (isRaw<DataDiffer>(value, "addNormalizer", "normalize", "areEqual") &&
+      (isRaw<DataNormalizer>(value, "addNormalizer", "normalize", "areEqual") &&
         typeof value.addNormalizer === "function" &&
         typeof value.normalize === "function" &&
         typeof value.areEqual === "function"))
@@ -157,7 +157,7 @@ export const isDataDiffer = (value: unknown): value is DataDiffer => {
 /**
  * Token to quickly identify matching mixin usages in type-guard.
  */
-const mixinIdentifier: unique symbol = Symbol("DataDifferMixin");
+const mixinIdentifier: unique symbol = Symbol("DataNormalizerMixin");
 
 /**
  * Type for holding the mixin token.
@@ -176,12 +176,12 @@ const MixinToken: MixinTokenType = {
  */
 // Possibly a good idea, providing this logging as mixin? Then Mixins
 // could use logging as provided by their "mixed in class".
-const dataDifferLogger = LoggerProvider.getLogger("DataDiffer");
+const dataNormalizerLogger = LoggerProvider.getLogger("DataNormalizer");
 
 /**
  * Mixin providing the data differ functionality.
  */
-export const DataDifferMixin: DataDiffer & MixinTokenType = {
+export const DataNormalizerMixin: DataNormalizer & MixinTokenType = {
   ...MixinToken,
 
   addNormalizer(normalizer: Normalizer, priority = 0): void {
@@ -212,14 +212,14 @@ export const DataDifferMixin: DataDiffer & MixinTokenType = {
 
     let result = value;
 
-    dataDifferLogger.debug("Going to normalize data.", { data: result });
+    dataNormalizerLogger.debug("Going to normalize data.", { data: result });
 
     priorities.forEach((priority) => {
       allNormalizers[priority]?.forEach((n) => (result = n(result)));
-      dataDifferLogger.debug(`Applied normalizers with priority ${priority}.`, { data: result });
+      dataNormalizerLogger.debug(`Applied normalizers with priority ${priority}.`, { data: result });
     });
 
-    dataDifferLogger.debug("Finished normalizing data.", { data: result });
+    dataNormalizerLogger.debug("Finished normalizing data.", { data: result });
 
     return toNormalizedData(result);
   },

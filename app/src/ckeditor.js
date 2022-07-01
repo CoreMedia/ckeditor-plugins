@@ -46,7 +46,7 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
-import { isDataDiffer } from "@coremedia/ckeditor5-richtext-normalizer/DataDiffer";
+import { isDataNormalizer } from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -280,7 +280,7 @@ const saveData = (source, data) => {
   };
 
   if (typeof lastData === "string") {
-    if (isDataDiffer(processor)) {
+    if (isDataNormalizer(processor)) {
       const normalized = {
         new: processor.normalize(data),
         last: processor.normalize(lastData),

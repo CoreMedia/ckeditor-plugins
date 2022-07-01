@@ -50,6 +50,6 @@
   "dependencies": {
     "@coremedia/ckeditor5-dataprocessor-support": "6.1.1-rc.1",
     "@coremedia/ckeditor5-logging": "6.1.1-rc.1",
-    "@coremedia/ckeditor5-richtext-normalizer": "6.1.1-rc.1"
+    "@coremedia/ckeditor5-data-normalization": "6.1.1-rc.1"
   }
 }

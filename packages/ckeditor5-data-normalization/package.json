@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-richtext-normalizer",
+  "name": "@coremedia/ckeditor5-data-normalization",
   "version": "6.1.1-rc.1",
   "engines": {
     "node": ">=15.0.0"

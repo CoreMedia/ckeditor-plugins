@@ -1,4 +1,4 @@
-import { normalizeToHash } from "../dist/Normalizers";
+import { normalizeToHash } from "../src/Normalizers";
 
 describe("Normalizers", () => {
   describe("normalizeToHash()", () => {
