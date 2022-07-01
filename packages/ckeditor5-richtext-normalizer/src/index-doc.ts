@@ -1,28 +1,35 @@
 /**
- * Provides a logging facilities, which can be triggered by hash-parameters.
+ * This package provides a normalizer API for RichText to be able
+ * to identify semantically equality.
  *
- * To control the log level of all loggers (also known as root logger), you may
- * use the hash parameter `ckdebug` and for more verbose output
- * `ckdebug=verbose`. In addition to that, you can control the output of any
- * logger using `loggerName=level`.
+ * The `DataDiffer` contains the `DataDifferMixin` which is the entry point for
+ * the CKEditor. The Mixin is used to provide the `DataDiffer` behavior on
+ * CKEditor RichTextDataProcessor.
  *
  * @example
  * ```typescript
- * import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
- * import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
- * class MyClass {
- *   static readonly #logger: Logger = LoggerProvider.getLogger("MyClass");
+ * mix(RichTextDataProcessor, DataDifferMixin);
+ * ```
  *
- *   execute(): void {
- *     const logger = MyClass.#logger;
+ * To use the added behavior the type guard can be used
  *
- *     logger.info("Starting.");
- *     const result = ...
- *     logger.info("Finished.", { result });
+ * @example
+ * ```typescript
+ * import { isDataDiffer } from "@coremedia/ckeditor5-richtext-normalizer/DataDiffer";
+ * class SomeClass {
+ *   #editor: CKEditor;
+ *   useTypeguardExample(): void {
+ *     const { processor } = #editor.data;
+ *     if (isDataDiffer(processor)) {
+ *       processor.normalize(richtext);
+ *     }
  *   }
  * }
  * ```
- * @module ckeditor5-logging
+ *
+ * Normalizers can be added by using the `DataDiffer` `addNormalizer` function.
+ *
+ * @module ckeditor5-richtext-normalizer
  */
 export * from "./DataDiffer";
 
