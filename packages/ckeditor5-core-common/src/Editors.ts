@@ -1,6 +1,6 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
-import { isRaw } from "./AdvancedTypes";
+import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 
 /**
  * Type-guard, which validates, if the given instance of Editor is an

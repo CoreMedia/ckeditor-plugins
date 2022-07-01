@@ -234,7 +234,6 @@ importers:
     specifiers:
       '@babel/cli': ^7.17.10
       '@babel/core': ^7.18.2
-      '@ckeditor/ckeditor5-core': ^34.1.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-logging': 6.1.1-rc.1
@@ -252,6 +251,50 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.7.2
     dependencies:
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
+    devDependencies:
+      '@babel/cli': 7.17.10_@babel+core@7.18.2
+      '@babel/core': 7.18.2
+      '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
+      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/jest': 27.5.2
+      '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
+      '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
+      eslint: 8.16.0
+      eslint-config-prettier: 8.5.0_eslint@8.16.0
+      eslint-plugin-prettier: 4.0.0_j7rsahgqtkecno6yauhsgsglf4
+      eslint-plugin-tsdoc: 0.2.16
+      jest: 27.5.1
+      jest-config: 27.5.1
+      prettier: 2.6.2
+      rimraf: 3.0.2
+      typescript: 4.7.2
+
+  packages/ckeditor5-core-common:
+    specifiers:
+      '@babel/cli': ^7.17.10
+      '@babel/core': ^7.18.2
+      '@ckeditor/ckeditor5-core': ^34.1.0
+      '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-common': 6.1.1-rc.1
+      '@coremedia/ckeditor5-logging': 6.1.1-rc.1
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/jest': ^27.5.1
+      '@typescript-eslint/eslint-plugin': ^5.27.0
+      '@typescript-eslint/parser': ^5.27.0
+      eslint: ^8.16.0
+      eslint-config-prettier: ^8.5.0
+      eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.16
+      jest: ^27.5.1
+      jest-config: ^27.5.1
+      prettier: ^2.6.2
+      rimraf: ^3.0.2
+      typescript: ^4.7.2
+    dependencies:
+      '@coremedia/ckeditor5-common': link:../ckeditor5-common
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
       '@babel/cli': 7.17.10_@babel+core@7.18.2
@@ -286,6 +329,7 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-common': 6.1.1-rc.1
+      '@coremedia/ckeditor5-core-common': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.1
       '@coremedia/ckeditor5-logging': 6.1.1-rc.1
       '@coremedia/service-agent': ^1.1.0
@@ -310,6 +354,7 @@ importers:
       typescript: ^4.7.2
     dependencies:
       '@coremedia/ckeditor5-common': link:../ckeditor5-common
+      '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
@@ -354,7 +399,7 @@ importers:
       '@ckeditor/ckeditor5-utils': ^34.1.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-common': 6.1.1-rc.1
+      '@coremedia/ckeditor5-core-common': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-content-clipboard': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.1
       '@coremedia/ckeditor5-logging': 6.1.1-rc.1
@@ -377,7 +422,7 @@ importers:
       rxjs: ^7.5.5
       typescript: ^4.7.2
     dependencies:
-      '@coremedia/ckeditor5-common': link:../ckeditor5-common
+      '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
@@ -423,6 +468,7 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-common': 6.1.1-rc.1
+      '@coremedia/ckeditor5-core-common': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-content-clipboard': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration': 6.1.1-rc.1
       '@coremedia/ckeditor5-logging': 6.1.1-rc.1
@@ -450,6 +496,7 @@ importers:
       typescript: ^4.7.2
     dependencies:
       '@coremedia/ckeditor5-common': link:../ckeditor5-common
+      '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging

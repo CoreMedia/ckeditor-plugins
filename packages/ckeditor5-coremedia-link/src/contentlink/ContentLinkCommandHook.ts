@@ -14,7 +14,7 @@ import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import { LINK_COMMAND_NAME } from "../link/Constants";
 import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
-import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-common/Commands";
+import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";
 
 /**
  * Alias for easier readable code.

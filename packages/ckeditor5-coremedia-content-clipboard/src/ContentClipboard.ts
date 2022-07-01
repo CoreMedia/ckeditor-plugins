@@ -17,7 +17,7 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 

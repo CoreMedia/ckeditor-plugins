@@ -4,7 +4,7 @@ import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Plugin to support images from CoreMedia RichText.

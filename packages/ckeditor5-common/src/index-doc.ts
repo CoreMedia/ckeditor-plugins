@@ -1,8 +1,5 @@
 /**
- * Tooling to help with CKEditor 5 Plugin implementations.
+ * Tooling to help with typescript language features.
  * @module ckeditor5-common
  */
 export * from "./AdvancedTypes";
-export * from "./Commands";
-export * from "./Editors";
-export * from "./Plugins";
