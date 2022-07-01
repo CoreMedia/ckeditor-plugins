@@ -55,7 +55,7 @@ const {
 	objectInline: withinTextIcon,
 	objectLeft: alignLeftIcon,	
   objectRight: alignRightIcon,
-  objectCenter: pageDefaultIcon
+  objectSizeFull: pageDefaultIcon
 } = icons;
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
