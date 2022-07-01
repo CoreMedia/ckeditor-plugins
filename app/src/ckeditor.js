@@ -31,7 +31,7 @@ import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/Conten
 import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
 import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
 
-import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
+import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
 
 import {setupPreview, updatePreview} from './preview'
@@ -96,7 +96,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Table,
     TableToolbar,
     Underline,
-    CoreMediaSymbolOnPasteMapper,
+    CoreMediaFontMapper,
     MockStudioIntegration
   ],
   toolbar: {

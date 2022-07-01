@@ -17,7 +17,9 @@ const launchOptions = {
 /**
  * These are meant to be possibly extended for local runs.
  */
-const contextOptions = {};
+const contextOptions = {
+  permissions: ["clipboard-read", "clipboard-write"],
+};
 
 /**
  * This is the default configuration used especially in CI.
