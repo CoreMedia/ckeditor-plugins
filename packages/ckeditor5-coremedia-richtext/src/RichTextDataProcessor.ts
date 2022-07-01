@@ -1,7 +1,7 @@
 import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -12,11 +12,14 @@ import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "./CoreMediaRichTextConfig";
-import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
+import { HtmlWriter } from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
+import { DataNormalizer, DataNormalizerMixin } from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
+import { normalizeToHash } from "@coremedia/ckeditor5-data-normalization/Normalizers";
+import { normalizeEmptyParagraphs, normalizeNamespaceDeclarations, normalizeXmlDeclaration } from "./Normalizers";
 
 class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -54,11 +57,22 @@ class RichTextDataProcessor implements DataProcessor {
     this.#noParserErrorNamespace =
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
+
+    this.addNormalizer(normalizeXmlDeclaration);
+    this.addNormalizer(normalizeNamespaceDeclarations);
+    this.addNormalizer(normalizeEmptyParagraphs);
+    // We want to do this last, so that patches may be applied, doing further
+    // normalization.
+    this.addNormalizer(normalizeToHash, Number.MAX_SAFE_INTEGER);
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
     this.#delegate.registerRawContentMatcher(pattern);
     this.#domConverter.registerRawContentMatcher(pattern);
+  }
+
+  useFillerType(type: "default" | "marked"): void {
+    this.#domConverter.blockFillerMode = type == "marked" ? "markedNbsp" : "nbsp";
   }
 
   /**
@@ -227,9 +241,9 @@ class RichTextDataProcessor implements DataProcessor {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RichTextDataProcessor extends Observable {}
+interface RichTextDataProcessor extends Observable, DataNormalizer {}
 
-mix(RichTextDataProcessor, ObservableMixin);
+mix(RichTextDataProcessor, ObservableMixin, DataNormalizerMixin);
 
 export default RichTextDataProcessor;
 

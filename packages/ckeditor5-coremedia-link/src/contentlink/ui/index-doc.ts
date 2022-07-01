@@ -15,9 +15,6 @@ export { default as ContentLinkActionsViewExtension } from "./ContentLinkActions
 export * from "./ContentLinkFormViewExtension";
 export { default as ContentLinkFormViewExtension } from "./ContentLinkFormViewExtension";
 
-export * from "./ContentLinkFormViewPropertyAccessor";
-export { default as ContentLinkFormViewPropertyAccessor } from "./ContentLinkFormViewPropertyAccessor";
-
 export * from "./ContentLinkView";
 export { default as ContentLinkView } from "./ContentLinkView";
 
@@ -26,3 +23,5 @@ export { default as ContentLinkViewFactory } from "./ContentLinkViewFactory";
 
 export * from "./CoreMediaIconView";
 export { default as CoreMediaIconView } from "./CoreMediaIconView";
+
+export * from "./ViewExtensions";

@@ -1,5 +1,4 @@
 packages:
   - "packages/*"
-  - "types/*"
   - "itest"
   - "app"

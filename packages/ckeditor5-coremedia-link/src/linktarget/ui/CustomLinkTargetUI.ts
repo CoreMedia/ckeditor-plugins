@@ -1,7 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
@@ -11,6 +10,8 @@ import clickOutsideHandler from "@ckeditor/ckeditor5-ui/src/bindings/clickoutsid
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
+import Command from "@ckeditor/ckeditor5-core/src/command";
+import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -39,9 +40,7 @@ export default class CustomLinkTargetUI extends Plugin {
    */
   linkUI!: LinkUI;
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [ContextualBalloon, LinkUI];
-  }
+  static readonly requires = [ContextualBalloon, LinkUI];
 
   init(): Promise<void> | void {
     const editor = this.editor;
@@ -86,11 +85,13 @@ export default class CustomLinkTargetUI extends Plugin {
    */
   #createButton(definition: Required<LinkTargetOptionDefinition>): void {
     const editor = this.editor;
-    const linkTargetCommand = editor.commands.get("linkTarget");
+    // @ts-expect-error TODO Handle missing command (see ifCommand etc.)
+    const linkTargetCommand: Command = editor.commands.get("linkTarget");
     const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
+    const { ui } = requireEditorWithUI(this.editor);
 
-    editor.ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
+    ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
       const view = new ButtonView(locale);
 
       view.set({
@@ -101,8 +102,8 @@ export default class CustomLinkTargetUI extends Plugin {
         isToggleable: true,
       });
 
-      view.bind("isOn").to(linkTargetCommand, "value", (value: string) => {
-        if (value === undefined) {
+      view.bind("isOn").to(linkTargetCommand, "value", (value: unknown) => {
+        if (typeof value !== "string") {
           return false;
         }
         // As "fallback" the `_other` button is active, if no other button matched.
@@ -115,6 +116,7 @@ export default class CustomLinkTargetUI extends Plugin {
        * although it will open with an empty editor when clicked (as specified, as we may fix the orphaned value of
        * xlink:show="other" this way).
        */
+      // @ts-expect-error TODO Check Typings
       view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: string) => {
         if (isOn && value !== OTHER_TARGET_NAME) {
           return `${this.editor.locale.t(definition.title)}: "${this.editor.locale.t(value)}"`;
@@ -169,6 +171,7 @@ export default class CustomLinkTargetUI extends Plugin {
     clickOutsideHandler({
       emitter: this.#form,
       activator: () => this.#isVisible,
+      // @ts-expect-error TODO Handle possible null values.
       contextElements: [this.#balloon.view.element],
       callback: () => this.#hideForm(),
     });
@@ -207,6 +210,7 @@ export default class CustomLinkTargetUI extends Plugin {
     // https://github.com/ckeditor/ckeditor5-image/issues/114
     labeledInput.fieldView.value = (<HTMLInputElement>labeledInput.fieldView.element).value = initialValue;
 
+    // @ts-expect-error TODO Check Typings/Usage
     this.#form.labeledInput.fieldView.select();
 
     this.#form.enableCssTransitions();
@@ -254,6 +258,7 @@ export default class CustomLinkTargetUI extends Plugin {
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
   #getBalloonPositionData(): Options {
+    // @ts-expect-error TODO Check Typings/Usage (most likely private API, we need to deal with somehow).
     return this.linkUI._getBalloonPositionData();
   }
 }

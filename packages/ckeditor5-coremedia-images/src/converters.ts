@@ -1,13 +1,6 @@
-/**
- * Creates an upcast converter that will pass all classes from the view element to the model element.
- */
-import { DowncastConversionHelperFunction } from "@ckeditor/ckeditor5-engine/src/conversion/conversionhelpers";
-import UpcastDispatcher, {
-  UpcastConversionApi,
-  UpcastEventData,
-} from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
+import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DowncastDispatcher, { DowncastEventData } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
 import { serviceAgent } from "@coremedia/service-agent";
 import BlobDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
@@ -23,9 +16,16 @@ import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from ".
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
+
+type DowncastEventData = {
+  item: ModelElement;
+  attributeOldValue: string | null;
+  attributeNewValue: string | null;
+};
+type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void;
 
 /**
  * A method to prevent the upcast of the src-attribute of an image.
@@ -43,7 +43,7 @@ export const preventUpcastImageSrc = () => {
   return (dispatcher: UpcastDispatcher): void => {
     dispatcher.on(
       `element:img`,
-      (evt: EventInfo, data: UpcastEventData, conversionApi: UpcastConversionApi) => {
+      (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
         if (data.viewItem.hasAttribute("data-xlink-href")) {
           conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
           data.viewItem._removeAttribute("src");
@@ -65,7 +65,7 @@ export const editingDowncastXlinkHref = (
   modelElementName: string
 ): DowncastConversionHelperFunction => {
   return (dispatcher: DowncastDispatcher) => {
-    dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
+    dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data): void => {
       onXlinkHrefEditingDowncast(editor, eventInfo, data);
     });
   };
@@ -76,7 +76,9 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
   updateImagePreviewAttributes(editor, data.item, spinnerPreviewAttributes, true);
 
   const xlinkHref = data.item.getAttribute("xlink-href");
+  // @ts-expect-error TODO Fix Signatures or check type of xlinkHref before.
   const uriPath: UriPath = toUriPath(xlinkHref);
+  // @ts-expect-error TODO Fix Signatures or check type of xlinkHref before.
   const property: string = toProperty(xlinkHref);
   serviceAgent
     .fetchService<BlobDisplayService>(new BlobDisplayServiceDescriptor())

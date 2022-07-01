@@ -1,5 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
@@ -21,15 +20,13 @@ import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [
-      Link,
-      ContentLinkActionsViewExtension,
-      ContentLinkFormViewExtension,
-      ContentLinkCommandHook,
-      ContentLinkClipboardPlugin,
-    ];
-  }
+  static readonly requires = [
+    Link,
+    ContentLinkActionsViewExtension,
+    ContentLinkFormViewExtension,
+    ContentLinkCommandHook,
+    ContentLinkClipboardPlugin,
+  ];
 
   init(): void {
     const editor = this.editor;
@@ -45,7 +42,9 @@ export default class ContentLinks extends Plugin {
       () => {
         const commandValue: string = <string>linkCommand?.value ?? "";
         const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
-        linkUI.formView.set({ contentUriPath: value });
+        // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+        const formView: LinkFormView = linkUI.formView;
+        formView.set({ contentUriPath: value });
         linkUI.actionsView.set({ contentUriPath: value });
       },
       this
@@ -53,7 +52,9 @@ export default class ContentLinks extends Plugin {
   }
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {
-    linkUI.formView.stopListening(<Emitter>(<unknown>document), "mousedown");
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
+    formView.stopListening(<Emitter>(<unknown>document), "mousedown");
   }
 
   /**
@@ -152,17 +153,22 @@ export default class ContentLinks extends Plugin {
 
   #addMouseEventListenerToHideDialog(linkUI: LinkUI): void {
     this.#addCustomClickOutsideHandler({
+      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
       emitter: <Emitter>(<unknown>linkUI.formView),
+      // @ts-expect-error TODO Fix Typings
       activator: () => linkUI._isUIInPanel,
+      // @ts-expect-error TODO Fix Typings
       contextElements: [linkUI._balloon.view.element],
       callback: () => {
+        // @ts-expect-error TODO Fix Typings
         linkUI._hideUI();
       },
     });
   }
 
   #extendFormView(linkUI: LinkUI): void {
-    const formView = linkUI.formView;
+    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+    const formView: LinkFormView = linkUI.formView;
 
     const t = this.editor.locale.t;
     formView.urlInputView.set({

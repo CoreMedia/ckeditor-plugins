@@ -4,7 +4,7 @@ import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Plugin to support images from CoreMedia RichText.
@@ -21,10 +21,7 @@ export default class ContentImageEditingPlugin extends Plugin {
   static readonly XLINK_HREF_MODEL_ATTRIBUTE_NAME = "xlink-href";
   static readonly XLINK_HREF_DATA_ATTRIBUTE_NAME = "data-xlink-href";
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    //It only requires ImageInline as we do not support ImageBlock. ImageBlock won't work.
-    return [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
-  }
+  static readonly requires = [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
 
   /**
    * Registers support for the `xlink:href` attribute for element `img` in
@@ -72,6 +69,7 @@ export default class ContentImageEditingPlugin extends Plugin {
       allowAttributes: [modelAttributeName],
     });
     editor.conversion.for("dataDowncast").attributeToAttribute({
+      // @ts-expect-error TODO Validate with typings from DefinitelyTyped
       model: {
         name: modelElementName,
         key: modelAttributeName,

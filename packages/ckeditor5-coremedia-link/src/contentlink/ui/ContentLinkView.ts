@@ -104,6 +104,7 @@ export default class ContentLinkView extends ButtonView {
         ],
       },
       on: {
+        // @ts-expect-error TODO Mismatch with typings from DefinitelyTyped
         click: bind.to((evt: MouseEvent) => {
           evt.preventDefault();
           const el: Element = <Element>evt.target;
@@ -141,7 +142,7 @@ export default class ContentLinkView extends ButtonView {
       this.#endContentSubscription();
 
       const value = evt.source.uriPath;
-      if (CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
+      if (typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
         this.#subscribeToContent(requireContentUriPath(value));
       }
     });
@@ -150,10 +151,12 @@ export default class ContentLinkView extends ButtonView {
   render(): void {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
+      // @ts-expect-error TODO Handle undefined
       this.children.add(this.#statusIcon);
     }
 
     if (this.renderOptions?.renderCancelButton) {
+      // @ts-expect-error TODO Handle undefined
       this.children.add(this.#cancelButton);
     }
   }

@@ -12,7 +12,7 @@ import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
-import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 
 const UTILITY_NAME = "DataToModelMechanism";

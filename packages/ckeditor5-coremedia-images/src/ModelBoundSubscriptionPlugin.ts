@@ -36,10 +36,6 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return ModelBoundSubscriptionPlugin.PLUGIN_NAME;
   }
 
-  static get requires(): Array<new (editor: Editor) => Plugin> {
-    return [];
-  }
-
   /**
    * Registers `change:data` listeners.
    */
@@ -63,7 +59,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    */
   addSubscription(modelElement: ModelElement, subscription: Subscription): void {
     const subscriptionId = modelElement.getAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME);
-    if (!subscriptionId) {
+    if (typeof subscriptionId !== "string" || !subscriptionId) {
       return;
     }
     ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.addSubscription(subscriptionId, subscription);
@@ -112,7 +108,9 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
       }
       for (const modelElement of allRemovedElementsWithSubscriptions) {
         const id = modelElement.getAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME);
-        ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribe(id);
+        if (typeof id === "string") {
+          ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribe(id);
+        }
       }
     });
   }
