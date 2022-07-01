@@ -6,7 +6,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { openInTab, showContentLinkField } from "../ContentLinkViewUtils";
-import { ifCommand } from "@coremedia/ckeditor5-common/Commands";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";

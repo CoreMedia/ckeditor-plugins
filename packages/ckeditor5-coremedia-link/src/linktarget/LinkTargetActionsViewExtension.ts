@@ -13,7 +13,7 @@ import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarsepa
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-common/Editors";
+import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:

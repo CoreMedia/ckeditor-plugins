@@ -46,6 +46,7 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+import { isDataNormalizer } from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -254,7 +255,53 @@ ClassicEditor.create(document.querySelector('.editor'), {
   console.error(error);
 });
 
-function saveData(source, data) {
-  console.log("Saving data triggered by " + source, {data: data});
-  updatePreview(data)
-}
+const LastData = Symbol("LastData");
+
+/**
+ * Save method with additional recognition, if there is an actual change.
+ * This represents, how we could prevent auto-checkout in CoreMedia
+ * Studio for irrelevant changes, because they are semantically equivalent.
+ *
+ * @param source - which editor stored the data
+ * @param data - data to be stored
+ */
+const saveData = (source, data) => {
+  const processor = window.editor?.data.processor;
+  const lastData = window[LastData];
+
+  // Provides some difference-details on console.
+  const diff = {
+    isDifferent: true,
+    strategy: {
+      by: "init",
+    },
+    data,
+    lastData,
+  };
+
+  if (typeof lastData === "string") {
+    if (isDataNormalizer(processor)) {
+      const normalized = {
+        new: processor.normalize(data),
+        last: processor.normalize(lastData),
+      };
+      diff.isDifferent = !processor.areEqual(normalized.new, normalized.last);
+      diff.strategy = {
+        by: "data-differ",
+        normalized,
+      };
+    } else {
+      diff.strategy.by = "strict-equals";
+      diff.isDifferent = lastData !== data;
+    }
+  }
+
+  if (diff.isDifferent) {
+    console.log(`Saving data triggered by ${source}.`, {diff});
+    updatePreview(data)
+  } else {
+    console.log(`Not saving data triggered by ${source} as they are semantically equivalent to previous data.`, {diff});
+  }
+
+  window[LastData] = data;
+};

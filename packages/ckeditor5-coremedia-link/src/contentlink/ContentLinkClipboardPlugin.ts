@@ -13,7 +13,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 

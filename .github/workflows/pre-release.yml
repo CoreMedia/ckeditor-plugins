@@ -27,12 +27,12 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           prnumber=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{github.repository}}/pulls?head=${{github.repository_owner}}:${{github.ref}} | jq -r '.[] | .number' )
-          echo "Allocated pr number ${prnumber}"
+          echo "Allocated Pull Request number ${prnumber}"
           echo "::set-output name=prnumber::${prnumber}"
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 15.x
       - name: Configure NPM
         run: |
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)
@@ -63,6 +63,7 @@ jobs:
           pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
           pnpm install --no-frozen-lockfile
           git commit -am "Set PR Version: ${next_version}"
+          echo "Chosen Pre-Release Version: ${next_version}"
       - name: Build
         run: pnpm build
       - name: Lint

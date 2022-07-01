@@ -6,7 +6,7 @@ import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragme
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import { ifPlugin } from "@coremedia/ckeditor5-common/Plugins";
+import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
 import { Mode } from "./FontMapping";

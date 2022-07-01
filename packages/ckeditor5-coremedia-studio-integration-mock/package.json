@@ -3,7 +3,7 @@
   "version": "6.1.1-rc.2",
   "private": true,
   "engines": {
-    "node": ">=14.19.0"
+    "node": ">=15.0.0"
   },
   "license": "Apache-2.0",
   "scripts": {

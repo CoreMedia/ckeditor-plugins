@@ -11,7 +11,7 @@ import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-common/Editors";
+import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if

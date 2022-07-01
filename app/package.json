@@ -3,7 +3,7 @@
   "description": "A custom CKEditor 5 build made by the CKEditor 5 online builder.",
   "version": "6.1.1-rc.2",
   "engines": {
-    "node": ">=14.19.0"
+    "node": ">=15.0.0"
   },
   "license": "Apache-2.0",
   "private": true,
@@ -38,8 +38,10 @@
     "@coremedia/ckeditor5-coremedia-link": "6.1.1-rc.2",
     "@coremedia/ckeditor5-coremedia-richtext": "6.1.1-rc.2",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "6.1.1-rc.2",
+    "@coremedia/ckeditor5-dataprocessor-support": "6.1.1-rc.2",
     "@coremedia/ckeditor5-studio-essentials": "6.1.1-rc.2",
     "@coremedia/ckeditor5-font-mapper": "6.1.1-rc.2",
+    "@coremedia/ckeditor5-data-normalization": "6.1.1-rc.2",
     "@coremedia/service-agent": "^1.1.0",
     "xml-formatter": "^2.6.1"
   },

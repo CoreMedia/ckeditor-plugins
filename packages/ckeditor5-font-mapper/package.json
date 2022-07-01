@@ -2,7 +2,7 @@
   "name": "@coremedia/ckeditor5-font-mapper",
   "version": "6.1.1-rc.2",
   "engines": {
-    "node": ">=14.19.0"
+    "node": ">=15.0.0"
   },
   "exports": {
     "./*": "./dist/*.js"
@@ -41,7 +41,7 @@
     "@ckeditor/ckeditor5-utils": "^34.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "6.1.1-rc.2",
+    "@coremedia/ckeditor5-core-common": "6.1.1-rc.2",
     "@coremedia/ckeditor5-logging": "6.1.1-rc.2"
   },
   "scripts": {

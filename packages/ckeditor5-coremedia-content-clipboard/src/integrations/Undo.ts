@@ -8,7 +8,7 @@ import {
   enableCommand,
   ifCommand,
   optionalCommandNotFound,
-} from "@coremedia/ckeditor5-common/Commands";
+} from "@coremedia/ckeditor5-core-common/Commands";
 
 const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
 
