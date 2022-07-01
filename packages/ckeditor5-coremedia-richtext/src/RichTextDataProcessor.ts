@@ -17,8 +17,8 @@ import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basich
 import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
-import { DataDiffer, DataDifferMixin } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
-import { normalizeToHash } from "@coremedia/ckeditor5-dataprocessor-support/Normalizers";
+import { DataDiffer, DataDifferMixin } from "@coremedia/ckeditor5-richtext-normalizer/DataDiffer";
+import { normalizeToHash } from "@coremedia/ckeditor5-richtext-normalizer/Normalizers";
 import { normalizeEmptyParagraphs, normalizeNamespaceDeclarations, normalizeXmlDeclaration } from "./Normalizers";
 
 class RichTextDataProcessor implements DataProcessor {

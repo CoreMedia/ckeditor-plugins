@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-richtext",
+  "name": "@coremedia/ckeditor5-richtext-normalizer",
   "version": "6.1.1-rc.1",
   "engines": {
     "node": ">=15.0.0"
@@ -14,17 +14,14 @@
     "prettier": "prettier --write \"src/*.+(js|jsx|ts|tsx|json)\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
+  "exports": {
+    "./*": "./dist/*.js"
+  },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.2",
-    "@ckeditor/ckeditor5-core": "^34.1.0",
-    "@ckeditor/ckeditor5-engine": "^34.1.0",
-    "@ckeditor/ckeditor5-utils": "^34.1.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@types/ckeditor__ckeditor5-core": "^33.0.3",
-    "@types/ckeditor__ckeditor5-engine": "^32.0.11",
-    "@types/ckeditor__ckeditor5-utils": "^28.0.14",
     "@types/jest": "^27.5.1",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
@@ -33,23 +30,12 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tsdoc": "^0.2.16",
     "jest": "^27.5.1",
-    "jest-each": "^27.5.1",
-    "jest-xml-matcher": "^1.2.0",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.7.2"
   },
-  "exports": {
-    "./*": "./dist/*.js"
-  },
-  "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^34.1.0",
-    "@ckeditor/ckeditor5-engine": "^34.1.0",
-    "@ckeditor/ckeditor5-utils": "^34.1.0"
-  },
   "dependencies": {
-    "@coremedia/ckeditor5-dataprocessor-support": "6.1.1-rc.1",
-    "@coremedia/ckeditor5-logging": "6.1.1-rc.1",
-    "@coremedia/ckeditor5-richtext-normalizer": "6.1.1-rc.1"
+    "@coremedia/ckeditor5-common": "6.1.1-rc.1",
+    "@coremedia/ckeditor5-logging": "6.1.1-rc.1"
   }
 }

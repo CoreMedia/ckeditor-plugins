@@ -46,7 +46,7 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
-import { isDataDiffer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
+import { isDataDiffer } from "@coremedia/ckeditor5-richtext-normalizer/DataDiffer";
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 

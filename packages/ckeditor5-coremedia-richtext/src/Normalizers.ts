@@ -1,4 +1,4 @@
-import { Normalizer } from "@coremedia/ckeditor5-dataprocessor-support/DataDiffer";
+import { Normalizer } from "@coremedia/ckeditor5-richtext-normalizer/DataDiffer";
 
 /**
  * Matches XML declaration such as `<?xml version="1.0">` and ignores possible

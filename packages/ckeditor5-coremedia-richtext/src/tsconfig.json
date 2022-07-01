@@ -8,7 +8,8 @@
     "declarationMap": true,
     "paths": {
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
-      "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"]
+      "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"],
+      "@coremedia/ckeditor5-richtext-normalizer/*": ["../../ckeditor5-richtext-normalizer/src/*"]
     }
   },
   "references": [
@@ -17,6 +18,9 @@
     },
     {
       "path": "../../ckeditor5-dataprocessor-support/src"
+    },
+    {
+      "path": "../../ckeditor5-richtext-normalizer/src"
     }
   ],
   "extends": "../../../tsconfig.json"

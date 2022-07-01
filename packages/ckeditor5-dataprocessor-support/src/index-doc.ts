@@ -3,8 +3,6 @@
  */
 export * as Attributes from "./Attributes";
 
-export * from "./DataDiffer";
-
 export * from "./ElementProxy";
 export { default as ElementProxy } from "./ElementProxy";
 
@@ -16,10 +14,6 @@ export { default as Namespace } from "./Namespace";
 
 export * from "./NodeProxy";
 export { default as NodeProxy } from "./NodeProxy";
-
-export * from "./NormalizedData";
-
-export * from "./Normalizers";
 
 export * from "./Rules";
 
