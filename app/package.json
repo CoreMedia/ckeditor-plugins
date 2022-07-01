@@ -39,7 +39,7 @@
     "@coremedia/ckeditor5-coremedia-richtext": "6.1.1-rc.1",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "6.1.1-rc.1",
     "@coremedia/ckeditor5-studio-essentials": "6.1.1-rc.1",
-    "@coremedia/ckeditor5-symbol-on-paste-mapper": "6.1.1-rc.1",
+    "@coremedia/ckeditor5-font-mapper": "6.1.1-rc.1",
     "@coremedia/service-agent": "^1.1.0",
     "xml-formatter": "^2.6.1"
   },

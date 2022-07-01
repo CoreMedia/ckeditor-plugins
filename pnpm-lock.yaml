@@ -52,8 +52,8 @@ importers:
       '@coremedia/ckeditor5-coremedia-link': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-richtext': 6.1.1-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 6.1.1-rc.1
+      '@coremedia/ckeditor5-font-mapper': 6.1.1-rc.1
       '@coremedia/ckeditor5-studio-essentials': 6.1.1-rc.1
-      '@coremedia/ckeditor5-symbol-on-paste-mapper': 6.1.1-rc.1
       '@coremedia/service-agent': ^1.1.0
       circular-dependency-plugin: ^5.2.2
       css-loader: ^6.7.1
@@ -99,8 +99,8 @@ importers:
       '@coremedia/ckeditor5-coremedia-link': link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
+      '@coremedia/ckeditor5-font-mapper': link:../packages/ckeditor5-font-mapper
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
-      '@coremedia/ckeditor5-symbol-on-paste-mapper': link:../packages/ckeditor5-symbol-on-paste-mapper
       '@coremedia/service-agent': 1.1.0
       xml-formatter: 2.6.1
     devDependencies:
@@ -818,6 +818,63 @@ importers:
       rimraf: 3.0.2
       typescript: 4.7.2
 
+  packages/ckeditor5-font-mapper:
+    specifiers:
+      '@babel/cli': ^7.17.10
+      '@babel/core': ^7.18.2
+      '@ckeditor/ckeditor5-clipboard': ^34.1.0
+      '@ckeditor/ckeditor5-core': ^34.1.0
+      '@ckeditor/ckeditor5-engine': ^34.1.0
+      '@ckeditor/ckeditor5-utils': ^34.1.0
+      '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-common': 6.1.1-rc.1
+      '@coremedia/ckeditor5-logging': 6.1.1-rc.1
+      '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-utils': ^28.0.14
+      '@types/jest': ^27.5.1
+      '@types/webpack': ^5.28.0
+      '@typescript-eslint/eslint-plugin': ^5.27.0
+      '@typescript-eslint/parser': ^5.27.0
+      eslint: ^8.16.0
+      eslint-config-prettier: ^8.5.0
+      eslint-plugin-prettier: ^4.0.0
+      eslint-plugin-tsdoc: ^0.2.16
+      jest: ^27.5.1
+      prettier: ^2.6.2
+      rimraf: ^3.0.2
+      typescript: ^4.7.2
+    dependencies:
+      '@coremedia/ckeditor5-common': link:../ckeditor5-common
+      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
+    devDependencies:
+      '@babel/cli': 7.17.10_@babel+core@7.18.2
+      '@babel/core': 7.18.2
+      '@ckeditor/ckeditor5-clipboard': 34.1.0
+      '@ckeditor/ckeditor5-core': 34.1.0
+      '@ckeditor/ckeditor5-engine': 34.1.0
+      '@ckeditor/ckeditor5-utils': 34.1.0
+      '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
+      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+      '@types/jest': 27.5.2
+      '@types/webpack': 5.28.0
+      '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
+      '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
+      eslint: 8.16.0
+      eslint-config-prettier: 8.5.0_eslint@8.16.0
+      eslint-plugin-prettier: 4.0.0_j7rsahgqtkecno6yauhsgsglf4
+      eslint-plugin-tsdoc: 0.2.16
+      jest: 27.5.1
+      prettier: 2.6.2
+      rimraf: 3.0.2
+      typescript: 4.7.2
+
   packages/ckeditor5-jest-test-helpers:
     specifiers:
       '@babel/core': ^7.18.2
@@ -859,61 +916,6 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@types/jest': 27.5.2
-      '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
-      '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
-      eslint: 8.16.0
-      eslint-config-prettier: 8.5.0_eslint@8.16.0
-      eslint-plugin-prettier: 4.0.0_j7rsahgqtkecno6yauhsgsglf4
-      eslint-plugin-tsdoc: 0.2.16
-      jest: 27.5.1
-      prettier: 2.6.2
-      rimraf: 3.0.2
-      typescript: 4.7.2
-
-  packages/ckeditor5-symbol-on-paste-mapper:
-    specifiers:
-      '@babel/cli': ^7.17.10
-      '@babel/core': ^7.18.2
-      '@ckeditor/ckeditor5-clipboard': ^34.1.0
-      '@ckeditor/ckeditor5-core': ^34.1.0
-      '@ckeditor/ckeditor5-engine': ^34.1.0
-      '@ckeditor/ckeditor5-utils': ^34.1.0
-      '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
-      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': 6.1.1-rc.1
-      '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
-      '@types/ckeditor__ckeditor5-core': ^33.0.3
-      '@types/ckeditor__ckeditor5-engine': ^32.0.11
-      '@types/ckeditor__ckeditor5-utils': ^28.0.14
-      '@types/jest': ^27.5.1
-      '@types/webpack': ^5.28.0
-      '@typescript-eslint/eslint-plugin': ^5.27.0
-      '@typescript-eslint/parser': ^5.27.0
-      eslint: ^8.16.0
-      eslint-config-prettier: ^8.5.0
-      eslint-plugin-prettier: ^4.0.0
-      eslint-plugin-tsdoc: ^0.2.16
-      jest: ^27.5.1
-      prettier: ^2.6.2
-      rimraf: ^3.0.2
-      typescript: ^4.7.2
-    dependencies:
-      '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
-    devDependencies:
-      '@babel/cli': 7.17.10_@babel+core@7.18.2
-      '@babel/core': 7.18.2
-      '@ckeditor/ckeditor5-clipboard': 34.1.0
-      '@ckeditor/ckeditor5-core': 34.1.0
-      '@ckeditor/ckeditor5-engine': 34.1.0
-      '@ckeditor/ckeditor5-utils': 34.1.0
-      '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
-      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
-      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
-      '@types/ckeditor__ckeditor5-core': 33.0.3
-      '@types/ckeditor__ckeditor5-engine': 32.0.11
-      '@types/ckeditor__ckeditor5-utils': 28.0.14
-      '@types/jest': 27.5.2
-      '@types/webpack': 5.28.0
       '@typescript-eslint/eslint-plugin': 5.27.0_dszb5tb7atwkjjijmmov4qhi7i
       '@typescript-eslint/parser': 5.27.0_xztl6dhthcahlo6akmb2bmjmle
       eslint: 8.16.0
