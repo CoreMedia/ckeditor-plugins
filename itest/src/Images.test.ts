@@ -2,6 +2,7 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import { img, p, richtext } from "./fixture/Richtext";
 import "./expect/ElementHandleExpectations";
+import { ImageStyleBalloonAction } from "./user-interaction/ImageStyleBalloonAction";
 
 /**
  * Simulates a blob reference to some property named `data`.
@@ -99,9 +100,8 @@ describe("Image Features", () => {
 
   it("Should correctly set Image Alignment", async () => {
     const { currentTestName } = expect.getState();
-    const { imageStylesBalloon, editor, mockContent } = application;
+    const { contextualBalloon, editor, mockContent } = application;
     const { ui } = editor;
-    const editableHandle = await ui.getEditableElement();
 
     const id = 42;
     await mockContent.addContents({
@@ -120,13 +120,13 @@ describe("Image Features", () => {
     );
 
     await editor.setDataAndGetDataView(data);
+    const editableHandle = await ui.getEditableElement();
 
     // click on image
     await page.locator(".ck-editor__editable img").click();
 
     // click on the align-left button in the imageStyle balloon
-    const alignLeftButton = imageStylesBalloon.getAlignLeftButton();
-    await alignLeftButton.click();
+    await ImageStyleBalloonAction.clickAlignLeft(application);
 
     await expect(editableHandle).toHaveSelector("span.image-inline");
     let imgHandle = await editableHandle.$("span.image-inline");
@@ -134,8 +134,7 @@ describe("Image Features", () => {
     await expect(imgHandle).toMatchComputedStyle("float", "left");
 
     // click on the align-right button in the imageStyle balloon
-    const alignRightButton = imageStylesBalloon.getAlignRightButton();
-    await alignRightButton.click();
+    await ImageStyleBalloonAction.clickAlignRight(application);
 
     await expect(editableHandle).toHaveSelector("span.image-inline");
     imgHandle = await editableHandle.$("span.image-inline");
@@ -143,8 +142,7 @@ describe("Image Features", () => {
     await expect(imgHandle).toMatchComputedStyle("float", "right");
 
     // click on the withinText button in the imageStyle balloon
-    const withinTextButton = imageStylesBalloon.getWithinTextButton();
-    await withinTextButton.click();
+    await ImageStyleBalloonAction.clickAlignWithinText(application);
 
     await expect(editableHandle).toHaveSelector("span.image-inline");
     imgHandle = await editableHandle.$("span.image-inline");
@@ -152,8 +150,7 @@ describe("Image Features", () => {
     await expect(imgHandle).toMatchComputedStyle("float", "none");
 
     // click on the page default button in the imageStyle balloon
-    const pageDefaultButton = imageStylesBalloon.getPageDefaultButton();
-    await pageDefaultButton.click();
+    await ImageStyleBalloonAction.clickAlignPageDefault(application);
 
     await expect(editableHandle).toHaveSelector("span.image-inline");
     imgHandle = await editableHandle.$("span.image-inline");

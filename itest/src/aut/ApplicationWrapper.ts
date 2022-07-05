@@ -6,7 +6,7 @@ import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { extendingWaitForExpect } from "../expect/Expectations";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
-import { ImageStylesBalloonWrapper } from "./ImageStylesBalloonWrapper";
+import { ContextualBalloonWrapper } from "./ContextualBalloonWrapper";
 
 /**
  * Represents result from starting the server.
@@ -110,8 +110,13 @@ export class ApplicationWrapper {
     return ClassicEditorWrapper.fromPage(page);
   }
 
-  get imageStylesBalloon(): ImageStylesBalloonWrapper {
-    return new ImageStylesBalloonWrapper(page);
+  /**
+   * Retrieve the actually opened ContextualBalloon.
+   *
+   * @returns ContextualBalloonWrapper the actually opened ContextualBalloon
+   */
+  get contextualBalloon(): ContextualBalloonWrapper {
+    return new ContextualBalloonWrapper(page);
   }
 
   /**
