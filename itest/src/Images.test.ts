@@ -96,4 +96,67 @@ describe("Image Features", () => {
     // BLOB-link to render the image.
     await expect(imgHandle).toMatchAttribute("src", PNG_RED_240x135);
   });
+
+  it("Should correctly set Image Alignment", async () => {
+    const { currentTestName } = expect.getState();
+    const { imageStylesBalloon, editor, mockContent } = application;
+    const { ui } = editor;
+    const editableHandle = await ui.getEditableElement();
+
+    const id = 42;
+    await mockContent.addContents({
+      id,
+      blob: PNG_RED_240x135,
+      name: `Document for test ${currentTestName}`,
+    });
+
+    const data = richtext(
+      p(
+        img({
+          alt: currentTestName,
+          "xlink:href": blobReference(id),
+        })
+      )
+    );
+
+    await editor.setDataAndGetDataView(data);
+
+    // click on image
+    await page.locator(".ck-editor__editable img").click();
+
+    // click on the align-left button in the imageStyle balloon
+    const alignLeftButton = imageStylesBalloon.getAlignLeftButton();
+    await alignLeftButton.click();
+
+    await expect(editableHandle).toHaveSelector("span.image-inline");
+    let imgHandle = await editableHandle.$("span.image-inline");
+    await expect(imgHandle).toMatchAttribute("class", /float--left/);
+    await expect(imgHandle).toMatchComputedStyle("float", "left");
+
+    // click on the align-right button in the imageStyle balloon
+    const alignRightButton = imageStylesBalloon.getAlignRightButton();
+    await alignRightButton.click();
+
+    await expect(editableHandle).toHaveSelector("span.image-inline");
+    imgHandle = await editableHandle.$("span.image-inline");
+    await expect(imgHandle).toMatchAttribute("class", /float--right/);
+    await expect(imgHandle).toMatchComputedStyle("float", "right");
+
+    // click on the withinText button in the imageStyle balloon
+    const withinTextButton = imageStylesBalloon.getWithinTextButton();
+    await withinTextButton.click();
+
+    await expect(editableHandle).toHaveSelector("span.image-inline");
+    imgHandle = await editableHandle.$("span.image-inline");
+    await expect(imgHandle).toMatchAttribute("class", /float--none/);
+    await expect(imgHandle).toMatchComputedStyle("float", "none");
+
+    // click on the page default button in the imageStyle balloon
+    const pageDefaultButton = imageStylesBalloon.getPageDefaultButton();
+    await pageDefaultButton.click();
+
+    await expect(editableHandle).toHaveSelector("span.image-inline");
+    imgHandle = await editableHandle.$("span.image-inline");
+    await expect(imgHandle).not.toMatchAttribute("class", /float/);
+  });
 });
