@@ -1,7 +1,10 @@
 import { Locator, Page } from "playwright";
 
 /**
- * Provides access to the actually opened ontextualBalloon.
+ * Provides access to the currently opened contextual balloon.
+ * Please note that the contextual balloon is actually a singleton and
+ * reuse for different balloon features.
+ * See: {@link https://ckeditor.com/docs/ckeditor5/latest/api/module_ui_panel_balloon_contextualballoon-ContextualBalloon.html}
  */
 export class ContextualBalloonWrapper {
   readonly page: Page;
@@ -11,7 +14,8 @@ export class ContextualBalloonWrapper {
   }
 
   /**
-   * Returns the nth item. Where n is index + 1.
+   * Returns the nth item.
+   * It's zero based, nth(0) selects the first element
    *
    * @param index - the index of the toolbar item. Starting with 0.
    * @returns Locator the locator

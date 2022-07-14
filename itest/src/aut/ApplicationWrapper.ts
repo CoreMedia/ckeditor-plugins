@@ -111,9 +111,9 @@ export class ApplicationWrapper {
   }
 
   /**
-   * Retrieve the actually opened ContextualBalloon.
+   * Retrieves the currently opened ContextualBalloon.
    *
-   * @returns ContextualBalloonWrapper the actually opened ContextualBalloon
+   * @returns ContextualBalloonWrapper the currently opened ContextualBalloon
    */
   get contextualBalloon(): ContextualBalloonWrapper {
     return new ContextualBalloonWrapper(page);
