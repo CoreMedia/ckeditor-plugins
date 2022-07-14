@@ -9,6 +9,7 @@ import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
@@ -25,6 +26,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
+
 
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
@@ -47,6 +49,15 @@ import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 import { isDataNormalizer } from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
+
+import { icons } from '@ckeditor/ckeditor5-core';
+
+const {
+	objectInline: withinTextIcon,
+	objectLeft: alignLeftIcon,	
+  objectRight: alignRightIcon,
+  objectSizeFull: pageDefaultIcon
+} = icons;
 
 const editorLanguage = document.currentScript.dataset.lang || "en";
 
@@ -79,6 +90,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     Highlight,
     ImageInline,
     ImageStyle,
+    ImageToolbar,
     Indent,
     Italic,
     AutoLink,
@@ -179,6 +191,46 @@ ClassicEditor.create(document.querySelector('.editor'), {
         },
       }
     },
+  },
+  image: {
+    styles: {
+      // Defining custom styling options for the images.
+      options: [ 
+        {
+          name: 'float-left',
+          icon: alignLeftIcon,
+          title: 'Left-aligned',
+          className: 'float--left',
+          modelElements: [ 'imageInline' ]
+        },
+        {
+          name: 'float-right',
+          icon: alignRightIcon,
+          title: 'Right-aligned',
+          className: 'float--right',
+          modelElements: [ 'imageInline' ]
+        },
+        {
+          name: 'float-none',
+          icon: withinTextIcon,
+          title: 'Within Text',
+          className: 'float--none',
+          modelElements: [ 'imageInline' ]
+        },
+        {
+          name: 'inline',
+          title: 'Page default',
+          icon: pageDefaultIcon,
+        }
+      ]
+    },
+    toolbar: [ 
+      'imageStyle:float-left',
+      'imageStyle:float-right',
+      'imageStyle:float-none',
+      "|",
+      'imageStyle:inline',
+    ]
   },
   table: {
     contentToolbar: [

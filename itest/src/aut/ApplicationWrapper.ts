@@ -6,6 +6,7 @@ import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { extendingWaitForExpect } from "../expect/Expectations";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
+import { ContextualBalloonWrapper } from "./ContextualBalloonWrapper";
 
 /**
  * Represents result from starting the server.
@@ -107,6 +108,15 @@ export class ApplicationWrapper {
    */
   get editor(): ClassicEditorWrapper {
     return ClassicEditorWrapper.fromPage(page);
+  }
+
+  /**
+   * Retrieves the currently opened ContextualBalloon.
+   *
+   * @returns ContextualBalloonWrapper the currently opened ContextualBalloon
+   */
+  get contextualBalloon(): ContextualBalloonWrapper {
+    return new ContextualBalloonWrapper(page);
   }
 
   /**

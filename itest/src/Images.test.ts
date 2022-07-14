@@ -2,6 +2,8 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import { img, p, richtext } from "./fixture/Richtext";
 import "./expect/ElementHandleExpectations";
+import { ImageStyleBalloonAction } from "./user-interaction/ImageStyleBalloonAction";
+import { ElementHandle } from "playwright-core";
 
 /**
  * Simulates a blob reference to some property named `data`.
@@ -96,4 +98,67 @@ describe("Image Features", () => {
     // BLOB-link to render the image.
     await expect(imgHandle).toMatchAttribute("src", PNG_RED_240x135);
   });
+
+  it("Should correctly set Image Alignment", async () => {
+    const { currentTestName } = expect.getState();
+    const { editor, mockContent } = application;
+    const { ui } = editor;
+
+    const id = 42;
+    await mockContent.addContents({
+      id,
+      blob: PNG_RED_240x135,
+      name: `Document for test ${currentTestName}`,
+    });
+
+    const data = richtext(
+      p(
+        img({
+          alt: currentTestName,
+          "xlink:href": blobReference(id),
+        })
+      )
+    );
+
+    await editor.setDataAndGetDataView(data);
+    const editableHandle = await ui.getEditableElement();
+
+    // click on image
+    await page.locator(".ck-editor__editable img").click();
+
+    // click on the align-left button in the imageStyle balloon
+    await ImageStyleBalloonAction.clickAlignLeft(application);
+    await expectFloat(editableHandle, "float--left", "left");
+
+    // click on the align-right button in the imageStyle balloon
+    await ImageStyleBalloonAction.clickAlignRight(application);
+
+    await expect(editableHandle).toHaveSelector("span.image-inline");
+    await expectFloat(editableHandle, "float--right", "right");
+
+    // click on the withinText button in the imageStyle balloon
+    await ImageStyleBalloonAction.clickAlignWithinText(application);
+    await expectFloat(editableHandle, "float--none", "none");
+
+    // click on the page default button in the imageStyle balloon
+    await ImageStyleBalloonAction.clickAlignPageDefault(application);
+    await expectNoFloat(editableHandle);
+  });
 });
+
+async function expectNoFloat(editableHandle: ElementHandle<HTMLElement>): Promise<void> {
+  await expect(editableHandle).toHaveSelector("span.image-inline");
+  const imgHandle = await editableHandle.$("span.image-inline");
+  await expect(imgHandle).not.toMatchAttribute("class", /float/);
+}
+
+async function expectFloat(
+  editableHandle: ElementHandle<HTMLElement>,
+  floatClass: string,
+  computedStyle: string
+): Promise<void> {
+  await expect(editableHandle).toHaveSelector("span.image-inline");
+  const imgHandle = await editableHandle.$("span.image-inline");
+  await expect(imgHandle).toMatchAttribute("class", new RegExp(`.*${floatClass}.*`));
+  await expect(imgHandle).toMatchComputedStyle("float", computedStyle);
+}

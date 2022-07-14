@@ -6,7 +6,7 @@ import ReplaceAllPasteAction from "./user-interaction/ReplaceAllPasteAction";
 
 const CHARACTER_PLACEHOLDER = "{PLACE_HOLDER}";
 
-describe("Symbol on paste mapper features", () => {
+describe("Font Mapper features", () => {
   let application: ApplicationWrapper;
 
   beforeAll(async () => {

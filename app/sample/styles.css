@@ -33,6 +33,26 @@
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* --------- IMAGE STYLES ------------------------------------------------------------------------------------------- */
+
+.ck-editor__editable .float--right {
+  float: right;
+  margin-left: 6px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ck-editor__editable .float--left {
+  float: left;
+  margin-right: 6px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ck-editor__editable .float--none {
+  float: none;
+}
+
 /* --------- EXAMPLE DATA ------------------------------------------------------------------------------------------- */
 
 input.error {
