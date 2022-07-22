@@ -15,6 +15,7 @@ jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
  */
 const TEST_SELECTOR = "";
 
+//@ts-expect-error
 const MOCK_EDITOR = new Editor();
 
 const parser = new DOMParser();
