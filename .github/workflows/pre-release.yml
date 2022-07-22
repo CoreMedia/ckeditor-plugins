@@ -70,6 +70,8 @@ jobs:
         run: pnpm lint
       - name: Test
         run: pnpm jest
+      - name: TypeDoc
+        run: pnpm doc
       - name: Publish prerelease
         if: github.event_name == 'workflow_dispatch'
         run: |

@@ -25,6 +25,9 @@
       "@coremedia/ckeditor5-coremedia-studio-integration/*": [
         "./packages/ckeditor5-coremedia-studio-integration/src/*"
       ],
+      "@coremedia/ckeditor5-data-normalization/*": [
+        "./packages/ckeditor5-data-normalization/src/*"
+      ],
       "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
         "./packages/ckeditor5-coremedia-studio-integration-mock/src/*"
       ],
@@ -34,10 +37,11 @@
       "@coremedia/ckeditor5-logging/*": [
         "./packages/ckeditor5-logging/src/*"
       ],
-      "@coremedia/ckeditor5-symbol-on-paste-mapper/*": [
-        "./packages/ckeditor5-symbol-on-paste-mapper/src/*"
+      "@coremedia/ckeditor5-font-mapper/*": [
+        "./packages/ckeditor5-font-mapper/src/*"
       ]
     }
   },
+  "exclude": ["itest", "app"],
   "extends": "./tsconfig.json"
 }

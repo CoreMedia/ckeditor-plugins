@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       '@coremedia/set-version': 1.1.1
+      '@types/jest': ^27.5.1
       rimraf: ^3.0.2
       typedoc: ^0.22.17
       typedoc-plugin-merge-modules: ^3.1.0
@@ -12,6 +13,7 @@ importers:
     dependencies:
       '@coremedia/set-version': 1.1.1
     devDependencies:
+      '@types/jest': 27.5.2
       rimraf: 3.0.2
       typedoc: 0.22.17_typescript@4.7.2
       typedoc-plugin-merge-modules: 3.1.0_typedoc@0.22.17

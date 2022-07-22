@@ -109,6 +109,8 @@ jobs:
         run: pnpm lint
       - name: Test
         run: pnpm jest
+      - name: TypeDoc
+        run: pnpm doc
       - name: Install for Production
         run: pnpm install --production
       # Publishes a release candidate with tag "next".
