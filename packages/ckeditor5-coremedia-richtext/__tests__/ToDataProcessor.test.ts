@@ -47,6 +47,7 @@ function fib(idx: number, memo?: Map<number, number>): number {
   return result;
 }
 
+//@ts-expect-error
 const MOCK_EDITOR = new Editor();
 const PARSER = new DOMParser();
 
