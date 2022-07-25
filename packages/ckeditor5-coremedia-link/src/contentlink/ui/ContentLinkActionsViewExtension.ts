@@ -52,12 +52,16 @@ class ContentLinkActionsViewExtension extends Plugin {
      */
     linkUI.actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
+      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+      const formView: LinkFormView = linkUI.formView;
+
       if (!hasContentUriPath(source)) {
+        // set visibility of url and content field
+        showContentLinkField(formView, false);
+        showContentLinkField(linkUI.actionsView, false);
         return;
       }
 
-      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-      const formView: LinkFormView = linkUI.formView;
       const { contentUriPath: value } = source;
 
       // content link value has changed. set urlInputView accordingly
