@@ -11,6 +11,8 @@ import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import { hasContentUriPath } from "./ViewExtensions";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -100,6 +102,11 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     contentLinkView.on("contentClick", () => {
       if (contentLinkView.uriPath) {
+        // we need to hide the balloon for the Studio environment
+        // otherwise a new tab would open and the balloon would still be displayed
+        ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
+          balloon.view.hide();
+        });
         openInTab(contentLinkView.uriPath);
       }
     });
