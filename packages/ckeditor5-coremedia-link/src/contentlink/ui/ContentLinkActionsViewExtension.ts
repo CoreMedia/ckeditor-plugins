@@ -105,7 +105,10 @@ class ContentLinkActionsViewExtension extends Plugin {
         // we need to hide the balloon for the Studio environment
         // otherwise a new tab would open and the balloon would still be displayed
         ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
-          balloon.view.hide();
+          if (balloon.visibleView) {
+            // it is not sufficient to just hide the visibleView, we need to remove it
+            balloon.remove(balloon.visibleView);
+          }
         });
         openInTab(contentLinkView.uriPath);
       }
