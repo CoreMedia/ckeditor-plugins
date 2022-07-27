@@ -11,6 +11,8 @@ import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import { hasContentUriPath } from "./ViewExtensions";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -52,12 +54,16 @@ class ContentLinkActionsViewExtension extends Plugin {
      */
     linkUI.actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
+      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
+      const formView: LinkFormView = linkUI.formView;
+
       if (!hasContentUriPath(source)) {
+        // set visibility of url and content field
+        showContentLinkField(formView, false);
+        showContentLinkField(linkUI.actionsView, false);
         return;
       }
 
-      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-      const formView: LinkFormView = linkUI.formView;
       const { contentUriPath: value } = source;
 
       // content link value has changed. set urlInputView accordingly
@@ -96,6 +102,14 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     contentLinkView.on("contentClick", () => {
       if (contentLinkView.uriPath) {
+        // we need to hide the balloon for the Studio environment
+        // otherwise a new tab would open and the balloon would still be displayed
+        ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
+          if (balloon.visibleView) {
+            // it is not sufficient to just hide the visibleView, we need to remove it
+            balloon.remove(balloon.visibleView);
+          }
+        });
         openInTab(contentLinkView.uriPath);
       }
     });
