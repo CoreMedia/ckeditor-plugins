@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dataprocessor-support",
-  "version": "7.0.1-rc.1",
+  "version": "7.0.1-rc.2",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -47,7 +47,7 @@
     "@ckeditor/ckeditor5-engine": "^34.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "7.0.1-rc.1",
-    "@coremedia/ckeditor5-logging": "7.0.1-rc.1"
+    "@coremedia/ckeditor5-common": "7.0.1-rc.2",
+    "@coremedia/ckeditor5-logging": "7.0.1-rc.2"
   }
 }
