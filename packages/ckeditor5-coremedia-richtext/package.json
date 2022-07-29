@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext",
-  "version": "7.0.1-rc.2",
+  "version": "7.0.1-rc.3",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -48,8 +48,8 @@
     "@ckeditor/ckeditor5-utils": "^34.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-dataprocessor-support": "7.0.1-rc.2",
-    "@coremedia/ckeditor5-logging": "7.0.1-rc.2",
-    "@coremedia/ckeditor5-data-normalization": "7.0.1-rc.2"
+    "@coremedia/ckeditor5-dataprocessor-support": "7.0.1-rc.3",
+    "@coremedia/ckeditor5-logging": "7.0.1-rc.3",
+    "@coremedia/ckeditor5-data-normalization": "7.0.1-rc.3"
   }
 }

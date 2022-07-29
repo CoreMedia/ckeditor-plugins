@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-logging",
-  "version": "7.0.1-rc.2",
+  "version": "7.0.1-rc.3",
   "description": "Provides logging to use in the plugins.",
   "keywords": [
     "coremedia"
