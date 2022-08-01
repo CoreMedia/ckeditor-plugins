@@ -1,5 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { ImageElementSupport } from "./integrations/Image";
+import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 
 export const XDIFF_ATTRIBUTES = {
   "xdiff:changetype": "changeType",
@@ -12,7 +13,7 @@ export const XDIFF_ATTRIBUTES = {
 
 export class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
-  static readonly requires = [ImageElementSupport];
+  static readonly requires = [HtmlImageElementSupport, ImageElementSupport];
 
   init(): void {
     const editor = this.editor;
