@@ -4,6 +4,14 @@ import {
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
 
+import {
+  differencingExample,
+  differencingTable,
+  differencingTextOnly,
+  miscW1000Text,
+  miscW5000Text
+} from './differencing-data'
+
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
 const SOME_TARGET = "somewhere";
@@ -1305,6 +1313,11 @@ const exampleData = {
   "CoreMedia RichText": coreMediaRichTextPoC(),
   "Empty": "",
   "Entities": entitiesExample,
+  "Differencing Text Only": differencingTextOnly,
+  "Differencing": differencingExample,
+  "Differencing Table": differencingTable,
+  "Differencing Misc W5000": miscW5000Text,
+  "Differencing Misc W1000": miscW1000Text,
   ...grsExampleData(),
   "Hello": richText(`<p>Hello World!</p>`),
   "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
