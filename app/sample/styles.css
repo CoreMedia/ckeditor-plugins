@@ -269,6 +269,51 @@ footer {
   color: rgba(0, 0, 0, .4);
 }
 
+/* Differencing */
+
+xdiff\:span[xdiff\:class="diff-html-added"] {
+  color: rgba(92, 160, 63, 1);
+  text-decoration: underline;
+}
+p > xdiff\:span[xdiff\:class="diff-html-added"]:empty::before {
+  content: '↩';
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
+}
+xdiff\:span[xdiff\:class="diff-html-removed"] {
+  color: rgba(196, 19, 19, 1);
+  text-decoration: line-through;
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(92, 160, 63, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-conflict"] {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(196, 19, 19, 1);
+}
+span.image-inline[xdiff\:changetype="diff-added-image"] {
+  box-sizing: border-box;
+  outline: 2px solid rgba(92, 160, 63, 1);
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-removed-image"] {
+  box-sizing: border-box;
+  outline: 2px solid rgba(196, 19, 19, 1);
+  outline-offset: -2px;
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] img {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(92, 160, 63, 1);
+  outline-offset: -4px;
+}
+span.image-inline[xdiff\:changetype="diff-conflict-image"] {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(196, 19, 19, 1);
+  outline-offset: -4px;
+}
+
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
 @media screen and ( max-width: 800px ) {
   :root {

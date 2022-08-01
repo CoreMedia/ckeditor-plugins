@@ -28,6 +28,7 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
 
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
@@ -48,13 +49,13 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
-import { isDataNormalizer } from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
+import {isDataNormalizer} from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
 
-import { icons } from '@ckeditor/ckeditor5-core';
+import {icons} from '@ckeditor/ckeditor5-core';
 
 const {
-	objectInline: withinTextIcon,
-	objectLeft: alignLeftIcon,	
+  objectInline: withinTextIcon,
+  objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
   objectSizeFull: pageDefaultIcon
 } = icons;
@@ -85,6 +86,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
     ContentLinks,
     ContentClipboard,
     ContentImagePlugin,
+    Differencing,
     Essentials,
     Heading,
     Highlight,
@@ -195,27 +197,27 @@ ClassicEditor.create(document.querySelector('.editor'), {
   image: {
     styles: {
       // Defining custom styling options for the images.
-      options: [ 
+      options: [
         {
           name: 'float-left',
           icon: alignLeftIcon,
           title: 'Left-aligned',
           className: 'float--left',
-          modelElements: [ 'imageInline' ]
+          modelElements: ['imageInline']
         },
         {
           name: 'float-right',
           icon: alignRightIcon,
           title: 'Right-aligned',
           className: 'float--right',
-          modelElements: [ 'imageInline' ]
+          modelElements: ['imageInline']
         },
         {
           name: 'float-none',
           icon: withinTextIcon,
           title: 'Within Text',
           className: 'float--none',
-          modelElements: [ 'imageInline' ]
+          modelElements: ['imageInline']
         },
         {
           name: 'inline',
@@ -224,7 +226,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
         }
       ]
     },
-    toolbar: [ 
+    toolbar: [
       'imageStyle:float-left',
       'imageStyle:float-right',
       'imageStyle:float-none',
@@ -280,7 +282,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
   [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
     // Demonstrates, how you may add more contents on the fly.
     contents: [
-      { id: 2, name: "Some Example Document", type: "document" },
+      {id: 2, name: "Some Example Document", type: "document"},
     ],
   },
 }).then(newEditor => {
