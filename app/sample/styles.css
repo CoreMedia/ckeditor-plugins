@@ -293,24 +293,24 @@ xdiff\:span[xdiff\:class="diff-html-conflict"] {
   color: rgba(255, 255, 255, 1);
   background-color: rgba(196, 19, 19, 1);
 }
-span.image-inline[xdiff\:changetype="diff-added-image"] {
-  box-sizing: border-box;
-  outline: 2px solid rgba(92, 160, 63, 1);
-  outline-offset: -2px;
-}
-span.image-inline[xdiff\:changetype="diff-removed-image"] {
-  box-sizing: border-box;
-  outline: 2px solid rgba(196, 19, 19, 1);
-  outline-offset: -2px;
-}
 xdiff\:span[xdiff\:class="diff-html-changed"] img {
   box-sizing: border-box;
   outline: 4px dashed rgba(92, 160, 63, 1);
   outline-offset: -4px;
 }
-span.image-inline[xdiff\:changetype="diff-conflict-image"] {
+span.image-inline[xdiff\:changetype="diff-added-image"], span.html-object-embed[xdiff\:changetype="diff-added-image"] {
   box-sizing: border-box;
-  outline: 4px dashed rgba(196, 19, 19, 1);
+  outline: 2px solid rgba(92, 160, 63, 1) !important;
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-removed-image"], span.html-object-embed[xdiff\:changetype="diff-removed-image"] {
+  box-sizing: border-box;
+  outline: 2px solid rgba(196, 19, 19, 1) !important;
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-conflict-image"], span.html-object-embed[xdiff\:changetype="diff-conflict-image"] {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(196, 19, 19, 1) !important;
   outline-offset: -4px;
 }
 
