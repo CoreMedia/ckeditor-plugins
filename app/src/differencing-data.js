@@ -36,37 +36,6 @@ const differencingExample = `
       </em>
       elit.
     </p>
-    <h3>Image Tests</h3>
-    <h4>001 Image Inserted</h4>
-    <p>Lorem
-      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="added-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}" xlink:role="myRole"
-             xlink:show="embed" xlink:title="legacy (swing editor/non-UAPI) coremedia URI link style" xlink:type="simple"
-             xdiff:changetype="diff-added-image"/>
-      </xdiff:span>
-      ipsum dolor sit amet, consectetuer adipiscing
-      <xdiff:span xdiff:class="diff-html-added" xdiff:previous="added-diff-0" xdiff:id="added-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}"
-             xlink:role="oldRole" xlink:show="embed" xlink:title="new UAPI coremedia URI style" xlink:type="simple"
-             xdiff:changetype="diff-added-image"/>
-      </xdiff:span>
-      elit.
-    </p>
-    <h4>002 Image deleted</h4>
-    <p>Lorem
-      <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="removed-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}" xlink:role="myRole"
-             xlink:show="embed" xlink:title="legacy (swing editor/non-UAPI) coremedia URI link style" xlink:type="simple"
-             xdiff:changetype="diff-removed-image"/>
-      </xdiff:span>
-      ipsum dolor sit amet, consectetuer adipiscing
-      <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="removed-diff-0" xdiff:id="removed-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}"
-             xlink:role="oldRole" xlink:show="embed" xlink:title="new UAPI coremedia URI style" xlink:type="simple"
-             xdiff:changetype="diff-removed-image"/>
-      </xdiff:span>
-      elit.
-    </p>
     <h3>Internal Link</h3>
     <h4>001 internal link target changed</h4>
     <p>This is an
@@ -256,6 +225,49 @@ const differencingTable = `
   </table>
 </div>
 `
+const differencingImages = `
+<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
+    <h2>Differencing Images</h2>
+    <h4>Image Inserted</h4>
+    <p>Lorem
+      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="added-diff-1">
+        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}" xlink:role="myRole"
+             xlink:show="embed" xlink:title="legacy (swing editor/non-UAPI) coremedia URI link style" xlink:type="simple"
+             xdiff:changetype="diff-added-image"/>
+      </xdiff:span>
+      ipsum dolor sit amet, consectetuer adipiscing
+      <xdiff:span xdiff:class="diff-html-added" xdiff:previous="added-diff-0" xdiff:id="added-diff-1">
+        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}"
+             xlink:role="oldRole" xlink:show="embed" xlink:title="new UAPI coremedia URI style" xlink:type="simple"
+             xdiff:changetype="diff-added-image"/>
+      </xdiff:span>
+      elit.
+    </p>
+    <h4>Image deleted</h4>
+    <p>Lorem
+      <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="removed-diff-1">
+        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}" xlink:role="myRole"
+             xlink:show="embed" xlink:title="legacy (swing editor/non-UAPI) coremedia URI link style" xlink:type="simple"
+             xdiff:changetype="diff-removed-image"/>
+      </xdiff:span>
+      ipsum dolor sit amet, consectetuer adipiscing
+      <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="removed-diff-0" xdiff:id="removed-diff-1">
+        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}"
+             xlink:role="oldRole" xlink:show="embed" xlink:title="new UAPI coremedia URI style" xlink:type="simple"
+             xdiff:changetype="diff-removed-image"/>
+      </xdiff:span>
+      elit.
+    </p>
+    <h4>Image alignment changed</h4>
+    <p>abcd
+      <xdiff:span xdiff:class="diff-html-changed" xdiff:changes="<ul class='changelist'><li>Changed from an <b>image</b> with alt , class float--right, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.</li><li>Changed to an <b>image</b> with alt , class float--none, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.</li></ul>" xdiff:id="changed-diff-0">
+          <img alt="" class="float--none" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${INLINE_IMG}"/>
+      </xdiff:span>
+      acbd
+    </p>
+</div>
+`
 const differencingTextOnly = `
   <div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
      xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
@@ -310,5 +322,6 @@ const differencingTextOnly = `
 export {
   differencingExample,
   differencingTextOnly,
-  differencingTable
+  differencingTable,
+  differencingImages
 }

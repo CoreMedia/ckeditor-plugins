@@ -4,7 +4,7 @@ import {
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
 
-import {differencingExample, differencingTable, differencingTextOnly,} from './differencing-data'
+import {differencingExample, differencingImages, differencingTable, differencingTextOnly} from './differencing-data'
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -1308,6 +1308,7 @@ const exampleData = {
   "Empty": "",
   "Entities": entitiesExample,
   "Differencing Text Only": differencingTextOnly,
+  "Differencing Images": differencingImages,
   "Differencing": differencingExample,
   "Differencing Table": differencingTable,
   ...grsExampleData(),
