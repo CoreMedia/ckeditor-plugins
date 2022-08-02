@@ -140,6 +140,46 @@ span.html-object-embed[xdiff\:changetype="diff-conflict-image"] {
 }
 ```
 
+### Added Newlines
+
+Styling added newlines is a little tricky. This is, because in editing view
+such added newlines will look like this:
+
+```xml
+<p>
+  Lorem ipsum&nbsp;
+  <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0">
+    <br data-cke-filler="true">
+  </xdiff:span>
+</p>
+```
+
+Thus, you have to find a CSS selector, which applies to an `<xdiff:span>` within
+a paragraph `<p>`, which only contains a `<br>` element.
+
+As there is no _has-child_ selector in CSS, the only way is to style the
+corresponding `<br>` tag, which again has some limitations regarding styling.
+Kudos to a posting at [StackOverflow](https://stackoverflow.com/questions/899252/can-you-target-br-with-css),
+there is some trick though, to style such added newlines. Here is an example:
+
+```css
+p > xdiff\:span[xdiff\:class="diff-html-added"] > br[data-cke-filler="true"]:only-child {
+  display: block;
+  font-size: 16px;
+  line-height: 16px;
+  height: 16px;
+  width: 16px;
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDkyLCAxNjAsIDYzKSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-origin: content-box;
+  content: "";
+  position: relative;
+}
+```
+
+For more experiments, consult corresponding [JSFiddle](https://jsfiddle.net/de67wxvs/).
+
 Assumptions
 --------------------------------------------------------------------------------
 
