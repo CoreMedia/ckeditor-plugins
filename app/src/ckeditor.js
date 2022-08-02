@@ -27,8 +27,7 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 
-
-import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
+import {Differencing} from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
@@ -74,10 +73,18 @@ setupPreview();
 
 let editor;
 
+const imagePlugins = [
+  ContentImagePlugin,
+  ImageInline,
+  ImageStyle,
+  ImageToolbar,
+];
+
 ClassicEditor.create(document.querySelector('.editor'), {
   licenseKey: '',
   placeholder: 'Type your text here...',
   plugins: [
+    ...imagePlugins,
     Alignment,
     Autosave,
     BlockQuote,
