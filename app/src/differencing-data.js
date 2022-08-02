@@ -5,7 +5,7 @@ const differencingExample = `
      xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
      <h1>Differencing testcases</h1>
      <h3>Element Structure tests</h3>
-     <h4>001 place text into element</h4>
+     <h4>Place text into element</h4>
      <p>Lorem ipsum dolor sit amet,
         <strong class="color--red background-color--purple">
         <xdiff:span xdiff:class="diff-html-changed"
@@ -37,7 +37,7 @@ const differencingExample = `
       elit.
     </p>
     <h3>Internal Link</h3>
-    <h4>001 internal link target changed</h4>
+    <h4>Internal link target changed</h4>
     <p>This is an
       <a xlink:actuate="onRequest" xlink:href="content:6" xlink:show="replace" xlink:type="simple">
         <xdiff:span xdiff:class="diff-html-changed"
@@ -56,7 +56,7 @@ const differencingExample = `
       </a>
       .
     </p>
-    <h4>002 internal link change show attribute</h4>
+    <h4> Internal link change show attribute</h4>
     <p>This is an
       <a xlink:actuate="onRequest" xlink:href="content:4" xlink:show="new" xlink:type="simple">
         <xdiff:span xdiff:class="diff-html-changed"
@@ -67,7 +67,7 @@ const differencingExample = `
       .
     </p>
     <h3>Misc.</h3>
-    <h4>001 class attribute change</h4>
+    <h4>Class attribute change</h4>
     <p>Lorem ipsum dolor sit amet,
       <strong class="color--red very-new-class background-color--purple">
         <xdiff:span xdiff:class="diff-html-changed"
@@ -94,7 +94,7 @@ const differencingTable = `
       </li>
     </ul>
   </p>
-  <h4>003 table move row in small filled table</h4>
+  <h4>Table move row in small filled table</h4>
   <table>
     <tr>
       <td rowspan="1" colspan="1">
@@ -159,7 +159,7 @@ const differencingTable = `
       </td>
     </tr>
   </table>
-  <h4>004 table move cell in small filled table</h4>
+  <h4>Table move cell in small filled table</h4>
   <table>
     <tr>
       <td rowspan="1" colspan="1">
