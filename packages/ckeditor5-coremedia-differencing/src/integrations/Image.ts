@@ -3,10 +3,16 @@ import { PluginIntegrationHook } from "../PluginIntegrationHook";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { XDIFF_ATTRIBUTES } from "../Xdiff";
+import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Hooks into `ImageInline` and `ImageBlock` plugin, if available and
- * registered additional differencing attributes applied to `<img>` elements.
+ * registers additional differencing attributes applied to `<img>` elements.
+ *
+ * For corresponding CSS rules, it is important to understand, that the
+ * `xdiff:changetype` attribute is applied to the surrounding element, like
+ * the corresponding `<span class="image-inline">` for inline images.
  */
 export class ImageElementSupport extends Plugin {
   static readonly pluginName: string = "DifferencingImageElementSupport";
@@ -15,6 +21,10 @@ export class ImageElementSupport extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(ImageElementSupport.pluginName);
 
   init(): void {
+    reportInitializationProgress(ImageElementSupport.pluginName, ImageElementSupport.#logger, () => this.#init());
+  }
+
+  #init(): void {
     const { editor } = this;
     const { model, plugins } = editor;
     const { schema }: Model = model;
@@ -31,23 +41,16 @@ export class ImageElementSupport extends Plugin {
     logger.debug("Waiting for plugin-integration hook to be ready.");
 
     pluginIntegrationHook.on("plugin-integration:ready", () => {
-      if (schema.isRegistered("imageBlock")) {
-        logger.debug(`Extending "imageBlock" by difference augmentation attribute.`);
-        schema.extend("imageBlock", {
-          allowAttributes: ["changeType"],
-        });
-      } else {
-        logger.debug(`Not integrating with "imageBlock" element, as it is unavailable.`);
-      }
-
-      if (schema.isRegistered("imageInline")) {
-        logger.debug(`Extending "imageInline" by difference augmentation attribute.`);
-        schema.extend("imageInline", {
-          allowAttributes: ["changeType"],
-        });
-      } else {
-        logger.debug(`Not integrating with "imageBlock" element, as it is unavailable.`);
-      }
+      ["imageBlock", "imageInline"].forEach((itemName): void => {
+        if (schema.isRegistered(itemName)) {
+          logger.debug(`Extending "${itemName}" by difference augmentation attribute.`);
+          schema.extend(itemName, {
+            allowAttributes: [XDIFF_ATTRIBUTES["xdiff:changetype"]],
+          });
+        } else {
+          logger.debug(`Not integrating with "${itemName}" element, as it is unavailable.`);
+        }
+      });
     });
   }
 }

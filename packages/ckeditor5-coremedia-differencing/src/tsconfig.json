@@ -8,7 +8,8 @@
     "declarationMap": true,
     "paths": {
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
-      "@coremedia/ckeditor5-common/*": ["../../ckeditor5-common/src/*"]
+      "@coremedia/ckeditor5-common/*": ["../../ckeditor5-common/src/*"],
+      "@coremedia/ckeditor5-core-common/*": ["../../ckeditor5-core-common/src/*"]
     }
   },
   "references": [
@@ -17,6 +18,9 @@
     },
     {
       "path": "../../ckeditor5-common/src"
+    },
+    {
+      "path": "../../ckeditor5-core-common/src"
     }
   ],
   "extends": "../../../tsconfig.json"

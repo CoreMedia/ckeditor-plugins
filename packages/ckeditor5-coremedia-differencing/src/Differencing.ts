@@ -1,51 +1,10 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
-
-/**
- * Attributes used by server-side differencing.
- *
- * * **Key:** Name of attributes in data and editing view.
- * * **Value:** Name of attribute in model.
- */
-export const XDIFF_ATTRIBUTES = {
-  /**
-   * Attribute, applied to images for example.
-   */
-  "xdiff:changetype": "xdiff-change-type",
-  /**
-   * Verbose description of changes. Unused yet.
-   */
-  "xdiff:changes": "xdiff-changes",
-  /**
-   * UI-Class that categorizes the change type.
-   */
-  "xdiff:class": "xdiff-class",
-  /**
-   * ID of the difference, which may be used, to jump between
-   * changes. Unused yet.
-   */
-  "xdiff:id": "xdiff-id",
-  /**
-   * Reference to next diff for diff-navigation. Unused yet.
-   */
-  "xdiff:next": "xdiff-next",
-  /**
-   * Reference to previous diff for diff-navigation. Unused yet.
-   */
-  "xdiff:previous": "xdiff-previous",
-};
-
-/**
- * Extra element, server-side differencing augments the original data with.
- */
-export const XDIFF_SPAN_ELEMENT_CONFIG: {
-  view: string;
-  model: string;
-} = {
-  view: "xdiff:span",
-  model: "xdiff-span",
-};
+import { XDIFF_ATTRIBUTES, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
+import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * Plugin, which adds support for server-side data augmentation for
@@ -57,10 +16,18 @@ export class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport];
 
+  static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
+
   init(): void {
+    reportInitializationProgress(Differencing.pluginName, Differencing.#logger, () => this.#init());
+  }
+
+  #init(): void {
     const editor = this.editor;
     const { model, conversion } = editor;
     const { schema } = model;
+
+    Differencing.#logger.info("Huhu?!??");
 
     schema.register("xdiff-span", {
       allowIn: ["$block", "$container"],

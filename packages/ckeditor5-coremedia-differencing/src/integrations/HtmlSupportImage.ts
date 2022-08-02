@@ -1,35 +1,67 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { XDIFF_ATTRIBUTES } from "../Xdiff";
+import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
 
+/**
+ * Hooks into GHS' `DataSchema` plugin, if available and registers additional
+ * differencing attributes applied to `<img>` elements.
+ *
+ * For corresponding CSS rules, it is important to understand, that the
+ * `xdiff:changetype` attribute is applied to the surrounding element, i.e.,
+ * the corresponding `<span class="html-object-embed">` element.
+ */
 export class HtmlImageElementSupport extends Plugin {
   static readonly pluginName: string = "DifferencingHtmlImageElementSupport";
   static readonly requires = [];
 
+  static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);
+
   init(): void {
+    reportInitializationProgress(HtmlImageElementSupport.pluginName, HtmlImageElementSupport.#logger, () =>
+      this.#init()
+    );
+  }
+
+  #init(): void {
     const { editor } = this;
     const { model } = editor;
     const { schema } = model;
+    const logger = HtmlImageElementSupport.#logger;
 
-    // Only required, if no standard image plugin is enabled.
     if (editor.plugins.has("ImageInlineEditing") || editor.plugins.has("ImageBlockEditing")) {
-      console.log("HtmlImageElementSupport: Irrelevant: Image Plugins available.");
+      logger.debug(`Skipping initialization, as corresponding "real" image plugins are available.`);
       return;
     }
-    // Skip, if GHS is not enabled, i.e., required contained DataSchema plugin is not available.
     if (!editor.plugins.has("DataSchema")) {
-      console.log("HtmlImageElementSupport: Irrelevant: DataSchema plugin unavailable.");
+      logger.debug(`Skipping initialization, as GHS' DataSchema plugin is unavailable.`);
       return;
     }
+
+    logger.debug(`Registering "checkAttribute" schema handler to allow "xdiff:changetype" on "htmlImg".`);
+
     /*
-       TODO: We must wait here, for 'htmlImg'  to be registered. See possibly
-       HTML Support, Image Integration and dataFilter.on( 'register:img', ( evt, definition )
-       We may be able, adding attributes there.
+     * As GHS registers `htmlImg` late in CKEditor's initialization process,
+     * there does not seem to be a good/robust way to extend `htmlImg` element.
+     * That is why we instead listen to `checkAttribute` to handle this case
+     * on demand. This is a workaround for
+     * [ckeditor/ckeditor5#12199](https://github.com/ckeditor/ckeditor5/issues/12199).
      */
-    if (schema.isRegistered("htmlImg")) {
-      schema.extend("htmlImg", {
-        allowAttributes: ["changeType"],
-      });
-    } else {
-      console.log("HtmlImageElementSupport: htmlImg element not (yet?) registered");
-    }
+    schema.on(
+      "checkAttribute",
+      (evt, args) => {
+        const context = args[0];
+        const attributeName = args[1];
+
+        if (context.endsWith("htmlImg") && attributeName === XDIFF_ATTRIBUTES["xdiff:changetype"]) {
+          // Prevent next listeners from being called.
+          evt.stop();
+          // Set the checkAttribute()'s return value.
+          evt.return = true;
+        }
+      },
+      { priority: "high" }
+    );
   }
 }
