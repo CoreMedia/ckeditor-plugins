@@ -272,47 +272,55 @@ const differencingTextOnly = `
   <div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
      xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
     <h2>Differencing Text Only</h2>
-    <h4>001 text change (en_US)</h4>
+    <h4>Text change (en_US)</h4>
     <p>If there were
       <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="added-diff-0">a</xdiff:span>
       <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0"
                   xdiff:id="added-diff-0">an interesting</xdiff:span>difference, it would certainly be seen.
     </p>
-    <h4>002 text added inbetween</h4>
+    <h4>Text added inbetween</h4>
     <p>Lorem ipsum dolor sit amet, <xdiff:span xdiff:class="diff-html-added"
                                            xdiff:id="added-diff-0">Wortberg</xdiff:span>consectetuer adipiscing elit.
     </p>
-    <h4>003 text added at beginning</h4>
+    <h4>Text added at beginning</h4>
     <p><xdiff:span xdiff:class="diff-html-added"
                xdiff:id="added-diff-0">Wortberg</xdiff:span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
     </p>
-    <h4>004 text added at end</h4>
+    <h4>Text added at end</h4>
     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
       <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0">Wortberg</xdiff:span>
     </p>
-    <h4>005 text removed inbetween</h4>
+    <h4>Text removed inbetween</h4>
     <p>Lorem ipsum dolor sit amet, <xdiff:span xdiff:class="diff-html-removed"
                                              xdiff:id="removed-diff-0">Wortberg</xdiff:span>consectetuer adipiscing elit.
     </p>
-    <h4>006 text removed at beginning</h4>
-      <p><xdiff:span xdiff:class="diff-html-removed"
+    <h4>Text removed at beginning</h4>
+    <p><xdiff:span xdiff:class="diff-html-removed"
                  xdiff:id="removed-diff-0">Wortberg</xdiff:span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-  </p>
-    <h4>007 text removed at end</h4>
+    </p>
+    <h4>Newline at end of line</h4>
+    <p>
+      Lorem ipsum
+      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0"/>
+    </p>
+    <p>
+      sit amet  
+    </p>
+    <h4>Text removed at end</h4>
       <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
     <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0">Wortberg</xdiff:span>
   </p>
-    <h4>008 text change (ja_JP)</h4>
+    <h4>Text change (ja_JP)</h4>
       <p>
     <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="added-diff-0">相違があった</xdiff:span>
     <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0"
                 xdiff:id="added-diff-0">興味深い違いがあった</xdiff:span>場合、それは確かに見られる。
   </p>
-    <h4>009 text change (de_DE)</h4>
+    <h4>Text change (de_DE)</h4>
       <p>Wäre hier ein <xdiff:span xdiff:class="diff-html-added"
                                xdiff:id="added-diff-0">interessanter</xdiff:span>Unterschied, wäre er sicherlich zu sehen.
   </p>
-    <h4>010 text change (ar_DZ)</h4>
+    <h4>Text change (ar_DZ)</h4>
       <p>إذا كان هناك فرق <xdiff:span xdiff:class="diff-html-added"
                                   xdiff:id="added-diff-0">مثيرة للاهتمام</xdiff:span>، ومن المؤكد أن يطلع عليها.
   </p>
