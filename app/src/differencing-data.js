@@ -266,6 +266,14 @@ const differencingImages = `
       </xdiff:span>
       acbd
     </p>
+    <h4>Image newline after image</h4>
+    <p>
+      Lorem Ipsum
+      <img alt="" class="float--none" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${INLINE_IMG}"/>
+
+      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0"/>
+    </p>
+    <p>dolor set?</p>
 </div>
 `
 const differencingTextOnly = `
