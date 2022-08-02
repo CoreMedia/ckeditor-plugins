@@ -99,3 +99,18 @@ export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInte
     throw new PluginNotFoundError(key, `Plugin ${key.name} unavailable.`);
   }
 };
+
+/**
+ * Reports, when initialization of a plugin starts and ends and provides some
+ * statistics afterwards.
+ *
+ * @param pluginName - plugin name that is initialized
+ * @param logger - logger to report progress
+ * @param initialization - initialization process to measure
+ */
+export const reportInitializationProgress = (pluginName: string, logger: Logger, initialization: () => void): void => {
+  const startTimestamp = performance.now();
+  logger.info(`Initializing ${pluginName}...`);
+  initialization();
+  logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+};
