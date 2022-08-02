@@ -261,7 +261,7 @@ const differencingImages = `
     </p>
     <h4>Image alignment changed</h4>
     <p>abcd
-      <xdiff:span xdiff:class="diff-html-changed" xdiff:changes="<ul class='changelist'><li>Changed from an <b>image</b> with alt , class float--right, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.</li><li>Changed to an <b>image</b> with alt , class float--none, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.</li></ul>" xdiff:id="changed-diff-0">
+      <xdiff:span xdiff:class="diff-html-changed" xdiff:changes="&lt;ul class='changelist'&gt;&lt;li&gt;Changed from an &lt;b&gt;image&lt;/b&gt; with alt , class float--right, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.&lt;/li&gt;&lt;li&gt;Changed to an &lt;b&gt;image&lt;/b&gt; with alt , class float--none, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.&lt;/li&gt;&lt;/ul&gt;" xdiff:id="changed-diff-0">
           <img alt="" class="float--none" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${INLINE_IMG}"/>
       </xdiff:span>
       acbd
