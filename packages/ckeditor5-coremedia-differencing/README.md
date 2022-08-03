@@ -163,6 +163,17 @@ p > xdiff\:span[xdiff\:class="diff-html-added"]:empty::before {
 }
 ```
 
+For a removed newline, the corresponding XML is similar, and so is the
+CSS style:
+
+```css
+p > xdiff\:span[xdiff\:class="diff-html-removed"]:empty::before {
+  content: url("...");
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
+}
+```
 Assumptions
 --------------------------------------------------------------------------------
 

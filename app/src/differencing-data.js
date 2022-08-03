@@ -1,343 +1,350 @@
-const INLINE_IMG = "content/900#properties.data";
+/**
+ * Places the given text into a CoreMedia RichText Heading Level 1.
+ */
+const h1 = (text) => `<p class="p--heading-1">${text}</p>`;
+/**
+ * Places the given text into some section heading (bold text paragraph).
+ */
+const section = (text) => `<p><strong>${text}</strong></p>`;
 
-const differencingExample = `
-<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
-     xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
-     <h1>Differencing testcases</h1>
-     <h3>Element Structure tests</h3>
-     <h4>Place text into element</h4>
-     <p>Lorem ipsum dolor sit amet,
-        <strong class="color--red background-color--purple">
-        <xdiff:span xdiff:class="diff-html-changed"
-                    xdiff:changes="&lt;b&gt;Strong&lt;/b&gt; style added with class color--red background-color--purple."
-                    xdiff:id="changed-diff-0">consectetuer
-        </xdiff:span>
-        </strong>
-        adipiscing elit.
-    </p>
-    <h3>003 place text into various nested elements</h3>
-    <p>Lorem ipsum dolor sit amet,
-      <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="added-diff-0">consectetuer
-      </xdiff:span>
-      <strong>
-        <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-0"
-                    xdiff:next="changed-diff-0">consec
-        </xdiff:span>
-        <em>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-0"
-                      xdiff:next="changed-diff-0">tetuer
-          </xdiff:span>
-        </em>
-      </strong>
-      <em>
-        <xdiff:span xdiff:class="diff-html-changed" xdiff:changes="&lt;b&gt;Emphasis&lt;/b&gt; style added."
-                    xdiff:previous="added-diff-0" xdiff:id="changed-diff-0">adipiscing
-        </xdiff:span>
-      </em>
-      elit.
-    </p>
-    <h3>Internal Link</h3>
-    <h4>Internal link target changed</h4>
-    <p>This is an
-      <a xlink:actuate="onRequest" xlink:href="content:6" xlink:show="replace" xlink:type="simple">
-        <xdiff:span xdiff:class="diff-html-changed"
-                    xdiff:changes="&lt;ul class='changelist'&gt;&lt;li&gt;Moved out of a &lt;b&gt;link&lt;/b&gt; with destination content:2 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.&lt;/li&gt;&lt;li&gt;Moved to a &lt;b&gt;link&lt;/b&gt; with destination content:6 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.&lt;/li&gt;&lt;/ul&gt;"
-                    xdiff:id="changed-diff-0" xdiff:next="changed-diff-1">internal link
-        </xdiff:span>
-      </a>
-      .
-    </p>
-    <p>This is an
-      <a xlink:actuate="onRequest" xlink:href="content:6" xlink:show="replace" xlink:type="simple">
-        <xdiff:span xdiff:class="diff-html-changed"
-                    xdiff:changes="&lt;ul class='changelist'&gt;&lt;li&gt;Moved out of a &lt;b&gt;link&lt;/b&gt; with destination content:4 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.&lt;/li&gt;&lt;li&gt;Moved to a &lt;b&gt;link&lt;/b&gt; with destination content:6 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.&lt;/li&gt;&lt;/ul&gt;"
-                    xdiff:previous="changed-diff-0" xdiff:id="changed-diff-1">internal link
-        </xdiff:span>
-      </a>
-      .
-    </p>
-    <h4> Internal link change show attribute</h4>
-    <p>This is an
-      <a xlink:actuate="onRequest" xlink:href="content:4" xlink:show="new" xlink:type="simple">
-        <xdiff:span xdiff:class="diff-html-changed"
-                    xdiff:changes="&lt;ul class='changelist'&gt;&lt;li&gt;Moved out of a &lt;b&gt;link&lt;/b&gt; with destination content:4 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.&lt;/li&gt;&lt;li&gt;Moved to a &lt;b&gt;link&lt;/b&gt; with destination content:4 with xlink:actuate onRequest, xlink:show new and xlink:type simple.&lt;/li&gt;&lt;/ul&gt;"
-                    xdiff:id="changed-diff-0">internal link
-        </xdiff:span>
-      </a>
-      .
-    </p>
-    <h3>Misc.</h3>
-    <h4>Class attribute change</h4>
-    <p>Lorem ipsum dolor sit amet,
-      <strong class="color--red very-new-class background-color--purple">
-        <xdiff:span xdiff:class="diff-html-changed"
-                    xdiff:changes="&lt;ul class='changelist'&gt;&lt;li&gt;&lt;b&gt;Strong&lt;/b&gt; style removed with class color--red background-color--purple.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Strong&lt;/b&gt; style added with class color--red very-new-class background-color--purple.&lt;/li&gt;&lt;/ul&gt;"
-                    xdiff:id="changed-diff-0">consectetuer
-        </xdiff:span>
-      </strong>
-      adipiscing elit.
-    </p>
-</div>`;
-const differencingTable = `
-<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
-<h2>Differencing with tables</h2>
-  <p>
-    Known issues: 
-    <ul>
-      <li>
-        Moving the table row is not detected as DaisyDiff cannot deal with structural changes which are not bound to a text node
-        in some way.
-      </li>
-      <li>
-        Moving the table cell is not detected as DaisyDiff cannot deal with structural changes which are not bound to a text
-        node in some way.
-      </li>
-    </ul>
-  </p>
-  <h4>Table move row in small filled table</h4>
-  <table>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="removed-diff-0">sit</xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="removed-diff-0">amet
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="removed-diff-0">consectetuer
-          </xdiff:span>
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>Lorem</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>ipsum</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>dolor</p>
-      </td>
-    </tr>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="added-diff-0" xdiff:id="removed-diff-0">sit
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="added-diff-0" xdiff:id="removed-diff-0">amet
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="added-diff-0"
-                      xdiff:id="removed-diff-0">consectetuer
-          </xdiff:span>
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>adipiscing</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>elit</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>Aenean</p>
-      </td>
-    </tr>
-  </table>
-  <h4>Table move cell in small filled table</h4>
-  <table>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>Lorem</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="removed-diff-0">dolor
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>ipsum
-          <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="added-diff-0" xdiff:id="removed-diff-0"
-                      xdiff:next="added-diff-1">dolor
-          </xdiff:span>
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-1"
-                      xdiff:next="removed-diff-1">amet
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>sit</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="added-diff-1" xdiff:id="removed-diff-1"
-                      xdiff:next="removed-diff-2">amet
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>consectetuer</p>
-      </td>
-    </tr>
-    <tr>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="removed-diff-1" xdiff:id="removed-diff-2"
-                      xdiff:next="added-diff-2">adipiscing
-          </xdiff:span>
-        </p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>elit</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>Aenean</p>
-      </td>
-      <td rowspan="1" colspan="1">
-        <p>
-          <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-2" xdiff:id="added-diff-2">adipiscing
-          </xdiff:span>
-        </p>
-      </td>
-    </tr>
-  </table>
-</div>
-`
-const differencingImages = `
-<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
-     xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
-    <h2>Differencing Images</h2>
-    <h4>Image Inserted</h4>
-    <p>Lorem
-      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0" xdiff:next="added-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}" xlink:role="myRole"
-             xlink:show="embed" xlink:title="legacy (swing editor/non-UAPI) coremedia URI link style" xlink:type="simple"
-             xdiff:changetype="diff-added-image"/>
-      </xdiff:span>
-      ipsum dolor sit amet, consectetuer adipiscing
-      <xdiff:span xdiff:class="diff-html-added" xdiff:previous="added-diff-0" xdiff:id="added-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}"
-             xlink:role="oldRole" xlink:show="embed" xlink:title="new UAPI coremedia URI style" xlink:type="simple"
-             xdiff:changetype="diff-added-image"/>
-      </xdiff:span>
-      elit.
-    </p>
-    <h4>Image deleted</h4>
-    <p>Lorem
-      <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="removed-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}" xlink:role="myRole"
-             xlink:show="embed" xlink:title="legacy (swing editor/non-UAPI) coremedia URI link style" xlink:type="simple"
-             xdiff:changetype="diff-removed-image"/>
-      </xdiff:span>
-      ipsum dolor sit amet, consectetuer adipiscing
-      <xdiff:span xdiff:class="diff-html-removed" xdiff:previous="removed-diff-0" xdiff:id="removed-diff-1">
-        <img alt="text" xlink:actuate="onLoad" xlink:href="${INLINE_IMG}"
-             xlink:role="oldRole" xlink:show="embed" xlink:title="new UAPI coremedia URI style" xlink:type="simple"
-             xdiff:changetype="diff-removed-image"/>
-      </xdiff:span>
-      elit.
-    </p>
-    <h4>Image alignment changed</h4>
-    <p>abcd
-      <xdiff:span xdiff:class="diff-html-changed" xdiff:changes="&lt;ul class='changelist'&gt;&lt;li&gt;Changed from an &lt;b&gt;image&lt;/b&gt; with alt , class float--right, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.&lt;/li&gt;&lt;li&gt;Changed to an &lt;b&gt;image&lt;/b&gt; with alt , class float--none, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${INLINE_IMG}.&lt;/li&gt;&lt;/ul&gt;" xdiff:id="changed-diff-0">
-          <img alt="" class="float--none" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${INLINE_IMG}"/>
-      </xdiff:span>
-      acbd
-    </p>
-    <h4>Image newline after image</h4>
-    <p>
-      Lorem Ipsum
-      <img alt="" class="float--none" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${INLINE_IMG}"/>
+/**
+ * Simple escaping mechanism for encoding HTML in attribute values.
+ * This is, what is expected by corresponding server responses (data).
+ */
+const escape = (text) => text === undefined ? undefined : text
+        .replaceAll(/&/g, "&amp;")
+        .replaceAll(/</g, "&lt;")
+        .replaceAll(/>/g, "&gt;")
+        .replaceAll(/"/g, "&quot;");
 
-      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0"/>
-    </p>
-    <p>dolor set?</p>
-</div>
-`
-const differencingTextOnly = `
-  <div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
-     xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
-    <h2>Differencing Text Only</h2>
-    <h4>Text change (en_US)</h4>
-    <p>If there were
-      <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="added-diff-0">a</xdiff:span>
-      <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0"
-                  xdiff:id="added-diff-0">an interesting</xdiff:span>difference, it would certainly be seen.
-    </p>
-    <h4>Text added inbetween</h4>
-    <p>Lorem ipsum dolor sit amet, <xdiff:span xdiff:class="diff-html-added"
-                                           xdiff:id="added-diff-0">Wortberg</xdiff:span>consectetuer adipiscing elit.
-    </p>
-    <h4>Text added at beginning</h4>
-    <p><xdiff:span xdiff:class="diff-html-added"
-               xdiff:id="added-diff-0">Wortberg</xdiff:span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    </p>
-    <h4>Text added at end</h4>
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0">Wortberg</xdiff:span>
-    </p>
-    <h4>Text removed inbetween</h4>
-    <p>Lorem ipsum dolor sit amet, <xdiff:span xdiff:class="diff-html-removed"
-                                             xdiff:id="removed-diff-0">Wortberg</xdiff:span>consectetuer adipiscing elit.
-    </p>
-    <h4>Text removed at beginning</h4>
-    <p><xdiff:span xdiff:class="diff-html-removed"
-                 xdiff:id="removed-diff-0">Wortberg</xdiff:span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    </p>
-    <h4>Newline at end of line</h4>
-    <p>
-      Lorem ipsum
-      <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0"/>
-    </p>
-    <p>
-      sit amet  
-    </p>
-    <h4>Text removed at end</h4>
-      <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0">Wortberg</xdiff:span>
-  </p>
-    <h4>Text change (ja_JP)</h4>
-      <p>
-    <xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="added-diff-0">相違があった</xdiff:span>
-    <xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0"
-                xdiff:id="added-diff-0">興味深い違いがあった</xdiff:span>場合、それは確かに見られる。
-  </p>
-    <h4>Text change (de_DE)</h4>
-      <p>Wäre hier ein <xdiff:span xdiff:class="diff-html-added"
-                               xdiff:id="added-diff-0">interessanter</xdiff:span>Unterschied, wäre er sicherlich zu sehen.
-  </p>
-    <h4>Text change (ar_DZ)</h4>
-      <p>إذا كان هناك فرق <xdiff:span xdiff:class="diff-html-added"
-                                  xdiff:id="added-diff-0">مثيرة للاهتمام</xdiff:span>، ومن المؤكد أن يطلع عليها.
-  </p>
-  </div>
-`
+/**
+ * Simple ID tracking. Should be reset between examples sets.
+ */
+let currentId = 0;
 
-export {
-  differencingExample,
-  differencingTextOnly,
-  differencingTable,
-  differencingImages
+/**
+ * Creates a generic ID (simplified for examples).
+ */
+const id = () => `diff-${currentId}`;
+/**
+ * Creates a reference to previous ID. `undefined` iff. `hasPrevious` is `false`.
+ */
+const previous = (hasPrevious) => hasPrevious ? `diff-${currentId - 1}` : undefined;
+/**
+ * Creates a reference to next ID. `undefined` iff. `hasNext` is `false`.
+ */
+const next = (hasNext) => hasNext ? `diff-${currentId + 1}` : undefined;
+
+/**
+ * Surrounds given text with outer CoreMedia RichText `<div>` element with
+ * required namespaces for augmented differencing markup.
+ */
+const differencingContainer = (xml) => {
+  const xlinkNS = xml.includes("xlink:") ? ` xmlns:xlink="http://www.w3.org/1999/xlink"` : ``;
+  return `<?xml version="1.0" encoding="utf-8"?>\
+<div xmlns="http://www.coremedia.com/2003/richtext-1.0"${xlinkNS} xmlns:xdiff="http://www.coremedia.com/2015/xdiff">\
+${xml}\
+</div>`
+};
+
+/**
+ * Adds some introduction text to the set of differencing examples.
+ * @param topic - topic the examples are about
+ */
+const differencingIntroduction = (topic) => `
+${h1(`Differencing: ${topic}`)}
+<p>
+  These examples refer to representing results of server-side differencing
+  in CoreMedia Studio. Note, that in general, such markup is only represented
+  in <em>read-only mode</em>, i.e., the examples below are not meant to be
+  edited. <em>Non-bijective:</em> This is also the reason, why you will not find
+  the corresponding differencing markup in the resulting data-representation as
+  can be seen in source editing view, for example.
+</p>
+`;
+
+/**
+ * Formats the corresponding `xdiff` attribute (with leading whitespace).
+ * An empty string is returned, if the given value is `undefined`.
+ */
+const xdiffAttr = (name, value) => {
+  if (value === undefined) {
+    return ``;
+  }
+  return ` xdiff:${name}="${value}"`
+};
+
+/**
+ * Formats an `xdiff:span` with the given configuration options. Any unset
+ * values in configuration are ignored. If a text is provided, it will be
+ * wrapped into the `xdiff:span` element.
+ */
+const xdiffSpan = (config, content) => {
+  const {
+    "class": className,
+    id,
+    previous,
+    next,
+    changetype,
+    changes
+  } = config;
+  const actualContent = content ?? "";
+  return [
+    `<xdiff:span`,
+    xdiffAttr("class", className),
+    xdiffAttr("id", id),
+    xdiffAttr("previous", previous),
+    xdiffAttr("next", next),
+    xdiffAttr("changetype", changetype),
+    // Changes-String should contain escaped HTML only.
+    xdiffAttr("changes", escape(changes)),
+    `>`,
+    actualContent,
+    `</xdiff:span>`
+  ].join("");
+};
+
+/**
+ * Base function for additions, deletions and changes to format corresponding
+ * `xdiff:span`.
+ */
+const formatXdiff = (text, config) => {
+  const {type, changes, hasNext, hasPrevious} = {
+    type: "undefined",
+    changes: undefined,
+    hasNext: false,
+    hasPrevious: currentId !== 0,
+    ...config,
+  };
+  const result = xdiffSpan({
+    class: `diff-html-${type}`,
+    id: id(),
+    previous: previous(hasPrevious),
+    next: next(hasNext),
+    changes,
+  }, text);
+  currentId++;
+  return result;
+};
+
+/**
+ * Represents an addition.
+ */
+const add = (text, config) => formatXdiff(text, {type: "added", ...config});
+/**
+ * Represents an deletion.
+ */
+const del = (text, config) => formatXdiff(text, {type: "removed", ...config});
+/**
+ * Represents a change.
+ */
+const change = (text, config) => formatXdiff(text, {type: "changed", ...config});
+
+const textReplaced = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  return `\
+${section("Text Replaced")}
+<p>
+Old text has been replaced by new text:
+${del(`Old`, {hasPrevious})}\
+${add('New', {hasNext})}.\
+</p>`
+};
+
+const textInlineStyleApplied = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  return `\
+${section("Inline-Style Applied to Text")}
+<p>
+Set to bold with class-attribute change:
+<strong class="some--class">\
+${change(`Lorem ipsum`, {
+    changes: `<b>Strong</b> style added with class some--class.`,
+    hasPrevious,
+    hasNext,
+})}\
+</strong>.
+</p>`;
+};
+
+const textClassAttributeValueChanged = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  return `\
+${section("Class Attribute Value Changed for Text")}
+<p>
+For bold text changed applied class attribute values:
+<strong class="new--class">\
+${change(`Lorem ipsum`, {
+    changes: `<ul class='changelist'><li><b>Strong</b> style removed with class old--class.</li><li><b>Strong</b> style added with class new--class.</li></ul>`,
+    hasPrevious,
+    hasNext,
+  })}\
+</strong>.
+</p>`;
+};
+
+const textLinkContentReferenceChanged = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  // noinspection HtmlUnknownAttribute
+  return `\
+${section("Link Content Reference Changed")}
+<p>
+The content reference of the following link has been changed:
+<a xlink:actuate="onRequest" xlink:href="content/6" xlink:show="replace" xlink:type="simple">\
+${change(`Link`, {
+    changes: `<ul class='changelist'><li>Moved out of a <b>link</b> with destination content/2 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.</li><li>Moved to a <b>link</b> with destination content/6 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.</li></ul>`,
+    hasPrevious,
+    hasNext,
+})}\
+</a>.
+</p>
+`;
+};
+
+const textNewlineAdded = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  return `\
+${section("Newline Added")}
+<p>
+Text before added newline\
+${add("", { hasPrevious, hasNext })}\
+</p>
+<p>
+Text that continued previous line prior to newline added.
+</p>`
+};
+
+const textLinkTargetAttributeChanged = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  // noinspection HtmlUnknownAttribute
+  return `\
+${section("Link Target Changed")}
+<p>
+The target of the following link has been changed:
+<a xlink:actuate="onRequest" xlink:href="content/4" xlink:show="new" xlink:type="simple">\
+${change(`Link`, {
+    changes: `<ul class='changelist'><li>Moved out of a <b>link</b> with destination content/4 with xlink:actuate onRequest, xlink:show replace and xlink:type simple.</li><li>Moved to a <b>link</b> with destination content/4 with xlink:actuate onRequest, xlink:show new and xlink:type simple.</li></ul>`,
+    hasPrevious,
+    hasNext,
+})}\
+</a>.
+</p>`
+};
+
+// Reset prior to text examples.
+currentId = 0;
+
+/**
+ * Some general examples.
+ */
+const textExamples = differencingContainer(`\
+${differencingIntroduction("Text Examples")}\
+${textReplaced()}\
+${textNewlineAdded()}\
+${textInlineStyleApplied()}\
+${textClassAttributeValueChanged()}\
+${textLinkContentReferenceChanged()}\
+${textLinkTargetAttributeChanged(false)}\
+`);
+
+const redImage = "content/900#properties.data";
+const greenImage = "content/902#properties.data";
+const blueImage = "content/904#properties.data";
+
+const addImage = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  // noinspection HtmlUnknownAttribute,RequiredAttributes
+  return `\
+${section("Image Added")}
+<p>
+${add(
+          `<img alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${blueImage}" xdiff:changetype="diff-added-image"/>`,
+          { hasPrevious }
+  )}\
+${add("", { hasNext })}\
+</p>`;
 }
+
+const removeImage = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  // noinspection HtmlUnknownAttribute,RequiredAttributes
+  return `\
+${section("Image Removed")}
+<p>
+${del(
+          `<img alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${blueImage}" xdiff:changetype="diff-removed-image"/>`,
+          { hasPrevious }
+  )}\
+${del("", { hasNext })}\
+</p>`;
+}
+
+const replaceImage = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  // noinspection HtmlUnknownAttribute,RequiredAttributes
+  return `\
+${section("Image Exchanged")}
+<p>
+${del(
+        `<img alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${blueImage}" xdiff:changetype="diff-removed-image"/>`,
+          { hasPrevious }
+)}\
+${add(
+          `<img alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${greenImage}" xdiff:changetype="diff-added-image"/>`,
+          { hasNext }
+)}\
+</p>`;
+}
+
+const changeImageAlignment = (next) => {
+  const hasPrevious = currentId !== 0;
+  const hasNext = next ?? true;
+
+  // noinspection HtmlUnknownAttribute,RequiredAttributes
+  return `\
+${section("Change Image Alignment")}
+<p>
+${change(
+          `<img alt="Some Image" class="float--right" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${redImage}"/>`,
+          {
+            changes: `<ul class='changelist'><li>Changed from an <b>image</b> with alt Some Image, class float--left, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${redImage}.</li><li>Changed to an <b>image</b> with alt Some Image, class float--right, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${redImage}.</li></ul>`,
+            hasPrevious,
+            hasNext
+          }
+  )}\
+</p>`;
+}
+
+// Reset prior to table examples.
+currentId = 0;
+
+const differencingImages = differencingContainer(`\
+${differencingIntroduction("Image Examples")}\
+${addImage()}\
+${removeImage()}\
+${replaceImage()}\
+${changeImageAlignment(false)}\
+`);
+
+export const differencingExamples = {
+  "Differencing: Images": differencingImages,
+  "Differencing: Text": textExamples,
+};
