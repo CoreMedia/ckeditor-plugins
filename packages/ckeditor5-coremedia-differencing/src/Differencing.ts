@@ -27,8 +27,6 @@ export class Differencing extends Plugin {
     const { model, conversion } = editor;
     const { schema } = model;
 
-    Differencing.#logger.info("Huhu?!??");
-
     schema.register("xdiff-span", {
       allowIn: ["$block", "$container"],
       allowChildren: ["$text", "$block", "$container"],
@@ -37,12 +35,40 @@ export class Differencing extends Plugin {
     });
 
     conversion.for("upcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
-    // dataDowncast: We also downcast back to data view, relying on other mechanisms
-    // (like data-processing), that these changes are not written back to the
-    // server, as these don't represent "real" data but augmented data, which are
-    // not meant to be stored on server again.
-    conversion.for("downcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
+    /*
+     * **dataDowncast:** We also downcast back to data view, relying on other
+     * mechanisms (like data-processing), that these changes are not written
+     * back to the server, as these don't represent "real" data but augmented
+     * data, which are not meant to be stored on server again.
+     */
 
+    conversion.for("downcast").elementToElement({
+      ...XDIFF_SPAN_ELEMENT_CONFIG,
+      view: (modelElement, { writer }) => {
+        if (modelElement.childCount === 0) {
+          /*
+           * Especially for CSS rules to apply, it is important to keep the
+           * empty state here. Not explicitly stating, that this element
+           * is considered empty, would add a filler element inside, like:
+           *
+           * ```html
+           * <br data-cke-filler="true">
+           * ```
+           *
+           * which again is hard to apply CSS styles to.
+           */
+          return writer.createEmptyElement(XDIFF_SPAN_ELEMENT_CONFIG.view);
+        }
+        return writer.createContainerElement(XDIFF_SPAN_ELEMENT_CONFIG.view);
+      },
+    });
+
+    /*
+     * **Note on data-processing:** Regarding dataDowncast we rely on any
+     * "unknown attribute" to be removed automatically. This applies especially
+     * (only?) to `xdiff:changetype` applied to `<img>` elements. That is why we
+     * do not require extra clean-up on toData-processing.
+     */
     Object.entries(XDIFF_ATTRIBUTES).forEach(([view, model]) => {
       const config = { view, model };
       conversion.for("upcast").attributeToAttribute(config);
