@@ -120,20 +120,20 @@ To support CKEditor with or without image plugin and possible fallback to
 GHS, corresponding CSS rules may look like this:
 
 ```css
-span.image-inline[xdiff\:changetype="diff-added-image"],
-span.html-object-embed[xdiff\:changetype="diff-added-image"] {
+span.image-inline[xdiff\:changetype="diff-added-image"] > img,
+span.html-object-embed[xdiff\:changetype="diff-added-image"] > img {
   box-sizing: border-box;
   outline: 2px solid rgba(92, 160, 63, 1) !important;
   outline-offset: -2px;
 }
-span.image-inline[xdiff\:changetype="diff-removed-image"],
-span.html-object-embed[xdiff\:changetype="diff-removed-image"] {
+span.image-inline[xdiff\:changetype="diff-removed-image"] > img,
+span.html-object-embed[xdiff\:changetype="diff-removed-image"] > img {
   box-sizing: border-box;
   outline: 2px solid rgba(196, 19, 19, 1) !important;
   outline-offset: -2px;
 }
-span.image-inline[xdiff\:changetype="diff-conflict-image"],
-span.html-object-embed[xdiff\:changetype="diff-conflict-image"] {
+span.image-inline[xdiff\:changetype="diff-conflict-image"] > img,
+span.html-object-embed[xdiff\:changetype="diff-conflict-image"] > img {
   box-sizing: border-box;
   outline: 4px dashed rgba(196, 19, 19, 1) !important;
   outline-offset: -4px;
