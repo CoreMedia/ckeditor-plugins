@@ -1,0 +1,120 @@
+###
+### Garbage Collect Pre-Releases, that are outdated meanwhile.
+###
+### It is intended, that we have a double safety-net here: To unpublish
+### any version, you not only have to switch "retain" from its default
+### "all" to some other value, you also have to disable "dryRun" which
+### is activated by default.
+###
+
+name: GC Pre-Releases
+
+on:
+  workflow_dispatch:
+    inputs:
+      retain:
+        type: choice
+        description: How many Pre-Release Versions to retain?
+        required: true
+        default: 'all'
+        options:
+          - all
+          - none
+          - last
+      dryRun:
+        type: boolean
+        description: Dry Run?
+        required: true
+        default: true
+
+env:
+  NPM_REPOSITORY: npm.coremedia.io
+  NPM_REPOSITORY_URL: https://npm.coremedia.io
+  NODE_VERSION: 15.x
+
+jobs:
+  run:
+    name: "Garbage Collecting Pre-Release Versions (retain: ${{ inputs.retain }}, dry-run: ${{ inputs.dryRun }})"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Set up .npmrc
+        run: |
+          NPM_AUTH_TOKEN=$(curl --silent \
+            --header "Accept: application/json" \
+            --header "Content-Type:application/json" \
+            --request PUT \
+            --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' \
+            "${{ env.NPM_REPOSITORY_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | \
+            jq -r .token)
+          echo "::add-mask::$NPM_AUTH_TOKEN"
+          echo "NPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
+          echo "NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
+          echo "NPM_CONFIG_@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> $GITHUB_ENV
+          echo "//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+          echo "@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> .npmrc
+      - name: "Performing Garbage Collection (retain: ${{ inputs.retain }}, dry-run: ${{ inputs.dryRun }})"
+        run: |
+          packages=($(npm search "@coremedia/ckeditor" --json --registry "${{ env.NPM_REPOSITORY_URL }}" | jq -r ".[].name"))
+
+          printf "${#packages[@]} Packages found: $(IFS=","; echo "${packages[*]}")\n\n"
+
+          ### Processing each package
+
+          for package in "${packages[@]}"; do
+            indent="    "
+            echo "${package}:"
+
+            preVersions=($(npm view "${package}" versions --json --registry "${{ env.NPM_REPOSITORY_URL }}" | jq -r '.[] | select(. | match("-pr[0-9]+"))'))
+
+            if [ ${#preVersions[@]} -eq 0 ]; then
+              echo "${indent}No Pre-Release-Versions found"
+            else
+              echo "${indent}${#preVersions[@]} Pre-Release-Versions found: $(IFS=","; echo "${preVersions[*]}")"
+            fi
+
+            ### Respecting "retain" parameter
+
+            cleanUpVersions=()
+
+            case "${{ inputs.retain }}" in
+              all)
+                # Nothing to do. We keep all.
+                ;;
+              none)
+                cleanUpVersions=(${preVersions[@]})
+                ;;
+              last)
+                cleanUpVersions=(${preVersions[@]})
+                if [ ${#cleanUpVersions[@]} -gt 0 ]; then
+                  unset cleanUpVersions[-1]
+                fi
+                ;;
+            esac
+
+            ### Perform the Pre-Release Version Garbage Collection
+
+            if [ ${#cleanUpVersions[@]} -eq 0 ]; then
+              echo "${indent}No version to garbage collect."
+            else
+              case "${{ inputs.dryRun }}" in
+                true)
+                  echo "${indent}Would garbage collect ${#cleanUpVersions[@]} pre-release versions: $(IFS=","; echo "${cleanUpVersions[*]}")"
+                  ;;
+                false)
+                  for version in "${cleanUpVersions[@]}"; do
+                    echo "${indent}Garbage collecting pre-release version: ${version}"
+                    npm unpublish "${package}@${version}" --registry "${{ env.NPM_REPOSITORY_URL }}"
+                  done
+                  ;;
+              esac
+            fi
+
+            printf "\n\n"
+
+          done
