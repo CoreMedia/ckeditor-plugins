@@ -294,6 +294,10 @@ ClassicEditor.create(document.querySelector('.editor'), {
   }, {
     isCollapsed: true,
   });
+  const differencing = newEditor.plugins.get("Differencing");
+  if (differencing) {
+    differencing.activateDifferencing();
+  }
   initExamples(newEditor);
   initDragExamples(newEditor);
   editor = newEditor;
