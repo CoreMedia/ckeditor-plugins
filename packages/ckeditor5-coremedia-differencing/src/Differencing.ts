@@ -18,8 +18,21 @@ export class Differencing extends Plugin {
 
   static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
 
-  init(): void {
+  /**
+   * Provides information about the current activation state. Once activated it
+   * can not be deactivated. Activation can not be executed twice.
+   */
+  #isActivated = false;
+
+  /**
+   * Activates the differencing.
+   */
+  activateDifferencing(): void {
+    if (this.#isActivated) {
+      return;
+    }
     reportInitializationProgress(Differencing.pluginName, Differencing.#logger, () => this.#init());
+    this.#isActivated = true;
   }
 
   #init(): void {
