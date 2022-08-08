@@ -11,6 +11,30 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * showing differences in data. This plugin is meant to be used in
  * read-only CKEditors that receive data from the server, which got augmented
  * by differencing hints.
+ *
+ * To use this plugin the plugin has to be part of the CKEditor configuration and
+ * it has to be activated programmatically by calling Differencing.activateDifferencing
+ * after the editor initialization.
+ *
+ * @example
+ * ```typescript
+ * ClassicEditor.create(document.querySelector('.editor'), {
+ *   .
+ *   .
+ *   .
+ *   plugins: [
+ *     Differencing,
+ *   ],
+ *   .
+ *   .
+ *   .
+ * }).then(newEditor => {
+ *   const differencing = newEditor.plugins.get("Differencing");
+ *   if (differencing) {
+ *     differencing.activateDifferencing();
+ *   }
+ * })
+ * ```
  */
 export class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
