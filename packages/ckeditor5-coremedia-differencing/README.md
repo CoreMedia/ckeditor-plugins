@@ -2,7 +2,7 @@ CoreMedia Differencing Plugin
 ================================================================================
 
 Other than possibly suggested by the plugin-name, this plugin does not take
-care of calculating differences by itself. It is meant to be ensure, that
+care of calculating differences by itself. It is meant to ensure, that
 differencing data as generated in CoreMedia Studio are forwarded to editing
 view, so that CSS rules can be applied to it, to highlight changes, additions
 and deletions.

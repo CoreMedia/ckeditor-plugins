@@ -6,7 +6,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 
 /**
  * This plugin provides an extension point, to wait for (optional)
- * plugins to be available in that way, that especially, there
+ * plugins to be available in that way, that especially, their
  * schema registrations got applied.
  *
  * It is based on a similar approach for CKEditor 5 GHS Plugin and
