@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-example-data",
+  "name": "@coremedia-internal/ckeditor5-coremedia-example-data",
   "version": "1.0.0",
   "private": true,
   "engines": {
