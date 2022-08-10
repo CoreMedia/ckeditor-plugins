@@ -6,7 +6,7 @@ type XDiffAttribute = "class" | "id" | "previous" | "next" | "changetype" | "cha
 /**
  * Supported difference types.
  */
-export type XDiffType = "added" | "removed" | "conflict";
+export type XDiffType = "added" | "removed" | "changed" | "conflict";
 
 /**
  * Configuration for generating `<xdiff:span>`.
@@ -155,6 +155,22 @@ export class Differencing {
   }
 
   /**
+   * Creates an `xdiff:span` of type "changed" according to the given
+   * configuration around the given (HTML) content.
+   *
+   * **Side Effects:** A call will automatically increase the ID used for
+   * next call. If `endOfDifferences` is set to `true`, the IDs will be
+   * automatically reset.
+   *
+   * @param content - content to wrap into `xdiff:span`. Use an empty string
+   * to create an empty `<xdiff:span></xdiff:span>`.
+   * @param config - configuration for `xdiff:span`.
+   */
+  change(content: string, config: Omit<XDiffSpanConfig, "type"> = {}): string {
+    return this.span(content, { ...config, type: "changed" });
+  }
+
+  /**
    * Creates an `xdiff:span` according to the given configuration around
    * an image with the given `href` attribute (will be set as
    * `xlink:href`).
@@ -164,12 +180,14 @@ export class Differencing {
    * automatically reset.
    *
    * @param href - meant to refer to some content's blob property.
-   * @param config - configuration for `xdiff:span`.
+   * @param config - configuration for `xdiff:span` along with possible extra
+   * class attribute to pass to image.
    */
-  img(href: string, config: XDiffSpanConfig): string {
-    const { type: diffType } = config;
+  img(href: string, config: XDiffSpanConfig & { class?: string }): string {
+    const { type: diffType, class: className } = config;
+    const classAttr = className ? "" : ` class="${className}"`;
     // noinspection HtmlUnknownAttribute
-    const content = `<img alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${href}" xdiff:changetype="diff-${diffType}-image"/>`;
+    const content = `<img${classAttr} alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${href}" xdiff:changetype="diff-${diffType}-image"/>`;
     return this.span(content, config);
   }
 }

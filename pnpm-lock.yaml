@@ -49,6 +49,7 @@ importers:
       '@ckeditor/ckeditor5-typing': 34.2.0
       '@ckeditor/ckeditor5-ui': 34.2.0
       '@ckeditor/ckeditor5-utils': 34.2.0
+      '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
       '@coremedia/ckeditor5-coremedia-content-clipboard': ^7.1.0
       '@coremedia/ckeditor5-coremedia-differencing': ^7.1.0
       '@coremedia/ckeditor5-coremedia-images': ^7.1.0
@@ -99,6 +100,7 @@ importers:
       '@ckeditor/ckeditor5-typing': 34.2.0
       '@ckeditor/ckeditor5-ui': 34.2.0
       '@ckeditor/ckeditor5-utils': 34.2.0
+      '@coremedia-internal/ckeditor5-coremedia-example-data': link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../packages/ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-differencing': link:../packages/ckeditor5-coremedia-differencing
       '@coremedia/ckeditor5-coremedia-images': link:../packages/ckeditor5-coremedia-images
