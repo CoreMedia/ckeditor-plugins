@@ -14,7 +14,7 @@ import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
-import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
+import { langDataFilterRule, langMapper, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
 import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
 
@@ -132,7 +132,17 @@ const defaultRules: FilterRuleSetConfiguration = {
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
     ...tableRules,
-    span: langMapperConfiguration,
+    span: {
+      ...langMapperConfiguration,
+      toData: (params) => {
+        langMapper.toData(params);
+        // Workaround for ckeditor/ckeditor5#11786
+        const { node } = params;
+        if (node.classList.length === 1 && node.classList.contains("ck-list-bogus-paragraph")) {
+          node.replaceByChildren = true;
+        }
+      },
+    },
     pre: langMapperConfiguration,
     "xdiff:span": (params) => {
       params.node.replaceByChildren = true;

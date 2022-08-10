@@ -101,10 +101,17 @@ describe("CoreMediaRichTextConfig: Lists", () => {
           dataView: wrapContent(`<${el}><li lang="en">${text}</li></${el}>`),
         },
         {
-          name: `${key}LI#5: Should prefer xml:lang over lang in data.`,
+          name: `${key}/LI#5: Should prefer xml:lang over lang in data.`,
           direction: Direction.toDataView,
           data: wrapContent(`<${el}><li lang="en" xml:lang="de">${text}</li></${el}>`),
           dataView: wrapContent(`<${el}><li lang="de">${text}</li></${el}>`),
+        },
+        {
+          name: `${key}/LI#6: Work around ck-list-bogus-paragraph`,
+          direction: Direction.toData,
+          comment: "Workaround for ckeditor/ckeditor5#11786",
+          data: wrapContent(`<${el}><li>${text}</li></${el}>`),
+          dataView: wrapContent(`<${el}><li><span class="ck-list-bogus-paragraph">${text}</span></li></${el}>`),
         },
       ];
     })
