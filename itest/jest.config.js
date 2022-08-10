@@ -8,5 +8,7 @@ module.exports = {
   // failures `Exceeded timeout`.
   testTimeout: 60000,
   preset: "jest-playwright-preset",
+  // Override from shared config.
+  testEnvironment: "jest-playwright-preset",
   setupFilesAfterEnv: [require.resolve("expect-playwright")],
 };
