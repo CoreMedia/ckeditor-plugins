@@ -132,17 +132,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
     ...tableRules,
-    span: {
-      ...langMapperConfiguration,
-      toData: (params) => {
-        langMapper.toData(params);
-        // Workaround for ckeditor/ckeditor5#11786
-        const { node } = params;
-        if (node.classList.length === 1 && node.classList.contains("ck-list-bogus-paragraph")) {
-          node.replaceByChildren = true;
-        }
-      },
-    },
+    span: langMapperConfiguration,
     pre: langMapperConfiguration,
     "xdiff:span": (params) => {
       params.node.replaceByChildren = true;

@@ -43,7 +43,8 @@ class RichTextDataProcessor implements DataProcessor {
     const { schema, toData, toView } = getConfig(editor.config);
 
     this.#delegate = new HtmlDataProcessor(document);
-    this.#domConverter = new DomConverter(document, { blockFillerMode: "nbsp" });
+    // renderingMode: "data" - Fixes observed issue ckeditor/ckeditor5#11786
+    this.#domConverter = new DomConverter(document, { blockFillerMode: "nbsp", renderingMode: "data" });
     this.#richTextXmlWriter = new RichTextXmlWriter();
     this.#htmlWriter = new BasicHtmlWriter();
     this.#domParser = new DOMParser();
