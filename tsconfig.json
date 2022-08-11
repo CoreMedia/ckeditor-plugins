@@ -18,6 +18,7 @@
     "target": "ES6",
     "composite": true,
     "incremental": true,
+    "skipLibCheck": true,
     "types": [
       "jest"
     ]
