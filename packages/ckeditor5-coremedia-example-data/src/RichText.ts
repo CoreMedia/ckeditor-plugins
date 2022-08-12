@@ -12,23 +12,8 @@
  * ```
  * @packageDocumentation
  */
-// noinspection HttpUrlsUsage
-export const defaultNamespaceUri = "http://www.coremedia.com/2003/richtext-1.0";
-export const xlinkNamespace = {
-  attr: "xmlns:xlink",
-  prefix: "xlink:",
-  uri: "http://www.w3.org/1999/xlink",
-};
-export const defaultXmlDeclaration = `<?xml version="1.0" encoding="utf-8"?>`;
 
-/**
- * Default attributes to possibly apply to the root `<div>` of CoreMedia
- * Richtext.
- */
-export const defaultRichtextAttributes = {
-  xmlns: defaultNamespaceUri,
-  [xlinkNamespace.attr]: xlinkNamespace.uri,
-};
+import { nsRichText, onDemandNamespaces, xmlDeclaration } from "./Namespaces";
 
 /**
  * URI.
@@ -138,22 +123,6 @@ export const nonEmptyElement = (element: string, content: Content = "", attrs: s
 export const emptyElement = (element: string, attrs: string | AnyAttributes = ""): string => {
   const elemAttrs = typeof attrs === "string" ? attrs : joinAttributes(attrs);
   return `<${element}${elemAttrs ? ` ${elemAttrs}` : ""}/>`;
-};
-
-/**
- * Wraps given richtext into required `<div>` with XML declaration header.
- *
- * **Content:** `(p|ol|ul|pre|blockquote|table)*`
- *
- * @param content - content to wrap
- * @param xmlDeclaration - XML declaration, which defaults to
- * `<?xml version="1.0" encoding="utf-8"?>`; the richtext `<div>` will be
- * directly appended without any additional whitespace
- */
-export const richtext = (content: Content = "", xmlDeclaration = defaultXmlDeclaration): string => {
-  const hasXLink = content.includes(xlinkNamespace.prefix);
-  const attrs = joinAttributes(defaultRichtextAttributes, (k) => k !== xlinkNamespace.attr || hasXLink);
-  return `${xmlDeclaration}${nonEmptyElement("div", content, attrs)}`;
 };
 
 /**
@@ -445,4 +414,122 @@ export interface TableDataAttributes extends Attributes, CellHAlign, CellVAlign 
  */
 export const td = (content: Content, attrs: TableDataAttributes = {}) => {
   return nonEmptyElement("td", nonEmptyContent(content), { ...attrs });
+};
+
+/**
+ * Convenience to create a heading.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param level - level of heading
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const heading = (level: 1 | 2 | 3 | 4 | 5 | 6, content: Content = "", attrs: Attributes = {}): string => {
+  const classFromAttrs = !!attrs.class ? `${attrs.class} ` : ``;
+  const classAttribute = `${classFromAttrs}p--heading-${level}`;
+  return p(content, {
+    ...attrs,
+    class: classAttribute,
+  });
+};
+
+/**
+ * Convenience to create a heading of level 1.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const h1 = (content: Content = "", attrs: Attributes = {}): string => heading(1, content, attrs);
+
+/**
+ * Convenience to create a heading of level 2.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const h2 = (content: Content = "", attrs: Attributes = {}): string => heading(2, content, attrs);
+
+/**
+ * Convenience to create a heading of level 3.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const h3 = (content: Content = "", attrs: Attributes = {}): string => heading(3, content, attrs);
+
+/**
+ * Convenience to create a heading of level 4.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const h4 = (content: Content = "", attrs: Attributes = {}): string => heading(4, content, attrs);
+
+/**
+ * Convenience to create a heading of level 6.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const h5 = (content: Content = "", attrs: Attributes = {}): string => heading(5, content, attrs);
+
+/**
+ * Convenience to create a heading of level 8.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const h6 = (content: Content = "", attrs: Attributes = {}): string => heading(6, content, attrs);
+
+/**
+ * Convenience to add some section heading (a paragraph with bold text inside).
+ * Attributes apply to paragraph.
+ *
+ * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const sectionHeading = (content: Content = "", attrs: Attributes = {}): string => p(strong(content), attrs);
+
+/**
+ * Wraps XML by corresponding `<div>` as used in CoreMedia RichText.
+ * Required namespaces are dynamically added.
+ *
+ * Note, that this method is meant for test-purpose only! For adding
+ * required namespaces, only a rough check is applied, not suitable for
+ * production scenarios.
+ *
+ * **Content:** `(p|ol|ul|pre|blockquote|table)*`
+ *
+ * @param innerXml - the XML to wrap into `<div>`.
+ * @param addXmlDeclaration - if to add the XML declaration with UTF-8 encoding)
+ * in front.
+ */
+export const richtext = (innerXml: Content = "", addXmlDeclaration = true): string => {
+  let result = "";
+  if (addXmlDeclaration) {
+    result += xmlDeclaration;
+  }
+  result += `<div xmlns="${nsRichText.uri}"`;
+  onDemandNamespaces.forEach((namespace) => {
+    if (innerXml.includes(`${namespace.name}:`)) {
+      result += ` xmlns:${namespace.name}="${namespace.uri}"`;
+    }
+  });
+  result += `>${innerXml}</div>`;
+  return result;
 };

@@ -13,6 +13,9 @@
 
 * **No Default Export:** For consistency and less friction with TSDoc/Typedoc,
   use named exports rather than default exports.
+* **Exception:** For consistency reasons, use a default export for the main
+  plugin in a plugin package. This ensures that all plugins can be imported in
+  the same way.
 
 ## Logging
 
@@ -50,13 +53,6 @@
     `coremedia`.
 
     This is at second position, separated by a dash: `ckeditor5-coremedia-*`.
-
-  * Typing packages must be prefixed with `types-`.
-
-    The complete name for a typing package is `types-<scope>__<package name>`
-    (two underscores as separator).
-    Thus, it is similar to typings at [DefinitelyTyped][]. The folder name,
-    in contrast to the role above, is just `<scope>__<package name>`
 
 * **Package Scopes:**
 

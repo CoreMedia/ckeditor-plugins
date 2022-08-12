@@ -1,5 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ContentImageEditingPlugin from "./ContentImageEditingPlugin";
 import ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
 

@@ -14,7 +14,7 @@ import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
-import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
+import { langDataFilterRule, langMapper, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
 import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
 

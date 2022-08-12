@@ -101,7 +101,7 @@ describe("CoreMediaRichTextConfig: Lists", () => {
           dataView: wrapContent(`<${el}><li lang="en">${text}</li></${el}>`),
         },
         {
-          name: `${key}LI#5: Should prefer xml:lang over lang in data.`,
+          name: `${key}/LI#5: Should prefer xml:lang over lang in data.`,
           direction: Direction.toDataView,
           data: wrapContent(`<${el}><li lang="en" xml:lang="de">${text}</li></${el}>`),
           dataView: wrapContent(`<${el}><li lang="de">${text}</li></${el}>`),

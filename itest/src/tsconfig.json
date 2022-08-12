@@ -13,12 +13,18 @@
       ],
       "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
         "../../packages/ckeditor5-coremedia-studio-integration-mock/src/*"
+      ],
+      "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
+        "../../packages/ckeditor5-coremedia-example-data/src/*"
       ]
     }
   },
   "references": [
     {
       "path": "../../packages/ckeditor5-logging/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-example-data/src"
     },
     {
       "path": "../../packages/ckeditor5-coremedia-richtext/src"

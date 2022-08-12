@@ -269,6 +269,62 @@ footer {
   color: rgba(0, 0, 0, .4);
 }
 
+/* Differencing */
+
+xdiff\:span[xdiff\:class="diff-html-added"] {
+  color: rgba(92, 160, 63, 1);
+  text-decoration: underline;
+}
+/* Represents inserted newline. */
+p > xdiff\:span[xdiff\:class="diff-html-added"]:empty::before {
+  content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDkyLCAxNjAsIDYzKSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
+}
+/* Represents removed newline. */
+p > xdiff\:span[xdiff\:class="diff-html-removed"]:empty::before {
+  content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDE5NiwgMTksIDE5KSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
+}
+xdiff\:span[xdiff\:class="diff-html-removed"] {
+  color: rgba(196, 19, 19, 1);
+  text-decoration: line-through;
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(92, 160, 63, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] a:link {
+  color: rgba(255, 255, 255, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-conflict"] {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(196, 19, 19, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] img {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(92, 160, 63, 1);
+  outline-offset: -4px;
+}
+span.image-inline[xdiff\:changetype="diff-added-image"] > img, span.html-object-embed[xdiff\:changetype="diff-added-image"] > img {
+  box-sizing: border-box;
+  outline: 2px solid rgba(92, 160, 63, 1) !important;
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-removed-image"]> img, span.html-object-embed[xdiff\:changetype="diff-removed-image"] > img {
+  box-sizing: border-box;
+  outline: 2px solid rgba(196, 19, 19, 1) !important;
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-object-embed[xdiff\:changetype="diff-conflict-image"] > img {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(196, 19, 19, 1) !important;
+  outline-offset: -4px;
+}
+
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
 @media screen and ( max-width: 800px ) {
   :root {
