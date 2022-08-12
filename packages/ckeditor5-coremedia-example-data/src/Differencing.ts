@@ -1,6 +1,8 @@
 /**
  * Supported attributes in XDIFF Namespace.
  */
+import { emptyElement, ImageAttributes } from "./RichText";
+
 export type XDiffAttribute = "class" | "id" | "previous" | "next" | "changetype" | "changes";
 
 /**
@@ -233,11 +235,39 @@ export class Differencing {
    * @param config - configuration for `xdiff:span` along with possible extra
    * class attribute to pass to image.
    */
-  img(href: string, config: XDiffSpanConfig & { class?: string }): string {
-    const { type: diffType, class: className } = config;
-    const classAttr = className ? "" : ` class="${className}"`;
-    // noinspection HtmlUnknownAttribute
-    const content = `<img${classAttr} alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="${href}" xdiff:changetype="diff-${diffType}-image"/>`;
-    return this.span(content, config);
+  simpleImg(href: string, config: XDiffSpanConfig & { class?: string }): string {
+    let attrs: ImageAttributes = {
+      "xlink:href": href,
+      alt: "Some Image",
+    };
+
+    if (!!config.class) {
+      attrs = {
+        ...attrs,
+        class: config.class,
+      };
+    }
+
+    return this.img(config, attrs);
+  }
+
+  /**
+   * Creates an `xdiff:span` according to the given configuration around
+   * an image with the given `href` attribute (will be set as
+   * `xlink:href`).
+   *
+   * **Side-Effects:** A call will automatically increase the ID used for
+   * next call. If `endOfDifferences` is set to `true`, the IDs will be
+   * automatically reset.
+   *
+   * @param config - configuration for `xdiff:span` along with possible extra
+   * class attribute to pass to image.
+   * @param attrs - attributes to apply to image
+   */
+  img(config: XDiffSpanConfig, attrs: ImageAttributes): string {
+    const { type: diffType } = config;
+    const changeType = `diff-${diffType}-image`;
+    const imageElement = emptyElement("img", { ...attrs, "xdiff:changetype": changeType });
+    return this.span(imageElement, config);
   }
 }

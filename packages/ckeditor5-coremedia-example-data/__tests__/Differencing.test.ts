@@ -1,31 +1,31 @@
-import { Differencing } from "../src/Differencing";
+import { Differencing, EOD } from "../src/Differencing";
 
 describe("Differencing", () => {
   it("should provide empty span", () => {
     const xdiff = new Differencing();
-    const actual = xdiff.span("", { type: "added" });
+    const actual = xdiff.span("", { type: "added", ...EOD });
     expect(actual).toStrictEqual(`<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0"></xdiff:span>`);
   });
 
   it("should provide convenience to add HTML", () => {
     const xdiff = new Differencing();
-    const actual = xdiff.add("Lorem");
+    const actual = xdiff.add("Lorem", EOD);
     expect(actual).toStrictEqual(`<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0">Lorem</xdiff:span>`);
   });
 
   it("should provide convenience to remove HTML", () => {
     const xdiff = new Differencing();
-    const actual = xdiff.del("Lorem");
+    const actual = xdiff.del("Lorem", EOD);
     expect(actual).toStrictEqual(`<xdiff:span xdiff:class="diff-html-removed" xdiff:id="diff-0">Lorem</xdiff:span>`);
   });
 
   it("should provide added Image along with expected surrounding xdiff:span", () => {
     const xdiff = new Differencing();
     const uri = "some:uri";
-    const actual = xdiff.img(uri, { type: "added" });
+    const actual = xdiff.simpleImg(uri, { type: "added", ...EOD });
     // noinspection HtmlUnknownAttribute
     expect(actual).toStrictEqual(
-      `<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0"><img alt="Some Image" xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple" xlink:href="some:uri" xdiff:changetype="diff-added-image"/></xdiff:span>`
+      `<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0"><img xlink:href="some:uri" alt="Some Image" xdiff:changetype="diff-added-image"/></xdiff:span>`
     );
   });
 

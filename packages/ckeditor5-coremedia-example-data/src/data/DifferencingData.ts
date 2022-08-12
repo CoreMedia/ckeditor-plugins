@@ -109,7 +109,7 @@ const addImage = (hasNext = true) => {
   return `\
 ${sectionHeading("Image Added")}
 <p>
-${xdiff.img(blueImage, { type: "added" })}\
+${xdiff.simpleImg(blueImage, { type: "added" })}\
 ${xdiff.add("", { endOfDifferences: !hasNext })}\
 </p>`;
 };
@@ -118,7 +118,7 @@ const removeImage = (hasNext = true) => {
   return `\
 ${sectionHeading("Image Removed")}
 <p>
-${xdiff.img(blueImage, { type: "removed" })}\
+${xdiff.simpleImg(blueImage, { type: "removed" })}\
 ${xdiff.del("", { endOfDifferences: !hasNext })}\
 </p>`;
 };
@@ -127,8 +127,8 @@ const replaceImage = (hasNext = true) => {
   return `\
 ${sectionHeading("Image Exchanged")}
 <p>
-${xdiff.img(blueImage, { type: "removed" })}\
-${xdiff.img(greenImage, { type: "added", endOfDifferences: !hasNext })}\
+${xdiff.simpleImg(blueImage, { type: "removed" })}\
+${xdiff.simpleImg(greenImage, { type: "added", endOfDifferences: !hasNext })}\
 </p>`;
 };
 
@@ -136,7 +136,7 @@ const changeImageAlignment = (hasNext = true) => {
   return `\
 ${sectionHeading("Image Alignment Changed")}
 <p>
-${xdiff.img(redImage, {
+${xdiff.simpleImg(redImage, {
   type: "changed",
   class: "float--right",
   changes: `<ul class='changelist'><li>Changed from an <b>image</b> with alt Some Image, class float--left, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${redImage}.</li><li>Changed to an <b>image</b> with alt Some Image, class float--right, xlink:actuate onLoad, xlink:show embed, xlink:type simple and xlink:href ${redImage}.</li></ul>`,
