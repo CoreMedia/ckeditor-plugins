@@ -19,6 +19,7 @@
     "@ckeditor/ckeditor5-core": "^34.2.0",
     "@ckeditor/ckeditor5-engine": "^34.2.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/ckeditor5-coremedia-richtext": "7.1.1-rc.2",
     "@coremedia/ckeditor5-coremedia-studio-integration": "7.1.1-rc.2",

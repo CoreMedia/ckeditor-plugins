@@ -1,6 +1,6 @@
 import { ExampleData } from "../ExampleData";
 import { Differencing } from "../Differencing";
-import { h1, sectionHeading, wrapRichText } from "../RichText";
+import { h1, sectionHeading, richtext } from "../RichText";
 
 const xdiff = new Differencing();
 
@@ -147,7 +147,7 @@ ${xdiff.img(redImage, {
 
 // noinspection JSUnusedGlobalSymbols: Used in Example App
 export const differencingData: ExampleData = {
-  "Differencing: Text": wrapRichText(`\
+  "Differencing: Text": richtext(`\
 ${differencingIntroduction("Text Examples")}\
 ${textReplaced()}\
 ${textNewlineAdded()}\
@@ -156,7 +156,7 @@ ${textClassAttributeValueChanged()}\
 ${textLinkContentReferenceChanged()}\
 ${textLinkTargetAttributeChanged(false)}\
 `),
-  "Differencing: Images": wrapRichText(`\
+  "Differencing: Images": richtext(`\
 ${differencingIntroduction("Image Examples")}\
 ${addImage()}\
 ${removeImage()}\

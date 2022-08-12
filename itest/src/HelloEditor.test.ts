@@ -1,7 +1,7 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { a, p, richtext } from "./fixture/Richtext";
 import "./expect/ElementHandleExpectations";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 
 /**
  * Provides some first test mainly for demonstration purpose of the test API.

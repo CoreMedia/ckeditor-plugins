@@ -1,16 +1,10 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
-import { img, p, richtext } from "./fixture/Richtext";
 import "./expect/ElementHandleExpectations";
 import { ImageStyleBalloonAction } from "./user-interaction/ImageStyleBalloonAction";
 import { ElementHandle } from "playwright-core";
-
-/**
- * Simulates a blob reference to some property named `data`.
- *
- * @param id - numeric id of the document the property is contained in
- */
-const blobReference = (id: number) => `content/${id}#properties.data`;
+import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
+import { img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 
 describe("Image Features", () => {
   let application: ApplicationWrapper;

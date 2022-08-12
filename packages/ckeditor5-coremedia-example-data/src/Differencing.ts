@@ -1,7 +1,14 @@
 /**
  * Supported attributes in XDIFF Namespace.
  */
-type XDiffAttribute = "class" | "id" | "previous" | "next" | "changetype" | "changes";
+export type XDiffAttribute = "class" | "id" | "previous" | "next" | "changetype" | "changes";
+
+/**
+ * Set of attributes in XDIFF Namespace.
+ */
+export type XDiffAttributes = {
+  [key in XDiffAttribute]?: string;
+};
 
 /**
  * Supported difference types.
@@ -28,6 +35,15 @@ export interface XDiffSpanConfig {
    */
   endOfDifferences?: boolean;
 }
+
+/**
+ * Shortcut, to mark changes directly as _end of differences_.
+ * This prevents that the difference-ID increases on each call
+ * to `xdiff`.
+ */
+export const EOD: Pick<XDiffSpanConfig, "endOfDifferences"> = {
+  endOfDifferences: true,
+};
 
 /**
  * Utility function to escape HTML within changes string.
@@ -75,12 +91,21 @@ export class Differencing {
     this.#currentId++;
   }
 
-  #resetIds(): void {
+  /**
+   * Resets the IDs. Possibly recommended to call in `afterEach` of a test,
+   * if differencing instance is shared across tests.
+   */
+  resetIds(): void {
     this.#currentId = 0;
   }
 
   static #xdiffAttr(name: XDiffAttribute, value = ""): string {
     return ` xdiff:${name}="${value}"`;
+  }
+
+  static #xdiffAttrs(attrs: XDiffAttributes): string[] {
+    const xdiffAttr = Differencing.#xdiffAttr;
+    return Object.entries(attrs).map(([key, value]) => xdiffAttr(<XDiffAttribute>key, value));
   }
 
   /**
@@ -97,26 +122,35 @@ export class Differencing {
    */
   span(content: string, config: XDiffSpanConfig): string {
     const xdiffAttr = Differencing.#xdiffAttr;
+    const xdiffAttrs = Differencing.#xdiffAttrs;
+
     const { type: diffType, changes, endOfDifferences } = config;
-    const attributes = [xdiffAttr("class", `diff-html-${diffType}`), xdiffAttr("id", this.#id)];
+
+    const id = this.#id;
+
+    const attributes = xdiffAttrs({ class: `diff-html-${diffType}`, id });
 
     if (this.#currentId > 0) {
       // Has Previous, so...
       attributes.push(xdiffAttr("previous", this.#previousId));
     }
 
-    if (endOfDifferences) {
-      // Side effect: Reset IDs, assuming, that next span's to generate are
-      // independent of current ones.
-      this.#resetIds();
-    } else {
+    if (!endOfDifferences) {
       attributes.push(xdiffAttr("next", this.#nextId));
-      // Side effect: Prepare ID for next `<xdiff:span>`
-      this.#incrementId();
     }
 
     if (typeof changes === "string") {
       attributes.push(xdiffAttr("changes", htmlEscape(changes)));
+    }
+
+    // ID Tracking Side Effects
+    if (endOfDifferences) {
+      // Side effect: Reset IDs, assuming, that next span's to generate are
+      // independent of current ones.
+      this.resetIds();
+    } else {
+      // Side effect: Prepare ID for next `<xdiff:span>`
+      this.#incrementId();
     }
 
     return [`<xdiff:span`, ...attributes, `>`, content, `</xdiff:span>`].join("");
@@ -168,6 +202,22 @@ export class Differencing {
    */
   change(content: string, config: Omit<XDiffSpanConfig, "type"> = {}): string {
     return this.span(content, { ...config, type: "changed" });
+  }
+
+  /**
+   * Creates an `xdiff:span` of type "conflict" according to the given
+   * configuration around the given (HTML) content.
+   *
+   * **Side Effects:** A call will automatically increase the ID used for
+   * next call. If `endOfDifferences` is set to `true`, the IDs will be
+   * automatically reset.
+   *
+   * @param content - content to wrap into `xdiff:span`. Use an empty string
+   * to create an empty `<xdiff:span></xdiff:span>`.
+   * @param config - configuration for `xdiff:span`.
+   */
+  conflict(content: string, config: Omit<XDiffSpanConfig, "type"> = {}): string {
+    return this.span(content, { ...config, type: "conflict" });
   }
 
   /**
