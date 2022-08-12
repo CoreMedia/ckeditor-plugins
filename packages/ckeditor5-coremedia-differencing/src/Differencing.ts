@@ -35,7 +35,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * })
  * ```
  */
-export class Differencing extends Plugin {
+export default class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport];
 
