@@ -37,6 +37,7 @@ import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
 
 import {setupPreview, updatePreview} from './preview'
+import {initReadOnlyMode} from './readOnlySupport'
 import {initExamples} from './example-data'
 import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
@@ -298,6 +299,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
   if (differencing) {
     differencing.activateDifferencing();
   }
+  initReadOnlyMode(newEditor);
   initExamples(newEditor);
   initDragExamples(newEditor);
   editor = newEditor;
