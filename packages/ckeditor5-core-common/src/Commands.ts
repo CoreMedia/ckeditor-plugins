@@ -2,7 +2,6 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import { PluginNotFoundErrorHandler } from "./Plugins";
 
 const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 
