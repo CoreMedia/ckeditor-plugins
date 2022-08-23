@@ -66,7 +66,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     // convert button configurations to buttonView instances
     const buttons = linkTargetDefinitions.map((buttonConfig) => {
       if (buttonConfig.name === OTHER_TARGET_NAME) {
-        return this.#createTargetOtherButton(linkTargetCommand);
+        return this.#createTargetOtherButton();
       } else {
         return this.#createTargetButton(linkUI.editor.locale, buttonConfig, linkTargetCommand);
       }
@@ -98,14 +98,10 @@ class LinkTargetActionsViewExtension extends Plugin {
   /**
    * Creates a button for `other` behavior, which is, that you can enter any
    * custom target value in an extra dialog.
-   *
-   * @param linkTargetCommand - command the enabled state is bound to
    */
-  #createTargetOtherButton(linkTargetCommand: Command) {
+  #createTargetOtherButton() {
     const { ui } = requireEditorWithUI(this.editor);
-    const view = <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
-    view.bind("isEnabled").to(linkTargetCommand);
-    return view;
+    return <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
   }
 
   /**
@@ -160,9 +156,13 @@ class LinkTargetActionsViewExtension extends Plugin {
    * @param buttons - the buttons to add in the given order
    */
   #addButtons(actionsView: LinkActionsView, buttons: View[]): void {
+    const viewElement = actionsView.element;
+    if (!viewElement) {
+      return;
+    }
     buttons.forEach((button) => {
-      // @ts-expect-error TODO Missing null-Handling
-      actionsView.element.insertBefore(button.element, actionsView.unlinkButtonView.element);
+      // @ts-expect-error Possibly wrong typing for insertBefore?
+      viewElement.insertBefore(button.element, actionsView.unlinkButtonView.element);
     });
   }
 }
