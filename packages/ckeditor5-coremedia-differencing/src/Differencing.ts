@@ -81,7 +81,7 @@ export default class Differencing extends Plugin {
     conversion.for("downcast").elementToElement({
       ...XDIFF_SPAN_ELEMENT_CONFIG,
       view: (modelElement, { writer }) => {
-        if (modelElement.childCount === 0) {
+        if (modelElement.isEmpty) {
           /*
            * Especially for CSS rules to apply, it is important to keep the
            * empty state here. Not explicitly stating, that this element
