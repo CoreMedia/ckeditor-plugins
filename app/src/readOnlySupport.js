@@ -11,25 +11,50 @@ const initReadOnlyMode = (editor) => {
     return;
   }
 
+  toggleButton.dataset.currentState = "read-write";
+
   const setLabel = (label) => toggleButton.textContent = label;
 
   const enableReadOnly = () => {
+    toggleButton.dataset.currentState = "read-only";
     editor.enableReadOnlyMode(READ_ONY_MODE_ID);
     setLabel(DISABLE_BTN_LABEL);
   };
 
   const disableReadOnly = () => {
+    toggleButton.dataset.currentState = "read-write";
     editor.disableReadOnlyMode(READ_ONY_MODE_ID);
     setLabel(ENABLE_BTN_LABEL);
   };
 
   // Naive check, but should be ok. We cannot ask CKEditor directly, if WE
   // are responsible for read-only state.
-  const isReadOnly = () => toggleButton.textContent === DISABLE_BTN_LABEL;
+  const isReadOnly = () => toggleButton.dataset.currentState === "read-only";
 
   setLabel(ENABLE_BTN_LABEL);
 
-  toggleButton.addEventListener("click", () => isReadOnly() ? disableReadOnly() : enableReadOnly());
+  let currentToggleDelay = undefined;
+
+  const toggleState = (countDownSeconds) => {
+    if (countDownSeconds > 0) {
+      setLabel(`Toggling Read-Only-Mode in ${countDownSeconds} s...`);
+      currentToggleDelay = setTimeout(toggleState, 1000, countDownSeconds - 1);
+    } else {
+      isReadOnly() ? disableReadOnly() : enableReadOnly();
+    }
+  };
+
+  toggleButton.addEventListener("click", (evt) => {
+    clearTimeout(currentToggleDelay);
+    let countDownSeconds = 0;
+    const ctrlOrCommandKey = evt.ctrlKey || evt.metaKey;
+    if (evt.shiftKey) {
+      countDownSeconds = ctrlOrCommandKey ? 120 : 60;
+    } else if (ctrlOrCommandKey) {
+      countDownSeconds = 10;
+    }
+    toggleState(countDownSeconds);
+  });
 };
 
 export {
