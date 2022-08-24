@@ -51,6 +51,39 @@ class RichTextDataProcessor implements DataProcessor {
 
     this.#richTextSchema = schema;
 
+    /*
+     * We need to mark xdiff:span as elements preserving spaces. Otherwise,
+     * CKEditor would consider adding filler nodes inside xdiff:span elements
+     * only containing spaces. As xdiff:span is only meant to be used in
+     * read-only CKEditor, there is no issue, preventing the filler node
+     * from being inserted.
+     *
+     * Possible alternative: When mapping `xdiff:span` we could replace any
+     * whitespaces with non-breakable-spaces. This solution is cumbersome,
+     * though, so this solution was the easiest one.
+     *
+     * See also: ckeditor/ckeditor5#12324
+     */
+    // @ts-expect-error Typings at DefinitelyTyped only allow this to contain
+    // `pre` element. But for TypeScript migration, CKEditor replaced typing
+    // by `string[]` instead.
+    this.#delegate.domConverter.preElements.push("xdiff:span");
+
+    /*
+     * DevNote: Some idea, if we would want to provide a programmatic
+     * extension point here, i.e., allow plugins to further extend data-processing
+     * rules (like for xdiff:span in Differencing Plugin):
+     *
+     * + These two instances should be instantiated lazily.
+     * + As further late configuration is unlikely, a pattern like "if unset,
+     *   instantiate and remember" should do the trick.
+     * + The method, which then extends the configuration, should just reset
+     *   these variables to `undefined`, so that they will be reevaluated on next
+     *   access.
+     * + Ideally, such an extension point accepts `FilterRuleSetConfiguration`
+     *   as input. This again requires some parsing and some merging algorithm
+     *   with existing parsed and pre-processed rules.
+     */
     this.#toViewFilter = new HtmlFilter(toView, editor);
     this.#toDataProcessor = new ToDataProcessor(new HtmlFilter(toData, editor));
 
