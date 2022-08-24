@@ -47,12 +47,12 @@ On double click, most browsers select the word as well as the space after.
 Setting such text to bold results in the following difference augmentation:
 </p>
 <p>
-Lorem ${xdiff.change(`ipsum `, {
+Lorem <strong>${xdiff.change(`ipsum `, {
     changes: `<b>Strong</b> style added.`,
   })}\
 ${xdiff.add(` `, {
   endOfDifferences: !hasNext,
-})}\
+})}</strong>\
 dolor\
 </p>`;
 };
