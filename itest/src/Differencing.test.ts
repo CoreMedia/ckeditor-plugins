@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { richtext, p } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { richtext, p, strong } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import { Differencing, EOD } from "@coremedia-internal/ckeditor5-coremedia-example-data/Differencing";
 import "./expect/ElementHandleExpectations";
 import { PNG_BLUE_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
@@ -127,9 +127,56 @@ describe("Differencing Feature", () => {
       await expect(shouldBeChange).toMatchAttribute("xdiff:previous", /-2$/);
     });
 
+    /**
+     * If you double-click a word, most browsers will also select the following
+     * space of a word. Applying inline styles such as setting the word (and
+     * the following space) to bold, results in server-side differencing in
+     * augmented data such as (simplified):
+     *
+     * ```xml
+     * <xdiff:span xdiff:class="changed">ipsum </xdiff:span><xdiff:span xdiff:class="added"> </xdiff:span>
+     * ```
+     *
+     * CKEditor default behavior would be to remove the extraneous space within
+     * the last diff and possibly add some filler element or marker. In context
+     * of differencing, meant for read-only view, this should be prevented. We
+     * do so, by declaring `<xdiff:span>` as pre-formatted element.
+     *
+     * This test shall ensure, that this approach still works for CKEditor.
+     *
+     * This is related to: ckeditor/ckeditor5#12324
+     */
+    it("False-Positive Newline should be prevented.", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      // EOD: We mark all diffs as EOD for simpler matching, as we don't struggle
+      // with attribute order then.
+      const difference = `${xdiff.change("bold ", EOD)}${xdiff.add(" ", EOD)}`;
+      // CKEditor's behavior is to change whitespaces to `&nbsp;` in here.
+      // And: As `bold` is a text attribute, it gets split up in this scenario,
+      // so that the text as well as the space are wrapped in `<strong>`
+      // element.
+      const expectedDifferenceInEditingView = `${xdiff.change(`<strong>bold&nbsp;</strong>`, EOD)}${xdiff.add(
+        `<strong>&nbsp;</strong>`,
+        EOD
+      )}`;
+
+      const innerHtml = `This ${strong(difference)}text.`;
+      const text = `${p(innerHtml)}`;
+
+      const diffData = richtext(text);
+      const dataView = await editor.setDataAndGetDataView(diffData);
+
+      expect(dataView).toContain(text);
+
+      // The difference and especially the whitespace within the last
+      // xdiff:span should be kept as is.
+      await expect(editableHandle).waitForInnerHtmlToContain(expectedDifferenceInEditingView);
+    });
+
     // This behavior is required to ease CSS styling of added/removed/... newlines.
-    // If not explicitly marked as empty, CKEditor would otherwise add some filler
-    // node/text, so that you can place the cursor within the element.
     it("Added newline should pass to editing view as empty element", async () => {
       const { editor } = application;
       const { ui } = editor;
@@ -142,12 +189,19 @@ describe("Differencing Feature", () => {
       const diffData = richtext(text);
       const dataView = await editor.setDataAndGetDataView(diffData);
 
+      // To differentiate from 'added whitespace' characters, we need
+      // to replace this xdiff:span from data by some other artificial element.
+      // We decided for xdiff:br applies on data-processing level, thus, the
+      // element is visible in data view as well as later in editing view.
+      const dataProcessedDifference = difference.replaceAll("xdiff:span", "xdiff:br");
+      const dataProcessedText = `${p(`Lorem${dataProcessedDifference}`)}${p(`Ipsum`)}`;
       // Validate Data-Processing
-      expect(dataView).toContain(text);
+      expect(dataView).toContain(dataProcessedText);
 
+      // Feature: For better control on CSS styling, we replace the `xdiff:span`
       // Validate Editing Downcast
       // Here, it is important, that no filler element got added to the xdiff:span.
-      await expect(editableHandle).waitForInnerHtmlToContain(difference);
+      await expect(editableHandle).waitForInnerHtmlToContain(dataProcessedDifference);
     });
   });
 
