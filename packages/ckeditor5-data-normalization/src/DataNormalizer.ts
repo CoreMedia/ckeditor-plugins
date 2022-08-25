@@ -9,7 +9,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 /**
  * A normalizer for data strings.
  */
-export type Normalizer = (input: string) => string;
+export type Normalizer = (input: string) => string | Promise<string>;
 
 /**
  * For convenience, we support a bunch of types to `areEqual`, especially
@@ -108,7 +108,7 @@ export interface DataNormalizer {
    *
    * @param value - value to normalize
    */
-  normalize(value: string | NormalizedData): NormalizedData;
+  normalize(value: string | NormalizedData): Promise<NormalizedData>;
 
   /**
    * Signals if the given values are equivalent, applying
@@ -134,7 +134,7 @@ export interface DataNormalizer {
    * @param value2 - second value to compare
    * @returns if the given values are considered equivalent after normalization or not
    */
-  areEqual(value1: AreEqualInputType, value2: AreEqualInputType): boolean;
+  areEqual(value1: AreEqualInputType, value2: AreEqualInputType): Promise<boolean>;
 }
 
 /**
@@ -201,7 +201,7 @@ export const DataNormalizerMixin: DataNormalizer & MixinTokenType = {
     }
   },
 
-  normalize(value: string | NormalizedData): NormalizedData {
+  async normalize(value: string | NormalizedData): Promise<NormalizedData> {
     if (isNormalizedData(value)) {
       return value;
     }
@@ -214,22 +214,25 @@ export const DataNormalizerMixin: DataNormalizer & MixinTokenType = {
 
     dataNormalizerLogger.debug("Going to normalize data.", { data: result });
 
-    priorities.forEach((priority) => {
-      allNormalizers[priority]?.forEach((n) => (result = n(result)));
+    for (const priority of priorities) {
+      const normalizers: Normalizer[] = allNormalizers[priority];
+      for (const normalizer of normalizers) {
+        result = await normalizer(result);
+      }
       dataNormalizerLogger.debug(`Applied normalizers with priority ${priority}.`, { data: result });
-    });
+    }
 
     dataNormalizerLogger.debug("Finished normalizing data.", { data: result });
 
     return toNormalizedData(result);
   },
 
-  areEqual(value1: AreEqualInputType, value2: AreEqualInputType): boolean {
+  async areEqual(value1: AreEqualInputType, value2: AreEqualInputType): Promise<boolean> {
     if (typeof value1 !== "string" || typeof value2 !== "string") {
       return value1 === value2;
     }
-    const normalized1 = this.normalize(value1);
-    const normalized2 = this.normalize(value2);
+    const normalized1 = await this.normalize(value1);
+    const normalized2 = await this.normalize(value2);
     return normalized1 === normalized2;
   },
 };

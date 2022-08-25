@@ -61,8 +61,8 @@ describe("DataNormalizer", () => {
       ${"lorem"} | ${"ipsum"} | ${false}
       ${"ipsum"} | ${"lorem"} | ${false}
       ${""}      | ${""}      | ${true}
-    `("[$#] Should '$value1' be equal to '$value2'? => $equal", ({value1, value2, equal}) => {
-      expect(differ.areEqual(value1, value2)).toStrictEqual(equal);
+    `("[$#] Should '$value1' be equal to '$value2'? => $equal", async ({value1, value2, equal}) => {
+      expect(await differ.areEqual(value1, value2)).toStrictEqual(equal);
     });
   });
 
@@ -107,11 +107,11 @@ describe("DataNormalizer", () => {
       ${"&"} | ${n("&amp;")} | ${n("&amp;")}
       ${"<"} | ${n("&lt;")}  | ${n("&amp;lt;")}
       ${">"} | ${n("&gt;")}  | ${n("&amp;gt;")}
-    `("[$#] Should respect the normalizer order when transforming `$input`.", ({ input, original, reversed }) => {
-      expect(differOrderOriginal.normalize(input)).toStrictEqual(original);
-      expect(differOrderReversed.normalize(input)).toStrictEqual(reversed);
-      expect(differPrioritizedOrderOriginal.normalize(input)).toStrictEqual(original);
-      expect(differPrioritizedOrderReversed.normalize(input)).toStrictEqual(reversed);
+    `("[$#] Should respect the normalizer order when transforming `$input`.", async ({ input, original, reversed }) => {
+      expect(await differOrderOriginal.normalize(input)).toStrictEqual(original);
+      expect(await differOrderReversed.normalize(input)).toStrictEqual(reversed);
+      expect(await differPrioritizedOrderOriginal.normalize(input)).toStrictEqual(original);
+      expect(await differPrioritizedOrderReversed.normalize(input)).toStrictEqual(reversed);
     });
   });
 
@@ -131,8 +131,8 @@ describe("DataNormalizer", () => {
       ${`<?xml version="1.0" encoding="utf-8" standalone="yes"?><root/>`} | ${`<?xml version="1.0"?><root/>`} | ${true}  | ${"ignoring declaration should ignore different declarations"}
       ${`<root/>`}                                                        | ${`<root/>`}                      | ${true}  | ${"no vs. existing namespace declarations ignored"}
       ${`<?xml version="1.0"?>\n<root><child/></root>`}                   | ${`<?xml version="1.0"?><root/>`} | ${false} | ${"ignoring declaration should ignore newlines"}
-    `("[$#] Should '$value1' be equal to '$value2'? => $equal ($comment)", ({ value1, value2, equal }) => {
-      expect(differ.areEqual(value1, value2)).toStrictEqual(equal);
+    `("[$#] Should '$value1' be equal to '$value2'? => $equal ($comment)", async ({ value1, value2, equal }) => {
+      expect(await differ.areEqual(value1, value2)).toStrictEqual(equal);
     });
   });
 
@@ -153,8 +153,8 @@ describe("DataNormalizer", () => {
       ${`<root><ex:child/></root>`}                                                                       | ${`<root xmlns="https://example.org/v2" xmlns:ex="https://example.org/ex"><ex:child/></root>`}      | ${true}  | ${"no vs. existing namespace declarations ignored"}
       ${`<root ex:attr="Lorem"><ex:child/></root>`}                                                       | ${`<root xmlns:ex="https://example.org/ex" ex:attr="Lorem"><ex:child/></root>`}                     | ${true}  | ${"no vs. existing namespace declarations ignored, respecting equal attribute"}
       ${`<root ex:attr="Lorem"><ex:child/></root>`}                                                       | ${`<root xmlns:ex="https://example.org/ex" ex:attr="Ipsum"><ex:child/></root>`}                     | ${false} | ${"no vs. existing namespace declarations ignored, respecting unequal attribute"}
-    `("[$#] Should '$value1' be different to '$value2'? => $equal ($comment)", ({ value1, value2, equal }) => {
-      expect(differ.areEqual(value1, value2)).toStrictEqual(equal);
+    `("[$#] Should '$value1' be different to '$value2'? => $equal ($comment)", async ({ value1, value2, equal }) => {
+      expect(await differ.areEqual(value1, value2)).toStrictEqual(equal);
     });
   });
 
@@ -172,8 +172,8 @@ describe("DataNormalizer", () => {
       ${`<?xml version="1.0"?>\n<root/>`}                                 | ${`<?xml version="1.0"?><root/>`}                                                                   | ${true} | ${"ignoring declaration should ignore newlines"}
       ${`<?xml version="1.0" encoding="utf-8" standalone="yes"?><root/>`} | ${`<?xml version="1.0"?><root/>`}                                                                   | ${true} | ${"ignoring declaration should ignore different declarations"}
       ${`<root xmlns="https://example.org/default"><ex:child/></root>`}   | ${`<root xmlns="https://example.org/default" xmlns:ex="https://example.org/ex"><ex:child/></root>`} | ${true} | ${"different namespace declarations ignored"}
-    `("[$#] Should '$value1' be equal to '$value2'? => $equal ($comment)", ({ value1, value2, equal }) => {
-      expect(differ.areEqual(value1, value2)).toStrictEqual(equal);
+    `("[$#] Should '$value1' be equal to '$value2'? => $equal ($comment)", async ({ value1, value2, equal }) => {
+      expect(await differ.areEqual(value1, value2)).toStrictEqual(equal);
     });
 
     // noinspection HtmlUnknownAttribute
@@ -182,9 +182,9 @@ describe("DataNormalizer", () => {
       ${`<?xml version="1.0"?>\n<root/>`}                                 | ${`<?xml version="1.0"?><root/>`}                                                                   | ${true} | ${"ignoring declaration should ignore newlines"}
       ${`<?xml version="1.0" encoding="utf-8" standalone="yes"?><root/>`} | ${`<?xml version="1.0"?><root/>`}                                                                   | ${true} | ${"ignoring declaration should ignore different declarations"}
       ${`<root xmlns="https://example.org/default"><ex:child/></root>`}   | ${`<root xmlns="https://example.org/default" xmlns:ex="https://example.org/ex"><ex:child/></root>`} | ${true} | ${"different namespace declarations ignored"}
-    `("[$#] Should normalized '$value1' be equal to '$value2'? => $equal ($comment)", ({ value1, value2, equal }) => {
-      const normalized1 = differ.normalize(value1);
-      expect(differ.areEqual(normalized1, value2)).toStrictEqual(equal);
+    `("[$#] Should normalized '$value1' be equal to '$value2'? => $equal ($comment)", async ({ value1, value2, equal }) => {
+      const normalized1 = await differ.normalize(value1);
+      expect(await differ.areEqual(normalized1, value2)).toStrictEqual(equal);
     });
 
     // noinspection HtmlUnknownAttribute
@@ -195,10 +195,10 @@ describe("DataNormalizer", () => {
       ${`<root xmlns="https://example.org/default"><ex:child/></root>`}   | ${`<root xmlns="https://example.org/default" xmlns:ex="https://example.org/ex"><ex:child/></root>`} | ${true} | ${"different namespace declarations ignored"}
     `(
       "[$#] Should normalized '$value1' be equal to normalized '$value2'? => $equal ($comment)",
-      ({ value1, value2, equal }) => {
-        const normalized1 = differ.normalize(value1);
-        const normalized2 = differ.normalize(value2);
-        expect(differ.areEqual(normalized1, normalized2)).toStrictEqual(equal);
+      async ({ value1, value2, equal }) => {
+        const normalized1 = await differ.normalize(value1);
+        const normalized2 = await differ.normalize(value2);
+        expect(await differ.areEqual(normalized1, normalized2)).toStrictEqual(equal);
       }
     );
   });

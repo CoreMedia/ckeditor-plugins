@@ -252,7 +252,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
   },
   autosave: {
     waitingTime: 1000, // in ms
-    save(currentEditor) {
+    save: (currentEditor) => {
       console.log("Save triggered...");
       const start = performance.now();
       const data = currentEditor.getData({
@@ -260,9 +260,10 @@ ClassicEditor.create(document.querySelector('.editor'), {
         // possible values: empty, none (default: empty)
         trim: 'empty',
       });
-      saveData("autosave", data);
-      console.log(`Saved data within ${performance.now() - start} ms.`);
-    }
+      return saveData("autosave", data).then(() => {
+        console.log(`Saved data within ${performance.now() - start} ms.`);
+      });
+    },
   },
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     strictness: Strictness.STRICT,
@@ -326,7 +327,7 @@ const LastData = Symbol("LastData");
  * @param source - which editor stored the data
  * @param data - data to be stored
  */
-const saveData = (source, data) => {
+const saveData = async (source, data) => {
   const processor = window.editor?.data.processor;
   const lastData = window[LastData];
 
@@ -343,10 +344,10 @@ const saveData = (source, data) => {
   if (typeof lastData === "string") {
     if (isDataNormalizer(processor)) {
       const normalized = {
-        new: processor.normalize(data),
-        last: processor.normalize(lastData),
+        new: await processor.normalize(data),
+        last: await processor.normalize(lastData),
       };
-      diff.isDifferent = !processor.areEqual(normalized.new, normalized.last);
+      diff.isDifferent = !(await processor.areEqual(normalized.new, normalized.last));
       diff.strategy = {
         by: "data-differ",
         normalized,
