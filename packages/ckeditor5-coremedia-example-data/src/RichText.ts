@@ -417,6 +417,21 @@ export const td = (content: Content, attrs: TableDataAttributes = {}) => {
 };
 
 /**
+ * Convenience to create a `<code>` element in view and model layer.
+ *
+ * @param content - content to wrap
+ * @param attrs - attributes to apply to element
+ */
+export const code = (content: Content, attrs: Attributes = {}): string => {
+  const classAttr = attrs.class ? `code ${attrs.class}` : `code`;
+  const spanAttrs: Attributes = {
+    ...attrs,
+    class: classAttr,
+  };
+  return span(content, spanAttrs);
+};
+
+/**
  * Convenience to create a heading.
  *
  * **Content:** `(#PCDATA|a|br|span|img|em|strong|sub|sup)*`
@@ -516,7 +531,7 @@ export const sectionHeading = (content: Content = "", attrs: Attributes = {}): s
  * **Content:** `(p|ol|ul|pre|blockquote|table)*`
  *
  * @param innerXml - the XML to wrap into `<div>`.
- * @param addXmlDeclaration - if to add the XML declaration with UTF-8 encoding)
+ * @param addXmlDeclaration - if to add the XML declaration with UTF-8 encoding
  * in front.
  */
 export const richtext = (innerXml: Content = "", addXmlDeclaration = true): string => {
