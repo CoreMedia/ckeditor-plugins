@@ -40,5 +40,18 @@ export const XDIFF_SPAN_ELEMENT_CONFIG: {
   model: string;
 } = {
   view: "xdiff:span",
-  model: "xdiff-span",
+  model: "xdiffSpan",
+};
+
+/**
+ * Artificial element added on data-processing to mark added, removed, changed
+ * or conflicting newlines. Originally received from server side differencing
+ * as `<xdiff:span/>`, i.e., without any content.
+ */
+export const XDIFF_BREAK_ELEMENT_CONFIG: {
+  view: string;
+  model: string;
+} = {
+  view: "xdiff:br",
+  model: "xdiffBreak",
 };

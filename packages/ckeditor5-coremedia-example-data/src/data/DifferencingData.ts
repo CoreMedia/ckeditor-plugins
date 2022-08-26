@@ -38,9 +38,22 @@ Set to bold with class-attribute change:
 <strong class="some--class">\
 ${xdiff.change(`Lorem ipsum`, {
   changes: `<b>Strong</b> style added with class some--class.`,
-  endOfDifferences: !hasNext,
 })}\
 </strong>.
+</p>
+${sectionHeading("Inline-Style Applied to Text And Following Space")}
+<p>
+On double click, most browsers select the word as well as the space after.
+Setting such text to bold results in the following difference augmentation:
+</p>
+<p>
+Lorem <strong>${xdiff.change(`ipsum `, {
+    changes: `<b>Strong</b> style added.`,
+  })}\
+${xdiff.add(` `, {
+  endOfDifferences: !hasNext,
+})}</strong>\
+dolor\
 </p>`;
 };
 

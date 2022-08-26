@@ -14,7 +14,7 @@ import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
 import { getSchema, schemaRules } from "./rules/Schema";
-import { langDataFilterRule, langMapper, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
+import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
 import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
 
@@ -134,13 +134,30 @@ const defaultRules: FilterRuleSetConfiguration = {
     ...tableRules,
     span: langMapperConfiguration,
     pre: langMapperConfiguration,
-    "xdiff:span": (params) => {
-      params.node.replaceByChildren = true;
+    /*
+     * DevNote: This should better be done by Differencing plugin. A
+     * corresponding API is missing in `RichTextDataProcessor` yet.
+     */
+    "xdiff:span": {
+      toView: (params) => {
+        const { node } = params;
+        // Later, in model, we cannot distinguish `<xdiff:span/>` representing
+        // a newline (added, removed, changed) from `<xdiff:span> </xdiff:span>`
+        // which is some whitespace change. Because of that, we introduce a
+        // virtual new element here, which signals a newline change.
+        if (node.isEmpty()) {
+          node.name = "xdiff:br";
+        }
+        // Whitespace-Only contents: Instead of applying corresponding processing
+        // here, we handle this in `RichTextDataProcessor` by declaring
+        // `xdiff:span` to be a `preElement`.
+        // See also: ckeditor/ckeditor5#12324
+      },
     },
   },
 };
 
-export function getConfig(config?: CKEditorConfig): ParsedConfig {
+export const getConfig = (config?: CKEditorConfig): ParsedConfig => {
   const customConfig: CoreMediaRichTextConfig =
     <CoreMediaRichTextConfig>config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) || {};
 
@@ -153,4 +170,4 @@ export function getConfig(config?: CKEditorConfig): ParsedConfig {
     toView,
     schema,
   };
-}
+};

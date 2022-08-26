@@ -1,7 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
-import { XDIFF_ATTRIBUTES, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
+import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
 import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -63,14 +63,23 @@ export default class Differencing extends Plugin {
     const { model, conversion } = editor;
     const { schema } = model;
 
-    schema.register("xdiff-span", {
-      allowIn: ["$block", "$container"],
-      allowChildren: ["$text", "$block", "$container"],
+    schema.register("xdiffSpan", {
+      allowWhere: "$inlineObject",
+      allowContentOf: ["$block", "$container"],
+      allowAttributes: Object.values(XDIFF_ATTRIBUTES),
+      isInline: true,
+    });
+
+    schema.register("xdiffBreak", {
+      allowWhere: "softBreak",
+      allowChildren: [],
       allowAttributes: Object.values(XDIFF_ATTRIBUTES),
       isInline: true,
     });
 
     conversion.for("upcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
+    conversion.for("upcast").elementToElement(XDIFF_BREAK_ELEMENT_CONFIG);
+
     /*
      * **dataDowncast:** We also downcast back to data view, relying on other
      * mechanisms (like data-processing), that these changes are not written
@@ -78,25 +87,13 @@ export default class Differencing extends Plugin {
      * data, which are not meant to be stored on server again.
      */
 
+    conversion.for("downcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
+
     conversion.for("downcast").elementToElement({
-      ...XDIFF_SPAN_ELEMENT_CONFIG,
-      view: (modelElement, { writer }) => {
-        if (modelElement.childCount === 0) {
-          /*
-           * Especially for CSS rules to apply, it is important to keep the
-           * empty state here. Not explicitly stating, that this element
-           * is considered empty, would add a filler element inside, like:
-           *
-           * ```html
-           * <br data-cke-filler="true">
-           * ```
-           *
-           * which again is hard to apply CSS styles to.
-           */
-          return writer.createEmptyElement(XDIFF_SPAN_ELEMENT_CONFIG.view);
-        }
-        return writer.createContainerElement(XDIFF_SPAN_ELEMENT_CONFIG.view);
-      },
+      ...XDIFF_BREAK_ELEMENT_CONFIG,
+      // DevNote: Empty Element prevents, for example, filler elements to be
+      // added.
+      view: (modelElement, { writer }) => writer.createEmptyElement(XDIFF_BREAK_ELEMENT_CONFIG.view),
     });
 
     /*
