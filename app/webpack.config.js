@@ -14,6 +14,32 @@ const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const CircularDependencyPlugin = require("circular-dependency-plugin");
 
+// WebPack 5+ Compatibility for clean-css (transitive dep. of html-minifier-terser)
+// see also: https://webpack.js.org/configuration/resolve/#resolvefallback
+/**
+ * clean-css (transitive dep. of html-minifier-terser) requires some modules,
+ * which are not shipped with WebPack 5+ anymore. As we don't use clean-css
+ * as part of the `html-minifier-terser`, we can just ignore all requirements.
+ *
+ * @see https://webpack.js.org/configuration/resolve/#resolvefallback
+ */
+const cleanCssCompat = {
+  fallback: {
+    fs:  false,
+    http: false,
+    https: false,
+    os: false,
+    path: false,
+    url: false,
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      // Clean-CSS checks here, if this is equal to win32 for `isWindows`.
+      "process.platform": JSON.stringify("unknown"),
+    }),
+  ],
+};
+
 module.exports = {
   devtool: 'eval-cheap-module-source-map',
   //devtool: 'source-map',
@@ -22,7 +48,10 @@ module.exports = {
   entry: path.resolve(__dirname, 'src', 'ckeditor.js'),
 
   resolve: {
-    extensions: ['.js', '.json']
+    extensions: ['.js', '.json'],
+    fallback: {
+      ...cleanCssCompat.fallback,
+    },
   },
 
   output: {
@@ -50,6 +79,7 @@ module.exports = {
   },
 
   plugins: [
+    ...cleanCssCompat.plugins,
     new CKEditorWebpackPlugin({
       // UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
       // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).

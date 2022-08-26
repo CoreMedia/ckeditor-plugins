@@ -19,7 +19,7 @@ import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/obser
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { DataNormalizer, DataNormalizerMixin } from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
 import { normalizeToHash } from "@coremedia/ckeditor5-data-normalization/Normalizers";
-import { normalizeEmptyParagraphs, normalizeNamespaceDeclarations, normalizeXmlDeclaration } from "./Normalizers";
+import { normalizeEmptyParagraphs, normalizeHtml, normalizeNamespaceDeclarations, normalizeXmlDeclaration } from "./Normalizers";
 
 class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
@@ -62,6 +62,7 @@ class RichTextDataProcessor implements DataProcessor {
     this.addNormalizer(normalizeXmlDeclaration);
     this.addNormalizer(normalizeNamespaceDeclarations);
     this.addNormalizer(normalizeEmptyParagraphs);
+    this.addNormalizer(normalizeHtml);
     // We want to do this last, so that patches may be applied, doing further
     // normalization.
     this.addNormalizer(normalizeToHash, Number.MAX_SAFE_INTEGER);

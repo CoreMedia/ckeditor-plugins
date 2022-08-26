@@ -25,6 +25,7 @@
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
     "@types/ckeditor__ckeditor5-engine": "^32.0.11",
     "@types/ckeditor__ckeditor5-utils": "^28.0.14",
+    "@types/html-minifier-terser": "^7.0.0",
     "@types/jest": "^28.1.6",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
@@ -50,6 +51,7 @@
   "dependencies": {
     "@coremedia/ckeditor5-data-normalization": "^8.0.0",
     "@coremedia/ckeditor5-dataprocessor-support": "^8.0.0",
-    "@coremedia/ckeditor5-logging": "^8.0.0"
+    "@coremedia/ckeditor5-logging": "^8.0.0",
+    "html-minifier-terser": "^7.0.0"
   }
 }
