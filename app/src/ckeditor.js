@@ -325,9 +325,27 @@ const LastData = Symbol("LastData");
  * for data-normalization.
  */
 const setData = (data) => {
+  const { editor } = window;
+  if (!editor) {
+    console.error("CKEditor unavailable.");
+    return;
+  }
+  const { document } = editor.model;
+
   window[LastData] = data;
+  const versionBefore = document.version
   window.editor?.setData(data);
-  console.log(`Editor Data set.`, {data});
+  const versionAfter = document.version
+  const input = data;
+  const output = window.editor?.getData();
+  const different = data !== output;
+  console.log(`Editor Data set.`, {
+    input,
+    output,
+    versionBefore,
+    versionAfter,
+    different
+  });
 };
 
 // Expose `setData` function, especially for use in example data.
@@ -342,11 +360,17 @@ window["setData"] = setData;
  * @param data - data to be stored
  */
 const saveData = async (source, data) => {
-  const {processor} = window.editor?.data;
+  const { editor } = window;
+  if (!editor) {
+    console.error("CKEditor unavailable.");
+    return;
+  }
+  const {processor} = editor.data;
   const lastData = window[LastData];
 
   // Provides some difference-details on console.
   const diff = {
+    version: editor.model.document.version,
     isDifferent: true,
     strategy: {
       by: "init",
