@@ -3,7 +3,8 @@ import {
   PREDEFINED_MOCK_BLOB_DATA,
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
-import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
+import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
+import {normalizationData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/NormalizationData";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -30,7 +31,7 @@ const richText = (plain) => {
     return `<div xmlns="${CM_RICHTEXT}"/>`
   }
   const hasXLink = plain.indexOf("xlink:") >= 0;
-  return `<div xmlns="${CM_RICHTEXT}"${hasXLink ? ` xmlns:xlink="${XLINK}"`: ""}>${plain}</div>`
+  return `<div xmlns="${CM_RICHTEXT}"${hasXLink ? ` xmlns:xlink="${XLINK}"` : ""}>${plain}</div>`
 };
 const h = (level, text) => `<p class="p--heading-${level}">${text}</p>`;
 const h1 = (text) => h(1, text);
@@ -525,11 +526,11 @@ const lorem = (words, paragraphs) => {
   const asParagraphs = chunks(allWords, wordsPerParagraph);
   const paragraph = (w) => {
     const paragraphText = w.join(" ")
-      .trim()
-      // Start each paragraph with upper case.
-      .replace(/^\w/, c => c.toUpperCase())
-      // End each paragraph with a dot, possibly replacing any non-alphabetic character.
-      .replace(/\W?$/, ".")
+            .trim()
+            // Start each paragraph with upper case.
+            .replace(/^\w/, c => c.toUpperCase())
+            // End each paragraph with a dot, possibly replacing any non-alphabetic character.
+            .replace(/\W?$/, ".")
     ;
     return `<p>${paragraphText}</p>`;
   };
@@ -1308,6 +1309,7 @@ const exampleData = {
   "Empty": "",
   "Entities": entitiesExample,
   ...differencingData,
+  ...normalizationData,
   ...grsExampleData(),
   "Hello": richText(`<p>Hello World!</p>`),
   "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
@@ -1385,7 +1387,7 @@ const setExampleData = (editor, exampleKey) => {
 
     const data = exampleData[exampleKey];
     console.log("Setting Example Data.", {data: data});
-    editor.setData(data);
+    window.setData?.(data);
   } catch (e) {
     console.error(`Failed setting data for ${exampleKey}.`, e);
   }
@@ -1429,7 +1431,7 @@ const initExamples = (editor) => {
 
   clearBtn.addEventListener("click", () => {
     xmpInput.blur();
-    editor.setData("");
+    window.setData?.("");
   });
 
   // Now add all examples

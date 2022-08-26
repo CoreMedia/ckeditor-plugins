@@ -320,6 +320,20 @@ ClassicEditor.create(document.querySelector('.editor'), {
 const LastData = Symbol("LastData");
 
 /**
+ * A small facade around editor.setData, which remembers the last data
+ * set explicitly. This simulates similar approach in studio-client used
+ * for data-normalization.
+ */
+const setData = (data) => {
+  window[LastData] = data;
+  window.editor?.setData(data);
+  console.log(`Editor Data set.`, {data});
+};
+
+// Expose `setData` function, especially for use in example data.
+window["setData"] = setData;
+
+/**
  * Save method with additional recognition, if there is an actual change.
  * This represents, how we could prevent auto-checkout in CoreMedia
  * Studio for irrelevant changes, because they are semantically equivalent.
@@ -328,7 +342,7 @@ const LastData = Symbol("LastData");
  * @param data - data to be stored
  */
 const saveData = async (source, data) => {
-  const processor = window.editor?.data.processor;
+  const {processor} = window.editor?.data;
   const lastData = window[LastData];
 
   // Provides some difference-details on console.
@@ -347,7 +361,7 @@ const saveData = async (source, data) => {
         new: await processor.normalize(data),
         last: await processor.normalize(lastData),
       };
-      diff.isDifferent = !(await processor.areEqual(normalized.new, normalized.last));
+      diff.isDifferent = normalized.new !== normalized.last;
       diff.strategy = {
         by: "data-differ",
         normalized,
