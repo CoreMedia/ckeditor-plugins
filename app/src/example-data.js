@@ -4,6 +4,7 @@ import {
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
 import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
+import {setData} from "./dataFacade";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -1385,7 +1386,7 @@ const setExampleData = (editor, exampleKey) => {
 
     const data = exampleData[exampleKey];
     console.log("Setting Example Data.", {data: data});
-    editor.setData(data);
+    setData(editor, data);
   } catch (e) {
     console.error(`Failed setting data for ${exampleKey}.`, e);
   }
@@ -1429,7 +1430,7 @@ const initExamples = (editor) => {
 
   clearBtn.addEventListener("click", () => {
     xmpInput.blur();
-    editor.setData("");
+    setData(editor, "");
   });
 
   // Now add all examples
