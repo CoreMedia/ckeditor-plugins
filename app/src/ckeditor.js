@@ -38,7 +38,7 @@ import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integra
 
 import {setupPreview, updatePreview} from './preview'
 import {initReadOnlyMode} from './readOnlySupport'
-import {initExamples} from './example-data'
+import {initExamples, setExampleData} from './example-data'
 import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
@@ -311,6 +311,7 @@ ClassicEditor.create(document.querySelector('.editor'), {
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");
 
+  setExampleData(newEditor, "Welcome");
   // Initialize Preview
   updatePreview(newEditor.getData());
 }).catch(error => {

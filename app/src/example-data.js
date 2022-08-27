@@ -5,6 +5,7 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
 import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
 import {setData} from "./dataFacade";
+import {welcomeTextData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -1302,6 +1303,7 @@ const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("X
 
 // noinspection HtmlUnknownAttribute
 const exampleData = {
+  ...welcomeTextData,
   "Content Links": contentLinkExamples(),
   "Various Links": PREDEFINED_MOCK_LINK_DATA,
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
@@ -1368,7 +1370,7 @@ const exampleData = {
   </ul>`)
 };
 
-const setExampleData = (editor, exampleKey) => {
+export const setExampleData = (editor, exampleKey) => {
   try {
     // noinspection InnerHTMLJS
     editor.editing.view.once("render", (event) => console.log("CKEditor's Editing-Controller rendered data.", {
@@ -1385,14 +1387,17 @@ const setExampleData = (editor, exampleKey) => {
     });
 
     const data = exampleData[exampleKey];
-    console.log("Setting Example Data.", {data: data});
+    console.log("Setting Example Data.", {exampleKey: data});
     setData(editor, data);
+
+    const xmpInput = document.getElementById("xmp-input");
+    xmpInput.value = exampleKey;
   } catch (e) {
     console.error(`Failed setting data for ${exampleKey}.`, e);
   }
 };
 
-const initExamples = (editor) => {
+export const initExamples = (editor) => {
   const xmpInput = document.getElementById("xmp-input");
   const xmpData = document.getElementById("xmp-data");
   const reloadBtn = document.getElementById("xmp-reload");
@@ -1442,7 +1447,3 @@ const initExamples = (editor) => {
     xmpData?.appendChild(option);
   }
 };
-
-export {
-  initExamples,
-}
