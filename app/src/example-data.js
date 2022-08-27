@@ -1387,7 +1387,7 @@ export const setExampleData = (editor, exampleKey) => {
     });
 
     const data = exampleData[exampleKey];
-    console.log("Setting Example Data.", {exampleKey: data});
+    console.log("Setting Example Data.", {[exampleKey]: data});
     setData(editor, data);
 
     const xmpInput = document.getElementById("xmp-input");
