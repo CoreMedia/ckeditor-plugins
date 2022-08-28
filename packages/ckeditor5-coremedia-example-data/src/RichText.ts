@@ -521,6 +521,27 @@ export const h6 = (content: Content = "", attrs: Attributes = {}): string => hea
 export const sectionHeading = (content: Content = "", attrs: Attributes = {}): string => p(strong(content), attrs);
 
 /**
+ * Type for all heading factory methods.
+ */
+export type Headings = typeof h1 | typeof h2 | typeof h3 | typeof h4 | typeof h5 | typeof h6;
+
+/**
+ * Type for all block level factory methods with default attributes supporting
+ * plain text content.
+ */
+export type DefaultBlock = typeof p | Headings;
+
+/**
+ * Type for inline factory methods with default attributes.
+ */
+export type DefaultInline = typeof span | typeof em | typeof strong | typeof sub | typeof sup;
+
+/**
+ * Type for list factory methods.
+ */
+export type List = typeof ul | typeof ol;
+
+/**
  * Wraps XML by corresponding `<div>` as used in CoreMedia RichText.
  * Required namespaces are dynamically added.
  *
