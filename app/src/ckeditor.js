@@ -38,7 +38,7 @@ import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integra
 
 import {setupPreview, updatePreview} from './preview'
 import {initReadOnlyMode} from './readOnlySupport'
-import {initExamples} from './example-data'
+import {initExamples, setExampleData} from './example-data'
 import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
@@ -49,9 +49,9 @@ import {replaceByElementAndClassBackAndForth} from "@coremedia/ckeditor5-coremed
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
-import {isDataNormalizer} from "@coremedia/ckeditor5-data-normalization/DataNormalizer";
 
 import {icons} from '@ckeditor/ckeditor5-core';
+import {saveData} from "./dataFacade";
 
 const {
   objectInline: withinTextIcon,
@@ -256,13 +256,9 @@ ClassicEditor.create(document.querySelector('.editor'), {
     save(currentEditor) {
       console.log("Save triggered...");
       const start = performance.now();
-      const data = currentEditor.getData({
-        // set to `none`, to trigger data-processing for empty text, too
-        // possible values: empty, none (default: empty)
-        trim: 'empty',
+      return saveData(currentEditor, "autosave").then(() => {
+        console.log(`Saved data within ${performance.now() - start} ms.`);
       });
-      saveData("autosave", data);
-      console.log(`Saved data within ${performance.now() - start} ms.`);
     }
   },
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
@@ -295,13 +291,13 @@ ClassicEditor.create(document.querySelector('.editor'), {
   }, {
     isCollapsed: true,
   });
-  const differencing = newEditor.plugins.get("Differencing");
-  if (differencing) {
-    differencing.activateDifferencing();
-  }
+
+  newEditor.plugins.get("Differencing")?.activateDifferencing();
+
   initReadOnlyMode(newEditor);
   initExamples(newEditor);
   initDragExamples(newEditor);
+
   editor = newEditor;
 
   let undoCommand = newEditor.commands.get("undo");
@@ -314,57 +310,10 @@ ClassicEditor.create(document.querySelector('.editor'), {
   // tests), that the editor is ready.
   window['editor'] = newEditor;
   console.log("Exposed editor instance as `editor`.");
+
+  setExampleData(newEditor, "Welcome");
+  // Initialize Preview
+  updatePreview(newEditor.getData());
 }).catch(error => {
   console.error(error);
 });
-
-const LastData = Symbol("LastData");
-
-/**
- * Save method with additional recognition, if there is an actual change.
- * This represents, how we could prevent auto-checkout in CoreMedia
- * Studio for irrelevant changes, because they are semantically equivalent.
- *
- * @param source - which editor stored the data
- * @param data - data to be stored
- */
-const saveData = (source, data) => {
-  const processor = window.editor?.data.processor;
-  const lastData = window[LastData];
-
-  // Provides some difference-details on console.
-  const diff = {
-    isDifferent: true,
-    strategy: {
-      by: "init",
-    },
-    data,
-    lastData,
-  };
-
-  if (typeof lastData === "string") {
-    if (isDataNormalizer(processor)) {
-      const normalized = {
-        new: processor.normalize(data),
-        last: processor.normalize(lastData),
-      };
-      diff.isDifferent = !processor.areEqual(normalized.new, normalized.last);
-      diff.strategy = {
-        by: "data-differ",
-        normalized,
-      };
-    } else {
-      diff.strategy.by = "strict-equals";
-      diff.isDifferent = lastData !== data;
-    }
-  }
-
-  if (diff.isDifferent) {
-    console.log(`Saving data triggered by ${source}.`, {diff});
-    updatePreview(data)
-  } else {
-    console.log(`Not saving data triggered by ${source} as they are semantically equivalent to previous data.`, {diff});
-  }
-
-  window[LastData] = data;
-};

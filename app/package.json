@@ -42,7 +42,6 @@
     "@coremedia/ckeditor5-dataprocessor-support": "^8.1.0",
     "@coremedia/ckeditor5-studio-essentials": "^8.1.0",
     "@coremedia/ckeditor5-font-mapper": "^8.1.0",
-    "@coremedia/ckeditor5-data-normalization": "^8.1.0",
     "@coremedia/service-agent": "^1.1.0",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "xml-formatter": "^2.6.1"

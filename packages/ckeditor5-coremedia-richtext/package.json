@@ -48,7 +48,6 @@
     "@ckeditor/ckeditor5-utils": "^34.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-data-normalization": "^8.1.0",
     "@coremedia/ckeditor5-dataprocessor-support": "^8.1.0",
     "@coremedia/ckeditor5-logging": "^8.1.0"
   }
