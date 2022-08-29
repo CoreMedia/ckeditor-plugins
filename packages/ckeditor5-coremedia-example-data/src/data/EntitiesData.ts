@@ -264,7 +264,7 @@ const coreMediaRichTextEntities = [
 const htmlCode = (code: string): string => `<pre><span class="language-html code">${code}</span></pre>`;
 
 const entitiesTableRow = (entity: string): string =>
-  `<tr><td>${htmlCode(entity.replace("&", "&amp;"))}</td><td>${entity}</td></tr>`; // lgtm[js/incomplete-sanitization]
+  `<tr><td>${htmlCode(entity.replaceAll("&", "&amp;"))}</td><td>${entity}</td></tr>`; // lgtm[js/incomplete-sanitization]
 /**
  * These are the default entities, allowed or required in XML.
  * These entities were affected by CoreMedia/ckeditor-plugins#39.
