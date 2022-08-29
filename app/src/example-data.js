@@ -9,7 +9,8 @@ import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-
 import {grsData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
 import {loremIpsumData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
 import {linkTargetData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
-import {h1, richtext, richTextDocument} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import {h1, richtext} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import {richTextDocument} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
 import {entitiesData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";

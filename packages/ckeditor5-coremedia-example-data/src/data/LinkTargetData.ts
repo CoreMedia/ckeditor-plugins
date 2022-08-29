@@ -1,5 +1,6 @@
 import { lorem } from "../LoremIpsum";
-import { em, h1, richtext, richTextDocument } from "../RichText";
+import { em, h1, richtext } from "../RichText";
+import { richTextDocument } from "../RichTextDOM";
 import { ExampleData } from "../ExampleData";
 
 const SOME_TARGET = "somewhere";
