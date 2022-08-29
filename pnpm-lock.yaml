@@ -571,7 +571,7 @@ importers:
       '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
-      '@types/ckeditor__ckeditor5-link': ^32.0.3
+      '@types/ckeditor__ckeditor5-link': ^32.0.4
       '@types/ckeditor__ckeditor5-typing': ^32.0.1
       '@types/ckeditor__ckeditor5-ui': ^32.0.2
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
@@ -612,7 +612,7 @@ importers:
       '@types/ckeditor__ckeditor5-clipboard': 29.0.5
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-engine': 32.0.11
-      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-link': 32.0.4
       '@types/ckeditor__ckeditor5-typing': 32.0.1
       '@types/ckeditor__ckeditor5-ui': 32.0.2
       '@types/ckeditor__ckeditor5-utils': 28.0.14
@@ -758,7 +758,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-richtext-support': 8.1.1-rc.1
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
-      '@types/ckeditor__ckeditor5-link': ^32.0.3
+      '@types/ckeditor__ckeditor5-link': ^32.0.4
       '@types/ckeditor__ckeditor5-typing': ^32.0.1
       '@types/ckeditor__ckeditor5-ui': ^32.0.2
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
@@ -791,7 +791,7 @@ importers:
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-engine': 32.0.11
-      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-link': 32.0.4
       '@types/ckeditor__ckeditor5-typing': 32.0.1
       '@types/ckeditor__ckeditor5-ui': 32.0.2
       '@types/ckeditor__ckeditor5-utils': 28.0.14
@@ -3204,7 +3204,7 @@ packages:
     dependencies:
       '@types/ckeditor__ckeditor5-adapter-ckfinder': 29.0.4
       '@types/ckeditor__ckeditor5-core': 33.0.3
-      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-link': 32.0.4
       '@types/ckeditor__ckeditor5-ui': 32.0.2
     dev: true
 
@@ -3256,7 +3256,7 @@ packages:
       '@types/ckeditor__ckeditor5-image': 33.0.0
       '@types/ckeditor__ckeditor5-indent': 29.0.3
       '@types/ckeditor__ckeditor5-language': 32.0.0
-      '@types/ckeditor__ckeditor5-link': 32.0.3
+      '@types/ckeditor__ckeditor5-link': 32.0.4
       '@types/ckeditor__ckeditor5-media-embed': 29.0.3
       '@types/ckeditor__ckeditor5-mention': 31.0.0
       '@types/ckeditor__ckeditor5-minimap': 33.0.0
@@ -3365,8 +3365,8 @@ packages:
       '@types/ckeditor__ckeditor5-core': 33.0.3
     dev: true
 
-  /@types/ckeditor__ckeditor5-link/32.0.3:
-    resolution: {integrity: sha512-vFwxCrwuo2g8bKWStzh5LsFAmLkRucaVBVygiYRTdNbLGcjA28wQiXZ7C7TFLXkkFdgn5jEadMyLqcEwrC9U/w==}
+  /@types/ckeditor__ckeditor5-link/32.0.4:
+    resolution: {integrity: sha512-ElABiBSynJvNpJ6kFSrOKfhtmVYUv7i158akP5VBnvI744hmvM3vl8D3Jjfj+/xKBFkHpJG9YN9XA0BSr+sOqA==}
     dependencies:
       '@types/ckeditor__ckeditor5-clipboard': 29.0.5
       '@types/ckeditor__ckeditor5-core': 33.0.3

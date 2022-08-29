@@ -30,7 +30,7 @@
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
     "@types/ckeditor__ckeditor5-engine": "^32.0.11",
-    "@types/ckeditor__ckeditor5-link": "^32.0.3",
+    "@types/ckeditor__ckeditor5-link": "^32.0.4",
     "@types/ckeditor__ckeditor5-typing": "^32.0.1",
     "@types/ckeditor__ckeditor5-ui": "^32.0.2",
     "@types/ckeditor__ckeditor5-utils": "^28.0.14",
