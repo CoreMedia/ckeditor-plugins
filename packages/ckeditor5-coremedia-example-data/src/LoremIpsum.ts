@@ -1,5 +1,6 @@
 import { p, richtext } from "./RichText";
 
+// noinspection SpellCheckingInspection
 /**
  * Raw Lorem Ipsum text as provided by [loremipsum.de](https://loremipsum.de/).
  */
