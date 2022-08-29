@@ -1,7 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-app",
   "description": "A custom CKEditor 5 build made by the CKEditor 5 online builder.",
-  "version": "8.1.1-rc.0",
+  "version": "8.1.1-rc.1",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -33,15 +33,15 @@
     "@ckeditor/ckeditor5-typing": "34.2.0",
     "@ckeditor/ckeditor5-ui": "34.2.0",
     "@ckeditor/ckeditor5-utils": "34.2.0",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-differencing": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-images": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-link": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-richtext": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-dataprocessor-support": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-studio-essentials": "8.1.1-rc.0",
-    "@coremedia/ckeditor5-font-mapper": "8.1.1-rc.0",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-coremedia-differencing": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-coremedia-images": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-coremedia-link": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-coremedia-richtext": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-dataprocessor-support": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-studio-essentials": "8.1.1-rc.1",
+    "@coremedia/ckeditor5-font-mapper": "8.1.1-rc.1",
     "@coremedia/service-agent": "^1.1.0",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "xml-formatter": "^2.6.1"
