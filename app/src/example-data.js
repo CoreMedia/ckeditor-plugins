@@ -9,7 +9,7 @@ import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-
 import {grsData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
 import {loremIpsumData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
 import {linkTargetData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
-import {richTextDocument} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import {h1, h2, richtext, richTextDocument} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -18,17 +18,6 @@ const LINK_TEXT = "Link";
 const serializer = new XMLSerializer();
 const tableHeader = (...headers) => `<tr class="tr--header">${headers.map((h) => `<td class="td--header">${h}</td>`).join("")}</tr>`;
 const htmlCode = (code) => `<pre><span class="language-html code">${code}</span></pre>`;
-const richText = (plain) => {
-  if (!plain) {
-    return `<div xmlns="${CM_RICHTEXT}"/>`
-  }
-  const hasXLink = plain.indexOf("xlink:") >= 0;
-  return `<div xmlns="${CM_RICHTEXT}"${hasXLink ? ` xmlns:xlink="${XLINK}"` : ""}>${plain}</div>`
-};
-const h = (level, text) => `<p class="p--heading-${level}">${text}</p>`;
-const h1 = (text) => h(1, text);
-const h2 = (text) => h(2, text);
-
 // TODO: Should use `RichText.a` in the end, as soon as proper escaping is
 //   supported. See also: `LinkTargetData.createLink` which is currently a
 //   duplicate.
@@ -430,7 +419,7 @@ const entitiesDescription = `<p>
   <span class="code">&amp;lt;</span>, is, that when written back to server, these
   entities are resolved to their corresponding UTF-8 characters.
 </p>`;
-const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("XML Entities")}<table>${tableHeader("Entity", "Character")}${xmlEntityRows}</table>${h2("CoreMedia RichText&nbsp;1.0 Entities")}<table>${tableHeader("Entity", "Character")}${richTextEntityRows}</table>`);
+const entitiesExample = richtext(`${h1("Entities")}${entitiesDescription}${h2("XML Entities")}<table>${tableHeader("Entity", "Character")}${xmlEntityRows}</table>${h2("CoreMedia RichText&nbsp;1.0 Entities")}<table>${tableHeader("Entity", "Character")}${richTextEntityRows}</table>`);
 
 // noinspection HtmlUnknownAttribute
 const exampleData = {
@@ -444,8 +433,8 @@ const exampleData = {
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   "Empty": "",
   "Entities": entitiesExample,
-  "Hello": richText(`<p>Hello World!</p>`),
-  "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
+  "Hello": richtext(`<p>Hello World!</p>`),
+  "Invalid RichText": richtext(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
           .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
