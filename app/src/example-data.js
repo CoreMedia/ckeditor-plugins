@@ -7,20 +7,15 @@ import {setData} from "./dataFacade";
 import {welcomeTextData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
 import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
 import {grsData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
-import {lorem} from "@coremedia-internal/ckeditor5-coremedia-example-data/LoremIpsum";
 import {loremIpsumData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
+import {linkTargetData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
+import {richTextDocument} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
-const SOME_TARGET = "somewhere";
-const EVIL_TARGET = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;
 const EXAMPLE_URL = "https://example.org/";
 const LINK_TEXT = "Link";
-const UNSET = "—";
-const parser = new DOMParser();
 const serializer = new XMLSerializer();
-// noinspection XmlUnusedNamespaceDeclaration
-const xmlDocument = parser.parseFromString(`<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}"></div>`, "text/xml");
 const tableHeader = (...headers) => `<tr class="tr--header">${headers.map((h) => `<td class="td--header">${h}</td>`).join("")}</tr>`;
 const htmlCode = (code) => `<pre><span class="language-html code">${code}</span></pre>`;
 const richText = (plain) => {
@@ -33,82 +28,17 @@ const richText = (plain) => {
 const h = (level, text) => `<p class="p--heading-${level}">${text}</p>`;
 const h1 = (text) => h(1, text);
 const h2 = (text) => h(2, text);
-const em = (str) => `<em>${str}</em>`;
 
-
+// TODO: Should use `RichText.a` in the end, as soon as proper escaping is
+//   supported. See also: `LinkTargetData.createLink` which is currently a
+//   duplicate.
 function createLink(show, role, href = EXAMPLE_URL) {
-  const a = xmlDocument.createElement("a");
+  const a = richTextDocument.createElement("a");
   a.textContent = LINK_TEXT;
   a.setAttribute("xlink:href", href);
   show && a.setAttribute("xlink:show", show);
   role && a.setAttribute("xlink:role", role);
   return serializer.serializeToString(a);
-}
-
-/**
- * Escapes the given string for display in HTML.
- * @param str
- * @returns {string}
- */
-function escape(str) {
-  if (!str) {
-    return str;
-  }
-
-  const el = xmlDocument.createElement("span");
-  el.textContent = str;
-  // noinspection InnerHTMLJS
-  return el.innerHTML;
-}
-
-function decode(str) {
-  if (!str) {
-    return str;
-  }
-
-  // We need to parse HTML entities here, thus using HTML document.
-  let el = document.createElement("span");
-  // noinspection InnerHTMLJS
-  el.innerHTML = str;
-  return el.textContent;
-}
-
-function truncate(str, maxLength) {
-  if (!!str && str.length > maxLength) {
-    return `${str.substring(0, maxLength)}${decode("&hellip;")}`;
-  }
-  return str;
-}
-
-function renderUiEditorValue(uiEditorValue) {
-  if (uiEditorValue === "") {
-    return `${em("empty")}`;
-  }
-  return uiEditorValue || UNSET;
-}
-
-function createLinkTableHeading() {
-  return tableHeader("xlink:show", "xlink:role", "target", "Active Button", "Editor Value", "Link", "Comment");
-}
-
-function createLinkTableRow({comment, show, role, target, uiActiveButton, uiEditorValue}) {
-  const shorten = (str) => escape(truncate(str, 15));
-  return `<tr>
-    <td>${shorten(show) || UNSET}</td>
-    <td>${shorten(role) || UNSET}</td>
-    <td>${shorten(target) || UNSET}</td>
-    <td>${uiActiveButton || UNSET}</td>
-    <td>${renderUiEditorValue(shorten(uiEditorValue))}</td>
-    <td>${createLink(show, role, EXAMPLE_URL)}</td>
-    <td>${comment || ""}</td>
-  </tr>`;
-}
-
-function createLinkScenario(title, scenarios) {
-  const scenarioTitle = h1(title);
-  const scenarioHeader = createLinkTableHeading();
-  const scenarioRows = scenarios.map(createLinkTableRow).join("");
-  return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
 }
 
 function createContentLinkTableHeading() {
@@ -124,10 +54,6 @@ function createContentLinkScenario(title, scenarios) {
   const scenarioHeader = createContentLinkTableHeading();
   const scenarioRows = scenarios.map(createContentLinkTableRow).join("");
   return `${scenarioTitle}<table>${scenarioHeader}${scenarioRows}</table>`;
-}
-
-function externalLinkTargetExamples() {
-  return linkTargetExamples();
 }
 
 function contentLinkExamples() {
@@ -223,243 +149,6 @@ function contentLinkExamples() {
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
 }
 
-function linkTargetExamples() {
-  const LONG_TARGET = lorem({words: 100});
-
-  /**
-   * The mapping we agreed upon for `xlink:show` to some target value.
-   * `other` is skipped here, as it is used for special meaning, which is,
-   * that the `xlink:show` is ignored but `xlink:role` will take over representing
-   * the `target` attribute.
-   */
-  const show = {
-    /**
-     * Open in new tab. Nothing to argue about.
-     */
-    new: "_blank",
-    /**
-     * Maybe either `_top` or `_self`. In CoreMedia CAE context we decided to
-     * map `replace` to `_self` as this is, what is documented for example
-     * at MDN.
-     */
-    replace: "_self",
-    /**
-     * Artificial mapping, we require, as there is no such `target` to represent
-     * embedding links.
-     */
-    embed: "_embed",
-    /**
-     * Artificial mapping, we require, as there is no such `target` to represent
-     * explicitly unspecified link behavior.
-     */
-    none: "_none",
-  };
-  const standardScenarios = [
-    {
-      comment: `default for having no target set; if triggered, will change target value to _self`,
-      show: null,
-      role: null,
-      target: null,
-      uiActiveButton: "Open in Current Tab",
-      uiEditorValue: null,
-    },
-    {
-      show: "new",
-      role: null,
-      target: show.new,
-      uiActiveButton: "Open in New Tab",
-      uiEditorValue: null,
-    },
-    {
-      show: "replace",
-      role: null,
-      target: show.replace,
-      uiActiveButton: "Open in Current Tab",
-      uiEditorValue: null,
-    },
-    {
-      comment: "artificial reserved word for 'target'.",
-      show: "embed",
-      role: null,
-      target: show.embed,
-      uiActiveButton: "Show Embedded",
-      uiEditorValue: null,
-    },
-    {
-      comment: `artificial state, as a 'role' would have been expected; on ${em("Save")} the empty editor value will trigger the deletion of target attribute value`,
-      show: "other",
-      role: null,
-      target: "_other",
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: "",
-    },
-    {
-      comment: "artificial reserved word for 'target' to reflect this XLink-state",
-      show: "none",
-      role: null,
-      target: show.none,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: show.none,
-    },
-    {
-      comment: "Open in Frame; normal state for a named target.",
-      show: "other",
-      role: SOME_TARGET,
-      target: SOME_TARGET,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: SOME_TARGET,
-    },
-    {
-      comment: "Open in Frame; UI challenge with long target value",
-      show: "other",
-      role: LONG_TARGET,
-      target: LONG_TARGET,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: LONG_TARGET,
-    },
-    {
-      comment: "Open in Frame; UI cross-site-scripting challenge",
-      show: "other",
-      role: EVIL_TARGET,
-      target: EVIL_TARGET,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: EVIL_TARGET,
-    },
-  ];
-  const artificialRichTextScenarios = [
-    {
-      comment: "artificial state, where a role misses an expected show attribute",
-      show: null,
-      role: SOME_TARGET,
-      target: `_role_${SOME_TARGET}`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `_role_${SOME_TARGET}`,
-    },
-    {
-      comment: "artificial state with unexpected role attribute",
-      show: "new",
-      role: SOME_TARGET,
-      target: `${show.new}_${SOME_TARGET}`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.new}_${SOME_TARGET}`,
-    },
-    {
-      comment: "artificial state with unexpected role attribute",
-      show: "replace",
-      role: SOME_TARGET,
-      target: `${show.replace}_${SOME_TARGET}`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.replace}_${SOME_TARGET}`,
-    },
-    {
-      comment: "artificial state with unexpected role attribute",
-      show: "embed",
-      role: SOME_TARGET,
-      target: `${show.embed}_${SOME_TARGET}`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.embed}_${SOME_TARGET}`,
-    },
-    {
-      comment: "artificial state with unexpected role attribute",
-      show: "none",
-      role: SOME_TARGET,
-      target: `${show.none}_${SOME_TARGET}`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.none}_${SOME_TARGET}`,
-    },
-  ];
-  const reservedTargetScenarios = [
-    {
-      show: "replace",
-      role: null,
-      target: show.replace,
-      uiActiveButton: "Open in Current Tab",
-      uiEditorValue: null,
-    },
-    {
-      show: "new",
-      role: null,
-      target: show.new,
-      uiActiveButton: "Open in New Tab",
-      uiEditorValue: null,
-    },
-    {
-      comment: "artificial regarding xlink-attributes",
-      show: "other",
-      role: "_parent",
-      target: "_parent",
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: "_parent",
-    },
-    {
-      comment: "artificial regarding xlink-attributes",
-      show: "other",
-      role: "_top",
-      target: "_top",
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: "_top",
-    },
-  ];
-  let cornerCaseScenarios;
-  cornerCaseScenarios = [
-    {
-      comment: "trying to misuse reserved word _role; handled as any custom target",
-      show: "other",
-      role: "_role",
-      target: "_role",
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: "_role",
-    },
-    {
-      comment: "trying to misuse reserved word _role; handled as any custom target",
-      show: "other",
-      role: "_role_",
-      target: "_role_",
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: "_role_",
-    },
-    {
-      comment: `trying to misuse artificial handling of ${show.new}_[role] with empty role; handled as any custom target`,
-      show: "other",
-      role: `${show.new}_`,
-      target: `${show.new}_`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.new}_`,
-    },
-    {
-      comment: `trying to misuse artificial handling of ${show.replace}_[role] with empty role; handled as any custom target`,
-      show: "other",
-      role: `${show.replace}_`,
-      target: `${show.replace}_`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.replace}_`,
-    },
-    {
-      comment: `trying to misuse artificial handling of ${show.embed}_[role] with empty role; handled as any custom target`,
-      show: "other",
-      role: `${show.embed}_`,
-      target: `${show.embed}_`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.embed}_`,
-    },
-    {
-      comment: `trying to misuse artificial handling of ${show.none}_[role] with empty role; handled as any custom target`,
-      show: "other",
-      role: `${show.none}_`,
-      target: `${show.none}_`,
-      uiActiveButton: "Open in Frame",
-      uiEditorValue: `${show.none}_`,
-    },
-  ];
-  const scenarios = [
-    createLinkScenario("Standard Links", standardScenarios),
-    createLinkScenario("Artificial Richtext Scenarios", artificialRichTextScenarios),
-    createLinkScenario("Reserved Target Scenarios", reservedTargetScenarios),
-    createLinkScenario("Corner Case Scenarios", cornerCaseScenarios),
-  ].join("");
-  // noinspection XmlUnusedNamespaceDeclaration
-  return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
-}
 
 /**
  * These are all CoreMedia RichText Entities known to CoreMedia RichText 1.0
@@ -746,6 +435,7 @@ const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("X
 // noinspection HtmlUnknownAttribute
 const exampleData = {
   ...differencingData,
+  ...linkTargetData,
   ...loremIpsumData,
   ...grsData,
   ...welcomeTextData,
@@ -757,7 +447,6 @@ const exampleData = {
   "Hello": richText(`<p>Hello World!</p>`),
   "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
           .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
-  "Links (Targets)": externalLinkTargetExamples(),
 };
 
 export const setExampleData = (editor, exampleKey) => {

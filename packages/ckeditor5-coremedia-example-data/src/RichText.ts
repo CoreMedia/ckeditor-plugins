@@ -1,3 +1,5 @@
+// noinspection GrazieInspection
+
 /**
  * Example Usage:
  * ```
@@ -383,6 +385,7 @@ export const tbody = (content: Content, attrs: TableBodyAttributes = {}) => {
  */
 export interface TableRowAttributes extends Attributes, CellHAlign, CellVAlign {}
 
+// noinspection GrazieInspection
 /**
  * Wraps given content into `<tr>` with given attributes.
  *
@@ -554,18 +557,36 @@ export type List = typeof ul | typeof ol;
  * @param innerXml - the XML to wrap into `<div>`.
  * @param addXmlDeclaration - if to add the XML declaration with UTF-8 encoding
  * in front.
+ * @param enforcedNamespaces - namespaces to add, even if not used in given
+ * XML.
  */
-export const richtext = (innerXml: Content = "", addXmlDeclaration = true): string => {
+export const richtext = (
+  innerXml: Content = "",
+  addXmlDeclaration = true,
+  enforcedNamespaces: ReadonlyArray<string> = []
+): string => {
   let result = "";
   if (addXmlDeclaration) {
     result += xmlDeclaration;
   }
   result += `<div xmlns="${nsRichText.uri}"`;
   onDemandNamespaces.forEach((namespace) => {
-    if (innerXml.includes(`${namespace.name}:`)) {
+    if (enforcedNamespaces.includes(namespace.name) || innerXml.includes(`${namespace.name}:`)) {
       result += ` xmlns:${namespace.name}="${namespace.uri}"`;
     }
   });
   result += `>${innerXml}</div>`;
   return result;
 };
+
+const domParser = new DOMParser();
+
+export const parseRichTextFromString = (
+  innerXml: Content = "",
+  enforcedNamespaces: ReadonlyArray<string> = []
+): Document => {
+  const xml = richtext(innerXml, true, enforcedNamespaces);
+  return domParser.parseFromString(xml, "text/xml");
+};
+
+export const richTextDocument = parseRichTextFromString("", ["xlink"]);
