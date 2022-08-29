@@ -7,6 +7,7 @@ import {setData} from "./dataFacade";
 import {welcomeTextData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
 import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
 import {grsData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
+import {lorem, loremRichText, LOREM_IPSUM_WORD_COUNT} from "@coremedia-internal/ckeditor5-coremedia-example-data/LoremIpsum";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -222,7 +223,7 @@ function contentLinkExamples() {
 }
 
 function linkTargetExamples() {
-  const LONG_TARGET = lorem(100);
+  const LONG_TARGET = lorem({ words: 100 });
 
   /**
    * The mapping we agreed upon for `xlink:show` to some target value.
@@ -458,80 +459,6 @@ function linkTargetExamples() {
   // noinspection XmlUnusedNamespaceDeclaration
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
 }
-
-// Source: https://loremipsum.de/
-const LOREM_IPSUM_RAW = `
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in
-vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto
-odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl
-ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit
-praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend
-option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl
-ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos
-erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed
-takimata ut vero voluptua. est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.`;
-const LOREM_IPSUM_WORDS = LOREM_IPSUM_RAW.trim().split(/\s+/);
-const chunks = (arr, chunkSize) => {
-  let result = [];
-  for (let i = 0; i < arr.length; i += chunkSize) {
-    result.push(arr.slice(i, i + chunkSize));
-  }
-  return result;
-};
-const lorem = (words, paragraphs) => {
-  let allWords = [];
-  while (allWords.length < words) {
-    const missingWords = words - allWords.length;
-    allWords = allWords.concat(LOREM_IPSUM_WORDS.slice(0, missingWords));
-  }
-  if (!paragraphs) {
-    // No paragraph, just plain text. Replace possible punctuation at the end with a dot.
-    return allWords.join(" ").replace(/\W$/, ".");
-  }
-  const wordsPerParagraph = Math.ceil(words / paragraphs);
-  const asParagraphs = chunks(allWords, wordsPerParagraph);
-  const paragraph = (w) => {
-    const paragraphText = w.join(" ")
-            .trim()
-            // Start each paragraph with upper case.
-            .replace(/^\w/, c => c.toUpperCase())
-            // End each paragraph with a dot, possibly replacing any non-alphabetic character.
-            .replace(/\W?$/, ".")
-    ;
-    return `<p>${paragraphText}</p>`;
-  };
-  const htmlParagraphs = `${asParagraphs.map((w) => paragraph(w)).join("")}`;
-  return richText(htmlParagraphs);
-};
 
 /**
  * These are all CoreMedia RichText Entities known to CoreMedia RichText 1.0
@@ -829,8 +756,8 @@ const exampleData = {
   "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
           .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
   "Links (Targets)": externalLinkTargetExamples(),
-  "Lorem": lorem(LOREM_IPSUM_WORDS.length, 10),
-  "Lorem (Huge)": lorem(LOREM_IPSUM_WORDS.length * 10, 80),
+  "Lorem": loremRichText({ words: LOREM_IPSUM_WORD_COUNT, paragraphs: 10 }),
+  "Lorem (Huge)": loremRichText({ words: LOREM_IPSUM_WORD_COUNT * 10, paragraphs: 80}),
 };
 
 export const setExampleData = (editor, exampleKey) => {
