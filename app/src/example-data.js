@@ -7,7 +7,8 @@ import {setData} from "./dataFacade";
 import {welcomeTextData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
 import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
 import {grsData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
-import {lorem, loremRichText, LOREM_IPSUM_WORD_COUNT} from "@coremedia-internal/ckeditor5-coremedia-example-data/LoremIpsum";
+import {lorem} from "@coremedia-internal/ckeditor5-coremedia-example-data/LoremIpsum";
+import {loremIpsumData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -223,7 +224,7 @@ function contentLinkExamples() {
 }
 
 function linkTargetExamples() {
-  const LONG_TARGET = lorem({ words: 100 });
+  const LONG_TARGET = lorem({words: 100});
 
   /**
    * The mapping we agreed upon for `xlink:show` to some target value.
@@ -744,20 +745,19 @@ const entitiesExample = richText(`${h1("Entities")}${entitiesDescription}${h2("X
 
 // noinspection HtmlUnknownAttribute
 const exampleData = {
+  ...differencingData,
+  ...loremIpsumData,
+  ...grsData,
   ...welcomeTextData,
   "Content Links": contentLinkExamples(),
   "Various Links": PREDEFINED_MOCK_LINK_DATA,
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   "Empty": "",
   "Entities": entitiesExample,
-  ...differencingData,
-  ...grsData,
   "Hello": richText(`<p>Hello World!</p>`),
   "Invalid RichText": richText(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
           .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
   "Links (Targets)": externalLinkTargetExamples(),
-  "Lorem": loremRichText({ words: LOREM_IPSUM_WORD_COUNT, paragraphs: 10 }),
-  "Lorem (Huge)": loremRichText({ words: LOREM_IPSUM_WORD_COUNT * 10, paragraphs: 80}),
 };
 
 export const setExampleData = (editor, exampleKey) => {
