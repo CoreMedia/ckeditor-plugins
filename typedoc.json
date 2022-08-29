@@ -13,7 +13,6 @@
     "./packages/ckeditor5-coremedia-studio-integration/src/index-doc.ts",
     "./packages/ckeditor5-coremedia-studio-integration-mock/src/index-doc.ts",
     "./packages/ckeditor5-dataprocessor-support/src/index-doc.ts",
-    "./packages/ckeditor5-data-normalization/src/index-doc.ts",
     "./packages/ckeditor5-logging/src/index-doc.ts",
     "./packages/ckeditor5-font-mapper/src/index-doc.ts"
   ],
