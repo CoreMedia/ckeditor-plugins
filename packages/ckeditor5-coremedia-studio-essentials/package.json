@@ -34,7 +34,7 @@
     "@types/ckeditor__ckeditor5-typing": "^32.0.1",
     "@types/ckeditor__ckeditor5-ui": "^32.0.2",
     "@types/ckeditor__ckeditor5-utils": "^28.0.14",
-    "@types/jest": "^28.1.6",
+    "@types/jest": "^28.1.8",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
     "eslint": "^8.23.0",

@@ -14,7 +14,7 @@
     "@babel/core": "^7.18.13",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@types/jest": "^28.1.6",
+    "@types/jest": "^28.1.8",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
