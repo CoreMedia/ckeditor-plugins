@@ -514,14 +514,14 @@ importers:
       jest-xml-matcher: ^1.2.0
       prettier: ^2.7.1
       rimraf: ^3.0.2
-      rxjs: ^7.5.5
+      rxjs: ^7.5.6
       typescript: ^4.7.2
     dependencies:
       '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
-      rxjs: 7.5.5
+      rxjs: 7.5.6
     devDependencies:
       '@babel/cli': 7.18.10_@babel+core@7.18.13
       '@babel/core': 7.18.13
@@ -587,7 +587,7 @@ importers:
       jest-xml-matcher: ^1.2.0
       prettier: ^2.7.1
       rimraf: ^3.0.2
-      rxjs: ^7.5.5
+      rxjs: ^7.5.6
       typescript: ^4.7.2
     dependencies:
       '@coremedia/ckeditor5-common': link:../ckeditor5-common
@@ -595,7 +595,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
-      rxjs: 7.5.5
+      rxjs: 7.5.6
     devDependencies:
       '@babel/cli': 7.18.10_@babel+core@7.18.13
       '@babel/core': 7.18.13
@@ -830,11 +830,11 @@ importers:
       jest-xml-matcher: ^1.2.0
       prettier: ^2.7.1
       rimraf: ^3.0.2
-      rxjs: ^7.5.5
+      rxjs: ^7.5.6
       typescript: ^4.7.2
     dependencies:
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
-      rxjs: 7.5.5
+      rxjs: 7.5.6
     devDependencies:
       '@babel/cli': 7.18.10_@babel+core@7.18.13
       '@babel/core': 7.18.13
@@ -881,12 +881,12 @@ importers:
       jest-xml-matcher: ^1.2.0
       prettier: ^2.7.1
       rimraf: ^3.0.2
-      rxjs: ^7.5.5
+      rxjs: ^7.5.6
       typescript: ^4.7.2
     dependencies:
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
-      rxjs: 7.5.5
+      rxjs: 7.5.6
     devDependencies:
       '@babel/cli': 7.18.10_@babel+core@7.18.13
       '@babel/core': 7.18.13
@@ -2679,7 +2679,7 @@ packages:
     resolution: {integrity: sha512-VrQbWO5MyHIIyaY0r0weZN+3cdzJtvtzE8vaeowFQ23ll9bOrBZ+yCAC8jsrgQLawuXUjWivRqVqXZCy9oVjIg==}
     dependencies:
       lodash: 4.17.21
-      rxjs: 7.5.5
+      rxjs: 7.5.6
 
   /@coremedia/set-version/1.1.1:
     resolution: {integrity: sha512-PZfuWfm+bUwmA2C5l0EOmmoy96hJfLb0nT7qcpslS8aWChEOT4Q0dY49E0MzJ5LJz9PeRJf/33yaej2K5NJg7Q==}
@@ -8110,8 +8110,8 @@ packages:
       tslib: 1.14.1
     dev: true
 
-  /rxjs/7.5.5:
-    resolution: {integrity: sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==}
+  /rxjs/7.5.6:
+    resolution: {integrity: sha512-dnyv2/YsXhnm461G+R/Pe5bWP41Nm6LBXEYWI6eiFP4fiwx6WRI/CD0zbdVAudd9xwLEF2IDcKXLHit0FYjUzw==}
     dependencies:
       tslib: 2.4.0
 
