@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-core-common",
-  "version": "8.0.1-rc.0",
+  "version": "8.0.1-rc.1",
   "description": "tooling to help with CKEditor 5 Plugin implementations.",
   "keywords": [
     "coremedia"
@@ -37,8 +37,8 @@
     "@ckeditor/ckeditor5-core": "^34.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "8.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "8.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "8.0.1-rc.1",
+    "@coremedia/ckeditor5-logging": "8.0.1-rc.1"
   },
   "scripts": {
     "clean": "rimraf ./dist",

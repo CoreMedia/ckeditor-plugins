@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-data-normalization",
-  "version": "8.0.1-rc.0",
+  "version": "8.0.1-rc.1",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -35,7 +35,7 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "8.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "8.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "8.0.1-rc.1",
+    "@coremedia/ckeditor5-logging": "8.0.1-rc.1"
   }
 }
