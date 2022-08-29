@@ -148,9 +148,8 @@ class RichTextDataProcessor implements DataProcessor {
     fragmentAsStringForDebugging: string;
   } {
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
-    // We use the RichTextDocument at this early stage, so that all created elements
-    // already have the required namespace. This eases subsequent processing.
-    const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment, richTextDocument);
+    // @ts-expect-error Typings did not incorporate 35.0.1 signature change yet: 2nd Document Argument is gone.
+    const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 
     if (RichTextDataProcessor.#logger.isDebugEnabled()) {
