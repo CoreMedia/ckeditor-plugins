@@ -14,6 +14,7 @@ import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -33,7 +34,7 @@ class LinkTargetActionsViewExtension extends Plugin {
 
   static readonly requires = [LinkUI, CustomLinkTargetUI];
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const logger = LinkTargetActionsViewExtension.#logger;
     const startTimestamp = performance.now();
 
@@ -42,7 +43,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     const editor = this.editor;
     const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
 
-    this.#extendView(linkUI);
+    await this.#extendView(linkUI);
 
     logger.debug(
       `Initialized ${LinkTargetActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
@@ -57,16 +58,15 @@ class LinkTargetActionsViewExtension extends Plugin {
    *
    * @param linkUI - the linkUI plugin
    */
-  #extendView(linkUI: LinkUI): void {
+  async #extendView(linkUI: LinkUI): Promise<void> {
     const actionsView: LinkActionsView = linkUI.actionsView;
-    const linkTargetCommand = this.editor.commands.get("linkTarget");
+    const linkTargetCommand = await ifCommand(this.editor, "linkTarget");
     const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config);
 
     // convert button configurations to buttonView instances
     const buttons = linkTargetDefinitions.map((buttonConfig) => {
       if (buttonConfig.name === OTHER_TARGET_NAME) {
-        const { ui } = requireEditorWithUI(this.editor);
-        return <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
+        return this.#createTargetOtherButton();
       } else {
         return this.#createTargetButton(linkUI.editor.locale, buttonConfig, linkTargetCommand);
       }
@@ -96,6 +96,15 @@ class LinkTargetActionsViewExtension extends Plugin {
   }
 
   /**
+   * Creates a button for `other` behavior, which is, that you can enter any
+   * custom target value in an extra dialog.
+   */
+  #createTargetOtherButton() {
+    const { ui } = requireEditorWithUI(this.editor);
+    return <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
+  }
+
+  /**
    * Creates and returns an instance of a buttonView for link target representation.
    * The buttons are bound to {@link LinkTargetCommand} to set the target on execute
    * and toggle their state accordingly.
@@ -110,7 +119,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   #createTargetButton(
     locale: Locale,
     buttonConfig: LinkTargetOptionDefinition,
-    linkTargetCommand: Command | undefined
+    linkTargetCommand: Command
   ): ButtonView {
     const view = new ButtonView();
     view.set({
@@ -123,12 +132,15 @@ class LinkTargetActionsViewExtension extends Plugin {
     });
 
     // Corner Case: `_self` is also on, if no target is set yet.
-    view.bind("isOn").to(
-      // @ts-expect-error TODO Check undefined handling
-      linkTargetCommand,
-      "value",
-      (value: string) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self")
-    );
+    view
+      .bind("isOn")
+      .to(
+        linkTargetCommand,
+        "value",
+        (value: unknown) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self")
+      );
+
+    view.bind("isEnabled").to(linkTargetCommand);
 
     view.on("execute", () => {
       linkTargetCommand?.execute(buttonConfig.name);
@@ -144,9 +156,13 @@ class LinkTargetActionsViewExtension extends Plugin {
    * @param buttons - the buttons to add in the given order
    */
   #addButtons(actionsView: LinkActionsView, buttons: View[]): void {
+    const viewElement = actionsView.element;
+    if (!viewElement) {
+      return;
+    }
     buttons.forEach((button) => {
-      // @ts-expect-error TODO Missing null-Handling
-      actionsView.element.insertBefore(button.element, actionsView.unlinkButtonView.element);
+      // @ts-expect-error Possibly wrong typing for insertBefore?
+      viewElement.insertBefore(button.element, actionsView.unlinkButtonView.element);
     });
   }
 }

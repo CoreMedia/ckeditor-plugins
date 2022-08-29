@@ -12,6 +12,7 @@ import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/Def
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -42,13 +43,15 @@ export default class CustomLinkTargetUI extends Plugin {
 
   static readonly requires = [ContextualBalloon, LinkUI];
 
-  init(): Promise<void> | void {
+  async init(): Promise<void> {
     const editor = this.editor;
     const { otherNames, myConfig } = this.#parseConfig(editor.config);
     this.linkUI = <LinkUI>editor.plugins.get(LinkUI);
+    const linkTargetCommand: Command = await ifCommand(editor, "linkTarget");
+
     this.#reservedTargetNames = new Set<string>(otherNames);
-    this.#createButton(myConfig);
-    this.#createForm();
+    this.#createButton(linkTargetCommand, myConfig);
+    this.#createForm(linkTargetCommand);
   }
 
   /**
@@ -83,10 +86,8 @@ export default class CustomLinkTargetUI extends Plugin {
    * Creates a button showing the balloon panel for changing the link target and
    * registers it in the editor `ComponentFactory`.
    */
-  #createButton(definition: Required<LinkTargetOptionDefinition>): void {
+  #createButton(linkTargetCommand: Command, definition: Required<LinkTargetOptionDefinition>): void {
     const editor = this.editor;
-    // @ts-expect-error TODO Handle missing command (see ifCommand etc.)
-    const linkTargetCommand: Command = editor.commands.get("linkTarget");
     const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
     const { ui } = requireEditorWithUI(this.editor);
@@ -109,6 +110,11 @@ export default class CustomLinkTargetUI extends Plugin {
         // As "fallback" the `_other` button is active, if no other button matched.
         return !reservedTargetNames.has(value);
       });
+
+      // It is ok, to make this read-only, too, as we can view the custom
+      // target in the tooltip of the button. Thus, no need to click to
+      // next balloon-dialog to see the actual state.
+      view.bind("isEnabled").to(linkTargetCommand);
 
       /*
        * The tooltip changes if a custom target is set. We can determine this by checking the "isOn" value of the button.
@@ -135,7 +141,7 @@ export default class CustomLinkTargetUI extends Plugin {
   /**
    * Creates the CustomLinkTargetInputFormView form.
    */
-  #createForm(): void {
+  #createForm(linkTargetCommand: Command): void {
     const editor = this.editor;
 
     /**
@@ -146,7 +152,7 @@ export default class CustomLinkTargetUI extends Plugin {
     /**
      * A form containing a textarea and buttons, used to change the target value for "Open In Frame".
      */
-    this.#form = new CustomLinkTargetInputFormView(editor.locale);
+    this.#form = new CustomLinkTargetInputFormView(linkTargetCommand, editor.locale);
 
     // Render the form so its #element is available for clickOutsideHandler.
     this.#form.render();

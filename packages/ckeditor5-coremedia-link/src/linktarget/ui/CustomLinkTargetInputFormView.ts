@@ -13,6 +13,7 @@ import submitHandler from "@ckeditor/ckeditor5-ui/src/bindings/submithandler";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import "../../../theme/customlinktargetform.css";
 import { icons } from "@ckeditor/ckeditor5-core";
+import Command from "@ckeditor/ckeditor5-core/src/command";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
@@ -33,7 +34,7 @@ export default class CustomLinkTargetInputFormView extends View {
   declare enableCssTransitions: () => void;
   declare disableCssTransitions: () => void;
 
-  constructor(locale?: Locale) {
+  constructor(linkTargetCommand: Command, locale?: Locale) {
     super(locale);
 
     const t = this.locale?.t;
@@ -62,6 +63,10 @@ export default class CustomLinkTargetInputFormView extends View {
      */
     this.saveButtonView = this.#createButton(t?.("Save") || "Save", icons.check, "ck-button-save");
     this.saveButtonView.type = "submit";
+
+    // Required for concurrent editing: If we are at editing a custom target
+    // and content changes to read-only we must not be able to save anymore.
+    this.saveButtonView.bind("isEnabled").to(linkTargetCommand);
 
     /**
      * A button used to cancel the form.
