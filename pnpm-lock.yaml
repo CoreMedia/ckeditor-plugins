@@ -56,7 +56,6 @@ importers:
       '@coremedia/ckeditor5-coremedia-link': ^8.1.0
       '@coremedia/ckeditor5-coremedia-richtext': ^8.1.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': ^8.1.0
-      '@coremedia/ckeditor5-data-normalization': ^8.1.0
       '@coremedia/ckeditor5-dataprocessor-support': ^8.1.0
       '@coremedia/ckeditor5-font-mapper': ^8.1.0
       '@coremedia/ckeditor5-studio-essentials': ^8.1.0
@@ -107,7 +106,6 @@ importers:
       '@coremedia/ckeditor5-coremedia-link': link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
-      '@coremedia/ckeditor5-data-normalization': 8.1.0
       '@coremedia/ckeditor5-dataprocessor-support': link:../packages/ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-font-mapper': link:../packages/ckeditor5-font-mapper
       '@coremedia/ckeditor5-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
@@ -2558,26 +2556,6 @@ packages:
       '@ckeditor/ckeditor5-ui': 34.2.0
       '@ckeditor/ckeditor5-utils': 34.2.0
       lodash-es: 4.17.21
-
-  /@coremedia/ckeditor5-common/8.1.0:
-    resolution: {integrity: sha512-9TUroVdnpLjlMB1KgUwa0d+5EmYAaDReKlrSZDWj+Wcb0RunFLHqgfhDhDUIHUqui5j0GMzNZ31WCUyV/sQCdw==}
-    engines: {node: '>=15.0.0', pnpm: '7'}
-    dependencies:
-      '@coremedia/ckeditor5-logging': 8.1.0
-    dev: false
-
-  /@coremedia/ckeditor5-data-normalization/8.1.0:
-    resolution: {integrity: sha512-cqI251G+ioH76PJ9KVpwun2dahSdgH0L3BQYRJZQRjhdBUA5KEf4nW+3hS9sZ0M+YDX5Qx2+M9hzIkSSJF1YTw==}
-    engines: {node: '>=15.0.0'}
-    dependencies:
-      '@coremedia/ckeditor5-common': 8.1.0
-      '@coremedia/ckeditor5-logging': 8.1.0
-    dev: false
-
-  /@coremedia/ckeditor5-logging/8.1.0:
-    resolution: {integrity: sha512-EgfqyDEyuEmMNDW685204/zNgsgaYpHkRc2ab97xfmaOkMhh09Soz1YeHuZbHJ02cXlbtWBY4WxoCXbjz2dUwA==}
-    engines: {node: '>=15.0.0', pnpm: '7'}
-    dev: false
 
   /@coremedia/service-agent/1.1.0:
     resolution: {integrity: sha512-crWQwslZczHO0BAD+ANvolGXKU77FxnbcTmNaGr9/7EuFDlJ2ikHwz6J36O6JN/If6exbZ/0nh/Z8UGyuE5C2w==}
