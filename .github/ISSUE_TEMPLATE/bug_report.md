@@ -33,11 +33,11 @@ _Do you have any details to share, such as console logs, screenshots?_
 
 ## 📃 Environment
 
-* OS: [e.g. iOS, Windows, Linux]
-* Browser: [e.g. Chrome, Safari, Firefox]
-* Browser Version: [e.g. 100.0]
-* CKEditor Version: [e.g. 35.0.0]
-* CoreMedia's CKEditor Plugins Version: [e.g. 9.0.0]
+* OS: <!-- e.g. iOS, Windows, Linux -->
+* Browser: <!-- e.g. Chrome, Safari, Firefox -->
+* Browser Version: <!-- e.g. 100.0 -->
+* CKEditor Version: <!-- e.g. 35.0.0 -->
+* CoreMedia's CKEditor Plugins Version: <!-- e.g. 9.0.0 -->
 * Installed CKEditor Plugins: …
 
 ---
