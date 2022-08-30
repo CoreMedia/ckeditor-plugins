@@ -15,7 +15,6 @@ export interface HasContentUriPath {
  * @param value - if value fulfills interface
  */
 export const hasContentUriPath = (value: unknown): value is HasContentUriPath => {
-  console.error("hasContentUriPath", { value });
   return (
     isRaw<HasContentUriPath>(value, "contentUriPath") &&
     // #83: value may be undefined, for example, when unsetting a content-link.
