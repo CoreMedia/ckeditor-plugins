@@ -1,37 +1,32 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: "\U00002B50 Feature request"
+about: Suggest a new idea.
 title: ''
-labels: enhancement
+labels: type:feature
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
+## 📝 Describe Suggested Feature
 
-A clear and concise description of what the issue is. Ex. I'm always frustrated when [...]
+### 🥅 What is Your Goal to Achieve?
 
-**What do you want to achieve with this feature?**
+_Understanding the purpose may help us, identifying alternatives, if the actual
+feature request cannot be fulfilled._
 
-Understanding the purpose may help us, identifying alternatives, if the actual feature request cannot be fulfilled.
+### 💡 What is Your Suggestion to Address/Reach This Goal?
 
-**Describe the solution you'd like**
+_You have an idea how to reach the goal? Please tell us!_
 
-A clear and concise description of what you want to happen.
+## 📃 Environment
 
-**Describe alternatives you've considered**
+* OS: [e.g. iOS, Windows, Linux]
+* Browser: [e.g. Chrome, Safari, Firefox]
+* Browser Version: [e.g. 100.0]
+* CKEditor Version: [e.g. 35.0.0]
+* CoreMedia's CKEditor Plugins Version: [e.g. 9.0.0]
+* Installed CKEditor Plugins: …
 
-A clear and concise description of any alternative solutions or features you've considered.
+---
 
-**Environment (please complete the following information):**
-
-Provide environmental information if applicable for the feature request.
-
- - OS: [e.g. iOS]
- - Browser: [e.g. chrome, safari]
- - Browser Version: [e.g. 22]
- - Plugins Version: [e.g. 4.0.1]
-
-**Additional context**
-
-Add any other context or screenshots about the feature request here.
+If you'd like to see this feature implemented, add a 👍 reaction to this post.
