@@ -2,7 +2,7 @@
 name: "\U0001F41B Bug report"
 about: Report that something is not working as expected.
 title: ''
-labels: bug
+labels: type:bug
 assignees: ''
 
 ---
@@ -39,3 +39,7 @@ _Do you have any details to share, such as console logs, screenshots?_
 * CKEditor Version: [e.g. 35.0.0]
 * CoreMedia's CKEditor Plugins Version: [e.g. 9.0.0]
 * Installed CKEditor Plugins: …
+
+---
+
+If you'd like to see this fixed sooner, add a 👍 reaction to this post.
