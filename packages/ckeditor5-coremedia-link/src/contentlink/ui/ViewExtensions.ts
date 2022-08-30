@@ -7,7 +7,7 @@ export interface HasContentUriPath {
   /**
    * UriPath to a content.
    */
-  contentUriPath: string | null;
+  contentUriPath: string | null | undefined;
 }
 
 /**
@@ -15,9 +15,13 @@ export interface HasContentUriPath {
  * @param value - if value fulfills interface
  */
 export const hasContentUriPath = (value: unknown): value is HasContentUriPath => {
+  console.error("hasContentUriPath", { value });
   return (
     isRaw<HasContentUriPath>(value, "contentUriPath") &&
-    (value.contentUriPath === null || typeof value.contentUriPath === "string")
+    // #83: value may be undefined, for example, when unsetting a content-link.
+    // Still, we must feel responsible in this state to handle the received
+    // value.
+    (!value.contentUriPath || typeof value.contentUriPath === "string")
   );
 };
 
