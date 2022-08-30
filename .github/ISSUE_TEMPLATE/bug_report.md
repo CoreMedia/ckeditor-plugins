@@ -1,40 +1,41 @@
 ---
-name: Bug Report
-about: Create a report to help us improve
+name: "\U0001F41B Bug report"
+about: Report that something is not working as expected.
 title: ''
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
+## 📝 Describe the Bug
 
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+### 👣 Reproduction Steps
 
 Steps to reproduce the behavior:
 
-1. Go to '...'
-2. Click on '....'
-3. See error
+1. …
+2. …
+3. …
 
-**Expected Behavior**
+### ✔ Expected Result
 
-A clear and concise description of what you expected to happen.
+_What is the expected result of the steps above?_
 
-**Actual Behavior**
+### ❌ Actual Result
 
-Describe the actual observed behavior, including console logs, if applicable. Provide screenshots if applicable.
+_What is the actual result of the steps above?_
 
-**Environment (please complete the following information):**
+### 🔎 Details
 
- - OS: [e.g. iOS]
- - Browser: [e.g. chrome, safari]
- - Browser Version: [e.g. 99.0]
- - CKEditor Version: [e.g. 32.0.0]
- - CoreMedia's CKEditor Plugins Version: [e.g. 4.0.1]
+_Do you have any details to share, such as console logs, screenshots?_
 
-**Additional context**
+## 📃 Environment
 
-Add any other context about the problem here, like for example installed CKEditor plugins, which may be involved.
+* OS: [e.g. iOS, Windows, Linux]
+* Browser: [e.g. Chrome, Safari, Firefox]
+* Browser Version: [e.g. 100.0]
+* CKEditor Version: [e.g. 35.0.0]
+* CoreMedia's CKEditor Plugins Version: [e.g. 9.0.0]
+* Installed CKEditor Plugins: …
