@@ -15,20 +15,24 @@ export class ContextualBalloonWrapper {
 
   /**
    * Returns the nth item.
-   * It's zero based, nth(0) selects the first element
+   * It is zero based, nth(0) selects the first element
    *
    * @param index - the index of the toolbar item. Starting with 0.
    * @returns Locator the locator
    */
   getNthItem(index: number): Locator {
-    return this.#getToolbarItems().nth(index);
+    return this.toolbarItems.nth(index);
   }
 
-  #getToolbarItems(): Locator {
-    return this.#getBalloon().locator(".ck-toolbar button");
+  get toolbarItems(): Locator {
+    return this.toolbar.locator("button");
   }
 
-  #getBalloon(): Locator {
+  get toolbar(): Locator {
+    return this.self.locator(".ck-toolbar");
+  }
+
+  get self(): Locator {
     return this.page.locator(".ck-body-wrapper .ck-balloon-panel");
   }
 }
