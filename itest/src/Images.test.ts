@@ -1,6 +1,6 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
-import "./expect/ElementHandleExpectations";
+import "./expect/Expectations";
 import { ImageStyleBalloonAction } from "./user-interaction/ImageStyleBalloonAction";
 import { ElementHandle } from "playwright-core";
 import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";

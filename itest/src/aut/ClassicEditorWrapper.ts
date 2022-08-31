@@ -2,7 +2,6 @@ import { Page } from "playwright";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
-import { extendingWaitForExpect } from "../expect/Expectations";
 import { EditorUiWrapper } from "./EditorUiWrapper";
 import RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
 
@@ -97,62 +96,5 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
         throw new Error(`Editor instance not available as ${name}`);
       }, name)
     );
-  }
-}
-
-/**
- * JEST Extension: Add matchers for `ClassicEditorWrapper`.
- */
-expect.extend({
-  async waitForDataContaining(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
-    return extendingWaitForExpect(
-      "waitForDataContaining",
-      async () => expect(await w.getData()).toContain(expectedData),
-      async () => expect(await w.getData()).not.toContain(expectedData),
-      this
-    );
-  },
-  async waitForDataEqualTo(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
-    return extendingWaitForExpect(
-      "waitForDataEqualTo",
-      async () => expect(await w.getData()).toStrictEqual(expectedData),
-      async () => expect(await w.getData()).not.toStrictEqual(expectedData),
-      this
-    );
-  },
-});
-
-/**
- * Extension to matchers for `ClassicEditorWrapper`.
- */
-export interface ClassicEditorWrapperMatchers<R = unknown, T = unknown> {
-  /**
-   * Waits for CKEditor data to contain the given substring.
-   */
-  waitForDataContaining: T extends ClassicEditorWrapper
-    ? (expectedData: string) => R
-    : "Type-level Error: Received value must be a ClassicEditorWrapper";
-  /**
-   * Waits for CKEditor data to be equal to the given string.
-   */
-  waitForDataEqualTo: T extends ClassicEditorWrapper
-    ? (expectedData: string) => R
-    : "Type-level Error: Received value must be a ClassicEditorWrapper";
-}
-
-/**
- * Tell TypeScript to know of new matchers.
- */
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface Expect extends ClassicEditorWrapperMatchers {}
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface,@typescript-eslint/ban-types
-    interface Matchers<R = unknown, T = {}> extends ClassicEditorWrapperMatchers<R, T> {}
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface InverseAsymmetricMatchers extends ClassicEditorWrapperMatchers {}
   }
 }
