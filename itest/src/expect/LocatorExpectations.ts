@@ -1,4 +1,4 @@
-import { extendingWaitForExpect } from "./Expectations";
+import { extendingWaitForExpect } from "./ExpectationsBase";
 import { Locator } from "playwright-core";
 
 expect.extend({
