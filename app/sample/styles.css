@@ -133,6 +133,10 @@ input.error {
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
+#ckeditor {
+  display: none;
+}
+
 .editor__editable,
   /* Classic build. */
 main .ck-editor[role='application'] .ck.ck-content,
