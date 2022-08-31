@@ -2,7 +2,7 @@ import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
 import { ContentLinkViewWrapper } from "./ContentLinkViewWrapper";
 
-export class LinkActionsViewWrapper implements Locatable {
+export class LinkFormViewWrapper implements Locatable {
   readonly #parent: Locatable;
 
   constructor(parent: Locatable) {
@@ -10,7 +10,7 @@ export class LinkActionsViewWrapper implements Locatable {
   }
 
   get locator(): Locator {
-    return this.#parent.locator.locator(".ck-link-actions");
+    return this.#parent.locator.locator(".ck-link-form");
   }
 
   get visible(): Promise<boolean> {
@@ -21,13 +21,11 @@ export class LinkActionsViewWrapper implements Locatable {
     return ContentLinkViewWrapper.fromParent(this);
   }
 
-  edit(): Promise<void> {
-    // As it seems there is no better locator for this than 'next to preview'.
-    const editButton = this.locator.locator("button.ck-link-actions__preview + button.ck-button");
-    return editButton.click();
+  save(): Promise<void> {
+    return this.locator.locator("button.ck-button-save").click();
   }
 
-  static fromParent(wrapper: Locatable): LinkActionsViewWrapper {
-    return new LinkActionsViewWrapper(wrapper);
+  static fromParent(wrapper: Locatable): LinkFormViewWrapper {
+    return new LinkFormViewWrapper(wrapper);
   }
 }

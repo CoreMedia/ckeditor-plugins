@@ -27,7 +27,7 @@ export class BodyCollectionWrapper extends JSWrapper<BodyCollection> implements 
   }
 
   get balloonPanel(): BalloonPanelViewWrapper {
-    return BalloonPanelViewWrapper.fromBodyCollection(this);
+    return BalloonPanelViewWrapper.fromParent(this);
   }
 
   static fromClassicEditorUIView(wrapper: EditorUIViewWrapper) {

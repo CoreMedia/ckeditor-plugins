@@ -15,7 +15,7 @@ export class EditorUIViewWrapper extends JSWrapper<ClassicEditorUIView> implemen
 
   get locator(): Locator {
     // As it seems, they share the same element reference.
-    return this.#parent.locator;
+    return this.#parent.locator.locator(".ck-content");
   }
 
   get visible(): Promise<boolean> {

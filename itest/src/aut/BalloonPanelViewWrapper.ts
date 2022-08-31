@@ -1,13 +1,13 @@
 // For now, this is only a DOM related wrapper.
 import { Locatable, visible } from "./Locatable";
-import { BodyCollectionWrapper } from "./BodyCollectionWrapper";
 import { Locator } from "playwright";
 import { LinkActionsViewWrapper } from "./LinkActionsViewWrapper";
+import { LinkFormViewWrapper } from "./LinkFormViewWrapper";
 
 export class BalloonPanelViewWrapper implements Locatable {
-  readonly #parent: BodyCollectionWrapper;
+  readonly #parent: Locatable;
 
-  constructor(parent: BodyCollectionWrapper) {
+  constructor(parent: Locatable) {
     this.#parent = parent;
   }
 
@@ -20,10 +20,14 @@ export class BalloonPanelViewWrapper implements Locatable {
   }
 
   get linkActionsView(): LinkActionsViewWrapper {
-    return LinkActionsViewWrapper.fromBalloonPanelViewWrapper(this);
+    return LinkActionsViewWrapper.fromParent(this);
   }
 
-  static fromBodyCollection(wrapper: BodyCollectionWrapper) {
+  get linkFormView(): LinkFormViewWrapper {
+    return LinkFormViewWrapper.fromParent(this);
+  }
+
+  static fromParent(wrapper: Locatable) {
     return new BalloonPanelViewWrapper(wrapper);
   }
 }

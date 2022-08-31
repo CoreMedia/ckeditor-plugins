@@ -18,7 +18,11 @@ export class EditorUIWrapper extends JSWrapper<ClassicEditorUI> implements Locat
   }
 
   get locator(): Locator {
-    return this.#parent.locator.locator("+ div.ck-editor");
+    // We need to find the next sibling of the parent node. As it seems, there
+    // is no good way to express this with locators like simply chaining
+    // `+ div.ck-editor` as the resulting querySelector chain is invalid then.
+    // For now, we assume, that both share the same parent.
+    return this.#parent.locator.locator("..").locator("div.ck-editor");
   }
 
   get visible(): Promise<boolean> {
