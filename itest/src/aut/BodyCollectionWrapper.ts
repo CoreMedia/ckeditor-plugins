@@ -1,7 +1,7 @@
 import { JSWrapper } from "./JSWrapper";
 import type { BodyCollection } from "@ckeditor/ckeditor5-ui";
 import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
-import { Locatable } from "./Locatable";
+import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
 import { BalloonPanelViewWrapper } from "./BalloonPanelViewWrapper";
 
@@ -20,6 +20,10 @@ export class BodyCollectionWrapper extends JSWrapper<BodyCollection> implements 
   get locator(): Locator {
     // Body Wrapper is at different location in DOM. No direct relation.
     return this.#parent.locator.page().locator(".ck-body-wrapper");
+  }
+
+  get visible(): Promise<boolean> {
+    return visible(this);
   }
 
   get balloonPanel(): BalloonPanelViewWrapper {

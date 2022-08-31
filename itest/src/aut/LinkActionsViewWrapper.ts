@@ -1,6 +1,7 @@
-import { Locatable } from "./Locatable";
+import { Locatable, visible } from "./Locatable";
 import { BalloonPanelViewWrapper } from "./BalloonPanelViewWrapper";
 import { Locator } from "playwright";
+import { ContentLinkViewWrapper } from "./ContentLinkViewWrapper";
 
 export class LinkActionsViewWrapper implements Locatable {
   readonly #parent: BalloonPanelViewWrapper;
@@ -11,6 +12,14 @@ export class LinkActionsViewWrapper implements Locatable {
 
   get locator(): Locator {
     return this.#parent.locator.locator(".ck-link-actions");
+  }
+
+  get visible(): Promise<boolean> {
+    return visible(this);
+  }
+
+  get contentLinkView(): ContentLinkViewWrapper {
+    return ContentLinkViewWrapper.fromParent(this);
   }
 
   static fromBalloonPanelViewWrapper(wrapper: BalloonPanelViewWrapper): LinkActionsViewWrapper {

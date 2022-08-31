@@ -4,7 +4,7 @@ import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
 import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
-import { Locatable } from "./Locatable";
+import { Locatable, visible } from "./Locatable";
 
 /**
  * Provides access to the editor within the example application. It requires
@@ -22,6 +22,10 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
 
   get locator(): Locator {
     return this.#page.locator(`#${this.#elementId}`);
+  }
+
+  get visible(): Promise<boolean> {
+    return visible(this);
   }
 
   /**

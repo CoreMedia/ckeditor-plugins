@@ -5,14 +5,14 @@ import "./ApplicationConsoleExpectations";
 import "./ApplicationWrapperExpectations";
 import "./ClassicEditorWrapperExpectations";
 import "./ElementHandleExpectations";
-import "./LocatorExpectations";
+import "./IsVisible/WaitToBeVisible";
 
 // Import Matcher Interfaces
 import { ApplicationWrapperMatchers } from "./ApplicationWrapperExpectations";
 import { ClassicEditorWrapperMatchers } from "./ClassicEditorWrapperExpectations";
 import { ElementHandleMatchers } from "./ElementHandleExpectations";
-import { LocatorMatchers } from "./LocatorExpectations";
 import { ApplicationConsoleMatchers } from "./ApplicationConsoleExpectations";
+import { WaitToBeVisible } from "./IsVisible/WaitToBeVisible";
 
 /**
  * Tell TypeScript to know of new matchers.
@@ -25,7 +25,7 @@ declare global {
         ApplicationWrapperMatchers,
         ClassicEditorWrapperMatchers,
         ElementHandleMatchers,
-        LocatorMatchers {}
+        WaitToBeVisible {}
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     interface Matchers<R = unknown, T = {}>
@@ -33,13 +33,13 @@ declare global {
         ApplicationWrapperMatchers<R, T>,
         ClassicEditorWrapperMatchers<R, T>,
         ElementHandleMatchers<R, T>,
-        LocatorMatchers<R, T> {}
+        WaitToBeVisible<R, T> {}
 
     interface InverseAsymmetricMatchers
       extends ApplicationConsoleMatchers,
         ApplicationWrapperMatchers,
         ElementHandleMatchers,
         ClassicEditorWrapperMatchers,
-        LocatorMatchers {}
+        WaitToBeVisible {}
   }
 }

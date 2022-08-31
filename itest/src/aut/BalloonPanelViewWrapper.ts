@@ -1,5 +1,5 @@
 // For now, this is only a DOM related wrapper.
-import { Locatable } from "./Locatable";
+import { Locatable, visible } from "./Locatable";
 import { BodyCollectionWrapper } from "./BodyCollectionWrapper";
 import { Locator } from "playwright";
 import { LinkActionsViewWrapper } from "./LinkActionsViewWrapper";
@@ -13,6 +13,10 @@ export class BalloonPanelViewWrapper implements Locatable {
 
   get locator(): Locator {
     return this.#parent.locator.locator(".ck-balloon-panel");
+  }
+
+  get visible(): Promise<boolean> {
+    return visible(this);
   }
 
   get linkActionsView(): LinkActionsViewWrapper {
