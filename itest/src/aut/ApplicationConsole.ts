@@ -24,17 +24,6 @@ type ConsoleMessageType =
 type ConsoleMessageHandler = (consoleMessage: ConsoleMessage) => void;
 
 /**
- * Maps messages to some representation for output. Ignores arguments, as they
- * require asynchronous access and evaluating `jsonValue` may fail for cyclic
- * references.
- *
- * @param messages - messages to transform to a string (separated by newlines)
- */
-const messagesToString = (messages: ConsoleMessage[]): string => {
-  return messages.map((m) => `${m.type()}: ${m.text()} (${JSON.stringify(m.location())})`).join("\n");
-};
-
-/**
  * Provides access to the application console.
  */
 export class ApplicationConsole {
@@ -97,44 +86,5 @@ export class ApplicationConsole {
    */
   clear(): void {
     this.#messages.length = 0;
-  }
-}
-
-/**
- * JEST Extension: Add matchers for `ApplicationConsole`.
- */
-expect.extend({
-  toHaveNoErrorsOrWarnings: (c: ApplicationConsole): jest.CustomMatcherResult => ({
-    message: () =>
-      `expected that no errors or warnings got logged but got ${c.errorsAndWarnings.length}:\n${messagesToString(
-        c.errorsAndWarnings
-      )}`,
-    pass: c.errorsAndWarnings.length === 0,
-  }),
-});
-
-/**
- * Extension to matchers for Application Console.
- */
-export interface ApplicationConsoleMatchers<R = unknown, T = unknown> {
-  toHaveNoErrorsOrWarnings: T extends ApplicationConsole
-    ? () => R
-    : "Type-level Error: Received value must be an ApplicationConsole.";
-}
-
-/**
- * Tell TypeScript to know of new matchers.
- */
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface Expect extends ApplicationConsoleMatchers {}
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface,@typescript-eslint/ban-types
-    interface Matchers<R = unknown, T = {}> extends ApplicationConsoleMatchers<R, T> {}
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface InverseAsymmetricMatchers extends ApplicationConsoleMatchers {}
   }
 }
