@@ -1,15 +1,29 @@
-import { Page } from "playwright";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import { JSHandle, Locator, Page } from "playwright";
+import type ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
-import { EditorUiWrapper } from "./EditorUiWrapper";
-import RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
+import { EditorUIWrapper } from "./EditorUIWrapper";
+import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
+import { Locatable } from "./Locatable";
 
 /**
  * Provides access to the editor within the example application. It requires
  * the editor to be exposed as global variable in window context.
  */
-export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
+export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implements Locatable {
+  readonly #elementId: string;
+  readonly #page: Page;
+
+  constructor(instance: Promise<JSHandle<ClassicEditor>>, page: Page, elementId: string) {
+    super(instance);
+    this.#page = page;
+    this.#elementId = elementId;
+  }
+
+  get locator(): Locator {
+    return this.#page.locator(`#${this.#elementId}`);
+  }
+
   /**
    * Retrieves the data from current CKEditor instance.
    */
@@ -76,14 +90,15 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
   /**
    * Provides a handle to the `EditorUI` of the CKEditor.
    */
-  get ui(): EditorUiWrapper {
-    return EditorUiWrapper.fromClassicEditor(this);
+  get ui(): EditorUIWrapper {
+    return EditorUIWrapper.fromClassicEditor(this);
   }
 
   /**
    * Provide access to ClassicEditor via Page.
    * @param page - page to evaluate handle for ClassicEditor
-   * @param name - name of the editor instance, stored at `window`
+   * @param name - name of the editor instance, stored at `window` as well as
+   * expected to be the ID of the element referenced on `ClassicEditor.create`.
    */
   static fromPage(page: Page, name = "editor"): ClassicEditorWrapper {
     return new ClassicEditorWrapper(
@@ -94,7 +109,9 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> {
           return editorHolder[name];
         }
         throw new Error(`Editor instance not available as ${name}`);
-      }, name)
+      }, name),
+      page,
+      name
     );
   }
 }

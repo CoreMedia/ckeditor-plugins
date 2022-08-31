@@ -1,4 +1,4 @@
-import CommandCollection from "@ckeditor/ckeditor5-core/src/commandcollection";
+import type CommandCollection from "@ckeditor/ckeditor5-core/src/commandcollection";
 import { JSWrapper } from "./JSWrapper";
 import { CommandWrapper } from "./CommandWrapper";
 import { EditorWrapper } from "./EditorWrapper";

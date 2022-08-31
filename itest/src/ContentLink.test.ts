@@ -50,13 +50,13 @@ describe("Content Link Feature", () => {
 
       await anchorHandle?.click();
 
-      const { contextualBalloon } = application;
-      const { self: balloon } = contextualBalloon;
+      const { linkActionsView } = editor.ui.view.body.balloonPanel;
+      const { locator } = linkActionsView;
 
       // The ballon should pop up on click.
-      await expect(balloon).waitToBeVisible();
+      await expect(locator).waitToBeVisible();
 
-      const contentLinkView = balloon.locator("button.cm-ck-content-link-view");
+      const contentLinkView = locator.locator("button.cm-ck-content-link-view");
       await expect(contentLinkView).waitToBeVisible();
       await expect(contentLinkView).toHaveText(`Document for`);
     });

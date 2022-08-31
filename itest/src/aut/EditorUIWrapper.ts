@@ -1,13 +1,26 @@
-import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
 import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { ElementHandle } from "playwright-core";
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
+import type ClassicEditorUI from "@ckeditor/ckeditor5-editor-classic/src/classiceditorui";
+import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
+import { Locatable } from "./Locatable";
+import { Locator } from "playwright";
 
 /**
  * Wrapper for `EditorUI`.
  */
-export class EditorUiWrapper extends JSWrapper<EditorUI> {
+export class EditorUIWrapper extends JSWrapper<ClassicEditorUI> implements Locatable {
+  readonly #parent: ClassicEditorWrapper;
+
+  constructor(parent: ClassicEditorWrapper) {
+    super(parent.evaluateHandle((editor) => editor.ui));
+    this.#parent = parent;
+  }
+
+  get locator(): Locator {
+    return this.#parent.locator.locator("+ div.ck-editor");
+  }
+
   /**
    * Provides access to the editable element via `ElementHandle`.
    */
@@ -29,11 +42,15 @@ export class EditorUiWrapper extends JSWrapper<EditorUI> {
     });
   }
 
+  get view(): EditorUIViewWrapper {
+    return EditorUIViewWrapper.fromClassicEditorUI(this);
+  }
+
   /**
    * Provides access to EditorUI via Editor.
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {
-    return new EditorUiWrapper(wrapper.evaluateHandle((editor) => (editor as EditorWithUI).ui));
+    return new EditorUIWrapper(wrapper);
   }
 }
