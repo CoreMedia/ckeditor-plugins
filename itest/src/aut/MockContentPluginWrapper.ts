@@ -1,4 +1,4 @@
-import { Wrapper } from "./Wrapper";
+import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
@@ -6,7 +6,7 @@ import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integra
 /**
  * Provides access to the `MockContentPlugin`.
  */
-export class MockContentPluginWrapper extends Wrapper<MockContentPlugin> {
+export class MockContentPluginWrapper extends JSWrapper<MockContentPlugin> {
   /**
    * Adds contents to be known by the mock backend.
    * @param data - content definitions

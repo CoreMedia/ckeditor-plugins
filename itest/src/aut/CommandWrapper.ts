@@ -1,11 +1,11 @@
-import { Wrapper } from "./Wrapper";
+import { JSWrapper } from "./JSWrapper";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 
 /**
  * Wraps a CKEditor `Command`.
  */
-export class CommandWrapper extends Wrapper<Command> {
+export class CommandWrapper extends JSWrapper<Command> {
   /**
    * Execute the given command with the provided arguments.
    * @param args - arguments to pass to command
