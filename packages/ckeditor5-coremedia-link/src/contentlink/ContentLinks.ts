@@ -42,8 +42,7 @@ export default class ContentLinks extends Plugin {
       () => {
         const commandValue: string = <string>linkCommand?.value ?? "";
         const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
-        // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-        const formView: LinkFormView = linkUI.formView;
+        const { formView } = linkUI;
         formView.set({ contentUriPath: value });
         linkUI.actionsView.set({ contentUriPath: value });
       },
@@ -52,8 +51,7 @@ export default class ContentLinks extends Plugin {
   }
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
     formView.stopListening(<Emitter>(<unknown>document), "mousedown");
   }
 
@@ -152,9 +150,10 @@ export default class ContentLinks extends Plugin {
   }
 
   #addMouseEventListenerToHideDialog(linkUI: LinkUI): void {
+    const { formView } = linkUI;
+
     this.#addCustomClickOutsideHandler({
-      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-      emitter: <Emitter>(<unknown>linkUI.formView),
+      emitter: formView,
       // @ts-expect-error TODO Fix Typings
       activator: () => linkUI._isUIInPanel,
       // @ts-expect-error TODO Fix Typings
@@ -167,8 +166,7 @@ export default class ContentLinks extends Plugin {
   }
 
   #extendFormView(linkUI: LinkUI): void {
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
 
     const t = this.editor.locale.t;
     formView.urlInputView.set({

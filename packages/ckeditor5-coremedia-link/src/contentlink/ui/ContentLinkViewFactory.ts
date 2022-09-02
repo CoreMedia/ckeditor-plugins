@@ -4,7 +4,6 @@ import "../../../theme/contentlinkview.css";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkView from "./ContentLinkView";
 import { openInTab } from "../ContentLinkViewUtils";
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -17,8 +16,7 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
  */
 const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView => {
   const { t } = locale;
-  // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-  const formView: LinkFormView = linkUI.formView;
+  const { formView } = linkUI;
   const contentLinkView: LabeledFieldView = new LabeledFieldView(
     locale,
     () =>

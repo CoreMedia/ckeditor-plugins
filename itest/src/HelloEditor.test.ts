@@ -56,46 +56,49 @@ describe("Hello Editor", () => {
     const { ui } = editor;
     // Get some text to write.
     const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Unknown Test";
 
     await editor.setData("");
     // Wait for pre-condition to be fulfilled.
     await expect(editor).waitForDataEqualTo("");
 
     const handle = await ui.getEditableElement();
-    await handle.type(currentTestName);
+    await handle.type(name);
 
-    await expect(editor).waitForDataContaining(currentTestName);
+    await expect(editor).waitForDataContaining(name);
   });
 
   it("Should render external links.", async () => {
     const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Unknown Test";
     const { editor } = application;
     const { ui } = editor;
     const handle = await ui.getEditableElement();
 
     const linkTarget = "https://example.org";
-    const data = richtext(p(a(currentTestName, { "xlink:href": linkTarget })));
+    const data = richtext(p(a(name, { "xlink:href": linkTarget })));
     await editor.setData(data);
 
     // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
     // for display purpose to the UI. Nevertheless, this serves as example, how
     // we may test the rendered editing view.
-    await expect(handle).waitForInnerHtmlToContain(` href="${linkTarget}">${currentTestName}</a>`);
+    await expect(handle).waitForInnerHtmlToContain(` href="${linkTarget}">${name}</a>`);
   });
 
   it("Should render internal links.", async () => {
     const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Unknown Test";
     const { editor, mockContent } = application;
     const { ui } = editor;
     const handle = await ui.getEditableElement();
     const id = 42;
     await mockContent.addContents({
       id,
-      name: `Document for test ${currentTestName}`,
+      name: `Document for test ${name}`,
     });
 
     const dataLink = contentUriPath(id);
-    const data = richtext(p(a(currentTestName, { "xlink:href": dataLink })));
+    const data = richtext(p(a(name, { "xlink:href": dataLink })));
     await editor.setData(data);
 
     // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
@@ -104,6 +107,6 @@ describe("Hello Editor", () => {
     //
     // `#`: For internal links, there is no representation in view. The reference
     // only exists on model layer.
-    await expect(handle).waitForInnerHtmlToContain(` href="#">${currentTestName}</a>`);
+    await expect(handle).waitForInnerHtmlToContain(` href="#">${name}</a>`);
   });
 });

@@ -41,6 +41,7 @@ describe("Image Features", () => {
    */
   it("Should render image blob after loading from data", async () => {
     const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Unknown Test";
     const { editor, mockContent } = application;
     const { ui } = editor;
     const editableHandle = await ui.getEditableElement();
@@ -49,13 +50,13 @@ describe("Image Features", () => {
     await mockContent.addContents({
       id,
       blob: PNG_RED_240x135,
-      name: `Document for test ${currentTestName}`,
+      name: `Document for test ${name}`,
     });
 
     const data = richtext(
       p(
         img({
-          alt: currentTestName,
+          alt: name,
           "xlink:href": blobReference(id),
         })
       )
@@ -95,6 +96,7 @@ describe("Image Features", () => {
 
   it("Should correctly set Image Alignment", async () => {
     const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Unknown Test";
     const { editor, mockContent } = application;
     const { ui } = editor;
 
@@ -102,13 +104,13 @@ describe("Image Features", () => {
     await mockContent.addContents({
       id,
       blob: PNG_RED_240x135,
-      name: `Document for test ${currentTestName}`,
+      name: `Document for test ${name}`,
     });
 
     const data = richtext(
       p(
         img({
-          alt: currentTestName,
+          alt: name,
           "xlink:href": blobReference(id),
         })
       )

@@ -9,7 +9,6 @@ import { openInTab, showContentLinkField } from "../ContentLinkViewUtils";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import { hasContentUriPath } from "./ViewExtensions";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
@@ -54,8 +53,7 @@ class ContentLinkActionsViewExtension extends Plugin {
      */
     linkUI.actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
-      // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-      const formView: LinkFormView = linkUI.formView;
+      const { formView } = linkUI;
 
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
@@ -88,8 +86,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   #extendView(linkUI: LinkUI): void {
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
     const actionsView: LinkActionsView = linkUI.actionsView;
     const contentLinkView = new ContentLinkView(this.editor.locale, linkUI, {
       renderTypeIcon: true,

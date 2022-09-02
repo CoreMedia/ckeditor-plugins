@@ -38,8 +38,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = <Command>editor.commands.get("link");
 
@@ -111,8 +110,7 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   #extendView(linkUI: LinkUI): void {
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
     const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
 
     formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
@@ -126,8 +124,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
 
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
@@ -144,8 +141,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
 
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     // @ts-expect-error TODO We must check for null/undefined here.
@@ -202,8 +198,7 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
     formView.urlInputView.fieldView.set("value", data);
     formView.set("contentUriPath", null);
     linkUI.actionsView.set("contentUriPath", null);
@@ -212,8 +207,7 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
-    // @ts-expect-error Bad Typing: DefinitelyTyped/DefinitelyTyped#60975
-    const formView: LinkFormView = linkUI.formView;
+    const { formView } = linkUI;
     formView.urlInputView.fieldView.set("value", null);
     formView.set("contentUriPath", data);
     linkUI.actionsView.set("contentUriPath", data);

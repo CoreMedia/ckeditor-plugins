@@ -208,6 +208,7 @@ describe("Differencing Feature", () => {
   describe("Image Differencing", () => {
     it("img Element Augmentation by xdiff:changetype should be passed to editing view", async () => {
       const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
       const { editor, mockContent } = application;
       const { ui } = editor;
 
@@ -215,7 +216,7 @@ describe("Differencing Feature", () => {
       await mockContent.addContents({
         id,
         blob: PNG_BLUE_240x135,
-        name: `Blue Image for test ${currentTestName}`,
+        name: `Blue Image for test ${name}`,
       });
 
       const blobRef = blobReference(id);
@@ -226,7 +227,7 @@ describe("Differencing Feature", () => {
           xdiff.img(
             { type: "changed", changes, ...EOD },
             {
-              alt: currentTestName,
+              alt: name,
               "xlink:href": blobRef,
               class: "float--right",
             }
