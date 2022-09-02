@@ -151,12 +151,20 @@ export default class ContentLinkView extends ButtonView {
   render(): void {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
-      // @ts-expect-error TODO Handle undefined
+      if (!this.#statusIcon) {
+        throw new Error(
+          "Unexpected State: Although render options request rendering a status icon, the required status icon is not available."
+        );
+      }
       this.children.add(this.#statusIcon);
     }
 
     if (this.renderOptions?.renderCancelButton) {
-      // @ts-expect-error TODO Handle undefined
+      if (!this.#cancelButton) {
+        throw new Error(
+          "Unexpected State: Although render options request rendering a cancel icon, the required cancel icon is not available."
+        );
+      }
       this.children.add(this.#cancelButton);
     }
   }

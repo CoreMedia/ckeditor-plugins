@@ -81,7 +81,7 @@ const imagePlugins = [
   ImageToolbar,
 ];
 
-ClassicEditor.create(document.querySelector('.editor'), {
+ClassicEditor.create(document.querySelector('#editor'), {
   licenseKey: '',
   placeholder: 'Type your text here...',
   plugins: [

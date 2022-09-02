@@ -1,12 +1,12 @@
-import CommandCollection from "@ckeditor/ckeditor5-core/src/commandcollection";
-import { Wrapper } from "./Wrapper";
+import type CommandCollection from "@ckeditor/ckeditor5-core/src/commandcollection";
+import { JSWrapper } from "./JSWrapper";
 import { CommandWrapper } from "./CommandWrapper";
 import { EditorWrapper } from "./EditorWrapper";
 
 /**
  * Wrapper for the command collection.
  */
-export class CommandCollectionWrapper extends Wrapper<CommandCollection> {
+export class CommandCollectionWrapper extends JSWrapper<CommandCollection> {
   /**
    * Get a wrapper for the given command name.
    * @param commandName - name of the command to get

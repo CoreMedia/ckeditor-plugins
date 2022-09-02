@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import "./expect/ElementHandleExpectations";
+import "./expect/Expectations";
 import ClipboardBrowserAccessor from "./browser/ClipboardBrowserAccessor";
 import * as fs from "fs";
 import ReplaceAllPasteAction from "./user-interaction/ReplaceAllPasteAction";

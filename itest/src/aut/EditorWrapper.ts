@@ -1,11 +1,11 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { Wrapper } from "./Wrapper";
+import { JSWrapper } from "./JSWrapper";
 import { EditingControllerWrapper } from "./EditingControllerWrapper";
 
 /**
  * Wrapper for CKEditor instance.
  */
-export class EditorWrapper<T extends Editor = Editor> extends Wrapper<T> {
+export class EditorWrapper<T extends Editor = Editor> extends JSWrapper<T> {
   /**
    * Focuses the editor.
    */

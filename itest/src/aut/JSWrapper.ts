@@ -2,9 +2,9 @@ import { JSHandle } from "playwright";
 import { PageFunctionOn, SmartHandle } from "playwright-core/types/structs";
 
 /**
- * General concept for wrappers.
+ * General concept for JSHandle wrappers.
  */
-export class Wrapper<T> {
+export class JSWrapper<T> {
   readonly #instance: Promise<JSHandle<T>>;
 
   constructor(instance: Promise<JSHandle<T>>) {

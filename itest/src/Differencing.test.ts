@@ -1,7 +1,7 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { richtext, p, strong } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import { Differencing, EOD } from "@coremedia-internal/ckeditor5-coremedia-example-data/Differencing";
-import "./expect/ElementHandleExpectations";
+import "./expect/Expectations";
 import { PNG_BLUE_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
 

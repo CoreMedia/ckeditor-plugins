@@ -1,13 +1,34 @@
-import EditorUI from "@ckeditor/ckeditor5-core/src/editor/editorui";
-import { Wrapper } from "./Wrapper";
+import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { ElementHandle } from "playwright-core";
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
+import type ClassicEditorUI from "@ckeditor/ckeditor5-editor-classic/src/classiceditorui";
+import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
+import { Locatable, visible } from "./Locatable";
+import { Locator } from "playwright";
 
 /**
  * Wrapper for `EditorUI`.
  */
-export class EditorUiWrapper extends Wrapper<EditorUI> {
+export class EditorUIWrapper extends JSWrapper<ClassicEditorUI> implements Locatable {
+  readonly #parent: ClassicEditorWrapper;
+
+  constructor(parent: ClassicEditorWrapper) {
+    super(parent.evaluateHandle((editor) => editor.ui));
+    this.#parent = parent;
+  }
+
+  get locator(): Locator {
+    // We need to find the next sibling of the parent node. As it seems, there
+    // is no good way to express this with locators like simply chaining
+    // `+ div.ck-editor` as the resulting querySelector chain is invalid then.
+    // For now, we assume, that both share the same parent.
+    return this.#parent.locator.locator("..").locator("div.ck-editor");
+  }
+
+  get visible(): Promise<boolean> {
+    return visible(this);
+  }
+
   /**
    * Provides access to the editable element via `ElementHandle`.
    */
@@ -29,11 +50,15 @@ export class EditorUiWrapper extends Wrapper<EditorUI> {
     });
   }
 
+  get view(): EditorUIViewWrapper {
+    return EditorUIViewWrapper.fromClassicEditorUI(this);
+  }
+
   /**
    * Provides access to EditorUI via Editor.
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {
-    return new EditorUiWrapper(wrapper.evaluateHandle((editor) => (editor as EditorWithUI).ui));
+    return new EditorUIWrapper(wrapper);
   }
 }

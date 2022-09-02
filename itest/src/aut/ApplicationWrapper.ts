@@ -4,7 +4,6 @@ import { Response } from "playwright";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
-import { extendingWaitForExpect } from "../expect/Expectations";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { ContextualBalloonWrapper } from "./ContextualBalloonWrapper";
 
@@ -111,9 +110,9 @@ export class ApplicationWrapper {
   }
 
   /**
-   * Retrieves the currently opened ContextualBalloon.
+   * Retrieves the now opened ContextualBalloon.
    *
-   * @returns ContextualBalloonWrapper the currently opened ContextualBalloon
+   * @returns ContextualBalloonWrapper the now opened ContextualBalloon
    */
   get contextualBalloon(): ContextualBalloonWrapper {
     return new ContextualBalloonWrapper(page);
@@ -128,45 +127,5 @@ export class ApplicationWrapper {
    */
   get mockContent(): MockContentPluginWrapper {
     return MockContentPluginWrapper.fromClassicEditor(this.editor);
-  }
-}
-
-/**
- * JEST Extension: Add matchers for `ApplicationConsole`.
- */
-expect.extend({
-  async waitForCKEditorToBeAvailable(a: ApplicationWrapper): Promise<jest.CustomMatcherResult> {
-    return extendingWaitForExpect(
-      "waitForCKEditorToBeAvailable",
-      async () => expect(await a.editor.exists()).toBe(true),
-      async () => expect(await a.editor.exists()).toBe(false),
-      this
-    );
-  },
-});
-
-/**
- * Extension to matchers for Application Console.
- */
-export interface ApplicationWrapperMatchers<R = unknown, T = unknown> {
-  waitForCKEditorToBeAvailable: T extends ApplicationWrapper
-    ? () => R
-    : "Type-level Error: Received value must be an ApplicationWrapper.";
-}
-
-/**
- * Tell TypeScript to know of new matchers.
- */
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface Expect extends ApplicationWrapperMatchers {}
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface,@typescript-eslint/ban-types
-    interface Matchers<R = unknown, T = {}> extends ApplicationWrapperMatchers<R, T> {}
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface InverseAsymmetricMatchers extends ApplicationWrapperMatchers {}
   }
 }
