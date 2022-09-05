@@ -114,7 +114,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));
 
     formView.on("cancel", () => {
-      const initialValue: string = <string>this.editor.commands.get("link")?.value;
+      const initialValue: string = this.editor.commands.get("link")?.value as string;
       linkUI.actionsView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });

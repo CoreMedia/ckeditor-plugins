@@ -30,7 +30,7 @@ export default class ContentLinks extends Plugin {
 
   init(): void {
     const editor = this.editor;
-    const linkCommand = <LinkCommand>editor.commands.get("link");
+    const linkCommand = editor.commands.get("link") as LinkCommand;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     ContentLinks.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI);
@@ -40,7 +40,7 @@ export default class ContentLinks extends Plugin {
       linkUI,
       "_hideUI",
       () => {
-        const commandValue: string = <string>linkCommand?.value ?? "";
+        const commandValue: string = (linkCommand?.value ?? "") as string;
         const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
         const { formView } = linkUI;
         formView.set({ contentUriPath: value });
@@ -52,7 +52,7 @@ export default class ContentLinks extends Plugin {
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {
     const { formView } = linkUI;
-    formView.stopListening(<Emitter>(<unknown>document), "mousedown");
+    formView.stopListening((document as unknown) as Emitter, "mousedown");
   }
 
   /**
@@ -88,7 +88,7 @@ export default class ContentLinks extends Plugin {
   }): void {
     const EDITOR_CLASS = "ck-editor";
     emitter.listenTo(
-      <Emitter>(<unknown>document),
+      (document as unknown) as Emitter,
       "mousedown",
       (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {
@@ -123,7 +123,7 @@ export default class ContentLinks extends Plugin {
       }
     );
     emitter.listenTo(
-      <Emitter>(<unknown>document),
+      (document as unknown) as Emitter,
       "click",
       (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {

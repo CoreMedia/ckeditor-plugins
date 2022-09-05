@@ -46,7 +46,7 @@ export default class CustomLinkTargetUI extends Plugin {
   async init(): Promise<void> {
     const editor = this.editor;
     const { otherNames, myConfig } = this.#parseConfig(editor.config);
-    this.linkUI = <LinkUI>editor.plugins.get(LinkUI);
+    this.linkUI = editor.plugins.get(LinkUI);
     const linkTargetCommand: Command = await ifCommand(editor, "linkTarget");
 
     this.#reservedTargetNames = new Set<string>(otherNames);
@@ -147,7 +147,7 @@ export default class CustomLinkTargetUI extends Plugin {
     /**
      * The contextual balloon plugin instance.
      */
-    this.#balloon = <ContextualBalloon>this.editor.plugins.get("ContextualBalloon");
+    this.#balloon = this.editor.plugins.get("ContextualBalloon") as ContextualBalloon;
 
     /**
      * A form containing a textarea and buttons, used to change the target value for "Open In Frame".
@@ -158,7 +158,7 @@ export default class CustomLinkTargetUI extends Plugin {
     this.#form.render();
 
     this.listenTo(this.#form, "submit", () => {
-      const { value } = <HTMLInputElement>this.#form.labeledInput.fieldView.element;
+      const { value } = this.#form.labeledInput.fieldView.element as HTMLInputElement;
       editor.execute("linkTarget", value);
       this.#hideForm(true);
     });
@@ -204,7 +204,7 @@ export default class CustomLinkTargetUI extends Plugin {
       });
     }
 
-    const commandValue: string = <string | undefined>linkTargetCommand?.value || "";
+    const commandValue: string = (linkTargetCommand?.value || "") as string;
     // For 'reserved targets' as current value, we still want to display an empty field.
     const initialValue: string =
       commandValue === OTHER_TARGET_NAME || this.#reservedTargetNames.has(commandValue) ? "" : commandValue;
@@ -214,7 +214,7 @@ export default class CustomLinkTargetUI extends Plugin {
     // stays unaltered) and re-opened it without changing the value of the command, they would see the
     // old value instead of the actual value of the command.
     // https://github.com/ckeditor/ckeditor5-image/issues/114
-    labeledInput.fieldView.value = (<HTMLInputElement>labeledInput.fieldView.element).value = initialValue;
+    labeledInput.fieldView.value = (labeledInput.fieldView.element as HTMLInputElement).value = initialValue;
 
     // @ts-expect-error TODO Check Typings/Usage
     this.#form.labeledInput.fieldView.select();

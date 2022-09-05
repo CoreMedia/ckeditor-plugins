@@ -107,7 +107,7 @@ export default class ContentLinkView extends ButtonView {
         // @ts-expect-error TODO Mismatch with typings from DefinitelyTyped
         click: bind.to((evt: MouseEvent) => {
           evt.preventDefault();
-          const el: Element = <Element>evt.target;
+          const el: Element = evt.target as Element;
           if (el?.id === CancelButtonView.iconId) {
             this.fire("cancelClick");
           } else {
@@ -116,7 +116,7 @@ export default class ContentLinkView extends ButtonView {
         }),
         dblclick: bind.to((evt: Event) => {
           evt.preventDefault();
-          const el: Element = <Element>evt.target;
+          const el: Element = evt.target as Element;
           if (!(el?.id === CancelButtonView.iconId)) {
             this.fire("doubleClick");
           }

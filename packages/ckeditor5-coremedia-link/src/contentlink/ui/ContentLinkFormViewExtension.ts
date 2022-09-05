@@ -40,7 +40,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const { formView } = linkUI;
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
-    const linkCommand = <Command>editor.commands.get("link");
+    const linkCommand = editor.commands.get("link") as Command;
 
     formView.set({
       contentUriPath: undefined,
@@ -115,7 +115,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
     formView.on("cancel", () => {
-      const initialValue: string = <string>this.editor.commands.get("link")?.value;
+      const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });

@@ -237,7 +237,7 @@ describe("HtmlFilter.applyTo()", () => {
 
     test(name, () => {
       document.body.innerHTML = testData.from.trim();
-      const root: Node = <Node>document.body.firstChild;
+      const root: Node = document.body.firstChild as Node;
       const filter = new HtmlFilter(testData.rules, MOCK_EDITOR);
 
       filter.applyTo(root);

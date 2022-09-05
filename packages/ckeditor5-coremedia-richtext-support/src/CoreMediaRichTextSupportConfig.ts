@@ -40,7 +40,7 @@ interface CoreMediaRichTextSupportConfig {
 }
 
 const getConfig = (config?: CKEditorConfig): CoreMediaRichTextSupportConfig => {
-  return <CoreMediaRichTextSupportConfig>config?.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) || {};
+  return (config?.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) || {}) as CoreMediaRichTextSupportConfig;
 };
 
 export default CoreMediaRichTextSupportConfig;

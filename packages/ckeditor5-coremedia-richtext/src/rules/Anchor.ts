@@ -31,7 +31,7 @@ const contentLinkToData = (href: string): string => {
 
 const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
   // It should have been checked before, that we have a href attribute set.
-  const href: string = <string>attributes.href;
+  const href: string = attributes.href as string;
   delete attributes.href;
   attributes["xlink:href"] = contentLinkToData(href);
 };
@@ -62,7 +62,7 @@ const contentLinkToModel = (href: string): string => {
 
 const xLinkHrefToHref = ({ attributes }: ElementProxy): void => {
   // It should have been checked before, that we have a href attribute set.
-  const href = <string>attributes["xlink:href"];
+  const href = attributes["xlink:href"] as string;
   delete attributes["xlink:href"];
   attributes.href = contentLinkToModel(href);
 };

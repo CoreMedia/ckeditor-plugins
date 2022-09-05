@@ -188,7 +188,7 @@ class RichTextDataProcessor implements DataProcessor {
   #fragmentToString(domFragment: Node | DocumentFragment): string {
     return (
       Array.from(domFragment.childNodes)
-        .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
+        .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
         .reduce((result, s) => (result || "") + (s || "")) || ""
     );
   }

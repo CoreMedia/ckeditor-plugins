@@ -808,7 +808,7 @@ describe("RichTextSchema.adjustAttributes", () => {
             null,
             XPathResult.FIRST_ORDERED_NODE_TYPE
           );
-          const element: Element = <Element>xPathResult.singleNodeValue;
+          const element: Element = xPathResult.singleNodeValue as Element;
           const mutableElement = ElementProxy.instantiateForTest(element);
 
           if (element === null) {
@@ -1513,7 +1513,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
 
     let validatedAtLeastOnce = false;
     let element: Element | null;
-    while ((element = <Element | null>xPathResult.iterateNext())) {
+    while ((element = xPathResult.iterateNext() as Element | null)) {
       validatedAtLeastOnce = true;
       const mutableElement = ElementProxy.instantiateForTest(element);
       test(`<${element?.parentElement?.tagName ?? "#document"}>, ${

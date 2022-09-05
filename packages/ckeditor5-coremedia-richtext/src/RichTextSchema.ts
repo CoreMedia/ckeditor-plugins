@@ -676,7 +676,7 @@ export default class RichTextSchema {
       return false;
     }
 
-    const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(<string>parentName) >= 0;
+    const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(parentName as string) >= 0;
     if (!isAllowedAtParent) {
       logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }

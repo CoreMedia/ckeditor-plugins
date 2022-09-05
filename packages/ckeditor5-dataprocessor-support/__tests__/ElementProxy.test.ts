@@ -850,9 +850,9 @@ describe("ElementProxy.applyRules()", () => {
     const xmlDocument: Document = requireValidXml(testData.from);
     const xmlExpectedDocument: Document = requireValidXml(testData.to);
 
-    const xmlElement: Element = <Element>(
+    const xmlElement: Element = (
       xmlDocument.evaluate(xpath, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
-    );
+    ) as Element;
 
     if (!xmlElement) {
       throw new Error(`Test Setup Issue: Unable resolving XPath '${xpath}' to element under test in: ${testData.from}`);

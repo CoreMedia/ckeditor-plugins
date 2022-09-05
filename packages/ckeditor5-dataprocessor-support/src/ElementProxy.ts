@@ -47,7 +47,7 @@ class ClassList implements DOMTokenList {
    * @throws DOMException on any mismatched token
    */
   #validate(...tokens: string[]): void {
-    const toValidate: string[] = (<string[]>[]).concat(tokens || []);
+    const toValidate: string[] = ([] as string[]).concat(tokens || []);
     toValidate.forEach((v) => {
       if (!v) {
         throw new DOMException("The token provided must not be empty.");
@@ -365,7 +365,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @param delegate - the original element to wrap
    */
   static instantiateForTest(delegate: Element): ElementProxy {
-    return new ElementProxy(delegate, <Editor>{});
+    return new ElementProxy(delegate, {} as Editor);
   }
 
   /**

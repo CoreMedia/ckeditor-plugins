@@ -41,7 +41,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     logger.debug(`Initializing ${LinkTargetActionsViewExtension.pluginName}...`);
 
     const editor = this.editor;
-    const linkUI: LinkUI = <LinkUI>editor.plugins.get(LinkUI);
+    const linkUI: LinkUI = editor.plugins.get(LinkUI);
 
     await this.#extendView(linkUI);
 
@@ -99,9 +99,9 @@ class LinkTargetActionsViewExtension extends Plugin {
    * Creates a button for `other` behavior, which is, that you can enter any
    * custom target value in an extra dialog.
    */
-  #createTargetOtherButton() {
+  #createTargetOtherButton(): ButtonView {
     const { ui } = requireEditorWithUI(this.editor);
-    return <ButtonView>ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName);
+    return ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName) as ButtonView;
   }
 
   /**
