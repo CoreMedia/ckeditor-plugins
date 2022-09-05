@@ -26,9 +26,9 @@ function hasHref({ attributes }: ElementProxy): boolean {
 export const handleImage: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
-    delete node.attributes["src"];
+    delete node.attributes.src;
     // Just ensure, that we have the required alt Attribute if it is unset.
-    node.attributes["alt"] = node.attributes["alt"] || "";
+    node.attributes.alt = node.attributes.alt || "";
     xLinkActuateMapper.toData(params);
     xLinkHrefMapper.toData(params);
     xLinkRoleMapper.toData(params);
@@ -45,7 +45,7 @@ export const handleImage: ToDataAndViewElementConfiguration = {
   },
   toView: (params) => {
     const { node } = params;
-    node.attributes["src"] = INLINE_IMG;
+    node.attributes.src = INLINE_IMG;
     xLinkActuateMapper.toView(params);
     xLinkHrefMapper.toView(params);
     xLinkRoleMapper.toView(params);

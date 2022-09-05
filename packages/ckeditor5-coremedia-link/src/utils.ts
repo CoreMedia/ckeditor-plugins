@@ -13,7 +13,7 @@ import { TemplateIfBinding } from "@ckeditor/ckeditor5-ui/src/template";
  */
 export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
   // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  const classes: Array<string | TemplateIfBinding> = view.template.attributes.class;
+  const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -33,7 +33,7 @@ export const addClassToTemplate = (view: View, classNames: string[] | string): v
  */
 export const removeClassFromTemplate = (view: View, classNames: string[] | string): void => {
   // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  const classes: Array<string | TemplateIfBinding> = view.template.attributes.class;
+  const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -100,8 +100,8 @@ export const createDecoratorHook = (
   options?: { priority?: number | PriorityString }
 ): void => {
   if (
-    !(methodParentCmp as DecorableCmp)["_events"] ||
-    !(methodParentCmp as DecorableCmp)["_events"].hasOwnProperty(methodName)
+    !(methodParentCmp as DecorableCmp)._events ||
+    !(methodParentCmp as DecorableCmp)._events.hasOwnProperty(methodName)
   ) {
     methodParentCmp.decorate(methodName);
   }
@@ -110,5 +110,5 @@ export const createDecoratorHook = (
 };
 
 interface DecorableCmp extends Observable {
-  _events: Array<unknown>;
+  _events: unknown[];
 }

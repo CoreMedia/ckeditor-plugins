@@ -64,7 +64,7 @@ class ClassList implements DOMTokenList {
    * Returns the current `class` value. Empty string will be returned, if unset.
    */
   get value(): string {
-    return this.#proxy.attributes["class"] || "";
+    return this.#proxy.attributes.class || "";
   }
 
   /**
@@ -76,9 +76,9 @@ class ClassList implements DOMTokenList {
    */
   set value(value: string) {
     if (!value) {
-      delete this.#proxy.attributes["class"];
+      delete this.#proxy.attributes.class;
     } else {
-      this.#proxy.attributes["class"] = value;
+      this.#proxy.attributes.class = value;
     }
   }
 
@@ -460,7 +460,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    */
   #persistAttributes(): PersistResponse {
-    const elementNamespaceAttribute: string | null = this.#attributes["xmlns"];
+    const elementNamespaceAttribute: string | null = this.#attributes.xmlns;
     if (!!elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
@@ -518,7 +518,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
         if (uri) {
           targetElement.setAttributeNS(uri, key, value);
           // Publish Namespace to root element.
-          ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES["xmlns"].uri, `xmlns:${prefix}`, uri);
+          ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES.xmlns.uri, `xmlns:${prefix}`, uri);
         } else {
           targetElement.setAttribute(key, value);
         }
@@ -552,8 +552,8 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @returns newly created element, for which filtering should be re-applied.
    */
   #persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {
-    if (!namespace && !!this.attributes["xmlns"]) {
-      return this.#persistReplaceBy(newName, this.attributes["xmlns"]);
+    if (!namespace && !!this.attributes.xmlns) {
+      return this.#persistReplaceBy(newName, this.attributes.xmlns);
     }
     let newElement: Element;
     const ownerDocument = this.ownerDocument;
@@ -807,9 +807,7 @@ interface ElementFilterParams {
 /**
  * Function interface: `(params: ElementFilterParams) => void`.
  */
-interface ElementFilterRule {
-  (params: ElementFilterParams): void;
-}
+type ElementFilterRule = (params: ElementFilterParams) => void;
 
 /**
  * Combines all filter rules into one.

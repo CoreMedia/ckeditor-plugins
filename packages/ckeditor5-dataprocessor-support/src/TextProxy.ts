@@ -142,9 +142,7 @@ interface TextFilterParams {
 /**
  * Function interface: `(params: TextFilterParams) => void`.
  */
-interface TextFilterRule {
-  (params: TextFilterParams): void;
-}
+type TextFilterRule = (params: TextFilterParams) => void;
 
 export default TextProxy;
 export { TextFilterParams, TextFilterRule };

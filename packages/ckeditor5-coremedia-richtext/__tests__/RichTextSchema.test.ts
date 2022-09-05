@@ -2,30 +2,30 @@ import "jest-xml-matcher";
 import RichTextSchema, { Strictness } from "../src/RichTextSchema";
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 
-type CommentableTestData = {
+interface CommentableTestData {
   /**
    * Some comment, which may help to understand the test case better.
    */
   comment?: string;
-};
+}
 
-type DisableableTestCase = {
+interface DisableableTestCase {
   // TODO[cke] Remove here, as unused, replace by test.skip instead if it is disabled.
   /**
    * If set to `true` or non-empty string this test will be ignored.
    * A string will be printed as message.
    */
   disabled?: boolean | string;
-};
+}
 
-type StrictnessAwareTestData = {
+interface StrictnessAwareTestData {
   /**
    * To which strictness modes the test applies to.
    */
   strictness: Strictness[];
-};
+}
 
-type XmlInputTestData = {
+interface XmlInputTestData {
   /**
    * XPath to element handed over.
    */
@@ -34,15 +34,15 @@ type XmlInputTestData = {
    * Input.
    */
   input: string;
-};
+}
 
-type ExpectTransformationTestData = {
+interface ExpectTransformationTestData {
   expected: string;
-};
+}
 
-type ExpectValidationTestData = {
+interface ExpectValidationTestData {
   expected: boolean;
-};
+}
 
 const parser = new DOMParser();
 const serializer = new XMLSerializer();
@@ -318,7 +318,8 @@ describe("RichTextSchema.adjustAttributes", () => {
     [
       "BLOCKQUOTE#4: <blockquote> - Should keep cite, although it is no valid URI.",
       {
-        comment: "We had to be less strict, as CKEditor doesn't do strict URI checks. If we agree on this eventually, could be merged with BLOCKQUOTE#5 test.",
+        comment:
+          "We had to be less strict, as CKEditor doesn't do strict URI checks. If we agree on this eventually, could be merged with BLOCKQUOTE#5 test.",
         strictness: [Strictness.STRICT],
         xpath: "/blockquote",
         input: `<blockquote cite="thisIsNoUri"/>`,
@@ -365,7 +366,8 @@ describe("RichTextSchema.adjustAttributes", () => {
     [
       "A#4: <a> - Should remove attributes having invalid value, and replace if required; should keep href although no URI",
       {
-        comment: "We had to be less strict, as CKEditor doesn't do strict input checks. If we agree on this eventually, could be merged with A#5 test.",
+        comment:
+          "We had to be less strict, as CKEditor doesn't do strict input checks. If we agree on this eventually, could be merged with A#5 test.",
         strictness: [Strictness.STRICT],
         xpath: "//a",
         input: `<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><a xlink:type="invalid" xlink:href="noUri" xlink:show="invalid" xlink:actuate="invalid"/></div>`,

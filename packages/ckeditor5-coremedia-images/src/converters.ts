@@ -20,11 +20,11 @@ import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-comm
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
-type DowncastEventData = {
+interface DowncastEventData {
   item: ModelElement;
   attributeOldValue: string | null;
   attributeNewValue: string | null;
-};
+}
 type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void;
 
 /**

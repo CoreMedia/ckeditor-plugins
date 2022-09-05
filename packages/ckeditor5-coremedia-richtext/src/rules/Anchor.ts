@@ -10,7 +10,7 @@ const CONTENT_LINK_MODEL_REGEXP = /^content:(?<id>\d+)*/;
 const CONTENT_LINK_MODEL_PREFIX = "content:";
 
 const hasHref = ({ attributes }: ElementProxy): boolean => {
-  const href = attributes["href"];
+  const href = attributes.href;
   return href === "" || !!href;
 };
 
@@ -31,8 +31,8 @@ const contentLinkToData = (href: string): string => {
 
 const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
   // It should have been checked before, that we have a href attribute set.
-  const href: string = <string>attributes["href"];
-  delete attributes["href"];
+  const href: string = <string>attributes.href;
+  delete attributes.href;
   attributes["xlink:href"] = contentLinkToData(href);
 };
 
@@ -64,13 +64,13 @@ const xLinkHrefToHref = ({ attributes }: ElementProxy): void => {
   // It should have been checked before, that we have a href attribute set.
   const href = <string>attributes["xlink:href"];
   delete attributes["xlink:href"];
-  attributes["href"] = contentLinkToModel(href);
+  attributes.href = contentLinkToModel(href);
 };
 
 const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
-  const target = attributes["target"] || "";
+  const target = attributes.target || "";
   // Just ensure, that even no empty target is written.
-  delete attributes["target"];
+  delete attributes.target;
 
   const newAttrs: {
     show?: string;
@@ -210,7 +210,7 @@ const xLinkShowAndRoleToTarget = (node: ElementProxy): void => {
   }
 
   if (!!target) {
-    node.attributes["target"] = target;
+    node.attributes.target = target;
   }
 };
 

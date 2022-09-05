@@ -158,8 +158,8 @@ export default class DragDropAsyncSupport {
       }
       logger.debug("isLinkable: Providing cached response.", {
         value: actualValue,
-        uriPath: uriPath,
-        evictImmediately: evictImmediately,
+        uriPath,
+        evictImmediately,
       });
       return actualValue !== IN_PROGRESS && actualValue;
     }
@@ -187,8 +187,8 @@ export default class DragDropAsyncSupport {
       // that the content is not linkable.
       logger.debug("isLinkable: Configuration service unavailable up to now. Providing precautious answer `false`", {
         value: false,
-        uriPath: uriPath,
-        evictImmediately: evictImmediately,
+        uriPath,
+        evictImmediately,
       });
       return false;
     }
@@ -198,8 +198,8 @@ export default class DragDropAsyncSupport {
       if (cache.get(uriPath) !== undefined) {
         logger.debug("isLinkable: Updating cache.", {
           value: cacheValue,
-          uriPath: uriPath,
-          evictImmediately: evictImmediately,
+          uriPath,
+          evictImmediately,
         });
         cache.set(uriPath, cacheValue);
       }
@@ -216,8 +216,8 @@ export default class DragDropAsyncSupport {
 
     logger.debug("isLinkable: Providing intermediate response", {
       value: actualValue,
-      uriPath: uriPath,
-      evictImmediately: evictImmediately,
+      uriPath,
+      evictImmediately,
     });
 
     return actualValue;

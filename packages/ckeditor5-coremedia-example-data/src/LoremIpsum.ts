@@ -113,8 +113,8 @@ export const DEFAULT_CONFIG: ParsedConfig = {
  * @param arr - array to split
  * @param chunkSize - size of chunks
  */
-const chunks = <T = unknown>(arr: T[], chunkSize: number): Array<T[]> => {
-  const result: Array<T[]> = [];
+const chunks = <T = unknown>(arr: T[], chunkSize: number): T[][] => {
+  const result: T[][] = [];
   for (let i = 0; i < arr.length; i += chunkSize) {
     result.push(arr.slice(i, i + chunkSize));
   }
@@ -128,7 +128,7 @@ const chunks = <T = unknown>(arr: T[], chunkSize: number): Array<T[]> => {
  * @param words - words to join in paragraph
  * @param formatParagraph - formatter for paragraph
  */
-const paragraph = (words: Array<string>, formatParagraph: FormatTextFunction): string => {
+const paragraph = (words: string[], formatParagraph: FormatTextFunction): string => {
   const paragraphText = words
     .join(" ")
     .trim()
@@ -144,8 +144,8 @@ const paragraph = (words: Array<string>, formatParagraph: FormatTextFunction): s
  *
  * @param wordCount - how many words to return
  */
-export const loremIpsumWords = (wordCount: number): Array<string> => {
-  let allWords: Array<string> = [];
+export const loremIpsumWords = (wordCount: number): string[] => {
+  let allWords: string[] = [];
   while (allWords.length < wordCount) {
     const missingWords = wordCount - allWords.length;
     allWords = allWords.concat(LOREM_IPSUM_WORDS.slice(0, missingWords));

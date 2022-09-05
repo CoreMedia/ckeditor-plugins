@@ -28,8 +28,8 @@ const isBlobData = (value: unknown): value is BlobData => {
   if (!isObject(value)) {
     return false;
   }
-  const hasValue = () => value.hasOwnProperty("value") && typeof value["value"] === "string";
-  const hasMime = () => value.hasOwnProperty("mime") && typeof value["mime"] === "string";
+  const hasValue = () => value.hasOwnProperty("value") && typeof value.value === "string";
+  const hasMime = () => value.hasOwnProperty("mime") && typeof value.mime === "string";
   return hasValue() && hasMime();
 };
 

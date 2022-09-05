@@ -28,7 +28,9 @@ export type Direction = "ltr" | "rtl";
 /**
  * Represents just any attributes.
  */
-export type AnyAttributes = { [key: string]: unknown };
+export interface AnyAttributes {
+  [key: string]: unknown;
+}
 
 /**
  * `coreattrs` attributes according to DTD.
@@ -431,7 +433,7 @@ export type List = typeof ul | typeof ol;
 export const richtext = (
   innerXml: Content = "",
   addXmlDeclaration = true,
-  enforcedNamespaces: ReadonlyArray<string> = []
+  enforcedNamespaces: readonly string[] = []
 ): string => {
   let result = "";
   if (addXmlDeclaration) {

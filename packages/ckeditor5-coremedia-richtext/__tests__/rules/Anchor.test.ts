@@ -41,10 +41,10 @@ const attr_link_content_document_uapi = "coremedia:///cap/content/42";
 const wrapAnchor = (anchor: string): string =>
   `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${anchor}</p></div>`;
 
-type XLinkBehavior = {
+interface XLinkBehavior {
   show?: string;
   role?: string;
-};
+}
 type XlinkBehaviorDefinition = XLinkBehavior & {
   comment?: string;
   non_bijective?: boolean;
@@ -52,9 +52,9 @@ type XlinkBehaviorDefinition = XLinkBehavior & {
 /**
  * Represents an empty target attribute.
  */
-type ExpectedTargetToXlinkShowAndRole = {
+interface ExpectedTargetToXlinkShowAndRole {
   [target: string]: XlinkBehaviorDefinition;
-};
+}
 /**
  * The mapping we agreed upon for `xlink:show` to some target value.
  * `other` is skipped here, as it is used for special meaning, which is,
@@ -268,7 +268,7 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       // noinspection HtmlUnknownAttribute
       const expectedData = wrapAnchor(`<a xlink:href="${attr_link_external}"${dataShow}${dataRole}>${text}</a>`);
       const testData: DataProcessingTestCase = {
-        name: name,
+        name,
         data: expectedData,
         dataView: inputFromView,
       };

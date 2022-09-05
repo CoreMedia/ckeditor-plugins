@@ -1,9 +1,11 @@
-import { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition, requireDefaultTargetDefinition } from "../../../src/linktarget/config/DefaultTarget";
+import {
+  DEFAULT_TARGETS_ARRAY,
+  getDefaultTargetDefinition,
+  requireDefaultTargetDefinition,
+} from "../../../src/linktarget/config/DefaultTarget";
 
 describe("DefaultTarget", () => {
-
   describe("DEFAULT_TARGETS_ARRAY", () => {
-
     test("should contain entries in expected order", () => {
       const names = DEFAULT_TARGETS_ARRAY.map((definition) => definition.name);
       // These are the buttons we want to see in the given order by default,
@@ -12,11 +14,11 @@ describe("DefaultTarget", () => {
     });
 
     test.each`
-       name        | title
-       ${"_self"}  | ${"Open in Current Tab"}
-       ${"_blank"} | ${"Open in New Tab"}
-       ${"_embed"} | ${"Show Embedded"}
-       ${"_other"} | ${"Open in Frame"}
+      name        | title
+      ${"_self"}  | ${"Open in Current Tab"}
+      ${"_blank"} | ${"Open in New Tab"}
+      ${"_embed"} | ${"Show Embedded"}
+      ${"_other"} | ${"Open in Frame"}
     `("[$#] Should provide expected title for $name: $title", ({ name, title: expectedTitle }) => {
       const options = DEFAULT_TARGETS_ARRAY.find((definition) => name === definition.name);
       // Precondition-check
@@ -26,11 +28,11 @@ describe("DefaultTarget", () => {
     });
 
     test.each`
-       name
-       ${"_self"}
-       ${"_blank"}
-       ${"_embed"}
-       ${"_other"}
+      name
+      ${"_self"}
+      ${"_blank"}
+      ${"_embed"}
+      ${"_other"}
     `("[$#] Should provide an icon $name", ({ name }) => {
       const options = DEFAULT_TARGETS_ARRAY.find((definition) => name === definition.name);
       // Precondition-check
@@ -38,7 +40,6 @@ describe("DefaultTarget", () => {
       const { icon: actualIcon } = options!;
       expect(actualIcon).toBeTruthy();
     });
-
   });
 
   describe("getDefaultTargetDefinition", () => {
@@ -67,11 +68,11 @@ describe("DefaultTarget", () => {
     });
 
     test.each`
-       name        | title
-       ${"_self"}  | ${"Open in Current Tab"}
-       ${"_blank"} | ${"Open in New Tab"}
-       ${"_embed"} | ${"Show Embedded"}
-       ${"_other"} | ${"Open in Frame"}
+      name        | title
+      ${"_self"}  | ${"Open in Current Tab"}
+      ${"_blank"} | ${"Open in New Tab"}
+      ${"_embed"} | ${"Show Embedded"}
+      ${"_other"} | ${"Open in Frame"}
     `("[$#] Should provide expected title for $name: $title", ({ name, title: expectedTitle }) => {
       const options = getDefaultTargetDefinition(name);
       // Precondition-check
@@ -79,7 +80,6 @@ describe("DefaultTarget", () => {
       const { title: actualTitle } = options!;
       expect(actualTitle).toStrictEqual(expectedTitle);
     });
-
   });
 
   describe("requireDefaultTargetDefinition", () => {
@@ -107,5 +107,4 @@ describe("DefaultTarget", () => {
       }
     });
   });
-
 });

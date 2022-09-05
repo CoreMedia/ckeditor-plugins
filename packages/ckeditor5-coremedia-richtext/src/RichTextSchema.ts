@@ -748,7 +748,7 @@ export default class RichTextSchema {
       RichTextSchema.#logger.debug(
         `${notAllowedAttributes.length} unsupported attribute(s) found at <${element.name}>. Attribute(s) will be removed prior to storing to server.`,
         {
-          element: element,
+          element,
           attributes: notAllowedAttributes,
         }
       );

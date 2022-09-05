@@ -36,13 +36,13 @@ describe("CoreMediaRichTextConfig: Text Fixtures", () => {
       const name = `TEXT/ENTITY#${index + 1}: Entity should be resolved to plain character: ${entity}`;
       return [
         {
-          name: name,
+          name,
           direction: Direction.toData,
           data: dataFromDataView,
-          dataView: dataView,
+          dataView,
         },
         {
-          name: name,
+          name,
           direction: Direction.toDataView,
           comment:
             "toView: We don't want to introduce entities again - just because we cannot distinguish the source. General contract should be: Always use UTF-8 characters.",

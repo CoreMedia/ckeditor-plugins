@@ -77,8 +77,8 @@ export default class CustomLinkTargetUI extends Plugin {
     };
 
     return {
-      otherNames: otherNames,
-      myConfig: myConfig,
+      otherNames,
+      myConfig,
     };
   }
 

@@ -19,7 +19,7 @@ export default class MarkerRepositionUtil {
   }
 
   static #moveMarkerForPreviousItemsToLeft(editor: Editor, beforeItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<MarkerData> = MarkerRepositionUtil.#findMarkers(
+    const markers: MarkerData[] = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
       MarkerRepositionUtil.#markerBeforeFilterPredicate
@@ -29,7 +29,7 @@ export default class MarkerRepositionUtil {
   }
 
   static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<MarkerData> = MarkerRepositionUtil.#findMarkers(
+    const markers: MarkerData[] = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
       MarkerRepositionUtil.#markerAfterFilterPredicate
@@ -37,7 +37,7 @@ export default class MarkerRepositionUtil {
     MarkerRepositionUtil.#moveMarkersTo(editor, markers, afterItemPosition);
   }
 
-  static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): Array<MarkerData> {
+  static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): MarkerData[] {
     const marker = editor.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
     if (!marker) {
       return [];
@@ -49,7 +49,7 @@ export default class MarkerRepositionUtil {
     });
   }
 
-  static #markersAtPosition(editor: Editor, position: Position): Array<MarkerData> {
+  static #markersAtPosition(editor: Editor, position: Position): MarkerData[] {
     return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
       .filter((value) => {
         return value.getStart().isEqual(position);
@@ -59,7 +59,7 @@ export default class MarkerRepositionUtil {
       });
   }
 
-  static #moveMarkersTo(editor: Editor, markerData: Array<MarkerData>, position: Position): void {
+  static #moveMarkersTo(editor: Editor, markerData: MarkerData[], position: Position): void {
     markerData.forEach((moveMarkerData: MarkerData) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
       const moveMarkerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(moveMarkerData);

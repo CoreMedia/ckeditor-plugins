@@ -82,8 +82,8 @@ export class FontMapping {
     const decodedInput: string | null = this.#decodeHtmlEntities(input);
     FontMapping.#logger.debug(`Decoded html characters before replacing. New string to process: ${decodedInput}`);
 
-    const characters: Array<string> = [...decodedInput];
-    const replacedInput: Array<string | null> = characters.map((value) => {
+    const characters: string[] = [...decodedInput];
+    const replacedInput: (string | null)[] = characters.map((value) => {
       const charCode = value.charCodeAt(0);
       const htmlEntity = this.map.get(charCode);
       if (htmlEntity) {

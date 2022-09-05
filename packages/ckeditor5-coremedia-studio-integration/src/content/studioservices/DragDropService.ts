@@ -14,8 +14,8 @@ interface DragDropService extends ServiceObject {
 }
 
 interface CMDragData {
-  contents: Array<CMBeanReference>;
-  content: Array<CMBeanReference>;
+  contents: CMBeanReference[];
+  content: CMBeanReference[];
 }
 
 interface CMBeanReference {

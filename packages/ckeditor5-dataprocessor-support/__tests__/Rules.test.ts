@@ -21,22 +21,22 @@ const MOCK_EDITOR = new Editor();
 const parser = new DOMParser();
 const serializer = new XMLSerializer();
 
-type CommentableTestData = {
+interface CommentableTestData {
   /**
    * Some comment, which may help to understand the test case better.
    */
   comment?: string;
-};
+}
 
-type DisablableTestCase = {
+interface DisablableTestCase {
   /**
    * If set to `true` or non-empty string this test will be ignored.
    * A string will be printed as message.
    */
   disabled?: boolean | string;
-};
+}
 
-type ParseFilterRuleSetConfigurationTestData = {
+interface ParseFilterRuleSetConfigurationTestData {
   config: FilterRuleSetConfiguration;
   // The original 'view'
   from: string;
@@ -44,11 +44,11 @@ type ParseFilterRuleSetConfigurationTestData = {
   data: string;
   // The view after re-transforming the previously generated data.
   view: string;
-};
+}
 
-type WithDefaultsTestData = {
+interface WithDefaultsTestData {
   default: FilterRuleSetConfiguration;
-};
+}
 
 const replaceElementByChildren: ElementFilterRule = (p) => {
   p.node.replaceByChildren = true;
@@ -224,12 +224,12 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el: {
               toData: (p) => {
-                p.node.attributes["dataattr"] = p.node.attributes["viewattr"];
-                delete p.node.attributes["viewattr"];
+                p.node.attributes.dataattr = p.node.attributes.viewattr;
+                delete p.node.attributes.viewattr;
               },
               toView: (p) => {
-                p.node.attributes["viewattr"] = p.node.attributes["dataattr"];
-                delete p.node.attributes["dataattr"];
+                p.node.attributes.viewattr = p.node.attributes.dataattr;
+                delete p.node.attributes.dataattr;
               },
             },
           },
@@ -247,13 +247,13 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el: {
               toData: (p) => {
-                p.node.attributes["type"] = p.node.name;
+                p.node.attributes.type = p.node.name;
                 p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  p.node.name = p.node.attributes["type"] || "missing-name";
-                  delete p.node.attributes["type"];
+                  p.node.name = p.node.attributes.type || "missing-name";
+                  delete p.node.attributes.type;
                 },
               },
             },
@@ -273,28 +273,28 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
           elements: {
             el1: {
               toData: (p) => {
-                p.node.attributes["type"] = p.node.name;
+                p.node.attributes.type = p.node.name;
                 p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  if (p.node.attributes["type"] === "el1") {
-                    p.node.name = p.node.attributes["type"];
-                    delete p.node.attributes["type"];
+                  if (p.node.attributes.type === "el1") {
+                    p.node.name = p.node.attributes.type;
+                    delete p.node.attributes.type;
                   }
                 },
               },
             },
             el2: {
               toData: (p) => {
-                p.node.attributes["type"] = p.node.name;
+                p.node.attributes.type = p.node.name;
                 p.node.name = "data";
               },
               toView: {
                 data: (p) => {
-                  if (p.node.attributes["type"] === "el2") {
-                    p.node.name = p.node.attributes["type"];
-                    delete p.node.attributes["type"];
+                  if (p.node.attributes.type === "el2") {
+                    p.node.name = p.node.attributes.type;
+                    delete p.node.attributes.type;
                   }
                 },
               },
@@ -368,7 +368,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
         default: {
           elements: {
             el: (p) => {
-              p.node.attributes["label"] = "data";
+              p.node.attributes.label = "data";
             },
           },
         },
@@ -391,7 +391,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
         default: {
           elements: {
             el: (p) => {
-              p.node.attributes["label"] = "data";
+              p.node.attributes.label = "data";
             },
           },
         },
@@ -460,13 +460,13 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
             el: {
               toData: (p) => {
                 currentStepIdx++;
-                p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/data.el.default#${currentStepIdx}`;
+                p.node.attributes.path = `${p.node.attributes.path ?? "/"}/data.el.default#${currentStepIdx}`;
                 p.node.name = "data";
               },
               toView: {
                 data: (p) => {
                   currentStepIdx++;
-                  p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/view.el.default#${currentStepIdx}`;
+                  p.node.attributes.path = `${p.node.attributes.path ?? "/"}/view.el.default#${currentStepIdx}`;
                   p.node.name = "view";
                 },
               },
@@ -485,18 +485,18 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
             el: {
               toData: (p) => {
                 currentStepIdx++;
-                p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/data.el.parent#${currentStepIdx}`;
+                p.node.attributes.path = `${p.node.attributes.path ?? "/"}/data.el.parent#${currentStepIdx}`;
                 p.parentRule(p);
                 currentStepIdx++;
-                p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/data.el.config#${currentStepIdx}`;
+                p.node.attributes.path = `${p.node.attributes.path ?? "/"}/data.el.config#${currentStepIdx}`;
               },
               toView: {
                 data: (p) => {
                   currentStepIdx++;
-                  p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/view.el.parent#${currentStepIdx}`;
+                  p.node.attributes.path = `${p.node.attributes.path ?? "/"}/view.el.parent#${currentStepIdx}`;
                   p.parentRule(p);
                   currentStepIdx++;
-                  p.node.attributes["path"] = `${p.node.attributes["path"] ?? "/"}/view.el.config#${currentStepIdx}`;
+                  p.node.attributes.path = `${p.node.attributes.path ?? "/"}/view.el.config#${currentStepIdx}`;
                 },
               },
             },

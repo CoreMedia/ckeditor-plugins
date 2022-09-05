@@ -5,13 +5,13 @@ import { TextFilterParams, TextFilterRule } from "./TextProxy";
 const parentChildElementRule =
   (parentRule: ElementFilterRule, childRule: ElementFilterRule): ElementFilterRule =>
   (params: ElementFilterParams) => {
-    return childRule({ ...params, parentRule: parentRule });
+    return childRule({ ...params, parentRule });
   };
 
 const parentChildTextRule =
   (parentRule: TextFilterRule, childRule: TextFilterRule): TextFilterRule =>
   (params: TextFilterParams) => {
-    return childRule({ ...params, parentRule: parentRule });
+    return childRule({ ...params, parentRule });
   };
 
 /**

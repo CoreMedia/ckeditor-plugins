@@ -162,9 +162,9 @@ class RichTextDataProcessor implements DataProcessor {
       });
     }
     return {
-      richTextDocument: richTextDocument,
-      domFragment: domFragment,
-      fragmentAsStringForDebugging: fragmentAsStringForDebugging,
+      richTextDocument,
+      domFragment,
+      fragmentAsStringForDebugging,
     };
   }
 
@@ -247,7 +247,7 @@ class RichTextDataProcessor implements DataProcessor {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
         out: dataView,
-        viewFragment: viewFragment,
+        viewFragment,
       });
     }
 

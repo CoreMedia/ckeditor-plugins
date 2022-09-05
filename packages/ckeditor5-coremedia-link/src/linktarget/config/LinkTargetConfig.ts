@@ -77,7 +77,7 @@ export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOption
         result.push(defaultDefinition);
       } else {
         result.push({
-          name: name,
+          name,
           icon: "",
           title: name,
         });

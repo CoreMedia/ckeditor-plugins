@@ -50,8 +50,8 @@ export class ContentClipboardMarkerDataUtils {
   }
 }
 
-export type MarkerData = {
+export interface MarkerData {
   prefix: string;
   dropId: number;
   itemIndex: number;
-};
+}

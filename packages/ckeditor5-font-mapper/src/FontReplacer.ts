@@ -80,7 +80,7 @@ const hasTextChild = (element: ViewElement): boolean => {
  * @param documentFragment - the document fragment
  * @returns an array of child elements
  */
-const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): Array<ViewElement> => {
+const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): ViewElement[] => {
   return Array.from<ViewNode>(documentFragment.getChildren())
     .filter((value) => value instanceof ViewElement)
     .map((value) => value as ViewElement);
@@ -229,7 +229,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
  * @param element - the element
  * @returns all direct text node children
  */
-const findTextNodeChildren = (element: ViewElement): Array<ViewText> => {
+const findTextNodeChildren = (element: ViewElement): ViewText[] => {
   return Array.from<ViewNode>(element.getChildren())
     .filter((value) => value instanceof ViewText)
     .map((value) => value as ViewText);

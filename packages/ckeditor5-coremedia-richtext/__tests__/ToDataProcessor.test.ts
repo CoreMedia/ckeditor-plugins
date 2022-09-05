@@ -288,7 +288,7 @@ describe("RichTextDataProcessor.toData", () => {
       const elements = viewData.querySelectorAll("*").length;
       return {
         data: dataProcessor.toData(viewData),
-        elements: elements,
+        elements,
       };
     }
 

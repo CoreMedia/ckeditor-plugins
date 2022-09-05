@@ -42,19 +42,19 @@ export default class ContentDropDataCache {
   }
 }
 
-export type ContentDropData = {
+export interface ContentDropData {
   dropContext: DropContext;
   itemContext: ItemContext;
-};
+}
 
-export type ItemContext = {
+export interface ItemContext {
   contentUri: string;
   isInline: boolean;
   itemIndex: number;
-};
+}
 
-export type DropContext = {
+export interface DropContext {
   dropId: number;
   batch: Batch;
-  selectedAttributes: Array<[string, string | number | boolean]>;
-};
+  selectedAttributes: [string, string | number | boolean][];
+}

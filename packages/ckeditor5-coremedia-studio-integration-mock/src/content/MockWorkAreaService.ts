@@ -1,7 +1,7 @@
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 
 class MockWorkAreaService implements WorkAreaService {
-  async openEntitiesInTabs(entities: Array<unknown>): Promise<unknown> {
+  async openEntitiesInTabs(entities: unknown[]): Promise<unknown> {
     entities.forEach((entity: unknown): void => {
       const node: Element = document.createElement("DIV");
       node.classList.add("notification");

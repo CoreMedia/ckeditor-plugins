@@ -90,14 +90,14 @@ export default class ContentLinks extends Plugin {
     emitter.listenTo(
       <Emitter>(<unknown>document),
       "mousedown",
-      (evt: unknown, domEvt: { composedPath: () => Array<Element>; target: HTMLElement }) => {
+      (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {
           return;
         }
 
         // Check if `composedPath` is `undefined` in case the browser does not support native shadow DOM.
         // Can be removed when all supported browsers support native shadow DOM.
-        const path: Array<Element> = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
+        const path: Element[] = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
 
         // Do not close balloon if user clicked on draggable outside any editor component
         const editorElements = document.getElementsByClassName(EDITOR_CLASS);
@@ -125,12 +125,12 @@ export default class ContentLinks extends Plugin {
     emitter.listenTo(
       <Emitter>(<unknown>document),
       "click",
-      (evt: unknown, domEvt: { composedPath: () => Array<Element>; target: HTMLElement }) => {
+      (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {
           return;
         }
 
-        const path = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
+        const path = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
         const editorElements = document.getElementsByClassName(EDITOR_CLASS);
 
         for (const editorElement of editorElements) {

@@ -420,20 +420,18 @@ interface PersistResponse {
 /**
  * Predicate to select children.
  */
-interface ChildPredicate {
-  /**
-   * <p>
-   * <strong>As function declaration:</strong>
-   * </p>
-   * <pre>
-   * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
-   * </pre>
-   * @param child - the child node to validate
-   * @param index - child node index
-   * @param array - list of all sibling child nodes (including the child itself)
-   */
-  (child: ChildNode, index: number, array: ChildNode[]): boolean;
-}
+/**
+ * <p>
+ * <strong>As function declaration:</strong>
+ * </p>
+ * <pre>
+ * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
+ * </pre>
+ * @param child - the child node to validate
+ * @param index - child node index
+ * @param array - list of all sibling child nodes (including the child itself)
+ */
+type ChildPredicate = (child: ChildNode, index: number, array: ChildNode[]) => boolean;
 
 /**
  * Represents the state of a given node, it should reach after persisting it

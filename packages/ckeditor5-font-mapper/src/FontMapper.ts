@@ -12,13 +12,13 @@ import { replaceFontInDocumentFragment } from "./FontReplacer";
 import { Mode } from "./FontMapping";
 
 export const COREMEDIA_FONT_MAPPER_CONFIG_KEY = "coremedia:fontMapper";
-export type FontMapperConfigEntry = {
+export interface FontMapperConfigEntry {
   font: string;
   mode?: Mode;
   map: { [key: number]: string };
-};
+}
 
-type FontMapperConfig = Array<FontMapperConfigEntry>;
+type FontMapperConfig = FontMapperConfigEntry[];
 
 /**
  * This plugin maps characters of a given font-family to their alternative

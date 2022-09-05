@@ -230,7 +230,7 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const contentUriPaths: Array<string> | null = receiveUriPathsFromDragDropService();
+    const contentUriPaths: string[] | null = receiveUriPathsFromDragDropService();
 
     if (!contentUriPaths) {
       logger.debug(

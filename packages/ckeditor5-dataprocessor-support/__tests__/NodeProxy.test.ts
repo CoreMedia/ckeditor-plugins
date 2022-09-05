@@ -9,9 +9,7 @@ Node.prototype.toString = function nodeToString(): string {
   return `${this.nodeName}`;
 };
 
-interface NodeProxyAction {
-  (proxy: NodeProxy): unknown;
-}
+type NodeProxyAction = (proxy: NodeProxy) => unknown;
 
 describe("NodeProxy.constructor", () => {
   let rootNode: Node;
@@ -458,7 +456,7 @@ describe("NodeProxy.persistToDom", () => {
         });
       }
 
-      let expectedRestartFrom: Node | undefined = undefined;
+      let expectedRestartFrom: Node | undefined;
       if (!!data.expectedRestartFromXPath) {
         expectedRestartFrom = <Node>(
           document.evaluate(data.expectedRestartFromXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)

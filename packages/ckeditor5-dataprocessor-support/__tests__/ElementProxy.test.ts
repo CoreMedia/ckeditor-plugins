@@ -73,9 +73,9 @@ describe("Should Respecting (Im-)Mutable State", () => {
   });
 
   test("should not be able to change attribute value", () => {
-    const getValue = () => immutableElement.attributes["class"];
+    const getValue = () => immutableElement.attributes.class;
     const previousValue = getValue();
-    expect(() => (immutableElement.attributes["class"] = "test")).toThrowError();
+    expect(() => (immutableElement.attributes.class = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
 
@@ -87,16 +87,16 @@ describe("Should Respecting (Im-)Mutable State", () => {
   });
 
   test("should not be able to add attribute", () => {
-    const getValue = () => immutableElement.attributes["id"];
+    const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
-    expect(() => (immutableElement.attributes["id"] = "test")).toThrowError();
+    expect(() => (immutableElement.attributes.id = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
 
   test("should not be able to delete attribute", () => {
-    const getValue = () => immutableElement.attributes["id"];
+    const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
-    expect(() => delete immutableElement.attributes["class"]).toThrowError();
+    expect(() => delete immutableElement.attributes.class).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
 });
@@ -541,7 +541,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["new"] = "new value";
+            me.node.attributes.new = "new value";
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -621,7 +621,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["old"] = null;
+            me.node.attributes.old = null;
           },
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
@@ -633,7 +633,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            delete me.node.attributes["old"];
+            delete me.node.attributes.old;
           },
         ],
         from: '<parent>Lorem <el old="old value" other="other">Ipsum</el> Dolor</parent>',
@@ -671,7 +671,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["new"] = "new value";
+            me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
               delete me.node.attributes[key];
             });
@@ -686,7 +686,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["attr"] = "prefixed:" + me.node.attributes["attr"];
+            me.node.attributes.attr = "prefixed:" + me.node.attributes.attr;
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -728,7 +728,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["new"] = "new value";
+            me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
               me.node.attributes[key] = "prefixed:" + me.node.attributes[key];
             });
@@ -743,7 +743,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["new"] = "new value";
+            me.node.attributes.new = "new value";
             for (const key in me.node.attributes) {
               if (me.node.attributes.hasOwnProperty(key)) {
                 const descriptor = Object.getOwnPropertyDescriptor(me.node.attributes, key);
@@ -766,7 +766,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["added"] = "";
+            me.node.attributes.added = "";
             ["added", "existing", "not_existing"].forEach((v) => {
               const existing: boolean = v in me.node.attributes;
               me.node.attributes[v] = String(existing);
@@ -796,7 +796,7 @@ describe("ElementProxy.applyRules()", () => {
         rules: [
           (me) => {
             me.node.name = "new";
-            me.node.attributes["attr"] = "value";
+            me.node.attributes.attr = "value";
           },
         ],
         from: "<parent><before>Lorem </before><el><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>",
@@ -809,7 +809,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["attr"] = "value";
+            me.node.attributes.attr = "value";
             me.node.name = "new";
           },
         ],
@@ -829,13 +829,13 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes["attr"] = `before-${me.node.attributes["attr"]}`;
+            me.node.attributes.attr = `before-${me.node.attributes.attr}`;
           },
           (me) => {
             me.node.name = "new";
           },
           (me) => {
-            me.node.attributes["attr"] = `${me.node.attributes["attr"]}-after`;
+            me.node.attributes.attr = `${me.node.attributes.attr}-after`;
           },
         ],
         from: '<parent><before>Lorem </before><el attr="value"><c1>Child 1</c1><c2>Child 1</c2></el><after> Ipsum</after></parent>',
