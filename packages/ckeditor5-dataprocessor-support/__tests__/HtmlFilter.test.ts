@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/naming-convention: off */
 // noinspection InnerHTMLJS
 
 import "jest-xml-matcher";

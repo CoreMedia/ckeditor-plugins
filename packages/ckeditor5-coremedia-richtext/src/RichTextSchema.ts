@@ -148,7 +148,7 @@ interface Elements {
  * possibly invalid values had not been removed. This action fulfills
  * exactly this contract for `LEGACY` mode.
  */
-const REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (attrValue, strictness) => {
+const REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (attrValue, strictness) => {
   return strictness === Strictness.LEGACY ? attrValue : undefined;
 };
 
@@ -204,22 +204,22 @@ const LENGTH: AttributeValueValidator = (v, s) => (s === Strictness.STRICT ? /^\
 const ATTRIBUTE_GROUP_COREATTRS: Attributes = {
   class: {
     valueValidator: CDATA,
-    onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+    onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
 
 const ATTRIBUTE_GROUP_I18N: Attributes = {
   lang: {
     valueValidator: LANGUAGE,
-    onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+    onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
   "xml:lang": {
     valueValidator: LANGUAGE,
-    onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+    onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
   dir: {
     valueValidator: (v) => ["ltr", "rtl"].indexOf(v) >= 0,
-    onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+    onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
 
@@ -228,14 +228,14 @@ const ATTRIBUTE_GROUP_ATTRS: Attributes = { ...ATTRIBUTE_GROUP_COREATTRS, ...ATT
 const ATTRIBUTE_GROUP_CELLHALIGN: Attributes = {
   align: {
     valueValidator: (v) => ["left", "center", "right"].indexOf(v) >= 0,
-    onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+    onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
 
 const ATTRIBUTE_GROUP_CELLVALIGN: Attributes = {
   valign: {
     valueValidator: (v) => ["top", "middle", "bottom", "baseline"].indexOf(v) >= 0,
-    onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+    onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
 
@@ -258,46 +258,46 @@ const ATTRIBUTE_GROUP_CELLVALIGN: Attributes = {
 
 /* ====================================================[ Text Elements ]===== */
 
-const MODEL_GROUP__SPECIAL: ModelGroup = {
+const MODEL_GROUP_SPECIAL: ModelGroup = {
   nestedElementNames: ["br", "span", "img"],
 };
 
-const MODEL_GROUP__PHRASE: ModelGroup = {
+const MODEL_GROUP_PHRASE: ModelGroup = {
   nestedElementNames: ["em", "strong", "sub", "sup"],
 };
 
-const MODEL_GROUP__INLINE: ModelGroup = {
-  nestedElementNames: ["a", ...MODEL_GROUP__SPECIAL.nestedElementNames, ...MODEL_GROUP__PHRASE.nestedElementNames],
+const MODEL_GROUP_INLINE_BASE: ModelGroup = {
+  nestedElementNames: ["a", ...MODEL_GROUP_SPECIAL.nestedElementNames, ...MODEL_GROUP_PHRASE.nestedElementNames],
 };
 
 const MODEL_GROUP_INLINE: ModelGroup = {
   mayBeEmpty: true,
   mayContainText: true,
-  nestedElementNames: MODEL_GROUP__INLINE.nestedElementNames,
+  nestedElementNames: MODEL_GROUP_INLINE_BASE.nestedElementNames,
 };
 
 /* ===================================================[ Block Elements ]===== */
 
-const MODEL_GROUP__LISTS: ModelGroup = {
+const MODEL_GROUP_LISTS: ModelGroup = {
   nestedElementNames: ["ul", "ol"],
 };
 
-const MODEL_GROUP__BLOCKTEXT: ModelGroup = {
+const MODEL_GROUP_BLOCKTEXT: ModelGroup = {
   nestedElementNames: ["pre", "blockquote"],
 };
 
-const MODEL_GROUP__BLOCK: ModelGroup = {
+const MODEL_GROUP_BLOCK_BASE: ModelGroup = {
   nestedElementNames: [
     "p",
-    ...MODEL_GROUP__LISTS.nestedElementNames,
-    ...MODEL_GROUP__BLOCKTEXT.nestedElementNames,
+    ...MODEL_GROUP_LISTS.nestedElementNames,
+    ...MODEL_GROUP_BLOCKTEXT.nestedElementNames,
     "table",
   ],
 };
 
 const MODEL_GROUP_BLOCK: ModelGroup = {
   mayBeEmpty: true,
-  nestedElementNames: MODEL_GROUP__BLOCK.nestedElementNames,
+  nestedElementNames: MODEL_GROUP_BLOCK_BASE.nestedElementNames,
 };
 
 /**
@@ -317,7 +317,7 @@ const MODEL_GROUP_FLOW: ModelGroup = {
 const MODEL_GROUP_A_CONTENT: ModelGroup = {
   mayBeEmpty: true,
   mayContainText: true,
-  nestedElementNames: [...MODEL_GROUP__SPECIAL.nestedElementNames, ...MODEL_GROUP__PHRASE.nestedElementNames],
+  nestedElementNames: [...MODEL_GROUP_SPECIAL.nestedElementNames, ...MODEL_GROUP_PHRASE.nestedElementNames],
 };
 
 /**
@@ -326,7 +326,7 @@ const MODEL_GROUP_A_CONTENT: ModelGroup = {
 const MODEL_GROUP_PRE_CONTENT: ModelGroup = {
   mayBeEmpty: true,
   mayContainText: true,
-  nestedElementNames: ["a", "br", "span", ...MODEL_GROUP__PHRASE.nestedElementNames],
+  nestedElementNames: ["a", "br", "span", ...MODEL_GROUP_PHRASE.nestedElementNames],
 };
 
 /*
@@ -387,7 +387,7 @@ const ELEMENTS: Elements = {
       ...ATTRIBUTE_GROUP_ATTRS,
       "xml:space": {
         valueValidator: (s) => "preserve" === s,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
   },
@@ -398,7 +398,7 @@ const ELEMENTS: Elements = {
       ...ATTRIBUTE_GROUP_ATTRS,
       cite: {
         valueValidator: URI,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
   },
@@ -409,30 +409,30 @@ const ELEMENTS: Elements = {
       ...ATTRIBUTE_GROUP_ATTRS,
       "xlink:type": {
         valueValidator: (s) => "simple" === s,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:href": {
         valueValidator: URI,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
         // Earlier processing should actually have removed this element without
         // href. This fix just ensures, that a required attribute is set.
         onMissingAttribute: () => "",
       },
       "xlink:role": {
         valueValidator: CDATA,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:title": {
         valueValidator: CDATA,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:show": {
         valueValidator: (s) => ["new", "replace", "embed", "other", "none"].indexOf(s) >= 0,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:actuate": {
         valueValidator: (s) => ["onRequest", "onLoad"].indexOf(s) >= 0,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
   },
@@ -472,43 +472,43 @@ const ELEMENTS: Elements = {
       ...ATTRIBUTE_GROUP_ATTRS,
       alt: {
         valueValidator: TEXT,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
         onMissingAttribute: () => "",
       },
       height: {
         valueValidator: LENGTH,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       width: {
         valueValidator: LENGTH,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:type": {
         valueValidator: (s) => "simple" === s,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       // Earlier processing should actually have removed this element without
       // href. This fix just ensures, that a required attribute is set.
       "xlink:href": {
         valueValidator: CDATA,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
         onMissingAttribute: () => "",
       },
       "xlink:role": {
         valueValidator: CDATA,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:title": {
         valueValidator: CDATA,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:show": {
         valueValidator: (s) => "embed" === s,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:actuate": {
         valueValidator: (s) => "onLoad" === s,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
   },
@@ -521,7 +521,7 @@ const ELEMENTS: Elements = {
       ...ATTRIBUTE_GROUP_ATTRS,
       summary: {
         valueValidator: TEXT,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
   },
@@ -553,15 +553,15 @@ const ELEMENTS: Elements = {
       ...ATTRIBUTE_GROUP_CELLVALIGN,
       abbr: {
         valueValidator: TEXT,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       rowspan: {
         valueValidator: NUMBER,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       colspan: {
         valueValidator: NUMBER,
-        onInvalidValue: REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY,
+        onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
   },
@@ -768,7 +768,7 @@ export default class RichTextSchema {
         // Note, that this may also remove required attributes — but having invalid values.
         // This is important for subsequent processing.
         if (!attributeValid) {
-          const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE___KEEP_ONLY_ON_LEGACY;
+          const invalidValueHandler = specification.onInvalidValue ?? REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY;
           const suggestedValue = invalidValueHandler(attributeValue, this.#strictness);
           if (suggestedValue === undefined) {
             RichTextSchema.#logger.debug(

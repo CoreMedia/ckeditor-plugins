@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/naming-convention: off */
+
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 
 // noinspection HttpUrlsUsage
