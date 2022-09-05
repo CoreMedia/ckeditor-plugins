@@ -129,7 +129,7 @@
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
     "no-trailing-spaces": "error",
-    "no-undef-init": "warn",
+    "no-undef-init": "error",
     "no-unsafe-finally": "error",
     "no-unused-labels": "error",
     "no-var": "error",
