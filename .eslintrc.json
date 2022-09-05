@@ -40,7 +40,7 @@
     "@typescript-eslint/array-type": "error",
 
     "brace-style": "off",
-    "@typescript-eslint/brace-style": ["warn", "stroustrup", { "allowSingleLine": true }],
+    "@typescript-eslint/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
 
     "@typescript-eslint/naming-convention": [
       "warn",
