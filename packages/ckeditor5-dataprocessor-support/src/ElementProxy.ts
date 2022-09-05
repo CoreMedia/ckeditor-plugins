@@ -654,6 +654,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * remove the attribute from the element.
    */
   public get attributes(): Attributes {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     return new Proxy(this.#attributes, {
       defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
