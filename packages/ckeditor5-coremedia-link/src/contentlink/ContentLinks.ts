@@ -52,7 +52,7 @@ export default class ContentLinks extends Plugin {
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {
     const { formView } = linkUI;
-    formView.stopListening((document as unknown) as Emitter, "mousedown");
+    formView.stopListening(document as unknown as Emitter, "mousedown");
   }
 
   /**
@@ -88,7 +88,7 @@ export default class ContentLinks extends Plugin {
   }): void {
     const EDITOR_CLASS = "ck-editor";
     emitter.listenTo(
-      (document as unknown) as Emitter,
+      document as unknown as Emitter,
       "mousedown",
       (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {
@@ -123,7 +123,7 @@ export default class ContentLinks extends Plugin {
       }
     );
     emitter.listenTo(
-      (document as unknown) as Emitter,
+      document as unknown as Emitter,
       "click",
       (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {

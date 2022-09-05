@@ -446,9 +446,8 @@ describe("NodeProxy.persistToDom", () => {
   describe.each<PersistTest>(testData)("(%#) %s", (name, data) => {
     test.each([[true], [false]])("(%#) has ownerDocument: %s", (hasOwnerDocument: boolean) => {
       const document = PARSER.parseFromString(dom, "text/xml");
-      const node = (
-        document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
-      ) as Node;
+      const node = document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+        .singleNodeValue as Node;
       const proxy = new NodeProxy(node);
 
       if (!hasOwnerDocument) {
@@ -460,10 +459,12 @@ describe("NodeProxy.persistToDom", () => {
 
       let expectedRestartFrom: Node | undefined;
       if (!!data.expectedRestartFromXPath) {
-        expectedRestartFrom = (
-          document.evaluate(data.expectedRestartFromXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-            .singleNodeValue
-        ) as Node;
+        expectedRestartFrom = document.evaluate(
+          data.expectedRestartFromXPath,
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE
+        ).singleNodeValue as Node;
       }
       data.action(proxy);
       const { continueWith, abort } = proxy.persistToDom();

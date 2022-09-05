@@ -158,8 +158,8 @@ const defaultRules: FilterRuleSetConfiguration = {
 };
 
 export const getConfig = (config?: CKEditorConfig): ParsedConfig => {
-  const customConfig: CoreMediaRichTextConfig =
-    (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) || {}) as CoreMediaRichTextConfig;
+  const customConfig: CoreMediaRichTextConfig = (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ||
+    {}) as CoreMediaRichTextConfig;
 
   const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
 

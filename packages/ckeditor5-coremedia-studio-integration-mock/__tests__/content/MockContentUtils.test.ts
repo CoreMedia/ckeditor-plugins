@@ -41,7 +41,7 @@ describe("MockContentUtils", () => {
     ${[true]}             | ${true}
     ${Symbol("@")}        | ${false}
     ${BigInt(0)}          | ${false}
-    ${someFunction}           | ${false}
+    ${someFunction}       | ${false}
     ${{}}                 | ${true}
     ${{ lorem: "ipsum" }} | ${true}
   `("[$#] isObject($input) = $expected", (data) => {

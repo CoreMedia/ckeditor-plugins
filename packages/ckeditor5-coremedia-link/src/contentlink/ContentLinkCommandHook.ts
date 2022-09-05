@@ -383,7 +383,7 @@ class ContentLinkCommandHook extends Plugin {
        */
       return false;
     }
-    const textProxy = (onlyItem as unknown) as TextProxy;
+    const textProxy = onlyItem as unknown as TextProxy;
     return this.#replaceRawLink(writer, textProxy, range);
   }
 }
