@@ -238,7 +238,7 @@ export class Differencing {
   simpleImg(href: string, config: XDiffSpanConfig & { class?: string }): string {
     let attrs: ImageAttributes = {
       "xlink:href": href,
-      alt: "Some Image",
+      "alt": "Some Image",
     };
 
     if (!!config.class) {

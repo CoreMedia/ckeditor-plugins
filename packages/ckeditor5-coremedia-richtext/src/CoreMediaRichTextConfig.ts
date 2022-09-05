@@ -80,9 +80,9 @@ const defaultRules: FilterRuleSetConfiguration = {
   },
   elements: {
     ...schemaRules,
-    a: handleAnchor,
-    img: handleImage,
-    p: {
+    "a": handleAnchor,
+    "img": handleImage,
+    "p": {
       toData: langDataFilterRule,
       // paragraphToHeading: While we could do this per heading level, this
       // approach spares some nested calls.
@@ -92,14 +92,14 @@ const defaultRules: FilterRuleSetConfiguration = {
     },
     ...headingRules,
     ...listRules,
-    blockquote: langMapperConfiguration,
+    "blockquote": langMapperConfiguration,
     // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
-    b: replaceBy("strong"),
-    strong: langMapperConfiguration,
-    em: langMapperConfiguration,
-    sub: langMapperConfiguration,
-    sup: langMapperConfiguration,
-    i: {
+    "b": replaceBy("strong"),
+    "strong": langMapperConfiguration,
+    "em": langMapperConfiguration,
+    "sub": langMapperConfiguration,
+    "sup": langMapperConfiguration,
+    "i": {
       toData: replaceBy("em"),
       toView: {
         // Note, that this assumes a default CKEditor. It needs to be changed, if
@@ -108,9 +108,9 @@ const defaultRules: FilterRuleSetConfiguration = {
         em: replaceBy("i"),
       },
     },
-    code: replaceByElementAndClassBackAndForth("code", "span", "code"),
-    u: replaceByElementAndClassBackAndForth("u", "span", "underline"),
-    br: (params) => {
+    "code": replaceByElementAndClassBackAndForth("code", "span", "code"),
+    "u": replaceByElementAndClassBackAndForth("u", "span", "underline"),
+    "br": (params) => {
       // Remove obsolete BR, if only element on block level params.el.
       const parent = params.node.parentElement;
       const parentName = parent?.name || "";
@@ -125,15 +125,15 @@ const defaultRules: FilterRuleSetConfiguration = {
       }
       params.node.remove = remove;
     },
-    del: strike,
-    s: strike,
+    "del": strike,
+    "s": strike,
     strike,
     // We are not applied to root-div. Thus, we have a nested div here, which
     // is not allowed in CoreMedia RichText 1.0.
-    div: replaceBy("p"),
+    "div": replaceBy("p"),
     ...tableRules,
-    span: langMapperConfiguration,
-    pre: langMapperConfiguration,
+    "span": langMapperConfiguration,
+    "pre": langMapperConfiguration,
     /*
      * DevNote: This should better be done by Differencing plugin. A
      * corresponding API is missing in `RichTextDataProcessor` yet.

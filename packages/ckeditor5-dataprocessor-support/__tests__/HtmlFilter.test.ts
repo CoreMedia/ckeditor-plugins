@@ -136,7 +136,7 @@ describe("HtmlFilter.applyTo()", () => {
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }before`;
             },
-            el: (params) => {
+            "el": (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
           },
@@ -174,12 +174,12 @@ describe("HtmlFilter.applyTo()", () => {
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }before`;
             },
-            $: (params) => {
+            "$": (params) => {
               params.node.attributes.name = `${
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }after`;
             },
-            el: (params) => {
+            "el": (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
           },
@@ -198,16 +198,16 @@ describe("HtmlFilter.applyTo()", () => {
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }before`;
             },
-            $: (params) => {
+            "$": (params) => {
               params.node.attributes.name = `${
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }after`;
             },
-            el: (params) => {
+            "el": (params) => {
               params.node.name = "replacement";
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
-            replacement: (params) => {
+            "replacement": (params) => {
               // This should not be triggered.
               params.node.attributes.name = `${
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""

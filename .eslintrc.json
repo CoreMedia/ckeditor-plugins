@@ -136,7 +136,7 @@
     "object-shorthand": "error",
     "prefer-const": "error",
     "prefer-object-spread": "error",
-    "quote-props": ["warn", "consistent-as-needed"],
+    "quote-props": ["error", "consistent-as-needed"],
     "space-in-parens": "warn",
     "unicode-bom": ["error", "never"],
     "use-isnan": "error"

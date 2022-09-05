@@ -209,7 +209,7 @@ const ATTRIBUTE_GROUP_COREATTRS: Attributes = {
 };
 
 const ATTRIBUTE_GROUP_I18N: Attributes = {
-  lang: {
+  "lang": {
     valueValidator: LANGUAGE,
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
@@ -217,7 +217,7 @@ const ATTRIBUTE_GROUP_I18N: Attributes = {
     valueValidator: LANGUAGE,
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
-  dir: {
+  "dir": {
     valueValidator: (v) => ["ltr", "rtl"].indexOf(v) >= 0,
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
@@ -342,7 +342,7 @@ const ELEMENTS: Elements = {
   div: {
     ...MODEL_GROUP_BLOCK,
     attributeList: {
-      xmlns: {
+      "xmlns": {
         valueValidator: (s) => COREMEDIA_RICHTEXT_1_0_NAMESPACE === s,
         onInvalidValue: () => {
           return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
@@ -470,16 +470,16 @@ const ELEMENTS: Elements = {
     nestedElementNames: [],
     attributeList: {
       ...ATTRIBUTE_GROUP_ATTRS,
-      alt: {
+      "alt": {
         valueValidator: TEXT,
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
         onMissingAttribute: () => "",
       },
-      height: {
+      "height": {
         valueValidator: LENGTH,
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
-      width: {
+      "width": {
         valueValidator: LENGTH,
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },

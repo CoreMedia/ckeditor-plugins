@@ -74,7 +74,7 @@ const lang = {
   )}`,
   text: "Lang Precedence",
   attr: { "xml:lang": "en" },
-  conflicting: { "xml:lang": "de", lang: "en" },
+  conflicting: { "xml:lang": "de", "lang": "en" },
 };
 
 const allCoreAttributes: CoreAttributes = {
@@ -218,28 +218,28 @@ const imgItem: ExampleData = {
   ${p(
     img({
       "xlink:href": INLINE_IMG,
-      alt: plainText,
+      "alt": plainText,
     })
   )}\
   ${p(
     img({
       "xlink:href": INLINE_IMG,
-      alt: allAttributesText,
+      "alt": allAttributesText,
       ...allAttributes,
       "xlink:actuate": "onLoad",
       "xlink:role": "ROLE",
       "xlink:show": "embed",
       "xlink:title": allAttributesText,
       "xlink:type": "simple",
-      height: 48,
-      width: 48,
+      "height": 48,
+      "width": 48,
     })
   )}\
   ${lang.intro}\
   ${p(
     img({
       "xlink:href": INLINE_IMG,
-      alt: lang.text,
+      "alt": lang.text,
       ...lang.conflicting,
     })
   )}\

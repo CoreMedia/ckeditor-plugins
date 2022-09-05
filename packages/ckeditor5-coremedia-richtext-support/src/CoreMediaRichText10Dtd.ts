@@ -70,9 +70,9 @@ class CoreMediaRichText10Dtd {
       name: "a",
       attributes: {
         // Data-Processed by merging xlink:show and xlink:role
-        target: true,
+        "target": true,
         // Data-processed from xlink:title
-        title: true,
+        "title": true,
         // Data-Processed from xlink:actuate
         "data-xlink-actuate": /^(onRequest|onLoad)$/,
         // Data-Processed from xlink:type
@@ -86,14 +86,14 @@ class CoreMediaRichText10Dtd {
     {
       name: "img",
       attributes: {
-        alt: true,
-        height: true,
+        "alt": true,
+        "height": true,
         // Will hold the Blob URL to load for displaying the image.
         // The actual Blob reference is stored in `data-xlink-href`.
-        src: true,
+        "src": true,
         // Data-processed from xlink:title
-        title: true,
-        width: true,
+        "title": true,
+        "width": true,
         // Data-Processed from xlink:actuate
         "data-xlink-actuate": /^(onRequest|onLoad)$/,
         // Data-Processed from xlink:href
