@@ -40,9 +40,11 @@
     "playwright": "pnpm --recursive --filter \"@coremedia/ckeditor5-coremedia-itest\" run playwright",
     "jest": "pnpm --recursive jest",
     "jest:coverage": "pnpm --recursive jest:coverage",
-    "lint": "pnpm --recursive lint",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "prettier": "prettier \"{,!(node_modules|docs)/**/}*.{js,jsx,ts,tsx,json,md}\"",
+    "prettier:fix": "prettier --write \"{,!(node_modules|docs)/**/}*.{js,jsx,ts,tsx,json,md}\"",
     "preinstall": "npx --yes only-allow pnpm",
-    "prettier": "pnpm --recursive prettier",
     "update-latest": "pnpm update --interactive --latest --recursive"
   },
   "dependencies": {
