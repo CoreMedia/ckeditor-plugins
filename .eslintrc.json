@@ -37,7 +37,7 @@
     "@typescript-eslint/no-empty-function": "error",
 
     "@typescript-eslint/adjacent-overload-signatures": "error",
-    "@typescript-eslint/array-type": "warn",
+    "@typescript-eslint/array-type": "error",
 
     "brace-style": "off",
     "@typescript-eslint/brace-style": ["warn", "stroustrup", { "allowSingleLine": true }],
