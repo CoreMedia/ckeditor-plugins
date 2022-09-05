@@ -55,7 +55,7 @@
       { "selector": "property", "format": null }
     ],
 
-    "@typescript-eslint/consistent-type-definitions": ["warn", "interface"],
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/consistent-type-assertions": ["warn", { "assertionStyle": "as" }],
 
     "max-statements-per-line": ["error", { "max": 1 }],
