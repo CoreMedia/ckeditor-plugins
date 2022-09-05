@@ -78,7 +78,7 @@
     "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
 
     "semi": "off",
-    "@typescript-eslint/semi": "warn",
+    "@typescript-eslint/semi": "error",
 
     "space-before-function-paren": "off",
     "@typescript-eslint/space-before-function-paren": ["error", {
