@@ -15,6 +15,7 @@ importers:
       eslint-plugin-no-null: ^1.0.2
       eslint-plugin-prettier: ^4.2.1
       eslint-plugin-tsdoc: ^0.2.16
+      eslint-plugin-unused-imports: ^2.0.0
       prettier: ^2.7.1
       rimraf: ^3.0.2
       typedoc: ^0.23.11
@@ -33,6 +34,7 @@ importers:
       eslint-plugin-no-null: 1.0.2_eslint@8.23.0
       eslint-plugin-prettier: 4.2.1_tgumt6uwl2md3n6uqnggd6wvce
       eslint-plugin-tsdoc: 0.2.16
+      eslint-plugin-unused-imports: 2.0.0_h2obgme53psvsi5hnxwhauwpoe
       prettier: 2.7.1
       rimraf: 3.0.2
       typedoc: 0.23.11_typescript@4.8.2
@@ -5136,6 +5138,26 @@ packages:
     dependencies:
       '@microsoft/tsdoc': 0.14.1
       '@microsoft/tsdoc-config': 0.16.1
+    dev: true
+
+  /eslint-plugin-unused-imports/2.0.0_h2obgme53psvsi5hnxwhauwpoe:
+    resolution: {integrity: sha512-3APeS/tQlTrFa167ThtP0Zm0vctjr4M44HMpeg1P4bK6wItarumq0Ma82xorMKdFsWpphQBlRPzw/pxiVELX1A==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      '@typescript-eslint/eslint-plugin': ^5.0.0
+      eslint: ^8.0.0
+    peerDependenciesMeta:
+      '@typescript-eslint/eslint-plugin':
+        optional: true
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 5.35.1_pfwtupu3r4wxmgbx6hj7gwmyuu
+      eslint: 8.23.0
+      eslint-rule-composer: 0.3.0
+    dev: true
+
+  /eslint-rule-composer/0.3.0:
+    resolution: {integrity: sha512-bt+Sh8CtDmn2OajxvNO+BX7Wn4CIWMpTRm3MaiKPCQcnnlm0CS2mhui6QaoeQugs+3Kj2ESKEEGJUdVafwhiCg==}
+    engines: {node: '>=4.0.0'}
     dev: true
 
   /eslint-scope/5.1.1:

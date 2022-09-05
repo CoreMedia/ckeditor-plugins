@@ -1,7 +1,6 @@
 /* eslint no-null/no-null: off */
 
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import { DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
