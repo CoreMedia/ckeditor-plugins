@@ -42,8 +42,8 @@
     "jest:coverage": "pnpm --recursive jest:coverage",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
-    "prettier": "prettier \"{,!(node_modules|docs)/**/}*.{js,jsx,ts,tsx,json,md}\"",
-    "prettier:fix": "prettier --write \"{,!(node_modules|docs)/**/}*.{js,jsx,ts,tsx,json,md}\"",
+    "prettier": "prettier --check \"**/*.{ts,tsx}\"",
+    "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
     "preinstall": "npx --yes only-allow pnpm",
     "update-latest": "pnpm update --interactive --latest --recursive"
   },
