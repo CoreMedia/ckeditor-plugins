@@ -133,7 +133,7 @@
     "no-unsafe-finally": "error",
     "no-unused-labels": "error",
     "no-var": "error",
-    "object-shorthand": "warn",
+    "object-shorthand": "error",
     "prefer-const": "error",
     "prefer-object-spread": "error",
     "quote-props": ["warn", "consistent-as-needed"],

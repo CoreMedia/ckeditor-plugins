@@ -127,7 +127,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     },
     del: strike,
     s: strike,
-    strike: strike,
+    strike,
     // We are not applied to root-div. Thus, we have a nested div here, which
     // is not allowed in CoreMedia RichText 1.0.
     div: replaceBy("p"),
