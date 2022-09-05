@@ -34,7 +34,7 @@
     "prettier/prettier": "warn",
 
     "@typescript-eslint/ban-ts-comment": "error",
-    "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/no-empty-function": "error",
 
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": "warn",

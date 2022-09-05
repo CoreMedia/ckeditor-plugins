@@ -1,5 +1,9 @@
 import { capitalize, increaseUpToAndRestart, isObject } from "../../src/content/MockContentUtils";
 
+const someFunction = () => {
+  // irrelevant, only type required
+};
+
 describe("MockContentUtils", () => {
   test.each`
     input | upperBound | expected | expectedRestart
@@ -35,7 +39,7 @@ describe("MockContentUtils", () => {
     ${[true]}             | ${true}
     ${Symbol("@")}        | ${false}
     ${BigInt(0)}          | ${false}
-    ${() => {}}           | ${false}
+    ${someFunction}           | ${false}
     ${{}}                 | ${true}
     ${{ lorem: "ipsum" }} | ${true}
   `("[$#] isObject($input) = $expected", (data) => {

@@ -4,6 +4,10 @@ import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTarge
 
 jest.mock("@ckeditor/ckeditor5-utils/src/config");
 
+const someFunction = () => {
+  // irrelevant, only type required
+};
+
 describe("LinkTargetConfig", () => {
   describe("parseLinkTargetConfig", () => {
     let config: Config;
@@ -167,7 +171,7 @@ describe("LinkTargetConfig", () => {
     test.each`
       config
       ${42}
-      ${() => {}}
+      ${someFunction}
       ${"lorem ipsum"}
       ${""}
       ${true}
@@ -182,7 +186,7 @@ describe("LinkTargetConfig", () => {
     test.each`
       entry
       ${42}
-      ${() => {}}
+      ${someFunction}
       ${true}
       ${false}
     `(
