@@ -1,3 +1,5 @@
+/* eslint no-restricted-globals: off */
+
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 
 class MockWorkAreaService implements WorkAreaService {

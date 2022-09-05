@@ -1,3 +1,5 @@
+/* eslint no-restricted-globals: off */
+
 import Delayed from "./Delayed";
 import { AtomicOrArray, increaseUpToAndRestart } from "./MockContentUtils";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";

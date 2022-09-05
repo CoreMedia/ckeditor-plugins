@@ -117,7 +117,7 @@
     "no-new-func": "error",
     "no-new-wrappers": "error",
     "no-return-await": "error",
-    "no-restricted-globals": ["warn",
+    "no-restricted-globals": ["error",
       { "name": "setTimeout" },
       { "name": "clearTimeout" },
       { "name": "setInterval" },
