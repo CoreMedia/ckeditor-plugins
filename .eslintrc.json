@@ -61,7 +61,7 @@
     "max-statements-per-line": ["error", { "max": 1 }],
 
     "no-duplicate-imports": "off",
-    "@typescript-eslint/no-duplicate-imports": "warn",
+    "@typescript-eslint/no-duplicate-imports": "error",
 
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-misused-new": "error",

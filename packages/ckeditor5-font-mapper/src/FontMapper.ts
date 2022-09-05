@@ -2,7 +2,6 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import DocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
@@ -110,7 +109,7 @@ export default class FontMapper extends Plugin {
   static #handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardInputEvent): void {
     FontMapper.#logger.debug("Event received with data", data);
     const pastedContent: string = data.dataTransfer.getData(FontMapper.supportedDataFormat);
-    const eventContent: DocumentFragment | undefined = data.content;
+    const eventContent: ViewDocumentFragment | undefined = data.content;
     if (!pastedContent || !eventContent) {
       FontMapper.#logger.debug(`No data for supported data Format ${FontMapper.supportedDataFormat} found.`);
       return;
