@@ -33,7 +33,7 @@
   "rules": {
     "prettier/prettier": "warn",
 
-    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/ban-ts-comment": "error",
     "@typescript-eslint/no-empty-function": "warn",
 
     "@typescript-eslint/adjacent-overload-signatures": "error",

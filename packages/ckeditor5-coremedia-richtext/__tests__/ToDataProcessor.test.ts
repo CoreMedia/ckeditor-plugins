@@ -47,7 +47,7 @@ function fib(idx: number, memo?: Map<number, number>): number {
   return result;
 }
 
-//@ts-expect-error
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
 const PARSER = new DOMParser();
 

@@ -4,7 +4,7 @@ import TextProxy, { TextFilterRule } from "../src/TextProxy";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
-//@ts-expect-error
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
 const SERIALIZER = new XMLSerializer();
 const PARSER = new DOMParser();
