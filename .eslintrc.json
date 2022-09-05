@@ -23,7 +23,7 @@
     //
     // ESLint in VS Code will lint any opened file (so long as it is not eslintignore'd), so
     // that will work regardless of the below.
-    { "files": ["*.ts", "*.tsx"] }
+    { "files": ["**/*.ts", "**/*.tsx"] }
   ],
   "extends": [
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
@@ -33,11 +33,14 @@
   "rules": {
     "prettier/prettier": "warn",
 
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/no-empty-function": "warn",
+
     "@typescript-eslint/adjacent-overload-signatures": "error",
-    "@typescript-eslint/array-type": "error",
+    "@typescript-eslint/array-type": "warn",
 
     "brace-style": "off",
-    "@typescript-eslint/brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+    "@typescript-eslint/brace-style": ["warn", "stroustrup", { "allowSingleLine": true }],
 
     "@typescript-eslint/naming-convention": [
       "warn",
@@ -52,7 +55,7 @@
       { "selector": "property", "format": null }
     ],
 
-    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/consistent-type-definitions": ["warn", "interface"],
     "@typescript-eslint/consistent-type-assertions": ["warn", { "assertionStyle": "as" }],
 
     "max-statements-per-line": ["error", { "max": 1 }],
@@ -62,20 +65,20 @@
 
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-misused-new": "error",
-    "@typescript-eslint/no-this-alias": "error",
+    "@typescript-eslint/no-this-alias": "warn",
 
     "no-unused-expressions": "off",
     "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true, "allowShortCircuit": true }],
 
     "@typescript-eslint/prefer-for-of": "warn",
-    "@typescript-eslint/prefer-function-type": "error",
+    "@typescript-eslint/prefer-function-type": "warn",
     "@typescript-eslint/prefer-namespace-keyword": "error",
 
     "quotes": "off",
-    "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
+    "@typescript-eslint/quotes": ["warn", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
 
     "semi": "off",
-    "@typescript-eslint/semi": "error",
+    "@typescript-eslint/semi": "warn",
 
     "space-before-function-paren": "off",
     "@typescript-eslint/space-before-function-paren": ["error", {
@@ -100,9 +103,10 @@
     // eslint
     "constructor-super": "error",
     "curly": ["error", "multi-line"],
-    "dot-notation": "error",
+    "dot-notation": "warn",
     "eqeqeq": "warn",
-    "linebreak-style": ["warn", "windows"],
+    // linebreak-style: First needs to be fixed on Windows.
+    "linebreak-style": ["off", "windows"],
     "new-parens": "error",
     "no-caller": "error",
     "no-duplicate-case": "error",
@@ -125,15 +129,15 @@
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
     "no-trailing-spaces": "error",
-    "no-undef-init": "error",
+    "no-undef-init": "warn",
     "no-unsafe-finally": "error",
     "no-unused-labels": "error",
     "no-var": "error",
-    "object-shorthand": "error",
+    "object-shorthand": "warn",
     "prefer-const": "error",
     "prefer-object-spread": "error",
-    "quote-props": ["error", "consistent-as-needed"],
-    "space-in-parens": "error",
+    "quote-props": ["warn", "consistent-as-needed"],
+    "space-in-parens": "warn",
     "unicode-bom": ["error", "never"],
     "use-isnan": "error"
   }
