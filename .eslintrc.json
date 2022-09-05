@@ -103,7 +103,7 @@
     // eslint
     "constructor-super": "error",
     "curly": ["error", "multi-line"],
-    "dot-notation": "warn",
+    "dot-notation": "error",
     "eqeqeq": "warn",
     // linebreak-style: First needs to be fixed on Windows.
     "linebreak-style": ["off", "windows"],
