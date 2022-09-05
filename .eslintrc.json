@@ -104,7 +104,7 @@
     "constructor-super": "error",
     "curly": ["error", "multi-line"],
     "dot-notation": "error",
-    "eqeqeq": "warn",
+    "eqeqeq": "error",
     // linebreak-style: First needs to be fixed on Windows.
     "linebreak-style": ["off", "windows"],
     "new-parens": "error",

@@ -27,7 +27,7 @@ const renameAttribute = (
 ): void => {
   const allNames = [name, ...aliases];
   const attributes = node.attributes;
-  const firstExistingIndex = allNames.findIndex((n) => attributes.hasOwnProperty(n) && attributes[n] != null);
+  const firstExistingIndex = allNames.findIndex((n) => attributes.hasOwnProperty(n) && attributes[n] !== null);
   if (firstExistingIndex === -1) {
     // Nothing to do.
     return;

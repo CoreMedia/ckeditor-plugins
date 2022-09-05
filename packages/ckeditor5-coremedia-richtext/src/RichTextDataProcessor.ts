@@ -96,7 +96,7 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   useFillerType(type: "default" | "marked"): void {
-    this.#domConverter.blockFillerMode = type == "marked" ? "markedNbsp" : "nbsp";
+    this.#domConverter.blockFillerMode = type === "marked" ? "markedNbsp" : "nbsp";
   }
 
   /**
