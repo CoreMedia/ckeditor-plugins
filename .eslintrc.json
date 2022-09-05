@@ -75,7 +75,7 @@
     "@typescript-eslint/prefer-namespace-keyword": "error",
 
     "quotes": "off",
-    "@typescript-eslint/quotes": ["warn", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
+    "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
 
     "semi": "off",
     "@typescript-eslint/semi": "warn",
