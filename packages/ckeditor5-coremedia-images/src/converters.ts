@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";

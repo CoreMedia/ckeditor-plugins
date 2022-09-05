@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import ElementProxy, { ElementFilterRule } from "./ElementProxy";
 import TextProxy, { TextFilterRule } from "./TextProxy";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";

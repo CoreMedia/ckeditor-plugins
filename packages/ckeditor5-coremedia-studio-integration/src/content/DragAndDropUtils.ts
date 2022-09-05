@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { serviceAgent } from "@coremedia/service-agent";
 import DragDropService, { CMBeanReference, CMDragData } from "./studioservices/DragDropService";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";

@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import NodeProxy, { PersistResponse } from "./NodeProxy";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 

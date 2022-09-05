@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { isBeanReference, isBeanReferences, parseBeanReferences } from "../../src/content/BeanReference";
 
 describe("BeanReference", () => {

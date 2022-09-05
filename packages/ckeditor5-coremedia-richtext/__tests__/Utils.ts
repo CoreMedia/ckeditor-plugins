@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 /**
  * Flattens a nested array of a given type.
  * @example

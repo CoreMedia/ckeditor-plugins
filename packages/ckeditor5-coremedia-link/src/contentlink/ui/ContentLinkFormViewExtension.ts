@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";

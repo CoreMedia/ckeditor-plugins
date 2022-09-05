@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 /**
  * A wrapper for DOM nodes, to store changes to be applied to the DOM structure
  * later on.

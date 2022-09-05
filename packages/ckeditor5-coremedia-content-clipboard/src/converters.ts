@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentDropDataCache from "./ContentDropDataCache";

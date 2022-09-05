@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import Config from "@ckeditor/ckeditor5-utils/src/config";
 import { parseLinkTargetConfig } from "../../../src/linktarget/config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";

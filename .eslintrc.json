@@ -95,7 +95,7 @@
     "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
 
     // eslint-plugin-no-null
-    "no-null/no-null": "warn",
+    "no-null/no-null": "error",
 
     // eslint-plugin-jsdoc
     "jsdoc/check-alignment": "error",

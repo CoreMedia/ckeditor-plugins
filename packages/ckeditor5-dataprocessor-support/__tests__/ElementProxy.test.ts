@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import ElementProxy, { ElementFilterRule, ElementFilterParams } from "../src/ElementProxy";
 
 import "jest-xml-matcher";

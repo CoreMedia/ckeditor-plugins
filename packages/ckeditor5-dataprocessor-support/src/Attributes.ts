@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
 
 /**

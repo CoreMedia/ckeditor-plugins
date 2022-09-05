@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
 import RichTextSchema, { Strictness } from "../RichTextSchema";
