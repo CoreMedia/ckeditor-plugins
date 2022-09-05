@@ -133,8 +133,7 @@ export default class LoggerProvider {
       // substring: Remove hash
       const hash: string = window.location.hash.substring(1);
       const hashParams: string[] = hash.split(/&/);
-      for (let i = 0; i < hashParams.length; i++) {
-        const hashParam: string = hashParams[i];
+      for (const hashParam of hashParams) {
         if (key === hashParam) {
           return true;
         }
