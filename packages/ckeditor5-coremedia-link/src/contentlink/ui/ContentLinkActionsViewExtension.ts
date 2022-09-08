@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
@@ -114,7 +116,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));
 
     formView.on("cancel", () => {
-      const initialValue: string = <string>this.editor.commands.get("link")?.value;
+      const initialValue: string = this.editor.commands.get("link")?.value as string;
       linkUI.actionsView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });

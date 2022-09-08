@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
@@ -77,7 +79,7 @@ export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOption
         result.push(defaultDefinition);
       } else {
         result.push({
-          name: name,
+          name,
           icon: "",
           title: name,
         });

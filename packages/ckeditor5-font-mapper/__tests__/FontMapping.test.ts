@@ -5,7 +5,7 @@ import { symbolFontMap } from "../src/SymbolFontMap";
  * A list of characters which are used as test inputs and the matching expectation.
  * First entry in the array is the expected result if using the second entry like it is in symbol font.
  */
-const mappedCharacterToLowCharCode: Array<Array<string>> = [
+const mappedCharacterToLowCharCode: string[][] = [
   ["!", "!"],
   ["∀", '"'],
   ["#", "#"],

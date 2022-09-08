@@ -1,4 +1,7 @@
-export type ClipboardItemConfig = { type: string; content: string };
+export interface ClipboardItemConfig {
+  type: string;
+  content: string;
+}
 /**
  * Accessor for the Clipboard Web-API {@link https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API}.
  *

@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import ElementProxy, { ElementFilterRule } from "./ElementProxy";
 import TextProxy, { TextFilterRule } from "./TextProxy";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
@@ -76,7 +78,7 @@ class HtmlFilter {
   public applyTo(root: Node): void {
     const logger = HtmlFilter.#logger;
 
-    logger.debug(`Applying filter to root node ${root.nodeName}.`, { root: root });
+    logger.debug(`Applying filter to root node ${root.nodeName}.`, { root });
     // In CKEditor 4 we had an extra filter for the root node. If we want to introduce
     // this again, we should do it here.
     this.#applyToChildNodes(root);
@@ -85,7 +87,7 @@ class HtmlFilter {
   #applyToChildNodes(parent: Node): void {
     const logger = HtmlFilter.#logger;
 
-    logger.debug(`Applying filter to child nodes of ${parent.nodeName}.`, { parent: parent });
+    logger.debug(`Applying filter to child nodes of ${parent.nodeName}.`, { parent });
     let next: Node | null = parent.firstChild;
     while (next) {
       next = this.#applyToCurrent(parent, next);
@@ -102,7 +104,7 @@ class HtmlFilter {
   #applyToCurrent(parent: Node, currentNode: Node): Node | null {
     const logger = HtmlFilter.#logger;
 
-    logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent: parent, currentNode: currentNode });
+    logger.debug(`Applying filter to ${currentNode.nodeName}.`, { parent, currentNode });
 
     const next = currentNode.nextSibling;
     let newCurrentSupplier: () => Node | null = () => null;
@@ -144,14 +146,14 @@ class HtmlFilter {
     if (logger.isDebugEnabled()) {
       if (newCurrent) {
         logger.debug(`Will restart with new node ${newCurrent.nodeName}.`, {
-          parent: parent,
+          parent,
           replacedNode: currentNode,
           next: newCurrent,
         });
       } else {
         logger.debug(`Will continue with next sibling of ${currentNode.nodeName}.`, {
-          parent: parent,
-          currentNode: currentNode,
+          parent,
+          currentNode,
           next: currentNode.nextSibling,
         });
       }

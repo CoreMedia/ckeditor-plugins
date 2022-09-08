@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/naming-convention: off */
 // noinspection InnerHTMLJS
 
 import "jest-xml-matcher";
@@ -6,7 +7,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
-//@ts-expect-error
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
 
 /**
@@ -135,7 +136,7 @@ describe("HtmlFilter.applyTo()", () => {
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }before`;
             },
-            el: (params) => {
+            "el": (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
           },
@@ -173,12 +174,12 @@ describe("HtmlFilter.applyTo()", () => {
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }before`;
             },
-            $: (params) => {
+            "$": (params) => {
               params.node.attributes.name = `${
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }after`;
             },
-            el: (params) => {
+            "el": (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
           },
@@ -197,16 +198,16 @@ describe("HtmlFilter.applyTo()", () => {
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }before`;
             },
-            $: (params) => {
+            "$": (params) => {
               params.node.attributes.name = `${
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
               }after`;
             },
-            el: (params) => {
+            "el": (params) => {
               params.node.name = "replacement";
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
             },
-            replacement: (params) => {
+            "replacement": (params) => {
               // This should not be triggered.
               params.node.attributes.name = `${
                 params.node.attributes.name ? params.node.attributes.name + "-" : ""
@@ -236,7 +237,7 @@ describe("HtmlFilter.applyTo()", () => {
 
     test(name, () => {
       document.body.innerHTML = testData.from.trim();
-      const root: Node = <Node>document.body.firstChild;
+      const root: Node = document.body.firstChild as Node;
       const filter = new HtmlFilter(testData.rules, MOCK_EDITOR);
 
       filter.applyTo(root);

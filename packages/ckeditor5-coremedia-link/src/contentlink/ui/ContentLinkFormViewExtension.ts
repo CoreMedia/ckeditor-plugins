@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
@@ -40,7 +42,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const { formView } = linkUI;
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
-    const linkCommand = <Command>editor.commands.get("link");
+    const linkCommand = editor.commands.get("link") as Command;
 
     formView.set({
       contentUriPath: undefined,
@@ -115,7 +117,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
     formView.on("cancel", () => {
-      const initialValue: string = <string>this.editor.commands.get("link")?.value;
+      const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
@@ -230,7 +232,7 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const contentUriPaths: Array<string> | null = receiveUriPathsFromDragDropService();
+    const contentUriPaths: string[] | null = receiveUriPathsFromDragDropService();
 
     if (!contentUriPaths) {
       logger.debug(

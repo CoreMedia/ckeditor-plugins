@@ -96,7 +96,7 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   useFillerType(type: "default" | "marked"): void {
-    this.#domConverter.blockFillerMode = type == "marked" ? "markedNbsp" : "nbsp";
+    this.#domConverter.blockFillerMode = type === "marked" ? "markedNbsp" : "nbsp";
   }
 
   /**
@@ -162,9 +162,9 @@ class RichTextDataProcessor implements DataProcessor {
       });
     }
     return {
-      richTextDocument: richTextDocument,
-      domFragment: domFragment,
-      fragmentAsStringForDebugging: fragmentAsStringForDebugging,
+      richTextDocument,
+      domFragment,
+      fragmentAsStringForDebugging,
     };
   }
 
@@ -188,7 +188,7 @@ class RichTextDataProcessor implements DataProcessor {
   #fragmentToString(domFragment: Node | DocumentFragment): string {
     return (
       Array.from(domFragment.childNodes)
-        .map((cn) => (<Element>cn).outerHTML || cn.nodeValue)
+        .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
         .reduce((result, s) => (result || "") + (s || "")) || ""
     );
   }
@@ -247,7 +247,7 @@ class RichTextDataProcessor implements DataProcessor {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
         out: dataView,
-        viewFragment: viewFragment,
+        viewFragment,
       });
     }
 

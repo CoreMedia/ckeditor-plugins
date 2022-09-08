@@ -107,7 +107,7 @@ export class Differencing {
 
   static #xdiffAttrs(attrs: XDiffAttributes): string[] {
     const xdiffAttr = Differencing.#xdiffAttr;
-    return Object.entries(attrs).map(([key, value]) => xdiffAttr(<XDiffAttribute>key, value));
+    return Object.entries(attrs).map(([key, value]) => xdiffAttr(key as XDiffAttribute, value));
   }
 
   /**
@@ -238,7 +238,7 @@ export class Differencing {
   simpleImg(href: string, config: XDiffSpanConfig & { class?: string }): string {
     let attrs: ImageAttributes = {
       "xlink:href": href,
-      alt: "Some Image",
+      "alt": "Some Image",
     };
 
     if (!!config.class) {

@@ -18,7 +18,7 @@ interface WorkAreaService extends ServiceObject {
    *
    * @returns the promise indicating success or failure.
    */
-  openEntitiesInTabs(entities: Array<unknown>, background?: boolean, options?: unknown): Promise<unknown>;
+  openEntitiesInTabs(entities: unknown[], background?: boolean, options?: unknown): Promise<unknown>;
 
   /**
    * Determines whether entities given by their REST URIs can be opened in a tab.
@@ -26,7 +26,7 @@ interface WorkAreaService extends ServiceObject {
    * @param entityUris - the entities given by their URIs.
    * @returns the promise holding whether the entities can be opened in a tab
    */
-  canBeOpenedInTab(entityUris: Array<unknown>): Promise<unknown>;
+  canBeOpenedInTab(entityUris: unknown[]): Promise<unknown>;
 }
 
 export default WorkAreaService;

@@ -1,5 +1,6 @@
+/* eslint no-null/no-null: off */
+
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import { DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
@@ -27,7 +28,7 @@ import { Subscription } from "rxjs";
  * `ModelBoundSubscriptionPlugin` by calling `addSubscription`.
  */
 export default class ModelBoundSubscriptionPlugin extends Plugin {
-  static readonly #modelElements: Array<string> = [];
+  static readonly #modelElements: string[] = [];
   static readonly ID_MODEL_ATTRIBUTE_NAME = "cmSubscriptionId";
   static readonly #SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
   static readonly PLUGIN_NAME = "ModelBoundSubscriptionPlugin";
@@ -96,7 +97,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         .filter((change) => change.type === "insert") // an insert on the graveyard means a removal on the root document
         .map((value) => value as DiffItemInsert)
         .filter(ModelBoundSubscriptionPlugin.#isOnGraveyard);
-      const allRemovedElementsWithSubscriptions: Array<ModelElement> = [];
+      const allRemovedElementsWithSubscriptions: ModelElement[] = [];
 
       for (const entry of insertsOnGraveyard) {
         const nodeAfter = entry.position.nodeAfter;
@@ -133,7 +134,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         .filter((value) => value !== null && value.is("element"))
         .map((value) => value as ModelElement);
 
-      const insertedRegisteredElements: Array<ModelElement> = [];
+      const insertedRegisteredElements: ModelElement[] = [];
       for (const insertion of insertions) {
         insertedRegisteredElements.push(...ModelBoundSubscriptionPlugin.#findRegisteredModelElements(insertion));
       }
@@ -159,12 +160,12 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return false;
   }
 
-  static #recursiveSearch(element: ModelElement): Array<ModelElement> {
+  static #recursiveSearch(element: ModelElement): ModelElement[] {
     if (ModelBoundSubscriptionPlugin.#isSubscribedModel(element)) {
       return [element];
     }
     const children = Array.from(element.getChildren());
-    const modelElements: Array<ModelElement> = [];
+    const modelElements: ModelElement[] = [];
     for (const child of children) {
       if (child.is("element")) {
         modelElements.push(...this.#recursiveSearch(child as ModelElement));
@@ -173,7 +174,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     return modelElements;
   }
 
-  static #findRegisteredModelElements(element: ModelElement): Array<ModelElement> {
+  static #findRegisteredModelElements(element: ModelElement): ModelElement[] {
     if (ModelBoundSubscriptionPlugin.#isSubscribedModel(element)) {
       return [element];
     }

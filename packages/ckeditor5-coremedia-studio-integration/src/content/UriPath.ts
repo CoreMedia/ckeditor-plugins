@@ -98,7 +98,7 @@ export const requireContentUriPath = (str: string): UriPath => {
  * @param uriPaths - string to validate and possibly transform
  * @throws InvalidCkeModelUriError in case of unmatched string
  */
-export const requireContentCkeModelUris = (uriPaths: Array<string>): Array<ModelUri> => {
+export const requireContentCkeModelUris = (uriPaths: string[]): ModelUri[] => {
   return uriPaths.map((uriPath) => {
     return requireContentCkeModelUri(uriPath);
   });

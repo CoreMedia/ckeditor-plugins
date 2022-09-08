@@ -30,9 +30,7 @@ type ContentsById = Map<number, MockContentConfig>;
 /**
  * Function to resolve an ID or URI Path to a `MockContent`.
  */
-interface MockContentProvider {
-  (idOrUriPath: number | UriPath): MockContent;
-}
+type MockContentProvider = (idOrUriPath: number | UriPath) => MockContent;
 
 /**
  * Default provider will just serve static contents without respecting any

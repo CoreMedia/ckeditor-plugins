@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -276,12 +278,12 @@ export default class ContentClipboard extends Plugin {
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).
     model.change(() => {
-      this.fire("contentInsertion", <ContentInsertionEventData>{
+      this.fire("contentInsertion", {
         content: new ModelDocumentFragment(),
         method: data.method,
         dataTransfer: data.dataTransfer,
         targetRanges: data.targetRanges,
-      });
+      } as ContentInsertionEventData);
     });
   };
 

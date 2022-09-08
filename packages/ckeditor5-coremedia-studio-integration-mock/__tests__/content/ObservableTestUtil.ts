@@ -4,9 +4,7 @@ import { take } from "rxjs/operators";
 /**
  * Assertions to run when done.
  */
-export interface ObservableAssertions<T> {
-  (actual: T[]): void;
-}
+export type ObservableAssertions<T> = (actual: T[]) => void;
 
 /**
  * Tests the given observable and hands over the retrieved values

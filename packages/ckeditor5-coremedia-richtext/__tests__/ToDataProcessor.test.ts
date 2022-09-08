@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import "jest-xml-matcher";
 import ToDataProcessor from "../src/ToDataProcessor";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
@@ -47,7 +49,7 @@ function fib(idx: number, memo?: Map<number, number>): number {
   return result;
 }
 
-//@ts-expect-error
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
 const PARSER = new DOMParser();
 
@@ -288,7 +290,7 @@ describe("RichTextDataProcessor.toData", () => {
       const elements = viewData.querySelectorAll("*").length;
       return {
         data: dataProcessor.toData(viewData),
-        elements: elements,
+        elements,
       };
     }
 

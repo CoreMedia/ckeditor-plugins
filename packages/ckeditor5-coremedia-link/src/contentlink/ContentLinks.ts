@@ -30,7 +30,7 @@ export default class ContentLinks extends Plugin {
 
   init(): void {
     const editor = this.editor;
-    const linkCommand = <LinkCommand>editor.commands.get("link");
+    const linkCommand = editor.commands.get("link") as LinkCommand;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     ContentLinks.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI);
@@ -40,7 +40,7 @@ export default class ContentLinks extends Plugin {
       linkUI,
       "_hideUI",
       () => {
-        const commandValue: string = <string>linkCommand?.value ?? "";
+        const commandValue: string = (linkCommand?.value ?? "") as string;
         const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
         const { formView } = linkUI;
         formView.set({ contentUriPath: value });
@@ -52,7 +52,7 @@ export default class ContentLinks extends Plugin {
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {
     const { formView } = linkUI;
-    formView.stopListening(<Emitter>(<unknown>document), "mousedown");
+    formView.stopListening(document as unknown as Emitter, "mousedown");
   }
 
   /**
@@ -88,16 +88,16 @@ export default class ContentLinks extends Plugin {
   }): void {
     const EDITOR_CLASS = "ck-editor";
     emitter.listenTo(
-      <Emitter>(<unknown>document),
+      document as unknown as Emitter,
       "mousedown",
-      (evt: unknown, domEvt: { composedPath: () => Array<Element>; target: HTMLElement }) => {
+      (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {
           return;
         }
 
         // Check if `composedPath` is `undefined` in case the browser does not support native shadow DOM.
         // Can be removed when all supported browsers support native shadow DOM.
-        const path: Array<Element> = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
+        const path: Element[] = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
 
         // Do not close balloon if user clicked on draggable outside any editor component
         const editorElements = document.getElementsByClassName(EDITOR_CLASS);
@@ -123,14 +123,14 @@ export default class ContentLinks extends Plugin {
       }
     );
     emitter.listenTo(
-      <Emitter>(<unknown>document),
+      document as unknown as Emitter,
       "click",
-      (evt: unknown, domEvt: { composedPath: () => Array<Element>; target: HTMLElement }) => {
+      (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
         if (!activator()) {
           return;
         }
 
-        const path = typeof domEvt.composedPath == "function" ? domEvt.composedPath() : [];
+        const path = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
         const editorElements = document.getElementsByClassName(EDITOR_CLASS);
 
         for (const editorElement of editorElements) {

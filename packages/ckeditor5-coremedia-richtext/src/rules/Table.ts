@@ -160,7 +160,7 @@ class TableWrapper extends ElementWrapper {
    * Returns all existing table sections.
    */
   get sections(): Element[] {
-    return <Element[]>[this.tHead, ...this.tBodies, this.tFoot].filter(Boolean);
+    return [this.tHead, ...this.tBodies, this.tFoot].filter(Boolean) as Element[];
   }
 
   /**

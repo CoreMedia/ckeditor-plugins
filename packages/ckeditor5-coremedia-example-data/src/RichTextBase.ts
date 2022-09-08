@@ -28,7 +28,9 @@ export type Direction = "ltr" | "rtl";
 /**
  * Represents just any attributes.
  */
-export type AnyAttributes = { [key: string]: unknown };
+export interface AnyAttributes {
+  [key: string]: unknown;
+}
 
 /**
  * `coreattrs` attributes according to DTD.
@@ -41,9 +43,9 @@ export interface CoreAttributes {
  * `i18n` attributes according to DTD.
  */
 export interface InternationalizationAttributions {
-  lang?: LanguageCode;
+  "lang"?: LanguageCode;
   "xml:lang"?: LanguageCode;
-  dir?: Direction;
+  "dir"?: Direction;
 }
 
 /**
@@ -293,9 +295,9 @@ export const sup = (content: Content = "", attrs: Attributes = {}): string => {
  * Attributes applicable to `<img>`.
  */
 export interface ImageAttributes extends Attributes {
-  alt: Text;
-  height?: Length;
-  width?: Length;
+  "alt": Text;
+  "height"?: Length;
+  "width"?: Length;
   "xlink:type"?: "simple";
   "xlink:href": Uri;
   "xlink:role"?: CDATA;
@@ -431,7 +433,7 @@ export type List = typeof ul | typeof ol;
 export const richtext = (
   innerXml: Content = "",
   addXmlDeclaration = true,
-  enforcedNamespaces: ReadonlyArray<string> = []
+  enforcedNamespaces: readonly string[] = []
 ): string => {
   let result = "";
   if (addXmlDeclaration) {

@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { AtomicOrArray, isObject } from "./MockContentUtils";
 import MigrateTo from "./MigrateTo";
 import { observeMutableProperty } from "./ObservableMutableProperty";
@@ -28,8 +30,8 @@ const isBlobData = (value: unknown): value is BlobData => {
   if (!isObject(value)) {
     return false;
   }
-  const hasValue = () => value.hasOwnProperty("value") && typeof value["value"] === "string";
-  const hasMime = () => value.hasOwnProperty("mime") && typeof value["mime"] === "string";
+  const hasValue = () => value.hasOwnProperty("value") && typeof value.value === "string";
+  const hasMime = () => value.hasOwnProperty("mime") && typeof value.mime === "string";
   return hasValue() && hasMime();
 };
 
@@ -150,7 +152,7 @@ const transformDefaultProviders = <T extends MutablePropertiesConfig>(
  * @param config - blob configuration to transform
  */
 const transformBlobConfig = (config: AtomicOrArray<BlobTypeConfig>): BlobType[] => {
-  const configs = (<BlobTypeConfig[]>[]).concat(config);
+  const configs = ([] as BlobTypeConfig[]).concat(config);
   return configs.map((c) => {
     if (!c) {
       return null;
@@ -185,9 +187,9 @@ const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
 
   return {
     ...config,
-    name: (<NameType[]>[]).concat(intermediateName),
-    editing: (<EditingType[]>[]).concat(intermediateEditing),
-    readable: (<ReadableType[]>[]).concat(intermediateReadable),
+    name: ([] as NameType[]).concat(intermediateName),
+    editing: ([] as EditingType[]).concat(intermediateEditing),
+    readable: ([] as ReadableType[]).concat(intermediateReadable),
     blob: transformBlobConfig(intermediateBlob),
   };
 };

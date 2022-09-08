@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { MockContentConfig } from "./MockContent";
 import {
   CONTENT_NAME_CHALLENGE_CHARSETS,

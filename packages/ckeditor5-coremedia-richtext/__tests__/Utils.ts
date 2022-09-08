@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 /**
  * Flattens a nested array of a given type.
  * @example
@@ -6,7 +8,7 @@
  * ```
  * @param arr - array to flatten
  */
-const flatten = <T>(arr: T[][]): T[] => (<T[]>[]).concat(...arr);
+const flatten = <T>(arr: T[][]): T[] => ([] as T[]).concat(...arr);
 
 /**
  * Decodes all entities to plain characters.
@@ -15,7 +17,7 @@ const decodeEntity = (str: string): string => {
   const ENTITY_ELEMENT = document.createElement("div");
   // noinspection InnerHTMLJS
   ENTITY_ELEMENT.innerHTML = str;
-  return <string>ENTITY_ELEMENT.textContent;
+  return ENTITY_ELEMENT.textContent as string;
 };
 
 /**

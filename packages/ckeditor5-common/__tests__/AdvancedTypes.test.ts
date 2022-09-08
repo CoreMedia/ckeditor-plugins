@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { isRaw } from "../src/AdvancedTypes";
 
 describe("AdvancedTypes", () => {
@@ -6,8 +8,8 @@ describe("AdvancedTypes", () => {
       const value = "some value";
       const obj: unknown = { value };
 
-      let actual1: string | undefined = undefined;
-      let actual2: string | undefined = undefined;
+      let actual1: string | undefined;
+      let actual2: string | undefined;
 
       if (typeof obj === "object" && !!obj) {
         if ("value" in obj) {

@@ -5,7 +5,7 @@ import { Subscription } from "rxjs";
  * Subscription will be stored for unsubscription to prevent memory leaks when the subscription reference is lost.
  */
 export default class SubscriptionCache {
-  subscriptionCache: Map<string, Array<Subscription>> = new Map<string, Array<Subscription>>();
+  subscriptionCache: Map<string, Subscription[]> = new Map<string, Subscription[]>();
 
   addSubscription(cmId: string, subscription: Subscription): void {
     const subscriptions = this.subscriptionCache.get(cmId);

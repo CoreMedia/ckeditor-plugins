@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
@@ -47,7 +49,7 @@ class ClassList implements DOMTokenList {
    * @throws DOMException on any mismatched token
    */
   #validate(...tokens: string[]): void {
-    const toValidate: string[] = (<string[]>[]).concat(tokens || []);
+    const toValidate: string[] = ([] as string[]).concat(tokens || []);
     toValidate.forEach((v) => {
       if (!v) {
         throw new DOMException("The token provided must not be empty.");
@@ -64,7 +66,7 @@ class ClassList implements DOMTokenList {
    * Returns the current `class` value. Empty string will be returned, if unset.
    */
   get value(): string {
-    return this.#proxy.attributes["class"] || "";
+    return this.#proxy.attributes.class || "";
   }
 
   /**
@@ -76,9 +78,9 @@ class ClassList implements DOMTokenList {
    */
   set value(value: string) {
     if (!value) {
-      delete this.#proxy.attributes["class"];
+      delete this.#proxy.attributes.class;
     } else {
-      this.#proxy.attributes["class"] = value;
+      this.#proxy.attributes.class = value;
     }
   }
 
@@ -365,7 +367,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @param delegate - the original element to wrap
    */
   static instantiateForTest(delegate: Element): ElementProxy {
-    return new ElementProxy(delegate, <Editor>{});
+    return new ElementProxy(delegate, {} as Editor);
   }
 
   /**
@@ -460,7 +462,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    */
   #persistAttributes(): PersistResponse {
-    const elementNamespaceAttribute: string | null = this.#attributes["xmlns"];
+    const elementNamespaceAttribute: string | null = this.#attributes.xmlns;
     if (!!elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
@@ -518,7 +520,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
         if (uri) {
           targetElement.setAttributeNS(uri, key, value);
           // Publish Namespace to root element.
-          ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES["xmlns"].uri, `xmlns:${prefix}`, uri);
+          ownerDocument.documentElement.setAttributeNS(DEFAULT_NAMESPACES.xmlns.uri, `xmlns:${prefix}`, uri);
         } else {
           targetElement.setAttribute(key, value);
         }
@@ -552,8 +554,8 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @returns newly created element, for which filtering should be re-applied.
    */
   #persistReplaceBy(newName: string, namespace?: string | null): PersistResponse {
-    if (!namespace && !!this.attributes["xmlns"]) {
-      return this.#persistReplaceBy(newName, this.attributes["xmlns"]);
+    if (!namespace && !!this.attributes.xmlns) {
+      return this.#persistReplaceBy(newName, this.attributes.xmlns);
     }
     let newElement: Element;
     const ownerDocument = this.ownerDocument;
@@ -654,6 +656,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * remove the attribute from the element.
    */
   public get attributes(): Attributes {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     return new Proxy(this.#attributes, {
       defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
@@ -807,9 +810,7 @@ interface ElementFilterParams {
 /**
  * Function interface: `(params: ElementFilterParams) => void`.
  */
-interface ElementFilterRule {
-  (params: ElementFilterParams): void;
-}
+type ElementFilterRule = (params: ElementFilterParams) => void;
 
 /**
  * Combines all filter rules into one.

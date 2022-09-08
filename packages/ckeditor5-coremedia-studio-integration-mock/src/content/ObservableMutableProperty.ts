@@ -1,3 +1,5 @@
+/* eslint no-restricted-globals: off */
+
 import Delayed from "./Delayed";
 import { AtomicOrArray, increaseUpToAndRestart } from "./MockContentUtils";
 import { Observable, Subscriber, TeardownLogic } from "rxjs";
@@ -54,7 +56,7 @@ class MutablePropertyObservationHandler<T> {
    */
   constructor(delays: Delayed, property: AtomicOrArray<T>) {
     const { initialDelayMs, changeDelayMs } = delays;
-    this.#values = (<T[]>[]).concat(property);
+    this.#values = ([] as T[]).concat(property);
 
     // Some convenience on-before calculation.
     this.#valuesLength = this.#values.length;

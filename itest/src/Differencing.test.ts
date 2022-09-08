@@ -227,9 +227,9 @@ describe("Differencing Feature", () => {
           xdiff.img(
             { type: "changed", changes, ...EOD },
             {
-              alt: name,
+              "alt": name,
               "xlink:href": blobRef,
-              class: "float--right",
+              "class": "float--right",
             }
           )
         )

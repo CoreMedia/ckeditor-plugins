@@ -7,7 +7,6 @@ import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 

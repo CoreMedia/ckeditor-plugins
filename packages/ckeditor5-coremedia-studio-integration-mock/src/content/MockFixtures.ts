@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/naming-convention: off */
+
 /**
  * Example Blob Fixture for 10×10 Red PNG.
  */

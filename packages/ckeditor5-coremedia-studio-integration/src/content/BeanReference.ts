@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 const logger = LoggerProvider.getLogger("BeanReference");

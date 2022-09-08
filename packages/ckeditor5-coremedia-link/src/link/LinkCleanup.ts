@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -120,7 +122,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     return model.document.differ
       .getChanges()
       .filter(isRemoveLinkHrefAttribute)
-      .map((c) => (<DiffItemAttribute>c).range);
+      .map((c) => (c as DiffItemAttribute).range);
   };
 
   static readonly #fixOrphanedAttribute = (
@@ -163,7 +165,7 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }
-  const diffItemAttribute: DiffItemAttribute = <DiffItemAttribute>diffItem;
+  const diffItemAttribute: DiffItemAttribute = diffItem as DiffItemAttribute;
   // We must not simply check for 'falsy' here, as an empty string does not
   // represent a deletion of the attribute, but signals (you guessed it), that
   // the attribute got set to an empty string.

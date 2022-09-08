@@ -1,7 +1,6 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ModelPosition from "@ckeditor/ckeditor5-engine/src/model/position";
-import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import ContentDropDataCache from "./ContentDropDataCache";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
@@ -18,8 +17,8 @@ export default class MarkerRepositionUtil {
     MarkerRepositionUtil.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, markerData);
   }
 
-  static #moveMarkerForPreviousItemsToLeft(editor: Editor, beforeItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<MarkerData> = MarkerRepositionUtil.#findMarkers(
+  static #moveMarkerForPreviousItemsToLeft(editor: Editor, beforeItemPosition: ModelPosition, markerData: MarkerData) {
+    const markers: MarkerData[] = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
       MarkerRepositionUtil.#markerBeforeFilterPredicate
@@ -28,8 +27,8 @@ export default class MarkerRepositionUtil {
     MarkerRepositionUtil.#moveMarkersTo(editor, markers, beforeItemPosition);
   }
 
-  static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: Position, markerData: MarkerData) {
-    const markers: Array<MarkerData> = MarkerRepositionUtil.#findMarkers(
+  static #moveMarkerForNextItemsToTheRight(editor: Editor, afterItemPosition: ModelPosition, markerData: MarkerData) {
+    const markers: MarkerData[] = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
       MarkerRepositionUtil.#markerAfterFilterPredicate
@@ -37,7 +36,7 @@ export default class MarkerRepositionUtil {
     MarkerRepositionUtil.#moveMarkersTo(editor, markers, afterItemPosition);
   }
 
-  static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): Array<MarkerData> {
+  static #findMarkers(editor: Editor, markerData: MarkerData, filterFunction: MarkerFilterFunction): MarkerData[] {
     const marker = editor.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
     if (!marker) {
       return [];
@@ -49,7 +48,7 @@ export default class MarkerRepositionUtil {
     });
   }
 
-  static #markersAtPosition(editor: Editor, position: Position): Array<MarkerData> {
+  static #markersAtPosition(editor: Editor, position: ModelPosition): MarkerData[] {
     return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
       .filter((value) => {
         return value.getStart().isEqual(position);
@@ -59,7 +58,7 @@ export default class MarkerRepositionUtil {
       });
   }
 
-  static #moveMarkersTo(editor: Editor, markerData: Array<MarkerData>, position: Position): void {
+  static #moveMarkersTo(editor: Editor, markerData: MarkerData[], position: ModelPosition): void {
     markerData.forEach((moveMarkerData: MarkerData) => {
       //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
       const moveMarkerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(moveMarkerData);

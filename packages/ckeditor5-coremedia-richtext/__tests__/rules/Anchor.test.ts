@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/naming-convention: off */
+
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 
 // noinspection HttpUrlsUsage
@@ -41,10 +43,10 @@ const attr_link_content_document_uapi = "coremedia:///cap/content/42";
 const wrapAnchor = (anchor: string): string =>
   `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"><p>${anchor}</p></div>`;
 
-type XLinkBehavior = {
+interface XLinkBehavior {
   show?: string;
   role?: string;
-};
+}
 type XlinkBehaviorDefinition = XLinkBehavior & {
   comment?: string;
   non_bijective?: boolean;
@@ -52,9 +54,9 @@ type XlinkBehaviorDefinition = XLinkBehavior & {
 /**
  * Represents an empty target attribute.
  */
-type ExpectedTargetToXlinkShowAndRole = {
+interface ExpectedTargetToXlinkShowAndRole {
   [target: string]: XlinkBehaviorDefinition;
-};
+}
 /**
  * The mapping we agreed upon for `xlink:show` to some target value.
  * `other` is skipped here, as it is used for special meaning, which is,
@@ -105,7 +107,7 @@ const show = {
 describe("CoreMediaRichTextConfig: Anchors", () => {
   // noinspection NonAsciiCharacters
   const specialCharacterTargets: ExpectedTargetToXlinkShowAndRole = {
-    äöü: {
+    "äöü": {
       comment: "Special Characters in target: Umlauts",
       show: "other",
       role: "äöü",
@@ -136,12 +138,12 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       comment: `Decision: Map ${show.new} to xlink:show=new as it was for CKEditor 4.`,
       show: "new",
     },
-    _top: {
+    "_top": {
       comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_top instead.",
       show: "other",
       role: "_top",
     },
-    _parent: {
+    "_parent": {
       comment: "Well-known target, which cannot be represented with xlink attributes. Mapped to other/_parent instead.",
       show: "other",
       role: "_parent",
@@ -235,7 +237,7 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
   const noTarget = "NoTarget";
   const expectedTargetToXlinkShowAndRole: ExpectedTargetToXlinkShowAndRole = {
     // TODO[cke]: Using [NO_TARGET] fails currently to compile in Babel. An update may help.
-    NoTarget: {
+    "NoTarget": {
       comment: "For no target, no xlink:show/xlink:role attributes should be added.",
     },
     "": {
@@ -243,7 +245,7 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
         "We assume empty targets to be non-existing. As the state disappears, it is not bijective as other mappings.",
       non_bijective: true,
     },
-    _role: {
+    "_role": {
       comment: "If artificial _role doesn't come with a role, assume to take it as target.",
       show: "other",
       role: "_role",
@@ -268,7 +270,7 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       // noinspection HtmlUnknownAttribute
       const expectedData = wrapAnchor(`<a xlink:href="${attr_link_external}"${dataShow}${dataRole}>${text}</a>`);
       const testData: DataProcessingTestCase = {
-        name: name,
+        name,
         data: expectedData,
         dataView: inputFromView,
       };

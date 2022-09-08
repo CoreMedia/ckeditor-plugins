@@ -56,7 +56,7 @@ describe("Image Features", () => {
     const data = richtext(
       p(
         img({
-          alt: name,
+          "alt": name,
           "xlink:href": blobReference(id),
         })
       )
@@ -110,7 +110,7 @@ describe("Image Features", () => {
     const data = richtext(
       p(
         img({
-          alt: name,
+          "alt": name,
           "xlink:href": blobReference(id),
         })
       )

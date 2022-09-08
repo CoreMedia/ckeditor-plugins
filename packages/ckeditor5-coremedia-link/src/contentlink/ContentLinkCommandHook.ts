@@ -227,7 +227,7 @@ class ContentLinkCommandHook extends Plugin {
   registerContentName(uriOrPath: UriPath | ModelUri, name: string): void {
     this.#trackingData.replacement = {
       modelUri: requireContentCkeModelUri(uriOrPath),
-      name: name,
+      name,
     };
   }
 
@@ -239,7 +239,7 @@ class ContentLinkCommandHook extends Plugin {
    */
   static #isTextNodeInsertion(value: DiffItem): boolean {
     if (value.type === "insert") {
-      const insertion = <DiffItemInsert>value;
+      const insertion = value as DiffItemInsert;
       // Unfortunately, insertion.position.textNode does not (yet) represent
       // the now added text node, but the text node the inserted one
       // may have been merged with.
@@ -254,7 +254,7 @@ class ContentLinkCommandHook extends Plugin {
    * @param value - value to cast
    */
   static #asDiffItemInsert(value: DiffItem): DiffItemInsert {
-    return <DiffItemInsert>value;
+    return value as DiffItemInsert;
   }
 
   /**
@@ -383,7 +383,7 @@ class ContentLinkCommandHook extends Plugin {
        */
       return false;
     }
-    const textProxy = <TextProxy>(<unknown>onlyItem);
+    const textProxy = onlyItem as unknown as TextProxy;
     return this.#replaceRawLink(writer, textProxy, range);
   }
 }

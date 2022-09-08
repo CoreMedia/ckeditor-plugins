@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
@@ -20,11 +22,11 @@ import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-comm
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
-type DowncastEventData = {
+interface DowncastEventData {
   item: ModelElement;
   attributeOldValue: string | null;
   attributeNewValue: string | null;
-};
+}
 type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void;
 
 /**

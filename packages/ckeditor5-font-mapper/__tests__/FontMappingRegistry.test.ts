@@ -43,7 +43,7 @@ it.each([
     fontMappingRegistry.registerFontMapping({
       font,
       map: fontMap,
-      mode: mode,
+      mode,
     });
     const newFontMapping = fontMappingRegistry.getFontMapping("anotherFont");
     expect(newFontMapping).toBeDefined();

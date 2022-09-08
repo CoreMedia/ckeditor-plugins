@@ -26,7 +26,7 @@ const xLinkActuateMapper = preserveAttributeAs("xlink:actuate", "data-xlink-actu
  */
 const xLinkHrefToDataAttribute = ({ attributes }: ElementProxy): void => {
   // It should have been checked before, that we have a href attribute set.
-  const href = <string>attributes["xlink:href"];
+  const href = attributes["xlink:href"] as string;
   delete attributes["xlink:href"];
   attributes["data-xlink-href"] = formatLink(href);
 };

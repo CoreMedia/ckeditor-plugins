@@ -1,10 +1,12 @@
+/* eslint no-null/no-null: off */
+
 import "jest-xml-matcher";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import TextProxy, { TextFilterRule } from "../src/TextProxy";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
-//@ts-expect-error
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
 const SERIALIZER = new XMLSerializer();
 const PARSER = new DOMParser();
@@ -147,10 +149,12 @@ describe("TextProxy.applyRules()", () => {
 
   describe.each<ApplyRulesData>(testData)("(%#) %s", (name, testData) => {
     function getTextNode(): Text {
-      const textNode: Text | null = <Text>(
-        inputDocument.evaluate(testData.nodePath, inputDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-          .singleNodeValue
-      );
+      const textNode: Text | null = inputDocument.evaluate(
+        testData.nodePath,
+        inputDocument,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE
+      ).singleNodeValue as Text;
 
       if (!textNode) {
         throw new Error(
@@ -164,10 +168,12 @@ describe("TextProxy.applyRules()", () => {
       if (!testData.restartPath) {
         return null;
       }
-      const restartNode: Node | null = <Node>(
-        expectedDocument.evaluate(testData.restartPath, expectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-          .singleNodeValue
-      );
+      const restartNode: Node | null = expectedDocument.evaluate(
+        testData.restartPath,
+        expectedDocument,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE
+      ).singleNodeValue as Node;
       if (!restartNode) {
         throw new Error(
           `Test Setup Issue: Unable resolving XPath '${testData.restartPath}' to expected restart node in: ${testData.to}`

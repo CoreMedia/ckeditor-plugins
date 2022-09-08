@@ -1,3 +1,5 @@
+/* eslint no-null/no-null: off */
+
 import "jest-xml-matcher";
 import NodeProxy from "../src/NodeProxy";
 
@@ -9,9 +11,7 @@ Node.prototype.toString = function nodeToString(): string {
   return `${this.nodeName}`;
 };
 
-interface NodeProxyAction {
-  (proxy: NodeProxy): unknown;
-}
+type NodeProxyAction = (proxy: NodeProxy) => unknown;
 
 describe("NodeProxy.constructor", () => {
   let rootNode: Node;
@@ -144,7 +144,7 @@ describe("Immutable NodeProxy", () => {
 
   beforeEach(() => {
     const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
-    const childNode = <Node>document.getRootNode().firstChild;
+    const childNode = document.getRootNode().firstChild as Node;
     immutableProxy = new NodeProxy(childNode, false);
   });
 
@@ -160,8 +160,8 @@ describe("Immutable NodeProxy", () => {
 describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
 
   const emptyProxy: NodeProxy = new NodeProxy(childNode);
   const nonEmptyProxy: NodeProxy = new NodeProxy(rootNode);
@@ -189,8 +189,8 @@ describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
 describe("NodeProxy.ownerDocument", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
 
   test.each([[rootNode], [childNode]])("(%#) Should provide expected ownerDocument for %s", (node) => {
     expect(new NodeProxy(node).ownerDocument).toStrictEqual(document);
@@ -200,8 +200,8 @@ describe("NodeProxy.ownerDocument", () => {
 describe("NodeProxy.parentNode", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
 
   test.each([
     [childNode, rootNode],
@@ -214,8 +214,8 @@ describe("NodeProxy.parentNode", () => {
 describe("NodeProxy.parentElement", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
 
   test.each([
     [childNode, rootNode],
@@ -228,8 +228,8 @@ describe("NodeProxy.parentElement", () => {
 describe("NodeProxy.name and NodeProxy.realName", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
 
   test.each([[childNode], [rootNode]])("(%#) Should provide expected name and realName for %s", (node) => {
     const { name, realName } = new NodeProxy(node);
@@ -241,11 +241,11 @@ describe("NodeProxy.name and NodeProxy.realName", () => {
 describe("NodeProxy.singleton", () => {
   const document = PARSER.parseFromString("<parent><child><pair1/><pair2/><pair3/></child></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
-  const pair1 = <Node>childNode.firstChild;
-  const pair2 = <Node>pair1.nextSibling;
-  const pair3 = <Node>pair2.nextSibling;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
+  const pair1 = childNode.firstChild as Node;
+  const pair2 = pair1.nextSibling as Node;
+  const pair3 = pair2.nextSibling as Node;
 
   test.each([
     [documentRootNode, true],
@@ -262,11 +262,11 @@ describe("NodeProxy.singleton", () => {
 describe("NodeProxy.lastNode", () => {
   const document = PARSER.parseFromString("<parent><child><pair1/><pair2/><pair3/></child></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
-  const pair1 = <Node>childNode.firstChild;
-  const pair2 = <Node>pair1.nextSibling;
-  const pair3 = <Node>pair2.nextSibling;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
+  const pair1 = childNode.firstChild as Node;
+  const pair2 = pair1.nextSibling as Node;
+  const pair3 = pair2.nextSibling as Node;
 
   test.each([
     [documentRootNode, true],
@@ -283,11 +283,11 @@ describe("NodeProxy.lastNode", () => {
 describe("NodeProxy.findFirst", () => {
   const document = PARSER.parseFromString("<parent><child><pair1/><pair2/><pair3/></child></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
-  const rootNode = <Node>documentRootNode.firstChild;
-  const childNode = <Node>rootNode.firstChild;
-  const pair1 = <Node>childNode.firstChild;
-  const pair2 = <Node>pair1.nextSibling;
-  const pair3 = <Node>pair2.nextSibling;
+  const rootNode = documentRootNode.firstChild as Node;
+  const childNode = rootNode.firstChild as Node;
+  const pair1 = childNode.firstChild as Node;
+  const pair2 = pair1.nextSibling as Node;
+  const pair3 = pair2.nextSibling as Node;
 
   test.each([
     [documentRootNode, rootNode],
@@ -446,9 +446,8 @@ describe("NodeProxy.persistToDom", () => {
   describe.each<PersistTest>(testData)("(%#) %s", (name, data) => {
     test.each([[true], [false]])("(%#) has ownerDocument: %s", (hasOwnerDocument: boolean) => {
       const document = PARSER.parseFromString(dom, "text/xml");
-      const node = <Node>(
-        document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
-      );
+      const node = document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+        .singleNodeValue as Node;
       const proxy = new NodeProxy(node);
 
       if (!hasOwnerDocument) {
@@ -458,12 +457,14 @@ describe("NodeProxy.persistToDom", () => {
         });
       }
 
-      let expectedRestartFrom: Node | undefined = undefined;
+      let expectedRestartFrom: Node | undefined;
       if (!!data.expectedRestartFromXPath) {
-        expectedRestartFrom = <Node>(
-          document.evaluate(data.expectedRestartFromXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-            .singleNodeValue
-        );
+        expectedRestartFrom = document.evaluate(
+          data.expectedRestartFromXPath,
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE
+        ).singleNodeValue as Node;
       }
       data.action(proxy);
       const { continueWith, abort } = proxy.persistToDom();
