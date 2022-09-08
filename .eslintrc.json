@@ -97,6 +97,8 @@
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/unified-signatures": "error",
 
+    "@typescript-eslint/prefer-ts-expect-error": "error",
+
     // eslint-plugin-import
     "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
 
