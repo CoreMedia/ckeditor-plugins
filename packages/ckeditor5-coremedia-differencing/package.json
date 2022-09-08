@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.18.10",
-    "@babel/core": "^7.18.13",
+    "@babel/core": "^7.19.0",
     "@ckeditor/ckeditor5-core": "^35.1.0",
     "@ckeditor/ckeditor5-engine": "^35.1.0",
     "@ckeditor/ckeditor5-utils": "^35.1.0",
