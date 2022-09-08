@@ -57,6 +57,7 @@
 
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/consistent-type-assertions": ["error", { "assertionStyle": "as" }],
+    "@typescript-eslint/no-non-null-assertion": "error",
 
     "max-statements-per-line": ["error", { "max": 1 }],
 

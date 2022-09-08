@@ -23,7 +23,7 @@ describe("DefaultTarget", () => {
       const options = DEFAULT_TARGETS_ARRAY.find((definition) => name === definition.name);
       // Precondition-check
       expect(options).toBeDefined();
-      const { title: actualTitle } = options!;
+      const { title: actualTitle } = options ?? { title: "unexpected undefined state" };
       expect(actualTitle).toStrictEqual(expectedTitle);
     });
 
@@ -37,7 +37,8 @@ describe("DefaultTarget", () => {
       const options = DEFAULT_TARGETS_ARRAY.find((definition) => name === definition.name);
       // Precondition-check
       expect(options).toBeDefined();
-      const { icon: actualIcon } = options!;
+      // default: provoke failure, unexpected as previous check guaranteed options to be defined.
+      const { icon: actualIcon } = options ?? { icon: false };
       expect(actualIcon).toBeTruthy();
     });
   });
@@ -77,7 +78,7 @@ describe("DefaultTarget", () => {
       const options = getDefaultTargetDefinition(name);
       // Precondition-check
       expect(options).toBeDefined();
-      const { title: actualTitle } = options!;
+      const { title: actualTitle } = options ?? { title: "unexpected undefined state" };
       expect(actualTitle).toStrictEqual(expectedTitle);
     });
   });
