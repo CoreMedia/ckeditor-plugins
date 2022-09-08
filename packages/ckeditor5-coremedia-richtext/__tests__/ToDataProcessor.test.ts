@@ -101,10 +101,6 @@ type NamedTestData = [
 ];
 
 /**
- * Processing Instructions.
- */
-const pi = `<?xml version="1.0" encoding="utf-8"?>`;
-/**
  * Some text fixture for testing.
  */
 const fxLtrText = "Lorem ipsum dolor.";

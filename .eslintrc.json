@@ -72,6 +72,9 @@
     "no-unused-expressions": "off",
     "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true, "allowShortCircuit": true }],
 
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+
     "@typescript-eslint/prefer-for-of": "error",
     "@typescript-eslint/prefer-function-type": "error",
     "@typescript-eslint/prefer-namespace-keyword": "error",
