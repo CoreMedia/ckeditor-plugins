@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-content-clipboard",
-  "version": "8.1.1-rc.7",
+  "version": "9.0.0",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -50,9 +50,9 @@
     "@coremedia/service-agent": "^1.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "8.1.1-rc.7",
-    "@coremedia/ckeditor5-core-common": "8.1.1-rc.7",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "8.1.1-rc.7",
-    "@coremedia/ckeditor5-logging": "8.1.1-rc.7"
+    "@coremedia/ckeditor5-common": "^9.0.0",
+    "@coremedia/ckeditor5-core-common": "^9.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^9.0.0",
+    "@coremedia/ckeditor5-logging": "^9.0.0"
   }
 }
