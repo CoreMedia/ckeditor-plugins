@@ -752,7 +752,7 @@ describe("ElementProxy.applyRules()", () => {
                 if (!!descriptor) {
                   // False positive? Checks assume, that descriptor may be undefined here. But how?
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
+                  // @ts-expect-error Possibly false positive.
                   descriptor.set("prefixed:" + descriptor.get());
                 }
               }

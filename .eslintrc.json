@@ -57,6 +57,7 @@
 
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/consistent-type-assertions": ["error", { "assertionStyle": "as" }],
+    "@typescript-eslint/no-non-null-assertion": "error",
 
     "max-statements-per-line": ["error", { "max": 1 }],
 
@@ -71,6 +72,9 @@
 
     "no-unused-expressions": "off",
     "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true, "allowShortCircuit": true }],
+
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
 
     "@typescript-eslint/prefer-for-of": "error",
     "@typescript-eslint/prefer-function-type": "error",
@@ -92,6 +96,8 @@
     "@typescript-eslint/triple-slash-reference": "error",
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/unified-signatures": "error",
+
+    "@typescript-eslint/prefer-ts-expect-error": "error",
 
     // eslint-plugin-import
     "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
