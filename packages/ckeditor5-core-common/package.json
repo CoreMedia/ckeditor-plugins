@@ -15,8 +15,8 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.18.10",
-    "@babel/core": "^7.18.13",
-    "@ckeditor/ckeditor5-core": "^35.0.1",
+    "@babel/core": "^7.19.0",
+    "@ckeditor/ckeditor5-core": "^35.1.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
