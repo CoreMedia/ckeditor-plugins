@@ -40,11 +40,11 @@
     "typescript": "^4.8.2"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^34.2.0",
-    "@ckeditor/ckeditor5-engine": "^34.2.0",
-    "@ckeditor/ckeditor5-typing": "^34.2.0",
-    "@ckeditor/ckeditor5-ui": "^34.2.0",
-    "@ckeditor/ckeditor5-utils": "^34.2.0"
+    "@ckeditor/ckeditor5-core": "^35.1.0",
+    "@ckeditor/ckeditor5-engine": "^35.1.0",
+    "@ckeditor/ckeditor5-typing": "^35.1.0",
+    "@ckeditor/ckeditor5-ui": "^35.1.0",
+    "@ckeditor/ckeditor5-utils": "^35.1.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-richtext": "^9.0.0",

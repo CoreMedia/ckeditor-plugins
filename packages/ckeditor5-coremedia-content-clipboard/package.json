@@ -41,12 +41,12 @@
     "./*": "./dist/*.js"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^34.2.0",
-    "@ckeditor/ckeditor5-core": "^34.2.0",
-    "@ckeditor/ckeditor5-engine": "^34.2.0",
-    "@ckeditor/ckeditor5-html-support": "^34.2.0",
-    "@ckeditor/ckeditor5-undo": "^34.2.0",
-    "@ckeditor/ckeditor5-utils": "^34.2.0",
+    "@ckeditor/ckeditor5-clipboard": "^35.1.0",
+    "@ckeditor/ckeditor5-core": "^35.1.0",
+    "@ckeditor/ckeditor5-engine": "^35.1.0",
+    "@ckeditor/ckeditor5-html-support": "^35.1.0",
+    "@ckeditor/ckeditor5-undo": "^35.1.0",
+    "@ckeditor/ckeditor5-utils": "^35.1.0",
     "@coremedia/service-agent": "^1.1.0"
   },
   "dependencies": {
