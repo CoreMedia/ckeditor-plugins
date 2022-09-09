@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration-mock",
-  "version": "9.0.1-rc.0",
+  "version": "9.0.1",
   "private": true,
   "engines": {
     "node": ">=15.0.0"
@@ -39,8 +39,8 @@
     "@coremedia/service-agent": "^1.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "9.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "9.0.1-rc.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^9.0.1",
+    "@coremedia/ckeditor5-logging": "^9.0.1",
     "rxjs": "^7.5.6"
   }
 }

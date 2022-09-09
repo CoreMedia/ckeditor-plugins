@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-font-mapper",
-  "version": "9.0.1-rc.0",
+  "version": "9.0.1",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -34,8 +34,8 @@
     "@ckeditor/ckeditor5-utils": "^35.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "9.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "9.0.1-rc.0"
+    "@coremedia/ckeditor5-core-common": "^9.0.1",
+    "@coremedia/ckeditor5-logging": "^9.0.1"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
