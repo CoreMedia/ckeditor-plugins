@@ -43,7 +43,7 @@ export type CommandNotFoundErrorHandler = (e: CommandNotFoundError) => void;
  *
  * @example
  * ```typescript
- * await ifCommand(editor, commandName)
+ * ifCommand(editor, commandName)
  *   .then(handler)
  *   .catch(optionalCommandNotFound);
  * ```
@@ -58,7 +58,7 @@ export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandN
  *
  * @example
  * ```typescript
- * await ifCommand(editor, commandName)
+ * ifCommand(editor, commandName)
  *   .then(handler)
  *   .catch(recommendCommand("Feature lorem ipsum won't work."));
  * ```
@@ -84,7 +84,7 @@ export const recommendCommand = (
  *
  * @example
  * ```typescript
- * await ifCommand(editor, commandName)
+ * ifCommand(editor, commandName)
  * .then(handler)
  * .catch(optionalCommandNotFound);
  * ```
