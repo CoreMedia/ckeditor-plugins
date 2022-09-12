@@ -60,14 +60,18 @@ CKEditor. For details see the corresponding documentation.
 
 ## Installation
 
+### Minimal
+
 For minimal CoreMedia RichText 1.0 support, the only module to install is
 [`ckeditor5-coremedia-studio-essentials`][]:
 
 ```text
-$ pnpm install @coremedia/ckeditor5-coremedia-studio-essentials
+pnpm install @coremedia/ckeditor5-coremedia-studio-essentials
 ```
 
 ```javascript
+import CoreMediaStudioEssentials from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
+
 ClassicEditor.create(document.querySelector('#editor'), {
   plugins: [
     CoreMediaStudioEssentials,
