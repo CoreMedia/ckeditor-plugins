@@ -1,7 +1,13 @@
 {
   "name": "@coremedia-internal/ckeditor5-babel-config",
   "version": "1.0.0",
-  "description": "babel config",
+  "description": "Shared Babel configuration",
+  "keywords": [
+    "coremedia",
+    "internal",
+    "babel",
+    "typescript"
+  ],
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
