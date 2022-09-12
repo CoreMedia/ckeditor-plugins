@@ -39,6 +39,7 @@
     "@ckeditor/ckeditor5-utils": "^35.1.0"
   },
   "dependencies": {
+    "@coremedia/ckeditor5-core-common": "^9.0.1",
     "@coremedia/ckeditor5-dataprocessor-support": "^9.0.1",
     "@coremedia/ckeditor5-logging": "^9.0.1"
   }

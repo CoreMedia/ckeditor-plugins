@@ -2,13 +2,12 @@
 
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./command/LinkTargetCommand";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeelement";
 import LinkCleanup, { getLinkCleanup } from "../link/LinkCleanup";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
@@ -30,7 +29,6 @@ const LINK_CUSTOM_PROPERTY = "link";
  */
 export default class LinkTargetModelView extends Plugin {
   static readonly pluginName: string = "LinkTargetModelView";
-  static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetModelView.pluginName);
   private readonly TEXT_NAME = "$text";
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
@@ -41,10 +39,7 @@ export default class LinkTargetModelView extends Plugin {
    * (to data and for editing) as `target` attribute.
    */
   init(): Promise<void> | void {
-    const logger = LinkTargetModelView.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${LinkTargetModelView.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor: Editor = this.editor;
     const model = editor.model;
@@ -82,7 +77,7 @@ export default class LinkTargetModelView extends Plugin {
 
     editor.commands.add("linkTarget", new LinkTargetCommand(editor));
 
-    logger.debug(`Initialized ${LinkTargetModelView.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 }
 /**

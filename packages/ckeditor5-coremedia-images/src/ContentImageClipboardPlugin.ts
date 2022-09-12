@@ -11,7 +11,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ifPlugin, recommendPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -45,13 +45,10 @@ export default class ContentImageClipboardPlugin extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
   async init(): Promise<void> {
-    const pluginName = ContentImageClipboardPlugin.pluginName;
     const logger = ContentImageClipboardPlugin.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${pluginName}...`);
-
     const { editor } = this;
+
+    const initInformation = reportInitStart(this);
 
     await ifPlugin(editor, ContentClipboardEditing)
       .then((plugin) => {
@@ -59,6 +56,6 @@ export default class ContentImageClipboardPlugin extends Plugin {
       })
       .catch(recommendPlugin("Creating Content Images from Clipboard not activated.", logger));
 
-    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 }

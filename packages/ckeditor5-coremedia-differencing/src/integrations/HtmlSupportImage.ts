@@ -19,7 +19,7 @@ export class HtmlImageElementSupport extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);
 
   init(): void {
-    const initInformation = reportInitStart({pluginName: HtmlImageElementSupport.pluginName, logger: HtmlImageElementSupport.#logger});
+    const initInformation = reportInitStart(this);
 
     this.#init();
 

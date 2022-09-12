@@ -3,8 +3,6 @@ import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * Plugin, which adds support for server-side data augmentation for
@@ -39,8 +37,6 @@ export default class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport];
 
-  static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
-
   /**
    * Provides information about the current activation state. Once activated it
    * can not be deactivated. Activation can not be executed twice.
@@ -55,7 +51,7 @@ export default class Differencing extends Plugin {
       return;
     }
 
-    const initInformation = reportInitStart({ pluginName: Differencing.pluginName, logger: Differencing.#logger});
+    const initInformation = reportInitStart(this);
 
     this.#init();
 

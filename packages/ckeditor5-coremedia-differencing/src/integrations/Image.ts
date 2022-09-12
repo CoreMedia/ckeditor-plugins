@@ -21,7 +21,7 @@ export class ImageElementSupport extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(ImageElementSupport.pluginName);
 
   init(): void {
-    const initInformation = reportInitStart({ pluginName: ImageElementSupport.pluginName, logger: ImageElementSupport.#logger });
+    const initInformation = reportInitStart(this);
 
     this.#init();
 

@@ -109,33 +109,25 @@ export interface InitInformation {
    */
   pluginName: string;
   /**
-   * Logger to use for reporting.
-   */
-  logger: Logger,
-  /**
    * Timestamp when initialization started.
    */
   timestamp: number;
 }
 
 /**
- * Information to be provided at start.
- */
-export type InitStartConfig = Omit<InitInformation, "timestamp">;
-
-/**
  * Reports start of plugin initialization and returns the timestamp as provided
  * by `performance.now()` when the message got called.
  *
- * @param config - configuration to report initialization start
+ * @param plugin - plugin about to be initialized
  * @returns some result to be used in subsequent end notice
  */
-export const reportInitStart = (config: InitStartConfig): InitInformation => {
+export const reportInitStart = (plugin: Plugin): InitInformation => {
   const timestamp: number = performance.now();
-  const { pluginName, logger } = config;
-  logger.info(`Initializing ${pluginName}...`);
+  // Workaround https://github.com/Microsoft/TypeScript/issues/3841
+  const pluginName = (<typeof Plugin>plugin.constructor).pluginName ?? "Unnamed Plugin";
+  pluginsLogger.debug(`Initializing ${pluginName}...`);
   return {
-    ...config,
+    pluginName,
     timestamp
   };
 };
@@ -146,6 +138,6 @@ export const reportInitStart = (config: InitStartConfig): InitInformation => {
  * @param information - information provided on initialization start
  */
 export const reportInitEnd = (information: InitInformation): void => {
-  const { pluginName, logger, timestamp } = information;
-  logger.info(`Initialized ${pluginName} within ${performance.now() - timestamp} ms.`);
+  const { pluginName, timestamp } = information;
+  pluginsLogger.debug(`Initialized ${pluginName} within ${performance.now() - timestamp} ms.`);
 };
