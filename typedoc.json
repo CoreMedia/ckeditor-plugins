@@ -19,7 +19,7 @@
   "excludeExternals": true,
   "excludeInternal": true,
   "excludePrivate": true,
-  "entryPointStrategy": "Resolve",
+  "entryPointStrategy": "resolve",
   "githubPages": false,
   "mergeModulesMergeMode": "module",
   "name": "CoreMedia CKEditor 5 Plugins",
