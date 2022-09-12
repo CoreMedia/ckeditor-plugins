@@ -101,7 +101,7 @@ export const ifCommand = async (editor: Editor, commandName: string): Promise<Co
 };
 
 /**
- * Handler for resolved plugins.
+ * Handler for resolved commands.
  */
 export type CommandHandler = (command: Command) => void;
 
