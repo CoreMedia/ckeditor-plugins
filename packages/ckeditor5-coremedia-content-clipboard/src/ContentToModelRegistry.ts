@@ -5,7 +5,7 @@ export type CreateModelFunction = (writer: Writer) => Node;
 export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
 
 /**
- * The ContentToModelRegistry is a util class that allows to provide information
+ * The ContentToModelRegistry is an util class that allows to provide information
  * on how to insert certain content objects into the editor's model.
  *
  * By using {@link registerToModelFunction}, a type/function pair can be registered.
@@ -14,7 +14,7 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
  *
  * The ContentToModelRegistry can be accessed by other plugins via the {@link ContentClipboardEditing} plugin.
  *
- * **Usage Example:**
+ * @example
  * ```
  * await ifPlugin(editor, ContentClipboardEditing)
       .then((plugin) => {

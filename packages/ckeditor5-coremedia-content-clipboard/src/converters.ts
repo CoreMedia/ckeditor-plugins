@@ -1,5 +1,4 @@
 /* eslint no-null/no-null: off */
-
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentDropDataCache from "./ContentDropDataCache";
@@ -22,11 +21,15 @@ export interface RemoveMarkerEventData {
 /**
  * Conversion function used in DowncastDispatcher event listeners.
  * Adds a UIElement to the editing view at a given marker position.
- * The marker position is retrieved from the data object provided by the event listener.
+ * The marker position is retrieved from the data object provided by the event
+ * listener.
  *
- * The added UIElement renders a loading spinner into the editing view without changing the model.
+ * The added UIElement renders a loading spinner into the editing view without
+ * changing the model.
  *
- * @param callback - the callback to be executed after the UIElement has been added (Usually to load the data for the loading spinner). Gets the markerData of the corresponding marker as the sole argument.
+ * @param callback - the callback to be executed after the UIElement has been
+ * added (Usually to load the data for the loading spinner). Gets the
+ * markerData of the corresponding marker as the sole argument.
  */
 export const addContentMarkerConversion = (callback: (markerData: MarkerData) => void) => {
   return (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
@@ -64,7 +67,8 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
 
 /**
  * Conversion function used in DowncastDispatcher event listeners.
- * Removes a previously added UIElement from the editing view at a given marker position.
+ * Removes a previously added UIElement from the editing view at a given marker
+ * position.
  * Does not change the model.
  *
  * @param evt - eventInfo
