@@ -3,6 +3,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import priorities from "@ckeditor/ckeditor5-utils/src/priorities";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * This plugin provides an extension point, to wait for (optional)
@@ -23,7 +24,9 @@ export class PluginIntegrationHook extends Plugin {
   }
 
   init(): void {
+    const initInformation = reportInitStart(this);
     this.#registerElementsAfterInit();
+    reportInitEnd(initInformation);
   }
 
   /**

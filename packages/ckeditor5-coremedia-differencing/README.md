@@ -1,5 +1,4 @@
-CoreMedia Differencing Plugin
-================================================================================
+# CoreMedia Differencing Plugin
 
 Other than possibly suggested by the plugin-name, this plugin does not take
 care of calculating differences by itself. It is meant to ensure, that
@@ -7,8 +6,35 @@ differencing data as generated in CoreMedia Studio are forwarded to editing
 view, so that CSS rules can be applied to it, to highlight changes, additions
 and deletions.
 
-CoreMedia Server-Side Differencing
---------------------------------------------------------------------------------
+## Installation
+
+```text
+pnpm install @coremedia/ckeditor5-coremedia-differencing
+```
+
+```javascript
+import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
+
+ClassicEditor.create(document.querySelector('#editor'), {
+  plugins: [
+    Differencing,
+    /* ... */
+  ],
+}).then((editor) => {
+  /* By default, plugin is not enabled. */
+  newEditor.plugins.get("Differencing")?.activateDifferencing();
+});
+```
+
+Note, that to ease set up of two CKEditors for the same with the same
+configuration despite the `Differencing` plugin, the plugin is disabled
+by default.
+
+To enable it in certain context (like the differencing view in CoreMedia
+Studio), you have to explicitly enable the plugin prior to loading the
+augmented data from server.
+
+## CoreMedia Server-Side Differencing
 
 In CoreMedia Studio, differences of CoreMedia RichText are evaluated on the
 server. The corresponding response is similar to this:
@@ -69,8 +95,19 @@ changes. As we do not (yet) show these in UI, these are ignored.
   feature between the different differencing nodes. It contains references to
   the corresponding IDs.
 
-CSS Styling
---------------------------------------------------------------------------------
+### Artificial `xdiff:br`
+
+Detecting added or removed newlines throughout the CKEditor view and model
+hierarchy is at least challenging. To ease detecting such added or removed
+newlines, the default data-processing for CoreMedia RichText 1.0 transforms
+such added/removed newlines to `xdiff:br` elements. In this early processing
+stage, they are easy to detect.
+
+The `xdiff:br` elements otherwise hold the same attributes as any
+`xdiff:span`, which is the element they originated from in the original
+server response.
+
+## CSS Styling
 
 ### xdiff:span
 
@@ -81,13 +118,6 @@ changes, as for example:
 xdiff\:span[xdiff\:class="diff-html-added"] {
   color: rgba(92, 160, 63, 1);
   text-decoration: underline;
-}
-p > xdiff\:span[xdiff\:class="diff-html-added"]:empty::before {
-  /* Some symbol to represent a new-line character. */
-  content: '↩';
-  height: 16px;
-  position: absolute;
-  margin-left: 3px;
 }
 xdiff\:span[xdiff\:class="diff-html-removed"] {
   color: rgba(196, 19, 19, 1);
@@ -101,10 +131,24 @@ xdiff\:span[xdiff\:class="diff-html-conflict"] {
   color: rgba(255, 255, 255, 1);
   background-color: rgba(196, 19, 19, 1);
 }
-xdiff\:span[xdiff\:class="diff-html-changed"] img {
-  box-sizing: border-box;
-  outline: 4px dashed rgba(92, 160, 63, 1);
-  outline-offset: -4px;
+```
+
+### xdiff:br
+
+As stated in the introduction, `<xdiff:br/>` is an artificial element. It gets
+transformed from an empty `<xdiff:span/>` in the data-processing stage as
+provided for CoreMedia RichText 1.0.
+
+It is meant to be used to highlight added/removed newlines, for example as
+follows:
+
+```css
+xdiff\:br[xdiff\:class="diff-html-added"]::before {
+  /* Some symbol to represent a new-line character. */
+  content: '↩';
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
 }
 ```
 
@@ -140,50 +184,14 @@ span.html-object-embed[xdiff\:changetype="diff-conflict-image"] > img {
 }
 ```
 
-### Added Newlines
-
-Styling added newlines is a little different. Added newlines are represented
-like this in differencing markup:
-
-```xml
-<p>
-  Lorem ipsum&nbsp;
-  <xdiff:span xdiff:class="diff-html-added" xdiff:id="added-diff-0"></xdiff:span>
-</p>
-```
-
-A possible corresponding CSS style may look like this:
-
-```css
-p > xdiff\:span[xdiff\:class="diff-html-added"]:empty::before {
-  content: url("...") /* 16×16 SVG, for example */;
-  height: 16px;
-  position: absolute;
-  margin-left: 3px;
-}
-```
-
-For a removed newline, the corresponding XML is similar, and so is the
-CSS style:
-
-```css
-p > xdiff\:span[xdiff\:class="diff-html-removed"]:empty::before {
-  content: url("...");
-  height: 16px;
-  position: absolute;
-  margin-left: 3px;
-}
-```
-Assumptions
---------------------------------------------------------------------------------
+## Assumptions
 
 * A CKEditor showing differences is always in read-only mode.
 
 * Any other attribute than `xdiff:class` are irrelevant. For a set of all
   allowed attributes, see [xdiff.xsd][].
 
-Requirements
---------------------------------------------------------------------------------
+## Requirements
 
 * Differences must never be written back to server.
 

@@ -4,6 +4,8 @@
   "description": "Server-side differencing support in CoreMedia Studio.",
   "keywords": [
     "coremedia",
+    "ckeditor",
+    "ckeditor5",
     "differencing"
   ],
   "engines": {

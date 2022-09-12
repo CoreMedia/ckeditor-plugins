@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 /**
  * Support for server-side differencing in CoreMedia Studio.
  *
