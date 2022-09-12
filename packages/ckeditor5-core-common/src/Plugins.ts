@@ -101,16 +101,51 @@ export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInte
 };
 
 /**
- * Reports, when initialization of a plugin starts and ends and provides some
- * statistics afterwards.
- *
- * @param pluginName - plugin name that is initialized
- * @param logger - logger to report progress
- * @param initialization - initialization process to measure
+ * Initialization Information.
  */
-export const reportInitializationProgress = (pluginName: string, logger: Logger, initialization: () => void): void => {
-  const startTimestamp = performance.now();
+export interface InitInformation {
+  /**
+   * Which plugin is about to be initialized.
+   */
+  pluginName: string;
+  /**
+   * Logger to use for reporting.
+   */
+  logger: Logger,
+  /**
+   * Timestamp when initialization started.
+   */
+  timestamp: number;
+}
+
+/**
+ * Information to be provided at start.
+ */
+export type InitStartConfig = Omit<InitInformation, "timestamp">;
+
+/**
+ * Reports start of plugin initialization and returns the timestamp as provided
+ * by `performance.now()` when the message got called.
+ *
+ * @param config - configuration to report initialization start
+ * @returns some result to be used in subsequent end notice
+ */
+export const reportInitStart = (config: InitStartConfig): InitInformation => {
+  const timestamp: number = performance.now();
+  const { pluginName, logger } = config;
   logger.info(`Initializing ${pluginName}...`);
-  initialization();
-  logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+  return {
+    ...config,
+    timestamp
+  };
+};
+
+/**
+ * Reports end of plugin initialization.
+ *
+ * @param information - information provided on initialization start
+ */
+export const reportInitEnd = (information: InitInformation): void => {
+  const { pluginName, logger, timestamp } = information;
+  logger.info(`Initialized ${pluginName} within ${performance.now() - timestamp} ms.`);
 };

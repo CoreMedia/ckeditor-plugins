@@ -4,7 +4,7 @@ import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
-import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Hooks into `ImageInline` and `ImageBlock` plugin, if available and
@@ -21,7 +21,11 @@ export class ImageElementSupport extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(ImageElementSupport.pluginName);
 
   init(): void {
-    reportInitializationProgress(ImageElementSupport.pluginName, ImageElementSupport.#logger, () => this.#init());
+    const initInformation = reportInitStart({ pluginName: ImageElementSupport.pluginName, logger: ImageElementSupport.#logger });
+
+    this.#init();
+
+    reportInitEnd(initInformation);
   }
 
   #init(): void {

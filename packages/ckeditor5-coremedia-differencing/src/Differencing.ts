@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
-import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
@@ -54,7 +54,13 @@ export default class Differencing extends Plugin {
     if (this.#isActivated) {
       return;
     }
-    reportInitializationProgress(Differencing.pluginName, Differencing.#logger, () => this.#init());
+
+    const initInformation = reportInitStart({ pluginName: Differencing.pluginName, logger: Differencing.#logger});
+
+    this.#init();
+
+    reportInitEnd(initInformation);
+
     this.#isActivated = true;
   }
 
