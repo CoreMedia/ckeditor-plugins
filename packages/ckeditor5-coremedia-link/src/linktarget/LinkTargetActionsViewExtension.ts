@@ -25,7 +25,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * opens and allows to set a custom target.
  *
  * The buttons to be rendered can be set in the editor's configuration.
- * The default configuration is defined in @see {@link DefaultTarget}.
+ * The default configuration is defined in {@link linktarget.config.DefaultTarget}.
  */
 class LinkTargetActionsViewExtension extends Plugin {
   static readonly pluginName: string = "LinkTargetActionsViewExtension";
@@ -46,7 +46,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * Extends the actions view of the linkUI plugin by adding target buttons right
    * before the {@link unlinkButtonView} element. The order of buttons is defined
    * by the editor's configuration, respectively the order of default targets
-   * in {@link DefaultTarget}.
+   * in {@link linktarget.config.DefaultTarget}.
    *
    * @param linkUI - the linkUI plugin
    */

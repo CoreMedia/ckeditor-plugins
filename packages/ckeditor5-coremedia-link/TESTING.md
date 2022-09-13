@@ -1,13 +1,11 @@
-Testing
-================================================================================
+# Testing
 
 This plugin does not come with automatic tests (yet). As it deeply integrates
 with [CKEditor's Link Plugin][ckeditor/ckeditor5-link] and partially copies
 behavior from `LinkCommand` for example, it is important to test this plugin on
 each CKEditor version update.
 
-Link Target
---------------------------------------------------------------------------------
+## Link Target
 
 The `LinkTarget` plugin provides the ability to set a `target` attribute for
 `<a>` anchor elements. In CoreMedia RichText this is represented as `xlink:show`
@@ -91,15 +89,15 @@ Testing binding of `LinkTargetCommand` to model and mapping into the UI.
    | _blank    | _Open in New Tab_     | _blank                |
    | _empty_   | _Open in Current Tab_ | _unset_               |
 
-10. Reopen for a previous _Open in Frame_ target.
+9. Reopen for a previous _Open in Frame_ target.
 
-11. Change the target text.
+10. Change the target text.
 
-12. Cancel.
+11. Cancel.
 
-13. Press _Open in Frame_ again.
+12. Press _Open in Frame_ again.
 
-14. Model value should be in text-field, not the cancelled text before.
+13. Model value should be in text-field, not the cancelled text before.
 
 ### LT#003: Unlink
 

@@ -1,5 +1,7 @@
 # Link-Target Feature
 
+[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+
 The Link-Target Plugin extends [CKEditor's Link Feature][cke5:docs:link:feature]
 by selection of a `target` attribute for an existing link. It is stored in model
 as `linkTarget` attribute.
@@ -24,7 +26,7 @@ the `LinkActionsView` of CKEditor's link feature.
 
 [Integration]: <#integration>
 
-[[Top][]|[Integration][]|[Configuration][]|[RichText][]]
+| [Top][] | [Integration][] | [Configuration][] | [RichText][] |
 
 ```typescript
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
@@ -50,7 +52,7 @@ ClassicEditor
 
 [Configuration]: <#configuration>
 
-[[Top][]|[Integration][]|[Configuration][]|[RichText][]]
+| [Top][] | [Integration][] | [Configuration][] | [RichText][] |
 
 The plugin can be configured as part of CKEditor's Link Feature configuration.
 
@@ -61,8 +63,7 @@ The plugin can be configured as part of CKEditor's Link Feature configuration.
 
 [Default Configuration]: <#default-configuration>
 
-[[Top][]|[Up][Configuration]|[Default Configuration][]
-|[Advanced Configuration][]]
+| [[Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] |
 
 The following example shows the default configuration, which is applied, if no
 configuration is given:
@@ -104,7 +105,7 @@ For customization, you may skip or reorder the targets according to your needs.
 
 [self]: <#predefined-_self>
 
-[[Top][]|[Up][Default Configuration]|[_self][]|[_blank][]|[_embed][]|[_other][]]
+| [Top][] | [Up][Default Configuration] | [_self][] | [_blank][] | [_embed][] | [_other][] |
 
 This is the default state for unset `linkTarget` attribute in model. When
 pressed, an explicit `linkTarget="_self"` will be applied to the model.
@@ -119,7 +120,7 @@ having a `linkTarget` attribute set.
 
 [blank]: <#predefined-_blank>
 
-[[Top][]|[Up][Default Configuration]|[_self][]|[_blank][]|[_embed][]|[_other][]]
+| [Top][] | [Up][Default Configuration] | [_self][] | [_blank][] | [_embed][] | [_other][] |
 
 This is the same as the standard HTML attribute value `_blank`.
 
@@ -129,7 +130,7 @@ This is the same as the standard HTML attribute value `_blank`.
 
 [embed]: <#predefined-_embed>
 
-[[Top][]|[Up][Default Configuration]|[_self][]|[_blank][]|[_embed][]|[_other][]]
+| [Top][] | [Up][Default Configuration] | [_self][] | [_blank][] | [_embed][] | [_other][] |
 
 This is an artificial target derived from `xlink:show="embed"` (and used by
 CoreMedia RichText 1.0 for example, see [below][RichText]). It is represented
@@ -141,7 +142,7 @@ similar to the standard target names with an underscore as prefix.
 
 [other]: <#predefined-_other>
 
-[[Top][]|[Up][Default Configuration]|[_self][]|[_blank][]|[_embed][]|[_other][]]
+| [Top][] | [Up][Default Configuration] | [_self][] | [_blank][] | [_embed][] | [_other][] |
 
 The name corresponds to `xlink:show="other"`. It represents any other value
 of `linkTarget` which is not known by any of the other configured targets. If
@@ -232,8 +233,7 @@ mapping from `xlink:show` and `xlink:role` as required for CoreMedia RichText
 
 [Advanced Configuration]: <#advanced-configuration>
 
-[[Top][]|[Up][Configuration]|[Default Configuration][]
-|[Advanced Configuration][]]
+| [Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] |
 
 You may add any custom button for predefined `linkTarget` values. For example to
 support standard HTML option values `_top` and `_parent` you may add them to the
@@ -302,7 +302,7 @@ having this initial size.
 
 [RichText]: <#coremedia-richtext-10-integration>
 
-[[Top][]|[Integration][]|[Configuration][]|[RichText][]]
+| [Top][] | [Integration][] | [Configuration][] | [RichText][] |
 
 The following is not part of the `LinkTarget` plugin, but included in the
 CoreMedia RichText plugin. Having this, it is perfectly fine, if you do not
@@ -375,7 +375,7 @@ decide to provide an [Advanced Configuration][] for these combined targets.
 
 [CKEditor 4]: <#ckeditor-4-behavior>
 
-[[Top][]|[Up][RichText]|[CKEditor 4][]]
+| [Top][] | [Up][RichText] | [CKEditor 4][] |
 
 Some details on the CKEditor 4 integration in CoreMedia Studio and its behavior
 regarding different states of `xlink:show` and `xlink:role` are shown here. It
@@ -397,3 +397,6 @@ external sources.
 [w3:xlink]: <https://www.w3.org/TR/xlink/> "XML Linking Language (XLink) Version 1.1"
 
 [w3:IRI]: <https://www.w3.org/TR/leiri/> "Legacy extended IRIs for XML resource identification"
+
+[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_link.linktarget.html> "Namespace linktarget"

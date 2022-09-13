@@ -8,14 +8,16 @@ import otherIcon from "../../../theme/icons/openInFrame.svg";
  * Artificial target name for the recommended minimal target configuration to
  * add.
  */
-const OTHER_TARGET_NAME = "_other";
+export const OTHER_TARGET_NAME = "_other";
 
 /**
  * Values the default target option may take.
  */
-type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
+export type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_NAME;
 
-type DefaultTargetOptions = {
+export default DefaultTarget;
+
+export type DefaultTargetOptions = {
   [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
 };
 
@@ -54,7 +56,7 @@ type DefaultTargetOptions = {
  *     custom options you may provide. Otherwise, you may find `linkTarget`
  *     attributes in the model, which cannot be represented in the UI.
  */
-const DEFAULT_TARGETS: DefaultTargetOptions = {
+export const DEFAULT_TARGETS: DefaultTargetOptions = {
   _self: {
     icon: selfIcon,
     title: "Open in Current Tab",
@@ -115,8 +117,8 @@ const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<
   return result;
 };
 
-const DEFAULT_TARGETS_MAP: Map<string, Required<LinkTargetOptionDefinition>> = asMap(DEFAULT_TARGETS);
-const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
+export const DEFAULT_TARGETS_MAP: Map<string, Required<LinkTargetOptionDefinition>> = asMap(DEFAULT_TARGETS);
+export const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
 
 /**
  * Gets a default target definition for the given key, if available.
@@ -124,7 +126,7 @@ const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTarg
  * @param key - name of the definition to get
  * @returns default target definition; `undefined` if not available
  */
-const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
+export const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
   return DEFAULT_TARGETS_MAP.get(key);
 };
 
@@ -135,20 +137,10 @@ const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefin
  * @returns default target definition
  * @throws Error when default target definition of given name is not available
  */
-const requireDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> => {
+export const requireDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> => {
   const definition = getDefaultTargetDefinition(key);
   if (!definition) {
     throw new Error(`Default Target Definition does not exist: "${key}"`);
   }
   return definition;
-};
-
-export default DefaultTarget;
-export {
-  OTHER_TARGET_NAME,
-  DEFAULT_TARGETS,
-  DEFAULT_TARGETS_ARRAY,
-  getDefaultTargetDefinition,
-  requireDefaultTargetDefinition,
-  DefaultTargetOptions,
 };
