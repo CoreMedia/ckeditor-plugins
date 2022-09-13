@@ -27,7 +27,7 @@ interface DowncastEventData {
   attributeOldValue: string | null;
   attributeNewValue: string | null;
 }
-type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void;
+export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void;
 
 /**
  * A method to prevent the upcast of the src-attribute of an image.
