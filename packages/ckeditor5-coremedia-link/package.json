@@ -1,6 +1,13 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-link",
   "version": "9.0.1",
+  "description": "Support for Content Link, Link Target Specification",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "links"
+  ],
   "engines": {
     "node": ">=15.0.0"
   },

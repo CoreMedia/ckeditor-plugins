@@ -18,6 +18,9 @@ import ToDataProcessor from "./ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 
+/**
+ * Data-Processor for CoreMedia RichText 1.0.
+ */
 class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";

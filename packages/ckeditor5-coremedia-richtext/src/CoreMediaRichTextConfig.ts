@@ -53,20 +53,18 @@ const strike: ToDataAndViewElementConfiguration = {
 
 /**
  * Coremedia Richtext Filter, that are applied before writing it back to the server. Some details about filter
- * execution: (see especially <code>core/htmlparser/params.el.js</code>)
+ * execution: (see especially `core/htmlparser/params.el.js`)
  *
- * <ul>
- * <li>If an element name changes, filtering will be restarted at that node.</li>
- * <li>If a new element is returned, it will replace the current one and processing will be restarted for that node.</li>
- * <li>If false is returned, the element and all its children will be removed.</li>
- * <li>If element name changes to empty, only the element itself will be removed and the children appended to the parent</li>
- * <li>An element is processed first, then its attributes and afterwards its children (if any)</li>
- * <li>Text nodes only support to be changed or removed… but not to be wrapped into some other params.el.</li>
- * <li><code>$</code> and <code>$$</code> are so-called generic element rules, which are applied after element
- * processing. <code>$</code> is applied prior to filtering the children, while <code>$$</code> is applied
- * after the element and all its children have been processed.
- * The opposite handler is <code>'^'</code> which would be applied before all other element handlers.</li>
- * </ul>
+ * * If an element name changes, filtering will be restarted at that node.
+ * * If a new element is returned, it will replace the current one and processing will be restarted for that node.
+ * * If false is returned, the element and all its children will be removed.
+ * * If element name changes to empty, only the element itself will be removed and the children appended to the parent
+ * * An element is processed first, then its attributes and afterwards its children (if any)
+ * * Text nodes only support to be changed or removed… but not to be wrapped into some other params.el.
+ * * `$` and `$$` are so-called generic element rules, which are applied after element
+ *   processing. `$` is applied prior to filtering the children, while `$$` is applied
+ *   after the element and all its children have been processed.
+ *   The opposite handler is `'^'` which would be applied before all other element handlers.
  */
 const defaultRules: FilterRuleSetConfiguration = {
   text: (params) => {
@@ -157,6 +155,11 @@ const defaultRules: FilterRuleSetConfiguration = {
   },
 };
 
+/**
+ * Get the parsed configuration, ready for data-processing.
+ *
+ * @param config - configuration to parse
+ */
 export const getConfig = (config?: CKEditorConfig): ParsedConfig => {
   const customConfig: CoreMediaRichTextConfig = (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ||
     {}) as CoreMediaRichTextConfig;
