@@ -124,11 +124,11 @@ export interface InitInformation {
 export const reportInitStart = (plugin: Plugin): InitInformation => {
   const timestamp: number = performance.now();
   // Workaround https://github.com/Microsoft/TypeScript/issues/3841
-  const pluginName = (<typeof Plugin>plugin.constructor).pluginName ?? "Unnamed Plugin";
+  const pluginName = (plugin.constructor as typeof Plugin).pluginName ?? "Unnamed Plugin";
   pluginsLogger.debug(`Initializing ${pluginName}...`);
   return {
     pluginName,
-    timestamp
+    timestamp,
   };
 };
 

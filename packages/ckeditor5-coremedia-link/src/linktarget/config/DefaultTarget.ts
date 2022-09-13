@@ -118,7 +118,8 @@ const asLinkTargetOptionDefinitions = (targets: DefaultTargetOptions): Required<
 };
 
 export const DEFAULT_TARGETS_MAP: Map<string, Required<LinkTargetOptionDefinition>> = asMap(DEFAULT_TARGETS);
-export const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] = asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
+export const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] =
+  asLinkTargetOptionDefinitions(DEFAULT_TARGETS);
 
 /**
  * Gets a default target definition for the given key, if available.

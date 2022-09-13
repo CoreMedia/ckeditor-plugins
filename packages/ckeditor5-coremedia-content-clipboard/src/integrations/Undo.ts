@@ -1,6 +1,12 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
-import { CommandHandler, disableCommand, enableCommand, ifCommand, optionalCommandNotFound, } from "@coremedia/ckeditor5-core-common/Commands";
+import {
+  CommandHandler,
+  disableCommand,
+  enableCommand,
+  ifCommand,
+  optionalCommandNotFound,
+} from "@coremedia/ckeditor5-core-common/Commands";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";

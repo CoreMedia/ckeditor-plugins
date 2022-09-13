@@ -92,7 +92,7 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
   const xlinkHref = data.item.getAttribute("xlink-href");
 
   if (typeof xlinkHref !== "string") {
-    throw new Error(`Unexpected type ${typeof xlinkHref} of attribute xlink-href (value: ${xlinkHref}).`)
+    throw new Error(`Unexpected type ${typeof xlinkHref} of attribute xlink-href (value: ${xlinkHref}).`);
   }
 
   const uriPath: UriPath = toUriPath(xlinkHref);
