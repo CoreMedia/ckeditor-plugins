@@ -1,6 +1,15 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration-mock",
   "version": "9.0.1",
+  "description": "CoreMedia Studio: Mock Communication facade for testing",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "studio",
+    "mock",
+    "testing"
+  ],
   "private": true,
   "engines": {
     "node": ">=15.0.0"
