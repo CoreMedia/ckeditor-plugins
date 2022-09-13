@@ -1,6 +1,14 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext-support",
   "version": "9.0.1",
+  "description": "CoreMedia RichText 1.0 DTD: Registers known elements/attributes",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "richtext",
+    "grs"
+  ],
   "engines": {
     "node": ">=15.0.0"
   },
