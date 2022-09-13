@@ -1,19 +1,19 @@
 /**
  * UTF8 Character Code.
  */
-type CharCode = number;
+export type CharCode = number;
 /**
  * HTML string. Typically, encoded characters, such as `&pi;`.
  */
-type HtmlString = string;
+export type HtmlString = string;
 /**
  * Maps UTF8 character codes to their HTML representation after being mapped.
  */
-type FontMap = Map<CharCode, HtmlString>;
+export type ParsedFontMap = Map<CharCode, HtmlString>;
 /**
  * `FontMap` as represented in CKEditor configuration.
  */
-interface FontMapConfig {
+export interface FontMapConfig {
   [code: CharCode]: HtmlString;
 }
 /**
@@ -23,7 +23,7 @@ const configEntryToFontMapEntry = ([k, v]: [string, unknown]): [CharCode, HtmlSt
 /**
  * Maps the FontMap configuration to corresponding `FontMap` instance.
  */
-export const configToMap = (config: FontMapConfig): FontMap => {
+export const configToMap = (config: FontMapConfig): ParsedFontMap => {
   const entries = Object.entries(config).map(configEntryToFontMapEntry);
   return new Map(entries);
 };
