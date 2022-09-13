@@ -13,15 +13,15 @@ import { Subscription } from "rxjs";
  * element.
  *
  * If a ModelElement has a subscription to an asynchronous service
- * (e.g., image xlink-href, which resolves the src attribute asynchronously)
+ * (e.g., image `xlink-href`, which resolves the `src` attribute asynchronously)
  * this plugin can be used to track those subscriptions.
  *
  * Tracked subscriptions will be unsubscribed on destroy or when the
  * ModelElement has been removed from the document.
  *
  * The plugin generates an attribute `cmSubscriptionId` for inserted registered
- * model elements. Listens to changes in the document regarding the registered
- * model elements.
+ * model elements. It listens to changes in the document regarding the
+ * registered model elements.
  *
  * If a registered model element is removed all subscriptions will be
  * unsubscribed. Subscriptions have to be added manually to the
@@ -53,9 +53,11 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   }
 
   /**
-   * Add a subscription to the subscription cache for unsubscription on related model changes.
+   * Add a subscription to the subscription cache for unsubscription on related
+   * model changes.
    *
-   * @param modelElement - the model element related to the subscription (must contain the `cmSubscriptionId`).
+   * @param modelElement - the model element related to the subscription (must
+   * contain the `cmSubscriptionId`).
    * @param subscription - the subscription
    */
   addSubscription(modelElement: ModelElement, subscription: Subscription): void {
@@ -68,6 +70,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
 
   /**
    * Registers a model element to be tracked by the plugin.
+   *
    * This means for the model elements the attribute `cmSubscriptionId` will be
    * generated on insertion and added subscriptions will be unsubscribed on
    * element removal and document destroying.
@@ -150,7 +153,6 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    * Checks if the given change is an element on the graveyard.
    *
    * @param insert - the insert change.
-   * @private
    */
   static #isOnGraveyard(insert: DiffItemInsert): boolean {
     const rootElement = insert.position.root;
@@ -192,7 +194,6 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    * Determines if a element is registered.
    *
    * @param element - the model element to check
-   * @private
    */
   static #isSubscribedModel(element: ModelElement): boolean {
     for (const subscribedElement of this.#modelElements) {

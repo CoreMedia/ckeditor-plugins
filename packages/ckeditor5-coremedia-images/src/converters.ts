@@ -32,14 +32,26 @@ type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void
 /**
  * A method to prevent the upcast of the src-attribute of an image.
  *
- * The src-attribute for CoreMedia Images is not stored as an url but as a reference to a content property in a xlink:href attribute.
- * In this case it does not make sense to work with src-attributes in the model and side effects of an existing src-attribute
- * (like ghs) have to be prevented.
+ * The `src` attribute for CoreMedia Images is not stored as a URL but as a
+ * reference to a content property in a `xlink:href` attribute. In this case it
+ * does not make sense to work with `src`-attributes in the model and side
+ * effects of an existing `src`-attribute (like GHS) have to be prevented.
  *
- * Normally preventing the src-attribute to be part of the model means to consume the attribute but don't do anything with it.
- * Unfortunately ckeditor does not check if the attribute has already been consumed (see https://github.com/ckeditor/ckeditor5/issues/11327).
- * With https://github.com/ckeditor/ckeditor5/issues/11530 the src-attribute will be upcasted if the src-attribute exists as view attribute.
- * To fully prevent the upcast we have to consume the attribute and remove the src-attribute from the view node.
+ * Preventing the `src` attribute to become part of the model means to consume
+ * the attribute.
+ *
+ * Unfortunately CKEditor does not check if the attribute has already been
+ * consumed:
+ *
+ * * [#11327: image conversion (imageInline and imageBlock) does not test if src is consumed.](https://github.com/ckeditor/ckeditor5/issues/11327)
+ *
+ * Combined with:
+ *
+ * * [#11530: The image upcast converter does not consume the `src` attribute](https://github.com/ckeditor/ckeditor5/issues/11530)
+ *
+ * the `src` attribute will be upcasted if the `src` attribute exists as view
+ * attribute. To fully prevent the upcast we have to consume the attribute and
+ * remove the `src`  from the view node.
  */
 export const preventUpcastImageSrc = () => {
   return (dispatcher: UpcastDispatcher): void => {
@@ -57,7 +69,7 @@ export const preventUpcastImageSrc = () => {
 };
 
 /**
- * Conversion for <code>modelElementName:xlink-href</code> to <code>img:src</code>
+ * Conversion for `modelElementName:xlink-href` to `img:src`.
  *
  * @param editor - the editor instance
  * @param modelElementName - the element name to convert
@@ -78,10 +90,14 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
   updateImagePreviewAttributes(editor, data.item, spinnerPreviewAttributes, true);
 
   const xlinkHref = data.item.getAttribute("xlink-href");
-  // @ts-expect-error TODO Fix Signatures or check type of xlinkHref before.
+
+  if (typeof xlinkHref !== "string") {
+    throw new Error(`Unexpected type ${typeof xlinkHref} of attribute xlink-href (value: ${xlinkHref}).`)
+  }
+
   const uriPath: UriPath = toUriPath(xlinkHref);
-  // @ts-expect-error TODO Fix Signatures or check type of xlinkHref before.
   const property: string = toProperty(xlinkHref);
+
   serviceAgent
     .fetchService<BlobDisplayService>(new BlobDisplayServiceDescriptor())
     .then((blobDisplayService: BlobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
