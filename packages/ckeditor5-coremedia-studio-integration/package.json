@@ -1,6 +1,13 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration",
   "version": "9.0.1",
+  "description": "CoreMedia Studio: Communication facade for Studio integration",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "studio"
+  ],
   "engines": {
     "node": ">=15.0.0"
   },
