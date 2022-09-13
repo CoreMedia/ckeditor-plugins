@@ -4,8 +4,8 @@
  *
  * Plugins contained:
  *
- * * `CoreMediaRichText` from `@coremedia/ckeditor5-richtext`
- * * `CoreMediaRichTextSupport` from `@coremedia/ckeditor5-richtext-support`
+ * * {@link ckeditor5-coremedia-richtext.CoreMediaRichText CoreMedia RichText}
+ * * {@link ckeditor5-coremedia-richtext-support.GeneralRichTextSupport CoreMedia General RichText Support}
  *
  * @module ckeditor5-coremedia-studio-essentials
  */

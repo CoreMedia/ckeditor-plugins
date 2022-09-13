@@ -1,14 +1,16 @@
-CoreMedia CKEditor 5 Essentials
-================================================================================
+# CoreMedia CKEditor 5 Essentials
+
+[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
 
 Provides a plugin for CKEditor 5 which consolidates the essential plugins for
 CoreMedia Studio. The plugins, provided by this package, are crucial to make
 CKEditor 5 work in CoreMedia Studio without corrupting any data.
 
-There are, however, other useful plugins to enable CoreMedia features in CKEditor 5,
-that are not part of this package. Those plugins are not mandatory, but recommended to
-use in any CoreMedia Studio CKEditor 5 build. Please have a look at the 
-corresponding repository or the documentation to learn more about other provided plugins.
+There are, however, other useful plugins to enable CoreMedia features in
+CKEditor 5, that are not part of this package. Those plugins are not mandatory,
+but recommended to use in any CoreMedia Studio CKEditor 5 build. Please have a
+look at the corresponding repository or the documentation to learn more about
+other provided plugins.
 
 Plugins contained:
 
@@ -31,3 +33,6 @@ by loading it into a CKEditor only containing the essential plugins above.
 plugins, many elements and attributes cannot be edited, we strongly recommend
 adding CKEditor's Source Code Editing Plugin, if you did not add any other
 plugins.
+
+[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_studio_essentials.html> "Module ckeditor5-coremedia-studio-essentials"
