@@ -1,5 +1,12 @@
 {
   "name": "@coremedia/ckeditor5-font-mapper",
+  "description": "Replaces characters in given font to alternative representation on paste",
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "font",
+    "clipboard"
+  ],
   "version": "9.0.1",
   "engines": {
     "node": ">=15.0.0"
