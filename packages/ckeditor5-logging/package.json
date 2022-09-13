@@ -1,9 +1,12 @@
 {
   "name": "@coremedia/ckeditor5-logging",
   "version": "9.0.1",
-  "description": "Provides logging to use in the plugins.",
+  "description": "Logging Facade",
   "keywords": [
-    "coremedia"
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "logging"
   ],
   "engines": {
     "node": ">=15.0.0",

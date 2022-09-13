@@ -171,6 +171,7 @@ font referenced in `font-family` `style` attributes.
 
 ## See Also
 
+* [Manual Testing](./TESTING.md)
 * [CKEditor 5 Paste from Office feature – CKEditor 5 API docs](https://ckeditor.com/docs/ckeditor5/latest/api/paste-from-office.html)
 
 [cke5:docs:clipboard:feature]: <https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/clipboard.html> "Clipboard - CKEditor 5 Documentation"
