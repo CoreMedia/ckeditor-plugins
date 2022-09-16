@@ -241,7 +241,8 @@ ClassicEditor.create(document.querySelector('#editor'), {
       "|",
       'imageStyle:inline',
       "|",
-      'linkImage'
+      'linkImage',
+      'contentImageOpenInTab'
     ]
   },
   table: {

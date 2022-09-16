@@ -431,6 +431,7 @@ importers:
       '@ckeditor/ckeditor5-core': ^35.1.0
       '@ckeditor/ckeditor5-engine': ^35.1.0
       '@ckeditor/ckeditor5-image': ^35.1.0
+      '@ckeditor/ckeditor5-ui': ^35.1.0
       '@ckeditor/ckeditor5-utils': ^35.1.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
@@ -442,6 +443,7 @@ importers:
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/ckeditor__ckeditor5-image': ^33.0.0
+      '@types/ckeditor__ckeditor5-ui': ^32.0.2
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
       '@types/jest': ^28.1.8
       jest: ^28.1.3
@@ -462,6 +464,7 @@ importers:
       '@ckeditor/ckeditor5-core': 35.1.0
       '@ckeditor/ckeditor5-engine': 35.1.0
       '@ckeditor/ckeditor5-image': 35.1.0
+      '@ckeditor/ckeditor5-ui': 35.1.0
       '@ckeditor/ckeditor5-utils': 35.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
@@ -469,6 +472,7 @@ importers:
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-engine': 32.0.11
       '@types/ckeditor__ckeditor5-image': 33.0.0
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
       '@types/ckeditor__ckeditor5-utils': 28.0.14
       '@types/jest': 28.1.8
       jest: 28.1.3
