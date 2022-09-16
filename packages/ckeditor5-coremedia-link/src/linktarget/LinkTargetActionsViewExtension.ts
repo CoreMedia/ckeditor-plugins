@@ -1,8 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
@@ -15,6 +13,7 @@ import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -26,35 +25,28 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
  * opens and allows to set a custom target.
  *
  * The buttons to be rendered can be set in the editor's configuration.
- * The default configuration is defined in @see {@link DefaultTarget}.
+ * The default configuration is defined in {@link linktarget.config.DefaultTarget}.
  */
 class LinkTargetActionsViewExtension extends Plugin {
   static readonly pluginName: string = "LinkTargetActionsViewExtension";
-  static readonly #logger: Logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
-
   static readonly requires = [LinkUI, CustomLinkTargetUI];
 
   async init(): Promise<void> {
-    const logger = LinkTargetActionsViewExtension.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${LinkTargetActionsViewExtension.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
 
     await this.#extendView(linkUI);
 
-    logger.debug(
-      `Initialized ${LinkTargetActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
-    );
+    reportInitEnd(initInformation);
   }
 
   /**
    * Extends the actions view of the linkUI plugin by adding target buttons right
    * before the {@link unlinkButtonView} element. The order of buttons is defined
    * by the editor's configuration, respectively the order of default targets
-   * in {@link DefaultTarget}.
+   * in {@link linktarget.config.DefaultTarget}.
    *
    * @param linkUI - the linkUI plugin
    */

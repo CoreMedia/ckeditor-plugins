@@ -5,7 +5,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ifPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
 import { Mode } from "./FontMapping";
@@ -26,7 +26,7 @@ type FontMapperConfig = FontMapperConfigEntry[];
  *
  * When detecting a given font in the font-family style attribute, the
  * replacement for all characters inside the element will be performed
- * recursively &mdash; until a nested element is found which overrides the
+ * recursively &mdash; until a nested element is found that overrides the
  * font-family.
  *
  * Upon processing, font-family style settings will be removed from the element,
@@ -63,11 +63,7 @@ export default class FontMapper extends Plugin {
   static readonly requires = [ClipboardPipeline];
 
   async init(): Promise<void> {
-    const logger = FontMapper.#logger;
-    const pluginName = FontMapper.pluginName;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor = this.editor;
     const customFontMapperConfig: FontMapperConfig | undefined = editor.config.get(
@@ -76,14 +72,14 @@ export default class FontMapper extends Plugin {
     FontMapper.#applyPluginConfig(customFontMapperConfig);
 
     // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
-    // We also need to use a priority higher then "low" in order to process the input in time.
+    // We also need to use a priority higher than "low" to process the input in time.
     await ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
       this.listenTo(p, FontMapper.clipboardEventName, FontMapper.#handleClipboardInputTransformationEvent, {
         priority: "normal",
       })
     );
 
-    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   /**

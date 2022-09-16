@@ -1,6 +1,13 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-images",
   "version": "9.0.1",
+  "description": "Support for CMS BLOB References like images",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "images"
+  ],
   "engines": {
     "node": ">=15.0.0"
   },

@@ -14,7 +14,7 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
  *
  * The ContentToModelRegistry can be accessed by other plugins via the {@link ContentClipboardEditing} plugin.
  *
- * **Usage Example:**
+ * @example
  * ```
  * await ifPlugin(editor, ContentClipboardEditing)
       .then((plugin) => {

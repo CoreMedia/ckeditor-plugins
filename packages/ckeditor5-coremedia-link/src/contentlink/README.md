@@ -1,5 +1,7 @@
 # Content-Link Feature
 
+[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+
 CoreMedia CMS manages its resources in so-called _Contents_, where each Content
 may either be a Document or a Folder.
 
@@ -15,7 +17,7 @@ The Content-Link Feature adds transparent support to
 
 [Integration]: <#integration>
 
-[[Top][]|[Integration][]|[Design][]|[RichText][]]
+| [Top][] | [Integration][] | [Design][] |[RichText][] |
 
 ```typescript
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
@@ -36,7 +38,7 @@ ClassicEditor
 
 [Service Agent]: <#service-agent>
 
-[[Top][]|[Up][Integration]|[Service Agent][]]
+| [Top][] | [Up][Integration] | [Service Agent][] |
 
 To resolve the name and other properties of a linked content, the Content-Link
 feature uses the Service Agent architecture as introduced in context of
@@ -67,7 +69,7 @@ by `@coremedia/ckeditor5-coremedia-studio-integration-mock`.
 
 [Design]: <#design>
 
-[[Top][]|[Integration][]|[Design][]|[RichText][]]
+| [Top][] | [Integration][] | [Design][] | [RichText][] |
 
 ### Representation for Root-Folder
 
@@ -92,17 +94,15 @@ decisions are subject to change.
 ## CoreMedia RichText 1.0 Integration
 
 [CoreMedia RichText 1.0 Integration]: <#coremedia-richtext-10-integration>
-
 [RichText]: <#coremedia-richtext-10-integration>
 
-[[Top][]|[Integration][]|[Design][]|[RichText][]]
+| [Top][] | [Integration][] | [Design][] | [RichText][] |
 
 For easier integration with [CKEditor's Link Feature][cke5:docs:link:feature] it
 is required, that content-links are represented in `href` attribute with
 `content:` scheme syntax:
 
 ```xml
-
 <a href="content:42">Some Content</a>
 ```
 
@@ -124,3 +124,5 @@ slash by a colon.
 [cke5:docs:link:feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/link.html> "Link - CKEditor 5 Documentation"
 
 [Top]: <#top> "Jump to top of document"
+[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_link.contentlink.html> "Namespace contentlink"

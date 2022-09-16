@@ -45,6 +45,7 @@
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
     "preinstall": "npx --yes only-allow pnpm",
+    "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
     "update-latest": "pnpm update --interactive --latest --recursive"
   },
   "dependencies": {

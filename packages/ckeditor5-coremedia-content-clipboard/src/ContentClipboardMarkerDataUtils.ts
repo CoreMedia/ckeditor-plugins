@@ -1,14 +1,21 @@
 /**
- * Utility class to create marker names for content drops and retrieve item index and drop id from a name.
+ * Utility class to create marker names for content drops and retrieve item
+ * index and drop id from a name.
  *
- * A marker name consists of 3 different parts that help to identify a marker as a part of a content drop
- * and determine its position inside a drop that contains multiple items.
+ * A marker name consists of 3 different parts that help to identify a marker as
+ * a part of a content drop and determine its position inside a drop that
+ * contains multiple items.
  *
  * It basically looks like this:
- * [prefix]:[dropId]:[itemIndex]
  *
- * Example:
+ * ```text
+ * [prefix]:[dropId]:[itemIndex]
+ * ```
+ *
+ * @example
+ * ```text
  * "content-drop:1642076134128:2"
+ * ```
  */
 export class ContentClipboardMarkerDataUtils {
   static readonly CONTENT_DROP_MARKER_PREFIX = "content-drop";
@@ -50,8 +57,20 @@ export class ContentClipboardMarkerDataUtils {
   }
 }
 
+/**
+ * Drop Marker Representation.
+ */
 export interface MarkerData {
+  /**
+   * Prefix of the drop marker.
+   */
   prefix: string;
+  /**
+   * ID of the dropped object.
+   */
   dropId: number;
+  /**
+   * Index of the relevant item in the dropped object.
+   */
   itemIndex: number;
 }

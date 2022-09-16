@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
-import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Hooks into GHS' `DataSchema` plugin, if available and registers additional
@@ -19,9 +19,11 @@ export class HtmlImageElementSupport extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);
 
   init(): void {
-    reportInitializationProgress(HtmlImageElementSupport.pluginName, HtmlImageElementSupport.#logger, () =>
-      this.#init()
-    );
+    const initInformation = reportInitStart(this);
+
+    this.#init();
+
+    reportInitEnd(initInformation);
   }
 
   #init(): void {

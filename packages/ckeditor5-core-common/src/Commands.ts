@@ -6,7 +6,7 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 
 /**
- * Error, which signals that a requested command could not be found.
+ * Error that signals that a requested command could not be found.
  */
 export class CommandNotFoundError extends Error {
   readonly #name: string;
@@ -41,6 +41,12 @@ export type CommandNotFoundErrorHandler = (e: CommandNotFoundError) => void;
  * Suggested alternative `catch` handler, if a command is not found.
  * It will trigger a debug log statement.
  *
+ * @example
+ * ```typescript
+ * ifCommand(editor, commandName)
+ *   .then(handler)
+ *   .catch(optionalCommandNotFound);
+ * ```
  * @param e - error to ignore
  */
 export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandNotFoundError) =>
@@ -49,6 +55,14 @@ export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandN
 /**
  * Provides a `catch` handler, if a recommended command is not found.
  * It will trigger a warning log statement and a debug log statement with more details.
+ *
+ * @example
+ * ```typescript
+ * ifCommand(editor, commandName)
+ *   .then(handler)
+ *   .catch(recommendCommand("Feature lorem ipsum won't work."));
+ * ```
+ *
  * @param effectIfMissingMessage - optional effect, what will happen if the plugin is missing
  * @param logger - optional logger to use instead of default
  */
@@ -66,11 +80,17 @@ export const recommendCommand = (
 
 /**
  * Immediately resolving promise to retrieve command. Rejected with `Error`
- * when command is not found.
+ * when command is not found. Rejecting with `CommandNotFoundError` on error.
+ *
+ * @example
+ * ```typescript
+ * ifCommand(editor, commandName)
+ * .then(handler)
+ * .catch(optionalCommandNotFound);
+ * ```
  *
  * @param editor - editor instance
  * @param commandName - command name to search for
- * @throws CommandNotFoundError if command could not be found
  */
 export const ifCommand = async (editor: Editor, commandName: string): Promise<Command> => {
   const command = editor.commands.get(commandName);
@@ -81,7 +101,7 @@ export const ifCommand = async (editor: Editor, commandName: string): Promise<Co
 };
 
 /**
- * Handler for resolved plugins.
+ * Handler for resolved commands.
  */
 export type CommandHandler = (command: Command) => void;
 

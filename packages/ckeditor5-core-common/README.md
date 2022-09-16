@@ -1,5 +1,4 @@
-CKEditor 5 Core Common
-================================================================================
+# CKEditor 5 Core Common
 
-This package contains common tooling to help with CKEditor 5 Plugin
-implementations.
+This package contains some assistive tooling around `@ckeditor/ckeditor5-core`
+API to ease implementation of plugins.

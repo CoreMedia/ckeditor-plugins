@@ -8,6 +8,7 @@ export * from "./constants";
 export * from "./ContentImageEditingPlugin";
 export { default as ContentImageEditingPlugin } from "./ContentImageEditingPlugin";
 
+export * from "./ContentImageClipboardPlugin";
 export { default as ContentImageClipboardPlugin } from "./ContentImageClipboardPlugin";
 
 export * from "./ContentImagePlugin";

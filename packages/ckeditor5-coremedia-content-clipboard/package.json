@@ -1,5 +1,12 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-content-clipboard",
+  "description": "Clipboard Support for CoreMedia Contents",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "clipboard"
+  ],
   "version": "9.0.1",
   "engines": {
     "node": ">=15.0.0"

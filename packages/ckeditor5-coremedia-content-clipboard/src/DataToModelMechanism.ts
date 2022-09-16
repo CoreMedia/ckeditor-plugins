@@ -18,31 +18,39 @@ import { enableUndo, UndoSupport } from "./integrations/Undo";
 const UTILITY_NAME = "DataToModelMechanism";
 
 /**
- * The DataToModelMechanism is a utility class that handles content insertions into the editor
- * and adjusts the editor's model accordingly. To be precise, it actually receives information
- * about a previously added marker, fetches the required data and displays it at the marker position.
+ * The DataToModelMechanism is a utility class that handles content insertions
+ * into the editor and adjusts the editor's model accordingly. To be precise, it
+ * actually receives information about a previously added marker, fetches the
+ * required data and displays it at the marker position.
  *
  * **How this works with other ContentClipboard Plugins:**
  *
- * The {@link ContentClipboard} plugin integrates into the CKEditor's Input Pipeline and evaluates
- * input events for CoreMedia Content inputs. Whenever an input is received, a placeholder
- * marker gets inserted at the corresponding cursor position.
+ * The {@link ContentClipboard} plugin integrates into the CKEditor's Input
+ * Pipeline and evaluates input events for CoreMedia Content inputs. Whenever an
+ * input is received, a placeholder marker gets inserted at the corresponding
+ * cursor position.
  *
- * Markers are used to indicate or highlight different things in the editor's view and in this case
- * are used to display a loading animation since the actual contents might take a while to
- * load. The {@link ContentClipboardEditing} plugin listens to markers getting added and triggers the
- * {@link DataToModelMechanism} if needed.
+ * Markers are used to indicate or highlight different things in the editor's
+ * view and in this case are used to display a loading animation since the
+ * actual contents might take a while to load. The
+ * {@link ContentClipboardEditing} plugin listens to markers getting added and
+ * triggers the {@link DataToModelMechanism} if needed.
  *
  * **DataToModelMechanism in Detail:**
  *
- * The DataToModelMechanism is executed whenever a marker is added and receives the corresponding MarkerData object.
- * The MarkerData holds information about the dropped data, such as the contentUri or the size of the drop.
- * Now, the DataToModelMechanism uses a Studio service to resolve the type of the content object from the given
- * contentUri. The type is needed to figure out how to render the content in the editor, or more precise, how
- * the model the content type is defined. This information is provided by the {@link ContentToModelRegistry}, which
- * allows other plugins to register model creator strategies for different content types.
+ * The DataToModelMechanism is executed whenever a marker is added and receives
+ * the corresponding MarkerData object. The MarkerData holds information about
+ * the dropped data, such as the contentUri or the size of the drop.
  *
- * Now, the model then is written, the view updates accordingly and the marker (loading animation) gets removed.
+ * Now, the DataToModelMechanism uses a Studio service to resolve the type of
+ * the content object from the given contentUri. The type is needed to figure
+ * out how to render the content in the editor, or more precise, how the model
+ * the content type is defined. This information is provided by the
+ * {@link ContentToModelRegistry}, which allows other plugins to register model
+ * creator strategies for different content types.
+ *
+ * Now, the model then is written, the view updates accordingly and the marker
+ * (loading animation) gets removed.
  */
 export default class DataToModelMechanism {
   static readonly #logger: Logger = LoggerProvider.getLogger(UTILITY_NAME);

@@ -52,6 +52,7 @@
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.7.1",
+    "http-server": "^14.1.1",
     "postcss": "^8.4.16",
     "postcss-loader": "^7.0.1",
     "raw-loader": "^4.0.2",
@@ -66,6 +67,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "webpack --mode production --stats-error-details",
-    "npm-check-updates": "npm-check-updates --upgrade"
+    "npm-check-updates": "npm-check-updates --upgrade",
+    "start": "http-server . --port 0 -d false -o sample"
   }
 }

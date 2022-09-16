@@ -3,7 +3,8 @@ import ContentImageEditingPlugin from "./ContentImageEditingPlugin";
 import ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
 
 /**
- * This is a glue plugin....
+ * Aggregator plugin for `ContentImageEditingPlugin` and
+ * `ContentImageClipboardPlugin`.
  */
 export default class ContentImagePlugin extends Plugin {
   static readonly pluginName: string = "ContentImagePlugin";

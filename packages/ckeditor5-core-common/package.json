@@ -1,9 +1,12 @@
 {
   "name": "@coremedia/ckeditor5-core-common",
   "version": "9.0.1",
-  "description": "tooling to help with CKEditor 5 Plugin implementations.",
+  "description": "Assistive Utilities for `@ckeditor/ckeditor5-core`.",
   "keywords": [
-    "coremedia"
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor5-core"
   ],
   "engines": {
     "node": ">=15.0.0",

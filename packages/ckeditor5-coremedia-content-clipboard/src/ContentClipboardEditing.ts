@@ -8,9 +8,15 @@ import { addContentMarkerConversion, removeContentMarkerConversion } from "./con
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 import { UndoSupport } from "./integrations/Undo";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const PLUGIN_NAME = "ContentClipboardEditing";
 
+/**
+ * The ContentClipboardEditing plugin listens to Content Input Markers, added by
+ * the `ContentClipboard` plugin. It then loads the linked content, removes the
+ * placeholder and renders the corresponding content.
+ */
 export default class ContentClipboardEditing extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
 
@@ -22,7 +28,9 @@ export default class ContentClipboardEditing extends Plugin {
   static readonly requires = [UndoSupport];
 
   init(): Promise<void> | void {
+    const initInformation = reportInitStart(this);
     this.#defineConverters();
+    reportInitEnd(initInformation);
   }
 
   #defineConverters(): void {

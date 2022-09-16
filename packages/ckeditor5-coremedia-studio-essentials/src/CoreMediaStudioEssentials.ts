@@ -7,9 +7,8 @@ import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-supp
  *
  * The CoreMediaStudioEssentials Plugin exposed by this package enables the following features:
  *
- * * CoreMedia RichText
- * * CoreMedia General RichText Support
- *
+ * * {@link ckeditor5-coremedia-richtext.CoreMediaRichText CoreMedia RichText}
+ * * {@link ckeditor5-coremedia-richtext-support.GeneralRichTextSupport CoreMedia General RichText Support}
  */
 export default class CoreMediaStudioEssentials extends Plugin {
   static readonly pluginName: string = "CoreMediaStudioEssentials";

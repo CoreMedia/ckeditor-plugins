@@ -1,5 +1,7 @@
 # CKEditor 5 Link Feature Extension Point
 
+[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+
 CKEditor 5 does not provide extension points for adding for sophisticated
 behaviors to links. In here you will find the extension points required by the
 CKEditor plugins provided here.
@@ -24,3 +26,6 @@ getLinkCleanup(editor)?.registerDependentAttribute("linkCustom");
 ```
 
 This requires to add `LinkCleanup` as required dependency to your plugin.
+
+[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_link.link.html> "Namespace link"

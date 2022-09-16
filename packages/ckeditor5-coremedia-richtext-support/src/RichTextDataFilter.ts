@@ -9,6 +9,7 @@ import ReducedMatcherPattern, {
 } from "./ReducedMatcherPattern";
 import { COREMEDIA_RICHTEXT_1_0_CONFIG } from "./CoreMediaRichText10Dtd";
 import { getConfig } from "./CoreMediaRichTextSupportConfig";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Plugin, which configures CKEditor's General HTML Support, so that
@@ -33,9 +34,8 @@ class RichTextDataFilter extends Plugin {
 
   init(): Promise<void> | void {
     const logger = RichTextDataFilter.#logger;
-    const startTimestamp = performance.now();
 
-    logger.info(`Initializing ${RichTextDataFilter.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor = this.editor;
     this.#delegate = editor.plugins.get(DataFilter);
@@ -92,7 +92,7 @@ class RichTextDataFilter extends Plugin {
       logger.debug("Declared elements and attributes to GHS.", { config: { ...this.#config } });
     }
 
-    logger.info(`Initialized ${RichTextDataFilter.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   /**
