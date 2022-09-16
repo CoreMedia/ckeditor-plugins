@@ -26,6 +26,8 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
+import ImageBlock from "@ckeditor/ckeditor5-image/src/imageblock";
+import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
 
 import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
@@ -77,6 +79,7 @@ let editor;
 const imagePlugins = [
   ContentImagePlugin,
   ImageInline,
+  ImageBlock,
   ImageStyle,
   ImageToolbar,
 ];
@@ -101,6 +104,7 @@ ClassicEditor.create(document.querySelector('#editor'), {
     Italic,
     AutoLink,
     Link,
+    LinkImage,
     LinkTarget,
     CoreMediaStudioEssentials,
     DocumentList,
@@ -236,6 +240,8 @@ ClassicEditor.create(document.querySelector('#editor'), {
       'imageStyle:float-none',
       "|",
       'imageStyle:inline',
+      "|",
+      'linkImage'
     ]
   },
   table: {
