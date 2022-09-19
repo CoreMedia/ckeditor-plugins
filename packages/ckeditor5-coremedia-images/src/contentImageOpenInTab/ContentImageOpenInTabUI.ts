@@ -9,6 +9,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 import { DocumentSelection } from "@ckeditor/ckeditor5-engine";
 import { ModelUri, requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
 
 export default class ContentImageOpenInTabUI extends Plugin {
   static readonly pluginName: string = "ContentImageOpenInTabUI";
@@ -17,11 +18,8 @@ export default class ContentImageOpenInTabUI extends Plugin {
   async init(): Promise<void> {
     const logger = ContentImageOpenInTabUI.#logger;
     const pluginName = ContentImageOpenInTabUI.pluginName;
-    const startTimestamp = performance.now();
 
-    logger.debug(`Initializing ${pluginName}...`);
-    this.#createToolbarLinkImageButton();
-    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitializationProgress(pluginName, logger, this.#createToolbarLinkImageButton);
   }
 
   #createToolbarLinkImageButton() {
