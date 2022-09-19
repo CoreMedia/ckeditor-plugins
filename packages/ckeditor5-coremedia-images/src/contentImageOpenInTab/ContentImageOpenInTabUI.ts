@@ -9,44 +9,44 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 
 export default class ContentImageOpenInTabUI extends Plugin {
-    static readonly pluginName: string = "ContentImageOpenInTabUI";
-    static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageOpenInTabUI.pluginName);
-    
-    async init(): Promise<void> {
-        const logger = ContentImageOpenInTabUI.#logger;
-        const pluginName = ContentImageOpenInTabUI.pluginName;
-        const startTimestamp = performance.now();
+  static readonly pluginName: string = "ContentImageOpenInTabUI";
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageOpenInTabUI.pluginName);
 
-        logger.debug(`Initializing ${pluginName}...`);
-        this.#createToolbarLinkImageButton();
-        logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
-    }
+  async init(): Promise<void> {
+    const logger = ContentImageOpenInTabUI.#logger;
+    const pluginName = ContentImageOpenInTabUI.pluginName;
+    const startTimestamp = performance.now();
 
-    #createToolbarLinkImageButton() {
-        const editor: EditorWithUI = this.editor as EditorWithUI;
-        const { ui } = requireEditorWithUI(this.editor);
-        const t = editor.t;
+    logger.debug(`Initializing ${pluginName}...`);
+    this.#createToolbarLinkImageButton();
+    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+  }
 
-        editor.ui.componentFactory.add( 'contentImageOpenInTab', locale => {
-            const button = new ButtonView( locale );
+  #createToolbarLinkImageButton() {
+    const editor: EditorWithUI = this.editor as EditorWithUI;
+    const { ui } = requireEditorWithUI(this.editor);
+    const t = editor.t;
 
-            button.set( {
-                isEnabled: true,
-                label: t( 'Open in tab' ),
-                icon: openInTabIcon,
-                tooltip: true,
-            } );
+    ui.componentFactory.add("contentImageOpenInTab", (locale) => {
+      const button = new ButtonView(locale);
 
-            // Bind button to the command.
-            // TODO
-            //button.bind( 'isEnabled' ).to( openInTabCommand, 'isEnabled' );
+      button.set({
+        isEnabled: true,
+        label: t("Open in tab"),
+        icon: openInTabIcon,
+        tooltip: true,
+      });
 
-            this.listenTo( button, 'execute', () => {
-                //TODO
-                console.log("open image in tab");
-            } );
+      // Bind button to the command.
+      // TODO
+      //button.bind( 'isEnabled' ).to( openInTabCommand, 'isEnabled' );
 
-            return button;
-        } );
-    }
+      this.listenTo(button, "execute", () => {
+        //TODO
+        console.log("open image in tab");
+      });
+
+      return button;
+    });
+  }
 }
