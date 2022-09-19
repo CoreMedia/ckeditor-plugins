@@ -39,7 +39,7 @@ class MockStudioIntegration extends Plugin {
     const dragDropService = new MockDragDropService();
     serviceAgent.registerService(dragDropService);
 
-    const workAreaService = new MockWorkAreaService();
+    const workAreaService = new MockWorkAreaService(this.editor);
     serviceAgent.registerService(workAreaService);
 
     const blobDisplayService = new MockBlobDisplayService(contentProvider);
