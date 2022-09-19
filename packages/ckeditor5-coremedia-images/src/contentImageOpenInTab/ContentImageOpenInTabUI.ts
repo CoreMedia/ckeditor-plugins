@@ -18,12 +18,13 @@ export default class ContentImageOpenInTabUI extends Plugin {
   async init(): Promise<void> {
     const logger = ContentImageOpenInTabUI.#logger;
     const pluginName = ContentImageOpenInTabUI.pluginName;
-
-    reportInitializationProgress(pluginName, logger, this.#createToolbarLinkImageButton);
+    const editor = this.editor;
+    reportInitializationProgress(pluginName, logger, () => {
+      this.#createToolbarLinkImageButton(editor as EditorWithUI);
+    });
   }
 
-  #createToolbarLinkImageButton() {
-    const editor: EditorWithUI = this.editor as EditorWithUI;
+  #createToolbarLinkImageButton(editor: EditorWithUI): void {
     const { ui } = requireEditorWithUI(this.editor);
     const t = editor.t;
 
