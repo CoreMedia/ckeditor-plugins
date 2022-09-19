@@ -2,20 +2,59 @@ import { Command } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 import WorkAreaServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
-import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 //TODO: Where to put this general command?
 export default class OpenInTabCommand extends Command {
-  override execute(...options: unknown[]): void {
-    if (!options) {
+  static #logger = LoggerProvider.getLogger("OpenInTabCommand");
+  #elementName: string | undefined;
+  #attributeName: string;
+
+  /**
+   *
+   *
+   * @param editor
+   * @param attributeName
+   * @param elementName - name of the element in the selection containing the Uri-Path attribute. Defaults to undefined.
+   */
+  constructor(editor: Editor, attributeName: string, elementName: string | undefined = undefined) {
+    super(editor);
+    this.#elementName = elementName;
+    this.#attributeName = attributeName;
+  }
+
+  override refresh(): void {
+    const logger = OpenInTabCommand.#logger;
+    const uriPath = this.#resolveUriPath();
+    if (!uriPath) {
+      this.isEnabled = false;
       return;
     }
 
-    if (!(options.length > 0)) {
-      return;
-    }
+    // TODO: WorkAreaService is not observable and canBeOpened might evaluate to true
+    // and stays true even if it should recalculate to false.
+    // To solve this either the WorkAreaService has to provide an observable or another
+    // service has to be implemented.
+    serviceAgent
+      .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
+      .then((workAreaService: WorkAreaService): void => {
+        workAreaService
+          .canBeOpenedInTab([uriPath])
+          .then((canBeOpened: unknown) => {
+            logger.debug("May be opened in tab: ", canBeOpened);
+            this.isEnabled = canBeOpened as boolean;
+          })
+          .catch((error): void => {
+            logger.warn(error);
+            this.isEnabled = false;
+          });
+      });
+  }
 
-    const uriPath = requireContentUriPath(options[0] as string);
+  override execute(): void {
+    const uriPath = this.#resolveUriPath();
     serviceAgent
       .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
       .then((workAreaService: WorkAreaService): void => {
@@ -24,5 +63,31 @@ export default class OpenInTabCommand extends Command {
       .catch((): void => {
         console.warn("WorkArea Service not available");
       });
+  }
+
+  #resolveUriPath(): UriPath | undefined {
+    const selection = this.editor.model.document.selection;
+    if (this.#elementName) {
+      const selectedElement = selection.getSelectedElement();
+      if (!selectedElement) {
+        return undefined;
+      }
+
+      const name = selectedElement.name;
+      if (name !== this.#elementName) {
+        return undefined;
+      }
+
+      const modelUriAttributeValue = selectedElement.getAttribute(this.#attributeName) as string;
+      return requireContentUriPath(modelUriAttributeValue);
+    }
+
+    // If it is a text we have no element, so we have to go for the first position.
+    const modelUriAttributeValue = selection.getFirstPosition()?.textNode?.getAttribute(this.#attributeName) as string;
+    if (!modelUriAttributeValue) {
+      return undefined;
+    }
+
+    return requireContentUriPath(modelUriAttributeValue);
   }
 }

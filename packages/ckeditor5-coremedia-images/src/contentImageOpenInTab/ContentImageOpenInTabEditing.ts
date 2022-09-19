@@ -13,7 +13,8 @@ export default class ContentImageOpenInTabEditing extends Plugin {
     const logger = ContentImageOpenInTabEditing.#logger;
     const editor = this.editor;
     reportInitializationProgress(pluginName, logger, () => {
-      editor.commands.add("openInTab", new OpenInTabCommand(editor));
+      editor.commands.add("openImageInTab", new OpenInTabCommand(editor, "xlink-href", "imageInline"));
+      editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
     });
   }
 }
