@@ -10,7 +10,7 @@ import {
   reportInitEnd,
   reportInitStart,
 } from "@coremedia/ckeditor5-core-common/Plugins";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-content/commands/OpenInTabCommand";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 
 /**
  * Plugin to support images from CoreMedia RichText.

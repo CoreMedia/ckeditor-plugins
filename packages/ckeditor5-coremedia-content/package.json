@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-content",
+  "name": "@coremedia/ckeditor5-coremedia-content",
   "version": "9.0.2-rc.0",
   "description": "CKEditor components and utilities related to CoreMedia content.",
   "keywords": [

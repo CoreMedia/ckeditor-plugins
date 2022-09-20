@@ -476,8 +476,8 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.1.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-content': 9.0.2-rc.0
       '@coremedia/ckeditor5-core-common': 9.0.2-rc.0
+      '@coremedia/ckeditor5-coremedia-content': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-content-clipboard': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 9.0.2-rc.0
       '@coremedia/ckeditor5-logging': 9.0.2-rc.0
@@ -495,8 +495,8 @@ importers:
       rxjs: ^7.5.6
       typescript: ^4.8.2
     dependencies:
-      '@coremedia/ckeditor5-content': link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
+      '@coremedia/ckeditor5-coremedia-content': link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
@@ -538,8 +538,8 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-common': 9.0.2-rc.0
-      '@coremedia/ckeditor5-content': 9.0.2-rc.0
       '@coremedia/ckeditor5-core-common': 9.0.2-rc.0
+      '@coremedia/ckeditor5-coremedia-content': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-content-clipboard': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 9.0.2-rc.0
       '@coremedia/ckeditor5-logging': 9.0.2-rc.0
@@ -560,8 +560,8 @@ importers:
       typescript: ^4.8.2
     dependencies:
       '@coremedia/ckeditor5-common': link:../ckeditor5-common
-      '@coremedia/ckeditor5-content': link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
+      '@coremedia/ckeditor5-coremedia-content': link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard': link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
