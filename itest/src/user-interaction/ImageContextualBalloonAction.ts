@@ -4,7 +4,7 @@ import { ContextualBalloonWrapper } from "../aut/ContextualBalloonWrapper";
 /**
  * Actions to control the ImageStyle contextual balloon.
  */
-export class ImageStyleBalloonAction {
+export class ImageContextualBalloonAction {
   /**
    * Clicks the align left button in the active contextual balloon.
    * Assumes that the balloon has been opened before.
@@ -13,7 +13,7 @@ export class ImageStyleBalloonAction {
    */
   static async clickAlignLeft(application: ApplicationWrapper): Promise<void> {
     const contextualBalloon = application.contextualBalloon;
-    const alignLeftButton = ImageStyleBalloonAction.#getAlignLeftButton(contextualBalloon);
+    const alignLeftButton = ImageContextualBalloonAction.#getAlignLeftButton(contextualBalloon);
     await alignLeftButton.click();
   }
 
@@ -25,7 +25,7 @@ export class ImageStyleBalloonAction {
    */
   static async clickAlignRight(application: ApplicationWrapper): Promise<void> {
     const contextualBalloon = application.contextualBalloon;
-    const alignRightButton = ImageStyleBalloonAction.#getAlignRightButton(contextualBalloon);
+    const alignRightButton = ImageContextualBalloonAction.#getAlignRightButton(contextualBalloon);
     await alignRightButton.click();
   }
 
@@ -37,7 +37,7 @@ export class ImageStyleBalloonAction {
    */
   static async clickAlignWithinText(application: ApplicationWrapper): Promise<void> {
     const contextualBalloon = application.contextualBalloon;
-    const alignWithinTextButton = ImageStyleBalloonAction.#getAlignWithinTextButton(contextualBalloon);
+    const alignWithinTextButton = ImageContextualBalloonAction.#getAlignWithinTextButton(contextualBalloon);
     await alignWithinTextButton.click();
   }
 
@@ -49,8 +49,31 @@ export class ImageStyleBalloonAction {
    */
   static async clickAlignPageDefault(application: ApplicationWrapper): Promise<void> {
     const contextualBalloon = application.contextualBalloon;
-    const alignPageDefaultButton = ImageStyleBalloonAction.#getAlignPageDefaultButton(contextualBalloon);
+    const alignPageDefaultButton = ImageContextualBalloonAction.#getAlignPageDefaultButton(contextualBalloon);
     await alignPageDefaultButton.click();
+  }
+
+  /**
+   * Clicks the open in tab button in the active contextual balloon.
+   * Assumes that the balloon has been opened before.
+   *
+   * @param application - the current application
+   */
+  static async clickOpenInTab(application: ApplicationWrapper): Promise<void> {
+    const contextualBalloon = application.contextualBalloon;
+    const openInTabButton = ImageContextualBalloonAction.#getOpenInTabButton(contextualBalloon);
+    await openInTabButton.click();
+  }
+
+  /**
+   * Returns the state of the open image in tab button.
+   *
+   * @param application - the application wrapper.
+   */
+  static async openInTabIsEnabled(application: ApplicationWrapper): Promise<boolean> {
+    const contextualBalloon = application.contextualBalloon;
+    const openInTabButton = ImageContextualBalloonAction.#getOpenInTabButton(contextualBalloon);
+    return openInTabButton.isEnabled();
   }
 
   static #getAlignLeftButton(contextualBalloon: ContextualBalloonWrapper) {
@@ -67,5 +90,9 @@ export class ImageStyleBalloonAction {
 
   static #getAlignPageDefaultButton(contextualBalloon: ContextualBalloonWrapper) {
     return contextualBalloon.getNthItem(3);
+  }
+
+  static #getOpenInTabButton(contextualBalloon: ContextualBalloonWrapper) {
+    return contextualBalloon.getNthItem(5);
   }
 }

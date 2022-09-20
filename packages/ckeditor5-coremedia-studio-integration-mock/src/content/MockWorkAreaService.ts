@@ -10,6 +10,11 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 class MockWorkAreaService implements WorkAreaService {
   static #LOGGER = LoggerProvider.getLogger("WorkAreaService");
   private editor: Editor;
+  /**
+   * The entities which were triggered to open latest.
+   * Used for testing purposes to verify if the openEntitiesInTab has been triggered.
+   */
+  lastOpenedEntities: unknown[] = [];
 
   constructor(editor: Editor) {
     this.editor = editor;
@@ -27,7 +32,12 @@ class MockWorkAreaService implements WorkAreaService {
       }, 4000);
     });
 
+    this.lastOpenedEntities = entities;
     return { success: true };
+  }
+
+  getLastOpenedEntities(): unknown[] {
+    return this.lastOpenedEntities;
   }
 
   async canBeOpenedInTab(entityUris: unknown[]): Promise<unknown> {

@@ -1,10 +1,11 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import "./expect/Expectations";
-import { ImageStyleBalloonAction } from "./user-interaction/ImageStyleBalloonAction";
+import { ImageContextualBalloonAction } from "./user-interaction/ImageContextualBalloonAction";
 import { ElementHandle } from "playwright-core";
 import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
 import { img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 
 describe("Image Features", () => {
   let application: ApplicationWrapper;
@@ -94,6 +95,35 @@ describe("Image Features", () => {
     await expect(imgHandle).toMatchAttribute("src", PNG_RED_240x135);
   });
 
+  it("Should trigger open in tab for image from balloon", async () => {
+    const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Unknown Test";
+    const { editor, mockContent } = application;
+    const id = 42;
+    await mockContent.addContents({
+      id,
+      blob: PNG_RED_240x135,
+      name: `Document for test ${name}`,
+    });
+    const data = richtext(
+      p(
+        img({
+          "alt": name,
+          "xlink:href": blobReference(id),
+        })
+      )
+    );
+    const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
+
+    await editor.setDataAndGetDataView(data);
+    await page.locator(".ck-editor__editable img").click();
+    const isEnabled = await ImageContextualBalloonAction.openInTabIsEnabled(application);
+    expect(isEnabled).toBe(true);
+    await ImageContextualBalloonAction.clickOpenInTab(application);
+    const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
+    expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42#properties.data"]);
+  });
+
   it("Should correctly set Image Alignment", async () => {
     const { currentTestName } = expect.getState();
     const name = currentTestName ?? "Unknown Test";
@@ -123,21 +153,21 @@ describe("Image Features", () => {
     await page.locator(".ck-editor__editable img").click();
 
     // click on the align-left button in the imageStyle balloon
-    await ImageStyleBalloonAction.clickAlignLeft(application);
+    await ImageContextualBalloonAction.clickAlignLeft(application);
     await expectFloat(editableHandle, "float--left", "left");
 
     // click on the align-right button in the imageStyle balloon
-    await ImageStyleBalloonAction.clickAlignRight(application);
+    await ImageContextualBalloonAction.clickAlignRight(application);
 
     await expect(editableHandle).toHaveSelector("span.image-inline");
     await expectFloat(editableHandle, "float--right", "right");
 
     // click on the withinText button in the imageStyle balloon
-    await ImageStyleBalloonAction.clickAlignWithinText(application);
+    await ImageContextualBalloonAction.clickAlignWithinText(application);
     await expectFloat(editableHandle, "float--none", "none");
 
     // click on the page default button in the imageStyle balloon
-    await ImageStyleBalloonAction.clickAlignPageDefault(application);
+    await ImageContextualBalloonAction.clickAlignPageDefault(application);
     await expectNoFloat(editableHandle);
   });
 });

@@ -8,6 +8,7 @@ import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { ContextualBalloonWrapper } from "./ContextualBalloonWrapper";
+import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 
 /**
  * Represents result from starting the server.
@@ -129,5 +130,9 @@ export class ApplicationWrapper {
    */
   get mockContent(): MockContentPluginWrapper {
     return MockContentPluginWrapper.fromClassicEditor(this.editor);
+  }
+
+  get mockServiceAgent(): MockServiceAgentPluginWrapper {
+    return MockServiceAgentPluginWrapper.fromClassicEditor(this.editor);
   }
 }
