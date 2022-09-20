@@ -5,6 +5,8 @@ import WorkAreaServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-int
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 
 /**
  * The open in tab command.
@@ -73,6 +75,7 @@ export class OpenInTabCommand extends Command {
 
   override execute(): void {
     const uriPath = this.#resolveUriPath();
+    this.#closeBalloonIfExisting();
     serviceAgent
       .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
       .then((workAreaService: WorkAreaService): void => {
@@ -81,6 +84,15 @@ export class OpenInTabCommand extends Command {
       .catch((): void => {
         console.warn("WorkArea Service not available");
       });
+  }
+
+  #closeBalloonIfExisting(): void {
+    ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
+      if (balloon.visibleView) {
+        // it is not sufficient to just hide the visibleView, we need to remove it
+        balloon.remove(balloon.visibleView);
+      }
+    });
   }
 
   #resolveUriPath(): UriPath | undefined {

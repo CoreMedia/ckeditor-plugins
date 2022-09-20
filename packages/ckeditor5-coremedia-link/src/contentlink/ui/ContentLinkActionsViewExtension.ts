@@ -10,8 +10,7 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import { hasContentUriPath } from "./ViewExtensions";
-import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { ifPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -93,14 +92,6 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     contentLinkView.on("contentClick", () => {
       if (contentLinkView.uriPath) {
-        // we need to hide the balloon for the Studio environment
-        // otherwise a new tab would open and the balloon would still be displayed
-        ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
-          if (balloon.visibleView) {
-            // it is not sufficient to just hide the visibleView, we need to remove it
-            balloon.remove(balloon.visibleView);
-          }
-        });
         this.editor.commands.get("openLinkInTab")?.execute();
       }
     });

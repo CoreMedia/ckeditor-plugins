@@ -20,8 +20,10 @@
     "@babel/core": "^7.19.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@ckeditor/ckeditor5-core": "^35.1.0",
+    "@ckeditor/ckeditor5-ui": "^35.1.0",
     "@coremedia/service-agent": "^1.1.2",
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
+    "@types/ckeditor__ckeditor5-ui": "^32.0.2",
     "@types/jest": "^28.1.8",
     "jest": "^28.1.3",
     "jest-config": "^28.1.3",
@@ -30,10 +32,12 @@
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-studio-integration": "9.0.2-rc.0",
+    "@coremedia/ckeditor5-core-common": "9.0.2-rc.0",
     "@coremedia/ckeditor5-logging": "9.0.2-rc.0"
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^35.1.0",
+    "@ckeditor/ckeditor5-ui": "^35.1.0",
     "@coremedia/service-agent": "^1.1.0"
   },
   "scripts": {
