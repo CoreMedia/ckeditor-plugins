@@ -1,5 +1,7 @@
 # CKEditor Plugin: Font Mapper
 
+[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+
 The Font Mapper plugin extends the
 [CKEditor 5 Clipboard Feature][cke5:docs:clipboard:feature].
 
@@ -21,7 +23,7 @@ in combination with CKEditor's `PasteFromOffice` plugin, which also listens
 to the same event, but has a higher priority.
 
 Both plugins manipulate the event's `data.content` object. This is why it
-is important to register the event listener with lower priority. Otherwise
+is important to register the event listener with lower priority. Otherwise,
 the `PasteFromOffice` plugin would just override the data changed in this
 plugin.
 
@@ -41,7 +43,7 @@ removed.
 During the insertion process, the pasted content is converted into a
 DocumentFragment. The `style` attribute on this fragment determines the
 font-family that is taken into account. The font-name will be a full match
-(i.e. not partial), ignoring the case.
+(i.e., not partial), ignoring the case.
 
 To reduce additional configuration effort, this plugin already comes with a
 mapping for the `Symbol` font and therefore supports pasting content from
@@ -57,7 +59,7 @@ use case, you can change the plugin configuration to meet your needs.
 The following example demonstrates how to add additional mappings for the
 `Symbol` font. The map consists of key-value pairs where the keys are the
 unicode code points to replace and the values are their HTML replacement, which
-is most likely an entity but you may also specify any HTML code.
+is most likely an entity, but you may also specify any HTML code.
 By default, the existing `Symbol` font mapping will remain, only the
 characters in the `map` configuration will be overridden.
 
@@ -160,7 +162,7 @@ property. The migrated configuration would look like this:
 
 If you did not use a custom configuration for the 
 `cmsymbolfontmapper` plugin, adding this plugin to your editor
-will be sufficient. Both plugins work the same in their default
+will be enough. Both plugins work the same in their default
 configuration.
 
 As you may have observed, the `font` parameter is new. Thus,
@@ -169,6 +171,9 @@ font referenced in `font-family` `style` attributes.
 
 ## See Also
 
-* [CKEditor 5 Paste from Office feature - CKEditor 5 API docs](https://ckeditor.com/docs/ckeditor5/latest/api/paste-from-office.html)
+* [Manual Testing](./TESTING.md)
+* [CKEditor 5 Paste from Office feature – CKEditor 5 API docs](https://ckeditor.com/docs/ckeditor5/latest/api/paste-from-office.html)
 
- [cke5:docs:clipboard:feature]: <https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/clipboard.html> "Clipboard - CKEditor 5 Documentation"
+[cke5:docs:clipboard:feature]: <https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/clipboard.html> "Clipboard - CKEditor 5 Documentation"
+[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_font_mapper.html> "Module ckeditor5-font-mapper"

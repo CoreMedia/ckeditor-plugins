@@ -11,6 +11,7 @@ import Delayed from "./Delayed";
 import { isObject } from "./MockContentUtils";
 import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { PREDEFINED_MOCK_CONTENTS } from "./PredefinedMockContents";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * If states shall change, it will be done with this fixed
@@ -129,17 +130,12 @@ class MockContentPlugin extends Plugin {
    * Initialize Plugin.
    */
   init(): Promise<void> | void {
-    const logger = MockContentPlugin.#logger;
-    const pluginName = MockContentPlugin.pluginName;
-
-    const startTimestamp = performance.now();
-
-    logger.info(`Initializing ${pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     this.#initContents();
     this.#initDefaults();
 
-    logger.info(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   /**

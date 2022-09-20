@@ -11,6 +11,7 @@ import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-comm
  *
  * The plugin takes the `xlink:href` represented in the data-view by
  * `data-xlink-href` and writes it to the model.
+ *
  * The model attribute afterwards will be downcast to the editing-view where it
  * is represented by the src-attribute of the `img`-tag.
  */
@@ -25,11 +26,11 @@ export default class ContentImageEditingPlugin extends Plugin {
 
   /**
    * Registers support for the `xlink:href` attribute for element `img` in
-   * richtext.
+   * RichText.
    *
    * `xlink:href` is represented in the data-view as `data-xlink-href` and in
    * model as `xlink-href`. When downcast to the editing-view it will be
-   * resolved to the image src-attribute by fetching the url from the
+   * resolved to the image src-attribute by fetching the URL from the
    * `BlobDisplayService`
    */
   async afterInit(): Promise<void> {

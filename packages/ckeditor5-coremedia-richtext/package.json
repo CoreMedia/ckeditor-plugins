@@ -1,6 +1,14 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext",
-  "version": "9.0.1",
+  "version": "9.0.2-rc.0",
+  "description": "CoreMedia RichText 1.0 DTD: Data-Processor",
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "richtext",
+    "dataprocessor"
+  ],
   "engines": {
     "node": ">=15.0.0"
   },
@@ -39,7 +47,8 @@
     "@ckeditor/ckeditor5-utils": "^35.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-dataprocessor-support": "^9.0.1",
-    "@coremedia/ckeditor5-logging": "^9.0.1"
+    "@coremedia/ckeditor5-core-common": "9.0.2-rc.0",
+    "@coremedia/ckeditor5-dataprocessor-support": "9.0.2-rc.0",
+    "@coremedia/ckeditor5-logging": "9.0.2-rc.0"
   }
 }

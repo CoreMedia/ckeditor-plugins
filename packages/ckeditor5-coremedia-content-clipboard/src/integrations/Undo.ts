@@ -1,6 +1,4 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
 import {
   CommandHandler,
@@ -9,6 +7,7 @@ import {
   ifCommand,
   optionalCommandNotFound,
 } from "@coremedia/ckeditor5-core-common/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
 
@@ -18,7 +17,6 @@ const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
  */
 export class UndoSupport extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
-  static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
   static readonly #disableHandler = disableCommand(PLUGIN_NAME);
   static readonly #enableHandler = enableCommand(PLUGIN_NAME);
   static readonly #commandNames = ["undo", "redo"];
@@ -29,17 +27,13 @@ export class UndoSupport extends Plugin {
   #enabled = false;
 
   init(): void {
-    const logger = UndoSupport.#logger;
-    const { pluginName } = UndoSupport;
     const { editor } = this;
 
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     this.#enabled = editor.plugins.has(UndoEditing);
 
-    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   /**

@@ -2,7 +2,9 @@ import { Subscription } from "rxjs";
 
 /**
  * A cache for subscriptions done during conversion of elements.
- * Subscription will be stored for unsubscription to prevent memory leaks when the subscription reference is lost.
+ *
+ * Subscription will be stored for unsubscription to prevent memory leaks when
+ * the subscription reference is lost.
  */
 export default class SubscriptionCache {
   subscriptionCache: Map<string, Subscription[]> = new Map<string, Subscription[]>();

@@ -3,8 +3,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { showContentLinkField } from "../ContentLinkViewUtils";
@@ -13,7 +11,7 @@ import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import { hasContentUriPath } from "./ViewExtensions";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ifPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -24,15 +22,11 @@ import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
  */
 class ContentLinkActionsViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkActionsViewExtension";
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
   static readonly requires = [LinkUI];
 
   async init(): Promise<void> {
-    const logger = ContentLinkActionsViewExtension.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${ContentLinkActionsViewExtension.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
@@ -82,9 +76,7 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     this.#extendView(linkUI);
 
-    logger.debug(
-      `Initialized ${ContentLinkActionsViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
-    );
+    reportInitEnd(initInformation);
   }
 
   #extendView(linkUI: LinkUI): void {

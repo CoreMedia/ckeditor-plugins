@@ -15,6 +15,7 @@ import { LINK_COMMAND_NAME } from "../link/Constants";
 import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Alias for easier readable code.
@@ -163,14 +164,11 @@ class ContentLinkCommandHook extends Plugin {
    */
   async init(): Promise<void> {
     const logger = ContentLinkCommandHook.#logger;
-    const startTimestamp = performance.now();
-    const pluginName = ContentLinkCommandHook.pluginName;
-
-    logger.debug(`Initializing ${pluginName}...`);
-
     const { editor } = this;
     const { model } = editor;
     const { document } = model;
+
+    const initInformation = reportInitStart(this);
 
     /*
      * When LinkCommand finished executing, we don't want to apply additional
@@ -188,7 +186,7 @@ class ContentLinkCommandHook extends Plugin {
      */
     document.registerPostFixer((writer) => this.#postFix(writer));
 
-    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   /**

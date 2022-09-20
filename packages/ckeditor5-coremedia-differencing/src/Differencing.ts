@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
-import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
@@ -13,7 +13,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * by differencing hints.
  *
  * To use this plugin, it has to be activated manually by calling
- * Differencing.activateDifferencing after the editor initialization.
+ * `Differencing.activateDifferencing` after the editor initialization.
  *
  * @example
  * ```typescript
@@ -28,17 +28,13 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  *   .
  *   .
  * }).then(newEditor => {
- *   const differencing = newEditor.plugins.get("Differencing");
- *   if (differencing) {
- *     differencing.activateDifferencing();
- *   }
+ *   newEditor.plugins.get("Differencing")?.activateDifferencing();
  * })
  * ```
  */
 export default class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport];
-
   static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
 
   /**
@@ -47,18 +43,40 @@ export default class Differencing extends Plugin {
    */
   #isActivated = false;
 
+  init(): void {
+    const logger = Differencing.#logger;
+    const initInformation = reportInitStart(this);
+
+    logger.debug("Differencing plugin available. May be activated by invoking differencing.activateDifferencing().");
+
+    reportInitEnd(initInformation);
+  }
+
   /**
    * Activates the differencing.
+   *
+   * It is recommended to activate differencing only for a CKEditor in
+   * read-only mode.
+   *
+   * Activating this in read-write mode may cause augmentation data like
+   * `<xdiff:span>` to be written back to server or will provide irritating
+   * highlighting in read-write editor where not expected.
    */
   activateDifferencing(): void {
+    const logger = Differencing.#logger;
+
     if (this.#isActivated) {
       return;
     }
-    reportInitializationProgress(Differencing.pluginName, Differencing.#logger, () => this.#init());
+
+    this.#activate();
+
     this.#isActivated = true;
+
+    logger.debug("Differencing got activated.");
   }
 
-  #init(): void {
+  #activate(): void {
     const editor = this.editor;
     const { model, conversion } = editor;
     const { schema } = model;

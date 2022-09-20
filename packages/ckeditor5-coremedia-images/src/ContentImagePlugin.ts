@@ -5,7 +5,8 @@ import ContentImageOpenInTabUI from "./contentImageOpenInTab/ContentImageOpenInT
 import ContentImageOpenInTabEditing from "./contentImageOpenInTab/ContentImageOpenInTabEditing";
 
 /**
- * This is a glue plugin....
+ * Aggregator plugin for `ContentImageEditingPlugin` and
+ * `ContentImageClipboardPlugin`.
  */
 export default class ContentImagePlugin extends Plugin {
   static readonly pluginName: string = "ContentImagePlugin";

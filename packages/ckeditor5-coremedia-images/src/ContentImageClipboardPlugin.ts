@@ -11,7 +11,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { ifPlugin, recommendPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ifPlugin, recommendPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -34,24 +34,25 @@ const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string)
 };
 
 /**
- * This plugin registers a "toModel" function for the ContentClipboardEditing plugin.
- * Initially, the ContentClipboardEditing plugin does not know how to handle insertions (e.g., via drag and drop)
- * of contents into the editor. Therefore, each feature has to provide this information to the plugin manually.
+ * This plugin registers a `toModel` function for the `ContentClipboardEditing`
+ * plugin.
  *
- * This particular plugin provides a strategy on how to insert contents that should be displayed as a preview image.
+ * Initially, the `ContentClipboardEditing` plugin does not know how to handle
+ * insertions (e.g., via drag and drop) of contents into the editor. Therefore,
+ * each feature has to provide this information to the plugin manually.
+ *
+ * This particular plugin provides a strategy on how to insert contents that
+ * should be displayed as a preview image.
  */
 export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
   async init(): Promise<void> {
-    const pluginName = ContentImageClipboardPlugin.pluginName;
     const logger = ContentImageClipboardPlugin.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${pluginName}...`);
-
     const { editor } = this;
+
+    const initInformation = reportInitStart(this);
 
     await ifPlugin(editor, ContentClipboardEditing)
       .then((plugin) => {
@@ -59,6 +60,6 @@ export default class ContentImageClipboardPlugin extends Plugin {
       })
       .catch(recommendPlugin("Creating Content Images from Clipboard not activated.", logger));
 
-    logger.debug(`Initialized ${pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 }

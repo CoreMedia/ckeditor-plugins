@@ -1,5 +1,7 @@
 # CKEditor 5 Plugin: CoreMedia Richtext 1.0 DataProcessor
 
+[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+
 This plugin is required to edit
 [CoreMedia Richtext 1.0](coremedia-richtext-1.0.dtd),
 an XML format, which provides a subset of XHTML features.
@@ -9,6 +11,249 @@ as well as conversion from CKEditor data model to CoreMedia RichText.
 
 To perform this transformation, this plugin provides a
 [CKEditor 5 DataProcessor](https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_dataprocessor_dataprocessor-DataProcessor.html).
+
+## Installation
+
+```text
+pnpm install @coremedia/ckeditor5-coremedia-richtext
+```
+
+```javascript
+import CoreMediaRichText
+  from '@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText';
+
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+});
+```
+
+This will set the data processor of this editor instance to
+`RichTextDataProcessor`.
+
+## Configuration
+
+The configuration key for CoreMedia RichText Plugin is `coremedia:richtext`.
+
+### Strictness
+
+```javascript
+import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema";
+```
+
+The strictness configures the behavior of the `toData` processing. It defaults
+to `STRICT`. Changing the strictness may be required for dealing with legacy
+contents stored in CoreMedia CMS.
+
+The following modes exist:
+
+* **`STRICT` enforces completely valid CoreMedia RichText 1.0.**
+
+  In addition to `LOOSE` it will check for _meant to be_, such as a type
+  called `Number` which states to be numbers only, but regarding the schema
+  allows any (unchecked) character data. For `STRICT`
+  non-numbers will be rated invalid.
+
+* **`LOOSE` will only check, what the scheme will detect.**
+
+  Given the example about numbers for `STRICT` mode, `LOOSE` will cause to
+  accept any character data.
+
+  **This is the safest mode to use**, when dealing with legacy contents, as for
+  example number attributes may contain non-numbers and still passed the DTD
+  validation.
+
+* **`LEGACY` simulates the CKEditor 4 RichText Data Processing Behavior.**
+
+  For CKEditor 4 the CoreMedia RichText data processing did not check for valid
+  attribute values. It only checked for valid and required attribute names.
+
+  If your extensions towards CKEditor 4 requires this behavior, you may enable
+  this legacy mode. Note though, that the generated XML may be invalid regarding
+  CoreMedia RichText 1.0 DTD. Most likely, you used this approach storing data
+  into a content property having a different grammar.
+
+#### Example Configuration
+
+```javascript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    strictness: Strictness.LOOSE,
+  },
+});
+```
+
+### Data Processing Rules for Elements
+
+As soon as you add a plugin, which supports an additional markup, you most
+likely need to adapt data processing, i.e., transformation between CKEditor's
+HTML and CoreMedia RichText 1.0.
+
+The [Highlight Plugin][highlight] for example adds a [`<mark>`][mark] element to
+HTML, which is not supported by CoreMedia RichText 1.0. You now have to model
+two mappings:
+
+1. **toData:** from HTML to CoreMedia RichText 1.0, and
+2. **toView:** from CoreMedia RichText 1.0 to HTML.
+
+An example configuration for the Highlight plugin will add the following
+mapping:
+
+1. **toData:**
+
+   * from: `<mark class="marker-green">highlighted</mark>`
+   * to: `<span class="mark--marker-green">highlighted</span>`
+
+2. **toView:**
+
+   * from: `<span class="mark--marker-green">highlighted</span>`
+   * to: `<mark class="marker-green">highlighted</mark>`
+
+As configuration:
+
+```javascript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    rules: {
+      elements: {
+        mark: {
+          toData: (params) => {
+            const originalClass = params.node.attributes["class"];
+            params.node.attributes["class"] = `mark--${originalClass}`;
+            params.node.name = "span";
+          },
+          toView: {
+            span: (params) => {
+              const originalClass = params.node.attributes["class"] || "";
+              const pattern = /^mark--(\S*)$/;
+              const match = pattern.exec(originalClass);
+              if (match) {
+                params.node.name = "mark";
+                params.node.attributes["class"] = match[1];
+              }
+            },
+          },
+        },
+      },
+    }
+  },
+});
+```
+
+As you see, you define the new rules in a section called `rules` and as we will
+map elements here, you use the keyword `elements` to define the mapping rules.
+
+The definition is (mostly) from HTML view: _Given an HTML element `<mark>`, how
+do I map it to a corresponding representation in CoreMedia RichText 1.0?_
+That's why the mapping keys are added with the name of the element.
+
+Most of the time, you need to configure both directions. Exceptions exist, and
+can be modelled, but are not part of this description. These directions are
+modelled by keywords `toData` and `toView`.
+
+Let's have a look at the `toData` mapping first:
+
+```javascript
+mark: {
+  toData: (params) => {
+    const originalClass = params.node.attributes["class"];
+    params.node.attributes["class"] = `mark--${originalClass}`;
+    params.node.name = "span";
+  }
+}
+```
+
+You define a mapping function, which receives `ElementFilterParams` as input.
+The interface knows the following properties:
+
+* **node:** Access to the DOM node to map, represented as `ElementProxy`.
+
+* **parentRule:** A possibly existing parent rule. Especially, when dealing with
+  elements, which are already mapped by default (such as heading elements), you
+  may (or may not) call the parent rule:
+
+    ```javascript
+    params.parentRule(params);
+    ```
+
+  If not calling this rule, it will just override any possibly existing default
+  configuration.
+
+* **editor:** The CKEditor instance. This may be used, for example, to access
+  the configuration of this CKEditor instance.
+
+The `toView` handling is slightly more challenging to implement. This is,
+because it is typical, that there are multiple element mappings for `<span>`
+originating from CoreMedia RichText. Thus, a typical `toView` mapping starts
+with a check, if the rule should feel responsible for mapping elements.
+
+Let's have a look at the `toView` mapping:
+
+```javascript
+toView: {
+  span: (params) => {
+    const originalClass = params.node.attributes["class"] || "";
+    const pattern = /^mark--(\S*)$/;
+    const match = pattern.exec(originalClass);
+    if (match) {
+      params.node.name = "mark";
+      params.node.attributes["class"] = match[1];
+    }
+  }
+}
+```
+
+As you see, it is checked, if the "marker" class is actually set, and if the
+rule should feel responsible.
+
+Again, you may call `params.parentRule(params);`. But, in contrast to the
+`toData` mapping you cannot block all transformations of `<span>` elements
+originating from CoreMedia RichText. This is because configuration parsing is
+context-sensitive:
+
+> The parent rule will only contain those `toView` mappings, which registered
+> before as part of the `toData` mapping of the `<mark>` element.
+
+All other mappings `toView` for `<span>` are handled independent of this rule.
+
+### Data Processing Rules for Text
+
+Similar to elements you may also add data processing rules for text nodes with a
+similar configuration.
+
+```typescript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    rules: {
+      elements: { /* ... */ },
+      text: {
+        toData: (params) => {
+          params.parentRule(params);
+          params.node.textContent = "data";
+        },
+        toView: (params) => {
+          params.parentRule(params);
+          params.node.textContent = "view";
+        },
+      },
+    },
+  }
+});
+```
 
 ## Reserved Classes
 
@@ -27,23 +272,24 @@ these RichText contents for delivery to browsers if used within webpages.
 
 This plugin introduced the following reserved class attribute values:
 
-| Class          | Applicable To | Representing | Comment                                           |
-|----------------|---------------|--------------|---------------------------------------------------|
-| `code`         | `<span>`      | `<code>`     |                                                   |
-| `p--heading-1` | `<p>`         | `<h1>`       |                                                   |
-| `p--heading-2` | `<p>`         | `<h2>`       |                                                   |
-| `p--heading-3` | `<p>`         | `<h3>`       |                                                   |
-| `p--heading-4` | `<p>`         | `<h4>`       |                                                   |
-| `p--heading-5` | `<p>`         | `<h5>`       |                                                   |
-| `p--heading-6` | `<p>`         | `<h6>`       |                                                   |
-| `strike`       | `<span>`      | `<s>`        |                                                   |
-| `td--header`   | `<td>`        | `<th>`       |                                                   |
-| `tr--header`   | `<tr>`        | `<tr>`       | Moved to `<thead>`. See [below](#table_sections). |
-| `tr--footer`   | `<tr>`        | `<tr>`       | Moved to `<tfoot>`. See [below](#table_sections). |
-| `underline`    | `<span>`      | `<u>`        |                                                   |
+| Class          | Applicable To | Representing | Comment                                     |
+|----------------|---------------|--------------|---------------------------------------------|
+| `code`         | `<span>`      | `<code>`     |                                             |
+| `p--heading-1` | `<p>`         | `<h1>`       |                                             |
+| `p--heading-2` | `<p>`         | `<h2>`       |                                             |
+| `p--heading-3` | `<p>`         | `<h3>`       |                                             |
+| `p--heading-4` | `<p>`         | `<h4>`       |                                             |
+| `p--heading-5` | `<p>`         | `<h5>`       |                                             |
+| `p--heading-6` | `<p>`         | `<h6>`       |                                             |
+| `strike`       | `<span>`      | `<s>`        |                                             |
+| `td--header`   | `<td>`        | `<th>`       |                                             |
+| `tr--header`   | `<tr>`        | `<tr>`       | Moved to `<thead>`. See [Table Sections][]. |
+| `tr--footer`   | `<tr>`        | `<tr>`       | Moved to `<tfoot>`. See [Table Sections][]. |
+| `underline`    | `<span>`      | `<u>`        |                                             |
 
 ### Table Sections
-<a id="table_sections"></a>
+
+[Table Sections]: <#table-sections>
 
 CoreMedia RichText 1.0 does not know about table sections. Instead, these
 table sections are represented by _reserved_ classes as well. Thus, a given
@@ -128,4 +374,12 @@ be evaluated and rated if they apply to you or not.
 
 ## See Also
 
-* [ckeditor5/gfmdataprocessor.js at master · ckeditor/ckeditor5](https://github.com/ckeditor/ckeditor5/blob/master/packages/ckeditor5-markdown-gfm/src/gfmdataprocessor.js)
+* [GFMDataProcessor - CKEditor 5 API docs][gfmdataprocessor]
+* [CoreMedia Richtext 1.0 DTD](coremedia-richtext-1.0.dtd)
+* [CoreMedia Richtext 1.0 RNG](coremedia-richtext-1.0.rng)
+
+[highlight]: <https://ckeditor.com/docs/ckeditor5/latest/features/highlight.html> "Highlight - CKEditor 5 Documentation"
+[mark]: <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark> "<mark>: The Mark Text element - HTML: HyperText Markup Language | MDN"
+[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_richtext.html> "Module ckeditor5-coremedia-richtext"
+[gfmdataprocessor]: <https://ckeditor.com/docs/ckeditor5/latest/api/module_markdown-gfm_gfmdataprocessor-GFMDataProcessor.html> "Class GFMDataProcessor (markdown-gfm/gfmdataprocessor~GFMDataProcessor) - CKEditor 5 API docs"

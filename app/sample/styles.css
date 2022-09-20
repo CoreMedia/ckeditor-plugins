@@ -280,14 +280,14 @@ xdiff\:span[xdiff\:class="diff-html-added"] {
   text-decoration: underline;
 }
 /* Represents inserted newline. */
-p > xdiff\:br[xdiff\:class="diff-html-added"]::before {
+xdiff\:br[xdiff\:class="diff-html-added"]::before {
   content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDkyLCAxNjAsIDYzKSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
   height: 16px;
   position: absolute;
   margin-left: 3px;
 }
 /* Represents removed newline. */
-p > xdiff\:br[xdiff\:class="diff-html-removed"]::before {
+xdiff\:br[xdiff\:class="diff-html-removed"]::before {
   content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDE5NiwgMTksIDE5KSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
   height: 16px;
   position: absolute;

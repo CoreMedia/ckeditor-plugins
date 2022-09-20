@@ -18,6 +18,7 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import { hasContentUriPathAndName } from "./ViewExtensions";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -33,10 +34,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static readonly requires = [LinkUI, ContentLinkCommandHook];
 
   init(): Promise<void> | void {
-    const logger = ContentLinkFormViewExtension.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${ContentLinkFormViewExtension.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
@@ -78,9 +76,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     this.#extendView(linkUI);
 
-    logger.debug(
-      `Initialized ${ContentLinkFormViewExtension.pluginName} within ${performance.now() - startTimestamp} ms.`
-    );
+    reportInitEnd(initInformation);
   }
 
   /**

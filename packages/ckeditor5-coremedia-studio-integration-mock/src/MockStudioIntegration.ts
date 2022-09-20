@@ -3,12 +3,11 @@ import MockContentDisplayService from "./content/MockContentDisplayService";
 import MockRichtextConfigurationService from "./content/MockRichtextConfigurationService";
 
 import { ServiceAgent, serviceAgent } from "@coremedia/service-agent";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -17,16 +16,11 @@ const PLUGIN_NAME = "MockStudioIntegration";
  */
 class MockStudioIntegration extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
-  static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
 
   static readonly requires = [MockContentPlugin];
 
   init(): Promise<void> | void {
-    const logger = MockStudioIntegration.#logger;
-
-    const startTimestamp = performance.now();
-
-    logger.info(`Initializing ${MockStudioIntegration.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const contentProvider = this.#initContents();
 
@@ -45,7 +39,7 @@ class MockStudioIntegration extends Plugin {
     const blobDisplayService = new MockBlobDisplayService(contentProvider);
     serviceAgent.registerService(blobDisplayService);
 
-    logger.info(`Initialized ${MockStudioIntegration.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   #initContents(): MockContentProvider {

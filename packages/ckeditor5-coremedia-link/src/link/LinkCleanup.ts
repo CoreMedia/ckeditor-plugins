@@ -1,14 +1,13 @@
 /* eslint no-null/no-null: off */
 
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import { LINK_HREF_MODEL } from "./Constants";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -45,18 +44,13 @@ interface LinkCleanupRegistry {
  */
 class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly pluginName: string = "LinkCleanup";
-  static readonly #logger: Logger = LoggerProvider.getLogger(LinkCleanup.pluginName);
-
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
   static readonly requires = [LinkUI];
 
   init(): void {
-    const logger = LinkCleanup.#logger;
-    const startTimestamp = performance.now();
-
-    logger.debug(`Initializing ${LinkCleanup.pluginName}...`);
+    const initInformation = reportInitStart(this);
 
     const editor = this.editor;
     const model = editor.model;
@@ -64,7 +58,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
 
     document.registerPostFixer(this.#fixOrphanedAttributes);
 
-    logger.debug(`Initialized ${LinkCleanup.pluginName} within ${performance.now() - startTimestamp} ms.`);
+    reportInitEnd(initInformation);
   }
 
   destroy(): void {

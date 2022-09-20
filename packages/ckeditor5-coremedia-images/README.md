@@ -1,29 +1,57 @@
-CoreMedia CKEditor 5 Images
-================================================================================
+# CoreMedia CKEditor 5 Images
 
-### General Information
+## General Information
 
-The `ckeditor5-coremedia-images` package is responsible for showing and editing images in CoreMedia RichText.
+The `ckeditor5-coremedia-images` package is responsible for showing and editing
+images in CoreMedia RichText.
 
-### Plugins:
+## Installation
 
-* ContentImageEditingPlugin
-* ContentImageClipboardPlugin
-* ModelBoundSubscriptionPlugin
+```text
+pnpm install @coremedia/ckeditor5-coremedia-images
+```
 
-**ContentImageEditingPlugin**
+```javascript
+ClassicEditor.create(document.querySelector('#editor'), {
+  plugins: [
+    ContentImagePlugin,
+    /* ... */
+  ],
+}).then((editor) => {
+  /* ... */
+});
+```
 
-Plugin to support images from CoreMedia RichText.
+Note, that you most likely will also install some of CKEditor's image plugins.
 
-**ContentImageClipboardPlugin**
+## Plugins
 
-Plugin that registers a creator function to support images in the **ContentClipboard** plugin.
+* `ContentImagePlugin`
 
-**ModelBoundSubscriptionPlugin**
+  Aggregator plugin for:
 
-Plugin to register active subscriptions for cleanup.
+  * `ContentImageEditingPlugin`
+  * `ContentImageClipboardPlugin`
 
-### Attributes for Images from RichText and mappings to model/view/data-view
+* `ContentImageEditingPlugin`
+
+  Plugin to support images from CoreMedia RichText. 
+
+* `ContentImageClipboardPlugin`
+
+  Plugin that registers a creator function to support images in the `ContentClipboard` plugin.
+
+* `ModelBoundSubscriptionPlugin`
+
+  Plugin to register active subscriptions for cleanup. Controlled by
+  `ContentImageEditingPlugin`.
+
+## Attributes for Images from RichText and mappings to model/view/data-view
+
+Note, that the representation in model depends on the installed plugins.
+If model elements are provided by _General RichText Support_ (based on
+CKEditor's General HTML support), it most likely means, that a corresponding
+plugin to edit this attribute has not been installed.
 
 | Data            | Data-View            | Model                 | Plugin                     | Data Example                              |
 |-----------------|----------------------|-----------------------|----------------------------|-------------------------------------------|
@@ -39,4 +67,3 @@ Plugin to register active subscriptions for cleanup.
 | `xml:lang`      | `lang`               | htmlAttributes by GRS | GeneralRichTextPlugin      | `xml:lang="en"`                           |
 | `height`        | `height`             | htmlAttributes by GRS | GeneralRichTextPlugin      | `height="48"`                             |
 | `width`         | `width`              | htmlAttributes by GRS | GeneralRichTextPlugin      | `width="48"`                              |
-
