@@ -4,7 +4,8 @@ import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ifPlugin, optionalPluginNotFound, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-content/commands/OpenInTabCommand";
 
 /**
  * Plugin to support images from CoreMedia RichText.
@@ -17,12 +18,21 @@ import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-comm
  */
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
+
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
   static readonly IMAGE_INLINE_VIEW_ELEMENT_NAME = "img";
   static readonly XLINK_HREF_MODEL_ATTRIBUTE_NAME = "xlink-href";
   static readonly XLINK_HREF_DATA_ATTRIBUTE_NAME = "data-xlink-href";
 
   static readonly requires = [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
+
+  async init(): Promise<void> {
+    const editor = this.editor;
+    const initInformation = reportInitStart(this);
+    editor.commands.add("openImageInTab", new OpenInTabCommand(editor, "xlink-href", "imageInline"));
+    editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
+    reportInitEnd(initInformation);
+  }
 
   /**
    * Registers support for the `xlink:href` attribute for element `img` in

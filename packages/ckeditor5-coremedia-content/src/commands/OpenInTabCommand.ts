@@ -6,8 +6,14 @@ import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-s
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
-//TODO: Where to put this general command?
-export default class OpenInTabCommand extends Command {
+/**
+ * The open in tab command.
+ * Uses the ServiceAgent to open a content in a CoreMedia Studio tab.
+ * Currently used for images and content links.
+ *
+ * @extends module:core/command~Command
+ */
+export class OpenInTabCommand extends Command {
   static #logger = LoggerProvider.getLogger("OpenInTabCommand");
   #elementName: string | undefined;
   #attributeName: string;

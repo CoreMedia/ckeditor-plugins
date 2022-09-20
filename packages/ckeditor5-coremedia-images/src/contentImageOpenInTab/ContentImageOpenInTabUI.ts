@@ -4,22 +4,21 @@ import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import openInTabIcon from "../../theme/icons/openInNewTab.svg";
 import "../lang/contentImageOpenInTab";
 
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
-import { reportInitializationProgress } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 
 export default class ContentImageOpenInTabUI extends Plugin {
   static readonly pluginName: string = "ContentImageOpenInTabUI";
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageOpenInTabUI.pluginName);
+
+  static readonly requires = [ContentImageEditingPlugin];
 
   async init(): Promise<void> {
-    const logger = ContentImageOpenInTabUI.#logger;
-    const pluginName = ContentImageOpenInTabUI.pluginName;
     const editor = this.editor;
-    reportInitializationProgress(pluginName, logger, () => {
-      this.#createToolbarLinkImageButton(editor as EditorWithUI);
-    });
+
+    const initInformation = reportInitStart(this);
+    this.#createToolbarLinkImageButton(editor as EditorWithUI);
+    reportInitEnd(initInformation);
   }
 
   #createToolbarLinkImageButton(editor: EditorWithUI): void {
