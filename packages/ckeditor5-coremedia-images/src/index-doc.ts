@@ -3,6 +3,8 @@
  *
  * @module ckeditor5-coremedia-images
  */
+export * as contentImageOpenInTab from "./contentImageOpenInTab/index-doc";
+
 export * from "./constants";
 
 export * from "./ContentImageEditingPlugin";
