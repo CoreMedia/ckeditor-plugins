@@ -62,6 +62,7 @@
   "dependencies": {
     "@coremedia/ckeditor5-common": "9.0.2-rc.0",
     "@coremedia/ckeditor5-core-common": "9.0.2-rc.0",
+    "@coremedia/ckeditor5-content": "9.0.2-rc.0",
     "@coremedia/ckeditor5-coremedia-content-clipboard": "9.0.2-rc.0",
     "@coremedia/ckeditor5-coremedia-studio-integration": "9.0.2-rc.0",
     "@coremedia/ckeditor5-logging": "9.0.2-rc.0",

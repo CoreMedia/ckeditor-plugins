@@ -30,7 +30,6 @@ export default class ContentImageEditingPlugin extends Plugin {
     const editor = this.editor;
     const initInformation = reportInitStart(this);
     editor.commands.add("openImageInTab", new OpenInTabCommand(editor, "xlink-href", "imageInline"));
-    editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
     reportInitEnd(initInformation);
   }
 

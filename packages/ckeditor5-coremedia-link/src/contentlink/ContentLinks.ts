@@ -12,6 +12,7 @@ import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-content/commands/OpenInTabCommand";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -48,6 +49,8 @@ export default class ContentLinks extends Plugin {
       },
       this
     );
+    // registers the openInTab command for content links, used to open a content when clicking the content link
+    editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
   }
 
   static #removeInitialMouseDownListener(linkUI: LinkUI): void {
