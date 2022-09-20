@@ -95,35 +95,6 @@ describe("Image Features", () => {
     await expect(imgHandle).toMatchAttribute("src", PNG_RED_240x135);
   });
 
-  it("Should trigger open in tab for image from balloon", async () => {
-    const { currentTestName } = expect.getState();
-    const name = currentTestName ?? "Unknown Test";
-    const { editor, mockContent } = application;
-    const id = 42;
-    await mockContent.addContents({
-      id,
-      blob: PNG_RED_240x135,
-      name: `Document for test ${name}`,
-    });
-    const data = richtext(
-      p(
-        img({
-          "alt": name,
-          "xlink:href": blobReference(id),
-        })
-      )
-    );
-    const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
-
-    await editor.setDataAndGetDataView(data);
-    await page.locator(".ck-editor__editable img").click();
-    const isEnabled = await ImageContextualBalloonAction.openInTabIsEnabled(application);
-    expect(isEnabled).toBe(true);
-    await ImageContextualBalloonAction.clickOpenInTab(application);
-    const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-    expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42#properties.data"]);
-  });
-
   it("Should correctly set Image Alignment", async () => {
     const { currentTestName } = expect.getState();
     const name = currentTestName ?? "Unknown Test";
@@ -169,6 +140,63 @@ describe("Image Features", () => {
     // click on the page default button in the imageStyle balloon
     await ImageContextualBalloonAction.clickAlignPageDefault(application);
     await expectNoFloat(editableHandle);
+  });
+
+  describe("Open image in tab", () => {
+    it("Should trigger open in tab for image from balloon", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
+      const { editor, mockContent } = application;
+      const id = 42;
+      await mockContent.addContents({
+        id,
+        blob: PNG_RED_240x135,
+        name: `Document for test ${name}`,
+      });
+      const data = richtext(
+        p(
+          img({
+            "alt": name,
+            "xlink:href": blobReference(id),
+          })
+        )
+      );
+      const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
+
+      await editor.setDataAndGetDataView(data);
+      await page.locator(".ck-editor__editable img").click();
+      const isEnabled = await ImageContextualBalloonAction.openInTabIsEnabled(application);
+      expect(isEnabled).toBe(true);
+      await ImageContextualBalloonAction.clickOpenInTab(application);
+      const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
+      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42#properties.data"]);
+    });
+
+    it("Should not be able to trigger open in tab for image from ballon", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
+      const { editor, mockContent } = application;
+      const id = 42;
+      await mockContent.addContents({
+        id,
+        blob: PNG_RED_240x135,
+        name: `Document for test ${name}`,
+        readable: false,
+      });
+      const data = richtext(
+        p(
+          img({
+            "alt": name,
+            "xlink:href": blobReference(id),
+          })
+        )
+      );
+
+      await editor.setDataAndGetDataView(data);
+      await page.locator(".ck-editor__editable img").click();
+      const isEnabled = await ImageContextualBalloonAction.openInTabIsEnabled(application);
+      expect(isEnabled).toBe(false);
+    });
   });
 });
 
