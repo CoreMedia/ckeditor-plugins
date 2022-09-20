@@ -13,10 +13,22 @@ export default class OpenInTabCommand extends Command {
   #attributeName: string;
 
   /**
+   * Creates an OpenInTabCommand.
    *
+   * The OpenInTabCommand triggers the WorkAreaService.openEntitiesInTab of the current
+   * selected model element. if it is the element this command is registered for.
    *
-   * @param editor
-   * @param attributeName
+   * This command only executes if the selected model element is the element
+   * with the given elementName and has an attribute with the given attributeName.
+   *
+   * Execution is managed by the property "isEnabled" and UI may be bound to
+   * the "isEnabled" property.
+   *
+   * If no elementName is given it defaults to undefined. This is a special case
+   * for textNodes as textNodes are not represented as elements.
+   *
+   * @param editor - the ckeditor instance
+   * @param attributeName - the name of the attribute which contains the ModelUri.
    * @param elementName - name of the element in the selection containing the Uri-Path attribute. Defaults to undefined.
    */
   constructor(editor: Editor, attributeName: string, elementName: string | undefined = undefined) {
