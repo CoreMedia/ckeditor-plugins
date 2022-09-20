@@ -43,7 +43,9 @@ export default class ContentImageOpenInTabUI extends Plugin {
 
       button.bind("isEnabled").to(openInTabCommand, "isEnabled");
 
-      this.listenTo(button, "execute", openInTabCommand.execute);
+      this.listenTo(button, "execute", () => {
+        openInTabCommand.execute();
+      });
       return button;
     });
   }
