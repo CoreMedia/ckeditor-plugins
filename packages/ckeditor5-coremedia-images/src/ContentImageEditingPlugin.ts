@@ -4,7 +4,12 @@ import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import { ifPlugin, optionalPluginNotFound, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import {
+  ifPlugin,
+  optionalPluginNotFound,
+  reportInitEnd,
+  reportInitStart,
+} from "@coremedia/ckeditor5-core-common/Plugins";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-content/commands/OpenInTabCommand";
 
 /**
