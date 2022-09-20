@@ -311,6 +311,7 @@ importers:
       '@ckeditor/ckeditor5-core': ^35.1.0
       '@ckeditor/ckeditor5-ui': ^35.1.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
+      '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-core-common': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 9.0.2-rc.0
       '@coremedia/ckeditor5-logging': 9.0.2-rc.0
@@ -332,6 +333,7 @@ importers:
       '@ckeditor/ckeditor5-core': 35.1.0
       '@ckeditor/ckeditor5-ui': 35.1.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
+      '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@coremedia/service-agent': 1.1.2
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-ui': 32.0.2
