@@ -169,7 +169,7 @@ describe("Image Features", () => {
       expect(isEnabled).toBe(true);
       await ImageContextualBalloonAction.clickOpenInTab(application);
       const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42#properties.data"]);
+      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
 
     it("Should not be able to trigger open in tab for image from ballon", async () => {

@@ -2,7 +2,12 @@ import { Command } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 import WorkAreaServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
-import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import {
+  CONTENT_CKE_MODEL_URI_REGEXP,
+  CONTENT_URI_PATH_REGEXP,
+  requireContentUriPath,
+  UriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
@@ -108,8 +113,8 @@ export class OpenInTabCommand extends Command {
         return undefined;
       }
 
-      const modelUriAttributeValue = selectedElement.getAttribute(this.#attributeName) as string;
-      return requireContentUriPath(modelUriAttributeValue);
+      const modelUriAttributeValue: string = selectedElement.getAttribute(this.#attributeName) as string;
+      return OpenInTabCommand.#toContentUri(modelUriAttributeValue);
     }
 
     // If it is a text we have no element, so we have to go for the first position.
@@ -117,7 +122,30 @@ export class OpenInTabCommand extends Command {
     if (!modelUriAttributeValue) {
       return undefined;
     }
+    return OpenInTabCommand.#toContentUri(modelUriAttributeValue);
+  }
 
-    return requireContentUriPath(modelUriAttributeValue);
+  /**
+   * Takes an attribute value and transforms to a plain content uri.
+   *
+   * Supports the following input formats:
+   *  - content/{id}
+   *  - content:{id}
+   *  - content/{id}#properties.{propertyName}
+   *  - content:{id}#properties.{propertyName}
+   *
+   * In case it is one of the supported inputs the output is always an UriPath (content/{id}).
+   * Otherwise undefined is returned.
+   *
+   * @param contentUriToParse - the uri string to parse and if necessary transform to a plain UriPath.
+   * @return UriPath or undefined if the input string is a non-supported format.
+   */
+  static #toContentUri(contentUriToParse: string): UriPath | undefined {
+    if (!CONTENT_URI_PATH_REGEXP.test(contentUriToParse) && !CONTENT_CKE_MODEL_URI_REGEXP.test(contentUriToParse)) {
+      return undefined;
+    }
+
+    const contentUriAndPropertiesPart = contentUriToParse.split("#");
+    return requireContentUriPath(contentUriAndPropertiesPart[0]);
   }
 }
