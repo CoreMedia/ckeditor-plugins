@@ -1,7 +1,7 @@
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
-import openInTabIcon from "../../theme/icons/openInNewTab.svg";
+import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
 
 import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
