@@ -8,6 +8,13 @@ import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 
+/**
+ * Plugin that registers a 'contentImageOpenInTab' button in
+ * the editor's componentFactory to be used in editor toolbars.
+ *
+ * This button uses the 'openInTabCommand', registered in the
+ * ContentImageEditingPlugin, which therefore is required.
+ */
 export default class ContentImageOpenInTabUI extends Plugin {
   static readonly pluginName: string = "ContentImageOpenInTabUI";
 

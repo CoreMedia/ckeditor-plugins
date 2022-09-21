@@ -32,6 +32,7 @@ Note, that you most likely will also install some of CKEditor's image plugins.
 
   * `ContentImageEditingPlugin`
   * `ContentImageClipboardPlugin`
+  * `ContentImageOpenInTabUI`
 
 * `ContentImageEditingPlugin`
 
@@ -40,6 +41,10 @@ Note, that you most likely will also install some of CKEditor's image plugins.
 * `ContentImageClipboardPlugin`
 
   Plugin that registers a creator function to support images in the `ContentClipboard` plugin.
+
+* `ContentImageOpenInTabUI`
+
+  Plugin that registers a button for the "OpenInTabCommand" in the componentFactory.
 
 * `ModelBoundSubscriptionPlugin`
 
