@@ -93,7 +93,7 @@ export class OpenInTabCommand extends Command {
 
   #closeBalloonIfExisting(): void {
     ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
-      if (balloon.visibleView) {
+      while (balloon.visibleView) {
         // it is not sufficient to just hide the visibleView, we need to remove it
         balloon.remove(balloon.visibleView);
       }
