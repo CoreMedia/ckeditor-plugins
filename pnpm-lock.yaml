@@ -161,12 +161,14 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
+      '@coremedia/ckeditor5-coremedia-link': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-richtext': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration': 9.0.2-rc.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': 9.0.2-rc.0
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': ^27.1.2
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
+      '@types/ckeditor__ckeditor5-link': ^32.0.4
       '@types/ckeditor__ckeditor5-ui': ^32.0.2
       '@types/express': ^4.17.13
       '@types/jest': ^28.1.8
@@ -195,12 +197,14 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': link:../packages/ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-coremedia-example-data': link:../packages/ckeditor5-coremedia-example-data
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../packages/ckeditor5-jest-test-helpers
+      '@coremedia/ckeditor5-coremedia-link': link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext': link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': 27.1.2
       '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-link': 32.0.4
       '@types/ckeditor__ckeditor5-ui': 32.0.2
       '@types/express': 4.17.13
       '@types/jest': 28.1.8

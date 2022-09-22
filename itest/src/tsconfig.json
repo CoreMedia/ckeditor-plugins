@@ -4,10 +4,24 @@
     "rootDir": ".",
     "outDir": "../dist",
     "esModuleInterop": true,
-    "types": ["jest", "playwright", "wait-for-expect", "jest-playwright-preset", "expect-playwright", "node"],
+    "types": [
+      "jest",
+      "playwright",
+      "wait-for-expect",
+      "jest-playwright-preset",
+      "expect-playwright",
+      "node"
+    ],
     "paths": {
-      "@coremedia/ckeditor5-logging/*": ["../../packages/ckeditor5-logging/src/*"],
-      "@coremedia/ckeditor5-coremedia-richtext/*": ["../../packages/ckeditor5-coremedia-richtext/src/*"],
+      "@coremedia/ckeditor5-logging/*": [
+        "../../packages/ckeditor5-logging/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-link/*": [
+        "../../packages/ckeditor5-coremedia-link/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-richtext/*": [
+        "../../packages/ckeditor5-coremedia-richtext/src/*"
+      ],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": [
         "../../packages/ckeditor5-coremedia-studio-integration/src/*"
       ],
@@ -25,6 +39,9 @@
     },
     {
       "path": "../../packages/ckeditor5-coremedia-example-data/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-link/src"
     },
     {
       "path": "../../packages/ckeditor5-coremedia-richtext/src"

@@ -7,6 +7,10 @@ import { a, img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-exa
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import { linkReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Links";
 import { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";
+import ToolbarViewWrapper from "./aut/components/ToolbarViewWrapper";
+import ImageContextualBalloonToolbar from "./aut/components/balloon/ImageContextualBalloonToolbar";
+import LinkActionsViewWrapper from "./aut/components/balloon/LinkActionsViewWrapper";
+import ContentLinkViewWrapper from "./aut/components/balloon/ContentLinkViewWrapper";
 
 describe("Image Features", () => {
   let application: ApplicationWrapper;
@@ -241,6 +245,7 @@ describe("Image Features", () => {
       const imageId = 42;
       const linkedContentId = 46;
 
+      const contentLinkDocumentName = `Document to link to the image for test ${name}`;
       await mockContent.addContents(
         {
           id: imageId,
@@ -249,7 +254,7 @@ describe("Image Features", () => {
         },
         {
           id: linkedContentId,
-          name: `Document to link to the image for test ${name}`,
+          name: contentLinkDocumentName,
         }
       );
 
@@ -270,6 +275,9 @@ describe("Image Features", () => {
       const imageContextToolbar = getImageContextToolbar(editor);
       const linkButton = imageContextToolbar.getLinkButton();
       await expect(linkButton).waitToBeOn();
+      await linkButton.click();
+      const contentLinkView = getContentLinkView(editor);
+      await expect(contentLinkView).waitToHaveContentName(contentLinkDocumentName);
     });
   });
 });
@@ -291,6 +299,14 @@ async function expectFloat(
   await expect(imgHandle).toMatchComputedStyle("float", computedStyle);
 }
 
+function getContentLinkView(editor: ClassicEditorWrapper): ContentLinkViewWrapper {
+  const visibleView = editor.contextualBalloonWrapper.view;
+  const linkActionsViewWrapper = LinkActionsViewWrapper.fromView(visibleView);
+  return linkActionsViewWrapper.getContentLinkView();
+}
+
 function getImageContextToolbar(editor: ClassicEditorWrapper) {
-  return editor.contextualBalloonWrapper.view.asToolbarViewWrapper().asImageContextualBalloonToolbar();
+  const visibleView = editor.contextualBalloonWrapper.view;
+  const toolbarViewWrapper = ToolbarViewWrapper.fromView(visibleView);
+  return new ImageContextualBalloonToolbar(toolbarViewWrapper);
 }

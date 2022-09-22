@@ -39,10 +39,4 @@ export default class ButtonViewWrapper extends JSWrapper<ButtonView> implements 
       return buttonView.isEnabled;
     });
   }
-
-  async #getAriaLabeledBy(): Promise<string | null | undefined> {
-    return this.evaluate((buttonView) => {
-      return buttonView.element?.getAttribute("aria-labelledby");
-    });
-  }
 }
