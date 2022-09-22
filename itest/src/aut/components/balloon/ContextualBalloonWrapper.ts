@@ -3,6 +3,7 @@ import { JSWrapper } from "../../JSWrapper";
 import type { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import ViewWrapper from "./../ViewWrapper";
 
+//TODO: Currently there is no option to check which view is the visible one.
 export default class ContextualBalloonWrapper extends JSWrapper<ContextualBalloon> {
   get view(): ViewWrapper {
     return ViewWrapper.fromContextualBalloon(this);
