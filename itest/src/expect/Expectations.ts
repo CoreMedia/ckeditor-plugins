@@ -7,6 +7,8 @@ import "./ApplicationWrapperExpectations";
 import "./ClassicEditorWrapperExpectations";
 import "./ElementHandleExpectations";
 import "./IsVisible/WaitToBeVisible";
+import "./isToggleable/WaitToBeOn";
+import "./isEnabled/WaitToBeEnabled";
 
 // Import Matcher Interfaces
 import { ApplicationWrapperMatchers } from "./ApplicationWrapperExpectations";
@@ -14,6 +16,8 @@ import { ClassicEditorWrapperMatchers } from "./ClassicEditorWrapperExpectations
 import { ElementHandleMatchers } from "./ElementHandleExpectations";
 import { ApplicationConsoleMatchers } from "./ApplicationConsoleExpectations";
 import { WaitToBeVisible } from "./IsVisible/WaitToBeVisible";
+import { WaitToBeOn } from "./isToggleable/WaitToBeOn";
+import { WaitToBeEnabled } from "./isEnabled/WaitToBeEnabled";
 
 /**
  * Tell TypeScript to know of new matchers.
@@ -26,7 +30,9 @@ declare global {
         ApplicationWrapperMatchers,
         ClassicEditorWrapperMatchers,
         ElementHandleMatchers,
-        WaitToBeVisible {}
+        WaitToBeVisible,
+        WaitToBeEnabled,
+        WaitToBeOn {}
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     interface Matchers<R = unknown, T = {}>
@@ -34,13 +40,17 @@ declare global {
         ApplicationWrapperMatchers<R, T>,
         ClassicEditorWrapperMatchers<R, T>,
         ElementHandleMatchers<R, T>,
-        WaitToBeVisible<R, T> {}
+        WaitToBeVisible<R, T>,
+        WaitToBeEnabled<R, T>,
+        WaitToBeOn<R, T> {}
 
     interface InverseAsymmetricMatchers
       extends ApplicationConsoleMatchers,
         ApplicationWrapperMatchers,
         ElementHandleMatchers,
         ClassicEditorWrapperMatchers,
-        WaitToBeVisible {}
+        WaitToBeVisible,
+        WaitToBeEnabled,
+        WaitToBeOn {}
   }
 }

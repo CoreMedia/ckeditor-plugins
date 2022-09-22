@@ -7,7 +7,6 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
-import { ContextualBalloonWrapper } from "./ContextualBalloonWrapper";
 import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 
 /**
@@ -110,15 +109,6 @@ export class ApplicationWrapper {
    */
   get editor(): ClassicEditorWrapper {
     return ClassicEditorWrapper.fromPage(page);
-  }
-
-  /**
-   * Retrieves the now opened ContextualBalloon.
-   *
-   * @returns ContextualBalloonWrapper the now opened ContextualBalloon
-   */
-  get contextualBalloon(): ContextualBalloonWrapper {
-    return new ContextualBalloonWrapper(page);
   }
 
   /**

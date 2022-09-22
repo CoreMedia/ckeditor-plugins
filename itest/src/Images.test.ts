@@ -1,11 +1,12 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import "./expect/Expectations";
-import { ImageContextualBalloonAction } from "./user-interaction/ImageContextualBalloonAction";
 import { ElementHandle } from "playwright-core";
 import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
-import { img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { a, img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
+import { linkReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Links";
+import { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";
 
 describe("Image Features", () => {
   let application: ApplicationWrapper;
@@ -95,51 +96,51 @@ describe("Image Features", () => {
     await expect(imgHandle).toMatchAttribute("src", PNG_RED_240x135);
   });
 
-  it("Should correctly set Image Alignment", async () => {
-    const { currentTestName } = expect.getState();
-    const name = currentTestName ?? "Unknown Test";
-    const { editor, mockContent } = application;
-    const { ui } = editor;
+  describe("Image Alignment", () => {
+    it("Should correctly set Image Alignment", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
+      const { editor, mockContent } = application;
+      const { ui } = editor;
 
-    const id = 42;
-    await mockContent.addContents({
-      id,
-      blob: PNG_RED_240x135,
-      name: `Document for test ${name}`,
+      const id = 42;
+      await mockContent.addContents({
+        id,
+        blob: PNG_RED_240x135,
+        name: `Document for test ${name}`,
+      });
+
+      const data = richtext(
+        p(
+          img({
+            "alt": name,
+            "xlink:href": blobReference(id),
+          })
+        )
+      );
+
+      await editor.setDataAndGetDataView(data);
+      const editableHandle = await ui.getEditableElement();
+      // click on image
+      await page.locator(".ck-editor__editable img").click();
+      const imageContextToolbar = getImageContextToolbar(editor);
+
+      await imageContextToolbar.getAlignLeftButton().click();
+      await expectFloat(editableHandle, "float--left", "left");
+
+      // click on the align-right button in the imageStyle balloon
+      await imageContextToolbar.getAlignRightButton().click();
+      await expect(editableHandle).toHaveSelector("span.image-inline");
+      await expectFloat(editableHandle, "float--right", "right");
+
+      // click on the withinText button in the imageStyle balloon
+      await imageContextToolbar.getAlignWithinTextButton().click();
+      await expectFloat(editableHandle, "float--none", "none");
+
+      // click on the page default button in the imageStyle balloon
+      await imageContextToolbar.getAlignPageDefaultButton().click();
+      await expectNoFloat(editableHandle);
     });
-
-    const data = richtext(
-      p(
-        img({
-          "alt": name,
-          "xlink:href": blobReference(id),
-        })
-      )
-    );
-
-    await editor.setDataAndGetDataView(data);
-    const editableHandle = await ui.getEditableElement();
-
-    // click on image
-    await page.locator(".ck-editor__editable img").click();
-
-    // click on the align-left button in the imageStyle balloon
-    await ImageContextualBalloonAction.clickAlignLeft(application);
-    await expectFloat(editableHandle, "float--left", "left");
-
-    // click on the align-right button in the imageStyle balloon
-    await ImageContextualBalloonAction.clickAlignRight(application);
-
-    await expect(editableHandle).toHaveSelector("span.image-inline");
-    await expectFloat(editableHandle, "float--right", "right");
-
-    // click on the withinText button in the imageStyle balloon
-    await ImageContextualBalloonAction.clickAlignWithinText(application);
-    await expectFloat(editableHandle, "float--none", "none");
-
-    // click on the page default button in the imageStyle balloon
-    await ImageContextualBalloonAction.clickAlignPageDefault(application);
-    await expectNoFloat(editableHandle);
   });
 
   describe("Open image in tab", () => {
@@ -165,9 +166,11 @@ describe("Image Features", () => {
 
       await editor.setDataAndGetDataView(data);
       await page.locator(".ck-editor__editable img").click();
-      const isEnabled = await ImageContextualBalloonAction.openInTabIsEnabled(application);
-      expect(isEnabled).toBe(true);
-      await ImageContextualBalloonAction.clickOpenInTab(application);
+      const imageContextToolbar = getImageContextToolbar(editor);
+
+      const openInTabButton = imageContextToolbar.getOpenInTabButton();
+      await expect(openInTabButton).waitToBeEnabled();
+      await openInTabButton.click();
       const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
       expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
@@ -194,8 +197,79 @@ describe("Image Features", () => {
 
       await editor.setDataAndGetDataView(data);
       await page.locator(".ck-editor__editable img").click();
-      const isEnabled = await ImageContextualBalloonAction.openInTabIsEnabled(application);
-      expect(isEnabled).toBe(false);
+      const openInTabButton = getImageContextToolbar(editor).getOpenInTabButton();
+      await expect(openInTabButton).waitToBeVisible();
+      await expect(openInTabButton).not.waitToBeEnabled();
+    });
+  });
+
+  describe("Image Links", () => {
+    it("Should have no link and the link button in the contextual balloon is not pressed", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
+      const { editor, mockContent } = application;
+
+      const imageId = 42;
+
+      await mockContent.addContents({
+        id: imageId,
+        blob: PNG_RED_240x135,
+        name: `Document for test ${name}`,
+      });
+
+      const data = richtext(
+        p(
+          img({
+            "alt": name,
+            "xlink:href": blobReference(imageId),
+          })
+        )
+      );
+
+      await editor.setDataAndGetDataView(data);
+      await page.locator(".ck-editor__editable img").click();
+      const imageContextToolbar = getImageContextToolbar(editor);
+      const linkButton = imageContextToolbar.getLinkButton();
+      await expect(linkButton).not.waitToBeOn();
+    });
+
+    it("Should have a link, contextual balloon link button is pressed and the balloon switches on click to show the link", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
+      const { editor, mockContent } = application;
+
+      const imageId = 42;
+      const linkedContentId = 46;
+
+      await mockContent.addContents(
+        {
+          id: imageId,
+          blob: PNG_RED_240x135,
+          name: `Document for test ${name}`,
+        },
+        {
+          id: linkedContentId,
+          name: `Document to link to the image for test ${name}`,
+        }
+      );
+
+      const data = richtext(
+        p(
+          a(
+            img({
+              "alt": name,
+              "xlink:href": blobReference(imageId),
+            }),
+            { "xlink:href": linkReference(linkedContentId) }
+          )
+        )
+      );
+
+      await editor.setDataAndGetDataView(data);
+      await page.locator(".ck-editor__editable img").click();
+      const imageContextToolbar = getImageContextToolbar(editor);
+      const linkButton = imageContextToolbar.getLinkButton();
+      await expect(linkButton).waitToBeOn();
     });
   });
 });
@@ -215,4 +289,8 @@ async function expectFloat(
   const imgHandle = await editableHandle.$("span.image-inline");
   await expect(imgHandle).toMatchAttribute("class", new RegExp(`.*${floatClass}.*`));
   await expect(imgHandle).toMatchComputedStyle("float", computedStyle);
+}
+
+function getImageContextToolbar(editor: ClassicEditorWrapper) {
+  return editor.contextualBalloonWrapper.view.asToolbarViewWrapper().asImageContextualBalloonToolbar();
 }
