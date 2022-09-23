@@ -27,6 +27,7 @@ import {
 } from "@coremedia/ckeditor5-core-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
+import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -154,7 +155,12 @@ export default class ContentClipboard extends Plugin {
 
     // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
     data.preventDefault();
-    const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(cmDataUris);
+
+    // for now, we only support content uris in ckeditor.
+    const validContentUris = cmDataUris.filter((uri) => {
+      return isUriPath(uri);
+    });
+    const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(validContentUris);
     // Applying dropEffects required to be run *after* CKEditor's normal
     // listeners, which almost always enforce `move` as dropEffect. We also must
     // not `stop` processing (at least at normal priority), as otherwise the
@@ -225,7 +231,12 @@ export default class ContentClipboard extends Plugin {
     // rendering the text of the input data.
     evt.stop();
 
-    if (!DragDropAsyncSupport.containsDisplayableContents(cmDataUris)) {
+    // for now, we only support content uris in ckeditor.
+    const validContentUris = cmDataUris.filter((uri) => {
+      return isUriPath(uri);
+    });
+
+    if (!DragDropAsyncSupport.containsDisplayableContents(validContentUris)) {
       return;
     }
 
@@ -258,7 +269,7 @@ export default class ContentClipboard extends Plugin {
     // Needed to keep the order when multiple inputs happen simultaneously
     // on the same position.
     const dropId = Date.now();
-    const multipleItemsDropped = cmDataUris.length > 1;
+    const multipleItemsDropped = validContentUris.length > 1;
     const dropContext: DropContext = {
       dropId,
       batch,
@@ -266,7 +277,7 @@ export default class ContentClipboard extends Plugin {
     };
 
     // Add a drop marker for each item.
-    cmDataUris.forEach((contentUri: string, index: number): void => {
+    validContentUris.forEach((contentUri: string, index: number): void => {
       // This only works because we are in a drag context and the result has
       // already been computed and cached. Calling this function without a
       // present cache entry for the given contentUri will probably result in a
