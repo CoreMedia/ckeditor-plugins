@@ -5,6 +5,7 @@ import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
 import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
 import { Locatable, visible } from "./Locatable";
+import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 
 /**
  * Provides access to the editor within the example application. It requires
@@ -96,6 +97,13 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
    */
   get ui(): EditorUIWrapper {
     return EditorUIWrapper.fromClassicEditor(this);
+  }
+
+  /**
+   * Provides access to the ContextualBalloon.
+   */
+  get contextualBalloonWrapper(): ContextualBalloonWrapper {
+    return ContextualBalloonWrapper.fromEditor(this);
   }
 
   /**

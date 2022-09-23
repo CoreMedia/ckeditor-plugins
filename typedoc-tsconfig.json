@@ -7,6 +7,9 @@
       "@coremedia/ckeditor5-core-common/*": [
         "./packages/ckeditor5-core-common/src/*"
       ],
+      "@coremedia/ckeditor5-coremedia-content/*": [
+        "./packages/ckeditor5-coremedia-content/src/*"
+      ],
       "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
         "./packages/ckeditor5-coremedia-content-clipboard/src/*"
       ],

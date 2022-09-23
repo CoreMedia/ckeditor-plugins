@@ -5,13 +5,12 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { openInTab, showContentLinkField } from "../ContentLinkViewUtils";
+import { showContentLinkField } from "../ContentLinkViewUtils";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import { hasContentUriPath } from "./ViewExtensions";
-import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { ifPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -93,15 +92,7 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     contentLinkView.on("contentClick", () => {
       if (contentLinkView.uriPath) {
-        // we need to hide the balloon for the Studio environment
-        // otherwise a new tab would open and the balloon would still be displayed
-        ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
-          if (balloon.visibleView) {
-            // it is not sufficient to just hide the visibleView, we need to remove it
-            balloon.remove(balloon.visibleView);
-          }
-        });
-        openInTab(contentLinkView.uriPath);
+        this.editor.commands.get("openLinkInTab")?.execute();
       }
     });
 

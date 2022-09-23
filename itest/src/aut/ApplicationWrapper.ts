@@ -7,7 +7,7 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
-import { ContextualBalloonWrapper } from "./ContextualBalloonWrapper";
+import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 
 /**
  * Represents result from starting the server.
@@ -112,15 +112,6 @@ export class ApplicationWrapper {
   }
 
   /**
-   * Retrieves the now opened ContextualBalloon.
-   *
-   * @returns ContextualBalloonWrapper the now opened ContextualBalloon
-   */
-  get contextualBalloon(): ContextualBalloonWrapper {
-    return new ContextualBalloonWrapper(page);
-  }
-
-  /**
    * Provides access to mock content plugin.
    *
    * While essentially being configured as plugin to CKEditor, this getter
@@ -129,5 +120,9 @@ export class ApplicationWrapper {
    */
   get mockContent(): MockContentPluginWrapper {
     return MockContentPluginWrapper.fromClassicEditor(this.editor);
+  }
+
+  get mockServiceAgent(): MockServiceAgentPluginWrapper {
+    return MockServiceAgentPluginWrapper.fromClassicEditor(this.editor);
   }
 }
