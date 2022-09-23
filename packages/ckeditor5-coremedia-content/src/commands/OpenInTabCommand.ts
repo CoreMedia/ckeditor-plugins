@@ -29,15 +29,15 @@ export class OpenInTabCommand extends Command {
    * Creates an OpenInTabCommand.
    *
    * The OpenInTabCommand triggers the WorkAreaService.openEntitiesInTab of the current
-   * selected model element. if it is the element this command is registered for.
+   * selected model element, if it is the element this command is registered for.
    *
-   * This command only executes if the selected model element is the element
-   * with the given elementName and has an attribute with the given attributeName.
+   * This command only executes if the selected model element has the given
+   * elementName and an attribute with the given attributeName.
    *
-   * Execution is managed by the property "isEnabled" and UI may be bound to
-   * the "isEnabled" property.
+   * The "isEnabled" property can be used to update the state of any
+   * bound ui element and restrict its execution.
    *
-   * If no elementName is given it defaults to undefined. This is a special case
+   * If no elementName is given, it defaults to undefined. This is a special case
    * for textNodes as textNodes are not represented as elements.
    *
    * @param editor - the ckeditor instance
@@ -58,10 +58,10 @@ export class OpenInTabCommand extends Command {
       return;
     }
 
-    // TODO: WorkAreaService is not observable and canBeOpened might evaluate to true
-    // and stays true even if it should recalculate to false.
-    // To solve this either the WorkAreaService has to provide an observable or another
-    // service has to be implemented.
+    // Please note: WorkAreaService is not observable and therefore, this command
+    // might not update correctly once displayed. You will have to trigger #refresh
+    // manually in order to display the correct content state
+    // (e.g. of a suddenly unreadable content).
     serviceAgent
       .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
       .then((workAreaService: WorkAreaService): void => {
@@ -126,7 +126,7 @@ export class OpenInTabCommand extends Command {
   }
 
   /**
-   * Takes an attribute value and transforms to a plain content uri.
+   * Takes an attribute value and returns a plain content uri.
    *
    * Supports the following input formats:
    *  - content/{id}
@@ -134,11 +134,11 @@ export class OpenInTabCommand extends Command {
    *  - content/{id}#properties.{propertyName}
    *  - content:{id}#properties.{propertyName}
    *
-   * In case it is one of the supported inputs the output is always an UriPath (content/{id}).
-   * Otherwise undefined is returned.
+   * In case the input is of one of these formats, the output is always
+   * a UriPath (content/{id}). Otherwise undefined is returned.
    *
-   * @param contentUriToParse - the uri string to parse and if necessary transform to a plain UriPath.
-   * @return UriPath or undefined if the input string is a non-supported format.
+   * @param contentUriToParse - the uri string to parse
+   * @returns transformed UriPath or undefined if the input string is a non-supported format.
    */
   static #toContentUri(contentUriToParse: string): UriPath | undefined {
     if (!CONTENT_URI_PATH_REGEXP.test(contentUriToParse) && !CONTENT_CKE_MODEL_URI_REGEXP.test(contentUriToParse)) {
