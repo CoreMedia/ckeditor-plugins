@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-core-common",
-  "version": "9.0.2-rc.1",
+  "version": "9.0.2-rc.2",
   "description": "Assistive Utilities for `@ckeditor/ckeditor5-core`.",
   "keywords": [
     "coremedia",
@@ -33,8 +33,8 @@
     "@ckeditor/ckeditor5-core": "^35.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "9.0.2-rc.1",
-    "@coremedia/ckeditor5-logging": "9.0.2-rc.1"
+    "@coremedia/ckeditor5-common": "9.0.2-rc.2",
+    "@coremedia/ckeditor5-logging": "9.0.2-rc.2"
   },
   "scripts": {
     "clean": "rimraf ./dist",
