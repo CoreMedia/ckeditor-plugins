@@ -157,9 +157,8 @@ export default class ContentClipboard extends Plugin {
     data.preventDefault();
 
     // for now, we only support content uris in ckeditor.
-    const validContentUris = cmDataUris.filter((uri) => {
-      return isUriPath(uri);
-    });
+    const validContentUris = ContentClipboard.#filterValidUris(cmDataUris);
+
     const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(validContentUris);
     // Applying dropEffects required to be run *after* CKEditor's normal
     // listeners, which almost always enforce `move` as dropEffect. We also must
@@ -232,9 +231,7 @@ export default class ContentClipboard extends Plugin {
     evt.stop();
 
     // for now, we only support content uris in ckeditor.
-    const validContentUris = cmDataUris.filter((uri) => {
-      return isUriPath(uri);
-    });
+    const validContentUris = ContentClipboard.#filterValidUris(cmDataUris);
 
     if (!DragDropAsyncSupport.containsDisplayableContents(validContentUris)) {
       return;
@@ -373,5 +370,15 @@ export default class ContentClipboard extends Plugin {
         isInline,
       },
     };
+  }
+
+  static #filterValidUris(uris: string[]): string[] {
+    return uris.filter((uri) => {
+      if (isUriPath(uri)) {
+        return true;
+      }
+      ContentClipboard.#logger.debug("Found an unsupported uri, will be ignored: " + uri);
+      return false;
+    });
   }
 }
