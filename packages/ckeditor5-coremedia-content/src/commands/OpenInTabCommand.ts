@@ -129,13 +129,13 @@ export class OpenInTabCommand extends Command {
    * Takes an attribute value and returns a plain content uri.
    *
    * Supports the following input formats:
-   *  - content/{id}
-   *  - content:{id}
-   *  - content/{id}#properties.{propertyName}
-   *  - content:{id}#properties.{propertyName}
+   *  - content/\{id\}
+   *  - content:\{id\}
+   *  - content/\{id\}#properties.\{propertyName\}
+   *  - content:\{id\}#properties.\{propertyName\}
    *
    * In case the input is of one of these formats, the output is always
-   * a UriPath (content/{id}). Otherwise undefined is returned.
+   * a UriPath (content/\{id\}). Otherwise undefined is returned.
    *
    * @param contentUriToParse - the uri string to parse
    * @returns transformed UriPath or undefined if the input string is a non-supported format.
