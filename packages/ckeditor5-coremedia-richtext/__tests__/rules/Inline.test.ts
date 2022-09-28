@@ -226,10 +226,26 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
     })
   );
 
+  const regressionFixtures: DataProcessingTestCase[] = [
+    {
+      name: `regression#1: Should map span with "strike underline" to <s> and <u> element.`,
+      data: wrapContent(`<p><span class="underline strike">${text}</span></p>`),
+      // <s><u> would also be valid.
+      dataView: wrapContent(`<p><u><s>${text}</s></u></p>`),
+    },
+    {
+      name: `regression#1: Should map span with "strike underline" to <s> and <u> element.`,
+      data: wrapContent(`<p><span class="strike underline">${text}</span></p>`),
+      // <u><s> would also be valid.
+      dataView: wrapContent(`<p><s><u>${text}</u></s></p>`),
+    },
+  ];
+
   const data: DataProcessingTestCase[] = [
     ...replaceInlineSimpleFixtures,
     ...replaceInlineBySpanFixtures,
     ...asIsFixtures,
+    ...regressionFixtures,
   ];
 
   allDataProcessingTests(data);
