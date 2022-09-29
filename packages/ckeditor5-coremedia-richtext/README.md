@@ -108,44 +108,44 @@ mapping:
 1. **toData:**
 
    * from: `<mark class="marker-green">highlighted</mark>`
-   * to: `<span class="mark--marker-green">highlighted</span>`
+   * to: `<span class="mark marker-green">highlighted</span>`
 
 2. **toView:**
 
-   * from: `<span class="mark--marker-green">highlighted</span>`
+   * from: `<span class="mark marker-green">highlighted</span>`
    * to: `<mark class="marker-green">highlighted</mark>`
+
+> **Note: `mark` becomes a reserved class:**
+>
+> Applying the given mapping will declare `mark` as _reserved class_, which
+> is, that it has some restrictions apply to this class, like the data
+> must not contain ambiguous reserved classes. For details see the
+> corresponding section below.
 
 As configuration:
 
 ```javascript
+import CoreMediaRichText
+  from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
+import GeneralRichTextSupport
+  from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
+import {replaceByElementAndClassBackAndForth}
+  from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
+
+/* ... */
+
 ClassicEditor.create(document.querySelector('.editor'), {
   plugins: [
     CoreMediaRichText,
+    GeneralRichTextSupport,
     // ...
   ],
   "coremedia:richtext": {
     rules: {
       elements: {
-        mark: {
-          toData: (params) => {
-            const originalClass = params.node.attributes["class"];
-            params.node.attributes["class"] = `mark--${originalClass}`;
-            params.node.name = "span";
-          },
-          toView: {
-            span: (params) => {
-              const originalClass = params.node.attributes["class"] || "";
-              const pattern = /^mark--(\S*)$/;
-              const match = pattern.exec(originalClass);
-              if (match) {
-                params.node.name = "mark";
-                params.node.attributes["class"] = match[1];
-              }
-            },
-          },
-        },
+        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
       },
-    }
+    },
   },
 });
 ```
@@ -153,22 +153,63 @@ ClassicEditor.create(document.querySelector('.editor'), {
 As you see, you define the new rules in a section called `rules` and as we will
 map elements here, you use the keyword `elements` to define the mapping rules.
 
-The definition is (mostly) from HTML view: _Given an HTML element `<mark>`, how
+The definition is (mostly) from data view: _Given an HTML element `<mark>`, how
 do I map it to a corresponding representation in CoreMedia RichText 1.0?_
 That's why the mapping keys are added with the name of the element.
 
-Most of the time, you need to configure both directions. Exceptions exist, and
-can be modelled, but are not part of this description. These directions are
-modelled by keywords `toData` and `toView`.
+`replaceByElementAndClassBackAndForth` provides a typical mapping, where
+an element gets replaced by a `<span>` with an identifying class attribute
+value.
+
+This convenience function may be expanded, which will provide more details
+on the data processing:
+
+```javascript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    GeneralHtmlSupport,
+    GeneralRichTextSupport,
+    // ...
+  ],
+  "coremedia:richtext": {
+    rules: {
+      elements: {
+        mark: {
+          toData: (params) => {
+            const { node } = params;
+            node.name = "span";
+            node.classList.add("mark");
+          },
+          toView: {
+            span: (params) => {
+              const { node } = params;
+              if (!node.classList.contains("mark")) {
+                // It's another span, we are not responsible.
+                return;
+              }
+              node.classList.remove("mark");
+              node.name = "mark";
+            },
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+Most of the time, you need to configure both directions (`toData` and `toView`).
+Exceptions exist, and can be modelled, but are not part of this description.
 
 Let's have a look at the `toData` mapping first:
 
 ```javascript
 mark: {
   toData: (params) => {
-    const originalClass = params.node.attributes["class"];
-    params.node.attributes["class"] = `mark--${originalClass}`;
-    params.node.name = "span";
+    const { node } = params;
+    node.name = "span";
+    node.classList.add("mark");
   }
 }
 ```
@@ -202,13 +243,13 @@ Let's have a look at the `toView` mapping:
 ```javascript
 toView: {
   span: (params) => {
-    const originalClass = params.node.attributes["class"] || "";
-    const pattern = /^mark--(\S*)$/;
-    const match = pattern.exec(originalClass);
-    if (match) {
-      params.node.name = "mark";
-      params.node.attributes["class"] = match[1];
+    const { node } = params;
+    if (!node.classList.contains("mark")) {
+      // It's another span, we are not responsible.
+      return;
     }
+    node.classList.remove("mark");
+    node.name = "mark";
   }
 }
 ```
@@ -286,6 +327,70 @@ This plugin introduced the following reserved class attribute values:
 | `tr--header`   | `<tr>`        | `<tr>`       | Moved to `<thead>`. See [Table Sections][]. |
 | `tr--footer`   | `<tr>`        | `<tr>`       | Moved to `<tfoot>`. See [Table Sections][]. |
 | `underline`    | `<span>`      | `<u>`        |                                             |
+
+### Ambiguous Class Mappings
+
+Note, that data may contain ambiguous class combinations such as the following:
+
+```html
+<p class="p--heading-1 p--heading-2">H1 or H2?</p>
+<p>
+  <span class="strike underline">Strikethrough or underline?</span>
+</p>
+```
+
+Such ambiguous states are typically resolved by deciding for one of the given
+mappings (rules may implement alternative approaches, though). For headings,
+a priority mapping exists, which prefers the _highest_ heading level.
+
+For more independent rules like for code, strikethrough and underline the
+behavior cannot be predicted. But: The ambiguous state will be resolved in one
+way or the other when later retrieving the data.
+
+Thus, when retrieving the data after being processed within CKEditor you may
+get as result one of these:
+
+```html
+<p class="p--heading-1">H1 or H2?</p>
+<p>
+  <span class="strike">Strikethrough or underline?</span>
+</p>
+```
+
+or
+
+```html
+<p class="p--heading-1">H1 or H2?</p>
+<p>
+  <span class="underline">Strikethrough or underline?</span>
+</p>
+```
+
+> **Warn on ambiguous states:**
+>
+> It is good practice reporting such ambiguous states in console log.
+
+This behavior is similar to, for example, CKEditor's text-alignment feature
+when configured for alignment being represented as classes. An ambiguous state
+like:
+
+```html
+<p class="align--center align--right">Lorem</p>
+```
+
+is resolved to one of these:
+
+```html
+<p class="align--center">Lorem</p>
+```
+
+or
+
+```html
+<p class="align--right">Lorem</p>
+```
+
+on subsequent `editor.getData()` call.
 
 ### Table Sections
 
