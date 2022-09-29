@@ -1,6 +1,7 @@
 import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { langMapper } from "./Lang";
+import { warnOnAmbiguousElementState } from "@coremedia/ckeditor5-dataprocessor-support/RulesLogger";
 
 const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
 const HEADING_CLASSES = Array.from(Array(6).keys()).map((i) => `p--heading-${i + 1}`);
@@ -48,8 +49,22 @@ export const paragraphToHeading: ElementFilterRule = (params) => {
     return;
   }
   node.name = `h${headingLevel}`;
+  const ambiguousClasses: string[] = [];
   // Now remove any heading-related classes.
-  HEADING_CLASSES.forEach((c) => node.classList.remove(c));
+  // Similar to #101 we resolve ambiguity here. In contrast to #110 with
+  // easy predictable behavior, as the higher heading will win.
+  HEADING_CLASSES.forEach((c) => {
+    if (c !== matchedHeading && node.classList.contains(c)) {
+      ambiguousClasses.push(c);
+    }
+    node.classList.remove(c);
+  });
+
+  if (ambiguousClasses.length > 0) {
+    warnOnAmbiguousElementState(
+      `Paragraph already got mapped to ${node.name} according to corresponding class. Ignored ambiguous heading classes: ${ambiguousClasses}.`
+    );
+  }
 };
 
 export const headingRules: ElementsFilterRuleSetConfiguration = {

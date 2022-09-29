@@ -17,5 +17,7 @@ export { default as NodeProxy } from "./NodeProxy";
 
 export * from "./Rules";
 
+export * as RulesLogger from "./RulesLogger";
+
 export * from "./TextProxy";
 export { default as TextProxy } from "./TextProxy";
