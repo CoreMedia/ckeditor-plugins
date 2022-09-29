@@ -302,7 +302,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
    * Overrides for attribute values.
    */
-  readonly #attributes: Attributes = {};
+  readonly #attributes: AttributeMap = {};
   /**
    * A set of well-known namespaces. Any prefix detected during processing
    * will trigger the corresponding namespace declaration to be added to
@@ -490,7 +490,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @param targetElement - the element to apply attributes to
    * @param attributes - set of attributes to apply
    */
-  #applyAttributes(targetElement: Element, attributes: Attributes): void {
+  #applyAttributes(targetElement: Element, attributes: AttributeMap): void {
     const ownerDocument = targetElement.ownerDocument;
     const attributeNames = Object.keys(attributes);
 
@@ -655,18 +655,18 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * Deleting an attribute, or setting its value to `null` will later
    * remove the attribute from the element.
    */
-  public get attributes(): Attributes {
+  public get attributes(): AttributeMap {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     return new Proxy(this.#attributes, {
-      defineProperty(target: Attributes, p: PropertyKey, attributes: PropertyDescriptor): boolean {
+      defineProperty(target: AttributeMap, p: PropertyKey, attributes: PropertyDescriptor): boolean {
         return Reflect.defineProperty(target, p, attributes);
       },
       /**
        * Retrieves the current attribute value. It is either the overwritten
        * value, or, if not overwritten, the original value.
        */
-      get(target: Attributes, attrName: PropertyKey, receiver: never): AttributeValue {
+      get(target: AttributeMap, attrName: PropertyKey, receiver: never): AttributeValue {
         if (Reflect.has(target, attrName)) {
           return Reflect.get(target, attrName, receiver);
         }
@@ -681,7 +681,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
        * especially used, when looping over the attributes and accessing
        * and/or modifying them.
        */
-      getOwnPropertyDescriptor(target: Attributes, attrName: PropertyKey): PropertyDescriptor | undefined {
+      getOwnPropertyDescriptor(target: AttributeMap, attrName: PropertyKey): PropertyDescriptor | undefined {
         // Handle, if this is the overwritten state.
         if (Reflect.has(target, attrName)) {
           const value = Reflect.get(target, attrName);
@@ -725,14 +725,14 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
        * Sets a specific property, and thus overrides it. Setting it to
        * `null` is the same as deleting it.
        */
-      set(target: Attributes, p: PropertyKey, value: unknown): boolean {
+      set(target: AttributeMap, p: PropertyKey, value: unknown): boolean {
         self.requireMutable();
         return Reflect.set(target, p, value);
       },
       /**
        * Deletes the property. Thus, if existing, marks it as <em>to-be-deleted</em>.
        */
-      deleteProperty(target: Attributes, p: PropertyKey): boolean {
+      deleteProperty(target: AttributeMap, p: PropertyKey): boolean {
         self.requireMutable();
         return Reflect.set(target, p, null);
       },
@@ -740,7 +740,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
        * Signals, if this property is available. Excludes any previously
        * deleted properties.
        */
-      has(target: Attributes, p: PropertyKey): boolean {
+      has(target: AttributeMap, p: PropertyKey): boolean {
         if (Reflect.has(target, p)) {
           return Reflect.get(target, p) !== null;
         }
@@ -754,7 +754,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
        * Provides all existing attributes names, skipping those, which got
        * marked for deletion.
        */
-      ownKeys(target: Attributes): OwnPropertyKey[] {
+      ownKeys(target: AttributeMap): OwnPropertyKey[] {
         const targetKeys: OwnPropertyKey[] = Reflect.ownKeys(target);
         const elementAttrs: OwnPropertyKey[] = self.delegate.getAttributeNames();
         // Join distinct keys, skip forcibly deleted.
@@ -776,7 +776,7 @@ type AttributeValue = string | null;
 /**
  * The attributes of an element.
  */
-interface Attributes {
+interface AttributeMap {
   [index: string]: AttributeValue;
 }
 
@@ -823,4 +823,4 @@ const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
 };
 
 export default ElementProxy;
-export { AttributeValue, Attributes, ElementFilterParams, ElementFilterRule, allFilterRules };
+export { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule, allFilterRules };
