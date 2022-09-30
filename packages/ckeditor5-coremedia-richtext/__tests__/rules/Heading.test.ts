@@ -71,6 +71,7 @@ describe("CoreMediaRichTextConfig: Headings", () => {
 
   const data: DataProcessingTestCase[] = [
     {
+      // See also #101 regarding ambiguous data states.
       name: "HEADING#1: Should prefer higher heading class (here: 1 and 2 → prefer 1).",
       direction: Direction.toDataView,
       data: wrapContent(`<p class="p--heading-1 p--heading-2">${text}</p>`),

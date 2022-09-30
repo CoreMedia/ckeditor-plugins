@@ -1,6 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
+import { warnOnAmbiguousAttributeState } from "./RulesLogger";
 
 /**
  * Mapper for attributes from view to data (`toData`) and vice versa (`toView`).
@@ -36,9 +37,23 @@ const renameAttribute = (
   }
   const firstExistingName = allNames[firstExistingIndex];
   const value: string = attributes[firstExistingName] || "";
+  const ambiguousAttributeNames: string[] = [];
+
   // Remove non-existing attribute names.
   allNames.splice(0, firstExistingIndex);
-  allNames.forEach((n) => delete attributes[n]);
+  allNames.forEach((n) => {
+    if (attributes.hasOwnProperty(n) && attributes[n] !== value) {
+      // implicitly filtering firstExistingName, as it should match the
+      // exact value.
+      ambiguousAttributeNames.push(n);
+    }
+    delete attributes[n];
+  });
+  if (ambiguousAttributeNames.length > 0) {
+    warnOnAmbiguousAttributeState(
+      `<${node.name}> contained ambiguous attributes to be mapped to attribute "${targetName}". Used value "${value}" provided by attribute "${firstExistingName}". Ignored conflicting attributes: ${ambiguousAttributeNames}.`
+    );
+  }
   node.attributes[targetName] = value;
 };
 

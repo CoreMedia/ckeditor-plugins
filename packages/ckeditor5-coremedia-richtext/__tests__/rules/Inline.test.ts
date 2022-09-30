@@ -1,4 +1,4 @@
-import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
+import { allDataProcessingTests, applyFilter, DataProcessingTestCase, Direction, getFilter } from "../DataDrivenTests";
 import { flatten } from "../Utils";
 
 // noinspection HttpUrlsUsage
@@ -218,6 +218,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
         },
         {
           name: `${key}#6: Should prefer xml:lang over lang in data.`,
+          silent: true,
           direction: Direction.toDataView,
           data: wrapContent(`<p><${el} lang="en" xml:lang="de">${text}</${el}></p>`),
           dataView: wrapContent(`<p><${el} lang="de">${text}</${el}></p>`),
@@ -233,4 +234,33 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
   ];
 
   allDataProcessingTests(data);
+
+  describe("Ambiguous States", () => {
+    it.each`
+      classes                        | remainingClasses
+      ${"strike underline"}          | ${[]}
+      ${"underline strike"}          | ${[]}
+      ${"underline strike custom"}   | ${["custom"]}
+      ${"underline custom strike"}   | ${["custom"]}
+      ${"custom underline strike"}   | ${["custom"]}
+      ${"c1 underline c2 strike c3"} | ${["c1", "c2", "c3"]}
+    `(
+      `[$#] Should map ambiguous <span class="$classes"> to either <u> or <s> keeping possibly remaining classes.`,
+      ({ classes, remainingClasses }) => {
+        const filter = getFilter(Direction.toDataView);
+        const input = wrapContent(`<p><span class="${classes}">${text}</span></p>`);
+        // silent: We expect a warning here. Don't show it in tests.
+        const actual = applyFilter(filter, input, true);
+        if (remainingClasses.length > 0) {
+          expect(actual).toMatch(/<([us]) class=[^>]+>[^<]*<\/\1>/);
+          for (const remainingClass of remainingClasses) {
+            expect(actual).toContain(remainingClass);
+          }
+        } else {
+          // Either <u> or <s>
+          expect(actual).toMatch(/<([us])>[^<]*<\/\1>/);
+        }
+      }
+    );
+  });
 });
