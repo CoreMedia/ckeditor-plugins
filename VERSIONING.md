@@ -102,6 +102,11 @@ Major and Minor Breaking Changes
     * A breaking change in Customization API is understood as a
         **minor breaking change**.
 
+* **Build and Tooling:**
+
+  * Node.js updates are considered a major breaking change. We will try to stick
+    to LTS versions.
+
 <!-- ======================================================[ REFERENCES ]=== -->
 
 [Top]: <#top>
