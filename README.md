@@ -70,7 +70,7 @@ pnpm install @coremedia/ckeditor5-coremedia-studio-essentials
 ```
 
 ```javascript
-import CoreMediaStudioEssentials from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
+import CoreMediaStudioEssentials from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 
 ClassicEditor.create(document.querySelector('#editor'), {
   plugins: [
@@ -140,8 +140,11 @@ previously `setData()` call. A typical approach is:
 [`ckeditor5-coremedia-images`]: <./packages/ckeditor5-coremedia-images> "@coremedia/ckeditor5-coremedia-images"
 [`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link> "@coremedia/ckeditor5-coremedia-link"
 [`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext> "@coremedia/ckeditor5-coremedia-richtext"
+
 [`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support> "@coremedia/ckeditor5-coremedia-richtext-support"
-[`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials> "@coremedia/ckeditor5-studio-essentials"
+
+[`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials> "@coremedia/ckeditor5-coremedia-studio-essentials"
+
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration> "@coremedia/ckeditor5-coremedia-studio-integration"
 [`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia/ckeditor5-coremedia-studio-integration-mock"
 [`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support> "@coremedia/ckeditor5-dataprocessor-support"
