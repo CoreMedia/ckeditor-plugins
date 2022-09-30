@@ -39,10 +39,10 @@
     "@coremedia/ckeditor5-coremedia-images": "9.1.1-rc.0",
     "@coremedia/ckeditor5-coremedia-link": "9.1.1-rc.0",
     "@coremedia/ckeditor5-coremedia-richtext": "9.1.1-rc.0",
+    "@coremedia/ckeditor5-coremedia-studio-essentials": "9.1.1-rc.0",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "9.1.1-rc.0",
     "@coremedia/ckeditor5-dataprocessor-support": "9.1.1-rc.0",
     "@coremedia/ckeditor5-font-mapper": "9.1.1-rc.0",
-    "@coremedia/ckeditor5-studio-essentials": "9.1.1-rc.0",
     "@coremedia/service-agent": "^1.1.2",
     "xml-formatter": "^2.6.1"
   },
