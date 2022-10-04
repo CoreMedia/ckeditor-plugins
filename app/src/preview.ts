@@ -1,7 +1,7 @@
-import format from 'xml-formatter';
+import format = require("xml-formatter");
 
 const WITH_PREVIEW_CLASS = "with-preview";
-const getPreviewPanel = () => {
+const getPreviewPanel = (): HTMLElement | null => {
   return document.getElementById("preview");
 };
 
@@ -11,21 +11,34 @@ const getEditor = () => {
 
 const setupPreview = () => {
   const preview = getPreviewPanel();
+  if (!preview) {
+    throw new Error("No Preview Panel found.");
+  }
   preview.innerText = "waiting for ckeditor changes...";
 };
 
-const updatePreview = (data) => {
+const updatePreview = (data: string) => {
   const preview = getPreviewPanel();
-  const formattedXml = !!data ? format(data, {
-    indentation: '   ',
-    collapseContent: false
-  }) : "empty";
-  preview.innerText = formattedXml;
+  if (!preview) {
+    return;
+  }
+  preview.innerText = !!data
+    ? format(data, {
+        indentation: "   ",
+        collapseContent: false,
+      })
+    : "empty";
 };
 
 const renderPreviewButton = () => {
   const preview = getPreviewPanel();
+  if (!preview) {
+    return;
+  }
   const previewButton = document.querySelector("#previewButton");
+  if (!previewButton) {
+    return;
+  }
   previewButton.addEventListener("click", () => {
     preview.hidden = !preview.hidden;
     if (preview.hidden) {
@@ -33,7 +46,6 @@ const renderPreviewButton = () => {
       getEditor().classList.remove(WITH_PREVIEW_CLASS);
       previewButton.textContent = "Show XML Preview";
       preview.classList.add("hidden");
-
     } else {
       // set preview-mode
       getEditor().classList.add(WITH_PREVIEW_CLASS);
@@ -45,7 +57,4 @@ const renderPreviewButton = () => {
 
 renderPreviewButton();
 
-export {
-  setupPreview,
-  updatePreview
-}
+export { setupPreview, updatePreview };

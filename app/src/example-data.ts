@@ -3,26 +3,28 @@ import {
   PREDEFINED_MOCK_BLOB_DATA,
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
-import {setData} from "./dataFacade";
-import {welcomeTextData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
-import {differencingData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
-import {grsData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
-import {loremIpsumData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
-import {linkTargetData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
-import {h1, richtext} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
-import {richTextDocument} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
-import {entitiesData} from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
+import { setData } from "./dataFacade";
+import { welcomeTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
+import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
+import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
+import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
+import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
+import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
+import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
+import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
 const EXAMPLE_URL = "https://example.org/";
 const LINK_TEXT = "Link";
 const serializer = new XMLSerializer();
-const tableHeader = (...headers) => `<tr class="tr--header">${headers.map((h) => `<td class="td--header">${h}</td>`).join("")}</tr>`;
+const tableHeader = (...headers: string[]) =>
+  `<tr class="tr--header">${headers.map((h) => `<td class="td--header">${h}</td>`).join("")}</tr>`;
 // TODO: Should use `RichText.a` in the end, as soon as proper escaping is
 //   supported. See also: `LinkTargetData.createLink` which is currently a
 //   duplicate.
-function createLink(show, role, href = EXAMPLE_URL) {
+function createLink(show: string, role: string, href = EXAMPLE_URL) {
   const a = richTextDocument.createElement("a");
   a.textContent = LINK_TEXT;
   a.setAttribute("xlink:href", href);
@@ -35,11 +37,11 @@ function createContentLinkTableHeading() {
   return tableHeader("Link", "Comment");
 }
 
-function createContentLinkTableRow({comment, id}) {
+function createContentLinkTableRow({ comment, id }: { comment: string; id: number }) {
   return `<tr><td>${createLink("", "", "content:" + id)}</td><td>${comment || ""}</td></tr>`;
 }
 
-function createContentLinkScenario(title, scenarios) {
+function createContentLinkScenario(title: string, scenarios: { comment: string; id: number }[]) {
   const scenarioTitle = h1(title);
   const scenarioHeader = createContentLinkTableHeading();
   const scenarioRows = scenarios.map(createContentLinkTableRow).join("");
@@ -47,7 +49,7 @@ function createContentLinkScenario(title, scenarios) {
 }
 
 function contentLinkExamples() {
-  const standardScenarios = [
+  const standardScenarios: { comment: string; id: number }[] = [
     {
       comment: "Root Folder",
       id: 1,
@@ -139,8 +141,6 @@ function contentLinkExamples() {
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
 }
 
-
-
 // noinspection HtmlUnknownAttribute
 const exampleData = {
   ...differencingData,
@@ -154,39 +154,55 @@ const exampleData = {
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   "Empty": "",
   "Hello": richtext(`<p>Hello World!</p>`),
-  "Invalid RichText": richtext(`${h1("Invalid RichText")}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`)
-          .replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
+  "Invalid RichText": richtext(
+    `${h1(
+      "Invalid RichText"
+    )}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`
+  ).replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
-export const setExampleData = (editor, exampleKey) => {
+export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
   try {
     // noinspection InnerHTMLJS
-    editor.editing.view.once("render", (event) => console.log("CKEditor's Editing-Controller rendered data.", {
-      source: event.source,
-      innerHtml: event.source.getDomRoot().innerHTML,
-    }), {
-      priority: "lowest",
-    });
-    editor.data.once("set", (event, details) => console.log("CKEditor's Data-Controller received data via 'set'.", {
-      event: event,
-      data: details[0],
-    }), {
-      priority: "lowest",
-    });
+    editor.editing.view.once(
+      "render",
+      (event) =>
+        console.log("CKEditor's Editing-Controller rendered data.", {
+          source: event.source,
+          innerHtml: (event.source.getDomRoot() as unknown as HTMLDivElement).innerHTML,
+        }),
+      {
+        priority: "lowest",
+      }
+    );
+    editor.data.once(
+      "set",
+      (event, details) =>
+        console.log("CKEditor's Data-Controller received data via 'set'.", {
+          event,
+          data: details[0],
+        }),
+      {
+        priority: "lowest",
+      }
+    );
 
+    //@ts-expect-error TODO Types
     const data = exampleData[exampleKey];
-    console.log("Setting Example Data.", {[exampleKey]: data});
+    console.log("Setting Example Data.", { [exampleKey]: data });
     setData(editor, data);
 
-    const xmpInput = document.getElementById("xmp-input");
-    xmpInput.value = exampleKey;
+    const xmpInput = document.getElementById("xmp-input") as HTMLInputElement;
+    if (xmpInput) {
+      xmpInput.value = exampleKey;
+    }
   } catch (e) {
     console.error(`Failed setting data for ${exampleKey}.`, e);
   }
 };
 
-export const initExamples = (editor) => {
-  const xmpInput = document.getElementById("xmp-input");
+export const initExamples = (editor: ClassicEditor) => {
+  const xmpInput = document.getElementById("xmp-input") as HTMLInputElement;
   const xmpData = document.getElementById("xmp-data");
   const reloadBtn = document.getElementById("xmp-reload");
   const clearBtn = document.getElementById("xmp-clear");
@@ -221,13 +237,13 @@ export const initExamples = (editor) => {
     }
   });
 
-  clearBtn.addEventListener("click", () => {
+  clearBtn?.addEventListener("click", () => {
     xmpInput.blur();
     setData(editor, "");
   });
 
   // Now add all examples
-  for (let exampleKey of Object.keys(exampleData).sort()) {
+  for (const exampleKey of Object.keys(exampleData).sort()) {
     const option = document.createElement("option");
     // noinspection InnerHTMLJS
     option.innerHTML = exampleKey;

@@ -1,37 +1,48 @@
-import {serviceAgent} from "@coremedia/service-agent";
+import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropService";
 import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
+
+interface DroppableElement {
+  label: string;
+  tooltip: string;
+  classes: string[];
+  items: number[];
+}
 
 /**
  * Set the drag data stored in the attribute data-cmuripath to the dragEvent.dataTransfer and to the dragDropService in studio.
  *
  * @param dragEvent the drag event
  */
-const setDragData = (dragEvent) => {
-  const contentId = dragEvent.target.getAttribute("data-cmuripath");
-  const idsArray = contentId.split(',');
+const setDragData = (dragEvent: DragEvent) => {
+  const dragEventTarget = dragEvent.target as HTMLElement;
+  const contentId = dragEventTarget.getAttribute("data-cmuripath");
   if (contentId) {
+    const idsArray = contentId.split(",");
     const dragDropService = new MockDragDropService();
     dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
     serviceAgent.registerService(dragDropService);
-    dragEvent.dataTransfer.setData('cm/uri-list', JSON.stringify(contentList(...idsArray)));
-    dragEvent.dataTransfer.setData('text', JSON.stringify(contentList(...idsArray)));
+    dragEvent.dataTransfer?.setData("cm/uri-list", JSON.stringify(contentList(...idsArray)));
+    dragEvent.dataTransfer?.setData("text", JSON.stringify(contentList(...idsArray)));
     return;
   }
-  dragEvent.dataTransfer.setData('text/plain', dragEvent.target.childNodes[0].textContent)
+  const text = dragEventTarget.childNodes[0].textContent;
+  if (text) {
+    dragEvent.dataTransfer?.setData("text/plain", text);
+  }
 };
 
 /**
  * Unregister the old dragDropService.
  */
 const removeDropData = () => {
-  serviceAgent.unregisterServices('dragDropService');
+  serviceAgent.unregisterServices("dragDropService");
 };
 
-const initDragExamples = (editor) => {
-
+const initDragExamples = (editor: ClassicEditor) => {
   const mockContentPlugin = editor.plugins.get(MockContentPlugin);
   // Just ensure, that the default content provided by MockContentPlugin
   // still fulfills our expectations.
@@ -46,7 +57,7 @@ const initDragExamples = (editor) => {
     linkable: false,
   });
 
-  const singleDroppableDocuments = [
+  const singleDroppableDocuments: DroppableElement[] = [
     {
       label: "Document 1",
       tooltip: "Some Document",
@@ -165,7 +176,7 @@ const initDragExamples = (editor) => {
       items: [requireExplicitContent(40)],
     },
   ];
-  const slowDocuments = [
+  const slowDocuments: DroppableElement[] = [
     {
       label: "Slow",
       tooltip: "Slowed down access to content",
@@ -238,30 +249,32 @@ const initDragExamples = (editor) => {
     },
     {
       label: `Droppable Documents (incl. Slow)`,
-      tooltip: `${singleDroppableDocuments.length + slowDocuments.length} including ${slowDocuments.length} documents at the start which load slowly.`,
+      tooltip: `${singleDroppableDocuments.length + slowDocuments.length} including ${
+        slowDocuments.length
+      } documents at the start which load slowly.`,
       classes: ["linkable", "type-collection"],
       items: slowDocuments.concat(singleDroppableDocuments).flatMap((item) => item.items),
     },
   ];
 
-  const allData = [
+  const allData: DroppableElement[] = [
     ...singleDroppables,
     ...singleUndroppables,
     ...slowDocuments,
     ...pairedExamples,
     ...allDroppables,
-    ...unreadables
+    ...unreadables,
   ];
 
-  const generateUriPath = (item) => {
+  const generateUriPath = (item: number) => {
     return `content/${item}`;
   };
 
-  const generateUriPathCsv = (items) => {
+  const generateUriPathCsv = (items: number[]) => {
     return items.map((item) => generateUriPath(item)).join(",");
   };
 
-  const addDragExample = (parent, data) => {
+  const addDragExample = (parent: Element, data: DroppableElement) => {
     const dragDiv = document.createElement("div");
     dragDiv.classList.add("drag-example", ...(data.classes || []));
     dragDiv.draggable = true;
@@ -287,20 +300,18 @@ const initDragExamples = (editor) => {
   main();
 };
 
-const contentList = (...ids) => {
+const contentList = (...ids: string[]) => {
   return ids.map((id) => {
     return {
       $Ref: id,
-    }
+    };
   });
 };
 
-const contentDragData = (...ids) => {
+const contentDragData = (...ids: string[]) => {
   return {
     contents: contentList(...ids),
   };
 };
 
-export {
-  initDragExamples
-};
+export { initDragExamples };

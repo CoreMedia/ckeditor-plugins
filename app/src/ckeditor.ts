@@ -2,7 +2,6 @@ import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
 import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
-import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
@@ -14,6 +13,7 @@ import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Link from "@ckeditor/ckeditor5-link/src/link";
+//@ts-expect-error not part of @types/ckeditor__ckeditor5-list@32.0.1, check for newer versions from time to time
 import DocumentList from "@ckeditor/ckeditor5-list/src/documentlist";
 import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
@@ -54,29 +54,34 @@ import { icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 
 const {
+  //@ts-expect-error We currently have no way to extend icon typing.
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
   objectSizeFull: pageDefaultIcon,
 } = icons;
 
-const editorLanguage = document.currentScript.dataset.lang || "en";
+const editorLanguage = document?.currentScript?.dataset.lang || "en";
 
 // setup dnd IFrame
 const dndButton = document.querySelector("#dragExamplesButton");
-const dndFrame = document.querySelector("#dragExamplesDiv");
-dndButton.addEventListener("click", () => {
-  dndFrame.hidden = !dndFrame.hidden;
-  dndButton.textContent = `${dndFrame.hidden ? "Show" : "Hide"} drag examples`;
-});
+const dndFrame = document.querySelector("#dragExamplesDiv") as HTMLDivElement;
+if (dndButton && dndFrame) {
+  dndButton.addEventListener("click", () => {
+    dndFrame.hidden = !dndFrame.hidden;
+    dndButton.textContent = `${dndFrame.hidden ? "Show" : "Hide"} drag examples`;
+  });
+}
 
 setupPreview();
 
-let editor;
-
 const imagePlugins = [ContentImagePlugin, ImageInline, ImageBlockEditing, ImageStyle, ImageToolbar];
 
-ClassicEditor.create(document.querySelector("#editor"), {
+const sourceElement = document.querySelector("#editor") as HTMLElement;
+if (!sourceElement) {
+  throw new Error("No element with class editor defined in html. Nothing to create the editor in.");
+}
+ClassicEditor.create(sourceElement, {
   licenseKey: "",
   placeholder: "Type your text here...",
   plugins: [
@@ -184,7 +189,7 @@ ClassicEditor.create(document.querySelector("#editor"), {
   },
   link: {
     defaultProtocol: "https://",
-    disabled_decorators: {
+    /*decorators: {
       hasTitle: {
         mode: "manual",
         label: "Title",
@@ -193,7 +198,7 @@ ClassicEditor.create(document.querySelector("#editor"), {
             'Example how standard-decorators of the link-plugin works. To enable/disable, just rename decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
         },
       },
-    },
+    },*/
   },
   image: {
     styles: {
@@ -246,17 +251,19 @@ ClassicEditor.create(document.querySelector("#editor"), {
     ui: editorLanguage,
     // Won't change language of content.
     content: "en",
+    textPartLanguage: [],
   },
   autosave: {
     waitingTime: 1000, // in ms
     save(currentEditor) {
       console.log("Save triggered...");
       const start = performance.now();
-      return saveData(currentEditor, "autosave").then(() => {
+      return saveData(currentEditor as ClassicEditor, "autosave").then(() => {
         console.log(`Saved data within ${performance.now() - start} ms.`);
       });
     },
   },
+  //@ts-expect-error Additional configuration, unknown for types.
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     strictness: Strictness.STRICT,
     rules: {
@@ -281,6 +288,7 @@ ClassicEditor.create(document.querySelector("#editor"), {
   },
 })
   .then((newEditor) => {
+    // @ts-expect-error imported in html
     CKEditorInspector.attach(
       {
         "main-editor": newEditor,
@@ -290,22 +298,22 @@ ClassicEditor.create(document.querySelector("#editor"), {
       }
     );
 
-    newEditor.plugins.get("Differencing")?.activateDifferencing();
+    (newEditor.plugins.get("Differencing") as Differencing)?.activateDifferencing();
 
     initReadOnlyMode(newEditor);
     initExamples(newEditor);
     initDragExamples(newEditor);
 
-    editor = newEditor;
-
     const undoCommand = newEditor.commands.get("undo");
     if (!!undoCommand) {
+      //@ts-expect-error Editor extension, no typing available.
       newEditor.resetUndo = () => undoCommand.clearStack();
       console.log("Registered `editor.resetUndo()` to clear undo history.");
     }
 
     // Do it late, so that we also have a clear signal (e.g., to integration
     // tests), that the editor is ready.
+    //@ts-expect-error Unknown, but we set it.
     window.editor = newEditor;
     console.log("Exposed editor instance as `editor`.");
 

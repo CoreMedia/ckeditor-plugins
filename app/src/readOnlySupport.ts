@@ -1,10 +1,12 @@
+import { Editor } from "@ckeditor/ckeditor5-core";
+
 const READ_ONLY_MODE_BTN_ID = "readOnlyMode";
 const READ_ONY_MODE_ID = "exampleApplicationReadOnlyMode";
 const ENABLE_BTN_LABEL = "Enable Read-Only-Mode";
 const DISABLE_BTN_LABEL = "Disable Read-Only-Mode";
 
-const initReadOnlyMode = (editor) => {
-  const toggleButton = document.querySelector(`#${READ_ONLY_MODE_BTN_ID}`);
+const initReadOnlyMode = (editor: Editor) => {
+  const toggleButton = document.querySelector(`#${READ_ONLY_MODE_BTN_ID}`) as HTMLElement;
 
   if (!toggleButton) {
     console.error("Failed initializing read-only mode toggle, as required button is not available.");
@@ -13,16 +15,18 @@ const initReadOnlyMode = (editor) => {
 
   toggleButton.dataset.currentState = "read-write";
 
-  const setLabel = (label) => toggleButton.textContent = label;
+  const setLabel = (label: string) => (toggleButton.textContent = label);
 
   const enableReadOnly = () => {
     toggleButton.dataset.currentState = "read-only";
+    //@ts-expect-error difference between Type and API. Method should be part of editor:https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html#function-enableReadOnlyMode
     editor.enableReadOnlyMode(READ_ONY_MODE_ID);
     setLabel(DISABLE_BTN_LABEL);
   };
 
   const disableReadOnly = () => {
     toggleButton.dataset.currentState = "read-write";
+    //@ts-expect-error difference between Type and API. Method should be part of editor:https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html#function-disableReadOnlyMode
     editor.disableReadOnlyMode(READ_ONY_MODE_ID);
     setLabel(ENABLE_BTN_LABEL);
   };
@@ -33,11 +37,12 @@ const initReadOnlyMode = (editor) => {
 
   setLabel(ENABLE_BTN_LABEL);
 
-  let currentToggleDelay = undefined;
+  let currentToggleDelay: number;
 
-  const toggleState = (countDownSeconds) => {
+  const toggleState = (countDownSeconds: number) => {
     if (countDownSeconds > 0) {
       setLabel(`Toggling Read-Only-Mode in ${countDownSeconds} s...`);
+      // eslint-disable-next-line no-restricted-globals
       currentToggleDelay = setTimeout(toggleState, 1000, countDownSeconds - 1);
     } else {
       isReadOnly() ? disableReadOnly() : enableReadOnly();
@@ -45,6 +50,7 @@ const initReadOnlyMode = (editor) => {
   };
 
   toggleButton.addEventListener("click", (evt) => {
+    // eslint-disable-next-line no-restricted-globals
     clearTimeout(currentToggleDelay);
     let countDownSeconds = 0;
     const ctrlOrCommandKey = evt.ctrlKey || evt.metaKey;
@@ -57,6 +63,4 @@ const initReadOnlyMode = (editor) => {
   });
 };
 
-export {
-  initReadOnlyMode
-}
+export { initReadOnlyMode };

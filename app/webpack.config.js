@@ -19,7 +19,7 @@ module.exports = {
   //devtool: 'source-map',
   performance: { hints: false },
 
-  entry: path.resolve(__dirname, "src", "ckeditor.js"),
+  entry: path.resolve(__dirname, "src", "ckeditor.ts"),
 
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
@@ -71,6 +71,14 @@ module.exports = {
       {
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
         use: ["raw-loader"],
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        exclude: /node_modules/,
+        options: {
+          projectReferences: true,
+        },
       },
       {
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
