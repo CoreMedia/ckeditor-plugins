@@ -8,6 +8,8 @@ import "./expect/Expectations";
  *
  * On an update of CKEditor 5 those tests might signalize changes in CKEditor 5 behavior.
  */
+const olString = "ol";
+const ulString = "ul";
 describe("Document List Feature", () => {
   // noinspection DuplicatedCode
   let application: ApplicationWrapper;
@@ -32,16 +34,12 @@ describe("Document List Feature", () => {
     application.console.close();
   });
 
-  describe("List attributes", () => {
-    //Unfortunately we have to import all parameters with ${} and the element name
-    //is equal to the function name. Therefore, store the element name first as a string.
-    const olString = "ol";
-    const ulString = "ul";
-    it.each`
-      listElement | listElementFunction
-      ${olString} | ${ol}
-      ${ulString} | ${ul}
-    `("$listElement contains attributes", async ({ listElement, listElementFunction }) => {
+  describe.each`
+    listElement | listElementFunction
+    ${olString} | ${ol}
+    ${ulString} | ${ul}
+  `(`$listElement: List attributes`, ({ listElement, listElementFunction }) => {
+    it(`${listElement} contains attributes`, async () => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
@@ -70,11 +68,7 @@ describe("Document List Feature", () => {
       await expect(listElementEditable).toMatchAttribute("lang", "de");
     });
 
-    it.each`
-      listElement | listElementFunction
-      ${olString} | ${ol}
-      ${ulString} | ${ul}
-    `("$listElement, li element contains attributes", async ({ listElement, listElementFunction }) => {
+    it(`${listElement}, li element contains attributes`, async () => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
@@ -99,11 +93,7 @@ describe("Document List Feature", () => {
       await expect(listItemElement).toMatchAttribute("lang", "de");
     });
 
-    it.each`
-      listElement | listElementFunction
-      ${olString} | ${ol}
-      ${ulString} | ${ul}
-    `("$listElement and li element contain attributes", async ({ listElement, listElementFunction }) => {
+    it(`${listElement} and li element contain attributes`, async () => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
