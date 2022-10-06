@@ -143,7 +143,7 @@ describe("Document List Feature", () => {
     listElement | listElementFunction
     ${olString} | ${ol}
     ${ulString} | ${ul}
-  `("Nested Elements in list item (li) according to dtd", ({ listElement, listElementFunction }) => {
+  `(`$listElement: Nested Elements in list item (li) according to dtd`, ({ listElement, listElementFunction }) => {
     //According to dtd p is allowed, but it will be removed by ckeditor
     it("p is removed if it is nested in li", async () => {
       const { editor } = application;
@@ -158,6 +158,30 @@ describe("Document List Feature", () => {
       const listItemElement = (await listElementEditable)?.$("li");
       const pTag = (await listItemElement)?.$("p");
       await expect(await pTag).toBeNull();
+    });
+    it.each`
+      nestedListElement | nestedListElementFunction
+      ${olString}       | ${ol}
+      ${ulString}       | ${ul}
+    `("$nestedListElement is accepted as nested element", async ({ nestedListElement, nestedListElementFunction }) => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(listElementFunction(li(nestedListElementFunction(li(text)))));
+      await editor.setDataAndGetDataView(data);
+
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      await expect(await listItemElement).not.toBeNull();
+
+      const nestedListElementEditable = (await listItemElement)?.$(nestedListElement);
+      await expect(await nestedListElementEditable).not.toBeNull();
+
+      const nestedListItem = (await nestedListElementEditable)?.$("li");
+      await expect(await nestedListItem).not.toBeNull();
+      await expect(await nestedListItem).toHaveText(text);
     });
   });
 });
