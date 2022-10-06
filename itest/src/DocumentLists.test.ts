@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { li, ol, richtext, ul } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { li, ol, p, richtext, ul } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import "./expect/Expectations";
 
 /**
@@ -127,6 +127,37 @@ describe("Document List Feature", () => {
       await expect(listItemElement).toMatchAttribute("class", "liclass");
       await expect(listItemElement).toMatchAttribute("dir", "ltr");
       await expect(listItemElement).toMatchAttribute("lang", "de");
+    });
+  });
+
+  /**
+   * This is a test of nested elements inside a li-element according to the coremedia-richtext-1.0.dtd.
+   *
+   * Inside li elements "Flow" is allowed (@see coremedia-richtext-1.0.dtd#656).
+   * Flow is defined as (#PCDATA | %block; | %inline;) (@see coremedia-richtext-1.0.dtd#608)
+   * where block is p | ul | ol | pre | blockquote | table
+   * and inline is a | em | strong | sub | sup | br | span | img
+   * All those elements are allowed by the dtd. The tests check if those are also allowed by the ckeditor too.
+   */
+  describe.each`
+    listElement | listElementFunction
+    ${olString} | ${ol}
+    ${ulString} | ${ul}
+  `("Nested Elements in list item (li) according to dtd", ({ listElement, listElementFunction }) => {
+    //According to dtd p is allowed, but it will be removed by ckeditor
+    it("p is removed if it is nested in li", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(listElementFunction(li(p(text))));
+      await editor.setDataAndGetDataView(data);
+
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      const pTag = (await listItemElement)?.$("p");
+      await expect(await pTag).toBeNull();
     });
   });
 });
