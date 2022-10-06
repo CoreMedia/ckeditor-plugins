@@ -3,7 +3,10 @@ import { li, ol, richtext, ul } from "@coremedia-internal/ckeditor5-coremedia-ex
 import "./expect/Expectations";
 
 /**
+ * This test is a test for the CKEditor 5 Document List feature and reflects the current state.
+ * It does not always fit our expectations, but it is currently implemented in CKEditor 5 like that.
  *
+ * On an update of CKEditor 5 those tests might signalize changes in CKEditor 5 behavior.
  */
 describe("Document List Feature", () => {
   // noinspection DuplicatedCode
@@ -92,6 +95,46 @@ describe("Document List Feature", () => {
       const listItemElement = (await listElementEditable)?.$("li");
       expect(listItemElement).not.toBeNull();
       await expect(listItemElement).toMatchAttribute("class", "anyclass");
+      await expect(listItemElement).toMatchAttribute("dir", "ltr");
+      await expect(listItemElement).toMatchAttribute("lang", "de");
+    });
+
+    it.each`
+      listElement | listElementFunction
+      ${olString} | ${ol}
+      ${ulString} | ${ul}
+    `("$listElement and li element contain attributes", async ({ listElement, listElementFunction }) => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(
+        listElementFunction(
+          li(text, {
+            "class": "liclass",
+            "dir": "ltr",
+            "xml:lang": "de",
+            "lang": "de",
+          }),
+          {
+            "class": `${listElement}Class`,
+            "dir": "rtl",
+            "xml:lang": "en",
+            "lang": "en",
+          }
+        )
+      );
+      await editor.setDataAndGetDataView(data);
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      expect(listElementEditable).not.toBeNull();
+      await expect(listElementEditable).toMatchAttribute("class", `${listElement}Class`);
+      await expect(listElementEditable).toMatchAttribute("dir", "rtl");
+      await expect(listElementEditable).toMatchAttribute("lang", "en");
+
+      const listItemElement = (await listElementEditable)?.$("li");
+      expect(listItemElement).not.toBeNull();
+      await expect(listItemElement).toMatchAttribute("class", "liclass");
       await expect(listItemElement).toMatchAttribute("dir", "ltr");
       await expect(listItemElement).toMatchAttribute("lang", "de");
     });
