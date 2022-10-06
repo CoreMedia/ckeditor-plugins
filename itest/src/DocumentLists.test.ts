@@ -38,7 +38,7 @@ describe("Document List Feature", () => {
       listElement | listElementFunction
       ${olString} | ${ol}
       ${ulString} | ${ul}
-    `("$listElement Attributes", async ({ listElement, listElementFunction }) => {
+    `("$listElement contains attributes", async ({ listElement, listElementFunction }) => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
@@ -65,6 +65,35 @@ describe("Document List Feature", () => {
       await expect(listElementEditable).toMatchAttribute("class", "anyclass");
       await expect(listElementEditable).toMatchAttribute("dir", "ltr");
       await expect(listElementEditable).toMatchAttribute("lang", "de");
+    });
+
+    it.each`
+      listElement | listElementFunction
+      ${olString} | ${ol}
+      ${ulString} | ${ul}
+    `("$listElement, li element contains attributes", async ({ listElement, listElementFunction }) => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(
+        listElementFunction(
+          li(text, {
+            "class": "anyclass",
+            "dir": "ltr",
+            "xml:lang": "de",
+            "lang": "de",
+          })
+        )
+      );
+      await editor.setDataAndGetDataView(data);
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      expect(listItemElement).not.toBeNull();
+      await expect(listItemElement).toMatchAttribute("class", "anyclass");
+      await expect(listItemElement).toMatchAttribute("dir", "ltr");
+      await expect(listItemElement).toMatchAttribute("lang", "de");
     });
   });
 });
