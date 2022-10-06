@@ -1,0 +1,80 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../dist",
+    "declaration": true,
+    "declarationMap": true,
+    "paths": {
+      "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
+        "../../packages/ckeditor5-coremedia-content-clipboard/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-differencing/*": [
+        "../../packages/ckeditor5-coremedia-differencing/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-images/*": [
+        "../../packages/ckeditor5-coremedia-images/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-link/*": [
+        "../../packages/ckeditor5-coremedia-link/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-richtext/*": [
+        "../../packages/ckeditor5-coremedia-richtext/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-essentials/*": [
+        "../../packages/ckeditor5-coremedia-studio-essentials/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
+        "../../packages/ckeditor5-coremedia-studio-integration/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
+        "../../packages/ckeditor5-coremedia-studio-integration-mock/src/*"
+      ],
+      "@coremedia/ckeditor5-font-mapper/*": [
+        "../../packages/ckeditor5-font-mapper/src/*"
+      ],
+      "@coremedia/ckeditor5-logging/*": [
+        "../../packages/ckeditor5-logging/src/*"
+      ],
+      "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
+        "../../packages/ckeditor5-coremedia-example-data/src/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../../packages/ckeditor5-coremedia-content-clipboard/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-differencing/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-images/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-link/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-richtext/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-studio-essentials/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-studio-integration/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-studio-integration-mock/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-font-mapper/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-logging/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-coremedia-example-data/src"
+    }
+  ],
+  "extends": "../../tsconfig.json"
+}

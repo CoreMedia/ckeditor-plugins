@@ -82,6 +82,26 @@ importers:
       '@coremedia/ckeditor5-dataprocessor-support': 9.1.1-rc.3
       '@coremedia/ckeditor5-font-mapper': 9.1.1-rc.3
       '@coremedia/service-agent': ^1.1.2
+      '@types/ckeditor__ckeditor5-alignment': 29.0.7
+      '@types/ckeditor__ckeditor5-autosave': ^32.0.0
+      '@types/ckeditor__ckeditor5-basic-styles': ^28.0.2
+      '@types/ckeditor__ckeditor5-block-quote': ^29.0.4
+      '@types/ckeditor__ckeditor5-code-block': ^29.0.3
+      '@types/ckeditor__ckeditor5-core': ^33.0.3
+      '@types/ckeditor__ckeditor5-editor-classic': ^27.1.2
+      '@types/ckeditor__ckeditor5-essentials': ^28.0.3
+      '@types/ckeditor__ckeditor5-heading': ^29.0.3
+      '@types/ckeditor__ckeditor5-highlight': ^29.0.3
+      '@types/ckeditor__ckeditor5-image': ^33.0.0
+      '@types/ckeditor__ckeditor5-indent': ^29.0.3
+      '@types/ckeditor__ckeditor5-link': ^32.0.4
+      '@types/ckeditor__ckeditor5-list': ^32.0.1
+      '@types/ckeditor__ckeditor5-paragraph': ^27.0.5
+      '@types/ckeditor__ckeditor5-paste-from-office': ^29.0.1
+      '@types/ckeditor__ckeditor5-remove-format': ^28.0.3
+      '@types/ckeditor__ckeditor5-source-editing': ^29.1.1
+      '@types/ckeditor__ckeditor5-table': ^33.0.0
+      '@types/node': ^18.8.1
       circular-dependency-plugin: ^5.2.2
       css-loader: ^6.7.1
       http-server: ^14.1.1
@@ -138,6 +158,26 @@ importers:
       '@ckeditor/ckeditor5-dev-utils': 30.5.0_frxmcuunqqqeqipt45cd6rjuvu
       '@ckeditor/ckeditor5-dev-webpack-plugin': 30.5.0_frxmcuunqqqeqipt45cd6rjuvu
       '@ckeditor/ckeditor5-inspector': 4.1.0
+      '@types/ckeditor__ckeditor5-alignment': 29.0.7
+      '@types/ckeditor__ckeditor5-autosave': 32.0.0
+      '@types/ckeditor__ckeditor5-basic-styles': 28.0.2
+      '@types/ckeditor__ckeditor5-block-quote': 29.0.4
+      '@types/ckeditor__ckeditor5-code-block': 29.0.3
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-editor-classic': 27.1.2
+      '@types/ckeditor__ckeditor5-essentials': 28.0.3
+      '@types/ckeditor__ckeditor5-heading': 29.0.3
+      '@types/ckeditor__ckeditor5-highlight': 29.0.3
+      '@types/ckeditor__ckeditor5-image': 33.0.0
+      '@types/ckeditor__ckeditor5-indent': 29.0.3
+      '@types/ckeditor__ckeditor5-link': 32.0.4
+      '@types/ckeditor__ckeditor5-list': 32.0.1
+      '@types/ckeditor__ckeditor5-paragraph': 27.0.5
+      '@types/ckeditor__ckeditor5-paste-from-office': 29.0.1
+      '@types/ckeditor__ckeditor5-remove-format': 28.0.3
+      '@types/ckeditor__ckeditor5-source-editing': 29.1.1
+      '@types/ckeditor__ckeditor5-table': 33.0.0
+      '@types/node': 18.8.1
       circular-dependency-plugin: 5.2.2_webpack@5.74.0
       css-loader: 6.7.1_webpack@5.74.0
       http-server: 14.1.1
@@ -3148,6 +3188,21 @@ packages:
       '@types/ckeditor__ckeditor5-core': 33.0.3
     dev: true
 
+  /@types/ckeditor__ckeditor5-basic-styles/28.0.2:
+    resolution: {integrity: sha512-ap6vMacs5rjcWRlHrYPsZPshHoPR7sruPgbuzduGQCy7X86SglOPwtd6XvMOMItslbLv1wYbJ3h9+S1kBOVvfA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+    dev: true
+
+  /@types/ckeditor__ckeditor5-block-quote/29.0.4:
+    resolution: {integrity: sha512-FwNayTN7/8hdxCSA9cBiab4rEG3jERy+bF6qgr5pYwCiEthghlKT87IYqFYmVhznSsfqqR3KHi2a6GIfJMHpCA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-enter': 27.0.3
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+    dev: true
+
   /@types/ckeditor__ckeditor5-ckfinder/29.0.3:
     resolution: {integrity: sha512-RQVFIg/RrJzaA19FHD9Qzzl36sVUyyqY9ozWhEUWAmlKMUZW0MQBBtMN3vX5dZ81JtOaPVcwklNAa2yw6dqlkg==}
     dependencies:
@@ -3243,6 +3298,17 @@ packages:
       '@types/ckeditor__ckeditor5-engine': 32.0.11
     dev: true
 
+  /@types/ckeditor__ckeditor5-essentials/28.0.3:
+    resolution: {integrity: sha512-vHtxf97CSVTRMGpxsEfDduRASHL32+9rvr1bVTmLlTgdykMiP0HY+TmFt07XtDTCpwAShehLu4bc8Qg4mkCCCA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-enter': 27.0.3
+      '@types/ckeditor__ckeditor5-select-all': 31.0.0
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-undo': 27.0.3
+    dev: true
+
   /@types/ckeditor__ckeditor5-export-pdf/31.0.0:
     resolution: {integrity: sha512-ZQdL2eI/zpPtmMB8Qd5VHqvDx8VNsnCs4SPMWgSG1lrwC7tM0cnyLkCcVxHQYcvZIlihzEF/QJJ+AV9waxT9Pg==}
     dependencies:
@@ -3326,6 +3392,17 @@ packages:
       '@types/ckeditor__ckeditor5-utils': 28.0.14
     dev: true
 
+  /@types/ckeditor__ckeditor5-list/32.0.1:
+    resolution: {integrity: sha512-FJxpxq56CgyRhI3DAaxWuKFHQH2ZZPFyKgj/3kF3qMbS2YJ2bBhh9/IfnMi1R2Gesdm0aNgCzM/Q+xp3j4ftHQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-enter': 27.0.3
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
   /@types/ckeditor__ckeditor5-media-embed/29.0.3:
     resolution: {integrity: sha512-Z1EAZ/s04KTh+MJHZ2Xj2ugwX8lOBmlga7BWdzO4/HkJVeNzozWjp4Kxj9bxVr3GA+EaGWS6MHqgnhtN4gqhfg==}
     dependencies:
@@ -3369,6 +3446,14 @@ packages:
       '@types/ckeditor__ckeditor5-engine': 32.0.11
     dev: true
 
+  /@types/ckeditor__ckeditor5-paste-from-office/29.0.1:
+    resolution: {integrity: sha512-/Asiwf6/cIA1R0tLIpsdiwyqOKYGQLc9va/GdTeZSAj1YG5OENeMlUK32pRth5BxS7dFlhK/xDsP5NhY/ZEUvQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-clipboard': 29.0.5
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+    dev: true
+
   /@types/ckeditor__ckeditor5-real-time-collaboration/32.0.0:
     resolution: {integrity: sha512-u93DiYz2Q2+0ILR4srrmabWYlBx1LTcEusSbE7ylvQrcTs4qmgWlio81FyEMEtn9G5hG4kqH/WN0WfhHjWoFTQ==}
     dependencies:
@@ -3378,12 +3463,30 @@ packages:
       '@types/ckeditor__ckeditor5-utils': 28.0.14
     dev: true
 
+  /@types/ckeditor__ckeditor5-remove-format/28.0.3:
+    resolution: {integrity: sha512-gVTTm3UtY/yL3Bvehhryed/sJVHGgT4vdcu8WwiIXgPP5l9LpGnDai0TAZsLbqLh3DC1VTopyg0pbLavxbzg2g==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
   /@types/ckeditor__ckeditor5-restricted-editing/32.0.0:
     resolution: {integrity: sha512-FCOqLUbMxHBaghkXuVHl6hJy9VmimlEXPiMSHeK1jmjq3prsCvavup31Ps+zhwPlo0Bd7aS7GBdUJPGuYkYP9w==}
     dependencies:
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-engine': 32.0.11
       '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-select-all/31.0.0:
+    resolution: {integrity: sha512-Sgp9N7HHdRcE+9UZlamI3f3ZUCt1fbAYyBv3OhmS9RO9Ev/vejGcSCh3tEddzLfqBcU9HNnl39SQK0zCjeKLEA==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+    dev: true
+
+  /@types/ckeditor__ckeditor5-source-editing/29.1.1:
+    resolution: {integrity: sha512-K1Wmh54yoBUzVeqnicoxjpI+nlW7CcBPruVurVx8D8AVJDJWMgvAR5nr/hpLjOEHUKiXTvSDbitc5DoKxjBUxg==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
     dev: true
 
   /@types/ckeditor__ckeditor5-table/33.0.0:
@@ -3521,7 +3624,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.7.16
+      '@types/node': 18.8.1
     dev: true
 
   /@types/graceful-fs/4.1.5:
@@ -3581,6 +3684,10 @@ packages:
 
   /@types/node/18.7.16:
     resolution: {integrity: sha512-EQHhixfu+mkqHMZl1R2Ovuvn47PUw18azMJOTwSZr9/fhzHNGXAJ0ma0dayRVchprpCj0Kc1K1xKoWaATWF1qg==}
+    dev: true
+
+  /@types/node/18.8.1:
+    resolution: {integrity: sha512-vuYaNuEIbOYLTLUAJh50ezEbvxrD43iby+lpUA2aa148Nh5kX/AVO/9m1Ahmbux2iU5uxJTNF9g2Y+31uml7RQ==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -6929,7 +7036,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.7.16
+      '@types/node': 18.8.1
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -6938,7 +7045,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.7.13
+      '@types/node': 18.8.1
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
