@@ -195,7 +195,7 @@ export interface BlockquoteAttributes extends Attributes {
  * @param attrs - attributes to apply to element
  */
 export const blockquote = (content: Content = "", attrs: BlockquoteAttributes = {}): string => {
-  return nonEmptyElement("pre", content, { ...attrs });
+  return nonEmptyElement("blockquote", content, { ...attrs });
 };
 
 /**
