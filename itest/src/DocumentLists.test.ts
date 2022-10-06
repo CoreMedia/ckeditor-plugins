@@ -1,6 +1,25 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { li, ol, p, richtext, ul } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import {
+  a,
+  blockquote,
+  em,
+  img,
+  li,
+  ol,
+  p,
+  pre,
+  richtext,
+  span,
+  strong,
+  sub,
+  sup,
+  table,
+  td,
+  tr,
+  ul,
+} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import "./expect/Expectations";
+import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
 
 /**
  * This test is a test for the CKEditor 5 Document List feature and reflects the current state.
@@ -137,7 +156,7 @@ describe("Document List Feature", () => {
    * Flow is defined as (#PCDATA | %block; | %inline;) (@see coremedia-richtext-1.0.dtd#608)
    * where block is p | ul | ol | pre | blockquote | table
    * and inline is a | em | strong | sub | sup | br | span | img
-   * All those elements are allowed by the dtd. The tests check if those are also allowed by the ckeditor too.
+   * All those elements are allowed by the dtd.
    */
   describe.each`
     listElement | listElementFunction
@@ -145,7 +164,7 @@ describe("Document List Feature", () => {
     ${ulString} | ${ul}
   `(`$listElement: Nested Elements in list item (li) according to dtd`, ({ listElement, listElementFunction }) => {
     //According to dtd p is allowed, but it will be removed by ckeditor
-    it("p is removed if it is nested in li", async () => {
+    it("nested p: is removed by cke", async () => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
@@ -159,11 +178,12 @@ describe("Document List Feature", () => {
       const pTag = (await listItemElement)?.$("p");
       await expect(await pTag).toBeNull();
     });
+
     it.each`
       nestedListElement | nestedListElementFunction
       ${olString}       | ${ol}
       ${ulString}       | ${ul}
-    `("$nestedListElement is accepted as nested element", async ({ nestedListElement, nestedListElementFunction }) => {
+    `("nested $nestedListElement", async ({ nestedListElement, nestedListElementFunction }) => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
@@ -182,6 +202,103 @@ describe("Document List Feature", () => {
       const nestedListItem = (await nestedListElementEditable)?.$("li");
       await expect(await nestedListItem).not.toBeNull();
       await expect(await nestedListItem).toHaveText(text);
+    });
+
+    const preString = "pre";
+    const blockquoteString = "blockquote";
+    const spanString = "span";
+    const strongString = "strong";
+    const subString = "sub";
+    const supString = "sup";
+
+    it.each`
+      nestedElement       | nestedElementFunction
+      ${preString}        | ${pre}
+      ${blockquoteString} | ${blockquote}
+      ${spanString}       | ${span}
+      ${strongString}     | ${strong}
+      ${subString}        | ${sub}
+      ${supString}        | ${sup}
+      ${"i"}              | ${em}
+    `("nested $nestedElement", async ({ nestedElement, nestedElementFunction }) => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(listElementFunction(li(nestedElementFunction(text))));
+      await editor.setDataAndGetDataView(data);
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      await expect(await listItemElement).not.toBeNull();
+
+      const actualNestedElement = (await listItemElement)?.$(nestedElement);
+      await expect(actualNestedElement).not.toBeNull();
+      await expect(await actualNestedElement).toHaveText(text);
+    });
+
+    it("nested a", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(listElementFunction(li(a(text, { "xlink:href": "content:42" }))));
+      await editor.setDataAndGetDataView(data);
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      await expect(await listItemElement).not.toBeNull();
+
+      const actualNestedElement = (await listItemElement)?.$("a");
+      await expect(await actualNestedElement).not.toBeNull();
+      await expect(await actualNestedElement).toHaveText(text);
+    });
+
+    it("nested img", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(
+        listElementFunction(
+          li(
+            img({
+              "alt": text,
+              "xlink:href": blobReference(42),
+            })
+          )
+        )
+      );
+      await editor.setDataAndGetDataView(data);
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      await expect(await listItemElement).not.toBeNull();
+
+      const actualNestedElement = (await listItemElement)?.$("img");
+      await expect(await actualNestedElement).not.toBeNull();
+      await expect(await actualNestedElement).toMatchAttribute("alt", text);
+    });
+
+    it("nested table", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const editableHandle = await ui.getEditableElement();
+
+      const text = `Lorem Ipsum`;
+      const data = richtext(listElementFunction(li(table(tr(td(text))))));
+      await editor.setDataAndGetDataView(data);
+      const listElementEditable = editableHandle.$(`${listElement}`);
+      const listItemElement = (await listElementEditable)?.$("li");
+      await expect(await listItemElement).not.toBeNull();
+
+      const actualNestedElement = (await listItemElement)?.$("table");
+      await expect(await actualNestedElement).not.toBeNull();
+      const trElement = (await listItemElement)?.$("tr");
+      await expect(await trElement).not.toBeNull();
+      const tdElement = (await listItemElement)?.$("td");
+      await expect(await tdElement).not.toBeNull();
+      await expect(await tdElement).toHaveText(text);
     });
   });
 });
