@@ -114,7 +114,15 @@ jobs:
       - name: Test
         run: pnpm jest
       - name: TypeDoc
-        run: pnpm doc
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status
+            echo "error:: There are unexpected changes in git!";
+            exit 1
+          fi
+          pnpm doc
+          git add --all
+          git commit -am "doc(typedoc): Update typedoc"
       - name: Install for Production
         run: pnpm install --production
       # Publishes a release candidate with tag "next".
