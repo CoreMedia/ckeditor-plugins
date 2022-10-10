@@ -22,6 +22,25 @@
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Rule to replace a given element and class by a new element, if the class
 attribute has the expected value.</p>
+<p><strong>Ambiguity:</strong> This rule replaces the element name by a new name (and thus,
+gets a new element). Rules, which matched the original element name will
+be executed afterwards (contained in <code>subSequentRules</code>). This handles
+ambiguous mappings by overriding each others.</p>
+<p>An example: You have mapping rules <code>&lt;span class=&quot;u&quot;&gt;</code> to element <code>&lt;u&gt;</code> and
+<code>&lt;span class=&quot;s&quot;&gt;</code> to element <code>&lt;s&gt;</code> and vice versa. Now, what about an
+incoming <code>&lt;span class=&quot;s u&quot;&gt;</code>? One of the mapping rules will be first,
+for example, replacing the element to <code>&lt;s&gt;</code>. As intermediate state, we will
+have <code>&lt;s class=&quot;u&quot;&gt;</code>. But: In <code>subsequentRules</code> we will still have the rule
+mapping by class <code>&quot;u&quot;</code>. Now, the element gets mapped to <code>&lt;u&gt;</code> in subsequent
+rules, the last class being removed. Note, that the order of mapping cannot
+be guaranteed here (we have no predictable order in rules being executed).</p>
+<p>This approach is considered <em>as designed</em>, which is, we have to deal
+somehow with this ambiguity. Removing both classes will eventually remove
+the ambiguity as it is decided, which class takes the lead. This is similar
+to the behavior of headings (<code>&lt;p class=&quot;p--heading-1 p--heading-2&quot;&gt;</code> will
+resolve ambiguity to <code>&lt;p class=&quot;p--heading-1&quot;&gt;</code>) or text alignment as
+handled by CKEditor (<code>&lt;p class=&quot;float--left float-right&quot;&gt;</code> will get
+one of the classes removed when it passed processing in CKEditor).</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -44,7 +63,7 @@ attribute has the expected value.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="../interfaces/ckeditor5_dataprocessor_support.ElementFilterRulesByName.html" class="tsd-signature-type" data-tsd-kind="Interface">ElementFilterRulesByName</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/82efd47d/packages/ckeditor5-coremedia-richtext/src/rules/ReplaceBy.ts#L32">packages/ckeditor5-coremedia-richtext/src/rules/ReplaceBy.ts:32</a></li></ul></aside></li></ul></section></div>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/11c54619/packages/ckeditor5-coremedia-richtext/src/rules/ReplaceBy.ts#L55">packages/ckeditor5-coremedia-richtext/src/rules/ReplaceBy.ts:55</a></li></ul></aside></li></ul></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -130,7 +149,8 @@ attribute has the expected value.</p>
 <li class="tsd-kind-namespace tsd-parent-kind-module"><a href="../modules/ckeditor5_coremedia_studio_integration_mock.content.html">content</a></li></ul></li>
 <li class="tsd-kind-module"><a href="../modules/ckeditor5_dataprocessor_support.html">ckeditor5-<wbr/>dataprocessor-<wbr/>support</a>
 <ul>
-<li class="tsd-kind-namespace tsd-parent-kind-module"><a href="../modules/ckeditor5_dataprocessor_support.Attributes.html">Attributes</a></li></ul></li>
+<li class="tsd-kind-namespace tsd-parent-kind-module"><a href="../modules/ckeditor5_dataprocessor_support.Attributes.html">Attributes</a></li>
+<li class="tsd-kind-namespace tsd-parent-kind-module"><a href="../modules/ckeditor5_dataprocessor_support.RulesLogger.html">Rules<wbr/>Logger</a></li></ul></li>
 <li class="tsd-kind-module"><a href="../modules/ckeditor5_font_mapper.html">ckeditor5-<wbr/>font-<wbr/>mapper</a></li>
 <li class="tsd-kind-module"><a href="../modules/ckeditor5_logging.html">ckeditor5-<wbr/>logging</a>
 <ul>
