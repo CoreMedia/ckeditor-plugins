@@ -5,7 +5,7 @@
     "outDir": "../dist",
     "emitDeclarationOnly": true,
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
   },
   "extends": "../../../tsconfig.json"
 }

@@ -1,49 +1,14 @@
-import { serviceAgent } from "@coremedia/service-agent";
-import MockDragDropService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropService";
 import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import MockDragDropPlugin, {
+  DroppableElement,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
 
 const DRAG_EXAMPLES_ID = "dragExamplesDiv";
 
-interface DroppableElement {
-  label: string;
-  tooltip: string;
-  classes: string[];
-  items: number[];
-}
-
-/**
- * Set the drag data stored in the attribute data-cmuripath to the dragEvent.dataTransfer and to the dragDropService in studio.
- *
- * @param dragEvent the drag event
- */
-const setDragData = (dragEvent: DragEvent) => {
-  const dragEventTarget = dragEvent.target as HTMLElement;
-  const contentId = dragEventTarget.getAttribute("data-cmuripath");
-  if (contentId) {
-    const idsArray = contentId.split(",");
-    const dragDropService = new MockDragDropService();
-    dragDropService.dragData = JSON.stringify(contentDragData(...idsArray));
-    serviceAgent.registerService(dragDropService);
-    dragEvent.dataTransfer?.setData("cm/uri-list", JSON.stringify(contentList(...idsArray)));
-    dragEvent.dataTransfer?.setData("text", JSON.stringify(contentList(...idsArray)));
-    return;
-  }
-  const text = dragEventTarget.childNodes[0].textContent;
-  if (text) {
-    dragEvent.dataTransfer?.setData("text/plain", text);
-  }
-};
-
-/**
- * Unregister the old dragDropService.
- */
-const removeDropData = () => {
-  serviceAgent.unregisterServices("dragDropService");
-};
-
 const initDragExamples = (editor: ClassicEditor) => {
   const mockContentPlugin = editor.plugins.get(MockContentPlugin);
+  const mockDragDropPlugin = editor.plugins.get(MockDragDropPlugin);
   // Just ensure, that the default content provided by MockContentPlugin
   // still fulfills our expectations.
   const requireExplicitContent = mockContentPlugin.requireExplicitContent;
@@ -266,26 +231,6 @@ const initDragExamples = (editor: ClassicEditor) => {
     ...unreadables,
   ];
 
-  const generateUriPath = (item: number) => {
-    return `content/${item}`;
-  };
-
-  const generateUriPathCsv = (items: number[]) => {
-    return items.map((item) => generateUriPath(item)).join(",");
-  };
-
-  const addDragExample = (parent: Element, data: DroppableElement) => {
-    const dragDiv = document.createElement("div");
-    dragDiv.classList.add("drag-example", ...(data.classes || []));
-    dragDiv.draggable = true;
-    dragDiv.textContent = data.label || "Unset";
-    dragDiv.dataset.cmuripath = generateUriPathCsv(data.items || []);
-    dragDiv.title = data.tooltip + " (" + dragDiv.dataset.cmuripath + ")";
-    dragDiv.addEventListener("dragstart", setDragData);
-    dragDiv.addEventListener("dragend", removeDropData);
-    parent.appendChild(dragDiv);
-  };
-
   const main = () => {
     const examplesEl = document.getElementById(DRAG_EXAMPLES_ID);
     if (!examplesEl) {
@@ -293,25 +238,14 @@ const initDragExamples = (editor: ClassicEditor) => {
       return;
     }
 
-    allData.forEach((data) => addDragExample(examplesEl, data));
+    allData.forEach((data) => {
+      const dragDiv = mockDragDropPlugin.createDragDivElement(data);
+      examplesEl.appendChild(dragDiv);
+    });
     console.log(`Initialized ${allData.length} drag examples.`);
   };
 
   main();
-};
-
-const contentList = (...ids: string[]) => {
-  return ids.map((id) => {
-    return {
-      $Ref: id,
-    };
-  });
-};
-
-const contentDragData = (...ids: string[]) => {
-  return {
-    contents: contentList(...ids),
-  };
 };
 
 export { initDragExamples };
