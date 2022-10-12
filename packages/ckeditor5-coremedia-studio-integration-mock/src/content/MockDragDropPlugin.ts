@@ -2,6 +2,8 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
+import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 /**
  * Describes a div-element which can be created by this plugin.
@@ -50,6 +52,24 @@ class MockDragDropPlugin extends Plugin {
     dragDiv.addEventListener("dragstart", MockDragDropPlugin.#setDragData);
     dragDiv.addEventListener("dragend", MockDragDropPlugin.#removeDropData);
     return dragDiv;
+  }
+
+  /**
+   * Fills the caches for the drag and drop.
+   *
+   * While the "dragover" event is executed synchronously, we have
+   * an asynchronous service-agent call to calculate the drop allowed.
+   *
+   * To ensure in tests that the drop is allowed, the cache can be filled before
+   * executing the drop.
+   *
+   * @param contentIds - the ids to fill the cache for.
+   */
+  prefillCaches(contentIds: number[]): boolean {
+    const uriPaths = contentIds.map((contentId) => contentUriPath(contentId));
+    return uriPaths.every((uriPath) => {
+      return DragDropAsyncSupport.isLinkable(uriPath);
+    });
   }
 
   /**
