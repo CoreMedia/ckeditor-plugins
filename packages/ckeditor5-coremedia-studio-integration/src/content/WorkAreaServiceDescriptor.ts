@@ -1,15 +1,11 @@
-import { ServiceDescriptor } from "@coremedia/service-agent";
+import { serviceDescFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
 import WorkAreaService from "./studioservices/WorkAreaService";
 
 /**
  * Descriptor used to fetch service from service agent.
  */
-class WorkAreaServiceDescriptor implements ServiceDescriptor<WorkAreaService> {
-  constructor() {
-    this.name = "workAreaService";
-  }
-
-  name: string;
+export function createWorkAreaServiceDescriptor(): ServiceDescriptorWithProps<WorkAreaService> {
+  return serviceDescFactory<WorkAreaService>({
+    name: "workAreaService",
+  });
 }
-
-export default WorkAreaServiceDescriptor;

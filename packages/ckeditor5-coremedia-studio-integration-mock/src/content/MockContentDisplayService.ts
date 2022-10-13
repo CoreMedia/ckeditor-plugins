@@ -2,7 +2,7 @@ import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integra
 import { combineLatest, Observable, OperatorFunction, Subscription } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { contentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
 import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
@@ -33,7 +33,7 @@ class MockContentDisplayService implements ContentDisplayService {
    * The name of the service.
    */
   getName(): string {
-    return new ContentDisplayServiceDescriptor().name;
+    return createContentDisplayServiceDescriptor().name;
   }
 
   /**

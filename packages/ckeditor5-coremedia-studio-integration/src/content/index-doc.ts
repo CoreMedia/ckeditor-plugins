@@ -12,7 +12,6 @@ export * from "./BlobDisplayService";
 export { default as BlobDisplayService } from "./BlobDisplayService";
 
 export * from "./BlobDisplayServiceDescriptor";
-export { default as BlobDisplayServiceDescriptor } from "./BlobDisplayServiceDescriptor";
 
 export * from "./ContentAsLink";
 export { default as ContentAsLink } from "./ContentAsLink";
@@ -21,7 +20,6 @@ export * from "./ContentDisplayService";
 export { default as ContentDisplayService } from "./ContentDisplayService";
 
 export * from "./ContentDisplayServiceDescriptor";
-export { default as ContentDisplayServiceDescriptor } from "./ContentDisplayServiceDescriptor";
 
 export * from "./DataTransferUtils";
 
@@ -38,10 +36,8 @@ export * from "./RichtextConfigurationService";
 export { default as RichtextConfigurationService } from "./RichtextConfigurationService";
 
 export * from "./RichtextConfigurationServiceDescriptor";
-export { default as RichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 
 export * as UriPath from "./UriPath";
 //export { default as UriPath } from "./UriPath";
 
 export * from "./WorkAreaServiceDescriptor";
-export { default as WorkAreaServiceDescriptor } from "./WorkAreaServiceDescriptor";

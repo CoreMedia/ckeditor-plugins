@@ -1,12 +1,10 @@
-import type { ServiceObject } from "@coremedia/service-agent";
-
 /**
  * Service for base Studio work area functionality to be registered with the
  * `serviceAgent`.
  *
  * @see serviceAgent
  */
-interface WorkAreaService extends ServiceObject {
+interface WorkAreaService {
   /**
    * Opens entities given by their REST URIs in Studio tabs.
    *

@@ -1,4 +1,3 @@
-import { ServiceObject } from "@coremedia/service-agent";
 import { UriPath } from "./UriPath";
 
 /**
@@ -8,7 +7,7 @@ import { UriPath } from "./UriPath";
  * The application is required providing an implementation for this
  * interface to use plugins based on this configuration.
  */
-interface RichtextConfigurationService extends ServiceObject {
+interface RichtextConfigurationService {
   /**
    * Signals, if the entity described by the given URI path (typically
    * a content) can be linked to from within Richtext.

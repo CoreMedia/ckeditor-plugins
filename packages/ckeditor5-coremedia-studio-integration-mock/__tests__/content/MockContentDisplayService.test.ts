@@ -1,6 +1,5 @@
-import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
 import { serviceAgent } from "@coremedia/service-agent";
-import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
 import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
 import { first } from "rxjs/operators";
@@ -12,9 +11,7 @@ describe("MockContentDisplayService", () => {
 
     test("Should be able to retrieve mock service.", () => {
       expect.hasAssertions();
-      return expect(
-        serviceAgent.fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-      ).resolves.toMatchObject(service);
+      return expect(serviceAgent.fetchService(createContentDisplayServiceDescriptor())).resolves.toMatchObject(service);
     });
   });
 

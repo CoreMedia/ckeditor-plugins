@@ -1,7 +1,7 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import RichtextConfigurationService from "./RichtextConfigurationService";
-import RichtextConfigurationServiceDescriptor from "./RichtextConfigurationServiceDescriptor";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IsLinkableResponse = boolean | "IN_PROGRESS";
@@ -180,7 +180,7 @@ export default class DragDropAsyncSupport {
   static #evaluate(uriPath: string, evictImmediately = false, cache: Cache, loadFunction: LoadFunction): boolean {
     const logger = DragDropAsyncSupport.#logger;
 
-    const service = serviceAgent.getService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor());
+    const service = serviceAgent.getService(createRichtextConfigurationServiceDescriptor());
 
     if (!service) {
       // Synchronous behavior: We don't have a service yet, so assume for now,

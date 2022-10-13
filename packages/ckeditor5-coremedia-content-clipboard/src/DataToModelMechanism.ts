@@ -9,8 +9,7 @@ import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
-import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
@@ -143,7 +142,7 @@ export default class DataToModelMechanism {
     // If the studio response delivers another type then link or image
     // it would be possible to provide another model rendering.
     return serviceAgent
-      .fetchService<RichtextConfigurationService>(new RichtextConfigurationServiceDescriptor())
+      .fetchService(createRichtextConfigurationServiceDescriptor())
       .then((service) => service.isEmbeddableType(contentUri))
       .then((isEmbeddable) => (isEmbeddable ? "image" : "link"));
   }

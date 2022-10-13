@@ -1,6 +1,5 @@
 import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
-import { ServiceObject } from "@coremedia/service-agent";
 import ContentAsLink from "./ContentAsLink";
 
 /**
@@ -13,13 +12,12 @@ import ContentAsLink from "./ContentAsLink";
  *
  * @example
  * ```typescript
- * const descriptor = new ContentDisplayServiceDescriptor();
  * serviceAgent
- *   .fetchService<ContentDisplayService>(descriptor)
+ *   .fetchService(createContentDisplayServiceDescriptor())
  *     .then((service: ContentDisplayService) => {});
  * ```
  */
-interface ContentDisplayService extends ServiceObject {
+interface ContentDisplayService {
   /**
    * Provides a name of a content, which must not be observed, but directly
    * used when resolved. Possibly use case: Get the name of a content dropped
