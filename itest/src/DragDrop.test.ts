@@ -4,7 +4,11 @@ import "./expect/Expectations";
 import { DroppableElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
 import waitForExpect from "wait-for-expect";
 import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
-import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
+import {
+  PNG_BLUE_240x135,
+  PNG_GREEN_240x135,
+  PNG_RED_240x135,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 
 const oneLink = [
   {
@@ -39,6 +43,63 @@ const multipleLinks = [
   {
     id: 10012,
     name: "Document 10012",
+  },
+];
+
+const oneImage = [
+  {
+    id: 100014,
+    name: "Document 100014",
+    blob: PNG_RED_240x135,
+    embeddable: true,
+    linkable: true,
+  },
+];
+const multipleImages = [
+  {
+    id: 100016,
+    name: "Document 100016",
+    blob: PNG_RED_240x135,
+    embeddable: true,
+    linkable: true,
+  },
+  {
+    id: 100018,
+    name: "Document 100018",
+    blob: PNG_BLUE_240x135,
+    embeddable: true,
+    linkable: true,
+  },
+  {
+    id: 100020,
+    name: "Document 100020",
+    blob: PNG_GREEN_240x135,
+    embeddable: true,
+    linkable: true,
+  },
+];
+const multipleImagesSlow = [
+  {
+    id: 100022,
+    name: "Document 100022",
+    blob: PNG_RED_240x135,
+    embeddable: true,
+    linkable: true,
+  },
+  {
+    id: 100024,
+    name: "Document 100024",
+    blob: PNG_BLUE_240x135,
+    initialDelayMs: 1000,
+    embeddable: true,
+    linkable: true,
+  },
+  {
+    id: 100026,
+    name: "Document 100026",
+    blob: PNG_GREEN_240x135,
+    embeddable: true,
+    linkable: true,
   },
 ];
 
@@ -102,47 +163,43 @@ describe("Drag and Drop", () => {
   });
 
   describe("Images", () => {
-    it("Should drag an image-content to the editor, the content is rendered as an image", async () => {
-      const contentId = 10002;
-      const droppableElement: DroppableElement = {
-        label: "Drag And Drop Test",
-        tooltip: "test-element",
-        items: [contentId],
-        classes: ["drag-content"],
-      };
-      const contentName = `${droppableElement.label}: ${contentId}`;
-      const contentMock: MockContentConfig = {
-        id: contentId,
-        name: contentName,
-        blob: PNG_RED_240x135,
-        embeddable: true,
-        linkable: true,
-      };
-      //Add contents and create the draggable element
-      await application.mockContent.addContents(contentMock);
-      await application.mockDragDrop.addDraggableElement(droppableElement);
+    it.each`
+      dragElementClass          | contentMocks
+      ${"one-image"}            | ${oneImage}
+      ${"multiple-images"}      | ${multipleImages}
+      ${"multiple-images-slow"} | ${multipleImagesSlow}
+    `(
+      "[$#]: Should drag and drop $contentMocks.length embeddable contents as images.",
+      async ({ dragElementClass, contentMocks }) => {
+        await setupScenario(dragElementClass, contentMocks);
 
-      //execute drag and drop
-      const dragElementSelector = ".drag-example.drag-content";
-      const dropTargetSelector = ".ck-content.ck-editor__editable";
-      await dragAndDrop([contentMock], dragElementSelector, dropTargetSelector);
+        //execute drag and drop
+        const dragElementSelector = `.drag-example.drag-content.${dragElementClass}`;
+        const dropTargetSelector = ".ck-content.ck-editor__editable";
+        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
 
-      // Validate Editing Downcast
-      const { ui } = application.editor;
+        // Validate Editing Downcast
+        const { ui } = application.editor;
+        await waitForExpect(async () => {
+          const data = await application.editor.getData();
+          for (const contentMock of contentMocks) {
+            // noinspection HtmlUnknownAttribute
+            await expect(data).toContain(`<img alt=\"\" xlink:href=\"content/${contentMock.id}#properties.data\"/>`);
+          }
+        });
 
-      await waitForExpect(async () => {
-        const data = await application.editor.getData();
-        // noinspection HtmlUnknownAttribute
-        expect(data).toContain(`<img alt=\"\" xlink:href=\"content/${contentId}#properties.data\"/>`);
-      });
-
-      const editableHandle = await ui.getEditableElement();
-      const image = await editableHandle.$("img");
-      await waitForExpect(() => {
-        expect(image).toMatchAttribute("src", PNG_RED_240x135);
-        expect(image).toMatchAttribute("title", contentName);
-      });
-    });
+        const editableHandle = await ui.getEditableElement();
+        await waitForExpect(async () => {
+          const images = await editableHandle.$$("img");
+          await expect(images).toHaveLength(contentMocks.length);
+          for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            await expect(image).toMatchAttribute("src", contentMocks[i].blob);
+            await expect(image).toMatchAttribute("title", contentMocks[i].name);
+          }
+        });
+      }
+    );
   });
 
   async function setupScenario(dragElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
