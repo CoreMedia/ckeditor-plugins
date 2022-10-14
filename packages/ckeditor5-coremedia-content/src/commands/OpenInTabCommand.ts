@@ -1,6 +1,5 @@
 import { Command } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
@@ -62,7 +61,7 @@ export class OpenInTabCommand extends Command {
     // might not update correctly once displayed. You will have to trigger #refresh
     // manually in order to display the correct content state
     // (e.g. of a suddenly unreadable content).
-    serviceAgent.fetchService(createWorkAreaServiceDescriptor()).then((workAreaService: WorkAreaService): void => {
+    serviceAgent.fetchService(createWorkAreaServiceDescriptor()).then((workAreaService): void => {
       workAreaService
         .canBeOpenedInTab([uriPath])
         .then((canBeOpened: unknown) => {
@@ -81,7 +80,7 @@ export class OpenInTabCommand extends Command {
     this.#closeBalloonIfExisting();
     serviceAgent
       .fetchService(createWorkAreaServiceDescriptor())
-      .then((workAreaService: WorkAreaService): void => {
+      .then((workAreaService): void => {
         workAreaService.openEntitiesInTabs([uriPath]);
       })
       .catch((): void => {

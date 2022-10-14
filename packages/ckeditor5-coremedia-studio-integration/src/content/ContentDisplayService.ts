@@ -14,7 +14,7 @@ import ContentAsLink from "./ContentAsLink";
  * ```typescript
  * serviceAgent
  *   .fetchService(createContentDisplayServiceDescriptor())
- *     .then((service: ContentDisplayService) => {});
+ *     .then((service) => {});
  * ```
  */
 interface ContentDisplayService {

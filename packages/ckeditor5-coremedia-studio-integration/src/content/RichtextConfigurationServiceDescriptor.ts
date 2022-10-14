@@ -4,8 +4,8 @@ import RichtextConfigurationService from "./RichtextConfigurationService";
 /**
  * Descriptor used to fetch service from service agent.
  */
-export function createRichtextConfigurationServiceDescriptor(): ServiceDescriptorWithProps<RichtextConfigurationService> {
-  return serviceDescFactory<RichtextConfigurationService>({
-    name: "richtextConfigurationService",
-  });
-}
+export const createRichtextConfigurationServiceDescriptor =
+  (): ServiceDescriptorWithProps<RichtextConfigurationService> =>
+    serviceDescFactory<RichtextConfigurationService>({
+      name: "richtextConfigurationService",
+    });

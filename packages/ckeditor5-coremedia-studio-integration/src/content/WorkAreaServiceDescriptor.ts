@@ -4,8 +4,7 @@ import WorkAreaService from "./studioservices/WorkAreaService";
 /**
  * Descriptor used to fetch service from service agent.
  */
-export function createWorkAreaServiceDescriptor(): ServiceDescriptorWithProps<WorkAreaService> {
-  return serviceDescFactory<WorkAreaService>({
+export const createWorkAreaServiceDescriptor = (): ServiceDescriptorWithProps<WorkAreaService> =>
+  serviceDescFactory<WorkAreaService>({
     name: "workAreaService",
   });
-}
