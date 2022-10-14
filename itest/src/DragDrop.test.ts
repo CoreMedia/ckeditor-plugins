@@ -80,23 +80,12 @@ describe("Drag and Drop", () => {
     `(
       "[$#]: Should drag and drop $contentMocks.length non embeddable contents as links.",
       async ({ dragElementClass, contentMocks }) => {
-        for (const contentMock of contentMocks) {
-          await application.mockContent.addContents(contentMock);
-        }
-
-        const dragIds = contentMocks.map((content: { id: number }) => content.id);
-        const droppableElement: DroppableElement = {
-          label: "Drag And Drop Test",
-          tooltip: "test-element",
-          items: dragIds,
-          classes: ["drag-content", dragElementClass],
-        };
-        await application.mockDragDrop.addDraggableElement(droppableElement);
+        await setupScenario(dragElementClass, contentMocks);
 
         //execute drag and drop
         const dragElementSelector = `.drag-example.drag-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(droppableElement, dragElementSelector, dropTargetSelector);
+        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -136,7 +125,7 @@ describe("Drag and Drop", () => {
       //execute drag and drop
       const dragElementSelector = ".drag-example.drag-content";
       const dropTargetSelector = ".ck-content.ck-editor__editable";
-      await dragAndDrop(droppableElement, dragElementSelector, dropTargetSelector);
+      await dragAndDrop([contentMock], dragElementSelector, dropTargetSelector);
 
       // Validate Editing Downcast
       const { ui } = application.editor;
@@ -156,8 +145,23 @@ describe("Drag and Drop", () => {
     });
   });
 
+  async function setupScenario(dragElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
+    for (const contentMock of contentMocks) {
+      await application.mockContent.addContents(contentMock);
+    }
+
+    const dragIds = contentMocks.map((content: { id: number }) => content.id);
+    const droppableElement: DroppableElement = {
+      label: "Drag And Drop Test",
+      tooltip: "test-element",
+      items: dragIds,
+      classes: ["drag-content", dragElementClass],
+    };
+    await application.mockDragDrop.addDraggableElement(droppableElement);
+  }
+
   async function dragAndDrop(
-    droppableElement: DroppableElement,
+    contentMocks: MockContentConfig[],
     dragElementSelector: string,
     dropTargetSelector: string
   ): Promise<void> {
@@ -166,7 +170,7 @@ describe("Drag and Drop", () => {
     const dragElement = page.locator(dragElementSelector);
     const dropTarget = page.locator(dropTargetSelector);
 
-    await ensureDropAllowed(droppableElement);
+    await ensureDropAllowed(contentMocks.map((contentMock) => contentMock.id));
     await dragElement.dragTo(dropTarget);
   }
 
@@ -178,11 +182,11 @@ describe("Drag and Drop", () => {
    * "dragover" will be executed many times while hovering over the CKEditor and on entering the CKEditor the asynchronous
    * fetch is triggered. The result will be written to a cache. The next "dragover" will be calculated using those data.
    *
-   * @param droppableElement -
+   * @param contentIds -
    */
-  async function ensureDropAllowed(droppableElement: DroppableElement): Promise<void> {
+  async function ensureDropAllowed(contentIds: number[]): Promise<void> {
     await waitForExpect(async () => {
-      const actual = await application.mockDragDrop.prefillCaches(droppableElement.items);
+      const actual = await application.mockDragDrop.prefillCaches(contentIds);
       expect(actual).toBeTruthy();
     });
   }
