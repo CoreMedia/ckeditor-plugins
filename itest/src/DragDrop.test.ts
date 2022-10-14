@@ -3,6 +3,8 @@ import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/R
 import "./expect/Expectations";
 import { DroppableElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
 import waitForExpect from "wait-for-expect";
+import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
+import { PNG_RED_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 
 describe("Drag and Drop", () => {
   // noinspection DuplicatedCode
@@ -19,8 +21,13 @@ describe("Drag and Drop", () => {
     await application?.shutdown();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     application.console.open();
+
+    //setup initial data
+    const initialData = richtext();
+    const { editor } = application;
+    await editor.setDataAndGetDataView(initialData);
   });
 
   afterEach(() => {
@@ -45,10 +52,37 @@ describe("Drag and Drop", () => {
       await application.mockContent.addContents(contentMock);
       await application.mockDragDrop.addDraggableElement(droppableElement);
 
-      //setup initial data
-      const initialData = richtext();
-      const { editor } = application;
-      await editor.setDataAndGetDataView(initialData);
+      //execute drag and drop
+      const dragElementSelector = ".drag-example.drag-content";
+      const dropTargetSelector = ".ck-content.ck-editor__editable";
+      await dragAndDrop(droppableElement, dragElementSelector, dropTargetSelector);
+
+      // Validate Editing Downcast
+      const { ui } = application.editor;
+      const editableHandle = await ui.getEditableElement();
+      const linkElement = await editableHandle.$("a");
+      await waitForExpect(() => expect(linkElement).toHaveText(contentMock.name));
+    });
+
+    it("Should drag an image-content to the editor, the content is rendered as an image", async () => {
+      const contentId = 10002;
+      const droppableElement: DroppableElement = {
+        label: "Drag And Drop Test",
+        tooltip: "test-element",
+        items: [contentId],
+        classes: ["drag-content"],
+      };
+      const contentName = `${droppableElement.label}: ${contentId}`;
+      const contentMock: MockContentConfig = {
+        id: contentId,
+        name: contentName,
+        blob: PNG_RED_240x135,
+        embeddable: true,
+        linkable: true,
+      };
+      //Add contents and create the draggable element
+      await application.mockContent.addContents(contentMock);
+      await application.mockDragDrop.addDraggableElement(droppableElement);
 
       //execute drag and drop
       const dragElementSelector = ".drag-example.drag-content";
@@ -56,10 +90,20 @@ describe("Drag and Drop", () => {
       await dragAndDrop(droppableElement, dragElementSelector, dropTargetSelector);
 
       // Validate Editing Downcast
-      const { ui } = editor;
+      const { ui } = application.editor;
+
+      await waitForExpect(async () => {
+        const data = await application.editor.getData();
+        // noinspection HtmlUnknownAttribute
+        expect(data).toContain(`<img alt=\"\" xlink:href=\"content/${contentId}#properties.data\"/>`);
+      });
+
       const editableHandle = await ui.getEditableElement();
-      const linkElement = await editableHandle.$("a");
-      await waitForExpect(() => expect(linkElement).toHaveText(contentMock.name));
+      const image = await editableHandle.$("img");
+      await waitForExpect(() => {
+        expect(image).toMatchAttribute("src", PNG_RED_240x135);
+        expect(image).toMatchAttribute("title", contentName);
+      });
     });
   });
 
