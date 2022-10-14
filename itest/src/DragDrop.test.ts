@@ -98,16 +98,64 @@ describe("Drag and Drop", () => {
       const dropTargetSelector = ".ck-content.ck-editor__editable";
       await dragAndDrop(droppableElement, dragElementSelector, dropTargetSelector);
 
+      const { ui } = application.editor;
+      const editableHandle = await ui.getEditableElement();
+      // Validate Editing Downcast
+      await waitForExpect(async () => {
+        const linkElements = await editableHandle.$$("a");
+        await expect(linkElements).toHaveLength(3);
+
+        await expect(linkElements[0]).toHaveText(contentMocks[0].name);
+        await expect(linkElements[1]).toHaveText(contentMocks[1].name);
+        await expect(linkElements[2]).toHaveText(contentMocks[2].name);
+      });
+    });
+
+    it("Should drag three contents (one slow) to the editor, the contents are rendered in the correct order as links", async () => {
+      const firstContentId = 10000;
+      const secondContentId = 10002;
+      const thirdContentId = 10004;
+      const droppableElement: DroppableElement = {
+        label: "Drag And Drop Test",
+        tooltip: "test-element",
+        items: [firstContentId, secondContentId, thirdContentId],
+        classes: ["drag-content"],
+      };
+      const contentMocks = [
+        {
+          id: firstContentId,
+          name: `${droppableElement.label}: ${firstContentId}`,
+        },
+        {
+          id: secondContentId,
+          name: `${droppableElement.label}: ${secondContentId}`,
+          initialDelayMs: 1000,
+        },
+        {
+          id: thirdContentId,
+          name: `${droppableElement.label}: ${thirdContentId}`,
+        },
+      ];
+      await application.mockContent.addContents(contentMocks[0]);
+      await application.mockContent.addContents(contentMocks[1]);
+      await application.mockContent.addContents(contentMocks[2]);
+      await application.mockDragDrop.addDraggableElement(droppableElement);
+
+      //execute drag and drop
+      const dragElementSelector = ".drag-example.drag-content";
+      const dropTargetSelector = ".ck-content.ck-editor__editable";
+      await dragAndDrop(droppableElement, dragElementSelector, dropTargetSelector);
+
       // Validate Editing Downcast
       const { ui } = application.editor;
       const editableHandle = await ui.getEditableElement();
-      const linkElements = await editableHandle.$$("a");
-      await waitForExpect(() => {
-        expect(linkElements).toHaveLength(3);
+      await waitForExpect(async () => {
+        const linkElements = await editableHandle.$$("a");
+        await expect(linkElements).toHaveLength(3);
 
-        expect(linkElements[0]).toHaveText(contentMocks[0].name);
-        expect(linkElements[1]).toHaveText(contentMocks[1].name);
-        expect(linkElements[2]).toHaveText(contentMocks[2].name);
+        await expect(linkElements[0]).toHaveText(contentMocks[0].name);
+        await expect(linkElements[1]).toHaveText(contentMocks[1].name);
+        await expect(linkElements[2]).toHaveText(contentMocks[2].name);
       });
     });
   });
