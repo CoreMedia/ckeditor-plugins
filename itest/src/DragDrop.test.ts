@@ -63,7 +63,9 @@ describe("Drag and Drop", () => {
       const linkElement = await editableHandle.$("a");
       await waitForExpect(() => expect(linkElement).toHaveText(contentMock.name));
     });
+  });
 
+  describe("Images", () => {
     it("Should drag an image-content to the editor, the content is rendered as an image", async () => {
       const contentId = 10002;
       const droppableElement: DroppableElement = {
