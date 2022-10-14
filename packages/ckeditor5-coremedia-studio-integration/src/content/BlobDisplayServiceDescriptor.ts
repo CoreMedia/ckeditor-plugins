@@ -6,6 +6,6 @@ import BlobDisplayService from "./BlobDisplayService";
  */
 export function createBlobDisplayServiceDescriptor(): ServiceDescriptorWithProps<BlobDisplayService> {
   return serviceDescFactory<BlobDisplayService>({
-    name: "workAreaService",
+    name: "blobDisplayService",
   });
 }

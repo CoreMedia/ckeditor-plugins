@@ -6,6 +6,6 @@ import ContentDisplayService from "./ContentDisplayService";
  */
 export function createContentDisplayServiceDescriptor(): ServiceDescriptorWithProps<ContentDisplayService> {
   return serviceDescFactory<ContentDisplayService>({
-    name: "workAreaService",
+    name: "contentDisplayService",
   });
 }
