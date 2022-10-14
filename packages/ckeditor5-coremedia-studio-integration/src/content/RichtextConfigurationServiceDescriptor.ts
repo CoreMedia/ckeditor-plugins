@@ -1,4 +1,4 @@
-import { serviceDescFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 
 /**
@@ -6,6 +6,6 @@ import RichtextConfigurationService from "./RichtextConfigurationService";
  */
 export const createRichtextConfigurationServiceDescriptor =
   (): ServiceDescriptorWithProps<RichtextConfigurationService> =>
-    serviceDescFactory<RichtextConfigurationService>({
+    serviceDescriptorFactory<RichtextConfigurationService>({
       name: "richtextConfigurationService",
     });
