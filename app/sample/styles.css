@@ -53,6 +53,15 @@
   float: none;
 }
 
+/* Also float surrounding a-tag to set correct link balloon position */
+a:has(> span.float--right) {
+  float: right;
+}
+
+a:has(> span.float--left) {
+  float: left;
+}
+
 /* --------- EXAMPLE DATA ------------------------------------------------------------------------------------------- */
 
 input.error {
