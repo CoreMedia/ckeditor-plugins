@@ -21,14 +21,15 @@ import {
 import "./expect/Expectations";
 import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
 
+const olString = "ol";
+const ulString = "ul";
+
 /**
  * This test is a test for the CKEditor 5 Document List feature and reflects the current state.
  * It does not always fit our expectations, but it is currently implemented in CKEditor 5 like that.
  *
  * On an update of CKEditor 5 those tests might signalize changes in CKEditor 5 behavior.
  */
-const olString = "ol";
-const ulString = "ul";
 describe("Document List Feature", () => {
   // noinspection DuplicatedCode
   let application: ApplicationWrapper;
