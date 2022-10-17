@@ -45,10 +45,25 @@ const startServer = async (): Promise<StartResult> => {
   const { port } = address;
   const baseUrl = new URL(`http://localhost:${port}/`);
   const indexUrl = new URL("/sample/index.html", baseUrl);
+
   const shutdown = async () => {
-    await browser.close();
-    server.close();
-    console.info("Done Browser & Server shutdown triggered.");
+    const start = performance.now();
+
+    const closeServer = new Promise<void>((resolve, reject) => {
+      server.close((err) => {
+        if (!!err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    }).catch((e) => console.warn("Failed closing server.", e));
+
+    const closeBrowser = browser.close().catch((e) => console.warn("Failed closing browser.", e));
+
+    await Promise.all([closeServer, closeBrowser]);
+
+    console.info(`Done: Browser & Server shutdown within ${performance.now() - start} ms.`);
   };
 
   console.info(`Server started: Base: ${baseUrl}, Index: ${indexUrl}`);
