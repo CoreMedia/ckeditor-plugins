@@ -245,22 +245,15 @@ describe("Document List Feature", () => {
       await expect(await nestedListItem).toHaveText(text);
     });
 
-    const preString = "pre";
-    const blockquoteString = "blockquote";
-    const spanString = "span";
-    const strongString = "strong";
-    const subString = "sub";
-    const supString = "sup";
-
     it.each`
-      nestedElement       | nestedElementFunction
-      ${preString}        | ${pre}
-      ${blockquoteString} | ${blockquote}
-      ${spanString}       | ${span}
-      ${strongString}     | ${strong}
-      ${subString}        | ${sub}
-      ${supString}        | ${sup}
-      ${"i"}              | ${em}
+      nestedElement   | nestedElementFunction
+      ${"pre"}        | ${pre}
+      ${"blockquote"} | ${blockquote}
+      ${"span"}       | ${span}
+      ${"strong"}     | ${strong}
+      ${"sub"}        | ${sub}
+      ${"sup"}        | ${sup}
+      ${"i"}          | ${em}
     `("nested $nestedElement", async ({ nestedElement, nestedElementFunction }) => {
       const { editor } = application;
       const { ui } = editor;
