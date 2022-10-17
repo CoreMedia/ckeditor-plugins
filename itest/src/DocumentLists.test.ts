@@ -164,8 +164,18 @@ describe("Document List Feature", () => {
     ${olString} | ${ol}
     ${ulString} | ${ul}
   `(`$listElement: Nested Elements in list item (li) according to dtd`, ({ listElement, listElementFunction }) => {
-    //According to dtd p is allowed, but it will be removed by ckeditor
-    it("nested p: is removed by cke", async () => {
+    // According to dtd p is allowed, but it will be removed by CKEditor.
+    // While this should not trigger auto-checkout, for example, in CoreMedia Studio
+    // it may be an issue, if your styling makes a difference here. Best practice
+    // would either be CSS styling in delivery that incorporates both states
+    // or extend the data-processing (toData) to always ensure texts are wrapped
+    // in paragraphs.
+    //
+    // If we consider this an issue at least for paragraphs read from server,
+    // possible workarounds may exist like adding a dummy class attribute value
+    // when reading from server and removing it later on prior to writing it
+    // to the server.
+    it("nested p: is removed by CKEditor", async () => {
       const { editor } = application;
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
@@ -179,6 +189,36 @@ describe("Document List Feature", () => {
       const pTag = (await listItemElement)?.$("p");
       await expect(await pTag).toBeNull();
     });
+
+    // If the paragraph contains any relevant information (such as class
+    // attributes), it should not be removed.
+    it.each`
+      attributeKey | attributeValue
+      ${"class"}   | ${"CLASS"}
+      ${"dir"}     | ${"ltr"}
+      ${"lang"}    | ${"en"}
+    `(
+      "nested p: should keep if attribute is set: '$attributeKey' (value '$attributeValue', for example)",
+      async ({ attributeKey, attributeValue }) => {
+        const { editor } = application;
+        const { ui } = editor;
+        const editableHandle = await ui.getEditableElement();
+
+        const text = `Lorem Ipsum`;
+        const data = richtext(listElementFunction(li(p(text, { [attributeKey]: attributeValue }))));
+        await editor.setDataAndGetDataView(data);
+
+        const listElementEditable = editableHandle.$(`${listElement}`);
+        const listItemElement = (await listElementEditable)?.$("li");
+        await expect(await listItemElement).not.toBeNull();
+
+        const actualNestedElement = (await listItemElement)?.$("p");
+        await expect(actualNestedElement).not.toBeNull();
+        await expect(await actualNestedElement).toHaveText(text);
+
+        await expect(actualNestedElement).toMatchAttribute(attributeKey, attributeValue);
+      }
+    );
 
     it.each`
       nestedListElement | nestedListElementFunction
