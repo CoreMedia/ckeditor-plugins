@@ -1,5 +1,3 @@
-import type { ServiceObject } from "@coremedia/service-agent";
-
 /**
  * Provides the {@link DragDropService.dragData} and {@link DragDropService.dragGroups} of the current
  * drag operation.
@@ -7,7 +5,7 @@ import type { ServiceObject } from "@coremedia/service-agent";
  * The service is only meant to be registered if a drag operation is performed.
  * After finishing or aborting the drag operation the service must be unregistered.
  */
-interface DragDropService extends ServiceObject {
+interface DragDropService {
   dragGroups: string;
 
   dragData: string;

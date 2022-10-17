@@ -1,7 +1,6 @@
 import { Command } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
-import WorkAreaServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   CONTENT_URI_PATH_REGEXP,
@@ -62,28 +61,26 @@ export class OpenInTabCommand extends Command {
     // might not update correctly once displayed. You will have to trigger #refresh
     // manually in order to display the correct content state
     // (e.g. of a suddenly unreadable content).
-    serviceAgent
-      .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
-      .then((workAreaService: WorkAreaService): void => {
-        workAreaService
-          .canBeOpenedInTab([uriPath])
-          .then((canBeOpened: unknown) => {
-            logger.debug("May be opened in tab: ", canBeOpened);
-            this.isEnabled = canBeOpened as boolean;
-          })
-          .catch((error): void => {
-            logger.warn(error);
-            this.isEnabled = false;
-          });
-      });
+    serviceAgent.fetchService(createWorkAreaServiceDescriptor()).then((workAreaService): void => {
+      workAreaService
+        .canBeOpenedInTab([uriPath])
+        .then((canBeOpened: unknown) => {
+          logger.debug("May be opened in tab: ", canBeOpened);
+          this.isEnabled = canBeOpened as boolean;
+        })
+        .catch((error): void => {
+          logger.warn(error);
+          this.isEnabled = false;
+        });
+    });
   }
 
   override execute(): void {
     const uriPath = this.#resolveUriPath();
     this.#closeBalloonIfExisting();
     serviceAgent
-      .fetchService<WorkAreaService>(new WorkAreaServiceDescriptor())
-      .then((workAreaService: WorkAreaService): void => {
+      .fetchService(createWorkAreaServiceDescriptor())
+      .then((workAreaService): void => {
         workAreaService.openEntitiesInTabs([uriPath]);
       })
       .catch((): void => {

@@ -1,4 +1,3 @@
-import { ServiceObject } from "@coremedia/service-agent";
 import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
 
@@ -25,7 +24,7 @@ export interface InlinePreview {
 /**
  * Service to receive data from blobs like images, audio data, etc.
  */
-export default interface BlobDisplayService extends ServiceObject {
+export default interface BlobDisplayService {
   /**
    * Provides information to render a preview of the given blob.
    *

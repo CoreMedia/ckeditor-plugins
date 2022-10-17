@@ -43,7 +43,7 @@
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "10.0.2-rc.0",
     "@coremedia/ckeditor5-dataprocessor-support": "10.0.2-rc.0",
     "@coremedia/ckeditor5-font-mapper": "10.0.2-rc.0",
-    "@coremedia/service-agent": "^1.1.2",
+    "@coremedia/service-agent": "^1.1.5",
     "xml-formatter": "^2.6.1"
   },
   "devDependencies": {

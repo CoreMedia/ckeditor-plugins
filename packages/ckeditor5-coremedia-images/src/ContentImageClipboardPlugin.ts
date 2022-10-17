@@ -1,8 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
-import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
-import RichtextConfigurationServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -18,9 +17,7 @@ type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
   contentUri: string
 ): Promise<CreateModelFunction> => {
-  const configurationService = await serviceAgent.fetchService<RichtextConfigurationService>(
-    new RichtextConfigurationServiceDescriptor()
-  );
+  const configurationService = await serviceAgent.fetchService(createRichtextConfigurationServiceDescriptor());
   const blobUriPath = await configurationService.resolveBlobPropertyReference(contentUri);
   return createImageModelFunction(blobUriPath);
 };

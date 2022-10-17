@@ -1,7 +1,6 @@
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { serviceAgent } from "@coremedia/service-agent";
-import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayService";
-import ContentDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
@@ -185,8 +184,8 @@ export default class ContentLinkView extends ButtonView {
 
   #subscribeToContent(uriPath: UriPath): void {
     serviceAgent
-      .fetchService<ContentDisplayService>(new ContentDisplayServiceDescriptor())
-      .then((contentDisplayService: ContentDisplayService): void => {
+      .fetchService(createContentDisplayServiceDescriptor())
+      .then((contentDisplayService): void => {
         // save the subscription to be able to unsubscribe later
         this.#registerSubscription(() =>
           contentDisplayService.observe_asLink(uriPath).subscribe({

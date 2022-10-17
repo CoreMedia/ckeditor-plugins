@@ -5,10 +5,8 @@ import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
 import { serviceAgent } from "@coremedia/service-agent";
-import BlobDisplayServiceDescriptor from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
-import BlobDisplayService, {
-  InlinePreview,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
+import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
+import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
@@ -99,8 +97,8 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
   const property: string = toProperty(xlinkHref);
 
   serviceAgent
-    .fetchService<BlobDisplayService>(new BlobDisplayServiceDescriptor())
-    .then((blobDisplayService: BlobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
+    .fetchService(createBlobDisplayServiceDescriptor())
+    .then((blobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
     .then(async (inlinePreviewObservable) => {
       const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
         updateImagePreviewAttributes(editor, data.item, inlinePreview, false);
