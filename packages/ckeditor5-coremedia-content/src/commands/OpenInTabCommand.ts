@@ -17,7 +17,7 @@ import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
  * Uses the ServiceAgent to open a content in a CoreMedia Studio tab.
  * Currently used for images and content links.
  *
- * @extends module:core/command~Command
+ * @augments module:core/command~Command
  */
 export class OpenInTabCommand extends Command {
   static #logger = LoggerProvider.getLogger("OpenInTabCommand");

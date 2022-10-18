@@ -19,7 +19,7 @@ module.exports = {
       ],
     },
     {
-      files: ["**/*.config.js", "**/*.local.js"],
+      files: ["**/*.config.js", "**/*.local.js", "**/*rc.js"],
       rules: {
         "no-undef": "off",
         "no-unused-vars": "off",
@@ -30,6 +30,7 @@ module.exports = {
       extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:jsdoc/recommended",
       ],
       rules: {
@@ -37,7 +38,12 @@ module.exports = {
          * =====================================================================
          * TypeScript/Broken Window
          *
-         * Possibly fix later or adjust configuration.
+         * Possibly fix later or adjust configuration. Prefer adding exclusions
+         * to corresponding modules. As soon as multiple modules are affected,
+         * add them to this configuration. Exception: If you consider a
+         * violation to be addressed as soon as possible and only a few
+         * modules are affected, duplicate the exclusions only in affected
+         * modules.
          * =====================================================================
          */
         // Broken Window/ESLint
@@ -54,6 +60,16 @@ module.exports = {
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
+        // Broken Window/TypeScript
+        "@typescript-eslint/no-unnecessary-type-assertion": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/unbound-method": "off",
         /*
          * =====================================================================
          * ESLint
@@ -115,7 +131,7 @@ module.exports = {
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": "off",
         "jsdoc/check-tag-names": [
-          "warn",
+          "error",
           {
             "definedTags": [
               "category",

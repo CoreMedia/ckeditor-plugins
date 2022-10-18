@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../dist",
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+  },
+  "references": [
+    {
+      "path": "../src"
+    },
+  ],
+  "extends": "../../../tsconfig.json"
+}
