@@ -62,6 +62,7 @@ interface ContentBlobIdResult {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isContentIdParseResult = (result: any): result is ContentIdParseResult => {
   if ("id" in result) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return typeof result.id === "string";
   }
   return false;
@@ -73,6 +74,7 @@ const isContentIdParseResult = (result: any): result is ContentIdParseResult => 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isContentBlobIdParseResult = (result: any): result is ContentBlobIdParseResult => {
   if ("id" in result && "property" in result) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return typeof result.id === "string" && typeof result.property === "string";
   }
   return false;

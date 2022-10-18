@@ -56,11 +56,11 @@ export const preventUpcastImageSrc = () => {
     dispatcher.on(
       `element:img`,
       (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        // eslint-disable-next-line
         if (data.viewItem.hasAttribute("data-xlink-href")) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          // eslint-disable-next-line
           conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          // eslint-disable-next-line
           data.viewItem._removeAttribute("src");
         }
       },

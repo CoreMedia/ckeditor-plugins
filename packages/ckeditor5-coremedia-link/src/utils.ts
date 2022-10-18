@@ -13,7 +13,7 @@ import { TemplateIfBinding } from "@ckeditor/ckeditor5-ui/src/template";
  */
 export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
   // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
   const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
@@ -34,7 +34,7 @@ export const addClassToTemplate = (view: View, classNames: string[] | string): v
  */
 export const removeClassFromTemplate = (view: View, classNames: string[] | string): void => {
   // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
   const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
   if (!Array.isArray(classNames)) {
     classNames = [classNames];

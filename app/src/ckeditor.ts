@@ -292,7 +292,7 @@ ClassicEditor.create(sourceElement, {
 })
   .then((newEditor) => {
     // @ts-expect-error imported in html
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    // eslint-disable-next-line
     CKEditorInspector.attach(
       {
         "main-editor": newEditor,
