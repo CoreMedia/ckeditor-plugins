@@ -142,7 +142,7 @@ function contentLinkExamples() {
 }
 
 // noinspection HtmlUnknownAttribute
-const exampleData = {
+const exampleData: Record<string, string> = {
   ...differencingData,
   ...entitiesData,
   ...linkTargetData,
@@ -161,9 +161,7 @@ const exampleData = {
   ).replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
-type ExampleData = typeof exampleData;
-
-export const setExampleData = (editor: ClassicEditor, exampleKey: keyof ExampleData) => {
+export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
   try {
     // noinspection InnerHTMLJS
     editor.editing.view.once(
@@ -221,7 +219,7 @@ export const initExamples = (editor: ClassicEditor) => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {
       xmpInput.classList.remove("error");
-      setExampleData(editor, newValue as keyof ExampleData);
+      setExampleData(editor, newValue);
       xmpInput.blur();
     } else {
       xmpInput.classList.add("error");
@@ -233,7 +231,7 @@ export const initExamples = (editor: ClassicEditor) => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {
       xmpInput.classList.remove("error");
-      setExampleData(editor, newValue as keyof ExampleData);
+      setExampleData(editor, newValue);
       xmpInput.blur();
     }
   });
