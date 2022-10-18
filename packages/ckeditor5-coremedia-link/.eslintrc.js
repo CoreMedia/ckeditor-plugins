@@ -8,7 +8,7 @@ module.exports = {
         project: [
           "./__mocks__/@ckeditor/ckeditor5-utils/src/tsconfig.json",
           "./__tests__/tsconfig.json",
-          "./src/tsconfig.json"
+          "./src/tsconfig.json",
         ],
       },
     },
