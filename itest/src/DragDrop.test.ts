@@ -140,7 +140,7 @@ describe("Drag and Drop", () => {
     it.each`
       dragElementClass         | contentMocks
       ${"one-link"}            | ${oneLink}
-      ${"mulitple-links-slow"} | ${multipleLinksIncludingSlow}
+      ${"multiple-links-slow"} | ${multipleLinksIncludingSlow}
       ${"multiple-links"}      | ${multipleLinks}
     `(
       "[$#]: Should drag and drop $contentMocks.length non embeddable contents as links.",
