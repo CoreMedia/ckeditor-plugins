@@ -16,6 +16,7 @@ const oneLink: MockContentConfig[] = [
     name: "Document 10000",
   },
 ];
+
 const multipleLinksIncludingSlow: MockContentConfig[] = [
   {
     id: 10002,
@@ -31,6 +32,7 @@ const multipleLinksIncludingSlow: MockContentConfig[] = [
     name: "Document 10006",
   },
 ];
+
 const multipleLinks: MockContentConfig[] = [
   {
     id: 10008,
@@ -55,6 +57,7 @@ const oneImage: MockContentConfig[] = [
     linkable: true,
   },
 ];
+
 const multipleImages: MockContentConfig[] = [
   {
     id: 100016,
@@ -78,6 +81,7 @@ const multipleImages: MockContentConfig[] = [
     linkable: true,
   },
 ];
+
 const multipleImagesSlow: MockContentConfig[] = [
   {
     id: 100022,
