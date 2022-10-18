@@ -80,7 +80,7 @@ const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
   const showRoleMatchResult = target.match(showRoleExpression);
   if (!showRoleMatchResult) {
     // Triggers: ignore empty target
-    if (!!target) {
+    if (target) {
       // We don't need to check for any target with special meaning,
       // just take it as "normal" named target attribute.
       newAttrs.show = "other";
@@ -138,10 +138,10 @@ const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
       newAttrs.role = suggestedRole;
     }
   }
-  if (!!newAttrs.show) {
+  if (newAttrs.show) {
     attributes["xlink:show"] = newAttrs.show;
   }
-  if (!!newAttrs.role) {
+  if (newAttrs.role) {
     attributes["xlink:role"] = newAttrs.role;
   }
 };
@@ -209,7 +209,7 @@ const xLinkShowAndRoleToTarget = (node: ElementProxy): void => {
     }
   }
 
-  if (!!target) {
+  if (target) {
     node.attributes.target = target;
   }
 };

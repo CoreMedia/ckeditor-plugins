@@ -668,7 +668,7 @@ export default class RichTextSchema {
     const isAtRoot = !element.parentElement;
 
     if (isAtRoot) {
-      if (!!elementSpecification.parentElementNames) {
+      if (elementSpecification.parentElementNames) {
         logger.debug(`Element <${elementName}> not allowed at root.`);
         return false;
       }

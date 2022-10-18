@@ -36,7 +36,7 @@ class NodeProxy<N extends Node = Node> {
    * @returns NodeProxy for given node; `null` for falsy values
    */
   public static proxy<T extends Node>(node: T | undefined | null, mutable = true): NodeProxy<T> | null {
-    if (!!node) {
+    if (node) {
       return new NodeProxy(node, mutable);
     }
     return null;
@@ -359,7 +359,7 @@ class NodeProxy<N extends Node = Node> {
       do {
         currentChild = this.delegate.firstChild;
         currentChild && parentNode.insertBefore(currentChild, this.delegate);
-      } while (!!currentChild);
+      } while (currentChild);
 
       parentNode.removeChild(this.delegate);
     } else {

@@ -277,7 +277,7 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       if (non_bijective) {
         testData.direction = Direction.toData;
       }
-      if (!!comment) {
+      if (comment) {
         testData.comment = comment;
       }
 

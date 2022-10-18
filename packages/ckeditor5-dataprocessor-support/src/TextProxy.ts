@@ -60,7 +60,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
    */
   public applyRules(...rules: (TextFilterRule | undefined)[]): Node | null {
     for (const rule of rules) {
-      if (!!rule) {
+      if (rule) {
         rule(this);
       }
 

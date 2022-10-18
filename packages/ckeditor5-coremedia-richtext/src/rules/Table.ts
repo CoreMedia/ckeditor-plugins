@@ -202,7 +202,7 @@ class TableWrapper extends ElementWrapper {
     if (!result) {
       result = this.delegate.ownerDocument.createElement("tbody");
       const foot = this.tFoot;
-      if (!!foot) {
+      if (foot) {
         this.delegate.insertBefore(result, foot);
       } else {
         this.delegate.appendChild(result);
@@ -242,7 +242,7 @@ class TableWrapper extends ElementWrapper {
    */
   deleteTFoot(): void {
     const element = this.tFoot;
-    if (!!element) {
+    if (element) {
       this.delegate.removeChild(element);
     }
   }
@@ -252,7 +252,7 @@ class TableWrapper extends ElementWrapper {
    */
   deleteTHead(): void {
     const element = this.tHead;
-    if (!!element) {
+    if (element) {
       this.delegate.removeChild(element);
     }
   }
@@ -295,7 +295,7 @@ class TableWrapper extends ElementWrapper {
  */
 function toDataProcessTableContents(tableElement: TableWrapper): void {
   function addClassToRows(section: Element | undefined | null, className: string): void {
-    if (!!section) {
+    if (section) {
       const wrapper = new TableSectionWrapper(section);
       for (const row of wrapper.rows) {
         if (!row.classList.contains(className)) {

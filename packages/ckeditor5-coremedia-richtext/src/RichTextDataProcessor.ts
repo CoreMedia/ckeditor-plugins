@@ -216,7 +216,7 @@ class RichTextDataProcessor implements DataProcessor {
     // If data are empty, we expect empty RichText by default, thus, we don't
     // need any parsing but may directly forward the empty data to the delegate
     // `toView` handler.
-    if (!!data) {
+    if (data) {
       const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
       if (this.#isParserError(dataDocument)) {
         logger.error("Failed parsing data. See debug messages for details.", { data });

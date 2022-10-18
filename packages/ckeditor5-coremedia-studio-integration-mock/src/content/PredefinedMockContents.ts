@@ -285,7 +285,7 @@ const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
       const type = configType ?? defaultTypeById(id);
       const uriPath = contentUriPath(id);
       let name: string;
-      if (!!comment) {
+      if (comment) {
         name = comment;
       } else if (Array.isArray(mockName)) {
         name = `${capitalize(type)} with name toggle`;
@@ -315,7 +315,7 @@ const PREDEFINED_MOCK_BLOB_DATA = wrapInRichText(
       const type = configType ?? defaultTypeById(id);
       const uriPath = contentUriPath(id);
       let name: string;
-      if (!!comment) {
+      if (comment) {
         name = comment;
       } else if (Array.isArray(mockName)) {
         name = `${capitalize(type)} with name toggle`;

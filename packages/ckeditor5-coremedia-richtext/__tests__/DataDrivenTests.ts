@@ -139,7 +139,7 @@ export const ddTest = <T extends NamedTestCase>(
   }
 
   if (isSkippable(data)) {
-    if (!!data.skip) {
+    if (data.skip) {
       let skipName: string;
       if (typeof data.skip === "boolean") {
         skipName = `Skipped: ${name}`;
@@ -150,7 +150,7 @@ export const ddTest = <T extends NamedTestCase>(
     }
   }
   if (isOnly(data)) {
-    if (!!data.only) {
+    if (data.only) {
       return test.only(name, testFn);
     }
   }

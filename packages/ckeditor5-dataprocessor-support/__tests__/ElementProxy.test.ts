@@ -749,7 +749,7 @@ describe("ElementProxy.applyRules()", () => {
             for (const key in me.node.attributes) {
               if (me.node.attributes.hasOwnProperty(key)) {
                 const descriptor = Object.getOwnPropertyDescriptor(me.node.attributes, key);
-                if (!!descriptor) {
+                if (descriptor) {
                   // False positive? Checks assume, that descriptor may be undefined here. But how?
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-expect-error Possibly false positive.

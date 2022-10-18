@@ -52,7 +52,7 @@ const startServer = async (): Promise<StartResult> => {
 
     const closeServer = new Promise<void>((resolve, reject) => {
       server.close((err) => {
-        if (!!err) {
+        if (err) {
           reject(err);
         } else {
           resolve();

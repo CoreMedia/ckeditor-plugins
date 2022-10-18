@@ -50,7 +50,6 @@ module.exports = {
          * =====================================================================
          */
         // Broken Window/ESLint
-        "no-extra-boolean-cast": "off",
         "no-prototype-builtins": "off",
         "no-useless-escape": "off",
         // Broken Window/JSDoc
@@ -104,6 +103,7 @@ module.exports = {
         "no-empty": "error",
         "no-eval": "error",
         "no-extra-bind": "error",
+        "no-extra-boolean-cast": "error",
         "no-fallthrough": "error",
         "no-new-func": "error",
         "no-new-wrappers": "error",

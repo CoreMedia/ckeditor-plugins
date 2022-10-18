@@ -63,7 +63,7 @@ class ContentLinkFormViewExtension extends Plugin {
       () => {
         if (hasContentUriPathAndName(formView)) {
           const { contentUriPath, contentName } = formView;
-          if (!!contentUriPath) {
+          if (contentUriPath) {
             contentLinkCommandHook.registerContentName(contentUriPath, contentName);
           }
         }
@@ -164,7 +164,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const contentUriPaths: string[] | undefined = getUriListValues(dragEvent);
 
-    if (!!contentUriPaths) {
+    if (contentUriPaths) {
       DragDropAsyncSupport.resetCache();
     }
 

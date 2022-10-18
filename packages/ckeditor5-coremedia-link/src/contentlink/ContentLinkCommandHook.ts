@@ -337,7 +337,7 @@ class ContentLinkCommandHook extends Plugin {
     // For the given scenario, we expect at most one matched diff item.
     const matchedDiffItem = textInsertions.find((diffItem) => this.#trackingData.matches(diffItem));
 
-    if (!!matchedDiffItem) {
+    if (matchedDiffItem) {
       return this.#postFixMatchedItem(writer, matchedDiffItem);
     }
 

@@ -409,11 +409,11 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
     let result: Node | null = null;
     for (const rule of rules) {
-      if (!!rule) {
+      if (rule) {
         rule(this);
 
         const response = this.persistToDom();
-        if (!!response.continueWith) {
+        if (response.continueWith) {
           result = response.continueWith || result;
         }
         if (response.abort) {
@@ -463,7 +463,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    */
   #persistAttributes(): PersistResponse {
     const elementNamespaceAttribute: string | null = this.#attributes.xmlns;
-    if (!!elementNamespaceAttribute) {
+    if (elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
       return this.#persistReplaceBy(this.realName, elementNamespaceAttribute);
@@ -613,7 +613,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     }
 
     const parentNode = this.delegate.parentNode;
-    if (!!parentNode) {
+    if (parentNode) {
       parentNode.replaceChild(newElement, this.delegate);
     }
     this.#replacement = newElement;

@@ -105,11 +105,11 @@ const mergePreParsedToViews = (preParsedConfig: PreParsedToView): FilterRuleSet 
     return elementsResult;
   };
 
-  if (!!preParsedConfig.text) {
+  if (preParsedConfig.text) {
     mergedResult.text = preParsedConfig.text;
   }
 
-  if (!!preParsedConfig.elements) {
+  if (preParsedConfig.elements) {
     mergedResult.elements = mergePreParsedElementSections(preParsedConfig.elements);
   }
   return mergedResult;
@@ -190,11 +190,11 @@ class FilterRuleSetConfigurationParser {
 
   parse(): PreParsedToDataAndView {
     const elementsConfiguration: ElementsFilterRuleSetConfiguration | undefined = this.#configuration.elements;
-    if (!!elementsConfiguration) {
+    if (elementsConfiguration) {
       this.#parseElements(elementsConfiguration);
     }
     const textConfiguration: TextFilterRule | ToDataAndViewTextConfiguration | undefined = this.#configuration.text;
-    if (!!textConfiguration) {
+    if (textConfiguration) {
       this.#parseText(textConfiguration);
     }
     return {
@@ -218,7 +218,7 @@ class FilterRuleSetConfigurationParser {
     if (!textFilterRule) {
       return;
     }
-    if (!!this.#preParsedToView.text) {
+    if (this.#preParsedToView.text) {
       this.#preParsedToView.text = parentChildTextRule(this.#preParsedToView.text, textFilterRule);
     } else {
       this.#preParsedToView.text = textFilterRule;
@@ -304,7 +304,7 @@ class FilterRuleSetConfigurationParser {
     if (!textFilterRule) {
       return;
     }
-    if (!!this.#parsedToData.text) {
+    if (this.#parsedToData.text) {
       this.#parsedToData.text = parentChildTextRule(this.#parsedToData.text, textFilterRule);
     } else {
       this.#parsedToData.text = textFilterRule;

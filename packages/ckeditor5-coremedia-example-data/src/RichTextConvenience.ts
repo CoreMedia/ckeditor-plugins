@@ -25,7 +25,7 @@ export const code = (content: Content, attrs: Attributes = {}): string => {
  * @param attrs - attributes to apply to element
  */
 export const heading = (level: 1 | 2 | 3 | 4 | 5 | 6, content: Content = "", attrs: Attributes = {}): string => {
-  const classFromAttrs = !!attrs.class ? `${attrs.class} ` : ``;
+  const classFromAttrs = attrs.class ? `${attrs.class} ` : ``;
   const classAttribute = `${classFromAttrs}p--heading-${level}`;
   return p(content, {
     ...attrs,

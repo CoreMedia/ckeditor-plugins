@@ -241,7 +241,7 @@ export class Differencing {
       "alt": "Some Image",
     };
 
-    if (!!config.class) {
+    if (config.class) {
       attrs = {
         ...attrs,
         class: config.class,

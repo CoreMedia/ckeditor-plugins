@@ -63,9 +63,9 @@ export default class LoggerProvider {
     const rootLogLevel: string | boolean = LoggerProvider.#getHashParam(LoggerProvider.#rootLoggerName);
     let logLevel: LogLevel = LoggerProvider.#defaultRootLogLevel;
 
-    if (!!logLevelParam) {
+    if (logLevelParam) {
       logLevel = LoggerProvider.#toLogLevel(logLevelParam);
-    } else if (!!rootLogLevel) {
+    } else if (rootLogLevel) {
       logLevel = LoggerProvider.#toLogLevel(rootLogLevel);
     }
 

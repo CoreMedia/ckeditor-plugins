@@ -16,7 +16,7 @@ export default class LoggerImpl implements Logger {
 
   private out(logFn: (...data: unknown[]) => void, data: unknown[]): void {
     const level = logFn.name.toUpperCase();
-    const contextPrefix = !!this.name ? ` ${this.name}:` : "";
+    const contextPrefix = this.name ? ` ${this.name}:` : "";
     const prefix = `[${level}]${contextPrefix}`;
     const prefixData: unknown[] = [prefix];
     const prefixedData: unknown[] = prefixData.concat(data);

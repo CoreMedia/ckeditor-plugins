@@ -22,7 +22,7 @@ const updatePreview = (data: string) => {
   if (!preview) {
     return;
   }
-  preview.innerText = !!data
+  preview.innerText = data
     ? format(data, {
         indentation: "   ",
         collapseContent: false,

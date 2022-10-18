@@ -307,7 +307,7 @@ ClassicEditor.create(sourceElement, {
     initDragExamples(newEditor);
 
     const undoCommand = newEditor.commands.get("undo");
-    if (!!undoCommand) {
+    if (undoCommand) {
       //@ts-expect-error Editor extension, no typing available.
       newEditor.resetUndo = () => undoCommand.clearStack();
       console.log("Registered `editor.resetUndo()` to clear undo history.");
