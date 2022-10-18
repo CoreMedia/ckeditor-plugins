@@ -154,6 +154,7 @@ export default class ContentClipboard extends Plugin {
     }
 
     // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     data.preventDefault();
 
     // for now, we only support content uris in ckeditor.

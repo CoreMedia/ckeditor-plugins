@@ -20,6 +20,7 @@ const initReadOnlyMode = (editor: Editor) => {
   const enableReadOnly = () => {
     toggleButton.dataset.currentState = "read-only";
     //@ts-expect-error difference between Type and API. Method should be part of editor:https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html#function-enableReadOnlyMode
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     editor.enableReadOnlyMode(READ_ONY_MODE_ID);
     setLabel(DISABLE_BTN_LABEL);
   };
@@ -27,6 +28,7 @@ const initReadOnlyMode = (editor: Editor) => {
   const disableReadOnly = () => {
     toggleButton.dataset.currentState = "read-write";
     //@ts-expect-error difference between Type and API. Method should be part of editor:https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html#function-disableReadOnlyMode
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     editor.disableReadOnlyMode(READ_ONY_MODE_ID);
     setLabel(ENABLE_BTN_LABEL);
   };

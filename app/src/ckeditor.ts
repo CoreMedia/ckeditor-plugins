@@ -291,6 +291,7 @@ ClassicEditor.create(sourceElement, {
 })
   .then((newEditor) => {
     // @ts-expect-error imported in html
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     CKEditorInspector.attach(
       {
         "main-editor": newEditor,
@@ -309,6 +310,7 @@ ClassicEditor.create(sourceElement, {
     const undoCommand = newEditor.commands.get("undo");
     if (undoCommand) {
       //@ts-expect-error Editor extension, no typing available.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       newEditor.resetUndo = () => undoCommand.clearStack();
       console.log("Registered `editor.resetUndo()` to clear undo history.");
     }

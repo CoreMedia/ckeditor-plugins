@@ -52,7 +52,7 @@ export class HtmlImageElementSupport extends Plugin {
      */
     schema.on(
       "checkAttribute",
-      (evt, args) => {
+      (evt, args: [string, string]) => {
         const context = args[0];
         const attributeName = args[1];
 

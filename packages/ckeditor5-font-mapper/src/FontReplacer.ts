@@ -45,8 +45,10 @@ export const replaceFontInDocumentFragment = (
     if (hasTextChild(alteredChildElement)) {
       const childIndex: number = documentFragment.getChildIndex(child);
       //@ts-expect-error TODO _removeChildren is protected for Element
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       documentFragment._removeChildren(childIndex, 1);
       //@ts-expect-error TODO _insertChild is protected for Element
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       documentFragment._insertChild(childIndex, alteredChildElement);
 
       // In this case, we just replaced the child element with a clone
@@ -116,6 +118,7 @@ const computeFontMappingForElement = (
       //if a font mapping is available for the current font family the font family has to be removed.
       logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element}`);
       //@ts-expect-error TODO _removeStyle is protected
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       element._removeStyle(fontFamily);
     }
     return fontMapping;
@@ -199,6 +202,7 @@ export const escapeFontFamily = (fontFamilyStyle: string): string => {
 const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElement): ViewElement => {
   const clone: ViewElement = new UpcastWriter(element.document).clone(element, true);
   //@ts-expect-error TODO _removeStyle is protected
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   clone._removeStyle(FONT_FAMILY_PROPERTY_NAME);
   replaceCharactersInTextNodeChildren(fontMapping, clone);
   return clone;

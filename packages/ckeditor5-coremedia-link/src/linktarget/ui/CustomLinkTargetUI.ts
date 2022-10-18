@@ -217,6 +217,7 @@ export default class CustomLinkTargetUI extends Plugin {
     labeledInput.fieldView.value = (labeledInput.fieldView.element as HTMLInputElement).value = initialValue;
 
     // @ts-expect-error TODO Check Typings/Usage
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.#form.labeledInput.fieldView.select();
 
     this.#form.enableCssTransitions();
@@ -265,6 +266,7 @@ export default class CustomLinkTargetUI extends Plugin {
   // without reinventing the whole positioning logic of CKE balloons
   #getBalloonPositionData(): Options {
     // @ts-expect-error TODO Check Typings/Usage (most likely private API, we need to deal with somehow).
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     return this.linkUI._getBalloonPositionData();
   }
 }

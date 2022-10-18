@@ -63,7 +63,6 @@ module.exports = {
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript
         "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/restrict-plus-operands": "off",
@@ -234,6 +233,7 @@ module.exports = {
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/no-unsafe-argument": "error",
+        "@typescript-eslint/no-unsafe-call": "error",
 
         "no-unused-expressions": "off",
         "@typescript-eslint/no-unused-expressions": ["error", { allowTernary: true, allowShortCircuit: true }],
@@ -269,6 +269,10 @@ module.exports = {
     },
     /*
      * Test-specific overrides.
+     *
+     * Some adaptions exist to enable tests to do things, others, because it
+     * would make it more complex to write tests, as for example data-driven
+     * ones.
      */
     {
       files: [
@@ -282,6 +286,7 @@ module.exports = {
       rules: {
         "no-irregular-whitespace": "off",
         "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
       },
     },
   ],
