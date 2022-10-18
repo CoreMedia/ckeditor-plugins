@@ -159,7 +159,7 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }
-  const diffItemAttribute: DiffItemAttribute = diffItem as DiffItemAttribute;
+  const diffItemAttribute: DiffItemAttribute = diffItem;
   // We must not simply check for 'falsy' here, as an empty string does not
   // represent a deletion of the attribute, but signals (you guessed it), that
   // the attribute got set to an empty string.

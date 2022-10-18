@@ -147,7 +147,7 @@ export default class CustomLinkTargetUI extends Plugin {
     /**
      * The contextual balloon plugin instance.
      */
-    this.#balloon = this.editor.plugins.get("ContextualBalloon") as ContextualBalloon;
+    this.#balloon = this.editor.plugins.get("ContextualBalloon");
 
     /**
      * A form containing a textarea and buttons, used to change the target value for "Open In Frame".

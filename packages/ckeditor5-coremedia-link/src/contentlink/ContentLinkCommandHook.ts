@@ -237,7 +237,7 @@ class ContentLinkCommandHook extends Plugin {
    */
   static #isTextNodeInsertion(value: DiffItem): boolean {
     if (value.type === "insert") {
-      const insertion = value as DiffItemInsert;
+      const insertion = value;
       // Unfortunately, insertion.position.textNode does not (yet) represent
       // the now added text node, but the text node the inserted one
       // may have been merged with.
