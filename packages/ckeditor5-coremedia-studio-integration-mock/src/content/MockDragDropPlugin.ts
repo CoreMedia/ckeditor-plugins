@@ -6,9 +6,9 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
 /**
- * Describes a div-element which can be created by this plugin.
- * An DroppableElement contains all data which are necessary to make the created
- * div-element drag & drop ready.
+ * Describes a div-element that can be created by this plugin.
+ * A `DroppableElement` contains all data that are necessary to make the created
+ * div-element drag &amp; drop ready.
  */
 export interface DroppableElement {
   /**
@@ -37,7 +37,7 @@ const PLUGIN_NAME = "MockDragDrop";
 class MockDragDropPlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
 
-  init(): Promise<void> | void {
+  init(): void {
     const initInformation = reportInitStart(this);
     reportInitEnd(initInformation);
   }
@@ -48,7 +48,7 @@ class MockDragDropPlugin extends Plugin {
     dragDiv.draggable = true;
     dragDiv.textContent = data.label || "Unset";
     dragDiv.dataset.cmuripath = MockDragDropPlugin.#generateUriPathCsv(data.items || []);
-    dragDiv.title = data.tooltip + " (" + dragDiv.dataset.cmuripath + ")";
+    dragDiv.title = `${data.tooltip} (${dragDiv.dataset.cmuripath})`;
     dragDiv.addEventListener("dragstart", MockDragDropPlugin.#setDragData);
     dragDiv.addEventListener("dragend", MockDragDropPlugin.#removeDropData);
     return dragDiv;
@@ -73,7 +73,8 @@ class MockDragDropPlugin extends Plugin {
   }
 
   /**
-   * Set the drag data stored in the attribute data-cmuripath to the dragEvent.dataTransfer and to the dragDropService in studio.
+   * Set the drag data stored in the attribute data-cmuripath to the
+   * `dragEvent.dataTransfer` and to the dragDropService in studio.
    *
    * @param dragEvent the drag event
    */
