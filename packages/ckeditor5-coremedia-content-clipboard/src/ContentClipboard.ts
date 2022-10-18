@@ -252,6 +252,23 @@ export default class ContentClipboard extends Plugin {
 
     const { model } = editor;
 
+    ContentClipboard.#insertContentMarkers(editor, targetRange, validContentUris);
+    // Fire content insertion event in a single change block to allow other
+    // handlers to run in the same block without post-fixers called in between
+    // (i.e., the selection post-fixer).
+    model.change(() => {
+      this.fire("contentInsertion", {
+        content: new ModelDocumentFragment(),
+        method: data.method,
+        dataTransfer: data.dataTransfer,
+        targetRanges: data.targetRanges,
+      } as ContentInsertionEventData);
+    });
+  };
+
+  static #insertContentMarkers(editor: Editor, targetRange: ModelRange, contentUris: string[]): void {
+    const { model } = editor;
+
     model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
       writer.setSelection(targetRange);
     });
@@ -266,7 +283,7 @@ export default class ContentClipboard extends Plugin {
     // Needed to keep the order when multiple inputs happen simultaneously
     // on the same position.
     const dropId = Date.now();
-    const multipleItemsDropped = validContentUris.length > 1;
+    const multipleItemsDropped = contentUris.length > 1;
     const dropContext: DropContext = {
       dropId,
       batch,
@@ -274,7 +291,7 @@ export default class ContentClipboard extends Plugin {
     };
 
     // Add a drop marker for each item.
-    validContentUris.forEach((contentUri: string, index: number): void => {
+    contentUris.forEach((contentUri: string, index: number): void => {
       // This only works because we are in a drag context and the result has
       // already been computed and cached. Calling this function without a
       // present cache entry for the given contentUri will probably result in a
@@ -288,19 +305,7 @@ export default class ContentClipboard extends Plugin {
       );
       ContentClipboard.#addContentDropMarker(editor, targetRange, contentDropData);
     });
-
-    // Fire content insertion event in a single change block to allow other
-    // handlers to run in the same block without post-fixers called in between
-    // (i.e., the selection post-fixer).
-    model.change(() => {
-      this.fire("contentInsertion", {
-        content: new ModelDocumentFragment(),
-        method: data.method,
-        dataTransfer: data.dataTransfer,
-        targetRanges: data.targetRanges,
-      } as ContentInsertionEventData);
-    });
-  };
+  }
 
   /**
    * Adds a marker to the editors model.
