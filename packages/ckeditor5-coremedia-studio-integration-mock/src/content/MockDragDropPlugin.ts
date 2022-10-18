@@ -4,6 +4,8 @@ import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -50,6 +52,7 @@ class MockDragDropPlugin extends Plugin {
     dragDiv.dataset.cmuripath = MockDragDropPlugin.#generateUriPathCsv(data.items || []);
     dragDiv.title = `${data.tooltip} (${dragDiv.dataset.cmuripath})`;
     dragDiv.addEventListener("dragstart", MockDragDropPlugin.#setDragData);
+    dragDiv.addEventListener("dblclick", MockDragDropPlugin.#setClipboardData);
     dragDiv.addEventListener("dragend", MockDragDropPlugin.#removeDropData);
     return dragDiv;
   }
@@ -72,13 +75,31 @@ class MockDragDropPlugin extends Plugin {
     });
   }
 
+  static async #setClipboardData(event: MouseEvent): Promise<void> {
+    const target = event.target as HTMLElement;
+    const contentIdCommaSeparated = target.getAttribute("data-cmuripath");
+    if (!contentIdCommaSeparated) {
+      return;
+    }
+    const contentIds: string[] = contentIdCommaSeparated.split(",");
+    const beanReferences = MockDragDropPlugin.#contentList(...contentIds);
+    const cmurilist = JSON.stringify(beanReferences);
+    const blob = new Blob([cmurilist], { type: "cm/uri-list" });
+    const data: Record<string, Blob> = {};
+    data[blob.type] = blob;
+
+    const clipboardService = await serviceAgent.fetchService(createClipboardServiceDescriptor());
+
+    clipboardService.setItems([{ data, options: "copy" }], new Date().getTime());
+  }
+
   /**
    * Set the drag data stored in the attribute data-cmuripath to the
    * `dragEvent.dataTransfer` and to the dragDropService in studio.
    *
    * @param dragEvent the drag event
    */
-  static #setDragData(dragEvent: DragEvent) {
+  static #setDragData(dragEvent: DragEvent): void {
     const dragEventTarget = dragEvent.target as HTMLElement;
     const contentId = dragEventTarget.getAttribute("data-cmuripath");
     if (contentId) {
@@ -103,7 +124,7 @@ class MockDragDropPlugin extends Plugin {
     serviceAgent.unregisterServices("dragDropService");
   }
 
-  static #contentList(...ids: string[]): { $Ref: string }[] {
+  static #contentList(...ids: string[]): BeanReference[] {
     return ids.map((id) => {
       return {
         $Ref: id,
