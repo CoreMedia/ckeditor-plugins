@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";

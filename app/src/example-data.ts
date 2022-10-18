@@ -180,6 +180,7 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
       (event, details) =>
         console.log("CKEditor's Data-Controller received data via 'set'.", {
           event,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           data: details[0],
         }),
       {

@@ -684,7 +684,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
       getOwnPropertyDescriptor(target: AttributeMap, attrName: PropertyKey): PropertyDescriptor | undefined {
         // Handle, if this is the overwritten state.
         if (Reflect.has(target, attrName)) {
-          const value = Reflect.get(target, attrName);
+          const value: unknown = Reflect.get(target, attrName);
           if (value === undefined || value === null) {
             return undefined;
           }

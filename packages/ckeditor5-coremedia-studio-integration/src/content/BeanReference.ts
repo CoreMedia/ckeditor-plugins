@@ -53,7 +53,7 @@ export const parseBeanReferences = (value: string): BeanReference[] | undefined 
     return undefined;
   }
   try {
-    const parsed = JSON.parse(value);
+    const parsed: unknown = JSON.parse(value);
     if (isBeanReferences(parsed)) {
       return parsed;
     }

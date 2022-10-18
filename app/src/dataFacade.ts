@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { updatePreview } from "./preview";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 

@@ -220,7 +220,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
   const textElements = findTextNodeChildren(element);
   for (const textElement of textElements) {
     //@ts-expect-error TODO _textData is protected
-    const oldTextData: string = textElement._textData;
+    const oldTextData: string = textElement._textData as string;
     logger.debug("Searching replacement character for textElement:", textElement);
     //@ts-expect-error TODO _textData is protected
     textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
