@@ -57,6 +57,7 @@ export const preventUpcastImageSrc = () => {
       `element:img`,
       (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
         if (data.viewItem.hasAttribute("data-xlink-href")) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
           data.viewItem._removeAttribute("src");
         }
@@ -78,6 +79,7 @@ export const editingDowncastXlinkHref = (
 ): DowncastConversionHelperFunction => {
   return (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data): void => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       onXlinkHrefEditingDowncast(editor, eventInfo, data);
     });
   };

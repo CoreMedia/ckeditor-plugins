@@ -59,7 +59,7 @@ export const saveData = async (editor: ClassicEditor, source: string) => {
     };
   };
 
-  let previewData;
+  let previewData: string;
 
   if (lastSetVersion !== undefined && lastSetVersion === currentVersion) {
     console.log(

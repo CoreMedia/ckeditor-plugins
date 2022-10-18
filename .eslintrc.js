@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript
-        "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
@@ -234,6 +233,7 @@ module.exports = {
         "@typescript-eslint/no-non-null-assertion": "error",
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "@typescript-eslint/no-unsafe-argument": "error",
 
         "no-unused-expressions": "off",
         "@typescript-eslint/no-unused-expressions": ["error", { allowTernary: true, allowShortCircuit: true }],
@@ -271,9 +271,17 @@ module.exports = {
      * Test-specific overrides.
      */
     {
-      files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      files: [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/itest/**/*.ts",
+        "**/__tests__/**/*.ts",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+      ],
       rules: {
         "no-irregular-whitespace": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
       },
     },
   ],

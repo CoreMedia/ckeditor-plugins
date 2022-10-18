@@ -161,7 +161,9 @@ const exampleData = {
   ).replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
-export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
+type ExampleData = typeof exampleData;
+
+export const setExampleData = (editor: ClassicEditor, exampleKey: keyof ExampleData) => {
   try {
     // noinspection InnerHTMLJS
     editor.editing.view.once(
@@ -187,7 +189,6 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
       }
     );
 
-    //@ts-expect-error TODO Types
     const data = exampleData[exampleKey];
     console.log("Setting Example Data.", { [exampleKey]: data });
     setData(editor, data);
@@ -220,7 +221,7 @@ export const initExamples = (editor: ClassicEditor) => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {
       xmpInput.classList.remove("error");
-      setExampleData(editor, newValue);
+      setExampleData(editor, newValue as keyof ExampleData);
       xmpInput.blur();
     } else {
       xmpInput.classList.add("error");
@@ -232,7 +233,7 @@ export const initExamples = (editor: ClassicEditor) => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {
       xmpInput.classList.remove("error");
-      setExampleData(editor, newValue);
+      setExampleData(editor, newValue as keyof ExampleData);
       xmpInput.blur();
     }
   });
