@@ -10,13 +10,13 @@ import {
   PNG_RED_240x135,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 
-const oneLink = [
+const oneLink: MockContentConfig[] = [
   {
     id: 10000,
     name: "Document 10000",
   },
 ];
-const multipleLinksIncludingSlow = [
+const multipleLinksIncludingSlow: MockContentConfig[] = [
   {
     id: 10002,
     name: "Document: 10002",
@@ -31,7 +31,7 @@ const multipleLinksIncludingSlow = [
     name: "Document 10006",
   },
 ];
-const multipleLinks = [
+const multipleLinks: MockContentConfig[] = [
   {
     id: 10008,
     name: "Document: 10008",
@@ -46,7 +46,7 @@ const multipleLinks = [
   },
 ];
 
-const oneImage = [
+const oneImage: MockContentConfig[] = [
   {
     id: 100014,
     name: "Document 100014",
@@ -55,7 +55,7 @@ const oneImage = [
     linkable: true,
   },
 ];
-const multipleImages = [
+const multipleImages: MockContentConfig[] = [
   {
     id: 100016,
     name: "Document 100016",
@@ -78,7 +78,7 @@ const multipleImages = [
     linkable: true,
   },
 ];
-const multipleImagesSlow = [
+const multipleImagesSlow: MockContentConfig[] = [
   {
     id: 100022,
     name: "Document 100022",
