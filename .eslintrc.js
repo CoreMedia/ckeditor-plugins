@@ -51,7 +51,6 @@ module.exports = {
          */
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
-        "no-useless-escape": "off",
         // Broken Window/JSDoc
         "jsdoc/check-param-names": "off",
         "jsdoc/empty-tags": "off",
@@ -124,6 +123,7 @@ module.exports = {
         "no-undef-init": "error",
         "no-unsafe-finally": "error",
         "no-unused-labels": "error",
+        "no-useless-escape": "error",
         "no-var": "error",
         "object-shorthand": "error",
         "prefer-const": "error",
