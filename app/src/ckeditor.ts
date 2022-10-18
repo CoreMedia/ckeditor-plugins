@@ -52,6 +52,7 @@ import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-st
 
 import { icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
+import MockDragDropPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
 
 const {
   //@ts-expect-error We currently have no way to extend icon typing.
@@ -116,6 +117,7 @@ ClassicEditor.create(sourceElement, {
     TableToolbar,
     Underline,
     CoreMediaFontMapper,
+    MockDragDropPlugin,
     MockStudioIntegration,
   ],
   toolbar: {
