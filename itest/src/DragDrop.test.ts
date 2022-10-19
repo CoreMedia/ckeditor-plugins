@@ -1,7 +1,7 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import "./expect/Expectations";
-import { DroppableElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
+import { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import waitForExpect from "wait-for-expect";
 import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
 import {
@@ -212,13 +212,13 @@ describe("Drag and Drop", () => {
     }
 
     const dragIds = contentMocks.map((content: { id: number }) => content.id);
-    const droppableElement: DroppableElement = {
+    const droppableElement: InputExampleElement = {
       label: "Drag And Drop Test",
       tooltip: "test-element",
       items: dragIds,
       classes: ["drag-content", dragElementClass],
     };
-    await application.mockDragDrop.addDraggableElement(droppableElement);
+    await application.mockInputExamplePlugin.addDraggableElement(droppableElement);
   }
 
   async function dragAndDrop(
@@ -247,7 +247,7 @@ describe("Drag and Drop", () => {
    */
   async function ensureDropAllowed(contentIds: number[]): Promise<void> {
     await waitForExpect(async () => {
-      const actual = await application.mockDragDrop.prefillCaches(contentIds);
+      const actual = await application.mockInputExamplePlugin.prefillCaches(contentIds);
       expect(actual).toBeTruthy();
     });
   }

@@ -9,10 +9,10 @@ import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia
 
 /**
  * Describes a div-element that can be created by this plugin.
- * A `DroppableElement` contains all data that are necessary to make the created
- * div-element drag &amp; drop ready.
+ * A `InputExampleElement` contains all data that are necessary to make the created
+ * div-element drag &amp; drop and paste ready.
  */
-export interface DroppableElement {
+export interface InputExampleElement {
   /**
    * The visible text on the div element.
    */
@@ -26,17 +26,17 @@ export interface DroppableElement {
    */
   classes: string[];
   /**
-   * content ids to create the drag information for studio from.
+   * content ids to create the input information for studio services from.
    */
   items: number[];
 }
 
-const PLUGIN_NAME = "MockDragDrop";
+const PLUGIN_NAME = "MockInputExamplePlugin";
 
 /**
  * A Plugin to create drag & drop mock data inside the example app and tests.
  */
-class MockDragDropPlugin extends Plugin {
+class MockInputExamplePlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
 
   init(): void {
@@ -44,16 +44,16 @@ class MockDragDropPlugin extends Plugin {
     reportInitEnd(initInformation);
   }
 
-  createDragDivElement(data: DroppableElement): HTMLDivElement {
+  createDragDivElement(data: InputExampleElement): HTMLDivElement {
     const dragDiv = document.createElement("div");
     dragDiv.classList.add("drag-example", ...(data.classes || []));
     dragDiv.draggable = true;
     dragDiv.textContent = data.label || "Unset";
-    dragDiv.dataset.cmuripath = MockDragDropPlugin.#generateUriPathCsv(data.items || []);
+    dragDiv.dataset.cmuripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
     dragDiv.title = `${data.tooltip} (${dragDiv.dataset.cmuripath})`;
-    dragDiv.addEventListener("dragstart", MockDragDropPlugin.#setDragData);
-    dragDiv.addEventListener("dblclick", MockDragDropPlugin.#setClipboardData);
-    dragDiv.addEventListener("dragend", MockDragDropPlugin.#removeDropData);
+    dragDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
+    dragDiv.addEventListener("dblclick", MockInputExamplePlugin.#setClipboardData);
+    dragDiv.addEventListener("dragend", MockInputExamplePlugin.#removeDropData);
     return dragDiv;
   }
 
@@ -82,7 +82,7 @@ class MockDragDropPlugin extends Plugin {
       return;
     }
     const contentIds: string[] = contentIdCommaSeparated.split(",");
-    const beanReferences = MockDragDropPlugin.#contentList(...contentIds);
+    const beanReferences = MockInputExamplePlugin.#contentList(...contentIds);
     const cmurilist = JSON.stringify(beanReferences);
     const blob = new Blob([cmurilist], { type: "cm/uri-list" });
     const data: Record<string, Blob> = {};
@@ -105,10 +105,10 @@ class MockDragDropPlugin extends Plugin {
     if (contentId) {
       const idsArray = contentId.split(",");
       const dragDropService = new MockDragDropService();
-      dragDropService.dragData = JSON.stringify(MockDragDropPlugin.#contentDragData(...idsArray));
+      dragDropService.dragData = JSON.stringify(MockInputExamplePlugin.#contentDragData(...idsArray));
       serviceAgent.registerService(dragDropService);
-      dragEvent.dataTransfer?.setData("cm/uri-list", JSON.stringify(MockDragDropPlugin.#contentList(...idsArray)));
-      dragEvent.dataTransfer?.setData("text", JSON.stringify(MockDragDropPlugin.#contentList(...idsArray)));
+      dragEvent.dataTransfer?.setData("cm/uri-list", JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray)));
+      dragEvent.dataTransfer?.setData("text", JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray)));
       return;
     }
     const text = dragEventTarget.childNodes[0].textContent;
@@ -134,7 +134,7 @@ class MockDragDropPlugin extends Plugin {
 
   static #contentDragData(...ids: string[]): { contents: { $Ref: string }[] } {
     return {
-      contents: MockDragDropPlugin.#contentList(...ids),
+      contents: MockInputExamplePlugin.#contentList(...ids),
     };
   }
 
@@ -143,8 +143,8 @@ class MockDragDropPlugin extends Plugin {
   }
 
   static #generateUriPathCsv(items: number[]): string {
-    return items.map((item) => MockDragDropPlugin.#generateUriPath(item)).join(",");
+    return items.map((item) => MockInputExamplePlugin.#generateUriPath(item)).join(",");
   }
 }
 
-export default MockDragDropPlugin;
+export default MockInputExamplePlugin;

@@ -1,14 +1,14 @@
 import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
-import MockDragDropPlugin, {
-  DroppableElement,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
+import MockInputExamplePlugin, {
+  InputExampleElement,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 
 const INPUT_EXAMPLE_CONTENT_DIV_CLASS = "inputExampleContentDiv";
 
 const initInputExampleContent = (editor: ClassicEditor) => {
   const mockContentPlugin = editor.plugins.get(MockContentPlugin);
-  const mockDragDropPlugin = editor.plugins.get(MockDragDropPlugin);
+  const mockInputExamplePlugin = editor.plugins.get(MockInputExamplePlugin);
   // Just ensure, that the default content provided by MockContentPlugin
   // still fulfills our expectations.
   const requireExplicitContent = mockContentPlugin.requireExplicitContent;
@@ -22,7 +22,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     linkable: false,
   });
 
-  const singleDroppableDocuments: DroppableElement[] = [
+  const singleDroppableDocuments: InputExampleElement[] = [
     {
       label: "Document 1",
       tooltip: "Some Document",
@@ -141,7 +141,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: [requireExplicitContent(40)],
     },
   ];
-  const slowDocuments: DroppableElement[] = [
+  const slowDocuments: InputExampleElement[] = [
     {
       label: "Slow",
       tooltip: "Slowed down access to content",
@@ -222,7 +222,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     },
   ];
 
-  const allData: DroppableElement[] = [
+  const allData: InputExampleElement[] = [
     ...singleDroppables,
     ...singleUndroppables,
     ...slowDocuments,
@@ -239,7 +239,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     }
 
     allData.forEach((data) => {
-      const dragDiv = mockDragDropPlugin.createDragDivElement(data);
+      const dragDiv = mockInputExamplePlugin.createDragDivElement(data);
       examplesEl.appendChild(dragDiv);
     });
     console.log(`Initialized ${allData.length} drag examples.`);
