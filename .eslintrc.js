@@ -52,7 +52,6 @@ module.exports = {
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
         // Broken Window/JSDoc
-        "jsdoc/empty-tags": "off",
         "jsdoc/newline-after-description": "off",
         "jsdoc/no-multi-asterisks": "off",
         "jsdoc/tag-lines": "off",
@@ -81,6 +80,11 @@ module.exports = {
         // the common localization pattern of CKEditor 5, i.e., accessing
         // editor.locale.t. Ignored for now, unless we find a better option.
         "@typescript-eslint/unbound-method": "off",
+        // While misuse of empty tags having contents seems to be a good
+        // idea, it collides with TypeDoc, expecting @inheritDoc with
+        // some argument. Unfortunately, there is no exclusion but only
+        // inclusion mechanism for this rule.
+        "jsdoc/empty-tags": "off",
         /*
          * =====================================================================
          * ESLint
