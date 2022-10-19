@@ -14,7 +14,7 @@ import { symbolFontMap } from "./SymbolFontMap";
  * {@link registerFontMapping} method.
  */
 export class FontMappingRegistry {
-  readonly #fontMappings: Map<string, FontMapping> = new Map();
+  readonly #fontMappings = new Map<string, FontMapping>();
 
   constructor() {
     this.#registerDefaultSymbolFontMapping();
