@@ -22,6 +22,103 @@ const THEAD_ROW_CLASS = "tr--header";
  */
 const TFOOT_ROW_CLASS = "tr--footer";
 
+/**
+ * CoreMedia RichText tables neither supports `<thead>` nor `<tfoot>` and
+ * only supports one `<tbody>`. Prior to processing the children of the table,
+ * the following _onBefore_ mapper ensures, that the original structure is kept
+ * at best effort.
+ *
+ * Note, that during data processing, we do not have higher element interfaces
+ * at hand such as HTMLTableElement. A `<table>` is represented as normal
+ * element, which just shares the same tagName as a `HTMLTableElement`. That's
+ * why implementation needs to be more complex.
+ *
+ * @param tableElement - table element to process
+ */
+const toDataProcessTableContents = (tableElement: TableWrapper): void => {
+  const addClassToRows = (section: Element | undefined | null, className: string): void => {
+    if (section) {
+      const wrapper = new TableSectionWrapper(section);
+      for (const row of wrapper.rows) {
+        if (!row.classList.contains(className)) {
+          row.classList.add(className);
+        }
+      }
+    }
+  };
+
+  addClassToRows(tableElement.tHead, THEAD_ROW_CLASS);
+  addClassToRows(tableElement.tFoot, TFOOT_ROW_CLASS);
+
+  const rowsSnapshot = tableElement.rows;
+  const targetBody = tableElement.createTBody();
+
+  rowsSnapshot.forEach((row) => {
+    targetBody.appendChild(row);
+  });
+
+  tableElement.removeEmptySections();
+};
+
+/**
+ * Transforms a table from data to view. As CoreMedia RichText does not know
+ * elements such as `thead` or `tfoot` this structure is rebuilt based on
+ * probably assigned classes.
+ *
+ * Note, that during data processing, we do not have higher element interfaces
+ * at hand such as HTMLTableElement. A `<table>` is represented as normal
+ * element, which just shares the same tagName as a `HTMLTableElement`. That's
+ * why implementation needs to be more complex.
+ *
+ * This is especially workaround for ckeditor/ckeditor5#9360, which makes some
+ * conflicting assumptions on `<th>` elements outside `<thead>`. This is,
+ * why it is important to remember and restore the state of a row being part
+ * of `<thead>` in view.
+ *
+ * @param tableElement - table element to process
+ */
+const toViewProcessTableContents = (tableElement: TableWrapper): void => {
+  const rowsSnapshot = tableElement.rows;
+
+  const removeClass = (el: Element, className: string): void => {
+    el.classList.remove(className);
+    if (el.classList.length === 0) {
+      // Clean-up DOM
+      el.attributes.removeNamedItem("class");
+    }
+  };
+
+  const moveToHead = (row: Element): boolean => {
+    if (!row.classList.contains(THEAD_ROW_CLASS)) {
+      return false;
+    }
+    removeClass(row, THEAD_ROW_CLASS);
+    tableElement.createTHead().appendChild(row);
+    return true;
+  };
+
+  const moveToFoot = (row: Element): boolean => {
+    if (!row.classList.contains(TFOOT_ROW_CLASS)) {
+      return false;
+    }
+    removeClass(row, TFOOT_ROW_CLASS);
+    tableElement.createTFoot().appendChild(row);
+    return true;
+  };
+
+  const moveToBody = (row: Element): void => {
+    tableElement.createTBody().appendChild(row);
+  };
+
+  rowsSnapshot.forEach((row) => {
+    if (!moveToHead(row) && !moveToFoot(row)) {
+      moveToBody(row);
+    }
+  });
+
+  tableElement.removeEmptySections();
+};
+
 export const tableRules: ElementsFilterRuleSetConfiguration = {
   td: {
     toData: (params) => {
@@ -271,101 +368,4 @@ class TableWrapper extends ElementWrapper {
       }
     }
   }
-}
-
-/**
- * CoreMedia RichText tables neither supports `<thead>` nor `<tfoot>` and
- * only supports one `<tbody>`. Prior to processing the children of the table,
- * the following _onBefore_ mapper ensures, that the original structure is kept
- * at best effort.
- *
- * Note, that during data processing, we do not have higher element interfaces
- * at hand such as HTMLTableElement. A `<table>` is represented as normal
- * element, which just shares the same tagName as a `HTMLTableElement`. That's
- * why implementation needs to be more complex.
- *
- * @param tableElement - table element to process
- */
-function toDataProcessTableContents(tableElement: TableWrapper): void {
-  function addClassToRows(section: Element | undefined | null, className: string): void {
-    if (section) {
-      const wrapper = new TableSectionWrapper(section);
-      for (const row of wrapper.rows) {
-        if (!row.classList.contains(className)) {
-          row.classList.add(className);
-        }
-      }
-    }
-  }
-
-  addClassToRows(tableElement.tHead, THEAD_ROW_CLASS);
-  addClassToRows(tableElement.tFoot, TFOOT_ROW_CLASS);
-
-  const rowsSnapshot = tableElement.rows;
-  const targetBody = tableElement.createTBody();
-
-  rowsSnapshot.forEach((row) => {
-    targetBody.appendChild(row);
-  });
-
-  tableElement.removeEmptySections();
-}
-
-/**
- * Transforms a table from data to view. As CoreMedia RichText does not know
- * elements such as `thead` or `tfoot` this structure is rebuilt based on
- * probably assigned classes.
- *
- * Note, that during data processing, we do not have higher element interfaces
- * at hand such as HTMLTableElement. A `<table>` is represented as normal
- * element, which just shares the same tagName as a `HTMLTableElement`. That's
- * why implementation needs to be more complex.
- *
- * This is especially workaround for ckeditor/ckeditor5#9360, which makes some
- * conflicting assumptions on `<th>` elements outside `<thead>`. This is,
- * why it is important to remember and restore the state of a row being part
- * of `<thead>` in view.
- *
- * @param tableElement - table element to process
- */
-function toViewProcessTableContents(tableElement: TableWrapper): void {
-  const rowsSnapshot = tableElement.rows;
-
-  function removeClass(el: Element, className: string): void {
-    el.classList.remove(className);
-    if (el.classList.length === 0) {
-      // Clean-up DOM
-      el.attributes.removeNamedItem("class");
-    }
-  }
-
-  function moveToHead(row: Element): boolean {
-    if (!row.classList.contains(THEAD_ROW_CLASS)) {
-      return false;
-    }
-    removeClass(row, THEAD_ROW_CLASS);
-    tableElement.createTHead().appendChild(row);
-    return true;
-  }
-
-  function moveToFoot(row: Element): boolean {
-    if (!row.classList.contains(TFOOT_ROW_CLASS)) {
-      return false;
-    }
-    removeClass(row, TFOOT_ROW_CLASS);
-    tableElement.createTFoot().appendChild(row);
-    return true;
-  }
-
-  function moveToBody(row: Element): void {
-    tableElement.createTBody().appendChild(row);
-  }
-
-  rowsSnapshot.forEach((row) => {
-    if (!moveToHead(row) && !moveToFoot(row)) {
-      moveToBody(row);
-    }
-  });
-
-  tableElement.removeEmptySections();
 }

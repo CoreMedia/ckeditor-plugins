@@ -9,7 +9,13 @@ import RichTextDataProcessor from "../RichTextDataProcessor";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
-export function getSchema({ editor }: ElementFilterParams | TextFilterParams): RichTextSchema {
+/**
+ * Get the schema set for the data processor of the given editor.
+ *
+ * @param editor - parameters to retrieve editor instance from
+ * @param editor.editor - the editor instance to query for schema
+ */
+export const getSchema = ({ editor }: ElementFilterParams | TextFilterParams): RichTextSchema => {
   const dataProcessor: DataProcessor | null = editor?.data?.processor || null;
   if (dataProcessor === null) {
     return defaultSchema;
@@ -20,7 +26,7 @@ export function getSchema({ editor }: ElementFilterParams | TextFilterParams): R
   }
 
   return richTextDataProcessor.richTextSchema ?? defaultSchema;
-}
+};
 
 /**
  * Rules meant as final check for schema validity. The task is to prevent any

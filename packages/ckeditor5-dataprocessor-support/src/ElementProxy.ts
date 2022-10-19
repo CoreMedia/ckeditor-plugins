@@ -494,13 +494,13 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     const ownerDocument = targetElement.ownerDocument;
     const attributeNames = Object.keys(attributes);
 
-    function handleAttributeWithoutNamespacePrefix(key: string, value: string | null) {
+    const handleAttributeWithoutNamespacePrefix = (key: string, value: string | null) => {
       if (value === null) {
         targetElement.removeAttributeNS(null, key);
       } else {
         targetElement.setAttributeNS(null, key, value);
       }
-    }
+    };
 
     const handleAttributeWithNamespacePrefix = (
       uri: string | undefined,

@@ -52,7 +52,6 @@ module.exports = {
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
         // Broken Window/JSDoc
-        "jsdoc/require-jsdoc": "off",
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
         /*
@@ -155,6 +154,7 @@ module.exports = {
         "jsdoc/newline-after-description": "error",
         // allowWhitespace: Must be true not to collide with Markdown.
         "jsdoc/no-multi-asterisks": ["error", { allowWhitespace: true }],
+        "jsdoc/require-jsdoc": "error",
         // Collides with TypeScript.
         "jsdoc/require-param-type": "off",
         // Collides with TypeScript.
@@ -316,6 +316,16 @@ module.exports = {
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
+        "jsdoc/require-jsdoc": "off",
+      },
+    },
+    /*
+     * Overrides for example application.
+     */
+    {
+      files: ["app/**/*.ts", "app/**/*.tsx"],
+      rules: {
+        "jsdoc/require-jsdoc": "off",
       },
     },
   ],
