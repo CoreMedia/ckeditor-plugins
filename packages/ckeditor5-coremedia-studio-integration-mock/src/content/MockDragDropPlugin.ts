@@ -67,9 +67,7 @@ class MockDragDropPlugin extends Plugin {
    */
   prefillCaches(contentIds: number[]): boolean {
     const uriPaths = contentIds.map((contentId) => contentUriPath(contentId));
-    return uriPaths.every((uriPath) => {
-      return DragDropAsyncSupport.isLinkable(uriPath);
-    });
+    return uriPaths.every((uriPath) => DragDropAsyncSupport.isLinkable(uriPath));
   }
 
   /**
@@ -104,11 +102,9 @@ class MockDragDropPlugin extends Plugin {
   }
 
   static #contentList(...ids: string[]): { $Ref: string }[] {
-    return ids.map((id) => {
-      return {
-        $Ref: id,
-      };
-    });
+    return ids.map((id) => ({
+      $Ref: id,
+    }));
   }
 
   static #contentDragData(...ids: string[]): { contents: { $Ref: string }[] } {

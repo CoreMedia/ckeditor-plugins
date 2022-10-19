@@ -85,9 +85,10 @@ export default class DataToModelMechanism {
     // embeddable. Lookup an extender with the object type, call the `create`
     // model stuff. take a promise and execute writeItemToModel
     this.#getType(contentDropData.itemContext.contentUri)
-      .then((type): Promise<CreateModelFunction> => {
-        return this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri);
-      })
+      .then(
+        (type): Promise<CreateModelFunction> =>
+          this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri)
+      )
       .then((createItemFunction: CreateModelFunction): void => {
         DataToModelMechanism.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
       })

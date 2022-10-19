@@ -165,9 +165,8 @@ export const ddTest = <T extends NamedTestCase>(
  * @param generator - strategy to generate a name for the test case
  * @see https://github.com/facebook/jest/issues/6413
  */
-export const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.name): [string, T][] => {
-  return data.map((d) => [generator(d), d]);
-};
+export const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.name): [string, T][] =>
+  data.map((d) => [generator(d), d]);
 
 export type DataProcessingTestCase = NamedTestCase &
   SkippableTestCase &
@@ -181,9 +180,8 @@ export const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
 export const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
 const serializer = new XMLSerializer();
 
-export const getFilter = (direction: Direction.toData | Direction.toDataView): HtmlFilter => {
-  return direction === Direction.toDataView ? toViewFilter : toDataFilter;
-};
+export const getFilter = (direction: Direction.toData | Direction.toDataView): HtmlFilter =>
+  direction === Direction.toDataView ? toViewFilter : toDataFilter;
 
 export const applyFilter = (
   filter: HtmlFilter,

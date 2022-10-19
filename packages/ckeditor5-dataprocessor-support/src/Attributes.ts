@@ -87,42 +87,40 @@ const preserveAttributeAs = (
   dataAttributeName: string,
   viewAttributeName: string,
   ...dataAttributeAliases: string[]
-): AttributeMapper => {
-  return {
-    toData: (params) => renameAttribute(params, viewAttributeName, dataAttributeName),
-    toView: (params) => renameAttribute(params, dataAttributeName, viewAttributeName, ...dataAttributeAliases),
-  };
-};
+): AttributeMapper => ({
+  toData: (params) => renameAttribute(params, viewAttributeName, dataAttributeName),
+  toView: (params) => renameAttribute(params, dataAttributeName, viewAttributeName, ...dataAttributeAliases),
+});
 
 /**
  * Combines all attribute mappers into one.
  *
  * @param mappers - attribute mappers to combine
  */
-const allAttributeMappers = (...mappers: AttributeMapper[]): AttributeMapper => {
-  return {
-    toData: (params) => mappers.forEach((m) => m.toData(params)),
-    toView: (params) => mappers.forEach((m) => m.toView(params)),
-  };
-};
+const allAttributeMappers = (...mappers: AttributeMapper[]): AttributeMapper => ({
+  toData: (params) => mappers.forEach((m) => m.toData(params)),
+  toView: (params) => mappers.forEach((m) => m.toView(params)),
+});
 
 /**
  * Extracts the `toData` rule from given mapper.
  *
  * @param mapper - mapper to extract `toData` from
  */
-const asDataFilterRule = (mapper: AttributeMapper): ElementFilterRule => {
-  return (params) => mapper.toData(params);
-};
+const asDataFilterRule =
+  (mapper: AttributeMapper): ElementFilterRule =>
+  (params) =>
+    mapper.toData(params);
 
 /**
  * Extracts the `toView` rule from given mapper.
  *
  * @param mapper - mapper to extract `toView` from
  */
-const asViewFilterRule = (mapper: AttributeMapper): ElementFilterRule => {
-  return (params) => mapper.toView(params);
-};
+const asViewFilterRule =
+  (mapper: AttributeMapper): ElementFilterRule =>
+  (params) =>
+    mapper.toView(params);
 
 export {
   AttributeMapper,

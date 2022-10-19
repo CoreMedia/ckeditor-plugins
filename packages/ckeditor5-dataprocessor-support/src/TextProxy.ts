@@ -34,9 +34,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
    *
    * Mimics `TextFilterParams`, which helps to deal with rule processing.
    */
-  public readonly parentRule: TextFilterRule = () => {
-    return undefined;
-  };
+  public readonly parentRule: TextFilterRule = () => undefined;
 
   /**
    * Constructor.

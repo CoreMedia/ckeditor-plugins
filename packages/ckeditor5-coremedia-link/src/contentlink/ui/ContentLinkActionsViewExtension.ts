@@ -35,9 +35,11 @@ class ContentLinkActionsViewExtension extends Plugin {
     });
 
     const bindContentUriPathTo = (command: Command): void => {
-      linkUI.actionsView.bind("contentUriPath").to(command, "value", (value: unknown) => {
-        return typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
-      });
+      linkUI.actionsView
+        .bind("contentUriPath")
+        .to(command, "value", (value: unknown) =>
+          typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
+        );
     };
 
     await ifCommand(editor, LINK_COMMAND_NAME).then((command) => bindContentUriPathTo(command));

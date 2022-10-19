@@ -156,9 +156,8 @@ class ObservableMutableProperty<T> extends Observable<T> {
   }
 }
 
-const observeMutableProperty = <T>(delays: Delayed, property: AtomicOrArray<T>): Observable<T> => {
-  return new ObservableMutableProperty<T>(delays, property);
-};
+const observeMutableProperty = <T>(delays: Delayed, property: AtomicOrArray<T>): Observable<T> =>
+  new ObservableMutableProperty<T>(delays, property);
 
 export default ObservableMutableProperty;
 export { observeMutableProperty, MutablePropertyObservationHandler };

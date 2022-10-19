@@ -70,9 +70,7 @@ export const replaceFontInDocumentFragment = (
  */
 const hasTextChild = (element: ViewElement): boolean => {
   const children = Array.from<ViewNode>(element.getChildren());
-  return children.some((node: ViewNode) => {
-    return node instanceof ViewText;
-  });
+  return children.some((node: ViewNode) => node instanceof ViewText);
 };
 
 /**
@@ -82,11 +80,10 @@ const hasTextChild = (element: ViewElement): boolean => {
  * @param documentFragment - the document fragment
  * @returns an array of child elements
  */
-const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): ViewElement[] => {
-  return Array.from<ViewNode>(documentFragment.getChildren())
+const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): ViewElement[] =>
+  Array.from<ViewNode>(documentFragment.getChildren())
     .filter((value) => value instanceof ViewElement)
     .map((value) => value as ViewElement);
-};
 
 /**
  * Returns a registered {@link FontMapping} based on the given element.
@@ -133,9 +130,7 @@ const computeFontMappingForElement = (
  * @param element - the element
  * @returns the font-family or undefined if no font-family style property is set
  */
-const evaluateFontFamily = (element: ViewElement): string | undefined => {
-  return element.getStyle(FONT_FAMILY_PROPERTY_NAME);
-};
+const evaluateFontFamily = (element: ViewElement): string | undefined => element.getStyle(FONT_FAMILY_PROPERTY_NAME);
 
 /**
  * Returns a mapping for the given font-family string from the
@@ -183,12 +178,11 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
  * @param fontFamilyStyle - the font name
  * @returns the escaped font name
  */
-export const escapeFontFamily = (fontFamilyStyle: string): string => {
-  return fontFamilyStyle
+export const escapeFontFamily = (fontFamilyStyle: string): string =>
+  fontFamilyStyle
     .split(/\s*(?:^,*|,|$)\s*/)
     .map((s) => s.replace(/^"(.*)"$/, "$1"))
     .filter((s) => !!s)[0];
-};
 
 /**
  * Creates a new element, based on an existing one.
@@ -233,8 +227,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
  * @param element - the element
  * @returns all direct text node children
  */
-const findTextNodeChildren = (element: ViewElement): ViewText[] => {
-  return Array.from<ViewNode>(element.getChildren())
+const findTextNodeChildren = (element: ViewElement): ViewText[] =>
+  Array.from<ViewNode>(element.getChildren())
     .filter((value) => value instanceof ViewText)
     .map((value) => value as ViewText);
-};

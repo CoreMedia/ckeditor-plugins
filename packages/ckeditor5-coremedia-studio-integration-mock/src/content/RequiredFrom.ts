@@ -15,9 +15,10 @@ type RequiredFrom<T extends Partial<R>, R> = Omit<T, keyof R> & Required<R>;
  * @param input - input object
  * @param defaults - output object, having properties of R as required properties
  */
-const withDefaults = <T extends Partial<R>, R>(input: T, defaults: Required<R>): RequiredFrom<T, R> => {
-  return { ...defaults, ...input };
-};
+const withDefaults = <T extends Partial<R>, R>(input: T, defaults: Required<R>): RequiredFrom<T, R> => ({
+  ...defaults,
+  ...input,
+});
 
 export default RequiredFrom;
 export { withDefaults };

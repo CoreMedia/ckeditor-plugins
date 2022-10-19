@@ -44,19 +44,15 @@ export default class MarkerRepositionUtil {
     }
     const markersAtSamePosition = MarkerRepositionUtil.#markersAtPosition(editor, marker.getStart());
 
-    return markersAtSamePosition.filter((otherMarkerData: MarkerData): boolean => {
-      return filterFunction(markerData, otherMarkerData);
-    });
+    return markersAtSamePosition.filter((otherMarkerData: MarkerData): boolean =>
+      filterFunction(markerData, otherMarkerData)
+    );
   }
 
   static #markersAtPosition(editor: Editor, position: ModelPosition): MarkerData[] {
     return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
-      .filter((value) => {
-        return value.getStart().isEqual(position);
-      })
-      .map((value) => {
-        return ContentClipboardMarkerDataUtils.splitMarkerName(value.name);
-      });
+      .filter((value) => value.getStart().isEqual(position))
+      .map((value) => ContentClipboardMarkerDataUtils.splitMarkerName(value.name));
   }
 
   static #moveMarkersTo(editor: Editor, markerData: MarkerData[], position: ModelPosition): void {

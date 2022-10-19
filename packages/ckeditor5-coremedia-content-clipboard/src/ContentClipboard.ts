@@ -43,9 +43,8 @@ declare interface ContentEventData<T> extends ClipboardEventData {
  *
  * @param value - value to validate
  */
-const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> => {
-  return isRaw<ContentEventData<unknown>>(value, "content");
-};
+const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> =>
+  isRaw<ContentEventData<unknown>>(value, "content");
 
 /**
  * Specifies the additional data provided by ClipboardPipeline's
@@ -341,9 +340,9 @@ export default class ContentClipboard extends Plugin {
     if (!data.targetRanges) {
       return editor.model.document.selection.getFirstRange();
     }
-    const targetRanges: ModelRange[] = data.targetRanges.map((viewRange: ViewRange): ModelRange => {
-      return editor.editing.mapper.toModelRange(viewRange);
-    });
+    const targetRanges: ModelRange[] = data.targetRanges.map(
+      (viewRange: ViewRange): ModelRange => editor.editing.mapper.toModelRange(viewRange)
+    );
     if (targetRanges.length > 0) {
       return targetRanges[0];
     }

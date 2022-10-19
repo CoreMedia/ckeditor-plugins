@@ -39,9 +39,8 @@ const DelayedDefaults: Delayed = {
  *
  * @param config - configuration to add delay defaults to.
  */
-const withDelayDefaults = <T extends DelayedConfig>(config: T): RequiredFrom<T, Delayed> => {
-  return withDefaults(config, DelayedDefaults);
-};
+const withDelayDefaults = <T extends DelayedConfig>(config: T): RequiredFrom<T, Delayed> =>
+  withDefaults(config, DelayedDefaults);
 
 export default Delayed;
 export { DelayedDefaults, DelayedConfig, withDelayDefaults };

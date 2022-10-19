@@ -20,9 +20,7 @@ import { defaultTypeById } from "./MockContentType";
 
 type PredefinedMockContentConfig = { comment?: string } & MockContentConfig;
 
-const hoursInMs = (hours: number): number => {
-  return hours * 1000 * 60 * 60;
-};
+const hoursInMs = (hours: number): number => hours * 1000 * 60 * 60;
 
 const FOLDER_MOCKS: PredefinedMockContentConfig[] = [
   {
@@ -257,11 +255,9 @@ const PREDEFINED_MOCK_CONTENTS: PredefinedMockContentConfig[] = [
   ...BLOB_CONTENTS,
 ];
 
-const wrapInRichText = (rawData: string): string => {
+const wrapInRichText = (rawData: string): string =>
   // noinspection HttpUrlsUsage
-  return `<?xml version="1.0" encoding="utf-8"?><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink">${rawData}</div>`;
-};
-
+  `<?xml version="1.0" encoding="utf-8"?><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink">${rawData}</div>`;
 const truncateName = (str: string, maxLength = 40): string => {
   if (str.length > maxLength) {
     return str.slice(0, maxLength - 3) + "...";

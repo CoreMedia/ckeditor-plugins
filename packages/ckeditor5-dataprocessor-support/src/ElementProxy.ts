@@ -340,9 +340,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    * Mimics `ElementFilterParams`, which helps to deal with rule processing.
    */
-  public readonly parentRule: ElementFilterRule = () => {
-    return undefined;
-  };
+  public readonly parentRule: ElementFilterRule = () => undefined;
 
   /**
    * Constructor.
@@ -818,9 +816,10 @@ type ElementFilterRule = (params: ElementFilterParams) => void;
  * @param rules - rules to combine
  * @returns rule, which combines all passed rules into one
  */
-const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
-  return (params) => rules.forEach((r) => r(params));
-};
+const allFilterRules =
+  (...rules: ElementFilterRule[]): ElementFilterRule =>
+  (params) =>
+    rules.forEach((r) => r(params));
 
 export default ElementProxy;
 export { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule, allFilterRules };

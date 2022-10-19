@@ -7,8 +7,6 @@ export default class WindowBrowserAccessor {
    * Gets the <i>userAgent</i> from the browser.
    */
   static async getUserAgent(): Promise<string> {
-    return page.evaluate(() => {
-      return window.navigator.userAgent;
-    });
+    return page.evaluate(() => window.navigator.userAgent);
   }
 }

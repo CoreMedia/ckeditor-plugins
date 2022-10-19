@@ -85,6 +85,7 @@ module.exports = {
          * ESLint
          * =====================================================================
          */
+        "arrow-body-style": ["error", "as-needed"],
         "constructor-super": "error",
         "curly": ["error", "multi-line"],
         "dot-notation": "error",

@@ -16,9 +16,10 @@ export class MockDragDropPluginWrapper extends JSWrapper<MockDragDropPlugin> {
   }
 
   async prefillCaches(contentIds: number[]): Promise<boolean> {
-    return this.evaluate((plugin: MockDragDropPlugin, contentIds): boolean => {
-      return plugin.prefillCaches(contentIds);
-    }, contentIds);
+    return this.evaluate(
+      (plugin: MockDragDropPlugin, contentIds): boolean => plugin.prefillCaches(contentIds),
+      contentIds
+    );
   }
 
   /**

@@ -39,9 +39,8 @@ interface CoreMediaRichTextSupportConfig {
   aliases?: InheritingMatcherPattern[];
 }
 
-const getConfig = (config?: CKEditorConfig): CoreMediaRichTextSupportConfig => {
-  return (config?.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) || {}) as CoreMediaRichTextSupportConfig;
-};
+const getConfig = (config?: CKEditorConfig): CoreMediaRichTextSupportConfig =>
+  (config?.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) || {}) as CoreMediaRichTextSupportConfig;
 
 export default CoreMediaRichTextSupportConfig;
 export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY, getConfig };

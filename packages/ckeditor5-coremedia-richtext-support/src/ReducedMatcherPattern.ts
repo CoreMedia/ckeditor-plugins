@@ -105,9 +105,10 @@ type MatcherPatternLookup = (name: string) => ReducedMatcherPattern | undefined;
  *
  * @param patterns - patterns to search within
  */
-const toLookupStrategy = (...patterns: ReducedMatcherPattern[]): MatcherPatternLookup => {
-  return (name) => findFirstPattern(name, ...patterns);
-};
+const toLookupStrategy =
+  (...patterns: ReducedMatcherPattern[]): MatcherPatternLookup =>
+  (name) =>
+    findFirstPattern(name, ...patterns);
 
 /**
  * Resolves an inheriting pattern.

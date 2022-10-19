@@ -26,11 +26,10 @@ const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
 
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {
   const nameToPass = name ? name : ROOT_NAME;
-  return (writer: Writer): Node => {
-    return writer.createText(nameToPass, {
+  return (writer: Writer): Node =>
+    writer.createText(nameToPass, {
       linkHref: requireContentCkeModelUri(contentUri),
     });
-  };
 };
 
 /**

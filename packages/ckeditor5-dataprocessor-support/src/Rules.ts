@@ -4,15 +4,13 @@ import { TextFilterParams, TextFilterRule } from "./TextProxy";
 
 const parentChildElementRule =
   (parentRule: ElementFilterRule, childRule: ElementFilterRule): ElementFilterRule =>
-  (params: ElementFilterParams) => {
-    return childRule({ ...params, parentRule });
-  };
+  (params: ElementFilterParams) =>
+    childRule({ ...params, parentRule });
 
 const parentChildTextRule =
   (parentRule: TextFilterRule, childRule: TextFilterRule): TextFilterRule =>
-  (params: TextFilterParams) => {
-    return childRule({ ...params, parentRule });
-  };
+  (params: TextFilterParams) =>
+    childRule({ ...params, parentRule });
 
 /**
  * This represents the combination of toData/toView.

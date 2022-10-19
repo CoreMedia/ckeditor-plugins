@@ -145,9 +145,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
  * ```
  * @param editor - current editor instance
  */
-const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => {
-  return editor.plugins.get(LinkCleanup);
-};
+const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => editor.plugins.get(LinkCleanup);
 
 /**
  * Checks, if this diff item represents a change regarding removal of

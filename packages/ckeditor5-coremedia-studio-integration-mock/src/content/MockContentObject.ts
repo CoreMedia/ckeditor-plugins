@@ -13,6 +13,5 @@ export default interface MockContentObject {
 /**
  * Type-Guard for `MockContentObject`.
  */
-export const isMockContentObject = (instance: unknown): instance is MockContentObject => {
-  return isObject(instance) && instance.hasOwnProperty("id") && typeof instance.id === "number";
-};
+export const isMockContentObject = (instance: unknown): instance is MockContentObject =>
+  isObject(instance) && instance.hasOwnProperty("id") && typeof instance.id === "number";

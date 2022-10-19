@@ -147,9 +147,8 @@ type Elements = Record<string, ElementSpecification>;
  * possibly invalid values had not been removed. This action fulfills
  * exactly this contract for `LEGACY` mode.
  */
-const REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (attrValue, strictness) => {
-  return strictness === Strictness.LEGACY ? attrValue : undefined;
-};
+const REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (attrValue, strictness) =>
+  strictness === Strictness.LEGACY ? attrValue : undefined;
 
 const NOTHING_TODO_ON_MISSING_ATTRIBUTE: MissingAttributeAction = () => undefined;
 
@@ -343,12 +342,8 @@ const ELEMENTS: Elements = {
     attributeList: {
       "xmlns": {
         valueValidator: (s) => COREMEDIA_RICHTEXT_1_0_NAMESPACE === s,
-        onInvalidValue: () => {
-          return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
-        },
-        onMissingAttribute: () => {
-          return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
-        },
+        onInvalidValue: () => COREMEDIA_RICHTEXT_1_0_NAMESPACE,
+        onMissingAttribute: () => COREMEDIA_RICHTEXT_1_0_NAMESPACE,
       },
       "xmlns:xlink": {
         valueValidator: (s) => XLINK_NAMESPACE === s,

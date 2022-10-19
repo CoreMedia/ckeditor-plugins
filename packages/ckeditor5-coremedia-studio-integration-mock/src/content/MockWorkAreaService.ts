@@ -46,20 +46,14 @@ class MockWorkAreaService implements WorkAreaService {
     const mockContentPlugin = this.#editor.plugins.get(MockContentPlugin.pluginName) as MockContentPlugin;
     const uris = entityUris as string[];
     return uris
-      .map((uri) => {
-        return mockContentPlugin.getContent(uri);
-      })
+      .map((uri) => mockContentPlugin.getContent(uri))
       .every((mockContent: MockContent): boolean => {
-        const allReadable = mockContent.readable.every((isReadable) => {
-          return isReadable;
-        });
+        const allReadable = mockContent.readable.every((isReadable) => isReadable);
         if (!mockContent.embeddable) {
           MockWorkAreaService.#LOGGER.debug(`Content is not embeddable and readable is ${allReadable}`);
           return allReadable;
         }
-        const dataIsSet = mockContent.blob.every((blobData: BlobType) => {
-          return blobData?.value;
-        });
+        const dataIsSet = mockContent.blob.every((blobData: BlobType) => blobData?.value);
         MockWorkAreaService.#LOGGER.debug(`Content is embeddable and readable is ${allReadable}`);
         return allReadable && dataIsSet;
       });

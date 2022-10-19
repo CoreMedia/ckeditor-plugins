@@ -89,9 +89,7 @@ class TrackingData {
  *
  * @param range - range to get included items for
  */
-const getItems = (range: Range): Item[] => {
-  return [...range.getItems({ shallow: true })];
-};
+const getItems = (range: Range): Item[] => [...range.getItems({ shallow: true })];
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -154,9 +152,7 @@ class ContentLinkCommandHook extends Plugin {
    *
    * @returns previously stored value, if any
    */
-  readonly #clearTrackingData = (): Replacement | undefined => {
-    return this.#trackingData.clear();
-  };
+  readonly #clearTrackingData = (): Replacement | undefined => this.#trackingData.clear();
 
   // The LinkEditing registers the command, which we want to hook into.
   static readonly requires = [LinkEditing];

@@ -21,18 +21,15 @@ ${h1(`Differencing: ${topic}`)}
 </p>
 `;
 
-const textReplaced = (hasNext = true): string => {
-  return `\
+const textReplaced = (hasNext = true): string => `\
 ${sectionHeading("Text Replaced")}
 <p>
 Old text has been replaced by new text:
 ${xdiff.del(`Old`)}\
 ${xdiff.add("New", { endOfDifferences: !hasNext })}.\
 </p>`;
-};
 
-const textInlineStyleApplied = (hasNext = true): string => {
-  return `\
+const textInlineStyleApplied = (hasNext = true): string => `\
 ${sectionHeading("Inline-Style Applied to Text")}
 <p>
 Set to bold with class-attribute change:
@@ -49,17 +46,15 @@ Setting such text to bold results in the following difference augmentation:
 </p>
 <p>
 Lorem <strong>${xdiff.change(`ipsum `, {
-    changes: `<b>Strong</b> style added.`,
-  })}\
+  changes: `<b>Strong</b> style added.`,
+})}\
 ${xdiff.add(` `, {
   endOfDifferences: !hasNext,
 })}</strong>\
 dolor\
 </p>`;
-};
 
-const textClassAttributeValueChanged = (hasNext = true) => {
-  return `\
+const textClassAttributeValueChanged = (hasNext = true) => `\
 ${sectionHeading("Class Attribute Value Changed for Text")}
 <p>
 For bold text changed applied class attribute values:
@@ -70,11 +65,10 @@ ${xdiff.change(`Lorem ipsum`, {
 })}\
 </strong>.
 </p>`;
-};
 
-const textLinkContentReferenceChanged = (hasNext = true) => {
+const textLinkContentReferenceChanged = (hasNext = true) =>
   // noinspection HtmlUnknownAttribute
-  return `\
+  `\
 ${sectionHeading("Link Content Reference Changed")}
 <p>
 The content reference of the following link has been changed:
@@ -86,10 +80,7 @@ ${xdiff.change(`Link`, {
 </a>.
 </p>
 `;
-};
-
-const textNewlineAdded = (hasNext = true) => {
-  return `\
+const textNewlineAdded = (hasNext = true) => `\
 ${sectionHeading("Newline Added")}
 <p>
 Text before added newline\
@@ -98,11 +89,10 @@ ${xdiff.add("", { endOfDifferences: !hasNext })}\
 <p>
 Text that continued previous line prior to newline added.
 </p>`;
-};
 
-const textLinkTargetAttributeChanged = (hasNext = true) => {
+const textLinkTargetAttributeChanged = (hasNext = true) =>
   // noinspection HtmlUnknownAttribute
-  return `\
+  `\
 ${sectionHeading("Link Target Changed")}
 <p>
 The target of the following link has been changed:
@@ -113,41 +103,32 @@ ${xdiff.change(`Link`, {
 })}\
 </a>.
 </p>`;
-};
-
 const redImage = "content/900#properties.data";
 const greenImage = "content/902#properties.data";
 const blueImage = "content/904#properties.data";
 
-const addImage = (hasNext = true) => {
-  return `\
+const addImage = (hasNext = true) => `\
 ${sectionHeading("Image Added")}
 <p>
 ${xdiff.simpleImg(blueImage, { type: "added" })}\
 ${xdiff.add("", { endOfDifferences: !hasNext })}\
 </p>`;
-};
 
-const removeImage = (hasNext = true) => {
-  return `\
+const removeImage = (hasNext = true) => `\
 ${sectionHeading("Image Removed")}
 <p>
 ${xdiff.simpleImg(blueImage, { type: "removed" })}\
 ${xdiff.del("", { endOfDifferences: !hasNext })}\
 </p>`;
-};
 
-const replaceImage = (hasNext = true) => {
-  return `\
+const replaceImage = (hasNext = true) => `\
 ${sectionHeading("Image Exchanged")}
 <p>
 ${xdiff.simpleImg(blueImage, { type: "removed" })}\
 ${xdiff.simpleImg(greenImage, { type: "added", endOfDifferences: !hasNext })}\
 </p>`;
-};
 
-const changeImageAlignment = (hasNext = true) => {
-  return `\
+const changeImageAlignment = (hasNext = true) => `\
 ${sectionHeading("Image Alignment Changed")}
 <p>
 ${xdiff.simpleImg(redImage, {
@@ -157,7 +138,6 @@ ${xdiff.simpleImg(redImage, {
   endOfDifferences: !hasNext,
 })}\
 </p>`;
-};
 
 // noinspection JSUnusedGlobalSymbols: Used in Example App
 export const differencingData: ExampleData = {

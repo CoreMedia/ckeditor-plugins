@@ -50,14 +50,8 @@ export const EOD: Pick<XDiffSpanConfig, "endOfDifferences"> = {
 /**
  * Utility function to escape HTML within changes string.
  */
-const htmlEscape = (str: string): string => {
-  return str
-    .replace(/&/g, `&amp;`)
-    .replace(/'/g, `&#39;`)
-    .replace(/"/g, `&quot;`)
-    .replace(/>/g, `&gt;`)
-    .replace(/</g, `&lt;`);
-};
+const htmlEscape = (str: string): string =>
+  str.replace(/&/g, `&amp;`).replace(/'/g, `&#39;`).replace(/"/g, `&quot;`).replace(/>/g, `&gt;`).replace(/</g, `&lt;`);
 
 /**
  * Provides support for creating differencing data, as they are typically

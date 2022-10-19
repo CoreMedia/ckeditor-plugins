@@ -9,9 +9,7 @@ export default class LinkActionsViewWrapper extends JSWrapper<LinkActionsView> {
   }
 
   static fromView(view: ViewWrapper): LinkActionsViewWrapper {
-    const instance = view.evaluateHandle((view) => {
-      return view as LinkActionsView;
-    });
+    const instance = view.evaluateHandle((view) => view as LinkActionsView);
     return new LinkActionsViewWrapper(instance);
   }
 }

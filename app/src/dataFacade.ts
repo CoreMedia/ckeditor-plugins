@@ -52,15 +52,13 @@ export const saveData = async (editor: ClassicEditor, source: string) => {
   //@ts-expect-error problem with symbols
   const lastSetData = window[LastSetData];
 
-  const logInfo = (isUpdate: boolean) => {
-    return {
-      isUpdate,
-      currentVersion,
-      lastSetVersion,
-      data,
-      lastSetData,
-    };
-  };
+  const logInfo = (isUpdate: boolean) => ({
+    isUpdate,
+    currentVersion,
+    lastSetVersion,
+    data,
+    lastSetData,
+  });
 
   let previewData: string;
 

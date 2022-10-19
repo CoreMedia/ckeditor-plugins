@@ -8,9 +8,8 @@ import { ConsoleMessage } from "playwright-core";
  *
  * @param messages - messages to transform to a string (separated by newlines)
  */
-const messagesToString = (messages: ConsoleMessage[]): string => {
-  return messages.map((m) => `${m.type()}: ${m.text()} (${JSON.stringify(m.location())})`).join("\n");
-};
+const messagesToString = (messages: ConsoleMessage[]): string =>
+  messages.map((m) => `${m.type()}: ${m.text()} (${JSON.stringify(m.location())})`).join("\n");
 
 /**
  * JEST Extension: Add matchers for `ApplicationConsole`.

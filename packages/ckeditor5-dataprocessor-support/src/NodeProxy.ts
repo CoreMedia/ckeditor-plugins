@@ -169,9 +169,7 @@ class NodeProxy<N extends Node = Node> {
     if (typeof condition === "function") {
       predicate = condition;
     } else {
-      predicate = (child) => {
-        return child.nodeName.toLowerCase() === condition.toLowerCase();
-      };
+      predicate = (child) => child.nodeName.toLowerCase() === condition.toLowerCase();
     }
     return NodeProxy.proxy(Array.from(this.delegate.childNodes).find(predicate, false));
   }

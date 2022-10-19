@@ -51,8 +51,9 @@ export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) 
  * attribute. To fully prevent the upcast we have to consume the attribute and
  * remove the `src`  from the view node.
  */
-export const preventUpcastImageSrc = () => {
-  return (dispatcher: UpcastDispatcher): void => {
+export const preventUpcastImageSrc =
+  () =>
+  (dispatcher: UpcastDispatcher): void => {
     dispatcher.on(
       `element:img`,
       (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
@@ -67,7 +68,6 @@ export const preventUpcastImageSrc = () => {
       { priority: "highest" }
     );
   };
-};
 
 /**
  * Conversion for `modelElementName:xlink-href` to `img:src`.
@@ -75,17 +75,14 @@ export const preventUpcastImageSrc = () => {
  * @param editor - the editor instance
  * @param modelElementName - the element name to convert
  */
-export const editingDowncastXlinkHref = (
-  editor: Editor,
-  modelElementName: string
-): DowncastConversionHelperFunction => {
-  return (dispatcher: DowncastDispatcher) => {
+export const editingDowncastXlinkHref =
+  (editor: Editor, modelElementName: string): DowncastConversionHelperFunction =>
+  (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data): void => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       onXlinkHrefEditingDowncast(editor, eventInfo, data);
     });
   };
-};
 
 const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: DowncastEventData): void => {
   const spinnerPreviewAttributes = createSpinnerImagePreviewAttributes(editor);
@@ -176,9 +173,7 @@ const toUriPath = (xlinkHref: string): string => {
   return requireContentUriPath(contentUriPart);
 };
 
-const toProperty = (xlinkHref: string): string => {
-  return xlinkHref.split("#")[1];
-};
+const toProperty = (xlinkHref: string): string => xlinkHref.split("#")[1];
 
 const findViewChild = (editor: Editor, viewElement: ViewElement, viewElementName: string): ViewElement | null => {
   const rangeInElement = editor.editing.view.createRangeIn(viewElement);

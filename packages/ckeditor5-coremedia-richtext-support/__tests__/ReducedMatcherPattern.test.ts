@@ -62,9 +62,8 @@ const inflate = (abbrev: AbbreviatedPattern | undefined): ReducedMatcherPattern 
  *
  * @param pattern - pattern to validate
  */
-const isReducedMatcherPattern = (pattern: ReducedMatcherPattern | undefined): pattern is ReducedMatcherPattern => {
-  return !!pattern;
-};
+const isReducedMatcherPattern = (pattern: ReducedMatcherPattern | undefined): pattern is ReducedMatcherPattern =>
+  !!pattern;
 
 describe("ReducedMatcherPattern", () => {
   describe("mergePatterns", () => {
