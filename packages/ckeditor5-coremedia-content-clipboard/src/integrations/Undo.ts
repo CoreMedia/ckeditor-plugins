@@ -67,6 +67,7 @@ export class UndoSupport extends Plugin {
 
 /**
  * Convenience handler to invoke `disableUndo` on plugin.
+ *
  * @param plugin - plugin to invoke method on
  */
 export const disableUndo = (plugin: UndoSupport): void => {
@@ -75,6 +76,7 @@ export const disableUndo = (plugin: UndoSupport): void => {
 
 /**
  * Convenience handler to invoke `disableUndo` on plugin.
+ *
  * @param plugin - plugin to invoke method on
  */
 export const enableUndo = (plugin: UndoSupport): void => {

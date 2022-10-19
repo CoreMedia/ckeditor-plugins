@@ -24,6 +24,7 @@ const truncate = (str: string | null, maxLength: number): string | null => {
 
 /**
  * Escapes the given string for display in HTML.
+ *
  * @param str - string to escape
  * @returns escaped string
  */

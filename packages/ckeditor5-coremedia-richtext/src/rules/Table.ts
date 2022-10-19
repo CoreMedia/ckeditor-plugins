@@ -251,6 +251,7 @@ class TableWrapper extends ElementWrapper {
 
   /**
    * Removes the given child element.
+   *
    * @param oldChild - child element to remove
    * @returns removed child
    */

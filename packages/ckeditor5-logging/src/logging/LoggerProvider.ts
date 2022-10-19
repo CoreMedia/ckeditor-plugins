@@ -119,6 +119,7 @@ export default class LoggerProvider {
 
   /**
    * Get the given hash parameter value from the given url
+   *
    * @param key - the hash parameter key to read; `undefined` will always
    * return `false`
    * @returns false iff. hash parameter is not set; true iff. the hash parameter is given without

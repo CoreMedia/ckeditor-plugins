@@ -9,6 +9,7 @@ import { EditorWrapper } from "./EditorWrapper";
 export class CommandCollectionWrapper extends JSWrapper<CommandCollection> {
   /**
    * Get a wrapper for the given command name.
+   *
    * @param commandName - name of the command to get
    */
   get(commandName: string): CommandWrapper {
@@ -17,6 +18,7 @@ export class CommandCollectionWrapper extends JSWrapper<CommandCollection> {
 
   /**
    * Provide access to CommandCollection via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromEditor(wrapper: EditorWrapper): CommandCollectionWrapper {

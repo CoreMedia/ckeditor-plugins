@@ -17,6 +17,7 @@ export const isEditorWithUI = <T extends Editor>(value: T): value is T & EditorW
 
 /**
  * Valides, that the given editor instance provides is an EditorWithUI.
+ *
  * @param editor - editor instance to validate
  * @throws Error if the editor instance does not provide a UI
  */

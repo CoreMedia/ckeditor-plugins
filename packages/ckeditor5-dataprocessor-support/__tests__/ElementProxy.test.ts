@@ -121,6 +121,7 @@ describe("ElementProxy.classList", () => {
    * Sets the class attribute value for both, DOM reference as
    * proxied DOM element. If `null`, the class attribute is removed
    * instead.
+   *
    * @param domClass - class to set; `null`to remove class attribute
    */
   const setClass = (domClass: string | null): void => {

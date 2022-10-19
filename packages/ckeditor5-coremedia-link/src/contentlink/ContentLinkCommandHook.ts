@@ -58,6 +58,7 @@ class TrackingData {
 
   /**
    * Signals, if a given diff item matches a previously recorded replacement.
+   *
    * @param diffItem - diff item to compare
    */
   matches(diffItem: DiffItemInsert): boolean {
@@ -85,6 +86,7 @@ class TrackingData {
 
 /**
  * Gets shallow items from a given range.
+ *
  * @param range - range to get included items for
  */
 const getItems = (range: Range): Item[] => {
@@ -249,6 +251,7 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Just cast to `DiffItemInsert`, expecting that it has been validated before,
    * that the cast is valid.
+   *
    * @param value - value to cast
    */
   static #asDiffItemInsert(value: DiffItem): DiffItemInsert {

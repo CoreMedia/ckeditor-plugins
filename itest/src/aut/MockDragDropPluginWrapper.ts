@@ -23,6 +23,7 @@ export class MockDragDropPluginWrapper extends JSWrapper<MockDragDropPlugin> {
 
   /**
    * Provides access to EditorUI via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {

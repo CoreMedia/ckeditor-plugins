@@ -8,6 +8,7 @@ import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 export class CommandWrapper extends JSWrapper<Command> {
   /**
    * Execute the given command with the provided arguments.
+   *
    * @param args - arguments to pass to command
    */
   async execute(...args: unknown[]): Promise<unknown> {
@@ -16,6 +17,7 @@ export class CommandWrapper extends JSWrapper<Command> {
 
   /**
    * Provide access to CommandCollection via CommandCollection.
+   *
    * @param wrapper - CommandCollection wrapper
    * @param commandName - name of the command
    */

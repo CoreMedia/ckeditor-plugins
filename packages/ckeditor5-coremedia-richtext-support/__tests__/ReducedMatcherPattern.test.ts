@@ -27,6 +27,7 @@ interface AbbreviatedPattern {
 
 /**
  * Inflates the abbreviated pattern to a full `ReducedMatcherPattern`.
+ *
  * @param abbrev - abbreviation to inflate
  */
 const inflate = (abbrev: AbbreviatedPattern | undefined): ReducedMatcherPattern | undefined => {
@@ -58,6 +59,7 @@ const inflate = (abbrev: AbbreviatedPattern | undefined): ReducedMatcherPattern 
 
 /**
  * Type Guard to remove undefined entries (and have correct type afterwards).
+ *
  * @param pattern - pattern to validate
  */
 const isReducedMatcherPattern = (pattern: ReducedMatcherPattern | undefined): pattern is ReducedMatcherPattern => {

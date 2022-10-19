@@ -82,6 +82,7 @@ const isContentBlobIdParseResult = (result: any): result is ContentBlobIdParseRe
 
 /**
  * Parses the given ID to a content ID.
+ *
  * @example
  * ```
  * const result = parseContentId("coremedia:///cap/content/2");
@@ -104,6 +105,7 @@ const parseContentId = (contentId: string): ContentIdResult | undefined => {
 
 /**
  * Parses the given ID to a content blob ID.
+ *
  * @example
  * ```
  * const result = parseContentBlobId("coremedia:///cap/blob/content/2#prop");

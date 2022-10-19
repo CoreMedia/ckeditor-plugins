@@ -160,6 +160,7 @@ export const ddTest = <T extends NamedTestCase>(
 /**
  * Workaround for Jest issue with less nice handling of array-driven tests
  * compared to table syntax tests.
+ *
  * @param data - test data to transform into [name, data] pattern.
  * @param generator - strategy to generate a name for the test case
  * @see https://github.com/facebook/jest/issues/6413

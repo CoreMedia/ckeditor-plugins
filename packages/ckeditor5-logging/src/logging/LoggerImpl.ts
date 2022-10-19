@@ -3,6 +3,7 @@ import Logger from "./Logger";
 
 /**
  * Implementation of Logger.
+ *
  * @internal
  */
 export default class LoggerImpl implements Logger {

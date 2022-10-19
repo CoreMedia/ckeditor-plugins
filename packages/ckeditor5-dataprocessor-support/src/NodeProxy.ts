@@ -19,6 +19,7 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Constructor.
+   *
    * @param delegate - delegate to wrap
    * @param mutable - signals, if this representation is mutable or not
    */
@@ -156,6 +157,7 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Get first (matching) child node of the given element.
+   *
    * @param condition - string: the node name to match (ignoring case), predicate:
    * the predicate to apply.
    */
@@ -429,6 +431,7 @@ interface PersistResponse {
  * <pre>
  * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
  * </pre>
+ *
  * @param child - the child node to validate
  * @param index - child node index
  * @param array - list of all sibling child nodes (including the child itself)

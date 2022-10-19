@@ -2,6 +2,7 @@
 
 /**
  * Flattens a nested array of a given type.
+ *
  * @example
  * ```
  * flatten([["a"], ["b"]]) → ["a", "b"]

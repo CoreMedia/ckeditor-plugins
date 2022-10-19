@@ -41,6 +41,7 @@ export enum Strictness {
 
 /**
  * Validator type for attribute values.
+ *
  * @param value - the attribute value to validate
  * @param strictness - mode for checking validity
  * @returns `true` if attribute value is considered valid; `false` if not

@@ -40,6 +40,7 @@ declare interface ContentEventData<T> extends ClipboardEventData {
 
 /**
  * Type-Guard for ContentEventData.
+ *
  * @param value - value to validate
  */
 const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> => {

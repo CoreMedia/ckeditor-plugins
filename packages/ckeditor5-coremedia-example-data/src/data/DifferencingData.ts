@@ -6,6 +6,7 @@ const xdiff = new Differencing();
 
 /**
  * Adds some introduction text to the set of differencing examples.
+ *
  * @param topic - topic the examples are about
  */
 const differencingIntroduction = (topic: string): string => `

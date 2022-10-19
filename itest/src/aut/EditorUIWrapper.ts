@@ -57,6 +57,7 @@ export class EditorUIWrapper extends JSWrapper<ClassicEditorUI> implements Locat
 
   /**
    * Provides access to EditorUI via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {

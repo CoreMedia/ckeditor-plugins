@@ -52,7 +52,6 @@ module.exports = {
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
         // Broken Window/JSDoc
-        "jsdoc/newline-after-description": "off",
         "jsdoc/no-multi-asterisks": "off",
         "jsdoc/tag-lines": "off",
         "jsdoc/require-jsdoc": "off",
@@ -153,6 +152,7 @@ module.exports = {
             definedTags: ["category", "packageDocumentation", "typeParam"],
           },
         ],
+        "jsdoc/newline-after-description": "error",
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": "off",
         /*

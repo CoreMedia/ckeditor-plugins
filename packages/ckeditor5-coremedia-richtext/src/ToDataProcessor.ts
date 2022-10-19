@@ -9,6 +9,7 @@ export default class ToDataProcessor {
 
   /**
    * Filter to use for `toData` processing.
+   *
    * @param toDataFilter - filter
    */
   constructor(toDataFilter: HtmlFilter) {

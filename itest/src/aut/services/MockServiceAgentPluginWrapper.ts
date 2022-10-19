@@ -10,6 +10,7 @@ export class MockServiceAgentPluginWrapper extends JSWrapper<MockServiceAgentPlu
 
   /**
    * Provides access to EditorUI via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {

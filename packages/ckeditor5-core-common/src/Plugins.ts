@@ -57,6 +57,7 @@ export const optionalPluginNotFound: PluginNotFoundErrorHandler = (e: PluginNotF
 /**
  * Provides a `catch` handler, if a recommended plugin is not found.
  * It will trigger a warning log statement and a debug log statement with more details.
+ *
  * @param effectIfMissingMessage - optional effect, what will happen if the plugin is missing
  * @param logger - optional logger to use instead of default
  */

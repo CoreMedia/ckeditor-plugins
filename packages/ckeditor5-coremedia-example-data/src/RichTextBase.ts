@@ -76,6 +76,7 @@ export type Content = string | string[];
 
 /**
  * Validates, that content must not be empty.
+ *
  * @param content - content to validate
  */
 export const nonEmptyContent = (content: Content): Content => {

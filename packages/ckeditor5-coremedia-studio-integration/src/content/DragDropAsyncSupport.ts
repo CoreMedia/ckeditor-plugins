@@ -122,6 +122,7 @@ export default class DragDropAsyncSupport {
    * and positive.
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
+   *
    * @param uriPaths - URI paths to validate
    */
   static containsDisplayableContents(uriPaths: string[]): boolean {

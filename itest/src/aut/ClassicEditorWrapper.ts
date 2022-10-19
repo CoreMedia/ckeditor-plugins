@@ -38,6 +38,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
 
   /**
    * Sets CKEditor data to the given value.
+   *
    * @param value - value to set
    */
   async setData(value: string): Promise<void> {
@@ -47,6 +48,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
   /**
    * Sets the given data and waits for them being processed to _data view_,
    * thus, the result of the `toView` transformation of the data processor.
+   *
    * @param value - value to set
    */
   async setDataAndGetDataView(value: string): Promise<string> {
@@ -108,6 +110,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
 
   /**
    * Provide access to ClassicEditor via Page.
+   *
    * @param page - page to evaluate handle for ClassicEditor
    * @param name - name of the editor instance, stored at `window` as well as
    * expected to be the ID of the element referenced on `ClassicEditor.create`.
