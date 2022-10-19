@@ -38,7 +38,7 @@ function createContentLinkTableHeading() {
 }
 
 function createContentLinkTableRow({ comment, id }: { comment: string; id: number }) {
-  return `<tr><td>${createLink("", "", "content:" + id)}</td><td>${comment || ""}</td></tr>`;
+  return `<tr><td>${createLink("", "", `content:${id}`)}</td><td>${comment || ""}</td></tr>`;
 }
 
 function createContentLinkScenario(title: string, scenarios: { comment: string; id: number }[]) {

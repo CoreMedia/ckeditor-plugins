@@ -52,13 +52,13 @@ class MockWorkAreaService implements WorkAreaService {
           return isReadable;
         });
         if (!mockContent.embeddable) {
-          MockWorkAreaService.#LOGGER.debug("Content is not embeddable and readable is " + allReadable);
+          MockWorkAreaService.#LOGGER.debug(`Content is not embeddable and readable is ${allReadable}`);
           return allReadable;
         }
         const dataIsSet = mockContent.blob.every((blobData: BlobType) => {
           return blobData?.value;
         });
-        MockWorkAreaService.#LOGGER.debug("Content is embeddable and readable is " + allReadable);
+        MockWorkAreaService.#LOGGER.debug(`Content is embeddable and readable is ${allReadable}`);
         return allReadable && dataIsSet;
       });
   }

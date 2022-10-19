@@ -43,7 +43,7 @@ export default class ImageContextualBalloonToolbar {
 
       const buttonView = (itemsView as ItemsView).children.get(buttonIndex) as unknown as ButtonView;
       if (!buttonView) {
-        throw new Error("No button found for button index " + buttonIndex);
+        throw new Error(`No button found for button index ${buttonIndex}.`);
       }
       return buttonView;
     }, buttonIndex);

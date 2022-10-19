@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript
-        "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/unbound-method": "off",
         // Broken Window/TypeScript (Strict Rules)
@@ -248,6 +247,8 @@ module.exports = {
 
         "quotes": "off",
         "@typescript-eslint/quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
+
+        "@typescript-eslint/restrict-plus-operands": "error",
 
         "semi": "off",
         "@typescript-eslint/semi": "error",

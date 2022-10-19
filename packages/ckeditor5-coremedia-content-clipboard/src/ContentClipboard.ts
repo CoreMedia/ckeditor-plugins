@@ -378,7 +378,7 @@ export default class ContentClipboard extends Plugin {
       if (isUriPath(uri)) {
         return true;
       }
-      ContentClipboard.#logger.debug("Found an unsupported uri, will be ignored: " + uri);
+      ContentClipboard.#logger.debug(`Found an unsupported uri, will be ignored: ${uri}`);
       return false;
     });
   }
