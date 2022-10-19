@@ -52,7 +52,6 @@ module.exports = {
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
         // Broken Window/JSDoc
-        "jsdoc/check-param-names": "off",
         "jsdoc/empty-tags": "off",
         "jsdoc/newline-after-description": "off",
         "jsdoc/no-multi-asterisks": "off",
@@ -143,14 +142,15 @@ module.exports = {
          * =====================================================================
          */
         "jsdoc/check-alignment": "error",
-        "jsdoc/require-param-type": "off",
-        "jsdoc/require-returns-type": "off",
+        "jsdoc/check-param-names": "error",
         "jsdoc/check-tag-names": [
           "error",
           {
             definedTags: ["category", "packageDocumentation", "typeParam"],
           },
         ],
+        "jsdoc/require-param-type": "off",
+        "jsdoc/require-returns-type": "off",
         /*
          * =====================================================================
          * ESLint Plugin: No-Null

@@ -87,7 +87,8 @@ export default class LinkTargetModelView extends Plugin {
  * priority).
  *
  * @param modelAttributeValue - target value
- * @param writer - writer from conversion API
+ * @param writer - conversion API
+ * @param writer.writer - writer from conversion API
  */
 function downcastTarget(modelAttributeValue: never, { writer }: DowncastConversionApi): AttributeElement {
   const element = writer.createAttributeElement(

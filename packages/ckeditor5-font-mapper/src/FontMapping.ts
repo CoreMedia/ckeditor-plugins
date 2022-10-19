@@ -46,8 +46,8 @@ export class FontMapping {
    * As we decode the HTML prior to replacement we need to ensure, that the
    * encoded characters are restored.
    *
-   * @param mode - the apply mode (only "replace" is taken into account)
    * @param map - the custom map to alter the existing FontMap
+   * @param mode - the apply mode (only "replace" is taken into account)
    */
   applyMapConfig(map: FontMap, mode: Mode = "append"): void {
     if (mode === "replace") {

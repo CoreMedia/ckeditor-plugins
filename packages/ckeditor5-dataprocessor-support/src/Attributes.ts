@@ -17,7 +17,8 @@ interface AttributeMapper {
  * value will be used for the target name. All attributes in that combined
  * list will be removed.
  *
- * @param node - node to handle attributes for
+ * @param node - Element filter parameters
+ * @param node.node - node to handle attributes for
  * @param name - the original name to rename
  * @param targetName - the new name of the attribute
  * @param aliases - possible alternative original names
