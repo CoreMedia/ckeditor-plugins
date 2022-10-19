@@ -157,7 +157,7 @@ class HtmlFilter {
       }
     }
 
-    return newCurrent || next;
+    return newCurrent ?? next;
   }
 }
 

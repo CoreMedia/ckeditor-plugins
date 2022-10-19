@@ -58,7 +58,7 @@ const mergePatterns = (...sources: ReducedMatcherPattern[]): ReducedMatcherPatte
       result.name = s.name;
     }
     if (s.attributes) {
-      result.attributes = result.attributes || {};
+      result.attributes = result.attributes ?? {};
       for (const key in s.attributes) {
         result.attributes[key] = s.attributes[key];
       }

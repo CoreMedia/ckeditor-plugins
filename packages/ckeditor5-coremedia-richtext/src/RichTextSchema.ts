@@ -628,7 +628,7 @@ export default class RichTextSchema {
       return false;
     }
 
-    const isAllowed = elementSpecification.mayContainText || false;
+    const isAllowed = elementSpecification.mayContainText ?? false;
 
     if (!isAllowed) {
       logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);

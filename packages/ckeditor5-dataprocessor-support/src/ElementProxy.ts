@@ -66,7 +66,7 @@ class ClassList implements DOMTokenList {
    * Returns the current `class` value. Empty string will be returned, if unset.
    */
   get value(): string {
-    return this.#proxy.attributes.class || "";
+    return this.#proxy.attributes.class ?? "";
   }
 
   /**
@@ -388,7 +388,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @inheritDoc NodeProxy.delegate
    */
   get delegate(): Element {
-    return this.#replacement || super.delegate;
+    return this.#replacement ?? super.delegate;
   }
 
   /**
@@ -631,7 +631,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * If the name got changed, will return this changed name instead.
    */
   public get name(): string {
-    return this.#name || super.name;
+    return this.#name ?? super.name;
   }
 
   /**

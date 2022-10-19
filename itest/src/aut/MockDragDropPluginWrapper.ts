@@ -30,7 +30,7 @@ export class MockDragDropPluginWrapper extends JSWrapper<MockDragDropPlugin> {
       wrapper.evaluateHandle((editor, pluginName) => {
         if (!editor.plugins.has(pluginName)) {
           const available = [...editor.plugins]
-            .map(([t, p]) => t.pluginName || `noname:${p.constructor.name}`)
+            .map(([t, p]) => t.pluginName ?? `noname:${p.constructor.name}`)
             .join(", ");
           throw new Error(`Plugin ${pluginName} not available. Available plugins: ${available}`);
         }

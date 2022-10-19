@@ -305,7 +305,7 @@ class NodeProxy<N extends Node = Node> {
   protected continueFrom(node: Node | null | undefined): PersistResponse {
     return {
       ...RESPONSE_CONTINUE,
-      continueWith: node || undefined,
+      continueWith: node ?? undefined,
     };
   }
 
@@ -317,7 +317,7 @@ class NodeProxy<N extends Node = Node> {
   protected restartFrom(node: Node | null | undefined): PersistResponse {
     return {
       ...RESPONSE_ABORT,
-      continueWith: node || undefined,
+      continueWith: node ?? undefined,
     };
   }
 

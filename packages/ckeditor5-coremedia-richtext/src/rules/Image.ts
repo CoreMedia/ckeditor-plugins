@@ -28,7 +28,7 @@ export const handleImage: ToDataAndViewElementConfiguration = {
     const { node } = params;
     delete node.attributes.src;
     // Just ensure, that we have the required alt Attribute if it is unset.
-    node.attributes.alt = node.attributes.alt || "";
+    node.attributes.alt = node.attributes.alt ?? "";
     xLinkActuateMapper.toData(params);
     xLinkHrefMapper.toData(params);
     xLinkRoleMapper.toData(params);

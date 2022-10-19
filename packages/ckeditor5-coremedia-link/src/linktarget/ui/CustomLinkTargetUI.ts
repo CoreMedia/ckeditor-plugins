@@ -259,7 +259,7 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns true if the {@link CustomLinkTargetUI.#form} is in the {@link CustomLinkTargetUI.#balloon}
    */
   get #isInBalloon(): boolean {
-    return this.#balloon?.hasView(this.#form) || false;
+    return this.#balloon?.hasView(this.#form) ?? false;
   }
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have

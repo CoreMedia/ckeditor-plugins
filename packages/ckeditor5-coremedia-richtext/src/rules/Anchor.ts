@@ -68,7 +68,7 @@ const xLinkHrefToHref = ({ attributes }: ElementProxy): void => {
 };
 
 const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
-  const target = attributes.target || "";
+  const target = attributes.target ?? "";
   // Just ensure, that even no empty target is written.
   delete attributes.target;
 

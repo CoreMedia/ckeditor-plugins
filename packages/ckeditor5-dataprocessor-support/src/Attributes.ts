@@ -36,7 +36,7 @@ const renameAttribute = (
     return;
   }
   const firstExistingName = allNames[firstExistingIndex];
-  const value: string = attributes[firstExistingName] || "";
+  const value: string = attributes[firstExistingName] ?? "";
   const ambiguousAttributeNames: string[] = [];
 
   // Remove non-existing attribute names.

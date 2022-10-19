@@ -63,7 +63,7 @@ const {
   objectSizeFull: pageDefaultIcon,
 } = icons;
 
-const editorLanguage = document?.currentScript?.dataset.lang || "en";
+const editorLanguage = document?.currentScript?.dataset.lang ?? "en";
 
 // setup dnd IFrame
 const dndButton = document.querySelector("#dragExamplesButton");

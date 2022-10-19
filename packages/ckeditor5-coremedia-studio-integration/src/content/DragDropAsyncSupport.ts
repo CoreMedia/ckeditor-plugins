@@ -208,7 +208,7 @@ export default class DragDropAsyncSupport {
 
     // || false -> required for possible undefined response from get() which
     // cannot happen here.
-    const cacheValue = cache.get(uriPath) || false;
+    const cacheValue = cache.get(uriPath) ?? false;
     const actualValue = cacheValue === IN_PROGRESS ? false : cacheValue;
 
     if (evictImmediately) {

@@ -120,7 +120,7 @@ class MutablePropertyObservationHandler<T> {
 
     // Will first respect initialDelay, while using changeDelay later.
     if (initialDelayMs < 1) {
-      timerId = handler() || undefined;
+      timerId = handler() ?? undefined;
     } else {
       timerId = setTimeout(handler, initialDelayMs);
     }

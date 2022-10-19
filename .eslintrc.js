@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
         /*
          * =====================================================================
@@ -260,6 +259,7 @@ module.exports = {
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-includes": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
+        "@typescript-eslint/prefer-nullish-coalescing": "error",
         "@typescript-eslint/prefer-ts-expect-error": "error",
 
         "quotes": "off",

@@ -34,7 +34,7 @@ class LinkTargetCommand extends Command {
     const document = model.document;
     const schema = model.schema;
     const selection: DocumentSelection = document.selection;
-    const selectedElement = selection.getSelectedElement() || first(selection.getSelectedBlocks());
+    const selectedElement = selection.getSelectedElement() ?? first(selection.getSelectedBlocks());
     const attributesAllowedFor = LinkTargetCommand.attributesAllowedFor;
     const checkAttributes = LinkTargetCommand.#checkAttributes;
     const checkAttributeInSelection = LinkTargetCommand.#checkAttributeInSelection;

@@ -64,7 +64,7 @@ class ContentLinkActionsViewExtension extends Plugin {
       // re-trigger a set of utlInputView here
       if (value !== null) {
         formView.urlInputView.fieldView.set({
-          value: value || "",
+          value: value ?? "",
         });
       }
 

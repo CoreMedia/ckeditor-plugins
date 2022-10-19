@@ -68,7 +68,7 @@ export default class LinkTargetModelView extends Plugin {
       },
       model: {
         key: LINK_TARGET_MODEL,
-        value: (viewElement) => viewElement.getAttribute(LINK_TARGET_VIEW) || null,
+        value: (viewElement) => viewElement.getAttribute(LINK_TARGET_VIEW) ?? null,
       },
       converterPriority: "low",
     });

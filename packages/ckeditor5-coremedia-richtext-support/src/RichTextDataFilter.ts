@@ -86,7 +86,7 @@ class RichTextDataFilter extends Plugin {
     // Doing this as extra step, allows using previously introduced aliases
     // (see above) as reference. Thus, you may also define an alias for
     // `<h1>` now.
-    this.loadAliases(config.aliases || []);
+    this.loadAliases(config.aliases ?? []);
 
     if (logger.isDebugEnabled()) {
       logger.debug("Declared elements and attributes to GHS.", { config: { ...this.#config } });

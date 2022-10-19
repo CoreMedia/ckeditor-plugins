@@ -117,9 +117,9 @@ const parseFilterRuleSetConfigurations = (
   customFilterRuleSetConfiguration?: FilterRuleSetConfiguration,
   defaultFilterRuleSetConfiguration?: FilterRuleSetConfiguration
 ): ParsedToDataAndView => {
-  const preParsedDefault = new FilterRuleSetConfigurationParser(defaultFilterRuleSetConfiguration || {}).parse();
+  const preParsedDefault = new FilterRuleSetConfigurationParser(defaultFilterRuleSetConfiguration ?? {}).parse();
   const preParsedToDataAndView: PreParsedToDataAndView = new FilterRuleSetConfigurationParser(
-    customFilterRuleSetConfiguration || {},
+    customFilterRuleSetConfiguration ?? {},
     preParsedDefault
   ).parse();
   const preParsedToView: PreParsedToView = preParsedToDataAndView.toView;
@@ -180,8 +180,8 @@ class FilterRuleSetConfigurationParser {
 
   constructor(configuration: FilterRuleSetConfiguration, preParsedDefault?: PreParsedToDataAndView) {
     this.#configuration = configuration;
-    this.#parsedToData = preParsedDefault?.toData || {};
-    this.#preParsedToView = preParsedDefault?.toView || {};
+    this.#parsedToData = preParsedDefault?.toData ?? {};
+    this.#preParsedToView = preParsedDefault?.toView ?? {};
   }
 
   parse(): PreParsedToDataAndView {

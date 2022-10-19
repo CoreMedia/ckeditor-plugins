@@ -192,7 +192,7 @@ class RichTextDataProcessor implements DataProcessor {
     return (
       Array.from(domFragment.childNodes)
         .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
-        .reduce((result, s) => (result || "") + (s || "")) || ""
+        .reduce((result, s) => (result ?? "") + (s ?? "")) ?? ""
     );
   }
 

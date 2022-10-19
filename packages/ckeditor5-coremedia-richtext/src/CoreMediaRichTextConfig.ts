@@ -111,7 +111,7 @@ const defaultRules: FilterRuleSetConfiguration = {
     "br": (params) => {
       // Remove obsolete BR, if only element on block level params.el.
       const parent = params.node.parentElement;
-      const parentName = parent?.name || "";
+      const parentName = parent?.name ?? "";
       let remove = false;
       if (!parent || parentName === "div") {
         // somehow, a top-level <br> has been introduced, which is not valid:
@@ -166,7 +166,7 @@ export const getConfig = (config?: CKEditorConfig): ParsedConfig => {
 
   const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
 
-  const schema = new RichTextSchema(customConfig.strictness || Strictness.STRICT);
+  const schema = new RichTextSchema(customConfig.strictness ?? Strictness.STRICT);
 
   return {
     toData,

@@ -24,7 +24,7 @@ export default class ToDataProcessor {
    * @returns the transformed CoreMedia RichText XML
    */
   toData(fromView: Node | DocumentFragment, targetDocument?: Document): Document {
-    const document: Document = targetDocument || ToDataProcessor.createCoreMediaRichTextDocument();
+    const document: Document = targetDocument ?? ToDataProcessor.createCoreMediaRichTextDocument();
     document.documentElement.appendChild(fromView);
     this.#toDataFilter.applyTo(document.documentElement);
     return document;

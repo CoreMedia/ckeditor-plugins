@@ -89,7 +89,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
    * Gets the text content, which may be overridden.
    */
   public get textContent(): string {
-    return this.#text || this.delegate.textContent || "";
+    return this.#text ?? this.delegate.textContent ?? "";
   }
 
   /**
