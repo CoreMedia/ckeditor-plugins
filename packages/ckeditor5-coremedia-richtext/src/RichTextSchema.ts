@@ -87,9 +87,7 @@ interface AttributeSpecification {
 /**
  * Map of attribute-names (lower-case) to their corresponding specification.
  */
-interface Attributes {
-  [attributeName: string]: AttributeSpecification;
-}
+type Attributes = Record<string, AttributeSpecification>;
 
 /**
  * Similar to a Relax-NG ModelGroup this specifies possible contents of
@@ -141,9 +139,7 @@ interface ElementSpecification extends ModelGroup {
 /**
  * Specifies all supported elements.
  */
-interface Elements {
-  [elementName: string]: ElementSpecification;
-}
+type Elements = Record<string, ElementSpecification>;
 
 /**
  * In previous implementations attribute values were not validated, and thus

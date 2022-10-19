@@ -54,9 +54,7 @@ type XlinkBehaviorDefinition = XLinkBehavior & {
 /**
  * Represents an empty target attribute.
  */
-interface ExpectedTargetToXlinkShowAndRole {
-  [target: string]: XlinkBehaviorDefinition;
-}
+type ExpectedTargetToXlinkShowAndRole = Record<string, XlinkBehaviorDefinition>;
 /**
  * The mapping we agreed upon for `xlink:show` to some target value.
  * `other` is skipped here, as it is used for special meaning, which is,

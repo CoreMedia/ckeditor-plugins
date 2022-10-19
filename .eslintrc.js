@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/consistent-indexed-object-style": "off",
         "@typescript-eslint/no-base-to-string": "off",
         "@typescript-eslint/no-dynamic-delete": "off",
         "@typescript-eslint/no-extraneous-class": "off",
@@ -174,6 +173,7 @@ module.exports = {
         "@typescript-eslint/brace-style": ["error", "1tbs", { allowSingleLine: true }],
 
         "@typescript-eslint/consistent-generic-constructors": "error",
+        "@typescript-eslint/consistent-indexed-object-style": "error",
         "@typescript-eslint/consistent-type-assertions": ["error", { assertionStyle: "as" }],
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
 

@@ -11,9 +11,7 @@ enum FilterMode {
   toView,
 }
 
-interface ElementFilterRulesByName {
-  [key: string]: ElementFilterRule;
-}
+type ElementFilterRulesByName = Record<string, ElementFilterRule>;
 
 interface ElementFilterRuleSet {
   elements?: ElementFilterRulesByName;

@@ -45,9 +45,7 @@ type ElementsFilterRuleSetConfigurationValueType = ElementFilterRule | ToDataAnd
 /**
  * Type for elements configuration.
  */
-interface ElementsFilterRuleSetConfiguration {
-  [key: string]: ElementsFilterRuleSetConfigurationValueType;
-}
+type ElementsFilterRuleSetConfiguration = Record<string, ElementsFilterRuleSetConfigurationValueType>;
 
 type TextFilterRuleSetConfigurationValueType = TextFilterRule | ToDataAndViewTextConfiguration;
 
@@ -159,9 +157,7 @@ interface PreParsedToView {
   text?: TextFilterRule;
 }
 
-interface PreParsedElementSection {
-  [toViewKey: string]: ElementFilterRulesByName;
-}
+type PreParsedElementSection = Record<string, ElementFilterRulesByName>;
 
 interface PreParsedToDataAndView {
   toData: FilterRuleSet;

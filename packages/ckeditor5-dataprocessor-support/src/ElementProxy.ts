@@ -776,9 +776,7 @@ type AttributeValue = string | null;
 /**
  * The attributes of an element.
  */
-interface AttributeMap {
-  [index: string]: AttributeValue;
-}
+type AttributeMap = Record<string, AttributeValue>;
 
 /**
  * Named parameters to be passed to element filters. For overriding filter rules

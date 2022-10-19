@@ -28,9 +28,7 @@ export type Direction = "ltr" | "rtl";
 /**
  * Represents just any attributes.
  */
-export interface AnyAttributes {
-  [key: string]: unknown;
-}
+export type AnyAttributes = Record<string, unknown>;
 
 /**
  * `coreattrs` attributes according to DTD.

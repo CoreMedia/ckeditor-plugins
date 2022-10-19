@@ -14,7 +14,7 @@ export const COREMEDIA_FONT_MAPPER_CONFIG_KEY = "coremedia:fontMapper";
 export interface FontMapperConfigEntry {
   font: string;
   mode?: Mode;
-  map: { [key: number]: string };
+  map: Record<number, string>;
 }
 
 type FontMapperConfig = FontMapperConfigEntry[];
