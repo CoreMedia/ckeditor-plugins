@@ -16,7 +16,7 @@ export default class ReplaceAllPasteAction {
    */
   static async execute(): Promise<void> {
     const userAgent = await WindowBrowserAccessor.getUserAgent();
-    if (userAgent.indexOf("Mac") === -1) {
+    if (!userAgent.includes("Mac")) {
       await page.keyboard.down("Control");
       await page.keyboard.press("a");
       await page.keyboard.press("v");

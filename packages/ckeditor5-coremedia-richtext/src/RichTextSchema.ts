@@ -216,7 +216,7 @@ const ATTRIBUTE_GROUP_I18N: Attributes = {
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
   "dir": {
-    valueValidator: (v) => ["ltr", "rtl"].indexOf(v) >= 0,
+    valueValidator: (v) => ["ltr", "rtl"].includes(v),
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
@@ -225,14 +225,14 @@ const ATTRIBUTE_GROUP_ATTRS: Attributes = { ...ATTRIBUTE_GROUP_COREATTRS, ...ATT
 
 const ATTRIBUTE_GROUP_CELLHALIGN: Attributes = {
   align: {
-    valueValidator: (v) => ["left", "center", "right"].indexOf(v) >= 0,
+    valueValidator: (v) => ["left", "center", "right"].includes(v),
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
 
 const ATTRIBUTE_GROUP_CELLVALIGN: Attributes = {
   valign: {
-    valueValidator: (v) => ["top", "middle", "bottom", "baseline"].indexOf(v) >= 0,
+    valueValidator: (v) => ["top", "middle", "bottom", "baseline"].includes(v),
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
@@ -425,11 +425,11 @@ const ELEMENTS: Elements = {
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:show": {
-        valueValidator: (s) => ["new", "replace", "embed", "other", "none"].indexOf(s) >= 0,
+        valueValidator: (s) => ["new", "replace", "embed", "other", "none"].includes(s),
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:actuate": {
-        valueValidator: (s) => ["onRequest", "onLoad"].indexOf(s) >= 0,
+        valueValidator: (s) => ["onRequest", "onLoad"].includes(s),
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
@@ -593,7 +593,7 @@ export default class RichTextSchema {
         if (elements.hasOwnProperty(nested)) {
           const nestedElementSpecification = elements[nested];
           const newParents: string[] = nestedElementSpecification.parentElementNames ?? [];
-          if (newParents.indexOf(elementName) < 0) {
+          if (!newParents.includes(elementName)) {
             newParents.push(elementName);
           }
           nestedElementSpecification.parentElementNames = newParents;
@@ -674,7 +674,7 @@ export default class RichTextSchema {
       return false;
     }
 
-    const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(parentName as string) >= 0;
+    const isAllowedAtParent = elementSpecification.parentElementNames.includes(parentName as string);
     if (!isAllowedAtParent) {
       logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
@@ -739,7 +739,7 @@ export default class RichTextSchema {
   #deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
     const notAllowedAttributes: string[] = actualAttributes.filter(
-      (a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0
+      (a) => !specifiedAttributes.includes(a.toLowerCase())
     );
 
     if (notAllowedAttributes.length > 0) {
@@ -795,7 +795,7 @@ export default class RichTextSchema {
   ) {
     const validActualAttributes = Object.keys(element.attributes);
     const possiblyMissingAttributes = specifiedAttributes.filter(
-      (a) => validActualAttributes.indexOf(a.toLowerCase()) < 0
+      (a) => !validActualAttributes.includes(a.toLowerCase())
     );
 
     possiblyMissingAttributes.forEach((attributeName) => {

@@ -759,7 +759,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
         const elementAttrs: OwnPropertyKey[] = self.delegate.getAttributeNames();
         // Join distinct keys, skip forcibly deleted.
         return elementAttrs
-          .concat(targetKeys.filter((k: OwnPropertyKey) => elementAttrs.indexOf(k) < 0))
+          .concat(targetKeys.filter((k: OwnPropertyKey) => !elementAttrs.includes(k)))
           .filter((k: OwnPropertyKey) => !Reflect.has(target, k) || Reflect.get(target, k) !== undefined);
       },
     });

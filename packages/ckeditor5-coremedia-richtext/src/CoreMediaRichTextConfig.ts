@@ -116,7 +116,7 @@ const defaultRules: FilterRuleSetConfiguration = {
       if (!parent || parentName === "div") {
         // somehow, a top-level <br> has been introduced, which is not valid:
         remove = true;
-      } else if (["td", "p"].indexOf(parentName) >= 0) {
+      } else if (["td", "p"].includes(parentName)) {
         // Only checking td, p here, as it was for CKEditor 4. You may argue, that other
         // block level elements should be respected too, though. Change it, if you think so.
         remove = params.node.lastNode;
