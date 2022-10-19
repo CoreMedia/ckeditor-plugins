@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript
-        "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/unbound-method": "off",
         // Broken Window/TypeScript (Strict Rules)
         "@typescript-eslint/consistent-generic-constructors": "off",
@@ -77,6 +76,15 @@ module.exports = {
         "@typescript-eslint/prefer-includes": "off",
         "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
+        /*
+         * =====================================================================
+         * Vetoed Rules
+         * =====================================================================
+         */
+        // Possibly useful, but requires a lot of effort to get straight.
+        // If we see, this is an issue with `[object Object]` and similar in
+        // strings, we may want to address that explicitly.
+        "@typescript-eslint/restrict-template-expressions": "off",
         /*
          * =====================================================================
          * ESLint
