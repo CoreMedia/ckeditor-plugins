@@ -116,10 +116,6 @@ class ElementWrapper {
  * a similar API.
  */
 class TableSectionWrapper extends ElementWrapper {
-  constructor(delegate: Element) {
-    super(delegate);
-  }
-
   get rows(): Element[] {
     return this.getDirectElementsByTagName("tr");
   }
@@ -131,10 +127,6 @@ class TableSectionWrapper extends ElementWrapper {
  * a similar API.
  */
 class TableWrapper extends ElementWrapper {
-  constructor(delegate: Element) {
-    super(delegate);
-  }
-
   getDirectElementsInSectionsByTagName(tagName: string): Element[] {
     const acceptedParents = this.sections;
     return acceptedParents.flatMap((s) =>

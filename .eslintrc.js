@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/no-useless-constructor": "off",
         "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/prefer-includes": "off",
         "@typescript-eslint/prefer-nullish-coalescing": "off",
@@ -254,6 +253,7 @@ module.exports = {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error",
 
+        "@typescript-eslint/no-useless-constructor": "error",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
