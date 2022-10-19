@@ -160,7 +160,7 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      ifPlugin(editor, UndoSupport).then(enableUndo);
+      void ifPlugin(editor, UndoSupport).then(enableUndo);
     }
   }
 

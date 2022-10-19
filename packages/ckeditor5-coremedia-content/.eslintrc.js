@@ -7,10 +7,6 @@ module.exports = {
         tsconfigRootDir: __dirname,
         project: "./src/tsconfig.json",
       },
-      rules: {
-        // Broken window, we may want to address later.
-        "@typescript-eslint/no-floating-promises": "off",
-      },
     },
   ],
 };

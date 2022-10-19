@@ -12,6 +12,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 
+// noinspection JSConstantReassignment
 /**
  * The open in tab command.
  * Uses the ServiceAgent to open a content in a CoreMedia Studio tab.
@@ -61,7 +62,7 @@ export class OpenInTabCommand extends Command {
     // might not update correctly once displayed. You will have to trigger #refresh
     // manually in order to display the correct content state
     // (e.g. of a suddenly unreadable content).
-    serviceAgent.fetchService(createWorkAreaServiceDescriptor()).then((workAreaService): void => {
+    void serviceAgent.fetchService(createWorkAreaServiceDescriptor()).then((workAreaService): void => {
       workAreaService
         .canBeOpenedInTab([uriPath])
         .then((canBeOpened: unknown) => {
@@ -80,8 +81,8 @@ export class OpenInTabCommand extends Command {
     this.#closeBalloonIfExisting();
     serviceAgent
       .fetchService(createWorkAreaServiceDescriptor())
-      .then((workAreaService): void => {
-        workAreaService.openEntitiesInTabs([uriPath]);
+      .then(async (workAreaService): Promise<void> => {
+        await workAreaService.openEntitiesInTabs([uriPath]);
       })
       .catch((): void => {
         console.warn("WorkArea Service not available");
@@ -89,7 +90,7 @@ export class OpenInTabCommand extends Command {
   }
 
   #closeBalloonIfExisting(): void {
-    ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
+    void ifPlugin(this.editor, ContextualBalloon).then((balloon) => {
       while (balloon.visibleView) {
         // it is not sufficient to just hide the visibleView, we need to remove it
         balloon.remove(balloon.visibleView);

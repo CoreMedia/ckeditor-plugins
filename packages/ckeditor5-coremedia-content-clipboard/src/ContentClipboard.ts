@@ -120,7 +120,9 @@ export default class ContentClipboard extends Plugin {
     // Priority `low` required, so that we can control the `dropEffect`.
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
 
-    ifPlugin(editor, ClipboardPipeline).then((p) => this.listenTo(p, "inputTransformation", this.#inputTransformation));
+    void ifPlugin(editor, ClipboardPipeline).then((p) =>
+      this.listenTo(p, "inputTransformation", this.#inputTransformation)
+    );
   }
 
   destroy(): void {
@@ -249,7 +251,7 @@ export default class ContentClipboard extends Plugin {
     //
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterwards.
-    ifPlugin(editor, UndoSupport).then(disableUndo);
+    void ifPlugin(editor, UndoSupport).then(disableUndo);
 
     const { model } = editor;
 

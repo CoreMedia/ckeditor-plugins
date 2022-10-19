@@ -56,7 +56,7 @@ export default class DragDropAsyncSupport {
       service: RichtextConfigurationService,
       callback: EvaluationCallback
     ): void => {
-      service.hasLinkableType(uriPath).then((hasLinkableType: boolean) => {
+      void service.hasLinkableType(uriPath).then((hasLinkableType: boolean) => {
         callback(hasLinkableType);
       });
     };
@@ -99,7 +99,7 @@ export default class DragDropAsyncSupport {
       service: RichtextConfigurationService,
       callback: EvaluationCallback
     ): void => {
-      service.isEmbeddableType(uriPath).then((isEmbeddable: boolean) => {
+      void service.isEmbeddableType(uriPath).then((isEmbeddable: boolean) => {
         callback(isEmbeddable);
       });
     };

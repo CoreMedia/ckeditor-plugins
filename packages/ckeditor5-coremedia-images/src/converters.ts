@@ -100,7 +100,7 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
   const uriPath: UriPath = toUriPath(xlinkHref);
   const property: string = toProperty(xlinkHref);
 
-  serviceAgent
+  void serviceAgent
     .fetchService(createBlobDisplayServiceDescriptor())
     .then((blobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
     .then(async (inlinePreviewObservable) => {
