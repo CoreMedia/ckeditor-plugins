@@ -4,9 +4,9 @@ import MockDragDropPlugin, {
   DroppableElement,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
 
-const DRAG_EXAMPLES_ID = "dragExamplesDiv";
+const INPUT_EXAMPLE_CONTENT_DIV_CLASS = "inputExampleContentDiv";
 
-const initDragExamples = (editor: ClassicEditor) => {
+const initInputExampleContent = (editor: ClassicEditor) => {
   const mockContentPlugin = editor.plugins.get(MockContentPlugin);
   const mockDragDropPlugin = editor.plugins.get(MockDragDropPlugin);
   // Just ensure, that the default content provided by MockContentPlugin
@@ -232,9 +232,9 @@ const initDragExamples = (editor: ClassicEditor) => {
   ];
 
   const main = () => {
-    const examplesEl = document.getElementById(DRAG_EXAMPLES_ID);
+    const examplesEl = document.getElementById(INPUT_EXAMPLE_CONTENT_DIV_CLASS);
     if (!examplesEl) {
-      console.error(`Required element missing: ${DRAG_EXAMPLES_ID}`);
+      console.error(`Required element missing: ${INPUT_EXAMPLE_CONTENT_DIV_CLASS}`);
       return;
     }
 
@@ -248,4 +248,4 @@ const initDragExamples = (editor: ClassicEditor) => {
   main();
 };
 
-export { initDragExamples };
+export { initInputExampleContent };

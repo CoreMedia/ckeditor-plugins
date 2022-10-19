@@ -46,7 +46,7 @@ import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
-import { initDragExamples } from "./dragExamples";
+import { initInputExampleContent } from "./dragExamples";
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
@@ -66,8 +66,8 @@ const {
 const editorLanguage = document?.currentScript?.dataset.lang || "en";
 
 // setup dnd IFrame
-const dndButton = document.querySelector("#dragExamplesButton");
-const dndFrame = document.querySelector("#dragExamplesDiv") as HTMLDivElement;
+const dndButton = document.querySelector("#inputExampleContentButton");
+const dndFrame = document.querySelector("#inputExampleContentDiv") as HTMLDivElement;
 if (dndButton && dndFrame) {
   dndButton.addEventListener("click", () => {
     dndFrame.hidden = !dndFrame.hidden;
@@ -308,7 +308,7 @@ ClassicEditor.create(sourceElement, {
 
     initReadOnlyMode(newEditor);
     initExamples(newEditor);
-    initDragExamples(newEditor);
+    initInputExampleContent(newEditor);
 
     const undoCommand = newEditor.commands.get("undo");
     if (!!undoCommand) {
