@@ -133,6 +133,7 @@ module.exports = {
         "no-useless-escape": "error",
         "no-var": "error",
         "object-shorthand": "error",
+        "prefer-arrow-callback": "error",
         "prefer-const": "error",
         "prefer-object-spread": "error",
         "quote-props": ["error", "consistent-as-needed"],

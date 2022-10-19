@@ -84,7 +84,7 @@ export const removeContentMarkerConversion = (
   if (!elements) {
     return;
   }
-  elements.forEach(function (element) {
+  elements.forEach((element) => {
     conversionApi.mapper.unbindElementFromMarkerName(element, data.markerName);
     const range = conversionApi.writer.createRangeOn(element);
     conversionApi.writer.clear(range, element);
