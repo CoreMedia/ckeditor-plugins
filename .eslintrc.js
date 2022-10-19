@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/no-unnecessary-condition": "off",
         "@typescript-eslint/no-useless-constructor": "off",
         "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/prefer-includes": "off",
@@ -73,6 +72,10 @@ module.exports = {
          * Vetoed Rules
          * =====================================================================
          */
+        // While some results may be valid, others need much more careful
+        // review, not to break the application. Some issues may be a result
+        // of bad typings. If we enable it, results must be reviewed carefully.
+        "@typescript-eslint/no-unnecessary-condition": "off",
         // Possibly useful, but requires a lot of effort to get straight.
         // If we see, this is an issue with `[object Object]` and similar in
         // strings, we may want to address that explicitly.
