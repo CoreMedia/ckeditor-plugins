@@ -55,7 +55,6 @@ module.exports = {
         "jsdoc/require-jsdoc": "off",
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
-        "jsdoc/valid-types": "off",
         /*
          * =====================================================================
          * Vetoed Rules
@@ -156,8 +155,12 @@ module.exports = {
         "jsdoc/newline-after-description": "error",
         // allowWhitespace: Must be true not to collide with Markdown.
         "jsdoc/no-multi-asterisks": ["error", { allowWhitespace: true }],
+        // Collides with TypeScript.
         "jsdoc/require-param-type": "off",
+        // Collides with TypeScript.
         "jsdoc/require-returns-type": "off",
+        // Collides with TypeScript.
+        "jsdoc/valid-types": "off",
         /*
          * =====================================================================
          * ESLint Plugin: No-Null
