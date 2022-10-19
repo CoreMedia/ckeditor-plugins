@@ -51,9 +51,6 @@ module.exports = {
          */
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
-        // Broken Window/JSDoc
-        "jsdoc/require-param": "off",
-        "jsdoc/require-returns": "off",
         /*
          * =====================================================================
          * Vetoed Rules
@@ -155,8 +152,14 @@ module.exports = {
         // allowWhitespace: Must be true not to collide with Markdown.
         "jsdoc/no-multi-asterisks": ["error", { allowWhitespace: true }],
         "jsdoc/require-jsdoc": "error",
+        // We believe, that if parameters are not described, it is for good
+        // reason (like self-explaining parameters).
+        "jsdoc/require-param": "off",
         // Collides with TypeScript.
         "jsdoc/require-param-type": "off",
+        // We believe, that if return values are not described, it is for good
+        // reason (like self-explaining return value).
+        "jsdoc/require-returns": "off",
         // Collides with TypeScript.
         "jsdoc/require-returns-type": "off",
         // Collides with TypeScript.
