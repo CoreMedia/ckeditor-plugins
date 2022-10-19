@@ -8,8 +8,10 @@ module.exports = {
         project: "./src/tsconfig.json",
       },
       rules: {
-        // Broken window, we may want to address later.
+        // May need some review. Used in context of waiting for the CKEditor
+        // to become available.
         "@typescript-eslint/await-thenable": "off",
+        // Broken window, we may want to address later.
         "@typescript-eslint/no-floating-promises": "off",
       },
     },
