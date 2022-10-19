@@ -661,6 +661,8 @@ describe("ElementProxy.applyRules()", () => {
         rules: [
           (me) => {
             Object.keys(me.node.attributes).forEach((key) => {
+              // To fix, we may migrate attributes to Map<> instead.
+              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
               delete me.node.attributes[key];
             });
           },
@@ -676,6 +678,8 @@ describe("ElementProxy.applyRules()", () => {
           (me) => {
             me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
+              // To fix, we may migrate attributes to Map<> instead.
+              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
               delete me.node.attributes[key];
             });
           },
