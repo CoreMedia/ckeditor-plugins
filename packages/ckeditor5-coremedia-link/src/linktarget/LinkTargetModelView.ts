@@ -29,7 +29,7 @@ const LINK_CUSTOM_PROPERTY = "link";
  */
 export default class LinkTargetModelView extends Plugin {
   static readonly pluginName: string = "LinkTargetModelView";
-  private readonly TEXT_NAME = "$text";
+  static readonly #TEXT_NAME = "$text";
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
   static readonly requires = [LinkCleanup];
@@ -45,7 +45,7 @@ export default class LinkTargetModelView extends Plugin {
     const model = editor.model;
 
     // Allow link attribute on all inline nodes.
-    model.schema.extend(this.TEXT_NAME, { allowAttributes: LINK_TARGET_MODEL });
+    model.schema.extend(LinkTargetModelView.#TEXT_NAME, { allowAttributes: LINK_TARGET_MODEL });
 
     // Downcast: Model -> Output (Data & Editing)
     // Create element with target attribute. Element will be merged with

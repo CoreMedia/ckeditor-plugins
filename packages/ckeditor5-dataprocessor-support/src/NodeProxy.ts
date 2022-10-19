@@ -5,17 +5,17 @@
  * later on.
  */
 class NodeProxy<N extends Node = Node> {
-  private readonly _delegate: N;
+  readonly #delegate: N;
   /**
    * Flag to signal if this instance is meant to be mutable. Typically, you
    * don't want to make nested instances to be mutable, as the framework will
    * not take care of persisting possibly applied changes.
    */
-  private readonly _mutable: boolean;
+  readonly #mutable: boolean;
   /**
    * Represents the state the node should take when persisting to DOM.
    */
-  private _state: NodeState = NodeState.KEEP_OR_REPLACE;
+  #state: NodeState = NodeState.KEEP_OR_REPLACE;
 
   /**
    * Constructor.
@@ -24,8 +24,8 @@ class NodeProxy<N extends Node = Node> {
    * @param mutable - signals, if this representation is mutable or not
    */
   constructor(delegate: N, mutable = true) {
-    this._delegate = delegate;
-    this._mutable = mutable;
+    this.#delegate = delegate;
+    this.#mutable = mutable;
   }
 
   /**
@@ -47,14 +47,14 @@ class NodeProxy<N extends Node = Node> {
    * Gets the state to reach when persisting this node to the DOM.
    */
   public get state(): NodeState {
-    return this._state;
+    return this.#state;
   }
 
   /**
    * Signals, if this element is mutable.
    */
   public get mutable(): boolean {
-    return this._mutable;
+    return this.#mutable;
   }
 
   /**
@@ -78,7 +78,7 @@ class NodeProxy<N extends Node = Node> {
    * all applicable rules have a chance to modify these nodes again.
    */
   public get delegate(): N {
-    return this._delegate;
+    return this.#delegate;
   }
 
   /**
@@ -210,9 +210,9 @@ class NodeProxy<N extends Node = Node> {
   public set remove(remove: boolean) {
     this.requireMutable();
     if (remove) {
-      this._state = NodeState.REMOVE_RECURSIVELY;
+      this.#state = NodeState.REMOVE_RECURSIVELY;
     } else {
-      this._state = NodeState.KEEP_OR_REPLACE;
+      this.#state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -237,9 +237,9 @@ class NodeProxy<N extends Node = Node> {
   public set removeChildren(remove: boolean) {
     this.requireMutable();
     if (remove) {
-      this._state = NodeState.REMOVE_CHILDREN;
+      this.#state = NodeState.REMOVE_CHILDREN;
     } else {
-      this._state = NodeState.KEEP_OR_REPLACE;
+      this.#state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -264,9 +264,9 @@ class NodeProxy<N extends Node = Node> {
   public set replaceByChildren(replace: boolean) {
     this.requireMutable();
     if (replace) {
-      this._state = NodeState.REMOVE_SELF;
+      this.#state = NodeState.REMOVE_SELF;
     } else {
-      this._state = NodeState.KEEP_OR_REPLACE;
+      this.#state = NodeState.KEEP_OR_REPLACE;
     }
   }
 

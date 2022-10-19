@@ -7,17 +7,17 @@ import Logger from "./Logger";
  * @internal
  */
 export default class LoggerImpl implements Logger {
-  private readonly name: string | undefined;
-  private readonly logLevel: LogLevel;
+  readonly #name: string | undefined;
+  readonly #logLevel: LogLevel;
 
   constructor(name: string | undefined, logLevel: LogLevel) {
-    this.name = name;
-    this.logLevel = logLevel;
+    this.#name = name;
+    this.#logLevel = logLevel;
   }
 
-  private out(logFn: (...data: unknown[]) => void, data: unknown[]): void {
+  #out(logFn: (...data: unknown[]) => void, data: unknown[]): void {
     const level = logFn.name.toUpperCase();
-    const contextPrefix = this.name ? ` ${this.name}:` : "";
+    const contextPrefix = this.#name ? ` ${this.#name}:` : "";
     const prefix = `[${level}]${contextPrefix}`;
     const prefixData: unknown[] = [prefix];
     const prefixedData: unknown[] = prefixData.concat(data);
@@ -25,7 +25,7 @@ export default class LoggerImpl implements Logger {
   }
 
   isEnabled(logLevel: LogLevel): boolean {
-    return this.logLevel <= logLevel;
+    return this.#logLevel <= logLevel;
   }
 
   isDebugEnabled(): boolean {
@@ -33,7 +33,7 @@ export default class LoggerImpl implements Logger {
   }
 
   debug(...data: unknown[]): void {
-    this.isDebugEnabled() && this.out(console.debug, data);
+    this.isDebugEnabled() && this.#out(console.debug, data);
   }
 
   isInfoEnabled(): boolean {
@@ -41,7 +41,7 @@ export default class LoggerImpl implements Logger {
   }
 
   info(...data: unknown[]): void {
-    this.isInfoEnabled() && this.out(console.info, data);
+    this.isInfoEnabled() && this.#out(console.info, data);
   }
 
   isWarnEnabled(): boolean {
@@ -49,7 +49,7 @@ export default class LoggerImpl implements Logger {
   }
 
   warn(...data: unknown[]): void {
-    this.isWarnEnabled() && this.out(console.warn, data);
+    this.isWarnEnabled() && this.#out(console.warn, data);
   }
 
   isErrorEnabled(): boolean {
@@ -57,14 +57,14 @@ export default class LoggerImpl implements Logger {
   }
 
   error(...data: unknown[]): void {
-    this.isErrorEnabled() && this.out(console.error, data);
+    this.isErrorEnabled() && this.#out(console.error, data);
   }
 
   isAnyEnabled(): boolean {
-    return this.logLevel !== LogLevel.NONE;
+    return this.#logLevel !== LogLevel.NONE;
   }
 
   log(...data: unknown[]): void {
-    this.isAnyEnabled() && this.out(console.log, data);
+    this.isAnyEnabled() && this.#out(console.log, data);
   }
 }

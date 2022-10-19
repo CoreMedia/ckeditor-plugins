@@ -27,11 +27,11 @@ export type Mode = "replace" | "append";
  */
 export class FontMapping {
   static readonly #logger = LoggerProvider.getLogger("FontMapper");
-  private map: FontMap;
-  private DECODE_ELEMENT_HELP = document.createElement("div");
+  #map: FontMap;
+  #DECODE_ELEMENT_HELP = document.createElement("div");
 
   constructor(map: FontMap) {
-    this.map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
+    this.#map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
   }
 
   /**
@@ -51,9 +51,9 @@ export class FontMapping {
    */
   applyMapConfig(map: FontMap, mode: Mode = "append"): void {
     if (mode === "replace") {
-      this.map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
+      this.#map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
     } else {
-      this.map = FontMapping.#mergeFontMaps(this.map, map);
+      this.#map = FontMapping.#mergeFontMaps(this.#map, map);
     }
   }
 
@@ -85,7 +85,7 @@ export class FontMapping {
     const characters: string[] = [...decodedInput];
     const replacedInput: (string | null)[] = characters.map((value) => {
       const charCode = value.charCodeAt(0);
-      const htmlEntity = this.map.get(charCode);
+      const htmlEntity = this.#map.get(charCode);
       if (htmlEntity) {
         FontMapping.#logger.debug(`Found a replacement for "${value}": ${htmlEntity}`);
         return this.#decodeHtmlEntities(htmlEntity);
@@ -108,8 +108,8 @@ export class FontMapping {
    * @returns the decoded string
    */
   #decodeHtmlEntities(inputString: string): string {
-    this.DECODE_ELEMENT_HELP.innerHTML = inputString;
-    const textContent = this.DECODE_ELEMENT_HELP.textContent;
+    this.#DECODE_ELEMENT_HELP.innerHTML = inputString;
+    const textContent = this.#DECODE_ELEMENT_HELP.textContent;
     if (!textContent) {
       // see https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
       throw new Error("Error during decodeHtmlEntities: HTMLDivElement has no textContent");
@@ -118,6 +118,6 @@ export class FontMapping {
   }
 
   toString(): string {
-    return `[FontMapping; ${this.map.size} entries]`;
+    return `[FontMapping; ${this.#map.size} entries]`;
   }
 }

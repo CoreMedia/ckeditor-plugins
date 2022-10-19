@@ -113,6 +113,15 @@ module.exports = {
           { name: "setImmediate" },
           { name: "clearImmediate" },
         ],
+        // https://github.com/typescript-eslint/typescript-eslint/issues/1391#issuecomment-1124154589
+        "no-restricted-syntax": [
+          "error",
+          {
+            // kind="method": Don't apply on constructors.
+            selector: ':matches(PropertyDefinition, MethodDefinition[kind="method"])[accessibility="private"]',
+            message: "Use #private instead",
+          },
+        ],
         "no-sparse-arrays": "error",
         "no-template-curly-in-string": "error",
         "no-throw-literal": "error",
