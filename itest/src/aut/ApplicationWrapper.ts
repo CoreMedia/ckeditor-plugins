@@ -9,6 +9,7 @@ import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 import { MockDragDropPluginWrapper } from "./MockDragDropPluginWrapper";
+import http from "http";
 
 /**
  * Represents result from starting the server.
@@ -38,7 +39,11 @@ const startServer = async (): Promise<StartResult> => {
   const applicationFolder = path.resolve("../app");
   const app = express();
   app.use("/", express.static(applicationFolder));
-  const server = app.listen(0);
+
+  const server = await new Promise<http.Server>((resolve) => {
+    const server = app.listen(0, () => resolve(server));
+  });
+
   const address = server.address();
   if (!isAddressInfo(address)) {
     throw new Error(`Incompatible address information. Expected AddressInfo but is: ${address} (${typeof address})`);

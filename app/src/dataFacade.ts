@@ -38,6 +38,8 @@ export const setData = (editor: ClassicEditor, data: string) => {
  * @param editor - the editor instance whose data to save
  * @param source - which editor stored the data
  */
+// async: In production scenarios, this will be an asynchronous call.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const saveData = async (editor: ClassicEditor, source: string) => {
   const data = editor.getData({
     // set to `none`, to trigger data-processing for empty text, too

@@ -92,6 +92,8 @@ export const recommendCommand = (
  * @param editor - editor instance
  * @param commandName - command name to search for
  */
+// Promise used to benefit from then-API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const ifCommand = async (editor: Editor, commandName: string): Promise<Command> => {
   const command = editor.commands.get(commandName);
   if (!command) {

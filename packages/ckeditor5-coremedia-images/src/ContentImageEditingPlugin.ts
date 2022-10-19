@@ -31,7 +31,7 @@ export default class ContentImageEditingPlugin extends Plugin {
 
   static readonly requires = [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
 
-  async init(): Promise<void> {
+  init(): void {
     const editor = this.editor;
     const initInformation = reportInitStart(this);
     editor.commands.add("openImageInTab", new OpenInTabCommand(editor, "xlink-href", "imageInline"));

@@ -92,6 +92,8 @@ export const recommendPlugin = (
  * @returns `Promise` for requested plugin
  * @throws PluginNotFoundError if plugin could not be found
  */
+// Promise used to benefit from then-API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInterface<T>): Promise<T> => {
   if (editor.plugins.has(key)) {
     return editor.plugins.get(key);

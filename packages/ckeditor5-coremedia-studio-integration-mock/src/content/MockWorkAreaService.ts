@@ -1,3 +1,5 @@
+/* async: Methods require to be asynchronous in production scenario. */
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";

@@ -10,7 +10,6 @@ module.exports = {
       rules: {
         // Broken window, we may want to address later.
         "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/require-await": "off",
       },
     },
   ],

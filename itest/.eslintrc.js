@@ -11,7 +11,6 @@ module.exports = {
         // Broken window, we may want to address later.
         "@typescript-eslint/await-thenable": "off",
         "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/require-await": "off",
       },
     },
   ],

@@ -41,6 +41,7 @@ export class EditorUIWrapper extends JSWrapper<ClassicEditorUI> implements Locat
      * controlled DOM in contrast to Rich Web Applications, which may respond
      * to updates from some server.
      */
+    // eslint-disable-next-line @typescript-eslint/require-await
     return this.evaluateHandle(async (ui): Promise<HTMLElement> => {
       const element = ui.getEditableElement();
       if (!element) {
