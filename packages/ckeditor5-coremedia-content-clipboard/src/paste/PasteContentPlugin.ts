@@ -8,6 +8,7 @@ import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-i
 import { parseBeanReferences } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import pasteIcon from "../../theme/icons/paste.svg";
 
 export default class PasteContentPlugin extends Plugin {
   init() {
@@ -15,6 +16,7 @@ export default class PasteContentPlugin extends Plugin {
 
     editor.ui.componentFactory.add("paste-content", () => {
       const button = new ButtonView();
+      button.icon = pasteIcon;
       button.on("execute", () => {
         serviceAgent
           .fetchService(createClipboardServiceDescriptor())
