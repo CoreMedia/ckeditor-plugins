@@ -52,7 +52,6 @@ module.exports = {
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
         // Broken Window/JSDoc
-        "jsdoc/no-multi-asterisks": "off",
         "jsdoc/tag-lines": "off",
         "jsdoc/require-jsdoc": "off",
         "jsdoc/require-param": "off",
@@ -153,6 +152,8 @@ module.exports = {
           },
         ],
         "jsdoc/newline-after-description": "error",
+        // allowWhitespace: Must be true not to collide with Markdown.
+        "jsdoc/no-multi-asterisks": ["error", { allowWhitespace: true }],
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": "off",
         /*
