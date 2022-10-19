@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/prefer-includes": "off",
         "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
@@ -75,6 +74,10 @@ module.exports = {
         // review, not to break the application. Some issues may be a result
         // of bad typings. If we enable it, results must be reviewed carefully.
         "@typescript-eslint/no-unnecessary-condition": "off",
+        // Collides with @typescript-eslint/no-non-null-assertion at several
+        // places. Possibly obsolete to suppress, if we refactor for example
+        // AttributesMap to some real Map rather than just a Record.
+        "@typescript-eslint/non-nullable-type-assertion-style": "off",
         // Possibly useful, but requires a lot of effort to get straight.
         // If we see, this is an issue with `[object Object]` and similar in
         // strings, we may want to address that explicitly.
