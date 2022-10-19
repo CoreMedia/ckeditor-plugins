@@ -89,7 +89,7 @@ class MutablePropertyObservationHandler<T> {
     let timerId: number | undefined;
 
     // Nested Timeout: https://javascript.info/settimeout-setinterval#nested-settimeout
-    const handler = (): number | void => {
+    const handler = (): number | undefined => {
       if (anyValue) {
         // There is at least one value, so let's provide it.
         const nextValue = values[idxCurrentValue];

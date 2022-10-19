@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import { JSHandle } from "playwright";
 import { PageFunctionOn, SmartHandle } from "playwright-core/types/structs";
 
