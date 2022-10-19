@@ -6,6 +6,8 @@ import { serviceAgent } from "@coremedia/service-agent";
 import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
 import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardItemRepresentation";
 import { parseBeanReferences } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
+import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 
 export default class PasteContentPlugin extends Plugin {
   init() {
@@ -27,9 +29,48 @@ export default class PasteContentPlugin extends Plugin {
             }
           });
       });
+      serviceAgent.fetchService(createClipboardServiceDescriptor()).then(async (clipboardService) => {
+        const initialItems = await clipboardService.getItems();
+        button.isEnabled = await PasteContentPlugin.calculateEnabledState(initialItems);
+
+        clipboardService.observe_items().subscribe(async (itemRepresentations) => {
+          button.isEnabled = await PasteContentPlugin.calculateEnabledState(itemRepresentations);
+        });
+      });
 
       return button;
     });
+  }
+
+  static async calculateEnabledState(itemRepresentations: ClipboardItemRepresentation[]): Promise<boolean> {
+    const uris = await PasteContentPlugin.toContentUris(itemRepresentations);
+    if (uris.length === 0) {
+      return false;
+    }
+    const everyUriIsValid = uris.every((uri) => {
+      return isUriPath(uri);
+    });
+    if (!everyUriIsValid) {
+      return false;
+    }
+
+    const pastableStates = await PasteContentPlugin.resolvePastableStates(uris);
+    return pastableStates.every((isPastable) => {
+      return isPastable;
+    });
+  }
+
+  static async resolvePastableStates(uris: string[]): Promise<boolean[]> {
+    const richtextConfigurationService = await serviceAgent.fetchService(
+      createRichtextConfigurationServiceDescriptor()
+    );
+    const pastableStatePromises: Promise<boolean>[] = uris.map(async (uri): Promise<boolean> => {
+      const isLinkable = await richtextConfigurationService.hasLinkableType(uri);
+      const isEmbeddable = await richtextConfigurationService.isEmbeddableType(uri);
+
+      return isLinkable || isEmbeddable;
+    });
+    return Promise.all(pastableStatePromises);
   }
 
   static async toContentUris(items: ClipboardItemRepresentation[]): Promise<string[]> {
