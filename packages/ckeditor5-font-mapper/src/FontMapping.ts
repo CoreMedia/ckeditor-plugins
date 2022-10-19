@@ -116,4 +116,8 @@ export class FontMapping {
     }
     return textContent;
   }
+
+  toString(): string {
+    return `[FontMapping; ${this.map.size} entries]`;
+  }
 }

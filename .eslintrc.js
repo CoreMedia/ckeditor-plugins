@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/no-base-to-string": "off",
         "@typescript-eslint/no-dynamic-delete": "off",
         "@typescript-eslint/no-extraneous-class": "off",
         "@typescript-eslint/no-invalid-void-type": "off",
@@ -228,6 +227,8 @@ module.exports = {
           },
           { selector: "property", format: null },
         ],
+
+        "@typescript-eslint/no-base-to-string": "error",
 
         "no-duplicate-imports": "off",
         "@typescript-eslint/no-duplicate-imports": "error",

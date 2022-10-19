@@ -116,7 +116,7 @@ const computeFontMappingForElement = (
     const fontMapping = getFontMappingForFontFamily(fontFamily);
     if (fontMapping) {
       //if a font mapping is available for the current font family the font family has to be removed.
-      logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element}`);
+      logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element?.name}`);
       //@ts-expect-error TODO _removeStyle is protected
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       element._removeStyle(fontFamily);
