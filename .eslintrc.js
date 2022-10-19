@@ -52,7 +52,6 @@ module.exports = {
         // Broken Window/ESLint
         "no-prototype-builtins": "off",
         // Broken Window/JSDoc
-        "jsdoc/tag-lines": "off",
         "jsdoc/require-jsdoc": "off",
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
@@ -83,6 +82,9 @@ module.exports = {
         // some argument. Unfortunately, there is no exclusion but only
         // inclusion mechanism for this rule.
         "jsdoc/empty-tags": "off",
+        // Collides with `@example` syntax for TypeDoc. May be possibly
+        // fine-tuned by more explicit configuration.
+        "jsdoc/tag-lines": "off",
         /*
          * =====================================================================
          * ESLint
