@@ -61,8 +61,6 @@ module.exports = {
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
-        // Broken Window/TypeScript
-        "@typescript-eslint/unbound-method": "off",
         // Broken Window/TypeScript (Strict Rules)
         "@typescript-eslint/consistent-generic-constructors": "off",
         "@typescript-eslint/consistent-indexed-object-style": "off",
@@ -85,6 +83,10 @@ module.exports = {
         // If we see, this is an issue with `[object Object]` and similar in
         // strings, we may want to address that explicitly.
         "@typescript-eslint/restrict-template-expressions": "off",
+        // While this may provide valid issues, it often clashes with
+        // the common localization pattern of CKEditor 5, i.e., accessing
+        // editor.locale.t. Ignored for now, unless we find a better option.
+        "@typescript-eslint/unbound-method": "off",
         /*
          * =====================================================================
          * ESLint
