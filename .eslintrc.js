@@ -89,6 +89,7 @@ module.exports = {
         "curly": ["error", "multi-line"],
         "dot-notation": "error",
         "eqeqeq": "error",
+        "import/no-duplicates": "error",
         // linebreak-style: First needs to be fixed on Windows.
         "linebreak-style": ["off", "windows"],
         "max-statements-per-line": ["error", { max: 1 }],
@@ -240,10 +241,6 @@ module.exports = {
         ],
 
         "@typescript-eslint/no-base-to-string": "error",
-
-        "no-duplicate-imports": "off",
-        "@typescript-eslint/no-duplicate-imports": "error",
-
         "@typescript-eslint/no-dynamic-delete": "error",
         "@typescript-eslint/no-empty-function": "error",
         "@typescript-eslint/no-extraneous-class": "error",
