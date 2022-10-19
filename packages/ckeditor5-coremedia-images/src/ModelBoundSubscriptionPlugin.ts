@@ -103,7 +103,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
 
       for (const entry of insertsOnGraveyard) {
         const nodeAfter = entry.position.nodeAfter;
-        if (nodeAfter && nodeAfter.is("element")) {
+        if (nodeAfter?.is("element")) {
           allRemovedElementsWithSubscriptions.push(
             ...ModelBoundSubscriptionPlugin.#recursiveSearch(nodeAfter as ModelElement)
           );
@@ -133,7 +133,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         .filter((diffItem) => diffItem.type === "insert")
         .map((diffItem) => diffItem as DiffItemInsert)
         .map((diffItem) => diffItem.position.nodeAfter)
-        .filter((value) => value !== null && value.is("element"))
+        .filter((value) => value?.is("element"))
         .map((value) => value as ModelElement);
 
       const insertedRegisteredElements: ModelElement[] = [];

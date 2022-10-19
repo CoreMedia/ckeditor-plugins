@@ -130,7 +130,7 @@ export default class LoggerProvider {
     if (key === undefined || typeof window === "undefined") {
       return false;
     }
-    if (window.location && window.location.hash) {
+    if (window.location?.hash) {
       // substring: Remove hash
       const hash: string = window.location.hash.substring(1);
       const hashParams: string[] = hash.split(/&/);
