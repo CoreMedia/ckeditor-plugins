@@ -14,6 +14,7 @@ type EvaluationCallback = (cacheValue: boolean) => void;
  * Provides support for asynchronous API called within synchronous HTML5 drag
  * and drop event handling.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class DragDropAsyncSupport {
   static readonly #logger = LoggerProvider.getLogger("DragDropAsyncSupport");
 

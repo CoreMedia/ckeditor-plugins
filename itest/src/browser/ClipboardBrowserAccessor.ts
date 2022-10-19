@@ -14,6 +14,7 @@ export interface ClipboardItemConfig {
  * Using the Clipboard might cause flaky tests as the system clipboard is used.
  * Therefore, tests accessing clipboard must not run parallel.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ClipboardBrowserAccessor {
   /**
    * Writes the given itemConfig to the Clipboard of the browser.

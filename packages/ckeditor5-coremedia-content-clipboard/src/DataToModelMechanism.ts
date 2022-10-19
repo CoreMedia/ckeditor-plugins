@@ -51,6 +51,7 @@ const UTILITY_NAME = "DataToModelMechanism";
  * Now, the model then is written, the view updates accordingly and the marker
  * (loading animation) gets removed.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class DataToModelMechanism {
   static readonly #logger: Logger = LoggerProvider.getLogger(UTILITY_NAME);
 

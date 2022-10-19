@@ -6,6 +6,7 @@ import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
 type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class MarkerRepositionUtil {
   static repositionMarkers(
     editor: Editor,

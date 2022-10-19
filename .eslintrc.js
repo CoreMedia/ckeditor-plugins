@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript (Strict Rules)
-        "@typescript-eslint/no-extraneous-class": "off",
         "@typescript-eslint/no-invalid-void-type": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
         "@typescript-eslint/no-useless-constructor": "off",
@@ -234,6 +233,7 @@ module.exports = {
 
         "@typescript-eslint/no-dynamic-delete": "error",
         "@typescript-eslint/no-empty-function": "error",
+        "@typescript-eslint/no-extraneous-class": "error",
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-non-null-assertion": "error",

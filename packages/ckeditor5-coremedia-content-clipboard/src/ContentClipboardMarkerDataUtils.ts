@@ -17,6 +17,7 @@
  * "content-drop:1642076134128:2"
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class ContentClipboardMarkerDataUtils {
   static readonly CONTENT_DROP_MARKER_PREFIX = "content-drop";
 
