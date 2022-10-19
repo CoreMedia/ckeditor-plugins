@@ -51,7 +51,7 @@ import { initDragExamples } from "./dragExamples";
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
-import { icons } from "@ckeditor/ckeditor5-core";
+import { Command, icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockDragDropPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
 
@@ -308,10 +308,11 @@ ClassicEditor.create(sourceElement, {
     initExamples(newEditor);
     initDragExamples(newEditor);
 
-    const undoCommand = newEditor.commands.get("undo");
+    const undoCommand: Command | undefined = newEditor.commands.get("undo");
+
     if (undoCommand) {
       //@ts-expect-error Editor extension, no typing available.
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
       newEditor.resetUndo = () => undoCommand.clearStack();
       console.log("Registered `editor.resetUndo()` to clear undo history.");
     }

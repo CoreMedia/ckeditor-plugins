@@ -62,7 +62,6 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "jsdoc/valid-types": "off",
         // Broken Window/TypeScript
-        "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/unbound-method": "off",
@@ -234,6 +233,7 @@ module.exports = {
         "@typescript-eslint/no-unsafe-assignment": "error",
         "@typescript-eslint/no-unsafe-call": "error",
         "@typescript-eslint/no-unsafe-member-access": "error",
+        "@typescript-eslint/no-unsafe-return": "error",
 
         "no-unused-expressions": "off",
         "@typescript-eslint/no-unused-expressions": ["error", { allowTernary: true, allowShortCircuit: true }],

@@ -267,6 +267,6 @@ export default class CustomLinkTargetUI extends Plugin {
   #getBalloonPositionData(): Options {
     // @ts-expect-error TODO Check Typings/Usage (most likely private API, we need to deal with somehow).
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    return this.linkUI._getBalloonPositionData();
+    return this.linkUI._getBalloonPositionData() as Options;
   }
 }

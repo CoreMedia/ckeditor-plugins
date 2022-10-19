@@ -158,7 +158,7 @@ export default class ContentLinks extends Plugin {
     this.#addCustomClickOutsideHandler({
       emitter: formView,
       // @ts-expect-error TODO Fix Typings
-      activator: () => linkUI._isUIInPanel,
+      activator: () => linkUI._isUIInPanel as boolean,
       // @ts-expect-error TODO Fix Typings
       // eslint-disable-next-line
       contextElements: [linkUI._balloon.view.element],

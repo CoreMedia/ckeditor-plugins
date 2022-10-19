@@ -668,7 +668,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
        */
       get(target: AttributeMap, attrName: PropertyKey, receiver: never): AttributeValue {
         if (Reflect.has(target, attrName)) {
-          return Reflect.get(target, attrName, receiver);
+          return Reflect.get(target, attrName, receiver) as AttributeValue;
         }
         if (typeof attrName === "string") {
           return self.delegate.getAttribute(attrName);

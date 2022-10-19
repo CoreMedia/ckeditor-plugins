@@ -118,7 +118,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const editorHolder: any = window;
         if (name in editorHolder) {
-          return editorHolder[name];
+          return editorHolder[name] as ClassicEditor;
         }
         throw new Error(`Editor instance not available as ${name}`);
       }, name),
