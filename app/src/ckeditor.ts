@@ -65,13 +65,15 @@ const {
 
 const editorLanguage = document?.currentScript?.dataset.lang || "en";
 
-// setup dnd IFrame
-const dndButton = document.querySelector("#inputExampleContentButton");
-const dndFrame = document.querySelector("#inputExampleContentDiv") as HTMLDivElement;
-if (dndButton && dndFrame) {
-  dndButton.addEventListener("click", () => {
-    dndFrame.hidden = !dndFrame.hidden;
-    dndButton.textContent = `${dndFrame.hidden ? "Show" : "Hide"} drag examples`;
+// setup input example content IFrame
+const showHideExampleContentButton = document.querySelector("#inputExampleContentButton");
+const inputExampleContentFrame = document.querySelector("#inputExampleContentDiv") as HTMLDivElement;
+if (showHideExampleContentButton && inputExampleContentFrame) {
+  showHideExampleContentButton.addEventListener("click", () => {
+    inputExampleContentFrame.hidden = !inputExampleContentFrame.hidden;
+    showHideExampleContentButton.textContent = `${
+      inputExampleContentFrame.hidden ? "Show" : "Hide"
+    } input example contents`;
   });
 }
 
