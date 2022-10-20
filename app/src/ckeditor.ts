@@ -46,7 +46,7 @@ import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
-import { initInputExampleContent } from "./dragExamples";
+import { initInputExampleContent } from "./inputExampleContents";
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
