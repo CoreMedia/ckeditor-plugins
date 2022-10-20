@@ -1,0 +1,58 @@
+###
+### Create Software Bill of Materials
+###
+### Will create a cyclondx SBOM.
+###
+
+name: Create SBOM
+
+on:
+  workflow_dispatch:
+
+env:
+  NPM_REPOSITORY: npm.coremedia.io
+  NPM_REPOSITORY_URL: https://npm.coremedia.io
+  NODE_VERSION: 16.x
+  PNPM_VERSION: 7.1.5
+
+jobs:
+  run:
+    name: "Creating SBOM with CycloneDX"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Use PNPM ${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - name: Set up .npmrc
+        run: |
+          NPM_AUTH_TOKEN=$(curl --silent \
+            --header "Accept: application/json" \
+            --header "Content-Type:application/json" \
+            --request PUT \
+            --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' \
+            "${{ env.NPM_REPOSITORY_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | \
+            jq -r .token)
+          echo "::add-mask::$NPM_AUTH_TOKEN"
+          echo "NPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
+          echo "NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
+          echo "NPM_CONFIG_@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> $GITHUB_ENV
+          echo "//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+          echo "@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> .npmrc
+      - name: Install
+        run: pnpm install
+      - name: Create SBOM with CycloneDX
+        uses: CycloneDX/gh-node-module-generatebom@master
+        with:
+          output: "./sbom.xml"
+      - name: Archive SBOM
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom.xml
+          path: sbom.xml
