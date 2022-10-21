@@ -4,9 +4,7 @@ interface Namespace {
   uri: string;
 }
 
-interface Namespaces {
-  [prefix: string]: Namespace;
-}
+type Namespaces = Record<string, Namespace>;
 
 const DEFAULT_NAMESPACES: Namespaces = {
   xlink: {

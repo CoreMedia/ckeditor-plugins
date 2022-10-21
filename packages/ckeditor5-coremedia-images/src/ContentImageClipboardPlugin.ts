@@ -22,13 +22,12 @@ const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
   return createImageModelFunction(blobUriPath);
 };
 
-const createImageModelFunction: CreateImageModelFunction = (blobUriPath: string): CreateModelFunction => {
-  return (writer: Writer): Node => {
-    return writer.createElement("imageInline", {
+const createImageModelFunction: CreateImageModelFunction =
+  (blobUriPath: string): CreateModelFunction =>
+  (writer: Writer): Node =>
+    writer.createElement("imageInline", {
       "xlink-href": blobUriPath,
     });
-  };
-};
 
 /**
  * This plugin registers a `toModel` function for the `ContentClipboardEditing`

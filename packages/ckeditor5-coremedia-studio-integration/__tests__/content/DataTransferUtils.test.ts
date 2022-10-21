@@ -71,9 +71,7 @@ describe("DataTransferUtils", () => {
       $Ref: uri,
     }));
     const beanReferencesJson = JSON.stringify(beanReferences);
-    const getData = (format: string): string => {
-      return format === URI_LIST_DATA ? beanReferencesJson : "";
-    };
+    const getData = (format: string): string => (format === URI_LIST_DATA ? beanReferencesJson : "");
 
     test("Should respond with `undefined` on `null`", () => {
       expect(getUriList(null)).toBeUndefined();
@@ -98,9 +96,7 @@ describe("DataTransferUtils", () => {
       $Ref: uri,
     }));
     const beanReferencesJson = JSON.stringify(beanReferences);
-    const getData = (format: string): string => {
-      return format === URI_LIST_DATA ? beanReferencesJson : "";
-    };
+    const getData = (format: string): string => (format === URI_LIST_DATA ? beanReferencesJson : "");
 
     test("Should respond with `undefined` on `null`", () => {
       expect(getUriListValues(null)).toBeUndefined();

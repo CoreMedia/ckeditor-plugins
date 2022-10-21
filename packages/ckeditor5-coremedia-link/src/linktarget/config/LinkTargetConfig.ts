@@ -57,7 +57,7 @@ interface LinkTargetConfig {
  * @param config - CKEditor configuration to parse
  */
 export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOptionDefinition>[] => {
-  const fromConfig = config.get("link.targets");
+  const fromConfig: unknown = config.get("link.targets");
   const result: Required<LinkTargetOptionDefinition>[] = [];
   if (fromConfig === null || fromConfig === undefined) {
     return DEFAULT_TARGETS_ARRAY;
@@ -75,7 +75,7 @@ export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOption
         throw new Error("link.targets: Target name must not be empty.");
       }
       const defaultDefinition = getDefaultTargetDefinition(name);
-      if (!!defaultDefinition) {
+      if (defaultDefinition) {
         result.push(defaultDefinition);
       } else {
         result.push({

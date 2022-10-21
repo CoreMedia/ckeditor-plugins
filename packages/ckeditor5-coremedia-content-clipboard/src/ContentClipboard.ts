@@ -40,11 +40,11 @@ declare interface ContentEventData<T> extends ClipboardEventData {
 
 /**
  * Type-Guard for ContentEventData.
+ *
  * @param value - value to validate
  */
-const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> => {
-  return isRaw<ContentEventData<unknown>>(value, "content");
-};
+const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> =>
+  isRaw<ContentEventData<unknown>>(value, "content");
 
 /**
  * Specifies the additional data provided by ClipboardPipeline's
@@ -120,7 +120,9 @@ export default class ContentClipboard extends Plugin {
     // Priority `low` required, so that we can control the `dropEffect`.
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
 
-    ifPlugin(editor, ClipboardPipeline).then((p) => this.listenTo(p, "inputTransformation", this.#inputTransformation));
+    void ifPlugin(editor, ClipboardPipeline).then((p) =>
+      this.listenTo(p, "inputTransformation", this.#inputTransformation)
+    );
   }
 
   destroy(): void {
@@ -154,6 +156,7 @@ export default class ContentClipboard extends Plugin {
     }
 
     // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     data.preventDefault();
 
     // for now, we only support content uris in ckeditor.
@@ -248,7 +251,7 @@ export default class ContentClipboard extends Plugin {
     //
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterwards.
-    ifPlugin(editor, UndoSupport).then(disableUndo);
+    void ifPlugin(editor, UndoSupport).then(disableUndo);
 
     const { model } = editor;
 
@@ -337,9 +340,9 @@ export default class ContentClipboard extends Plugin {
     if (!data.targetRanges) {
       return editor.model.document.selection.getFirstRange();
     }
-    const targetRanges: ModelRange[] = data.targetRanges.map((viewRange: ViewRange): ModelRange => {
-      return editor.editing.mapper.toModelRange(viewRange);
-    });
+    const targetRanges: ModelRange[] = data.targetRanges.map(
+      (viewRange: ViewRange): ModelRange => editor.editing.mapper.toModelRange(viewRange)
+    );
     if (targetRanges.length > 0) {
       return targetRanges[0];
     }
@@ -377,7 +380,7 @@ export default class ContentClipboard extends Plugin {
       if (isUriPath(uri)) {
         return true;
       }
-      ContentClipboard.#logger.debug("Found an unsupported uri, will be ignored: " + uri);
+      ContentClipboard.#logger.debug(`Found an unsupported uri, will be ignored: ${uri}`);
       return false;
     });
   }

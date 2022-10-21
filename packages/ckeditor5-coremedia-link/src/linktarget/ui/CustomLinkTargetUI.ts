@@ -147,7 +147,7 @@ export default class CustomLinkTargetUI extends Plugin {
     /**
      * The contextual balloon plugin instance.
      */
-    this.#balloon = this.editor.plugins.get("ContextualBalloon") as ContextualBalloon;
+    this.#balloon = this.editor.plugins.get("ContextualBalloon");
 
     /**
      * A form containing a textarea and buttons, used to change the target value for "Open In Frame".
@@ -217,6 +217,7 @@ export default class CustomLinkTargetUI extends Plugin {
     labeledInput.fieldView.value = (labeledInput.fieldView.element as HTMLInputElement).value = initialValue;
 
     // @ts-expect-error TODO Check Typings/Usage
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.#form.labeledInput.fieldView.select();
 
     this.#form.enableCssTransitions();
@@ -258,13 +259,14 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns true if the {@link CustomLinkTargetUI.#form} is in the {@link CustomLinkTargetUI.#balloon}
    */
   get #isInBalloon(): boolean {
-    return this.#balloon?.hasView(this.#form) || false;
+    return this.#balloon?.hasView(this.#form) ?? false;
   }
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
   #getBalloonPositionData(): Options {
     // @ts-expect-error TODO Check Typings/Usage (most likely private API, we need to deal with somehow).
-    return this.linkUI._getBalloonPositionData();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    return this.linkUI._getBalloonPositionData() as Options;
   }
 }

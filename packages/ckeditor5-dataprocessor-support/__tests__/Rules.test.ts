@@ -252,7 +252,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
               },
               toView: {
                 data: (p) => {
-                  p.node.name = p.node.attributes.type || "missing-name";
+                  p.node.name = p.node.attributes.type ?? "missing-name";
                   delete p.node.attributes.type;
                 },
               },

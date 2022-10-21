@@ -33,6 +33,7 @@ export class ApplicationConsole {
 
   /**
    * Just instantiates the console with no listener attached yet.
+   *
    * @param page - page to listen to
    */
   constructor(page: Page) {

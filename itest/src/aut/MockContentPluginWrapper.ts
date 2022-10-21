@@ -9,6 +9,7 @@ import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integra
 export class MockContentPluginWrapper extends JSWrapper<MockContentPlugin> {
   /**
    * Adds contents to be known by the mock backend.
+   *
    * @param data - content definitions
    */
   async addContents(...data: MockContentConfig[]): Promise<void> {
@@ -17,6 +18,7 @@ export class MockContentPluginWrapper extends JSWrapper<MockContentPlugin> {
 
   /**
    * Provides access to EditorUI via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {
@@ -24,7 +26,7 @@ export class MockContentPluginWrapper extends JSWrapper<MockContentPlugin> {
       wrapper.evaluateHandle((editor, pluginName) => {
         if (!editor.plugins.has(pluginName)) {
           const available = [...editor.plugins]
-            .map(([t, p]) => t.pluginName || `noname:${p.constructor.name}`)
+            .map(([t, p]) => t.pluginName ?? `noname:${p.constructor.name}`)
             .join(", ");
           throw new Error(`Plugin ${pluginName} not available. Available plugins: ${available}`);
         }

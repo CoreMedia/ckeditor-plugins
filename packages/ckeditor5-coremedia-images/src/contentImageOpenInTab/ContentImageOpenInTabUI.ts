@@ -20,7 +20,7 @@ export default class ContentImageOpenInTabUI extends Plugin {
 
   static readonly requires = [ContentImageEditingPlugin];
 
-  async init(): Promise<void> {
+  init(): void {
     const editor = this.editor;
 
     const initInformation = reportInitStart(this);

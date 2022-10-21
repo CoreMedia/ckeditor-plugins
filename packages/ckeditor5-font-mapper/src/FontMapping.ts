@@ -27,11 +27,11 @@ export type Mode = "replace" | "append";
  */
 export class FontMapping {
   static readonly #logger = LoggerProvider.getLogger("FontMapper");
-  private map: FontMap;
-  private DECODE_ELEMENT_HELP = document.createElement("div");
+  #map: FontMap;
+  #DECODE_ELEMENT_HELP = document.createElement("div");
 
   constructor(map: FontMap) {
-    this.map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
+    this.#map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
   }
 
   /**
@@ -46,14 +46,14 @@ export class FontMapping {
    * As we decode the HTML prior to replacement we need to ensure, that the
    * encoded characters are restored.
    *
-   * @param mode - the apply mode (only "replace" is taken into account)
    * @param map - the custom map to alter the existing FontMap
+   * @param mode - the apply mode (only "replace" is taken into account)
    */
   applyMapConfig(map: FontMap, mode: Mode = "append"): void {
     if (mode === "replace") {
-      this.map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
+      this.#map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
     } else {
-      this.map = FontMapping.#mergeFontMaps(this.map, map);
+      this.#map = FontMapping.#mergeFontMaps(this.#map, map);
     }
   }
 
@@ -85,7 +85,7 @@ export class FontMapping {
     const characters: string[] = [...decodedInput];
     const replacedInput: (string | null)[] = characters.map((value) => {
       const charCode = value.charCodeAt(0);
-      const htmlEntity = this.map.get(charCode);
+      const htmlEntity = this.#map.get(charCode);
       if (htmlEntity) {
         FontMapping.#logger.debug(`Found a replacement for "${value}": ${htmlEntity}`);
         return this.#decodeHtmlEntities(htmlEntity);
@@ -108,12 +108,16 @@ export class FontMapping {
    * @returns the decoded string
    */
   #decodeHtmlEntities(inputString: string): string {
-    this.DECODE_ELEMENT_HELP.innerHTML = inputString;
-    const textContent = this.DECODE_ELEMENT_HELP.textContent;
+    this.#DECODE_ELEMENT_HELP.innerHTML = inputString;
+    const textContent = this.#DECODE_ELEMENT_HELP.textContent;
     if (!textContent) {
       // see https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
       throw new Error("Error during decodeHtmlEntities: HTMLDivElement has no textContent");
     }
     return textContent;
+  }
+
+  toString(): string {
+    return `[FontMapping; ${this.#map.size} entries]`;
   }
 }

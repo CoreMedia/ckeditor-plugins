@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/no-duplicate-imports: off */
+/* eslint-disable import/no-duplicates */
 // noinspection JSUnusedGlobalSymbols
 
 // Import expect.extend

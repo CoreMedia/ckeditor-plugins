@@ -47,9 +47,11 @@ class ContentLinkFormViewExtension extends Plugin {
       contentName: undefined,
     });
 
-    formView.bind("contentUriPath").to(linkCommand, "value", (value: unknown) => {
-      return typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined;
-    });
+    formView
+      .bind("contentUriPath")
+      .to(linkCommand, "value", (value: unknown) =>
+        typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
+      );
 
     this.#rebindSaveEnabled(linkCommand, formView);
 
@@ -63,7 +65,7 @@ class ContentLinkFormViewExtension extends Plugin {
       () => {
         if (hasContentUriPathAndName(formView)) {
           const { contentUriPath, contentName } = formView;
-          if (!!contentUriPath) {
+          if (contentUriPath) {
             contentLinkCommandHook.registerContentName(contentUriPath, contentName);
           }
         }
@@ -97,11 +99,9 @@ class ContentLinkFormViewExtension extends Plugin {
       isEnabled: boolean,
       contentName: string | undefined,
       contentUriPath: string | undefined
-    ): boolean => {
+    ): boolean =>
       // Either contentUriPath must be unset or contentName must be set.
-      return isEnabled && (!contentUriPath || !!contentName);
-    };
-
+      isEnabled && (!contentUriPath || !!contentName);
     saveButtonView.unbind("isEnabled");
     // @ts-expect-error TODO Fix after Migrating to Types from DefinitelyTyped
     saveButtonView.bind("isEnabled").to(...enabledProperties, enabledHandler);
@@ -164,7 +164,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const contentUriPaths: string[] | undefined = getUriListValues(dragEvent);
 
-    if (!!contentUriPaths) {
+    if (contentUriPaths) {
       DragDropAsyncSupport.resetCache();
     }
 

@@ -31,8 +31,9 @@ export interface RemoveMarkerEventData {
  * added (Usually to load the data for the loading spinner). Gets the
  * markerData of the corresponding marker as the sole argument.
  */
-export const addContentMarkerConversion = (callback: (markerData: MarkerData) => void) => {
-  return (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
+export const addContentMarkerConversion =
+  (callback: (markerData: MarkerData) => void) =>
+  (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
     const viewPosition = conversionApi.mapper.toViewPosition(data.markerRange.start);
     const contentDropData = ContentDropDataCache.lookupData(data.markerName);
     if (!contentDropData) {
@@ -63,7 +64,6 @@ export const addContentMarkerConversion = (callback: (markerData: MarkerData) =>
 
     evt.stop();
   };
-};
 
 /**
  * Conversion function used in DowncastDispatcher event listeners.
@@ -84,7 +84,7 @@ export const removeContentMarkerConversion = (
   if (!elements) {
     return;
   }
-  elements.forEach(function (element) {
+  elements.forEach((element) => {
     conversionApi.mapper.unbindElementFromMarkerName(element, data.markerName);
     const range = conversionApi.writer.createRangeOn(element);
     conversionApi.writer.clear(range, element);

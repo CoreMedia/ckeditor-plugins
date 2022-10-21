@@ -37,11 +37,11 @@ const FIBONACCI_INDEX_TO = 2;
 
 // https://medium.com/developers-writing/fibonacci-sequence-algorithm-in-javascript-b253dc7e320e
 function fib(idx: number, memo?: Map<number, number>): number {
-  const myMemo: Map<number, number> = memo || new Map<number, number>();
+  const myMemo: Map<number, number> = memo ?? new Map<number, number>();
   if (idx <= 1) {
     return 1;
   }
-  let result: number = myMemo.get(idx) || 0;
+  let result: number = myMemo.get(idx) ?? 0;
   if (result === 0) {
     result = fib(idx - 1, memo) + fib(idx - 2, memo);
     myMemo.set(idx, result);

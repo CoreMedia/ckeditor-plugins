@@ -1,6 +1,7 @@
 /**
  * Provides a logging facilities, which can be triggered by hash-parameters.
  * See Module documentation for details.
+ *
  * @packageDocumentation
  * @category Virtual
  */

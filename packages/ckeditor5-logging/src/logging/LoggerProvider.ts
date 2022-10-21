@@ -17,6 +17,7 @@ import LogLevel from "./LogLevel";
  *   LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class LoggerProvider {
   static readonly #verbose = "verbose";
   static readonly #none = "none";
@@ -63,9 +64,9 @@ export default class LoggerProvider {
     const rootLogLevel: string | boolean = LoggerProvider.#getHashParam(LoggerProvider.#rootLoggerName);
     let logLevel: LogLevel = LoggerProvider.#defaultRootLogLevel;
 
-    if (!!logLevelParam) {
+    if (logLevelParam) {
       logLevel = LoggerProvider.#toLogLevel(logLevelParam);
-    } else if (!!rootLogLevel) {
+    } else if (rootLogLevel) {
       logLevel = LoggerProvider.#toLogLevel(rootLogLevel);
     }
 
@@ -118,6 +119,7 @@ export default class LoggerProvider {
 
   /**
    * Get the given hash parameter value from the given url
+   *
    * @param key - the hash parameter key to read; `undefined` will always
    * return `false`
    * @returns false iff. hash parameter is not set; true iff. the hash parameter is given without
@@ -129,7 +131,7 @@ export default class LoggerProvider {
     if (key === undefined || typeof window === "undefined") {
       return false;
     }
-    if (window.location && window.location.hash) {
+    if (window.location?.hash) {
       // substring: Remove hash
       const hash: string = window.location.hash.substring(1);
       const hashParams: string[] = hash.split(/&/);

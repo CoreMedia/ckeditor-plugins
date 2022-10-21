@@ -22,6 +22,7 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
       })
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ContentToModelRegistry {
   static #contentToModel: Map<string, CreateModelFunctionCreator> = new Map<string, CreateModelFunctionCreator>();
 

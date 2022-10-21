@@ -881,7 +881,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
 
   function allForbidden(self: string, ...allowed: string[]): string {
     return `<root>${allDtdElementsAndUnknown
-      .filter((e) => [self, ...allowed].indexOf(e) < 0)
+      .filter((e) => ![self, ...allowed].includes(e))
       .map((e) => `<${e}><${self}/></${e}>`)
       .join()}</root>`;
   }

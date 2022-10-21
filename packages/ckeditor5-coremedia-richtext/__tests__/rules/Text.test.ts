@@ -55,15 +55,13 @@ describe("CoreMediaRichTextConfig: Text Fixtures", () => {
     })
   );
 
-  const textCoreEntityFixtures: DataProcessingTestCase[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => {
-    return {
-      name: `TEXT/CORE_ENTITY#${index + 1}: Core Entity should be kept as is: ${entity}`,
-      direction: Direction.toData,
-      comment: "toView: In contrast to other entities, we must keep core entities, as otherwise XML may break.",
-      data: wrapContent(`<p>${text}${entity}${text}</p>`),
-      dataView: wrapContent(`<p>${text}${entity}${text}</p>`),
-    };
-  });
+  const textCoreEntityFixtures: DataProcessingTestCase[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => ({
+    name: `TEXT/CORE_ENTITY#${index + 1}: Core Entity should be kept as is: ${entity}`,
+    direction: Direction.toData,
+    comment: "toView: In contrast to other entities, we must keep core entities, as otherwise XML may break.",
+    data: wrapContent(`<p>${text}${entity}${text}</p>`),
+    dataView: wrapContent(`<p>${text}${entity}${text}</p>`),
+  }));
 
   // noinspection HtmlUnknownAttribute,XmlUnusedNamespaceDeclaration
   const data: DataProcessingTestCase[] = [

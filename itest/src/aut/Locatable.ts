@@ -1,9 +1,7 @@
 import { Locator } from "playwright";
 import { HasVisible } from "../expect/IsVisible/HasVisible";
 
-export const visible = (locatable: Locatable): Promise<boolean> => {
-  return locatable.locator.isVisible();
-};
+export const visible = (locatable: Locatable): Promise<boolean> => locatable.locator.isVisible();
 
 /**
  * Object providing access to its representation as locator.

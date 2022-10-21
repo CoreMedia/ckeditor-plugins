@@ -5,26 +5,27 @@
  * later on.
  */
 class NodeProxy<N extends Node = Node> {
-  private readonly _delegate: N;
+  readonly #delegate: N;
   /**
    * Flag to signal if this instance is meant to be mutable. Typically, you
    * don't want to make nested instances to be mutable, as the framework will
    * not take care of persisting possibly applied changes.
    */
-  private readonly _mutable: boolean;
+  readonly #mutable: boolean;
   /**
    * Represents the state the node should take when persisting to DOM.
    */
-  private _state: NodeState = NodeState.KEEP_OR_REPLACE;
+  #state: NodeState = NodeState.KEEP_OR_REPLACE;
 
   /**
    * Constructor.
+   *
    * @param delegate - delegate to wrap
    * @param mutable - signals, if this representation is mutable or not
    */
   constructor(delegate: N, mutable = true) {
-    this._delegate = delegate;
-    this._mutable = mutable;
+    this.#delegate = delegate;
+    this.#mutable = mutable;
   }
 
   /**
@@ -36,7 +37,7 @@ class NodeProxy<N extends Node = Node> {
    * @returns NodeProxy for given node; `null` for falsy values
    */
   public static proxy<T extends Node>(node: T | undefined | null, mutable = true): NodeProxy<T> | null {
-    if (!!node) {
+    if (node) {
       return new NodeProxy(node, mutable);
     }
     return null;
@@ -46,14 +47,14 @@ class NodeProxy<N extends Node = Node> {
    * Gets the state to reach when persisting this node to the DOM.
    */
   public get state(): NodeState {
-    return this._state;
+    return this.#state;
   }
 
   /**
    * Signals, if this element is mutable.
    */
   public get mutable(): boolean {
-    return this._mutable;
+    return this.#mutable;
   }
 
   /**
@@ -77,7 +78,7 @@ class NodeProxy<N extends Node = Node> {
    * all applicable rules have a chance to modify these nodes again.
    */
   public get delegate(): N {
-    return this._delegate;
+    return this.#delegate;
   }
 
   /**
@@ -156,6 +157,7 @@ class NodeProxy<N extends Node = Node> {
 
   /**
    * Get first (matching) child node of the given element.
+   *
    * @param condition - string: the node name to match (ignoring case), predicate:
    * the predicate to apply.
    */
@@ -167,9 +169,7 @@ class NodeProxy<N extends Node = Node> {
     if (typeof condition === "function") {
       predicate = condition;
     } else {
-      predicate = (child) => {
-        return child.nodeName.toLowerCase() === condition.toLowerCase();
-      };
+      predicate = (child) => child.nodeName.toLowerCase() === condition.toLowerCase();
     }
     return NodeProxy.proxy(Array.from(this.delegate.childNodes).find(predicate, false));
   }
@@ -208,9 +208,9 @@ class NodeProxy<N extends Node = Node> {
   public set remove(remove: boolean) {
     this.requireMutable();
     if (remove) {
-      this._state = NodeState.REMOVE_RECURSIVELY;
+      this.#state = NodeState.REMOVE_RECURSIVELY;
     } else {
-      this._state = NodeState.KEEP_OR_REPLACE;
+      this.#state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -235,9 +235,9 @@ class NodeProxy<N extends Node = Node> {
   public set removeChildren(remove: boolean) {
     this.requireMutable();
     if (remove) {
-      this._state = NodeState.REMOVE_CHILDREN;
+      this.#state = NodeState.REMOVE_CHILDREN;
     } else {
-      this._state = NodeState.KEEP_OR_REPLACE;
+      this.#state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -262,9 +262,9 @@ class NodeProxy<N extends Node = Node> {
   public set replaceByChildren(replace: boolean) {
     this.requireMutable();
     if (replace) {
-      this._state = NodeState.REMOVE_SELF;
+      this.#state = NodeState.REMOVE_SELF;
     } else {
-      this._state = NodeState.KEEP_OR_REPLACE;
+      this.#state = NodeState.KEEP_OR_REPLACE;
     }
   }
 
@@ -305,7 +305,7 @@ class NodeProxy<N extends Node = Node> {
   protected continueFrom(node: Node | null | undefined): PersistResponse {
     return {
       ...RESPONSE_CONTINUE,
-      continueWith: node || undefined,
+      continueWith: node ?? undefined,
     };
   }
 
@@ -317,7 +317,7 @@ class NodeProxy<N extends Node = Node> {
   protected restartFrom(node: Node | null | undefined): PersistResponse {
     return {
       ...RESPONSE_ABORT,
-      continueWith: node || undefined,
+      continueWith: node ?? undefined,
     };
   }
 
@@ -359,7 +359,7 @@ class NodeProxy<N extends Node = Node> {
       do {
         currentChild = this.delegate.firstChild;
         currentChild && parentNode.insertBefore(currentChild, this.delegate);
-      } while (!!currentChild);
+      } while (currentChild);
 
       parentNode.removeChild(this.delegate);
     } else {
@@ -429,6 +429,7 @@ interface PersistResponse {
  * <pre>
  * `(child: ChildNode, index: number, array: ChildNode[]) => boolean`
  * </pre>
+ *
  * @param child - the child node to validate
  * @param index - child node index
  * @param array - list of all sibling child nodes (including the child itself)

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { updatePreview } from "./preview";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 
@@ -37,6 +38,8 @@ export const setData = (editor: ClassicEditor, data: string) => {
  * @param editor - the editor instance whose data to save
  * @param source - which editor stored the data
  */
+// async: In production scenarios, this will be an asynchronous call.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const saveData = async (editor: ClassicEditor, source: string) => {
   const data = editor.getData({
     // set to `none`, to trigger data-processing for empty text, too
@@ -49,17 +52,15 @@ export const saveData = async (editor: ClassicEditor, source: string) => {
   //@ts-expect-error problem with symbols
   const lastSetData = window[LastSetData];
 
-  const logInfo = (isUpdate: boolean) => {
-    return {
-      isUpdate,
-      currentVersion,
-      lastSetVersion,
-      data,
-      lastSetData,
-    };
-  };
+  const logInfo = (isUpdate: boolean) => ({
+    isUpdate,
+    currentVersion,
+    lastSetVersion,
+    data,
+    lastSetData,
+  });
 
-  let previewData;
+  let previewData: string;
 
   if (lastSetVersion !== undefined && lastSetVersion === currentVersion) {
     console.log(

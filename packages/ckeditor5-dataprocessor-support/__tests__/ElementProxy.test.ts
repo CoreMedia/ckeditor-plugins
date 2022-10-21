@@ -121,6 +121,7 @@ describe("ElementProxy.classList", () => {
    * Sets the class attribute value for both, DOM reference as
    * proxied DOM element. If `null`, the class attribute is removed
    * instead.
+   *
    * @param domClass - class to set; `null`to remove class attribute
    */
   const setClass = (domClass: string | null): void => {
@@ -162,6 +163,7 @@ describe("ElementProxy.classList", () => {
   });
 
   describe("classList.value", () => {
+    // noinspection ES6DestructuringVariablesMerge
     describe.each`
       class                                | comment
       ${""}                                | ${"Empty class should stay as is."}
@@ -660,6 +662,8 @@ describe("ElementProxy.applyRules()", () => {
         rules: [
           (me) => {
             Object.keys(me.node.attributes).forEach((key) => {
+              // To fix, we may migrate attributes to Map<> instead.
+              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
               delete me.node.attributes[key];
             });
           },
@@ -675,6 +679,8 @@ describe("ElementProxy.applyRules()", () => {
           (me) => {
             me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
+              // To fix, we may migrate attributes to Map<> instead.
+              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
               delete me.node.attributes[key];
             });
           },
@@ -688,7 +694,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes.attr = "prefixed:" + me.node.attributes.attr;
+            me.node.attributes.attr = `prefixed:${me.node.attributes.attr}`;
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -702,7 +708,7 @@ describe("ElementProxy.applyRules()", () => {
       {
         rules: [
           (me) => {
-            me.node.attributes.attr = "prefixed:" + me.node.attributes.attr;
+            me.node.attributes.attr = `prefixed:${me.node.attributes.attr}`;
           },
         ],
         // If we ever see this fail because of attribute order, please remove
@@ -717,7 +723,7 @@ describe("ElementProxy.applyRules()", () => {
         rules: [
           (me) => {
             Object.keys(me.node.attributes).forEach((key) => {
-              me.node.attributes[key] = "prefixed:" + me.node.attributes[key];
+              me.node.attributes[key] = `prefixed:${me.node.attributes[key]}`;
             });
           },
         ],
@@ -732,7 +738,7 @@ describe("ElementProxy.applyRules()", () => {
           (me) => {
             me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
-              me.node.attributes[key] = "prefixed:" + me.node.attributes[key];
+              me.node.attributes[key] = `prefixed:${me.node.attributes[key]}`;
             });
           },
         ],
@@ -749,11 +755,11 @@ describe("ElementProxy.applyRules()", () => {
             for (const key in me.node.attributes) {
               if (me.node.attributes.hasOwnProperty(key)) {
                 const descriptor = Object.getOwnPropertyDescriptor(me.node.attributes, key);
-                if (!!descriptor) {
+                if (descriptor) {
                   // False positive? Checks assume, that descriptor may be undefined here. But how?
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-expect-error Possibly false positive.
-                  descriptor.set("prefixed:" + descriptor.get());
+                  descriptor.set(`prefixed:${descriptor.get()}`);
                 }
               }
             }

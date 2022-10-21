@@ -51,6 +51,7 @@ const UTILITY_NAME = "DataToModelMechanism";
  * Now, the model then is written, the view updates accordingly and the marker
  * (loading animation) gets removed.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class DataToModelMechanism {
   static readonly #logger: Logger = LoggerProvider.getLogger(UTILITY_NAME);
 
@@ -84,9 +85,10 @@ export default class DataToModelMechanism {
     // embeddable. Lookup an extender with the object type, call the `create`
     // model stuff. take a promise and execute writeItemToModel
     this.#getType(contentDropData.itemContext.contentUri)
-      .then((type): Promise<CreateModelFunction> => {
-        return this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri);
-      })
+      .then(
+        (type): Promise<CreateModelFunction> =>
+          this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri)
+      )
       .then((createItemFunction: CreateModelFunction): void => {
         DataToModelMechanism.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
       })
@@ -159,7 +161,7 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      ifPlugin(editor, UndoSupport).then(enableUndo);
+      void ifPlugin(editor, UndoSupport).then(enableUndo);
     }
   }
 

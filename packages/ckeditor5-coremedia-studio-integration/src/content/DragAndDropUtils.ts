@@ -28,9 +28,7 @@ export const receiveUriPathsFromDragDropService = (): string[] | null => {
   }
 
   const contents: CMBeanReference[] = dragData.contents;
-  return contents.map((value) => {
-    return value.$Ref;
-  });
+  return contents.map((value) => value.$Ref);
 };
 
 /**

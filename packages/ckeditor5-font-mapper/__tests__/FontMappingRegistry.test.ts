@@ -15,7 +15,7 @@ it.each([
 ])(
   "Should apply map %s with mode %s when font %s is already registered to be mapped",
   // @ts-expect-error somehow typescript does not recognize that "append" and "replace" are the defined options for mode.
-  (font: string, fontMap: { [key: number]: string }, mode: Mode | undefined) => {
+  (font: string, fontMap: Record<number, string>, mode: Mode | undefined) => {
     const fontMappingRegistry = new FontMappingRegistry();
     const fontMapping = fontMappingRegistry.getFontMapping("symbol");
     expect(fontMapping).toBeDefined();
@@ -37,7 +37,7 @@ it.each([
 ])(
   "Should add font '%s' with font mapping '%s' if font is not registered yet, ignoring mode '%s'",
   // @ts-expect-error somehow typescript does not recognize that "append" and "replace" are the defined options for mode.
-  (font: string, fontMap: { [key: number]: string }, mode: Mode | undefined) => {
+  (font: string, fontMap: Record<number, string>, mode: Mode | undefined) => {
     const fontMappingRegistry = new FontMappingRegistry();
 
     fontMappingRegistry.registerFontMapping({

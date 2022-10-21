@@ -28,9 +28,7 @@ export type Direction = "ltr" | "rtl";
 /**
  * Represents just any attributes.
  */
-export interface AnyAttributes {
-  [key: string]: unknown;
-}
+export type AnyAttributes = Record<string, unknown>;
 
 /**
  * `coreattrs` attributes according to DTD.
@@ -60,14 +58,11 @@ export interface Attributes extends CoreAttributes, InternationalizationAttribut
  * @param attrs - attributes to join
  * @param keyFilter - optional filter to possibly remove some attributes; defaults to answer `true`, which is to add all attributes
  */
-export const joinAttributes = (attrs: AnyAttributes, keyFilter: (k: string) => boolean = () => true): string => {
-  return Object.entries(attrs)
-    .filter(([k]) => {
-      return keyFilter(k);
-    })
+export const joinAttributes = (attrs: AnyAttributes, keyFilter: (k: string) => boolean = () => true): string =>
+  Object.entries(attrs)
+    .filter(([k]) => keyFilter(k))
     .map(([k, v]) => `${k}="${v}"`)
     .join(" ");
-};
 
 /**
  * We may provide contents as single string or as array of strings.
@@ -78,6 +73,7 @@ export type Content = string | string[];
 
 /**
  * Validates, that content must not be empty.
+ *
  * @param content - content to validate
  */
 export const nonEmptyContent = (content: Content): Content => {
@@ -120,9 +116,7 @@ export const emptyElement = (element: string, attrs: string | AnyAttributes = ""
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const p = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("p", content, { ...attrs });
-};
+export const p = (content: Content = "", attrs: Attributes = {}): string => nonEmptyElement("p", content, { ...attrs });
 
 /**
  * Wraps given content into `<ul>` with given attributes.
@@ -132,9 +126,8 @@ export const p = (content: Content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const ul = (content: Content, attrs: Attributes = {}): string => {
-  return nonEmptyElement("ul", nonEmptyContent(content), { ...attrs });
-};
+export const ul = (content: Content, attrs: Attributes = {}): string =>
+  nonEmptyElement("ul", nonEmptyContent(content), { ...attrs });
 
 /**
  * Wraps given content into `<ol>` with given attributes.
@@ -144,9 +137,8 @@ export const ul = (content: Content, attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const ol = (content: Content, attrs: Attributes = {}): string => {
-  return nonEmptyElement("ol", nonEmptyContent(content), { ...attrs });
-};
+export const ol = (content: Content, attrs: Attributes = {}): string =>
+  nonEmptyElement("ol", nonEmptyContent(content), { ...attrs });
 
 /**
  * Wraps given content into `<li>` with given attributes.
@@ -156,9 +148,8 @@ export const ol = (content: Content, attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const li = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("li", content, { ...attrs });
-};
+export const li = (content: Content = "", attrs: Attributes = {}): string =>
+  nonEmptyElement("li", content, { ...attrs });
 
 /**
  * Attributes applicable to `<pre>`.
@@ -175,9 +166,8 @@ export interface PreAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const pre = (content: Content = "", attrs: PreAttributes = {}): string => {
-  return nonEmptyElement("pre", content, { ...attrs });
-};
+export const pre = (content: Content = "", attrs: PreAttributes = {}): string =>
+  nonEmptyElement("pre", content, { ...attrs });
 
 /**
  * Attributes applicable to `<blockquote>`.
@@ -194,9 +184,8 @@ export interface BlockquoteAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const blockquote = (content: Content = "", attrs: BlockquoteAttributes = {}): string => {
-  return nonEmptyElement("blockquote", content, { ...attrs });
-};
+export const blockquote = (content: Content = "", attrs: BlockquoteAttributes = {}): string =>
+  nonEmptyElement("blockquote", content, { ...attrs });
 
 /**
  * Attributes applicable to `<a>`.
@@ -218,9 +207,8 @@ export interface AnchorAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const a = (content: Content = "", attrs: AnchorAttributes): string => {
-  return nonEmptyElement("a", content, { ...attrs });
-};
+export const a = (content: Content = "", attrs: AnchorAttributes): string =>
+  nonEmptyElement("a", content, { ...attrs });
 
 /**
  * Wraps given content into `<span>` with given attributes.
@@ -230,18 +218,15 @@ export const a = (content: Content = "", attrs: AnchorAttributes): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const span = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("span", content, { ...attrs });
-};
+export const span = (content: Content = "", attrs: Attributes = {}): string =>
+  nonEmptyElement("span", content, { ...attrs });
 
 /**
  * Adds element `<br>` with given attributes.
  *
  * @param attrs - attributes to apply to element
  */
-export const br = (attrs: CoreAttributes = {}): string => {
-  return emptyElement("br", { ...attrs });
-};
+export const br = (attrs: CoreAttributes = {}): string => emptyElement("br", { ...attrs });
 
 /**
  * Wraps given content into `<em>` with given attributes.
@@ -251,9 +236,8 @@ export const br = (attrs: CoreAttributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const em = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("em", content, { ...attrs });
-};
+export const em = (content: Content = "", attrs: Attributes = {}): string =>
+  nonEmptyElement("em", content, { ...attrs });
 
 /**
  * Wraps given content into `<strong>` with given attributes.
@@ -263,9 +247,8 @@ export const em = (content: Content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const strong = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("strong", content, { ...attrs });
-};
+export const strong = (content: Content = "", attrs: Attributes = {}): string =>
+  nonEmptyElement("strong", content, { ...attrs });
 
 /**
  * Wraps given content into `<sub>` with given attributes.
@@ -275,9 +258,8 @@ export const strong = (content: Content = "", attrs: Attributes = {}): string =>
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const sub = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("sub", content, { ...attrs });
-};
+export const sub = (content: Content = "", attrs: Attributes = {}): string =>
+  nonEmptyElement("sub", content, { ...attrs });
 
 /**
  * Wraps given content into `<sup>` with given attributes.
@@ -287,9 +269,8 @@ export const sub = (content: Content = "", attrs: Attributes = {}): string => {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const sup = (content: Content = "", attrs: Attributes = {}): string => {
-  return nonEmptyElement("sup", content, { ...attrs });
-};
+export const sup = (content: Content = "", attrs: Attributes = {}): string =>
+  nonEmptyElement("sup", content, { ...attrs });
 
 /**
  * Attributes applicable to `<img>`.
@@ -311,9 +292,7 @@ export interface ImageAttributes extends Attributes {
  *
  * @param attrs - attributes to apply to element
  */
-export const img = (attrs: ImageAttributes): string => {
-  return emptyElement("img", { ...attrs });
-};
+export const img = (attrs: ImageAttributes): string => emptyElement("img", { ...attrs });
 
 /**
  * Horizontal Alignment Attribute.
@@ -344,9 +323,8 @@ export interface TableAttributes extends Attributes {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const table = (content: Content, attrs: TableAttributes = {}) => {
-  return nonEmptyElement("table", nonEmptyContent(content), { ...attrs });
-};
+export const table = (content: Content, attrs: TableAttributes = {}) =>
+  nonEmptyElement("table", nonEmptyContent(content), { ...attrs });
 
 /**
  * Attributes applicable to `<tbody>`.
@@ -361,9 +339,8 @@ export interface TableBodyAttributes extends Attributes, CellHAlign, CellVAlign 
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const tbody = (content: Content, attrs: TableBodyAttributes = {}) => {
-  return nonEmptyElement("tbody", nonEmptyContent(content), { ...attrs });
-};
+export const tbody = (content: Content, attrs: TableBodyAttributes = {}) =>
+  nonEmptyElement("tbody", nonEmptyContent(content), { ...attrs });
 
 /**
  * Attributes applicable to `<tr>`.
@@ -379,9 +356,8 @@ export interface TableRowAttributes extends Attributes, CellHAlign, CellVAlign {
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const tr = (content: Content, attrs: TableRowAttributes = {}) => {
-  return nonEmptyElement("tr", nonEmptyContent(content), { ...attrs });
-};
+export const tr = (content: Content, attrs: TableRowAttributes = {}) =>
+  nonEmptyElement("tr", nonEmptyContent(content), { ...attrs });
 
 /**
  * Attributes applicable to `<td>`.
@@ -400,9 +376,8 @@ export interface TableDataAttributes extends Attributes, CellHAlign, CellVAlign 
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const td = (content: Content, attrs: TableDataAttributes = {}) => {
-  return nonEmptyElement("td", nonEmptyContent(content), { ...attrs });
-};
+export const td = (content: Content, attrs: TableDataAttributes = {}) =>
+  nonEmptyElement("td", nonEmptyContent(content), { ...attrs });
 
 /**
  * Type for inline factory methods with default attributes.

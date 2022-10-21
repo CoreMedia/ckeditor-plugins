@@ -2,6 +2,7 @@
 
 /**
  * Flattens a nested array of a given type.
+ *
  * @example
  * ```
  * flatten([["a"], ["b"]]) → ["a", "b"]
@@ -34,7 +35,7 @@ const xmlParser = new DOMParser();
 
 const parseXml = (xmlData: string): Document => {
   const xmlDocument: Document = xmlParser.parseFromString(xmlData, "text/xml");
-  if (xmlDocument.documentElement.outerHTML.indexOf("parsererror") >= 0) {
+  if (xmlDocument.documentElement.outerHTML.includes("parsererror")) {
     throw new Error(`Failed parsing XML: ${xmlData}: ${xmlDocument.documentElement.outerHTML}`);
   }
   return xmlDocument;

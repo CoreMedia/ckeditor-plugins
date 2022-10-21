@@ -41,6 +41,7 @@ export enum Strictness {
 
 /**
  * Validator type for attribute values.
+ *
  * @param value - the attribute value to validate
  * @param strictness - mode for checking validity
  * @returns `true` if attribute value is considered valid; `false` if not
@@ -87,9 +88,7 @@ interface AttributeSpecification {
 /**
  * Map of attribute-names (lower-case) to their corresponding specification.
  */
-interface Attributes {
-  [attributeName: string]: AttributeSpecification;
-}
+type Attributes = Record<string, AttributeSpecification>;
 
 /**
  * Similar to a Relax-NG ModelGroup this specifies possible contents of
@@ -141,18 +140,15 @@ interface ElementSpecification extends ModelGroup {
 /**
  * Specifies all supported elements.
  */
-interface Elements {
-  [elementName: string]: ElementSpecification;
-}
+type Elements = Record<string, ElementSpecification>;
 
 /**
  * In previous implementations attribute values were not validated, and thus
  * possibly invalid values had not been removed. This action fulfills
  * exactly this contract for `LEGACY` mode.
  */
-const REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (attrValue, strictness) => {
-  return strictness === Strictness.LEGACY ? attrValue : undefined;
-};
+const REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY: InvalidAttributeValueAction = (attrValue, strictness) =>
+  strictness === Strictness.LEGACY ? attrValue : undefined;
 
 const NOTHING_TODO_ON_MISSING_ATTRIBUTE: MissingAttributeAction = () => undefined;
 
@@ -220,7 +216,7 @@ const ATTRIBUTE_GROUP_I18N: Attributes = {
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
   "dir": {
-    valueValidator: (v) => ["ltr", "rtl"].indexOf(v) >= 0,
+    valueValidator: (v) => ["ltr", "rtl"].includes(v),
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
@@ -229,14 +225,14 @@ const ATTRIBUTE_GROUP_ATTRS: Attributes = { ...ATTRIBUTE_GROUP_COREATTRS, ...ATT
 
 const ATTRIBUTE_GROUP_CELLHALIGN: Attributes = {
   align: {
-    valueValidator: (v) => ["left", "center", "right"].indexOf(v) >= 0,
+    valueValidator: (v) => ["left", "center", "right"].includes(v),
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
 
 const ATTRIBUTE_GROUP_CELLVALIGN: Attributes = {
   valign: {
-    valueValidator: (v) => ["top", "middle", "bottom", "baseline"].indexOf(v) >= 0,
+    valueValidator: (v) => ["top", "middle", "bottom", "baseline"].includes(v),
     onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
   },
 };
@@ -346,12 +342,8 @@ const ELEMENTS: Elements = {
     attributeList: {
       "xmlns": {
         valueValidator: (s) => COREMEDIA_RICHTEXT_1_0_NAMESPACE === s,
-        onInvalidValue: () => {
-          return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
-        },
-        onMissingAttribute: () => {
-          return COREMEDIA_RICHTEXT_1_0_NAMESPACE;
-        },
+        onInvalidValue: () => COREMEDIA_RICHTEXT_1_0_NAMESPACE,
+        onMissingAttribute: () => COREMEDIA_RICHTEXT_1_0_NAMESPACE,
       },
       "xmlns:xlink": {
         valueValidator: (s) => XLINK_NAMESPACE === s,
@@ -429,11 +421,11 @@ const ELEMENTS: Elements = {
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:show": {
-        valueValidator: (s) => ["new", "replace", "embed", "other", "none"].indexOf(s) >= 0,
+        valueValidator: (s) => ["new", "replace", "embed", "other", "none"].includes(s),
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
       "xlink:actuate": {
-        valueValidator: (s) => ["onRequest", "onLoad"].indexOf(s) >= 0,
+        valueValidator: (s) => ["onRequest", "onLoad"].includes(s),
         onInvalidValue: REMOVE_ATTRIBUTE_KEEP_ONLY_ON_LEGACY,
       },
     },
@@ -597,7 +589,7 @@ export default class RichTextSchema {
         if (elements.hasOwnProperty(nested)) {
           const nestedElementSpecification = elements[nested];
           const newParents: string[] = nestedElementSpecification.parentElementNames ?? [];
-          if (newParents.indexOf(elementName) < 0) {
+          if (!newParents.includes(elementName)) {
             newParents.push(elementName);
           }
           nestedElementSpecification.parentElementNames = newParents;
@@ -632,7 +624,7 @@ export default class RichTextSchema {
       return false;
     }
 
-    const isAllowed = elementSpecification.mayContainText || false;
+    const isAllowed = elementSpecification.mayContainText ?? false;
 
     if (!isAllowed) {
       logger.debug(`Text nodes not allowed at <${parentName}>. Will signal 'not allowed at parent' for:`, text);
@@ -668,7 +660,7 @@ export default class RichTextSchema {
     const isAtRoot = !element.parentElement;
 
     if (isAtRoot) {
-      if (!!elementSpecification.parentElementNames) {
+      if (elementSpecification.parentElementNames) {
         logger.debug(`Element <${elementName}> not allowed at root.`);
         return false;
       }
@@ -678,7 +670,7 @@ export default class RichTextSchema {
       return false;
     }
 
-    const isAllowedAtParent = elementSpecification.parentElementNames.indexOf(parentName as string) >= 0;
+    const isAllowedAtParent = elementSpecification.parentElementNames.includes(parentName as string);
     if (!isAllowedAtParent) {
       logger.debug(`Element <${elementName}> not allowed at parent <${parentName}>.`);
     }
@@ -743,7 +735,7 @@ export default class RichTextSchema {
   #deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
     const notAllowedAttributes: string[] = actualAttributes.filter(
-      (a) => specifiedAttributes.indexOf(a.toLowerCase()) < 0
+      (a) => !specifiedAttributes.includes(a.toLowerCase())
     );
 
     if (notAllowedAttributes.length > 0) {
@@ -754,6 +746,8 @@ export default class RichTextSchema {
           attributes: notAllowedAttributes,
         }
       );
+      // To fix, we may migrate attributes to Map<> instead.
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       notAllowedAttributes.forEach((attributeName) => delete element.attributes[attributeName]);
     }
   }
@@ -776,6 +770,8 @@ export default class RichTextSchema {
             RichTextSchema.#logger.debug(
               `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
             );
+            // To fix, we may migrate attributes to Map<> instead.
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
             RichTextSchema.#logger.debug(
@@ -795,7 +791,7 @@ export default class RichTextSchema {
   ) {
     const validActualAttributes = Object.keys(element.attributes);
     const possiblyMissingAttributes = specifiedAttributes.filter(
-      (a) => validActualAttributes.indexOf(a.toLowerCase()) < 0
+      (a) => !validActualAttributes.includes(a.toLowerCase())
     );
 
     possiblyMissingAttributes.forEach((attributeName) => {

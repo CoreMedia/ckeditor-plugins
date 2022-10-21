@@ -41,7 +41,7 @@ export default class ContentLinks extends Plugin {
       linkUI,
       "_hideUI",
       () => {
-        const commandValue: string = (linkCommand?.value ?? "") as string;
+        const commandValue: string = linkCommand?.value ?? "";
         const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
         const { formView } = linkUI;
         formView.set({ contentUriPath: value });
@@ -158,11 +158,13 @@ export default class ContentLinks extends Plugin {
     this.#addCustomClickOutsideHandler({
       emitter: formView,
       // @ts-expect-error TODO Fix Typings
-      activator: () => linkUI._isUIInPanel,
+      activator: () => linkUI._isUIInPanel as boolean,
       // @ts-expect-error TODO Fix Typings
+      // eslint-disable-next-line
       contextElements: [linkUI._balloon.view.element],
       callback: () => {
         // @ts-expect-error TODO Fix Typings
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         linkUI._hideUI();
       },
     });

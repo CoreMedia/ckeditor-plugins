@@ -34,7 +34,9 @@ export const testShouldRetrieveValuesThat = <T>(
       next: (value) => {
         retrievedValues.push(value);
       },
-      error: (error) => done(error),
+      error: (error) => {
+        done(error);
+      },
       complete: () => {
         assertions(retrievedValues);
         done();

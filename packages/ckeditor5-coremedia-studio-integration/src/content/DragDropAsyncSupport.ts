@@ -14,6 +14,7 @@ type EvaluationCallback = (cacheValue: boolean) => void;
  * Provides support for asynchronous API called within synchronous HTML5 drag
  * and drop event handling.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class DragDropAsyncSupport {
   static readonly #logger = LoggerProvider.getLogger("DragDropAsyncSupport");
 
@@ -55,7 +56,7 @@ export default class DragDropAsyncSupport {
       service: RichtextConfigurationService,
       callback: EvaluationCallback
     ): void => {
-      service.hasLinkableType(uriPath).then((hasLinkableType: boolean) => {
+      void service.hasLinkableType(uriPath).then((hasLinkableType: boolean) => {
         callback(hasLinkableType);
       });
     };
@@ -98,7 +99,7 @@ export default class DragDropAsyncSupport {
       service: RichtextConfigurationService,
       callback: EvaluationCallback
     ): void => {
-      service.isEmbeddableType(uriPath).then((isEmbeddable: boolean) => {
+      void service.isEmbeddableType(uriPath).then((isEmbeddable: boolean) => {
         callback(isEmbeddable);
       });
     };
@@ -121,6 +122,7 @@ export default class DragDropAsyncSupport {
    * and positive.
    *
    * **On drop the cache has to be cleared so the short-term cache does not grow eternally.**
+   *
    * @param uriPaths - URI paths to validate
    */
   static containsDisplayableContents(uriPaths: string[]): boolean {
@@ -207,7 +209,7 @@ export default class DragDropAsyncSupport {
 
     // || false -> required for possible undefined response from get() which
     // cannot happen here.
-    const cacheValue = cache.get(uriPath) || false;
+    const cacheValue = cache.get(uriPath) ?? false;
     const actualValue = cacheValue === IN_PROGRESS ? false : cacheValue;
 
     if (evictImmediately) {

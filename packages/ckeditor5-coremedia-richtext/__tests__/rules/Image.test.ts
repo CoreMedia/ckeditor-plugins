@@ -27,7 +27,7 @@ const imageSourceToDummyHref = (document: Document): void => {
   // these tests.
   if (actualImageElements.length === 1) {
     const actualImageElement = actualImageElements[0];
-    if (!!actualImageElement.getAttribute("src")) {
+    if (actualImageElement.getAttribute("src")) {
       actualImageElement.setAttribute("src", dummySrc);
     }
   }

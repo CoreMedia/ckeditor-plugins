@@ -66,7 +66,7 @@ class ClassList implements DOMTokenList {
    * Returns the current `class` value. Empty string will be returned, if unset.
    */
   get value(): string {
-    return this.#proxy.attributes.class || "";
+    return this.#proxy.attributes.class ?? "";
   }
 
   /**
@@ -340,9 +340,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    * Mimics `ElementFilterParams`, which helps to deal with rule processing.
    */
-  public readonly parentRule: ElementFilterRule = () => {
-    return undefined;
-  };
+  public readonly parentRule: ElementFilterRule = () => undefined;
 
   /**
    * Constructor.
@@ -388,7 +386,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * @inheritDoc NodeProxy.delegate
    */
   get delegate(): Element {
-    return this.#replacement || super.delegate;
+    return this.#replacement ?? super.delegate;
   }
 
   /**
@@ -409,11 +407,11 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   applyRules(...rules: (ElementFilterRule | undefined)[]): Node | null {
     let result: Node | null = null;
     for (const rule of rules) {
-      if (!!rule) {
+      if (rule) {
         rule(this);
 
         const response = this.persistToDom();
-        if (!!response.continueWith) {
+        if (response.continueWith) {
           result = response.continueWith || result;
         }
         if (response.abort) {
@@ -463,7 +461,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    */
   #persistAttributes(): PersistResponse {
     const elementNamespaceAttribute: string | null = this.#attributes.xmlns;
-    if (!!elementNamespaceAttribute) {
+    if (elementNamespaceAttribute) {
       // We cannot just set attributes. We need to create a new element with
       // the given namespace.
       return this.#persistReplaceBy(this.realName, elementNamespaceAttribute);
@@ -494,13 +492,13 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     const ownerDocument = targetElement.ownerDocument;
     const attributeNames = Object.keys(attributes);
 
-    function handleAttributeWithoutNamespacePrefix(key: string, value: string | null) {
+    const handleAttributeWithoutNamespacePrefix = (key: string, value: string | null) => {
       if (value === null) {
         targetElement.removeAttributeNS(null, key);
       } else {
         targetElement.setAttributeNS(null, key, value);
       }
-    }
+    };
 
     const handleAttributeWithNamespacePrefix = (
       uri: string | undefined,
@@ -613,7 +611,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     }
 
     const parentNode = this.delegate.parentNode;
-    if (!!parentNode) {
+    if (parentNode) {
       parentNode.replaceChild(newElement, this.delegate);
     }
     this.#replacement = newElement;
@@ -631,7 +629,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * If the name got changed, will return this changed name instead.
    */
   public get name(): string {
-    return this.#name || super.name;
+    return this.#name ?? super.name;
   }
 
   /**
@@ -668,7 +666,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
        */
       get(target: AttributeMap, attrName: PropertyKey, receiver: never): AttributeValue {
         if (Reflect.has(target, attrName)) {
-          return Reflect.get(target, attrName, receiver);
+          return Reflect.get(target, attrName, receiver) as AttributeValue;
         }
         if (typeof attrName === "string") {
           return self.delegate.getAttribute(attrName);
@@ -684,7 +682,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
       getOwnPropertyDescriptor(target: AttributeMap, attrName: PropertyKey): PropertyDescriptor | undefined {
         // Handle, if this is the overwritten state.
         if (Reflect.has(target, attrName)) {
-          const value = Reflect.get(target, attrName);
+          const value: unknown = Reflect.get(target, attrName);
           if (value === undefined || value === null) {
             return undefined;
           }
@@ -759,7 +757,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
         const elementAttrs: OwnPropertyKey[] = self.delegate.getAttributeNames();
         // Join distinct keys, skip forcibly deleted.
         return elementAttrs
-          .concat(targetKeys.filter((k: OwnPropertyKey) => elementAttrs.indexOf(k) < 0))
+          .concat(targetKeys.filter((k: OwnPropertyKey) => !elementAttrs.includes(k)))
           .filter((k: OwnPropertyKey) => !Reflect.has(target, k) || Reflect.get(target, k) !== undefined);
       },
     });
@@ -776,9 +774,9 @@ type AttributeValue = string | null;
 /**
  * The attributes of an element.
  */
-interface AttributeMap {
-  [index: string]: AttributeValue;
-}
+// TODO: We should migrate this to a map instead. This would also solve issues
+//       like @typescript-eslint/no-dynamic-delete.
+type AttributeMap = Record<string, AttributeValue>;
 
 /**
  * Named parameters to be passed to element filters. For overriding filter rules
@@ -818,9 +816,10 @@ type ElementFilterRule = (params: ElementFilterParams) => void;
  * @param rules - rules to combine
  * @returns rule, which combines all passed rules into one
  */
-const allFilterRules = (...rules: ElementFilterRule[]): ElementFilterRule => {
-  return (params) => rules.forEach((r) => r(params));
-};
+const allFilterRules =
+  (...rules: ElementFilterRule[]): ElementFilterRule =>
+  (params) =>
+    rules.forEach((r) => r(params));
 
 export default ElementProxy;
 export { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule, allFilterRules };

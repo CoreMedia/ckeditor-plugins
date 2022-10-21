@@ -43,9 +43,7 @@ const increaseUpToAndRestart = (input: number, upperBoundExcluding: number): Inc
  *
  * @param c - instance to check
  */
-const isObject = (c: unknown): c is Record<string, unknown> => {
-  return typeof c === "object" && c !== null;
-};
+const isObject = (c: unknown): c is Record<string, unknown> => typeof c === "object" && c !== null;
 
 /**
  * Utility type to map a given type to an atomic or array type.
