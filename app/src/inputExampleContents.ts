@@ -221,7 +221,6 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: slowDocuments.concat(singleDroppableDocuments).flatMap((item) => item.items),
     },
   ];
-
   const allData: InputExampleElement[] = [
     ...singleDroppables,
     ...singleUndroppables,
@@ -229,6 +228,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     ...pairedExamples,
     ...allDroppables,
     ...unreadables,
+    ...createBulkOfContent(),
   ];
 
   const main = () => {
@@ -248,4 +248,18 @@ const initInputExampleContent = (editor: ClassicEditor) => {
   main();
 };
 
+const createBulkOfContent = (): [{ classes: string[]; tooltip: string; label: string; items: number[] }] => {
+  const ids = [];
+  for (let i = 12000; i < 12500; i = i + 2) {
+    ids.push(i);
+  }
+  return [
+    {
+      label: "A lot of documents ",
+      tooltip: "Really!",
+      classes: ["linkable", "type-document"],
+      items: ids,
+    },
+  ];
+};
 export { initInputExampleContent };
