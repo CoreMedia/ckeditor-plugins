@@ -1,6 +1,6 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import ContentDropDataCache, { ContentDropData } from "./ContentDropDataCache";
+import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
@@ -66,7 +66,7 @@ export default class DataToModelMechanism {
     const logger = DataToModelMechanism.#logger;
 
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
-    const contentDropData = ContentDropDataCache.lookupData(markerName);
+    const contentDropData = ContentInputDataCache.lookupData(markerName);
     if (!contentDropData) {
       return;
     }
@@ -175,7 +175,7 @@ export default class DataToModelMechanism {
    */
   static #writeItemToModel(
     editor: Editor,
-    contentDropData: ContentDropData,
+    contentDropData: ContentInputData,
     markerData: MarkerData,
     createItemFunction: (writer: Writer) => Node
   ): void {
@@ -187,7 +187,7 @@ export default class DataToModelMechanism {
       }
       const markerPosition: Position | undefined = marker.getStart();
       if (!markerPosition) {
-        ContentDropDataCache.removeData(marker.name);
+        ContentInputDataCache.removeData(marker.name);
         return;
       }
 
@@ -220,7 +220,7 @@ export default class DataToModelMechanism {
 
   /**
    * Removes the marker in the editor view. Also removes the corresponding data from
-   * the {@link ContentDropDataCache}.
+   * the {@link ContentInputDataCache}.
    *
    * @param editor - the editor
    * @param markerData - the markerData object
@@ -232,7 +232,7 @@ export default class DataToModelMechanism {
         return;
       }
       writer.removeMarker(marker);
-      ContentDropDataCache.removeData(marker.name);
+      ContentInputDataCache.removeData(marker.name);
     });
   }
 

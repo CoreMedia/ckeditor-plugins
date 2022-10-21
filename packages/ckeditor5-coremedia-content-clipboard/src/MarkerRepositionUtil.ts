@@ -1,7 +1,7 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ModelPosition from "@ckeditor/ckeditor5-engine/src/model/position";
-import ContentDropDataCache from "./ContentDropDataCache";
+import ContentInputDataCache from "./ContentInputDataCache";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 
 type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
@@ -64,7 +64,7 @@ export default class MarkerRepositionUtil {
       const moveMarkerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(moveMarkerData);
 
       //Check if the marker we want to move still exists.
-      const currentData = ContentDropDataCache.lookupData(moveMarkerName);
+      const currentData = ContentInputDataCache.lookupData(moveMarkerName);
       if (!currentData) {
         return;
       }

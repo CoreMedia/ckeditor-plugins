@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import ContentDropDataCache from "./ContentDropDataCache";
+import ContentInputDataCache from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { Item as ModelItem } from "@ckeditor/ckeditor5-engine/src/model/item";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
@@ -34,7 +34,7 @@ export interface RemoveMarkerEventData {
 export const addContentMarkerConversion = (callback: (markerData: MarkerData) => void) => {
   return (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
     const viewPosition = conversionApi.mapper.toViewPosition(data.markerRange.start);
-    const contentDropData = ContentDropDataCache.lookupData(data.markerName);
+    const contentDropData = ContentInputDataCache.lookupData(data.markerName);
     if (!contentDropData) {
       return;
     }

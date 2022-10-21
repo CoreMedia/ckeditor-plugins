@@ -13,8 +13,8 @@ export { default as ContentClipboardEditing } from "./ContentClipboardEditing";
 
 export * from "./ContentClipboardMarkerDataUtils";
 
-export * from "./ContentDropDataCache";
-export { default as ContentDropDataCache } from "./ContentDropDataCache";
+export * from "./ContentInputDataCache";
+export { default as ContentDropDataCache } from "./ContentInputDataCache";
 
 export * from "./ContentToModelRegistry";
 export { default as ContentToModelRegistry } from "./ContentToModelRegistry";

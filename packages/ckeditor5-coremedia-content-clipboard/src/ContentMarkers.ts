@@ -1,7 +1,7 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import ContentDropDataCache, { ContentDropData, InsertionContext } from "./ContentDropDataCache";
+import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -59,7 +59,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
       !isEmbeddableContent && !multipleInputItems,
       index
     );
-    addContentDropMarker(editor, targetRange, contentDropData);
+    addContentInputMarker(editor, targetRange, contentDropData);
   });
 };
 
@@ -71,14 +71,14 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
  * @param isInline - determines whether the item will be displayed inline or
  * as new paragraph
  * @param itemIndex - the position of the item inside the drop
- * @returns ContentDropData
+ * @returns ContentInputData
  */
 const createContentDropData = (
   insertionContext: InsertionContext,
   contentUri: string,
   isInline: boolean,
   itemIndex: number
-): ContentDropData => {
+): ContentInputData => {
   return {
     insertionContext,
     itemContext: {
@@ -96,9 +96,9 @@ const createContentDropData = (
  *
  * @param editor - the editor
  * @param markerRange - the marker range
- * @param contentInputData - content drop data
+ * @param contentInputData - content input data
  */
-const addContentDropMarker = (editor: Editor, markerRange: ModelRange, contentInputData: ContentDropData): void => {
+const addContentInputMarker = (editor: Editor, markerRange: ModelRange, contentInputData: ContentInputData): void => {
   const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
     contentInputData.insertionContext.insertionId,
     contentInputData.itemContext.itemIndex
@@ -106,6 +106,6 @@ const addContentDropMarker = (editor: Editor, markerRange: ModelRange, contentIn
   logger.debug("Adding content-input marker", markerName, contentInputData);
   editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
     writer.addMarker(markerName, { usingOperation: true, range: markerRange });
-    ContentDropDataCache.storeData(markerName, contentInputData);
+    ContentInputDataCache.storeData(markerName, contentInputData);
   });
 };
