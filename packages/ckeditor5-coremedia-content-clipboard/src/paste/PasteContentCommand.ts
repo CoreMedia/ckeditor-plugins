@@ -20,15 +20,18 @@ export class PasteContentCommand extends Command {
     this.isEnabled = false;
     const onServiceRegisteredFunction = async (services: ClipboardService[]) => {
       if (services.length === 0) {
+        // noinspection JSConstantReassignment bad types
         this.isEnabled = false;
         this.#logger.debug("No Clipboard service registered yet");
         return;
       }
       const clipboardService = services[0];
       const initialItems = await clipboardService.getItems();
+      // noinspection JSConstantReassignment bad types
       this.isEnabled = await PasteContentCommand.calculateEnabledState(initialItems);
 
       clipboardService.observe_items().subscribe(async (itemRepresentations: ClipboardItemRepresentation[]) => {
+        // noinspection JSConstantReassignment bad types
         this.isEnabled = await PasteContentCommand.calculateEnabledState(itemRepresentations);
       });
       if (this.#serviceRegisteredSubscription) {
