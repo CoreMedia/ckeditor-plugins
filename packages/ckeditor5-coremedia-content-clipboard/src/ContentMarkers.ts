@@ -5,8 +5,16 @@ import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDro
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
+/**
+ * Inserts a marker for each given uri.
+ *
+ * @param editor - the editor
+ * @param targetRange - the range to insert the contents to
+ * @param contentUris - the uris to insert
+ */
 export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, contentUris: string[]): void => {
   const { model } = editor;
 
@@ -20,9 +28,9 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
   // input element.
   const attributes = Array.from(model.document.selection.getAttributes());
 
-  // Use the current timestamp as the dropId to have increasing drop indexes.
-  // Needed to keep the order when multiple inputs happen simultaneously
-  // on the same position.
+  // Use the current timestamp as the contentInputId to mark multiple Contents as part of one insertion.
+  // Multiple insertions might happen at the same time and maybe even at the same position (e.g. for slower loading contents).
+  // By adding a timestamp for each insertion, those situations can be handled.
   const dropId = Date.now();
   const multipleItemsDropped = contentUris.length > 1;
   const dropContext: DropContext = {
