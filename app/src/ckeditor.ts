@@ -131,7 +131,7 @@ ClassicEditor.create(sourceElement, {
       "|",
       "heading",
       "|",
-      "paste-content",
+      "pasteContent",
       "|",
       "bold",
       "italic",
