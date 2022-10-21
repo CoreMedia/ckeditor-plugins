@@ -11,6 +11,12 @@ import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckedito
 import { parseBeanReferences } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { insertContentMarkers } from "../ContentMarkers";
 
+/**
+ * Command to insert Content from the ClipboardService into the document at the actual selection.
+ *
+ * The command is enabled if the ClipboardService contains Contents and all Contents
+ * are insertable.
+ */
 export class PasteContentCommand extends Command {
   #logger = LoggerProvider.getLogger("PasteContentCommand");
   #serviceRegisteredSubscription: Subscription | null;
