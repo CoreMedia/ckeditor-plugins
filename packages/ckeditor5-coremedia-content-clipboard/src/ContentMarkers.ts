@@ -13,8 +13,8 @@ const logger = LoggerProvider.getLogger("ContentMarkers");
  *
  * A marker indicates the position of an input item, which can then be
  * displayed in the editing view, but will not be written into the data view.
- * This function also stores data for the dropped item (contentDropData) to
- * the ContentDropDataCache.
+ * This function also stores data for the input item (ContentInputData) to
+ * the ContentInputDataCache.
  *
  * To resolve the identifiers for the created markers use ContentClipboardMarkerDataUtils.toMarkerName.
  *
@@ -53,27 +53,27 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
     // present cache entry for the given contentUri will probably result in a
     // wrong value.
     const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-    const contentDropData = createContentDropData(
+    const contentInputData = createContentInputData(
       insertionContext,
       contentUri,
       !isEmbeddableContent && !multipleInputItems,
       index
     );
-    addContentInputMarker(editor, targetRange, contentDropData);
+    addContentInputMarker(editor, targetRange, contentInputData);
   });
 };
 
 /**
- * Creates a ContentDropData object.
+ * Creates a ContentInputData object.
  *
  * @param insertionContext - insertionContext
  * @param contentUri - the content-URI of the input item
  * @param isInline - determines whether the item will be displayed inline or
  * as new paragraph
- * @param itemIndex - the position of the item inside the drop
+ * @param itemIndex - the position of the item inside the insertion
  * @returns ContentInputData
  */
-const createContentDropData = (
+const createContentInputData = (
   insertionContext: InsertionContext,
   contentUri: string,
   isInline: boolean,
