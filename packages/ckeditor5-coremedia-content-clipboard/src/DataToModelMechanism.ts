@@ -65,7 +65,7 @@ export default class DataToModelMechanism {
   static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
     const logger = DataToModelMechanism.#logger;
 
-    const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.dropId, markerData.itemIndex);
+    const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.insertionId, markerData.itemIndex);
     const contentDropData = ContentInputDataCache.lookupData(markerName);
     if (!contentDropData) {
       return;
@@ -156,7 +156,7 @@ export default class DataToModelMechanism {
    */
   static #finishDrop(editor: Editor): void {
     const markers = Array.from(
-      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX)
+      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
     );
     if (markers.length === 0) {
       ifPlugin(editor, UndoSupport).then(enableUndo);

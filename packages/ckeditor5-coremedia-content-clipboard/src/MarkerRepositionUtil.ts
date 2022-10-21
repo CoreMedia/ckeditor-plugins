@@ -49,7 +49,7 @@ export default class MarkerRepositionUtil {
   }
 
   static #markersAtPosition(editor: Editor, position: ModelPosition): MarkerData[] {
-    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX))
+    return Array.from(editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX))
       .filter((value) => {
         return value.getStart().isEqual(position);
       })
@@ -77,33 +77,33 @@ export default class MarkerRepositionUtil {
 
   static #markerBeforeFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
-    const dropId = markerData.dropId;
+    const dropId = markerData.insertionId;
 
     //dropId = Timestamp when a group of marker have been created.
     //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
     //smaller index.
-    if (otherMarkerData.dropId === dropId) {
+    if (otherMarkerData.insertionId === dropId) {
       return otherMarkerData.itemIndex < itemIndex;
     }
 
     //If a drop done later to the same position happened we want to make sure all the dropped
     //items stay on the left of the marker.
-    return otherMarkerData.dropId > dropId;
+    return otherMarkerData.insertionId > dropId;
   };
 
   static #markerAfterFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
-    const dropId = markerData.dropId;
+    const dropId = markerData.insertionId;
 
     //dropId = Timestamp when a group of marker have been created.
     //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
     //bigger index.
-    if (otherMarkerData.dropId === dropId) {
+    if (otherMarkerData.insertionId === dropId) {
       return otherMarkerData.itemIndex > itemIndex;
     }
 
     //If a drop done later to the same position happened we want to make sure all the dropped
     //items stay on the right of the marker.
-    return otherMarkerData.dropId < dropId;
+    return otherMarkerData.insertionId < dropId;
   };
 }

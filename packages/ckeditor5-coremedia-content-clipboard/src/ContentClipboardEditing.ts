@@ -21,9 +21,9 @@ export default class ContentClipboardEditing extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
 
   static readonly #CONTENT_DROP_ADD_MARKER_EVENT =
-    "addMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
+    "addMarker:" + ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX;
   static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT =
-    "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_DROP_MARKER_PREFIX;
+    "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX;
 
   static readonly requires = [UndoSupport];
 
