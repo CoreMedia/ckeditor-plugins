@@ -1,7 +1,7 @@
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import ContentDropDataCache, { ContentDropData, DropContext } from "./ContentDropDataCache";
+import ContentDropDataCache, { ContentDropData, InsertionContext } from "./ContentDropDataCache";
 import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -10,6 +10,13 @@ const logger = LoggerProvider.getLogger("ContentMarkers");
 
 /**
  * Inserts a marker for each given uri.
+ *
+ * A marker indicates the position of an input item, which can then be
+ * displayed in the editing view, but will not be written into the data view.
+ * This function also stores data for the dropped item (contentDropData) to
+ * the ContentDropDataCache.
+ *
+ * To resolve the identifiers for the created markers use ContentClipboardMarkerDataUtils.toMarkerName.
  *
  * @param editor - the editor
  * @param targetRange - the range to insert the contents to
@@ -28,18 +35,18 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
   // input element.
   const attributes = Array.from(model.document.selection.getAttributes());
 
-  // Use the current timestamp as the contentInputId to mark multiple Contents as part of one insertion.
+  // Use the current timestamp as the insertionId to mark multiple Contents as part of one insertion.
   // Multiple insertions might happen at the same time and maybe even at the same position (e.g. for slower loading contents).
   // By adding a timestamp for each insertion, those situations can be handled.
-  const dropId = Date.now();
-  const multipleItemsDropped = contentUris.length > 1;
-  const dropContext: DropContext = {
-    dropId,
+  const insertionId = Date.now();
+  const multipleInputItems = contentUris.length > 1;
+  const insertionContext: InsertionContext = {
+    insertionId,
     batch,
     selectedAttributes: attributes,
   };
 
-  // Add a drop marker for each item.
+  // Add a content marker for each item.
   contentUris.forEach((contentUri: string, index: number): void => {
     // This only works because we are in a drag context and the result has
     // already been computed and cached. Calling this function without a
@@ -47,9 +54,9 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
     // wrong value.
     const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
     const contentDropData = createContentDropData(
-      dropContext,
+      insertionContext,
       contentUri,
-      !isEmbeddableContent && !multipleItemsDropped,
+      !isEmbeddableContent && !multipleInputItems,
       index
     );
     addContentDropMarker(editor, targetRange, contentDropData);
@@ -59,7 +66,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
 /**
  * Creates a ContentDropData object.
  *
- * @param dropContext - dropContext
+ * @param insertionContext - insertionContext
  * @param contentUri - the content-URI of the input item
  * @param isInline - determines whether the item will be displayed inline or
  * as new paragraph
@@ -67,13 +74,13 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
  * @returns ContentDropData
  */
 const createContentDropData = (
-  dropContext: DropContext,
+  insertionContext: InsertionContext,
   contentUri: string,
   isInline: boolean,
   itemIndex: number
 ): ContentDropData => {
   return {
-    dropContext,
+    insertionContext,
     itemContext: {
       contentUri,
       itemIndex,
@@ -83,25 +90,22 @@ const createContentDropData = (
 };
 
 /**
- * Adds a marker to the editors model.
+ * Adds a marker to the editors model at the given range.
  *
- * A marker indicates the position of an input item, which can then be
- * displayed in the editing view, but will not be written into the data view.
- * This function also stores data for the dropped item (contentDropData) to
- * the ContentDropDataCache.
+ * A marker itself is inserted without the option to use undo to revert it.
  *
  * @param editor - the editor
  * @param markerRange - the marker range
- * @param contentDropData - content drop data
+ * @param contentInputData - content drop data
  */
-const addContentDropMarker = (editor: Editor, markerRange: ModelRange, contentDropData: ContentDropData): void => {
+const addContentDropMarker = (editor: Editor, markerRange: ModelRange, contentInputData: ContentDropData): void => {
   const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
-    contentDropData.dropContext.dropId,
-    contentDropData.itemContext.itemIndex
+    contentInputData.insertionContext.insertionId,
+    contentInputData.itemContext.itemIndex
   );
-  logger.debug("Adding content-drop marker", markerName, contentDropData);
+  logger.debug("Adding content-input marker", markerName, contentInputData);
   editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
     writer.addMarker(markerName, { usingOperation: true, range: markerRange });
-    ContentDropDataCache.storeData(markerName, contentDropData);
+    ContentDropDataCache.storeData(markerName, contentInputData);
   });
 };

@@ -179,7 +179,7 @@ export default class DataToModelMechanism {
     markerData: MarkerData,
     createItemFunction: (writer: Writer) => Node
   ): void {
-    editor.model.enqueueChange(contentDropData.dropContext.batch, (writer: Writer): void => {
+    editor.model.enqueueChange(contentDropData.insertionContext.batch, (writer: Writer): void => {
       const item: Node = createItemFunction(writer);
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
@@ -197,7 +197,7 @@ export default class DataToModelMechanism {
       }
 
       const range = writer.model.insertContent(item, insertPosition);
-      DataToModelMechanism.#applyAttributes(writer, [range], contentDropData.dropContext.selectedAttributes);
+      DataToModelMechanism.#applyAttributes(writer, [range], contentDropData.insertionContext.selectedAttributes);
 
       // Evaluate if the container element has to be split after the element has
       // been inserted.

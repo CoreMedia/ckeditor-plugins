@@ -43,7 +43,7 @@ export default class ContentDropDataCache {
 }
 
 export interface ContentDropData {
-  dropContext: DropContext;
+  insertionContext: InsertionContext;
   itemContext: ItemContext;
 }
 
@@ -53,8 +53,8 @@ export interface ItemContext {
   itemIndex: number;
 }
 
-export interface DropContext {
-  dropId: number;
+export interface InsertionContext {
+  insertionId: number;
   batch: Batch;
   selectedAttributes: [string, string | number | boolean][];
 }
