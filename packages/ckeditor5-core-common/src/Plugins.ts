@@ -57,6 +57,7 @@ export const optionalPluginNotFound: PluginNotFoundErrorHandler = (e: PluginNotF
 /**
  * Provides a `catch` handler, if a recommended plugin is not found.
  * It will trigger a warning log statement and a debug log statement with more details.
+ *
  * @param effectIfMissingMessage - optional effect, what will happen if the plugin is missing
  * @param logger - optional logger to use instead of default
  */
@@ -92,6 +93,8 @@ export const recommendPlugin = (
  * @returns `Promise` for requested plugin
  * @throws PluginNotFoundError if plugin could not be found
  */
+// Promise used to benefit from then-API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInterface<T>): Promise<T> => {
   if (editor.plugins.has(key)) {
     return editor.plugins.get(key);

@@ -458,7 +458,7 @@ describe("NodeProxy.persistToDom", () => {
       }
 
       let expectedRestartFrom: Node | undefined;
-      if (!!data.expectedRestartFromXPath) {
+      if (data.expectedRestartFromXPath) {
         expectedRestartFrom = document.evaluate(
           data.expectedRestartFromXPath,
           document,

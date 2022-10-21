@@ -24,6 +24,7 @@ const truncate = (str: string | null, maxLength: number): string | null => {
 
 /**
  * Escapes the given string for display in HTML.
+ *
  * @param str - string to escape
  * @returns escaped string
  */
@@ -74,13 +75,13 @@ interface Scenario {
 const createLinkTableRow = ({ comment, show, role, target, uiActiveButton, uiEditorValue }: Scenario) => {
   const shorten = (str: string | null): string | null => escape(truncate(str, 15));
   return `<tr>
-    <td>${shorten(show) || UNSET}</td>
-    <td>${shorten(role) || UNSET}</td>
-    <td>${shorten(target) || UNSET}</td>
+    <td>${shorten(show) ?? UNSET}</td>
+    <td>${shorten(role) ?? UNSET}</td>
+    <td>${shorten(target) ?? UNSET}</td>
     <td>${uiActiveButton || UNSET}</td>
     <td>${renderUiEditorValue(shorten(uiEditorValue))}</td>
     <td>${createLink(show, role, EXAMPLE_URL)}</td>
-    <td>${comment || ""}</td>
+    <td>${comment ?? ""}</td>
   </tr>`;
 };
 

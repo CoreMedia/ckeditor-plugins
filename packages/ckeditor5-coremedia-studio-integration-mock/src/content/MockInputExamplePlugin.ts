@@ -70,9 +70,7 @@ class MockInputExamplePlugin extends Plugin {
    */
   prefillCaches(contentIds: number[]): boolean {
     const uriPaths = contentIds.map((contentId) => contentUriPath(contentId));
-    return uriPaths.every((uriPath) => {
-      return DragDropAsyncSupport.isLinkable(uriPath);
-    });
+    return uriPaths.every((uriPath) => DragDropAsyncSupport.isLinkable(uriPath));
   }
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {
@@ -125,11 +123,9 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   static #contentList(...ids: string[]): BeanReference[] {
-    return ids.map((id) => {
-      return {
-        $Ref: id,
-      };
-    });
+    return ids.map((id) => ({
+      $Ref: id,
+    }));
   }
 
   static #contentDragData(...ids: string[]): { contents: { $Ref: string }[] } {

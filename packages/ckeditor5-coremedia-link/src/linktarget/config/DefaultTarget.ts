@@ -127,9 +127,8 @@ export const DEFAULT_TARGETS_ARRAY: Required<LinkTargetOptionDefinition>[] =
  * @param key - name of the definition to get
  * @returns default target definition; `undefined` if not available
  */
-export const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined => {
-  return DEFAULT_TARGETS_MAP.get(key);
-};
+export const getDefaultTargetDefinition = (key: string): Required<LinkTargetOptionDefinition> | undefined =>
+  DEFAULT_TARGETS_MAP.get(key);
 
 /**
  * Gets a required default target definition for the given key.

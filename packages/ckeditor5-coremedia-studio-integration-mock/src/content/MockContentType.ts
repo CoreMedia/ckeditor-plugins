@@ -82,9 +82,7 @@ type MockContentTypeSpecificPropertiesConfig = RequireOnly<MockContentTypeSpecif
  */
 const withTypeDefaults = <T extends MockContentTypeSpecificPropertiesConfig>(
   config: T
-): RequiredFrom<T, MockContentTypeSpecificProperties> => {
-  return withDefaults(config, getTypeDefaults(config));
-};
+): RequiredFrom<T, MockContentTypeSpecificProperties> => withDefaults(config, getTypeDefaults(config));
 
 export default MockContentType;
 export {

@@ -12,17 +12,15 @@ export interface HasContentUriPath {
 
 /**
  * Type-Guard for `HasContentUriPath`.
+ *
  * @param value - if value fulfills interface
  */
-export const hasContentUriPath = (value: unknown): value is HasContentUriPath => {
-  return (
-    isRaw<HasContentUriPath>(value, "contentUriPath") &&
-    // #83: value may be undefined, for example, when unsetting a content-link.
-    // Still, we must feel responsible in this state to handle the received
-    // value.
-    (!value.contentUriPath || typeof value.contentUriPath === "string")
-  );
-};
+export const hasContentUriPath = (value: unknown): value is HasContentUriPath =>
+  isRaw<HasContentUriPath>(value, "contentUriPath") &&
+  // #83: value may be undefined, for example, when unsetting a content-link.
+  // Still, we must feel responsible in this state to handle the received
+  // value.
+  (!value.contentUriPath || typeof value.contentUriPath === "string");
 
 /**
  * Provides the name of a content.
@@ -36,11 +34,11 @@ export interface HasContentName {
 
 /**
  * Type-Guard for `HasContentName`.
+ *
  * @param value - if value fulfills interface
  */
-export const hasContentName = (value: unknown): value is HasContentName => {
-  return isRaw<HasContentName>(value, "contentName") && typeof value.contentName === "string";
-};
+export const hasContentName = (value: unknown): value is HasContentName =>
+  isRaw<HasContentName>(value, "contentName") && typeof value.contentName === "string";
 
 /**
  * Combined interface for providing the content's UriPath and name.
@@ -49,8 +47,8 @@ export type HasContentUriPathAndName = HasContentUriPath & HasContentName;
 
 /**
  * Type-Guard for `HasContentUriPathAndName`.
+ *
  * @param value - if value fulfills interface
  */
-export const hasContentUriPathAndName = (value: unknown): value is HasContentUriPathAndName => {
-  return hasContentUriPath(value) && hasContentName(value);
-};
+export const hasContentUriPathAndName = (value: unknown): value is HasContentUriPathAndName =>
+  hasContentUriPath(value) && hasContentName(value);

@@ -17,11 +17,13 @@ export const isEditorWithUI = <T extends Editor>(value: T): value is T & EditorW
 
 /**
  * Valides, that the given editor instance provides is an EditorWithUI.
+ *
  * @param editor - editor instance to validate
  * @throws Error if the editor instance does not provide a UI
  */
 export const requireEditorWithUI = <T extends Editor>(editor: T): T & EditorWithUI => {
   if (!isEditorWithUI(editor)) {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw new Error(`Editor does not provide required access to \`ui\`: ${editor}`);
   }
   return editor;

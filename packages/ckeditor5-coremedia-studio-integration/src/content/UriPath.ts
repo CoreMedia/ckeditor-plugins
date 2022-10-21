@@ -19,9 +19,8 @@ export type ModelUri = string;
  *
  * @param value - value to validate
  */
-export const isUriPath = (value: unknown): value is string => {
-  return typeof value === "string" && CONTENT_URI_PATH_REGEXP.test(value);
-};
+export const isUriPath = (value: unknown): value is string =>
+  typeof value === "string" && CONTENT_URI_PATH_REGEXP.test(value);
 
 /**
  * Returns the numeric ID from a URI path.
@@ -48,9 +47,7 @@ export const numericId = (uriPath: number | UriPath): number => {
  *
  * @param contentId - id to add to URI path
  */
-export const contentUriPath = (contentId: number): string => {
-  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
-};
+export const contentUriPath = (contentId: number): string => `${CONTENT_URI_PATH_PREFIX}${contentId}`;
 
 /**
  * Returns the content URI as used within CKEditor model for a
@@ -58,9 +55,7 @@ export const contentUriPath = (contentId: number): string => {
  *
  * @param contentId - id to create content URI for CKEditor model
  */
-export const contentCkeModelUri = (contentId: number): string => {
-  return `${CONTENT_URI_PATH_PREFIX}${contentId}`;
-};
+export const contentCkeModelUri = (contentId: number): string => `${CONTENT_URI_PATH_PREFIX}${contentId}`;
 
 /**
  * Requires a Content URI Path, which can be handled by CoreMedia Studio to
@@ -98,11 +93,8 @@ export const requireContentUriPath = (str: string): UriPath => {
  * @param uriPaths - string to validate and possibly transform
  * @throws InvalidCkeModelUriError in case of unmatched string
  */
-export const requireContentCkeModelUris = (uriPaths: string[]): ModelUri[] => {
-  return uriPaths.map((uriPath) => {
-    return requireContentCkeModelUri(uriPath);
-  });
-};
+export const requireContentCkeModelUris = (uriPaths: string[]): ModelUri[] =>
+  uriPaths.map((uriPath) => requireContentCkeModelUri(uriPath));
 
 export const requireContentCkeModelUri = (uriPath: string): ModelUri => {
   if (CONTENT_CKE_MODEL_URI_REGEXP.test(uriPath)) {

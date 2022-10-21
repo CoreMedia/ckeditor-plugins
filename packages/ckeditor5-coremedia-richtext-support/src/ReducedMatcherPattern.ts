@@ -58,7 +58,7 @@ const mergePatterns = (...sources: ReducedMatcherPattern[]): ReducedMatcherPatte
       result.name = s.name;
     }
     if (s.attributes) {
-      result.attributes = result.attributes || {};
+      result.attributes = result.attributes ?? {};
       for (const key in s.attributes) {
         result.attributes[key] = s.attributes[key];
       }
@@ -105,9 +105,10 @@ type MatcherPatternLookup = (name: string) => ReducedMatcherPattern | undefined;
  *
  * @param patterns - patterns to search within
  */
-const toLookupStrategy = (...patterns: ReducedMatcherPattern[]): MatcherPatternLookup => {
-  return (name) => findFirstPattern(name, ...patterns);
-};
+const toLookupStrategy =
+  (...patterns: ReducedMatcherPattern[]): MatcherPatternLookup =>
+  (name) =>
+    findFirstPattern(name, ...patterns);
 
 /**
  * Resolves an inheriting pattern.

@@ -45,8 +45,10 @@ export const replaceFontInDocumentFragment = (
     if (hasTextChild(alteredChildElement)) {
       const childIndex: number = documentFragment.getChildIndex(child);
       //@ts-expect-error TODO _removeChildren is protected for Element
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       documentFragment._removeChildren(childIndex, 1);
       //@ts-expect-error TODO _insertChild is protected for Element
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       documentFragment._insertChild(childIndex, alteredChildElement);
 
       // In this case, we just replaced the child element with a clone
@@ -68,9 +70,7 @@ export const replaceFontInDocumentFragment = (
  */
 const hasTextChild = (element: ViewElement): boolean => {
   const children = Array.from<ViewNode>(element.getChildren());
-  return children.some((node: ViewNode) => {
-    return node instanceof ViewText;
-  });
+  return children.some((node: ViewNode) => node instanceof ViewText);
 };
 
 /**
@@ -80,11 +80,10 @@ const hasTextChild = (element: ViewElement): boolean => {
  * @param documentFragment - the document fragment
  * @returns an array of child elements
  */
-const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): ViewElement[] => {
-  return Array.from<ViewNode>(documentFragment.getChildren())
+const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): ViewElement[] =>
+  Array.from<ViewNode>(documentFragment.getChildren())
     .filter((value) => value instanceof ViewElement)
     .map((value) => value as ViewElement);
-};
 
 /**
  * Returns a registered {@link FontMapping} based on the given element.
@@ -114,8 +113,9 @@ const computeFontMappingForElement = (
     const fontMapping = getFontMappingForFontFamily(fontFamily);
     if (fontMapping) {
       //if a font mapping is available for the current font family the font family has to be removed.
-      logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element}`);
+      logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element?.name}`);
       //@ts-expect-error TODO _removeStyle is protected
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       element._removeStyle(fontFamily);
     }
     return fontMapping;
@@ -130,9 +130,7 @@ const computeFontMappingForElement = (
  * @param element - the element
  * @returns the font-family or undefined if no font-family style property is set
  */
-const evaluateFontFamily = (element: ViewElement): string | undefined => {
-  return element.getStyle(FONT_FAMILY_PROPERTY_NAME);
-};
+const evaluateFontFamily = (element: ViewElement): string | undefined => element.getStyle(FONT_FAMILY_PROPERTY_NAME);
 
 /**
  * Returns a mapping for the given font-family string from the
@@ -180,12 +178,11 @@ const getFontMappingForFontFamily = (fontFamily: string): FontMapping | undefine
  * @param fontFamilyStyle - the font name
  * @returns the escaped font name
  */
-export const escapeFontFamily = (fontFamilyStyle: string): string => {
-  return fontFamilyStyle
+export const escapeFontFamily = (fontFamilyStyle: string): string =>
+  fontFamilyStyle
     .split(/\s*(?:^,*|,|$)\s*/)
     .map((s) => s.replace(/^"(.*)"$/, "$1"))
     .filter((s) => !!s)[0];
-};
 
 /**
  * Creates a new element, based on an existing one.
@@ -199,6 +196,7 @@ export const escapeFontFamily = (fontFamilyStyle: string): string => {
 const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElement): ViewElement => {
   const clone: ViewElement = new UpcastWriter(element.document).clone(element, true);
   //@ts-expect-error TODO _removeStyle is protected
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   clone._removeStyle(FONT_FAMILY_PROPERTY_NAME);
   replaceCharactersInTextNodeChildren(fontMapping, clone);
   return clone;
@@ -216,7 +214,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
   const textElements = findTextNodeChildren(element);
   for (const textElement of textElements) {
     //@ts-expect-error TODO _textData is protected
-    const oldTextData: string = textElement._textData;
+    const oldTextData: string = textElement._textData as string;
     logger.debug("Searching replacement character for textElement:", textElement);
     //@ts-expect-error TODO _textData is protected
     textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
@@ -229,8 +227,7 @@ const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: 
  * @param element - the element
  * @returns all direct text node children
  */
-const findTextNodeChildren = (element: ViewElement): ViewText[] => {
-  return Array.from<ViewNode>(element.getChildren())
+const findTextNodeChildren = (element: ViewElement): ViewText[] =>
+  Array.from<ViewNode>(element.getChildren())
     .filter((value) => value instanceof ViewText)
     .map((value) => value as ViewText);
-};

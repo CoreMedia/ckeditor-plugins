@@ -84,13 +84,11 @@ class MockContentDisplayService implements ContentDisplayService {
     type Hints = readonly [DisplayHint, DisplayHint, DisplayHint];
 
     const toContentAsLink: OperatorFunction<Hints, ContentAsLink> = map<Hints, ContentAsLink>(
-      ([nameHint, typeHint, stateHint]: Hints): ContentAsLink => {
-        return {
-          content: nameHint,
-          type: typeHint,
-          state: stateHint,
-        };
-      }
+      ([nameHint, typeHint, stateHint]: Hints): ContentAsLink => ({
+        content: nameHint,
+        type: typeHint,
+        state: stateHint,
+      })
     );
 
     return combineLatest([nameSubscription, typeSubscription, stateSubscription]).pipe(toContentAsLink);

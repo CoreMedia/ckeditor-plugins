@@ -1,13 +1,9 @@
 import format = require("xml-formatter");
 
 const WITH_PREVIEW_CLASS = "with-preview";
-const getPreviewPanel = (): HTMLElement | null => {
-  return document.getElementById("preview");
-};
+const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
 
-const getEditor = () => {
-  return document.getElementsByClassName("ck-editor")[0];
-};
+const getEditor = () => document.getElementsByClassName("ck-editor")[0];
 
 const setupPreview = () => {
   const preview = getPreviewPanel();
@@ -22,7 +18,7 @@ const updatePreview = (data: string) => {
   if (!preview) {
     return;
   }
-  preview.innerText = !!data
+  preview.innerText = data
     ? format(data, {
         indentation: "   ",
         collapseContent: false,

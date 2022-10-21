@@ -144,7 +144,7 @@ class MockContentPlugin extends Plugin {
   #initContents(): void {
     const logger = MockContentPlugin.#logger;
     const { editor } = this;
-    const config = editor.config.get(CONTENTS_CONFIG_PATH);
+    const config: unknown = editor.config.get(CONTENTS_CONFIG_PATH);
     let combinedConfigs: MockContentConfig[];
 
     if (isMockContentConfigs(config)) {
@@ -182,7 +182,7 @@ class MockContentPlugin extends Plugin {
    */
   #initDefaults(): void {
     const { editor } = this;
-    const config = editor.config.get(DEFAULTS_CONFIG_PATH);
+    const config: unknown = editor.config.get(DEFAULTS_CONFIG_PATH);
     if (!isObject(config)) {
       return;
     }

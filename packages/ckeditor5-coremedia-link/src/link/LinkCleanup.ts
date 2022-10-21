@@ -145,9 +145,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
  * ```
  * @param editor - current editor instance
  */
-const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => {
-  return editor.plugins.get(LinkCleanup);
-};
+const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => editor.plugins.get(LinkCleanup);
 
 /**
  * Checks, if this diff item represents a change regarding removal of
@@ -159,7 +157,7 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }
-  const diffItemAttribute: DiffItemAttribute = diffItem as DiffItemAttribute;
+  const diffItemAttribute: DiffItemAttribute = diffItem;
   // We must not simply check for 'falsy' here, as an empty string does not
   // represent a deletion of the attribute, but signals (you guessed it), that
   // the attribute got set to an empty string.

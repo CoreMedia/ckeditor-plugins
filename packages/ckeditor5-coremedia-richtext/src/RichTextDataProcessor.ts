@@ -186,13 +186,14 @@ class RichTextDataProcessor implements DataProcessor {
 
   /**
    * Transform a fragment into an HTML string for debugging purpose.
+   *
    * @param domFragment - fragment to transform
    */
   #fragmentToString(domFragment: Node | DocumentFragment): string {
     return (
       Array.from(domFragment.childNodes)
         .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
-        .reduce((result, s) => (result || "") + (s || "")) || ""
+        .reduce((result, s) => (result ?? "") + (s ?? "")) ?? ""
     );
   }
 
@@ -216,7 +217,7 @@ class RichTextDataProcessor implements DataProcessor {
     // If data are empty, we expect empty RichText by default, thus, we don't
     // need any parsing but may directly forward the empty data to the delegate
     // `toView` handler.
-    if (!!data) {
+    if (data) {
       const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
       if (this.#isParserError(dataDocument)) {
         logger.error("Failed parsing data. See debug messages for details.", { data });

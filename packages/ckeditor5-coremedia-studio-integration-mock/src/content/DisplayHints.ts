@@ -42,12 +42,10 @@ const unreadableName = (config: UnreadableNameHintConfig): string => {
  * @param config - configuration to create display hint
  * @param classes - classes to apply
  */
-const unreadableNameHint = (config: UnreadableNameHintConfig, classes: string[] = []): DisplayHint => {
-  return {
-    name: unreadableName(config),
-    classes,
-  };
-};
+const unreadableNameHint = (config: UnreadableNameHintConfig, classes: string[] = []): DisplayHint => ({
+  name: unreadableName(config),
+  classes,
+});
 
 /**
  * Provides an observable for the `DisplayHint` of the content-name. Respects
@@ -154,11 +152,7 @@ const observeTypeHint = (config: TypeHintConfig): Observable<DisplayHint> => {
     name,
     classes,
   };
-  return observableReadable.pipe(
-    map((readable): DisplayHint => {
-      return readable ? typeHint : unreadableTypeHint;
-    })
-  );
+  return observableReadable.pipe(map((readable): DisplayHint => (readable ? typeHint : unreadableTypeHint)));
 };
 
 export {

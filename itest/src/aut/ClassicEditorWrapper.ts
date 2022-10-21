@@ -38,6 +38,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
 
   /**
    * Sets CKEditor data to the given value.
+   *
    * @param value - value to set
    */
   async setData(value: string): Promise<void> {
@@ -47,6 +48,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
   /**
    * Sets the given data and waits for them being processed to _data view_,
    * thus, the result of the `toView` transformation of the data processor.
+   *
    * @param value - value to set
    */
   async setDataAndGetDataView(value: string): Promise<string> {
@@ -62,27 +64,29 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
      * If this should fail, we may want to provide a listener instead, which
      * waits until the expected event data are provided.
      */
-    return this.evaluate((editor, value): Promise<string> => {
-      return new Promise<string>((resolve, reject) => {
-        // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
-        const processor = editor.data.processor as RichTextDataProcessor;
-        // Prior to setting data, wait for them being processed.
-        processor.once("richtext:toView", (eventInfo, eventData) => {
-          if ("dataView" in eventData && "data" in eventData) {
-            if (eventData.data !== value) {
-              reject(
-                new Error(
-                  `Unexpected data being processed. Concurrent changes applied?\n\tExpected: ${value}\n\tActual: ${eventData.data}`
-                )
-              );
+    return this.evaluate(
+      (editor, value): Promise<string> =>
+        new Promise<string>((resolve, reject) => {
+          // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
+          const processor = editor.data.processor as RichTextDataProcessor;
+          // Prior to setting data, wait for them being processed.
+          processor.once("richtext:toView", (eventInfo, eventData) => {
+            if ("dataView" in eventData && "data" in eventData) {
+              if (eventData.data !== value) {
+                reject(
+                  new Error(
+                    `Unexpected data being processed. Concurrent changes applied?\n\tExpected: ${value}\n\tActual: ${eventData.data}`
+                  )
+                );
+              }
+              resolve(eventData.dataView);
             }
-            resolve(eventData.dataView);
-          }
-          reject(new Error("richtext:toView provided unexpected data: " + JSON.stringify(eventData)));
-        });
-        editor.setData(value);
-      });
-    }, value);
+            reject(new Error("richtext:toView provided unexpected data: " + JSON.stringify(eventData)));
+          });
+          editor.setData(value);
+        }),
+      value
+    );
   }
 
   /**
@@ -108,6 +112,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
 
   /**
    * Provide access to ClassicEditor via Page.
+   *
    * @param page - page to evaluate handle for ClassicEditor
    * @param name - name of the editor instance, stored at `window` as well as
    * expected to be the ID of the element referenced on `ClassicEditor.create`.
@@ -118,7 +123,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const editorHolder: any = window;
         if (name in editorHolder) {
-          return editorHolder[name];
+          return editorHolder[name] as ClassicEditor;
         }
         throw new Error(`Editor instance not available as ${name}`);
       }, name),

@@ -92,6 +92,8 @@ export const recommendCommand = (
  * @param editor - editor instance
  * @param commandName - command name to search for
  */
+// Promise used to benefit from then-API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const ifCommand = async (editor: Editor, commandName: string): Promise<Command> => {
   const command = editor.commands.get(commandName);
   if (!command) {
@@ -111,9 +113,10 @@ export type CommandHandler = (command: Command) => void;
  * @param id - Unique identifier for disabling. Use the same id when enabling back the command.
  * @returns identifiable handler to disable a command
  */
-export const disableCommand = (id: string): CommandHandler => {
-  return (command) => command.forceDisabled(id);
-};
+export const disableCommand =
+  (id: string): CommandHandler =>
+  (command) =>
+    command.forceDisabled(id);
 
 /**
  * Handler to enable given commands.
@@ -121,6 +124,7 @@ export const disableCommand = (id: string): CommandHandler => {
  * @param id - Unique identifier for enabling. Use the same id as when requested to disable command.
  * @returns identifiable handler to enable a command
  */
-export const enableCommand = (id: string): CommandHandler => {
-  return (command) => command.clearForceDisabled(id);
-};
+export const enableCommand =
+  (id: string): CommandHandler =>
+  (command) =>
+    command.clearForceDisabled(id);

@@ -38,7 +38,7 @@ function createContentLinkTableHeading() {
 }
 
 function createContentLinkTableRow({ comment, id }: { comment: string; id: number }) {
-  return `<tr><td>${createLink("", "", "content:" + id)}</td><td>${comment || ""}</td></tr>`;
+  return `<tr><td>${createLink("", "", `content:${id}`)}</td><td>${comment || ""}</td></tr>`;
 }
 
 function createContentLinkScenario(title: string, scenarios: { comment: string; id: number }[]) {
@@ -142,7 +142,7 @@ function contentLinkExamples() {
 }
 
 // noinspection HtmlUnknownAttribute
-const exampleData = {
+const exampleData: Record<string, string> = {
   ...differencingData,
   ...entitiesData,
   ...linkTargetData,
@@ -180,6 +180,7 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
       (event, details) =>
         console.log("CKEditor's Data-Controller received data via 'set'.", {
           event,
+          // eslint-disable-next-line
           data: details[0],
         }),
       {
@@ -187,7 +188,6 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
       }
     );
 
-    //@ts-expect-error TODO Types
     const data = exampleData[exampleKey];
     console.log("Setting Example Data.", { [exampleKey]: data });
     setData(editor, data);

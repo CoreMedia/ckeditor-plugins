@@ -107,6 +107,6 @@ export const getUriList = (
  */
 export const getUriListValues = (
   dataTransferOrHolder: HasData | HasNullableDataTransfer | null
-): string[] | undefined => {
-  return getUriList(dataTransferOrHolder)?.map((ref) => esapi.encoder().encodeForURL(ref.$Ref));
-};
+): string[] | undefined =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
+  getUriList(dataTransferOrHolder)?.map((ref) => esapi.encoder().encodeForURL(ref.$Ref) as string);

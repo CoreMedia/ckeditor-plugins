@@ -14,7 +14,7 @@ export const COREMEDIA_FONT_MAPPER_CONFIG_KEY = "coremedia:fontMapper";
 export interface FontMapperConfigEntry {
   font: string;
   mode?: Mode;
-  map: { [key: number]: string };
+  map: Record<number, string>;
 }
 
 type FontMapperConfig = FontMapperConfigEntry[];
@@ -57,8 +57,8 @@ export default class FontMapper extends Plugin {
   static readonly pluginName: string = "FontMapper";
   static readonly #logger: Logger = LoggerProvider.getLogger(FontMapper.pluginName);
 
-  private static readonly supportedDataFormat: string = "text/html";
-  private static readonly clipboardEventName: string = "inputTransformation";
+  static readonly #supportedDataFormat: string = "text/html";
+  static readonly #clipboardEventName: string = "inputTransformation";
 
   static readonly requires = [ClipboardPipeline];
 
@@ -74,7 +74,7 @@ export default class FontMapper extends Plugin {
     // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
     // We also need to use a priority higher than "low" to process the input in time.
     await ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
-      this.listenTo(p, FontMapper.clipboardEventName, FontMapper.#handleClipboardInputTransformationEvent, {
+      this.listenTo(p, FontMapper.#clipboardEventName, FontMapper.#handleClipboardInputTransformationEvent, {
         priority: "normal",
       })
     );
@@ -104,10 +104,10 @@ export default class FontMapper extends Plugin {
   // noinspection JSUnusedLocalSymbols
   static #handleClipboardInputTransformationEvent(eventInfo: EventInfo, data: ClipboardInputEvent): void {
     FontMapper.#logger.debug("Event received with data", data);
-    const pastedContent: string = data.dataTransfer.getData(FontMapper.supportedDataFormat);
+    const pastedContent: string = data.dataTransfer.getData(FontMapper.#supportedDataFormat);
     const eventContent: ViewDocumentFragment | undefined = data.content;
     if (!pastedContent || !eventContent) {
-      FontMapper.#logger.debug(`No data for supported data Format ${FontMapper.supportedDataFormat} found.`);
+      FontMapper.#logger.debug(`No data for supported data Format ${FontMapper.#supportedDataFormat} found.`);
       return;
     }
 

@@ -9,6 +9,7 @@ import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 import { MockInputExamplePluginWrapper } from "./MockInputExamplePluginWrapper";
+import http from "http";
 
 /**
  * Represents result from starting the server.
@@ -25,9 +26,8 @@ interface StartResult {
  *
  * @param value - value to validate
  */
-const isAddressInfo = (value: unknown): value is Pick<AddressInfo, "port"> => {
-  return typeof value === "object" && value !== null && value.hasOwnProperty("port");
-};
+const isAddressInfo = (value: unknown): value is Pick<AddressInfo, "port"> =>
+  typeof value === "object" && value !== null && value.hasOwnProperty("port");
 
 /**
  * Starts an HTTP server via Express, statically bound to the path of the
@@ -38,7 +38,11 @@ const startServer = async (): Promise<StartResult> => {
   const applicationFolder = path.resolve("../app");
   const app = express();
   app.use("/", express.static(applicationFolder));
-  const server = app.listen(0);
+
+  const server = await new Promise<http.Server>((resolve) => {
+    const server = app.listen(0, () => resolve(server));
+  });
+
   const address = server.address();
   if (!isAddressInfo(address)) {
     throw new Error(`Incompatible address information. Expected AddressInfo but is: ${address} (${typeof address})`);
@@ -52,7 +56,7 @@ const startServer = async (): Promise<StartResult> => {
 
     const closeServer = new Promise<void>((resolve, reject) => {
       server.close((err) => {
-        if (!!err) {
+        if (err) {
           reject(err);
         } else {
           resolve();

@@ -7,6 +7,7 @@ import WindowBrowserAccessor from "../browser/WindowBrowserAccessor";
  * The action is using keyboard shortcuts to select everything and paste.
  * Select and paste is supported for Linux, Max and Windows.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ReplaceAllPasteAction {
   /**
    * Selects all (ctrl + a) in the currently focused dom element and triggers
@@ -15,7 +16,7 @@ export default class ReplaceAllPasteAction {
    */
   static async execute(): Promise<void> {
     const userAgent = await WindowBrowserAccessor.getUserAgent();
-    if (userAgent.indexOf("Mac") === -1) {
+    if (!userAgent.includes("Mac")) {
       await page.keyboard.down("Control");
       await page.keyboard.press("a");
       await page.keyboard.press("v");

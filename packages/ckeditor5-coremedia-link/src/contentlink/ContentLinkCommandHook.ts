@@ -58,6 +58,7 @@ class TrackingData {
 
   /**
    * Signals, if a given diff item matches a previously recorded replacement.
+   *
    * @param diffItem - diff item to compare
    */
   matches(diffItem: DiffItemInsert): boolean {
@@ -85,11 +86,10 @@ class TrackingData {
 
 /**
  * Gets shallow items from a given range.
+ *
  * @param range - range to get included items for
  */
-const getItems = (range: Range): Item[] => {
-  return [...range.getItems({ shallow: true })];
-};
+const getItems = (range: Range): Item[] => [...range.getItems({ shallow: true })];
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -152,9 +152,7 @@ class ContentLinkCommandHook extends Plugin {
    *
    * @returns previously stored value, if any
    */
-  readonly #clearTrackingData = (): Replacement | undefined => {
-    return this.#trackingData.clear();
-  };
+  readonly #clearTrackingData = (): Replacement | undefined => this.#trackingData.clear();
 
   // The LinkEditing registers the command, which we want to hook into.
   static readonly requires = [LinkEditing];
@@ -237,7 +235,7 @@ class ContentLinkCommandHook extends Plugin {
    */
   static #isTextNodeInsertion(value: DiffItem): boolean {
     if (value.type === "insert") {
-      const insertion = value as DiffItemInsert;
+      const insertion = value;
       // Unfortunately, insertion.position.textNode does not (yet) represent
       // the now added text node, but the text node the inserted one
       // may have been merged with.
@@ -249,6 +247,7 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Just cast to `DiffItemInsert`, expecting that it has been validated before,
    * that the cast is valid.
+   *
    * @param value - value to cast
    */
   static #asDiffItemInsert(value: DiffItem): DiffItemInsert {
@@ -337,7 +336,7 @@ class ContentLinkCommandHook extends Plugin {
     // For the given scenario, we expect at most one matched diff item.
     const matchedDiffItem = textInsertions.find((diffItem) => this.#trackingData.matches(diffItem));
 
-    if (!!matchedDiffItem) {
+    if (matchedDiffItem) {
       return this.#postFixMatchedItem(writer, matchedDiffItem);
     }
 

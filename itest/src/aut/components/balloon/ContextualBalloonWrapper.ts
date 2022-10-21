@@ -9,9 +9,7 @@ export default class ContextualBalloonWrapper extends JSWrapper<ContextualBalloo
   }
 
   static fromEditor(editor: ClassicEditorWrapper): ContextualBalloonWrapper {
-    const instance = editor.evaluateHandle((editor) => {
-      return editor.plugins.get("ContextualBalloon") as ContextualBalloon;
-    });
+    const instance = editor.evaluateHandle((editor) => editor.plugins.get("ContextualBalloon"));
     return new ContextualBalloonWrapper(instance);
   }
 }

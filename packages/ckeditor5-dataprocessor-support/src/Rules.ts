@@ -4,15 +4,13 @@ import { TextFilterParams, TextFilterRule } from "./TextProxy";
 
 const parentChildElementRule =
   (parentRule: ElementFilterRule, childRule: ElementFilterRule): ElementFilterRule =>
-  (params: ElementFilterParams) => {
-    return childRule({ ...params, parentRule });
-  };
+  (params: ElementFilterParams) =>
+    childRule({ ...params, parentRule });
 
 const parentChildTextRule =
   (parentRule: TextFilterRule, childRule: TextFilterRule): TextFilterRule =>
-  (params: TextFilterParams) => {
-    return childRule({ ...params, parentRule });
-  };
+  (params: TextFilterParams) =>
+    childRule({ ...params, parentRule });
 
 /**
  * This represents the combination of toData/toView.
@@ -45,9 +43,7 @@ type ElementsFilterRuleSetConfigurationValueType = ElementFilterRule | ToDataAnd
 /**
  * Type for elements configuration.
  */
-interface ElementsFilterRuleSetConfiguration {
-  [key: string]: ElementsFilterRuleSetConfigurationValueType;
-}
+type ElementsFilterRuleSetConfiguration = Record<string, ElementsFilterRuleSetConfigurationValueType>;
 
 type TextFilterRuleSetConfigurationValueType = TextFilterRule | ToDataAndViewTextConfiguration;
 
@@ -105,11 +101,11 @@ const mergePreParsedToViews = (preParsedConfig: PreParsedToView): FilterRuleSet 
     return elementsResult;
   };
 
-  if (!!preParsedConfig.text) {
+  if (preParsedConfig.text) {
     mergedResult.text = preParsedConfig.text;
   }
 
-  if (!!preParsedConfig.elements) {
+  if (preParsedConfig.elements) {
     mergedResult.elements = mergePreParsedElementSections(preParsedConfig.elements);
   }
   return mergedResult;
@@ -119,9 +115,9 @@ const parseFilterRuleSetConfigurations = (
   customFilterRuleSetConfiguration?: FilterRuleSetConfiguration,
   defaultFilterRuleSetConfiguration?: FilterRuleSetConfiguration
 ): ParsedToDataAndView => {
-  const preParsedDefault = new FilterRuleSetConfigurationParser(defaultFilterRuleSetConfiguration || {}).parse();
+  const preParsedDefault = new FilterRuleSetConfigurationParser(defaultFilterRuleSetConfiguration ?? {}).parse();
   const preParsedToDataAndView: PreParsedToDataAndView = new FilterRuleSetConfigurationParser(
-    customFilterRuleSetConfiguration || {},
+    customFilterRuleSetConfiguration ?? {},
     preParsedDefault
   ).parse();
   const preParsedToView: PreParsedToView = preParsedToDataAndView.toView;
@@ -159,9 +155,7 @@ interface PreParsedToView {
   text?: TextFilterRule;
 }
 
-interface PreParsedElementSection {
-  [toViewKey: string]: ElementFilterRulesByName;
-}
+type PreParsedElementSection = Record<string, ElementFilterRulesByName>;
 
 interface PreParsedToDataAndView {
   toData: FilterRuleSet;
@@ -184,17 +178,17 @@ class FilterRuleSetConfigurationParser {
 
   constructor(configuration: FilterRuleSetConfiguration, preParsedDefault?: PreParsedToDataAndView) {
     this.#configuration = configuration;
-    this.#parsedToData = preParsedDefault?.toData || {};
-    this.#preParsedToView = preParsedDefault?.toView || {};
+    this.#parsedToData = preParsedDefault?.toData ?? {};
+    this.#preParsedToView = preParsedDefault?.toView ?? {};
   }
 
   parse(): PreParsedToDataAndView {
     const elementsConfiguration: ElementsFilterRuleSetConfiguration | undefined = this.#configuration.elements;
-    if (!!elementsConfiguration) {
+    if (elementsConfiguration) {
       this.#parseElements(elementsConfiguration);
     }
     const textConfiguration: TextFilterRule | ToDataAndViewTextConfiguration | undefined = this.#configuration.text;
-    if (!!textConfiguration) {
+    if (textConfiguration) {
       this.#parseText(textConfiguration);
     }
     return {
@@ -218,7 +212,7 @@ class FilterRuleSetConfigurationParser {
     if (!textFilterRule) {
       return;
     }
-    if (!!this.#preParsedToView.text) {
+    if (this.#preParsedToView.text) {
       this.#preParsedToView.text = parentChildTextRule(this.#preParsedToView.text, textFilterRule);
     } else {
       this.#preParsedToView.text = textFilterRule;
@@ -304,7 +298,7 @@ class FilterRuleSetConfigurationParser {
     if (!textFilterRule) {
       return;
     }
-    if (!!this.#parsedToData.text) {
+    if (this.#parsedToData.text) {
       this.#parsedToData.text = parentChildTextRule(this.#parsedToData.text, textFilterRule);
     } else {
       this.#parsedToData.text = textFilterRule;

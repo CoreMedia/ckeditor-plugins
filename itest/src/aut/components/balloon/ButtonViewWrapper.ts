@@ -17,26 +17,18 @@ export default class ButtonViewWrapper extends JSWrapper<ButtonView> implements 
   }
 
   get visible(): Promise<boolean> {
-    return this.evaluate((buttonView) => {
-      return buttonView.isVisible;
-    });
+    return this.evaluate((buttonView) => buttonView.isVisible);
   }
 
   get toggleable(): Promise<boolean> {
-    return this.evaluate((buttonView) => {
-      return buttonView.isToggleable;
-    });
+    return this.evaluate((buttonView) => buttonView.isToggleable);
   }
 
   get on(): Promise<boolean> {
-    return this.evaluate((buttonView) => {
-      return buttonView.isOn;
-    });
+    return this.evaluate((buttonView) => buttonView.isOn);
   }
 
   get enabled(): Promise<boolean> {
-    return this.evaluate((buttonView) => {
-      return buttonView.isEnabled;
-    });
+    return this.evaluate((buttonView) => buttonView.isEnabled);
   }
 }

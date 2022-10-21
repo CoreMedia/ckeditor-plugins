@@ -10,6 +10,7 @@ export class EditingControllerWrapper extends JSWrapper<EditingController> {
 
   /**
    * Provides access to EditingController via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromEditor(wrapper: EditorWrapper) {

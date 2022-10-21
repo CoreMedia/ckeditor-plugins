@@ -9,6 +9,7 @@ import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
  *
  * The data object must be saved by using the corresponding marker name as the map key.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ContentInputDataCache {
   static readonly #contentInputDataCache = new Map<string, ContentInputData>();
 

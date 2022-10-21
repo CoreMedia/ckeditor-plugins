@@ -4,7 +4,6 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import { DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import RootElement from "@ckeditor/ckeditor5-engine/src/model/rootelement";
 import SubscriptionCache from "./SubscriptionCache";
 import { Subscription } from "rxjs";
 
@@ -104,7 +103,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
 
       for (const entry of insertsOnGraveyard) {
         const nodeAfter = entry.position.nodeAfter;
-        if (nodeAfter && nodeAfter.is("element")) {
+        if (nodeAfter?.is("element")) {
           allRemovedElementsWithSubscriptions.push(
             ...ModelBoundSubscriptionPlugin.#recursiveSearch(nodeAfter as ModelElement)
           );
@@ -134,7 +133,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         .filter((diffItem) => diffItem.type === "insert")
         .map((diffItem) => diffItem as DiffItemInsert)
         .map((diffItem) => diffItem.position.nodeAfter)
-        .filter((value) => value !== null && value.is("element"))
+        .filter((value) => value?.is("element"))
         .map((value) => value as ModelElement);
 
       const insertedRegisteredElements: ModelElement[] = [];
@@ -157,7 +156,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   static #isOnGraveyard(insert: DiffItemInsert): boolean {
     const rootElement = insert.position.root;
     if (rootElement.is("rootElement")) {
-      return (rootElement as RootElement).rootName === "$graveyard";
+      return rootElement.rootName === "$graveyard";
     }
     return false;
   }

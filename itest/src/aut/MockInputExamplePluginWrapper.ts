@@ -16,13 +16,15 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
   }
 
   async prefillCaches(contentIds: number[]): Promise<boolean> {
-    return this.evaluate((plugin: MockInputExamplePlugin, contentIds): boolean => {
-      return plugin.prefillCaches(contentIds);
-    }, contentIds);
+    return this.evaluate(
+      (plugin: MockInputExamplePlugin, contentIds): boolean => plugin.prefillCaches(contentIds),
+      contentIds
+    );
   }
 
   /**
    * Provides access to EditorUI via Editor.
+   *
    * @param wrapper - editor wrapper
    */
   static fromClassicEditor(wrapper: ClassicEditorWrapper) {
@@ -30,7 +32,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
       wrapper.evaluateHandle((editor, pluginName) => {
         if (!editor.plugins.has(pluginName)) {
           const available = [...editor.plugins]
-            .map(([t, p]) => t.pluginName || `noname:${p.constructor.name}`)
+            .map(([t, p]) => t.pluginName ?? `noname:${p.constructor.name}`)
             .join(", ");
           throw new Error(`Plugin ${pluginName} not available. Available plugins: ${available}`);
         }

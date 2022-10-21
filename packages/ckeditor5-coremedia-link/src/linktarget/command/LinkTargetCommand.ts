@@ -1,5 +1,4 @@
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Element from "@ckeditor/ckeditor5-engine/src/model/element";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Schema from "@ckeditor/ckeditor5-engine/src/model/schema";
@@ -27,10 +26,6 @@ type Target = string | DeletedTarget;
  * Command to be bound in `LinkActionsView` to set a certain target behavior.
  */
 class LinkTargetCommand extends Command {
-  constructor(editor: Editor) {
-    super(editor);
-  }
-
   /**
    * Update value and enabled state.
    */
@@ -39,7 +34,7 @@ class LinkTargetCommand extends Command {
     const document = model.document;
     const schema = model.schema;
     const selection: DocumentSelection = document.selection;
-    const selectedElement = selection.getSelectedElement() || first(selection.getSelectedBlocks());
+    const selectedElement = selection.getSelectedElement() ?? first(selection.getSelectedBlocks());
     const attributesAllowedFor = LinkTargetCommand.attributesAllowedFor;
     const checkAttributes = LinkTargetCommand.#checkAttributes;
     const checkAttributeInSelection = LinkTargetCommand.#checkAttributeInSelection;

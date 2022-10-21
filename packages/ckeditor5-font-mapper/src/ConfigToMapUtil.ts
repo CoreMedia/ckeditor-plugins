@@ -13,9 +13,7 @@ export type ParsedFontMap = Map<CharCode, HtmlString>;
 /**
  * `FontMap` as represented in CKEditor configuration.
  */
-export interface FontMapConfig {
-  [code: CharCode]: HtmlString;
-}
+export type FontMapConfig = Record<CharCode, HtmlString>;
 /**
  * Maps configuration entries to corresponding `FontMap` entries.
  */

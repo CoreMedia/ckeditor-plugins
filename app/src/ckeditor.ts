@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
@@ -50,7 +51,7 @@ import { initInputExampleContent } from "./inputExampleContents";
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
-import { icons } from "@ckeditor/ckeditor5-core";
+import { Command, icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
@@ -63,7 +64,7 @@ const {
   objectSizeFull: pageDefaultIcon,
 } = icons;
 
-const editorLanguage = document?.currentScript?.dataset.lang || "en";
+const editorLanguage = document?.currentScript?.dataset.lang ?? "en";
 
 // setup input example content IFrame
 const showHideExampleContentButton = document.querySelector("#inputExampleContentButton");
@@ -297,6 +298,7 @@ ClassicEditor.create(sourceElement, {
 })
   .then((newEditor) => {
     // @ts-expect-error imported in html
+    // eslint-disable-next-line
     CKEditorInspector.attach(
       {
         "main-editor": newEditor,
@@ -312,9 +314,11 @@ ClassicEditor.create(sourceElement, {
     initExamples(newEditor);
     initInputExampleContent(newEditor);
 
-    const undoCommand = newEditor.commands.get("undo");
-    if (!!undoCommand) {
+    const undoCommand: Command | undefined = newEditor.commands.get("undo");
+
+    if (undoCommand) {
       //@ts-expect-error Editor extension, no typing available.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
       newEditor.resetUndo = () => undoCommand.clearStack();
       console.log("Registered `editor.resetUndo()` to clear undo history.");
     }

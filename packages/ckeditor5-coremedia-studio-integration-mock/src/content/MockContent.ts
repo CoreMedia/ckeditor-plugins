@@ -22,9 +22,8 @@ type MockContentConfig = MockContentObject &
  *
  * @param value - object to identify
  */
-const isMockContentConfig = (value: unknown): value is MockContentConfig => {
-  return isObject(value) && value.hasOwnProperty("id");
-};
+const isMockContentConfig = (value: unknown): value is MockContentConfig =>
+  isObject(value) && value.hasOwnProperty("id");
 
 /**
  * Type-Guard if object represents an array `MockContentConfig`.

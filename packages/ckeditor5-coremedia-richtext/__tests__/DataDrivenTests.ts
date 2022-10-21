@@ -139,7 +139,7 @@ export const ddTest = <T extends NamedTestCase>(
   }
 
   if (isSkippable(data)) {
-    if (!!data.skip) {
+    if (data.skip) {
       let skipName: string;
       if (typeof data.skip === "boolean") {
         skipName = `Skipped: ${name}`;
@@ -150,7 +150,7 @@ export const ddTest = <T extends NamedTestCase>(
     }
   }
   if (isOnly(data)) {
-    if (!!data.only) {
+    if (data.only) {
       return test.only(name, testFn);
     }
   }
@@ -160,13 +160,13 @@ export const ddTest = <T extends NamedTestCase>(
 /**
  * Workaround for Jest issue with less nice handling of array-driven tests
  * compared to table syntax tests.
+ *
  * @param data - test data to transform into [name, data] pattern.
  * @param generator - strategy to generate a name for the test case
  * @see https://github.com/facebook/jest/issues/6413
  */
-export const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.name): [string, T][] => {
-  return data.map((d) => [generator(d), d]);
-};
+export const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.name): [string, T][] =>
+  data.map((d) => [generator(d), d]);
 
 export type DataProcessingTestCase = NamedTestCase &
   SkippableTestCase &
@@ -180,9 +180,8 @@ export const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
 export const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
 const serializer = new XMLSerializer();
 
-export const getFilter = (direction: Direction.toData | Direction.toDataView): HtmlFilter => {
-  return direction === Direction.toDataView ? toViewFilter : toDataFilter;
-};
+export const getFilter = (direction: Direction.toData | Direction.toDataView): HtmlFilter =>
+  direction === Direction.toDataView ? toViewFilter : toDataFilter;
 
 export const applyFilter = (
   filter: HtmlFilter,
