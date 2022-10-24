@@ -39,7 +39,7 @@ const UTILITY_NAME = "DataToModelMechanism";
  *
  * The DataToModelMechanism is executed whenever a marker is added and receives
  * the corresponding MarkerData object. The MarkerData holds information about
- * the dropped data, such as the contentUri or the size of the drop.
+ * the input data, such as the contentUri or the size of the insertion.
  *
  * Now, the DataToModelMechanism uses a Studio service to resolve the type of
  * the content object from the given contentUri. The type is needed to figure
@@ -61,17 +61,20 @@ export default class DataToModelMechanism {
    * It then renders the content in the editor and finally removes the marker.
    *
    * @param editor - the editor
-   * @param markerData - object that holds information about the marker and the associated content drop
+   * @param markerData - object that holds information about the marker and the associated content insertion
    */
   static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
     const logger = DataToModelMechanism.#logger;
 
-    const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(markerData.insertionId, markerData.itemIndex);
-    const contentDropData = ContentInputDataCache.lookupData(markerName);
-    if (!contentDropData) {
+    const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
+      markerData.insertionId,
+      markerData.itemIndex
+    );
+    const contentInputData = ContentInputDataCache.lookupData(markerName);
+    if (!contentInputData) {
       return;
     }
-    logger.debug(`Looking for replace marker (${markerName}) with content ${contentDropData.itemContext.contentUri}`);
+    logger.debug(`Looking for replace marker (${markerName}) with content ${contentInputData.itemContext.contentUri}`);
 
     // Fetch Object Type (e.g. document, image, video) Maybe this should be a
     // string, which is unrelated to content type. I guess it has to be
@@ -84,26 +87,26 @@ export default class DataToModelMechanism {
     // images. The only two attributes to distinguish contents are linkable and
     // embeddable. Lookup an extender with the object type, call the `create`
     // model stuff. take a promise and execute writeItemToModel
-    this.#getType(contentDropData.itemContext.contentUri)
+    this.#getType(contentInputData.itemContext.contentUri)
       .then(
         (type): Promise<CreateModelFunction> =>
-          this.lookupCreateItemFunction(type, contentDropData.itemContext.contentUri)
+          this.lookupCreateItemFunction(type, contentInputData.itemContext.contentUri)
       )
       .then((createItemFunction: CreateModelFunction): void => {
-        DataToModelMechanism.#writeItemToModel(editor, contentDropData, markerData, createItemFunction);
+        DataToModelMechanism.#writeItemToModel(editor, contentInputData, markerData, createItemFunction);
       })
       .catch((reason) => {
         DataToModelMechanism.#markerCleanup(editor, markerData);
         logger.error("Error occurred in promise", reason);
       })
-      .finally(() => DataToModelMechanism.#finishDrop(editor));
+      .finally(() => DataToModelMechanism.#finishInsertion(editor));
   }
 
   /**
    * Uses the {@link ContentToModelRegistry} to lookup a strategy to create a model element
    * for the given contentUri.
    *
-   * @param type - the type of the dropped content object
+   * @param type - the type of the inserted content object
    * @param contentUri - the contentUri of the content object
    * @returns a Promise containing the function that creates the model element
    */
@@ -150,13 +153,13 @@ export default class DataToModelMechanism {
   }
 
   /**
-   * Verifies if this was the last marker of the content drop.
+   * Verifies if this was the last marker of the content insertion.
    * If this is the case, the disabled undo action gets enabled again.
-   * This is important because the undo action is disabled at the start of a drop.
+   * This is important because the undo action is disabled at the start of an insertion.
    *
    * @param editor - the editor
    */
-  static #finishDrop(editor: Editor): void {
+  static #finishInsertion(editor: Editor): void {
     const markers = Array.from(
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
     );
@@ -171,17 +174,17 @@ export default class DataToModelMechanism {
    * Please note: This method might split the parent container.
    *
    * @param editor - the editor
-   * @param contentDropData - the contentDropData object
+   * @param contentInputData - the contentInputData object
    * @param markerData - the markerData object
    * @param createItemFunction - the function to create the model element
    */
   static #writeItemToModel(
     editor: Editor,
-    contentDropData: ContentInputData,
+    contentInputData: ContentInputData,
     markerData: MarkerData,
     createItemFunction: (writer: Writer) => Node
   ): void {
-    editor.model.enqueueChange(contentDropData.insertionContext.batch, (writer: Writer): void => {
+    editor.model.enqueueChange(contentInputData.insertionContext.batch, (writer: Writer): void => {
       const item: Node = createItemFunction(writer);
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
@@ -194,12 +197,12 @@ export default class DataToModelMechanism {
       }
 
       let insertPosition = markerPosition;
-      if (!markerPosition.isAtStart && !contentDropData.itemContext.isInline) {
+      if (!markerPosition.isAtStart && !contentInputData.itemContext.isInline) {
         insertPosition = writer.split(markerPosition).range.end;
       }
 
       const range = writer.model.insertContent(item, insertPosition);
-      DataToModelMechanism.#applyAttributes(writer, [range], contentDropData.insertionContext.selectedAttributes);
+      DataToModelMechanism.#applyAttributes(writer, [range], contentInputData.insertionContext.selectedAttributes);
 
       // Evaluate if the container element has to be split after the element has
       // been inserted.
@@ -208,7 +211,7 @@ export default class DataToModelMechanism {
       // at the end of a container/document. This prevents empty paragraphs
       // after the inserted element.
       let finalAfterInsertPosition: Position = range.end;
-      if (!range.end.isAtEnd && !contentDropData.itemContext.isInline) {
+      if (!range.end.isAtEnd && !contentInputData.itemContext.isInline) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
       }
       MarkerRepositionUtil.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);

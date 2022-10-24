@@ -14,7 +14,7 @@ export { default as ContentClipboardEditing } from "./ContentClipboardEditing";
 export * from "./ContentClipboardMarkerDataUtils";
 
 export * from "./ContentInputDataCache";
-export { default as ContentDropDataCache } from "./ContentInputDataCache";
+export { default as ContentInputDataCache } from "./ContentInputDataCache";
 
 export * from "./ContentToModelRegistry";
 export { default as ContentToModelRegistry } from "./ContentToModelRegistry";

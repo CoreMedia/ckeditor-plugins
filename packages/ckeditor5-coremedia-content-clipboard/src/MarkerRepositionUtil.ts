@@ -74,33 +74,33 @@ export default class MarkerRepositionUtil {
 
   static #markerBeforeFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
-    const dropId = markerData.insertionId;
+    const insertionId = markerData.insertionId;
 
-    //dropId = Timestamp when a group of marker have been created.
-    //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
+    //insertionId = Timestamp when a group of marker have been created.
+    //If we are in the same group of markers (part of one insertion) we want to adapt all markers with a
     //smaller index.
-    if (otherMarkerData.insertionId === dropId) {
+    if (otherMarkerData.insertionId === insertionId) {
       return otherMarkerData.itemIndex < itemIndex;
     }
 
-    //If a drop done later to the same position happened we want to make sure all the dropped
+    //If an insertion done later to the same position, we want to make sure all the inserted
     //items stay on the left of the marker.
-    return otherMarkerData.insertionId > dropId;
+    return otherMarkerData.insertionId > insertionId;
   };
 
   static #markerAfterFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
-    const dropId = markerData.insertionId;
+    const insertionId = markerData.insertionId;
 
-    //dropId = Timestamp when a group of marker have been created.
-    //If we are in the same group of markers (part of one drop) we want to adapt all markers with a
+    //insertionId = Timestamp when a group of marker have been created.
+    //If we are in the same group of markers (part of one insertion) we want to adapt all markers with a
     //bigger index.
-    if (otherMarkerData.insertionId === dropId) {
+    if (otherMarkerData.insertionId === insertionId) {
       return otherMarkerData.itemIndex > itemIndex;
     }
 
-    //If a drop done later to the same position happened we want to make sure all the dropped
+    //If an insert done later to the same position, we want to make sure all the inserted
     //items stay on the right of the marker.
-    return otherMarkerData.insertionId < dropId;
+    return otherMarkerData.insertionId < insertionId;
   };
 }

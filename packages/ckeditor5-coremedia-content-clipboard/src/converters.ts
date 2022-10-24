@@ -35,8 +35,8 @@ export const addContentMarkerConversion =
   (callback: (markerData: MarkerData) => void) =>
   (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
     const viewPosition = conversionApi.mapper.toViewPosition(data.markerRange.start);
-    const contentDropData = ContentInputDataCache.lookupData(data.markerName);
-    if (!contentDropData) {
+    const contentInputData = ContentInputDataCache.lookupData(data.markerName);
+    if (!contentInputData) {
       return;
     }
     /*
@@ -53,7 +53,7 @@ export const addContentMarkerConversion =
      * simply add classes to the view container.
      */
     const loadMaskClasses = ["cm-load-mask"];
-    if (contentDropData.itemContext.isInline) {
+    if (contentInputData.itemContext.isInline) {
       loadMaskClasses.push("cm-load-mask--inline");
     }
     const viewContainer = conversionApi.writer.createUIElement("div", { class: loadMaskClasses.join(" ") });

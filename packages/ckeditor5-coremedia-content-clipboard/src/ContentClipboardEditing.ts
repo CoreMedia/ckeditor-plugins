@@ -20,9 +20,9 @@ const PLUGIN_NAME = "ContentClipboardEditing";
 export default class ContentClipboardEditing extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
 
-  static readonly #CONTENT_DROP_ADD_MARKER_EVENT =
+  static readonly #CONTENT_INPUT_ADD_MARKER_EVENT =
     "addMarker:" + ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX;
-  static readonly #CONTENT_DROP_REMOVE_MARKER_EVENT =
+  static readonly #CONTENT_INPUT_REMOVE_MARKER_EVENT =
     "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX;
 
   static readonly requires = [UndoSupport];
@@ -38,8 +38,8 @@ export default class ContentClipboardEditing extends Plugin {
     const conversion = editor.conversion;
 
     conversion.for("editingDowncast").add((dispatcher: DowncastDispatcher) => {
-      dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_ADD_MARKER_EVENT, this.#onAddMarker(editor));
-      dispatcher.on(ContentClipboardEditing.#CONTENT_DROP_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
+      dispatcher.on(ContentClipboardEditing.#CONTENT_INPUT_ADD_MARKER_EVENT, this.#onAddMarker(editor));
+      dispatcher.on(ContentClipboardEditing.#CONTENT_INPUT_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
     });
   }
 
@@ -52,13 +52,13 @@ export default class ContentClipboardEditing extends Plugin {
   /**
    * This function is used to register "toModel" functions in other plugins.
    * These functions are held in the {@link ContentToModelRegistry} and are
-   * used to insert dropped content into the editor.
+   * used to insert content into the editor.
    *
    * Please note: Types that are not supported by the
    * {@link DataToModelMechanism} will fall back to the default "toModel"
    * function or throw an error.
    *
-   * @param type - the identifier for the dropped content (e.g. "link" or "image")
+   * @param type - the identifier for the content (e.g. "link" or "image")
    * @param createModelFunctionCreator - a function that expects a contentUri as
    * parameter and returns a promise of type CreateModelFunction
    */
