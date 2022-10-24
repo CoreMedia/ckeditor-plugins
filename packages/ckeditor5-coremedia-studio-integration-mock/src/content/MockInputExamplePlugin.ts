@@ -6,6 +6,8 @@ import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integrat
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -38,6 +40,7 @@ const PLUGIN_NAME = "MockInputExamplePlugin";
  */
 class MockInputExamplePlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
+  static readonly #logger: Logger = LoggerProvider.getLogger(this.pluginName);
 
   init(): void {
     const initInformation = reportInitStart(this);
@@ -52,7 +55,13 @@ class MockInputExamplePlugin extends Plugin {
     insertDiv.dataset.cmuripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
     insertDiv.title = `${data.tooltip} (${insertDiv.dataset.cmuripath})`;
     insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
-    insertDiv.addEventListener("dblclick", MockInputExamplePlugin.#setClipboardData);
+    insertDiv.addEventListener("dblclick", (event): void => {
+      MockInputExamplePlugin.#setClipboardData(event)
+        .then(() => MockInputExamplePlugin.#logger.debug("Successfully copied data to the content clipboard"))
+        .catch((reason: string) => {
+          MockInputExamplePlugin.#logger.warn("Could not set clipboard data", reason);
+        });
+    });
     insertDiv.addEventListener("dragend", MockInputExamplePlugin.#removeDropData);
     return insertDiv;
   }
@@ -88,7 +97,7 @@ class MockInputExamplePlugin extends Plugin {
 
     const clipboardService = await serviceAgent.fetchService(createClipboardServiceDescriptor());
 
-    clipboardService.setItems([{ data, options: "copy" }], new Date().getTime());
+    await clipboardService.setItems([{ data, options: "copy" }], new Date().getTime());
   }
 
   /**

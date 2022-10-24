@@ -78,16 +78,14 @@ const createContentInputData = (
   contentUri: string,
   isInline: boolean,
   itemIndex: number
-): ContentInputData => {
-  return {
-    insertionContext,
-    itemContext: {
-      contentUri,
-      itemIndex,
-      isInline,
-    },
-  };
-};
+): ContentInputData => ({
+  insertionContext,
+  itemContext: {
+    contentUri,
+    itemIndex,
+    isInline,
+  },
+});
 
 /**
  * Adds a marker to the editors model at the given range.

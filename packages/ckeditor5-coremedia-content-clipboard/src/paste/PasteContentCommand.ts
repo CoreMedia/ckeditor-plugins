@@ -24,7 +24,7 @@ export class PasteContentCommand extends Command {
   constructor(editor: Editor) {
     super(editor);
     this.isEnabled = false;
-    const onServiceRegisteredFunction = async (services: ClipboardService[]) => {
+    const onServiceRegisteredFunction = (services: ClipboardService[]): void => {
       if (services.length === 0) {
         // noinspection JSConstantReassignment bad types
         this.isEnabled = false;
@@ -32,22 +32,36 @@ export class PasteContentCommand extends Command {
         return;
       }
       const clipboardService = services[0];
-      const initialItems = await clipboardService.getItems();
-      // noinspection JSConstantReassignment bad types
-      this.isEnabled = await PasteContentCommand.calculateEnabledState(initialItems);
-
-      clipboardService.observe_items().subscribe(async (itemRepresentations: ClipboardItemRepresentation[]) => {
-        // noinspection JSConstantReassignment bad types
-        this.isEnabled = await PasteContentCommand.calculateEnabledState(itemRepresentations);
-      });
-      if (this.#serviceRegisteredSubscription) {
-        this.#serviceRegisteredSubscription.unsubscribe();
-      }
+      this.#initializeWithClipboardService(clipboardService)
+        .then(() => {
+          this.#logger.debug("Successfully initialized paste content command with a clipboard service.");
+        })
+        .catch((reason) => {
+          this.#logger.warn("Initialization of PasteContentCommand failed. ", reason);
+        });
     };
 
     this.#serviceRegisteredSubscription = serviceAgent
       .observeServices<ClipboardService>(createClipboardServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
+  }
+
+  async #initializeWithClipboardService(clipboardService: ClipboardService): Promise<void> {
+    const initialItems = await clipboardService.getItems();
+    // noinspection JSConstantReassignment bad types
+    this.isEnabled = await PasteContentCommand.calculateEnabledState(initialItems);
+
+    clipboardService.observe_items().subscribe((itemRepresentations: ClipboardItemRepresentation[]) => {
+      // noinspection JSConstantReassignment bad types
+      PasteContentCommand.calculateEnabledState(itemRepresentations)
+        .then((isEnabled) => (this.isEnabled = isEnabled))
+        .catch((reason) => {
+          this.#logger.warn("Error while receiving enabled state", reason);
+        });
+    });
+    if (this.#serviceRegisteredSubscription) {
+      this.#serviceRegisteredSubscription.unsubscribe();
+    }
   }
 
   // Empty implementation because the overridden implementation always sets isEnabled=true
@@ -57,15 +71,16 @@ export class PasteContentCommand extends Command {
   override execute(): void {
     serviceAgent
       .fetchService(createClipboardServiceDescriptor())
-      .then((clipboardService) => {
-        return clipboardService.getItems();
-      })
+      .then((clipboardService) => clipboardService.getItems())
       .then(async (items) => {
         const contentUris = await PasteContentCommand.toContentUris(items);
         const firstRange = this.editor.model.document.selection.getFirstRange();
         if (firstRange) {
           insertContentMarkers(this.editor, firstRange, contentUris);
         }
+      })
+      .catch((reason) => {
+        this.#logger.warn("Error occurred during insertion of markers for contents", reason);
       });
   }
 
@@ -74,17 +89,13 @@ export class PasteContentCommand extends Command {
     if (uris.length === 0) {
       return false;
     }
-    const everyUriIsValid = uris.every((uri: string) => {
-      return isUriPath(uri);
-    });
+    const everyUriIsValid = uris.every((uri: string) => isUriPath(uri));
     if (!everyUriIsValid) {
       return false;
     }
 
     const pastableStates = await PasteContentCommand.resolvePastableStates(uris);
-    return pastableStates.every((isPastable) => {
-      return isPastable;
-    });
+    return pastableStates.every((isPastable) => isPastable);
   }
 
   static async resolvePastableStates(uris: string[]): Promise<boolean[]> {
@@ -102,13 +113,7 @@ export class PasteContentCommand extends Command {
 
   static async toContentUris(items: ClipboardItemRepresentation[]): Promise<string[]> {
     const beanReferencesAsStrings: string[] = await Promise.all(
-      items
-        .map((item) => {
-          return item.data["cm/uri-list"];
-        })
-        .map(async (blob) => {
-          return blob.text();
-        })
+      items.map((item) => item.data["cm/uri-list"]).map(async (blob) => blob.text())
     );
     return beanReferencesAsStrings
       .map((references) => {
@@ -116,8 +121,6 @@ export class PasteContentCommand extends Command {
         return parsedReferences ? parsedReferences.filter((reference) => !!reference) : [];
       })
       .flat()
-      .map((reference) => {
-        return reference.$Ref;
-      });
+      .map((reference) => reference.$Ref);
   }
 }
