@@ -379,6 +379,14 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
  *   </div>
  *   ```
  *
+ * * Multiple Styles: There is no way to express, that one style excludes the
+ *   other. All selected styles are applied, even if they override each other.
+ *   Thus, there are no "style groups". The feature may be better suited to
+ *   semantic classes such as 'claim' for 14 Pt Arial Black.
+ *   It is also assumed, that font-families and sizes may be better covered
+ *   by alternative plugins, which, for example. allow to "increase the font
+ *   size" rather than to select it explicitly.
+ *
  * =============================================================================
  */
 
@@ -653,6 +661,70 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
 
 .ck-content .font-name--verdana {
   font-family: Verdana, sans-serif;
+}
+
+/*
+ * Font Sizes
+ */
+
+.ck-content .font-size--8 {
+  font-size: 8pt;
+}
+
+.ck-content .font-size--9 {
+  font-size: 9pt;
+}
+
+.ck-content .font-size--10 {
+  font-size: 10pt;
+}
+
+.ck-content .font-size--11 {
+  font-size: 11pt;
+}
+
+.ck-content .font-size--12 {
+  font-size: 12pt;
+}
+
+.ck-content .font-size--14 {
+  font-size: 14pt;
+}
+
+.ck-content .font-size--16 {
+  font-size: 16pt;
+}
+
+.ck-content .font-size--18 {
+  font-size: 18pt;
+}
+
+.ck-content .font-size--20 {
+  font-size: 20pt;
+}
+
+.ck-content .font-size--24 {
+  font-size: 24pt;
+}
+
+.ck-content .font-size--26 {
+  font-size: 26pt;
+}
+
+.ck-content .font-size--28 {
+  font-size: 28pt;
+}
+
+.ck-content .font-size--36 {
+  font-size: 36pt;
+}
+
+.ck-content .font-size--48 {
+  font-size: 48pt;
+}
+
+.ck-content .font-size--72 {
+  font-size: 72pt;
 }
 
 /* --------- RWD --------------------------------------------------------------------------------------------------- */

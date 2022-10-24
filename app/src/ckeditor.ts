@@ -307,6 +307,81 @@ ClassicEditor.create(sourceElement, {
         element: "span",
         classes: ["font-name--verdana"],
       },
+      {
+        name: "Size: 08 Pt",
+        element: "span",
+        classes: ["font-size--8"],
+      },
+      {
+        name: "Size: 09 Pt",
+        element: "span",
+        classes: ["font-size--9"],
+      },
+      {
+        name: "Size: 10 Pt",
+        element: "span",
+        classes: ["font-size--10"],
+      },
+      {
+        name: "Size: 11 Pt",
+        element: "span",
+        classes: ["font-size--11"],
+      },
+      {
+        name: "Size: 12 Pt",
+        element: "span",
+        classes: ["font-size--12"],
+      },
+      {
+        name: "Size: 14 Pt",
+        element: "span",
+        classes: ["font-size--14"],
+      },
+      {
+        name: "Size: 16 Pt",
+        element: "span",
+        classes: ["font-size--16"],
+      },
+      {
+        name: "Size: 18 Pt",
+        element: "span",
+        classes: ["font-size--18"],
+      },
+      {
+        name: "Size: 20 Pt",
+        element: "span",
+        classes: ["font-size--20"],
+      },
+      {
+        name: "Size: 24 Pt",
+        element: "span",
+        classes: ["font-size--24"],
+      },
+      {
+        name: "Size: 26 Pt",
+        element: "span",
+        classes: ["font-size--26"],
+      },
+      {
+        name: "Size: 28 Pt",
+        element: "span",
+        classes: ["font-size--28"],
+      },
+      {
+        name: "Size: 36 Pt",
+        element: "span",
+        classes: ["font-size--36"],
+      },
+      {
+        name: "Size: 48 Pt",
+        element: "span",
+        classes: ["font-size--48"],
+      },
+      {
+        name: "Size: 72 Pt",
+        element: "span",
+        classes: ["font-size--72"],
+      },
     ],
   },
 
