@@ -148,7 +148,7 @@ describe("Paste Button", () => {
       async ({ inputElementClass, contentMocks }) => {
         await setupScenario(inputElementClass, contentMocks);
 
-        const inputElementSelector = `.drag-example.drag-content.${inputElementClass}`;
+        const inputElementSelector = `.input-example.drag-content.${inputElementClass}`;
         await copyPaste(contentMocks, inputElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
@@ -167,18 +167,18 @@ describe("Paste Button", () => {
 
   describe("Images", () => {
     it.each`
-      dragElementClass          | contentMocks
+      inputElementClass         | contentMocks
       ${"one-image"}            | ${oneImage}
       ${"multiple-images"}      | ${multipleImages}
       ${"multiple-images-slow"} | ${multipleImagesSlow}
     `(
       "[$#]: Should drag and drop $contentMocks.length embeddable contents as images.",
-      async ({ dragElementClass, contentMocks }) => {
-        await setupScenario(dragElementClass, contentMocks);
+      async ({ dragElementClass: inputElementClass, contentMocks }) => {
+        await setupScenario(inputElementClass, contentMocks);
 
         //execute drag and drop
-        const dragElementSelector = `.drag-example.drag-content.${dragElementClass}`;
-        await copyPaste(contentMocks, dragElementSelector, dropTargetSelector);
+        const inputElementSelector = `.input-example.drag-content.${inputElementClass}`;
+        await copyPaste(contentMocks, inputElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;

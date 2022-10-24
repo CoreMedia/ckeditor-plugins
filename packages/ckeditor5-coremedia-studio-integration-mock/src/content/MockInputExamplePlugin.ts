@@ -44,17 +44,17 @@ class MockInputExamplePlugin extends Plugin {
     reportInitEnd(initInformation);
   }
 
-  createDragDivElement(data: InputExampleElement): HTMLDivElement {
-    const dragDiv = document.createElement("div");
-    dragDiv.classList.add("drag-example", ...(data.classes || []));
-    dragDiv.draggable = true;
-    dragDiv.textContent = data.label || "Unset";
-    dragDiv.dataset.cmuripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
-    dragDiv.title = `${data.tooltip} (${dragDiv.dataset.cmuripath})`;
-    dragDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
-    dragDiv.addEventListener("dblclick", MockInputExamplePlugin.#setClipboardData);
-    dragDiv.addEventListener("dragend", MockInputExamplePlugin.#removeDropData);
-    return dragDiv;
+  createInsertElement(data: InputExampleElement): HTMLDivElement {
+    const insertDiv = document.createElement("div");
+    insertDiv.classList.add("input-example", ...(data.classes || []));
+    insertDiv.draggable = true;
+    insertDiv.textContent = data.label || "Unset";
+    insertDiv.dataset.cmuripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
+    insertDiv.title = `${data.tooltip} (${insertDiv.dataset.cmuripath})`;
+    insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
+    insertDiv.addEventListener("dblclick", MockInputExamplePlugin.#setClipboardData);
+    insertDiv.addEventListener("dragend", MockInputExamplePlugin.#removeDropData);
+    return insertDiv;
   }
 
   /**

@@ -10,7 +10,7 @@ import MockInputExamplePlugin, {
 export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlugin> {
   async addDraggableElement(data: InputExampleElement): Promise<void> {
     await this.evaluate((p, data) => {
-      const htmlDivElement = p.createDragDivElement(data);
+      const htmlDivElement = p.createInsertElement(data);
       window.document.body.append(htmlDivElement);
     }, data);
   }

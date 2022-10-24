@@ -13,16 +13,16 @@ const initInputExampleContent = (editor: ClassicEditor) => {
   // still fulfills our expectations.
   const requireExplicitContent = mockContentPlugin.requireExplicitContent;
 
-  // Add some content of undroppable type. (By default only contents of type 'document'
-  // are considered droppable.
+  // Add some content of not insertable type. (By default only contents of type 'document'
+  // are considered insertable.
   mockContentPlugin.addContents({
     id: 40,
-    type: "undroppable",
-    name: "Undroppable Content Type",
+    type: "notinsertable",
+    name: "Not Insertable Content Type",
     linkable: false,
   });
 
-  const singleDroppableDocuments: InputExampleElement[] = [
+  const singleInputDocuments: InputExampleElement[] = [
     {
       label: "Document 1",
       tooltip: "Some Document",
@@ -91,15 +91,15 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     },
   ];
 
-  const singleDroppables = [
+  const singleInputs = [
     {
       label: "Root",
-      tooltip: "Root Folder; droppable for test-scenarios with empty name",
+      tooltip: "Root Folder; insertable for test-scenarios with empty name",
       classes: ["linkable", "type-folder"],
       // id is an extra option, which overrides any ID calculation.
       items: [requireExplicitContent(1)],
     },
-    ...singleDroppableDocuments,
+    ...singleInputDocuments,
   ];
   const unreadables = [
     {
@@ -127,7 +127,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: [requireExplicitContent(914)],
     },
   ];
-  const singleUndroppables = [
+  const singleInputsNotInsertable = [
     {
       label: "Folder",
       tooltip: "Some Folder",
@@ -135,8 +135,8 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: [31],
     },
     {
-      label: "Undroppable",
-      tooltip: "Content of undroppable type.",
+      label: "Not Insertable",
+      tooltip: "Content of not insertable type.",
       classes: ["non-linkable", "type-folder"],
       items: [requireExplicitContent(40)],
     },
@@ -164,7 +164,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
   const pairedExamples = [
     {
       label: "Two",
-      tooltip: "Two documents, which are valid to drop.",
+      tooltip: "Two documents, which are valid to insert.",
       classes: ["linkable", "type-collection"],
       items: [30, 32],
     },
@@ -182,51 +182,51 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     },
     {
       label: "Slow/Fast/Slow",
-      tooltip: "Slow/Fast/Slow for testing drop order after lazy loading",
+      tooltip: "Slow/Fast/Slow for testing insert order after lazy loading",
       classes: ["linkable", "type-collection"],
       items: [requireExplicitContent(800), 32, requireExplicitContent(804)],
     },
     {
-      label: "Droppable/Not Droppable",
-      tooltip: "Two contents, one of them is not allowed to be dropped.",
+      label: "Insertable/Not Insertable",
+      tooltip: "Two contents, one of them is not allowed to be inserted.",
       classes: ["non-linkable", "type-collection"],
       items: [31, 32],
     },
     {
       label: "Three Images",
-      tooltip: "Three images, which are valid to drop.",
+      tooltip: "Three images, which are valid to insert.",
       classes: ["linkable", "embeddable", "type-collection"],
       items: [requireExplicitContent(900), requireExplicitContent(902), requireExplicitContent(904)],
     },
   ];
-  const allDroppables = [
+  const allInputs = [
     {
-      label: `Several Droppables`,
-      tooltip: `${singleDroppables.length} contents which are allowed to be dropped.`,
+      label: `Several Inputs`,
+      tooltip: `${singleInputs.length} contents which are allowed to be inserted.`,
       classes: ["linkable", "type-collection"],
-      items: singleDroppables.flatMap((item) => item.items),
+      items: singleInputs.flatMap((item) => item.items),
     },
     {
-      label: `Several Droppable Documents`,
-      tooltip: `${singleDroppableDocuments.length} documents which are allowed to be dropped.`,
+      label: `Several Input Documents`,
+      tooltip: `${singleInputDocuments.length} documents which are allowed to be inserted.`,
       classes: ["linkable", "type-collection"],
-      items: singleDroppableDocuments.flatMap((item) => item.items),
+      items: singleInputDocuments.flatMap((item) => item.items),
     },
     {
-      label: `Droppable Documents (incl. Slow)`,
-      tooltip: `${singleDroppableDocuments.length + slowDocuments.length} including ${
+      label: `Insertable Documents (incl. Slow)`,
+      tooltip: `${singleInputDocuments.length + slowDocuments.length} including ${
         slowDocuments.length
       } documents at the start which load slowly.`,
       classes: ["linkable", "type-collection"],
-      items: slowDocuments.concat(singleDroppableDocuments).flatMap((item) => item.items),
+      items: slowDocuments.concat(singleInputDocuments).flatMap((item) => item.items),
     },
   ];
   const allData: InputExampleElement[] = [
-    ...singleDroppables,
-    ...singleUndroppables,
+    ...singleInputs,
+    ...singleInputsNotInsertable,
     ...slowDocuments,
     ...pairedExamples,
-    ...allDroppables,
+    ...allInputs,
     ...unreadables,
     ...createBulkOfContent(),
   ];
@@ -239,10 +239,10 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     }
 
     allData.forEach((data) => {
-      const dragDiv = mockInputExamplePlugin.createDragDivElement(data);
-      examplesEl.appendChild(dragDiv);
+      const insertDiv: HTMLDivElement = mockInputExamplePlugin.createInsertElement(data);
+      examplesEl.appendChild(insertDiv);
     });
-    console.log(`Initialized ${allData.length} drag examples.`);
+    console.log(`Initialized ${allData.length} insert examples.`);
   };
 
   main();
