@@ -99,8 +99,8 @@ export default class MarkerRepositionUtil {
       return otherMarkerData.itemIndex > itemIndex;
     }
 
-    //If an insert done later to the same position, we want to make sure all the inserted
-    //items stay on the right of the marker.
+    // If an insert appears to the same position later on, we want to make
+    // sure all the inserted items stay on the right of the marker.
     return otherMarkerData.insertionId < insertionId;
   };
 }

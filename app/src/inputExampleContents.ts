@@ -18,7 +18,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
   mockContentPlugin.addContents({
     id: 40,
     type: "notinsertable",
-    name: "Not Insertable Content Type",
+    name: "Not insertable Content Type",
     linkable: false,
   });
 
