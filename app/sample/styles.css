@@ -727,6 +727,50 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
   font-size: 72pt;
 }
 
+/*
+ * Colors
+ * ------
+ */
+
+.ck-content .color--aqua { color: aqua; }
+.ck-content .color--black { color: black; }
+.ck-content .color--blue { color: blue; }
+.ck-content .color--fuchsia { color: fuchsia; }
+.ck-content .color--gray { color: gray; }
+.ck-content .color--green { color: green; }
+.ck-content .color--lime { color: lime; }
+.ck-content .color--maroon { color: maroon; }
+.ck-content .color--navy { color: navy; }
+.ck-content .color--olive { color: olive; }
+.ck-content .color--purple { color: purple; }
+.ck-content .color--red { color: red; }
+.ck-content .color--silver { color: silver; }
+.ck-content .color--teal { color: teal; }
+.ck-content .color--white { color: white; }
+.ck-content .color--yellow { color: yellow; }
+
+/*
+ * Background Colors
+ * -----------------
+ */
+
+.ck-content .background-color--aqua { background-color: aqua; }
+.ck-content .background-color--black { background-color: black; }
+.ck-content .background-color--blue { background-color: blue; }
+.ck-content .background-color--fuchsia { background-color: fuchsia; }
+.ck-content .background-color--gray { background-color: gray; }
+.ck-content .background-color--green { background-color: green; }
+.ck-content .background-color--lime { background-color: lime; }
+.ck-content .background-color--maroon { background-color: maroon; }
+.ck-content .background-color--navy { background-color: navy; }
+.ck-content .background-color--olive { background-color: olive; }
+.ck-content .background-color--purple { background-color: purple; }
+.ck-content .background-color--red { background-color: red; }
+.ck-content .background-color--silver { background-color: silver; }
+.ck-content .background-color--teal { background-color: teal; }
+.ck-content .background-color--white { background-color: white; }
+.ck-content .background-color--yellow { background-color: yellow; }
+
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
 @media screen and ( max-width: 800px ) {
   :root {

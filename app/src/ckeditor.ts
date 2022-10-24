@@ -263,6 +263,167 @@ ClassicEditor.create(sourceElement, {
   style: {
     definitions: [
       {
+        name: "Background: Aqua",
+        element: "span",
+        classes: ["background-color--aqua"],
+      },
+      {
+        name: "Background: Black",
+        element: "span",
+        classes: ["background-color--black"],
+      },
+      {
+        name: "Background: Blue",
+        element: "span",
+        classes: ["background-color--blue"],
+      },
+      {
+        name: "Background: Fuchsia",
+        element: "span",
+        classes: ["background-color--fuchsia"],
+      },
+      {
+        name: "Background: Gray",
+        element: "span",
+        classes: ["background-color--gray"],
+      },
+      {
+        name: "Background: Green",
+        element: "span",
+        classes: ["background-color--green"],
+      },
+      {
+        name: "Background: Lime",
+        element: "span",
+        classes: ["background-color--lime"],
+      },
+      {
+        name: "Background: Maroon",
+        element: "span",
+        classes: ["background-color--maroon"],
+      },
+      {
+        name: "Background: Navy",
+        element: "span",
+        classes: ["background-color--navy"],
+      },
+      {
+        name: "Background: Olive",
+        element: "span",
+        classes: ["background-color--olive"],
+      },
+      {
+        name: "Background: Purple",
+        element: "span",
+        classes: ["background-color--purple"],
+      },
+      {
+        name: "Background: Red",
+        element: "span",
+        classes: ["background-color--red"],
+      },
+      {
+        name: "Background: Silver",
+        element: "span",
+        classes: ["background-color--silver"],
+      },
+      {
+        name: "Background: Teal",
+        element: "span",
+        classes: ["background-color--teal"],
+      },
+      {
+        name: "Background: White",
+        element: "span",
+        classes: ["background-color--white"],
+      },
+      {
+        name: "Background: Yellow",
+        element: "span",
+        classes: ["background-color--yellow"],
+      },
+
+      {
+        name: "Color: Aqua",
+        element: "span",
+        classes: ["color--aqua"],
+      },
+      {
+        name: "Color: Black",
+        element: "span",
+        classes: ["color--black"],
+      },
+      {
+        name: "Color: Blue",
+        element: "span",
+        classes: ["color--blue"],
+      },
+      {
+        name: "Color: Fuchsia",
+        element: "span",
+        classes: ["color--fuchsia"],
+      },
+      {
+        name: "Color: Gray",
+        element: "span",
+        classes: ["color--gray"],
+      },
+      {
+        name: "Color: Green",
+        element: "span",
+        classes: ["color--green"],
+      },
+      {
+        name: "Color: Lime",
+        element: "span",
+        classes: ["color--lime"],
+      },
+      {
+        name: "Color: Maroon",
+        element: "span",
+        classes: ["color--maroon"],
+      },
+      {
+        name: "Color: Navy",
+        element: "span",
+        classes: ["color--navy"],
+      },
+      {
+        name: "Color: Olive",
+        element: "span",
+        classes: ["color--olive"],
+      },
+      {
+        name: "Color: Purple",
+        element: "span",
+        classes: ["color--purple"],
+      },
+      {
+        name: "Color: Red",
+        element: "span",
+        classes: ["color--red"],
+      },
+      {
+        name: "Color: Silver",
+        element: "span",
+        classes: ["color--silver"],
+      },
+      {
+        name: "Color: Teal",
+        element: "span",
+        classes: ["color--teal"],
+      },
+      {
+        name: "Color: White",
+        element: "span",
+        classes: ["color--white"],
+      },
+      {
+        name: "Color: Yellow",
+        element: "span",
+        classes: ["color--yellow"],
+      },
+      {
         name: "Font: Arial",
         element: "span",
         classes: ["font-name--arial"],
