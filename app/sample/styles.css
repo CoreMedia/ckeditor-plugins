@@ -11,6 +11,18 @@
   --ck-sample-container-width: 1285px;
   --ck-sample-sidebar-width: 350px;
   --ck-sample-editor-min-height: 400px;
+  /* Color for languages with light background. */
+  --language-color-light: hsl(0, 0%, 0%);
+  /* Color for languages with dark background. */
+  --language-color-dark: hsl(0, 0%, 100%);
+  --language-color-en-gb: hsl(240, 16%, 62%);
+  --language-color-en-us: hsl(240, 28%, 56%);
+  --language-color-de: hsl(52, 99%, 50%);
+  --language-color-fr: hsl(240, 26%, 61%);
+  --language-color-es: hsl(60, 100%, 50%);
+  --language-color-ja: hsl(0, 100%, 75%);
+  --language-color-uk: hsl(210, 100%, 40%);
+  --language-border-base: 0 0 0 2px solid;
   /* We are not ready for dark/light color-scheme support, yet. Let's tell that to the browser. */
   color-scheme: normal !important;
 }
@@ -75,16 +87,6 @@ input.error {
 
 .ck-content .grs.xmp1 {
   color: #004444;
-}
-
-.ck-content [lang="de"] {
-  background: rgba(0, 0, 0, 0.3) !important;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 50%, rgba(255, 204, 0, 0.3) 100%) !important;
-}
-
-.ck-content [lang="en"] {
-  background: rgba(0, 36, 125, 0.3) !important;
-  background: linear-gradient(135deg, rgba(0, 36, 125, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(207, 20, 43, 0.3) 100%) !important;
 }
 
 /* --------- DND  --------------------------------------------------------------------------------------------------- */
@@ -288,54 +290,305 @@ xdiff\:span[xdiff\:class="diff-html-added"] {
   color: rgba(92, 160, 63, 1);
   text-decoration: underline;
 }
+
 /* Represents inserted newline. */
+/*noinspection CssUnknownTarget*/
 xdiff\:br[xdiff\:class="diff-html-added"]::before {
   content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDkyLCAxNjAsIDYzKSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
   height: 16px;
   position: absolute;
   margin-left: 3px;
 }
+
 /* Represents removed newline. */
+/*noinspection CssUnknownTarget*/
 xdiff\:br[xdiff\:class="diff-html-removed"]::before {
   content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDE5NiwgMTksIDE5KSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
   height: 16px;
   position: absolute;
   margin-left: 3px;
 }
+
 xdiff\:span[xdiff\:class="diff-html-removed"] {
   color: rgba(196, 19, 19, 1);
   text-decoration: line-through;
 }
+
 xdiff\:span[xdiff\:class="diff-html-changed"] {
   color: rgba(255, 255, 255, 1);
   background-color: rgba(92, 160, 63, 1);
 }
+
 xdiff\:span[xdiff\:class="diff-html-changed"] a:link {
   color: rgba(255, 255, 255, 1);
 }
+
 xdiff\:span[xdiff\:class="diff-html-conflict"] {
   color: rgba(255, 255, 255, 1);
   background-color: rgba(196, 19, 19, 1);
 }
+
 xdiff\:span[xdiff\:class="diff-html-changed"] img {
   box-sizing: border-box;
   outline: 4px dashed rgba(92, 160, 63, 1);
   outline-offset: -4px;
 }
+
 span.image-inline[xdiff\:changetype="diff-added-image"] > img, span.html-object-embed[xdiff\:changetype="diff-added-image"] > img {
   box-sizing: border-box;
   outline: 2px solid rgba(92, 160, 63, 1) !important;
   outline-offset: -2px;
 }
-span.image-inline[xdiff\:changetype="diff-removed-image"]> img, span.html-object-embed[xdiff\:changetype="diff-removed-image"] > img {
+
+span.image-inline[xdiff\:changetype="diff-removed-image"] > img, span.html-object-embed[xdiff\:changetype="diff-removed-image"] > img {
   box-sizing: border-box;
   outline: 2px solid rgba(196, 19, 19, 1) !important;
   outline-offset: -2px;
 }
+
 span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-object-embed[xdiff\:changetype="diff-conflict-image"] > img {
   box-sizing: border-box;
   outline: 4px dashed rgba(196, 19, 19, 1) !important;
   outline-offset: -4px;
+}
+
+/*
+ * =============================================================================
+ * Historic Styles for CoreMedia CMS.
+ *
+ * The following styles shipped with CoreMedia CMS since decades. For
+ * compatibility reasons, they have to be supported with CoreMedia CMS
+ * using CKEditor 5 as well.
+ *
+ * The styles here are meant as example, how to integrate these styles and
+ * how to make them available for formatting within CKEditor 5 via
+ * Styles feature.
+ * =============================================================================
+ */
+
+.ck-content [lang="de"] {
+  background: rgba(0, 0, 0, 0.3) !important;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 50%, rgba(255, 204, 0, 0.3) 100%) !important;
+}
+
+.ck-content [lang="en"] {
+  background: rgba(0, 36, 125, 0.3) !important;
+  background: linear-gradient(135deg, rgba(0, 36, 125, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(207, 20, 43, 0.3) 100%) !important;
+}
+
+/*
+ * Languages
+ * ---------
+ *
+ * Differences compared to CoreMedia CMS prior to CMCC 11.2210.1:
+ *
+ * * Prefer language tag: Nowadays it is preferred applying styles to language
+ *   tag instead and using CKEditor's text part language feature to select
+ *   languages, rather than applying classes. Class references are only kept
+ *   for compatibility with old stored data. You may also want to consider
+ *   those in data-processing applying the corresponding language tag instead.
+ *
+ * * Make styles important: Language color highlighting is considered more
+ *   important than other styles in this example.
+ *
+ * * Set color: We explicitly set the color to ensure enough contrast, no matter
+ *   of surrounding styles.
+ *
+ * * Block Level Formats: In previous CMS versions, we only applied the style
+ *   to paragraphs. Nowadays, we must apply the styles at least to all editing
+ *   view elements that originate from a data-processed paragraph. In this
+ *   example application, it only applies to headings.
+ */
+.ck-content [lang="en-gb"],
+.ck-content .language--en-gb {
+  background-color: var(--language-color-en-gb) !important;
+  color: var(--language-color-dark) !important;
+}
+
+.ck-content [lang="en-us"],
+.ck-content .language--en-us {
+  background-color: var(--language-color-en-us);
+  color: var(--language-color-dark) !important;
+}
+
+.ck-content [lang="de"],
+.ck-content .language--de {
+  background-color: var(--language-color-de);
+  color: var(--language-color-light) !important;
+}
+
+.ck-content [lang="en"],
+.ck-content .language--en {
+  background-color: var(--language-color-en-us) !important;
+  color: var(--language-color-dark) !important;
+}
+
+.ck-content [lang="fr"],
+.ck-content .language--fr {
+  background-color: var(--language-color-fr) !important;
+  color: var(--language-color-light) !important;
+}
+
+.ck-content [lang="es"],
+.ck-content .language--es {
+  background-color: var(--language-color-es);
+  color: var(--language-color-light) !important;
+}
+
+.ck-content [lang="ja"],
+.ck-content .language--ja {
+  background-color: var(--language-color-ja);
+  color: var(--language-color-light) !important;
+}
+
+.ck-content [lang="uk"],
+.ck-content .language--uk {
+  background-color: var(--language-color-uk);
+  color: hsl(48, 100%, 50%) !important;
+}
+
+.ck-content p[lang="en-gb"],
+.ck-content h1[lang="en-gb"],
+.ck-content h2[lang="en-gb"],
+.ck-content h3[lang="en-gb"],
+.ck-content h4[lang="en-gb"],
+.ck-content h5[lang="en-gb"],
+.ck-content h6[lang="en-gb"],
+.ck-content p.language--en-gb,
+.ck-content h1.language--en-gb,
+.ck-content h2.language--en-gb,
+.ck-content h3.language--en-gb,
+.ck-content h4.language--en-gb,
+.ck-content h5.language--en-gb,
+.ck-content h6.language--en-gb {
+  border: var(--language-border-base);
+  border-color: var(--language-color-en-gb);
+}
+
+.ck-content p[lang="en-us"],
+.ck-content h1[lang="en-us"],
+.ck-content h2[lang="en-us"],
+.ck-content h3[lang="en-us"],
+.ck-content h4[lang="en-us"],
+.ck-content h5[lang="en-us"],
+.ck-content h6[lang="en-us"],
+.ck-content p.language--en-us,
+.ck-content h1.language--en-us,
+.ck-content h2.language--en-us,
+.ck-content h3.language--en-us,
+.ck-content h4.language--en-us,
+.ck-content h5.language--en-us,
+.ck-content h6.language--en-us {
+  border: var(--language-border-base);
+  border-color: var(--language-color-en-us);
+}
+
+.ck-content p[lang="en"],
+.ck-content h1[lang="en"],
+.ck-content h2[lang="en"],
+.ck-content h3[lang="en"],
+.ck-content h4[lang="en"],
+.ck-content h5[lang="en"],
+.ck-content h6[lang="en"],
+.ck-content p.language--en,
+.ck-content h1.language--en,
+.ck-content h2.language--en,
+.ck-content h3.language--en,
+.ck-content h4.language--en,
+.ck-content h5.language--en,
+.ck-content h6.language--en {
+  border: var(--language-border-base);
+  border-color: var(--language-color-en-us);
+}
+
+.ck-content p[lang="de"],
+.ck-content h1[lang="de"],
+.ck-content h2[lang="de"],
+.ck-content h3[lang="de"],
+.ck-content h4[lang="de"],
+.ck-content h5[lang="de"],
+.ck-content h6[lang="de"],
+.ck-content p.language--de,
+.ck-content h1.language--de,
+.ck-content h2.language--de,
+.ck-content h3.language--de,
+.ck-content h4.language--de,
+.ck-content h5.language--de,
+.ck-content h6.language--de {
+  border: var(--language-border-base);
+  border-color: var(--language-color-de);
+}
+
+.ck-content p[lang="fr"],
+.ck-content h1[lang="fr"],
+.ck-content h2[lang="fr"],
+.ck-content h3[lang="fr"],
+.ck-content h4[lang="fr"],
+.ck-content h5[lang="fr"],
+.ck-content h6[lang="fr"],
+.ck-content p.language--fr,
+.ck-content h1.language--fr,
+.ck-content h2.language--fr,
+.ck-content h3.language--fr,
+.ck-content h4.language--fr,
+.ck-content h5.language--fr,
+.ck-content h6.language--fr {
+  border: var(--language-border-base);
+  border-color: var(--language-color-fr);
+}
+
+.ck-content p[lang="es"],
+.ck-content h1[lang="es"],
+.ck-content h2[lang="es"],
+.ck-content h3[lang="es"],
+.ck-content h4[lang="es"],
+.ck-content h5[lang="es"],
+.ck-content h6[lang="es"],
+.ck-content p.language--es,
+.ck-content h1.language--es,
+.ck-content h2.language--es,
+.ck-content h3.language--es,
+.ck-content h4.language--es,
+.ck-content h5.language--es,
+.ck-content h6.language--es {
+  border: var(--language-border-base);
+  border-color: var(--language-color-es);
+}
+
+.ck-content p[lang="ja"],
+.ck-content h1[lang="ja"],
+.ck-content h2[lang="ja"],
+.ck-content h3[lang="ja"],
+.ck-content h4[lang="ja"],
+.ck-content h5[lang="ja"],
+.ck-content h6[lang="ja"],
+.ck-content p.language--ja,
+.ck-content h1.language--ja,
+.ck-content h2.language--ja,
+.ck-content h3.language--ja,
+.ck-content h4.language--ja,
+.ck-content h5.language--ja,
+.ck-content h6.language--ja {
+  border: var(--language-border-base);
+  border-color: var(--language-color-ja);
+}
+
+.ck-content p[lang="uk"],
+.ck-content h1[lang="uk"],
+.ck-content h2[lang="uk"],
+.ck-content h3[lang="uk"],
+.ck-content h4[lang="uk"],
+.ck-content h5[lang="uk"],
+.ck-content h6[lang="uk"],
+.ck-content p.language--uk,
+.ck-content h1.language--uk,
+.ck-content h2.language--uk,
+.ck-content h3.language--uk,
+.ck-content h4.language--uk,
+.ck-content h5.language--uk,
+.ck-content h6.language--uk {
+  border: var(--language-border-base);
+  border-color: var(--language-color-uk);
 }
 
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
