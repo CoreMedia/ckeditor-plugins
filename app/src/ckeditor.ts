@@ -52,6 +52,7 @@ import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-corem
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 import { Command, icons } from "@ckeditor/ckeditor5-core";
+import { TextPartLanguage } from "@ckeditor/ckeditor5-language";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
@@ -97,25 +98,20 @@ ClassicEditor.create(sourceElement, {
     Bold,
     CodeBlock,
     ContentLinks,
-    ContentClipboard,
     Differencing,
     Essentials,
     Heading,
     Highlight,
     Indent,
     Italic,
-    AutoLink,
     Link,
     LinkImage,
     LinkTarget,
-    CoreMediaStudioEssentials,
-    DocumentList,
     Paragraph,
     PasteContentPlugin,
     PasteFromOffice,
     RemoveFormat,
     Strikethrough,
-    SourceEditing,
     Subscript,
     Superscript,
     Table,
@@ -124,6 +120,7 @@ ClassicEditor.create(sourceElement, {
     CoreMediaFontMapper,
     MockInputExamplePlugin,
     MockStudioIntegration,
+    TextPartLanguage,
   ],
   toolbar: {
     items: [
@@ -156,9 +153,12 @@ ClassicEditor.create(sourceElement, {
       "|",
       "insertTable",
       "|",
+      "textPartLanguage",
+      "|",
       "sourceEditing",
     ],
   },
+
   alignment: {
     // The following alternative to signal alignment was used in CKEditor 4
     // of CoreMedia CMCC 10 and before.
@@ -196,6 +196,7 @@ ClassicEditor.create(sourceElement, {
       { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" },
     ],
   },
+
   link: {
     defaultProtocol: "https://",
     /*decorators: {
@@ -209,6 +210,7 @@ ClassicEditor.create(sourceElement, {
       },
     },*/
   },
+
   image: {
     styles: {
       // Defining custom styling options for the images.
@@ -252,16 +254,29 @@ ClassicEditor.create(sourceElement, {
       "contentImageOpenInTab",
     ],
   },
+
   table: {
     contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
   },
+
   language: {
     // Language switch only applies to editor instance.
     ui: editorLanguage,
     // Won't change language of content.
     content: "en",
-    textPartLanguage: [],
+    textPartLanguage: [
+      { title: "Arabic", languageCode: "ar", textDirection: "rtl" },
+      { title: "English (GB)", languageCode: "en-GB" },
+      { title: "English (US)", languageCode: "en-US" },
+      { title: "English", languageCode: "en" },
+      { title: "French", languageCode: "fr" },
+      { title: "German", languageCode: "de" },
+      { title: "Japanese", languageCode: "ja" },
+      { title: "Spanish", languageCode: "es" },
+      { title: "Ukrainian", languageCode: "uk" },
+    ],
   },
+
   autosave: {
     waitingTime: 1000, // in ms
     save(currentEditor) {

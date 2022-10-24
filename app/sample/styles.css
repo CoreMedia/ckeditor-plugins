@@ -366,16 +366,6 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
  * =============================================================================
  */
 
-.ck-content [lang="de"] {
-  background: rgba(0, 0, 0, 0.3) !important;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 50%, rgba(255, 204, 0, 0.3) 100%) !important;
-}
-
-.ck-content [lang="en"] {
-  background: rgba(0, 36, 125, 0.3) !important;
-  background: linear-gradient(135deg, rgba(0, 36, 125, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(207, 20, 43, 0.3) 100%) !important;
-}
-
 /*
  * Languages
  * ---------
@@ -388,6 +378,10 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
  *   for compatibility with old stored data. You may also want to consider
  *   those in data-processing applying the corresponding language tag instead.
  *
+ *   Note, while CoreMedia Rich Text 1.0 supports lang and xml:lang attribute,
+ *   the preferred representation in editing view is the lang (and dir)
+ *   attribute as used by the text part language feature of CKEditor 5.
+ *
  * * Make styles important: Language color highlighting is considered more
  *   important than other styles in this example.
  *
@@ -398,18 +392,15 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
  *   to paragraphs. Nowadays, we must apply the styles at least to all editing
  *   view elements that originate from a data-processed paragraph. In this
  *   example application, it only applies to headings.
+ *
+ * * New language codes: uk (Ukrainian), ar (Arabic, especially for rtl
+ *   demonstration.
+ *
+ * * Block Elements: Unsupported by text part language feature by CKEditor 5.
+ *   Thus, while the styles below contain block styles, it is not possible
+ *   with text part language feature (for version 35.2.0) to applying
+ *   languages to block elements.
  */
-.ck-content [lang="en-gb"],
-.ck-content .language--en-gb {
-  background-color: var(--language-color-en-gb) !important;
-  color: var(--language-color-dark) !important;
-}
-
-.ck-content [lang="en-us"],
-.ck-content .language--en-us {
-  background-color: var(--language-color-en-us);
-  color: var(--language-color-dark) !important;
-}
 
 .ck-content [lang="de"],
 .ck-content .language--de {
@@ -420,6 +411,18 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
 .ck-content [lang="en"],
 .ck-content .language--en {
   background-color: var(--language-color-en-us) !important;
+  color: var(--language-color-dark) !important;
+}
+
+.ck-content [lang="en-GB"],
+.ck-content .language--en-gb {
+  background-color: var(--language-color-en-gb) !important;
+  color: var(--language-color-dark) !important;
+}
+
+.ck-content [lang="en-US"],
+.ck-content .language--en-us {
+  background-color: var(--language-color-en-us);
   color: var(--language-color-dark) !important;
 }
 
@@ -447,40 +450,22 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
   color: hsl(48, 100%, 50%) !important;
 }
 
-.ck-content p[lang="en-gb"],
-.ck-content h1[lang="en-gb"],
-.ck-content h2[lang="en-gb"],
-.ck-content h3[lang="en-gb"],
-.ck-content h4[lang="en-gb"],
-.ck-content h5[lang="en-gb"],
-.ck-content h6[lang="en-gb"],
-.ck-content p.language--en-gb,
-.ck-content h1.language--en-gb,
-.ck-content h2.language--en-gb,
-.ck-content h3.language--en-gb,
-.ck-content h4.language--en-gb,
-.ck-content h5.language--en-gb,
-.ck-content h6.language--en-gb {
+.ck-content p[lang="de"],
+.ck-content h1[lang="de"],
+.ck-content h2[lang="de"],
+.ck-content h3[lang="de"],
+.ck-content h4[lang="de"],
+.ck-content h5[lang="de"],
+.ck-content h6[lang="de"],
+.ck-content p.language--de,
+.ck-content h1.language--de,
+.ck-content h2.language--de,
+.ck-content h3.language--de,
+.ck-content h4.language--de,
+.ck-content h5.language--de,
+.ck-content h6.language--de {
   border: var(--language-border-base);
-  border-color: var(--language-color-en-gb);
-}
-
-.ck-content p[lang="en-us"],
-.ck-content h1[lang="en-us"],
-.ck-content h2[lang="en-us"],
-.ck-content h3[lang="en-us"],
-.ck-content h4[lang="en-us"],
-.ck-content h5[lang="en-us"],
-.ck-content h6[lang="en-us"],
-.ck-content p.language--en-us,
-.ck-content h1.language--en-us,
-.ck-content h2.language--en-us,
-.ck-content h3.language--en-us,
-.ck-content h4.language--en-us,
-.ck-content h5.language--en-us,
-.ck-content h6.language--en-us {
-  border: var(--language-border-base);
-  border-color: var(--language-color-en-us);
+  border-color: var(--language-color-de);
 }
 
 .ck-content p[lang="en"],
@@ -501,22 +486,40 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
   border-color: var(--language-color-en-us);
 }
 
-.ck-content p[lang="de"],
-.ck-content h1[lang="de"],
-.ck-content h2[lang="de"],
-.ck-content h3[lang="de"],
-.ck-content h4[lang="de"],
-.ck-content h5[lang="de"],
-.ck-content h6[lang="de"],
-.ck-content p.language--de,
-.ck-content h1.language--de,
-.ck-content h2.language--de,
-.ck-content h3.language--de,
-.ck-content h4.language--de,
-.ck-content h5.language--de,
-.ck-content h6.language--de {
+.ck-content p[lang="en-GB"],
+.ck-content h1[lang="en-GB"],
+.ck-content h2[lang="en-GB"],
+.ck-content h3[lang="en-GB"],
+.ck-content h4[lang="en-GB"],
+.ck-content h5[lang="en-GB"],
+.ck-content h6[lang="en-GB"],
+.ck-content p.language--en-gb,
+.ck-content h1.language--en-gb,
+.ck-content h2.language--en-gb,
+.ck-content h3.language--en-gb,
+.ck-content h4.language--en-gb,
+.ck-content h5.language--en-gb,
+.ck-content h6.language--en-gb {
   border: var(--language-border-base);
-  border-color: var(--language-color-de);
+  border-color: var(--language-color-en-gb);
+}
+
+.ck-content p[lang="en-US"],
+.ck-content h1[lang="en-US"],
+.ck-content h2[lang="en-US"],
+.ck-content h3[lang="en-US"],
+.ck-content h4[lang="en-US"],
+.ck-content h5[lang="en-US"],
+.ck-content h6[lang="en-US"],
+.ck-content p.language--en-us,
+.ck-content h1.language--en-us,
+.ck-content h2.language--en-us,
+.ck-content h3.language--en-us,
+.ck-content h4.language--en-us,
+.ck-content h5.language--en-us,
+.ck-content h6.language--en-us {
+  border: var(--language-border-base);
+  border-color: var(--language-color-en-us);
 }
 
 .ck-content p[lang="fr"],
