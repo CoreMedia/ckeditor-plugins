@@ -135,7 +135,7 @@ describe("Paste Button", () => {
     expect(application.console).toHaveNoErrorsOrWarnings();
     application.console.close();
   });
-  const dropTargetSelector = ".ck-toolbar__items";
+  const targetSelector = ".ck-toolbar__items";
 
   describe("Links", () => {
     it.each`
@@ -149,7 +149,7 @@ describe("Paste Button", () => {
         await setupScenario(inputElementClass, contentMocks);
 
         const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
-        await copyPaste(contentMocks, inputElementSelector, dropTargetSelector);
+        await copyPaste(contentMocks, inputElementSelector, targetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -172,13 +172,13 @@ describe("Paste Button", () => {
       ${"multiple-images"}      | ${multipleImages}
       ${"multiple-images-slow"} | ${multipleImagesSlow}
     `(
-      "[$#]: Should drag and drop $contentMocks.length embeddable contents as images.",
+      "[$#]: Should paste $contentMocks.length embeddable contents as images.",
       async ({ inputElementClass, contentMocks }) => {
         await setupScenario(inputElementClass, contentMocks);
 
-        //execute drag and drop
+        //execute paste
         const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
-        await copyPaste(contentMocks, inputElementSelector, dropTargetSelector);
+        await copyPaste(contentMocks, inputElementSelector, targetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -204,30 +204,30 @@ describe("Paste Button", () => {
     );
   });
 
-  async function setupScenario(dragElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
+  async function setupScenario(inputElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
     for (const contentMock of contentMocks) {
       await application.mockContent.addContents(contentMock);
     }
 
-    const dragIds = contentMocks.map((content: { id: number }) => content.id);
-    const droppableElement: InputExampleElement = {
-      label: "Drag And Drop Test",
+    const inputIds = contentMocks.map((content: { id: number }) => content.id);
+    const inputElement: InputExampleElement = {
+      label: "Paste Test",
       tooltip: "test-element",
-      items: dragIds,
-      classes: ["input-content", dragElementClass],
+      items: inputIds,
+      classes: ["input-content", inputElementClass],
     };
-    await application.mockInputExamplePlugin.addDraggableElement(droppableElement);
+    await application.mockInputExamplePlugin.addInputExampleElement(inputElement);
   }
 
   async function copyPaste(
     contentMocks: MockContentConfig[],
-    dragElementSelector: string,
+    inputElementSelector: string,
     toolbarItemsLocator: string
   ): Promise<void> {
-    await page.waitForSelector(dragElementSelector);
+    await page.waitForSelector(inputElementSelector);
     await page.waitForSelector(toolbarItemsLocator);
-    const dragElement = page.locator(dragElementSelector);
-    await dragElement.dblclick();
+    const inputElement = page.locator(inputElementSelector);
+    await inputElement.dblclick();
     const pasteButton = page.locator(toolbarItemsLocator).locator("button").nth(10);
     console.log(await pasteButton.innerHTML());
     await expect(pasteButton).toBeEnabled();

@@ -8,7 +8,7 @@ import MockInputExamplePlugin, {
  * Provides access to the `MockInputExamplePlugin`.
  */
 export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlugin> {
-  async addDraggableElement(data: InputExampleElement): Promise<void> {
+  async addInputExampleElement(data: InputExampleElement): Promise<void> {
     await this.evaluate((p, data) => {
       const htmlDivElement = p.createInsertElement(data);
       window.document.body.append(htmlDivElement);

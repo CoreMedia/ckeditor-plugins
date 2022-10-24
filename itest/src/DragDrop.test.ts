@@ -218,7 +218,7 @@ describe("Drag and Drop", () => {
       items: dragIds,
       classes: ["input-content", dragElementClass],
     };
-    await application.mockInputExamplePlugin.addDraggableElement(droppableElement);
+    await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
   }
 
   async function dragAndDrop(
