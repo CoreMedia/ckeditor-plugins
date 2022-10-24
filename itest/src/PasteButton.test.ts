@@ -148,7 +148,7 @@ describe("Paste Button", () => {
       async ({ inputElementClass, contentMocks }) => {
         await setupScenario(inputElementClass, contentMocks);
 
-        const inputElementSelector = `.input-example.drag-content.${inputElementClass}`;
+        const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
         await copyPaste(contentMocks, inputElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
@@ -173,11 +173,11 @@ describe("Paste Button", () => {
       ${"multiple-images-slow"} | ${multipleImagesSlow}
     `(
       "[$#]: Should drag and drop $contentMocks.length embeddable contents as images.",
-      async ({ dragElementClass: inputElementClass, contentMocks }) => {
+      async ({ inputElementClass, contentMocks }) => {
         await setupScenario(inputElementClass, contentMocks);
 
         //execute drag and drop
-        const inputElementSelector = `.input-example.drag-content.${inputElementClass}`;
+        const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
         await copyPaste(contentMocks, inputElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
@@ -214,7 +214,7 @@ describe("Paste Button", () => {
       label: "Drag And Drop Test",
       tooltip: "test-element",
       items: dragIds,
-      classes: ["drag-content", dragElementClass],
+      classes: ["input-content", dragElementClass],
     };
     await application.mockInputExamplePlugin.addDraggableElement(droppableElement);
   }

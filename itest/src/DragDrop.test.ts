@@ -148,7 +148,7 @@ describe("Drag and Drop", () => {
         await setupScenario(dragElementClass, contentMocks);
 
         //execute drag and drop
-        const dragElementSelector = `.input-example.drag-content.${dragElementClass}`;
+        const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
         await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
 
@@ -178,7 +178,7 @@ describe("Drag and Drop", () => {
         await setupScenario(dragElementClass, contentMocks);
 
         //execute drag and drop
-        const dragElementSelector = `.input-example.drag-content.${dragElementClass}`;
+        const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
         await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
 
@@ -216,7 +216,7 @@ describe("Drag and Drop", () => {
       label: "Drag And Drop Test",
       tooltip: "test-element",
       items: dragIds,
-      classes: ["drag-content", dragElementClass],
+      classes: ["input-content", dragElementClass],
     };
     await application.mockInputExamplePlugin.addDraggableElement(droppableElement);
   }
