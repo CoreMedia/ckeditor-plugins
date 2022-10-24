@@ -2,9 +2,10 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
-import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { serviceAgent } from "@coremedia/service-agent";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
@@ -48,18 +49,22 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
 
   // Add a content marker for each item.
   contentUris.forEach((contentUri: string, index: number): void => {
-    // This only works because we are in a drag context and the result has
-    // already been computed and cached. Calling this function without a
-    // present cache entry for the given contentUri will probably result in a
-    // wrong value.
-    const isEmbeddableContent = DragDropAsyncSupport.isEmbeddable(contentUri, true);
-    const contentInputData = createContentInputData(
-      insertionContext,
-      contentUri,
-      !isEmbeddableContent && !multipleInputItems,
-      index
-    );
-    addContentInputMarker(editor, targetRange, contentInputData);
+    serviceAgent
+      .fetchService(createRichtextConfigurationServiceDescriptor())
+      .then(async (value) => {
+        const embeddableType = await value.isEmbeddableType(contentUri);
+        const contentInputData = createContentInputData(
+          insertionContext,
+          contentUri,
+          !embeddableType && !multipleInputItems,
+          index
+        );
+        addContentInputMarker(editor, targetRange, contentInputData);
+        return embeddableType;
+      })
+      .catch((reason) => {
+        logger.warn("Error while fetching content type", reason);
+      });
   });
 };
 
