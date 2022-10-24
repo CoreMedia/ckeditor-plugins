@@ -20,6 +20,8 @@ import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
 import RemoveFormat from "@ckeditor/ckeditor5-remove-format/src/removeformat";
 import Strikethrough from "@ckeditor/ckeditor5-basic-styles/src/strikethrough";
+//@ts-expect-error typings not available from DefinitelyTyped
+import Style from "@ckeditor/ckeditor5-style/src/style";
 import SourceEditing from "@ckeditor/ckeditor5-source-editing/src/sourceediting";
 import Subscript from "@ckeditor/ckeditor5-basic-styles/src/subscript";
 import Superscript from "@ckeditor/ckeditor5-basic-styles/src/superscript";
@@ -112,6 +114,7 @@ ClassicEditor.create(sourceElement, {
     PasteFromOffice,
     RemoveFormat,
     Strikethrough,
+    Style,
     Subscript,
     Superscript,
     Table,
@@ -128,6 +131,7 @@ ClassicEditor.create(sourceElement, {
       "redo",
       "|",
       "heading",
+      "style",
       "|",
       "pasteContent",
       "|",
@@ -255,6 +259,57 @@ ClassicEditor.create(sourceElement, {
     ],
   },
 
+  //@ts-expect-error Typings unavailable.
+  style: {
+    definitions: [
+      {
+        name: "Font: Arial",
+        element: "span",
+        classes: ["font-name--arial"],
+      },
+      {
+        name: "Font: Arial Black",
+        element: "span",
+        classes: ["font-name--arial-black"],
+      },
+      {
+        name: "Font: Arial Narrow",
+        element: "span",
+        classes: ["font-name--arial-narrow"],
+      },
+      {
+        name: "Font: Century",
+        element: "span",
+        classes: ["font-name--century"],
+      },
+      {
+        name: "Font: Courier",
+        element: "span",
+        classes: ["font-name--courier"],
+      },
+      {
+        name: "Font: Lucida Console",
+        element: "span",
+        classes: ["font-name--lucida-console"],
+      },
+      {
+        name: "Font: Lucida Sans Unicode",
+        element: "span",
+        classes: ["font-name--lucida-sans-unicode"],
+      },
+      {
+        name: "Font: Times New Roman",
+        element: "span",
+        classes: ["font-name--times-new-roman"],
+      },
+      {
+        name: "Font: Verdana",
+        element: "span",
+        classes: ["font-name--verdana"],
+      },
+    ],
+  },
+
   table: {
     contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
   },
@@ -287,7 +342,6 @@ ClassicEditor.create(sourceElement, {
       });
     },
   },
-  //@ts-expect-error Additional configuration, unknown for types.
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     strictness: Strictness.STRICT,
     rules: {

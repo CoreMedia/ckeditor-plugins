@@ -363,8 +363,29 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
  * The styles here are meant as example, how to integrate these styles and
  * how to make them available for formatting within CKEditor 5 via
  * Styles feature.
+ *
+ * Styles Feature Notes:
+ *
+ * * As it seems, it can only applied to one specific element.
+ * * Styling for classes must include the CKEditor itself, as the same styles
+ *   are used for the style selector UI such as:
+ *
+ *   ```
+ *   <div class="ck ck-style-panel">
+ *   <!-- ... -->
+ *     <div class="... ck-style-grid__button__preview ck-content">
+ *       <span class="font-name--arial">AaBbCcDdEeFfGgHhIiJj</span></div>
+ *     </div>
+ *   </div>
+ *   ```
+ *
  * =============================================================================
  */
+
+.ck.ck-style-panel .ck-style-grid .ck-style-grid__button .ck-style-grid__button__preview {
+  /* Corrupted if set by `main .ck-editor[role='application'] .ck.ck-content`. */
+  min-height: inherit;
+}
 
 /*
  * Languages
@@ -592,6 +613,46 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
 .ck-content h6.language--uk {
   border: var(--language-border-base);
   border-color: var(--language-color-uk);
+}
+
+/*
+ * Font Names
+ */
+
+.ck-content .font-name--arial {
+  font-family: Arial, sans-serif;
+}
+
+.ck-content .font-name--arial-black {
+  font-family: Arial Black, sans-serif;
+}
+
+.ck-content .font-name--arial-narrow {
+  font-family: Arial Narrow, sans-serif;
+}
+
+.ck-content .font-name--century {
+  font-family: Century, serif;
+}
+
+.ck-content .font-name--courier {
+  font-family: Courier, monospace;
+}
+
+.ck-content .font-name--lucida-console {
+  font-family: Lucida Console, monospace;
+}
+
+.ck-content .font-name--lucida-sans-unicode {
+  font-family: Lucida Sans Unicode, sans-serif;
+}
+
+.ck-content .font-name--times-new-roman {
+  font-family: Times New Roman, serif;
+}
+
+.ck-content .font-name--verdana {
+  font-family: Verdana, sans-serif;
 }
 
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
