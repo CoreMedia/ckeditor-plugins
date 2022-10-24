@@ -27,13 +27,19 @@ export interface RemoveMarkerEventData {
  * The added UIElement renders a loading spinner into the editing view without
  * changing the model.
  *
+ * @param pendingMarkerNames - all markers which are not yet finally inserted.
  * @param callback - the callback to be executed after the UIElement has been
  * added (Usually to load the data for the loading spinner). Gets the
  * markerData of the corresponding marker as the sole argument.
  */
 export const addContentMarkerConversion =
-  (callback: (markerData: MarkerData) => void) =>
+  (pendingMarkerNames: string[], callback: (markerData: MarkerData) => void) =>
   (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
+    if (pendingMarkerNames.includes(data.markerName)) {
+      evt.stop();
+      return;
+    }
+    pendingMarkerNames.push(data.markerName);
     const viewPosition = conversionApi.mapper.toViewPosition(data.markerRange.start);
     const contentInputData = ContentInputDataCache.lookupData(data.markerName);
     if (!contentInputData) {

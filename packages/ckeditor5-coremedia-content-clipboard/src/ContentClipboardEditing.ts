@@ -27,6 +27,20 @@ export default class ContentClipboardEditing extends Plugin {
 
   static readonly requires = [UndoSupport];
 
+  /**
+   * All markers which are not yet finally inserted.
+   *
+   * Every marker which is set and started to be processed will be added to this list.
+   * While updating the position of a marker CKEditor internally removes and adds the marker again.
+   * Therefore, the marker will be added multiple times. This can be prevented by checking if the newly added marker
+   * is in the pendingMarkerNames list.
+   *
+   * This is a performance optimization.
+   *
+   * @private
+   */
+  #pendingMarkerNames = new Array<string>();
+
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
     this.#defineConverters();
@@ -44,8 +58,8 @@ export default class ContentClipboardEditing extends Plugin {
   }
 
   #onAddMarker(editor: Editor) {
-    return addContentMarkerConversion((markerData: MarkerData): void => {
-      DataToModelMechanism.triggerLoadAndWriteToModel(editor, markerData);
+    return addContentMarkerConversion(this.#pendingMarkerNames, (markerData: MarkerData): void => {
+      DataToModelMechanism.triggerLoadAndWriteToModel(editor, this.#pendingMarkerNames, markerData);
     });
   }
 

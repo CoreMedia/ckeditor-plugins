@@ -228,7 +228,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     ...pairedExamples,
     ...allInputs,
     ...unreadables,
-    ...createBulkOfContent(),
+    ...createBulkOf50Contents(),
   ];
 
   const main = () => {
@@ -248,15 +248,15 @@ const initInputExampleContent = (editor: ClassicEditor) => {
   main();
 };
 
-const createBulkOfContent = (): [{ classes: string[]; tooltip: string; label: string; items: number[] }] => {
+const createBulkOf50Contents = (): [{ classes: string[]; tooltip: string; label: string; items: number[] }] => {
   const ids = [];
-  for (let i = 12000; i < 12500; i = i + 2) {
+  for (let i = 13000; i < 13100; i = i + 2) {
     ids.push(i);
   }
   return [
     {
-      label: "A lot of documents ",
-      tooltip: "Really!",
+      label: "50 contents",
+      tooltip: "50 contents: ",
       classes: ["linkable", "type-document"],
       items: ids,
     },

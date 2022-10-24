@@ -61,9 +61,10 @@ export default class DataToModelMechanism {
    * It then renders the content in the editor and finally removes the marker.
    *
    * @param editor - the editor
+   * @param pendingMarkerNames - all markers which are not yet finally inserted.
    * @param markerData - object that holds information about the marker and the associated content insertion
    */
-  static triggerLoadAndWriteToModel(editor: Editor, markerData: MarkerData): void {
+  static triggerLoadAndWriteToModel(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
     const logger = DataToModelMechanism.#logger;
 
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
@@ -93,10 +94,16 @@ export default class DataToModelMechanism {
           this.lookupCreateItemFunction(type, contentInputData.itemContext.contentUri)
       )
       .then((createItemFunction: CreateModelFunction): void => {
-        DataToModelMechanism.#writeItemToModel(editor, contentInputData, markerData, createItemFunction);
+        DataToModelMechanism.#writeItemToModel(
+          editor,
+          pendingMarkerNames,
+          contentInputData,
+          markerData,
+          createItemFunction
+        );
       })
       .catch((reason) => {
-        DataToModelMechanism.#markerCleanup(editor, markerData);
+        DataToModelMechanism.#markerCleanup(editor, pendingMarkerNames, markerData);
         logger.error("Error occurred in promise", reason);
       })
       .finally(() => DataToModelMechanism.#finishInsertion(editor));
@@ -164,7 +171,11 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      void ifPlugin(editor, UndoSupport).then(enableUndo);
+      ifPlugin(editor, UndoSupport)
+        .then(enableUndo)
+        .catch((reason) => {
+          this.#logger.warn("Unable to reenable UndoCommand", reason);
+        });
     }
   }
 
@@ -174,12 +185,14 @@ export default class DataToModelMechanism {
    * Please note: This method might split the parent container.
    *
    * @param editor - the editor
+   * @param pendingMarkerNames - all markers which are not yet finally inserted.
    * @param contentInputData - the contentInputData object
    * @param markerData - the markerData object
    * @param createItemFunction - the function to create the model element
    */
   static #writeItemToModel(
     editor: Editor,
+    pendingMarkerNames: string[],
     contentInputData: ContentInputData,
     markerData: MarkerData,
     createItemFunction: (writer: Writer) => Node
@@ -220,7 +233,7 @@ export default class DataToModelMechanism {
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
       writer.removeSelectionAttribute("linkHref");
     });
-    DataToModelMechanism.#markerCleanup(editor, markerData);
+    DataToModelMechanism.#markerCleanup(editor, pendingMarkerNames, markerData);
   }
 
   /**
@@ -228,15 +241,21 @@ export default class DataToModelMechanism {
    * the {@link ContentInputDataCache}.
    *
    * @param editor - the editor
+   * @param pendingMarkerNames - all markers which are not yet finally inserted.
    * @param markerData - the markerData object
    */
-  static #markerCleanup(editor: Editor, markerData: MarkerData): void {
+  static #markerCleanup(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
     editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
       }
       writer.removeMarker(marker);
+      const actualIndex = pendingMarkerNames.indexOf(marker.name);
+      if (actualIndex >= 0) {
+        pendingMarkerNames.splice(actualIndex, 1);
+      }
+
       ContentInputDataCache.removeData(marker.name);
     });
   }
