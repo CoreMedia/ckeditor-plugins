@@ -73,6 +73,7 @@ export class PasteContentCommand extends Command {
       .fetchService(createClipboardServiceDescriptor())
       .then((clipboardService: ClipboardService) => clipboardService.getItems())
       .then(async (items: ClipboardItemRepresentation[]) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         const contentUris: string[] = await toContentUris(items);
         const firstRange = this.editor.model.document.selection.getFirstRange();
         if (firstRange) {
@@ -85,6 +86,7 @@ export class PasteContentCommand extends Command {
   }
 
   static async calculateEnabledState(itemRepresentations: ClipboardItemRepresentation[]): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const uris: string[] = await toContentUris(itemRepresentations);
     if (uris.length === 0) {
       return false;
