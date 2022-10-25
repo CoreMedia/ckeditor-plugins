@@ -108,6 +108,8 @@ export class FontMapping {
    * @returns the decoded string
    */
   #decodeHtmlEntities(inputString: string): string {
+    //This is mentioned by CodeQL as security vulnerability but using a textarea element it can't be misused.
+    //Therefore, the vulnerability is ignored.
     this.#DECODE_ELEMENT_HELP.innerHTML = inputString;
     const textContent = this.#DECODE_ELEMENT_HELP.value;
     if (!textContent) {
