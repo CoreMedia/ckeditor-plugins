@@ -8,8 +8,8 @@ import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-i
 import type { Subscription } from "rxjs";
 import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
-import { parseBeanReferences } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { insertContentMarkers } from "../ContentMarkers";
+import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardServiceUtil";
 
 /**
  * Command to insert Content from the ClipboardService into the document at the actual selection.
@@ -71,9 +71,9 @@ export class PasteContentCommand extends Command {
   override execute(): void {
     serviceAgent
       .fetchService(createClipboardServiceDescriptor())
-      .then((clipboardService) => clipboardService.getItems())
-      .then(async (items) => {
-        const contentUris = await PasteContentCommand.toContentUris(items);
+      .then((clipboardService: ClipboardService) => clipboardService.getItems())
+      .then(async (items: ClipboardItemRepresentation[]) => {
+        const contentUris: string[] = await toContentUris(items);
         const firstRange = this.editor.model.document.selection.getFirstRange();
         if (firstRange) {
           insertContentMarkers(this.editor, firstRange, contentUris);
@@ -85,7 +85,7 @@ export class PasteContentCommand extends Command {
   }
 
   static async calculateEnabledState(itemRepresentations: ClipboardItemRepresentation[]): Promise<boolean> {
-    const uris = await PasteContentCommand.toContentUris(itemRepresentations);
+    const uris: string[] = await toContentUris(itemRepresentations);
     if (uris.length === 0) {
       return false;
     }
@@ -109,18 +109,5 @@ export class PasteContentCommand extends Command {
       return isLinkable || isEmbeddable;
     });
     return Promise.all(pastableStatePromises);
-  }
-
-  static async toContentUris(items: ClipboardItemRepresentation[]): Promise<string[]> {
-    const beanReferencesAsStrings: string[] = await Promise.all(
-      items.map((item) => item.data["cm/uri-list"]).map(async (blob) => blob.text())
-    );
-    return beanReferencesAsStrings
-      .map((references) => {
-        const parsedReferences = parseBeanReferences(references);
-        return parsedReferences ? parsedReferences.filter((reference) => !!reference) : [];
-      })
-      .flat()
-      .map((reference) => reference.$Ref);
   }
 }
