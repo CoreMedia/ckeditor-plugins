@@ -7,7 +7,7 @@
     "font",
     "clipboard"
   ],
-  "version": "10.1.1-rc.2",
+  "version": "10.1.1-rc.3",
   "engines": {
     "node": ">=16.0.0"
   },
@@ -41,8 +41,8 @@
     "@ckeditor/ckeditor5-utils": "^35.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "10.1.1-rc.2",
-    "@coremedia/ckeditor5-logging": "10.1.1-rc.2"
+    "@coremedia/ckeditor5-core-common": "10.1.1-rc.3",
+    "@coremedia/ckeditor5-logging": "10.1.1-rc.3"
   },
   "scripts": {
     "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
