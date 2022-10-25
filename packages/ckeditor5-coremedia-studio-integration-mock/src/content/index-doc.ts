@@ -12,6 +12,10 @@ export * from "./DisplayHints";
 export * from "./MigrateTo";
 export { default as MigrateTo } from "./MigrateTo";
 
+export { default as MockBlobDisplayService } from "./MockBlobDisplayService";
+
+export { default as MockClipboardService } from "./MockClipboardService";
+
 export * from "./MockContent";
 export { default as MockContent } from "./MockContent";
 
@@ -34,13 +38,21 @@ export { default as MockDragDropService } from "./MockDragDropService";
 
 export * from "./MockFixtures";
 
+export * from "./MockInputExamplePlugin";
+export { default as MockInputExamplePlugin } from "./MockInputExamplePlugin";
+
 export * from "./MockRichtextConfigurationService";
 export { default as MockRichtextConfigurationService } from "./MockRichtextConfigurationService";
+
+export { default as MockServiceAgentPlugin } from "./MockServiceAgentPlugin";
 
 export * from "./MockWorkAreaService";
 export { default as MockWorkAreaService } from "./MockWorkAreaService";
 
 export * from "./MutableProperties";
+
+export * from "./ObservableMutableProperty";
+export { default as ObservableMutableProperty } from "./ObservableMutableProperty";
 
 export * from "./PredefinedMockContents";
 

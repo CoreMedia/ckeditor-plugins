@@ -8,7 +8,7 @@ import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
-import { MockDragDropPluginWrapper } from "./MockDragDropPluginWrapper";
+import { MockInputExamplePluginWrapper } from "./MockInputExamplePluginWrapper";
 import http from "http";
 
 /**
@@ -142,8 +142,8 @@ export class ApplicationWrapper {
     return MockContentPluginWrapper.fromClassicEditor(this.editor);
   }
 
-  get mockDragDrop(): MockDragDropPluginWrapper {
-    return MockDragDropPluginWrapper.fromClassicEditor(this.editor);
+  get mockInputExamplePlugin(): MockInputExamplePluginWrapper {
+    return MockInputExamplePluginWrapper.fromClassicEditor(this.editor);
   }
 
   get mockServiceAgent(): MockServiceAgentPluginWrapper {

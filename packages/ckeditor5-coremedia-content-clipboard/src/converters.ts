@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import ContentDropDataCache from "./ContentDropDataCache";
+import ContentInputDataCache from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { Item as ModelItem } from "@ckeditor/ckeditor5-engine/src/model/item";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
@@ -27,16 +27,22 @@ export interface RemoveMarkerEventData {
  * The added UIElement renders a loading spinner into the editing view without
  * changing the model.
  *
+ * @param pendingMarkerNames - all markers which are not yet finally inserted.
  * @param callback - the callback to be executed after the UIElement has been
  * added (Usually to load the data for the loading spinner). Gets the
  * markerData of the corresponding marker as the sole argument.
  */
 export const addContentMarkerConversion =
-  (callback: (markerData: MarkerData) => void) =>
+  (pendingMarkerNames: string[], callback: (markerData: MarkerData) => void) =>
   (evt: EventInfo, data: AddMarkerEventData, conversionApi: DowncastConversionApi): void => {
+    if (pendingMarkerNames.includes(data.markerName)) {
+      evt.stop();
+      return;
+    }
+    pendingMarkerNames.push(data.markerName);
     const viewPosition = conversionApi.mapper.toViewPosition(data.markerRange.start);
-    const contentDropData = ContentDropDataCache.lookupData(data.markerName);
-    if (!contentDropData) {
+    const contentInputData = ContentInputDataCache.lookupData(data.markerName);
+    if (!contentInputData) {
       return;
     }
     /*
@@ -53,7 +59,7 @@ export const addContentMarkerConversion =
      * simply add classes to the view container.
      */
     const loadMaskClasses = ["cm-load-mask"];
-    if (contentDropData.itemContext.isInline) {
+    if (contentInputData.itemContext.isInline) {
       loadMaskClasses.push("cm-load-mask--inline");
     }
     const viewContainer = conversionApi.writer.createUIElement("div", { class: loadMaskClasses.join(" ") });

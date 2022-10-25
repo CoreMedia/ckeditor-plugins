@@ -9,6 +9,8 @@ import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlu
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import MockClipboardService from "./content/MockClipboardService";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -39,6 +41,9 @@ class MockStudioIntegration extends Plugin {
 
     const blobDisplayService = new MockBlobDisplayService(contentProvider);
     serviceAgent.registerService(blobDisplayService);
+
+    const clipboardService = new MockClipboardService();
+    serviceAgent.registerService<MockClipboardService>(clipboardService, createClipboardServiceDescriptor());
 
     reportInitEnd(initInformation);
   }

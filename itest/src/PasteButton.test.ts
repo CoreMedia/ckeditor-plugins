@@ -107,7 +107,7 @@ const multipleImagesSlow: MockContentConfig[] = [
   },
 ];
 
-describe("Drag and Drop", () => {
+describe("Paste Button", () => {
   // noinspection DuplicatedCode
   let application: ApplicationWrapper;
 
@@ -135,22 +135,21 @@ describe("Drag and Drop", () => {
     expect(application.console).toHaveNoErrorsOrWarnings();
     application.console.close();
   });
+  const targetSelector = ".ck-toolbar__items";
 
   describe("Links", () => {
     it.each`
-      dragElementClass         | contentMocks
+      inputElementClass        | contentMocks
       ${"one-link"}            | ${oneLink}
       ${"multiple-links-slow"} | ${multipleLinksIncludingSlow}
       ${"multiple-links"}      | ${multipleLinks}
     `(
-      "[$#]: Should drag and drop $contentMocks.length non embeddable contents as links.",
-      async ({ dragElementClass, contentMocks }) => {
-        await setupScenario(dragElementClass, contentMocks);
+      "[$#]: Should paste $contentMocks.length non embeddable contents as links.",
+      async ({ inputElementClass, contentMocks }) => {
+        await setupScenario(inputElementClass, contentMocks);
 
-        //execute drag and drop
-        const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
-        const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
+        const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
+        await copyPaste(contentMocks, inputElementSelector, targetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -168,19 +167,18 @@ describe("Drag and Drop", () => {
 
   describe("Images", () => {
     it.each`
-      dragElementClass          | contentMocks
+      inputElementClass         | contentMocks
       ${"one-image"}            | ${oneImage}
       ${"multiple-images"}      | ${multipleImages}
       ${"multiple-images-slow"} | ${multipleImagesSlow}
     `(
-      "[$#]: Should drag and drop $contentMocks.length embeddable contents as images.",
-      async ({ dragElementClass, contentMocks }) => {
-        await setupScenario(dragElementClass, contentMocks);
+      "[$#]: Should paste $contentMocks.length embeddable contents as images.",
+      async ({ inputElementClass, contentMocks }) => {
+        await setupScenario(inputElementClass, contentMocks);
 
-        //execute drag and drop
-        const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
-        const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
+        //execute paste
+        const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
+        await copyPaste(contentMocks, inputElementSelector, targetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -206,49 +204,32 @@ describe("Drag and Drop", () => {
     );
   });
 
-  async function setupScenario(dragElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
+  async function setupScenario(inputElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
     for (const contentMock of contentMocks) {
       await application.mockContent.addContents(contentMock);
     }
 
-    const dragIds = contentMocks.map((content: { id: number }) => content.id);
-    const droppableElement: InputExampleElement = {
-      label: "Drag And Drop Test",
+    const inputIds = contentMocks.map((content: { id: number }) => content.id);
+    const inputElement: InputExampleElement = {
+      label: "Paste Test",
       tooltip: "test-element",
-      items: dragIds,
-      classes: ["input-content", dragElementClass],
+      items: inputIds,
+      classes: ["input-content", inputElementClass],
     };
-    await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
+    await application.mockInputExamplePlugin.addInputExampleElement(inputElement);
   }
 
-  async function dragAndDrop(
+  async function copyPaste(
     contentMocks: MockContentConfig[],
-    dragElementSelector: string,
-    dropTargetSelector: string
+    inputElementSelector: string,
+    toolbarItemsLocator: string
   ): Promise<void> {
-    await page.waitForSelector(dragElementSelector);
-    await page.waitForSelector(dropTargetSelector);
-    const dragElement = page.locator(dragElementSelector);
-    const dropTarget = page.locator(dropTargetSelector);
-
-    await ensureDropAllowed(contentMocks.map((contentMock) => contentMock.id));
-    await dragElement.dragTo(dropTarget);
-  }
-
-  /**
-   * Ensures that the drop is allowed into the CKEditor.
-   *
-   * This contains some implementation knowledge. The "dragover" calculates if the drop is allowed or not.
-   * While the "dragover" is a synchronous event the data retrieval for the calculation is asynchronous.
-   * "dragover" will be executed many times while hovering over the CKEditor and on entering the CKEditor the asynchronous
-   * fetch is triggered. The result will be written to a cache. The next "dragover" will be calculated using those data.
-   *
-   * @param contentIds -
-   */
-  async function ensureDropAllowed(contentIds: number[]): Promise<void> {
-    await waitForExpect(async () => {
-      const actual = await application.mockInputExamplePlugin.prefillCaches(contentIds);
-      expect(actual).toBeTruthy();
-    });
+    await page.waitForSelector(inputElementSelector);
+    await page.waitForSelector(toolbarItemsLocator);
+    const inputElement = page.locator(inputElementSelector);
+    await inputElement.dblclick();
+    const pasteButton = page.locator(toolbarItemsLocator).locator("button").nth(10);
+    await expect(pasteButton).toBeEnabled();
+    await pasteButton.click();
   }
 });

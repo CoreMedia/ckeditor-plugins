@@ -47,13 +47,14 @@ import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
-import { initDragExamples } from "./dragExamples";
+import { initInputExampleContent } from "./inputExampleContents";
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 import { Command, icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
-import MockDragDropPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockDragDropPlugin";
+import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
+import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
 
 const {
   //@ts-expect-error We currently have no way to extend icon typing.
@@ -65,13 +66,15 @@ const {
 
 const editorLanguage = document?.currentScript?.dataset.lang ?? "en";
 
-// setup dnd IFrame
-const dndButton = document.querySelector("#dragExamplesButton");
-const dndFrame = document.querySelector("#dragExamplesDiv") as HTMLDivElement;
-if (dndButton && dndFrame) {
-  dndButton.addEventListener("click", () => {
-    dndFrame.hidden = !dndFrame.hidden;
-    dndButton.textContent = `${dndFrame.hidden ? "Show" : "Hide"} drag examples`;
+// setup input example content IFrame
+const showHideExampleContentButton = document.querySelector("#inputExampleContentButton");
+const inputExampleContentFrame = document.querySelector("#inputExampleContentDiv") as HTMLDivElement;
+if (showHideExampleContentButton && inputExampleContentFrame) {
+  showHideExampleContentButton.addEventListener("click", () => {
+    inputExampleContentFrame.hidden = !inputExampleContentFrame.hidden;
+    showHideExampleContentButton.textContent = `${
+      inputExampleContentFrame.hidden ? "Show" : "Hide"
+    } input example contents`;
   });
 }
 
@@ -108,6 +111,7 @@ ClassicEditor.create(sourceElement, {
     CoreMediaStudioEssentials,
     DocumentList,
     Paragraph,
+    PasteContentPlugin,
     PasteFromOffice,
     RemoveFormat,
     Strikethrough,
@@ -118,7 +122,7 @@ ClassicEditor.create(sourceElement, {
     TableToolbar,
     Underline,
     CoreMediaFontMapper,
-    MockDragDropPlugin,
+    MockInputExamplePlugin,
     MockStudioIntegration,
   ],
   toolbar: {
@@ -127,6 +131,8 @@ ClassicEditor.create(sourceElement, {
       "redo",
       "|",
       "heading",
+      "|",
+      "pasteContent",
       "|",
       "bold",
       "italic",
@@ -306,7 +312,7 @@ ClassicEditor.create(sourceElement, {
 
     initReadOnlyMode(newEditor);
     initExamples(newEditor);
-    initDragExamples(newEditor);
+    initInputExampleContent(newEditor);
 
     const undoCommand: Command | undefined = newEditor.commands.get("undo");
 

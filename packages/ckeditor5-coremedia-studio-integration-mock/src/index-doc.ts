@@ -5,3 +5,5 @@
  * @module ckeditor5-coremedia-studio-integration-mock
  */
 export * as content from "./content/index-doc";
+
+export { default as MockStudioIntegration } from "./MockStudioIntegration";

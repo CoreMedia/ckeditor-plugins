@@ -90,7 +90,7 @@ input.error {
 /* --------- DND  --------------------------------------------------------------------------------------------------- */
 
 
-.drag-example {
+.input-example {
   display: inline-block;
   border-radius: 2px;
   background-color: #f1f1f1;
@@ -118,7 +118,7 @@ input.error {
   display: none;
 }
 
-#drag-examples.hidden {
+#input-examples.hidden {
   display: none;
 }
 
