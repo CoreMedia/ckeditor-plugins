@@ -28,7 +28,7 @@ export type Mode = "replace" | "append";
 export class FontMapping {
   static readonly #logger = LoggerProvider.getLogger("FontMapper");
   #map: FontMap;
-  #DECODE_ELEMENT_HELP = document.createElement("div");
+  #DECODE_ELEMENT_HELP = document.createElement("textarea");
 
   constructor(map: FontMap) {
     this.#map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);
@@ -108,8 +108,10 @@ export class FontMapping {
    * @returns the decoded string
    */
   #decodeHtmlEntities(inputString: string): string {
+    //This is mentioned by CodeQL as security vulnerability but using a textarea element it can't be misused.
+    //Therefore, the vulnerability is ignored.
     this.#DECODE_ELEMENT_HELP.innerHTML = inputString;
-    const textContent = this.#DECODE_ELEMENT_HELP.textContent;
+    const textContent = this.#DECODE_ELEMENT_HELP.value;
     if (!textContent) {
       // see https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
       throw new Error("Error during decodeHtmlEntities: HTMLDivElement has no textContent");
