@@ -7,6 +7,12 @@
  * @packageDocumentation
  * @category Virtual
  */
+export * from "./ClipboardService";
+export { default as ClipboardService } from "./ClipboardService";
+
+export * from "./ClipboardItemRepresentation";
+export { default as ClipboardItemRepresentation } from "./ClipboardItemRepresentation";
+
 export * from "./DragDropService";
 export { default as DragDropService } from "./DragDropService";
 
