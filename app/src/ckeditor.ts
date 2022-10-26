@@ -20,8 +20,6 @@ import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
 import RemoveFormat from "@ckeditor/ckeditor5-remove-format/src/removeformat";
 import Strikethrough from "@ckeditor/ckeditor5-basic-styles/src/strikethrough";
-//@ts-expect-error typings not available from DefinitelyTyped
-import Style from "@ckeditor/ckeditor5-style/src/style";
 import SourceEditing from "@ckeditor/ckeditor5-source-editing/src/sourceediting";
 import Subscript from "@ckeditor/ckeditor5-basic-styles/src/subscript";
 import Superscript from "@ckeditor/ckeditor5-basic-styles/src/superscript";
@@ -54,10 +52,11 @@ import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-corem
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 import { Command, icons } from "@ckeditor/ckeditor5-core";
-import { TextPartLanguage } from "@ckeditor/ckeditor5-language";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
+//@ts-expect-error Typings unavailable.
+import Style from "@ckeditor/ckeditor5-style/src/style";
 
 const {
   //@ts-expect-error We currently have no way to extend icon typing.
@@ -100,21 +99,25 @@ ClassicEditor.create(sourceElement, {
     Bold,
     CodeBlock,
     ContentLinks,
+    ContentClipboard,
     Differencing,
     Essentials,
     Heading,
     Highlight,
     Indent,
     Italic,
+    AutoLink,
     Link,
     LinkImage,
     LinkTarget,
+    CoreMediaStudioEssentials,
+    DocumentList,
     Paragraph,
     PasteContentPlugin,
     PasteFromOffice,
     RemoveFormat,
     Strikethrough,
-    Style,
+    SourceEditing,
     Subscript,
     Superscript,
     Table,
@@ -123,7 +126,7 @@ ClassicEditor.create(sourceElement, {
     CoreMediaFontMapper,
     MockInputExamplePlugin,
     MockStudioIntegration,
-    TextPartLanguage,
+    Style,
   ],
   toolbar: {
     items: [
