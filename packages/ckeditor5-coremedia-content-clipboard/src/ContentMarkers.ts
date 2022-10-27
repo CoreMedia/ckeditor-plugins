@@ -6,6 +6,7 @@ import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUti
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { Model } from "@ckeditor/ckeditor5-engine";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
@@ -46,6 +47,10 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
     batch,
     selectedAttributes: attributes,
   };
+  //If a range is not collapsed it means that the new content must replace the selected part.
+  //Therefore, we remove the targetRange and create a collapsed range at the start of the
+  //replaced range.
+  const collapsedInsertRange = handleExpandedRange(model, targetRange);
 
   // Add a content marker for each item.
   contentUris.forEach((contentUri: string, index: number): void => {
@@ -59,7 +64,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
           !embeddableType && !multipleInputItems,
           index
         );
-        addContentInputMarker(editor, targetRange, contentInputData);
+        addContentInputMarker(editor, collapsedInsertRange, contentInputData);
         return embeddableType;
       })
       .catch((reason) => {
@@ -68,6 +73,24 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
   });
 };
 
+/**
+ * Handles expanded ranges by removing everything inside the range and create a
+ * collapsed range at the start of the expanded range.
+ * If the given range is already collapsed the range will be returned without any changes.
+ *
+ * @param model - the model to modify if expanded range is given.
+ * @param range - the range to
+ * @returns ModelRange a collapsed range.
+ */
+const handleExpandedRange = (model: Model, range: ModelRange): ModelRange => {
+  if (range.isCollapsed) {
+    return range;
+  }
+  model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
+    writer.remove(range);
+  });
+  return model.createRange(range.start);
+};
 /**
  * Creates a ContentInputData object.
  *
