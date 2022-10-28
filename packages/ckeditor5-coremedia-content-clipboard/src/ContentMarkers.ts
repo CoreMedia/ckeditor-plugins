@@ -6,7 +6,7 @@ import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUti
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
-import { Model } from "@ckeditor/ckeditor5-engine";
+import type { Model } from "@ckeditor/ckeditor5-engine";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
