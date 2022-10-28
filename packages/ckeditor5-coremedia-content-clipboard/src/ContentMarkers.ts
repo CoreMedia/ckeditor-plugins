@@ -74,7 +74,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
 };
 
 /**
- * Handles expanded ranges by removing everything inside the range and create a
+ * Handles expanded ranges by removing everything inside the range and creates a
  * collapsed range at the start of the expanded range.
  * If the given range is already collapsed the range will be returned without any changes.
  *
