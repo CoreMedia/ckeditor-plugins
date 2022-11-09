@@ -55,6 +55,7 @@ importers:
       '@ckeditor/ckeditor5-editor-classic': 35.2.0
       '@ckeditor/ckeditor5-engine': 35.2.0
       '@ckeditor/ckeditor5-essentials': 35.2.0
+      '@ckeditor/ckeditor5-font': 35.2.0
       '@ckeditor/ckeditor5-heading': 35.2.0
       '@ckeditor/ckeditor5-highlight': 35.2.0
       '@ckeditor/ckeditor5-image': 35.2.0
@@ -92,6 +93,7 @@ importers:
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': ^27.1.2
       '@types/ckeditor__ckeditor5-essentials': ^28.0.3
+      '@types/ckeditor__ckeditor5-font': ^33.0.1
       '@types/ckeditor__ckeditor5-heading': ^29.0.3
       '@types/ckeditor__ckeditor5-highlight': ^29.0.3
       '@types/ckeditor__ckeditor5-image': ^33.0.0
@@ -130,6 +132,7 @@ importers:
       '@ckeditor/ckeditor5-editor-classic': 35.2.0
       '@ckeditor/ckeditor5-engine': 35.2.0
       '@ckeditor/ckeditor5-essentials': 35.2.0
+      '@ckeditor/ckeditor5-font': 35.2.0
       '@ckeditor/ckeditor5-heading': 35.2.0
       '@ckeditor/ckeditor5-highlight': 35.2.0
       '@ckeditor/ckeditor5-image': 35.2.0
@@ -171,6 +174,7 @@ importers:
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': 27.1.2
       '@types/ckeditor__ckeditor5-essentials': 28.0.3
+      '@types/ckeditor__ckeditor5-font': 33.0.1
       '@types/ckeditor__ckeditor5-heading': 29.0.3
       '@types/ckeditor__ckeditor5-highlight': 29.0.3
       '@types/ckeditor__ckeditor5-image': 33.0.0
@@ -2502,6 +2506,13 @@ packages:
 
   /@ckeditor/ckeditor5-essentials/35.2.0:
     resolution: {integrity: sha512-5G2tq5Rm54vfBpgYEMvpw5VKrAJvUXEGFhKKxcsqTuAKs5jaXforg/Jq0IyUtO0OtU78mw8Z8ZsNzsjHirFyGw==}
+    engines: {node: '>=14.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 35.2.0
+    dev: false
+
+  /@ckeditor/ckeditor5-font/35.2.0:
+    resolution: {integrity: sha512-pSTkRKoUCapzbpeyQmiCU9kh7pL8mZQPSlvW5hHIPND1yA1hzuIfKzNayjzresmmODm0C5p0mtPEp47x/VJ2bQ==}
     engines: {node: '>=14.0.0', npm: '>=5.7.1'}
     dependencies:
       ckeditor5: 35.2.0

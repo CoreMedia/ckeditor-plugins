@@ -57,6 +57,11 @@ import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integr
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
 //@ts-expect-error Typings unavailable.
 import Style from "@ckeditor/ckeditor5-style/src/style";
+import { FontBackgroundColor, FontColor, FontFamily, FontSize } from "@ckeditor/ckeditor5-font";
+import { TextPartLanguage } from "@ckeditor/ckeditor5-language";
+import { TableCellProperties, TableProperties } from "@ckeditor/ckeditor5-table";
+import { FontSizeOption } from "@ckeditor/ckeditor5-font/src/fontsize";
+import { FontFamilyOption } from "@ckeditor/ckeditor5-font/src/fontfamily";
 
 const {
   //@ts-expect-error We currently have no way to extend icon typing.
@@ -84,6 +89,139 @@ setupPreview();
 
 const imagePlugins = [ContentImagePlugin, ImageInline, ImageBlockEditing, ImageStyle, ImageToolbar];
 
+const customColors = [
+  {
+    color: "aqua",
+    label: "Aqua",
+  },
+  {
+    color: "black",
+    label: "Black",
+  },
+  {
+    color: "blue",
+    label: "Blue",
+  },
+  {
+    color: "fuchsia",
+    label: "Fuchsia",
+  },
+  {
+    color: "gray",
+    label: "Gray",
+  },
+  {
+    color: "green",
+    label: "Green",
+  },
+  {
+    color: "lime",
+    label: "Lime",
+  },
+  {
+    color: "maroon",
+    label: "Maroon",
+  },
+  {
+    color: "navy",
+    label: "Navy",
+  },
+  {
+    color: "olive",
+    label: "Olive",
+  },
+  {
+    color: "purple",
+    label: "Purple",
+  },
+  {
+    color: "red",
+    label: "Red",
+  },
+  {
+    color: "silver",
+    label: "Silver",
+  },
+  {
+    color: "teal",
+    label: "Teal",
+  },
+  {
+    color: "white",
+    label: "White",
+  },
+  {
+    color: "yellow",
+    label: "Yellow",
+  },
+];
+
+const fontSizeOption = (config: Pick<FontSizeOption, "title" | "model"> & { class: string }): FontSizeOption => ({
+  ...config,
+  // @ts-expect-error - https://github.com/DefinitelyTyped/DefinitelyTyped/issues/63059
+  upcastAlso: undefined,
+  view: {
+    name: "span",
+    classes: config.class,
+    // See https://github.com/ckeditor/ckeditor5/issues/2295
+    // Required for styling the menu. Removed for data-processing, thus, only
+    // used in editing view (duplicate information) and in menu.
+    styles: {
+      "font-size": config.model,
+    },
+  },
+});
+
+const fontSizeOptions = (config: (number | "default")[]): (FontSizeOption | "default")[] =>
+  config.map((value) => {
+    if (value === "default") {
+      return "default";
+    }
+    return fontSizeOption({
+      title: `${value} Pt.`,
+      // model value to be re-used for menu styling.
+      model: `${value}pt`,
+      class: `font-size--${value}`,
+    });
+  });
+
+const fontFamilyOption = (config: Pick<FontFamilyOption, "title" | "model"> & { class: string }): FontFamilyOption => ({
+  ...config,
+  // @ts-expect-error - Similar to https://github.com/DefinitelyTyped/DefinitelyTyped/issues/63059
+  upcastAlso: undefined,
+  view: {
+    name: "span",
+    classes: config.class,
+    // See https://github.com/ckeditor/ckeditor5/issues/2295
+    // Required for styling the menu. Removed for data-processing, thus, only
+    // used in editing view (duplicate information) and in menu.
+    styles: {
+      "font-family": config.model,
+    },
+  },
+});
+
+const NonAlphaNumericOrUnderscore = /[\W_]+/g;
+
+const fontNameToCssClass = (name: string): string => {
+  const lcName = name.toLowerCase();
+  const fontNamePostfix = lcName.replaceAll(NonAlphaNumericOrUnderscore, "-");
+  return `font-name--${fontNamePostfix}`;
+};
+
+const fontFamilyOptions = (config: (string | "default")[]): (FontFamilyOption | "default")[] =>
+  config.map((value) => {
+    if (value === "default") {
+      return "default";
+    }
+    return fontFamilyOption({
+      title: value,
+      // model value to be re-used for menu styling.
+      model: value,
+      class: fontNameToCssClass(value),
+    });
+  });
+
 const sourceElement = document.querySelector("#editor") as HTMLElement;
 if (!sourceElement) {
   throw new Error("No element with class editor defined in html. Nothing to create the editor in.");
@@ -102,6 +240,10 @@ ClassicEditor.create(sourceElement, {
     ContentClipboard,
     Differencing,
     Essentials,
+    FontBackgroundColor,
+    FontColor,
+    FontFamily,
+    FontSize,
     Heading,
     Highlight,
     Indent,
@@ -121,7 +263,10 @@ ClassicEditor.create(sourceElement, {
     Subscript,
     Superscript,
     Table,
+    TableCellProperties,
+    TableProperties,
     TableToolbar,
+    TextPartLanguage,
     Underline,
     CoreMediaFontMapper,
     MockInputExamplePlugin,
@@ -137,6 +282,11 @@ ClassicEditor.create(sourceElement, {
       "style",
       "|",
       "pasteContent",
+      "|",
+      "fontFamily",
+      "fontColor",
+      "fontBackgroundColor",
+      "fontSize",
       "|",
       "bold",
       "italic",
@@ -164,6 +314,36 @@ ClassicEditor.create(sourceElement, {
       "|",
       "sourceEditing",
     ],
+  },
+
+  fontFamily: {
+    options: [
+      "Consolas",
+      ...fontFamilyOptions([
+        "default",
+        "Arial",
+        "Arial Black",
+        "Arial Narrow",
+        "Century",
+        "Courier",
+        "Lucida Console",
+        "Lucida Sans Unicode",
+        "Times New Roman",
+        "Verdana",
+      ]),
+    ],
+  },
+
+  fontSize: {
+    options: fontSizeOptions(["default", 8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 26, 28, 36, 48, 72]),
+  },
+
+  fontColor: {
+    colors: customColors,
+  },
+
+  fontBackgroundColor: {
+    colors: customColors,
   },
 
   alignment: {
@@ -195,8 +375,26 @@ ClassicEditor.create(sourceElement, {
   heading: {
     options: [
       { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
+      {
+        model: "paragraph-lime",
+        view: {
+          name: "p",
+          classes: "background-color--lime",
+        },
+        title: "Paragraph (Lime)",
+        class: "ck-heading_paragraph background-color--lime",
+      },
       { model: "heading1", view: "h1", title: "Heading 1", class: "ck-heading_heading1" },
       { model: "heading2", view: "h2", title: "Heading 2", class: "ck-heading_heading2" },
+      {
+        model: "heading2-maroon",
+        view: {
+          name: "h2",
+          classes: "background-color--maroon",
+        },
+        title: "Heading 2 (Maroon)",
+        class: "ck-heading_heading2 background-color--maroon",
+      },
       { model: "heading3", view: "h3", title: "Heading 3", class: "ck-heading_heading3" },
       { model: "heading4", view: "h4", title: "Heading 4", class: "ck-heading_heading4" },
       { model: "heading5", view: "h5", title: "Heading 5", class: "ck-heading_heading5" },
@@ -266,166 +464,261 @@ ClassicEditor.create(sourceElement, {
   style: {
     definitions: [
       {
-        name: "Background: Aqua",
+        name: `<td> Purple`,
+        element: "td",
+        classes: ["background-color--purple"],
+      },
+      {
+        name: `<td> Teal`,
+        element: "td",
+        classes: ["background-color--teal"],
+      },
+      {
+        name: `<td> Yellow`,
+        element: "td",
+        classes: ["background-color--yellow"],
+      },
+      {
+        name: `<th> Purple`,
+        element: "th",
+        classes: ["background-color--purple"],
+      },
+      {
+        name: `<th> Teal`,
+        element: "th",
+        classes: ["background-color--teal"],
+      },
+      {
+        name: `<th> Yellow`,
+        element: "th",
+        classes: ["background-color--yellow"],
+      },
+      {
+        name: `<table> Purple`,
+        element: "table",
+        classes: ["background-color--purple"],
+      },
+      {
+        name: `<table> Teal`,
+        element: "table",
+        classes: ["background-color--teal"],
+      },
+      {
+        name: `<table> Yellow`,
+        element: "table",
+        classes: ["background-color--yellow"],
+      },
+      {
+        name: `<ol> Arial Black`,
+        element: "ol",
+        classes: ["font-name--arial-black"],
+      },
+      {
+        name: `<ol> Lucida Console`,
+        element: "ol",
+        classes: ["font-name--lucida-console"],
+      },
+      {
+        name: `<ul> Arial Black`,
+        element: "ul",
+        classes: ["font-name--arial-black"],
+      },
+      {
+        name: `<ul> Lucida Console`,
+        element: "ul",
+        classes: ["font-name--lucida-console"],
+      },
+      {
+        name: `<li> Arial Black`,
+        element: "li",
+        classes: ["font-name--arial-black"],
+      },
+      {
+        name: `<li> Lucida Console`,
+        element: "li",
+        classes: ["font-name--lucida-console"],
+      },
+      {
+        name: `<p> Arial Black`,
+        element: "p",
+        classes: ["font-name--arial-black"],
+      },
+      {
+        name: `<p> Lucida Console`,
+        element: "p",
+        classes: ["font-name--lucida-console"],
+      },
+      {
+        name: `Heading 2 (Maroon)`,
+        element: "h2",
+        classes: ["background-color--maroon"],
+      },
+      {
+        name: `Fuchsia <blockquote>`,
+        element: "blockquote",
+        classes: ["background-color--fuchsia"],
+      },
+      {
+        name: "Aqua Bg.",
         element: "span",
         classes: ["background-color--aqua"],
       },
       {
-        name: "Background: Black",
+        name: "Black Bg.",
         element: "span",
         classes: ["background-color--black"],
       },
       {
-        name: "Background: Blue",
+        name: "Blue Bg.",
         element: "span",
         classes: ["background-color--blue"],
       },
       {
-        name: "Background: Fuchsia",
+        name: "Fuchsia Bg.",
         element: "span",
         classes: ["background-color--fuchsia"],
       },
       {
-        name: "Background: Gray",
+        name: "Gray Bg.",
         element: "span",
         classes: ["background-color--gray"],
       },
       {
-        name: "Background: Green",
+        name: "Green Bg.",
         element: "span",
         classes: ["background-color--green"],
       },
       {
-        name: "Background: Lime",
+        name: "Lime Bg.",
         element: "span",
         classes: ["background-color--lime"],
       },
       {
-        name: "Background: Maroon",
+        name: "Maroon Bg.",
         element: "span",
         classes: ["background-color--maroon"],
       },
       {
-        name: "Background: Navy",
+        name: "Navy Bg.",
         element: "span",
         classes: ["background-color--navy"],
       },
       {
-        name: "Background: Olive",
+        name: "Olive Bg.",
         element: "span",
         classes: ["background-color--olive"],
       },
       {
-        name: "Background: Purple",
+        name: "Purple Bg.",
         element: "span",
         classes: ["background-color--purple"],
       },
       {
-        name: "Background: Red",
+        name: "Red Bg.",
         element: "span",
         classes: ["background-color--red"],
       },
       {
-        name: "Background: Silver",
+        name: "Silver Bg.",
         element: "span",
         classes: ["background-color--silver"],
       },
       {
-        name: "Background: Teal",
+        name: "Teal Bg.",
         element: "span",
         classes: ["background-color--teal"],
       },
       {
-        name: "Background: White",
+        name: "White Bg.",
         element: "span",
         classes: ["background-color--white"],
       },
       {
-        name: "Background: Yellow",
+        name: "Yellow Bg.",
         element: "span",
         classes: ["background-color--yellow"],
       },
-
       {
-        name: "Color: Aqua",
+        name: "Aqua Fg.",
         element: "span",
         classes: ["color--aqua"],
       },
       {
-        name: "Color: Black",
+        name: "Black Fg.",
         element: "span",
         classes: ["color--black"],
       },
       {
-        name: "Color: Blue",
+        name: "Blue Fg.",
         element: "span",
         classes: ["color--blue"],
       },
       {
-        name: "Color: Fuchsia",
+        name: "Fuchsia Fg.",
         element: "span",
         classes: ["color--fuchsia"],
       },
       {
-        name: "Color: Gray",
+        name: "Gray Fg.",
         element: "span",
         classes: ["color--gray"],
       },
       {
-        name: "Color: Green",
+        name: "Green Fg.",
         element: "span",
         classes: ["color--green"],
       },
       {
-        name: "Color: Lime",
+        name: "Lime Fg.",
         element: "span",
         classes: ["color--lime"],
       },
       {
-        name: "Color: Maroon",
+        name: "Maroon Fg.",
         element: "span",
         classes: ["color--maroon"],
       },
       {
-        name: "Color: Navy",
+        name: "Navy Fg.",
         element: "span",
         classes: ["color--navy"],
       },
       {
-        name: "Color: Olive",
+        name: "Olive Fg.",
         element: "span",
         classes: ["color--olive"],
       },
       {
-        name: "Color: Purple",
+        name: "Purple Fg.",
         element: "span",
         classes: ["color--purple"],
       },
       {
-        name: "Color: Red",
+        name: "Red Fg.",
         element: "span",
         classes: ["color--red"],
       },
       {
-        name: "Color: Silver",
+        name: "Silver Fg.",
         element: "span",
         classes: ["color--silver"],
       },
       {
-        name: "Color: Teal",
+        name: "Teal Fg.",
         element: "span",
         classes: ["color--teal"],
       },
       {
-        name: "Color: White",
+        name: "White Fg.",
         element: "span",
         classes: ["color--white"],
       },
       {
-        name: "Color: Yellow",
+        name: "Yellow Fg.",
         element: "span",
         classes: ["color--yellow"],
       },
+
       {
         name: "Font: Arial",
         element: "span",
@@ -471,6 +764,7 @@ ClassicEditor.create(sourceElement, {
         element: "span",
         classes: ["font-name--verdana"],
       },
+
       {
         name: "Size: 08 Pt",
         element: "span",
@@ -550,7 +844,25 @@ ClassicEditor.create(sourceElement, {
   },
 
   table: {
-    contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
+    contentToolbar: [
+      "tableColumn",
+      "tableRow",
+      "mergeTableCells",
+      "|",
+      "tableProperties",
+      "tableCellProperties",
+      "|",
+      "style",
+      "link",
+    ],
+    tableProperties: {
+      borderColors: customColors,
+      backgroundColors: customColors,
+    },
+    tableCellProperties: {
+      borderColors: customColors,
+      backgroundColors: customColors,
+    },
   },
 
   language: {
