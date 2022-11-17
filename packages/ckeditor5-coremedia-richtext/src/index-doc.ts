@@ -21,7 +21,7 @@ export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 export * from "./processors/Legacy10RichTextDataProcessor";
 export { default as RichTextDataProcessor } from "./processors/Legacy10RichTextDataProcessor";
 
-export * from "./processors/NewRichTextDataProcessor";
+export * from "./processors/RichTextDataProcessor";
 
 export * from "./RichTextSchema";
 export { default as RichTextSchema } from "./RichTextSchema";

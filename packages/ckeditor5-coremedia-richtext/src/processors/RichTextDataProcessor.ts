@@ -16,7 +16,7 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 // TODO[poc] In case we need priorities, consider using: https://ckeditor.com/docs/ckeditor5/35.2.1/api/module_utils_priorities-PriorityString.html
 // TODO[poc] For matching we may use https://ckeditor.com/docs/ckeditor5/35.2.1/api/module_engine_view_matcher-MatcherPattern.html
 // TODO[poc] Conversion API: https://ckeditor.com/docs/ckeditor5/35.2.1/api/module_engine_conversion_conversion-Conversion.html
-export class NewRichTextDataProcessor implements DataProcessor {
+export class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   readonly #delegate: HtmlDataProcessor;
   readonly conversion: Conversion = new ConversionImpl();

@@ -3,7 +3,7 @@ import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { COREMEDIA_RICHTEXT_CONFIG_KEY } from "./CoreMediaRichTextConfig";
-import { NewRichTextDataProcessor } from "./processors/NewRichTextDataProcessor";
+import { RichTextDataProcessor } from "./processors/RichTextDataProcessor";
 import Legacy10RichTextDataProcessor from "./processors/Legacy10RichTextDataProcessor";
 
 /**
@@ -20,7 +20,7 @@ export default class CoreMediaRichText extends Plugin {
     if (this.#isUseLegacy()) {
       this.#setDataProcessor(new Legacy10RichTextDataProcessor(editor));
     } else {
-      this.#setDataProcessor(new NewRichTextDataProcessor(editor));
+      this.#setDataProcessor(new RichTextDataProcessor(editor));
     }
 
     reportInitEnd(initInformation);
