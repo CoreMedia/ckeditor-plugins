@@ -21,7 +21,7 @@ import mix from "@ckeditor/ckeditor5-utils/src/mix";
 /**
  * Data-Processor for CoreMedia RichText 1.0.
  */
-class RichTextDataProcessor implements DataProcessor {
+class Legacy10RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -89,7 +89,7 @@ class RichTextDataProcessor implements DataProcessor {
 
     const parserErrorDocument = this.#domParser.parseFromString("<", "text/xml");
     this.#noParserErrorNamespace =
-      RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
+      Legacy10RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
   }
 
@@ -123,7 +123,7 @@ class RichTextDataProcessor implements DataProcessor {
    * @returns CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
-    const logger = RichTextDataProcessor.#logger;
+    const logger = Legacy10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     const { richTextDocument, domFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
@@ -155,10 +155,10 @@ class RichTextDataProcessor implements DataProcessor {
     const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 
-    if (RichTextDataProcessor.#logger.isDebugEnabled()) {
+    if (Legacy10RichTextDataProcessor.#logger.isDebugEnabled()) {
       fragmentAsStringForDebugging = this.#fragmentToString(domFragment);
 
-      RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
+      Legacy10RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: domFragment,
         domAsString: fragmentAsStringForDebugging,
@@ -199,7 +199,7 @@ class RichTextDataProcessor implements DataProcessor {
 
   // https://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
   #isParserError(parsedDocument: Document) {
-    const namespace = RichTextDataProcessor.#PARSER_ERROR_NAMESPACE;
+    const namespace = Legacy10RichTextDataProcessor.#PARSER_ERROR_NAMESPACE;
     if (this.#noParserErrorNamespace) {
       // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
       return parsedDocument.getElementsByTagName("parsererror").length > 0;
@@ -209,7 +209,7 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   toView(data: string): ViewDocumentFragment | null {
-    const logger = RichTextDataProcessor.#logger;
+    const logger = Legacy10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     let dataView = "";
@@ -268,11 +268,11 @@ class RichTextDataProcessor implements DataProcessor {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RichTextDataProcessor extends Observable {}
+interface Legacy10RichTextDataProcessor extends Observable {}
 
-mix(RichTextDataProcessor, ObservableMixin);
+mix(Legacy10RichTextDataProcessor, ObservableMixin);
 
-export default RichTextDataProcessor;
+export default Legacy10RichTextDataProcessor;
 
 /**
  * We must ensure, that entities defined by CoreMedia RichText 1.0 are known

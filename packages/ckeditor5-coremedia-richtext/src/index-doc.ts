@@ -18,8 +18,10 @@ export { default as CoreMediaRichText } from "./CoreMediaRichText";
 export * from "./CoreMediaRichTextConfig";
 export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 
-export * from "./processors/RichTextDataProcessor";
-export { default as RichTextDataProcessor } from "./processors/RichTextDataProcessor";
+export * from "./processors/Legacy10RichTextDataProcessor";
+export { default as RichTextDataProcessor } from "./processors/Legacy10RichTextDataProcessor";
+
+export * from "./processors/NewRichTextDataProcessor";
 
 export * from "./RichTextSchema";
 export { default as RichTextSchema } from "./RichTextSchema";
