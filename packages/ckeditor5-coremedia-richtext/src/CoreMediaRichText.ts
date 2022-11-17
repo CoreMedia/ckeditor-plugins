@@ -1,5 +1,5 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import RichTextDataProcessor from "./RichTextDataProcessor";
+import RichTextDataProcessor from "./processors/RichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
