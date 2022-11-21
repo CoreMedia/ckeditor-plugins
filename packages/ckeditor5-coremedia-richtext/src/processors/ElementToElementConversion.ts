@@ -63,7 +63,6 @@ const parseElementToElementConfig = (config: ElementToElementConfig): ParsedElem
 const applyToDocumentFragment = (fragment: DocumentFragment, config: ParsedElementToElementConfig): void => {
   fragment.normalize();
   const sourceDocument = fragment.ownerDocument;
-
 };
 
 /**
@@ -79,6 +78,6 @@ export interface ElementToElement extends ParsedElementToElementConfig {
   apply(fragment: DocumentFragment): void;
 }
 
-export const elementToElement = (config: ElementToElementConfig): ElementToElementConfig => {
-
-}
+export const elementToElement = (): ElementToElementConfig => {
+  return {} as ElementToElementConfig;
+};
