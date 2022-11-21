@@ -9,3 +9,4 @@
  *
  * @module ckeditor5-dom-converter
  */
+export * as types from "./types/index-doc";
