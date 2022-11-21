@@ -140,7 +140,7 @@ export const compileElementNameMatcherPattern = (pattern: ElementNameMatcherPatt
  * @param element - element, that matched by name
  * @returns name attributes of the given element
  */
-export const matchedName = (element: Element): NamedElement => {
+export const matchedName = (element: NamedElement): NamedElement => {
   const { namespaceURI, localName, nodeName, tagName, prefix } = element;
   // We could return the element as is, but this strips any irrelevant
   // information.
@@ -151,4 +151,29 @@ export const matchedName = (element: Element): NamedElement => {
     tagName,
     prefix,
   };
+};
+
+/**
+ * Applies the given predicate, if any, to the given element.
+ *
+ * Possibly returned values are:
+ *
+ * * `undefined` iff. the predicate is undefined
+ * * `false` iff. the predicate is defined but does not signal a match
+ * * details of name aspects of element on match
+ *
+ * @param element - element to validate
+ * @param predicate - optional predicate to use
+ */
+export const possiblyMatchName = (
+  element: NamedElement,
+  predicate?: ElementNamePredicate
+): undefined | false | ReturnType<typeof matchedName> => {
+  if (predicate) {
+    if (predicate(element)) {
+      return matchedName(element);
+    }
+    return false;
+  }
+  return undefined;
 };

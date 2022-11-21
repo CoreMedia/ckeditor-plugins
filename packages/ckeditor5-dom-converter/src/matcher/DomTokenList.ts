@@ -11,10 +11,12 @@ export type DomTokenListPredicate = (value: DOMTokenList) => false | string[];
  *
  * * `true` always match; result will contain all tokens.
  * * `string` must match at least one element; result contains all matched tokens
+ * * `string[]` all tokens must be contained; result contains all matched tokens
  * * `RegExp` must match at least one element; result contains all matched tokens
  * * `Record` all `true` states must be contained, all `false` tokens must not be contained; result contains all positively matched tokens
+ * * `DomTokenListPredicate` predicate to match tokens
  */
-export type DomTokenListMatcherPattern = true | string | RegExp | Record<string, boolean> | DomTokenListPredicate;
+export type DomTokenListMatcherPattern = true | string | string[] | RegExp | Record<string, boolean> | DomTokenListPredicate;
 
 /**
  * Compiles the given pattern for a `DOMTokenList` to a predicate.
@@ -27,6 +29,16 @@ export const compileDomTokenListMatcherPattern = (pattern: DomTokenListMatcherPa
   }
   if (typeof pattern === "string") {
     return (value) => (value.contains(pattern) ? [pattern] : false);
+  }
+  if (Array.isArray(pattern)) {
+    return (value) => {
+      for (const token of pattern) {
+        if (!value.contains(token)) {
+          return false;
+        }
+      }
+      return pattern;
+    };
   }
   if (pattern instanceof RegExp) {
     return (value): false | string[] => {
@@ -60,4 +72,26 @@ export const compileDomTokenListMatcherPattern = (pattern: DomTokenListMatcherPa
     };
   }
   return pattern;
+};
+
+/**
+ * Applies the given predicate, if any, to the given `DOMTokenList`.
+ *
+ * Possibly returned values are:
+ *
+ * * `undefined` iff. the predicate is undefined
+ * * `false` iff. the predicate is defined but does not signal a match
+ * * details of matched tokens on match
+ *
+ * @param value - token list to validate
+ * @param predicate - optional predicate to use
+ */
+export const possiblyMatchDomTokenList = (
+  value: DOMTokenList,
+  predicate?: DomTokenListPredicate
+): undefined | ReturnType<DomTokenListPredicate> => {
+  if (predicate) {
+    return predicate(value);
+  }
+  return undefined;
 };
