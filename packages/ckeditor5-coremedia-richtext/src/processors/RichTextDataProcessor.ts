@@ -8,6 +8,9 @@ import ViewNode from "@ckeditor/ckeditor5-engine/src/view/node";
 import { Element, HtmlDataProcessor } from "@ckeditor/ckeditor5-engine";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { ToViewHelpers } from "./ToViewConversion";
+import { Conversion } from "./Conversion";
+import { HtmlDomToRichTextConverter } from "./HtmlDomToRichTextConverter";
 
 // TODO[poc] Idea: If possible, the new data processor could also handle
 // TODO[poc] registering known elements to GHS. If to do this, should be
@@ -19,7 +22,8 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 export class RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   readonly #delegate: HtmlDataProcessor;
-  readonly conversion: Conversion = new ConversionImpl();
+  readonly #rtConverter = new HtmlDomToRichTextConverter();
+  readonly conversion: Conversion = {} as Conversion;
 
   constructor(editor: Editor) {
     this.#delegate = createHtmlDataProcessor(editor);
@@ -90,32 +94,6 @@ export class RichTextDataProcessor implements DataProcessor {
 
 const createHtmlDataProcessor = (editor: Editor): HtmlDataProcessor => new HtmlDataProcessor(editor.data.viewDocument);
 
-export interface ToViewElementToElementConfig {
-  data: MatcherPattern;
-  view: string | Element | ElementConversionFunction;
-  /**
-   * We may always give these some priority.
-   */
-  priority?: PriorityString;
-}
-
-export interface ToViewHelpers {
-  elementToElement(config: ToViewElementToElementConfig): this;
-  // TODO[poc] Should be hidden in configuration API
-  apply(fragment: DocumentFragment): void;
-}
-
-class ToViewHelpersImpl implements ToViewHelpers {
-  readonly #configs: ToViewElementToElementConfig[] = [];
-  elementToElement(config: ToViewElementToElementConfig): this {
-    this.#configs.push(config);
-    return this;
-  }
-
-  apply(fragment: DocumentFragment): void {
-  }
-}
-
 export interface ConversionApi {
   /**
    * Document for creating new elements, etc.
@@ -144,8 +122,6 @@ export interface ToDataHelpers {
 
 export const toData = Symbol("toData");
 export type ToData = typeof toData;
-export const toView = Symbol("toView");
-export type ToView = typeof toView;
 
 export interface DataElementToViewElementByClassConfig {
   /**
@@ -166,56 +142,4 @@ export interface DataElementToViewElementByClassConfig {
    * TODO[poc] If we have both directions here, which is the priority to take? As alternative we may need two priority strings, or we can assume for one direction the reverse priority.
    */
   priority?: PriorityString;
-}
-
-export interface Conversion {
-  for<T extends ToData | ToView>(direction: T): T extends ToData ? ToDataHelpers : ToViewHelpers;
-
-  /**
-   * Convenience methods for frequent use-cases.
-   */
-  dataElementToViewElementByClass(config: DataElementToViewElementByClassConfig): void;
-  // TODO[poc] Should not be exposed for configuration.
-  toView(fragment: DocumentFragment): void;
-}
-
-class ConversionImpl implements Conversion {
-  readonly #toData: ToDataHelpers | undefined;
-  readonly #toView: ToViewHelpers = new ToViewHelpersImpl();
-
-  constructor() {}
-
-  toView(fragment: DocumentFragment): void {
-    this.#toView.apply(fragment);
-  }
-
-  dataElementToViewElementByClass(config: DataElementToViewElementByClassConfig): void {
-    this.for(toData).elementToElement({
-      view: config.view,
-      data: (element: Element, conversionApi: ConversionApi): Element =>
-        // TODO[poc] Don't do anything yet. Just sketching API.
-        element,
-      priority: config.priority,
-    });
-    this.for(toView).elementToElement({
-      data: config.data,
-      view: (element: Element, conversionApi: ConversionApi): Element =>
-        // TODO[poc] Don't do anything yet. Just sketching API.
-        element,
-      priority: config.priority,
-    });
-  }
-
-  for<T extends ToData | ToView>(direction: T): T extends ToData ? ToDataHelpers : ToViewHelpers {
-    switch (direction) {
-      case toData:
-        // @ts-expect-error API not straight here. TODO[poc]
-        return {};
-      case toView:
-        // @ts-expect-error API not straight here. TODO[poc]
-        return {};
-      default:
-        throw new Error(`Unknown direction: ${String(direction)}.`);
-    }
-  }
 }
