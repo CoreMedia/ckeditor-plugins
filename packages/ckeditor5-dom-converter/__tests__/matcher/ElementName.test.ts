@@ -1,4 +1,4 @@
-import { dataNs, dataViewNs, element, first, html, select, xml } from "./ElementUtils";
+import { dataNs, dataViewNs, element, first, html, select, xml } from "../ElementUtils";
 import { compileElementNameMatcherPattern, ElementNameExpression, matchedName } from "../../src/matcher/ElementName";
 
 describe("matcher.ElementName", () => {

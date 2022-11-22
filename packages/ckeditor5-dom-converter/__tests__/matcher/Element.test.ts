@@ -1,4 +1,4 @@
-import { dataNs, dataViewNs, element, first, html, select, xml } from "./ElementUtils";
+import { dataNs, dataViewNs, element, first, html, select, xml } from "../ElementUtils";
 import { compileElementMatcherPattern, ElementMatcherPattern, ElementPredicate } from "../../src/matcher/Element";
 import { matchedName } from "../../src/matcher/ElementName";
 

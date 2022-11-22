@@ -1,4 +1,4 @@
-import { element, html, select } from "./ElementUtils";
+import { element, html, select } from "../ElementUtils";
 import { compileDomTokenListMatcherPattern } from "../../src/matcher/DomTokenList";
 
 const fixture = element(html(`<div><p class="lorem ipsum"/></div>`), select("p"));
