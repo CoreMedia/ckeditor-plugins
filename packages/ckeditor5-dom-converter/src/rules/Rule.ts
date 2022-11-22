@@ -1,9 +1,8 @@
 import { DefaultMatchResultType, Matcher } from "../matcher/Matcher";
-import { DomConverter } from "../DomConverter";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { priorities } from "@ckeditor/ckeditor5-utils";
-import { RuleExecutable, RuleExecutionResponse } from "./RuleExecutable";
-import { Prioritized } from "./Prioritized";
+import { RuleExecutable } from "./RuleExecutable";
+import { byPriority, Prioritized } from "./Prioritized";
 
 /**
  * Parameters to pass for rule execution.
@@ -13,17 +12,6 @@ export interface RuleExecutionParams<T extends Node = Node> {
    * Node that matched previously.
    */
   node: T;
-  /**
-   * Target document to transform to. Only meant as factory for new elements,
-   * attributes, etc. Not to be modified during rule execution.
-   */
-  targetDocument: Document;
-  /**
-   * Converter, that may be used to pre-process children, for example.
-   * Expected corresponding signal to subsequent processing in execution
-   * response, like to skip processing children.
-   */
-  domConverter: DomConverter;
 }
 
 /**
@@ -31,35 +19,32 @@ export interface RuleExecutionParams<T extends Node = Node> {
  * used, if matching and execution is done in different steps.
  */
 export class MatchedRule<T extends Node = Node, R = DefaultMatchResultType> implements Prioritized {
+  /**
+   * The result of the previous match. This result may be important, as rules
+   * with higher priorities may have already modified the matched node.
+   * Having the match result, you may be able to determine its original state
+   * if required.
+   */
   readonly #matchResult: R;
   readonly #executable: RuleExecutable<T, R>;
-  readonly #priority: number;
+  readonly priority: number;
 
   constructor(matchResult: R, executable: RuleExecutable<T, R>, priority: number) {
     this.#executable = executable;
-    this.#priority = priority;
+    this.priority = priority;
     this.#matchResult = matchResult;
   }
 
-  get priority(): number {
-    return this.#priority;
-  }
-
   /**
-   * Apply the rule to the given element. If unmatched, `false` will be
-   * returned. On match, the element will be processed and the result will
-   * be provided in the given response.
+   * Apply the rule to the given element.
    *
-   * @param params - parameters required for rule execution
+   * @param node - the node to process
    */
-  execute(params: RuleExecutionParams<T>): false | Required<RuleExecutionResponse> {
-    return {
-      continue: "default",
-      ...this.#executable({
-        ...params,
-        matchResult: this.#matchResult,
-      }),
-    };
+  execute(node: T): Node {
+    return this.#executable({
+      node,
+      matchResult: this.#matchResult,
+    });
   }
 }
 
@@ -69,7 +54,7 @@ export class MatchedRule<T extends Node = Node, R = DefaultMatchResultType> impl
 export class Rule<T extends Node = Node, R = DefaultMatchResultType> implements Prioritized {
   readonly #matcher: Matcher<T, R>;
   readonly #executable: RuleExecutable<T, R>;
-  readonly #priority: number;
+  readonly priority: number;
 
   constructor(
     matcher: Matcher<T, R>,
@@ -80,14 +65,7 @@ export class Rule<T extends Node = Node, R = DefaultMatchResultType> implements 
     this.#matcher = matcher;
     this.#executable = executable;
     // Parse Priority String.
-    this.#priority = priorities.get(priority);
-  }
-
-  /**
-   * Get the priority for this rule.
-   */
-  get priority(): number {
-    return this.#priority;
+    this.priority = priorities.get(priority);
   }
 
   /**
@@ -104,23 +82,25 @@ export class Rule<T extends Node = Node, R = DefaultMatchResultType> implements 
     }
     return new MatchedRule<T, R>(matchResult, this.#executable, this.priority);
   }
-
-  /**
-   * Apply the rule to the given node. If unmatched, `false` will be
-   * returned. On match, the node will be processed and the result will
-   * be provided in the given response.
-   *
-   * To split up matching and rule execution, use `match` first, followed
-   * by eventually executing the matched rule.
-   *
-   * @param params - parameters required for rule execution
-   */
-  execute(params: RuleExecutionParams<T>): false | Required<RuleExecutionResponse> {
-    const { node } = params;
-    const matched = this.match(node);
-    if (!matched) {
-      return false;
-    }
-    return matched.execute(params);
-  }
 }
+
+/**
+ * Filters applicable rules for the given node.
+ *
+ * @param node - node to match
+ * @param rules - rules to filter
+ * @param sorted - if to sort applicable rules by priority
+ */
+export const applicableRules = (node: Node, rules: Rule[], sorted = true): MatchedRule[] => {
+  const matchResults = rules.map((r) => r.match(node));
+  const result: MatchedRule[] = [];
+  for (const matchResult of matchResults) {
+    if (matchResult) {
+      result.push(matchResult);
+    }
+  }
+  if (sorted) {
+    result.sort(byPriority);
+  }
+  return result;
+};

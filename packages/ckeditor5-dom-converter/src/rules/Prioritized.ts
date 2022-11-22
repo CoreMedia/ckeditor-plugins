@@ -28,4 +28,4 @@ export interface Prioritized {
  * @param a - first prioritized object
  * @param b - second prioritized object
  */
-const byPriority = (a: Prioritized, b: Prioritized) => b.priority - a.priority;
+export const byPriority = (a: Prioritized, b: Prioritized) => b.priority - a.priority;

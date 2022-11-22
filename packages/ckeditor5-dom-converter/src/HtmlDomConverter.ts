@@ -1,6 +1,7 @@
 import { isHasNamespaceUri } from "./dom/HasNamespaceUri";
 import { isElement } from "./dom/Element";
 import { isParentNode } from "./dom/ParentNode";
+import { applicableRules, Rule } from "./rules/Rule";
 
 /**
  * The HTML DOM Converter is dedicated to XML grammars, that are closely related
@@ -27,6 +28,13 @@ export class HtmlDomConverter {
    * general idea to transform HTML-alike dialects in here back and forth.
    */
   readonly targetDefaultNamespaceUri: string | null;
+  /**
+   * Rules that operate on single nodes only and do not perform structural
+   * changes. Note, that, while being prioritized, the order of rules here
+   * is irrelevant. Priority is considered later, when it comes to
+   * processing.
+   */
+  readonly nodeRules: Rule[] = [];
 
   constructor(targetDocument: Document) {
     this.targetDocument = targetDocument;
@@ -47,12 +55,22 @@ export class HtmlDomConverter {
   // Prio 1: Transform Data View to Data.
   convert(externalNode: Node): Node {
     const converted = this.#importNode(externalNode);
-    if (isParentNode(converted)) {
+    const nodeRulesApplied = this.#applyNodeRules(converted);
+    if (isParentNode(externalNode) && isParentNode(nodeRulesApplied)) {
       for (const child of externalNode.childNodes) {
-        converted.append(this.convert(child));
+        nodeRulesApplied.append(this.convert(child));
       }
     }
-    return converted;
+    return nodeRulesApplied;
+  }
+
+  #applyNodeRules(node: Node): Node {
+    const rules = applicableRules(node, this.nodeRules);
+    let result = node;
+    for (const rule of rules) {
+      result = rule.execute(result);
+    }
+    return result;
   }
 
   #createElementNSFrom(externalElement: Element): Element {
@@ -112,7 +130,7 @@ export class HtmlDomConverter {
    * Nodes without namespace and namespace-attributes are imported directly
    * via corresponding API.
    *
-   * @param externalNode
+   * @param externalNode - external node to import
    */
   #importNode<T extends Node = Node>(externalNode: T): T {
     if (isHasNamespaceUri(externalNode)) {

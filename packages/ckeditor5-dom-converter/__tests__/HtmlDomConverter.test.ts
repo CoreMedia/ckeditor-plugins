@@ -1,6 +1,9 @@
 import { dataNs, dataViewNs, html, serialize, xml } from "./ElementUtils";
 import { createDocument } from "../src/dom/Document";
 import { HtmlDomConverter } from "../src/HtmlDomConverter";
+import { ElementMatcher } from "../src/matcher/ElementMatcher";
+import { ElementRuleExecutable, replaceByElementAndClass, replaceFromElementAndClass } from "../src/rules/ElementRuleExecutable";
+import { ElementRule } from "../src/rules/ElementRule";
 
 const toData = (htmlDocument: Document, domConverter: HtmlDomConverter, xmlDocument: Document): void => {
   // Typical process in DataProcessor implementation, to work on
@@ -50,6 +53,23 @@ describe("HtmlDomConverter", () => {
           `<div xmlns="${dataNs}"><p class="lorem" lang="en" dir="ltr"/></div>`
         );
       });
+
+      it(`should transform <mark> HTML element to <span class="mark"> based on rule`, () => {
+        const document = html(`<body><p><mark/></p></body>`);
+        const targetDocument = createDocument({ namespaceURI: dataNs, qualifiedName: "div" });
+        const domConverter = new HtmlDomConverter(targetDocument);
+
+        const dataViewMatcher = new ElementMatcher("mark");
+        const executable: ElementRuleExecutable = replaceByElementAndClass("span", "mark");
+        const rule = new ElementRule(dataViewMatcher, executable);
+
+        //@ts-expect-error - get generics straight here... TODO
+        domConverter.nodeRules.push(rule);
+
+        toData(document, domConverter, targetDocument);
+
+        expect(serialize(targetDocument)).toStrictEqual(`<div xmlns="${dataNs}"><p><span class="mark"/></p></div>`);
+      });
     });
 
     describe("toDataView", () => {
@@ -73,6 +93,26 @@ describe("HtmlDomConverter", () => {
         expect(serialize(targetDocument.body)).toStrictEqual(
           `<body xmlns="${dataViewNs}"><p class="lorem" lang="en" dir="ltr"></p></body>`
         );
+      });
+
+      it(`should transform <span class="mark"> in Rich Text to <mark> element in HTML`, () => {
+        const document = xml(`<div xmlns="${dataNs}"><p><span class="mark"/></p></div>`);
+        const targetDocument = html(`<body/>`);
+        const domConverter = new HtmlDomConverter(targetDocument);
+
+        const dataViewMatcher = new ElementMatcher({
+          name: "span",
+          classes: "mark",
+        });
+        const executable: ElementRuleExecutable = replaceFromElementAndClass("mark", "mark");
+        const rule = new ElementRule(dataViewMatcher, executable);
+
+        //@ts-expect-error - get generics straight here... TODO
+        domConverter.nodeRules.push(rule);
+
+        toDataView(document, domConverter, targetDocument);
+
+        expect(serialize(targetDocument.body)).toStrictEqual(`<body xmlns="${dataViewNs}"><p><mark></mark></p></body>`);
       });
     });
   });
