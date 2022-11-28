@@ -2,13 +2,27 @@ import { serviceAgent } from "@coremedia/service-agent";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
+import {
+  ContentReferenceRequest,
+  ContentReferenceResponse,
+  ContentReferenceService,
+  createContentReferenceServiceDescriptor,
+} from "./studioservices/ContentReferenceService";
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IsLinkableResponse = boolean | "IN_PROGRESS";
 type IsEmbeddableResponse = boolean | "IN_PROGRESS";
+type ContentReferenceResponseCacheValue = ContentReferenceResponse[] | "IN_PROGRESS";
 type Cache = Map<string, IsLinkableResponse | IsEmbeddableResponse>;
+type ContentReferenceCache = Map<string, ContentReferenceResponseCacheValue>;
 type LoadFunction = (uriPath: string, service: RichtextConfigurationService, callback: EvaluationCallback) => void;
+type ContentReferenceServiceLoadFunction = (
+  uriPath: string[],
+  service: ContentReferenceService,
+  callback: ContentReferenceEvaluationCallback
+) => void;
 type EvaluationCallback = (cacheValue: boolean) => void;
+type ContentReferenceEvaluationCallback = (cacheValue: ContentReferenceResponseCacheValue) => void;
 
 /**
  * Provides support for asynchronous API called within synchronous HTML5 drag
@@ -25,6 +39,10 @@ export default class DragDropAsyncSupport {
    */
   static readonly #isLinkableCache: Cache = new Map<string, IsLinkableResponse>();
   static readonly #isEmbeddableTypeCache: Cache = new Map<string, IsEmbeddableResponse>();
+  static readonly #contentReferenceResponseCache: ContentReferenceCache = new Map<
+    string,
+    ContentReferenceResponseCacheValue
+  >();
 
   /**
    * States if the content denoted by the given URI-path is configured, that it
@@ -66,6 +84,88 @@ export default class DragDropAsyncSupport {
       DragDropAsyncSupport.#isLinkableCache,
       loadFunction
     );
+  }
+
+  //TODO: This is just a spike implementation and has to be unified with the other cache example
+  static validateUris(uris: string[], evictImmediately = false): ContentReferenceResponse[] | undefined {
+    const loadFunction: ContentReferenceServiceLoadFunction = (
+      uriPaths: string[],
+      service: ContentReferenceService,
+      callback: ContentReferenceEvaluationCallback
+    ): void => {
+      const contentReferenceRequests: ContentReferenceRequest[] = uriPaths.map((uri) => ({ uri }));
+      service
+        .getContentReferences(contentReferenceRequests)
+        .then((result) => callback(result))
+        .catch((reason) => this.#logger.warn(reason));
+    };
+    return DragDropAsyncSupport.#loadFromContentReferenceCache(
+      uris,
+      evictImmediately,
+      DragDropAsyncSupport.#contentReferenceResponseCache,
+      loadFunction
+    );
+  }
+
+  static #loadFromContentReferenceCache(
+    uris: string[],
+    evictImmediately = false,
+    cache: ContentReferenceCache,
+    loadFunction: ContentReferenceServiceLoadFunction
+  ): ContentReferenceResponse[] | undefined {
+    const logger = DragDropAsyncSupport.#logger;
+
+    const actualValue = cache.get(JSON.stringify(uris));
+
+    if (actualValue !== undefined) {
+      if (evictImmediately) {
+        cache.delete(JSON.stringify(uris));
+      }
+      logger.debug("isLinkable: Providing cached response.", {
+        value: actualValue,
+        uris,
+        evictImmediately,
+      });
+      if (actualValue === IN_PROGRESS) {
+        return undefined;
+      }
+      return actualValue;
+    }
+    return DragDropAsyncSupport.#evaluateContentReferenceService(uris, evictImmediately, cache, loadFunction);
+  }
+
+  static #evaluateContentReferenceService(
+    uriPath: string[],
+    evictImmediately = false,
+    cache: ContentReferenceCache,
+    loadFunction: ContentReferenceServiceLoadFunction
+  ): ContentReferenceResponse[] | undefined {
+    const logger = DragDropAsyncSupport.#logger;
+
+    const service = serviceAgent.getService(createContentReferenceServiceDescriptor());
+
+    if (!service) {
+      // Synchronous behavior: We don't have a service yet, so assume for now,
+      // that the content is not linkable.
+      logger.debug("isLinkable: Configuration service unavailable up to now. Providing precautious answer `false`", {
+        value: false,
+        uriPath,
+        evictImmediately,
+      });
+      return undefined;
+    }
+
+    cache.set(JSON.stringify(uriPath), IN_PROGRESS);
+    loadFunction(uriPath, service, (cacheValue: ContentReferenceResponseCacheValue) => {
+      if (cache.get(JSON.stringify(uriPath)) !== undefined) {
+        logger.debug("isLinkable: Updating cache.", {
+          value: cacheValue,
+          uriPath,
+          evictImmediately,
+        });
+        cache.set(JSON.stringify(uriPath), cacheValue);
+      }
+    });
   }
 
   /**

@@ -24,8 +24,8 @@ import {
 } from "@coremedia/ckeditor5-core-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { insertContentMarkers } from "./ContentMarkers";
+import { ContentReferenceResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -152,21 +152,52 @@ export default class ContentClipboard extends Plugin {
     if (!cmDataUris) {
       return;
     }
+    if (ContentClipboard.#logger.isDebugEnabled()) {
+      ContentClipboard.#logger.debug("URIs received from DragDropService", cmDataUris);
+    }
 
     // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     data.preventDefault();
 
     // for now, we only support content uris in ckeditor.
-    const validContentUris = ContentClipboard.#filterValidUris(cmDataUris);
+    const contentReferenceResponseValidations: ContentReferenceResponse[] | undefined =
+      DragDropAsyncSupport.validateUris(cmDataUris);
+    if (!contentReferenceResponseValidations) {
+      if (ContentClipboard.#logger.isDebugEnabled()) {
+        ContentClipboard.#logger.debug("URIs not loaded from ContentReferenceService yet.");
+      }
+      data.dataTransfer.dropEffect = "none";
+      return;
+    }
+    const allUrisFollowKnownPattern = contentReferenceResponseValidations.every(
+      (response) => response.contentReferenceInformation.isKnownUriPattern
+    );
+    if (!allUrisFollowKnownPattern) {
+      if (ContentClipboard.#logger.isDebugEnabled()) {
+        ContentClipboard.#logger.debug("Not all URIs are known by the ContentReferenceResponse");
+        const invalidUris = contentReferenceResponseValidations.filter(
+          (response) => !response.contentReferenceInformation.isKnownUriPattern
+        );
+        ContentClipboard.#logger.debug("URIs which are not known by the system", invalidUris);
+      }
+      data.dataTransfer.dropEffect = "none";
+    }
+    const validUris: string[] = contentReferenceResponseValidations
+      .map((response) => response.request.uri)
+      .filter((uri): uri is string => !!uri);
 
-    const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(validContentUris);
-    // Applying dropEffects required to be run *after* CKEditor's normal
-    // listeners, which almost always enforce `move` as dropEffect. We also must
-    // not `stop` processing (at least at normal priority), as otherwise the
-    // range indicator won't be updated.
-    if (containsDisplayableContents) {
-      data.dataTransfer.dropEffect = "link";
+    if (validUris) {
+      const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(validUris);
+      // Applying dropEffects required to be run *after* CKEditor's normal
+      // listeners, which almost always enforce `move` as dropEffect. We also must
+      // not `stop` processing (at least at normal priority), as otherwise the
+      // range indicator won't be updated.
+      if (containsDisplayableContents) {
+        data.dataTransfer.dropEffect = "link";
+      } else {
+        data.dataTransfer.dropEffect = "none";
+      }
     } else {
       data.dataTransfer.dropEffect = "none";
     }
@@ -232,9 +263,21 @@ export default class ContentClipboard extends Plugin {
     evt.stop();
 
     // for now, we only support content uris in ckeditor.
-    const validContentUris = ContentClipboard.#filterValidUris(cmDataUris);
+    const validContentUris = DragDropAsyncSupport.validateUris(cmDataUris, true);
+    if (!validContentUris) {
+      return;
+    }
+    const allUrisFollowKnownPattern = validContentUris.every(
+      (response) => response.contentReferenceInformation.isKnownUriPattern
+    );
+    if (!allUrisFollowKnownPattern) {
+      return;
+    }
+    const validUris: string[] = validContentUris
+      .map((response) => response.request.uri)
+      .filter((uri): uri is string => !!uri);
 
-    if (!DragDropAsyncSupport.containsDisplayableContents(validContentUris)) {
+    if (!DragDropAsyncSupport.containsDisplayableContents(validUris)) {
       return;
     }
 
@@ -253,7 +296,7 @@ export default class ContentClipboard extends Plugin {
 
     const { model } = editor;
 
-    insertContentMarkers(editor, targetRange, validContentUris);
+    insertContentMarkers(editor, targetRange, validUris);
     // Fire content insertion event in a single change block to allow other
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).
@@ -284,15 +327,5 @@ export default class ContentClipboard extends Plugin {
       return targetRanges[0];
     }
     return null;
-  }
-
-  static #filterValidUris(uris: string[]): string[] {
-    return uris.filter((uri) => {
-      if (isUriPath(uri)) {
-        return true;
-      }
-      ContentClipboard.#logger.debug(`Found an unsupported uri, will be ignored: ${uri}`);
-      return false;
-    });
   }
 }

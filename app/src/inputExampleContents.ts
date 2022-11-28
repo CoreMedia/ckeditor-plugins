@@ -242,6 +242,9 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       const insertDiv: HTMLDivElement = mockInputExamplePlugin.createInsertElement(data);
       examplesEl.appendChild(insertDiv);
     });
+
+    const externalContentUriDiv: HTMLDivElement = mockInputExamplePlugin.createInsertElementForExternalUri();
+    examplesEl.appendChild(externalContentUriDiv);
     console.log(`Initialized ${allData.length} insert examples.`);
   };
 

@@ -13,6 +13,11 @@ import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckedito
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
+import {
+  ContentReferenceResponse,
+  createContentReferenceServiceDescriptor,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
 
 const UTILITY_NAME = "DataToModelMechanism";
 
@@ -88,13 +93,27 @@ export default class DataToModelMechanism {
     // images. The only two attributes to distinguish contents are linkable and
     // embeddable. Lookup an extender with the object type, call the `create`
     // model stuff. take a promise and execute writeItemToModel
-    this.#getType(contentInputData.itemContext.contentUri)
-      .then(
-        (type): Promise<CreateModelFunction> =>
-          this.lookupCreateItemFunction(type, contentInputData.itemContext.contentUri)
-      )
-      .then((createItemFunction: CreateModelFunction): void => {
-        DataToModelMechanism.#writeItemToModel(
+    const contentUri = contentInputData.itemContext.contentUri;
+    serviceAgent
+      .fetchService(createContentReferenceServiceDescriptor())
+      .then((service) => service.getContentReference({ uri: contentUri }))
+      .then(async (response: ContentReferenceResponse) => {
+        if (response.content) {
+          return Promise.resolve(response.content.uri);
+        }
+        if (response.contentReferenceInformation.isKnownUriPattern) {
+          const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
+          if (response.request.uri) {
+            const importedContentReference = await contentImportService.import(response.request.uri);
+            return Promise.resolve(importedContentReference.uri);
+          }
+        }
+        return Promise.reject("No content found and uri is not importable.");
+      })
+      .then(async (uri) => {
+        const type = await this.#getType(uri);
+        const createItemFunction = await this.lookupCreateItemFunction(type, uri);
+        return DataToModelMechanism.#writeItemToModel(
           editor,
           pendingMarkerNames,
           contentInputData,

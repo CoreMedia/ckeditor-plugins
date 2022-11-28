@@ -47,6 +47,26 @@ class MockInputExamplePlugin extends Plugin {
     reportInitEnd(initInformation);
   }
 
+  createInsertElementForExternalUri(): HTMLDivElement {
+    const insertDiv = document.createElement("div");
+    insertDiv.classList.add("input-example");
+    insertDiv.draggable = true;
+    //TODO: This is just one static example for the spike
+    insertDiv.textContent = "External Id";
+    insertDiv.dataset.cmuripath = "externalUri/12345";
+    insertDiv.title = `External Id (${insertDiv.dataset.cmuripath})`;
+    insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
+    insertDiv.addEventListener("dblclick", (event): void => {
+      MockInputExamplePlugin.#setClipboardData(event)
+        .then(() => MockInputExamplePlugin.#logger.debug("Successfully copied data to the content clipboard"))
+        .catch((reason: string) => {
+          MockInputExamplePlugin.#logger.warn("Could not set clipboard data", reason);
+        });
+    });
+    insertDiv.addEventListener("dragend", MockInputExamplePlugin.#removeDropData);
+    return insertDiv;
+  }
+
   createInsertElement(data: InputExampleElement): HTMLDivElement {
     const insertDiv = document.createElement("div");
     insertDiv.classList.add("input-example", ...(data.classes || []));

@@ -3,18 +3,40 @@
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { serviceAgent } from "@coremedia/service-agent";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import MockExternalContentPlugin from "./MockExternalContentPlugin";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   readonly #contentProvider: MockContentProvider;
+  readonly #editor: Editor;
 
   /**
    * Constructor with some configuration options for the mock service.
    */
-  constructor(contentProvider: MockContentProvider = defaultMockContentProvider) {
+  constructor(editor: Editor, contentProvider: MockContentProvider = defaultMockContentProvider) {
     this.#contentProvider = contentProvider;
+    this.#editor = editor;
   }
 
   async hasLinkableType(uriPath: UriPath): Promise<boolean> {
+    const contentReferenceService = serviceAgent.getService(createContentReferenceServiceDescriptor());
+    if (!contentReferenceService) {
+      return Promise.reject("ContentReferenceService unavailable");
+    }
+
+    const contentReference = await contentReferenceService.getContentReference({ uri: uriPath });
+    if (contentReference.content) {
+      return this.#contentProvider(contentReference.content.uri).linkable;
+    }
+    if (contentReference.contentReferenceInformation.isKnownUriPattern) {
+      const mockExternalContentPlugin = this.#editor.plugins.get(MockExternalContentPlugin);
+      const externalContent = mockExternalContentPlugin.getExternalContent(uriPath);
+      if (externalContent) {
+        return externalContent.contentAfterImport.linkable;
+      }
+    }
     if (isUriPath(uriPath)) {
       const mockContent = this.#contentProvider(uriPath);
       return mockContent.linkable;
