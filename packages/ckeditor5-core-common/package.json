@@ -19,7 +19,7 @@
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.19.0",
-    "@ckeditor/ckeditor5-core": "^35.2.0",
+    "@ckeditor/ckeditor5-core": "^35.3.2",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
@@ -30,7 +30,7 @@
     "typescript": "^4.8.2"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^35.2.0"
+    "@ckeditor/ckeditor5-core": "^35.3.2"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "10.2.2-rc.0",
