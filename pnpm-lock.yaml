@@ -44,6 +44,7 @@ importers:
   app:
     specifiers:
       '@ckeditor/ckeditor5-alignment': 35.2.0
+      '@ckeditor/ckeditor5-autoformat': 35.2.0
       '@ckeditor/ckeditor5-autosave': 35.2.0
       '@ckeditor/ckeditor5-basic-styles': 35.2.0
       '@ckeditor/ckeditor5-block-quote': 35.2.0
@@ -55,6 +56,7 @@ importers:
       '@ckeditor/ckeditor5-editor-classic': 35.2.0
       '@ckeditor/ckeditor5-engine': 35.2.0
       '@ckeditor/ckeditor5-essentials': 35.2.0
+      '@ckeditor/ckeditor5-find-and-replace': 35.2.0
       '@ckeditor/ckeditor5-heading': 35.2.0
       '@ckeditor/ckeditor5-highlight': 35.2.0
       '@ckeditor/ckeditor5-image': 35.2.0
@@ -83,6 +85,7 @@ importers:
       '@coremedia/ckeditor5-font-mapper': 10.2.2-rc.0
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-alignment': 29.0.7
+      '@types/ckeditor__ckeditor5-autoformat': ^31.0.1
       '@types/ckeditor__ckeditor5-autosave': ^32.0.0
       '@types/ckeditor__ckeditor5-basic-styles': ^28.0.2
       '@types/ckeditor__ckeditor5-block-quote': ^29.0.4
@@ -90,6 +93,7 @@ importers:
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': ^27.1.2
       '@types/ckeditor__ckeditor5-essentials': ^28.0.3
+      '@types/ckeditor__ckeditor5-find-and-replace': ^29.1.2
       '@types/ckeditor__ckeditor5-heading': ^29.0.3
       '@types/ckeditor__ckeditor5-highlight': ^29.0.3
       '@types/ckeditor__ckeditor5-image': ^33.0.0
@@ -118,6 +122,7 @@ importers:
       xml-formatter: ^2.6.1
     dependencies:
       '@ckeditor/ckeditor5-alignment': 35.2.0
+      '@ckeditor/ckeditor5-autoformat': 35.2.0
       '@ckeditor/ckeditor5-autosave': 35.2.0
       '@ckeditor/ckeditor5-basic-styles': 35.2.0
       '@ckeditor/ckeditor5-block-quote': 35.2.0
@@ -127,6 +132,7 @@ importers:
       '@ckeditor/ckeditor5-editor-classic': 35.2.0
       '@ckeditor/ckeditor5-engine': 35.2.0
       '@ckeditor/ckeditor5-essentials': 35.2.0
+      '@ckeditor/ckeditor5-find-and-replace': 35.2.0
       '@ckeditor/ckeditor5-heading': 35.2.0
       '@ckeditor/ckeditor5-highlight': 35.2.0
       '@ckeditor/ckeditor5-image': 35.2.0
@@ -159,6 +165,7 @@ importers:
       '@ckeditor/ckeditor5-dev-webpack-plugin': 30.5.0_frxmcuunqqqeqipt45cd6rjuvu
       '@ckeditor/ckeditor5-inspector': 4.1.0
       '@types/ckeditor__ckeditor5-alignment': 29.0.7
+      '@types/ckeditor__ckeditor5-autoformat': 31.0.1
       '@types/ckeditor__ckeditor5-autosave': 32.0.0
       '@types/ckeditor__ckeditor5-basic-styles': 28.0.2
       '@types/ckeditor__ckeditor5-block-quote': 29.0.4
@@ -166,6 +173,7 @@ importers:
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': 27.1.2
       '@types/ckeditor__ckeditor5-essentials': 28.0.3
+      '@types/ckeditor__ckeditor5-find-and-replace': 29.1.2
       '@types/ckeditor__ckeditor5-heading': 29.0.3
       '@types/ckeditor__ckeditor5-highlight': 29.0.3
       '@types/ckeditor__ckeditor5-image': 33.0.0
@@ -2368,6 +2376,13 @@ packages:
       ckeditor5: 35.2.0
     dev: false
 
+  /@ckeditor/ckeditor5-autoformat/35.2.0:
+    resolution: {integrity: sha512-bV6LjT9oNx8Y65Gdgw6VjbWiY2At//m1lP8yMTCzBex8H1RzhlCun2JUnG5HNpWsZi9N7I0VzgMmxSKD8vw2/Q==}
+    engines: {node: '>=14.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 35.2.0
+    dev: false
+
   /@ckeditor/ckeditor5-autosave/35.2.0:
     resolution: {integrity: sha512-0Fli5W+EicUS4JdRyNy4ShDcly6iRJdEeJGgW+nKNSdyUnJ0gIgKQQ67fOEYKpWbz4TiiJdyVo6V1Q5fCisbPQ==}
     engines: {node: '>=14.0.0', npm: '>=5.7.1'}
@@ -2499,6 +2514,16 @@ packages:
     engines: {node: '>=14.0.0', npm: '>=5.7.1'}
     dependencies:
       ckeditor5: 35.2.0
+    dev: false
+
+  /@ckeditor/ckeditor5-find-and-replace/35.2.0:
+    resolution: {integrity: sha512-IMWfpD/E2SNA0/+L2wppKQ5/kYl8wad080x7P8NXG0GV1Gb2lkanyRgHS6F1koUgN383Rss+XgmZn51RYNGTqQ==}
+    engines: {node: '>=14.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-ui': 35.2.0
+      '@ckeditor/ckeditor5-utils': 35.2.0
+      ckeditor5: 35.2.0
+      lodash-es: 4.17.21
     dev: false
 
   /@ckeditor/ckeditor5-heading/35.2.0:
@@ -3190,6 +3215,14 @@ packages:
       '@types/ckeditor__ckeditor5-utils': 28.0.14
     dev: true
 
+  /@types/ckeditor__ckeditor5-autoformat/31.0.1:
+    resolution: {integrity: sha512-E2bDInIyq6J5slWDAruCRTCvWxCH1Gm91d70/V2+YKiwpzj0X0EXyIPTqO01xTbdjHbCy9XiGIZ7fVLDrzchNQ==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-typing': 32.0.1
+    dev: true
+
   /@types/ckeditor__ckeditor5-autosave/32.0.0:
     resolution: {integrity: sha512-auGeVgBG4HLXwPTbHQSsfGZcItntaBuBQN8LSreZea0ur4SJ6NKfh25USqIIQs1DUWYMDPiK6ODwSn2mhyfJ2A==}
     dependencies:
@@ -3328,6 +3361,15 @@ packages:
     resolution: {integrity: sha512-2cpRFCsTHUh3xlbr3IdqfxhRs2AnfvViT0qekhk3SnP9VsUBiqN9CPcgGkBvk3huv30w5kiIpT2UH8l1Ff5Biw==}
     dependencies:
       '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-utils': 28.0.14
+    dev: true
+
+  /@types/ckeditor__ckeditor5-find-and-replace/29.1.2:
+    resolution: {integrity: sha512-AETb7Re9xnk2d2Ep86TBDmKjXijHhMYsRl3naNu9NxPPit9hTcaROfZS0hwrwfzYb5Xv+uMsVZaAbnLoiRAL3A==}
+    dependencies:
+      '@types/ckeditor__ckeditor5-core': 33.0.3
+      '@types/ckeditor__ckeditor5-engine': 32.0.11
+      '@types/ckeditor__ckeditor5-ui': 32.0.2
       '@types/ckeditor__ckeditor5-utils': 28.0.14
     dev: true
 
