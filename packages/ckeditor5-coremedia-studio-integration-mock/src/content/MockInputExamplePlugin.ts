@@ -53,8 +53,8 @@ class MockInputExamplePlugin extends Plugin {
     insertDiv.draggable = true;
     //TODO: This is just one static example for the spike
     insertDiv.textContent = "External Id";
-    insertDiv.dataset.cmuripath = "externalUri/12345";
-    insertDiv.title = `External Id (${insertDiv.dataset.cmuripath})`;
+    insertDiv.dataset.uripath = "externalUri/12345";
+    insertDiv.title = `External Id (${insertDiv.dataset.uripath})`;
     insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
     insertDiv.addEventListener("dblclick", (event): void => {
       MockInputExamplePlugin.#setClipboardData(event)
@@ -72,8 +72,8 @@ class MockInputExamplePlugin extends Plugin {
     insertDiv.classList.add("input-example", ...(data.classes || []));
     insertDiv.draggable = true;
     insertDiv.textContent = data.label || "Unset";
-    insertDiv.dataset.cmuripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
-    insertDiv.title = `${data.tooltip} (${insertDiv.dataset.cmuripath})`;
+    insertDiv.dataset.uripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
+    insertDiv.title = `${data.tooltip} (${insertDiv.dataset.uripath})`;
     insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
     insertDiv.addEventListener("dblclick", (event): void => {
       MockInputExamplePlugin.#setClipboardData(event)
@@ -104,7 +104,7 @@ class MockInputExamplePlugin extends Plugin {
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {
     const target = event.target as HTMLElement;
-    const contentIdCommaSeparated = target.getAttribute("data-cmuripath");
+    const contentIdCommaSeparated = target.getAttribute("data-uripath");
     if (!contentIdCommaSeparated) {
       return;
     }
@@ -121,14 +121,14 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   /**
-   * Set the drag data stored in the attribute data-cmuripath to the
+   * Set the drag data stored in the attribute data-uripath to the
    * `dragEvent.dataTransfer` and to the dragDropService in studio.
    *
    * @param dragEvent the drag event
    */
   static #setDragData(dragEvent: DragEvent): void {
     const dragEventTarget = dragEvent.target as HTMLElement;
-    const contentId = dragEventTarget.getAttribute("data-cmuripath");
+    const contentId = dragEventTarget.getAttribute("data-uripath");
     if (contentId) {
       const idsArray = contentId.split(",");
       const dragDropService = new MockDragDropService();
