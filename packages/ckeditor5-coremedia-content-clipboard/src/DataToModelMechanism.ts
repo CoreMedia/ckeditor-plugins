@@ -16,7 +16,7 @@ import { enableUndo, UndoSupport } from "./integrations/Undo";
 import {
   ContentReferenceResponse,
   createContentReferenceServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
 
 const UTILITY_NAME = "DataToModelMechanism";
@@ -96,21 +96,21 @@ export default class DataToModelMechanism {
     const contentUri = contentInputData.itemContext.contentUri;
     serviceAgent
       .fetchService(createContentReferenceServiceDescriptor())
-      .then((service) => service.getContentReference({ uri: contentUri }))
+      .then((service) => service.getContentReference(contentUri))
       .then(async (response: ContentReferenceResponse) => {
-        if (response.content) {
-          return Promise.resolve(response.content.uri);
+        if (response.contentUri) {
+          return Promise.resolve(response.contentUri);
         }
-        if (response.contentReferenceInformation.isKnownUriPattern) {
+        if (response.externalUriInformation) {
           const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
-          if (response.request.uri) {
-            const importedContentReference = await contentImportService.import(response.request.uri);
-            return Promise.resolve(importedContentReference.uri);
+          if (response.request) {
+            const importedContentReference = await contentImportService.import(response.request);
+            return Promise.resolve(importedContentReference);
           }
         }
         return Promise.reject("No content found and uri is not importable.");
       })
-      .then(async (uri) => {
+      .then(async (uri: string) => {
         const type = await this.#getType(uri);
         const createItemFunction = await this.lookupCreateItemFunction(type, uri);
         return DataToModelMechanism.#writeItemToModel(

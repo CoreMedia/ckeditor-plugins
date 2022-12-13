@@ -3,11 +3,10 @@ import RichtextConfigurationService from "./RichtextConfigurationService";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 import {
-  ContentReferenceRequest,
   ContentReferenceResponse,
-  ContentReferenceService,
   createContentReferenceServiceDescriptor,
-} from "./studioservices/ContentReferenceService";
+  IContentReferenceService,
+} from "./studioservices/IContentReferenceService";
 
 const IN_PROGRESS = "IN_PROGRESS";
 type IsLinkableResponse = boolean | "IN_PROGRESS";
@@ -18,7 +17,7 @@ type ContentReferenceCache = Map<string, ContentReferenceResponseCacheValue>;
 type LoadFunction = (uriPath: string, service: RichtextConfigurationService, callback: EvaluationCallback) => void;
 type ContentReferenceServiceLoadFunction = (
   uriPath: string[],
-  service: ContentReferenceService,
+  service: IContentReferenceService,
   callback: ContentReferenceEvaluationCallback
 ) => void;
 type EvaluationCallback = (cacheValue: boolean) => void;
@@ -90,12 +89,11 @@ export default class DragDropAsyncSupport {
   static validateUris(uris: string[], evictImmediately = false): ContentReferenceResponse[] | undefined {
     const loadFunction: ContentReferenceServiceLoadFunction = (
       uriPaths: string[],
-      service: ContentReferenceService,
+      service: IContentReferenceService,
       callback: ContentReferenceEvaluationCallback
     ): void => {
-      const contentReferenceRequests: ContentReferenceRequest[] = uriPaths.map((uri) => ({ uri }));
       service
-        .getContentReferences(contentReferenceRequests)
+        .getContentReferences(uriPaths)
         .then((result) => callback(result))
         .catch((reason) => this.#logger.warn(reason));
     };

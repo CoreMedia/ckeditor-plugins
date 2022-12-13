@@ -1,8 +1,7 @@
-import { ContentReference } from "./ContentReferenceService";
 import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
 
 export abstract class ContentImportService {
-  abstract import(uri: string): Promise<ContentReference>;
+  abstract import(uri: string): Promise<string>;
 }
 
 /**

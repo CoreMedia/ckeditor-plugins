@@ -4,7 +4,7 @@ import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 
@@ -26,11 +26,11 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
       return Promise.reject("ContentReferenceService unavailable");
     }
 
-    const contentReference = await contentReferenceService.getContentReference({ uri: uriPath });
-    if (contentReference.content) {
-      return this.#contentProvider(contentReference.content.uri).linkable;
+    const contentReference = await contentReferenceService.getContentReference(uriPath);
+    if (contentReference.contentUri) {
+      return this.#contentProvider(contentReference.contentUri).linkable;
     }
-    if (contentReference.contentReferenceInformation.isKnownUriPattern) {
+    if (contentReference.externalUriInformation) {
       const mockExternalContentPlugin = this.#editor.plugins.get(MockExternalContentPlugin);
       const externalContent = mockExternalContentPlugin.getExternalContent(uriPath);
       if (externalContent) {

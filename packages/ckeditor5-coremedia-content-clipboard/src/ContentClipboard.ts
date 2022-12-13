@@ -25,7 +25,7 @@ import {
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 import { insertContentMarkers } from "./ContentMarkers";
-import { ContentReferenceResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
+import { ContentReferenceResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -161,30 +161,25 @@ export default class ContentClipboard extends Plugin {
     data.preventDefault();
 
     // for now, we only support content uris in ckeditor.
-    const contentReferenceResponseValidations: ContentReferenceResponse[] | undefined =
-      DragDropAsyncSupport.validateUris(cmDataUris);
-    if (!contentReferenceResponseValidations) {
+    const contentReferences: ContentReferenceResponse[] | undefined = DragDropAsyncSupport.validateUris(cmDataUris);
+    if (!contentReferences) {
       if (ContentClipboard.#logger.isDebugEnabled()) {
         ContentClipboard.#logger.debug("URIs not loaded from ContentReferenceService yet.");
       }
       data.dataTransfer.dropEffect = "none";
       return;
     }
-    const allUrisFollowKnownPattern = contentReferenceResponseValidations.every(
-      (response) => response.contentReferenceInformation.isKnownUriPattern
-    );
+    const allUrisFollowKnownPattern = contentReferences.every(ContentClipboard.#isKnownUri);
     if (!allUrisFollowKnownPattern) {
       if (ContentClipboard.#logger.isDebugEnabled()) {
         ContentClipboard.#logger.debug("Not all URIs are known by the ContentReferenceResponse");
-        const invalidUris = contentReferenceResponseValidations.filter(
-          (response) => !response.contentReferenceInformation.isKnownUriPattern
-        );
+        const invalidUris = contentReferences.filter((response) => !ContentClipboard.#isKnownUri(response));
         ContentClipboard.#logger.debug("URIs which are not known by the system", invalidUris);
       }
       data.dataTransfer.dropEffect = "none";
     }
-    const validUris: string[] = contentReferenceResponseValidations
-      .map((response) => response.request.uri)
+    const validUris: string[] = contentReferences
+      .map((response) => response.request)
       .filter((uri): uri is string => !!uri);
 
     if (validUris) {
@@ -201,6 +196,18 @@ export default class ContentClipboard extends Plugin {
     } else {
       data.dataTransfer.dropEffect = "none";
     }
+  }
+
+  /**
+   * Returns true if the uri is known, otherwise false.
+   * Known means that the content reference is a content or at least a known
+   * uri pattern which can be handled.
+   *
+   * @param contentReferenceResponse - the ContentReferenceResponse to validate.
+   * @private
+   */
+  static #isKnownUri(contentReferenceResponse: ContentReferenceResponse): boolean {
+    return !!contentReferenceResponse.contentUri || !!contentReferenceResponse.externalUriInformation;
   }
 
   // noinspection JSUnusedLocalSymbols
@@ -267,14 +274,12 @@ export default class ContentClipboard extends Plugin {
     if (!validContentUris) {
       return;
     }
-    const allUrisFollowKnownPattern = validContentUris.every(
-      (response) => response.contentReferenceInformation.isKnownUriPattern
-    );
+    const allUrisFollowKnownPattern = validContentUris.every(ContentClipboard.#isKnownUri);
     if (!allUrisFollowKnownPattern) {
       return;
     }
     const validUris: string[] = validContentUris
-      .map((response) => response.request.uri)
+      .map((response) => response.request)
       .filter((uri): uri is string => !!uri);
 
     if (!DragDropAsyncSupport.containsDisplayableContents(validUris)) {

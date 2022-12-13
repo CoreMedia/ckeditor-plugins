@@ -1,15 +1,14 @@
 import {
-  ContentReferenceRequest,
   ContentReferenceResponse,
-  ContentReferenceService,
   createContentReferenceServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentReferenceService";
+  IContentReferenceService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 import MockContentPlugin from "./MockContentPlugin";
 import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 
-export class MockContentReferenceService implements ContentReferenceService {
+export class MockContentReferenceService implements IContentReferenceService {
   #editor: Editor;
 
   constructor(editor: Editor) {
@@ -20,11 +19,11 @@ export class MockContentReferenceService implements ContentReferenceService {
     return createContentReferenceServiceDescriptor().name;
   }
 
-  getContentReferences(requests: ContentReferenceRequest[]): Promise<ContentReferenceResponse[]> {
+  getContentReferences(requests: string[]): Promise<ContentReferenceResponse[]> {
     return Promise.all(requests.map((request) => this.getContentReference(request)));
   }
 
-  getContentReference(request: ContentReferenceRequest): Promise<ContentReferenceResponse> {
+  getContentReference(request: string): Promise<ContentReferenceResponse> {
     const mockContentPlugin: MockContentPlugin = this.#editor.plugins.get(
       MockContentPlugin.pluginName
     ) as MockContentPlugin;
@@ -38,43 +37,37 @@ export class MockContentReferenceService implements ContentReferenceService {
   #evaluateResponse(
     mockContentPlugin: MockContentPlugin,
     mockExternalContentPlugin: MockExternalContentPlugin,
-    request: ContentReferenceRequest
+    request: string
   ): ContentReferenceResponse | undefined {
-    if (!request.uri) {
+    if (!request) {
       return undefined;
     }
 
-    const contentExist = mockContentPlugin.hasExplicitContent(request.uri);
-    if (contentExist || isUriPath(request.uri)) {
+    const contentExist = mockContentPlugin.hasExplicitContent(request);
+    if (contentExist || isUriPath(request)) {
       return {
         request,
-        content: { uri: request.uri, uuid: "Some UUID" },
-        contentReferenceInformation: {
-          isContent: true,
-          isKnownUriPattern: true,
-        },
+        contentUri: request,
+        externalUriInformation: undefined,
       };
     }
 
-    const externalContentExist = mockExternalContentPlugin.externalContentExist(request.uri);
-    if (externalContentExist) {
+    const externalContent = mockExternalContentPlugin.getExternalContent(request);
+    if (externalContent) {
       return {
         request,
-        content: undefined,
-        contentReferenceInformation: {
-          isContent: false,
-          isKnownUriPattern: true,
+        contentUri: undefined,
+        externalUriInformation: {
+          mappedContentType: externalContent.contentAfterImport.type,
+          contentUri: undefined,
         },
       };
     }
 
     return {
       request,
-      content: undefined,
-      contentReferenceInformation: {
-        isContent: false,
-        isKnownUriPattern: false,
-      },
+      contentUri: undefined,
+      externalUriInformation: undefined,
     };
   }
 }
