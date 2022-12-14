@@ -33,8 +33,8 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     if (contentReference.externalUriInformation) {
       const mockExternalContentPlugin = this.#editor.plugins.get(MockExternalContentPlugin);
       const externalContent = mockExternalContentPlugin.getExternalContent(uriPath);
-      if (externalContent) {
-        return externalContent.contentAfterImport.linkable;
+      if (externalContent?.contentAfterImport) {
+        return externalContent.contentAfterImport?.type === "linkable";
       }
     }
     if (isUriPath(uriPath)) {

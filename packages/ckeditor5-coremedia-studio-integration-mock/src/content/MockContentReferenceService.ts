@@ -43,24 +43,39 @@ export class MockContentReferenceService implements IContentReferenceService {
       return undefined;
     }
 
+    const externalContent = mockExternalContentPlugin.getExternalContent(request);
+    if (externalContent) {
+      if (externalContent.isAlreadyImported && externalContent.contentAfterImport) {
+        if (externalContent.contentAfterImport.type) {
+          return {
+            request,
+            contentUri: undefined,
+            externalUriInformation: {
+              contentUri: `content/${externalContent.contentAfterImport.id}`,
+              mappedContentType: externalContent.contentAfterImport.type,
+            },
+          };
+        }
+      }
+
+      if (externalContent.contentAfterImport?.type) {
+        return {
+          request,
+          contentUri: undefined,
+          externalUriInformation: {
+            contentUri: undefined,
+            mappedContentType: externalContent.contentAfterImport.type,
+          },
+        };
+      }
+    }
+
     const contentExist = mockContentPlugin.hasExplicitContent(request);
     if (contentExist || isUriPath(request)) {
       return {
         request,
         contentUri: request,
         externalUriInformation: undefined,
-      };
-    }
-
-    const externalContent = mockExternalContentPlugin.getExternalContent(request);
-    if (externalContent) {
-      return {
-        request,
-        contentUri: undefined,
-        externalUriInformation: {
-          mappedContentType: externalContent.contentAfterImport.type,
-          contentUri: undefined,
-        },
       };
     }
 

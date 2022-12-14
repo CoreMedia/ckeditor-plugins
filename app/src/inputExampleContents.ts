@@ -221,6 +221,46 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: slowDocuments.concat(singleInputDocuments).flatMap((item) => item.items),
     },
   ];
+
+  const externalContents: InputExampleElement[] = [
+    {
+      label: "Insertable external content",
+      tooltip: "Insertable External Content",
+      classes: ["linkable"],
+      items: [{ externalId: 2000 }],
+    },
+    {
+      label: "Already imported external content",
+      tooltip: "Already imported external Content",
+      classes: ["linkable"],
+      items: [{ externalId: 2002 }],
+    },
+    {
+      label: "Not insertable external content",
+      tooltip: "Not droppable external content (Unknown type)",
+      classes: ["non-linkable"],
+      items: [{ externalId: 2004 }],
+    },
+    {
+      label: "Multiple insertable external contents",
+      tooltip: "Multiple insertable external contents",
+      classes: ["linkable"],
+      items: [{ externalId: 2000 }, { externalId: 2002 }],
+    },
+    {
+      label: "Multiple external contents (including not insertable)",
+      tooltip: "Multiple external contents (including not insertable)",
+      classes: ["non-linkable"],
+      items: [{ externalId: 2000 }, { externalId: 2002 }, { externalId: 2004 }],
+    },
+    {
+      label: "External content - error",
+      tooltip: "External content - error",
+      classes: ["linkable"],
+      items: [{ externalId: 2006 }],
+    },
+  ];
+
   const allData: InputExampleElement[] = [
     ...singleInputs,
     ...singleInputsNotInsertable,
@@ -229,6 +269,7 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     ...allInputs,
     ...unreadables,
     ...createBulkOf50Contents(),
+    ...externalContents,
   ];
 
   const main = () => {
@@ -242,9 +283,6 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       const insertDiv: HTMLDivElement = mockInputExamplePlugin.createInsertElement(data);
       examplesEl.appendChild(insertDiv);
     });
-
-    const externalContentUriDiv: HTMLDivElement = mockInputExamplePlugin.createInsertElementForExternalUri();
-    examplesEl.appendChild(externalContentUriDiv);
     console.log(`Initialized ${allData.length} insert examples.`);
   };
 

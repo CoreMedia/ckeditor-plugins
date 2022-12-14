@@ -20,8 +20,17 @@ export class MockContentImportService implements ContentImportService {
     const mockExternalContentPlugin = this.#editor.plugins.get(MockExternalContentPlugin);
     const externalContent = mockExternalContentPlugin.getExternalContent(uri);
     if (!externalContent) {
-      return Promise.reject();
+      return Promise.reject("No external content found, has it been defined in the MockExternalContentPlugin?");
     }
+
+    if (!externalContent.contentAfterImport) {
+      return Promise.reject("A content that would have been created has not been provided.");
+    }
+
+    if (externalContent.errorWhileImporting) {
+      return Promise.reject("An error occurred and is hopefully handled");
+    }
+
     const mockContentPlugin = this.#editor.plugins.get(MockContentPlugin);
     mockContentPlugin.addContents(externalContent.contentAfterImport);
     return Promise.resolve(contentUriPath(externalContent.contentAfterImport.id));

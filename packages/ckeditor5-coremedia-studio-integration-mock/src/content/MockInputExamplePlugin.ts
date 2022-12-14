@@ -28,10 +28,25 @@ export interface InputExampleElement {
    */
   classes: string[];
   /**
-   * content ids to create the input information for studio services from.
+   * Content ids or ExternalContents to create the input information for studio services from.
    */
-  items: number[];
+  items: (number | ExternalContent)[];
 }
+
+/**
+ * Represents an external content. An External Content is an item which is not
+ * a content but a third-party item known to be converted to a content by the embedding system.
+ */
+export interface ExternalContent {
+  externalId: number;
+}
+
+export const isAnExternalContent = (obj: number | object): boolean => {
+  if (typeof obj === "number") {
+    return false;
+  }
+  return "externalId" in obj;
+};
 
 const PLUGIN_NAME = "MockInputExamplePlugin";
 
@@ -45,26 +60,6 @@ class MockInputExamplePlugin extends Plugin {
   init(): void {
     const initInformation = reportInitStart(this);
     reportInitEnd(initInformation);
-  }
-
-  createInsertElementForExternalUri(): HTMLDivElement {
-    const insertDiv = document.createElement("div");
-    insertDiv.classList.add("input-example");
-    insertDiv.draggable = true;
-    //TODO: This is just one static example for the spike
-    insertDiv.textContent = "External Id";
-    insertDiv.dataset.uripath = "externalUri/12345";
-    insertDiv.title = `External Id (${insertDiv.dataset.uripath})`;
-    insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
-    insertDiv.addEventListener("dblclick", (event): void => {
-      MockInputExamplePlugin.#setClipboardData(event)
-        .then(() => MockInputExamplePlugin.#logger.debug("Successfully copied data to the content clipboard"))
-        .catch((reason: string) => {
-          MockInputExamplePlugin.#logger.warn("Could not set clipboard data", reason);
-        });
-    });
-    insertDiv.addEventListener("dragend", MockInputExamplePlugin.#removeDropData);
-    return insertDiv;
   }
 
   createInsertElement(data: InputExampleElement): HTMLDivElement {
@@ -163,11 +158,13 @@ class MockInputExamplePlugin extends Plugin {
     };
   }
 
-  static #generateUriPath(item: number): string {
-    return `content/${item}`;
+  static #generateUriPath(item: number | ExternalContent): string {
+    const prefix: string = isAnExternalContent(item) ? "externalUri" : "content";
+    const id: number = isAnExternalContent(item) ? (item as ExternalContent).externalId : (item as number);
+    return `${prefix}/${id}`;
   }
 
-  static #generateUriPathCsv(items: number[]): string {
+  static #generateUriPathCsv(items: (number | ExternalContent)[]): string {
     return items.map((item) => MockInputExamplePlugin.#generateUriPath(item)).join(",");
   }
 }
