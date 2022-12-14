@@ -101,14 +101,15 @@ export default class DataToModelMechanism {
         if (response.contentUri) {
           return Promise.resolve(response.contentUri);
         }
-        if (response.externalUriInformation) {
-          const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
-          if (response.request) {
-            const importedContentReference = await contentImportService.import(response.request);
-            return Promise.resolve(importedContentReference);
-          }
+        if (!response.externalUriInformation) {
+          return Promise.reject("No content found and uri is not importable.");
         }
-        return Promise.reject("No content found and uri is not importable.");
+        const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
+        if (response.externalUriInformation.contentUri) {
+          return Promise.resolve(response.externalUriInformation.contentUri);
+        }
+        const importedContentReference = await contentImportService.import(response.request);
+        return Promise.resolve(importedContentReference);
       })
       .then(async (uri: string) => {
         const type = await this.#getType(uri);
