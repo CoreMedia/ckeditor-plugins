@@ -99,15 +99,20 @@ export default class DataToModelMechanism {
       .then((service) => service.getContentReference(contentUri))
       .then(async (response: ContentReferenceResponse) => {
         if (response.contentUri) {
+          //The reference uri is a content uri
           return Promise.resolve(response.contentUri);
         }
         if (!response.externalUriInformation) {
           return Promise.reject("No content found and uri is not importable.");
         }
+
         const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
         if (response.externalUriInformation.contentUri) {
+          //The external content has been imported previously. A content representation already exists.
           return Promise.resolve(response.externalUriInformation.contentUri);
         }
+
+        //Neither a content nor a content representation found. Let's create a content representation.
         const importedContentReference = await contentImportService.import(response.request);
         return Promise.resolve(importedContentReference);
       })
