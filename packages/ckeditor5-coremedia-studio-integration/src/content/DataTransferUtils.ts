@@ -1,7 +1,5 @@
 import { URI_LIST_DATA } from "./Constants";
 import { BeanReference, parseBeanReferences } from "./BeanReference";
-//@ts-expect-error no types available
-import esapi from "node-esapi";
 
 /**
  * Artificial interface, which describes the various representations of
@@ -109,4 +107,4 @@ export const getUriListValues = (
   dataTransferOrHolder: HasData | HasNullableDataTransfer | null
 ): string[] | undefined =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
-  getUriList(dataTransferOrHolder)?.map((ref) => esapi.encoder().encodeForURL(ref.$Ref) as string);
+  getUriList(dataTransferOrHolder)?.map((ref) => ref.$Ref);
