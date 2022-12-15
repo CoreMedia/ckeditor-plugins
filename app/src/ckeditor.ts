@@ -275,10 +275,10 @@ ClassicEditor.create(sourceElement, {
   },
   autosave: {
     waitingTime: 1000, // in ms
-    save(currentEditor) {
+    save(currentEditor: ClassicEditor) {
       console.log("Save triggered...");
       const start = performance.now();
-      return saveData(currentEditor as ClassicEditor, "autosave").then(() => {
+      return saveData(currentEditor, "autosave").then(() => {
         console.log(`Saved data within ${performance.now() - start} ms.`);
       });
     },
@@ -306,7 +306,7 @@ ClassicEditor.create(sourceElement, {
     contents: [{ id: 2, name: "Some Example Document", type: "document" }],
   },
 })
-  .then((newEditor) => {
+  .then((newEditor: ClassicEditor) => {
     // @ts-expect-error imported in html
     // eslint-disable-next-line
     CKEditorInspector.attach(
