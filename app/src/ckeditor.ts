@@ -84,7 +84,13 @@ if (showHideExampleContentButton && inputExampleContentFrame) {
 
 setupPreview();
 
-const imagePlugins = [ContentImagePlugin, ImageInline, ImageBlockEditing, ImageStyle, ImageToolbar];
+const imagePlugins = [
+  ContentImagePlugin,
+  ImageInline,
+  ImageBlockEditing,
+  ImageStyle,
+  ImageToolbar,
+  ImageTextAlternative];
 
 const sourceElement = document.querySelector("#editor") as HTMLElement;
 if (!sourceElement) {
@@ -109,7 +115,6 @@ ClassicEditor.create(sourceElement, {
     FindAndReplace,
     Heading,
     Highlight,
-    ImageTextAlternative,
     Indent,
     Italic,
     AutoLink,
