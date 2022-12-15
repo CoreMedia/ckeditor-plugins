@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
+import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
+import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
 import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import Code from "@ckeditor/ckeditor5-basic-styles/src/code";
 import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
+import FindAndReplace from "@ckeditor/ckeditor5-find-and-replace/src/findandreplace";
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageTextAlternative from "@ckeditor/ckeditor5-image/src/imagetextalternative";
 import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
-import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 //@ts-expect-error not part of @types/ckeditor__ckeditor5-list@32.0.1, check for newer versions from time to time
 import DocumentList from "@ckeditor/ckeditor5-list/src/documentlist";
@@ -80,7 +84,13 @@ if (showHideExampleContentButton && inputExampleContentFrame) {
 
 setupPreview();
 
-const imagePlugins = [ContentImagePlugin, ImageInline, ImageBlockEditing, ImageStyle, ImageToolbar];
+const imagePlugins = [
+  ContentImagePlugin,
+  ImageInline,
+  ImageBlockEditing,
+  ImageStyle,
+  ImageToolbar,
+  ImageTextAlternative];
 
 const sourceElement = document.querySelector("#editor") as HTMLElement;
 if (!sourceElement) {
@@ -92,14 +102,17 @@ ClassicEditor.create(sourceElement, {
   plugins: [
     ...imagePlugins,
     Alignment,
+    Autoformat,
     Autosave,
     BlockQuote,
     Bold,
+    Code,
     CodeBlock,
     ContentLinks,
     ContentClipboard,
     Differencing,
     Essentials,
+    FindAndReplace,
     Heading,
     Highlight,
     Indent,
@@ -125,40 +138,42 @@ ClassicEditor.create(sourceElement, {
     MockInputExamplePlugin,
     MockStudioIntegration,
   ],
-  toolbar: {
-    items: [
-      "undo",
-      "redo",
-      "|",
-      "heading",
-      "|",
-      "pasteContent",
-      "|",
-      "bold",
-      "italic",
-      "underline",
-      "strikethrough",
-      "subscript",
-      "superscript",
-      "highlight",
-      "removeFormat",
-      "|",
-      "link",
-      "|",
-      "bulletedList",
-      "numberedList",
-      "outdent",
-      "indent",
-      "|",
-      "codeBlock",
-      "blockQuote",
-      "alignment",
-      "|",
-      "insertTable",
-      "|",
-      "sourceEditing",
-    ],
-  },
+  toolbar: [
+    "undo",
+    "redo",
+    "|",
+    "heading",
+    "|",
+    "bold",
+    "italic",
+    "underline",
+    //@ts-expect-error - incorrect types, types expect an array of strings here
+    {
+      label: "More formatting",
+      icon: "threeVerticalDots",
+      items: ["strikethrough", "subscript", "superscript", "code"],
+    },
+    "highlight",
+    "removeFormat",
+    "|",
+    "link",
+    "|",
+    "alignment",
+    "blockQuote",
+    "codeBlock",
+    "|",
+    "insertTable",
+    "|",
+    "numberedList",
+    "bulletedList",
+    "outdent",
+    "indent",
+    "|",
+    "pasteContent",
+    "findAndReplace",
+    "|",
+    "sourceEditing",
+  ],
   alignment: {
     // The following alternative to signal alignment was used in CKEditor 4
     // of CoreMedia CMCC 10 and before.
@@ -249,6 +264,7 @@ ClassicEditor.create(sourceElement, {
       "imageStyle:inline",
       "|",
       "linkImage",
+      "imageTextAlternative",
       "contentImageOpenInTab",
     ],
   },
@@ -264,15 +280,14 @@ ClassicEditor.create(sourceElement, {
   },
   autosave: {
     waitingTime: 1000, // in ms
-    save(currentEditor) {
+    save(currentEditor: ClassicEditor) {
       console.log("Save triggered...");
       const start = performance.now();
-      return saveData(currentEditor as ClassicEditor, "autosave").then(() => {
+      return saveData(currentEditor, "autosave").then(() => {
         console.log(`Saved data within ${performance.now() - start} ms.`);
       });
     },
   },
-  //@ts-expect-error Additional configuration, unknown for types.
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     strictness: Strictness.STRICT,
     rules: {
@@ -296,7 +311,7 @@ ClassicEditor.create(sourceElement, {
     contents: [{ id: 2, name: "Some Example Document", type: "document" }],
   },
 })
-  .then((newEditor) => {
+  .then((newEditor: ClassicEditor) => {
     // @ts-expect-error imported in html
     // eslint-disable-next-line
     CKEditorInspector.attach(
