@@ -171,6 +171,8 @@ class ContentLinkFormViewExtension extends Plugin {
     const contentCkeModelUris = requireContentCkeModelUris(contentUriPaths ?? []);
     dragEvent.preventDefault();
 
+    ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
+
     //handle content links
     if (contentCkeModelUris.length > 0) {
       if (contentCkeModelUris.length !== 1) {
@@ -193,6 +195,15 @@ class ContentLinkFormViewExtension extends Plugin {
       ContentLinkFormViewExtension.#setDataAndSwitchToExternalLink(linkUI, data);
     }
     return;
+  }
+
+  static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
+    const view = linkUI.formView.urlInputView;
+    if (loading) {
+      view.element?.classList.add("url-input-field--loading");
+    } else {
+      view.element?.classList.remove("url-input-field--loading");
+    }
   }
 
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
