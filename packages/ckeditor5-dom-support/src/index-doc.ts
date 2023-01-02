@@ -6,4 +6,5 @@
 export * from "./DocumentFragments";
 export * from "./Documents";
 export * from "./Elements";
+export * from "./Nodes";
 export * from "./ParentNodes";
