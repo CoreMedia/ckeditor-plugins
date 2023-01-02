@@ -46,6 +46,7 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 | [`ckeditor5-coremedia-studio-integration`][]      | CoreMedia Studio: Communication facade for Studio integration            |
 | [`ckeditor5-coremedia-studio-integration-mock`][] | CoreMedia Studio: Mock Communication facade for testing                  |
 | [`ckeditor5-dataprocessor-support`][]             | Utilities for providing custom CKEditor 5 DataProcessors                 |
+| [`ckeditor5-dom-support`][]                       | Utilities for handling DOM objects                                       |
 | [`ckeditor5-font-mapper`][]                       | Replaces characters in given font to alternative representation on paste |
 | [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                                                   |
 | [`ckeditor5-logging`][]                           | Logging Facade                                                           |
@@ -148,6 +149,7 @@ previously `setData()` call. A typical approach is:
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration> "@coremedia/ckeditor5-coremedia-studio-integration"
 [`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia/ckeditor5-coremedia-studio-integration-mock"
 [`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support> "@coremedia/ckeditor5-dataprocessor-support"
+[`ckeditor5-dom-support`]: <./packages/ckeditor5-dom-support> "@coremedia/ckeditor5-dom-support"
 [`ckeditor5-font-mapper`]: <./packages/ckeditor5-font-mapper> "@coremedia/ckeditor5-font-mapper"
 [`ckeditor5-jest-test-helpers`]: <./packages/ckeditor5-jest-test-helpers> "@coremedia-internal/ckeditor5-jest-test-helpers"
 [`ckeditor5-logging`]: <./packages/ckeditor5-logging> "@coremedia/ckeditor5-logging"
