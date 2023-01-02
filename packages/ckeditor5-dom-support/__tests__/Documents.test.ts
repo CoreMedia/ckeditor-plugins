@@ -20,7 +20,7 @@ describe("Documents", () => {
       ${`<body/>`}
       ${`<body><p>Test</p></body>`}
     `(
-      "should auto-complete missing root-elements for $incompleteHtml",
+      "[$#] should auto-complete missing root-elements for $incompleteHtml",
       ({ incompleteHtml }: { incompleteHtml: string }) => {
         const document = documentFromHtml(incompleteHtml);
         expect(document.documentElement.localName).toStrictEqual("html");
@@ -42,7 +42,7 @@ describe("Documents", () => {
       ${`<body><p>Test</p></body>`}         | ${"body"}           | ${"p"}
       ${`<root><child>Test</child></root>`} | ${"root"}           | ${"child"}
     `(
-      "should successfully parse: $xmlString",
+      "[$#] should successfully parse: $xmlString",
       ({
         xmlString,
         expectedRootElement,
@@ -78,7 +78,7 @@ describe("Documents", () => {
       ${undefined}
       ${null}
       ${documentFromHtml("<body/>").firstElementChild}
-    `("should not match any other objects than Document: $unmatched", ({ unmatched }: { unmatched: unknown }) => {
+    `("[$#] should not match any other objects than Document: $unmatched", ({ unmatched }: { unmatched: unknown }) => {
       expect(isDocument(unmatched)).toBeFalsy();
     });
   });
