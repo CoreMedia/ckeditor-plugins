@@ -8,5 +8,7 @@ export * from "./DocumentFragments";
 export * from "./Documents";
 export * from "./Elements";
 export * from "./HasNamespaceUris";
+export * from "./HTMLTableElements";
+export * from "./Namespaces";
 export * from "./Nodes";
 export * from "./ParentNodes";

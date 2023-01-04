@@ -1,6 +1,6 @@
 import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
-import { serializeToXmlString } from "../src/Nodes";
+import { extractNodeContents, serializeToXmlString } from "../src/Nodes";
 import { fragmentFromNodeContents } from "../src/DocumentFragments";
 
 describe("Nodes", () => {
@@ -21,6 +21,48 @@ describe("Nodes", () => {
     `("[$#] Should transform $node to: $expectedXml", ({ node, expectedXml }: { node: Node; expectedXml: string }) => {
       const xmlString = serializeToXmlString(node);
       expect(xmlString).toStrictEqual(expectedXml);
+    });
+  });
+
+  describe("extractNodeContents", () => {
+    it(USE_CASE_NAME, () => {
+      const xmlDocument = documentFromXml("<root><child/></root>");
+      const { documentElement } = xmlDocument;
+
+      const extracted = extractNodeContents(documentElement);
+
+      expect(serializeToXmlString(xmlDocument)).toStrictEqual("<root/>");
+      expect(serializeToXmlString(extracted)).toStrictEqual("<child/>");
+    });
+
+    it("should extract all child nodes to fragment recursively", () => {
+      const xmlDocument = documentFromXml("<root><child>1</child><child>2</child></root>");
+      const { documentElement } = xmlDocument;
+
+      const extracted = extractNodeContents(documentElement);
+
+      expect(serializeToXmlString(xmlDocument)).toStrictEqual("<root/>");
+      expect(serializeToXmlString(extracted)).toStrictEqual("<child>1</child><child>2</child>");
+    });
+
+    it("should extract text node as fragment", () => {
+      const xmlDocument = documentFromXml("<root>TEXT</root>");
+      const { documentElement } = xmlDocument;
+
+      const extracted = extractNodeContents(documentElement);
+
+      expect(serializeToXmlString(xmlDocument)).toStrictEqual("<root/>");
+      expect(serializeToXmlString(extracted)).toStrictEqual("TEXT");
+    });
+
+    it("should do nothing on empty node", () => {
+      const xmlDocument = documentFromXml("<root/>");
+      const { documentElement } = xmlDocument;
+
+      const extracted = extractNodeContents(documentElement);
+
+      expect(serializeToXmlString(xmlDocument)).toStrictEqual("<root/>");
+      expect(serializeToXmlString(extracted)).toStrictEqual("");
     });
   });
 });
