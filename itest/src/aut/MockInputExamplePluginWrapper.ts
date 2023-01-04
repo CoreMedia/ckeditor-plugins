@@ -3,6 +3,7 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import MockInputExamplePlugin, {
   InputExampleElement,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
+import { IsDroppableResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 /**
  * Provides access to the `MockInputExamplePlugin`.
@@ -15,10 +16,12 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
     }, data);
   }
 
-  async prefillCaches(contentIds: number[]): Promise<boolean> {
+  async validateIsDroppableState(uris: string[]): Promise<IsDroppableResponse | undefined> {
     return this.evaluate(
-      (plugin: MockInputExamplePlugin, contentIds): boolean => plugin.prefillCaches(contentIds),
-      contentIds
+      (plugin: MockInputExamplePlugin, contentIds): IsDroppableResponse | undefined =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
+      uris
     );
   }
 

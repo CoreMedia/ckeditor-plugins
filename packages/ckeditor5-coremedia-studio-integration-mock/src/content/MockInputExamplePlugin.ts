@@ -2,12 +2,14 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import {
+  IsDroppableInRichtext,
+  IsDroppableResponse,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -82,6 +84,7 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   /**
+   * TODO: Reword to new method content
    * Fills the caches for the drag and drop.
    *
    * While the "dragover" event is executed synchronously, we have
@@ -90,11 +93,11 @@ class MockInputExamplePlugin extends Plugin {
    * To ensure in tests that the drop is allowed, the cache can be filled before
    * executing the drop.
    *
-   * @param contentIds - the ids to fill the cache for.
+   * @param uris - the uris to fill the cache for.
    */
-  prefillCaches(contentIds: number[]): boolean {
-    const uriPaths = contentIds.map((contentId) => contentUriPath(contentId));
-    return uriPaths.every((uriPath) => DragDropAsyncSupport.isLinkable(uriPath));
+  ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableResponse | undefined {
+    const beanReferences = MockInputExamplePlugin.#contentList(...uris);
+    return IsDroppableInRichtext.isDroppableBeanReferences(JSON.stringify(beanReferences));
   }
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {
@@ -129,8 +132,10 @@ class MockInputExamplePlugin extends Plugin {
       const dragDropService = new MockDragDropService();
       dragDropService.dragData = JSON.stringify(MockInputExamplePlugin.#contentDragData(...idsArray));
       serviceAgent.registerService(dragDropService);
-      dragEvent.dataTransfer?.setData("cm/uri-list", JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray)));
-      dragEvent.dataTransfer?.setData("text", JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray)));
+      const dragDropData = JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray));
+      dragEvent.dataTransfer?.setData("cm/uri-list", dragDropData);
+      dragEvent.dataTransfer?.setData("text", dragDropData);
+      MockInputExamplePlugin.#logger.debug("Successfully put data on dragdrop service", dragDropData);
       return;
     }
     const text = dragEventTarget.childNodes[0].textContent;

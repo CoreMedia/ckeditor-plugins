@@ -9,6 +9,8 @@ import {
   PNG_GREEN_240x135,
   PNG_RED_240x135,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
+import { Locator } from "playwright";
+import { IsDroppableResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 const oneLink: MockContentConfig[] = [
   {
@@ -143,7 +145,7 @@ describe("Drag and Drop", () => {
       ${"multiple-links-slow"} | ${multipleLinksIncludingSlow}
       ${"multiple-links"}      | ${multipleLinks}
     `(
-      "[$#]: Should drag and drop $contentMocks.length non embeddable contents as links.",
+      "[$#]: Should drag ($dragElementClass) and drop $contentMocks.length non embeddable contents as links.",
       async ({ dragElementClass, contentMocks }) => {
         await setupScenario(dragElementClass, contentMocks);
 
@@ -231,7 +233,11 @@ describe("Drag and Drop", () => {
     const dragElement = page.locator(dragElementSelector);
     const dropTarget = page.locator(dropTargetSelector);
 
-    await ensureDropAllowed(contentMocks.map((contentMock) => contentMock.id));
+    await ensureDropAllowed(
+      dragElement,
+      dropTarget,
+      contentMocks.map((contentMock) => `content/${contentMock.id}`)
+    );
     await dragElement.dragTo(dropTarget);
   }
 
@@ -243,12 +249,30 @@ describe("Drag and Drop", () => {
    * "dragover" will be executed many times while hovering over the CKEditor and on entering the CKEditor the asynchronous
    * fetch is triggered. The result will be written to a cache. The next "dragover" will be calculated using those data.
    *
-   * @param contentIds -
+   * @param dragElement -
+   * @param dropTarget -
+   * @param uris -
    */
-  async function ensureDropAllowed(contentIds: number[]): Promise<void> {
+  async function ensureDropAllowed(dragElement: Locator, dropTarget: Locator, uris: string[]): Promise<void> {
+    console.log("Waiting for contents to be available in caches and services", uris);
     await waitForExpect(async () => {
-      const actual = await application.mockInputExamplePlugin.prefillCaches(contentIds);
-      expect(actual).toBeTruthy();
+      const dragElementBoundingBox = await dragElement.boundingBox();
+      if (dragElementBoundingBox) {
+        await page.mouse.move(dragElementBoundingBox.x, dragElementBoundingBox.y);
+        await page.mouse.down();
+        await dropTarget.hover();
+
+        const actual: IsDroppableResponse | undefined =
+          await application.mockInputExamplePlugin.validateIsDroppableState(uris);
+        if (actual) {
+          console.log("Contents are ready for drag and drop", uris);
+        }
+        expect(actual).toBeDefined();
+        expect(actual).not.toEqual("PENDING");
+        if (actual && actual !== "PENDING") {
+          expect(actual.areDroppable).toBeTruthy();
+        }
+      }
     });
   }
 });

@@ -6,8 +6,6 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
-import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
-import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
@@ -15,7 +13,6 @@ import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard/src/clipboardo
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import {
   ifPlugin,
   optionalPluginNotFound,
@@ -25,7 +22,11 @@ import {
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 import { insertContentMarkers } from "./ContentMarkers";
-import { ContentReferenceResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
+import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
+import {
+  IsDroppableInRichtext,
+  IsDroppableResponse,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -148,66 +149,26 @@ export default class ContentClipboard extends Plugin {
     if (isContentEventData(data) && !!data.content) {
       return;
     }
-    const cmDataUris = receiveUriPathsFromDragDropService();
-    if (!cmDataUris) {
+    const isDroppableResponse = IsDroppableInRichtext.isDroppable();
+    if (!isDroppableResponse) {
       return;
-    }
-    if (ContentClipboard.#logger.isDebugEnabled()) {
-      ContentClipboard.#logger.debug("URIs received from DragDropService", cmDataUris);
     }
 
     // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     data.preventDefault();
 
-    // for now, we only support content uris in ckeditor.
-    const contentReferences: ContentReferenceResponse[] | undefined = DragDropAsyncSupport.validateUris(cmDataUris);
-    if (!contentReferences) {
-      if (ContentClipboard.#logger.isDebugEnabled()) {
-        ContentClipboard.#logger.debug("URIs not loaded from ContentReferenceService yet.");
-      }
+    if (isDroppableResponse === "PENDING") {
+      ContentClipboard.#logger.debug("Drag over evaluation is currently pending", data);
       data.dataTransfer.dropEffect = "none";
       return;
     }
-    const allUrisFollowKnownPattern = contentReferences.every(ContentClipboard.#isKnownUri);
-    if (!allUrisFollowKnownPattern) {
-      if (ContentClipboard.#logger.isDebugEnabled()) {
-        ContentClipboard.#logger.debug("Not all URIs are known by the ContentReferenceResponse");
-        const invalidUris = contentReferences.filter((response) => !ContentClipboard.#isKnownUri(response));
-        ContentClipboard.#logger.debug("URIs which are not known by the system", invalidUris);
-      }
-      data.dataTransfer.dropEffect = "none";
-    }
-    const validUris: string[] = contentReferences
-      .map((response) => response.request)
-      .filter((uri): uri is string => !!uri);
 
-    if (validUris) {
-      const containsDisplayableContents = DragDropAsyncSupport.containsDisplayableContents(validUris);
-      // Applying dropEffects required to be run *after* CKEditor's normal
-      // listeners, which almost always enforce `move` as dropEffect. We also must
-      // not `stop` processing (at least at normal priority), as otherwise the
-      // range indicator won't be updated.
-      if (containsDisplayableContents) {
-        data.dataTransfer.dropEffect = "link";
-      } else {
-        data.dataTransfer.dropEffect = "none";
-      }
+    if (isDroppableResponse.areDroppable) {
+      data.dataTransfer.dropEffect = "link";
     } else {
       data.dataTransfer.dropEffect = "none";
     }
-  }
-
-  /**
-   * Returns true if the uri is known, otherwise false.
-   * Known means that the content reference is a content or at least a known
-   * uri pattern which can be handled.
-   *
-   * @param contentReferenceResponse - the ContentReferenceResponse to validate.
-   * @private
-   */
-  static #isKnownUri(contentReferenceResponse: ContentReferenceResponse): boolean {
-    return !!contentReferenceResponse.contentUri || !!contentReferenceResponse.externalUriInformation;
   }
 
   // noinspection JSUnusedLocalSymbols
@@ -223,8 +184,15 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   #clipboardInputHandler = (evt: EventInfo, data: ClipboardInputEvent): void => {
+    const contentBeanReferences: string | undefined = data.dataTransfer?.getData(URI_LIST_DATA);
+    if (!contentBeanReferences) {
+      return;
+    }
+
+    const droppableResponse: IsDroppableResponse | undefined =
+      IsDroppableInRichtext.getEvaluationResult(contentBeanReferences);
     // Return if this is no CoreMedia content drop.
-    if ((getUriListValues(data) ?? []).length === 0) {
+    if (!droppableResponse) {
       return;
     }
 
@@ -250,11 +218,23 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   #inputTransformation = (evt: EventInfo, data: InputTransformationEventData): void => {
-    const cmDataUris: string[] = getUriListValues(data) ?? [];
-    // Return if this is no CoreMedia content drop.
-    if (cmDataUris.length === 0) {
+    const contentBeanReferences: string | undefined = data.dataTransfer?.getData(URI_LIST_DATA);
+    if (!contentBeanReferences) {
       return;
     }
+
+    const droppableResponse: IsDroppableResponse | undefined =
+      IsDroppableInRichtext.getEvaluationResult(contentBeanReferences);
+    if (!droppableResponse || droppableResponse === "PENDING") {
+      return;
+    }
+
+    // Return if this is no CoreMedia content drop.
+    if (!droppableResponse.uris || droppableResponse.uris.length === 0) {
+      return;
+    }
+
+    const cmDataUris = droppableResponse.uris;
 
     const { editor } = this;
 
@@ -268,23 +248,6 @@ export default class ContentClipboard extends Plugin {
     // Do not trigger the default inputTransformation event listener to avoid
     // rendering the text of the input data.
     evt.stop();
-
-    // for now, we only support content uris in ckeditor.
-    const validContentUris = DragDropAsyncSupport.validateUris(cmDataUris, true);
-    if (!validContentUris) {
-      return;
-    }
-    const allUrisFollowKnownPattern = validContentUris.every(ContentClipboard.#isKnownUri);
-    if (!allUrisFollowKnownPattern) {
-      return;
-    }
-    const validUris: string[] = validContentUris
-      .map((response) => response.request)
-      .filter((uri): uri is string => !!uri);
-
-    if (!DragDropAsyncSupport.containsDisplayableContents(validUris)) {
-      return;
-    }
 
     // We might run into trouble during complex input scenarios:
     //
@@ -301,7 +264,7 @@ export default class ContentClipboard extends Plugin {
 
     const { model } = editor;
 
-    insertContentMarkers(editor, targetRange, validUris);
+    insertContentMarkers(editor, targetRange, cmDataUris);
     // Fire content insertion event in a single change block to allow other
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).

@@ -16,6 +16,8 @@ import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-co
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
+import { MockBeanReferenceToUriService } from "./content/MockBeanReferenceToUriService";
+import { createBeanReferenceToUriServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReferenceToUriService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -59,6 +61,12 @@ class MockStudioIntegration extends Plugin {
     serviceAgent.registerService<MockContentImportService>(
       contentImportService,
       createContentImportServiceDescriptor()
+    );
+
+    const beanReferenceToUriService = new MockBeanReferenceToUriService();
+    serviceAgent.registerService<MockBeanReferenceToUriService>(
+      beanReferenceToUriService,
+      createBeanReferenceToUriServiceDescriptor()
     );
 
     reportInitEnd(initInformation);

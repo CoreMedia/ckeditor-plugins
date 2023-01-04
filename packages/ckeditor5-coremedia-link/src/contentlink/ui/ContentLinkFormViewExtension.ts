@@ -7,18 +7,20 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
-  requireContentCkeModelUris,
+  requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
-import { receiveUriPathsFromDragDropService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragAndDropUtils";
 import { showContentLinkField } from "../ContentLinkViewUtils";
-import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import { getUriListValues } from "@coremedia/ckeditor5-coremedia-studio-integration/content/DataTransferUtils";
 import { hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { IsLinkableDragAndDrop, IsLinkableResponse } from "./IsLinkableDragAndDrop";
+import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
+import { serviceAgent } from "@coremedia/service-agent";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -162,39 +164,72 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
-    const contentUriPaths: string[] | undefined = getUriListValues(dragEvent);
+    const logger = ContentLinkFormViewExtension.#logger;
 
-    if (contentUriPaths) {
-      DragDropAsyncSupport.resetCache();
+    const contentBeanReferences: string | undefined = dragEvent.dataTransfer?.getData(URI_LIST_DATA);
+
+    if (!contentBeanReferences) {
+      const data: string | undefined = dragEvent.dataTransfer?.getData("text/plain");
+      if (data) {
+        dragEvent.preventDefault();
+        ContentLinkFormViewExtension.#setDataAndSwitchToExternalLink(linkUI, data);
+      }
+      return;
     }
 
-    const contentCkeModelUris = requireContentCkeModelUris(contentUriPaths ?? []);
     dragEvent.preventDefault();
-
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
 
-    //handle content links
-    if (contentCkeModelUris.length > 0) {
-      if (contentCkeModelUris.length !== 1) {
-        this.#logger.warn(
-          "Received multiple contents on drop. Should not happen as the drag over should prevent drop of multiple contents."
-        );
-        return;
-      }
-      ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, contentCkeModelUris[0]);
+    const linkable = IsLinkableDragAndDrop.getEvaluationResult(contentBeanReferences);
+    if (!linkable || linkable === "PENDING") {
       return;
     }
 
-    //handle normal links
-    if (dragEvent.dataTransfer === null) {
+    const contentUris = linkable.uris;
+    if (!contentUris) {
       return;
     }
 
-    const data: string = dragEvent.dataTransfer.getData("text/plain");
-    if (data) {
-      ContentLinkFormViewExtension.#setDataAndSwitchToExternalLink(linkUI, data);
+    const uri: string | undefined = contentUris[0];
+    if (!uri) {
+      logger.warn("Invalid amount of uris dropped.");
+      return;
     }
-    return;
+
+    // eslint-disable-next-line no-restricted-globals
+    setTimeout(() => {
+      ContentLinkFormViewExtension.#toContentUri(uri)
+        .then((importedUri: string) => {
+          const ckeModelUri = requireContentCkeModelUri(importedUri);
+          ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, ckeModelUri);
+        })
+        .catch((reason) => {
+          logger.warn(reason);
+        });
+    }, 2000);
+  }
+
+  static async #toContentUri(uri: string): Promise<string> {
+    const contentReferenceService = await serviceAgent.fetchService(createContentReferenceServiceDescriptor());
+    const contentReference = await contentReferenceService.getContentReference(uri);
+
+    if (contentReference.contentUri) {
+      //The reference uri is a content uri
+      return contentReference.contentUri;
+    }
+
+    if (!contentReference.externalUriInformation) {
+      return Promise.reject("No content found and uri is not importable.");
+    }
+
+    if (contentReference.externalUriInformation.contentUri) {
+      //The external content has been imported previously. A content representation already exists.
+      return contentReference.externalUriInformation.contentUri;
+    }
+
+    //Neither a content nor a content representation found. Let's create a content representation.
+    const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
+    return contentImportService.import(contentReference.request);
   }
 
   static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
@@ -217,6 +252,12 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     const { formView } = linkUI;
+    // element.offsetParent is null if the balloon is not visible.
+    // If a user closes the balloon before this method gets called could open
+    // with a wrong state.
+    if (!formView.element?.offsetParent) {
+      return;
+    }
     formView.urlInputView.fieldView.set("value", null);
     formView.set("contentUriPath", data);
     linkUI.actionsView.set("contentUriPath", data);
@@ -239,9 +280,9 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const contentUriPaths: string[] | null = receiveUriPathsFromDragDropService();
+    const isLinkable: IsLinkableResponse = IsLinkableDragAndDrop.isLinkable();
 
-    if (!contentUriPaths) {
+    if (!isLinkable) {
       logger.debug(
         "DragOverEvent: No URI received from DragDropService. Assuming that is any text (like an url) and allow it."
       );
@@ -249,23 +290,20 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    if (contentUriPaths.length !== 1) {
+    if (isLinkable === "PENDING") {
+      dragEvent.dataTransfer.dropEffect = "none";
+      return;
+    }
+
+    if (isLinkable.uris?.length !== 1) {
       logger.debug(
-        `DragOverEvent: Received ${contentUriPaths.length} URI-paths, while it is not allowed to drop multiple contents.`
+        `DragOverEvent: Received ${isLinkable.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`
       );
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
 
-    const contentUriPath = contentUriPaths[0];
-    const isLinkable = DragDropAsyncSupport.isLinkable(contentUriPath);
-
-    logger.debug("DragOverEvent: Received Content URI-Path from DragDropService.", {
-      uriPath: contentUriPath,
-      linkable: isLinkable,
-    });
-
-    dragEvent.dataTransfer.dropEffect = isLinkable ? "link" : "none";
+    dragEvent.dataTransfer.dropEffect = isLinkable.areLinkable ? "link" : "none";
   }
 }
 
