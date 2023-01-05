@@ -247,31 +247,36 @@ describe("Drag and Drop", () => {
    * This contains some implementation knowledge. The "dragover" calculates if the drop is allowed or not.
    * While the "dragover" is a synchronous event the data retrieval for the calculation is asynchronous.
    * "dragover" will be executed many times while hovering over the CKEditor and on entering the CKEditor the asynchronous
-   * fetch is triggered. The result will be written to a cache. The next "dragover" will be calculated using those data.
+   * fetch is triggered. The result will be stored. The next "dragover" will be calculated using those data.
    *
-   * @param dragElement -
-   * @param dropTarget -
-   * @param uris -
+   * While in the asynchronous call is in evaluation "PENDING" will be returned, otherwise the result.
+   * In this case we wait until the asynchronous call finished evaluating and the result is droppable.
+   *
+   * @param dragElement - the element to drag
+   * @param dropTarget - the target to drop the dragElement to.
+   * @param uris - the uris of the dragElement.
    */
   async function ensureDropAllowed(dragElement: Locator, dropTarget: Locator, uris: string[]): Promise<void> {
-    console.log("Waiting for contents to be available in caches and services", uris);
-    await waitForExpect(async () => {
-      const dragElementBoundingBox = await dragElement.boundingBox();
-      if (dragElementBoundingBox) {
-        await page.mouse.move(dragElementBoundingBox.x, dragElementBoundingBox.y);
-        await page.mouse.down();
-        await dropTarget.hover();
+    const dragElementBoundingBox = await dragElement.boundingBox();
+    if (!dragElementBoundingBox) {
+      return Promise.reject(`Element to drag not found for selector ${JSON.stringify(dragElement)}`);
+    }
 
-        const actual: IsDroppableResponse | undefined =
-          await application.mockInputExamplePlugin.validateIsDroppableState(uris);
-        if (actual) {
-          console.log("Contents are ready for drag and drop", uris);
-        }
-        expect(actual).toBeDefined();
-        expect(actual).not.toEqual("PENDING");
-        if (actual && actual !== "PENDING") {
-          expect(actual.areDroppable).toBeTruthy();
-        }
+    //Initiate the first call by hovering the drop target with the dragged element.
+    await page.mouse.move(dragElementBoundingBox.x, dragElementBoundingBox.y);
+    await page.mouse.down();
+    await dropTarget.hover();
+
+    console.log("Waiting for contents to be available in caches and services", uris);
+
+    await waitForExpect(async () => {
+      const actual: IsDroppableResponse | undefined = await application.mockInputExamplePlugin.validateIsDroppableState(
+        uris
+      );
+      expect(actual).toBeDefined();
+      expect(actual).not.toEqual("PENDING");
+      if (actual && actual !== "PENDING") {
+        expect(actual.areDroppable).toBeTruthy();
       }
     });
   }
