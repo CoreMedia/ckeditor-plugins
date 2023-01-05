@@ -80,7 +80,7 @@ export default class DataToModelMechanism {
     if (!contentInputData) {
       return;
     }
-    logger.debug(`Looking for replace marker (${markerName}) with content ${contentInputData.itemContext.contentUri}`);
+    logger.debug(`Looking for replace marker (${markerName}) with content ${contentInputData.itemContext.uri}`);
 
     // Fetch Object Type (e.g. document, image, video) Maybe this should be a
     // string, which is unrelated to content type. I guess it has to be
@@ -93,10 +93,10 @@ export default class DataToModelMechanism {
     // images. The only two attributes to distinguish contents are linkable and
     // embeddable. Lookup an extender with the object type, call the `create`
     // model stuff. take a promise and execute writeItemToModel
-    const contentUri = contentInputData.itemContext.contentUri;
+    const uri = contentInputData.itemContext.uri;
     serviceAgent
       .fetchService(createContentReferenceServiceDescriptor())
-      .then((service) => service.getContentReference(contentUri))
+      .then((service) => service.getContentReference(uri))
       .then(async (response: ContentReferenceResponse) => {
         if (response.contentUri) {
           //The reference uri is a content uri
