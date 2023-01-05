@@ -5,3 +5,4 @@
  */
 
 export * from "./HtmlDomConverter";
+export * from "./Signals";

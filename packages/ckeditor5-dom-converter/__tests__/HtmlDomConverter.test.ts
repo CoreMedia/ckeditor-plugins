@@ -7,6 +7,8 @@ import { extractNodeContents, serializeToXmlString } from "@coremedia/ckeditor5-
 import { toData, toDataView } from "./DataProcessorSimulation";
 import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { wrapIfTableElement } from "@coremedia/ckeditor5-dom-support/HTMLTableElements";
+import { skip, Skip } from "../src/Signals";
+import { wrapIfHTMLElement } from "@coremedia/ckeditor5-dom-support/HTMLElements";
 
 describe("HtmlDomConverter", () => {
   describe(USE_CASE_NAME, () => {
@@ -148,14 +150,13 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected postProcessImportedNode<T extends Node = Node>(originalNode: T, importedNode: T): Node | undefined {
-          let postProcessImportedNode = super.postProcessImportedNode(originalNode, importedNode);
-          if (isElement(postProcessImportedNode) && postProcessImportedNode.localName === "mark") {
-            const renamed = renameElement(postProcessImportedNode, "span");
+        protected importedNode(importedNode: Node): Node | Skip {
+          if (isElement(importedNode) && importedNode.localName === "mark") {
+            const renamed = renameElement(importedNode, "span");
             renamed.classList.add("mark");
-            postProcessImportedNode = renamed;
+            return renamed;
           }
-          return postProcessImportedNode;
+          return importedNode;
         }
       }
 
@@ -173,12 +174,11 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected postProcessImportedNode<T extends Node = Node>(originalNode: T, importedNode: T): Node | undefined {
-          const postProcessImportedNode = super.postProcessImportedNode(originalNode, importedNode);
-          if (isElement(postProcessImportedNode) && postProcessImportedNode.localName === "mark") {
-            return undefined;
+        protected importedNode(importedNode: Node): Node | Skip {
+          if (isElement(importedNode) && importedNode.localName === "mark") {
+            return skip;
           }
-          return postProcessImportedNode;
+          return importedNode;
         }
       }
 
@@ -191,17 +191,31 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("Replace element by its children", () => {
+    it.each`
+      mode
+      ${"early"}
+      ${"late"}
+    `("[$#] Replace element by its children, processing stage: $mode", ({ mode }: { mode: "early" | "late" }) => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected postProcessImportedNode<T extends Node = Node>(originalNode: T, importedNode: T): Node | undefined {
-          const postProcessImportedNode = super.postProcessImportedNode(originalNode, importedNode);
-          if (isElement(postProcessImportedNode) && postProcessImportedNode.localName === "mark") {
-            return extractNodeContents(postProcessImportedNode);
+        protected importedNode(importedNode: Node): Node | Skip {
+          if (mode === "early" && isElement(importedNode) && importedNode.localName === "mark") {
+            // In early processing, we have no further control on how children
+            // are added.
+            return this.createDocumentFragment();
           }
-          return postProcessImportedNode;
+          return importedNode;
+        }
+
+        protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+          if (mode === "late" && isElement(importedNode) && importedNode.localName === "mark") {
+            // In late processing, we may use, for example, attributes of
+            // imported node to decide how to deal with child nodes.
+            return extractNodeContents(importedNode);
+          }
+          return importedNode;
         }
       }
 
@@ -228,23 +242,22 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected finishNodeConversion(originalNode: Node, importedNode: Node): Node | undefined {
-          const finishedNode = super.finishNodeConversion(originalNode, importedNode);
-          if (!isElement(finishedNode)) {
-            return finishedNode;
+        protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+          if (!isElement(importedNode)) {
+            return importedNode;
           }
 
-          if (finishedNode.localName === "thead") {
+          if (importedNode.localName === "thead") {
             // Mark all child elements as belonging to `<thead>` where, in a
             // second step, these children will be moved to the body.
-            for (const headerElement of finishedNode.children) {
+            for (const headerElement of importedNode.children) {
               headerElement.classList.add("tr--head");
             }
+          } else {
+            wrapIfTableElement(importedNode)?.mergeAllRowsOfAllSectionsIntoTBody();
           }
 
-          wrapIfTableElement(finishedNode)?.mergeAllRowsOfAllSectionsIntoTBody();
-
-          return finishedNode;
+          return importedNode;
         }
       }
 
@@ -270,15 +283,9 @@ describe("HtmlDomConverter", () => {
       );
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected finishNodeConversion(originalNode: Node, importedNode: Node): Node | undefined {
-          const finishedNode = super.finishNodeConversion(originalNode, importedNode);
-          if (!isElement(finishedNode)) {
-            return finishedNode;
-          }
-
-          wrapIfTableElement(finishedNode)?.moveRowsWithClassToTHead("tr--head");
-
-          return finishedNode;
+        protected importedNodeAndChildren(importedNode: Node): Node {
+          wrapIfTableElement(importedNode)?.moveRowsWithClassToTHead("tr--head");
+          return importedNode;
         }
       }
 
@@ -288,6 +295,51 @@ describe("HtmlDomConverter", () => {
 
       expect(serializeToXmlString(dataViewDocument)).toStrictEqual(
         `<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><table><thead><tr></tr></thead><tbody><tr></tr></tbody></table></body></html>`
+      );
+    });
+
+    it("Data View to Data: Convert HTML attribute to artificial element in CoreMedia RichText 1.0", () => {
+      const dataViewDocument = documentFromHtml(`<body><em data-editor="Peter">Text</em></body>`);
+      const dataDocument = documentFromXml(`<div xmlns="${dataNs}"/>`);
+
+      class CustomHtmlDomConverter extends HtmlDomConverter {
+        protected prepareForImport(originalNode: Node) {
+          wrapIfHTMLElement(originalNode)?.moveDataAttributesToChildElements();
+        }
+      }
+
+      const converter = new CustomHtmlDomConverter(dataDocument);
+
+      toData(converter, dataViewDocument, dataDocument);
+
+      expect(serializeToXmlString(dataDocument)).toStrictEqual(
+        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
+      );
+    });
+
+    it("Data to Data View: Convert artificial element CoreMedia RichText 1.0 to attribute in HTML", () => {
+      const dataViewDocument = documentFromHtml(`<body/>`);
+      const dataDocument = documentFromXml(
+        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
+      );
+
+      class CustomHtmlDomConverter extends HtmlDomConverter {
+        protected prepareForImport(originalNode: Node) {
+          wrapIfHTMLElement(originalNode)?.moveDataAttributesToChildElements();
+        }
+
+        protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+          wrapIfHTMLElement(importedNode)?.moveDataAttributeChildElementToDataAttributes();
+          return importedNode;
+        }
+      }
+
+      const converter = new CustomHtmlDomConverter(dataViewDocument);
+
+      toDataView(converter, dataDocument, dataViewDocument);
+
+      expect(serializeToXmlString(dataViewDocument.body)).toStrictEqual(
+        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
       );
     });
   });

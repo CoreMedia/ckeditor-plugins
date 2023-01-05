@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-returns-check,@typescript-eslint/unified-signatures */
-import { createElement, removeClass } from "./Elements";
+import { createElement, isElement, removeClass } from "./Elements";
 import { querySelectorAllDirectChildren, querySelectorDirectChild } from "./ParentNodes";
 
 /**
@@ -20,8 +20,10 @@ export const isHTMLTableElement = (value: unknown): value is HTMLTableElement =>
  *
  * @param delegate - delegate to wrap
  */
-export const wrapIfTableElement = (delegate: Element | HTMLTableElement): HTMLTableElementWrapper | undefined => {
-  if (delegate.localName !== "table" && !isHTMLTableElement(delegate)) {
+export const wrapIfTableElement = (
+  delegate: Node | Element | HTMLTableElement
+): HTMLTableElementWrapper | undefined => {
+  if (!isElement(delegate) || (delegate.localName !== "table" && !isHTMLTableElement(delegate))) {
     return undefined;
   }
   // Safe to create wrapper without possibly triggering exception.
