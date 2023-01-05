@@ -196,17 +196,14 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    // eslint-disable-next-line no-restricted-globals
-    setTimeout(() => {
-      ContentLinkFormViewExtension.#toContentUri(uri)
-        .then((importedUri: string) => {
-          const ckeModelUri = requireContentCkeModelUri(importedUri);
-          ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, ckeModelUri);
-        })
-        .catch((reason) => {
-          logger.warn(reason);
-        });
-    }, 2000);
+    ContentLinkFormViewExtension.#toContentUri(uri)
+      .then((importedUri: string) => {
+        const ckeModelUri = requireContentCkeModelUri(importedUri);
+        ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, ckeModelUri);
+      })
+      .catch((reason) => {
+        logger.warn(reason);
+      });
   }
 
   static async #toContentUri(uri: string): Promise<string> {
