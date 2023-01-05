@@ -7,7 +7,7 @@ import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import {
-  IsDroppableInRichtext,
+  isDroppableBeanReferences,
   IsDroppableResponse,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
@@ -97,7 +97,7 @@ class MockInputExamplePlugin extends Plugin {
    */
   ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableResponse | undefined {
     const beanReferences = MockInputExamplePlugin.#contentList(...uris);
-    return IsDroppableInRichtext.isDroppableBeanReferences(JSON.stringify(beanReferences));
+    return isDroppableBeanReferences(JSON.stringify(beanReferences));
   }
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {

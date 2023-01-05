@@ -24,7 +24,8 @@ import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 import { insertContentMarkers } from "./ContentMarkers";
 import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import {
-  IsDroppableInRichtext,
+  getEvaluationResult,
+  isDroppable,
   IsDroppableResponse,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
@@ -149,7 +150,7 @@ export default class ContentClipboard extends Plugin {
     if (isContentEventData(data) && !!data.content) {
       return;
     }
-    const isDroppableResponse = IsDroppableInRichtext.isDroppable();
+    const isDroppableResponse = isDroppable();
     if (!isDroppableResponse) {
       return;
     }
@@ -189,8 +190,7 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const droppableResponse: IsDroppableResponse | undefined =
-      IsDroppableInRichtext.getEvaluationResult(contentBeanReferences);
+    const droppableResponse: IsDroppableResponse | undefined = getEvaluationResult(contentBeanReferences);
     // Return if this is no CoreMedia content drop.
     if (!droppableResponse) {
       return;
@@ -223,8 +223,7 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const droppableResponse: IsDroppableResponse | undefined =
-      IsDroppableInRichtext.getEvaluationResult(contentBeanReferences);
+    const droppableResponse: IsDroppableResponse | undefined = getEvaluationResult(contentBeanReferences);
     if (!droppableResponse || droppableResponse === "PENDING") {
       return;
     }
