@@ -10,61 +10,58 @@ import { receiveDraggedItems } from "@coremedia/ckeditor5-coremedia-studio-integ
 
 export type IsLinkableResponse = { uris: string[] | undefined; areLinkable: boolean } | "PENDING" | undefined;
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class IsLinkableDragAndDrop {
-  static #logger = LoggerProvider.getLogger(IsLinkableDragAndDrop.name);
+const logger = LoggerProvider.getLogger("IsLinkableDragAndDrop");
+let pendingEvaluation: { key: string; value: IsLinkableResponse } | undefined;
 
-  static #pendingEvaluation: { key: string; value: IsLinkableResponse } | undefined;
+export const getEvaluationResult = (beanReferences: string): IsLinkableResponse | undefined => {
+  if (pendingEvaluation?.key === beanReferences) {
+    return pendingEvaluation.value;
+  }
+  return undefined;
+};
 
-  static getEvaluationResult(beanReferences: string): IsLinkableResponse | undefined {
-    if (IsLinkableDragAndDrop.#pendingEvaluation?.key === beanReferences) {
-      return IsLinkableDragAndDrop.#pendingEvaluation.value;
-    }
+/**
+ * Reads the currently dragged items from the DragDropService.
+ */
+export const isLinkable = (): IsLinkableResponse | undefined => {
+  const dragData: string | undefined = receiveDraggedItems();
+  if (!dragData) {
+    logger.info("No drag data available, nothing to drop. Enable debug logging if you are facing any problems.");
     return undefined;
   }
 
-  static isLinkable(): IsLinkableResponse | undefined {
-    const dragData: string | undefined = receiveDraggedItems();
-    if (!dragData) {
-      IsLinkableDragAndDrop.#logger.info(
-        "No drag data available, nothing to drop. Enable debug logging if you are facing any problems."
-      );
-      return undefined;
-    }
-
-    if (IsLinkableDragAndDrop.#pendingEvaluation?.key === dragData) {
-      return IsLinkableDragAndDrop.#pendingEvaluation.value;
-    }
-
-    IsLinkableDragAndDrop.#pendingEvaluation = { key: dragData, value: "PENDING" };
-    IsLinkableDragAndDrop.#evaluateIsLinkable(dragData)
-      .then((isDroppable) => {
-        IsLinkableDragAndDrop.#pendingEvaluation = { key: dragData, value: isDroppable };
-      })
-      .catch((reason) => {
-        IsLinkableDragAndDrop.#logger.warn("An error occurred while evaluating the droppable state", dragData, reason);
-        IsLinkableDragAndDrop.#pendingEvaluation = undefined;
-      });
-    return IsLinkableDragAndDrop.#pendingEvaluation.value;
+  if (pendingEvaluation?.key === dragData) {
+    return pendingEvaluation.value;
   }
 
-  static async #evaluateIsLinkable(beanReferences: string): Promise<IsLinkableResponse> {
-    const beanReferenceToUriService: BeanReferenceToUriService =
-      await serviceAgent.fetchService<BeanReferenceToUriService>(createBeanReferenceToUriServiceDescriptor());
+  pendingEvaluation = { key: dragData, value: "PENDING" };
+  evaluateIsLinkable(dragData)
+    .then((isDroppable) => {
+      pendingEvaluation = { key: dragData, value: isDroppable };
+    })
+    .catch((reason: string) => {
+      logger.warn("An error occurred while evaluating the droppable state", dragData, reason);
+      pendingEvaluation = undefined;
+    });
+  return pendingEvaluation.value;
+};
 
-    const uris: string[] = await beanReferenceToUriService.resolveUris(beanReferences);
-    if (uris.length === 0) {
-      return Promise.resolve({ uris, areLinkable: false });
-    }
-    const linkableInformation: boolean[] = await Promise.all(uris.map(IsLinkableDragAndDrop.#isLinkableUriInformation));
-    const allLinkable: boolean = linkableInformation.every((value: boolean) => value);
-    return Promise.resolve({ uris, areLinkable: allLinkable });
-  }
+const evaluateIsLinkable = async (beanReferences: string): Promise<IsLinkableResponse> => {
+  const beanReferenceToUriService: BeanReferenceToUriService =
+    await serviceAgent.fetchService<BeanReferenceToUriService>(createBeanReferenceToUriServiceDescriptor());
 
-  static async #isLinkableUriInformation(uri: string): Promise<boolean> {
-    const richTextConfigurationService: RichtextConfigurationService = await serviceAgent.fetchService(
-      createRichtextConfigurationServiceDescriptor()
-    );
-    return richTextConfigurationService.hasLinkableType(uri);
+  const uris: string[] = await beanReferenceToUriService.resolveUris(beanReferences);
+  if (uris.length === 0) {
+    return Promise.resolve({ uris, areLinkable: false });
   }
-}
+  const linkableInformation: boolean[] = await Promise.all(uris.map(isLinkableUriInformation));
+  const allLinkable: boolean = linkableInformation.every((value: boolean) => value);
+  return Promise.resolve({ uris, areLinkable: allLinkable });
+};
+
+const isLinkableUriInformation = async (uri: string): Promise<boolean> => {
+  const richTextConfigurationService: RichtextConfigurationService = await serviceAgent.fetchService(
+    createRichtextConfigurationServiceDescriptor()
+  );
+  return richTextConfigurationService.hasLinkableType(uri);
+};

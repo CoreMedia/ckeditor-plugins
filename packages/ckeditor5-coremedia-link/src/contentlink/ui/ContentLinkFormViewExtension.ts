@@ -16,7 +16,7 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { IsLinkableDragAndDrop, IsLinkableResponse } from "./IsLinkableDragAndDrop";
+import { getEvaluationResult, isLinkable, IsLinkableResponse } from "./IsLinkableDragAndDrop";
 import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
@@ -180,7 +180,7 @@ class ContentLinkFormViewExtension extends Plugin {
     dragEvent.preventDefault();
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
 
-    const linkable = IsLinkableDragAndDrop.getEvaluationResult(contentBeanReferences);
+    const linkable = getEvaluationResult(contentBeanReferences);
     if (!linkable || linkable === "PENDING") {
       return;
     }
@@ -277,9 +277,9 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const isLinkable: IsLinkableResponse = IsLinkableDragAndDrop.isLinkable();
+    const isLinkableResponse: IsLinkableResponse = isLinkable();
 
-    if (!isLinkable) {
+    if (!isLinkableResponse) {
       logger.debug(
         "DragOverEvent: No URI received from DragDropService. Assuming that is any text (like an url) and allow it."
       );
@@ -287,20 +287,20 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    if (isLinkable === "PENDING") {
+    if (isLinkableResponse === "PENDING") {
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
 
-    if (isLinkable.uris?.length !== 1) {
+    if (isLinkableResponse.uris?.length !== 1) {
       logger.debug(
-        `DragOverEvent: Received ${isLinkable.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`
+        `DragOverEvent: Received ${isLinkableResponse.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`
       );
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
 
-    dragEvent.dataTransfer.dropEffect = isLinkable.areLinkable ? "link" : "none";
+    dragEvent.dataTransfer.dropEffect = isLinkableResponse.areLinkable ? "link" : "none";
   }
 }
 
