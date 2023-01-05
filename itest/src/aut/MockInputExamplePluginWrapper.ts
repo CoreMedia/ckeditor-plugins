@@ -16,10 +16,14 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
     }, data);
   }
 
+  /**
+   * Evaluates the drop state of the uris inside the browser context.
+   *
+   * @param uris - the uris to check if they are in a droppable state.
+   */
   async validateIsDroppableState(uris: string[]): Promise<IsDroppableResponse | undefined> {
     return this.evaluate(
       (plugin: MockInputExamplePlugin, contentIds): IsDroppableResponse | undefined =>
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
       uris
     );
