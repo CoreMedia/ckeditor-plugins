@@ -8,7 +8,7 @@ import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import { receiveDraggedItems } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
 
-export type IsLinkableResponse = { uris: string[] | undefined; areLinkable: boolean } | "PENDING" | undefined;
+export type IsLinkableResponse = { uris: string[] | undefined; isLinkable: boolean } | "PENDING" | undefined;
 
 const logger = LoggerProvider.getLogger("IsLinkableDragAndDrop");
 let pendingEvaluation: { key: string; value: IsLinkableResponse } | undefined;
@@ -66,11 +66,11 @@ const evaluateIsLinkable = async (beanReferences: string): Promise<IsLinkableRes
 
   const uris: string[] = await beanReferenceToUriService.resolveUris(beanReferences);
   if (uris.length === 0) {
-    return Promise.resolve({ uris, areLinkable: false });
+    return Promise.resolve({ uris, isLinkable: false });
   }
   const linkableInformation: boolean[] = await Promise.all(uris.map(isLinkableUriInformation));
-  const allLinkable: boolean = linkableInformation.every((value: boolean) => value);
-  return Promise.resolve({ uris, areLinkable: allLinkable });
+  const isLinkable: boolean = linkableInformation.every((value: boolean) => value);
+  return Promise.resolve({ uris, isLinkable });
 };
 
 const isLinkableUriInformation = async (uri: string): Promise<boolean> => {

@@ -300,7 +300,7 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    dragEvent.dataTransfer.dropEffect = isLinkableResponse.areLinkable ? "link" : "none";
+    dragEvent.dataTransfer.dropEffect = isLinkableResponse.isLinkable ? "link" : "none";
   }
 }
 
