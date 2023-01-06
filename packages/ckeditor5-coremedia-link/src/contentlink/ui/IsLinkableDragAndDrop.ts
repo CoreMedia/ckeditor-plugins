@@ -13,6 +13,11 @@ export type IsLinkableResponse = { uris: string[] | undefined; areLinkable: bool
 const logger = LoggerProvider.getLogger("IsLinkableDragAndDrop");
 let pendingEvaluation: { key: string; value: IsLinkableResponse } | undefined;
 
+/**
+ * Returns the evaluation result for isLinkable calls.
+ *
+ * @param beanReferences the beanReferences to look up the evaluation result for.
+ */
 export const getEvaluationResult = (beanReferences: string): IsLinkableResponse | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
     return pendingEvaluation.value;
@@ -21,7 +26,16 @@ export const getEvaluationResult = (beanReferences: string): IsLinkableResponse 
 };
 
 /**
- * Reads the currently dragged items from the DragDropService.
+ * Reads the currently dragged items from the DragDropService and triggers an
+ * asynchronous evaluation if the dragged items are linkable.
+ *
+ * While the evaluation requires asynchronous service calls, this method is
+ * synchronous and made for cases where the environment is not made for
+ * asynchronous behavior (e.g. dragover is always evaluated synchronous)
+ *
+ * The synchronicity is based on multiple calls. Internally the first call triggers
+ * an asynchronous call. Every following one for the same data is only looking if
+ * the asynchronous call returned and provided a result.
  */
 export const isLinkable = (): IsLinkableResponse | undefined => {
   const dragData: string | undefined = receiveDraggedItems();
