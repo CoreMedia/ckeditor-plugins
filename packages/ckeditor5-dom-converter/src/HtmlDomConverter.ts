@@ -1,9 +1,10 @@
-import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/HasNamespaceUris";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { isAttr } from "@coremedia/ckeditor5-dom-support/Attrs";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { skip, Skip } from "./Signals";
 import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas";
+import { ConversionContext } from "./ConversionContext";
+import { ConversionApi } from "./ConversionApi";
 
 /**
  * The HTML DOM Converter is dedicated to XML grammars, that are closely related
@@ -18,18 +19,9 @@ import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas
  */
 export class HtmlDomConverter {
   /**
-   * The target document to transform to.
+   * Context for conversion.
    */
-  readonly targetDocument: Document;
-  /**
-   * If the document (or better: its `documentElement`) have a default namespace
-   * it is stored in here.
-   *
-   * This namespace is used during conversion, if an incoming node has the
-   * same namespace as the default namespace of its document. It follows the
-   * general idea to transform HTML-alike dialects in here back and forth.
-   */
-  readonly targetDefaultNamespaceUri: string | null;
+  readonly api: ConversionApi;
 
   /**
    * Constructor.
@@ -37,19 +29,7 @@ export class HtmlDomConverter {
    * @param targetDocument - target document to transform to
    */
   constructor(targetDocument: Document) {
-    this.targetDocument = targetDocument;
-
-    const { documentElement } = targetDocument;
-    const { namespaceURI } = documentElement;
-
-    let defaultNamespaceUri: string | null = null;
-    if (namespaceURI !== null) {
-      if (targetDocument.documentElement.isDefaultNamespace(namespaceURI)) {
-        defaultNamespaceUri = namespaceURI;
-      }
-    }
-
-    this.targetDefaultNamespaceUri = defaultNamespaceUri;
+    this.api = new ConversionApi(targetDocument);
   }
 
   /**
@@ -70,11 +50,14 @@ export class HtmlDomConverter {
    * nodes; `undefined` if the node is to be ignored in target document.
    */
   convert(originalNode: Node): Node | undefined {
+    const { api } = this;
+    const context = new ConversionContext(originalNode, api);
+
     let result: Node | Skip;
 
-    this.prepareForImport(originalNode);
+    this.prepareForImport(originalNode, context);
 
-    result = this.importedNode(this.#importNode(originalNode));
+    result = this.importedNode(api.importNode(originalNode), context);
 
     if (result === skip) {
       return;
@@ -82,7 +65,7 @@ export class HtmlDomConverter {
 
     if (isParentNode(originalNode)) {
       this.#convertChildren(originalNode, result);
-      result = this.importedNodeAndChildren(result);
+      result = this.importedNodeAndChildren(result, context);
 
       if (result === skip) {
         return;
@@ -100,28 +83,20 @@ export class HtmlDomConverter {
    * * Modify children prior to import.
    *
    * This method is especially useful for data view to data transformation,
-   * where the data view is the much richer HTML API, such as `HTMLElement`
+   * where the data view provides richer HTML API, such as `HTMLElement`
    * providing access to `dataset`.
    *
    * There is no need when overriding to call the `super` method as it is
    * a no-operation method.
    *
+   * This method must not detach the original node from DOM or relocate it.
+   *
    * @param originalNode - original (mutable!) node
+   * @param context - current conversion context
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected prepareForImport(originalNode: Node): void {
+  protected prepareForImport(originalNode: Node, context: ConversionContext): void {
     // No operation by default.
-  }
-
-  /**
-   * Creates a document fragment owned by `targetDocument`. Meant as utility
-   * method for subclasses. May be used in use-cases such as replacing a node
-   * by only its child nodes.
-   */
-  protected createDocumentFragment(): DocumentFragment {
-    // TODO: We may want to make this public, so that rules may access this
-    //   method.
-    return this.targetDocument.createDocumentFragment();
   }
 
   /**
@@ -172,11 +147,12 @@ export class HtmlDomConverter {
    *   to ease further processing.
    *
    * @param importedNode - the just imported node
+   * @param context - current conversion context
    * @returns the node to continue with in further processing or a signal
    * what to do instead
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected importedNode(importedNode: Node): Node | Skip {
+  protected importedNode(importedNode: Node, context: ConversionContext): Node | Skip {
     return importedNode;
   }
 
@@ -198,10 +174,12 @@ export class HtmlDomConverter {
    *   attached to DOM.
    *
    * @param importedNode - imported node, possibly with children
+   * @param context - current conversion context
    * @returns the node to attach to the DOM eventually; or a corresponding
    * signal what to do instead
    */
-  protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected importedNodeAndChildren(importedNode: Node, context: ConversionContext): Node | Skip {
     return importedNode;
   }
 
@@ -306,113 +284,5 @@ export class HtmlDomConverter {
     }
 
     return false;
-  }
-
-  /**
-   * Creates an element in target document, which is similar to the one
-   * passed as argument. Neither attributes nor children are handled in
-   * here.
-   *
-   * @param originalElement - external element to create a similar element from
-   * @returns newly created element
-   */
-  #createElementNSFrom<T extends Element = Element>(originalElement: T): T {
-    const { targetDocument } = this;
-    const { namespaceURI, localName, prefix } = originalElement;
-    if (prefix !== null) {
-      // We don't translate the namespace for prefixed elements.
-      return targetDocument.createElementNS(namespaceURI, `${prefix}:${localName}`) as T;
-    }
-    const { ownerDocument } = originalElement;
-    let newNamespaceUri: string | null = namespaceURI;
-    if (ownerDocument.isDefaultNamespace(namespaceURI)) {
-      // Default namespace of element without prefix:
-      // Let's translate the namespace, as if the element now is part
-      // of the target namespace.
-      newNamespaceUri = this.targetDefaultNamespaceUri;
-    }
-    return targetDocument.createElementNS(newNamespaceUri, `${localName}`) as T;
-  }
-
-  /**
-   * Creates an attribute in target document, which is similar to the one
-   * passed as argument.
-   *
-   * @param originalAttribute - external attribute to create a similar one from
-   * @returns newly created attribute
-   */
-  #createAttributeNSFrom(originalAttribute: Attr): Attr {
-    const { targetDocument } = this;
-    const { namespaceURI, localName, prefix, value } = originalAttribute;
-    let newAttribute: Attr;
-    if (prefix !== null) {
-      // We don't translate the namespace for prefixed elements.
-      newAttribute = targetDocument.createAttributeNS(namespaceURI, `${prefix}:${localName}`);
-    } else {
-      const { ownerDocument } = originalAttribute;
-      let newNamespaceUri: string | null = namespaceURI;
-      if (ownerDocument.isDefaultNamespace(namespaceURI)) {
-        // Default namespace of element without prefix:
-        // Let's translate the namespace, as if the attribute now is part
-        // of the target namespace.
-        newNamespaceUri = this.targetDefaultNamespaceUri;
-      }
-      newAttribute = targetDocument.createAttributeNS(newNamespaceUri, `${localName}`);
-    }
-    newAttribute.value = value;
-    return newAttribute;
-  }
-
-  /**
-   * Imports all attributes from given external element into the target
-   * element.
-   *
-   * @param externalElement - external element to copy attributes from
-   * @param targetElement - element that receives attributes
-   */
-  #importAttributesFrom(externalElement: Element, targetElement: Element): void {
-    for (const originalAttribute of externalElement.attributes) {
-      // Not using `convert` here: While it may seem suitable calling
-      // `convert` here, it would collide with the alternative `importNode`
-      // called on `targetDocument`. As the alternative path just exists, to
-      // align default namespaces, we should behave similar to `importNode`
-      // here, not doing any fancy conversion.
-      const newAttribute = this.#importNode(originalAttribute);
-      targetElement.setAttributeNodeNS(newAttribute);
-    }
-  }
-
-  /**
-   * Imports the given node (flat, thus, without children) into the target
-   * document. Node and attributes of the same namespace as the source document
-   * will be copied, as if they exist in the same way in the target namespace.
-   * Nodes or attributes of foreign namespace will keep their original
-   * namespace.
-   *
-   * Nodes without namespace and namespace-attributes are imported directly
-   * via corresponding API.
-   *
-   * @param originalNode - external node to import
-   */
-  #importNode<T extends Node = Node>(originalNode: T): T {
-    if (isHasNamespaceUri(originalNode)) {
-      // Manual `importNode`: Purpose is to automatically align default
-      // namespaces: If the original node is of the default namespace of
-      // the originating document, it is now transferred to the default
-      // namespace of the target document.
-      if (isElement(originalNode)) {
-        const newElement = this.#createElementNSFrom(originalNode);
-        // As `importNode` also handles attributes, we need to do this here,
-        // too.
-        this.#importAttributesFrom(originalNode, newElement);
-        return newElement;
-      } else if (isAttr(originalNode)) {
-        // For now, we know, that this is an attribute due to the implementation
-        // of isHasNamespaceUri.
-        return this.#createAttributeNSFrom(originalNode) as unknown as T;
-      }
-    }
-    // Use default `importNode` instead, of the above is not applicable.
-    return this.targetDocument.importNode(originalNode, false);
   }
 }

@@ -9,6 +9,7 @@ import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/Eleme
 import { wrapIfTableElement } from "@coremedia/ckeditor5-dom-support/HTMLTableElements";
 import { skip, Skip } from "../src/Signals";
 import { wrapIfHTMLElement } from "@coremedia/ckeditor5-dom-support/HTMLElements";
+import { ConversionContext } from "../src/ConversionContext";
 
 describe("HtmlDomConverter", () => {
   describe(USE_CASE_NAME, () => {
@@ -146,7 +147,7 @@ describe("HtmlDomConverter", () => {
    */
   describe("Override Behaviors", () => {
     it("Replace element by different element", () => {
-      const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
+      const dataViewDocument = documentFromHtml(`<body><p><mark>TEXT</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
@@ -193,40 +194,43 @@ describe("HtmlDomConverter", () => {
 
     it.each`
       mode
-      ${"early"}
-      ${"late"}
-    `("[$#] Replace element by its children, processing stage: $mode", ({ mode }: { mode: "early" | "late" }) => {
-      const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
-      const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
+      ${"atImported"}
+      ${"atImportedWithChildren"}
+    `(
+      "[$#] Replace element by its children, processing stage: $mode",
+      ({ mode }: { mode: "atPrepareForInput" | "atImported" | "atImportedWithChildren" }) => {
+        const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
+        const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedNode(importedNode: Node): Node | Skip {
-          if (mode === "early" && isElement(importedNode) && importedNode.localName === "mark") {
-            // In early processing, we have no further control on how children
-            // are added.
-            return this.createDocumentFragment();
+        class CustomHtmlDomConverter extends HtmlDomConverter {
+          protected importedNode(importedNode: Node, { api }: ConversionContext): Node | Skip {
+            if (mode === "atImported" && isElement(importedNode) && importedNode.localName === "mark") {
+              // Benefit: lightweight processing, possibly better performance.
+              // Drawback: No information to forward to children from current node.
+              return api.createDocumentFragment();
+            }
+            return importedNode;
           }
-          return importedNode;
+
+          protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+            if (mode === "atImportedWithChildren" && isElement(importedNode) && importedNode.localName === "mark") {
+              // Benefit: full control over children, like forwarding information from parent node to children.
+              // Drawback: More complex operations required.
+              return extractNodeContents(importedNode);
+            }
+            return importedNode;
+          }
         }
 
-        protected importedNodeAndChildren(importedNode: Node): Node | Skip {
-          if (mode === "late" && isElement(importedNode) && importedNode.localName === "mark") {
-            // In late processing, we may use, for example, attributes of
-            // imported node to decide how to deal with child nodes.
-            return extractNodeContents(importedNode);
-          }
-          return importedNode;
-        }
+        const converter = new CustomHtmlDomConverter(dataDocument);
+
+        toData(converter, dataViewDocument, dataDocument);
+
+        expect(serializeToXmlString(dataDocument)).toStrictEqual(
+          `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Marked Text</p></div>`
+        );
       }
-
-      const converter = new CustomHtmlDomConverter(dataDocument);
-
-      toData(converter, dataViewDocument, dataDocument);
-
-      expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Marked Text</p></div>`
-      );
-    });
+    );
 
     /**
      * This simulates a typical pattern in CoreMedia Rich Text 1.0
@@ -324,10 +328,6 @@ describe("HtmlDomConverter", () => {
       );
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected prepareForImport(originalNode: Node) {
-          wrapIfHTMLElement(originalNode)?.moveDataAttributesToChildElements();
-        }
-
         protected importedNodeAndChildren(importedNode: Node): Node | Skip {
           wrapIfHTMLElement(importedNode)?.moveDataAttributeChildElementToDataAttributes();
           return importedNode;
@@ -339,7 +339,7 @@ describe("HtmlDomConverter", () => {
       toDataView(converter, dataDocument, dataViewDocument);
 
       expect(serializeToXmlString(dataViewDocument.body)).toStrictEqual(
-        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
+        `<body xmlns="http://www.w3.org/1999/xhtml"><em data-editor="Peter">Text</em></body>`
       );
     });
   });
