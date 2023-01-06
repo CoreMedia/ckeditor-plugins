@@ -34,8 +34,8 @@ export const getEvaluationResult = (beanReferences: string): IsLinkableEvaluatio
  * asynchronous behavior (e.g. dragover is always evaluated synchronous)
  *
  * The synchronicity is based on multiple calls. Internally the first call triggers
- * an asynchronous call. Every following one for the same data is only looking if
- * the asynchronous call returned and provided a result.
+ * an asynchronous call. Every following one for the same data is returning the state
+ * of the call (PENDING or the result).
  */
 export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
   const dragData: string | undefined = receiveDraggedItems();

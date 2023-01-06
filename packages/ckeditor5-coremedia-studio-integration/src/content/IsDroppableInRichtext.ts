@@ -10,6 +10,11 @@ export type IsDroppableEvaluationResult = { uris: string[] | undefined; isDroppa
 const logger = LoggerProvider.getLogger("IsDroppableInRichtext");
 let pendingEvaluation: { key: string; value: IsDroppableEvaluationResult } | undefined;
 
+/**
+ * Returns the evaluation result for isDroppable calls.
+ *
+ * @param beanReferences the beanReferences to look up the evaluation result for.
+ */
 export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
     return pendingEvaluation.value;
@@ -17,6 +22,40 @@ export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluati
   return undefined;
 };
 
+/**
+ * Reads the currently dragged items from the DragDropService and triggers an
+ * asynchronous evaluation if the dragged items are droppable in rich text.
+ *
+ * While the evaluation requires asynchronous service calls, this method is
+ * synchronous and made for cases where the environment is not made for
+ * asynchronous behavior (e.g. dragover is always evaluated synchronous)
+ *
+ * The synchronicity is based on multiple calls. Internally the first call triggers
+ * an asynchronous call. Every following one for the same data is returning the state
+ * of the call (PENDING or the result).
+ */
+export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
+  const dragData: string | undefined = receiveDraggedItems();
+  if (!dragData) {
+    logger.debug("No drag data available, nothing to drop.");
+    logger.debug("Current evaluation state", pendingEvaluation);
+    return undefined;
+  }
+  return isDroppableBeanReferences(dragData);
+};
+
+/**
+ * Triggers an asynchronous evaluation if the given bean references are droppable
+ * in rich text.
+ *
+ * While the evaluation requires asynchronous service calls, this method is
+ * synchronous and made for cases where the environment is not made for
+ * asynchronous behavior (e.g. dragover is always evaluated synchronous)
+ *
+ * The synchronicity is based on multiple calls. Internally the first call triggers
+ * an asynchronous call. Every following one for the same data is returning the state
+ * of the call (PENDING or the result).
+ */
 export const isDroppableBeanReferences = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
     logger.debug("Current evaluation state", beanReferences, pendingEvaluation.value);
@@ -37,17 +76,6 @@ export const isDroppableBeanReferences = (beanReferences: string): IsDroppableEv
     });
   logger.debug("Current evaluation result for contents", pendingEvaluation.value);
   return pendingEvaluation.value;
-};
-
-//TODO: Shape signature and find good names
-export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
-  const dragData: string | undefined = receiveDraggedItems();
-  if (!dragData) {
-    logger.debug("No drag data available, nothing to drop.");
-    logger.debug("Current evaluation state", pendingEvaluation);
-    return undefined;
-  }
-  return isDroppableBeanReferences(dragData);
 };
 
 const evaluateIsDroppable = async (beanReferences: string): Promise<IsDroppableEvaluationResult> => {
