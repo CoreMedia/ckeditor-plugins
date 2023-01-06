@@ -7,11 +7,6 @@ import { receiveDraggedItems } from "./studioservices/DragDropServiceWrapper";
 
 export type IsDroppableEvaluationResult = { uris: string[] | undefined; areDroppable: boolean } | "PENDING";
 
-interface DroppableUriInformation {
-  isLinkable: boolean;
-  isEmbeddable: boolean;
-}
-
 const logger = LoggerProvider.getLogger("IsDroppableInRichtext");
 let pendingEvaluation: { key: string; value: IsDroppableEvaluationResult } | undefined;
 
@@ -79,3 +74,8 @@ const isDroppableUriInformation = async (uri: string): Promise<DroppableUriInfor
   const isLinkable: boolean = await richTextConfigurationService.hasLinkableType(uri);
   return { isEmbeddable, isLinkable };
 };
+
+interface DroppableUriInformation {
+  isLinkable: boolean;
+  isEmbeddable: boolean;
+}
