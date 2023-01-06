@@ -5,7 +5,7 @@ import RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 import { receiveDraggedItems } from "./studioservices/DragDropServiceWrapper";
 
-export type IsDroppableEvaluationResult = { uris: string[] | undefined; areDroppable: boolean } | "PENDING";
+export type IsDroppableEvaluationResult = { uris: string[] | undefined; isDroppable: boolean } | "PENDING";
 
 const logger = LoggerProvider.getLogger("IsDroppableInRichtext");
 let pendingEvaluation: { key: string; value: IsDroppableEvaluationResult } | undefined;
@@ -56,14 +56,14 @@ const evaluateIsDroppable = async (beanReferences: string): Promise<IsDroppableE
 
   const uris: string[] = await beanReferenceToUriService.resolveUris(beanReferences);
   if (uris.length === 0) {
-    return { uris, areDroppable: false };
+    return { uris, isDroppable: false };
   }
 
   const droppableUriInformation = await Promise.all(uris.map((uri) => isDroppableUriInformation(uri)));
-  const areDroppable = droppableUriInformation.every(
+  const isDroppable = droppableUriInformation.every(
     (droppableInformation) => droppableInformation.isEmbeddable || droppableInformation.isLinkable
   );
-  return Promise.resolve({ uris, areDroppable });
+  return Promise.resolve({ uris, isDroppable });
 };
 
 const isDroppableUriInformation = async (uri: string): Promise<DroppableUriInformation> => {

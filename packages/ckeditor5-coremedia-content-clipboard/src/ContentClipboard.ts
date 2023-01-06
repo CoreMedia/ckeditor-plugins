@@ -150,8 +150,8 @@ export default class ContentClipboard extends Plugin {
     if (isContentEventData(data) && !!data.content) {
       return;
     }
-    const isDroppableResponse = isDroppable();
-    if (!isDroppableResponse) {
+    const isDroppableEvaluationResult = isDroppable();
+    if (!isDroppableEvaluationResult) {
       return;
     }
 
@@ -159,13 +159,13 @@ export default class ContentClipboard extends Plugin {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     data.preventDefault();
 
-    if (isDroppableResponse === "PENDING") {
+    if (isDroppableEvaluationResult === "PENDING") {
       ContentClipboard.#logger.debug("Drag over evaluation is currently pending", data);
       data.dataTransfer.dropEffect = "none";
       return;
     }
 
-    if (isDroppableResponse.areDroppable) {
+    if (isDroppableEvaluationResult.isDroppable) {
       data.dataTransfer.dropEffect = "link";
     } else {
       data.dataTransfer.dropEffect = "none";

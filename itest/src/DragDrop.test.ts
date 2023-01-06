@@ -275,7 +275,7 @@ describe("Drag and Drop", () => {
       expect(actual).toBeDefined();
       expect(actual).not.toEqual("PENDING");
       if (actual && actual !== "PENDING") {
-        expect(actual.areDroppable).toBeTruthy();
+        expect(actual.isDroppable).toBeTruthy();
       }
     });
   }
