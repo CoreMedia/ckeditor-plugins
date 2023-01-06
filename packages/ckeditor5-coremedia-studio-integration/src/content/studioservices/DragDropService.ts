@@ -9,11 +9,8 @@ interface DragDropService {
   dragGroups: string;
 
   dragData: string;
-}
 
-interface CMDragData {
-  contents: CMBeanReference[];
-  content: CMBeanReference[];
+  dataTransfer: DataTransfer | null;
 }
 
 interface CMBeanReference {
