@@ -187,18 +187,21 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const contentUris = linkable.uris;
     if (!contentUris) {
+      ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
       return;
     }
 
     const uri: string | undefined = contentUris[0];
     if (!uri) {
       logger.warn("Invalid amount of uris dropped.");
+      ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
       return;
     }
 
     ContentLinkFormViewExtension.#toContentUri(uri)
       .then((importedUri: string) => {
         const ckeModelUri = requireContentCkeModelUri(importedUri);
+        ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
         ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, ckeModelUri);
       })
       .catch((reason) => {
@@ -230,11 +233,11 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
-    const view = linkUI.formView.urlInputView;
+    const view = linkUI.formView;
     if (loading) {
-      view.element?.classList.add("url-input-field--loading");
+      view.element?.classList.add("cm-ck-form-view--loading");
     } else {
-      view.element?.classList.remove("url-input-field--loading");
+      view.element?.classList.remove("cm-ck-form-view--loading");
     }
   }
 

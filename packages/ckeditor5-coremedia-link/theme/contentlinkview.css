@@ -45,6 +45,7 @@
  */
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
+  position: relative;
   margin-left: 0 !important;
 }
 
