@@ -8,7 +8,7 @@ import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import { receiveDraggedItems } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
 
-export type IsLinkableResponse = { uris: string[] | undefined; isLinkable: boolean } | "PENDING" | undefined;
+export type IsLinkableResponse = { uris: string[] | undefined; isLinkable: boolean } | "PENDING";
 
 const logger = LoggerProvider.getLogger("IsLinkableDragAndDrop");
 let pendingEvaluation: { key: string; value: IsLinkableResponse } | undefined;

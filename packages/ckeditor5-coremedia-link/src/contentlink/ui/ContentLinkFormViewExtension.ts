@@ -277,7 +277,7 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const isLinkableResponse: IsLinkableResponse = isLinkable();
+    const isLinkableResponse: IsLinkableResponse | undefined = isLinkable();
 
     if (!isLinkableResponse) {
       logger.debug(
