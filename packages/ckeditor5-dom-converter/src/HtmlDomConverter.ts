@@ -57,7 +57,7 @@ export class HtmlDomConverter {
 
     this.prepareForImport(originalNode, context);
 
-    result = this.importedNode(api.importNode(originalNode), context);
+    result = this.imported(api.importNode(originalNode), context);
 
     if (result === skip) {
       return;
@@ -65,7 +65,7 @@ export class HtmlDomConverter {
 
     if (isParentNode(originalNode)) {
       this.#convertChildren(originalNode, result);
-      result = this.importedNodeAndChildren(result, context);
+      result = this.importedWithChildren(result, context);
 
       if (result === skip) {
         return;
@@ -152,7 +152,7 @@ export class HtmlDomConverter {
    * what to do instead
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected importedNode(importedNode: Node, context: ConversionContext): Node | Skip {
+  protected imported(importedNode: Node, context: ConversionContext): Node | Skip {
     return importedNode;
   }
 
@@ -179,7 +179,7 @@ export class HtmlDomConverter {
    * signal what to do instead
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected importedNodeAndChildren(importedNode: Node, context: ConversionContext): Node | Skip {
+  protected importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
     return importedNode;
   }
 

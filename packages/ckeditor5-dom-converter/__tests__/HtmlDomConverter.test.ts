@@ -151,7 +151,7 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedNode(importedNode: Node): Node | Skip {
+        protected imported(importedNode: Node): Node | Skip {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             const renamed = renameElement(importedNode, "span");
             renamed.classList.add("mark");
@@ -175,7 +175,7 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedNode(importedNode: Node): Node | Skip {
+        protected imported(importedNode: Node): Node | Skip {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             return skip;
           }
@@ -203,7 +203,7 @@ describe("HtmlDomConverter", () => {
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
         class CustomHtmlDomConverter extends HtmlDomConverter {
-          protected importedNode(importedNode: Node, { api }: ConversionContext): Node | Skip {
+          protected imported(importedNode: Node, { api }: ConversionContext): Node | Skip {
             if (mode === "atImported" && isElement(importedNode) && importedNode.localName === "mark") {
               // Benefit: lightweight processing, possibly better performance.
               // Drawback: No information to forward to children from current node.
@@ -212,7 +212,7 @@ describe("HtmlDomConverter", () => {
             return importedNode;
           }
 
-          protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+          protected importedWithChildren(importedNode: Node): Node | Skip {
             if (mode === "atImportedWithChildren" && isElement(importedNode) && importedNode.localName === "mark") {
               // Benefit: full control over children, like forwarding information from parent node to children.
               // Drawback: More complex operations required.
@@ -246,7 +246,7 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+        protected importedWithChildren(importedNode: Node): Node | Skip {
           if (!isElement(importedNode)) {
             return importedNode;
           }
@@ -287,7 +287,7 @@ describe("HtmlDomConverter", () => {
       );
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedNodeAndChildren(importedNode: Node): Node {
+        protected importedWithChildren(importedNode: Node): Node {
           wrapIfTableElement(importedNode)?.moveRowsWithClassToTHead("tr--head");
           return importedNode;
         }
@@ -328,7 +328,7 @@ describe("HtmlDomConverter", () => {
       );
 
       class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedNodeAndChildren(importedNode: Node): Node | Skip {
+        protected importedWithChildren(importedNode: Node): Node | Skip {
           wrapIfHTMLElement(importedNode)?.moveDataAttributeChildElementToDataAttributes();
           return importedNode;
         }
