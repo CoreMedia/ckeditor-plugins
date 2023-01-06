@@ -5,7 +5,7 @@ import RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 import { receiveDraggedItems } from "./studioservices/DragDropServiceWrapper";
 
-export type IsDroppableResponse = { uris: string[] | undefined; areDroppable: boolean } | "PENDING";
+export type IsDroppableEvaluationResult = { uris: string[] | undefined; areDroppable: boolean } | "PENDING";
 
 interface DroppableUriInformation {
   isLinkable: boolean;
@@ -13,16 +13,16 @@ interface DroppableUriInformation {
 }
 
 const logger = LoggerProvider.getLogger("IsDroppableInRichtext");
-let pendingEvaluation: { key: string; value: IsDroppableResponse } | undefined;
+let pendingEvaluation: { key: string; value: IsDroppableEvaluationResult } | undefined;
 
-export const getEvaluationResult = (beanReferences: string): IsDroppableResponse | undefined => {
+export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
     return pendingEvaluation.value;
   }
   return undefined;
 };
 
-export const isDroppableBeanReferences = (beanReferences: string): IsDroppableResponse | undefined => {
+export const isDroppableBeanReferences = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
     logger.debug("Current evaluation state", beanReferences, pendingEvaluation.value);
     return pendingEvaluation.value;
@@ -45,7 +45,7 @@ export const isDroppableBeanReferences = (beanReferences: string): IsDroppableRe
 };
 
 //TODO: Shape signature and find good names
-export const isDroppable = (): IsDroppableResponse | undefined => {
+export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
   const dragData: string | undefined = receiveDraggedItems();
   if (!dragData) {
     logger.debug("No drag data available, nothing to drop.");
@@ -55,7 +55,7 @@ export const isDroppable = (): IsDroppableResponse | undefined => {
   return isDroppableBeanReferences(dragData);
 };
 
-const evaluateIsDroppable = async (beanReferences: string): Promise<IsDroppableResponse> => {
+const evaluateIsDroppable = async (beanReferences: string): Promise<IsDroppableEvaluationResult> => {
   const beanReferenceToUriService: BeanReferenceToUriService =
     await serviceAgent.fetchService<BeanReferenceToUriService>(createBeanReferenceToUriServiceDescriptor());
 

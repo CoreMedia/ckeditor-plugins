@@ -3,7 +3,7 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import MockInputExamplePlugin, {
   InputExampleElement,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
-import { IsDroppableResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 /**
  * Provides access to the `MockInputExamplePlugin`.
@@ -21,9 +21,9 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
    *
    * @param uris - the uris to check if they are in a droppable state.
    */
-  async validateIsDroppableState(uris: string[]): Promise<IsDroppableResponse | undefined> {
+  async validateIsDroppableState(uris: string[]): Promise<IsDroppableEvaluationResult | undefined> {
     return this.evaluate(
-      (plugin: MockInputExamplePlugin, contentIds): IsDroppableResponse | undefined =>
+      (plugin: MockInputExamplePlugin, contentIds): IsDroppableEvaluationResult | undefined =>
         plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
       uris
     );

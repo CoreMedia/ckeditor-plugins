@@ -8,7 +8,7 @@ import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import {
   isDroppableBeanReferences,
-  IsDroppableResponse,
+  IsDroppableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 /**
@@ -95,7 +95,7 @@ class MockInputExamplePlugin extends Plugin {
    *
    * @param uris - the uris to fill the cache for.
    */
-  ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableResponse | undefined {
+  ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableEvaluationResult | undefined {
     const beanReferences = MockInputExamplePlugin.#contentList(...uris);
     return isDroppableBeanReferences(JSON.stringify(beanReferences));
   }

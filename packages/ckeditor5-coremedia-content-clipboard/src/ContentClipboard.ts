@@ -26,7 +26,7 @@ import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration
 import {
   getEvaluationResult,
   isDroppable,
-  IsDroppableResponse,
+  IsDroppableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
@@ -190,9 +190,9 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const droppableResponse: IsDroppableResponse | undefined = getEvaluationResult(contentBeanReferences);
+    const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(contentBeanReferences);
     // Return if this is no CoreMedia content drop.
-    if (!droppableResponse) {
+    if (!isDroppableResult) {
       return;
     }
 
@@ -223,17 +223,17 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const droppableResponse: IsDroppableResponse | undefined = getEvaluationResult(contentBeanReferences);
-    if (!droppableResponse || droppableResponse === "PENDING") {
+    const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(contentBeanReferences);
+    if (!isDroppableResult || isDroppableResult === "PENDING") {
       return;
     }
 
     // Return if this is no CoreMedia content drop.
-    if (!droppableResponse.uris || droppableResponse.uris.length === 0) {
+    if (!isDroppableResult.uris || isDroppableResult.uris.length === 0) {
       return;
     }
 
-    const cmDataUris = droppableResponse.uris;
+    const cmDataUris = isDroppableResult.uris;
 
     const { editor } = this;
 

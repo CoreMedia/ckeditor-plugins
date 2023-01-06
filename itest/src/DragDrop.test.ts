@@ -10,7 +10,7 @@ import {
   PNG_RED_240x135,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import { Locator } from "playwright";
-import { IsDroppableResponse } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 
 const oneLink: MockContentConfig[] = [
   {
@@ -270,9 +270,8 @@ describe("Drag and Drop", () => {
     console.log("Waiting for contents to be available in caches and services", uris);
 
     await waitForExpect(async () => {
-      const actual: IsDroppableResponse | undefined = await application.mockInputExamplePlugin.validateIsDroppableState(
-        uris
-      );
+      const actual: IsDroppableEvaluationResult | undefined =
+        await application.mockInputExamplePlugin.validateIsDroppableState(uris);
       expect(actual).toBeDefined();
       expect(actual).not.toEqual("PENDING");
       if (actual && actual !== "PENDING") {
