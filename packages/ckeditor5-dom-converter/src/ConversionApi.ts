@@ -18,16 +18,32 @@ export class ConversionApi {
   }
 
   createAttributeNS(namespaceURI: string | null, qualifiedName: string): Attr {
-    const { targetDocument } = this;
-    return targetDocument.createAttributeNS(namespaceURI, qualifiedName);
+    return this.targetDocument.createAttributeNS(namespaceURI, qualifiedName);
+  }
+
+  /**
+   * Creates a CDATA section owned by `targetDocument`.
+   *
+   * @param data - CDATA text
+   */
+  createCDATASection(data: string): CDATASection {
+    return this.targetDocument.createCDATASection(data);
+  }
+
+  /**
+   * Creates a Comment owned by `targetDocument`.
+   *
+   * @param data - text
+   */
+  createComment(data: string): Comment {
+    return this.targetDocument.createComment(data);
   }
 
   /**
    * Creates an empty `DocumentFragment` owned by `targetDocument`.
    */
   createDocumentFragment(): DocumentFragment {
-    const { targetDocument } = this;
-    return targetDocument.createDocumentFragment();
+    return this.targetDocument.createDocumentFragment();
   }
 
   /**
@@ -47,8 +63,23 @@ export class ConversionApi {
    * @param qualifiedName - qualified name of element to create
    */
   createElementNS(namespaceURI: string | null, qualifiedName: string): Element {
-    const { targetDocument } = this;
-    return targetDocument.createElementNS(namespaceURI, qualifiedName);
+    return this.targetDocument.createElementNS(namespaceURI, qualifiedName);
+  }
+
+  /**
+   * Creates a `Range` owned by `targetDocument`.
+   */
+  createRange(): Range {
+    return this.targetDocument.createRange();
+  }
+
+  /**
+   * Creates a Text node owned by `targetDocument`.
+   *
+   * @param data - text
+   */
+  createTextNode(data: string): Text {
+    return this.targetDocument.createTextNode(data);
   }
 
   #hasDefaultNamespace(node: Element | Attr): boolean {
@@ -90,10 +121,26 @@ export class ConversionApi {
     return imported;
   }
 
+  /**
+   * Forwards to `importNode` of target document.
+   *
+   * @param node - node to import
+   * @param deep - if to include child nodes
+   */
   #importNode<T extends Node>(node: T, deep = false): T {
     return this.targetDocument.importNode(node, deep);
   }
 
+  /**
+   * Imports nodes similar to `Document.importNode`. In contrast to
+   * `Document.importNode´ this method tries to also adapt the namespace
+   * URIs of corresponding nodes: If they were of the default namespace in
+   * the source document, they will now use the default namespace of the
+   * target document.
+   *
+   * @param node - node to import
+   * @param deep - if to include children; defaults to `false`.
+   */
   importNode(node: Node, deep = false): Node {
     if (isElement(node)) {
       return this.#importElement(node, deep) ?? this.#importNode(node, deep);
