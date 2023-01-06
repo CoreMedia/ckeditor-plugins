@@ -8,17 +8,17 @@ import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import { receiveDraggedItems } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
 
-export type IsLinkableResponse = { uris: string[] | undefined; isLinkable: boolean } | "PENDING";
+export type IsLinkableEvaluationResult = { uris: string[] | undefined; isLinkable: boolean } | "PENDING";
 
 const logger = LoggerProvider.getLogger("IsLinkableDragAndDrop");
-let pendingEvaluation: { key: string; value: IsLinkableResponse } | undefined;
+let pendingEvaluation: { key: string; value: IsLinkableEvaluationResult } | undefined;
 
 /**
  * Returns the evaluation result for isLinkable calls.
  *
  * @param beanReferences the beanReferences to look up the evaluation result for.
  */
-export const getEvaluationResult = (beanReferences: string): IsLinkableResponse | undefined => {
+export const getEvaluationResult = (beanReferences: string): IsLinkableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
     return pendingEvaluation.value;
   }
@@ -37,7 +37,7 @@ export const getEvaluationResult = (beanReferences: string): IsLinkableResponse 
  * an asynchronous call. Every following one for the same data is only looking if
  * the asynchronous call returned and provided a result.
  */
-export const isLinkable = (): IsLinkableResponse | undefined => {
+export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
   const dragData: string | undefined = receiveDraggedItems();
   if (!dragData) {
     logger.info("No drag data available, nothing to drop. Enable debug logging if you are facing any problems.");
@@ -60,7 +60,7 @@ export const isLinkable = (): IsLinkableResponse | undefined => {
   return pendingEvaluation.value;
 };
 
-const evaluateIsLinkable = async (beanReferences: string): Promise<IsLinkableResponse> => {
+const evaluateIsLinkable = async (beanReferences: string): Promise<IsLinkableEvaluationResult> => {
   const beanReferenceToUriService: BeanReferenceToUriService =
     await serviceAgent.fetchService<BeanReferenceToUriService>(createBeanReferenceToUriServiceDescriptor());
 

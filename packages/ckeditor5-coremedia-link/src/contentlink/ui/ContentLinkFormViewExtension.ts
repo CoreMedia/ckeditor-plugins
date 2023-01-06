@@ -16,7 +16,7 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { getEvaluationResult, isLinkable, IsLinkableResponse } from "./IsLinkableDragAndDrop";
+import { getEvaluationResult, isLinkable, IsLinkableEvaluationResult } from "./IsLinkableDragAndDrop";
 import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
@@ -277,9 +277,9 @@ class ContentLinkFormViewExtension extends Plugin {
     }
 
     const logger = ContentLinkFormViewExtension.#logger;
-    const isLinkableResponse: IsLinkableResponse | undefined = isLinkable();
+    const isLinkableEvaluationResult: IsLinkableEvaluationResult | undefined = isLinkable();
 
-    if (!isLinkableResponse) {
+    if (!isLinkableEvaluationResult) {
       logger.debug(
         "DragOverEvent: No URI received from DragDropService. Assuming that is any text (like an url) and allow it."
       );
@@ -287,20 +287,20 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
 
-    if (isLinkableResponse === "PENDING") {
+    if (isLinkableEvaluationResult === "PENDING") {
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
 
-    if (isLinkableResponse.uris?.length !== 1) {
+    if (isLinkableEvaluationResult.uris?.length !== 1) {
       logger.debug(
-        `DragOverEvent: Received ${isLinkableResponse.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`
+        `DragOverEvent: Received ${isLinkableEvaluationResult.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`
       );
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
 
-    dragEvent.dataTransfer.dropEffect = isLinkableResponse.isLinkable ? "link" : "none";
+    dragEvent.dataTransfer.dropEffect = isLinkableEvaluationResult.isLinkable ? "link" : "none";
   }
 }
 
