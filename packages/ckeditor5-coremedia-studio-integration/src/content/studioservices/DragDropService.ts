@@ -13,6 +13,11 @@ interface DragDropService {
   dataTransfer: DataTransfer | null;
 }
 
+interface CMDragData {
+  contents: CMBeanReference[];
+  content: CMBeanReference[];
+}
+
 interface CMBeanReference {
   $Ref: string;
 }
