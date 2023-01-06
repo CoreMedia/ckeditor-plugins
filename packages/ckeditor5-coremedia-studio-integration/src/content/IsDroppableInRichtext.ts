@@ -13,7 +13,8 @@ let pendingEvaluation: { key: string; value: IsDroppableEvaluationResult } | und
 /**
  * Returns the evaluation result for isDroppable calls.
  *
- * @param beanReferences the beanReferences to look up the evaluation result for.
+ * @param beanReferences - the beanReferences to look up the evaluation result for.
+ * @returns the evaluation result or undefined
  */
 export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
@@ -33,6 +34,8 @@ export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluati
  * The synchronicity is based on multiple calls. Internally the first call triggers
  * an asynchronous call. Every following one for the same data is returning the state
  * of the call (PENDING or the result).
+ *
+ * @returns the evaluation result or undefined
  */
 export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
   const dragData: string | undefined = receiveDraggedItems();
@@ -55,6 +58,8 @@ export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
  * The synchronicity is based on multiple calls. Internally the first call triggers
  * an asynchronous call. Every following one for the same data is returning the state
  * of the call (PENDING or the result).
+ *
+ * @returns the evaluation result or undefined
  */
 export const isDroppableBeanReferences = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {

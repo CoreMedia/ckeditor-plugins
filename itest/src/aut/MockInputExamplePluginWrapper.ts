@@ -20,6 +20,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
    * Evaluates the drop state of the uris inside the browser context.
    *
    * @param uris - the uris to check if they are in a droppable state.
+   * @returns the evaluation promise
    */
   async validateIsDroppableState(uris: string[]): Promise<IsDroppableEvaluationResult | undefined> {
     return this.evaluate(
@@ -33,8 +34,9 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
    * Provides access to EditorUI via Editor.
    *
    * @param wrapper - editor wrapper
+   * @returns the MockInputExamplePluginWrapper
    */
-  static fromClassicEditor(wrapper: ClassicEditorWrapper) {
+  static fromClassicEditor(wrapper: ClassicEditorWrapper): MockInputExamplePluginWrapper {
     return new MockInputExamplePluginWrapper(
       wrapper.evaluateHandle((editor, pluginName) => {
         if (!editor.plugins.has(pluginName)) {

@@ -16,7 +16,8 @@ let pendingEvaluation: { key: string; value: IsLinkableEvaluationResult } | unde
 /**
  * Returns the evaluation result for isLinkable calls.
  *
- * @param beanReferences the beanReferences to look up the evaluation result for.
+ * @param beanReferences - the beanReferences to look up the evaluation result for.
+ * @returns the evaluation result or undefined
  */
 export const getEvaluationResult = (beanReferences: string): IsLinkableEvaluationResult | undefined => {
   if (pendingEvaluation?.key === beanReferences) {
@@ -36,6 +37,8 @@ export const getEvaluationResult = (beanReferences: string): IsLinkableEvaluatio
  * The synchronicity is based on multiple calls. Internally the first call triggers
  * an asynchronous call. Every following one for the same data is returning the state
  * of the call (PENDING or the result).
+ *
+ * @returns the evaluation result or undefined
  */
 export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
   const dragData: string | undefined = receiveDraggedItems();

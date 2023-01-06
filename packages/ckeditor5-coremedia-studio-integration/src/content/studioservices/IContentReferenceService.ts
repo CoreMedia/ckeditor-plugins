@@ -14,7 +14,7 @@ export interface ContentReferenceResponse {
   request: string;
 
   /**
-   * Reference information containing uri and uuid.
+   * Reference information containing URI and UUID.
    *
    * If the requestedUri is the same as the content.uri a content object already exist for the given URI.
    * In this case a UUID is also available.

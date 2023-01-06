@@ -135,7 +135,7 @@ export default class DataToModelMechanism {
   }
 
   /**
-   * Uses the {@link ContentToModelRegistry} to lookup a strategy to create a model element
+   * Uses the {@link ContentToModelRegistry} to look up a strategy to create a model element
    * for the given contentUri.
    *
    * @param type - the type of the inserted content object

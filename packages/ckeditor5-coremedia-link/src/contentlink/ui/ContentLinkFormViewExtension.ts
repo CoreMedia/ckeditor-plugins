@@ -252,9 +252,8 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     const { formView } = linkUI;
-    // element.offsetParent is null if the balloon is not visible.
-    // If a user closes the balloon before this method gets called could open
-    // with a wrong state.
+    // Check if the balloon is visible. If it was closed, while data was loaded, just return.
+    // We can use element.offsetParent to check if the balloon's HTML element is visible.
     if (!formView.element?.offsetParent) {
       return;
     }

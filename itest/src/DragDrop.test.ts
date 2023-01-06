@@ -249,7 +249,7 @@ describe("Drag and Drop", () => {
    * "dragover" will be executed many times while hovering over the CKEditor and on entering the CKEditor the asynchronous
    * fetch is triggered. The result will be stored. The next "dragover" will be calculated using those data.
    *
-   * While in the asynchronous call is in evaluation "PENDING" will be returned, otherwise the result.
+   * While the asynchronous call is in evaluation, "PENDING" will be returned, otherwise the result.
    * In this case we wait until the asynchronous call finished evaluating and the result is droppable.
    *
    * @param dragElement - the element to drag
