@@ -11,6 +11,7 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
 import { Locator } from "playwright";
 import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { MockExternalContent } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockExternalContentPlugin";
 
 const oneLink: MockContentConfig[] = [
   {
@@ -47,6 +48,88 @@ const multipleLinks: MockContentConfig[] = [
   {
     id: 10012,
     name: "Document 10012",
+  },
+];
+
+const externalLink: MockExternalContent[] = [
+  {
+    id: 22000,
+    contentAfterImport: {
+      id: 22000,
+      name: "Document 22000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+];
+
+const alreadyImportedExternalLink: MockExternalContent[] = [
+  {
+    id: 23000,
+    contentAfterImport: {
+      id: 23000,
+      name: "Existing Document 23000",
+      type: "linkable",
+    },
+    isAlreadyImported: true,
+    errorWhileImporting: false,
+  },
+];
+
+const multipleExternalLinks: MockExternalContent[] = [
+  {
+    id: 24000,
+    contentAfterImport: {
+      id: 24000,
+      name: "Document 24000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+  {
+    id: 25000,
+    contentAfterImport: {
+      id: 25000,
+      name: "Document 25000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+  {
+    id: 26000,
+    contentAfterImport: {
+      id: 26000,
+      name: "Document 26000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+];
+
+const multipleMixedExternalLinks: MockExternalContent[] = [
+  {
+    id: 27000,
+    contentAfterImport: {
+      id: 27000,
+      name: "Document 27000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+  {
+    id: 28000,
+    contentAfterImport: {
+      id: 28000,
+      name: "Document 28000",
+      type: "linkable",
+    },
+    isAlreadyImported: true,
+    errorWhileImporting: false,
   },
 ];
 
@@ -152,7 +235,8 @@ describe("Drag and Drop", () => {
         //execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
+        const uris = contentMocks.map((contentMock: MockContentConfig) => `content/${contentMock.id}`);
+        await dragAndDrop(uris, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -162,6 +246,40 @@ describe("Drag and Drop", () => {
           await expect(linkElements).toHaveLength(contentMocks.length);
           for (let i = 0; i < linkElements.length; i++) {
             await expect(linkElements[i]).toHaveText(contentMocks[i].name);
+          }
+        });
+      }
+    );
+  });
+
+  describe("ExternalLinks", () => {
+    it.each`
+      dragElementClass                                       | contentMocks
+      ${"external-link"}                                     | ${externalLink}
+      ${"already-imported-external-link"}                    | ${alreadyImportedExternalLink}
+      ${"multiple-external-links"}                           | ${multipleExternalLinks}
+      ${"multiple-imported-and-not-imported-external-links"} | ${multipleMixedExternalLinks}
+    `(
+      "[$#]: Should drag ($dragElementClass) and drop $contentMocks.length non embeddable contents as links.",
+      async ({ dragElementClass, contentMocks }) => {
+        await setupExternalScenario(dragElementClass, contentMocks);
+
+        //execute drag and drop
+        const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
+        const dropTargetSelector = ".ck-content.ck-editor__editable";
+
+        const uris = contentMocks.map((contentMock: MockExternalContent) => `externalUri/${contentMock.id}`);
+
+        await dragAndDrop(uris, dragElementSelector, dropTargetSelector);
+
+        // Validate Editing Downcast
+        const { ui } = application.editor;
+        const editableHandle = await ui.getEditableElement();
+        await waitForExpect(async () => {
+          const linkElements = await editableHandle.$$("a");
+          await expect(linkElements).toHaveLength(contentMocks.length);
+          for (let i = 0; i < linkElements.length; i++) {
+            await expect(linkElements[i]).toHaveText(contentMocks[i].contentAfterImport.name);
           }
         });
       }
@@ -182,7 +300,8 @@ describe("Drag and Drop", () => {
         //execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
+        const uris = contentMocks.map((contentMock: MockContentConfig) => `content/${contentMock.id}`);
+        await dragAndDrop(uris, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -223,21 +342,39 @@ describe("Drag and Drop", () => {
     await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
   }
 
-  async function dragAndDrop(
-    contentMocks: MockContentConfig[],
-    dragElementSelector: string,
-    dropTargetSelector: string
+  async function setupExternalScenario(
+    dragElementClass: string,
+    externalContentMocks: MockExternalContent[]
   ): Promise<void> {
+    for (const externalContentMock of externalContentMocks) {
+      await application.mockExternalContent.addContents(externalContentMock);
+      if (externalContentMock.isAlreadyImported) {
+        if (!externalContentMock.contentAfterImport) {
+          break;
+        }
+        await application.mockContent.addContents(externalContentMock.contentAfterImport);
+      }
+    }
+
+    const dragIds = externalContentMocks.map((content) => ({
+      externalId: content.id,
+    }));
+    const droppableElement: InputExampleElement = {
+      label: "Drag And Drop Test",
+      tooltip: "test-element",
+      items: dragIds,
+      classes: ["input-content", dragElementClass],
+    };
+    await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
+  }
+
+  async function dragAndDrop(uris: string[], dragElementSelector: string, dropTargetSelector: string): Promise<void> {
     await page.waitForSelector(dragElementSelector);
     await page.waitForSelector(dropTargetSelector);
     const dragElement = page.locator(dragElementSelector);
     const dropTarget = page.locator(dropTargetSelector);
 
-    await ensureDropAllowed(
-      dragElement,
-      dropTarget,
-      contentMocks.map((contentMock) => `content/${contentMock.id}`)
-    );
+    await ensureDropAllowed(dragElement, dropTarget, uris);
     await dragElement.dragTo(dropTarget);
   }
 

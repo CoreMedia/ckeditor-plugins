@@ -7,7 +7,7 @@ import MockContentPlugin from "./MockContentPlugin";
 
 const PLUGIN_NAME = "MockExternalContent";
 
-interface MockExternalContent {
+export interface MockExternalContent {
   /**
    * ID of the external content
    */
@@ -77,6 +77,10 @@ export default class MockExternalContentPlugin extends Plugin {
 
   addExternalContent(externalContent: MockExternalContent): void {
     this.#registeredExternalContents.set(`externalUri/${externalContent.id}`, externalContent);
+  }
+
+  addExternalContents(externalContents: MockExternalContent[]): void {
+    externalContents.forEach((externalContent) => this.addExternalContent(externalContent));
   }
 
   externalContentExist(uri: string): boolean {

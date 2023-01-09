@@ -10,6 +10,7 @@ import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 import { MockInputExamplePluginWrapper } from "./MockInputExamplePluginWrapper";
 import http from "http";
+import {MockExternalContentPluginWrapper} from "./MockExternalContentPluginWrapper";
 
 /**
  * Represents result from starting the server.
@@ -140,6 +141,10 @@ export class ApplicationWrapper {
    */
   get mockContent(): MockContentPluginWrapper {
     return MockContentPluginWrapper.fromClassicEditor(this.editor);
+  }
+
+  get mockExternalContent(): MockExternalContentPluginWrapper {
+    return MockExternalContentPluginWrapper.fromClassicEditor(this.editor);
   }
 
   get mockInputExamplePlugin(): MockInputExamplePluginWrapper {
