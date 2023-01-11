@@ -3,6 +3,8 @@ import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import MockInputExamplePlugin, {
   InputExampleElement,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
+import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 /**
  * Provides access to the `MockInputExamplePlugin`.
@@ -15,10 +17,25 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
     }, data);
   }
 
-  async prefillCaches(contentIds: number[]): Promise<boolean> {
+  /**
+   * Evaluates the drop state of the uris inside the browser context.
+   *
+   * @param uris - the uris to check if they are in a droppable state.
+   * @returns the evaluation promise
+   */
+  async validateIsDroppableState(uris: string[]): Promise<IsDroppableEvaluationResult | undefined> {
     return this.evaluate(
-      (plugin: MockInputExamplePlugin, contentIds): boolean => plugin.prefillCaches(contentIds),
-      contentIds
+      (plugin: MockInputExamplePlugin, contentIds): IsDroppableEvaluationResult | undefined =>
+        plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
+      uris
+    );
+  }
+
+  async validateIsDroppableInLinkBalloon(uris: string[]): Promise<IsLinkableEvaluationResult | undefined> {
+    return this.evaluate(
+      (plugin: MockInputExamplePlugin, contentIds): IsLinkableEvaluationResult | undefined =>
+        plugin.ensureIsDroppableInLinkBalloon(contentIds),
+      uris
     );
   }
 
@@ -26,8 +43,9 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
    * Provides access to EditorUI via Editor.
    *
    * @param wrapper - editor wrapper
+   * @returns the MockInputExamplePluginWrapper
    */
-  static fromClassicEditor(wrapper: ClassicEditorWrapper) {
+  static fromClassicEditor(wrapper: ClassicEditorWrapper): MockInputExamplePluginWrapper {
     return new MockInputExamplePluginWrapper(
       wrapper.evaluateHandle((editor, pluginName) => {
         if (!editor.plugins.has(pluginName)) {

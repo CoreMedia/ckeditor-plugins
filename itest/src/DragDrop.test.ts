@@ -9,6 +9,10 @@ import {
   PNG_GREEN_240x135,
   PNG_RED_240x135,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
+import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { MockExternalContent } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockExternalContentPlugin";
+import WindowBrowserAccessor from "./browser/WindowBrowserAccessor";
+import { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 const oneLink: MockContentConfig[] = [
   {
@@ -45,6 +49,88 @@ const multipleLinks: MockContentConfig[] = [
   {
     id: 10012,
     name: "Document 10012",
+  },
+];
+
+const externalLink: MockExternalContent[] = [
+  {
+    id: 22000,
+    contentAfterImport: {
+      id: 22000,
+      name: "Document 22000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+];
+
+const alreadyImportedExternalLink: MockExternalContent[] = [
+  {
+    id: 23000,
+    contentAfterImport: {
+      id: 23000,
+      name: "Existing Document 23000",
+      type: "linkable",
+    },
+    isAlreadyImported: true,
+    errorWhileImporting: false,
+  },
+];
+
+const multipleExternalLinks: MockExternalContent[] = [
+  {
+    id: 24000,
+    contentAfterImport: {
+      id: 24000,
+      name: "Document 24000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+  {
+    id: 25000,
+    contentAfterImport: {
+      id: 25000,
+      name: "Document 25000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+  {
+    id: 26000,
+    contentAfterImport: {
+      id: 26000,
+      name: "Document 26000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+];
+
+const multipleMixedExternalLinks: MockExternalContent[] = [
+  {
+    id: 27000,
+    contentAfterImport: {
+      id: 27000,
+      name: "Document 27000",
+      type: "linkable",
+    },
+    isAlreadyImported: false,
+    errorWhileImporting: false,
+  },
+  {
+    id: 28000,
+    contentAfterImport: {
+      id: 28000,
+      name: "Document 28000",
+      type: "linkable",
+    },
+    isAlreadyImported: true,
+    errorWhileImporting: false,
   },
 ];
 
@@ -143,14 +229,15 @@ describe("Drag and Drop", () => {
       ${"multiple-links-slow"} | ${multipleLinksIncludingSlow}
       ${"multiple-links"}      | ${multipleLinks}
     `(
-      "[$#]: Should drag and drop $contentMocks.length non embeddable contents as links.",
+      "[$#]: Should drag ($dragElementClass) and drop $contentMocks.length non embeddable contents as links.",
       async ({ dragElementClass, contentMocks }) => {
         await setupScenario(dragElementClass, contentMocks);
 
         //execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
+        const uris = contentMocks.map((contentMock: MockContentConfig) => `content/${contentMock.id}`);
+        await dragAndDrop(uris, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -166,6 +253,92 @@ describe("Drag and Drop", () => {
     );
   });
 
+  describe("ExternalLinks", () => {
+    it.each`
+      dragElementClass                                       | contentMocks
+      ${"external-link"}                                     | ${externalLink}
+      ${"already-imported-external-link"}                    | ${alreadyImportedExternalLink}
+      ${"multiple-external-links"}                           | ${multipleExternalLinks}
+      ${"multiple-imported-and-not-imported-external-links"} | ${multipleMixedExternalLinks}
+    `(
+      "[$#]: Should drag ($dragElementClass) and drop $contentMocks.length non embeddable contents as links.",
+      async ({ dragElementClass, contentMocks }) => {
+        await setupExternalScenario(dragElementClass, contentMocks);
+
+        //execute drag and drop
+        const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
+        const dropTargetSelector = ".ck-content.ck-editor__editable";
+
+        const uris = contentMocks.map((contentMock: MockExternalContent) => `externalUri/${contentMock.id}`);
+
+        await dragAndDrop(uris, dragElementSelector, dropTargetSelector);
+
+        // Validate Editing Downcast
+        const { ui } = application.editor;
+        const editableHandle = await ui.getEditableElement();
+        await waitForExpect(async () => {
+          const linkElements = await editableHandle.$$("a");
+          await expect(linkElements).toHaveLength(contentMocks.length);
+          for (let i = 0; i < linkElements.length; i++) {
+            await expect(linkElements[i]).toHaveText(contentMocks[i].contentAfterImport.name);
+          }
+        });
+      }
+    );
+  });
+
+  describe("ExternalLinkIntoLinkBalloon", () => {
+    it("Should render dropped content-link with name in link balloon", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const { view } = ui;
+
+      const dragElementClass = "external-content";
+      const contentMock = externalLink[0];
+
+      // open link balloon
+      const editableElement = await ui.getEditableElement();
+      await editableElement.click();
+      await openLinkBalloonShortcut();
+      const { linkFormView } = view.body.balloonPanel;
+      await setupExternalScenario(dragElementClass, [contentMock]);
+
+      const inputFieldLocator = linkFormView.urlInputField;
+      await inputFieldLocator.waitFor({ state: "visible" });
+      //execute drag and drop
+      const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
+
+      const uri = `externalUri/${contentMock.id}`;
+      await page.waitForSelector(dragElementSelector);
+      const dragElement = page.locator(dragElementSelector);
+      await ensureDropInLinkBalloonAllowed([uri]);
+      await dragElement.dragTo(inputFieldLocator);
+
+      await linkFormView.save();
+
+      // Validate Editing Downcast
+      await waitForExpect(async () => {
+        const name = contentMock.contentAfterImport?.name as string;
+        expect(name).toBeDefined();
+        if (!name) {
+          return;
+        }
+        const linkElements = await editableElement.$$("a");
+        await expect(linkElements).toHaveLength(1);
+        await expect(linkElements[0]).toHaveText(name);
+      });
+    });
+  });
+
+  const openLinkBalloonShortcut = async () => {
+    const userAgent = await WindowBrowserAccessor.getUserAgent();
+    if (userAgent.includes("Mac")) {
+      await page.keyboard.press("Meta+K");
+    } else {
+      await page.keyboard.press("Control+K");
+    }
+  };
+
   describe("Images", () => {
     it.each`
       dragElementClass          | contentMocks
@@ -180,7 +353,8 @@ describe("Drag and Drop", () => {
         //execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const dropTargetSelector = ".ck-content.ck-editor__editable";
-        await dragAndDrop(contentMocks, dragElementSelector, dropTargetSelector);
+        const uris = contentMocks.map((contentMock: MockContentConfig) => `content/${contentMock.id}`);
+        await dragAndDrop(uris, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const { ui } = application.editor;
@@ -221,17 +395,39 @@ describe("Drag and Drop", () => {
     await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
   }
 
-  async function dragAndDrop(
-    contentMocks: MockContentConfig[],
-    dragElementSelector: string,
-    dropTargetSelector: string
+  async function setupExternalScenario(
+    dragElementClass: string,
+    externalContentMocks: MockExternalContent[]
   ): Promise<void> {
+    for (const externalContentMock of externalContentMocks) {
+      await application.mockExternalContent.addContents(externalContentMock);
+      if (externalContentMock.isAlreadyImported) {
+        if (!externalContentMock.contentAfterImport) {
+          break;
+        }
+        await application.mockContent.addContents(externalContentMock.contentAfterImport);
+      }
+    }
+
+    const dragIds = externalContentMocks.map((content) => ({
+      externalId: content.id,
+    }));
+    const droppableElement: InputExampleElement = {
+      label: "Drag And Drop Test",
+      tooltip: "test-element",
+      items: dragIds,
+      classes: ["input-content", dragElementClass],
+    };
+    await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
+  }
+
+  async function dragAndDrop(uris: string[], dragElementSelector: string, dropTargetSelector: string): Promise<void> {
     await page.waitForSelector(dragElementSelector);
     await page.waitForSelector(dropTargetSelector);
     const dragElement = page.locator(dragElementSelector);
     const dropTarget = page.locator(dropTargetSelector);
 
-    await ensureDropAllowed(contentMocks.map((contentMock) => contentMock.id));
+    await ensureDropAllowed(uris);
     await dragElement.dragTo(dropTarget);
   }
 
@@ -241,14 +437,38 @@ describe("Drag and Drop", () => {
    * This contains some implementation knowledge. The "dragover" calculates if the drop is allowed or not.
    * While the "dragover" is a synchronous event the data retrieval for the calculation is asynchronous.
    * "dragover" will be executed many times while hovering over the CKEditor and on entering the CKEditor the asynchronous
-   * fetch is triggered. The result will be written to a cache. The next "dragover" will be calculated using those data.
+   * fetch is triggered. The result will be stored. The next "dragover" will be calculated using those data.
    *
-   * @param contentIds -
+   * While the asynchronous call is in evaluation, "PENDING" will be returned, otherwise the result.
+   * In this case we wait until the asynchronous call finished evaluating and the result is droppable.
+   *
+   * @param uris - the uris of the dragElement.
    */
-  async function ensureDropAllowed(contentIds: number[]): Promise<void> {
+  async function ensureDropAllowed(uris: string[]): Promise<void> {
+    console.log("Waiting for contents to be available in caches and services", uris);
+
     await waitForExpect(async () => {
-      const actual = await application.mockInputExamplePlugin.prefillCaches(contentIds);
-      expect(actual).toBeTruthy();
+      const actual: IsDroppableEvaluationResult | undefined =
+        await application.mockInputExamplePlugin.validateIsDroppableState(uris);
+      expect(actual).toBeDefined();
+      expect(actual).not.toEqual("PENDING");
+      if (actual && actual !== "PENDING") {
+        expect(actual.isDroppable).toBeTruthy();
+      }
+    });
+  }
+
+  async function ensureDropInLinkBalloonAllowed(uris: string[]): Promise<void> {
+    console.log("Waiting for contents to be available in caches and services", uris);
+
+    await waitForExpect(async () => {
+      const actual: IsLinkableEvaluationResult | undefined =
+        await application.mockInputExamplePlugin.validateIsDroppableInLinkBalloon(uris);
+      expect(actual).toBeDefined();
+      expect(actual).not.toEqual("PENDING");
+      if (actual && actual !== "PENDING") {
+        expect(actual.isLinkable).toBeTruthy();
+      }
     });
   }
 });

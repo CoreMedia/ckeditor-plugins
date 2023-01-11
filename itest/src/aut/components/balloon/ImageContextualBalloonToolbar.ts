@@ -31,7 +31,7 @@ export default class ImageContextualBalloonToolbar {
   }
 
   getOpenInTabButton(): ButtonViewWrapper {
-    return this.#getButtonViewWrapper(7);
+    return this.#getButtonViewWrapper(8);
   }
 
   #getButtonViewWrapper(buttonIndex: number): ButtonViewWrapper {

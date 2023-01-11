@@ -90,7 +90,8 @@ const imagePlugins = [
   ImageBlockEditing,
   ImageStyle,
   ImageToolbar,
-  ImageTextAlternative];
+  ImageTextAlternative,
+];
 
 const sourceElement = document.querySelector("#editor") as HTMLElement;
 if (!sourceElement) {

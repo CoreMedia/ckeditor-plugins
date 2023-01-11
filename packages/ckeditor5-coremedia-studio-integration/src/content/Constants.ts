@@ -16,4 +16,4 @@ export const ROOT_NAME = "<root>";
  * Data-Type used in instances of `DataTransfer` objects to denote a list of
  * contained URI-Paths.
  */
-export const URI_LIST_DATA = "cm/uri-list";
+export const URI_LIST_DATA = "cm-studio-rest/uri-list";

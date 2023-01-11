@@ -95,7 +95,7 @@ const handleExpandedRange = (model: Model, range: ModelRange): ModelRange => {
  * Creates a ContentInputData object.
  *
  * @param insertionContext - insertionContext
- * @param contentUri - the content-URI of the input item
+ * @param uri - the uri of the input item
  * @param isInline - determines whether the item will be displayed inline or
  * as new paragraph
  * @param itemIndex - the position of the item inside the insertion
@@ -103,13 +103,13 @@ const handleExpandedRange = (model: Model, range: ModelRange): ModelRange => {
  */
 const createContentInputData = (
   insertionContext: InsertionContext,
-  contentUri: string,
+  uri: string,
   isInline: boolean,
   itemIndex: number
 ): ContentInputData => ({
   insertionContext,
   itemContext: {
-    contentUri,
+    uri,
     itemIndex,
     isInline,
   },

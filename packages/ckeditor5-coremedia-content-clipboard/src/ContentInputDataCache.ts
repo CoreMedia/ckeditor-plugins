@@ -49,7 +49,7 @@ export interface ContentInputData {
 }
 
 export interface ItemContext {
-  contentUri: string;
+  uri: string;
   isInline: boolean;
   itemIndex: number;
 }
