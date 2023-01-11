@@ -16,11 +16,15 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { getEvaluationResult, isLinkable, IsLinkableEvaluationResult } from "./IsLinkableDragAndDrop";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
 import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
+import {
+  getEvaluationResult,
+  isLinkable,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 /**
  * Extends the form view for Content link display. This includes:

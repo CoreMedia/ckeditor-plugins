@@ -10,6 +10,10 @@ import {
   isDroppableUris,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
+import {
+  IsLinkableEvaluationResult,
+  isLinkableUris,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -97,6 +101,10 @@ class MockInputExamplePlugin extends Plugin {
    */
   ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableEvaluationResult | undefined {
     return isDroppableUris(uris);
+  }
+
+  ensureIsDroppableInLinkBalloon(uris: string[]): IsLinkableEvaluationResult | undefined {
+    return isLinkableUris(uris);
   }
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {

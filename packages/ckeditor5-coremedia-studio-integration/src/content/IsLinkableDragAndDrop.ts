@@ -1,8 +1,8 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
-import { receiveDraggedItemsFromService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
+import { receiveDraggedItemsFromService } from "./studioservices/DragDropServiceWrapper";
+import RichtextConfigurationService from "./RichtextConfigurationService";
+import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 
 export type IsLinkableEvaluationResult = { uris: string[] | undefined; isLinkable: boolean } | "PENDING";
 
@@ -36,6 +36,25 @@ export const getEvaluationResult = (uris: string[]): IsLinkableEvaluationResult 
  *
  * @returns the evaluation result or undefined
  */
+export const isLinkableUris = (uris: string[]): IsLinkableEvaluationResult | undefined => {
+  const urisKey = JSON.stringify(uris);
+
+  if (pendingEvaluation?.key === urisKey) {
+    return pendingEvaluation.value;
+  }
+
+  pendingEvaluation = { key: urisKey, value: "PENDING" };
+  evaluateIsLinkable(uris)
+    .then((isDroppable) => {
+      pendingEvaluation = { key: urisKey, value: isDroppable };
+    })
+    .catch((reason: string) => {
+      logger.warn("An error occurred while evaluating the droppable state", uris, reason);
+      pendingEvaluation = undefined;
+    });
+  return pendingEvaluation.value;
+};
+
 export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
   const dragData: string[] | undefined = receiveDraggedItemsFromService();
   if (!dragData) {
@@ -43,22 +62,7 @@ export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
     return undefined;
   }
 
-  const urisKey = JSON.stringify(dragData);
-
-  if (pendingEvaluation?.key === urisKey) {
-    return pendingEvaluation.value;
-  }
-
-  pendingEvaluation = { key: urisKey, value: "PENDING" };
-  evaluateIsLinkable(dragData)
-    .then((isDroppable) => {
-      pendingEvaluation = { key: urisKey, value: isDroppable };
-    })
-    .catch((reason: string) => {
-      logger.warn("An error occurred while evaluating the droppable state", dragData, reason);
-      pendingEvaluation = undefined;
-    });
-  return pendingEvaluation.value;
+  return isLinkableUris(dragData);
 };
 
 const evaluateIsLinkable = async (uris: string[]): Promise<IsLinkableEvaluationResult> => {

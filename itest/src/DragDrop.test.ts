@@ -9,9 +9,10 @@ import {
   PNG_GREEN_240x135,
   PNG_RED_240x135,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
-import { Locator } from "playwright";
 import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 import { MockExternalContent } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockExternalContentPlugin";
+import WindowBrowserAccessor from "./browser/WindowBrowserAccessor";
+import { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 const oneLink: MockContentConfig[] = [
   {
@@ -286,6 +287,58 @@ describe("Drag and Drop", () => {
     );
   });
 
+  describe("ExternalLinkIntoLinkBalloon", () => {
+    it("Should render dropped content-link with name in link balloon", async () => {
+      const { editor } = application;
+      const { ui } = editor;
+      const { view } = ui;
+
+      const dragElementClass = "external-content";
+      const contentMock = externalLink[0];
+
+      // open link balloon
+      const editableElement = await ui.getEditableElement();
+      await editableElement.click();
+      await openLinkBalloonShortcut();
+      const { linkFormView } = view.body.balloonPanel;
+      await setupExternalScenario(dragElementClass, [contentMock]);
+
+      const inputFieldLocator = linkFormView.urlInputField;
+      await inputFieldLocator.waitFor({ state: "visible" });
+      //execute drag and drop
+      const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
+
+      const uri = `externalUri/${contentMock.id}`;
+      await page.waitForSelector(dragElementSelector);
+      const dragElement = page.locator(dragElementSelector);
+      await ensureDropInLinkBalloonAllowed([uri]);
+      await dragElement.dragTo(inputFieldLocator);
+
+      await linkFormView.save();
+
+      // Validate Editing Downcast
+      await waitForExpect(async () => {
+        const name = contentMock.contentAfterImport?.name as string;
+        expect(name).toBeDefined();
+        if (!name) {
+          return;
+        }
+        const linkElements = await editableElement.$$("a");
+        await expect(linkElements).toHaveLength(1);
+        await expect(linkElements[0]).toHaveText(name);
+      });
+    });
+  });
+
+  const openLinkBalloonShortcut = async () => {
+    const userAgent = await WindowBrowserAccessor.getUserAgent();
+    if (userAgent.includes("Mac")) {
+      await page.keyboard.press("Meta+K");
+    } else {
+      await page.keyboard.press("Control+K");
+    }
+  };
+
   describe("Images", () => {
     it.each`
       dragElementClass          | contentMocks
@@ -374,7 +427,7 @@ describe("Drag and Drop", () => {
     const dragElement = page.locator(dragElementSelector);
     const dropTarget = page.locator(dropTargetSelector);
 
-    await ensureDropAllowed(dragElement, dropTarget, uris);
+    await ensureDropAllowed(uris);
     await dragElement.dragTo(dropTarget);
   }
 
@@ -389,21 +442,9 @@ describe("Drag and Drop", () => {
    * While the asynchronous call is in evaluation, "PENDING" will be returned, otherwise the result.
    * In this case we wait until the asynchronous call finished evaluating and the result is droppable.
    *
-   * @param dragElement - the element to drag
-   * @param dropTarget - the target to drop the dragElement to.
    * @param uris - the uris of the dragElement.
    */
-  async function ensureDropAllowed(dragElement: Locator, dropTarget: Locator, uris: string[]): Promise<void> {
-    const dragElementBoundingBox = await dragElement.boundingBox();
-    if (!dragElementBoundingBox) {
-      return Promise.reject(`Element to drag not found for selector ${JSON.stringify(dragElement)}`);
-    }
-
-    //Initiate the first call by hovering the drop target with the dragged element.
-    await page.mouse.move(dragElementBoundingBox.x, dragElementBoundingBox.y);
-    await page.mouse.down();
-    await dropTarget.hover();
-
+  async function ensureDropAllowed(uris: string[]): Promise<void> {
     console.log("Waiting for contents to be available in caches and services", uris);
 
     await waitForExpect(async () => {
@@ -413,6 +454,20 @@ describe("Drag and Drop", () => {
       expect(actual).not.toEqual("PENDING");
       if (actual && actual !== "PENDING") {
         expect(actual.isDroppable).toBeTruthy();
+      }
+    });
+  }
+
+  async function ensureDropInLinkBalloonAllowed(uris: string[]): Promise<void> {
+    console.log("Waiting for contents to be available in caches and services", uris);
+
+    await waitForExpect(async () => {
+      const actual: IsLinkableEvaluationResult | undefined =
+        await application.mockInputExamplePlugin.validateIsDroppableInLinkBalloon(uris);
+      expect(actual).toBeDefined();
+      expect(actual).not.toEqual("PENDING");
+      if (actual && actual !== "PENDING") {
+        expect(actual.isLinkable).toBeTruthy();
       }
     });
   }

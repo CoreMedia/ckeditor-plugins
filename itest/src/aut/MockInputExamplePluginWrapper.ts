@@ -4,6 +4,7 @@ import MockInputExamplePlugin, {
   InputExampleElement,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 /**
  * Provides access to the `MockInputExamplePlugin`.
@@ -26,6 +27,14 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
     return this.evaluate(
       (plugin: MockInputExamplePlugin, contentIds): IsDroppableEvaluationResult | undefined =>
         plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
+      uris
+    );
+  }
+
+  async validateIsDroppableInLinkBalloon(uris: string[]): Promise<IsLinkableEvaluationResult | undefined> {
+    return this.evaluate(
+      (plugin: MockInputExamplePlugin, contentIds): IsLinkableEvaluationResult | undefined =>
+        plugin.ensureIsDroppableInLinkBalloon(contentIds),
       uris
     );
   }
