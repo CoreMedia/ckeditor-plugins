@@ -22,12 +22,12 @@ import {
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 import { insertContentMarkers } from "./ContentMarkers";
-import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import {
   getEvaluationResult,
   isDroppable,
   IsDroppableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -185,12 +185,17 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   #clipboardInputHandler = (evt: EventInfo, data: ClipboardInputEvent): void => {
-    const contentBeanReferences: string | undefined = data.dataTransfer?.getData(URI_LIST_DATA);
-    if (!contentBeanReferences) {
+    const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
+    if (!dataTransfer) {
       return;
     }
 
-    const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(contentBeanReferences);
+    const uris: string[] | undefined = receiveDraggedItemsFromDataTransfer(dataTransfer);
+    if (!uris) {
+      return;
+    }
+
+    const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(uris);
     // Return if this is no CoreMedia content drop.
     if (!isDroppableResult) {
       return;
@@ -218,12 +223,17 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   #inputTransformation = (evt: EventInfo, data: InputTransformationEventData): void => {
-    const contentBeanReferences: string | undefined = data.dataTransfer?.getData(URI_LIST_DATA);
-    if (!contentBeanReferences) {
+    const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
+    if (!dataTransfer) {
       return;
     }
 
-    const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(contentBeanReferences);
+    const uris: string[] | undefined = receiveDraggedItemsFromDataTransfer(dataTransfer);
+    if (!uris) {
+      return;
+    }
+
+    const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(uris);
     if (!isDroppableResult || isDroppableResult === "PENDING") {
       return;
     }
@@ -233,7 +243,7 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    const cmDataUris = isDroppableResult.uris;
+    const droppableUris = isDroppableResult.uris;
 
     const { editor } = this;
 
@@ -263,7 +273,7 @@ export default class ContentClipboard extends Plugin {
 
     const { model } = editor;
 
-    insertContentMarkers(editor, targetRange, cmDataUris);
+    insertContentMarkers(editor, targetRange, droppableUris);
     // Fire content insertion event in a single change block to allow other
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).

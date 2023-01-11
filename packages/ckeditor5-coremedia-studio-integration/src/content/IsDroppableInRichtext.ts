@@ -1,9 +1,8 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { BeanReferenceToUriService, createBeanReferenceToUriServiceDescriptor } from "./BeanReferenceToUriService";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
-import { receiveDraggedItems } from "./studioservices/DragDropServiceWrapper";
+import { receiveDraggedItemsFromService } from "./studioservices/DragDropServiceWrapper";
 
 export type IsDroppableEvaluationResult = { uris: string[] | undefined; isDroppable: boolean } | "PENDING";
 
@@ -13,11 +12,11 @@ let pendingEvaluation: { key: string; value: IsDroppableEvaluationResult } | und
 /**
  * Returns the evaluation result for isDroppable calls.
  *
- * @param beanReferences - the beanReferences to look up the evaluation result for.
+ * @param uris - the uris to look up the evaluation result for.
  * @returns the evaluation result or undefined
  */
-export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
-  if (pendingEvaluation?.key === beanReferences) {
+export const getEvaluationResult = (uris: string[]): IsDroppableEvaluationResult | undefined => {
+  if (pendingEvaluation?.key === JSON.stringify(uris)) {
     return pendingEvaluation.value;
   }
   return undefined;
@@ -38,17 +37,17 @@ export const getEvaluationResult = (beanReferences: string): IsDroppableEvaluati
  * @returns the evaluation result or undefined
  */
 export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
-  const dragData: string | undefined = receiveDraggedItems();
-  if (!dragData) {
-    logger.debug("No drag data available, nothing to drop.");
+  const uris: string[] | undefined = receiveDraggedItemsFromService();
+  if (!uris) {
+    logger.debug("No uris available, nothing to drop.");
     logger.debug("Current evaluation state", pendingEvaluation);
     return undefined;
   }
-  return isDroppableBeanReferences(dragData);
+  return isDroppableUris(uris);
 };
 
 /**
- * Triggers an asynchronous evaluation if the given bean references are droppable
+ * Triggers an asynchronous evaluation if the given uris are droppable
  * in rich text.
  *
  * While the evaluation requires asynchronous service calls, this method is
@@ -61,33 +60,31 @@ export const isDroppable = (): IsDroppableEvaluationResult | undefined => {
  *
  * @returns the evaluation result or undefined
  */
-export const isDroppableBeanReferences = (beanReferences: string): IsDroppableEvaluationResult | undefined => {
-  if (pendingEvaluation?.key === beanReferences) {
-    logger.debug("Current evaluation state", beanReferences, pendingEvaluation.value);
+export const isDroppableUris = (uris: string[]): IsDroppableEvaluationResult | undefined => {
+  const urisKey = JSON.stringify(uris);
+
+  if (pendingEvaluation?.key === urisKey) {
+    logger.debug("Current evaluation state", uris, pendingEvaluation.value);
     return pendingEvaluation.value;
   }
 
-  logger.debug("Starting evaluation of IsDroppableInRichText for dragged contents", beanReferences);
+  logger.debug("Starting evaluation of IsDroppableInRichText for dragged contents", uris);
 
-  pendingEvaluation = { key: beanReferences, value: "PENDING" };
+  pendingEvaluation = { key: urisKey, value: "PENDING" };
 
-  evaluateIsDroppable(beanReferences)
+  evaluateIsDroppable(uris)
     .then((isDroppable) => {
-      pendingEvaluation = { key: beanReferences, value: isDroppable };
+      pendingEvaluation = { key: urisKey, value: isDroppable };
     })
     .catch((reason) => {
-      logger.warn("An error occurred while evaluating the droppable state", beanReferences, reason);
+      logger.warn("An error occurred while evaluating the droppable state", uris, reason);
       pendingEvaluation = undefined;
     });
   logger.debug("Current evaluation result for contents", pendingEvaluation.value);
   return pendingEvaluation.value;
 };
 
-const evaluateIsDroppable = async (beanReferences: string): Promise<IsDroppableEvaluationResult> => {
-  const beanReferenceToUriService: BeanReferenceToUriService =
-    await serviceAgent.fetchService<BeanReferenceToUriService>(createBeanReferenceToUriServiceDescriptor());
-
-  const uris: string[] = await beanReferenceToUriService.resolveUris(beanReferences);
+const evaluateIsDroppable = async (uris: string[]): Promise<IsDroppableEvaluationResult> => {
   if (uris.length === 0) {
     return { uris, isDroppable: false };
   }

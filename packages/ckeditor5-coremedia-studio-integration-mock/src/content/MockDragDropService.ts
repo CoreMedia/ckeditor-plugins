@@ -13,7 +13,7 @@ class MockDragDropService implements DragDropService {
 
   dragData!: string;
   dragGroups!: string;
-  dataTransfer!: DataTransfer | null;
+  dataTransferItems: string | undefined;
 }
 
 export default MockDragDropService;

@@ -17,10 +17,10 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 import { hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { getEvaluationResult, isLinkable, IsLinkableEvaluationResult } from "./IsLinkableDragAndDrop";
-import { URI_LIST_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
 import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
+import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -165,10 +165,12 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
+    if (!dragEvent.dataTransfer) {
+      return;
+    }
+    const uris = receiveDraggedItemsFromDataTransfer(dragEvent.dataTransfer);
 
-    const contentBeanReferences: string | undefined = dragEvent.dataTransfer?.getData(URI_LIST_DATA);
-
-    if (!contentBeanReferences) {
+    if (!uris) {
       const data: string | undefined = dragEvent.dataTransfer?.getData("text/plain");
       if (data) {
         dragEvent.preventDefault();
@@ -180,7 +182,7 @@ class ContentLinkFormViewExtension extends Plugin {
     dragEvent.preventDefault();
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
 
-    const linkable = getEvaluationResult(contentBeanReferences);
+    const linkable = getEvaluationResult(uris);
     if (!linkable || linkable === "PENDING") {
       return;
     }

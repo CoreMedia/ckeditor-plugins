@@ -1,42 +1,32 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import DragDropService, { CMBeanReference, CMDragData } from "./DragDropService";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import DragDropService from "./DragDropService";
 
-const logger = LoggerProvider.getLogger("DragDropServiceWrapper");
-
-export const receiveDraggedItems = (): string | undefined => {
+export const receiveDraggedItemsFromService = (): string[] | undefined => {
   const dragDropService = serviceAgent.getService<DragDropService>("dragDropService");
   if (!dragDropService) {
     return undefined;
   }
-  const dragData = dragDropService.dragData;
-  return unifyDragDropInput(dragData);
+  const dataTransferItemsJson = dragDropService.dataTransferItems;
+  if (!dataTransferItemsJson) {
+    return undefined;
+  }
+  const dataTransferItems = JSON.parse(dataTransferItemsJson) as Record<string, string>;
+  return extractUris(dataTransferItems);
 };
 
-const unifyDragDropInput = (dragDropServiceDataInput: string): string | undefined => {
-  const dragData: CMDragData | undefined = parseDragDataJson(dragDropServiceDataInput);
-  if (!dragData) {
+export const receiveDraggedItemsFromDataTransfer = (dataTransfer: DataTransfer): string[] | undefined => {
+  const urisJson = dataTransfer.getData("cm-studio-rest/uri-list");
+  if (!urisJson) {
     return undefined;
   }
 
-  const contents: CMBeanReference[] = dragData.contents;
-  return JSON.stringify(contents);
+  return JSON.parse(urisJson) as string[];
 };
 
-/**
- * Parse drag-data from drag drop service.
- *
- * @param dataAsJson - data to parse
- * @returns parsed drag-data; `undefined` if drag-data could not be parsed.
- */
-const parseDragDataJson = (dataAsJson: string | null | undefined): CMDragData | undefined => {
-  if (!dataAsJson) {
+const extractUris = (dataTransferItems: Record<string, string>): string[] | undefined => {
+  const dataTransferItem = dataTransferItems["cm-studio-rest/uri-list"];
+  if (!dataTransferItem) {
     return undefined;
   }
-  try {
-    return JSON.parse(dataAsJson) as CMDragData;
-  } catch (e: unknown) {
-    logger.debug("Failed parsing data from drag-drop service.", dataAsJson, e);
-    return undefined;
-  }
+  return JSON.parse(dataTransferItem) as string[];
 };

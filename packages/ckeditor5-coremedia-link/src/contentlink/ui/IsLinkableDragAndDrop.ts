@@ -1,12 +1,8 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import {
-  BeanReferenceToUriService,
-  createBeanReferenceToUriServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReferenceToUriService";
 import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
-import { receiveDraggedItems } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
+import { receiveDraggedItemsFromService } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
 
 export type IsLinkableEvaluationResult = { uris: string[] | undefined; isLinkable: boolean } | "PENDING";
 
@@ -16,11 +12,11 @@ let pendingEvaluation: { key: string; value: IsLinkableEvaluationResult } | unde
 /**
  * Returns the evaluation result for isLinkable calls.
  *
- * @param beanReferences - the beanReferences to look up the evaluation result for.
+ * @param uris - the uris to look up the evaluation result for.
  * @returns the evaluation result or undefined
  */
-export const getEvaluationResult = (beanReferences: string): IsLinkableEvaluationResult | undefined => {
-  if (pendingEvaluation?.key === beanReferences) {
+export const getEvaluationResult = (uris: string[]): IsLinkableEvaluationResult | undefined => {
+  if (pendingEvaluation?.key === JSON.stringify(uris)) {
     return pendingEvaluation.value;
   }
   return undefined;
@@ -41,20 +37,22 @@ export const getEvaluationResult = (beanReferences: string): IsLinkableEvaluatio
  * @returns the evaluation result or undefined
  */
 export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
-  const dragData: string | undefined = receiveDraggedItems();
+  const dragData: string[] | undefined = receiveDraggedItemsFromService();
   if (!dragData) {
     logger.info("No drag data available, nothing to drop. Enable debug logging if you are facing any problems.");
     return undefined;
   }
 
-  if (pendingEvaluation?.key === dragData) {
+  const urisKey = JSON.stringify(dragData);
+
+  if (pendingEvaluation?.key === urisKey) {
     return pendingEvaluation.value;
   }
 
-  pendingEvaluation = { key: dragData, value: "PENDING" };
+  pendingEvaluation = { key: urisKey, value: "PENDING" };
   evaluateIsLinkable(dragData)
     .then((isDroppable) => {
-      pendingEvaluation = { key: dragData, value: isDroppable };
+      pendingEvaluation = { key: urisKey, value: isDroppable };
     })
     .catch((reason: string) => {
       logger.warn("An error occurred while evaluating the droppable state", dragData, reason);
@@ -63,11 +61,7 @@ export const isLinkable = (): IsLinkableEvaluationResult | undefined => {
   return pendingEvaluation.value;
 };
 
-const evaluateIsLinkable = async (beanReferences: string): Promise<IsLinkableEvaluationResult> => {
-  const beanReferenceToUriService: BeanReferenceToUriService =
-    await serviceAgent.fetchService<BeanReferenceToUriService>(createBeanReferenceToUriServiceDescriptor());
-
-  const uris: string[] = await beanReferenceToUriService.resolveUris(beanReferences);
+const evaluateIsLinkable = async (uris: string[]): Promise<IsLinkableEvaluationResult> => {
   if (uris.length === 0) {
     return Promise.resolve({ uris, isLinkable: false });
   }

@@ -2,14 +2,14 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import {
-  isDroppableBeanReferences,
   IsDroppableEvaluationResult,
+  isDroppableUris,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -96,8 +96,7 @@ class MockInputExamplePlugin extends Plugin {
    * @param uris - the uris to fill the cache for.
    */
   ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableEvaluationResult | undefined {
-    const beanReferences = MockInputExamplePlugin.#contentList(...uris);
-    return isDroppableBeanReferences(JSON.stringify(beanReferences));
+    return isDroppableUris(uris);
   }
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {
@@ -129,13 +128,14 @@ class MockInputExamplePlugin extends Plugin {
     const contentId = dragEventTarget.getAttribute("data-uripath");
     if (contentId) {
       const idsArray = contentId.split(",");
+      const urisAsJson = JSON.stringify(idsArray);
+      const dataTransferItems: Record<string, string> = {};
+      dataTransferItems["cm-studio-rest/uri-list"] = urisAsJson;
       const dragDropService = new MockDragDropService();
-      dragDropService.dragData = JSON.stringify(MockInputExamplePlugin.#contentDragData(...idsArray));
+      dragDropService.dataTransferItems = JSON.stringify(dataTransferItems);
       serviceAgent.registerService(dragDropService);
-      const dragDropData = JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray));
-      dragEvent.dataTransfer?.setData("cm/uri-list", dragDropData);
-      dragEvent.dataTransfer?.setData("text", dragDropData);
-      MockInputExamplePlugin.#logger.debug("Successfully put data on dragdrop service", dragDropData);
+      dragEvent.dataTransfer?.setData("cm-studio-rest/uri-list", urisAsJson);
+      MockInputExamplePlugin.#logger.debug("Successfully put data on dragdrop service", urisAsJson);
       return;
     }
     const text = dragEventTarget.childNodes[0].textContent;
@@ -155,12 +155,6 @@ class MockInputExamplePlugin extends Plugin {
     return ids.map((id) => ({
       $Ref: id,
     }));
-  }
-
-  static #contentDragData(...ids: string[]): { contents: { $Ref: string }[] } {
-    return {
-      contents: MockInputExamplePlugin.#contentList(...ids),
-    };
   }
 
   static #generateUriPath(item: number | ExternalContent): string {

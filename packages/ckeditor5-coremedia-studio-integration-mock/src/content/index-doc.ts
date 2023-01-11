@@ -11,7 +11,6 @@ export * from "./DisplayHints";
 
 export * from "./MigrateTo";
 export { default as MigrateTo } from "./MigrateTo";
-export * from "./MockBeanReferenceToUriService";
 
 export { default as MockBlobDisplayService } from "./MockBlobDisplayService";
 

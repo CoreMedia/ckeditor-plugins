@@ -10,17 +10,7 @@ interface DragDropService {
 
   dragData: string;
 
-  dataTransfer: DataTransfer | null;
-}
-
-interface CMDragData {
-  contents: CMBeanReference[];
-  content: CMBeanReference[];
-}
-
-interface CMBeanReference {
-  $Ref: string;
+  dataTransferItems: string | undefined;
 }
 
 export default DragDropService;
-export { CMDragData, CMBeanReference };
