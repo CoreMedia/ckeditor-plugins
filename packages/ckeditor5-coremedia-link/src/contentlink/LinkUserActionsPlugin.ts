@@ -17,6 +17,19 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
 
+/**
+ * A Plugin to override default behavior for user action on links in CKEditor.
+ *
+ * CKEditor default for ctrl + click or alt + enter opens the underlying link
+ * in a new browser tab. For external links it is fine, but content links should
+ * be open in a new work area tab, because browsers do not know how to handle them.
+ *
+ * In read only mode links are clickable (but not selectable for keyboard events)
+ * and are opened in the same tab. For content links nothing happens as # is loaded
+ * as the same page but external links are opened and users lose the CMS context.
+ * Therefore, this plugin overrides the behavior and opens external links in a new
+ * browser tab instead of the same tab and content links in a new work area tab.
+ */
 export default class LinkUserActionsPlugin extends Plugin {
   static readonly pluginName: string = "LinkUserActionsPlugin";
   static readonly LOG: Logger = LoggerProvider.getLogger(LinkUserActionsPlugin.pluginName);
@@ -27,6 +40,13 @@ export default class LinkUserActionsPlugin extends Plugin {
     this.#preventOpenInNewTabForContentLinks();
   }
 
+  /**
+   * Overrides the link clicks in read only mode.
+   * External links will be opened in new browser tab, content links in new
+   * work area tab.
+   *
+   * @private
+   */
   #handleLinkClicksInReadOnly() {
     const editor = this.editor;
     const view = editor.editing.view;
@@ -49,14 +69,14 @@ export default class LinkUserActionsPlugin extends Plugin {
 
         evt.stop();
         data.preventDefault();
-        this.#onReadOnlyLinkActivated(editor, data.view, clickedElement);
+        this.#onReadOnlyLinkClicked(editor, data.view, clickedElement);
       },
       //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
       { priority: "high", context: "$capture" }
     );
   }
 
-  #onReadOnlyLinkActivated(editor: Editor, view: View, domElement: Element): void {
+  #onReadOnlyLinkClicked(editor: Editor, view: View, domElement: Element): void {
     const modelElement: TextProxy | undefined = this.#resolveAnchorModelElement(editor, view, domElement);
     if (!modelElement) {
       return;
@@ -69,6 +89,12 @@ export default class LinkUserActionsPlugin extends Plugin {
     }
   }
 
+  /**
+   * Prevents CKEditor from opening content links in new browser tab and instead
+   * opens the content links in the work area.
+   *
+   * @private
+   */
   #preventOpenInNewTabForContentLinks() {
     const editor = this.editor;
     const view = editor.editing.view;
