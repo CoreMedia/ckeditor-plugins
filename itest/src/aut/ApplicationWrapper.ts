@@ -125,6 +125,10 @@ export class ApplicationWrapper {
     return this.#console;
   }
 
+  async switchReadOnly(): Promise<void> {
+    return page.locator("#readOnlyMode").click();
+  }
+
   /**
    * Retrieve editor instance.
    */
