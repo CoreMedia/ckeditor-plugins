@@ -109,6 +109,8 @@ jobs:
         run: pnpm lint
       - name: Test
         run: pnpm jest
+      - name: Playwright Tests
+        run: pnpm playwright
       - name: TypeDoc
         run: |
           if [ -n "$(git status --porcelain)" ]; then
