@@ -55,7 +55,11 @@ export class HtmlDomConverter {
 
     let result: Node | Skip;
 
-    this.prepareForImport(originalNode, context);
+    // Context is irrelevant in this stage: The source node is the same
+    // as the one given here and the convenience API is bound to the target
+    // document and thus irrelevant for modifying the DOM of the original
+    // node.
+    this.prepareForImport(originalNode);
 
     result = this.imported(api.importNode(originalNode), context);
 
@@ -64,7 +68,7 @@ export class HtmlDomConverter {
     }
 
     if (isParentNode(originalNode)) {
-      this.#convertChildren(originalNode, result);
+      this.#convertChildren(originalNode, result, context);
       result = this.importedWithChildren(result, context);
 
       if (result === skip) {
@@ -77,14 +81,7 @@ export class HtmlDomConverter {
 
   /**
    * Prior to importing the original node, you may want to modify it. Note,
-   * that allowed modification is limited, though. Expected use-cases are:
-   *
-   * * Modify attributes prior to import.
-   * * Modify children prior to import.
-   *
-   * This method is especially useful for data view to data transformation,
-   * where the data view provides richer HTML API, such as `HTMLElement`
-   * providing access to `dataset`.
+   * that allowed modification is limited, though.
    *
    * There is no need when overriding to call the `super` method as it is
    * a no-operation method.
@@ -92,10 +89,9 @@ export class HtmlDomConverter {
    * This method must not detach the original node from DOM or relocate it.
    *
    * @param originalNode - original (mutable!) node
-   * @param context - current conversion context
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected prepareForImport(originalNode: Node, context: ConversionContext): void {
+  protected prepareForImport(originalNode: Node): void {
     // No operation by default.
   }
 
@@ -105,46 +101,6 @@ export class HtmlDomConverter {
    *
    * **Default Behavior:** No operation by default, thus, just returning the
    * `importedNode`. Overrides may safely skip call to `super`.
-   *
-   * **Implementation Notes:**
-   *
-   * * Just exchanging one node with another of a similar (high-level)
-   *   type is considered harmless. Thus, if an element becomes an
-   *   element, this is in general safe despite possible implications
-   *   towards a document valid by schema. Such invalid states may be
-   *   fixed in later processing, though.
-   *
-   * * In general, it is not recommended to exchange a `ParentNode` with
-   *   some node, that may not hold any children in this stage, as children
-   *   will not be handled at all. Better do so in later processing.
-   *
-   * * You may _expand_ a given node to a set of nodes by returning
-   *   a `DocumentFragment` instead. Note, though, that in this stage
-   *   subsequent child nodes will be appended to this `DocumentFragment`
-   *   which may be unexpected. In general such _expansion_ should be done
-   *   at a later stage.
-   *
-   * * To ignore this node, but still process the children, you may return
-   *   an empty `DocumentFragment` instead.
-   *
-   * * To skip all further processing of this node (and not child nodes, as they
-   *   have not been handled yet), you may signal this by providing the `skip`
-   *   signal.
-   *
-   * * If you want to replace, for example, an element by just some
-   *   character data, it is recommended to do this in later processing
-   *   when also the children have been processed. Otherwise, ensure
-   *   you understand possible implications doing this in this early stage,
-   *   such as that children not being converted to CharacterData are
-   *   ignored, and that CharacterData are just appended without taking
-   *   the actual type of data into account.
-   *
-   * * When transforming from HTML to XML, you may experience a rather
-   *   limited API for `importedNode` compared to the original node.
-   *   Like in XML there is no `HTMLElement.dataset`. Dealing with this
-   *   richer API is best done in setup phase by overriding
-   *   `prepareForImport`. Here you may modify the DOM with some restrictions
-   *   to ease further processing.
    *
    * @param importedNode - the just imported node
    * @param context - current conversion context
@@ -162,16 +118,6 @@ export class HtmlDomConverter {
    *
    * **Default Behavior:** No operation by default, thus, just returning the
    * `importedNode`. Overrides may safely skip call to `super`.
-   *
-   * **Implementation Notes:**
-   *
-   * * To replace a node by its children, you may return a `DocumentFragment`
-   *   with the corresponding children here.
-   *
-   * * Returning `skip` is semantically similar to returning an empty
-   *   `DocumentFragment`. Exception: `skip` prevents further processing
-   *   completely whereas a `DocumentFragment` still signals to have been
-   *   attached to DOM.
    *
    * @param importedNode - imported node, possibly with children
    * @param context - current conversion context
@@ -197,18 +143,37 @@ export class HtmlDomConverter {
    * and converted
    * @param importedNode - the just imported (parent) node, neither attached
    * to DOM yet nor having any children yet
+   * @param context - current conversion context
    */
-  #convertChildren(originalNode: ParentNode, importedNode: Node): void {
+  #convertChildren(originalNode: ParentNode, importedNode: Node, context: ConversionContext): void {
     if (isAttr(importedNode)) {
       // Skip fast on discouraged conversion states, thus, nodes, which
       // cannot hold children or attributes.
     }
     for (const child of originalNode.childNodes) {
       const convertedChild = this.convert(child);
-      if (convertedChild) {
-        this.appendChild(importedNode, convertedChild);
+      if (convertedChild && this.appendChild(importedNode, convertedChild)) {
+        this.appended(importedNode, convertedChild, context);
       }
     }
+  }
+
+  /**
+   * Called as soon as a node got attached to the DOM.
+   *
+   * **Note on `context`:** The source node references the related
+   * representation of `parentNode` in the original document.
+   *
+   * The default implementation is empty. Thus, no super call required on
+   * override.
+   *
+   * @param parentNode - parent node child got appended to
+   * @param childNode - child node that got appended
+   * @param context - current conversion context
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected appended(parentNode: Node, childNode: Node, context: ConversionContext): void {
+    // No operation by default.
   }
 
   /**

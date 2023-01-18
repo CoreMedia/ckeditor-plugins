@@ -6,5 +6,8 @@
 
 export * from "./ConversionApi";
 export * from "./ConversionContext";
+export * from "./DomConverterStages";
 export * from "./HtmlDomConverter";
+export * from "./Rule";
+export * from "./RuleBasedHtmlDomConverter";
 export * from "./Signals";
