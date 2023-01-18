@@ -49,6 +49,7 @@
   "dependencies": {
     "@coremedia/ckeditor5-core-common": "^10.3.0",
     "@coremedia/ckeditor5-dataprocessor-support": "^10.3.0",
+    "@coremedia/ckeditor5-dom-converter": "^10.3.0",
     "@coremedia/ckeditor5-logging": "^10.3.0"
   }
 }
