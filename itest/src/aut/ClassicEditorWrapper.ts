@@ -3,7 +3,7 @@ import type ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiced
 import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
+import type LegacyRichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/LegacyRichTextDataProcessor";
 import { Locatable, visible } from "./Locatable";
 import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 
@@ -68,7 +68,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
       (editor, value): Promise<string> =>
         new Promise<string>((resolve, reject) => {
           // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
-          const processor = editor.data.processor as RichTextDataProcessor;
+          const processor = editor.data.processor as LegacyRichTextDataProcessor;
           // Prior to setting data, wait for them being processed.
           processor.once("richtext:toView", (eventInfo, eventData) => {
             if ("dataView" in eventData && "data" in eventData) {

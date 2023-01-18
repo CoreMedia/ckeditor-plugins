@@ -1,5 +1,5 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import RichTextDataProcessor from "./RichTextDataProcessor";
+import LegacyRichTextDataProcessor from "./LegacyRichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
@@ -13,7 +13,7 @@ export default class CoreMediaRichText extends Plugin {
     const initInformation = reportInitStart(this);
 
     // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
-    this.editor.data.processor = new RichTextDataProcessor(this.editor);
+    this.editor.data.processor = new LegacyRichTextDataProcessor(this.editor);
 
     reportInitEnd(initInformation);
   }
