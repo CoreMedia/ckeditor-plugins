@@ -1,4 +1,5 @@
-import priorities, { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { priorities } from "@ckeditor/ckeditor5-utils";
 import {
   AppendedFunction,
   ImportedFunction,
