@@ -917,6 +917,7 @@ importers:
     specifiers:
       '@babel/cli': ^7.18.10
       '@babel/core': ^7.19.0
+      '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-dom-support': ^10.3.0
@@ -929,6 +930,7 @@ importers:
     devDependencies:
       '@babel/cli': 7.18.10_@babel+core@7.19.0
       '@babel/core': 7.19.0
+      '@ckeditor/ckeditor5-utils': 35.4.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@types/jest': 28.1.8
