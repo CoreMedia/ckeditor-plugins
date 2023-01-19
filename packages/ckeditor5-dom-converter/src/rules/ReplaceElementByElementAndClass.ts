@@ -45,6 +45,10 @@ export const replaceElementByElementAndClass = (config: ReplaceElementByElementA
         }
         const result = renameElement(node, viewLocalName);
         result.classList.remove(dataReservedClass);
+        // Unfortunately, `classList` does not provide this cleanup.
+        if (result.classList.length === 0) {
+          result.removeAttribute("class");
+        }
         return result;
       },
       priority,
