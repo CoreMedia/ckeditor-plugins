@@ -12,14 +12,14 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
-import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { replaceHeadingsByElementAndClass } from "./rules/ReplaceHeadingsByElementAndClass";
-import { preferLangAttribute } from "./rules/PreferLangAttribute";
-import { replaceElementByElement } from "./rules/ReplaceElementByElement";
-import { replaceElementByElementAndClass, ReplaceElementByElementAndClassConfig, } from "./rules/ReplaceElementByElementAndClass";
+import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { replaceElementByElementAndClass } from "./rules/ReplaceElementByElementAndClass";
 import { mergeTableSectionsToTableBody } from "./rules/MergeTableSectionsToTableBody";
 import { representXLinkAttributesAsDataAttributes } from "./rules/XLink";
 import { declareCoreMediaRichText10Entities } from "./Entities";
+import { headings } from "./rules/Headings";
+import { languageAttributes } from "./rules/LanguageAttributes";
+import { basicInlineStyles } from "./rules/BasicInlineStyles";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -66,48 +66,24 @@ class RichTextDataProcessor implements DataProcessor {
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
 
-    this.addRule(replaceHeadingsByElementAndClass());
-    this.addRule(preferLangAttribute());
-    // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
-    this.addRule(replaceElementByElement({ viewLocalName: "b", dataLocalName: "strong", direction: "toData" }));
-    // Note, that this assumes a default CKEditor. It needs to be changed, if
-    // a downcast has been installed, so that the view uses `em` instead.
-    // See https://github.com/ckeditor/ckeditor5/issues/1394.
-    this.addRule(replaceElementByElement({ viewLocalName: "i", dataLocalName: "em", direction: "toView" }));
-    this.addRule(replaceElementByElementAndClass({ viewLocalName: "code", dataLocalName: "span" }));
-    this.addRule(
-      replaceElementByElementAndClass({ viewLocalName: "u", dataLocalName: "span", dataReservedClass: "underline" })
-    );
-    // Preferred mapping for strikethrough, as `<s>` is the default in CKEditor for strikethrough.
-    const strikeMapping: ReplaceElementByElementAndClassConfig = {
-      viewLocalName: "div",
-      dataLocalName: "p",
-      dataReservedClass: "p--div",
-    };
-    // Support alternative names for strikethrough in data view.
-    ["del", "strike"].forEach((viewLocalName) => {
-      this.addRule(
-        replaceElementByElementAndClass({
-          ...strikeMapping,
-          viewLocalName,
-          direction: "toData",
-        })
-      );
-    });
-    this.addRule(replaceElementByElementAndClass(strikeMapping));
+    this.#addRule(headings);
+    this.#addRule(languageAttributes);
+    this.addRules(...basicInlineStyles);
+
+    this.#addRule(replaceElementByElementAndClass({ viewLocalName: "code", dataLocalName: "span" }));
     // Fixes naive mapping in old CoreMedia CMS releases, where all `<div>`
     // elements from data view have been mapped to `<p>` in data without applying
     // reverse mapping.
-    this.addRule(
+    this.#addRule(
       replaceElementByElementAndClass({ viewLocalName: "div", dataLocalName: "p", dataReservedClass: "p--div" })
     );
-    this.addRule(
+    this.#addRule(
       replaceElementByElementAndClass({ viewLocalName: "th", dataLocalName: "td", dataReservedClass: "td--header" })
     );
-    this.addRule(mergeTableSectionsToTableBody());
+    this.#addRule(mergeTableSectionsToTableBody());
     // This rule is meant to run late, to collect any possible left-overs of
     // previous running rules, like anchor and image tag processing.
-    this.addRule(representXLinkAttributesAsDataAttributes());
+    this.#addRule(representXLinkAttributesAsDataAttributes());
     // This rule should later move to Differencing Plugin
     /*
      * We need to mark xdiff:span as elements preserving spaces. Otherwise,
@@ -126,7 +102,7 @@ class RichTextDataProcessor implements DataProcessor {
     // `pre` element. But for TypeScript migration, CKEditor replaced typing
     // by `string[]` instead.
     this.#delegate.domConverter.preElements.push("xdiff:span");
-    this.addRule({
+    this.#addRule({
       toView: {
         id: "differencing-represent-empty-span-by-br",
         importedWithChildren: (node, { api }): Node => {
@@ -277,15 +253,20 @@ class RichTextDataProcessor implements DataProcessor {
     return dataDocument;
   }
 
-  addRule(config: RuleConfig): void {
+  #addRule(config: RuleConfig): void {
     const { toData, toView } = parseRule(config);
-    // TODO: Apply sorting.
     if (toData) {
       this.toDataRules.push(toData);
     }
     if (toView) {
       this.toViewRules.push(toView);
     }
+  }
+
+  addRules(...configs: RuleConfig[]): void {
+    configs.forEach((config) => this.#addRule(config));
+    this.toDataRules.sort(byPriority);
+    this.toViewRules.sort(byPriority);
   }
 
   toView(data: string): ViewDocumentFragment | null {
