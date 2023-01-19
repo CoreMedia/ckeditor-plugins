@@ -7,26 +7,39 @@ import {
   PrepareFunction,
 } from "./DomConverterStages";
 
+export interface RuleConfigBase {
+  /**
+   * Optional ID for rule. Possibly useful for debugging purpose. Propagated
+   * as part of the default ID to section configurations.
+   */
+  id?: string;
+  toData?: RuleSectionConfig;
+  toView?: RuleSectionConfig;
+  /**
+   * The default priority to be propagated to rule sections. May be overridden
+   * in sections.
+   */
+  priority?: PriorityString;
+}
+
+/**
+ * Utility type to mark selected properties as required.
+ */
+type RequireSelected<Type extends object, Key extends keyof Type> = Pick<Type, keyof Omit<Type, Key>> &
+  Required<Pick<Type, Key>>;
+
 /**
  * A rule configuration containing related `toData` and `toView` mapping
  * configuration to provide bijective mapping from data such as
  * CoreMedia Rich Text 1.0 to HTML representation in CKEditor's data view
  * and vice versa.
  */
-export interface RuleConfig {
-  /**
-   * Optional ID for rule. Possibly useful for debugging purpose. Propagated
-   * as default ID to section configurations.
-   */
-  id?: string;
-  toData?: RuleSectionConfig;
-  toView?: RuleSectionConfig;
-}
+export type RuleConfig = RequireSelected<RuleConfigBase, "toData"> | RequireSelected<RuleConfigBase, "toView">;
 
 /**
  * A configuration for either `toData` or `toView` transformation.
  */
-export interface RuleSectionConfig {
+export interface RuleSectionConfigBase {
   /**
    * Optional ID for a given configuration. Possibly useful for debugging
    * purpose.
@@ -92,6 +105,15 @@ export interface RuleSectionConfig {
 }
 
 /**
+ * A configuration for either `toData` or `toView` transformation.
+ */
+export type RuleSectionConfig =
+  | RequireSelected<RuleSectionConfigBase, "prepare">
+  | RequireSelected<RuleSectionConfigBase, "imported">
+  | RequireSelected<RuleSectionConfigBase, "appended">
+  | RequireSelected<RuleSectionConfigBase, "importedWithChildren">;
+
+/**
  * Utility type to transform a type of given properties to another.
  */
 type TransformPropertyType<Type extends object, Key extends keyof Type, ValueType> = Pick<
@@ -154,19 +176,21 @@ const randomId = () => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
  * @param config - configuration to parse
  */
 export const parseRule = (config: RuleConfig): Rule => {
-  const { id, toData, toView } = config;
+  const { id, toData, toView, priority } = config;
   const idWithFallback = id ?? `rule-${randomId()}`;
   return {
     id: idWithFallback,
     toData: toData
       ? parseRuleSectionConfig({
           id: `toData-${idWithFallback}`,
+          priority,
           ...toData,
         })
       : undefined,
     toView: toView
       ? parseRuleSectionConfig({
           id: `toView-${idWithFallback}`,
+          priority,
           ...toView,
         })
       : undefined,
