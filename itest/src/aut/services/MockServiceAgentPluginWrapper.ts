@@ -1,6 +1,6 @@
 import { JSWrapper } from "../JSWrapper";
 import { ClassicEditorWrapper } from "../ClassicEditorWrapper";
-import MockServiceAgentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockServiceAgentPlugin";
+import type MockServiceAgentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockServiceAgentPlugin";
 import { WorkAreaServiceWrapper } from "./WorkAreaServiceWrapper";
 
 export class MockServiceAgentPluginWrapper extends JSWrapper<MockServiceAgentPlugin> {
@@ -24,7 +24,7 @@ export class MockServiceAgentPluginWrapper extends JSWrapper<MockServiceAgentPlu
       // We need to access the plugin via its name rather than via descriptor,
       // as the descriptor is unknown in remote context.
       return editor.plugins.get(pluginName) as MockServiceAgentPlugin;
-    }, MockServiceAgentPlugin.pluginName);
+    }, "MockServiceAgent");
     return new MockServiceAgentPluginWrapper(instance);
   }
 }
