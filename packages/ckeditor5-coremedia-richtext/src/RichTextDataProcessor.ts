@@ -20,6 +20,7 @@ import {
   replaceElementByElementAndClass,
   ReplaceElementByElementAndClassConfig,
 } from "@coremedia/ckeditor5-dom-converter/rules/ReplaceElementByElementAndClass";
+import { mergeTableSectionsToTableBody } from "@coremedia/ckeditor5-dom-converter/rules/MergeTableSectionsToTableBody";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -119,6 +120,10 @@ class RichTextDataProcessor implements DataProcessor {
     this.addRule(
       replaceElementByElementAndClass({ viewLocalName: "div", dataLocalName: "p", dataReservedClass: "p--div" })
     );
+    this.addRule(
+      replaceElementByElementAndClass({ viewLocalName: "th", dataLocalName: "td", dataReservedClass: "td--header" })
+    );
+    this.addRule(mergeTableSectionsToTableBody());
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
