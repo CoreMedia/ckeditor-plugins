@@ -21,6 +21,7 @@ import {
   ReplaceElementByElementAndClassConfig,
 } from "@coremedia/ckeditor5-dom-converter/rules/ReplaceElementByElementAndClass";
 import { mergeTableSectionsToTableBody } from "@coremedia/ckeditor5-dom-converter/rules/MergeTableSectionsToTableBody";
+import { representXLinkAttributesAsDataAttributes } from "@coremedia/ckeditor5-dom-converter/rules/XLink";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -106,6 +107,9 @@ class RichTextDataProcessor implements DataProcessor {
       replaceElementByElementAndClass({ viewLocalName: "th", dataLocalName: "td", dataReservedClass: "td--header" })
     );
     this.addRule(mergeTableSectionsToTableBody());
+    // This rule is meant to run late, to collect any possible left-overs of
+    // previous running rules, like anchor and image tag processing.
+    this.addRule(representXLinkAttributesAsDataAttributes());
     // This rule should later move to Differencing Plugin
     /*
      * We need to mark xdiff:span as elements preserving spaces. Otherwise,
