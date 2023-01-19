@@ -13,6 +13,13 @@ import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/obser
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
 import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { replaceHeadingsByElementAndClass } from "@coremedia/ckeditor5-dom-converter/rules/ReplaceHeadingsByElementAndClass";
+import { preferLangAttribute } from "@coremedia/ckeditor5-dom-converter/rules/PreferLangAttribute";
+import { replaceElementByElement } from "@coremedia/ckeditor5-dom-converter/rules/ReplaceElementByElement";
+import {
+  replaceElementByElementAndClass,
+  ReplaceElementByElementAndClassConfig,
+} from "@coremedia/ckeditor5-dom-converter/rules/ReplaceElementByElementAndClass";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -77,28 +84,41 @@ class RichTextDataProcessor implements DataProcessor {
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
 
-    this.addRule({
-      id: "poc-heading-1",
-      toData: {
-        imported: (node, { api }): Node => {
-          if (!(node instanceof Element) || node.localName !== "h1") {
-            return node;
-          }
-          const p = api.createElement("p");
-          p.classList.add(`p--heading-1`);
-          return p;
-        },
-      },
-      toView: {
-        imported: (node, { api }) => {
-          if (!(node instanceof Element) || node.localName !== "p" || !node.classList.contains("p--heading-1")) {
-            return node;
-          }
-          const h1 = api.createElement("h1");
-          return h1;
-        },
-      },
+    this.addRule(replaceHeadingsByElementAndClass());
+    this.addRule(preferLangAttribute());
+    // Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to remap.
+    this.addRule(replaceElementByElement({ viewLocalName: "b", dataLocalName: "strong", direction: "toData" }));
+    // Note, that this assumes a default CKEditor. It needs to be changed, if
+    // a downcast has been installed, so that the view uses `em` instead.
+    // See https://github.com/ckeditor/ckeditor5/issues/1394.
+    this.addRule(replaceElementByElement({ viewLocalName: "i", dataLocalName: "em", direction: "toView" }));
+    this.addRule(replaceElementByElementAndClass({ viewLocalName: "code", dataLocalName: "span" }));
+    this.addRule(
+      replaceElementByElementAndClass({ viewLocalName: "u", dataLocalName: "span", dataReservedClass: "underline" })
+    );
+    // Preferred mapping for strikethrough, as `<s>` is the default in CKEditor for strikethrough.
+    const strikeMapping: ReplaceElementByElementAndClassConfig = {
+      viewLocalName: "div",
+      dataLocalName: "p",
+      dataReservedClass: "p--div",
+    };
+    // Support alternative names for strikethrough in data view.
+    ["del", "strike"].forEach((viewLocalName) => {
+      this.addRule(
+        replaceElementByElementAndClass({
+          ...strikeMapping,
+          viewLocalName,
+          direction: "toData",
+        })
+      );
     });
+    this.addRule(replaceElementByElementAndClass(strikeMapping));
+    // Fixes naive mapping in old CoreMedia CMS releases, where all `<div>`
+    // elements from data view have been mapped to `<p>` in data without applying
+    // reverse mapping.
+    this.addRule(
+      replaceElementByElementAndClass({ viewLocalName: "div", dataLocalName: "p", dataReservedClass: "p--div" })
+    );
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
