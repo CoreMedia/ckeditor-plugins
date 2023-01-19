@@ -1,6 +1,6 @@
 import { Direction, resolveDirectionToConfig } from "./Direction";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import { RuleConfig } from "../Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { isHTMLElement } from "@coremedia/ckeditor5-dom-support/HTMLElements";
 
 export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink";

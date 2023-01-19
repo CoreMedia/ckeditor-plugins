@@ -13,15 +13,15 @@ import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/obser
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
 import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { replaceHeadingsByElementAndClass } from "@coremedia/ckeditor5-dom-converter/rules/ReplaceHeadingsByElementAndClass";
-import { preferLangAttribute } from "@coremedia/ckeditor5-dom-converter/rules/PreferLangAttribute";
-import { replaceElementByElement } from "@coremedia/ckeditor5-dom-converter/rules/ReplaceElementByElement";
+import { replaceHeadingsByElementAndClass } from "./rules/ReplaceHeadingsByElementAndClass";
+import { preferLangAttribute } from "./rules/PreferLangAttribute";
+import { replaceElementByElement } from "./rules/ReplaceElementByElement";
 import {
   replaceElementByElementAndClass,
   ReplaceElementByElementAndClassConfig,
-} from "@coremedia/ckeditor5-dom-converter/rules/ReplaceElementByElementAndClass";
-import { mergeTableSectionsToTableBody } from "@coremedia/ckeditor5-dom-converter/rules/MergeTableSectionsToTableBody";
-import { representXLinkAttributesAsDataAttributes } from "@coremedia/ckeditor5-dom-converter/rules/XLink";
+} from "./rules/ReplaceElementByElementAndClass";
+import { mergeTableSectionsToTableBody } from "./rules/MergeTableSectionsToTableBody";
+import { representXLinkAttributesAsDataAttributes } from "./rules/XLink";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace

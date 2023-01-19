@@ -10,6 +10,7 @@
       "@coremedia/ckeditor5-core-common/*": ["../../ckeditor5-core-common/src/*"],
       "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"],
       "@coremedia/ckeditor5-dom-converter/*": ["../../ckeditor5-dom-converter/src/*"],
+      "@coremedia/ckeditor5-dom-support/*": ["../../ckeditor5-dom-support/src/*"],
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"]
     }
   },
@@ -22,6 +23,9 @@
     },
     {
       "path": "../../ckeditor5-dom-converter/src"
+    },
+    {
+      "path": "../../ckeditor5-dom-support/src"
     },
     {
       "path": "../../ckeditor5-logging/src"
