@@ -15,7 +15,7 @@ export default class PasteContentUI extends Plugin {
       throw new Error('The command "pasteContent" is required.');
     }
 
-    const PASTE_KEYSTROKE = "Ctrl+Shift+L";
+    const PASTE_KEYSTROKE = "Ctrl+Shift+P";
 
     editor.keystrokes.set(PASTE_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
