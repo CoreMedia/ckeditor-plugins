@@ -8,7 +8,6 @@
  * @module ckeditor5-coremedia-richtext
  */
 
-export * as rules from "./rules/index-doc";
 export * as legacy from "./legacy/index-doc";
 
 export * from "./Constants";

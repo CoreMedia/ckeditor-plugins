@@ -2,10 +2,10 @@
 
 import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
-import RichTextSchema, { Strictness } from "../RichTextSchema";
+import RichTextSchema, { Strictness } from "../../../RichTextSchema";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
-import LegacyRichTextDataProcessor from "../legacy/v11/LegacyRichTextDataProcessor";
+import LegacyRichTextDataProcessor from "../LegacyRichTextDataProcessor";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
