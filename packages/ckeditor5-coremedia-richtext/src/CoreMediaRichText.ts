@@ -1,5 +1,5 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import LegacyRichTextDataProcessor from "./LegacyRichTextDataProcessor";
+import LegacyRichTextDataProcessor from "./legacy/v11/LegacyRichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
