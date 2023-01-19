@@ -29,3 +29,5 @@ export { default as RichTextXmlWriter } from "./RichTextXmlWriter";
 
 export * from "./ToDataProcessor";
 export { default as ToDataProcessor } from "./ToDataProcessor";
+export { COREMEDIA_RICHTEXT_1_0_DTD } from "./Entities";
+export { declareCoreMediaRichText10Entities } from "./Entities";
