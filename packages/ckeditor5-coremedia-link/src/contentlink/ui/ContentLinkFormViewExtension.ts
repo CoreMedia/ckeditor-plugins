@@ -25,6 +25,7 @@ import {
   isLinkable,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
+import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusUtils";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -140,6 +141,9 @@ class ContentLinkFormViewExtension extends Plugin {
 
     // @ts-expect-error TODO We must check for null/undefined here.
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
+
+    handleFocusManagement(formView as LinkViewWithFocusables, [contentLinkView], formView.urlInputView);
+
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }
 

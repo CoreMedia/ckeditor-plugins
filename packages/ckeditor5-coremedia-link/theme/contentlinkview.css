@@ -8,6 +8,10 @@
   border-radius: var(--ck-border-radius);
 }
 
+.ck.cm-ck-link-form-view .cm-ck-content-link-view:focus {
+  border: var(--ck-focus-ring);
+}
+
 /* content view label */
 .cm-ck-content-link-view > .ck.ck-button__label {
   flex: 1;

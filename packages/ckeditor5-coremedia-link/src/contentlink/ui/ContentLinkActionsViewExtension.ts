@@ -11,6 +11,7 @@ import { LINK_COMMAND_NAME } from "../../link/Constants";
 import { Command } from "@ckeditor/ckeditor5-core";
 import { hasContentUriPath } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusUtils";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -115,6 +116,8 @@ class ContentLinkActionsViewExtension extends Plugin {
     }
     // @ts-expect-error TODO: Element may be null; we should check that
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
+
+    handleFocusManagement(actionsView as LinkViewWithFocusables, [simpleContentLinkView], actionsView.previewButtonView);
   }
 }
 
