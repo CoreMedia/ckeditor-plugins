@@ -13,6 +13,7 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
+import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -27,6 +28,7 @@ export default class ContentLinks extends Plugin {
     ContentLinkFormViewExtension,
     ContentLinkCommandHook,
     ContentLinkClipboardPlugin,
+    LinkUserActionsPlugin,
   ];
 
   init(): void {
