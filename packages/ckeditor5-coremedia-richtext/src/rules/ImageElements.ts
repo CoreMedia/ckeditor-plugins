@@ -1,4 +1,9 @@
-import { extractXLinkAttributes, extractXLinkDataSetEntries, setXLinkAttributes, setXLinkDataSetEntries, } from "./XLink";
+import {
+  extractXLinkAttributes,
+  extractXLinkDataSetEntries,
+  setXLinkAttributes,
+  setXLinkDataSetEntries,
+} from "./XLink";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { isHTMLImageElement } from "@coremedia/ckeditor5-dom-support/HTMLImageElements";
 
@@ -23,6 +28,9 @@ export const imageElements: RuleConfig = {
         // is not meant to be stored in data. Blob references are stored
         // in xlink:href, which are tracked separately.
         node.removeAttribute("src");
+        // title: Not mapping xlink:title to title yet, as we use the title
+        // for generating tooltips regarding the related content.
+        node.removeAttribute("title");
       }
     },
   },
@@ -30,6 +38,8 @@ export const imageElements: RuleConfig = {
     id: `toView-transform-image-element-attributes`,
     imported: (node): Node => {
       if (isHTMLImageElement(node)) {
+        // title: Not mapping xlink:title to title yet, as we use the title
+        // for generating tooltips regarding the related content.
         setXLinkDataSetEntries(node, extractXLinkAttributes(node));
         node.src = INLINE_IMG;
       }
