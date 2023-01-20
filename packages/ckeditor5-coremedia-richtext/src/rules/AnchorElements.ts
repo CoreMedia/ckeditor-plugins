@@ -205,9 +205,9 @@ export const anchorElements: RuleConfig = {
         const { href, show, role } = xlinkAttrs;
 
         // Clear respected data.
-        xlinkAttrs.href = undefined;
-        xlinkAttrs.show = undefined;
-        xlinkAttrs.role = undefined;
+        delete xlinkAttrs.href;
+        delete xlinkAttrs.show;
+        delete xlinkAttrs.role;
 
         if (href === undefined) {
           // Invalid state, that should not happen for valid CoreMedia Rich Text 1.0

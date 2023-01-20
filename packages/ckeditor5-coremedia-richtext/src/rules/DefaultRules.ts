@@ -6,6 +6,7 @@ import { codeElements } from "./CodeElements";
 import { divElements } from "./DivElements";
 import { tableElements } from "./TableElements";
 import { anchorElements } from "./AnchorElements";
+import { imageElements } from "./ImageElements";
 
 /**
  * Default rules for `RichTextDataProcessor`. May be extended or overridden
@@ -27,6 +28,7 @@ export const defaultRules: RuleConfig[] = [
   codeElements,
   divElements,
   headingElements,
+  imageElements,
   languageAttributes,
   ...tableElements,
 ];

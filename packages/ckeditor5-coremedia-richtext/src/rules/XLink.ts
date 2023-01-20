@@ -71,22 +71,11 @@ export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes
 };
 
 export const setXLinkDataSetEntries = (element: HTMLElement, attributes: XLinkAttributes): void => {
-  const { ownerDocument } = element;
-  Object.entries(attributes).forEach(([key, value]: [XLinkAttributeKey, string | undefined]) => {
+  Object.entries(attributes).forEach(([localName, value]: [XLinkAttributeKey, string | undefined]) => {
     // We ignore empty values. Thus, only add if non-empty.
-    if (value) {
-      const qualifiedName: XLinkAttributeQualifiedName = `${xLinkPrefix}:${key}`;
-      const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, qualifiedName);
-      xlinkAttribute.value = value;
-      element.setAttributeNodeNS(xlinkAttribute);
+    if (typeof value === "string") {
+      const key: XLinkAttributeDataSetKey = `${xLinkPrefix}${capitalize(localName)}`;
+      element.dataset[key] = value;
     }
   });
-};
-
-export const transformXLinkAttributesToDataSetEntries = (element: HTMLElement): void => {
-  setXLinkDataSetEntries(element, extractXLinkAttributes(element));
-};
-
-export const transformXLinkDataSetEntriesToAttributes = (element: HTMLElement): void => {
-  setXLinkAttributes(element, extractXLinkDataSetEntries(element));
 };
