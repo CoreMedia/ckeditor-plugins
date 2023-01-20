@@ -139,6 +139,7 @@ class RichTextDataProcessor implements DataProcessor {
     if (converted) {
       dataDocument.documentElement.append(converted);
     }
+    // TODO: Sanitize Document
     const xml = this.#richTextXmlWriter.getXml(dataDocument);
     logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: fragmentAsStringForDebugging,

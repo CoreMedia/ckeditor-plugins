@@ -1,4 +1,4 @@
-import RichTextSchema, { Strictness } from "./legacy/v11/RichTextSchema";
+import RichTextSchema from "./legacy/v11/RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
 import { allFilterRules } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
@@ -21,6 +21,7 @@ import { getSchema, schemaRules } from "./legacy/v11/rules/Schema";
 import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./legacy/v11/rules/Lang";
 import { handleImage } from "./legacy/v11/rules/Image";
 import { listRules } from "./legacy/v11/rules/List";
+import { Strictness } from "./Strictness";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
