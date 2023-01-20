@@ -90,13 +90,13 @@ class MockInputExamplePlugin extends Plugin {
   /**
    * Triggers the evaluation if the given uris are droppable in the richtext.
    *
-   * First call triggers the evaluation while proceeding calls will just respond
+   * First call triggers the evaluation while subsequent calls will just return
    * the evaluation state, which means either "PENDING" or the result.
    *
    * This is needed for "dragover" because the event is executed synchronously
    * but multiple times (when moving the cursor further).
    *
-   * To ensure in tests that the drop is allowed, this function can be used.
+   * This function can be used in tests to ensure a drop is allowed.
    *
    * @param uris - the uris to evaluate if they are droppable.
    */
@@ -105,15 +105,15 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   /**
-   * Triggers the evaluation if the given uris are linkable in the link balloon.
+   * Triggers the evaluation if the given uris are linkable in the richtext.
    *
-   * First call triggers the evaluation while proceeding calls will just respond
+   * First call triggers the evaluation while subsequent calls will just return
    * the evaluation state, which means either "PENDING" or the result.
    *
    * This is needed for "dragover" because the event is executed synchronously
    * but multiple times (when moving the cursor further).
    *
-   * To ensure in tests that the drop is allowed, this function can be used.
+   * This function can be used in tests to ensure a drop is allowed.
    *
    * @param uris - the uris to evaluate if they are linkable.
    */

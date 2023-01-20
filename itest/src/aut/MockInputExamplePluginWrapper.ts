@@ -56,6 +56,10 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
         // We need to access the plugin via its name rather than via descriptor,
         // as the descriptor is unknown in remote context.
         return editor.plugins.get(pluginName) as MockInputExamplePlugin;
+        // We need to use the MockInputExamplePlugin name as a string here and cannot
+        // use the pluginName property directly. Importing from MockInputExamplePlugin
+        // would result in a serviceAgent instance during test runs, which then would
+        // prevent the test from finishing.
       }, "MockInputExamplePlugin")
     );
   }
