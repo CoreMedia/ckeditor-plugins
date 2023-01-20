@@ -37,7 +37,7 @@ export default class LinkUserActionsPlugin extends Plugin {
 
   init(): void {
     this.#handleLinkClicksInReadOnly();
-    this.#preventOpenInNewTabForContentLinks();
+    this.#handleContentLinkClicksInReadOnly();
   }
 
   /**
@@ -95,7 +95,7 @@ export default class LinkUserActionsPlugin extends Plugin {
    *
    * @private
    */
-  #preventOpenInNewTabForContentLinks() {
+  #handleContentLinkClicksInReadOnly() {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
