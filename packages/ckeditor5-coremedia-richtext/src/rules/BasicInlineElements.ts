@@ -8,7 +8,7 @@ import {
  * Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to
  * remap. Nevertheless, plugins may add `<b>` as valid element again.
  */
-export const legacyBoldSupport = replaceElementByElement({
+export const legacyBoldElements = replaceElementByElement({
   viewLocalName: "b",
   dataLocalName: "strong",
   direction: "toData",
@@ -29,7 +29,7 @@ export const legacyBoldSupport = replaceElementByElement({
  *
  * and vice versa.
  */
-export const underlines = replaceElementByElementAndClass({
+export const underlineElements = replaceElementByElementAndClass({
   viewLocalName: "u",
   dataLocalName: "span",
   dataReservedClass: "underline",
@@ -52,7 +52,7 @@ export const underlines = replaceElementByElementAndClass({
  */
 // DevNote: May need to be adapted, if https://github.com/ckeditor/ckeditor5/issues/1394.
 // is resolved.
-export const italics = replaceElementByElement({ viewLocalName: "i", dataLocalName: "em" });
+export const italicElements = replaceElementByElement({ viewLocalName: "i", dataLocalName: "em" });
 
 /**
  * Preferred bijective mapping for strikethrough element.
@@ -101,7 +101,7 @@ const legacyStrikeMappings = ["del", "strike"].map((viewLocalName) =>
  *
  * and vice versa.
  */
-export const strikethroughs = [replaceElementByElementAndClass(preferredStrikeConfig), ...legacyStrikeMappings];
+export const strikethroughElements = [replaceElementByElementAndClass(preferredStrikeConfig), ...legacyStrikeMappings];
 
 /**
  * Rules for basic inline styles mapped to CoreMedia Rich Text 1.0:
@@ -110,4 +110,4 @@ export const strikethroughs = [replaceElementByElementAndClass(preferredStrikeCo
  * * `<b>` (`<strong>` preferred in data view)
  * * `<s>` (also with legacy support for `<del>` and `<strike>`).
  */
-export const basicInlineStyles = [italics, legacyBoldSupport, ...strikethroughs, underlines];
+export const basicInlineElements = [italicElements, legacyBoldElements, ...strikethroughElements, underlineElements];

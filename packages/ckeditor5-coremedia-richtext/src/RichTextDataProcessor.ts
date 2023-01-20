@@ -13,13 +13,8 @@ import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/obser
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { replaceElementByElementAndClass } from "./rules/ReplaceElementByElementAndClass";
-import { mergeTableSectionsToTableBody } from "./rules/MergeTableSectionsToTableBody";
-import { representXLinkAttributesAsDataAttributes } from "./rules/XLink";
 import { declareCoreMediaRichText10Entities } from "./Entities";
-import { headings } from "./rules/Headings";
-import { languageAttributes } from "./rules/LanguageAttributes";
-import { basicInlineStyles } from "./rules/BasicInlineStyles";
+import { defaultRules } from "./rules/DefaultRules";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -66,24 +61,7 @@ class RichTextDataProcessor implements DataProcessor {
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
 
-    this.#addRule(headings);
-    this.#addRule(languageAttributes);
-    this.addRules(...basicInlineStyles);
-
-    this.#addRule(replaceElementByElementAndClass({ viewLocalName: "code", dataLocalName: "span" }));
-    // Fixes naive mapping in old CoreMedia CMS releases, where all `<div>`
-    // elements from data view have been mapped to `<p>` in data without applying
-    // reverse mapping.
-    this.#addRule(
-      replaceElementByElementAndClass({ viewLocalName: "div", dataLocalName: "p", dataReservedClass: "p--div" })
-    );
-    this.#addRule(
-      replaceElementByElementAndClass({ viewLocalName: "th", dataLocalName: "td", dataReservedClass: "td--header" })
-    );
-    this.#addRule(mergeTableSectionsToTableBody());
-    // This rule is meant to run late, to collect any possible left-overs of
-    // previous running rules, like anchor and image tag processing.
-    this.#addRule(representXLinkAttributesAsDataAttributes());
+    this.addRules(...defaultRules);
     // This rule should later move to Differencing Plugin
     /*
      * We need to mark xdiff:span as elements preserving spaces. Otherwise,

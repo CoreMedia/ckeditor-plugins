@@ -1,3 +1,3 @@
 import { replaceHeadingsByElementAndClass } from "./ReplaceHeadingsByElementAndClass";
 
-export const headings = replaceHeadingsByElementAndClass();
+export const headingElements = replaceHeadingsByElementAndClass();

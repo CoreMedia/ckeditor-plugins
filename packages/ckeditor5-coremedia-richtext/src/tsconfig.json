@@ -7,6 +7,7 @@
     "declaration": true,
     "declarationMap": true,
     "paths": {
+      "@coremedia/ckeditor5-common/*": ["../../ckeditor5-common/src/*"],
       "@coremedia/ckeditor5-core-common/*": ["../../ckeditor5-core-common/src/*"],
       "@coremedia/ckeditor5-dataprocessor-support/*": ["../../ckeditor5-dataprocessor-support/src/*"],
       "@coremedia/ckeditor5-dom-converter/*": ["../../ckeditor5-dom-converter/src/*"],
@@ -15,6 +16,9 @@
     }
   },
   "references": [
+    {
+      "path": "../../ckeditor5-common/src"
+    },
     {
       "path": "../../ckeditor5-core-common/src"
     },

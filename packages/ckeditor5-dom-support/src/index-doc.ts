@@ -9,6 +9,7 @@ export * from "./DocumentFragments";
 export * from "./Documents";
 export * from "./Elements";
 export * from "./HasNamespaceUris";
+export * from "./HTMLAnchorElements";
 export * from "./HTMLElements";
 export * from "./HTMLTableElements";
 export * from "./Namespaces";

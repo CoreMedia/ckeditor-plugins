@@ -1,92 +1,92 @@
-import { Direction, resolveDirectionToConfig } from "./Direction";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { isHTMLElement } from "@coremedia/ckeditor5-dom-support/HTMLElements";
+import { capitalize } from "@coremedia/ckeditor5-common/Strings";
 
-export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink";
-export const xLinkPrefix = "xlink";
+export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink" as const;
+export const xLinkPrefix = "xlink" as const;
 export const xLinkAttributes = ["type", "href", "role", "title", "show", "actuate"];
+export type XLinkAttributeKey = typeof xLinkAttributes[number];
+export type XLinkAttributes = Partial<Record<XLinkAttributeKey, string>>;
+export type XLinkAttributeQualifiedName = `${typeof xLinkPrefix}:${XLinkAttributeKey}`;
+/**
+ * Valid dataset attribute keys are, for example, `xlinkType`, `xlinkHref`.
+ * Due to naming conventions, these are accessible as plain attributes as
+ * `data-xlink-type` and `data-xlink-href`.
+ */
+export type XLinkAttributeDataSetKey = `${typeof xLinkPrefix}${Capitalize<XLinkAttributeKey>}`;
 
-export interface RepresentXLinkAttributesAsDataAttributesConfig {
-  direction?: Direction;
-  priority?: PriorityString;
-}
+const mergeXLinkAttributes = (
+  previous: XLinkAttributes | undefined,
+  current: XLinkAttributes | undefined
+): XLinkAttributes => ({
+  ...previous,
+  ...current,
+});
 
-export const defaultRepresentXLinkAttributesAsDataAttributesConfig: Required<RepresentXLinkAttributesAsDataAttributesConfig> =
-  {
-    direction: "bijective",
-    // We use priority low by default, to provide other handlers to decide
-    // differently, how to deal with xlink: attributes. Example: For anchors,
-    // we want to merge xlink:role and xlink:show into target attribute instead.
-    // Thus, this can be perceived as fallback, if no other rule decided to handle
-    // them before.
-    priority: "low",
-  };
+export const extractXLinkAttributes = (element: Element): XLinkAttributes =>
+  xLinkAttributes
+    .map((localName: XLinkAttributeKey): XLinkAttributes | undefined => {
+      const attribute = element.getAttributeNodeNS(xLinkNamespaceUri, localName);
+      if (attribute) {
+        const value = attribute.value;
+        // extract: Remove after retrieved.
+        element.removeAttributeNode(attribute);
+        return {
+          [localName]: value,
+        };
+      }
+    })
+    .reduce(mergeXLinkAttributes) ?? {};
 
-export const representXLinkAttributesAsDataAttributes = (
-  config?: RepresentXLinkAttributesAsDataAttributesConfig
-): RuleConfig => {
-  const { direction, priority } = {
-    ...defaultRepresentXLinkAttributesAsDataAttributesConfig,
-    ...config,
-  };
-  return resolveDirectionToConfig({
-    direction,
-    toData: () => ({
-      id: "toData-transform-xlink-data-attributes-to-xlink-attributes",
-      // Do early, to benefit from richer HTML API.
-      prepare: (node): void => {
-        if (isHTMLElement(node)) {
-          const { ownerDocument } = node;
-          for (const key in node.dataset) {
-            const match = xLinkAttributes.find((attr) => `${xLinkPrefix}_${attr}` === key);
-            if (match) {
-              const value = node.dataset[key];
-              // no-dynamic-delete: I do not see any better option here to remove
-              // the data attribute without mangling with the attribute name, which
-              // again may open a door to XSS attacks if not carefully designed.
-              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-              delete node.dataset[key];
-
-              if (value) {
-                // We ignore empty values. Thus, only add if non-empty.
-                const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, `${xLinkPrefix}:${match}`);
-                xlinkAttribute.value = value;
-                node.setAttributeNodeNS(xlinkAttribute);
-              }
-            }
-          }
+export const extractXLinkDataSetEntries = (element: HTMLElement): XLinkAttributes =>
+  xLinkAttributes
+    .map((localName: XLinkAttributeKey): XLinkAttributes | undefined => {
+      const key: XLinkAttributeDataSetKey = `${xLinkPrefix}${capitalize(localName)}`;
+      if (key in element.dataset) {
+        const value: string | undefined = element.dataset[key];
+        // extract: Remove after retrieved.
+        // no-dynamic-delete: I do not see any better option here to remove
+        // the data attribute without mangling with the attribute name, which
+        // again may open a door to XSS attacks if not carefully designed.
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete element.dataset[key];
+        if (typeof value === "string") {
+          return {
+            [localName]: value,
+          };
         }
-      },
-      priority,
-    }),
-    toView: () => ({
-      id: "toData-transform-xlink-attributes-to-xlink-data-attributes",
-      // Do late, to benefit from richer HTML API.
-      imported: (node): Node => {
-        if (isHTMLElement(node)) {
-          const existingAttrs = xLinkAttributes
-            .map((attrKey) => node.getAttributeNodeNS(xLinkNamespaceUri, attrKey))
-            .filter(Boolean) as Attr[];
-          existingAttrs.forEach((attr) => {
-            // TODO: `dataset` does not allow hyphens in name. Thus, we may
-            //   need to adapt some code. And if we stick to this, also the
-            //   old data-processing needs to be adapted accordingly.
-            const dataName = `${xLinkPrefix}_${attr.localName}`;
-            const dataValue = attr.value;
-            node.removeAttributeNode(attr);
-            if (dataValue) {
-              // Ignore empty values.
-              node.dataset[dataName] = dataValue;
-            }
-          });
-        }
-        return node;
-      },
-      priority,
-    }),
-    ruleDefaults: {
-      id: `represent-xlink-attributes-as-data-attributes-${direction}`,
-    },
+      }
+    })
+    .reduce(mergeXLinkAttributes) ?? {};
+
+export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes): void => {
+  const { ownerDocument } = element;
+  Object.entries(attributes).forEach(([key, value]: [XLinkAttributeKey, string | undefined]) => {
+    // We ignore empty values. Thus, only add if non-empty.
+    if (value) {
+      const qualifiedName: XLinkAttributeQualifiedName = `${xLinkPrefix}:${key}`;
+      const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, qualifiedName);
+      xlinkAttribute.value = value;
+      element.setAttributeNodeNS(xlinkAttribute);
+    }
   });
+};
+
+export const setXLinkDataSetEntries = (element: HTMLElement, attributes: XLinkAttributes): void => {
+  const { ownerDocument } = element;
+  Object.entries(attributes).forEach(([key, value]: [XLinkAttributeKey, string | undefined]) => {
+    // We ignore empty values. Thus, only add if non-empty.
+    if (value) {
+      const qualifiedName: XLinkAttributeQualifiedName = `${xLinkPrefix}:${key}`;
+      const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, qualifiedName);
+      xlinkAttribute.value = value;
+      element.setAttributeNodeNS(xlinkAttribute);
+    }
+  });
+};
+
+export const transformXLinkAttributesToDataSetEntries = (element: HTMLElement): void => {
+  setXLinkDataSetEntries(element, extractXLinkAttributes(element));
+};
+
+export const transformXLinkDataSetEntriesToAttributes = (element: HTMLElement): void => {
+  setXLinkAttributes(element, extractXLinkDataSetEntries(element));
 };
