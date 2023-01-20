@@ -21,9 +21,6 @@ export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 export * from "./RichTextDataProcessor";
 export { default as RichTextDataProcessor } from "./RichTextDataProcessor";
 
-export * from "./RichTextSchema";
-export { default as RichTextSchema } from "./RichTextSchema";
-
 export * from "./RichTextXmlWriter";
 export { default as RichTextXmlWriter } from "./RichTextXmlWriter";
 

@@ -1,4 +1,4 @@
-import RichTextSchema, { Strictness } from "./RichTextSchema";
+import RichTextSchema, { Strictness } from "./legacy/v11/RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
 import { allFilterRules } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
