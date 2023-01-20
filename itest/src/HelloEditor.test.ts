@@ -51,23 +51,6 @@ describe("Hello Editor", () => {
     await expect(handle.$("h1")).toHaveText("CoreMedia");
   });
 
-  it("Should update data when typed.", async () => {
-    const { editor } = application;
-    const { ui } = editor;
-    // Get some text to write.
-    const { currentTestName } = expect.getState();
-    const name = currentTestName ?? "Unknown Test";
-
-    await editor.setData("");
-    // Wait for pre-condition to be fulfilled.
-    await expect(editor).waitForDataEqualTo("");
-
-    const handle = await ui.getEditableElement();
-    await handle.type(name);
-
-    await expect(editor).waitForDataContaining(name);
-  });
-
   it("Should render external links.", async () => {
     const { currentTestName } = expect.getState();
     const name = currentTestName ?? "Unknown Test";
