@@ -22,9 +22,9 @@ import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
  *
  * CKEditor default for ctrl + click or alt + enter opens the underlying link
  * in a new browser tab. For external links it is fine, but content links should
- * be open in a new work area tab, because browsers do not know how to handle them.
+ * be opened in a new work area tab, because browsers do not know how to handle them.
  *
- * In read only mode links are clickable (but not selectable for keyboard events)
+ * Per default, in read only mode links are clickable (but not selectable for keyboard events)
  * and are opened in the same tab. For content links nothing happens as # is loaded
  * as the same page but external links are opened and users lose the CMS context.
  * Therefore, this plugin overrides the behavior and opens external links in a new
