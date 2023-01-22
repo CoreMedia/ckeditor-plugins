@@ -15,8 +15,9 @@ import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/Ru
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
-import { RichTextSanitizer, trackingSanitationListener } from "./RichTextSanitizer";
+import { RichTextSanitizer } from "./RichTextSanitizer";
 import { Strictness } from "./Strictness";
+import { trackingSanitationListener } from "./SanitationListener";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
