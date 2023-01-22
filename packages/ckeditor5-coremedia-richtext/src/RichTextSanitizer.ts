@@ -2,8 +2,8 @@ import { Strictness } from "./Strictness";
 import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
-import { COREMEDIA_RICHTEXT_NAMESPACE_URI } from "./Constants";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
+import { namespaces } from "./Namespaces";
 
 const pcdata = Symbol("pcdata");
 const allowEmpty = Symbol("allowEmpty");
@@ -31,8 +31,11 @@ class ElementConfig {
       return allowed.includes(pcdata);
     }
     if (isElement(node)) {
-      // TODO: Perhaps better place, but we need to respect the namespace.
-      if (node.namespaceURI !== COREMEDIA_RICHTEXT_NAMESPACE_URI) {
+      const { parentElement } = node;
+      // Instead of declaring namespace URI explicitly, we expect it to be of
+      // the same namespace as its parent. More sophisticated behavior will
+      // require refactoring down to how to configure elements.
+      if (node.namespaceURI !== parentElement?.namespaceURI || node.prefix !== parentElement.prefix) {
         return false;
       }
       return allowed.includes(node.localName);
@@ -115,6 +118,12 @@ export const richTextElementNames = [
 export type RichTextElementName = typeof richTextElementNames[number];
 export type SupportedRichTextElements = Record<RichTextElementName, ElementConfig>;
 
+/**
+ * Supported CoreMedia Rich Text 1.0 elements. Note, that it is expected, that
+ * all elements are of the same namespace as the root element.
+ */
+// DevNote: To support different namespaceURIs of elements, it needs to become
+// part of ElementConfig and possibly require some different lookup.
 const supportedElements: SupportedRichTextElements = {
   div: new ElementConfig(Block),
   p: new ElementConfig(Inline),
@@ -147,7 +156,13 @@ export class RichTextSanitizer {
     this.listener.started();
     const { documentElement } = document;
     let result: T | false = document;
-    if (documentElement.localName !== "div") {
+    // Regarding Prefix: While supported theoretically, CoreMedia Rich Text 1.0
+    // with prefix is mostly unsupported in various layers of CoreMedia CMS.
+    if (
+      documentElement.localName !== "div" ||
+      documentElement.namespaceURI !== namespaces.default ||
+      documentElement.prefix
+    ) {
       this.listener.fatal(`Invalid document element. Expected: <div>, Action: <${documentElement.localName}>`);
       result = false;
     } else {
