@@ -59,10 +59,10 @@ class ElementConfig {
     const mayBeEmpty = allowed.length === 0 || allowed.includes(allowEmpty);
     if (!element.hasChildNodes() && !mayBeEmpty) {
       try {
+        listener.removeNode(element, "mustNotBeEmpty");
         element.remove();
-        listener.onRemoveEmpty(element);
       } catch (e) {
-        console.error(`Failed removing invalid <${element.nodeName}>: ${e}`, e);
+        listener.fatal(`Failed removing invalid ${element.nodeName}: ${e}`, e);
       }
     }
     return this;
@@ -75,16 +75,15 @@ class ElementConfig {
         const range = ownerDocument?.createRange() ?? new Range();
         range.selectNodeContents(child);
         const children = range.extractContents();
+        listener.removeNode(child, "invalidAtParent");
         if (children.hasChildNodes()) {
-          listener.onRemoveInvalidChild(parent, child, "replaceByChildren");
           parent.replaceChild(children, child);
           // Structure changed, we may need to re-evaluate
           return true;
         }
-        listener.onRemoveInvalidChild(parent, child, "remove");
         parent.removeChild(child);
       } catch (e) {
-        console.error(`Failed removing invalid child <${child.nodeName}> at <${parent.nodeName}>: ${e}`, e);
+        listener.fatal(`Failed removing invalid child ${child.nodeName} at ${parent.nodeName}: ${e}`, e);
       }
     }
     return false;
@@ -137,24 +136,114 @@ const supportedElements: SupportedRichTextElements = {
   td: new ElementConfig(Flow),
 };
 
-export interface SanitationListener {
-  onRemoveInvalidChild(parent: ParentNode, child: ChildNode, strategy: "remove" | "replaceByChildren"): void;
-  onRemoveEmpty(parent: ParentNode): void;
+export const causes = ["invalid", "invalidAtParent", "mustNotBeEmpty"];
+export type Cause = typeof causes[number];
+export const severeCauses: Exclude<Cause, "mustNotBeEmpty">[] = ["invalid", "invalidAtParent"];
+
+export class SanitationListener {
+  started(): void {}
+
+  stopped(): void {}
+
+  fatal(...data: unknown[]): void {}
+
+  enteringElement(element: Element, depth: number): void {}
+
+  leavingElement(element: Element, depth: number): void {}
+
+  removeNode(node: Node, cause: Cause): void {}
 }
 
-export const silentSanitationListener: SanitationListener = {
-  onRemoveInvalidChild(): void {},
-  onRemoveEmpty(): void {},
-};
+type ConsoleLike = Pick<Console, "debug" | "info" | "warn" | "error" | "group" | "groupEnd">;
 
-export const consoleSanitationListener: SanitationListener = {
-  onRemoveInvalidChild(parent: ParentNode, child: ChildNode, strategy) {
-    console.warn(`Removing invalid child <${child.nodeName}> at <${parent.nodeName}> by strategy '${strategy}'.`);
-  },
-  onRemoveEmpty(parent: ParentNode): void {
-    console.warn(`Removing <${parent.nodeName}> because it is empty.`);
-  },
-};
+class ConsoleSanitationListener extends SanitationListener {
+  readonly #console: ConsoleLike;
+  #started: DOMHighResTimeStamp = performance.now();
+
+  constructor(con: ConsoleLike = console) {
+    super();
+    this.#console = con;
+  }
+
+  started() {
+    this.#started = performance.now();
+    this.#console.group("Sanitation started.");
+  }
+
+  stopped() {
+    const stopped = performance.now();
+    this.#console.info(`Sanitation done within ${stopped - this.#started} ms.`);
+    this.#console.groupEnd();
+  }
+
+  fatal(...data: unknown[]) {
+    this.#console.error(data);
+  }
+
+  enteringElement(element: Element, depth: number) {
+    this.#console.group(`Entering <${element.localName}> at depth ${depth}`);
+  }
+
+  leavingElement() {
+    this.#console.groupEnd();
+  }
+
+  removeNode(node: Node, cause: Cause): void {
+    const log = severeCauses.includes(cause) ? this.#console.warn : this.#console.debug;
+    log(`Removing ${node.nodeName} (${node.nodeType}): ${cause}`);
+  }
+}
+
+export class TrackingState {
+  removed: {
+    total: number;
+    severe: number;
+  } = { total: 0, severe: 0 };
+  visitedElements = 0;
+  maxElementDepth = 0;
+  startTimeStamp: DOMHighResTimeStamp = performance.now();
+  endTimeStamp: DOMHighResTimeStamp = this.startTimeStamp;
+
+  toString(): string {
+    const { removed, visitedElements, maxElementDepth, startTimeStamp, endTimeStamp } = this;
+    const durationMillis = endTimeStamp - startTimeStamp;
+    return `Visited Elements: ${visitedElements}; Removed: ${removed.severe} severe of ${removed.total} total; Maximum Element Depth: ${maxElementDepth}; Duration (ms): ${durationMillis}`;
+  }
+}
+
+export class TrackingSanitationListener extends SanitationListener {
+  #state: TrackingState = new TrackingState();
+
+  started() {
+    this.#state = new TrackingState();
+  }
+
+  stopped() {
+    this.#state.endTimeStamp = performance.now();
+  }
+
+  enteringElement(element: Element, depth: number) {
+    this.#state.visitedElements++;
+    this.#state.maxElementDepth = Math.max(this.#state.maxElementDepth, depth);
+  }
+
+  removeNode(node: Node, cause: Cause) {
+    this.#state.removed.total++;
+    if (severeCauses.includes(cause)) {
+      this.#state.removed.severe++;
+    }
+  }
+
+  get state(): TrackingState {
+    return this.#state;
+  }
+}
+
+export const silentSanitationListener = new SanitationListener();
+
+export const consoleSanitationListener: SanitationListener = new ConsoleSanitationListener();
+
+export const trackingSanitationListener = new TrackingSanitationListener();
 
 export class RichTextSanitizer {
   constructor(
@@ -163,19 +252,29 @@ export class RichTextSanitizer {
   ) {}
 
   sanitize<T extends Document>(document: T): T | false {
+    this.listener.started();
     const { documentElement } = document;
+    let result: T | false = document;
     if (documentElement.localName !== "div") {
-      // The overall document is invalid.
-      return false;
+      this.listener.fatal(`Invalid document element. Expected: <div>, Action: <${documentElement.localName}>`);
+      result = false;
+    } else {
+      try {
+        this.#sanitize(documentElement);
+      } catch (e) {
+        this.listener.fatal(`Sanitation failed with error: ${e}`, e);
+        result = false;
+      }
     }
-    this.#sanitize(documentElement);
-    return document;
+    this.listener.stopped();
+    return result;
   }
 
-  #sanitize(element: Element): void {
+  #sanitize(element: Element, depth = 0): void {
+    this.listener.enteringElement(element, depth);
     if (isParentNode(element)) {
       for (const childElement of element.children) {
-        this.#sanitize(childElement);
+        this.#sanitize(childElement, depth + 1);
       }
     }
     const { listener } = this;
@@ -183,5 +282,6 @@ export class RichTextSanitizer {
     // If this element is not supported, it is expected to be cleaned up
     // when the parent node calls `removeInvalidChildren`.
     supportedElements[localName]?.removeInvalidChildren(element, listener).removeIfInvalid(element, listener);
+    this.listener.leavingElement(element, depth);
   }
 }

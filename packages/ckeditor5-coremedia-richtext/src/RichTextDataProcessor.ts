@@ -15,7 +15,7 @@ import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/Ru
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
-import { consoleSanitationListener, RichTextSanitizer } from "./RichTextSanitizer";
+import { RichTextSanitizer, trackingSanitationListener } from "./RichTextSanitizer";
 import { Strictness } from "./Strictness";
 
 /**
@@ -141,8 +141,8 @@ class RichTextDataProcessor implements DataProcessor {
     if (converted) {
       dataDocument.documentElement.append(converted);
     }
-    new RichTextSanitizer(Strictness.STRICT, consoleSanitationListener).sanitize(dataDocument);
-    // TODO: Sanitize Document
+    new RichTextSanitizer(Strictness.STRICT, trackingSanitationListener).sanitize(dataDocument);
+    logger.debug(`Sanitized Document: ${trackingSanitationListener.state}`);
     const xml = this.#richTextXmlWriter.getXml(dataDocument);
     logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: fragmentAsStringForDebugging,
