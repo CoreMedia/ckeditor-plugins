@@ -1,4 +1,4 @@
-import { Cause, severeCauses } from "./RichTextSanitizer";
+import { Cause, severeCauses } from "./Causes";
 
 export class SanitationListener {
   started(): void {}

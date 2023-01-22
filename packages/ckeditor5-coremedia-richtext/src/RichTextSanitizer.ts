@@ -137,10 +137,6 @@ const supportedElements: SupportedRichTextElements = {
   td: new ElementConfig(Flow),
 };
 
-export const causes = ["invalid", "invalidAtParent", "mustNotBeEmpty"];
-export type Cause = typeof causes[number];
-export const severeCauses: Exclude<Cause, "mustNotBeEmpty">[] = ["invalid", "invalidAtParent"];
-
 export class RichTextSanitizer {
   constructor(
     public readonly strictness: Strictness = Strictness.STRICT,
