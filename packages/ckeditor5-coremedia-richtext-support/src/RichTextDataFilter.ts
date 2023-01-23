@@ -45,10 +45,13 @@ class RichTextDataFilter extends Plugin {
     // Add alias elements from default data-processing.
     this.loadAliases([
       // thead|tfoot: Introduced by data-processing for `<tr>` elements
-      // having a dedicated class. No additional attributes are defined
-      // during data-processing for `thead` and `tfoot`, thus, no inheritance.
+      // having a dedicated class.
+      // In data-processing from data `<thead>` and `<tfoot>` will get the
+      // same attributes as the `<tbody>` they originate from. Thus, inheriting
+      // from `tbody` here.
       {
         name: /^(thead|tfoot)$/,
+        inherit: "tbody",
       },
       {
         name: /^(h[1-6])$/,
