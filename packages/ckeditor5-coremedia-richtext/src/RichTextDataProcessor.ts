@@ -15,9 +15,9 @@ import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/Ru
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
-import { RichTextSanitizer } from "./RichTextSanitizer";
+import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { Strictness } from "./Strictness";
-import { TrackingSanitationListener } from "./SanitationListener";
+import { TrackingSanitationListener } from "./sanitation/SanitationListener";
 import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
 
 /**

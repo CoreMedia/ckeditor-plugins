@@ -1,8 +1,8 @@
-import { Strictness } from "./Strictness";
+import { Strictness } from "../Strictness";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
-import { isKnownNamespacePrefix, namespaces } from "./Namespaces";
+import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
 
 const pcdata = Symbol("pcdata");
