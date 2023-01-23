@@ -2,6 +2,7 @@ import "./expect/Expectations";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
+import { Locator } from "playwright";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -65,6 +66,52 @@ describe("Content Link Feature", () => {
       await expect(contentLinkView).waitToBeVisible();
       await expect(contentLinkView.locator).toHaveText(`Document for`);
     });
+
+    it("Should be possible to reach all buttons with keyboard", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Lorem ipsum";
+      const { editor, mockContent } = application;
+      const { ui } = editor;
+      const { view } = ui;
+
+      const id = 48;
+      const contentName = `Document for test ${name}`;
+      await mockContent.addContents({
+        id,
+        name: contentName,
+      });
+
+      const dataLink = contentUriPath(id);
+      const data = richtext(p(a(name, { "xlink:href": dataLink })));
+      await editor.setData(data);
+
+      // In editing view links are represented with href="#".
+      const contentLink = view.locator.locator(`a`, { hasText: name });
+
+      await contentLink.click({
+        position: {
+          x: 1,
+          y: 1,
+        },
+      });
+
+      const { linkActionsView } = view.body.balloonPanel;
+      await expect(linkActionsView).waitToBeVisible();
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText(contentName);
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText("Edit link");
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText("Open in Current Tab");
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText("Open in New Tab");
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText("Show Embedded");
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText("Open in Frame");
+      await page.keyboard.press("Tab");
+      await focusedElementHasAriaText("Unlink");
+    });
   });
 
   describe("FormView Extension", () => {
@@ -120,4 +167,43 @@ describe("Content Link Feature", () => {
       await expect(editor).waitForDataContaining(`xlink:href=""`);
     });
   });
+
+  it("Should be possible to add content link with keyboard only", async () => {
+    const { currentTestName } = expect.getState();
+    const name = currentTestName ?? "Lorem ipsum";
+    const { editor, mockContent } = application;
+    const id = 46;
+    await mockContent.addContents({
+      id,
+      name: `Document for test ${name}`,
+    });
+    const { ui } = editor;
+    const { view } = ui;
+    await view.locator.click();
+    const modifier: string = await ctrlOrMeta();
+    await page.keyboard.press(`${modifier}+k`);
+    const { linkFormView } = editor.ui.view.body.balloonPanel;
+    await expect(linkFormView).waitToBeVisible();
+    await page.keyboard.type(`content:${id}`);
+
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Enter");
+
+    const contentLink = view.locator.locator(`a`, { hasText: `content:${id}` });
+    await expect(contentLink).toBeDefined();
+  });
 });
+
+const ctrlOrMeta = async function (): Promise<string> {
+  return (await isMac()) ? "Meta" : "Control";
+};
+
+const isMac = async function () {
+  const response = String(await page.evaluate(() => navigator.userAgent));
+  return response.includes("Mac");
+};
+
+const focusedElementHasAriaText = async function (ariaLabelContent: string): Promise<void> {
+  const focusedElement: Locator = await page.locator("*:focus");
+  await expect(focusedElement).waitToHaveAriaLabel(ariaLabelContent);
+};

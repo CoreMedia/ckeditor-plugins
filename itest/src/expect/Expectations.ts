@@ -10,6 +10,7 @@ import "./IsVisible/WaitToBeVisible";
 import "./isToggleable/WaitToBeOn";
 import "./isEnabled/WaitToBeEnabled";
 import "./contentName/WaitToHaveContentName";
+import "./locator/ToHaveAriaLabel";
 
 // Import Matcher Interfaces
 import { ApplicationWrapperMatchers } from "./ApplicationWrapperExpectations";
@@ -20,6 +21,7 @@ import { WaitToBeVisible } from "./IsVisible/WaitToBeVisible";
 import { WaitToBeOn } from "./isToggleable/WaitToBeOn";
 import { WaitToBeEnabled } from "./isEnabled/WaitToBeEnabled";
 import { WaitToHaveContentName } from "./contentName/WaitToHaveContentName";
+import { WaitToHaveAriaLabel } from "./locator/ToHaveAriaLabel";
 
 /**
  * Tell TypeScript to know of new matchers.
@@ -35,6 +37,7 @@ declare global {
         WaitToBeVisible,
         WaitToBeEnabled,
         WaitToHaveContentName,
+        WaitToHaveAriaLabel,
         WaitToBeOn {}
 
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -46,6 +49,7 @@ declare global {
         WaitToBeVisible<R, T>,
         WaitToBeEnabled<R, T>,
         WaitToHaveContentName<R, T>,
+        WaitToHaveAriaLabel<R, T>,
         WaitToBeOn<R, T> {}
 
     interface InverseAsymmetricMatchers
@@ -56,6 +60,7 @@ declare global {
         WaitToBeVisible,
         WaitToBeEnabled,
         WaitToHaveContentName,
+        WaitToHaveAriaLabel,
         WaitToBeOn {}
   }
 }
