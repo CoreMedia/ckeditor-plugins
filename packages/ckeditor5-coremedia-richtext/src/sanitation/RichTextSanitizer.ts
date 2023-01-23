@@ -6,6 +6,7 @@ import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
 import { acAny, AttributeContent } from "./AttributeContent";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
+import { parseAttributeDefinitionConfig, ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
 
 const special: ElementContent[] = ["br", "span", "img"];
 const phrase: ElementContent[] = ["em", "strong", "sub", "sup"];
@@ -57,43 +58,6 @@ export const acEnum = (...validValues: (string | null)[]): AttributeContent => (
     return validValues.includes(value);
   },
 });
-
-export interface AttributeDefinitionConfig {
-  localName: string;
-  prefix?: string | null;
-  namespaceURI?: string | null;
-  /**
-   * If required and missing: Use the given value as default value.
-   */
-  required?: string | false;
-  fixed?: string | null;
-  content?: AttributeContent;
-  validateValue?: (value: string | null, strictness: Strictness) => boolean;
-}
-
-export type ParsedAttributeDefinitionConfig = Required<AttributeDefinitionConfig>;
-
-export const parseAttributeDefinitionConfig = (config: AttributeDefinitionConfig): ParsedAttributeDefinitionConfig => {
-  const content = config.content ?? acAny;
-  // eslint-disable-next-line no-null/no-null
-  const prefix = config.prefix ?? null;
-  // Simplified to fall back to default namespace. May need to be adjusted, if
-  // we want to provide more sophisticated namespace support.
-  let namespaceURI = config.namespaceURI ?? namespaces.default;
-  if (!namespaceURI && isKnownNamespacePrefix(prefix)) {
-    namespaceURI = namespaces[prefix];
-  }
-  return {
-    prefix,
-    namespaceURI,
-    required: false,
-    // eslint-disable-next-line no-null/no-null
-    fixed: null,
-    content,
-    validateValue: (value: string | null, strictness: Strictness): boolean => content.validateValue(value, strictness),
-    ...config,
-  };
-};
 
 export const coreClassAttr = parseAttributeDefinitionConfig({ localName: "class", content: acCData });
 export const coreAttrs: ParsedAttributeDefinitionConfig[] = [coreClassAttr];
