@@ -98,19 +98,19 @@ describe("Content Link Feature", () => {
       const { linkActionsView } = view.body.balloonPanel;
       await expect(linkActionsView).waitToBeVisible();
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText(contentName);
+      await expectFocusedElementHasAriaText(contentName);
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText("Edit link");
+      await expectFocusedElementHasAriaText("Edit link");
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText("Open in Current Tab");
+      await expectFocusedElementHasAriaText("Open in Current Tab");
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText("Open in New Tab");
+      await expectFocusedElementHasAriaText("Open in New Tab");
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText("Show Embedded");
+      await expectFocusedElementHasAriaText("Show Embedded");
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText("Open in Frame");
+      await expectFocusedElementHasAriaText("Open in Frame");
       await page.keyboard.press("Tab");
-      await focusedElementHasAriaText("Unlink");
+      await expectFocusedElementHasAriaText("Unlink");
     });
   });
 
@@ -166,6 +166,57 @@ describe("Content Link Feature", () => {
       // remains. To completely remove it, you have to use the unlink-button.
       await expect(editor).waitForDataContaining(`xlink:href=""`);
     });
+
+    it("Should be possible to delete content link with keyboard", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Lorem ipsum";
+      const { editor, mockContent } = application;
+      const { ui } = editor;
+      const { view } = ui;
+
+      const id = 50;
+      await mockContent.addContents({
+        id,
+        name: `Document for test ${name}`,
+      });
+
+      const dataLink = contentUriPath(id);
+      const data = richtext(p(a(name, { "xlink:href": dataLink })));
+      await editor.setData(data);
+
+      // In editing view links are represented with href="#".
+      const contentLink = view.locator.locator(`a`, { hasText: name });
+
+      await contentLink.click({
+        position: {
+          x: 1,
+          y: 1,
+        },
+      });
+
+      const { linkActionsView, linkFormView } = view.body.balloonPanel;
+
+      await expect(linkActionsView).waitToBeVisible();
+      await tabToAriaLabel("Edit Link");
+      await page.keyboard.press("Enter");
+
+      const { contentLinkView } = linkFormView;
+
+      await expect(contentLinkView).waitToBeVisible();
+      await expect(contentLinkView.locator).toHaveText(`Document for`);
+
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Space");
+
+      await expect(linkFormView).waitToBeVisible();
+
+      await linkFormView.save();
+
+      // The link should have been cleared also in data.
+      // Note, that it is expected behavior, that the anchor element itself
+      // remains. To completely remove it, you have to use the unlink-button.
+      await expect(editor).waitForDataContaining(`xlink:href=""`);
+    });
   });
 
   it("Should be possible to add content link with keyboard only", async () => {
@@ -203,7 +254,45 @@ const isMac = async function () {
   return response.includes("Mac");
 };
 
-const focusedElementHasAriaText = async function (ariaLabelContent: string): Promise<void> {
+const expectFocusedElementHasAriaText = async function (ariaLabelContent: string): Promise<void> {
   const focusedElement: Locator = await page.locator("*:focus");
   await expect(focusedElement).waitToHaveAriaLabel(ariaLabelContent);
+};
+
+const tabToAriaLabel = async function (ariaLabelContent: string): Promise<void> {
+  const firstItem = await page.locator("*:focus");
+  if (await hasAriaLabel(firstItem, ariaLabelContent)) {
+    return;
+  }
+  const firstItemAriaLabelContent = await getAriaLabel(firstItem);
+  if (!firstItemAriaLabelContent) {
+    return Promise.reject();
+  }
+
+  await page.keyboard.press("Tab");
+  while (!(await focusedElementHasAriaText(firstItemAriaLabelContent))) {
+    if (await focusedElementHasAriaText(ariaLabelContent)) {
+      break;
+    }
+    await page.keyboard.press("Tab");
+  }
+};
+
+const focusedElementHasAriaText = async (ariaText: string): Promise<boolean> => {
+  const focusedElement = await page.locator("*:focus");
+  return hasAriaLabel(focusedElement, ariaText);
+};
+
+const hasAriaLabel = async (element: Locator, ariaLabel: string): Promise<boolean> => {
+  const ariaLabelContent = await getAriaLabel(element);
+  return ariaLabelContent === ariaLabel;
+};
+
+const getAriaLabel = async (element: Locator): Promise<string | null> => {
+  const ariaLabelId = await element.getAttribute("aria-labelledby");
+  if (!ariaLabelId) {
+    return Promise.reject(`No aria label found for locator: ${await element.innerHTML()}`);
+  }
+  const ariaLabelSpan = element.locator(`span#${ariaLabelId}`);
+  return ariaLabelSpan.textContent();
 };
