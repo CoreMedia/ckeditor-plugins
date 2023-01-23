@@ -1,3 +1,4 @@
+/* eslint-disable no-null/no-null */
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
