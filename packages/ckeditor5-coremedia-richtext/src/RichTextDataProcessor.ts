@@ -15,10 +15,10 @@ import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/Ru
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
-import { RichTextSanitizer } from "./sanitation/RichTextDtd";
 import { Strictness } from "./Strictness";
 import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
+import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace

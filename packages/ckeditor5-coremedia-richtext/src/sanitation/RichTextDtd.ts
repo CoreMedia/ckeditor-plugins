@@ -1,7 +1,4 @@
 import { Strictness } from "../Strictness";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
-import { silentSanitationListener } from "./SanitationListener";
-import { namespaces } from "../Namespaces";
 import { acAny, acEnum, AttributeContent } from "./AttributeContent";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 import { parseAttributeDefinitionConfig, ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
@@ -228,7 +225,7 @@ export const tdElement = new ElementConfig(Flow, [
  */
 // DevNote: To support different namespaceURIs of elements, it needs to become
 // part of ElementConfig and possibly require some different lookup.
-const supportedElements: SupportedRichTextElements = {
+export const supportedElements: SupportedRichTextElements = {
   div: divElement,
   p: pElement,
   ul: ulElement,
@@ -249,61 +246,3 @@ const supportedElements: SupportedRichTextElements = {
   tr: trElement,
   td: tdElement,
 };
-
-export class RichTextSanitizer {
-  constructor(
-    public readonly strictness: Strictness = Strictness.STRICT,
-    public readonly listener = silentSanitationListener
-  ) {}
-
-  sanitize<T extends Document>(document: T): T | false {
-    this.listener.started();
-    const { documentElement } = document;
-    let result: T | false = document;
-    // Regarding Prefix: While supported theoretically, CoreMedia Rich Text 1.0
-    // with prefix is mostly unsupported in various layers of CoreMedia CMS.
-    if (
-      documentElement.localName !== "div" ||
-      documentElement.namespaceURI !== namespaces.default ||
-      documentElement.prefix
-    ) {
-      this.listener.fatal(`Invalid document element. Expected: <div>, Action: <${documentElement.localName}>`);
-      result = false;
-    } else {
-      try {
-        this.#sanitize(documentElement);
-      } catch (e) {
-        this.listener.fatal(`Sanitation failed with error: ${e}`, e);
-        result = false;
-      }
-    }
-    this.listener.stopped();
-    return result;
-  }
-
-  #sanitize(element: Element, depth = 0): void {
-    this.listener.enteringElement(element, depth);
-
-    if (isParentNode(element)) {
-      for (const childElement of element.children) {
-        this.#sanitize(childElement, depth + 1);
-      }
-    }
-
-    const { strictness, listener } = this;
-    const { prefix, localName } = element;
-
-    // We don't respect prefixed elements yet. Thus, any prefixed
-    // elements are by default considered invalid. This, for example,
-    // is true for `<xdiff:span>`. We expect them to be removed when
-    // processing the parent element.
-    if (!prefix) {
-      // If this element is not supported, it is expected to be cleaned up
-      // when parent node is processed. This again requires, that the root
-      // element gets extra processing applied.
-      supportedElements[localName]?.process(element, strictness, listener);
-    }
-
-    this.listener.leavingElement(element, depth);
-  }
-}
