@@ -13,3 +13,13 @@ export interface AttributeContent {
    */
   validateValue(value: string | null, strictness: Strictness): boolean;
 }
+
+/**
+ * Represents an attribute, that is valid always, no matter of strictness
+ * level. Typically used for attributes with CDATA content.
+ */
+export const acAny: AttributeContent = {
+  validateValue(): true {
+    return true;
+  },
+};

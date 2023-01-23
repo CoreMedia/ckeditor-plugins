@@ -4,7 +4,7 @@ import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
-import { AttributeContent } from "./AttributeContent";
+import { acAny, AttributeContent } from "./AttributeContent";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 
 const special: ElementContent[] = ["br", "span", "img"];
@@ -19,11 +19,6 @@ const Flow: ElementContent[] = [allowEmpty, pcdata, ...block, ...inline];
 const aContent: ElementContent[] = [allowEmpty, pcdata, ...special, ...phrase];
 const preContent: ElementContent[] = [allowEmpty, pcdata, "a", "br", "span", ...phrase];
 
-export const acAny: AttributeContent = {
-  validateValue(): true {
-    return true;
-  },
-};
 export const acCData = acAny;
 export const nmTokenRegExp = /^[a-zA-Z0-9._\-:]*$/;
 export const acNmToken: AttributeContent = {
