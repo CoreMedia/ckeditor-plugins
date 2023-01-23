@@ -178,6 +178,7 @@ export class ElementConfig {
 
   /**
    * Negation of `#isValidChild`, which may be suitable for filtering.
+   *
    * @param node - child node to analyze
    */
   #isInvalidChild(node: ChildNode): boolean {
@@ -323,7 +324,39 @@ export class ElementConfig {
   #getAttributeConfig(attribute: Attr): ParsedAttributeDefinitionConfig | undefined {
     const prefix = attribute.prefix ?? defaultPrefix;
     const { localName } = attribute;
+    return this.#getAttributeConfigFromCachedData(prefix, localName);
+  }
+
+  /**
+   * Gets attribute configuration from cached data. May loop once, if
+   * attributes are not properly represented in DOM, such as that `xml:space`
+   * may be stored as attribute with prefix `null` and local name `xml:space`.
+   * In these cases, a retry is triggered by manually splitting up prefix and
+   * local name.
+   *
+   * @param prefix - prefix; possibly placeholder symbol for default prefix
+   * @param localName - local name of attribute
+   */
+  #getAttributeConfigFromCachedData(
+    prefix: string | DefaultPrefix,
+    localName: string
+  ): ParsedAttributeDefinitionConfig | undefined {
     const byPrefix = this.#attributesByPrefixAndLocalName.get(prefix);
-    return byPrefix?.get(localName);
+    const result = byPrefix?.get(localName);
+    // In some contexts, the namespaceURI of a given attribute is null, while
+    // the name contains a prefix, such as `xml:space`. We provide a fallback
+    // here, by manually extracting the prefix.
+    if (result === undefined && prefix === defaultPrefix && localName.includes(":")) {
+      const manualPrefixRegExp = /^(?<p>[^:]*):(?<n>.*)$/;
+      const match = localName.match(manualPrefixRegExp);
+      if (match) {
+        // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
+        const { p, n }: { p: string; n: string } = match.groups;
+        // As, for example, the prefix is now different from defaultPrefix, there
+        // is no danger for endless recursion.
+        return this.#getAttributeConfigFromCachedData(p, n);
+      }
+    }
+    return result;
   }
 }
