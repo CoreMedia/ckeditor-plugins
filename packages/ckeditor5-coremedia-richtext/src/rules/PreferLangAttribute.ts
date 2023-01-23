@@ -19,10 +19,6 @@ export interface PreferLangAttributeConfig {
    */
   preferInView?: string;
   /**
-   * Precedence of attributes to consider for value.
-   */
-  valuePrecedence?: string[];
-  /**
    * Priority of mapping.
    */
   priority?: PriorityString;
@@ -34,8 +30,37 @@ export interface PreferLangAttributeConfig {
 export const defaultPreferLangAttributeConfig: Required<PreferLangAttributeConfig> = {
   preferInData: "xml:lang",
   preferInView: "lang",
-  valuePrecedence: ["xml:lang", "lang"],
   priority: "normal",
+};
+
+/**
+ * Extract language attribute value. Extracting means, that all corresponding
+ * attributes will be removed and if any attribute provides a value, it is
+ * returned.
+ *
+ * Value is provided by preferring `xml:lang` over `lang`, as defined for
+ * HTML processing.
+ *
+ * @param el - element to possibly get language attributes from
+ */
+const extractLangAttributes = (el: Element): string | null => {
+  const preferredAttr: Attr | null = [
+    el.getAttributeNodeNS(nsXml, "lang"),
+    // For some reason in processing we may have an attribute without
+    // correct namespace URI applied.
+    el.getAttributeNodeNS(null, "xml:lang"),
+    el.getAttributeNodeNS(el.namespaceURI, "lang"),
+    el.getAttributeNodeNS(null, "lang"),
+  ].reduce((previous, current): Attr | null => {
+    if (current) {
+      el.removeAttributeNode(current);
+    }
+    if (previous?.value) {
+      return previous;
+    }
+    return current;
+  });
+  return preferredAttr?.value ?? null;
 };
 
 /**
@@ -47,27 +72,19 @@ export const defaultPreferLangAttributeConfig: Required<PreferLangAttributeConfi
  * in `xml:lang`.
  */
 export const preferLangAttribute = (config?: PreferLangAttributeConfig): RuleConfig => {
-  const { preferInData, preferInView, valuePrecedence, priority } = {
+  const { preferInData, preferInView, priority } = {
     ...defaultPreferLangAttributeConfig,
     ...config,
   };
 
-  const extractValue = (el: Element): string | null => {
-    let value: string | null = null;
-    valuePrecedence.reverse().forEach((key) => {
-      const namespace = key.startsWith("xml:") ? nsXml : null;
-      value = el.getAttributeNS(namespace, key) ?? value;
-      // Cleanup nodes, so that in the end we have only one, thus, clean up
-      // possible ambiguous state.
-      el.removeAttributeNS(namespace, key);
-    });
-    return value;
-  };
-
   const preferAttribute = (el: Element, key: string): void => {
-    const value = extractValue(el)?.trim();
+    const value = extractLangAttributes(el)?.trim();
     if (value) {
-      el.setAttributeNS(key.startsWith("xml:") ? nsXml : null, key, value);
+      const namespace = key.startsWith("xml:") ? nsXml : el.namespaceURI;
+      // Possible pitfall: setAttributeNS requires a qualified name, while
+      // related methods removeAttributeNS, getAttributeNS require localName
+      // instead.
+      el.setAttributeNS(namespace, key, value);
     }
   };
 
