@@ -3,6 +3,7 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { Locator } from "playwright";
+import { ctrlOrMeta } from "./browser/UserAgent";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -244,15 +245,6 @@ describe("Content Link Feature", () => {
     await expect(contentLink).toBeDefined();
   });
 });
-
-const ctrlOrMeta = async function (): Promise<string> {
-  return (await isMac()) ? "Meta" : "Control";
-};
-
-const isMac = async function () {
-  const response = String(await page.evaluate(() => navigator.userAgent));
-  return response.includes("Mac");
-};
 
 const expectFocusedElementHasAriaText = async function (ariaLabelContent: string): Promise<void> {
   const focusedElement: Locator = await page.locator("*:focus");
