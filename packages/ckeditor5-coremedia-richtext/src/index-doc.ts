@@ -9,6 +9,8 @@
  */
 
 export * as legacy from "./legacy/index-doc";
+export * as rules from "./legacy/index-doc";
+export * as sanitation from "./sanitation/index-doc";
 
 export * from "./Constants";
 
