@@ -88,21 +88,35 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   /**
-   * TODO: Reword to new method content
-   * Fills the caches for the drag and drop.
+   * Triggers the evaluation if the given uris are droppable in the richtext.
    *
-   * While the "dragover" event is executed synchronously, we have
-   * an asynchronous service-agent call to calculate the drop allowed.
+   * First call triggers the evaluation while subsequent calls will just return
+   * the evaluation state, which means either "PENDING" or the result.
    *
-   * To ensure in tests that the drop is allowed, the cache can be filled before
-   * executing the drop.
+   * This is needed for "dragover" because the event is executed synchronously
+   * but multiple times (when moving the cursor further).
    *
-   * @param uris - the uris to fill the cache for.
+   * This function can be used in tests to ensure a drop is allowed.
+   *
+   * @param uris - the uris to evaluate if they are droppable.
    */
   ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableEvaluationResult | undefined {
     return isDroppableUris(uris);
   }
 
+  /**
+   * Triggers the evaluation if the given uris are linkable in the richtext.
+   *
+   * First call triggers the evaluation while subsequent calls will just return
+   * the evaluation state, which means either "PENDING" or the result.
+   *
+   * This is needed for "dragover" because the event is executed synchronously
+   * but multiple times (when moving the cursor further).
+   *
+   * This function can be used in tests to ensure a drop is allowed.
+   *
+   * @param uris - the uris to evaluate if they are linkable.
+   */
   ensureIsDroppableInLinkBalloon(uris: string[]): IsLinkableEvaluationResult | undefined {
     return isLinkableUris(uris);
   }

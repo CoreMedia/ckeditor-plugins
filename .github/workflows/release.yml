@@ -20,6 +20,7 @@ jobs:
     env:
       NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.actor != 'coremedia-ci' && github.actor != 'github-action[bot]'
     steps:
       - name: Checkout
@@ -109,6 +110,8 @@ jobs:
         run: pnpm lint
       - name: Test
         run: pnpm jest
+      - name: Playwright Tests
+        run: pnpm playwright
       - name: TypeDoc
         run: |
           if [ -n "$(git status --porcelain)" ]; then

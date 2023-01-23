@@ -23,6 +23,14 @@ export const isUriPath = (value: unknown): value is string =>
   typeof value === "string" && CONTENT_URI_PATH_REGEXP.test(value);
 
 /**
+ * Validates, if the given value represents a Model Uri (colon separated instead of slash separated).
+ *
+ * @param value - value to validate
+ */
+export const isModelUriPath = (value: unknown): value is string =>
+  typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value);
+
+/**
  * Returns the numeric ID from a URI path.
  *
  * For convenience, it will provide any number unmodified, so that you can
