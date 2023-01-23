@@ -17,8 +17,8 @@ import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { Strictness } from "./Strictness";
-import { TrackingSanitationListener } from "./sanitation/SanitationListener";
 import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
+import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
