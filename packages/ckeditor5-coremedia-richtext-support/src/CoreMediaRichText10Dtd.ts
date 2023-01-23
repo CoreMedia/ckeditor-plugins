@@ -76,12 +76,8 @@ class CoreMediaRichText10Dtd {
         "title": true,
         // Data-Processed from xlink:actuate
         "data-xlink-actuate": /^(onRequest|onLoad)$/,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_actuate": /^(onRequest|onLoad)$/,
         // Data-Processed from xlink:type
         "data-xlink-type": /^(simple)$/,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_type": /^(simple)$/,
       },
     },
     CoreMediaRichText10Dtd.attrs
@@ -101,24 +97,14 @@ class CoreMediaRichText10Dtd {
         "width": true,
         // Data-Processed from xlink:actuate
         "data-xlink-actuate": /^(onRequest|onLoad)$/,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_actuate": /^(onRequest|onLoad)$/,
         // Data-Processed from xlink:href
         "data-xlink-href": true,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_href": true,
         // Data-Processed from xlink:role
         "data-xlink-role": true,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_role": true,
         // Data-Processed from xlink:show
         "data-xlink-show": /^(embed)$/,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_show": /^(embed)$/,
         // Data-Processed from xlink:type
         "data-xlink-type": /^(simple)$/,
-        // TODO: Allow alternative representation for new data processor.
-        "data-xlink_type": /^(simple)$/,
       },
     },
     CoreMediaRichText10Dtd.attrs
