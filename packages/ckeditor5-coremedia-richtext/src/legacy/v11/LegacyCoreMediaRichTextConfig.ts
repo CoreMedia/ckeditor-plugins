@@ -9,7 +9,7 @@ import {
   ToDataAndViewElementConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 
-import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy, } from "./rules/ReplaceBy";
+import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
@@ -18,9 +18,7 @@ import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from 
 import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
 import { Strictness } from "../../Strictness";
-import CoreMediaRichTextConfig from "../../CoreMediaRichTextConfig";
-
-export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
+import { getV10CoreMediaRichTextConfig } from "../../CoreMediaRichTextConfig";
 
 /**
  * Configuration options for CoreMedia RichText Data Processing.
@@ -152,8 +150,7 @@ const defaultRules: FilterRuleSetConfiguration = {
  * @param config - configuration to parse
  */
 export const getConfig = (config?: CKEditorConfig): ParsedConfig => {
-  const customConfig: CoreMediaRichTextConfig = (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ||
-    {}) as CoreMediaRichTextConfig;
+  const customConfig = getV10CoreMediaRichTextConfig(config);
 
   const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
 

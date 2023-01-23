@@ -290,6 +290,7 @@ ClassicEditor.create(sourceElement, {
   },
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     strictness: Strictness.STRICT,
+    compatibility: "v10",
     rules: {
       elements: {
         // Highlight Plugin Support

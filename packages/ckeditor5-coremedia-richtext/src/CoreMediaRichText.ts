@@ -4,6 +4,7 @@ import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import RichTextDataProcessor from "./RichTextDataProcessor";
+import { getCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 
 /**
  * Applies a data-processor for CoreMedia RichText 1.0 support.
@@ -13,13 +14,22 @@ export default class CoreMediaRichText extends Plugin {
 
   init(): void {
     const initInformation = reportInitStart(this);
+    const { editor } = this;
+    const { config } = editor;
+    const parsedConfig = getCoreMediaRichTextConfig(config);
+    const { compatibility } = parsedConfig;
+
     let dataProcessor: DataProcessor;
 
-    // TODO: Replace by compat flag.
-    if (false) {
-      dataProcessor = new LegacyRichTextDataProcessor(this.editor);
-    } else {
-      dataProcessor = new RichTextDataProcessor(this.editor);
+    switch (compatibility) {
+      case "latest":
+        dataProcessor = new RichTextDataProcessor(this.editor);
+        break;
+      case "v10":
+        dataProcessor = new LegacyRichTextDataProcessor(this.editor);
+        break;
+      default:
+        throw new Error(`Incompatible configuration: ${compatibility}`);
     }
 
     // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
