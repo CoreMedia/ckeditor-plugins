@@ -4,7 +4,7 @@ import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
-import { acAny, AttributeContent } from "./AttributeContent";
+import { acAny, acEnum, AttributeContent } from "./AttributeContent";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 import { parseAttributeDefinitionConfig, ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
 
@@ -50,14 +50,6 @@ export const acLength: AttributeContent = {
     return lengthRegEx.test(value);
   },
 };
-export const acEnum = (...validValues: (string | null)[]): AttributeContent => ({
-  validateValue(value: string | null, strictness: Strictness): boolean {
-    if (!value || strictness === Strictness.LOOSE) {
-      return true;
-    }
-    return validValues.includes(value);
-  },
-});
 
 export const coreClassAttr = parseAttributeDefinitionConfig({ localName: "class", content: acCData });
 export const coreAttrs: ParsedAttributeDefinitionConfig[] = [coreClassAttr];

@@ -23,3 +23,17 @@ export const acAny: AttributeContent = {
     return true;
   },
 };
+
+/**
+ * Creates an attribute content definition of enumerated values.
+ *
+ * @param validValues - valid values an attribute may take
+ */
+export const acEnum = (...validValues: (string | null)[]): AttributeContent => ({
+  validateValue(value: string | null, strictness: Strictness): boolean {
+    if (!value || strictness === Strictness.LOOSE) {
+      return true;
+    }
+    return validValues.includes(value);
+  },
+});
