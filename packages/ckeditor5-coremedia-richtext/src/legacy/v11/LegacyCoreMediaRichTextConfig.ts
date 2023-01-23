@@ -9,11 +9,7 @@ import {
   ToDataAndViewElementConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 
-import {
-  replaceBy,
-  replaceByElementAndClassBackAndForth,
-  replaceElementAndClassBy,
-} from "./rules/ReplaceBy";
+import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy, } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
 import { tableRules } from "./rules/Table";
@@ -22,19 +18,9 @@ import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from 
 import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
 import { Strictness } from "../../Strictness";
+import CoreMediaRichTextConfig from "../../CoreMediaRichTextConfig";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
-
-/**
- * Configuration as given at CKEditor initialization.
- */
-export default interface CoreMediaRichTextConfig {
-  /**
-   * The strictness when validating against CoreMedia RichText 1.0 DTD.
-   */
-  readonly strictness?: Strictness;
-  readonly rules?: FilterRuleSetConfiguration;
-}
 
 /**
  * Configuration options for CoreMedia RichText Data Processing.

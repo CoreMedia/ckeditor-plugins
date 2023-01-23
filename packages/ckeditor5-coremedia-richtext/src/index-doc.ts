@@ -17,6 +17,8 @@ export * from "./Constants";
 export * from "./CoreMediaRichText";
 export { default as CoreMediaRichText } from "./CoreMediaRichText";
 
+export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
+
 export * from "./RichTextDataProcessor";
 export { default as RichTextDataProcessor } from "./RichTextDataProcessor";
 
