@@ -4,6 +4,7 @@ import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
+import { AttributeContent } from "./AttributeContent";
 
 const pcdata = Symbol("pcdata");
 const allowEmpty = Symbol("allowEmpty");
@@ -21,10 +22,6 @@ const Block: ElementContent[] = [allowEmpty, ...block];
 const Flow: ElementContent[] = [allowEmpty, pcdata, ...block, ...inline];
 const aContent: ElementContent[] = [allowEmpty, pcdata, ...special, ...phrase];
 const preContent: ElementContent[] = [allowEmpty, pcdata, "a", "br", "span", ...phrase];
-
-export interface AttributeContent {
-  validateValue(value: string | null, strictness: Strictness): boolean;
-}
 
 export const acAny: AttributeContent = {
   validateValue(): true {
