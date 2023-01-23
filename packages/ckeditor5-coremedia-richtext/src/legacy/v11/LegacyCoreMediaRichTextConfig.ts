@@ -1,4 +1,4 @@
-import RichTextSchema from "./legacy/v11/RichTextSchema";
+import RichTextSchema from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
 import { allFilterRules } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
@@ -13,15 +13,15 @@ import {
   replaceBy,
   replaceByElementAndClassBackAndForth,
   replaceElementAndClassBy,
-} from "./legacy/v11/rules/ReplaceBy";
-import { headingRules, paragraphToHeading } from "./legacy/v11/rules/Heading";
-import { handleAnchor } from "./legacy/v11/rules/Anchor";
-import { tableRules } from "./legacy/v11/rules/Table";
-import { getSchema, schemaRules } from "./legacy/v11/rules/Schema";
-import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./legacy/v11/rules/Lang";
-import { handleImage } from "./legacy/v11/rules/Image";
-import { listRules } from "./legacy/v11/rules/List";
-import { Strictness } from "./Strictness";
+} from "./rules/ReplaceBy";
+import { headingRules, paragraphToHeading } from "./rules/Heading";
+import { handleAnchor } from "./rules/Anchor";
+import { tableRules } from "./rules/Table";
+import { getSchema, schemaRules } from "./rules/Schema";
+import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
+import { handleImage } from "./rules/Image";
+import { listRules } from "./rules/List";
+import { Strictness } from "../../Strictness";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 

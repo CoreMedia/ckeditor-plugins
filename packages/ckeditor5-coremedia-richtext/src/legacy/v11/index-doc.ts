@@ -8,6 +8,9 @@
 
 export * as rules from "./rules/index-doc";
 
+export * from "./LegacyCoreMediaRichTextConfig";
+export { default as CoreMediaRichTextConfig } from "./LegacyCoreMediaRichTextConfig";
+
 export * from "./LegacyRichTextDataProcessor";
 export { default as LegacyRichTextDataProcessor } from "./LegacyRichTextDataProcessor";
 

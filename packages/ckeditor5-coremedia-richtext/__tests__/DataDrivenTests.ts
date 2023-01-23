@@ -1,7 +1,7 @@
 import "jest-xml-matcher";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { getConfig } from "../src/CoreMediaRichTextConfig";
+import { getConfig } from "../src/legacy/v11/LegacyCoreMediaRichTextConfig";
 import { parseXml, silenced } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
