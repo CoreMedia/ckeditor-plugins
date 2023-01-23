@@ -76,6 +76,18 @@ export default class ContentLinkView extends ButtonView {
      */
     this.set("renderAsTextLink", false);
 
+    /*
+     * The aria label usually just points to the label of the button. Since we want to
+     * add information about the document type to the aria label and not to the text
+     * of the button, the best solution is to remove the "aria-labelledby" attribute and
+     * use "aria-label" instead.
+     *
+     * @observable
+     * @member {string} #ariaLabelText
+     * @default empty string
+     */
+    this.set("ariaLabelText", "");
+
     this.withText = true;
 
     if (renderOptions?.renderTypeIcon) {
@@ -96,11 +108,12 @@ export default class ContentLinkView extends ButtonView {
 
     this.extendTemplate({
       attributes: {
-        class: [
+        "class": [
           "cm-ck-content-link-view",
           bind.if("underlined", "cm-ck-button--underlined"),
           bind.if("renderAsTextLink", "ck-link-actions__preview"),
         ],
+        "aria-label": bind.to("ariaLabelText"),
       },
       on: {
         // @ts-expect-error TODO Mismatch with typings from DefinitelyTyped
@@ -137,7 +150,6 @@ export default class ContentLinkView extends ButtonView {
       this.#statusIcon?.set({
         iconClass: undefined,
       });
-      this.updateAriaLabel("");
 
       this.#endContentSubscription();
 
@@ -167,7 +179,9 @@ export default class ContentLinkView extends ButtonView {
       }
       this.children.add(this.#cancelButton);
     }
-    this.updateAriaLabel("");
+    if (this.element) {
+      this.element.removeAttribute("aria-labelledby");
+    }
   }
 
   #endContentSubscription(): void {
@@ -201,8 +215,8 @@ export default class ContentLinkView extends ButtonView {
               this.set({
                 tooltip: received.content.name,
                 contentName: received.content.name,
+                ariaLabelText: `${received.type.name}: ${received.content.name}`,
               });
-              this.updateAriaLabel(`${received.type.name}: ${received.content.name}`);
             },
           })
         );
@@ -214,24 +228,6 @@ export default class ContentLinkView extends ButtonView {
 
   get cancelButton(): ButtonView | undefined {
     return this.#cancelButton;
-  }
-
-  /**
-   * The aria label usually just points to the label of the button. Since we want to
-   * add information about the document type to the aria label and not to the text
-   * of the button, the best solution is to remove the "aria-labelled" attribute and
-   * use "aria-label" instead.
-   *
-   * @param label - the aria label to be set
-   */
-  updateAriaLabel(label: string): void {
-    const element = this.element;
-    if (!element) {
-      return;
-    }
-
-    element.ariaLabel = label;
-    element.removeAttribute("aria-labelledby");
   }
 
   destroy(): void {
