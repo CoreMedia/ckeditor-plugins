@@ -25,6 +25,11 @@ export const acAny: AttributeContent = {
 };
 
 /**
+ * Expresses content type `CDATA` in attribute declaration.
+ */
+export const acCData = acAny;
+
+/**
  * Creates an attribute content definition of enumerated values.
  *
  * @param validValues - valid values an attribute may take
@@ -37,3 +42,16 @@ export const acEnum = (...validValues: (string | null)[]): AttributeContent => (
     return validValues.includes(value);
   },
 });
+
+const nmTokenRegExp = /^[a-zA-Z0-9._\-:]*$/;
+/**
+ * Expresses content type `NMTOKEN` in attribute definition.
+ */
+export const acNmToken: AttributeContent = {
+  validateValue(value: string | null, strictness: Strictness): boolean {
+    if (!value || strictness === Strictness.LEGACY) {
+      return true;
+    }
+    return nmTokenRegExp.test(value);
+  },
+};
