@@ -20,51 +20,7 @@ export class SanitationListener {
   removeNode(node: Node, cause: Cause): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  removeInvalidAttr(attributeOwner: Element, attr: Attr): void {}
-}
-
-type ConsoleSanitationListenerConsole = Pick<Console, "debug" | "info" | "warn" | "error" | "group" | "groupEnd">;
-
-class ConsoleSanitationListener extends SanitationListener {
-  readonly #console: ConsoleSanitationListenerConsole;
-  #started: DOMHighResTimeStamp = performance.now();
-
-  constructor(con: ConsoleSanitationListenerConsole = console) {
-    super();
-    this.#console = con;
-  }
-
-  started() {
-    this.#started = performance.now();
-    this.#console.group("Sanitation started.");
-  }
-
-  stopped() {
-    const stopped = performance.now();
-    this.#console.info(`Sanitation done within ${stopped - this.#started} ms.`);
-    this.#console.groupEnd();
-  }
-
-  fatal(...data: unknown[]) {
-    this.#console.error(data);
-  }
-
-  enteringElement(element: Element, depth: number) {
-    this.#console.group(`Entering <${element.localName}> at depth ${depth}`);
-  }
-
-  leavingElement() {
-    this.#console.groupEnd();
-  }
-
-  removeNode(node: Node, cause: Cause): void {
-    const log = severeCauses.includes(cause) ? this.#console.warn : this.#console.debug;
-    log(`Removing ${node.nodeName} (${node.nodeType}): ${cause}`);
-  }
-
-  removeInvalidAttr(attributeOwner: Element, attr: Attr) {
-    this.#console.warn(`Removing invalid ${attr.localName} at ${attributeOwner.localName}.`);
-  }
+  removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: "invalidAtElement" | "invalidValue"): void {}
 }
 
 class TrackingState {
@@ -117,6 +73,10 @@ export class TrackingSanitationListener extends SanitationListener {
     }
   }
 
+  fatal(...data: unknown[]) {
+    this.#console.error(data);
+  }
+
   enteringElement(element: Element, depth: number) {
     this.#state.visitedElements++;
     this.#state.maxElementDepth = Math.max(this.#state.maxElementDepth, depth);
@@ -132,11 +92,10 @@ export class TrackingSanitationListener extends SanitationListener {
     }
   }
 
-  removeInvalidAttr(attributeOwner: Element, attr: Attr) {
-    this.#console.debug(`Removing invalid attribute ${attr.localName} at ${attributeOwner.localName}.`);
+  removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: "invalidAtElement" | "invalidValue") {
+    this.#console.debug(`Removing invalid attribute ${attr.localName} at ${attributeOwner.localName} (value: "${attr.value}"): ${cause}`);
     this.#state.removedInvalidAttrs++;
   }
 }
 
 export const silentSanitationListener = new SanitationListener();
-export const consoleSanitationListener: SanitationListener = new ConsoleSanitationListener();

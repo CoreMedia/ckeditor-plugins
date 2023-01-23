@@ -1,6 +1,9 @@
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { namespaces } from "../Namespaces";
+
+const nsXml = namespaces.xml;
 
 /**
  * Configuration for mapping language attributes.
@@ -50,11 +53,12 @@ export const preferLangAttribute = (config?: PreferLangAttributeConfig): RuleCon
 
   const extractValue = (el: Element): string | null => {
     let value: string | null = null;
-    valuePrecedence.reverse().forEach((attr) => {
-      value = el.getAttribute(attr) ?? value;
+    valuePrecedence.reverse().forEach((key) => {
+      const namespace = key.startsWith("xml:") ? nsXml : null;
+      value = el.getAttributeNS(namespace, key) ?? value;
       // Cleanup nodes, so that in the end we have only one, thus, clean up
       // possible ambiguous state.
-      el.removeAttribute(attr);
+      el.removeAttributeNS(namespace, key);
     });
     return value;
   };
@@ -62,7 +66,7 @@ export const preferLangAttribute = (config?: PreferLangAttributeConfig): RuleCon
   const preferAttribute = (el: Element, key: string): void => {
     const value = extractValue(el)?.trim();
     if (value) {
-      el.setAttribute(key, value);
+      el.setAttributeNS(key.startsWith("xml:") ? nsXml : null, key, value);
     }
   };
 

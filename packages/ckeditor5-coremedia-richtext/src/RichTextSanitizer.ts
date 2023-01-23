@@ -313,19 +313,29 @@ class ElementConfig {
         // Namespaces handled later.
         continue;
       }
+      const { value } = attribute;
       const config = this.#getAttributeConfig(attribute);
+
       // We combine check for invalid attribute and invalid attribute value.
       // If we require more sophisticated reporting, we may want to split
       // it up instead.
-      if (!config || !config.validateValue(attribute.value, strictness)) {
-        listener.removeInvalidAttr(element, attribute);
-        element.removeAttributeNode(attribute);
-      } else if (config?.fixed) {
+      if (!config) {
+        listener.removeInvalidAttr(element, attribute, "invalidAtElement");
+      } else {
+        const fixed = config.fixed;
         // Cleanup: Remove fixed attributes, that are irrelevant to store.
-        element.removeAttributeNode(attribute);
+        if (fixed && fixed === value) {
+          // Cleanup: We expect a fixed value to be valid by definition and that
+          // it is obsolete to forward it to stored data.
+          element.removeAttributeNode(attribute);
+        } else if (!config.validateValue(value, strictness)) {
+          listener.removeInvalidAttr(element, attribute, "invalidValue");
+          element.removeAttributeNode(attribute);
+        }
+
+        // We may, as suggested by TSDoc, also remove irrelevant attributes, if
+        // they match the default values as provided by DTD. Skipped for now.
       }
-      // We may, as suggested by TSDoc, also remove irrelevant attributes, if
-      // they match the default values as provided by DTD. Skipped for now.
     }
     this.#processRequiredAttributes(element);
   }
@@ -344,11 +354,8 @@ class ElementConfig {
         const qualifiedName = `${prefixString}${localName}`;
         if (!element.hasAttribute(qualifiedName)) {
           let namespaceURI = element.lookupNamespaceURI(actualPrefix);
-          if (actualPrefix && !namespaceURI) {
+          if (actualPrefix && isKnownNamespacePrefix(actualPrefix) && !namespaceURI) {
             namespaceURI = namespaces[actualPrefix];
-            if (!namespaceURI) {
-              throw new Error(`Required attribute defined without well-known namespace prefix: ${actualPrefix}.`);
-            }
           }
           element.setAttributeNS(namespaceURI, qualifiedName, defaultValue);
         }
@@ -356,6 +363,16 @@ class ElementConfig {
     }
   }
 
+  /**
+   * Get configuration of _known_ attribute, `undefined` if corresponding
+   * attribute is not defined. Note, that for proper namespace/prefix support,
+   * attributes must have been created with full namespace support. Thus,
+   * using `setAttribute("xml:lang", "en")` would create an attribute, that
+   * cannot be handled by this, as the prefix will be `null` for this attribute
+   * then.
+   *
+   * @param attribute - attribute to get configuration for
+   */
   #getAttributeConfig(attribute: Attr): ParsedAttributeDefinitionConfig | undefined {
     const prefix = attribute.prefix ?? defaultPrefix;
     const { localName } = attribute;
