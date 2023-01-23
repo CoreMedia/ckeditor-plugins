@@ -5,11 +5,7 @@ import { SanitationListener, silentSanitationListener } from "./SanitationListen
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
 import { AttributeContent } from "./AttributeContent";
-
-const pcdata = Symbol("pcdata");
-const allowEmpty = Symbol("allowEmpty");
-
-type ElementContent = string | typeof pcdata | typeof allowEmpty;
+import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 
 const special: ElementContent[] = ["br", "span", "img"];
 const phrase: ElementContent[] = ["em", "strong", "sub", "sup"];
