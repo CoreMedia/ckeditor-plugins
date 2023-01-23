@@ -125,6 +125,21 @@ class ContentLinkFormViewExtension extends Plugin {
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
+
+    // focus contentLinkView when formView is opened and urlInputView is not visible
+    this.listenTo(
+      linkUI.actionsView,
+      "edit",
+      () => {
+        if (!formView.urlInputView.element || formView.urlInputView.element.style.visibility === "") {
+          // the urlInput is hidden, focus contentView instead
+          contentLinkView.focus();
+        }
+      },
+      {
+        priority: "lowest",
+      }
+    );
   }
 
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
