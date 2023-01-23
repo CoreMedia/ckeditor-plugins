@@ -37,10 +37,21 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         const tBodies = [...node.tBodies];
         const targetBody = node.createTBody();
 
+        const transferAttributesToTargetBody = (section: HTMLTableSectionElement): void => {
+          for (const attribute of section.attributes) {
+            // We risk overriding here for now, not expecting any collisions.
+            // If collisions exist, we may want to prefer those of tbody.
+            targetBody.setAttributeNode(attribute.cloneNode(true) as Attr);
+          }
+        };
+
         if (tHead) {
+          transferAttributesToTargetBody(tHead);
+
           [...tHead.rows].forEach((row) => {
             row.classList.add(headerRowClass);
           });
+
           const range = ownerDocument.createRange();
           range.selectNodeContents(tHead);
           targetBody.append(range.extractContents());
@@ -48,6 +59,8 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         }
 
         [...tBodies].forEach((tBody) => {
+          transferAttributesToTargetBody(tBody);
+
           // We don't mark the origin of `<tbody>` here, thus, we only support
           // ony `<tbody>`. To change this behavior, we would have to remember
           // the index of `<tbody>` as class, for example.
@@ -58,6 +71,8 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         });
 
         if (tFoot) {
+          transferAttributesToTargetBody(tFoot);
+
           [...tFoot.rows].forEach((row) => {
             row.classList.add(footerRowClass);
           });
@@ -97,7 +112,14 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
           }
         });
 
-        previousBodies.forEach((previousBody) => previousBody.remove());
+        previousBodies.forEach((previousBody) => {
+          for (const attribute of previousBody.attributes) {
+            tHead.setAttributeNode(attribute.cloneNode(true) as Attr);
+            tBody.setAttributeNode(attribute.cloneNode(true) as Attr);
+            tFoot.setAttributeNode(attribute.cloneNode(true) as Attr);
+          }
+          previousBody.remove();
+        });
 
         // Cleanup possibly empty `<thead>`
         if (tHead.childElementCount === 0) {
