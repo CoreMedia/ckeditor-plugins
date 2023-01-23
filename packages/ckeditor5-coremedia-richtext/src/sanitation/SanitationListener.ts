@@ -1,4 +1,4 @@
-import { AttributeCause, ElementCause } from "../Causes";
+import { AttributeCause, ElementCause } from "./Causes";
 
 export class SanitationListener {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

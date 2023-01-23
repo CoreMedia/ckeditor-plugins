@@ -1,4 +1,4 @@
-import { AttributeCause, ElementCause, severeElementCauses } from "../Causes";
+import { AttributeCause, ElementCause, severeElementCauses } from "./Causes";
 import { SanitationListener } from "./SanitationListener";
 
 class TrackingState {
