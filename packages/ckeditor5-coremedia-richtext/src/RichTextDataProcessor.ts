@@ -17,7 +17,8 @@ import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { RichTextSanitizer } from "./RichTextSanitizer";
 import { Strictness } from "./Strictness";
-import { trackingSanitationListener } from "./SanitationListener";
+import { TrackingSanitationListener } from "./SanitationListener";
+import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -142,8 +143,14 @@ class RichTextDataProcessor implements DataProcessor {
     if (converted) {
       dataDocument.documentElement.append(converted);
     }
-    new RichTextSanitizer(Strictness.STRICT, trackingSanitationListener).sanitize(dataDocument);
-    logger.debug(`Sanitized Document: ${trackingSanitationListener.state}`);
+
+    new RichTextSanitizer(Strictness.STRICT, new TrackingSanitationListener(logger)).sanitize(dataDocument);
+
+    // We have to do this late, as sanitation may have removed
+    // elements/attributes, whose namespace prefixes may otherwise be registered
+    // although unused in the end.
+    registerNamespacePrefixes(dataDocument);
+
     const xml = this.#richTextXmlWriter.getXml(dataDocument);
     logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: fragmentAsStringForDebugging,

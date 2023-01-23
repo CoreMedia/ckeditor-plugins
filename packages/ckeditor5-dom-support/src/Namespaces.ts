@@ -1,41 +1,52 @@
+import { isDocument } from "./Documents";
+
 /**
  * Namespace URI for `xmlns`.
  */
 export const xmlnsNamespaceUri = "http://www.w3.org/2000/xmlns/";
 
 /**
- * Registers the given namespace prefix at the root document element.
+ * Registers namespace prefixes of document (recursively) or
+ * element (non-recursive) to given target element. If target element is unset
+ * it falls back to the `documentElement` (of `ownerDocument`, if element is
+ * given).
  *
- * @param ownerDocument - document to register namespace at its document element
- * @param prefix - prefix to register
- * @param namespaceUri - namespace URI to register
+ * @param documentOrElement - the document to analyze recursively or the element
+ * to analyze non-recursively.
+ * @param targetElement - the element, that shall receive the prefixed namespace
+ * declarations; defaults applied according to description.
  */
-export const registerNamespacePrefixAtDocumentElement = (
-  ownerDocument: Document,
-  prefix: string,
-  namespaceUri: string
-): void => {
-  ownerDocument.documentElement.setAttributeNS(xmlnsNamespaceUri, `xmlns:${prefix}`, namespaceUri);
-};
+export const registerNamespacePrefixes = (documentOrElement: Document | Element, targetElement?: Element): void => {
+  if (isDocument(documentOrElement)) {
+    const target = targetElement ?? documentOrElement.documentElement;
+    documentOrElement.querySelectorAll("*").forEach((el) => registerNamespacePrefixes(el, target));
+    return;
+  }
 
-/**
- * Registers namespace prefixes globally at document element.
- *
- * @param ownerDocument - owner document, where to add namespace declarations
- * to its document element
- */
-export const globallyRegisterNamespacePrefixes = (ownerDocument: Document): void => {
+  const element = documentOrElement;
+  const { ownerDocument } = element;
+
+  const target = targetElement ?? ownerDocument?.documentElement;
+
+  if (!target) {
+    throw new Error(
+      "Illegal State: Either given element to analyze must by attached to DOM or a targetElement must be provided."
+    );
+  }
+
+  if (target.isSameNode(element)) {
+    return;
+  }
+
   const processNamespacedNode = (node: Attr | Element) => {
     const { prefix, namespaceURI } = node;
     if (prefix && namespaceURI) {
-      registerNamespacePrefixAtDocumentElement(ownerDocument, prefix, namespaceURI);
+      target.setAttributeNS(xmlnsNamespaceUri, `xmlns:${prefix}`, namespaceURI);
     }
   };
-  const processElement = (el: Element) => {
-    processNamespacedNode(el);
-    for (const attr of el.attributes) {
-      processNamespacedNode(attr);
-    }
-  };
-  ownerDocument.querySelectorAll("*").forEach(processElement);
+
+  processNamespacedNode(element);
+  for (const attr of element.attributes) {
+    processNamespacedNode(attr);
+  }
 };

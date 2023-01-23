@@ -1,8 +1,10 @@
 import { Cause, severeCauses } from "./Causes";
 
 export class SanitationListener {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   started(): void {}
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   stopped(): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
@@ -16,15 +18,18 @@ export class SanitationListener {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   removeNode(node: Node, cause: Cause): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
+  removeInvalidAttr(attributeOwner: Element, attr: Attr): void {}
 }
 
-type ConsoleLike = Pick<Console, "debug" | "info" | "warn" | "error" | "group" | "groupEnd">;
+type ConsoleSanitationListenerConsole = Pick<Console, "debug" | "info" | "warn" | "error" | "group" | "groupEnd">;
 
 class ConsoleSanitationListener extends SanitationListener {
-  readonly #console: ConsoleLike;
+  readonly #console: ConsoleSanitationListenerConsole;
   #started: DOMHighResTimeStamp = performance.now();
 
-  constructor(con: ConsoleLike = console) {
+  constructor(con: ConsoleSanitationListenerConsole = console) {
     super();
     this.#console = con;
   }
@@ -56,27 +61,48 @@ class ConsoleSanitationListener extends SanitationListener {
     const log = severeCauses.includes(cause) ? this.#console.warn : this.#console.debug;
     log(`Removing ${node.nodeName} (${node.nodeType}): ${cause}`);
   }
+
+  removeInvalidAttr(attributeOwner: Element, attr: Attr) {
+    this.#console.warn(`Removing invalid ${attr.localName} at ${attributeOwner.localName}.`);
+  }
 }
 
-export class TrackingState {
+class TrackingState {
   removed: {
     total: number;
     severe: number;
   } = { total: 0, severe: 0 };
+  removedInvalidAttrs = 0;
   visitedElements = 0;
   maxElementDepth = 0;
   startTimeStamp: DOMHighResTimeStamp = performance.now();
   endTimeStamp: DOMHighResTimeStamp = this.startTimeStamp;
 
+  /**
+   * Are there any severe issues, that signal, that data-processing is missing
+   * any rules for correct mapping?
+   */
+  hasSevereIssues(): boolean {
+    return this.removed.severe + this.removedInvalidAttrs > 0;
+  }
+
   toString(): string {
-    const { removed, visitedElements, maxElementDepth, startTimeStamp, endTimeStamp } = this;
+    const { removed, removedInvalidAttrs, visitedElements, maxElementDepth, startTimeStamp, endTimeStamp } = this;
     const durationMillis = endTimeStamp - startTimeStamp;
-    return `Visited Elements: ${visitedElements}; Removed: ${removed.severe} severe of ${removed.total} total; Maximum Element Depth: ${maxElementDepth}; Duration (ms): ${durationMillis}`;
+    return `Visited Elements: ${visitedElements}; Removed: ${removed.severe} severe of ${removed.total} total; Removed Invalid Attributes: ${removedInvalidAttrs}, Maximum Element Depth: ${maxElementDepth}; Duration (ms): ${durationMillis}`;
   }
 }
 
+type TrackingSanitationListenerConsole = Pick<Console, "debug" | "info" | "warn" | "error">;
+
 export class TrackingSanitationListener extends SanitationListener {
   #state: TrackingState = new TrackingState();
+  #console: TrackingSanitationListenerConsole;
+
+  constructor(con: TrackingSanitationListenerConsole = console) {
+    super();
+    this.#console = con;
+  }
 
   started() {
     this.#state = new TrackingState();
@@ -84,6 +110,11 @@ export class TrackingSanitationListener extends SanitationListener {
 
   stopped() {
     this.#state.endTimeStamp = performance.now();
+    if (this.#state.hasSevereIssues()) {
+      this.#console.warn(`Sanitation done with issues (turn on debug logging for details): ${this.#state}`);
+    } else {
+      this.#console.debug(`Sanitation done: ${this.#state}`);
+    }
   }
 
   enteringElement(element: Element, depth: number) {
@@ -95,14 +126,17 @@ export class TrackingSanitationListener extends SanitationListener {
     this.#state.removed.total++;
     if (severeCauses.includes(cause)) {
       this.#state.removed.severe++;
+      this.#console.debug(
+        `Removing ${node.nodeName} (type: ${node.nodeType}, parent: ${node.parentNode?.nodeName}): ${cause}`
+      );
     }
   }
 
-  get state(): TrackingState {
-    return this.#state;
+  removeInvalidAttr(attributeOwner: Element, attr: Attr) {
+    this.#console.debug(`Removing invalid attribute ${attr.localName} at ${attributeOwner.localName}.`);
+    this.#state.removedInvalidAttrs++;
   }
 }
 
 export const silentSanitationListener = new SanitationListener();
 export const consoleSanitationListener: SanitationListener = new ConsoleSanitationListener();
-export const trackingSanitationListener = new TrackingSanitationListener();

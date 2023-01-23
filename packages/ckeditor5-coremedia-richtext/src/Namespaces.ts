@@ -2,6 +2,8 @@ export const knownNamespacePrefixes = ["xml", "xlink", "xdiff"];
 
 export type KnownNamespacePrefix = typeof knownNamespacePrefixes[number];
 
+export const isKnownNamespacePrefix = (value: unknown): value is KnownNamespacePrefix => typeof value === "string" && knownNamespacePrefixes.includes(value);
+
 /**
  * Maps namespace prefixes to expected namespace URIs.
  */

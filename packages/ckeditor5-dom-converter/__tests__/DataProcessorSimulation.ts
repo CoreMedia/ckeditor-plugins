@@ -1,5 +1,5 @@
 import { HtmlDomConverter } from "../src/HtmlDomConverter";
-import { globallyRegisterNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
+import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
 
 /**
  * Simulates processing from HTML document as hold in data view layer in
@@ -21,7 +21,7 @@ export const toData = (converter: HtmlDomConverter, htmlDocument: Document, xmlD
 
   // Doing this late ensures, that we only register remaining namespaces
   // after transformation process.
-  globallyRegisterNamespacePrefixes(xmlDocument);
+  registerNamespacePrefixes(xmlDocument);
 };
 
 /**
@@ -44,5 +44,5 @@ export const toDataView = (converter: HtmlDomConverter, xmlDocument: Document, h
 
   // Doing this late ensures, that we only register remaining namespaces
   // after transformation process.
-  globallyRegisterNamespacePrefixes(htmlDocument);
+  registerNamespacePrefixes(htmlDocument);
 };

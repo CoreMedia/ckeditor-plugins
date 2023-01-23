@@ -5,6 +5,7 @@
  */
 export * from "./Attrs";
 export * from "./CharacterDatas";
+export * from "./Comments";
 export * from "./DocumentFragments";
 export * from "./Documents";
 export * from "./Elements";
@@ -15,3 +16,4 @@ export * from "./HTMLTableElements";
 export * from "./Namespaces";
 export * from "./Nodes";
 export * from "./ParentNodes";
+export * from "./Texts";
