@@ -48,6 +48,7 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
     linkUI.actionsView.set({
       contentUriPath: undefined,
     });
+    formView.urlInputView.focus();
   });
 
   return contentLinkView;
