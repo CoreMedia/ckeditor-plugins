@@ -212,6 +212,10 @@ export default class ContentLinkView extends ButtonView {
       });
   }
 
+  get cancelButton(): ButtonView | undefined {
+    return this.#cancelButton;
+  }
+
   /**
    * The aria label usually just points to the label of the button. Since we want to
    * add information about the document type to the aria label and not to the text
