@@ -7,25 +7,75 @@ import {
 } from "./XLink";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support/HTMLAnchorElements";
+import { ConversionApi } from "@coremedia/ckeditor5-dom-converter/ConversionApi";
 
-export const contentUriPathPrefix = "content" as const;
-export const dataContentLinkPattern = /^content\/(?<id>\d+)$/;
-export const viewContentLinkPattern = /^content:(?<id>\d+)$/;
+const contentUriPathPrefix = "content" as const;
 
+/**
+ * Pattern for extracting ID (group: `id`) from link as represented in data.
+ * Support URI Paths from CoreMedia Studio as well as UAPI Links.
+ */
+const dataContentLinkPattern = /^(?:coremedia:\/{3}cap\/)?content\/(?<id>\d+)$/;
+
+/**
+ * Pattern for extracting ID (group: `id`) from link as represented in data
+ * view.
+ */
+const viewContentLinkPattern = /^content:(?<id>\d+)$/;
+
+/**
+ * Template literal string for UAPI Content Links.
+ */
+export type UapiContentLink = `coremedia:///cap/content/${number}`;
+
+/**
+ * Template literal string for Content Links as represented in general in data.
+ */
 export type DataContentLink = `${typeof contentUriPathPrefix}/${number}`;
 
+/**
+ * Template literal string for Content Links as represented in data view.
+ */
 export type ViewContentLink = `${typeof contentUriPathPrefix}:${number}`;
 
-export const parseDataContentLink = (value: DataContentLink | string): number | undefined => {
+/**
+ * Parses ID of content links as they are represented in data. For convenience,
+ * especially in source editing, also UAPI links are supported, while in
+ * general `content/<id>` is expected in context of CoreMedia Studio.
+ *
+ * Thus, you may expect results as follows, for example:
+ *
+ * * `content/42` evaluates to number 42
+ * * `coremedia:///cap/content/42` evaluates to number 42
+ * * `https://example.org/` evaluates to `undefined`
+ *
+ * @param value - value to parse
+ */
+export const parseDataContentLink = (value: DataContentLink | UapiContentLink | string): number | undefined => {
   const match = value.match(dataContentLinkPattern);
   if (!match) {
     return;
   }
   // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
   const { id }: { id: string } = match.groups;
-  return parseInt(id);
+  const parsed = parseInt(id);
+  if (isNaN(parsed)) {
+    // Should not happen for valid RegExp, but provides an additional safety net.
+    return undefined;
+  }
+  return parsed;
 };
 
+/**
+ * Parses ID of content links as they are represented in data view.
+ *
+ * Thus, you may expect results as follows, for example:
+ *
+ * * `content:42` evaluates to number 42
+ * * `https://example.org/` evaluates to `undefined`
+ *
+ * @param value - value to parse
+ */
 export const parseViewContentLink = (value: ViewContentLink | string): number | undefined => {
   const match = value.match(viewContentLinkPattern);
   if (!match) {
@@ -33,11 +83,35 @@ export const parseViewContentLink = (value: ViewContentLink | string): number | 
   }
   // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
   const { id }: { id: string } = match.groups;
-  return parseInt(id);
+  const parsed = parseInt(id);
+  if (isNaN(parsed)) {
+    // Should not happen for valid RegExp, but provides an additional safety net.
+    return undefined;
+  }
+  return parsed;
 };
 
+/**
+ * Transforms the given ID to a content link is represented in data layer, thus,
+ * `content/${number}`.
+ *
+ * @param id - id to format
+ */
 export const toDataContentLink = (id: number): DataContentLink => `content/${id}`;
+/**
+ * Transforms the given ID to a content link is represented in view layer, thus,
+ * `content:${number}`.
+ *
+ * @param id - id to format
+ */
 export const toViewContentLink = (id: number): ViewContentLink => `content:${id}`;
+
+/**
+ * Formats a link suitable for representation in data send to CoreMedia Studio
+ * server.
+ *
+ * @param value - value from data view to transform
+ */
 export const formatHrefForData = (value: ViewContentLink | string): DataContentLink | string => {
   const parsed = parseViewContentLink(value);
   if (parsed !== undefined) {
@@ -47,6 +121,12 @@ export const formatHrefForData = (value: ViewContentLink | string): DataContentL
   return value;
 };
 
+/**
+ * Formats a link suitable for representation in data view. This format provides
+ * good integration into CKEditor 5 Link Feature.
+ *
+ * @param value - value from data to transform
+ */
 export const formatHrefForView = (value: DataContentLink | string): ViewContentLink | string => {
   const parsed = parseDataContentLink(value);
   if (parsed !== undefined) {
@@ -56,6 +136,21 @@ export const formatHrefForView = (value: DataContentLink | string): ViewContentL
   return value;
 };
 
+/**
+ * Formats value for `target` attribute of an anchor element, so that it can
+ * be edited as part of the CKEditor 5 Link feature (with additional
+ * CoreMedia Plugin).
+ *
+ * As CoreMedia Rich Text 1.0 does not support the `target` attribute, it was
+ * best practice ever since CoreMedia Rich Text 1.0, to encode the `target` into
+ * two attributes `xlink:show` and `xlink:role`.
+ *
+ * For transformation, some artificial states provide a consistent format, so
+ * that it is suitable to restore the original state later on, when transforming
+ * `target` back to `xlink:role`/`xlink:show` again.
+ *
+ * @param attributes - relevant XLink attributes `role` and `show` to format target.
+ */
 export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">): string => {
   const { show, role } = attributes;
   let target = "";
@@ -110,6 +205,13 @@ export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">)
   return target;
 };
 
+/**
+ * Parses targets as, for example, generated by `formatTarget` back to a
+ * representation in attributes `xlink:show` and `xlink:role`.
+ *
+ * @param target - target to parse
+ * @returns parsed result; possibly empty object
+ */
 export const parseTarget = (target: string): Partial<Pick<XLinkAttributes, "show" | "role">> => {
   const newAttrs: Partial<Pick<XLinkAttributes, "show" | "role">> = {};
   const showRoleExpression = /^(_[^_]+)(?:|_(.+))$/;
@@ -177,54 +279,67 @@ export const parseTarget = (target: string): Partial<Pick<XLinkAttributes, "show
   return newAttrs;
 };
 
+/**
+ * Transforms attributes of anchor element (if identified as anchor element)
+ * to suitable attributes in data representation.
+ *
+ * Note, that this should be called early in data-processing when still
+ * operating on HTML DOM representation to benefit from richer API.
+ *
+ * @param node - node to possibly adapt
+ */
+export const transformLinkAttributesToData = (node: Node): void => {
+  if (isHTMLAnchorElement(node)) {
+    const xlinkAttrs = {
+      ...extractXLinkDataSetEntries(node),
+      // Provides xlink:role and xlink:show.
+      ...parseTarget(node.target),
+      href: formatHrefForData(node.href),
+    };
+    setXLinkAttributes(node, xlinkAttrs);
+    // Clear used data:
+    node.removeAttribute("target");
+    node.removeAttribute("href");
+  }
+};
+
+export const transformLinkAttributesToView = (node: Node, { api }: { api: ConversionApi }): Node => {
+  if (isHTMLAnchorElement(node)) {
+    const xlinkAttrs = extractXLinkAttributes(node);
+    const { href, show, role } = xlinkAttrs;
+
+    // Clear respected data.
+    delete xlinkAttrs.href;
+    delete xlinkAttrs.show;
+    delete xlinkAttrs.role;
+
+    if (href === undefined) {
+      // Invalid state, that should not happen for valid CoreMedia Rich Text 1.0
+      console.warn("Invalid anchor node in data without required `xlink:href` attribute set. Ignoring node.");
+      // The empty document fragment ensures, that we keep the children.
+      return api.createDocumentFragment();
+    }
+    node.href = formatHrefForView(href);
+
+    const target = formatTarget({ show, role });
+    if (target) {
+      node.target = target;
+    }
+
+    setXLinkDataSetEntries(node, xlinkAttrs);
+  }
+  return node;
+};
+
 export const anchorElements: RuleConfig = {
   id: `transform-anchor-element-attributes-bijective`,
   toData: {
     id: `toData-transform-xlink-attributes`,
     // Do early, to benefit from richer HTML API.
-    prepare: (node): void => {
-      if (isHTMLAnchorElement(node)) {
-        const xlinkAttrs = {
-          ...extractXLinkDataSetEntries(node),
-          // Provides xlink:role and xlink:show.
-          ...parseTarget(node.target),
-          href: formatHrefForData(node.href),
-        };
-        setXLinkAttributes(node, xlinkAttrs);
-        // Clear used data:
-        node.removeAttribute("target");
-        node.removeAttribute("href");
-      }
-    },
+    prepare: transformLinkAttributesToData,
   },
   toView: {
     id: `toView-transform-xlink-attributes`,
-    imported: (node, { api }): Node => {
-      if (isHTMLAnchorElement(node)) {
-        const xlinkAttrs = extractXLinkAttributes(node);
-        const { href, show, role } = xlinkAttrs;
-
-        // Clear respected data.
-        delete xlinkAttrs.href;
-        delete xlinkAttrs.show;
-        delete xlinkAttrs.role;
-
-        if (href === undefined) {
-          // Invalid state, that should not happen for valid CoreMedia Rich Text 1.0
-          console.warn("Invalid anchor node in data without required `xlink:href` attribute set. Ignoring node.");
-          // The empty document fragment ensures, that we keep the children.
-          return api.createDocumentFragment();
-        }
-        node.href = formatHrefForView(href);
-
-        const target = formatTarget({ show, role });
-        if (target) {
-          node.target = target;
-        }
-
-        setXLinkDataSetEntries(node, xlinkAttrs);
-      }
-      return node;
-    },
+    imported: transformLinkAttributesToView,
   },
 };
