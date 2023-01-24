@@ -1,6 +1,6 @@
 import * as aut from "../../src/rules/DivElements";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
-import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
+import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
 import { bijective, Direction, isToData, isToView } from "./Direction";
 
