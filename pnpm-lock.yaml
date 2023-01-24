@@ -82,6 +82,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-essentials': ^10.3.0
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': ^10.3.0
       '@coremedia/ckeditor5-dataprocessor-support': ^10.3.0
+      '@coremedia/ckeditor5-dom-converter': ^10.3.0
       '@coremedia/ckeditor5-font-mapper': ^10.3.0
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-alignment': 29.0.7
@@ -157,6 +158,7 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-essentials': link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-coremedia-studio-integration-mock': link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-dataprocessor-support': link:../packages/ckeditor5-dataprocessor-support
+      '@coremedia/ckeditor5-dom-converter': link:../packages/ckeditor5-dom-converter
       '@coremedia/ckeditor5-font-mapper': link:../packages/ckeditor5-font-mapper
       '@coremedia/service-agent': 1.1.5
       xml-formatter: 2.6.1
