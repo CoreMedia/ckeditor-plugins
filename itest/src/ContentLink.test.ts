@@ -2,8 +2,8 @@ import "./expect/Expectations";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
-import { Locator } from "playwright";
 import { ctrlOrMeta } from "./browser/UserAgent";
+import { expectFocusedElementHasAriaText, tabToAriaLabel } from "./aria/AriaUtils";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -99,7 +99,7 @@ describe("Content Link Feature", () => {
       const { linkActionsView } = view.body.balloonPanel;
       await expect(linkActionsView).waitToBeVisible();
       await page.keyboard.press("Tab");
-      await expectFocusedElementHasAriaText(contentName);
+      await expectFocusedElementHasAriaText(`Document: ${contentName}`);
       await page.keyboard.press("Tab");
       await expectFocusedElementHasAriaText("Edit link");
       await page.keyboard.press("Tab");
@@ -196,9 +196,10 @@ describe("Content Link Feature", () => {
       });
 
       const { linkActionsView, linkFormView } = view.body.balloonPanel;
-
       await expect(linkActionsView).waitToBeVisible();
-      await tabToAriaLabel("Edit Link");
+
+      await page.keyboard.press("Tab");
+      await tabToAriaLabel("Edit link");
       await page.keyboard.press("Enter");
 
       const { contentLinkView } = linkFormView;
@@ -245,46 +246,3 @@ describe("Content Link Feature", () => {
     await expect(contentLink).toBeDefined();
   });
 });
-
-const expectFocusedElementHasAriaText = async function (ariaLabelContent: string): Promise<void> {
-  const focusedElement: Locator = await page.locator("*:focus");
-  await expect(focusedElement).waitToHaveAriaLabel(ariaLabelContent);
-};
-
-const tabToAriaLabel = async function (ariaLabelContent: string): Promise<void> {
-  const firstItem = await page.locator("*:focus");
-  if (await hasAriaLabel(firstItem, ariaLabelContent)) {
-    return;
-  }
-  const firstItemAriaLabelContent = await getAriaLabel(firstItem);
-  if (!firstItemAriaLabelContent) {
-    return Promise.reject();
-  }
-
-  await page.keyboard.press("Tab");
-  while (!(await focusedElementHasAriaText(firstItemAriaLabelContent))) {
-    if (await focusedElementHasAriaText(ariaLabelContent)) {
-      break;
-    }
-    await page.keyboard.press("Tab");
-  }
-};
-
-const focusedElementHasAriaText = async (ariaText: string): Promise<boolean> => {
-  const focusedElement = await page.locator("*:focus");
-  return hasAriaLabel(focusedElement, ariaText);
-};
-
-const hasAriaLabel = async (element: Locator, ariaLabel: string): Promise<boolean> => {
-  const ariaLabelContent = await getAriaLabel(element);
-  return ariaLabelContent === ariaLabel;
-};
-
-const getAriaLabel = async (element: Locator): Promise<string | null> => {
-  const ariaLabelId = await element.getAttribute("aria-labelledby");
-  if (!ariaLabelId) {
-    return Promise.reject(`No aria label found for locator: ${await element.innerHTML()}`);
-  }
-  const ariaLabelSpan = element.locator(`span#${ariaLabelId}`);
-  return ariaLabelSpan.textContent();
-};

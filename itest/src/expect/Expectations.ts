@@ -10,7 +10,7 @@ import "./IsVisible/WaitToBeVisible";
 import "./isToggleable/WaitToBeOn";
 import "./isEnabled/WaitToBeEnabled";
 import "./contentName/WaitToHaveContentName";
-import "./locator/ToHaveAriaLabel";
+import "./aria/ToHaveAriaLabel";
 
 // Import Matcher Interfaces
 import { ApplicationWrapperMatchers } from "./ApplicationWrapperExpectations";
@@ -21,7 +21,7 @@ import { WaitToBeVisible } from "./IsVisible/WaitToBeVisible";
 import { WaitToBeOn } from "./isToggleable/WaitToBeOn";
 import { WaitToBeEnabled } from "./isEnabled/WaitToBeEnabled";
 import { WaitToHaveContentName } from "./contentName/WaitToHaveContentName";
-import { WaitToHaveAriaLabel } from "./locator/ToHaveAriaLabel";
+import { WaitToHaveAriaLabel } from "./aria/ToHaveAriaLabel";
 
 /**
  * Tell TypeScript to know of new matchers.
