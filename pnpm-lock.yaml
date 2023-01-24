@@ -661,6 +661,7 @@ importers:
       '@ckeditor/ckeditor5-engine': ^35.4.0
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
+      '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
       '@coremedia/ckeditor5-common': ^10.3.0
       '@coremedia/ckeditor5-core-common': ^10.3.0
@@ -691,6 +692,7 @@ importers:
       '@ckeditor/ckeditor5-engine': 35.4.0
       '@ckeditor/ckeditor5-utils': 35.4.0
       '@coremedia-internal/ckeditor5-babel-config': link:../ckeditor5-babel-config
+      '@coremedia-internal/ckeditor5-coremedia-example-data': link:../ckeditor5-coremedia-example-data
       '@coremedia-internal/ckeditor5-jest-test-helpers': link:../ckeditor5-jest-test-helpers
       '@types/ckeditor__ckeditor5-core': 33.0.3
       '@types/ckeditor__ckeditor5-engine': 32.0.11
