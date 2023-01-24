@@ -12,6 +12,12 @@ import { replaceElementByElementAndClass } from "./ReplaceElementByElementAndCla
  * transform them back to `<div>` when loaded into CKEditor, as well as a
  * corresponding mapping could be applied in delivery.
  *
+ * Nevertheless, this mapping is rather limited, as it only supports
+ * `<div>` in the same context as `<p>` elements are allowed. The same
+ * applies to allowed children. Thus, especially a `<div>` in data view
+ * must not contain a nexted `<p>` element. Such states would be fixed by
+ * sanitation but may provide surprising results.
+ *
  * * **Reserved Class:** `p--div`
  * * **Data View:** `<div>
  * * **Data:** `<p class="p--div">`
