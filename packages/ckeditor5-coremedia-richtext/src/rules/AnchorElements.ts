@@ -303,6 +303,17 @@ export const transformLinkAttributesToData = (node: Node): void => {
   }
 };
 
+/**
+ * Transforms attributes of anchor element (if identified as anchor element)
+ * to suitable attributes in data view representation.
+ *
+ * Note, that this should be called later in data-processing when
+ * operating on HTML DOM representation to benefit from richer API.
+ *
+ * @param node - node to possibly adapt
+ * @param api - conversion API
+ * @param api.api - conversion API
+ */
 export const transformLinkAttributesToView = (node: Node, { api }: { api: ConversionApi }): Node => {
   if (isHTMLAnchorElement(node)) {
     const xlinkAttrs = extractXLinkAttributes(node);
