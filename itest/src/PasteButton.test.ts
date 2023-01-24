@@ -165,7 +165,7 @@ describe("Paste Button", () => {
       }
     );
     it("Should paste a link using keyboard shorcut.", async () => {
-      const inputElementClass = "one-link";
+      const inputElementClass = "paste-via-keyboard-link";
       const contentMock = oneLink;
       await setupScenario(inputElementClass, contentMock);
 
