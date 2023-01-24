@@ -104,7 +104,9 @@ export default class ContentLinkView extends ButtonView {
     }
     if (this.renderOptions?.renderCancelButton) {
       this.#cancelButton = new CancelButtonView(this.locale);
+      this.#cancelButton.delegate("execute").to(this, "executeCancel");
     }
+    this.delegate("execute").to(this, "executeContentLink");
 
     this.extendTemplate({
       attributes: {
@@ -115,25 +117,15 @@ export default class ContentLinkView extends ButtonView {
         ],
         "aria-label": bind.to("ariaLabelText"),
       },
-      on: {
-        // @ts-expect-error TODO Mismatch with typings from DefinitelyTyped
-        click: bind.to((evt: MouseEvent) => {
-          evt.preventDefault();
-          const el: Element = evt.target as Element;
-          if (el?.id === CancelButtonView.iconId) {
-            this.fire("cancelClick");
-          } else {
-            this.fire("contentClick");
-          }
-        }),
-        dblclick: bind.to((evt: Event) => {
-          evt.preventDefault();
-          const el: Element = evt.target as Element;
-          if (!(el?.id === CancelButtonView.iconId)) {
-            this.fire("doubleClick");
-          }
-        }),
-      },
+    });
+
+    this.listenTo(this, "executeContentLink", () => {
+      // If cancel button is executed, this button also executes
+      // We must not fire the contentClick event then. Therefore, check
+      // if executeCancel already removed the uriPath
+      if (this.uriPath) {
+        this.fire("contentClick");
+      }
     });
 
     this.bind("label").to(this, "contentName");
