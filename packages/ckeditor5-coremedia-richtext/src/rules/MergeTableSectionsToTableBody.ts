@@ -2,6 +2,7 @@ import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Direction, resolveDirectionToConfig } from "./Direction";
 import { isHTMLTableElement } from "@coremedia/ckeditor5-dom-support/HTMLTableElements";
+import { removeClass } from "@coremedia/ckeditor5-dom-support/Elements";
 
 export interface MergeTableSectionsToTableBodyConfig {
   headerRowClass?: string;
@@ -58,7 +59,7 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
           node.deleteTHead();
         }
 
-        [...tBodies].forEach((tBody) => {
+        tBodies.forEach((tBody) => {
           transferAttributesToTargetBody(tBody);
 
           // We don't mark the origin of `<tbody>` here, thus, we only support
@@ -102,10 +103,10 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         rows.forEach((row) => {
           if (row.classList.contains(headerRowClass)) {
             tHead.append(row);
-            row.classList.remove(headerRowClass);
+            removeClass(row, headerRowClass);
           } else if (row.classList.contains(footerRowClass)) {
             tFoot.append(row);
-            row.classList.remove(footerRowClass);
+            removeClass(row, footerRowClass);
           } else {
             // Put all remaining rows into one `<tbody>`.
             tBody.append(row);
@@ -127,7 +128,11 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         }
         // Cleanup possibly empty `<tbody>`
         if (tBody.childElementCount === 0) {
-          node.deleteTHead();
+          tBody.remove();
+        }
+        // Cleanup possibly empty `<tfoot>`
+        if (tFoot.childElementCount === 0) {
+          node.deleteTFoot();
         }
         return node;
       },

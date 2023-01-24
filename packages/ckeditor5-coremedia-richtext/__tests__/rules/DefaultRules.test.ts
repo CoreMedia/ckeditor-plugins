@@ -84,8 +84,8 @@ describe("DefaultRules", () => {
     ${`<p><img alt="" width="42" xlink:href="${imgHref}"/></p>`}                    | ${bijective} | ${`<p><img alt="" width="42" data-xlink-href="${imgHref}" src="${INLINE_IMG}"/></p>`}
     ${`<table><tbody><tr><td>${text}</td></tr></tbody></table>`}                    | ${bijective} | ${`<table><tbody><tr><td>${text}</td></tr></tbody></table>`}
     ${`<table><tbody><tr><td class="td--header">${text}</td></tr></tbody></table>`} | ${bijective} | ${`<table><tbody><tr><th>${text}</th></tr></tbody></table>`}
-    ${`<table><tbody><tr class="tr--header"><td>${text}</td></tr></tbody></table>`} | ${bijective} | ${`<table><thead><tr><th>${text}</th></tr></thead></table>`}
-    ${`<table><tbody><tr class="tr--footer"><td>${text}</td></tr></tbody></table>`} | ${bijective} | ${`<table><tfoot><tr><th>${text}</th></tr></tfoot></table>`}
+    ${`<table><tbody><tr class="tr--header"><td>${text}</td></tr></tbody></table>`} | ${bijective} | ${`<table><thead><tr><td>${text}</td></tr></thead></table>`}
+    ${`<table><tbody><tr class="tr--footer"><td>${text}</td></tr></tbody></table>`} | ${bijective} | ${`<table><tfoot><tr><td>${text}</td></tr></tfoot></table>`}
   `(
     "[$#] Should provide mapping from data $direction view: $data $direction $view",
     ({ data, direction, view }: { data: string; direction: Direction; view: string }) => {
