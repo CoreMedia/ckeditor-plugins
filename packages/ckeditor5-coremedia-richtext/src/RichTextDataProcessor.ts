@@ -19,6 +19,7 @@ import { Strictness } from "./Strictness";
 import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
+import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -65,7 +66,10 @@ class RichTextDataProcessor implements DataProcessor {
       RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
 
-    this.addRules(...defaultRules);
+    const config = getLatestCoreMediaRichTextConfig(editor.config);
+
+    this.addRules([...defaultRules, ...config.rules]);
+
     // This rule should later move to Differencing Plugin
     /*
      * We need to mark xdiff:span as elements preserving spaces. Otherwise,
@@ -253,7 +257,13 @@ class RichTextDataProcessor implements DataProcessor {
     }
   }
 
-  addRules(...configs: RuleConfig[]): void {
+  addRule(config: RuleConfig): void {
+    this.addRule(config);
+    this.toDataRules.sort(byPriority);
+    this.toViewRules.sort(byPriority);
+  }
+
+  addRules(configs: RuleConfig[]): void {
     configs.forEach((config) => this.#addRule(config));
     this.toDataRules.sort(byPriority);
     this.toViewRules.sort(byPriority);

@@ -59,6 +59,8 @@ import { Command, icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
 
 const {
   //@ts-expect-error We currently have no way to extend icon typing.
@@ -90,12 +92,28 @@ const imagePlugins = [
   ImageBlockEditing,
   ImageStyle,
   ImageToolbar,
-  ImageTextAlternative];
+  ImageTextAlternative,
+];
 
 const sourceElement = document.querySelector("#editor") as HTMLElement;
 if (!sourceElement) {
   throw new Error("No element with class editor defined in html. Nothing to create the editor in.");
 }
+
+/**
+ * Apply custom mapping rules.
+ */
+const richTextRuleConfigurations: RuleConfig[] = [
+  // Highlight plugin support.
+  replaceElementByElementAndClass({
+    viewLocalName: "mark",
+    dataLocalName: "span",
+    // "mark" is the default here, derived from `viewLocalName`. Thus,
+    // we may skip it here.
+    dataReservedClass: "mark",
+  }),
+];
+
 ClassicEditor.create(sourceElement, {
   licenseKey: "",
   placeholder: "Type your text here...",
@@ -289,14 +307,20 @@ ClassicEditor.create(sourceElement, {
     },
   },
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
+    // Defaults to: Loose
     strictness: Strictness.STRICT,
-    compatibility: "v10",
-    rules: {
-      elements: {
-        // Highlight Plugin Support
-        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
-      },
-    },
+    // Latest is the default. Use v10 for first data-processor architecture,
+    // for example.
+    compatibility: "latest",
+    rules: richTextRuleConfigurations,
+    /* Example for v10 configuration:
+     * rules: {
+     *   elements: {
+     *     // Highlight Plugin Support
+     *     mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
+     *   },
+     * },
+     */
   },
   [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
     aliases: [

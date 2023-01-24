@@ -1,6 +1,7 @@
 import { Strictness } from "./Strictness";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -42,6 +43,7 @@ export interface CommonCoreMediaRichTextConfig extends CompatibilityConfig {
 
 export interface LatestCoreMediaRichTextConfig extends CommonCoreMediaRichTextConfig {
   readonly compatibility: "latest";
+  readonly rules: RuleConfig[];
 }
 
 const isLatestCoreMediaRichTextConfig = (value: unknown): value is LatestCoreMediaRichTextConfig => {

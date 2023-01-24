@@ -30,6 +30,9 @@
       "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
         "../../packages/ckeditor5-coremedia-studio-integration-mock/src/*"
       ],
+      "@coremedia/ckeditor5-dom-converter/*": [
+        "../../packages/ckeditor5-dom-converter/src/*"
+      ],
       "@coremedia/ckeditor5-font-mapper/*": [
         "../../packages/ckeditor5-font-mapper/src/*"
       ],
@@ -65,6 +68,9 @@
     },
     {
       "path": "../../packages/ckeditor5-coremedia-studio-integration-mock/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-dom-converter/src"
     },
     {
       "path": "../../packages/ckeditor5-font-mapper/src"
