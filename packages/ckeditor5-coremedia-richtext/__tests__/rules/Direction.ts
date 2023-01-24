@@ -1,5 +1,5 @@
 export const bijective = "<=>";
-const toView = "=>";
+export const toView = "=>";
 export const toData = "<=";
 type Bijective = typeof bijective;
 type ToView = typeof toView;
