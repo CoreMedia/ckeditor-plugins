@@ -116,8 +116,8 @@ class ContentLinkActionsViewExtension extends Plugin {
     }
     // @ts-expect-error TODO: Element may be null; we should check that
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
-
-    handleFocusManagement(actionsView as LinkViewWithFocusables, [simpleContentLinkView], actionsView.previewButtonView);
+    const linkViewWithFocusable = actionsView as LinkViewWithFocusables;
+    handleFocusManagement(linkViewWithFocusable, [simpleContentLinkView], actionsView.previewButtonView);
   }
 }
 
