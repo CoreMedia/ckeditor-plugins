@@ -4,4 +4,4 @@
  * @packageDocumentation
  */
 
-export * from "../legacy/v11/rules/ReplaceBy";
+export * from "../compatibility/v10/rules/ReplaceBy";

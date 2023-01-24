@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import "jest-xml-matcher";
-import RichTextSchema from "../src/legacy/v11/RichTextSchema";
+import RichTextSchema from "../src/compatibility/v10/RichTextSchema";
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
 import { Strictness } from "../src/Strictness";
 

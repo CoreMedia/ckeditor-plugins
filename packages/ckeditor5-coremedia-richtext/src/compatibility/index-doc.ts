@@ -6,4 +6,4 @@
  * @category Virtual
  */
 
-export * as v11 from "./v11/index-doc";
+export * as v10 from "./v10/index-doc";

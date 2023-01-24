@@ -1,4 +1,4 @@
-import { formatLink } from "../../src/legacy/v11/rules/IdHelper";
+import { formatLink } from "../../src/compatibility/v10/rules/IdHelper";
 
 describe("IdHelper", () => {
   test.each`
