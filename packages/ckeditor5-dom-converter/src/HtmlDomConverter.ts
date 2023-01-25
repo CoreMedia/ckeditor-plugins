@@ -108,8 +108,6 @@ export class HtmlDomConverter {
    * There is no need when overriding to call the `super` method as it is
    * a no-operation method.
    *
-   * This method must not detach the original node from DOM or relocate it.
-   *
    * @param originalNode - original (mutable!) node
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

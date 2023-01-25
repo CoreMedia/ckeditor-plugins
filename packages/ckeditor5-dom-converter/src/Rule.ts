@@ -38,6 +38,19 @@ export type RuleConfig = RequireSelected<RuleConfigBase, "toData"> | RequireSele
 
 /**
  * A configuration for either `toData` or `toView` transformation.
+ *
+ * While processing, the following steps will be sequentially invoked
+ * for a given node:
+ *
+ * 1. prepare
+ * 2. imported
+ * 3. importedWithChildren
+ * 4. appended
+ *
+ * Note, that for a given node, first all _prepare_ steps are executed for
+ * a given node, then all _imported_ steps, and so on. Thus, do not
+ * expect by default, that a node handled in `prepare` step comes unchanged
+ * to the next step _imported_.
  */
 export interface RuleSectionConfigBase {
   /**
@@ -71,6 +84,19 @@ export interface RuleSectionConfigBase {
    * Also note, that previous processing may have already adapted or even
    * exchanged the imported node. So, it may make sense to do some checks
    * on the original node instead, like, if a given rule is applicable.
+   *
+   * Typical behaviors done in this stage:
+   *
+   * * Adapt attributes.
+   * * Exchange node by another (just by returning a new one).
+   *
+   * You may also append child nodes in this state. Original child nodes will
+   * then be appended. Nevertheless, structural changes are best applied
+   * in `importedWithChildren` step, as you have full control on the
+   * structure then.
+   *
+   * Alternative to this, you may add children to the original
+   * DOM as part of the `prepare` step.
    */
   imported?: ImportedFunction;
   /**
