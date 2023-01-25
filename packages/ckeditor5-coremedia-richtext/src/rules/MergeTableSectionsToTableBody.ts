@@ -46,9 +46,26 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
           }
         };
 
+        // Attributes: Attributes of first `<tbody>` always take precedence
+        // over any other attributes set. Also decided, as `<thead> is supported
+        // by CKEditor 5, while `<tfoot>` isn't supported yet, that attributes
+        // of `<thead>` take precedence over `<tfoot>`.
+
+        if (tFoot) {
+          transferAttributesToTargetBody(tFoot);
+        }
+
         if (tHead) {
           transferAttributesToTargetBody(tHead);
+        }
 
+        // Attributes of first `<tbody>` preferred, thus, applying
+        // reverse transfer of attributes.
+        [...tBodies].reverse().forEach((tBody) => {
+          transferAttributesToTargetBody(tBody);
+        });
+
+        if (tHead) {
           [...tHead.rows].forEach((row) => {
             row.classList.add(headerRowClass);
           });
@@ -60,8 +77,6 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         }
 
         tBodies.forEach((tBody) => {
-          transferAttributesToTargetBody(tBody);
-
           // We don't mark the origin of `<tbody>` here, thus, we only support
           // ony `<tbody>`. To change this behavior, we would have to remember
           // the index of `<tbody>` as class, for example.
@@ -72,8 +87,6 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         });
 
         if (tFoot) {
-          transferAttributesToTargetBody(tFoot);
-
           [...tFoot.rows].forEach((row) => {
             row.classList.add(footerRowClass);
           });
