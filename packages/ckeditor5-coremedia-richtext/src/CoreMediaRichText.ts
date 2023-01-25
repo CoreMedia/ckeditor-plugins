@@ -1,5 +1,5 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import LegacyRichTextDataProcessor from "./compatibility/v10/LegacyRichTextDataProcessor";
+import V10RichTextDataProcessor from "./compatibility/v10/V10RichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
@@ -26,7 +26,7 @@ export default class CoreMediaRichText extends Plugin {
         dataProcessor = new RichTextDataProcessor(this.editor);
         break;
       case "v10":
-        dataProcessor = new LegacyRichTextDataProcessor(this.editor);
+        dataProcessor = new V10RichTextDataProcessor(this.editor);
         break;
       default:
         throw new Error(`Incompatible configuration: ${compatibility}`);

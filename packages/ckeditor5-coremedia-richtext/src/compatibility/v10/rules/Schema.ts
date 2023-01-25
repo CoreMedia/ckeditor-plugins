@@ -5,7 +5,7 @@ import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/Tex
 import RichTextSchema from "../RichTextSchema";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
-import LegacyRichTextDataProcessor from "../LegacyRichTextDataProcessor";
+import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
@@ -21,7 +21,7 @@ export const getSchema = ({ editor }: ElementFilterParams | TextFilterParams): R
   if (dataProcessor === null) {
     return defaultSchema;
   }
-  const richTextDataProcessor: LegacyRichTextDataProcessor = dataProcessor as LegacyRichTextDataProcessor;
+  const richTextDataProcessor: V10RichTextDataProcessor = dataProcessor as V10RichTextDataProcessor;
   if (!richTextDataProcessor) {
     return defaultSchema;
   }

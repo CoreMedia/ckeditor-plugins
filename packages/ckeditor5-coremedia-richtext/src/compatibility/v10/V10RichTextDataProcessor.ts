@@ -11,7 +11,7 @@ import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { getConfig } from "./LegacyCoreMediaRichTextConfig";
+import { getConfig } from "./V10CoreMediaRichTextConfig";
 import { HtmlWriter } from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "../../ToDataProcessor";
@@ -22,7 +22,7 @@ import { declareCoreMediaRichText10Entities } from "../../Entities";
 /**
  * Data-Processor for CoreMedia RichText 1.0.
  */
-class LegacyRichTextDataProcessor implements DataProcessor {
+class V10RichTextDataProcessor implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -90,7 +90,7 @@ class LegacyRichTextDataProcessor implements DataProcessor {
 
     const parserErrorDocument = this.#domParser.parseFromString("<", "text/xml");
     this.#noParserErrorNamespace =
-      LegacyRichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
+      V10RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
   }
 
@@ -124,7 +124,7 @@ class LegacyRichTextDataProcessor implements DataProcessor {
    * @returns CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
-    const logger = LegacyRichTextDataProcessor.#logger;
+    const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     const { richTextDocument, domFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
@@ -156,10 +156,10 @@ class LegacyRichTextDataProcessor implements DataProcessor {
     const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 
-    if (LegacyRichTextDataProcessor.#logger.isDebugEnabled()) {
+    if (V10RichTextDataProcessor.#logger.isDebugEnabled()) {
       fragmentAsStringForDebugging = this.#fragmentToString(domFragment);
 
-      LegacyRichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
+      V10RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: domFragment,
         domAsString: fragmentAsStringForDebugging,
@@ -200,7 +200,7 @@ class LegacyRichTextDataProcessor implements DataProcessor {
 
   // https://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
   #isParserError(parsedDocument: Document) {
-    const namespace = LegacyRichTextDataProcessor.#PARSER_ERROR_NAMESPACE;
+    const namespace = V10RichTextDataProcessor.#PARSER_ERROR_NAMESPACE;
     if (this.#noParserErrorNamespace) {
       // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
       return parsedDocument.getElementsByTagName("parsererror").length > 0;
@@ -210,7 +210,7 @@ class LegacyRichTextDataProcessor implements DataProcessor {
   }
 
   toView(data: string): ViewDocumentFragment | null {
-    const logger = LegacyRichTextDataProcessor.#logger;
+    const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
     let dataView = "";
@@ -269,8 +269,8 @@ class LegacyRichTextDataProcessor implements DataProcessor {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LegacyRichTextDataProcessor extends Observable {}
+interface V10RichTextDataProcessor extends Observable {}
 
-mix(LegacyRichTextDataProcessor, ObservableMixin);
+mix(V10RichTextDataProcessor, ObservableMixin);
 
-export default LegacyRichTextDataProcessor;
+export default V10RichTextDataProcessor;
