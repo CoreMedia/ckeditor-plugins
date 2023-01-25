@@ -3,12 +3,8 @@ import { isRichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext
 import { xDiffElements } from "./XDiffElements";
 
 /**
- * Hooks into `ImageInline` and `ImageBlock` plugin, if available and
- * registers additional differencing attributes applied to `<img>` elements.
- *
- * For corresponding CSS rules, it is important to understand, that the
- * `xdiff:changetype` attribute is applied to the surrounding element, like
- * the corresponding `<span class="image-inline">` for inline images.
+ * If Rich Text Data Processing is enabled, applies a corresponding
+ * rule to map `xdiff:span` elements as expected/required.
  */
 export class RichTextDataProcessorIntegration extends Plugin {
   static readonly pluginName: string = "RichTextDataProcessorIntegration";
