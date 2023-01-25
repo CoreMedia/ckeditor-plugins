@@ -63,14 +63,20 @@ class RichTextDataProcessor implements DataProcessor {
 
   /**
    * Set of rules to apply on data view to data mapping (or: from CKEditor HTML
-   * in data view to CoreMedia Rich Text 1.0 in data)
+   * in data view to CoreMedia Rich Text 1.0 in data).
+   *
+   * Note, that any update is expected to sort the rule sections according
+   * to their priority.
    */
-  readonly toDataRules: RuleSection[] = [];
+  readonly #toDataRules: RuleSection[] = [];
   /**
    * Set of rules to apply on view to data view mapping (or: from CoreMedia
    * Rich Text 1.0 in data to CKEditor HTML in data view).
+   *
+   * Note, that any update is expected to sort the rule sections according
+   * to their priority.
    */
-  readonly toViewRules: RuleSection[] = [];
+  readonly #toViewRules: RuleSection[] = [];
 
   /**
    * Constructor of plugin.
@@ -138,7 +144,7 @@ class RichTextDataProcessor implements DataProcessor {
     const dataDocument = createCoreMediaRichTextDocument();
     const { htmlDomFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
 
-    const converter = new RuleBasedHtmlDomConverter(dataDocument, this.toDataRules);
+    const converter = new RuleBasedHtmlDomConverter(dataDocument, this.#toDataRules);
     const converted = converter.convert(htmlDomFragment);
     if (converted) {
       dataDocument.documentElement.append(converted);
@@ -246,23 +252,23 @@ class RichTextDataProcessor implements DataProcessor {
   #addRule(config: RuleConfig): void {
     const { toData, toView } = parseRule(config);
     if (toData) {
-      this.toDataRules.push(toData);
+      this.#toDataRules.push(toData);
     }
     if (toView) {
-      this.toViewRules.push(toView);
+      this.#toViewRules.push(toView);
     }
   }
 
   addRule(config: RuleConfig): void {
     this.#addRule(config);
-    this.toDataRules.sort(byPriority);
-    this.toViewRules.sort(byPriority);
+    this.#toDataRules.sort(byPriority);
+    this.#toViewRules.sort(byPriority);
   }
 
   addRules(configs: RuleConfig[]): void {
     configs.forEach((config) => this.#addRule(config));
-    this.toDataRules.sort(byPriority);
-    this.toViewRules.sort(byPriority);
+    this.#toDataRules.sort(byPriority);
+    this.#toViewRules.sort(byPriority);
   }
 
   toView(data: string): ViewDocumentFragment | null {
@@ -272,7 +278,7 @@ class RichTextDataProcessor implements DataProcessor {
     const dataDocument = this.#parseData(data);
     const htmlDocument = createHtmlDocument();
 
-    const converter = new RuleBasedHtmlDomConverter(htmlDocument, this.toViewRules);
+    const converter = new RuleBasedHtmlDomConverter(htmlDocument, this.#toViewRules);
     const range = dataDocument.createRange();
     range.selectNodeContents(dataDocument.documentElement);
     const dataFragment = range.extractContents();
