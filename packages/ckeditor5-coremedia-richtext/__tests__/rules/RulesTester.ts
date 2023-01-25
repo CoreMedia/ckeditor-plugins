@@ -2,6 +2,8 @@ import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import { isToData, isToView, TestDirection } from "./TestDirection";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 
+import "jest-xml-matcher";
+
 /**
  * Class to help writing data driven tests for `RuleConfig` objects.
  */
@@ -47,7 +49,9 @@ export class RulesTester {
       it("toView", () => {
         const { toViewConverter, xmlElement, htmlElementSerialized } = setUp();
         const result = toViewConverter.convert(xmlElement) as HTMLElement;
-        expect(result.outerHTML).toStrictEqual(htmlElementSerialized);
+        // Unfortunately, does not ignore order of attributes. If we struggle
+        // with this, we may want to search for alternative approaches.
+        expect(result.outerHTML).toEqualXML(htmlElementSerialized);
       });
     }
 
@@ -55,7 +59,9 @@ export class RulesTester {
       it("toData", () => {
         const { toDataConverter, htmlElement, xmlElementSerialized } = setUp();
         const result = toDataConverter.convert(htmlElement) as Element;
-        expect(xmlSerializer.serializeToString(result)).toStrictEqual(xmlElementSerialized);
+        // Unfortunately, does not ignore order of attributes. If we struggle
+        // with this, we may want to search for alternative approaches.
+        expect(xmlSerializer.serializeToString(result)).toEqualXML(xmlElementSerialized);
       });
     }
   }
