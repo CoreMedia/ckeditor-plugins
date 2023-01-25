@@ -50,7 +50,7 @@ export class HtmlDomConverter {
     const converted = this.convert(originalNode);
 
     if (converted) {
-      this.#appendChildAndSignal(targetParentNode, converted, context);
+      this.#appendChildAndSignal(converted, targetParentNode, context);
     }
   }
 
