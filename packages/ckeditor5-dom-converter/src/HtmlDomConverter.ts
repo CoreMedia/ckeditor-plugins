@@ -5,6 +5,7 @@ import { skip, Skip } from "./Signals";
 import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas";
 import { ConversionContext } from "./ConversionContext";
 import { ConversionApi } from "./ConversionApi";
+import { isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFragments";
 
 /**
  * The HTML DOM Converter is dedicated to XML grammars, that are closely related
@@ -152,8 +153,19 @@ export class HtmlDomConverter {
     }
     for (const child of originalNode.childNodes) {
       const convertedChild = this.convert(child);
-      if (convertedChild && this.appendChild(importedNode, convertedChild)) {
-        this.appended(importedNode, convertedChild, context);
+      if (convertedChild) {
+        if (isDocumentFragment(convertedChild)) {
+          // Special handling for notification purpose, as the standard
+          // process will pass an empty fragment as `convertedChild`
+          // after appending.
+          const fragmentContents = [...convertedChild.childNodes];
+          if (this.appendChild(importedNode, convertedChild)) {
+            fragmentContents.forEach((content) => this.appended(importedNode, content, context));
+          }
+        }
+        if (this.appendChild(importedNode, convertedChild)) {
+          this.appended(importedNode, convertedChild, context);
+        }
       }
     }
   }
