@@ -61,9 +61,22 @@ class RichTextDataProcessor implements DataProcessor {
   readonly #domParser: DOMParser;
   readonly #noParserErrorNamespace: boolean;
 
+  /**
+   * Set of rules to apply on data view to data mapping (or: from CKEditor HTML
+   * in data view to CoreMedia Rich Text 1.0 in data)
+   */
   readonly toDataRules: RuleSection[] = [];
+  /**
+   * Set of rules to apply on view to data view mapping (or: from CoreMedia
+   * Rich Text 1.0 in data to CKEditor HTML in data view).
+   */
   readonly toViewRules: RuleSection[] = [];
 
+  /**
+   * Constructor of plugin.
+   *
+   * @param editor - editor instance, the plugin belongs to
+   */
   constructor(editor: Editor) {
     const document: ViewDocument = editor.data.viewDocument;
 
