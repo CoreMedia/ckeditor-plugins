@@ -2,7 +2,7 @@ import * as aut from "../../src/rules/CodeElements";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
-import { bijective, Direction, isToData, isToView } from "./Direction";
+import { bijective, TestDirection, isToData, isToView } from "./TestDirection";
 
 describe("CodeElements", () => {
   const ruleConfigurations = [aut.codeElements];
@@ -20,7 +20,7 @@ describe("CodeElements", () => {
     ${`<span dir="ltr" class="code">${text}</span>`} | ${bijective} | ${`<code dir="ltr">${text}</code>`}
   `(
     "[$#] Should provide mapping from data $direction view: $data $direction $view",
-    ({ data, direction, view }: { data: string; direction: Direction; view: string }) => {
+    ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
       const dataString = richtext(p(data));
       const htmlString = `<body><p>${view}</p></body>`;
       let xmlDocument: Document;

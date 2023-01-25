@@ -2,7 +2,7 @@ import * as aut from "../../src/rules/HeadingElements";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
-import { bijective, Direction, isToData, isToView } from "./Direction";
+import { bijective, TestDirection, isToData, isToView } from "./TestDirection";
 
 describe("HeadingElements", () => {
   const ruleConfigurations = [aut.headingElements];
@@ -24,7 +24,7 @@ describe("HeadingElements", () => {
     ${`<p class="CLASS p--heading-1">${text}</p>`} | ${bijective} | ${`<h1 class="CLASS">${text}</h1>`}
   `(
     "[$#] Should provide mapping from data $direction view: $data $direction $view",
-    ({ data, direction, view }: { data: string; direction: Direction; view: string }) => {
+    ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       let xmlDocument: Document;

@@ -4,7 +4,7 @@ import * as aut from "../../src/rules/DefaultRules";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
-import { bijective, Direction, isToData, isToView, toView } from "./Direction";
+import { bijective, TestDirection, isToData, isToView, toView } from "./TestDirection";
 import { INLINE_IMG } from "../../src/rules/ImageElements";
 
 /**
@@ -88,7 +88,7 @@ describe("DefaultRules", () => {
     ${`<table><tbody><tr class="tr--footer"><td>${text}</td></tr></tbody></table>`} | ${bijective} | ${`<table><tfoot><tr><td>${text}</td></tr></tfoot></table>`}
   `(
     "[$#] Should provide mapping from data $direction view: $data $direction $view",
-    ({ data, direction, view }: { data: string; direction: Direction; view: string }) => {
+    ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       let xmlDocument: Document;
