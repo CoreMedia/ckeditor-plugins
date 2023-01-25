@@ -214,15 +214,7 @@ class RichTextDataProcessor implements DataProcessor {
 
     converter.convertAndAppend(dataFragment, htmlDocument.body);
 
-    const { innerHTML } = htmlDocument.body;
-
-    // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
-    // for singleton elements such as `<img>` and `<br>`. A better fix would
-    // fix the serialization issue instead.
-    // For now, we just remove (in HTML) obsolete dangling closing tag
-    // for the affected elements.
-    // TODO: Validate, if still required.
-    const dataView = innerHTML.replaceAll(/<\/(?:img|br)>/g, "");
+    const { innerHTML: dataView } = htmlDocument.body;
 
     const viewFragment = this.#delegate.toView(dataView);
 
