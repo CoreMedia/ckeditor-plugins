@@ -3,6 +3,7 @@ import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Direction, resolveDirectionToConfig } from "./Direction";
 import { isHTMLTableElement } from "@coremedia/ckeditor5-dom-support/HTMLTableElements";
 import { removeClass } from "@coremedia/ckeditor5-dom-support/Elements";
+import { copyAttributesFrom } from "@coremedia/ckeditor5-dom-support/Attrs";
 
 export interface MergeTableSectionsToTableBodyConfig {
   headerRowClass?: string;
@@ -39,11 +40,9 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         const targetBody = node.createTBody();
 
         const transferAttributesToTargetBody = (section: HTMLTableSectionElement): void => {
-          for (const attribute of section.attributes) {
-            // We risk overriding here for now, not expecting any collisions.
-            // If collisions exist, we may want to prefer those of tbody.
-            targetBody.setAttributeNode(attribute.cloneNode(true) as Attr);
-          }
+          // We risk overriding here for now, not expecting any collisions.
+          // If collisions exist, we may want to prefer those of tbody.
+          copyAttributesFrom(section, targetBody);
         };
 
         // Attributes: Attributes of first `<tbody>` always take precedence
