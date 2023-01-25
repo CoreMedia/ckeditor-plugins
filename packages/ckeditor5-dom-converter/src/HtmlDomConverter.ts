@@ -34,6 +34,27 @@ export class HtmlDomConverter {
   }
 
   /**
+   * Converts the given original node via `convert` and subsequently
+   * appends the result to `targetParentNode`. Different to `convert` this
+   * ensures, that `appended` handler is also called when appending to
+   * target parent node.
+   *
+   * @param originalNode - original node to transform
+   * @param targetParentNode - node in target document where to append the
+   * conversion result to.
+   */
+  convertAndAppend(originalNode: Node, targetParentNode: ParentNode): void {
+    const { api } = this;
+    const context = new ConversionContext(originalNode, api);
+
+    const converted = this.convert(originalNode);
+
+    if (converted) {
+      this.#appendChildAndSignal(targetParentNode, converted, context);
+    }
+  }
+
+  /**
    * Converts the given node and its children to the target
    * document. The processing is performed in this order:
    *
@@ -150,23 +171,39 @@ export class HtmlDomConverter {
     if (isAttr(importedNode)) {
       // Skip fast on discouraged conversion states, thus, nodes, which
       // cannot hold children or attributes.
+      return;
     }
+
     for (const child of originalNode.childNodes) {
       const convertedChild = this.convert(child);
       if (convertedChild) {
-        if (isDocumentFragment(convertedChild)) {
-          // Special handling for notification purpose, as the standard
-          // process will pass an empty fragment as `convertedChild`
-          // after appending.
-          const fragmentContents = [...convertedChild.childNodes];
-          if (this.appendChild(importedNode, convertedChild)) {
-            fragmentContents.forEach((content) => this.appended(importedNode, content, context));
-          }
-        }
-        if (this.appendChild(importedNode, convertedChild)) {
-          this.appended(importedNode, convertedChild, context);
-        }
+        this.#appendChildAndSignal(convertedChild, importedNode, context);
       }
+    }
+  }
+
+  /**
+   * Appends the given child and raises a signal via `appended` as soon as it
+   * got appended successfully. Note, that special handling for document
+   * fragments is applied, as they dissolve when appended. Thus, the signal
+   * is raised for each child node contained in the fragment, rather than
+   * for the fragment itself.
+   *
+   * @param convertedChild - child node to add
+   * @param parentNode - parent node to append the node to
+   * @param context - conversion context information
+   */
+  #appendChildAndSignal(convertedChild: Node | DocumentFragment, parentNode: Node, context: ConversionContext) {
+    if (isDocumentFragment(convertedChild)) {
+      // Special handling for notification purpose, as the standard
+      // process will pass an empty fragment as `convertedChild`
+      // after appending.
+      const fragmentContents = [...convertedChild.childNodes];
+      if (this.appendChild(parentNode, convertedChild)) {
+        fragmentContents.forEach((content) => this.appended(parentNode, content, context));
+      }
+    } else if (this.appendChild(parentNode, convertedChild)) {
+      this.appended(parentNode, convertedChild, context);
     }
   }
 

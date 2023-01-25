@@ -126,6 +126,126 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   /**
+   * Adds a single rule without triggering resorting. Prior to adding,
+   * parses the configuration and adds result to corresponding sections
+   * for `toData` or `toView` mapping or both.
+   *
+   * @param config - configuration to parse and add
+   */
+  #addRule(config: RuleConfig): void {
+    const { toData, toView } = parseRule(config);
+    if (toData) {
+      this.#toDataRules.push(toData);
+    }
+    if (toView) {
+      this.#toViewRules.push(toView);
+    }
+  }
+
+  /**
+   * Adds a single rule configuration.
+   *
+   * Note, that for adding multiple rules at once, `addRules` is preferred
+   * instead.
+   *
+   * @param config - configuration to add
+   */
+  addRule(config: RuleConfig): void {
+    this.addRules([config]);
+  }
+
+  /**
+   * Adds a set of rules to the configuration.
+   *
+   * @param configs - configurations to add
+   */
+  addRules(configs: RuleConfig[]): void {
+    const logger = RichTextDataProcessor.#logger;
+
+    configs.forEach((config) => this.#addRule(config));
+
+    this.#toDataRules.sort(byPriority);
+    this.#toViewRules.sort(byPriority);
+
+    if (logger.isDebugEnabled()) {
+      logger.debug(`${configs.length} rule configurations added.`);
+      this.dumpRules();
+    }
+  }
+
+  /**
+   * Dumps applied rule IDs.
+   */
+  dumpRules(): void {
+    const logger = RichTextDataProcessor.#logger;
+    if (logger.isDebugEnabled()) {
+      logger.debug(`toData Rules (${this.#toDataRules.length}):`);
+      this.#dumpRules(this.#toDataRules);
+      logger.debug(`toView Rules (${this.#toViewRules.length}):`);
+      this.#dumpRules(this.#toViewRules);
+    }
+  }
+
+  #dumpRules(sections: RuleSection[]): void {
+    sections
+      .map((section) => section.id)
+      .forEach((id) => {
+        RichTextDataProcessor.#logger.debug(`\t${id}`);
+      });
+  }
+
+  /**
+   * Transforms data to data view, thus, from CoreMedia Rich Text 1.0
+   * to CKEditor 5 HTML as expected in data view by CKEditor.
+   *
+   * @param data - data to transform
+   */
+  toView(data: string): ViewDocumentFragment | null {
+    const logger = RichTextDataProcessor.#logger;
+    const startTimestamp = performance.now();
+
+    const dataDocument = this.#parseData(data);
+    const htmlDocument = createHtmlDocument();
+
+    const converter = new RuleBasedHtmlDomConverter(htmlDocument, this.#toViewRules);
+    const range = dataDocument.createRange();
+    range.selectNodeContents(dataDocument.documentElement);
+    const dataFragment = range.extractContents();
+
+    converter.convertAndAppend(dataFragment, htmlDocument.body);
+
+    const { innerHTML } = htmlDocument.body;
+
+    // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
+    // for singleton elements such as `<img>` and `<br>`. A better fix would
+    // fix the serialization issue instead.
+    // For now, we just remove (in HTML) obsolete dangling closing tag
+    // for the affected elements.
+    // TODO: Validate, if still required.
+    const dataView = innerHTML.replaceAll(/<\/(?:img|br)>/g, "");
+
+    const viewFragment = this.#delegate.toView(dataView);
+
+    if (logger.isDebugEnabled()) {
+      logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
+        in: data,
+        out: dataView,
+        viewFragment,
+      });
+    }
+
+    // Mainly for debugging/testing purpose, we provide the interim
+    // processing result with the original data and the intermediate
+    // _data view_ as provided after data-processing.
+    this.fire("richtext:toView", {
+      data,
+      dataView,
+    });
+
+    return viewFragment;
+  }
+
+  /**
    * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note, that
    * to trigger data processor for empty text as well, you have to set the
    * option `trim: 'none'` on `CKEditor.getData()`.
@@ -141,10 +261,8 @@ class RichTextDataProcessor implements DataProcessor {
     const { htmlDomFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
 
     const converter = new RuleBasedHtmlDomConverter(dataDocument, this.#toDataRules);
-    const converted = converter.convert(htmlDomFragment);
-    if (converted) {
-      dataDocument.documentElement.append(converted);
-    }
+
+    converter.convertAndAppend(htmlDomFragment, dataDocument.documentElement);
 
     new RichTextSanitizer(Strictness.STRICT, new TrackingSanitationListener(logger)).sanitize(dataDocument);
 
@@ -207,6 +325,34 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   /**
+   * Parses the incoming data. On parsing error as well as on empty data, an
+   * empty document is returned.
+   *
+   * @param data - data to parse
+   */
+  #parseData(data: string): Document {
+    const logger = RichTextDataProcessor.#logger;
+
+    if (!data) {
+      return createCoreMediaRichTextDocument();
+    }
+
+    const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
+
+    if (this.#isParserError(dataDocument)) {
+      logger.error("Failed parsing data. See debug messages for details.", { data });
+      if (logger.isDebugEnabled()) {
+        // noinspection InnerHTMLJS
+        const parsererror = dataDocument.documentElement.innerHTML;
+        logger.debug("Failed parsing data.", { parsererror });
+      }
+      return createCoreMediaRichTextDocument();
+    }
+
+    return dataDocument;
+  }
+
+  /**
    * Detects, if current DOM implementation provides a namespace for
    * `<parsererror>` elements. PhantomJS, for example, does not provide
    * such a namespace URI.
@@ -237,104 +383,6 @@ class RichTextDataProcessor implements DataProcessor {
     }
 
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
-  }
-
-  /**
-   * Parses the incoming data. On parsing error as well as on empty data, an
-   * empty document is returned.
-   *
-   * @param data - data to parse
-   */
-  #parseData(data: string): Document {
-    const logger = RichTextDataProcessor.#logger;
-
-    if (!data) {
-      return createCoreMediaRichTextDocument();
-    }
-
-    const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
-
-    if (this.#isParserError(dataDocument)) {
-      logger.error("Failed parsing data. See debug messages for details.", { data });
-      if (logger.isDebugEnabled()) {
-        // noinspection InnerHTMLJS
-        const parsererror = dataDocument.documentElement.innerHTML;
-        logger.debug("Failed parsing data.", { parsererror });
-      }
-      return createCoreMediaRichTextDocument();
-    }
-
-    return dataDocument;
-  }
-
-  #addRule(config: RuleConfig): void {
-    const { toData, toView } = parseRule(config);
-    if (toData) {
-      this.#toDataRules.push(toData);
-    }
-    if (toView) {
-      this.#toViewRules.push(toView);
-    }
-  }
-
-  addRule(config: RuleConfig): void {
-    this.#addRule(config);
-    this.#toDataRules.sort(byPriority);
-    this.#toViewRules.sort(byPriority);
-  }
-
-  addRules(configs: RuleConfig[]): void {
-    configs.forEach((config) => this.#addRule(config));
-    this.#toDataRules.sort(byPriority);
-    this.#toViewRules.sort(byPriority);
-  }
-
-  toView(data: string): ViewDocumentFragment | null {
-    const logger = RichTextDataProcessor.#logger;
-    const startTimestamp = performance.now();
-
-    const dataDocument = this.#parseData(data);
-    const htmlDocument = createHtmlDocument();
-
-    const converter = new RuleBasedHtmlDomConverter(htmlDocument, this.#toViewRules);
-    const range = dataDocument.createRange();
-    range.selectNodeContents(dataDocument.documentElement);
-    const dataFragment = range.extractContents();
-    const converted = converter.convert(dataFragment);
-
-    if (converted) {
-      htmlDocument.body.append(converted);
-    }
-
-    const { innerHTML } = htmlDocument.body;
-
-    // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
-    // for singleton elements such as `<img>` and `<br>`. A better fix would
-    // fix the serialization issue instead.
-    // For now, we just remove (in HTML) obsolete dangling closing tag
-    // for the affected elements.
-    // TODO: Validate, if still required.
-    const dataView = innerHTML.replaceAll(/<\/(?:img|br)>/g, "");
-
-    const viewFragment = this.#delegate.toView(dataView);
-
-    if (logger.isDebugEnabled()) {
-      logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
-        in: data,
-        out: dataView,
-        viewFragment,
-      });
-    }
-
-    // Mainly for debugging/testing purpose, we provide the interim
-    // processing result with the original data and the intermediate
-    // _data view_ as provided after data-processing.
-    this.fire("richtext:toView", {
-      data,
-      dataView,
-    });
-
-    return viewFragment;
   }
 }
 
