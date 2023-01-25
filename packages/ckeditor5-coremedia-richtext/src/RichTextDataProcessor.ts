@@ -87,15 +87,12 @@ class RichTextDataProcessor implements DataProcessor {
     const document: ViewDocument = editor.data.viewDocument;
 
     this.#delegate = new HtmlDataProcessor(document);
-    // renderingMode: "data" - Fixes observed issue ckeditor/ckeditor5#11786
-    this.#domConverter = new DomConverter(document, { renderingMode: "data" });
+    // Remember and re-use DOM converter.
+    this.#domConverter = this.#delegate.domConverter;
     this.#richTextXmlWriter = new RichTextXmlWriter();
     this.#domParser = new DOMParser();
 
-    const parserErrorDocument = this.#domParser.parseFromString("<", "text/xml");
-    this.#noParserErrorNamespace =
-      RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
-      parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
+    this.#noParserErrorNamespace = this.#isNoParserErrorNamespace(this.#domParser);
 
     const config = getLatestCoreMediaRichTextConfig(editor.config);
 
@@ -122,11 +119,10 @@ class RichTextDataProcessor implements DataProcessor {
 
   registerRawContentMatcher(pattern: MatcherPattern): void {
     this.#delegate.registerRawContentMatcher(pattern);
-    this.#domConverter.registerRawContentMatcher(pattern);
   }
 
   useFillerType(type: "default" | "marked"): void {
-    this.#domConverter.blockFillerMode = type === "marked" ? "markedNbsp" : "nbsp";
+    this.#delegate.useFillerType(type);
   }
 
   /**
@@ -210,6 +206,28 @@ class RichTextDataProcessor implements DataProcessor {
     );
   }
 
+  /**
+   * Detects, if current DOM implementation provides a namespace for
+   * `<parsererror>` elements. PhantomJS, for example, does not provide
+   * such a namespace URI.
+   *
+   * @param parser - DOM parser to use
+   */
+  // https://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
+  #isNoParserErrorNamespace(parser: DOMParser): boolean {
+    const parserErrorDocument = parser.parseFromString("<", "text/xml");
+    return (
+      RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
+      parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI
+    );
+  }
+
+  /**
+   * Validates, if the document represents a parser error to trigger
+   * well-behaved behavior for failed parsing of data.
+   *
+   * @param parsedDocument - document to analyze
+   */
   // https://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
   #isParserError(parsedDocument: Document) {
     const namespace = RichTextDataProcessor.#PARSER_ERROR_NAMESPACE;
