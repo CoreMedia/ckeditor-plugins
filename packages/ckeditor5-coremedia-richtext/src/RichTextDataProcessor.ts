@@ -70,7 +70,6 @@ class RichTextDataProcessor implements DataProcessor {
 
     this.addRules([...defaultRules, ...config.rules]);
 
-    // This rule should later move to Differencing Plugin
     /*
      * We need to mark xdiff:span as elements preserving spaces. Otherwise,
      * CKEditor would consider adding filler nodes inside xdiff:span elements
@@ -88,34 +87,6 @@ class RichTextDataProcessor implements DataProcessor {
     // `pre` element. But for TypeScript migration, CKEditor replaced typing
     // by `string[]` instead.
     this.#delegate.domConverter.preElements.push("xdiff:span");
-    this.#addRule({
-      toView: {
-        id: "differencing-represent-empty-span-by-br",
-        importedWithChildren: (node, { api }): Node => {
-          if (!(node instanceof Element) || node.prefix !== "xdiff" || node.localName !== "span") {
-            return node;
-          }
-          // Later, in model, we cannot distinguish `<xdiff:span/>` representing
-          // a newline (added, removed, changed) from `<xdiff:span> </xdiff:span>`
-          // which is some whitespace change. Because of that, we introduce a
-          // virtual new element here, which signals a newline change.
-          // TODO: Something is broken here and needs to be validated: `<xdiff:br>`
-          //   elements are no longer created. As it seems, corresponding nodes are
-          //   not detected as being empty anymore.
-          if (!node.hasChildNodes()) {
-            // TODO: No namespace handling. It is an artificial element anyway.
-            //   Task is to check, whether we want to declare a namespace.
-            // eslint-disable-next-line no-null/no-null
-            return api.targetDocument.createElement("xdiff:br");
-          }
-          // Whitespace-Only contents: Instead of applying corresponding processing
-          // here, we handle this in `RichTextDataProcessor` by declaring
-          // `xdiff:span` to be a `preElement`.
-          // See also: ckeditor/ckeditor5#12324
-          return node;
-        },
-      },
-    });
   }
 
   registerRawContentMatcher(pattern: MatcherPattern): void {

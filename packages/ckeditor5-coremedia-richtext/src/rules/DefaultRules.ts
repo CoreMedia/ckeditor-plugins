@@ -8,7 +8,7 @@ import { tableElements } from "./TableElements";
 import { anchorElements } from "./AnchorElements";
 import { imageElements } from "./ImageElements";
 import { suppressedElements } from "./SuppressedElements";
-import { supppressedXDiffData } from "./SuppressedXDiffData";
+import { xDiffElements } from "./XDiffElements";
 
 /**
  * Default rules for `RichTextDataProcessor`. May be extended or overridden
@@ -33,6 +33,6 @@ export const defaultRules: RuleConfig[] = [
   imageElements,
   languageAttributes,
   ...suppressedElements,
-  supppressedXDiffData,
+  xDiffElements,
   ...tableElements,
 ];
