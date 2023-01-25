@@ -112,6 +112,10 @@ export default class ContentLinks extends Plugin {
             pathIncludesAnyEditor = true;
           }
         }
+        const library = document.getElementById("collection-view-container");
+        if (library && path.includes(library)) {
+          return;
+        }
 
         if (domEvt.target.draggable && !pathIncludesAnyEditor) {
           return;
@@ -142,6 +146,10 @@ export default class ContentLinks extends Plugin {
           if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {
             return;
           }
+        }
+        const library = document.getElementById("collection-view-container");
+        if (library && path.includes(library)) {
+          return;
         }
 
         for (const contextElement of contextElements) {
