@@ -6,6 +6,8 @@ import {
 } from "./XLink";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { isHTMLImageElement } from "@coremedia/ckeditor5-dom-support/HTMLImageElements";
+import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { namespaces } from "../Namespaces";
 
 /**
  * Placeholder for images when CoreMedia ContentImagePlugin is not enabled.
@@ -33,7 +35,20 @@ export const imageElements: RuleConfig = {
         node.removeAttribute("title");
       }
     },
+
+    imported: (node, { api }): Node => {
+      if (!isElement(node) || node.localName !== "img") {
+        return node;
+      }
+      if (!node.getAttributeNS(namespaces.xlink, "href")) {
+        // Prevent image missing required reference to content Blob, thus,
+        // removing it.
+        return api.createDocumentFragment();
+      }
+      return node;
+    },
   },
+
   toView: {
     id: `toView-transform-image-element-attributes`,
     imported: (node): Node => {
