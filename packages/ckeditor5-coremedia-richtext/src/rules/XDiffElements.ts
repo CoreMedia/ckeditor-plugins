@@ -3,29 +3,6 @@ import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { namespaces } from "../Namespaces";
 import { copyAttributesFrom } from "@coremedia/ckeditor5-dom-support/Attrs";
 
-/*
-<?xml version="1.0" encoding="utf-8"?>
-<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
-     xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
-  <p>
-    <em>
-      <xdiff:span xdiff:class="diff-html-changed" xdiff:changes="&lt;b&gt;Emphasis&lt;/b&gt; style added."
-                  xdiff:id="changed-diff-0">Hurz
-      </xdiff:span>
-    </em>
-  </p>
-</div>
-
-Add newline:
-<?xml version="1.0" encoding="utf-8"?>
-<div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
-<p><em><xdiff:span xdiff:class="diff-html-removed" xdiff:id="removed-diff-0" xdiff:next="added-diff-0">Hurz</xdiff:span></em><em><xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-0">Hu</xdiff:span></em><xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-0"/></p><p><em><xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-0">rz</xdiff:span></em></p></div>
-
-Thus, represented as:
-
-<xdiff:span xdiff:class="diff-html-added" xdiff:previous="removed-diff-0" xdiff:id="added-diff-0"/>
-
- */
 /**
  * Elements of `xdiff` namespace should not make it into data. Thus, on data
  * processing, we are removing them. They are expected to be part of a false
