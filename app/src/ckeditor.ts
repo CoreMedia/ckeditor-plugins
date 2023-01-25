@@ -52,7 +52,6 @@ import CoreMediaStudioEssentials, {
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 import { initInputExampleContent } from "./inputExampleContents";
-import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 import { Command, icons } from "@ckeditor/ckeditor5-core";
@@ -63,7 +62,7 @@ import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
 
 const {
-  //@ts-expect-error We currently have no way to extend icon typing.
+  //@ts-expect-error We have no way to extend icon typing, yet.
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
