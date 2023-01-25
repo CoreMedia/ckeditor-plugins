@@ -51,15 +51,23 @@ const extractLangAttributes = (el: Element): string | null => {
     el.getAttributeNodeNS(null, "xml:lang"),
     el.getAttributeNodeNS(el.namespaceURI, "lang"),
     el.getAttributeNodeNS(null, "lang"),
-  ].reduce((previous, current): Attr | null => {
-    if (current) {
-      el.removeAttributeNode(current);
-    }
-    if (previous?.value) {
-      return previous;
-    }
-    return current;
-  });
+  ]
+    .map((current): Attr | null => {
+      if (current) {
+        el.removeAttributeNode(current);
+        if (!current.value.trim()) {
+          // Irrelevant language attribute
+          return null;
+        }
+      }
+      return current;
+    })
+    .reduce((previous, current): Attr | null => {
+      if (previous?.value) {
+        return previous;
+      }
+      return current;
+    });
   return preferredAttr?.value ?? null;
 };
 
