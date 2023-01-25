@@ -38,6 +38,18 @@ const createCoreMediaRichTextDocument = (): Document => {
 const createHtmlDocument = (): Document => document.implementation.createHTMLDocument();
 
 /**
+ * Type guard for `RichTextDataProcessor`.
+ *
+ * Especially meant to be used from plugins, to determine, if a data processor
+ * set at CKEditor 5 instance, is the `RichTextDataProcessor` you may want to
+ * add rules to.
+ *
+ * @param value - value to validate
+ */
+export const isRichTextDataProcessor = (value: unknown): value is RichTextDataProcessor =>
+  value instanceof RichTextDataProcessor;
+
+/**
  * Data-Processor for CoreMedia RichText 1.0.
  */
 class RichTextDataProcessor implements DataProcessor {
@@ -229,7 +241,7 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   addRule(config: RuleConfig): void {
-    this.addRule(config);
+    this.#addRule(config);
     this.toDataRules.sort(byPriority);
     this.toViewRules.sort(byPriority);
   }
