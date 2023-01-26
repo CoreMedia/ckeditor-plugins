@@ -1,5 +1,5 @@
 import { ActiveStrictness, Strictness } from "../Strictness";
-import { silentSanitationListener } from "./SanitationListener";
+import { SanitationListener, silentSanitationListener } from "./SanitationListener";
 import { namespaces } from "../Namespaces";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { supportedElements } from "./RichTextDtd";
@@ -18,7 +18,7 @@ export class RichTextSanitizer {
    */
   constructor(
     public readonly strictness: Strictness = Strictness.STRICT,
-    public readonly listener = silentSanitationListener
+    public readonly listener: SanitationListener = silentSanitationListener
   ) {}
 
   /**

@@ -30,6 +30,11 @@ export enum Strictness {
 }
 
 /**
+ * Valid strictness keys.
+ */
+export type StrictnessKey = keyof typeof Strictness;
+
+/**
  * Strictness levels for active sanitation. These strictness levels may
  * occur at runtime during sanitation, while `Strictness.NONE` should not
  * trigger any sanitation.
