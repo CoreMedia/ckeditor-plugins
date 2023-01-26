@@ -2,12 +2,18 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import DragDropAsyncSupport from "@coremedia/ckeditor5-coremedia-studio-integration/content/DragDropAsyncSupport";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import {
+  IsDroppableEvaluationResult,
+  isDroppableUris,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
+import {
+  IsLinkableEvaluationResult,
+  isLinkableUris,
+} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -28,10 +34,25 @@ export interface InputExampleElement {
    */
   classes: string[];
   /**
-   * content ids to create the input information for studio services from.
+   * Content ids or ExternalContents to create the input information for studio services from.
    */
-  items: number[];
+  items: (number | ExternalContent)[];
 }
+
+/**
+ * Represents an external content. An External Content is an item which is not
+ * a content but a third-party item known to be converted to a content by the embedding system.
+ */
+export interface ExternalContent {
+  externalId: number;
+}
+
+export const isAnExternalContent = (obj: number | object): boolean => {
+  if (typeof obj === "number") {
+    return false;
+  }
+  return "externalId" in obj;
+};
 
 const PLUGIN_NAME = "MockInputExamplePlugin";
 
@@ -52,8 +73,8 @@ class MockInputExamplePlugin extends Plugin {
     insertDiv.classList.add("input-example", ...(data.classes || []));
     insertDiv.draggable = true;
     insertDiv.textContent = data.label || "Unset";
-    insertDiv.dataset.cmuripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
-    insertDiv.title = `${data.tooltip} (${insertDiv.dataset.cmuripath})`;
+    insertDiv.dataset.uripath = MockInputExamplePlugin.#generateUriPathCsv(data.items || []);
+    insertDiv.title = `${data.tooltip} (${insertDiv.dataset.uripath})`;
     insertDiv.addEventListener("dragstart", MockInputExamplePlugin.#setDragData);
     insertDiv.addEventListener("dblclick", (event): void => {
       MockInputExamplePlugin.#setClipboardData(event)
@@ -67,24 +88,42 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   /**
-   * Fills the caches for the drag and drop.
+   * Triggers the evaluation if the given uris are droppable in the richtext.
    *
-   * While the "dragover" event is executed synchronously, we have
-   * an asynchronous service-agent call to calculate the drop allowed.
+   * First call triggers the evaluation while subsequent calls will just return
+   * the evaluation state, which means either "PENDING" or the result.
    *
-   * To ensure in tests that the drop is allowed, the cache can be filled before
-   * executing the drop.
+   * This is needed for "dragover" because the event is executed synchronously
+   * but multiple times (when moving the cursor further).
    *
-   * @param contentIds - the ids to fill the cache for.
+   * This function can be used in tests to ensure a drop is allowed.
+   *
+   * @param uris - the uris to evaluate if they are droppable.
    */
-  prefillCaches(contentIds: number[]): boolean {
-    const uriPaths = contentIds.map((contentId) => contentUriPath(contentId));
-    return uriPaths.every((uriPath) => DragDropAsyncSupport.isLinkable(uriPath));
+  ensureIsDroppableInRichTextIsEvaluated(uris: string[]): IsDroppableEvaluationResult | undefined {
+    return isDroppableUris(uris);
+  }
+
+  /**
+   * Triggers the evaluation if the given uris are linkable in the richtext.
+   *
+   * First call triggers the evaluation while subsequent calls will just return
+   * the evaluation state, which means either "PENDING" or the result.
+   *
+   * This is needed for "dragover" because the event is executed synchronously
+   * but multiple times (when moving the cursor further).
+   *
+   * This function can be used in tests to ensure a drop is allowed.
+   *
+   * @param uris - the uris to evaluate if they are linkable.
+   */
+  ensureIsDroppableInLinkBalloon(uris: string[]): IsLinkableEvaluationResult | undefined {
+    return isLinkableUris(uris);
   }
 
   static async #setClipboardData(event: MouseEvent): Promise<void> {
     const target = event.target as HTMLElement;
-    const contentIdCommaSeparated = target.getAttribute("data-cmuripath");
+    const contentIdCommaSeparated = target.getAttribute("data-uripath");
     if (!contentIdCommaSeparated) {
       return;
     }
@@ -101,21 +140,24 @@ class MockInputExamplePlugin extends Plugin {
   }
 
   /**
-   * Set the drag data stored in the attribute data-cmuripath to the
+   * Set the drag data stored in the attribute data-uripath to the
    * `dragEvent.dataTransfer` and to the dragDropService in studio.
    *
    * @param dragEvent the drag event
    */
   static #setDragData(dragEvent: DragEvent): void {
     const dragEventTarget = dragEvent.target as HTMLElement;
-    const contentId = dragEventTarget.getAttribute("data-cmuripath");
+    const contentId = dragEventTarget.getAttribute("data-uripath");
     if (contentId) {
       const idsArray = contentId.split(",");
+      const urisAsJson = JSON.stringify(idsArray);
+      const dataTransferItems: Record<string, string> = {};
+      dataTransferItems["cm-studio-rest/uri-list"] = urisAsJson;
       const dragDropService = new MockDragDropService();
-      dragDropService.dragData = JSON.stringify(MockInputExamplePlugin.#contentDragData(...idsArray));
+      dragDropService.dataTransferItems = JSON.stringify(dataTransferItems);
       serviceAgent.registerService(dragDropService);
-      dragEvent.dataTransfer?.setData("cm/uri-list", JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray)));
-      dragEvent.dataTransfer?.setData("text", JSON.stringify(MockInputExamplePlugin.#contentList(...idsArray)));
+      dragEvent.dataTransfer?.setData("cm-studio-rest/uri-list", urisAsJson);
+      MockInputExamplePlugin.#logger.debug("Successfully put data on dragdrop service", urisAsJson);
       return;
     }
     const text = dragEventTarget.childNodes[0].textContent;
@@ -137,17 +179,13 @@ class MockInputExamplePlugin extends Plugin {
     }));
   }
 
-  static #contentDragData(...ids: string[]): { contents: { $Ref: string }[] } {
-    return {
-      contents: MockInputExamplePlugin.#contentList(...ids),
-    };
+  static #generateUriPath(item: number | ExternalContent): string {
+    const prefix: string = isAnExternalContent(item) ? "externalUri" : "content";
+    const id: number = isAnExternalContent(item) ? (item as ExternalContent).externalId : (item as number);
+    return `${prefix}/${id}`;
   }
 
-  static #generateUriPath(item: number): string {
-    return `content/${item}`;
-  }
-
-  static #generateUriPathCsv(items: number[]): string {
+  static #generateUriPathCsv(items: (number | ExternalContent)[]): string {
     return items.map((item) => MockInputExamplePlugin.#generateUriPath(item)).join(",");
   }
 }

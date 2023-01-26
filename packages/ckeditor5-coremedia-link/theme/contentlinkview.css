@@ -1,4 +1,5 @@
 @import "contentlinkvisibility.css";
+@import "contentlinkformview.css";
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
@@ -44,6 +45,7 @@
  */
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
+  position: relative;
   margin-left: 0 !important;
 }
 

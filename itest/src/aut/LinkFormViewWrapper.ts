@@ -17,6 +17,10 @@ export class LinkFormViewWrapper implements Locatable {
     return visible(this);
   }
 
+  get urlInputField(): Locator {
+    return this.locator.locator(".ck-input");
+  }
+
   get contentLinkView(): ContentLinkViewWrapper {
     return ContentLinkViewWrapper.fromParent(this);
   }

@@ -36,6 +36,9 @@ export * from "./MockContentUtils";
 export * from "./MockDragDropService";
 export { default as MockDragDropService } from "./MockDragDropService";
 
+export * from "./MockExternalContentPlugin";
+export { default as MockExternalContentPlugin } from "./MockExternalContentPlugin";
+
 export * from "./MockFixtures";
 
 export * from "./MockInputExamplePlugin";
