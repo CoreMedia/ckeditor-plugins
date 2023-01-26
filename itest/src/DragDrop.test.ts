@@ -362,7 +362,7 @@ describe("Drag and Drop", () => {
           const data = await application.editor.getData();
           for (const contentMock of contentMocks) {
             // noinspection HtmlUnknownAttribute
-            await expect(data).toContain(`<img alt="" xlink:href="content/${contentMock.id}#properties.data"/>`);
+            await expect(data).toContain(`<img xlink:href="content/${contentMock.id}#properties.data" alt=""/>`);
           }
         });
 
