@@ -60,6 +60,7 @@ class RichTextDataProcessor implements DataProcessor {
   readonly #richTextXmlWriter: RichTextXmlWriter;
   readonly #domParser: DOMParser;
   readonly #noParserErrorNamespace: boolean;
+  readonly #strictness: Strictness;
 
   /**
    * Set of rules to apply on data view to data mapping (or: from CKEditor HTML
@@ -95,6 +96,8 @@ class RichTextDataProcessor implements DataProcessor {
     this.#noParserErrorNamespace = this.#isNoParserErrorNamespace(this.#domParser);
 
     const config = getLatestCoreMediaRichTextConfig(editor.config);
+
+    this.#strictness = config.strictness;
 
     this.addRules([...defaultRules, ...config.rules]);
 
@@ -256,7 +259,7 @@ class RichTextDataProcessor implements DataProcessor {
 
     converter.convertAndAppend(htmlDomFragment, dataDocument.documentElement);
 
-    new RichTextSanitizer(Strictness.STRICT, new TrackingSanitationListener(logger)).sanitize(dataDocument);
+    new RichTextSanitizer(this.#strictness, new TrackingSanitationListener(logger)).sanitize(dataDocument);
 
     // We have to do this late, as sanitation may have removed
     // elements/attributes, whose namespace prefixes may otherwise be registered
