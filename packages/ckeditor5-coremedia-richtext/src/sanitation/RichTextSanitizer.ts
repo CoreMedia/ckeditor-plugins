@@ -1,4 +1,4 @@
-import { Strictness } from "../Strictness";
+import { ActiveStrictness, Strictness } from "../Strictness";
 import { silentSanitationListener } from "./SanitationListener";
 import { namespaces } from "../Namespaces";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
@@ -33,6 +33,13 @@ export class RichTextSanitizer {
    * `false` if `documentElement` does not match requirements.
    */
   sanitize<T extends Document>(document: T): T | false {
+    const { strictness } = this;
+
+    if (strictness === Strictness.NONE) {
+      // Sanitation turned off.
+      return document;
+    }
+
     this.listener.started();
     const { documentElement } = document;
     let result: T | false = document;
@@ -47,7 +54,7 @@ export class RichTextSanitizer {
       result = false;
     } else {
       try {
-        this.#sanitize(documentElement);
+        this.#sanitize(documentElement, strictness);
       } catch (e) {
         this.listener.fatal(`Sanitation failed with error: ${e}`, e);
         result = false;
@@ -63,9 +70,10 @@ export class RichTextSanitizer {
    * sanitized first as recursive call.
    *
    * @param element - element to analyze
+   * @param strictness - strictness level to apply (only active strictness levels supported)
    * @param depth - current element depth
    */
-  #sanitize(element: Element, depth = 0): void {
+  #sanitize(element: Element, strictness: ActiveStrictness, depth = 0): void {
     this.listener.enteringElement(element, depth);
 
     if (isParentNode(element)) {
@@ -74,7 +82,7 @@ export class RichTextSanitizer {
       }
     }
 
-    const { strictness, listener } = this;
+    const { listener } = this;
     const { prefix, localName } = element;
 
     // We don't respect prefixed elements yet. Thus, any prefixed

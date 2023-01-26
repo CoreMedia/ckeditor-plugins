@@ -1,4 +1,4 @@
-import RichTextSchema from "./RichTextSchema";
+import RichTextSchema, { V10Strictness } from "./RichTextSchema";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 
 import { allFilterRules } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
@@ -17,7 +17,7 @@ import { getSchema, schemaRules } from "./rules/Schema";
 import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./rules/Lang";
 import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
-import { Strictness } from "../../Strictness";
+import { defaultStrictness, Strictness } from "../../Strictness";
 import { getV10CoreMediaRichTextConfig } from "../../CoreMediaRichTextConfig";
 
 /**
@@ -154,7 +154,25 @@ export const getConfig = (config?: CKEditorConfig): ParsedConfig => {
 
   const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
 
-  const schema = new RichTextSchema(customConfig.strictness ?? Strictness.STRICT);
+  const { strictness } = customConfig;
+  let compatStrictness: V10Strictness;
+  if (strictness === undefined) {
+    compatStrictness = defaultStrictness;
+  } else {
+    switch (strictness) {
+      case Strictness.STRICT:
+      case Strictness.LOOSE:
+      case Strictness.LEGACY:
+        compatStrictness = strictness;
+        break;
+      case Strictness.NONE:
+        compatStrictness = Strictness.LEGACY;
+        break;
+      default:
+        throw new Error(`Incompatible strictness level ${strictness} without compatibility handling.`);
+    }
+  }
+  const schema = new RichTextSchema(compatStrictness);
 
   return {
     toData,

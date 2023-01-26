@@ -1,6 +1,6 @@
 import { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
-import { Strictness } from "../Strictness";
+import { ActiveStrictness } from "../Strictness";
 import { SanitationListener } from "./SanitationListener";
 import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
@@ -139,7 +139,7 @@ export class ElementConfig {
    * @param strictness - strictness level to apply
    * @param listener - listener for reporting
    */
-  process(element: Element, strictness: Strictness, listener: SanitationListener): void {
+  process(element: Element, strictness: ActiveStrictness, listener: SanitationListener): void {
     this.#removeInvalidChildren(element, listener);
     if (this.#removeOnInvalidEmptyState(element, listener)) {
       // No need to perform further checks.
@@ -254,7 +254,7 @@ export class ElementConfig {
    * @param strictness - strictness to apply
    * @param listener - listener to inform on issues
    */
-  #processAttributes(element: Element, strictness: Strictness, listener: SanitationListener): void {
+  #processAttributes(element: Element, strictness: ActiveStrictness, listener: SanitationListener): void {
     const { attributes } = element;
     for (const attribute of attributes) {
       if (attribute.localName === "xmlns" || attribute.prefix === "xmlns") {

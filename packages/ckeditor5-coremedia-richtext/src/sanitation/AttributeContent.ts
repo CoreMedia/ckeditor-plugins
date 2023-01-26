@@ -1,4 +1,4 @@
-import { Strictness } from "../Strictness";
+import { ActiveStrictness, Strictness } from "../Strictness";
 
 /**
  * Definition details of some attribute.
@@ -11,7 +11,7 @@ export interface AttributeContent {
    * @param strictness - strictness level
    * @returns `true` if value is considered valid; `false` if not.
    */
-  validateValue(value: string | null, strictness: Strictness): boolean;
+  validateValue(value: string | null, strictness: ActiveStrictness): boolean;
 }
 
 /**
@@ -35,7 +35,7 @@ export const acCData = acAny;
  * @param validValues - valid values an attribute may take
  */
 export const acEnum = (...validValues: (string | null)[]): AttributeContent => ({
-  validateValue(value: string | null, strictness: Strictness): boolean {
+  validateValue(value: string | null, strictness: ActiveStrictness): boolean {
     if (!value || strictness === Strictness.LOOSE) {
       return true;
     }
@@ -48,7 +48,7 @@ const nmTokenRegExp = /^[a-zA-Z0-9._\-:]*$/;
  * Expresses content type `NMTOKEN` in attribute definition.
  */
 export const acNmToken: AttributeContent = {
-  validateValue(value: string | null, strictness: Strictness): boolean {
+  validateValue(value: string | null, strictness: ActiveStrictness): boolean {
     if (!value || strictness === Strictness.LEGACY) {
       return true;
     }

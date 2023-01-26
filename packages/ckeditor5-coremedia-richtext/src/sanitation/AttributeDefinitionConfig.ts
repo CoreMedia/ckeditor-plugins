@@ -1,5 +1,5 @@
 import { acAny, AttributeContent } from "./AttributeContent";
-import { Strictness } from "../Strictness";
+import { ActiveStrictness } from "../Strictness";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 
 /**
@@ -39,7 +39,7 @@ export interface AttributeDefinitionConfig {
    * @param value - value to validate
    * @param strictness - strictness level to respect
    */
-  validateValue?: (value: string | null, strictness: Strictness) => boolean;
+  validateValue?: (value: string | null, strictness: ActiveStrictness) => boolean;
 }
 
 /**
@@ -69,7 +69,8 @@ export const parseAttributeDefinitionConfig = (config: AttributeDefinitionConfig
     // eslint-disable-next-line no-null/no-null
     fixed: null,
     content,
-    validateValue: (value: string | null, strictness: Strictness): boolean => content.validateValue(value, strictness),
+    validateValue: (value: string | null, strictness: ActiveStrictness): boolean =>
+      content.validateValue(value, strictness),
     ...config,
   };
 };

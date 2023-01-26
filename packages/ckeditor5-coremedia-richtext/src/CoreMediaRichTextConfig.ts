@@ -1,4 +1,4 @@
-import { Strictness } from "./Strictness";
+import { defaultStrictness, Strictness } from "./Strictness";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
@@ -84,7 +84,7 @@ export type DefaultCoreMediaRichTextConfig = Required<
   Pick<CommonCoreMediaRichTextConfig, "strictness" | "compatibility">
 >;
 export const defaultCoreMediaRichTextConfig: DefaultCoreMediaRichTextConfig = {
-  strictness: Strictness.LOOSE,
+  strictness: defaultStrictness,
   compatibility: "latest",
 };
 

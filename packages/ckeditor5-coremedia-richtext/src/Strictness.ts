@@ -22,4 +22,24 @@ export enum Strictness {
    * is the behavior the mode `LEGACY` simulates.
    */
   LEGACY,
+  /**
+   * Available since v11 of ckeditor-plugins and corresponding data-processing.
+   * v10-compatibility will assume `LEGACY` instead.
+   */
+  NONE,
 }
+
+/**
+ * Strictness levels for active sanitation. These strictness levels may
+ * occur at runtime during sanitation, while `Strictness.NONE` should not
+ * trigger any sanitation.
+ */
+export type ActiveStrictness = Exclude<Strictness, Strictness.NONE>;
+
+/**
+ * Default strictness is loose, which is the minimum strictness to ensure,
+ * that data represent valid CoreMedia Rich Text 1.0.
+ *
+ * Default changed from `Strictness.STRICT` to `Strictness.LOOSE` in v11.
+ */
+export const defaultStrictness = Strictness.LOOSE as const;

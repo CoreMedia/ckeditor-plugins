@@ -537,13 +537,21 @@ const ELEMENTS: Elements = {
 };
 
 /**
+ * Strictness levels available for compatibility API. It is recommended to
+ * provide some best-effort compatible mapping of strictness levels. For
+ * example, in v11 `Strictness.NONE` had been introduced, which will be
+ * transformed to the less strict level `Strictness.LEGACY`.
+ */
+export type V10Strictness = Extract<Strictness, Strictness.STRICT | Strictness.LOOSE | Strictness.LEGACY>;
+
+/**
  * Representation of CoreMedia RichText 1.0 Schema.
  */
 export default class RichTextSchema {
   static readonly #logger: Logger = LoggerProvider.getLogger("RichTextSchema");
-  readonly #strictness: Strictness;
+  readonly #strictness: V10Strictness;
 
-  constructor(strictness: Strictness) {
+  constructor(strictness: V10Strictness) {
     this.#strictness = strictness;
     RichTextSchema.#initParentElementNames(ELEMENTS);
   }

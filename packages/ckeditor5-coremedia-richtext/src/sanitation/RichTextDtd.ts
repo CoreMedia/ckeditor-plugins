@@ -1,4 +1,4 @@
-import { Strictness } from "../Strictness";
+import { ActiveStrictness, Strictness } from "../Strictness";
 import { acCData, acEnum, acNmToken, AttributeContent } from "./AttributeContent";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 import { parseAttributeDefinitionConfig, ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
@@ -50,7 +50,7 @@ export const acLanguageCode = acNmToken;
  * ```
  */
 export const acNumber: AttributeContent = {
-  validateValue(value: string | null, strictness: Strictness): boolean {
+  validateValue(value: string | null, strictness: ActiveStrictness): boolean {
     if (!value || strictness !== Strictness.STRICT) {
       return true;
     }
@@ -77,7 +77,7 @@ const lengthRegEx = /^\d+%?$/;
  * ```
  */
 export const acLength: AttributeContent = {
-  validateValue(value: string | null, strictness: Strictness): boolean {
+  validateValue(value: string | null, strictness: ActiveStrictness): boolean {
     if (!value || strictness !== Strictness.STRICT) {
       return true;
     }
