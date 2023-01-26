@@ -5,6 +5,7 @@ import ToDataProcessor from "../../../src/ToDataProcessor";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "../../../src/compatibility/v10/V10CoreMediaRichTextConfig";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import { getV10Config } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
@@ -108,7 +109,7 @@ const fxRtlText = "ב היא יסוד.";
 const fxClass = "class--fixture";
 const fxLang = "ja-JP-u-ca-japanese-x-lvariant-JP";
 
-const { toData } = getConfig();
+const { toData } = getV10Config();
 const filter: HtmlFilter = new HtmlFilter(toData, MOCK_EDITOR);
 const dataProcessor: ToDataProcessor = new ToDataProcessor(filter);
 
