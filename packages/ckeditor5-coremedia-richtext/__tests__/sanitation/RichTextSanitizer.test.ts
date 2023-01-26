@@ -15,6 +15,14 @@ class TestSanitationListener extends SanitationListener {
     this.removedInvalidAttrs.length = 0;
   }
 
+  get totalLengh(): number {
+    return this.fatals.length + this.removedNodes.length + this.removedInvalidAttrs.length;
+  }
+
+  get empty(): boolean {
+    return this.totalLengh === 0;
+  }
+
   fatal(...data: unknown[]): void {
     this.fatals.push(data.join("|"));
   }
@@ -37,14 +45,19 @@ const domParser = new DOMParser();
 const xmlSerializer = new XMLSerializer();
 
 describe("RichTextSanitizer", () => {
+  beforeEach(() => {
+    listener.clear();
+  });
+
   describe.each`
     strictness
     ${"STRICT"}
     ${"LOOSE"}
     ${"LEGACY"}
     ${"NONE"}
-  `("[$#] Testing strictness level $strictness", ({ strictness }: { strictness: StrictnessKey }) => {
-    const sanitizer = createRichTextSanitizer(Strictness[strictness]);
+  `("[$#] Testing strictness level $strictness", ({ strictness: strictnessKey }: { strictness: StrictnessKey }) => {
+    const strictness = Strictness[strictnessKey];
+    const sanitizer = createRichTextSanitizer(strictness);
 
     it("Should not modify empty richtext on sanitation", () => {
       const document = domParser.parseFromString(richtext(), "text/xml");
@@ -54,6 +67,21 @@ describe("RichTextSanitizer", () => {
       expect(result).toBe(document);
       const actualXml = xmlSerializer.serializeToString(document);
       expect(actualXml).toStrictEqual(expectedXml);
+      expect(listener.empty).toBeTruthy();
+    });
+
+    it("Should fail on any non-richtext Document despite for Strictness.NONE", () => {
+      const document = domParser.parseFromString("<root/>", "text/xml");
+      const result = sanitizer.sanitize(document);
+
+      if (strictness === Strictness.NONE) {
+        expect(result).toBe(document);
+        expect(listener.empty).toBeTruthy();
+        return;
+      }
+
+      expect(result).toBeFalsy();
+      expect(listener.fatals).toHaveLength(1);
     });
   });
 });
