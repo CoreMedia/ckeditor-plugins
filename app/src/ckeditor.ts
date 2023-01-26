@@ -312,14 +312,6 @@ ClassicEditor.create(sourceElement, {
     // for example.
     compatibility: "latest",
     rules: richTextRuleConfigurations,
-    /* Example for v10 configuration:
-     * rules: {
-     *   elements: {
-     *     // Highlight Plugin Support
-     *     mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
-     *   },
-     * },
-     */
   },
   [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
     aliases: [
