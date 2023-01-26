@@ -257,7 +257,7 @@ export class ElementConfig {
   #processAttributes(element: Element, strictness: ActiveStrictness, listener: SanitationListener): void {
     const { attributes } = element;
     for (const attribute of attributes) {
-      if (attribute.localName === "xmlns" || attribute.prefix === "xmlns") {
+      if (attribute.localName === "xmlns" || attribute.prefix === "xmlns" || attribute.localName.startsWith("xmlns:")) {
         // Namespaces handled later.
         continue;
       }
@@ -269,6 +269,7 @@ export class ElementConfig {
       // it up instead.
       if (!config) {
         listener.removeInvalidAttr(element, attribute, "invalidAtElement");
+        element.removeAttributeNode(attribute);
       } else {
         const fixed = config.fixed;
         // Cleanup: Remove fixed attributes, that are irrelevant to store.

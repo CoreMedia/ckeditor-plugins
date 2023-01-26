@@ -42,6 +42,11 @@ export type StrictnessKey = keyof typeof Strictness;
 export type ActiveStrictness = Exclude<Strictness, Strictness.NONE>;
 
 /**
+ * Valid active strictness keys.
+ */
+export type ActiveStrictnessKey = Exclude<StrictnessKey, "NONE">;
+
+/**
  * Default strictness is loose, which is the minimum strictness to ensure,
  * that data represent valid CoreMedia Rich Text 1.0.
  *

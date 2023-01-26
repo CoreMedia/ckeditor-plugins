@@ -36,7 +36,7 @@ export const acCData = acAny;
  */
 export const acEnum = (...validValues: (string | null)[]): AttributeContent => ({
   validateValue(value: string | null, strictness: ActiveStrictness): boolean {
-    if (!value || strictness === Strictness.LOOSE) {
+    if (strictness === Strictness.LEGACY) {
       return true;
     }
     return validValues.includes(value);

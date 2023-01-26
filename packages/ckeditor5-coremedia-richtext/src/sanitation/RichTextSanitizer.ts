@@ -78,7 +78,7 @@ export class RichTextSanitizer {
 
     if (isParentNode(element)) {
       for (const childElement of element.children) {
-        this.#sanitize(childElement, depth + 1);
+        this.#sanitize(childElement, strictness, depth + 1);
       }
     }
 
