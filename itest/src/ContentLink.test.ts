@@ -3,6 +3,7 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { expectFocusedElementHasAriaText, tabToAriaLabel } from "./aria/AriaUtils";
+import { ctrlOrMeta } from "./browser/UserAgent";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -218,30 +219,30 @@ describe("Content Link Feature", () => {
       // remains. To completely remove it, you have to use the unlink-button.
       await expect(editor).waitForDataContaining(`xlink:href=""`);
     });
-  });
-/*
-  it("Should be possible to add content link with keyboard only", async () => {
-    const { currentTestName } = expect.getState();
-    const name = currentTestName ?? "Lorem ipsum";
-    const { editor, mockContent } = application;
-    const id = 46;
-    await mockContent.addContents({
-      id,
-      name: `Document for test ${name}`,
+
+    it("Should be possible to add content link with keyboard only", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Lorem ipsum";
+      const { editor, mockContent } = application;
+      const id = 46;
+      await mockContent.addContents({
+        id,
+        name: `Document for test ${name}`,
+      });
+      const { ui } = editor;
+      const { view } = ui;
+      await view.locator.click();
+      const modifier: string = await ctrlOrMeta();
+      await page.keyboard.press(`${modifier}+k`);
+      const { linkFormView } = editor.ui.view.body.balloonPanel;
+      await expect(linkFormView).waitToBeVisible();
+      await page.keyboard.type(`content:${id}`);
+
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Enter");
+
+      const contentLink = view.locator.locator(`a`, { hasText: `content:${id}` });
+      await expect(contentLink).toBeDefined();
     });
-    const { ui } = editor;
-    const { view } = ui;
-    await view.locator.click();
-    const modifier: string = await ctrlOrMeta();
-    await page.keyboard.press(`${modifier}+k`);
-    const { linkFormView } = editor.ui.view.body.balloonPanel;
-    await expect(linkFormView).waitToBeVisible();
-    await page.keyboard.type(`content:${id}`);
-
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Enter");
-
-    const contentLink = view.locator.locator(`a`, { hasText: `content:${id}` });
-    await expect(contentLink).toBeDefined();
-  });*/
+  });
 });
