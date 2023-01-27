@@ -10,7 +10,8 @@ export class ConversionApi {
 
   constructor(targetDocument: Document) {
     this.targetDocument = targetDocument;
-    this.targetDefaultNamespaceURI = this.targetDocument.lookupNamespaceURI(null);
+    // lookupNamespaceURI(null) does not provide expected result in Firefox 109
+    this.targetDefaultNamespaceURI = this.targetDocument.documentElement.namespaceURI;
   }
 
   createAttribute(localName: string): Attr {
