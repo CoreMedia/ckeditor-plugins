@@ -24,7 +24,6 @@
 
 /* content link view inner button */
 .cm-ck-content-link-view > .ck.ck-button{
-  border: none;
   min-height: calc(var(--ck-ui-component-min-height) - 2px);
 }
 
