@@ -5,7 +5,23 @@ import { skip, Skip } from "./Signals";
 import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas";
 import { ConversionContext } from "./ConversionContext";
 import { ConversionApi } from "./ConversionApi";
-import { isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFragments";
+import { fragmentToString, isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFragments";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+
+const nodeToString = (node: Node | null | undefined): string => {
+  if (!node) {
+    return `${node}`;
+  }
+  if (isDocumentFragment(node)) {
+    return `${node.nodeName}: type: ${node.nodeType}, contents: ${fragmentToString(node)}`;
+  }
+  if (isElement(node)) {
+    return `<${node.localName}>: prefix: ${node.prefix}, namespaceURI: ${node.namespaceURI}, outerHTML: ${node.outerHTML}`;
+  } else {
+    return `${node.nodeName}: type: ${node.nodeType}`;
+  }
+};
 
 /**
  * The HTML DOM Converter is dedicated to XML grammars, that are closely related
@@ -19,15 +35,19 @@ import { isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFra
  * namespace prefix).
  */
 export class HtmlDomConverter {
+  static readonly #logger: Logger = LoggerProvider.getLogger("HtmlDomConverter");
+
   /**
    * Context for conversion.
    */
   readonly api: ConversionApi;
+  readonly logger?: Logger;
 
   /**
    * Constructor.
    *
    * @param targetDocument - target document to transform to
+   * @param logger - optional console that may tell details on processing
    */
   constructor(targetDocument: Document) {
     this.api = new ConversionApi(targetDocument);
@@ -45,6 +65,7 @@ export class HtmlDomConverter {
    */
   convertAndAppend(originalNode: Node, targetParentNode: ParentNode): void {
     const { api } = this;
+
     const context = new ConversionContext(originalNode, api);
 
     const converted = this.convert(originalNode);
@@ -72,10 +93,16 @@ export class HtmlDomConverter {
    * nodes; `undefined` if the node is to be ignored in target document.
    */
   convert(originalNode: Node): Node | undefined {
+    const logger = HtmlDomConverter.#logger;
     const { api } = this;
     const context = new ConversionContext(originalNode, api);
+    const originalNodeString = logger.isDebugEnabled() ? nodeToString(originalNode) : undefined;
 
     let result: Node | Skip;
+
+    logger.debug(`convert(${originalNode.nodeName})`, {
+      input: originalNodeString,
+    });
 
     // Context is irrelevant in this stage: The source node is the same
     // as the one given here and the convenience API is bound to the target
@@ -83,22 +110,44 @@ export class HtmlDomConverter {
     // node.
     this.prepareForImport(originalNode);
 
-    result = this.imported(api.importNode(originalNode), context);
-
-    if (result === skip) {
-      return;
+    if (logger.isDebugEnabled()) {
+      logger.debug(`convert(${originalNode.nodeName}); Stage: prepared`, {
+        input: originalNodeString,
+        prepared: nodeToString(originalNode),
+      });
     }
 
-    if (isParentNode(originalNode)) {
-      this.#convertChildren(originalNode, result, context);
-      result = this.importedWithChildren(result, context);
+    result = this.imported(api.importNode(originalNode), context);
 
-      if (result === skip) {
-        return;
+    if (logger.isDebugEnabled()) {
+      logger.debug(`convert(${originalNode.nodeName}); Stage: imported`, {
+        input: originalNodeString,
+        imported: nodeToString(originalNode),
+      });
+    }
+
+    if (result !== skip) {
+      if (isParentNode(originalNode)) {
+        this.#convertChildren(originalNode, result, context);
+        result = this.importedWithChildren(result, context);
+
+        if (logger.isDebugEnabled()) {
+          logger.debug(`convert(${originalNode.nodeName}); Stage: importedWithChildren`, {
+            input: originalNodeString,
+            importedWithChildren: nodeToString(result === skip ? undefined : result),
+          });
+        }
       }
     }
 
-    return result;
+    if (logger.isDebugEnabled()) {
+      logger.debug(`convert(${originalNode.nodeName}); Stage: Done.`, {
+        input: originalNodeString,
+        output: nodeToString(result === skip ? undefined : result),
+      });
+    }
+
+    return result === skip ? undefined : result;
   }
 
   /**
