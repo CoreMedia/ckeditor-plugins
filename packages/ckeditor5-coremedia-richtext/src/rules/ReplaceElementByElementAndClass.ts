@@ -1,7 +1,7 @@
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Direction, resolveDirectionToConfig } from "./Direction";
-import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { isElement, removeClass, renameElement } from "@coremedia/ckeditor5-dom-support/Elements";
 
 export interface ReplaceElementByElementAndClassConfig {
   viewLocalName: string;
@@ -44,11 +44,7 @@ export const replaceElementByElementAndClass = (config: ReplaceElementByElementA
           return node;
         }
         const result = renameElement(node, viewLocalName);
-        result.classList.remove(dataReservedClass);
-        // Unfortunately, `classList` does not provide this cleanup.
-        if (result.classList.length === 0) {
-          result.removeAttribute("class");
-        }
+        removeClass(node, dataReservedClass);
         return result;
       },
       priority,

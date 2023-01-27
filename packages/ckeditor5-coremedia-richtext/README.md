@@ -6,8 +6,8 @@ This plugin is required to edit
 [CoreMedia Richtext 1.0](coremedia-richtext-1.0.dtd),
 an XML format, which provides a subset of XHTML features.
 
-It grants conversion of CoreMedia RichText 1.0 to the CKEditor data model
-as well as conversion from CKEditor data model to CoreMedia RichText.
+It grants conversion of CoreMedia RichText 1.0 to the CKEditor data model as
+well as conversion from CKEditor data model to CoreMedia RichText.
 
 To perform this transformation, this plugin provides a
 [CKEditor 5 DataProcessor](https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_dataprocessor_dataprocessor-DataProcessor.html).
@@ -44,7 +44,7 @@ import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema
 ```
 
 The strictness configures the behavior of the `toData` processing. It defaults
-to `STRICT`. Changing the strictness may be required for dealing with legacy
+to `LOOSE`. Changing the strictness may be required for dealing with legacy
 contents stored in CoreMedia CMS.
 
 The following modes exist:
@@ -75,7 +75,9 @@ The following modes exist:
   CoreMedia RichText 1.0 DTD. Most likely, you used this approach storing data
   into a content property having a different grammar.
 
-#### Example Configuration
+#### Example Configurations
+
+You may adjust the strictness:
 
 ```javascript
 ClassicEditor.create(document.querySelector('.editor'), {
@@ -85,6 +87,52 @@ ClassicEditor.create(document.querySelector('.editor'), {
   ],
   "coremedia:richtext": {
     strictness: Strictness.LOOSE,
+  },
+});
+```
+
+You may adjust the compatibility for parsing `rules` section. It defaults
+to `latest` but may be set to `v10`, for example, to support object like
+configuration similar to `HtmlFilter` in CKEditor 4 (note, that `v10` processing
+has high complexity when it comes to dealing with slightly more complex
+mapping requirements):
+
+```javascript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    // Trigger old configuration parsing
+    compatibility: "v10",
+    rules: {
+      elements: {
+        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
+      },
+    },
+  },
+});
+```
+
+In the latest configuration, this example would look like this:
+
+```javascript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    // "latest" is the default, so you may skip it.
+    compatibility: "latest",
+    rules: [
+      replaceElementByElementAndClass({
+        viewLocalName: "mark",
+        dataLocalName: "span",
+        dataReservedClass: "mark",
+      }),
+    ],
   },
 });
 ```
@@ -129,8 +177,8 @@ import CoreMediaRichText
   from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
 import GeneralRichTextSupport
   from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
-import {replaceByElementAndClassBackAndForth}
-  from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
+import { replaceElementByElementAndClass }
+  from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
 
 /* ... */
 
@@ -141,30 +189,31 @@ ClassicEditor.create(document.querySelector('.editor'), {
     // ...
   ],
   "coremedia:richtext": {
-    rules: {
-      elements: {
-        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
-      },
-    },
+    // "latest" is the default, so you may skip it.
+    compatibility: "latest",
+    rules: [
+      replaceElementByElementAndClass({
+        viewLocalName: "mark",
+        dataLocalName: "span",
+        dataReservedClass: "mark",
+      }),
+    ],
   },
 });
 ```
 
-As you see, you define the new rules in a section called `rules` and as we will
-map elements here, you use the keyword `elements` to define the mapping rules.
+As you see, you define the new rules in a section called `rules`.
 
-The definition is (mostly) from data view: _Given an HTML element `<mark>`, how
-do I map it to a corresponding representation in CoreMedia RichText 1.0?_
-That's why the mapping keys are added with the name of the element.
-
-`replaceByElementAndClassBackAndForth` provides a typical mapping, where
-an element gets replaced by a `<span>` with an identifying class attribute
-value.
+`replaceElementByElementAndClass` provides a typical mapping, where an element
+gets replaced by a `<span>` with an identifying class attribute value.
 
 This convenience function may be expanded, which will provide more details
 on the data processing:
 
 ```javascript
+import { removeClass, renameElement } from
+  "@coremedia/ckeditor5-dom-support/Elements";
+
 ClassicEditor.create(document.querySelector('.editor'), {
   plugins: [
     CoreMediaRichText,
@@ -173,28 +222,28 @@ ClassicEditor.create(document.querySelector('.editor'), {
     // ...
   ],
   "coremedia:richtext": {
-    rules: {
-      elements: {
-        mark: {
-          toData: (params) => {
-            const { node } = params;
-            node.name = "span";
-            node.classList.add("mark");
-          },
-          toView: {
-            span: (params) => {
-              const { node } = params;
-              if (!node.classList.contains("mark")) {
-                // It's another span, we are not responsible.
-                return;
-              }
-              node.classList.remove("mark");
-              node.name = "mark";
-            },
-          },
-        },
+    rules: [{
+      toData: {
+        imported: (node) => {
+          if (node instanceof Element && node.localName === "mark") {
+            const result = renameElement(node, "span");
+            result.classList.add("mark");
+            return result;
+          };
+          return node;
+        }
       },
-    },
+      toView: {
+        imported: (node, { api }) => {
+          if (node instanceof Element && node.localName === "span" && node.classList.contains("mark")) {
+            const result = renameElement(node, "mark");
+            removeClass(node, "mark");
+            return result;
+          };
+          return node;
+        },
+      }
+    }],
   },
 });
 ```
@@ -202,99 +251,10 @@ ClassicEditor.create(document.querySelector('.editor'), {
 Most of the time, you need to configure both directions (`toData` and `toView`).
 Exceptions exist, and can be modelled, but are not part of this description.
 
-Let's have a look at the `toData` mapping first:
-
-```javascript
-mark: {
-  toData: (params) => {
-    const { node } = params;
-    node.name = "span";
-    node.classList.add("mark");
-  }
-}
-```
-
-You define a mapping function, which receives `ElementFilterParams` as input.
-The interface knows the following properties:
-
-* **node:** Access to the DOM node to map, represented as `ElementProxy`.
-
-* **parentRule:** A possibly existing parent rule. Especially, when dealing with
-  elements, which are already mapped by default (such as heading elements), you
-  may (or may not) call the parent rule:
-
-    ```javascript
-    params.parentRule(params);
-    ```
-
-  If not calling this rule, it will just override any possibly existing default
-  configuration.
-
-* **editor:** The CKEditor instance. This may be used, for example, to access
-  the configuration of this CKEditor instance.
-
-The `toView` handling is slightly more challenging to implement. This is,
-because it is typical, that there are multiple element mappings for `<span>`
-originating from CoreMedia RichText. Thus, a typical `toView` mapping starts
-with a check, if the rule should feel responsible for mapping elements.
-
-Let's have a look at the `toView` mapping:
-
-```javascript
-toView: {
-  span: (params) => {
-    const { node } = params;
-    if (!node.classList.contains("mark")) {
-      // It's another span, we are not responsible.
-      return;
-    }
-    node.classList.remove("mark");
-    node.name = "mark";
-  }
-}
-```
-
-As you see, it is checked, if the "marker" class is actually set, and if the
-rule should feel responsible.
-
-Again, you may call `params.parentRule(params);`. But, in contrast to the
-`toData` mapping you cannot block all transformations of `<span>` elements
-originating from CoreMedia RichText. This is because configuration parsing is
-context-sensitive:
-
-> The parent rule will only contain those `toView` mappings, which registered
-> before as part of the `toData` mapping of the `<mark>` element.
-
-All other mappings `toView` for `<span>` are handled independent of this rule.
-
-### Data Processing Rules for Text
-
-Similar to elements you may also add data processing rules for text nodes with a
-similar configuration.
-
-```typescript
-ClassicEditor.create(document.querySelector('.editor'), {
-  plugins: [
-    CoreMediaRichText,
-    // ...
-  ],
-  "coremedia:richtext": {
-    rules: {
-      elements: { /* ... */ },
-      text: {
-        toData: (params) => {
-          params.parentRule(params);
-          params.node.textContent = "data";
-        },
-        toView: (params) => {
-          params.parentRule(params);
-          params.node.textContent = "view";
-        },
-      },
-    },
-  }
-});
-```
+As you see, also here we use convenience API `renameElement` and `removeClass`
+here, to reduce the overhead in rule implementation. `renameElement`, for
+example, provides an element of the new name, but with all attributes copied
+from original element.
 
 ## Reserved Classes
 
@@ -428,7 +388,7 @@ will be transformed to:
 </table>
 ```
 
-Note: As of CKEditor 5, 24.0.0, `<tfoot>` is not supported and will be moved
+Note: As of CKEditor 5, 35.0.0, `<tfoot>` is not supported and will be moved
 to `<tbody>` instead.
 
 ## Limitations
