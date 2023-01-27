@@ -10,6 +10,7 @@ describe("AnchorElement", () => {
   describe("parseDataContentLink", () => {
     it.each`
       data                                                     | expectedId
+      ${``}                                                    | ${undefined}
       ${`https://example.org/`}                                | ${undefined}
       ${`content/42`}                                          | ${42}
       ${`content/0`}                                           | ${0}
@@ -76,6 +77,7 @@ describe("AnchorElement", () => {
   describe("formatHrefForData", () => {
     it.each`
       view                                    | expectedHref
+      ${``}                                   | ${``}
       ${`https://example.org/`}               | ${`https://example.org/`}
       ${`content:42`}                         | ${`content/42`}
       ${`content:0`}                          | ${`content/0`}

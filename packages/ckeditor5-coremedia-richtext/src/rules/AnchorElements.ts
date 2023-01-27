@@ -294,7 +294,7 @@ export const transformLinkAttributesToData = (node: Node): void => {
       ...extractXLinkDataSetEntries(node),
       // Provides xlink:role and xlink:show.
       ...parseTarget(node.target),
-      href: formatHrefForData(node.href),
+      href: formatHrefForData(node.getAttribute("href") ?? ""),
     };
     setXLinkAttributes(node, xlinkAttrs);
     // Clear used data:
