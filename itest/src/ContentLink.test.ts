@@ -242,8 +242,8 @@ describe("Content Link Feature", () => {
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
 
-    const contentLink = view.locator.locator(`a`, { hasText: `content:${id}` });
-    await expect(contentLink).toBeDefined();
+    const contentLink = view.locator.locator(`a`);
+    await expect(contentLink).toHaveText(`content:${id}`);
     return Promise.resolve();
   });
 });
