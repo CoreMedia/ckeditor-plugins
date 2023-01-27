@@ -60,6 +60,9 @@ import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integr
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/compatibility/v10/rules/ReplaceBy";
+import { getHashParam } from "./HashParams";
 
 const {
   //@ts-expect-error We have no way to extend icon typing, yet.
@@ -100,6 +103,12 @@ if (!sourceElement) {
 }
 
 /**
+ * You may switch the compatibility, for example, by providing
+ * `compatibility=v10`.
+ */
+const richTextCompatibility = getHashParam("compatibility") || "latest";
+
+/**
  * Apply custom mapping rules.
  */
 const richTextRuleConfigurations: RuleConfig[] = [
@@ -112,6 +121,16 @@ const richTextRuleConfigurations: RuleConfig[] = [
     dataReservedClass: "mark",
   }),
 ];
+
+/**
+ * v10 compatible configuration.
+ */
+const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
+  elements: {
+    // Highlight Plugin Support
+    mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
+  },
+};
 
 ClassicEditor.create(sourceElement, {
   licenseKey: "",
@@ -310,8 +329,8 @@ ClassicEditor.create(sourceElement, {
     strictness: Strictness.STRICT,
     // Latest is the default. Use v10 for first data-processor architecture,
     // for example.
-    compatibility: "latest",
-    rules: richTextRuleConfigurations,
+    compatibility: richTextCompatibility,
+    rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
   },
   [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
     aliases: [
