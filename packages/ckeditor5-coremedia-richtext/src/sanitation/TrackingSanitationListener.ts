@@ -1,5 +1,6 @@
 import { AttributeCause, ElementCause, severeElementCauses } from "./Causes";
 import { SanitationListener } from "./SanitationListener";
+import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/HasNamespaceUris";
 
 class TrackingState {
   removedElements: {
@@ -76,9 +77,19 @@ export class TrackingSanitationListener extends SanitationListener {
     this.#state.removedElements.total++;
     if (severeElementCauses.includes(cause)) {
       this.#state.removedElements.severe++;
-      this.#console.debug(
-        `Removing ${node.nodeName} (type: ${node.nodeType}, parent: ${node.parentNode?.nodeName}): ${cause}`
-      );
+      const { nodeName, nodeType, parentNode } = node;
+      this.#console.debug(`Removing ${nodeName} (type: ${nodeType}, parent: ${parentNode?.nodeName}): ${cause}`, {
+        node: {
+          nodeName,
+          nodeType,
+          namespaceURI: isHasNamespaceUri(node) ? node.namespaceURI : undefined,
+        },
+        parentNode: {
+          nodeName: parentNode?.nodeName,
+          nodeType: parentNode?.nodeType,
+          namespaceURI: isHasNamespaceUri(parentNode) ? parentNode.namespaceURI : undefined,
+        },
+      });
     }
   }
 

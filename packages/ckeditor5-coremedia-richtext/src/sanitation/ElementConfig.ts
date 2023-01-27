@@ -6,6 +6,7 @@ import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
+import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/HasNamespaceUris";
 
 const defaultPrefix = Symbol("default");
 type DefaultPrefix = typeof defaultPrefix;
@@ -152,6 +153,8 @@ export class ElementConfig {
 
   /**
    * Checks if the given child node is valid according to configuration.
+   * Prior to checking the configuration, the method will ensure, that a
+   * given child shares the same `namespaceURI` as its parent.
    *
    * @param node - child node to analyze
    */
@@ -164,18 +167,38 @@ export class ElementConfig {
       return allowed.includes(pcdata);
     }
 
+    if (!this.#hasCompatibleNamespaceAndPrefixWithParent(node)) {
+      return false;
+    }
+
     if (isElement(node)) {
-      const { parentElement } = node;
-      // Instead of declaring namespace URI explicitly, we expect it to be of
-      // the same namespace as its parent. More sophisticated behavior will
-      // require refactoring down to how to configure elements.
-      if (node.namespaceURI !== parentElement?.namespaceURI || node.prefix !== parentElement.prefix) {
-        return false;
-      }
       return allowed.includes(node.localName);
     }
 
     return false;
+  }
+
+  /**
+   * Checks, if the `namespaceURI` of child node and parent are compatible.
+   * Strictly speaking, if they are the same. But for any unset `namespaceURI`
+   * at node, they are considered compatible.
+   *
+   * It also checks, that both, child node and parent, have a compatible
+   * prefix declaration.
+   *
+   * @param node - node to validate regarding its namespace (URI and prefix)
+   */
+  #hasCompatibleNamespaceAndPrefixWithParent(node: ChildNode): boolean {
+    const { parentElement } = node;
+    if (!isHasNamespaceUri(node) || !isHasNamespaceUri(parentElement)) {
+      // Assume, they are compatible.
+      return true;
+    }
+    if (!node.namespaceURI || !parentElement.namespaceURI) {
+      // Assume, they are compatible.
+      return true;
+    }
+    return node.namespaceURI === parentElement.namespaceURI && node.prefix === parentElement.prefix;
   }
 
   /**
