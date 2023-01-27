@@ -3,8 +3,11 @@ import type { ButtonView } from "@ckeditor/ckeditor5-ui";
 import { HasVisible } from "../../../expect/IsVisible/HasVisible";
 import { HasToggleable } from "../../../expect/isToggleable/HasToggleable";
 import { HasEnabled } from "../../../expect/isEnabled/HasEnabled";
+import { HasAriaLabel } from "../../../aria/AriaUtils";
 
-export default class ButtonViewWrapper extends JSWrapper<ButtonView> implements HasVisible, HasToggleable, HasEnabled {
+export default class ButtonViewWrapper
+  extends JSWrapper<ButtonView>
+  implements HasVisible, HasToggleable, HasEnabled, HasAriaLabel {
   click(): Promise<void> {
     return this.evaluate((buttonView) => {
       const element = buttonView.element;
@@ -30,5 +33,33 @@ export default class ButtonViewWrapper extends JSWrapper<ButtonView> implements 
 
   get enabled(): Promise<boolean> {
     return this.evaluate((buttonView) => buttonView.isEnabled);
+  }
+
+  getAriaLabel(): Promise<string | undefined> {
+    return this.evaluate((buttonView) => {
+      const element = buttonView.element;
+      if (!element) {
+        return Promise.reject();
+      }
+      const attribute = element.getAttribute("aria-label");
+      if (!attribute) {
+        return Promise.resolve(undefined);
+      }
+      return Promise.resolve(attribute);
+    });
+  }
+
+  getAriaLabelledBy(): Promise<string | undefined> {
+    return this.evaluate((buttonView) => {
+      const element = buttonView.element;
+      if (!element) {
+        return Promise.reject();
+      }
+      const attribute = element.getAttribute("aria-labelledby");
+      if (!attribute) {
+        return Promise.resolve(undefined);
+      }
+      return Promise.resolve(attribute);
+    });
   }
 }

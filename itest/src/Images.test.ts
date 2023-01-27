@@ -295,10 +295,11 @@ describe("Image Features", () => {
       await page.locator(".ck-editor__editable img").click();
       const imageContextToolbar = getImageContextToolbar(editor);
       const linkButton = imageContextToolbar.getLinkButton();
+      await expect(linkButton).waitToHaveAriaLabel("Link image");
       await expect(linkButton).waitToBeOn();
       await linkButton.click();
       const contentLinkView = getContentLinkView(editor);
-      await expect(contentLinkView).waitToHaveContentName(contentLinkDocumentName);
+      await expect(contentLinkView).waitToHaveContentName(`Document: ${contentLinkDocumentName}`);
     });
   });
 });

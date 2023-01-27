@@ -9,6 +9,7 @@ import {
   PNG_GREEN_240x135,
   PNG_RED_240x135,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
+import { ctrlOrMeta } from "./browser/UserAgent";
 
 const oneLink: MockContentConfig[] = [
   {
@@ -163,6 +164,29 @@ describe("Paste Button", () => {
         });
       }
     );
+    it("Should paste a link using keyboard shorcut.", async () => {
+      const inputElementClass = "paste-via-keyboard-link";
+      const contentMock = oneLink;
+      await setupScenario(inputElementClass, contentMock);
+
+      const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
+      await page.locator(inputElementSelector).dblclick();
+      await application.editor.ui.locator.click();
+      const controlOrMeta = await ctrlOrMeta();
+      await page.keyboard.press(`${controlOrMeta}+Shift+P`);
+      // Validate Editing Downcast
+      const { ui } = application.editor;
+      const editableHandle = await ui.getEditableElement();
+      const linkElements = await editableHandle.$$("a");
+
+      await waitForExpect(async () => {
+        await expect(linkElements).toHaveLength(1);
+        if (contentMock[0].name) {
+          const contentName: string = contentMock[0].name as string;
+          await expect(linkElements[0]).toHaveText(contentName);
+        }
+      });
+    });
   });
 
   describe("Images", () => {

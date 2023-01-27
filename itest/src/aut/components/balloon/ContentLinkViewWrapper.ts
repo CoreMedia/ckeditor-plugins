@@ -5,6 +5,10 @@ import { JSWrapper } from "../../JSWrapper";
 export default class ContentLinkViewWrapper extends JSWrapper<Element> implements HasContentName {
   get contentName(): Promise<string> {
     return this.evaluate((htmlElement) => {
+      const ariaLabel = htmlElement.getAttribute("aria-label");
+      if (ariaLabel) {
+        return ariaLabel;
+      }
       //By using the aria-labelledby we can get a reference to the span where the content name is stored.
       const spanId = htmlElement.getAttribute("aria-labelledby");
       let spanElement: Element | undefined;

@@ -10,6 +10,8 @@ export * as integrations from "./integrations/index-doc";
  */
 export * as paste from "./paste/index-doc";
 
+export * as lang from "./lang/index-doc";
+
 export * from "./ContentClipboard";
 export { default as ContentClipboard } from "./ContentClipboard";
 
