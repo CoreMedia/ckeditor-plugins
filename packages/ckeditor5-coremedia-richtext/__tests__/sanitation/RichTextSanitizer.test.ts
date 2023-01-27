@@ -637,6 +637,15 @@ describe("RichTextSanitizer", () => {
             });
           });
 
+          it("Should add missing required attribute (silently)", () => {
+            const validXml = richtext(p(a("", { "xlink:href": "" })));
+            const invalidXml = validXml.replace(`xlink:href=""`, "");
+            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
+              expect(l.totalLength).toStrictEqual(0);
+              expect(l.removedInvalidAttrs).toHaveLength(0);
+            });
+          });
+
           it("Should remove fixed attribute (silently)", () => {
             const optimizedXml = richtext(p(a("", { "xlink:href": "" })));
             const originalXml = richtext(p(a("", { "xlink:href": "", "xlink:type": "simple" })));
@@ -860,6 +869,20 @@ describe("RichTextSanitizer", () => {
             const originalXml = richtext(p(withFixed));
             expectSanitationResult(sanitizer, originalXml, optimizedXml, (l) => {
               expect(l.totalLength).toStrictEqual(0);
+            });
+          });
+
+          it("Should add missing required attribute (silently)", () => {
+            // Skipping test for required `alt` attribute here, as we had hassle
+            // with attribute orders during validation – and for some reason, the
+            // alt attribute is serialized having a `ns1` attribute prefix applied,
+            // although it is of the default namespaceURI.
+            // It works correctly in manual testing, though.
+            const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
+            const invalidXml = validXml.replace(`xlink:href=""`, "");
+            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
+              expect(l.totalLength).toStrictEqual(0);
+              expect(l.removedInvalidAttrs).toHaveLength(0);
             });
           });
 

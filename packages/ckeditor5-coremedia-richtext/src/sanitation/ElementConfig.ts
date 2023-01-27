@@ -85,6 +85,8 @@ export class ElementConfig {
     const { localName } = config;
     const prefix = config.prefix ?? defaultPrefix;
     this.#addToKnownAttributes(prefix, localName, config);
+    // Explicit type check required, as !config.required would prevent default
+    // values of "".
     if (typeof config.required === "string") {
       this.#addToRequiredAttributes(prefix, localName, config.required);
     }
@@ -295,21 +297,21 @@ export class ElementConfig {
    * @param element - element to possibly add required attributes to
    */
   #processRequiredAttributes(element: Element) {
-    for (const [prefix, byLocalName] of this.#requiredAttributesByPrefixAndLocalName.entries()) {
+    this.#requiredAttributesByPrefixAndLocalName.forEach((byLocalName, prefix) => {
       // eslint-disable-next-line no-null/no-null
       const actualPrefix = prefix === defaultPrefix ? null : prefix;
       const prefixString = actualPrefix ? `${actualPrefix}:` : "";
-      for (const [localName, defaultValue] of byLocalName) {
+      byLocalName.forEach((defaultValue, localName) => {
+        let namespaceURI = element.lookupNamespaceURI(actualPrefix);
+        if (actualPrefix && isKnownNamespacePrefix(actualPrefix) && !namespaceURI) {
+          namespaceURI = namespaces[actualPrefix];
+        }
         const qualifiedName = `${prefixString}${localName}`;
-        if (!element.hasAttribute(qualifiedName)) {
-          let namespaceURI = element.lookupNamespaceURI(actualPrefix);
-          if (actualPrefix && isKnownNamespacePrefix(actualPrefix) && !namespaceURI) {
-            namespaceURI = namespaces[actualPrefix];
-          }
+        if (!element.hasAttributeNS(namespaceURI, localName) && !element.hasAttribute(qualifiedName)) {
           element.setAttributeNS(namespaceURI, qualifiedName, defaultValue);
         }
-      }
-    }
+      });
+    });
   }
 
   /**
