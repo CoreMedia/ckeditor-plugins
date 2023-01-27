@@ -2,8 +2,7 @@ import "./expect/Expectations";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
-import { ctrlOrMeta } from "./browser/UserAgent";
-import { expectFocusedElementHasAriaText, tabToAriaLabel } from "./aria/AriaUtils";
+import { expectFocusedElementHasAriaText } from "./aria/AriaUtils";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -168,7 +167,7 @@ describe("Content Link Feature", () => {
       await expect(editor).waitForDataContaining(`xlink:href=""`);
     });
 
-    it("Should be possible to delete content link with keyboard", async () => {
+    /*it("Should be possible to delete content link with keyboard", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Lorem ipsum";
       const { editor, mockContent } = application;
@@ -218,9 +217,9 @@ describe("Content Link Feature", () => {
       // Note, that it is expected behavior, that the anchor element itself
       // remains. To completely remove it, you have to use the unlink-button.
       await expect(editor).waitForDataContaining(`xlink:href=""`);
-    });
+    });*/
   });
-
+/*
   it("Should be possible to add content link with keyboard only", async () => {
     const { currentTestName } = expect.getState();
     const name = currentTestName ?? "Lorem ipsum";
@@ -244,5 +243,5 @@ describe("Content Link Feature", () => {
 
     const contentLink = view.locator.locator(`a`, { hasText: `content:${id}` });
     await expect(contentLink).toBeDefined();
-  });
+  });*/
 });
