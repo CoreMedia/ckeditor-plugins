@@ -74,15 +74,15 @@ importers:
       '@ckeditor/ckeditor5-ui': 35.4.0
       '@ckeditor/ckeditor5-utils': 35.4.0
       '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
-      '@coremedia/ckeditor5-coremedia-content-clipboard': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-differencing': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-images': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-link': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-richtext': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-essentials': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration-mock': 10.4.1-rc.1
-      '@coremedia/ckeditor5-dataprocessor-support': 10.4.1-rc.1
-      '@coremedia/ckeditor5-font-mapper': 10.4.1-rc.1
+      '@coremedia/ckeditor5-coremedia-content-clipboard': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-differencing': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-images': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-link': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-richtext': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-essentials': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock': 10.4.1-rc.2
+      '@coremedia/ckeditor5-dataprocessor-support': 10.4.1-rc.2
+      '@coremedia/ckeditor5-font-mapper': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-alignment': 29.0.7
       '@types/ckeditor__ckeditor5-autoformat': ^31.0.1
@@ -209,10 +209,10 @@ importers:
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-coremedia-link': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-richtext': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration-mock': 10.4.1-rc.1
+      '@coremedia/ckeditor5-coremedia-link': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-richtext': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-editor-classic': ^27.1.2
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
@@ -304,7 +304,7 @@ importers:
       '@babel/core': ^7.19.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/jest': ^28.1.8
       jest: ^28.1.3
@@ -332,8 +332,8 @@ importers:
       '@ckeditor/ckeditor5-core': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/jest': ^28.1.8
       jest: ^28.1.3
@@ -364,9 +364,9 @@ importers:
       '@ckeditor/ckeditor5-ui': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-ui': ^32.0.2
@@ -408,10 +408,10 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
@@ -469,9 +469,9 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
@@ -534,11 +534,11 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-content': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-content-clipboard': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-content': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-content-clipboard': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
@@ -595,12 +595,12 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-content': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-content-clipboard': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-content': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-content-clipboard': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
@@ -660,9 +660,9 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-dataprocessor-support': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-dataprocessor-support': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
@@ -704,8 +704,8 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/ckeditor__ckeditor5-html-support': ^33.0.0
@@ -751,8 +751,8 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-coremedia-richtext': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-richtext-support': 10.4.1-rc.1
+      '@coremedia/ckeditor5-coremedia-richtext': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-richtext-support': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/ckeditor__ckeditor5-link': ^32.0.4
@@ -798,7 +798,7 @@ importers:
       '@babel/core': ^7.19.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/jest': ^28.1.8
       copyfiles: ^2.4.1
@@ -834,9 +834,9 @@ importers:
       '@ckeditor/ckeditor5-core': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-coremedia-studio-integration': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@coremedia/service-agent': ^1.1.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
@@ -879,8 +879,8 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
       '@types/ckeditor__ckeditor5-utils': ^28.0.14
@@ -921,8 +921,8 @@ importers:
       '@ckeditor/ckeditor5-utils': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 10.4.1-rc.1
-      '@coremedia/ckeditor5-logging': 10.4.1-rc.1
+      '@coremedia/ckeditor5-core-common': 10.4.1-rc.2
+      '@coremedia/ckeditor5-logging': 10.4.1-rc.2
       '@types/ckeditor__ckeditor5-clipboard': ^29.0.5
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
