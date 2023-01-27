@@ -244,5 +244,6 @@ describe("Content Link Feature", () => {
 
     const contentLink = view.locator.locator(`a`, { hasText: `content:${id}` });
     await expect(contentLink).toBeDefined();
+    return Promise.resolve();
   });
 });
