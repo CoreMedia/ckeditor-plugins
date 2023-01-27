@@ -82,16 +82,27 @@ export class ConversionApi {
     return this.targetDocument.createTextNode(data);
   }
 
-  #hasDefaultNamespace(node: Element | Attr): boolean {
-    if (node.prefix) {
+  /**
+   * Checks if the node has the same namespace URI as its document and
+   * that it does not use a prefix.
+   *
+   * @param node - node to validate
+   */
+  #hasDocumentNamespace(node: Element | Attr): boolean {
+    const { ownerDocument } = node;
+    const { documentElement } = ownerDocument;
+
+    if (node.prefix !== documentElement.prefix) {
       return false;
     }
-    const defaultNamespaceURI = node.ownerDocument.lookupNamespaceURI(null);
-    return node.namespaceURI === defaultNamespaceURI;
+
+    // Does not work in Firefox 109 (provides null as result):
+    //   node.ownerDocument.lookupNamespaceURI(null);
+    return node.namespaceURI === documentElement.namespaceURI;
   }
 
   #importAttr(attr: Attr): Attr | undefined {
-    if (!this.#hasDefaultNamespace(attr)) {
+    if (!this.#hasDocumentNamespace(attr)) {
       return;
     }
     const imported = this.createAttribute(attr.localName);
@@ -100,7 +111,7 @@ export class ConversionApi {
   }
 
   #importElement(element: Element, deep = false): Element | undefined {
-    if (!this.#hasDefaultNamespace(element)) {
+    if (!this.#hasDocumentNamespace(element)) {
       return;
     }
 
