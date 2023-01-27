@@ -2,8 +2,6 @@
 
 import { defaultStrictness, Strictness, StrictnessKey } from "../../src/Strictness";
 import { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
-import { SanitationListener } from "../../src/sanitation/SanitationListener";
-import { AttributeCause, ElementCause } from "../../src/sanitation/Causes";
 import {
   a,
   blockquote,
@@ -24,83 +22,12 @@ import {
   tr,
   ul,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
+import { sanitationListener } from "./TestSanitationListener";
+import { parseXml } from "./XmlTestUtils";
+import { expectSanitationResult } from "./ExpectSanitationResult";
 
-class TestSanitationListener extends SanitationListener {
-  readonly fatals: string[] = [];
-  readonly removedNodes: string[] = [];
-  readonly removedInvalidAttrs: string[] = [];
-
-  clear(): void {
-    this.fatals.length = 0;
-    this.removedNodes.length = 0;
-    this.removedInvalidAttrs.length = 0;
-  }
-
-  get totalLength(): number {
-    return this.fatals.length + this.removedNodes.length + this.removedInvalidAttrs.length;
-  }
-
-  get empty(): boolean {
-    return this.totalLength === 0;
-  }
-
-  fatal(...data: unknown[]): void {
-    this.fatals.push(data.join("|"));
-  }
-
-  removeNode(node: Node, cause: ElementCause): void {
-    this.removedNodes.push(`${node.nodeName}|${cause}`);
-  }
-
-  removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause): void {
-    this.removedInvalidAttrs.push(`${attributeOwner.nodeName}.${attr.localName}|${cause}`);
-  }
-}
-
-const listener = new TestSanitationListener();
-
-const createRichTextSanitizer = (strictness: Strictness = defaultStrictness): RichTextSanitizer =>
-  new RichTextSanitizer(strictness, listener);
-
-const domParser = new DOMParser();
-const xmlSerializer = new XMLSerializer();
-
-const parseXml = (xml: string): Document => domParser.parseFromString(xml, "text/xml");
-
-const serialize = (document: Document): string => xmlSerializer.serializeToString(document);
-
-type ListenerExpectations = (listener: TestSanitationListener) => void;
-
-const expectNoIssues: ListenerExpectations = (listener: TestSanitationListener): void => {
-  expect(listener.empty).toBeTruthy();
-};
-
-const expectSanitationResult = (
-  sanitizer: RichTextSanitizer,
-  inputXml: string,
-  sanitizedXml: string,
-  listenerExpectations: ListenerExpectations = expectNoIssues
-): void => {
-  const { strictness } = sanitizer;
-  const disabled = strictness === Strictness.NONE;
-  const inputDocument = parseXml(inputXml);
-  const expectedOutputDocument = disabled ? inputDocument : parseXml(sanitizedXml);
-  const expectedOutputDocumentXml = serialize(expectedOutputDocument);
-
-  const result = sanitizer.sanitize(inputDocument);
-
-  expect(result).toBe(inputDocument);
-
-  const actualXml = serialize(inputDocument);
-
-  expect(actualXml).toStrictEqual(expectedOutputDocumentXml);
-
-  if (disabled) {
-    expectNoIssues(listener);
-  } else {
-    listenerExpectations(listener);
-  }
-};
+export const createRichTextSanitizer = (strictness: Strictness = defaultStrictness): RichTextSanitizer =>
+  new RichTextSanitizer(strictness, sanitationListener);
 
 /*
  * =====================================================================================================================
@@ -110,7 +37,7 @@ const expectSanitationResult = (
 
 describe("RichTextSanitizer", () => {
   beforeEach(() => {
-    listener.clear();
+    sanitationListener.clear();
   });
 
   describe.each`
@@ -136,12 +63,12 @@ describe("RichTextSanitizer", () => {
 
       if (disabled) {
         expect(result).toBe(document);
-        expect(listener.empty).toBeTruthy();
+        expect(sanitationListener.empty).toBeTruthy();
         return;
       }
 
       expect(result).toBeFalsy();
-      expect(listener.fatals).toHaveLength(1);
+      expect(sanitationListener.fatals).toHaveLength(1);
     });
 
     describe(`Element Sanitation; strictness: ${strictnessKey}`, () => {
