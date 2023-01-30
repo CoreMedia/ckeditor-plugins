@@ -150,18 +150,16 @@ describe("HtmlDomConverter", () => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>TEXT</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected imported(importedNode: Node): Node | Skip {
+      const converter = new HtmlDomConverter(dataDocument, {
+        imported(importedNode: Node): Node | Skip {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             const renamed = renameElement(importedNode, "span");
             renamed.classList.add("mark");
             return renamed;
           }
           return importedNode;
-        }
-      }
-
-      const converter = new CustomHtmlDomConverter(dataDocument);
+        },
+      });
 
       toData(converter, dataViewDocument, dataDocument);
 
@@ -174,16 +172,14 @@ describe("HtmlDomConverter", () => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected imported(importedNode: Node): Node | Skip {
+      const converter = new HtmlDomConverter(dataDocument, {
+        imported(importedNode: Node): Node | Skip {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             return skip;
           }
           return importedNode;
-        }
-      }
-
-      const converter = new CustomHtmlDomConverter(dataDocument);
+        },
+      });
 
       toData(converter, dataViewDocument, dataDocument);
 
@@ -202,27 +198,25 @@ describe("HtmlDomConverter", () => {
         const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
-        class CustomHtmlDomConverter extends HtmlDomConverter {
-          protected imported(importedNode: Node, { api }: ConversionContext): Node | Skip {
+        const converter = new HtmlDomConverter(dataDocument, {
+          imported(importedNode: Node, { api }: ConversionContext): Node | Skip {
             if (mode === "atImported" && isElement(importedNode) && importedNode.localName === "mark") {
               // Benefit: lightweight processing, possibly better performance.
               // Drawback: No information to forward to children from current node.
               return api.createDocumentFragment();
             }
             return importedNode;
-          }
+          },
 
-          protected importedWithChildren(importedNode: Node): Node | Skip {
+          importedWithChildren(importedNode: Node): Node | Skip {
             if (mode === "atImportedWithChildren" && isElement(importedNode) && importedNode.localName === "mark") {
               // Benefit: full control over children, like forwarding information from parent node to children.
               // Drawback: More complex operations required.
               return extractNodeContents(importedNode);
             }
             return importedNode;
-          }
-        }
-
-        const converter = new CustomHtmlDomConverter(dataDocument);
+          },
+        });
 
         toData(converter, dataViewDocument, dataDocument);
 
@@ -245,8 +239,8 @@ describe("HtmlDomConverter", () => {
       const dataViewDocument = documentFromHtml(`<body><table><thead><tr/></thead><tbody><tr/></tbody></table></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedWithChildren(importedNode: Node): Node | Skip {
+      const converter = new HtmlDomConverter(dataDocument, {
+        importedWithChildren(importedNode: Node): Node | Skip {
           if (!isElement(importedNode)) {
             return importedNode;
           }
@@ -262,10 +256,8 @@ describe("HtmlDomConverter", () => {
           }
 
           return importedNode;
-        }
-      }
-
-      const converter = new CustomHtmlDomConverter(dataDocument);
+        },
+      });
 
       toData(converter, dataViewDocument, dataDocument);
 
@@ -286,14 +278,12 @@ describe("HtmlDomConverter", () => {
         `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`
       );
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedWithChildren(importedNode: Node): Node {
+      const converter = new HtmlDomConverter(dataViewDocument, {
+        importedWithChildren(importedNode: Node): Node {
           wrapIfTableElement(importedNode)?.moveRowsWithClassToTHead("tr--head");
           return importedNode;
-        }
-      }
-
-      const converter = new CustomHtmlDomConverter(dataViewDocument);
+        },
+      });
 
       toDataView(converter, dataDocument, dataViewDocument);
 
@@ -306,13 +296,11 @@ describe("HtmlDomConverter", () => {
       const dataViewDocument = documentFromHtml(`<body><em data-editor="Peter">Text</em></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"/>`);
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected prepareForImport(originalNode: Node) {
+      const converter = new HtmlDomConverter(dataDocument, {
+        prepare(originalNode: Node) {
           wrapIfHTMLElement(originalNode)?.moveDataAttributesToChildElements();
-        }
-      }
-
-      const converter = new CustomHtmlDomConverter(dataDocument);
+        },
+      });
 
       toData(converter, dataViewDocument, dataDocument);
 
@@ -327,14 +315,12 @@ describe("HtmlDomConverter", () => {
         `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
       );
 
-      class CustomHtmlDomConverter extends HtmlDomConverter {
-        protected importedWithChildren(importedNode: Node): Node | Skip {
+      const converter = new HtmlDomConverter(dataViewDocument, {
+        importedWithChildren(importedNode: Node): Node | Skip {
           wrapIfHTMLElement(importedNode)?.moveDataAttributeChildElementToDataAttributes();
           return importedNode;
-        }
-      }
-
-      const converter = new CustomHtmlDomConverter(dataViewDocument);
+        },
+      });
 
       toDataView(converter, dataDocument, dataViewDocument);
 
