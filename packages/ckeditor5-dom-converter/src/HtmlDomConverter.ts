@@ -8,6 +8,7 @@ import { ConversionApi } from "./ConversionApi";
 import { fragmentToString, isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFragments";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { ConversionListener } from "./ConversionListener";
 
 const nodeToString = (node: Node | null | undefined): string => {
   if (!node) {
@@ -41,15 +42,18 @@ export class HtmlDomConverter {
    * Context for conversion.
    */
   readonly api: ConversionApi;
+  readonly listener: ConversionListener;
   readonly logger?: Logger;
 
   /**
    * Constructor.
    *
    * @param targetDocument - target document to transform to
+   * @param listener - listener to provide a different behavior
    */
-  constructor(targetDocument: Document) {
+  constructor(targetDocument: Document, listener: ConversionListener = {}) {
     this.api = new ConversionApi(targetDocument);
+    this.listener = listener;
   }
 
   /**
@@ -153,22 +157,16 @@ export class HtmlDomConverter {
    * Prior to importing the original node, you may want to modify it. Note,
    * that allowed modification is limited, though.
    *
-   * There is no need when overriding to call the `super` method as it is
-   * a no-operation method.
-   *
    * @param originalNode - original (mutable!) node
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected prepareForImport(originalNode: Node): void {
-    // No operation by default.
+    this.listener.prepare?.(originalNode);
   }
 
   /**
    * Provides the possibility to handle a just imported node. The node is
    * neither attached to DOM yet, nor children are available.
-   *
-   * **Default Behavior:** No operation by default, thus, just returning the
-   * `importedNode`. Overrides may safely skip call to `super`.
    *
    * @param importedNode - the just imported node
    * @param context - current conversion context
@@ -177,15 +175,13 @@ export class HtmlDomConverter {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected imported(importedNode: Node, context: ConversionContext): Node | Skip {
-    return importedNode;
+    const processed = this.listener.imported?.(importedNode, context);
+    return processed ?? importedNode;
   }
 
   /**
    * Provides the opportunity to handle a just imported node, having its
    * children processed. The node is not attached to the DOM yet, though.
-   *
-   * **Default Behavior:** No operation by default, thus, just returning the
-   * `importedNode`. Overrides may safely skip call to `super`.
    *
    * @param importedNode - imported node, possibly with children
    * @param context - current conversion context
@@ -194,7 +190,8 @@ export class HtmlDomConverter {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
-    return importedNode;
+    const processed = this.listener.importedWithChildren?.(importedNode, context);
+    return processed ?? importedNode;
   }
 
   /**
