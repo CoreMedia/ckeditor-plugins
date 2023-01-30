@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-common",
-  "version": "10.4.1-rc.1",
+  "version": "10.5.1-rc.0",
   "description": "Common Utilities, independent from CKEditor",
   "keywords": [
     "coremedia"
@@ -26,7 +26,7 @@
     "typescript": "^4.8.2"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "10.4.1-rc.1"
+    "@coremedia/ckeditor5-logging": "10.5.1-rc.0"
   },
   "scripts": {
     "clean": "rimraf ./dist",

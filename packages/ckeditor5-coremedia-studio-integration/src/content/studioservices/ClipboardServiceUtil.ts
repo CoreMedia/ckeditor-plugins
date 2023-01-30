@@ -1,5 +1,4 @@
 import ClipboardItemRepresentation from "./ClipboardItemRepresentation";
-import { parseBeanReferences } from "../BeanReference";
 
 /**
  * Extracts content uris from the given ClipboardItemRepresentations.
@@ -9,14 +8,11 @@ import { parseBeanReferences } from "../BeanReference";
  * @returns the content uris.
  */
 export async function toContentUris(items: ClipboardItemRepresentation[]): Promise<string[]> {
-  const beanReferencesAsStrings: string[] = await Promise.all(
-    items.map((item) => item.data["cm/uri-list"]).map(async (blob) => blob.text())
+  // blob.text() returns an Array of a json. The JSON is an Array of uris.
+  // We have to parse the arrays and put them in one flat array.
+  const jsonUriArrays: string[] = await Promise.all(
+    items.map((item) => item.data["cm-studio-rest/uri-list"]).map(async (blob) => blob.text())
   );
-  return beanReferencesAsStrings
-    .map((references) => {
-      const parsedReferences = parseBeanReferences(references);
-      return parsedReferences ? parsedReferences.filter((reference) => !!reference) : [];
-    })
-    .flat()
-    .map((reference) => reference.$Ref);
+  const arrayOfUriArrays = jsonUriArrays.map((value): string[] => JSON.parse(value) as string[]);
+  return arrayOfUriArrays.flat();
 }

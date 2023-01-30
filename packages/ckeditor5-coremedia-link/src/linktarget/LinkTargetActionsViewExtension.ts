@@ -14,6 +14,7 @@ import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { handleFocusManagement, LinkViewWithFocusables } from "../link/FocusUtils";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -85,6 +86,12 @@ class LinkTargetActionsViewExtension extends Plugin {
       // no need to render the buttons manually, just add them to the DOM
       actionsView.once("render", () => this.#addButtons(actionsView, [separatorLeft, ...buttons, separatorRight]));
     }
+
+    actionsView.once("render", () => LinkTargetActionsViewExtension.#render(actionsView, buttons));
+  }
+
+  static #render(actionsView: LinkActionsView, addedButtons: View[]): void {
+    handleFocusManagement(actionsView as LinkViewWithFocusables, addedButtons, actionsView.unlinkButtonView, "before");
   }
 
   /**

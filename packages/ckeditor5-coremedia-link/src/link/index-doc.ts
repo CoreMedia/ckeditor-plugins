@@ -31,6 +31,7 @@
  */
 
 export * as Constants from "./Constants";
+export * as FocusUtils from "./FocusUtils";
 
 export * from "./LinkCleanup";
 export { default as LinkCleanup } from "./LinkCleanup";

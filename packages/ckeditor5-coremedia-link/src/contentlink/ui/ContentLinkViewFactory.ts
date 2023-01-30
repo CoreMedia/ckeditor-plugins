@@ -37,17 +37,18 @@ const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView
   // Propagate Content Name from ContentLinkView to FormView, as we require to
   // know the name in some link insertion scenarios.
   formView.bind("contentName").to(contentLinkView.fieldView);
-  contentLinkView.fieldView.on("doubleClick", () => {
+  contentLinkView.fieldView.on("contentClick", () => {
     linkUI.editor.commands.get("openLinkInTab")?.execute();
   });
 
-  contentLinkView.fieldView.on("cancelClick", () => {
+  contentLinkView.fieldView.on("executeCancel", () => {
     formView.set({
       contentUriPath: undefined,
     });
     linkUI.actionsView.set({
       contentUriPath: undefined,
     });
+    formView.urlInputView.focus();
   });
 
   return contentLinkView;

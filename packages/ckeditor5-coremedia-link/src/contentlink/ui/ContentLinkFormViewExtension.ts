@@ -25,6 +25,9 @@ import {
   isLinkable,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
+import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusUtils";
+import ContentLinkView from "./ContentLinkView";
+import View from "@ckeditor/ckeditor5-ui/src/view";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -124,6 +127,21 @@ class ContentLinkFormViewExtension extends Plugin {
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
+
+    // focus contentLinkView when formView is opened and urlInputView is not visible
+    this.listenTo(
+      linkUI.actionsView,
+      "edit",
+      () => {
+        if (!formView.urlInputView.element || formView.urlInputView.element.style.visibility === "") {
+          // the urlInput is hidden, focus contentView instead
+          contentLinkView.focus();
+        }
+      },
+      {
+        priority: "lowest",
+      }
+    );
   }
 
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
@@ -140,7 +158,27 @@ class ContentLinkFormViewExtension extends Plugin {
 
     // @ts-expect-error TODO We must check for null/undefined here.
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
+
+    const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
+    handleFocusManagement(formView as LinkViewWithFocusables, contentLinkButtons, formView.urlInputView);
+
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
+  }
+
+  /**
+   * Returns the contentLinkView and the focusable "cancel link" button.
+   *
+   * @param contentLinkView - the contentLinkView
+   * @returns both buttons
+   * @private
+   */
+  static #getContentLinkButtons(contentLinkView: LabeledFieldView): View[] {
+    const contentView = contentLinkView.fieldView as unknown as ContentLinkView;
+    const buttons: View[] = [contentLinkView];
+    if (contentView.cancelButton) {
+      buttons.push(contentView.cancelButton);
+    }
+    return buttons;
   }
 
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {

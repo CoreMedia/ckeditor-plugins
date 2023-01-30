@@ -37,6 +37,17 @@ export default class ContentImageOpenInTabUI extends Plugin {
       throw new Error('The command "openImageInTab" is required.');
     }
 
+    const OPEN_IN_TAB_KEYSTROKE = "Ctrl+Shift+O";
+
+    editor.keystrokes.set(OPEN_IN_TAB_KEYSTROKE, (keyEvtData, cancel) => {
+      // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
+      cancel();
+
+      if (openInTabCommand.isEnabled) {
+        openInTabCommand.execute();
+      }
+    });
+
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
       const button = new ButtonView(locale);
 
@@ -44,6 +55,7 @@ export default class ContentImageOpenInTabUI extends Plugin {
         isEnabled: true,
         label: t("Open in tab"),
         icon: openInTabIcon,
+        keystroke: OPEN_IN_TAB_KEYSTROKE,
         tooltip: true,
       });
 
