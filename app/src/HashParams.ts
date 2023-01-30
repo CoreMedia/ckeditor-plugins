@@ -1,5 +1,14 @@
+/**
+ * Regular expression to split up hash parameters similar to query parameters,
+ * thus, having a name and a value.
+ */
 export const hashParamRegExp = /([^=]*)=(.*)/;
 
+/**
+ * Get hash parameter value from `window.location`.
+ *
+ * @param key - hash parameter key
+ */
 export const getHashParam = (key: string | undefined): string | boolean => {
   // Check for `window`: Required when used from within Jest tests, where
   // 'jsdom' is not available.
