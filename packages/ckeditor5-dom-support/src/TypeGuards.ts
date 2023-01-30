@@ -1,3 +1,5 @@
+import { HasChildren, HasNamespaceUri } from "./Types";
+
 /**
  * Type-guard if given value is an attribute instance `Attr`.
  *
@@ -44,7 +46,7 @@ export const isElement = (value: unknown): value is Element => value instanceof 
  * Type-guard for DOM nodes providing a `namespaceURI` attribute.
  */
 // DevNote: CSSNamespaceRule missing yet. Add, if required.
-export const isHasNamespaceUri = (value: unknown): value is Attr | Element => isAttr(value) || isElement(value);
+export const isHasNamespaceUri = (value: unknown): value is HasNamespaceUri => isAttr(value) || isElement(value);
 
 /**
  * Type-Guard for DOM `HTMLAnchorElement`.
@@ -79,7 +81,7 @@ export const isHTMLTableElement = (value: unknown): value is HTMLTableElement =>
  *
  * @param value - value to guard
  */
-export const isParentNode = (value: unknown): value is ParentNode =>
+export const isParentNode = (value: unknown): value is HasChildren =>
   isDocument(value) || isDocumentFragment(value) || isElement(value);
 
 /**
