@@ -71,15 +71,25 @@ export const createElement = (ownerDocument: Document, definition: ElementDefini
  * does not make any guarantees regarding its state, thus, the original element
  * should not be used anymore.
  *
+ * **Children:** By default (`keepChildren` set to `true`), the transformation
+ * respects child nodes in that way, that they are moved to the new element
+ * (and thus, detached from original element). If set to `false` child  nodes
+ * are not transferred, thus the new renamed node is empty.
+ *
  * @param originalElement - original element to rename
  * @param definition - definition how to rename the element
- * @param deep - if to transfer child nodes to new element; defaults to `true`
+ * @param keepChildren - if to keep, thus transfer child nodes to new element;
+ * defaults to `true`
  * @returns renamed element
  */
-export const renameElement = (originalElement: Element, definition: ElementDefinitionType, deep = true): Element => {
+export const renameElement = (
+  originalElement: Element,
+  definition: ElementDefinitionType,
+  keepChildren = true
+): Element => {
   const newElement = createElement(originalElement.ownerDocument, definition);
 
-  if (deep) {
+  if (keepChildren) {
     for (const childNode of originalElement.childNodes) {
       newElement.append(childNode);
     }
