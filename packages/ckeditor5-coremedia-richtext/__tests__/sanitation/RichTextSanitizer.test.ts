@@ -76,9 +76,9 @@ describe("RichTextSanitizer", () => {
       // ======================================================================================================[ <div> ]
 
       describe(`<div>; strictness: ${strictnessKey}`, () => {
-        const eut = "<div>";
+        const elementUnderTest = "<div>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it("Should not modify for only strictly valid attributes", () => {
             const validXml = richtext("", true, ["xlink"]);
             expectSanitationResult(sanitizer, validXml, validXml);
@@ -94,7 +94,7 @@ describe("RichTextSanitizer", () => {
           });
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${""}
@@ -131,9 +131,9 @@ describe("RichTextSanitizer", () => {
       // ========================================================================================================[ <p> ]
 
       describe(`<p>; strictness: ${strictnessKey}`, () => {
-        const eut = "<p>";
+        const elementUnderTest = "<p>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${p()}
@@ -182,7 +182,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${""}
@@ -227,9 +227,9 @@ describe("RichTextSanitizer", () => {
       `(
         `<$element>; strictness: ${strictnessKey}`,
         ({ element, factory }: { element: string; factory: typeof ol | typeof ul }) => {
-          const eut = `<${element}>`;
+          const elementUnderTest = `<${element}>`;
 
-          describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+          describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
             it.each`
               validElement
               ${factory(li())}
@@ -278,7 +278,7 @@ describe("RichTextSanitizer", () => {
             );
           });
 
-          describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+          describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
             test.each`
               validChild
               ${li()}
@@ -325,9 +325,9 @@ describe("RichTextSanitizer", () => {
 
       describe(`<li>; strictness: ${strictnessKey}`, () => {
         const container = ul;
-        const eut = "<li>";
+        const elementUnderTest = "<li>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${li()}
@@ -376,7 +376,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${""}
@@ -414,9 +414,9 @@ describe("RichTextSanitizer", () => {
       // ======================================================================================================[ <pre> ]
 
       describe(`<pre>; strictness: ${strictnessKey}`, () => {
-        const eut = "<pre>";
+        const elementUnderTest = "<pre>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${pre()}
@@ -474,7 +474,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${""}
@@ -512,9 +512,9 @@ describe("RichTextSanitizer", () => {
       // ===============================================================================================[ <blockquote> ]
 
       describe(`<blockquote>; strictness: ${strictnessKey}`, () => {
-        const eut = "<blockquote>";
+        const elementUnderTest = "<blockquote>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${blockquote()}
@@ -565,7 +565,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${""}
@@ -603,9 +603,9 @@ describe("RichTextSanitizer", () => {
       // ========================================================================================================[ <a> ]
 
       describe(`<a>; strictness: ${strictnessKey}`, () => {
-        const eut = "<a>";
+        const elementUnderTest = "<a>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${a("", { "xlink:href": "" })}
@@ -678,7 +678,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${""}
@@ -732,9 +732,9 @@ describe("RichTextSanitizer", () => {
           element: string;
           factory: typeof span | typeof em | typeof strong | typeof sub | typeof sup;
         }) => {
-          const eut = `<${element}>`;
+          const elementUnderTest = `<${element}>`;
 
-          describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+          describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
             it.each`
               validElement
               ${factory("")}
@@ -783,7 +783,7 @@ describe("RichTextSanitizer", () => {
             );
           });
 
-          describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+          describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
             test.each`
               validChild
               ${""}
@@ -823,9 +823,9 @@ describe("RichTextSanitizer", () => {
       // ======================================================================================================[ <img> ]
 
       describe(`<img>; strictness: ${strictnessKey}`, () => {
-        const eut = "<img>";
+        const elementUnderTest = "<img>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${img({ "alt": "", "xlink:href": "" })}
@@ -913,7 +913,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             invalidChild
             ${p()}
@@ -935,9 +935,9 @@ describe("RichTextSanitizer", () => {
       // ====================================================================================================[ <table> ]
 
       describe(`<table>; strictness: ${strictnessKey}`, () => {
-        const eut = "<table>";
+        const elementUnderTest = "<table>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${table(tr(td()))}
@@ -987,7 +987,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChild
             ${tr(td())}
@@ -1024,9 +1024,9 @@ describe("RichTextSanitizer", () => {
       // ====================================================================================================[ <tbody> ]
 
       describe(`<tbody>; strictness: ${strictnessKey}`, () => {
-        const eut = "<tbody>";
+        const elementUnderTest = "<tbody>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${tbody(tr(td()))}
@@ -1079,7 +1079,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChildren
             ${tr(td())}
@@ -1119,9 +1119,9 @@ describe("RichTextSanitizer", () => {
       // =======================================================================================================[ <tr> ]
 
       describe(`<tr>; strictness: ${strictnessKey}`, () => {
-        const eut = "<tr>";
+        const elementUnderTest = "<tr>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${tr(td())}
@@ -1174,7 +1174,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChildren
             ${td()}
@@ -1214,9 +1214,9 @@ describe("RichTextSanitizer", () => {
       // =======================================================================================================[ <td> ]
 
       describe(`<td>; strictness: ${strictnessKey}`, () => {
-        const eut = "<td>";
+        const elementUnderTest = "<td>";
 
-        describe(`${eut} attributes; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
           it.each`
             validElement
             ${td()}
@@ -1291,7 +1291,7 @@ describe("RichTextSanitizer", () => {
           );
         });
 
-        describe(`${eut} children; strictness: ${strictnessKey}`, () => {
+        describe(`${elementUnderTest} children; strictness: ${strictnessKey}`, () => {
           test.each`
             validChildren
             ${""}
