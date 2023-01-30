@@ -6,8 +6,6 @@
  */
 export * as studioservices from "./studioservices/index-doc";
 
-export * from "./BeanReference";
-
 export * from "./BlobDisplayService";
 export { default as BlobDisplayService } from "./BlobDisplayService";
 
