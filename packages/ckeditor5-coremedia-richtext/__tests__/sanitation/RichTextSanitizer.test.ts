@@ -87,9 +87,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext();
             const invalidXml = validXml.replace("div", `div invalid="true"`);
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
         });
@@ -119,9 +119,9 @@ describe("RichTextSanitizer", () => {
             ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
               const invalidXml = richtext(invalidChild);
               const sanitizedXml = richtext(sanitizedChildren);
-              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedNodes).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedNodes).toHaveLength(1);
               });
             }
           );
@@ -155,9 +155,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p());
             const invalidXml = richtext(p("", { class: "I" })).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -174,9 +174,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -209,9 +209,9 @@ describe("RichTextSanitizer", () => {
             ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
               const invalidXml = richtext(p(invalidChild));
               const sanitizedXml = richtext(p(sanitizedChildren));
-              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedNodes).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedNodes).toHaveLength(1);
               });
             }
           );
@@ -251,9 +251,9 @@ describe("RichTextSanitizer", () => {
             it("Should remove invalid attributes", () => {
               const validXml = richtext(factory(li()));
               const invalidXml = richtext(factory(li(), { class: "I" })).replace("class", "invalid");
-              expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedInvalidAttrs).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedInvalidAttrs).toHaveLength(1);
               });
             });
 
@@ -270,9 +270,9 @@ describe("RichTextSanitizer", () => {
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
                 const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-                expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                  expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                  expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+                expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                  expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                  expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
                 });
               }
             );
@@ -291,9 +291,9 @@ describe("RichTextSanitizer", () => {
             it("Should remove illegal empty element", () => {
               const validXml = richtext();
               const invalidXml = richtext(`<${element}/>`);
-              expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedNodes).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedNodes).toHaveLength(1);
               });
             });
 
@@ -308,12 +308,12 @@ describe("RichTextSanitizer", () => {
               ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
                 const invalidXml = richtext(factory(invalidChild));
                 const sanitizedXml = richtext(factory(sanitizedChildren));
-                expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
+                expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
                   // Note, that if the paragraphs had content, this will also
                   // increase the failure count. Thus, we can only ensure, that
                   // it is _greater than_.
-                  expect(l.totalLength).toBeGreaterThanOrEqual(1);
-                  expect(l.removedNodes.length).toBeGreaterThanOrEqual(1);
+                  expect(listener.totalLength).toBeGreaterThanOrEqual(1);
+                  expect(listener.removedNodes.length).toBeGreaterThanOrEqual(1);
                 });
               }
             );
@@ -349,9 +349,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(container(li()));
             const invalidXml = richtext(container(li("", { class: "I" }))).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -368,9 +368,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -402,9 +402,9 @@ describe("RichTextSanitizer", () => {
             ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
               const invalidXml = richtext(p(invalidChild));
               const sanitizedXml = richtext(p(sanitizedChildren));
-              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedNodes).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedNodes).toHaveLength(1);
               });
             }
           );
@@ -438,17 +438,17 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(pre());
             const invalidXml = richtext(pre("", { class: "I" })).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
           it("Should remove fixed attribute (silently)", () => {
             const optimizedXml = richtext(pre());
             const originalXml = richtext(pre("", { "xml:space": "preserve" }));
-            expectSanitationResult(sanitizer, originalXml, optimizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(0);
+            expectSanitationResult(sanitizer, originalXml, optimizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(0);
             });
           });
 
@@ -466,9 +466,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -500,9 +500,9 @@ describe("RichTextSanitizer", () => {
             ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
               const invalidXml = richtext(pre(invalidChild));
               const sanitizedXml = richtext(pre(sanitizedChildren));
-              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedNodes).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedNodes).toHaveLength(1);
               });
             }
           );
@@ -538,9 +538,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(blockquote());
             const invalidXml = richtext(blockquote("", { class: "I" })).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -557,9 +557,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -592,9 +592,9 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should clean up invalid children: $invalidChild", ({ invalidChild }: { invalidChild: string }) => {
             const invalidXml = richtext(blockquote(invalidChild));
             const sanitizedXml = richtext(blockquote());
-            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedNodes).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedNodes).toHaveLength(1);
             });
           });
         });
@@ -631,26 +631,26 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p(a("", { "xlink:href": "" })));
             const invalidXml = richtext(p(a("", { "xlink:href": "", "class": "I" }))).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
           it("Should add missing required attribute (silently)", () => {
             const validXml = richtext(p(a("", { "xlink:href": "" })));
             const invalidXml = validXml.replace(`xlink:href=""`, "");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(0);
-              expect(l.removedInvalidAttrs).toHaveLength(0);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(0);
+              expect(listener.removedInvalidAttrs).toHaveLength(0);
             });
           });
 
           it("Should remove fixed attribute (silently)", () => {
             const optimizedXml = richtext(p(a("", { "xlink:href": "" })));
             const originalXml = richtext(p(a("", { "xlink:href": "", "xlink:type": "simple" })));
-            expectSanitationResult(sanitizer, originalXml, optimizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(0);
+            expectSanitationResult(sanitizer, originalXml, optimizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(0);
             });
           });
 
@@ -670,9 +670,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -705,9 +705,9 @@ describe("RichTextSanitizer", () => {
             ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
               const invalidXml = richtext(p(a(invalidChild, { "xlink:href": "" })));
               const sanitizedXml = richtext(p(a(sanitizedChildren, { "xlink:href": "" })));
-              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedNodes).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedNodes).toHaveLength(1);
               });
             }
           );
@@ -756,9 +756,9 @@ describe("RichTextSanitizer", () => {
             it("Should remove invalid attributes", () => {
               const validXml = richtext(p(factory()));
               const invalidXml = richtext(p(factory("", { class: "I" }))).replace("class", "invalid");
-              expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-                expect(l.totalLength).toStrictEqual(1);
-                expect(l.removedInvalidAttrs).toHaveLength(1);
+              expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(1);
+                expect(listener.removedInvalidAttrs).toHaveLength(1);
               });
             });
 
@@ -775,9 +775,9 @@ describe("RichTextSanitizer", () => {
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
                 const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-                expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                  expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                  expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+                expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                  expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                  expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
                 });
               }
             );
@@ -810,9 +810,9 @@ describe("RichTextSanitizer", () => {
               ({ invalidChild, sanitizedChildren }: { invalidChild: string; sanitizedChildren: string }) => {
                 const invalidXml = richtext(p(factory(invalidChild)));
                 const sanitizedXml = richtext(p(factory(sanitizedChildren)));
-                expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-                  expect(l.totalLength).toStrictEqual(1);
-                  expect(l.removedNodes).toHaveLength(1);
+                expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+                  expect(listener.totalLength).toStrictEqual(1);
+                  expect(listener.removedNodes).toHaveLength(1);
                 });
               }
             );
@@ -854,9 +854,9 @@ describe("RichTextSanitizer", () => {
               "class",
               "invalid"
             );
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -867,8 +867,8 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should remove fixed attribute (silently): $withFixed", ({ withFixed }: { withFixed: string }) => {
             const optimizedXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
             const originalXml = richtext(p(withFixed));
-            expectSanitationResult(sanitizer, originalXml, optimizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(0);
+            expectSanitationResult(sanitizer, originalXml, optimizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(0);
             });
           });
 
@@ -880,9 +880,9 @@ describe("RichTextSanitizer", () => {
             // It works correctly in manual testing, though.
             const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
             const invalidXml = validXml.replace(`xlink:href=""`, "");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(0);
-              expect(l.removedInvalidAttrs).toHaveLength(0);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(0);
+              expect(listener.removedInvalidAttrs).toHaveLength(0);
             });
           });
 
@@ -905,9 +905,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -924,9 +924,9 @@ describe("RichTextSanitizer", () => {
               `>${invalidChild}</img>`
             );
             const sanitizedXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
-            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-              expect(l.totalLength).toBeGreaterThanOrEqual(1);
-              expect(l.removedNodes.length).toBeGreaterThanOrEqual(1);
+            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+              expect(listener.totalLength).toBeGreaterThanOrEqual(1);
+              expect(listener.removedNodes.length).toBeGreaterThanOrEqual(1);
             });
           });
         });
@@ -960,9 +960,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tr(td())));
             const invalidXml = richtext(table(tr(td()), { class: "I" })).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -979,9 +979,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -1000,9 +1000,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove illegal empty element", () => {
             const validXml = richtext();
             const invalidXml = richtext(`<table/>`);
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedNodes).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedNodes).toHaveLength(1);
             });
           });
 
@@ -1013,9 +1013,9 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should clean up invalid children: $invalidChild", ({ invalidChild }: { invalidChild: string }) => {
             const invalidXml = richtext(table([invalidChild, tr(td()), invalidChild]));
             const sanitizedXml = richtext(table(tr(td())));
-            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(2);
-              expect(l.removedNodes).toHaveLength(2);
+            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedNodes).toHaveLength(2);
             });
           });
         });
@@ -1050,9 +1050,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tbody(tr(td()))));
             const invalidXml = richtext(table(tbody(tr(td()), { class: "I" }))).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -1071,9 +1071,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -1095,9 +1095,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove illegal empty element", () => {
             const validXml = richtext();
             const invalidXml = richtext(table(`<tbody/>`));
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(2);
-              expect(l.removedNodes).toHaveLength(2);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedNodes).toHaveLength(2);
             });
           });
 
@@ -1108,9 +1108,9 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should clean up invalid children: $invalidChild", ({ invalidChild }: { invalidChild: string }) => {
             const invalidXml = richtext(table(tbody([invalidChild, tr(td()), invalidChild])));
             const sanitizedXml = richtext(table(tbody(tr(td()))));
-            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(2);
-              expect(l.removedNodes).toHaveLength(2);
+            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedNodes).toHaveLength(2);
             });
           });
         });
@@ -1145,9 +1145,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tr(td())));
             const invalidXml = richtext(table(tr(td(), { class: "I" }))).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -1166,9 +1166,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -1190,9 +1190,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove illegal empty element", () => {
             const validXml = richtext();
             const invalidXml = richtext(table(`<tr/>`));
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(2);
-              expect(l.removedNodes).toHaveLength(2);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedNodes).toHaveLength(2);
             });
           });
 
@@ -1203,9 +1203,9 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should clean up invalid children: $invalidChild", ({ invalidChild }: { invalidChild: string }) => {
             const invalidXml = richtext(table(tr([invalidChild, td(), invalidChild])));
             const sanitizedXml = richtext(table(tr(td())));
-            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(2);
-              expect(l.removedNodes).toHaveLength(2);
+            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedNodes).toHaveLength(2);
             });
           });
         });
@@ -1243,9 +1243,9 @@ describe("RichTextSanitizer", () => {
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tr(td(""))));
             const invalidXml = richtext(table(tr(td("", { class: "I" })))).replace("class", "invalid");
-            expectSanitationResult(sanitizer, invalidXml, validXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedInvalidAttrs).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedInvalidAttrs).toHaveLength(1);
             });
           });
 
@@ -1264,9 +1264,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -1283,9 +1283,9 @@ describe("RichTextSanitizer", () => {
               const expectedXml = strictness !== Strictness.STRICT ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness !== Strictness.STRICT ? 0 : 1;
 
-              expectSanitationResult(sanitizer, invalidXml, expectedXml, (l) => {
-                expect(l.totalLength).toStrictEqual(expectedInvalidAttributes);
-                expect(l.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
+              expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
+                expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
+                expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
             }
           );
@@ -1314,9 +1314,9 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should clean up invalid children: $invalidChild", ({ invalidChild }: { invalidChild: string }) => {
             const invalidXml = richtext(table(tr(td(invalidChild))));
             const sanitizedXml = richtext(table(tr(td())));
-            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (l) => {
-              expect(l.totalLength).toStrictEqual(1);
-              expect(l.removedNodes).toHaveLength(1);
+            expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
+              expect(listener.totalLength).toStrictEqual(1);
+              expect(listener.removedNodes).toHaveLength(1);
             });
           });
         });
