@@ -1,6 +1,6 @@
 import { skip, Skip } from "./Signals";
 import { ConversionContext } from "./ConversionContext";
-import { SortedRuleSection } from "./Rule";
+import { byPriority, RuleSection, SortedRuleSection } from "./Rule";
 import { ConversionListener } from "./ConversionListener";
 
 /**
@@ -10,26 +10,50 @@ export class RuleBasedConversionListener implements ConversionListener {
   /**
    * Rules to process. Expected to be sorted.
    */
-  readonly rules: SortedRuleSection[] = [];
+  readonly #rules: SortedRuleSection[] = [];
 
   /**
    * Constructor.
    *
    * @param rules - rules to apply on conversion
    */
-  constructor(rules: SortedRuleSection[] = []) {
-    this.rules = rules;
+  constructor(rules: RuleSection[] = []) {
+    this.#rules.push(...rules.sort(byPriority));
+  }
+
+  /**
+   * Replaces previously configured rules by new ones.
+   *
+   * @param rules - rules to set
+   */
+  setRules(rules: RuleSection[]): void {
+    this.#rules.length = 0;
+    this.#rules.push(...rules.sort(byPriority));
+  }
+
+  /**
+   * Dumps the IDs of configured rules.
+   *
+   * @param writer - writer to write rule IDs to
+   * @param indent - optional indent
+   */
+  dumpRules(writer: (...data: unknown[]) => void = console.debug, indent = ""): void {
+    this.#rules
+      .map((section) => section.id)
+      .forEach((id) => {
+        writer(`${indent}${id}`);
+      });
   }
 
   prepare(originalNode: Node) {
-    for (const rule of this.rules) {
+    for (const rule of this.#rules) {
       rule.prepare?.(originalNode);
     }
   }
 
   imported(importedNode: Node, context: ConversionContext): Node | Skip {
     let result: Node | Skip = importedNode;
-    for (const rule of this.rules) {
+    for (const rule of this.#rules) {
       if (result === skip) {
         return skip;
       }
@@ -39,14 +63,14 @@ export class RuleBasedConversionListener implements ConversionListener {
   }
 
   appended(parentNode: Node, childNode: Node, context: ConversionContext) {
-    for (const rule of this.rules) {
+    for (const rule of this.#rules) {
       rule.appended?.(parentNode, childNode, context);
     }
   }
 
   importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
     let result: Node | Skip = importedNode;
-    for (const rule of this.rules) {
+    for (const rule of this.#rules) {
       if (result === skip) {
         return skip;
       }

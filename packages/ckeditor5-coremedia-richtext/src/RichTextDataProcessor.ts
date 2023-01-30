@@ -11,7 +11,7 @@ import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
-import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { Strictness } from "./Strictness";
@@ -83,12 +83,12 @@ class RichTextDataProcessor implements DataProcessor {
    * Conversion listener for `toData` processing. Expected to be updated
    * on changes on `toDataRules`.
    */
-  #toDataConversionListener = new RuleBasedConversionListener();
+  readonly #toDataConversionListener = new RuleBasedConversionListener();
   /**
    * Conversion listener for `toData` processing. Expected to be updated
    * on changes on `toViewRules`.
    */
-  #toViewConversionListener = new RuleBasedConversionListener();
+  readonly #toViewConversionListener = new RuleBasedConversionListener();
 
   /**
    * Constructor of plugin.
@@ -190,12 +190,8 @@ class RichTextDataProcessor implements DataProcessor {
    * Triggers updating caches for rules when rules got modified.
    */
   #modifiedRules(): void {
-    // DevNote: We may think of moving this update code to the listener instead.
-    //   Thus, feel free to do so :-)
-    this.#toDataRules.sort(byPriority);
-    this.#toViewRules.sort(byPriority);
-    this.#toViewConversionListener = new RuleBasedConversionListener(this.#toDataRules);
-    this.#toDataConversionListener = new RuleBasedConversionListener(this.#toDataRules);
+    this.#toViewConversionListener.setRules(this.#toViewRules);
+    this.#toDataConversionListener.setRules(this.#toDataRules);
   }
 
   /**
@@ -205,18 +201,10 @@ class RichTextDataProcessor implements DataProcessor {
     const logger = RichTextDataProcessor.#logger;
     if (logger.isDebugEnabled()) {
       logger.debug(`toData Rules (${this.#toDataRules.length}):`);
-      this.#dumpRules(this.#toDataRules);
+      this.#toDataConversionListener.dumpRules(logger.debug, "\t");
       logger.debug(`toView Rules (${this.#toViewRules.length}):`);
-      this.#dumpRules(this.#toViewRules);
+      this.#toViewConversionListener.dumpRules(logger.debug, "\t");
     }
-  }
-
-  #dumpRules(sections: RuleSection[]): void {
-    sections
-      .map((section) => section.id)
-      .forEach((id) => {
-        RichTextDataProcessor.#logger.debug(`\t${id}`);
-      });
   }
 
   /**
