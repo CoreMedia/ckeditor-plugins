@@ -9,7 +9,6 @@ import {
   IsDroppableEvaluationResult,
   isDroppableUris,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
-import { BeanReference } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BeanReference";
 import {
   IsLinkableEvaluationResult,
   isLinkableUris,
@@ -128,9 +127,8 @@ class MockInputExamplePlugin extends Plugin {
       return;
     }
     const contentIds: string[] = contentIdCommaSeparated.split(",");
-    const beanReferences = MockInputExamplePlugin.#contentList(...contentIds);
-    const cmurilist = JSON.stringify(beanReferences);
-    const blob = new Blob([cmurilist], { type: "cm/uri-list" });
+    const urilistJSON = JSON.stringify(contentIds);
+    const blob = new Blob([urilistJSON], { type: "cm-studio-rest/uri-list" });
     const data: Record<string, Blob> = {};
     data[blob.type] = blob;
 
@@ -171,12 +169,6 @@ class MockInputExamplePlugin extends Plugin {
    */
   static #removeDropData(): void {
     serviceAgent.unregisterServices("dragDropService");
-  }
-
-  static #contentList(...ids: string[]): BeanReference[] {
-    return ids.map((id) => ({
-      $Ref: id,
-    }));
   }
 
   static #generateUriPath(item: number | ExternalContent): string {
