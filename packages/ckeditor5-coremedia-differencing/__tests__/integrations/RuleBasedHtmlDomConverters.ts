@@ -1,5 +1,6 @@
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
+import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/RuleBasedConversionListener";
+import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/HtmlDomConverter";
 
 /**
  * Lightweight "data processor" just providing access to the DOM Converter API.
@@ -24,11 +25,13 @@ export class RuleBasedHtmlDomConverterFactory {
     this.toViewRules.sort(byPriority);
   }
 
-  createToViewConverter(targetDocument: Document): RuleBasedHtmlDomConverter {
-    return new RuleBasedHtmlDomConverter(targetDocument, this.toViewRules);
+  createToViewConverter(targetDocument: Document): HtmlDomConverter {
+    const listener = new RuleBasedConversionListener(this.toViewRules);
+    return new HtmlDomConverter(targetDocument, listener);
   }
 
-  createToDataConverter(targetDocument: Document): RuleBasedHtmlDomConverter {
-    return new RuleBasedHtmlDomConverter(targetDocument, this.toDataRules);
+  createToDataConverter(targetDocument: Document): HtmlDomConverter {
+    const listener = new RuleBasedConversionListener(this.toDataRules);
+    return new HtmlDomConverter(targetDocument, listener);
   }
 }

@@ -79,6 +79,16 @@ class RichTextDataProcessor implements DataProcessor {
    * to their priority.
    */
   readonly #toViewRules: RuleSection[] = [];
+  /**
+   * Conversion listener for `toData` processing. Expected to be updated
+   * on changes on `toDataRules`.
+   */
+  #toDataConversionListener = new RuleBasedConversionListener();
+  /**
+   * Conversion listener for `toData` processing. Expected to be updated
+   * on changes on `toViewRules`.
+   */
+  #toViewConversionListener = new RuleBasedConversionListener();
 
   /**
    * Constructor of plugin.
@@ -168,13 +178,24 @@ class RichTextDataProcessor implements DataProcessor {
 
     configs.forEach((config) => this.#addRule(config));
 
-    this.#toDataRules.sort(byPriority);
-    this.#toViewRules.sort(byPriority);
+    this.#modifiedRules();
 
     if (logger.isDebugEnabled()) {
       logger.debug(`${configs.length} rule configurations added.`);
       this.dumpRules();
     }
+  }
+
+  /**
+   * Triggers updating caches for rules when rules got modified.
+   */
+  #modifiedRules(): void {
+    // DevNote: We may think of moving this update code to the listener instead.
+    //   Thus, feel free to do so :-)
+    this.#toDataRules.sort(byPriority);
+    this.#toViewRules.sort(byPriority);
+    this.#toViewConversionListener = new RuleBasedConversionListener(this.#toDataRules);
+    this.#toDataConversionListener = new RuleBasedConversionListener(this.#toDataRules);
   }
 
   /**
@@ -211,8 +232,7 @@ class RichTextDataProcessor implements DataProcessor {
     const dataDocument = this.#parseData(data);
     const htmlDocument = createHtmlDocument();
 
-    const listener = new RuleBasedConversionListener(this.#toViewRules);
-    const converter = new HtmlDomConverter(htmlDocument, listener);
+    const converter = new HtmlDomConverter(htmlDocument, this.#toViewConversionListener);
 
     const range = dataDocument.createRange();
     range.selectNodeContents(dataDocument.documentElement);
@@ -258,8 +278,7 @@ class RichTextDataProcessor implements DataProcessor {
     const dataDocument = createCoreMediaRichTextDocument();
     const { htmlDomFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
 
-    const listener = new RuleBasedConversionListener(this.#toDataRules);
-    const converter = new HtmlDomConverter(dataDocument, listener);
+    const converter = new HtmlDomConverter(dataDocument, this.#toDataConversionListener);
 
     converter.convertAndAppend(htmlDomFragment, dataDocument.documentElement);
 
