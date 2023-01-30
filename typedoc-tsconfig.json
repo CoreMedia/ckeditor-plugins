@@ -34,6 +34,12 @@
       "@coremedia/ckeditor5-dataprocessor-support/*": [
         "./packages/ckeditor5-dataprocessor-support/src/*"
       ],
+      "@coremedia/ckeditor5-dom-converter/*": [
+        "./packages/ckeditor5-dom-converter/src/*"
+      ],
+      "@coremedia/ckeditor5-dom-support/*": [
+        "./packages/ckeditor5-dom-converter/src/*"
+      ],
       "@coremedia/ckeditor5-logging/*": [
         "./packages/ckeditor5-logging/src/*"
       ],
