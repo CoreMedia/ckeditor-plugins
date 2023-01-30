@@ -3,6 +3,7 @@
  */
 // DevNote: More strict would be, only allowing alphabetical characters.
 export type CapitalLetter = Capitalize<string[0]>;
+
 /**
  * Type for capitalized strings.
  */
@@ -15,10 +16,6 @@ export type Capitalized = Capitalize<string>;
  */
 export const capitalizeFirst = <T extends string>(value: T): CapitalLetter =>
   value.charAt(0).toUpperCase() as CapitalLetter;
-
-capitalizeFirst("");
-
-const a: Capitalized = "";
 
 /**
  * Capitalizes the given string.
