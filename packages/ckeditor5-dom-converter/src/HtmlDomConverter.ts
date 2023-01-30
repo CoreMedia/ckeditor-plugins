@@ -47,7 +47,6 @@ export class HtmlDomConverter {
    * Constructor.
    *
    * @param targetDocument - target document to transform to
-   * @param logger - optional console that may tell details on processing
    */
   constructor(targetDocument: Document) {
     this.api = new ConversionApi(targetDocument);
