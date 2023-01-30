@@ -111,7 +111,7 @@ export class HtmlDomConverter {
     // as the one given here and the convenience API is bound to the target
     // document and thus irrelevant for modifying the DOM of the original
     // node.
-    this.prepareForImport(originalNode);
+    this.#prepareForImport(originalNode);
 
     if (logger.isDebugEnabled()) {
       logger.debug(`convert(${originalNode.nodeName}); Stage: prepared`, {
@@ -120,7 +120,7 @@ export class HtmlDomConverter {
       });
     }
 
-    result = this.imported(api.importNode(originalNode), context);
+    result = this.#imported(api.importNode(originalNode), context);
 
     if (logger.isDebugEnabled()) {
       logger.debug(`convert(${originalNode.nodeName}); Stage: imported`, {
@@ -132,7 +132,7 @@ export class HtmlDomConverter {
     if (result !== skip) {
       if (isParentNode(originalNode)) {
         this.#convertChildren(originalNode, result, context);
-        result = this.importedWithChildren(result, context);
+        result = this.#importedWithChildren(result, context);
 
         if (logger.isDebugEnabled()) {
           logger.debug(`convert(${originalNode.nodeName}); Stage: importedWithChildren`, {
@@ -160,7 +160,7 @@ export class HtmlDomConverter {
    * @param originalNode - original (mutable!) node
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected prepareForImport(originalNode: Node): void {
+  #prepareForImport(originalNode: Node): void {
     this.listener.prepare?.(originalNode);
   }
 
@@ -173,8 +173,7 @@ export class HtmlDomConverter {
    * @returns the node to continue with in further processing or a signal
    * what to do instead
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected imported(importedNode: Node, context: ConversionContext): Node | Skip {
+  #imported(importedNode: Node, context: ConversionContext): Node | Skip {
     const processed = this.listener.imported?.(importedNode, context);
     return processed ?? importedNode;
   }
@@ -188,8 +187,7 @@ export class HtmlDomConverter {
    * @returns the node to attach to the DOM eventually; or a corresponding
    * signal what to do instead
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
+  #importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
     const processed = this.listener.importedWithChildren?.(importedNode, context);
     return processed ?? importedNode;
   }
@@ -243,10 +241,10 @@ export class HtmlDomConverter {
       // after appending.
       const fragmentContents = [...convertedChild.childNodes];
       if (this.appendChild(parentNode, convertedChild)) {
-        fragmentContents.forEach((content) => this.appended(parentNode, content, context));
+        fragmentContents.forEach((content) => this.#appended(parentNode, content, context));
       }
     } else if (this.appendChild(parentNode, convertedChild)) {
-      this.appended(parentNode, convertedChild, context);
+      this.#appended(parentNode, convertedChild, context);
     }
   }
 
@@ -256,16 +254,12 @@ export class HtmlDomConverter {
    * **Note on `context`:** The source node references the related
    * representation of `parentNode` in the original document.
    *
-   * The default implementation is empty. Thus, no super call required on
-   * override.
-   *
    * @param parentNode - parent node child got appended to
    * @param childNode - child node that got appended
    * @param context - current conversion context
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected appended(parentNode: Node, childNode: Node, context: ConversionContext): void {
-    // No operation by default.
+  #appended(parentNode: Node, childNode: Node, context: ConversionContext): void {
+    this.listener.appended?.(parentNode, childNode, context);
   }
 
   /**
