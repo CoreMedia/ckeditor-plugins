@@ -10,5 +10,5 @@ export * from "./ConversionListener";
 export * from "./DomConverterStages";
 export * from "./HtmlDomConverter";
 export * from "./Rule";
-export * from "./RuleBasedHtmlDomConverter";
+export * from "./RuleBasedConversionListener";
 export * from "./Signals";

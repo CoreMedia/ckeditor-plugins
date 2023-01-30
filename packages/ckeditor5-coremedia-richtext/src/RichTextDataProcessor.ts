@@ -11,7 +11,6 @@ import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import mix from "@ckeditor/ckeditor5-utils/src/mix";
-import { RuleBasedHtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/RuleBasedHtmlDomConverter";
 import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
@@ -20,6 +19,8 @@ import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Name
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
+import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/RuleBasedConversionListener";
+import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/HtmlDomConverter";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -210,7 +211,9 @@ class RichTextDataProcessor implements DataProcessor {
     const dataDocument = this.#parseData(data);
     const htmlDocument = createHtmlDocument();
 
-    const converter = new RuleBasedHtmlDomConverter(htmlDocument, this.#toViewRules);
+    const listener = new RuleBasedConversionListener(this.#toViewRules);
+    const converter = new HtmlDomConverter(htmlDocument, listener);
+
     const range = dataDocument.createRange();
     range.selectNodeContents(dataDocument.documentElement);
     const dataFragment = range.extractContents();
@@ -255,7 +258,8 @@ class RichTextDataProcessor implements DataProcessor {
     const dataDocument = createCoreMediaRichTextDocument();
     const { htmlDomFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
 
-    const converter = new RuleBasedHtmlDomConverter(dataDocument, this.#toDataRules);
+    const listener = new RuleBasedConversionListener(this.#toDataRules);
+    const converter = new HtmlDomConverter(dataDocument, listener);
 
     converter.convertAndAppend(htmlDomFragment, dataDocument.documentElement);
 

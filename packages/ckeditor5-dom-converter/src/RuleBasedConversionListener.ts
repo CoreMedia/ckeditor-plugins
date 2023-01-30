@@ -1,12 +1,12 @@
-import { HtmlDomConverter } from "./HtmlDomConverter";
 import { skip, Skip } from "./Signals";
 import { ConversionContext } from "./ConversionContext";
 import { SortedRuleSection } from "./Rule";
+import { ConversionListener } from "./ConversionListener";
 
 /**
  * Rule based HTML DOM Converter.
  */
-export class RuleBasedHtmlDomConverter extends HtmlDomConverter {
+export class RuleBasedConversionListener implements ConversionListener {
   /**
    * Rules to process. Expected to be sorted.
    */
@@ -15,21 +15,19 @@ export class RuleBasedHtmlDomConverter extends HtmlDomConverter {
   /**
    * Constructor.
    *
-   * @param targetDocument - target document to transform to
    * @param rules - rules to apply on conversion
    */
-  constructor(targetDocument: Document, rules: SortedRuleSection[] = []) {
-    super(targetDocument);
+  constructor(rules: SortedRuleSection[] = []) {
     this.rules = rules;
   }
 
-  protected prepareForImport(originalNode: Node) {
+  prepare(originalNode: Node) {
     for (const rule of this.rules) {
       rule.prepare?.(originalNode);
     }
   }
 
-  protected imported(importedNode: Node, context: ConversionContext): Node | Skip {
+  imported(importedNode: Node, context: ConversionContext): Node | Skip {
     let result: Node | Skip = importedNode;
     for (const rule of this.rules) {
       if (result === skip) {
@@ -40,13 +38,13 @@ export class RuleBasedHtmlDomConverter extends HtmlDomConverter {
     return result;
   }
 
-  protected appended(parentNode: Node, childNode: Node, context: ConversionContext) {
+  appended(parentNode: Node, childNode: Node, context: ConversionContext) {
     for (const rule of this.rules) {
       rule.appended?.(parentNode, childNode, context);
     }
   }
 
-  protected importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
+  importedWithChildren(importedNode: Node, context: ConversionContext): Node | Skip {
     let result: Node | Skip = importedNode;
     for (const rule of this.rules) {
       if (result === skip) {
