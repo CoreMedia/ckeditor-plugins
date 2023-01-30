@@ -238,12 +238,13 @@ export class HtmlDomConverter {
     if (isDocumentFragment(convertedChild)) {
       // Special handling for notification purpose, as the standard
       // process will pass an empty fragment as `convertedChild`
-      // after appending.
+      // after appending. As `appendChild` will empty the fragment, it
+      // is important to remember the children here for notification purpose.
       const fragmentContents = [...convertedChild.childNodes];
-      if (this.appendChild(parentNode, convertedChild)) {
+      if (this.#appendChild(parentNode, convertedChild)) {
         fragmentContents.forEach((content) => this.#appended(parentNode, content, context));
       }
-    } else if (this.appendChild(parentNode, convertedChild)) {
+    } else if (this.#appendChild(parentNode, convertedChild)) {
       this.#appended(parentNode, convertedChild, context);
     }
   }
@@ -274,23 +275,12 @@ export class HtmlDomConverter {
    * also the imported child is `CharacterData` by appending these data
    * to the parent. Such behavior may signal some misbehavior in processing.
    *
-   * For implementing classes, the method signals, if it successfully handled
-   * the child. A return value of `false` signals, that the child was not
-   * handled in any way **and** that subclasses may decide to do different.
-   * A subclass may return **true** although the child was not added: This
-   * would signal, that the node got ignored by intention, like a node, which
-   * is not allowed as child to the given parent node in target document.
-   *
-   * Similar to the `imported*` methods, this method may be overridden to
-   * control appending child nodes to parents. Different to those methods,
-   * it is strongly recommended calling the `super` method when overriding.
-   *
    * @param importedParentNode - the node to append the child to
    * @param importedChildNode - the just imported child node to append
    * @returns `true` if the child node has been handled; `false` if it is not
    * and subclasses may decide to take the responsibility for handling them
    */
-  protected appendChild(importedParentNode: Node, importedChildNode: Node): boolean {
+  #appendChild(importedParentNode: Node, importedChildNode: Node): boolean {
     if (isParentNode(importedParentNode)) {
       if (isAttr(importedChildNode)) {
         if (isElement(importedParentNode)) {
