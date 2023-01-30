@@ -3,7 +3,6 @@
 import "jest-xml-matcher";
 import ToDataProcessor from "../../../src/ToDataProcessor";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import { getConfig } from "../../../src/compatibility/v10/V10CoreMediaRichTextConfig";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import { getV10Config } from "./Utils";
 

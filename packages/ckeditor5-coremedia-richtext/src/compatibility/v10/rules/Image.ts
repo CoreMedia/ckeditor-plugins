@@ -1,6 +1,13 @@
 import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { xLinkActuateMapper, xLinkHrefMapper, xLinkRoleMapper, xLinkShowMapper, xLinkTitleMapper, xLinkTypeMapper, } from "./XLink";
+import {
+  xLinkActuateMapper,
+  xLinkHrefMapper,
+  xLinkRoleMapper,
+  xLinkShowMapper,
+  xLinkTitleMapper,
+  xLinkTypeMapper,
+} from "./XLink";
 import { langMapper } from "./Lang";
 import { INLINE_IMG } from "../../../rules/ImageElements";
 

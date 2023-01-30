@@ -18,10 +18,7 @@ export const fragmentFromNodeContents = (value: Node): DocumentFragment => {
  *
  * @param domFragment - fragment to create `toString` representation of
  */
-export const fragmentToString = (domFragment: DocumentFragment): string => {
-  return (
-    Array.from(domFragment.childNodes)
-      .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
-      .reduce((result, s) => (result ?? "") + (s ?? ""), "") ?? ""
-  );
-};
+export const fragmentToString = (domFragment: DocumentFragment): string =>
+  Array.from(domFragment.childNodes)
+    .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
+    .reduce((result, s) => (result ?? "") + (s ?? ""), "") ?? "";
