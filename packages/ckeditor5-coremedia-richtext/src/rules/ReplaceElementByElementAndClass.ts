@@ -44,7 +44,7 @@ export const replaceElementByElementAndClass = (config: ReplaceElementByElementA
           return node;
         }
         const result = renameElement(node, viewLocalName);
-        removeClass(node, dataReservedClass);
+        removeClass(result, dataReservedClass);
         return result;
       },
       priority,
