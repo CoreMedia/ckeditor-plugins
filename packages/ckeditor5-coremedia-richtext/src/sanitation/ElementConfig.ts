@@ -7,6 +7,7 @@ import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
 import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
 import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/HasNamespaceUris";
+import { lookupNamespaceURI } from "@coremedia/ckeditor5-dom-support/Nodes";
 
 const defaultPrefix = Symbol("default");
 type DefaultPrefix = typeof defaultPrefix;
@@ -325,7 +326,7 @@ export class ElementConfig {
       const actualPrefix = prefix === defaultPrefix ? null : prefix;
       const prefixString = actualPrefix ? `${actualPrefix}:` : "";
       byLocalName.forEach((defaultValue, localName) => {
-        let namespaceURI = element.lookupNamespaceURI(actualPrefix);
+        let namespaceURI = lookupNamespaceURI(element, actualPrefix);
         if (actualPrefix && isKnownNamespacePrefix(actualPrefix) && !namespaceURI) {
           namespaceURI = namespaces[actualPrefix];
         }

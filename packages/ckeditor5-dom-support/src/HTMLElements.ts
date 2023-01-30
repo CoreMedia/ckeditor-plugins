@@ -1,9 +1,5 @@
-/**
- * Type-Guard for DOM `HTMLElement`.
- *
- * @param value - value to guard
- */
-export const isHTMLElement = (value: unknown): value is HTMLElement => value instanceof HTMLElement;
+import { isHTMLElement } from "./TypeGuards";
+export { isHTMLElement } from "./TypeGuards";
 
 export const wrapIfHTMLElement = (delegate: Node | HTMLElement): HTMLElementWrapper | undefined => {
   if (isHTMLElement(delegate)) {

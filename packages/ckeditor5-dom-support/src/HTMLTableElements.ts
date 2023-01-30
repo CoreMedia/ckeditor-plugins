@@ -1,13 +1,8 @@
 /* eslint-disable jsdoc/require-returns-check,@typescript-eslint/unified-signatures */
+import { isHTMLTableElement } from "./TypeGuards";
+export { isHTMLTableElement } from "./TypeGuards";
 import { createElement, isElement, removeClass } from "./Elements";
 import { querySelectorAllDirectChildren, querySelectorDirectChild } from "./ParentNodes";
-
-/**
- * Type-Guard for DOM `HTMLTableElement`.
- *
- * @param value - value to guard
- */
-export const isHTMLTableElement = (value: unknown): value is HTMLTableElement => value instanceof HTMLTableElement;
 
 /**
  * Wraps the given `<table>` element into a wrapper, which provides some

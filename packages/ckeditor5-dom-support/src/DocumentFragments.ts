@@ -1,9 +1,4 @@
-/**
- * Type-Guard for DOM `DocumentFragment`.
- *
- * @param value - value to guard
- */
-export const isDocumentFragment = (value: unknown): value is DocumentFragment => value instanceof DocumentFragment;
+export { isDocumentFragment } from "./TypeGuards";
 
 /**
  * Extracts `DocumentFragment` from contents of given node.

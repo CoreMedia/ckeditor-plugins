@@ -1,11 +1,6 @@
 import { copyAttributesFrom } from "./Attrs";
-
-/**
- * Type-Guard for DOM `Element`.
- *
- * @param value - value to guard
- */
-export const isElement = (value: unknown): value is Element => value instanceof Element;
+import { lookupDocumentDefaultNamespaceURI } from "./Nodes";
+export { isElement } from "./TypeGuards";
 
 /**
  * Represents an element to create.
@@ -58,7 +53,7 @@ export const createElement = (ownerDocument: Document, definition: ElementDefini
     // more expected behavior, which is, `<created/>` as serialized XML.
     // Sticking to tri-state here, thus `null` will not trigger this behavior,
     // as it may be intended behavior to create this empty namespace.
-    newNamespaceURI = ownerDocument.documentElement.namespaceURI;
+    newNamespaceURI = lookupDocumentDefaultNamespaceURI(ownerDocument);
   }
   return document.createElementNS(newNamespaceURI, qualifiedName);
 };

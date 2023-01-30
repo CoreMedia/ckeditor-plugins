@@ -1,5 +1,6 @@
 import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
 import { isAttr } from "@coremedia/ckeditor5-dom-support/Attrs";
+import { lookupDocumentDefaultNamespaceURI } from "@coremedia/ckeditor5-dom-support/Nodes";
 
 /**
  * Contextual information and API during DOM conversion.
@@ -10,8 +11,7 @@ export class ConversionApi {
 
   constructor(targetDocument: Document) {
     this.targetDocument = targetDocument;
-    // lookupNamespaceURI(null) does not provide expected result in Firefox 109
-    this.targetDefaultNamespaceURI = this.targetDocument.documentElement.namespaceURI;
+    this.targetDefaultNamespaceURI = lookupDocumentDefaultNamespaceURI(targetDocument);
   }
 
   createAttribute(localName: string): Attr {
@@ -97,9 +97,7 @@ export class ConversionApi {
       return false;
     }
 
-    // Does not work in Firefox 109 (provides null as result):
-    //   node.ownerDocument.lookupNamespaceURI(null);
-    return node.namespaceURI === documentElement.namespaceURI;
+    return node.namespaceURI === lookupDocumentDefaultNamespaceURI(ownerDocument);
   }
 
   #importAttr(attr: Attr): Attr | undefined {

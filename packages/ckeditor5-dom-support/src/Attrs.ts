@@ -1,9 +1,4 @@
-/**
- * Type-guard if given value is an attribute instance `Attr`.
- *
- * @param value - value to validate
- */
-export const isAttr = (value: unknown): value is Attr => value instanceof Attr;
+export { isAttr } from "./TypeGuards";
 
 /**
  * Copies attributes from source element to target element.

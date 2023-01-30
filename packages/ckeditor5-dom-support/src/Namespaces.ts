@@ -1,4 +1,4 @@
-import { isDocument } from "./Documents";
+import { isDocument } from "./TypeGuards";
 
 /**
  * Namespace URI for `xmlns`.
