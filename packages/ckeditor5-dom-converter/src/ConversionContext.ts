@@ -3,7 +3,7 @@ import { ConversionApi } from "./ConversionApi";
 /**
  * Contextual information and API during DOM conversion.
  */
-export class ConversionContext implements ConversionContext {
+export class ConversionContext {
   readonly sourceNode: Node;
 
   readonly api: ConversionApi;
