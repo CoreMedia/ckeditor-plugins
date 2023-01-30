@@ -151,13 +151,12 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       const converter = new HtmlDomConverter(dataDocument, {
-        imported(importedNode: Node): Node | Skip {
+        imported(importedNode: Node): Node | undefined {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             const renamed = renameElement(importedNode, "span");
             renamed.classList.add("mark");
             return renamed;
           }
-          return importedNode;
         },
       });
 
@@ -173,11 +172,10 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       const converter = new HtmlDomConverter(dataDocument, {
-        imported(importedNode: Node): Node | Skip {
+        imported(importedNode: Node): Skip | undefined {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             return skip;
           }
-          return importedNode;
         },
       });
 
@@ -199,22 +197,20 @@ describe("HtmlDomConverter", () => {
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
         const converter = new HtmlDomConverter(dataDocument, {
-          imported(importedNode: Node, { api }: ConversionContext): Node | Skip {
+          imported(importedNode: Node, { api }: ConversionContext): Node | undefined {
             if (mode === "atImported" && isElement(importedNode) && importedNode.localName === "mark") {
               // Benefit: lightweight processing, possibly better performance.
               // Drawback: No information to forward to children from current node.
               return api.createDocumentFragment();
             }
-            return importedNode;
           },
 
-          importedWithChildren(importedNode: Node): Node | Skip {
+          importedWithChildren(importedNode: Node): Node | undefined {
             if (mode === "atImportedWithChildren" && isElement(importedNode) && importedNode.localName === "mark") {
               // Benefit: full control over children, like forwarding information from parent node to children.
               // Drawback: More complex operations required.
               return extractNodeContents(importedNode);
             }
-            return importedNode;
           },
         });
 
@@ -240,9 +236,9 @@ describe("HtmlDomConverter", () => {
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
       const converter = new HtmlDomConverter(dataDocument, {
-        importedWithChildren(importedNode: Node): Node | Skip {
+        importedWithChildren(importedNode: Node): undefined {
           if (!isElement(importedNode)) {
-            return importedNode;
+            return;
           }
 
           if (importedNode.localName === "thead") {
@@ -254,8 +250,6 @@ describe("HtmlDomConverter", () => {
           } else {
             wrapIfTableElement(importedNode)?.mergeAllRowsOfAllSectionsIntoTBody();
           }
-
-          return importedNode;
         },
       });
 
@@ -279,9 +273,9 @@ describe("HtmlDomConverter", () => {
       );
 
       const converter = new HtmlDomConverter(dataViewDocument, {
-        importedWithChildren(importedNode: Node): Node {
+        importedWithChildren(importedNode: Node): undefined {
           wrapIfTableElement(importedNode)?.moveRowsWithClassToTHead("tr--head");
-          return importedNode;
+          return undefined;
         },
       });
 
@@ -316,9 +310,9 @@ describe("HtmlDomConverter", () => {
       );
 
       const converter = new HtmlDomConverter(dataViewDocument, {
-        importedWithChildren(importedNode: Node): Node | Skip {
+        importedWithChildren(importedNode: Node): undefined {
           wrapIfHTMLElement(importedNode)?.moveDataAttributeChildElementToDataAttributes();
-          return importedNode;
+          return undefined;
         },
       });
 
