@@ -17,3 +17,4 @@ export * from "./Namespaces";
 export * from "./Nodes";
 export * from "./ParentNodes";
 export * from "./Texts";
+export * from "./Types";

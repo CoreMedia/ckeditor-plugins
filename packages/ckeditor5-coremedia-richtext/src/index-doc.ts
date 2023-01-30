@@ -17,7 +17,10 @@ export * from "./Constants";
 export * from "./CoreMediaRichText";
 export { default as CoreMediaRichText } from "./CoreMediaRichText";
 
+export * from "./CoreMediaRichTextConfig";
 export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
+
+export * from "./Namespaces";
 
 export * from "./RichTextDataProcessor";
 export { default as RichTextDataProcessor } from "./RichTextDataProcessor";
@@ -29,4 +32,4 @@ export * from "./ToDataProcessor";
 export { default as ToDataProcessor } from "./ToDataProcessor";
 export { COREMEDIA_RICHTEXT_1_0_DTD } from "./Entities";
 export { declareCoreMediaRichText10Entities } from "./Entities";
-export { Strictness } from "./Strictness";
+export * from "./Strictness";
