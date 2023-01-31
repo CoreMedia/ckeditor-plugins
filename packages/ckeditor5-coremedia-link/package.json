@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-link",
-  "version": "10.5.1-rc.1",
+  "version": "11.0.0",
   "description": "Support for Content Link, Link Target Specification",
   "keywords": [
     "coremedia",
@@ -60,12 +60,12 @@
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "10.5.1-rc.1",
-    "@coremedia/ckeditor5-core-common": "10.5.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-content": "10.5.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "10.5.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "10.5.1-rc.1",
-    "@coremedia/ckeditor5-logging": "10.5.1-rc.1",
+    "@coremedia/ckeditor5-common": "^11.0.0",
+    "@coremedia/ckeditor5-core-common": "^11.0.0",
+    "@coremedia/ckeditor5-coremedia-content": "^11.0.0",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "^11.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^11.0.0",
+    "@coremedia/ckeditor5-logging": "^11.0.0",
     "rxjs": "^7.5.6"
   }
 }
