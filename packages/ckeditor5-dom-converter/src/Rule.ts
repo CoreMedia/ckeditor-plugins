@@ -25,7 +25,7 @@ export interface RuleConfigBase {
 /**
  * Utility type to mark selected properties as required.
  */
-type RequireSelected<Type extends object, Key extends keyof Type> = Pick<Type, keyof Omit<Type, Key>> &
+export type RequireSelected<Type extends object, Key extends keyof Type> = Pick<Type, keyof Omit<Type, Key>> &
   Required<Pick<Type, Key>>;
 
 /**
@@ -142,7 +142,7 @@ export type RuleSectionConfig =
 /**
  * Utility type to transform a type of given properties to another.
  */
-type TransformPropertyType<Type extends object, Key extends keyof Type, ValueType> = Pick<
+export type TransformPropertyType<Type extends object, Key extends keyof Type, ValueType> = Pick<
   Type,
   keyof Omit<Type, Key>
 > & {

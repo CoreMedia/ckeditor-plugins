@@ -23,7 +23,7 @@ export const includesToData = (direction: Direction): boolean => ["toData", "bij
  */
 export const includesToView = (direction: Direction): boolean => ["toView", "bijective"].includes(direction);
 
-type RuleSectionConfigSupplier = () => RuleSectionConfig;
+export type RuleSectionConfigSupplier = () => RuleSectionConfig;
 
 export const ifIncludesToData = (
   direction: Direction,

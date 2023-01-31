@@ -33,7 +33,7 @@ class TrackingState {
  * Explicitly declares the expected API for logging. Thus, alternative
  * implementations may be handed over.
  */
-type TrackingSanitationListenerConsole = Pick<Console, "debug" | "info" | "warn" | "error">;
+export type TrackingSanitationListenerConsole = Pick<Console, "debug" | "info" | "warn" | "error">;
 
 /**
  * The tracking sanitation listener listens to sanitation events and especially

@@ -9,7 +9,7 @@ import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support/HTMLAnchorElements";
 import { ConversionApi } from "@coremedia/ckeditor5-dom-converter/ConversionApi";
 
-const contentUriPathPrefix = "content" as const;
+export const contentUriPathPrefix = "content" as const;
 
 /**
  * Pattern for extracting ID (group: `id`) from link as represented in data.
