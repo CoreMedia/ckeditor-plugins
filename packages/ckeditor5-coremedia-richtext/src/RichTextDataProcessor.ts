@@ -110,7 +110,7 @@ class RichTextDataProcessor implements DataProcessor {
 
     this.#strictness = config.strictness;
 
-    this.addRules([...defaultRules, ...config.rules]);
+    this.addRules([...defaultRules, ...(config.rules ?? [])]);
 
     /*
      * We need to mark xdiff:span as elements preserving spaces. Otherwise,

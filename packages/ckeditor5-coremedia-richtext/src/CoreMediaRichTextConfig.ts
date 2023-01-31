@@ -43,7 +43,7 @@ export interface CommonCoreMediaRichTextConfig extends CompatibilityConfig {
 
 export interface LatestCoreMediaRichTextConfig extends CommonCoreMediaRichTextConfig {
   readonly compatibility: "latest";
-  readonly rules: RuleConfig[];
+  readonly rules?: RuleConfig[];
 }
 
 const isLatestCoreMediaRichTextConfig = (value: unknown): value is LatestCoreMediaRichTextConfig => {
