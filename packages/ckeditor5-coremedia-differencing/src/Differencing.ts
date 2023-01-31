@@ -5,6 +5,7 @@ import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
 
 /**
  * Plugin, which adds support for server-side data augmentation for
@@ -34,7 +35,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  */
 export default class Differencing extends Plugin {
   static readonly pluginName: string = "Differencing";
-  static readonly requires = [HtmlImageElementSupport, ImageElementSupport];
+  static readonly requires = [HtmlImageElementSupport, ImageElementSupport, RichTextDataProcessorIntegration];
   static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
 
   /**

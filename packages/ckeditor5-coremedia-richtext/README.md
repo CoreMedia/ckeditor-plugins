@@ -6,8 +6,8 @@ This plugin is required to edit
 [CoreMedia Richtext 1.0](coremedia-richtext-1.0.dtd),
 an XML format, which provides a subset of XHTML features.
 
-It grants conversion of CoreMedia RichText 1.0 to the CKEditor data model
-as well as conversion from CKEditor data model to CoreMedia RichText.
+It grants conversion of CoreMedia RichText 1.0 to the CKEditor data model as
+well as conversion from CKEditor data model to CoreMedia RichText.
 
 To perform this transformation, this plugin provides a
 [CKEditor 5 DataProcessor](https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_dataprocessor_dataprocessor-DataProcessor.html).
@@ -36,6 +36,8 @@ This will set the data processor of this editor instance to
 ## Configuration
 
 The configuration key for CoreMedia RichText Plugin is `coremedia:richtext`.
+Regarding rules configuration, you also have the option to adapt these via
+a provided API in `RichTextDataProcessor`.
 
 ### Strictness
 
@@ -44,12 +46,12 @@ import {Strictness} from "@coremedia/ckeditor5-coremedia-richtext/RichTextSchema
 ```
 
 The strictness configures the behavior of the `toData` processing. It defaults
-to `STRICT`. Changing the strictness may be required for dealing with legacy
+to `LOOSE`. Changing the strictness may be required for dealing with legacy
 contents stored in CoreMedia CMS.
 
 The following modes exist:
 
-* **`STRICT` enforces completely valid CoreMedia RichText 1.0.**
+* **`STRICT` enforces completely valid CoreMedia Rich Text 1.0.**
 
   In addition to `LOOSE` it will check for _meant to be_, such as a type
   called `Number` which states to be numbers only, but regarding the schema
@@ -75,9 +77,25 @@ The following modes exist:
   CoreMedia RichText 1.0 DTD. Most likely, you used this approach storing data
   into a content property having a different grammar.
 
-#### Example Configuration
+* **`NONE` disables checks.**
 
-```javascript
+  If your data-processing configuration is _bullet-proof_, you may consider
+  disabling strictness completely. It will spare a process of so-called
+  _sanitation_, that is triggered directly after mapping to CoreMedia
+  Rich Text 1.0 and right before the data being sent to server.
+
+  Disabling strictness and thus sanitation and having issues in your
+  data-processing may prevent editors from storing data on a validating
+  CoreMedia CMS.
+
+  As _bullet-proof_ also means, to have careful testing on CKEditor 5 updates,
+  which may introduce new elements/attributes not handled by data-processing,
+  yet, this mode is not recommended. It may although help debugging your system
+  or doing performance tests of `toData` processing.
+
+#### Example Configurations
+
+```typescript
 ClassicEditor.create(document.querySelector('.editor'), {
   plugins: [
     CoreMediaRichText,
@@ -91,16 +109,24 @@ ClassicEditor.create(document.querySelector('.editor'), {
 
 ### Data Processing Rules for Elements
 
+**Note in advance:** The following section is rather complex, as you have high
+capabilities to adapt and extend data-processing rules at different stages. In
+general, it is recommended using carefully designed factory methods providing
+such a configuration like `replaceElementByElementAndClass` instead. It may also
+come handy to know, that for roughly 80% of all processing it is enough to know
+of the `imported` stage and to ignore priorities (thus, use default priority
+`normal`). Everything else is dedicated to more detailed processing.
+
 As soon as you add a plugin, which supports an additional markup, you most
 likely need to adapt data processing, i.e., transformation between CKEditor's
-HTML and CoreMedia RichText 1.0.
+HTML and CoreMedia Rich Text 1.0.
 
 The [Highlight Plugin][highlight] for example adds a [`<mark>`][mark] element to
 HTML, which is not supported by CoreMedia RichText 1.0. You now have to model
 two mappings:
 
-1. **toData:** from HTML to CoreMedia RichText 1.0, and
-2. **toView:** from CoreMedia RichText 1.0 to HTML.
+1. **toData:** from HTML to CoreMedia Rich Text 1.0, and
+2. **toView:** from CoreMedia Rich Text 1.0 to HTML.
 
 An example configuration for the Highlight plugin will add the following
 mapping:
@@ -122,6 +148,7 @@ mapping:
 > must not contain ambiguous reserved classes. For details see the
 > corresponding section below.
 
+
 As configuration:
 
 ```javascript
@@ -129,8 +156,8 @@ import CoreMediaRichText
   from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
 import GeneralRichTextSupport
   from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
-import {replaceByElementAndClassBackAndForth}
-  from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
+import { replaceElementByElementAndClass }
+  from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
 
 /* ... */
 
@@ -141,6 +168,270 @@ ClassicEditor.create(document.querySelector('.editor'), {
     // ...
   ],
   "coremedia:richtext": {
+    rules: [
+      replaceElementByElementAndClass({
+        viewLocalName: "mark",
+        dataLocalName: "span",
+        dataReservedClass: "mark",
+      }),
+    ],
+  },
+});
+```
+
+As you see, you define the new rules in a section called `rules`.
+
+`replaceElementByElementAndClass` provides a typical mapping, where an element
+gets replaced by a `<span>` with an identifying class attribute value.
+
+This convenience function may be expanded, which will provide more details
+on the data processing:
+
+```typescript
+import { removeClass, renameElement } from
+  "@coremedia/ckeditor5-dom-support/Elements";
+
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    GeneralHtmlSupport,
+    GeneralRichTextSupport,
+    // ...
+  ],
+  "coremedia:richtext": {
+    rules: [{
+      toData: {
+        imported: (node) => {
+          if (node instanceof Element && node.localName === "mark") {
+            const result = renameElement(node, "span");
+            result.classList.add("mark");
+            return result;
+          };
+          return node;
+        }
+      },
+      toView: {
+        imported: (node, { api }) => {
+          if (node instanceof Element && node.localName === "span" && node.classList.contains("mark")) {
+            const result = renameElement(node, "mark");
+            removeClass(node, "mark");
+            return result;
+          };
+          return node;
+        },
+      }
+    }],
+  },
+});
+```
+
+Most of the time, you need to configure both directions (`toData` and `toView`).
+Exceptions exist, and can be modelled, but are not part of this description.
+
+As you see, also here we use convenience API `renameElement` and `removeClass`
+here, to reduce the overhead in rule implementation. `renameElement`, for
+example, provides an element of the new name, but with all attributes copied
+from original element.
+
+#### API Usage
+
+Along with configuration as part of the CKEditor 5 instance creation, you may
+provide additional rules via plugins. As the data-processor itself is assigned
+in plugin initialization, rule updates are typically done in `Plugin.afterInit`,
+like:
+
+```typescript
+export class RichTextDataProcessorIntegration extends Plugin {
+  static readonly pluginName: string = "RichTextDataProcessorIntegration";
+
+  afterInit(): void {
+    const { editor } = this;
+    const { processor } = editor.data;
+
+    if (isRichTextDataProcessor(processor)) {
+      processor.addRules([ /* ... */ ]);
+    }
+  }
+}
+```
+
+This may be done for custom plugins, as well as bundling plugins like the
+_Highlight_ plugin in an aggregating plugin, that also adds the corresponding
+data processing configuration.
+
+#### Priority
+
+In general, it is recommended having independent rules, that do not collide.
+There may be occasions though, where it is important to run a rule with high
+or low priority, where _low_ means to run late in processing.
+
+The rule configuration inherits the semantics of `PriorityString` as defined
+in `ckeditor5-utils`. Possible priorities are:
+
+1. `highest`
+2. `high`
+3. `normal` – the default priority used by `ckeditor5-coremedia-richtext`
+4. `low`
+5. `lowest`
+
+This priority works along with the implicit priority of different processing
+stages. Given a node to process, it will pass these processing stages:
+
+1. `prepare` – the node is still part of original DOM
+
+   You typically use this stage, if you want to benefit from richer DOM API.
+   This especially applies to `toData` mapping, where, in this stage, you will
+   still be able using the HTML DOM API such as `HTMLElement.dataset`. On
+   `toView` processing, this richer API is available starting with stage
+   `imported`.
+
+   **Restrictions:** You must not change the identity of the node, as it is
+   used directly for subsequent processing. But you may adjust attributes or
+   modify children (add or remove). Regarding children, operations are limited
+   strictly to the sub-hierarchy of the node. Thus, you must not move children,
+   for example, to the parent node, as further processing may/will ignore this
+   moved node.
+
+2. `imported` – the node got imported similar to `Document.importNode()` of
+   DOM API.
+
+   Different to the DOM API, a node, which originally was part of the default
+   namespace of the originating document, will now be of the target document's
+   namespace. Thus, if you start with XHTML coming from CKEditor 5 data view
+   and having a `<p>` element of this namespace, it is now still a `<p>` element
+   but having the CoreMedia Rich Text 1.0 namespace assigned.
+
+   An imported node typically has no children by default (unless preceding rules
+   added some) and is not attached to a parent yet.
+
+   Note, that this is an intermediate state. It is not necessarily to be expected
+   that such nodes are valid within given namespace. See below for an example.
+
+   This is the typical stage, where you change the identity or attributes of
+   a given element.
+
+   **Restrictions:** Regarding accessible nodes, almost no restrictions apply.
+   You may change the identity of the node, you may change attributes and add
+   child nodes. Note though, that added child nodes are not processed afterwards
+   and thus, should be in a proper state (e.g., part of target namespace). Also,
+   any subsequently processed children will be appended to the list of children
+   you possibly added.
+
+   **Tip:** If you want to remove a node and keep its children, you may return
+   an empty `DocumentFragment` here. It will be filled with children of the
+   original node in subsequent processing and later added as bundle to the
+   parent node, which makes them merge into the parent node children.
+
+3. `importedWithChildren` – a node and its children got imported.
+
+   Still, the node is not appended to a parent yet. But all children got fully
+   imported and appended. This stage is, for example, used to restructure tables
+   in `toView` processing, i.e., move matching rows to `<thead>`, for example.
+
+4. `appended` – a node got attached to its parent.
+
+   This is the first time, you may access the parent of a node. Note, though,
+   that you cannot expect anything regarding sibling nodes, i.e., if they already
+   got processed or not.
+
+   This processing stage exists for completeness of possible integration points
+   for data-processing. In general, it is recommended to perform access across
+   hierarchy within `importedWithChildren`. Thus, to process a node as part of
+   its parent, you may add an `importedWithChildren` handler for the expected
+   parent node instead.
+
+##### Example Processing Stages
+
+Let us assume, we process the `<mark>` element. First, we start with a more
+detailed processing example for `toData` mapping.
+
+1. `prepare`: We start with the original `<mark>` element being part of the
+   original DOM. Modifications at this stage do not collide with any internal
+   CKEditor 5 state, thus, we have a copy here of the internal CKEditor 5 state.
+
+   The class of the `<mark>` element is `HTMLElement`, providing access to the
+   richer HTML DOM API, like `HTMLElement.dataset`.
+
+   Regarding rule priorities, all rules are called in given order, starting
+   with `highest` down to `lowest` in `prepare` stage.
+
+   **Thus, priorities are always applied per stage, not per processed node.**
+
+2. `imported`: Rules now receive the `<mark>` element, but it is now a plain
+   DOM API `Element` and has CoreMedia Rich Text 1.0 as its namespace URI.
+   If a rule at `normal` priority changes this to `<span class="mark">` all
+   `imported` stages at lower priority will receive the node
+   `<span class="mark">` instead (the source node can still be referenced from
+   a provided context information, though).
+
+   Again, all `imported` stages are processed with priorities from `highest`
+   down to `lowest`.
+
+3. `importedWithChildren`: Rules again receive the possibly meanwhile mapped
+   `<mark>` element. In examples above, they will receive `<span class="mark">`
+   element. The children, like, for example, the text node wrapped by this
+   element can be accessed. A rule like: _make all text uppercase if part of
+   `<span class="mark">` may be applied here.
+
+   Again, all `importedWithChildren` stages are processed with priorities from
+   `highest` down to `lowest`.
+
+4. `appended`: Rules in this stage receive the possibly transformed `<mark>`
+   element as soon as it gets to its parent node, like a paragraph element.
+   No guarantees made on sibling nodes here.
+
+It is perfectly fine, to have a rule, that defined more than just one stage.
+Thus, you may prepare your node for import in the `prepare` stage and apply
+more transformation during the `import` stage. You should be aware though,
+that both processing stages not necessarily follow each other. The identity
+of the node may have changed between `prepare` and `import`, especially
+triggered by rules with higher priorities in `import` processing.
+
+Having a short glimpse on `toView` processing regarding the example above,
+the processing is the same, but again with subtle differences regarding the
+available DOM API: On `toView`, the `prepare` step will start with
+`<span class="mark">` being a plain element. In `imported` we will have the
+richer HTML DOM API available, so that you can use `HTMLElement` API.
+
+#### Security Considerations
+
+For secure processing in data-processing it is recommended using richer API,
+where available. For example, to add new entries to `dataset` you could do
+so by invoking `element.setAttribute("data-custom-value", "example") `. But as
+soon as you use variable strings and string concatenation, you may open doors
+to cross-site-scripting attacks (XSS).
+
+Thus, it is recommended using [HTMLElement.dataset][mdn-dataset] API instead:
+
+```typescript
+const setDataAt = (el: HTMLElement, key: string, value: string): void => {
+  el.dataset[key] = value;
+};
+
+setDataAt(myElement, "customValue", "example");
+```
+
+This automatically applies proper dash-style conversion of camel-cased key,
+takes care to put the `data-` in front of the attribute name with no need to
+concatenate strings.
+
+#### Compatibility
+
+You may adjust the compatibility for parsing `rules` section. It defaults
+to `latest` but may be set to `v10`, for example, to support object like
+configuration similar to `HtmlFilter` in CKEditor 4 (note, that `v10` processing
+has high complexity when it comes to dealing with slightly more complex
+mapping requirements):
+
+```javascript
+ClassicEditor.create(document.querySelector('.editor'), {
+  plugins: [
+    CoreMediaRichText,
+    // ...
+  ],
+  "coremedia:richtext": {
+    // Trigger old configuration parsing
+    compatibility: "v10",
     rules: {
       elements: {
         mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
@@ -150,149 +441,25 @@ ClassicEditor.create(document.querySelector('.editor'), {
 });
 ```
 
-As you see, you define the new rules in a section called `rules` and as we will
-map elements here, you use the keyword `elements` to define the mapping rules.
-
-The definition is (mostly) from data view: _Given an HTML element `<mark>`, how
-do I map it to a corresponding representation in CoreMedia RichText 1.0?_
-That's why the mapping keys are added with the name of the element.
-
-`replaceByElementAndClassBackAndForth` provides a typical mapping, where
-an element gets replaced by a `<span>` with an identifying class attribute
-value.
-
-This convenience function may be expanded, which will provide more details
-on the data processing:
+In the latest configuration, this example would look like this:
 
 ```javascript
 ClassicEditor.create(document.querySelector('.editor'), {
   plugins: [
     CoreMediaRichText,
-    GeneralHtmlSupport,
-    GeneralRichTextSupport,
     // ...
   ],
   "coremedia:richtext": {
-    rules: {
-      elements: {
-        mark: {
-          toData: (params) => {
-            const { node } = params;
-            node.name = "span";
-            node.classList.add("mark");
-          },
-          toView: {
-            span: (params) => {
-              const { node } = params;
-              if (!node.classList.contains("mark")) {
-                // It's another span, we are not responsible.
-                return;
-              }
-              node.classList.remove("mark");
-              node.name = "mark";
-            },
-          },
-        },
-      },
-    },
+    // "latest" is the default, so you may skip it.
+    compatibility: "latest",
+    rules: [
+      replaceElementByElementAndClass({
+        viewLocalName: "mark",
+        dataLocalName: "span",
+        dataReservedClass: "mark",
+      }),
+    ],
   },
-});
-```
-
-Most of the time, you need to configure both directions (`toData` and `toView`).
-Exceptions exist, and can be modelled, but are not part of this description.
-
-Let's have a look at the `toData` mapping first:
-
-```javascript
-mark: {
-  toData: (params) => {
-    const { node } = params;
-    node.name = "span";
-    node.classList.add("mark");
-  }
-}
-```
-
-You define a mapping function, which receives `ElementFilterParams` as input.
-The interface knows the following properties:
-
-* **node:** Access to the DOM node to map, represented as `ElementProxy`.
-
-* **parentRule:** A possibly existing parent rule. Especially, when dealing with
-  elements, which are already mapped by default (such as heading elements), you
-  may (or may not) call the parent rule:
-
-    ```javascript
-    params.parentRule(params);
-    ```
-
-  If not calling this rule, it will just override any possibly existing default
-  configuration.
-
-* **editor:** The CKEditor instance. This may be used, for example, to access
-  the configuration of this CKEditor instance.
-
-The `toView` handling is slightly more challenging to implement. This is,
-because it is typical, that there are multiple element mappings for `<span>`
-originating from CoreMedia RichText. Thus, a typical `toView` mapping starts
-with a check, if the rule should feel responsible for mapping elements.
-
-Let's have a look at the `toView` mapping:
-
-```javascript
-toView: {
-  span: (params) => {
-    const { node } = params;
-    if (!node.classList.contains("mark")) {
-      // It's another span, we are not responsible.
-      return;
-    }
-    node.classList.remove("mark");
-    node.name = "mark";
-  }
-}
-```
-
-As you see, it is checked, if the "marker" class is actually set, and if the
-rule should feel responsible.
-
-Again, you may call `params.parentRule(params);`. But, in contrast to the
-`toData` mapping you cannot block all transformations of `<span>` elements
-originating from CoreMedia RichText. This is because configuration parsing is
-context-sensitive:
-
-> The parent rule will only contain those `toView` mappings, which registered
-> before as part of the `toData` mapping of the `<mark>` element.
-
-All other mappings `toView` for `<span>` are handled independent of this rule.
-
-### Data Processing Rules for Text
-
-Similar to elements you may also add data processing rules for text nodes with a
-similar configuration.
-
-```typescript
-ClassicEditor.create(document.querySelector('.editor'), {
-  plugins: [
-    CoreMediaRichText,
-    // ...
-  ],
-  "coremedia:richtext": {
-    rules: {
-      elements: { /* ... */ },
-      text: {
-        toData: (params) => {
-          params.parentRule(params);
-          params.node.textContent = "data";
-        },
-        toView: (params) => {
-          params.parentRule(params);
-          params.node.textContent = "view";
-        },
-      },
-    },
-  }
 });
 ```
 
@@ -316,6 +483,7 @@ This plugin introduced the following reserved class attribute values:
 | Class          | Applicable To | Representing | Comment                                     |
 |----------------|---------------|--------------|---------------------------------------------|
 | `code`         | `<span>`      | `<code>`     |                                             |
+| `p--div`       | `<p>`         | `<div>`      | Limited fallback scenario. See below.       |
 | `p--heading-1` | `<p>`         | `<h1>`       |                                             |
 | `p--heading-2` | `<p>`         | `<h2>`       |                                             |
 | `p--heading-3` | `<p>`         | `<h3>`       |                                             |
@@ -327,6 +495,17 @@ This plugin introduced the following reserved class attribute values:
 | `tr--header`   | `<tr>`        | `<tr>`       | Moved to `<thead>`. See [Table Sections][]. |
 | `tr--footer`   | `<tr>`        | `<tr>`       | Moved to `<tfoot>`. See [Table Sections][]. |
 | `underline`    | `<span>`      | `<u>`        |                                             |
+
+The example of mapping a nested `<div>` in data view to `<p class="p--div">` is
+an example of limitations in corresponding processing. While in HTML it is
+perfectly valid having a structure like `<div><p>Text</p></div>`, this will fail
+when being mapped to `<p class="p--div"><p>Text</p></p>` as this is invalid
+CoreMedia Rich Text 1.0. If such a structure is handed over to sanitation (see
+strictness levels above), it will be cleaned to valid CoreMedia Rich Text 1.0 by
+removing the extra paragraph. Thus, the resulting representation in CoreMedia
+Rich Text 1.0 will be: `<p class="p--div">Text</p>`.
+
+Short: Try to prevent having `<div>` elements in data view.
 
 ### Ambiguous Class Mappings
 
@@ -428,7 +607,7 @@ will be transformed to:
 </table>
 ```
 
-Note: As of CKEditor 5, 24.0.0, `<tfoot>` is not supported and will be moved
+Note: As of CKEditor 5, 35.0.0, `<tfoot>` is not supported and will be moved
 to `<tbody>` instead.
 
 ## Limitations
@@ -488,3 +667,4 @@ be evaluated and rated if they apply to you or not.
 [badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
 [api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_richtext.html> "Module ckeditor5-coremedia-richtext"
 [gfmdataprocessor]: <https://ckeditor.com/docs/ckeditor5/latest/api/module_markdown-gfm_gfmdataprocessor-GFMDataProcessor.html> "Class GFMDataProcessor (markdown-gfm/gfmdataprocessor~GFMDataProcessor) - CKEditor 5 API docs"
+[mdn-dataset]: <https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset> "HTMLElement.dataset - Web APIs | MDN"

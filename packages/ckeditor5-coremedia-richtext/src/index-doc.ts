@@ -8,7 +8,9 @@
  * @module ckeditor5-coremedia-richtext
  */
 
+export * as compatibility from "./compatibility/index-doc";
 export * as rules from "./rules/index-doc";
+export * as sanitation from "./sanitation/index-doc";
 
 export * from "./Constants";
 
@@ -18,14 +20,16 @@ export { default as CoreMediaRichText } from "./CoreMediaRichText";
 export * from "./CoreMediaRichTextConfig";
 export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 
+export * from "./Namespaces";
+
 export * from "./RichTextDataProcessor";
 export { default as RichTextDataProcessor } from "./RichTextDataProcessor";
-
-export * from "./RichTextSchema";
-export { default as RichTextSchema } from "./RichTextSchema";
 
 export * from "./RichTextXmlWriter";
 export { default as RichTextXmlWriter } from "./RichTextXmlWriter";
 
 export * from "./ToDataProcessor";
 export { default as ToDataProcessor } from "./ToDataProcessor";
+export { COREMEDIA_RICHTEXT_1_0_DTD } from "./Entities";
+export { declareCoreMediaRichText10Entities } from "./Entities";
+export * from "./Strictness";

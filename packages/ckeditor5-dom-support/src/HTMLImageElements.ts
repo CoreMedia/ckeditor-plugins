@@ -1,0 +1,1 @@
+export { isHTMLImageElement } from "./TypeGuards";

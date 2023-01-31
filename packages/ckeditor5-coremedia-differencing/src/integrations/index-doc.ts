@@ -6,5 +6,5 @@
  */
 
 export * from "./HtmlSupportImage";
-
 export * from "./Image";
+export * from "./RichTextDataProcessorIntegration";

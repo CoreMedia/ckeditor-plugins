@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "noEmit": true,
+    "paths": {
+      "@coremedia/ckeditor5-dom-converter/*": [
+        "../../ckeditor5-dom-converter/src/*"
+      ],
+      "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
+        "../../ckeditor5-coremedia-example-data/src/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../src"
+    },
+    {
+      "path": "../../ckeditor5-dom-converter/src"
+    },
+    {
+      "path": "../../ckeditor5-coremedia-example-data/src"
+    }
+  ],
+  "extends": "../../../tsconfig.json"
+}

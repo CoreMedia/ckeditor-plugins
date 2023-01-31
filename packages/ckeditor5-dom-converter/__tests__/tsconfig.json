@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "noEmit": true,
+    "paths": {
+      "@coremedia/ckeditor5-dom-support/*": ["../../ckeditor5-dom-support/src/*"],
+    }
+  },
+  "references": [{
+    "path": "../src"
+  }, {
+    "path": "../../ckeditor5-dom-support/src"
+  }],
+  "extends": "../../../tsconfig.json",
+}

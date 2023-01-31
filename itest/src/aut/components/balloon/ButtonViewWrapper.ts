@@ -7,6 +7,9 @@ import { HasAriaLabel } from "../../../aria/AriaUtils";
 
 export default class ButtonViewWrapper
   extends JSWrapper<ButtonView>
+  // Seems, we cannot make prettier happy here for some reason regarding
+  // whitespace before curly brace.
+  // eslint-disable-next-line prettier/prettier
   implements HasVisible, HasToggleable, HasEnabled, HasAriaLabel {
   click(): Promise<void> {
     return this.evaluate((buttonView) => {

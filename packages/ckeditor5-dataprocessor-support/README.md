@@ -1,5 +1,15 @@
 # CKEditor 5: DataProcessor Support
 
+> ⚠ **Deprecated Since v11**
+>
+> This package is deprecated, as it was dedicated to a similar data-processing
+> as it was available within CKEditor 4, without ever reaching a state of
+> being a complete replacement.
+>
+> Instead, the new data-processing architecture relies on pure DOM
+> manipulation, providing a much richer API to deal with nodes, elements and
+> attributes.
+
 [![API Documentation][badge:docs:api]][api:ckeditor-plugins]
 
 In CKEditor 4 a central part of the mapping architecture were HTML filters and

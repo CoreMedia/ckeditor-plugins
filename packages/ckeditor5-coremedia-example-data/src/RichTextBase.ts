@@ -371,13 +371,13 @@ export interface TableDataAttributes extends Attributes, CellHAlign, CellVAlign 
 /**
  * Wraps given content into `<td>` with given attributes.
  *
- * **Content:** `(td)+`
+ * **Content:** `(#PCDATA|p|ol|ul|pre|blockquote|table|a|br|span|img|em|strong|sub|sup)*`
  *
  * @param content - content to wrap
  * @param attrs - attributes to apply to element
  */
-export const td = (content: Content, attrs: TableDataAttributes = {}) =>
-  nonEmptyElement("td", nonEmptyContent(content), { ...attrs });
+export const td = (content: Content = "", attrs: TableDataAttributes = {}) =>
+  nonEmptyElement("td", content, { ...attrs });
 
 /**
  * Type for inline factory methods with default attributes.

@@ -1,0 +1,1 @@
+export { isCharacterData } from "./TypeGuards";

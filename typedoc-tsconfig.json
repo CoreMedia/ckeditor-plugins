@@ -13,6 +13,9 @@
       "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
         "./packages/ckeditor5-coremedia-content-clipboard/src/*"
       ],
+      "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
+        "./packages/ckeditor5-coremedia-example-data/src/*"
+      ],
       "@coremedia/ckeditor5-coremedia-images/*": [
         "./packages/ckeditor5-coremedia-images/src/*"
       ],
@@ -33,6 +36,15 @@
       ],
       "@coremedia/ckeditor5-dataprocessor-support/*": [
         "./packages/ckeditor5-dataprocessor-support/src/*"
+      ],
+      "@coremedia/ckeditor5-dom-converter/*": [
+        "./packages/ckeditor5-dom-converter/src/*"
+      ],
+      "@coremedia/ckeditor5-dom-converter/*": [
+        "./packages/ckeditor5-dom-converter/src/*"
+      ],
+      "@coremedia/ckeditor5-dom-support/*": [
+        "./packages/ckeditor5-dom-support/src/*"
       ],
       "@coremedia/ckeditor5-logging/*": [
         "./packages/ckeditor5-logging/src/*"

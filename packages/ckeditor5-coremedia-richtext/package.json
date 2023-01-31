@@ -27,6 +27,7 @@
     "@ckeditor/ckeditor5-engine": "^35.4.0",
     "@ckeditor/ckeditor5-utils": "^35.4.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
     "@types/ckeditor__ckeditor5-engine": "^32.0.11",
@@ -47,8 +48,11 @@
     "@ckeditor/ckeditor5-utils": "^35.4.0"
   },
   "dependencies": {
+    "@coremedia/ckeditor5-common": "10.5.1-rc.0",
     "@coremedia/ckeditor5-core-common": "10.5.1-rc.0",
     "@coremedia/ckeditor5-dataprocessor-support": "10.5.1-rc.0",
+    "@coremedia/ckeditor5-dom-converter": "10.5.1-rc.0",
+    "@coremedia/ckeditor5-dom-support": "10.5.1-rc.0",
     "@coremedia/ckeditor5-logging": "10.5.1-rc.0"
   }
 }

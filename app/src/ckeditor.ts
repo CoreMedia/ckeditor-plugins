@@ -52,16 +52,20 @@ import CoreMediaStudioEssentials, {
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 import { initInputExampleContent } from "./inputExampleContents";
-import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceBy";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
 import { Command, icons } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/compatibility/v10/rules/ReplaceBy";
+import { getHashParam } from "./HashParams";
 
 const {
-  //@ts-expect-error We currently have no way to extend icon typing.
+  //@ts-expect-error We have no way to extend icon typing, yet.
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
@@ -97,6 +101,37 @@ const sourceElement = document.querySelector("#editor") as HTMLElement;
 if (!sourceElement) {
   throw new Error("No element with class editor defined in html. Nothing to create the editor in.");
 }
+
+/**
+ * You may switch the compatibility, for example, by providing
+ * `compatibility=v10`.
+ */
+const richTextCompatibility = getHashParam("compatibility") || "latest";
+
+/**
+ * Apply custom mapping rules.
+ */
+const richTextRuleConfigurations: RuleConfig[] = [
+  // Highlight plugin support.
+  replaceElementByElementAndClass({
+    viewLocalName: "mark",
+    dataLocalName: "span",
+    // "mark" is the default here, derived from `viewLocalName`. Thus,
+    // we may skip it here.
+    dataReservedClass: "mark",
+  }),
+];
+
+/**
+ * v10 compatible configuration.
+ */
+const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
+  elements: {
+    // Highlight Plugin Support
+    mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
+  },
+};
+
 ClassicEditor.create(sourceElement, {
   licenseKey: "",
   placeholder: "Type your text here...",
@@ -290,13 +325,12 @@ ClassicEditor.create(sourceElement, {
     },
   },
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
+    // Defaults to: Loose
     strictness: Strictness.STRICT,
-    rules: {
-      elements: {
-        // Highlight Plugin Support
-        mark: replaceByElementAndClassBackAndForth("mark", "span", "mark"),
-      },
-    },
+    // Latest is the default. Use v10 for first data-processor architecture,
+    // for example.
+    compatibility: richTextCompatibility,
+    rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
   },
   [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
     aliases: [
