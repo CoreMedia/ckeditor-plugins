@@ -201,9 +201,9 @@ class RichTextDataProcessor implements DataProcessor {
     const logger = RichTextDataProcessor.#logger;
     if (logger.isDebugEnabled()) {
       logger.debug(`toData Rules (${this.#toDataRules.length}):`);
-      this.#toDataConversionListener.dumpRules(logger.debug, "\t");
+      this.#toDataConversionListener.dumpRules(logger, "\t");
       logger.debug(`toView Rules (${this.#toViewRules.length}):`);
-      this.#toViewConversionListener.dumpRules(logger.debug, "\t");
+      this.#toViewConversionListener.dumpRules(logger, "\t");
     }
   }
 

@@ -2,6 +2,7 @@ import { skip, Skip } from "./Signals";
 import { ConversionContext } from "./ConversionContext";
 import { byPriority, RuleSection, SortedRuleSection } from "./Rule";
 import { ConversionListener } from "./ConversionListener";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 
 /**
  * Rule based HTML DOM Converter.
@@ -34,14 +35,14 @@ export class RuleBasedConversionListener implements ConversionListener {
   /**
    * Dumps the IDs of configured rules.
    *
-   * @param writer - writer to write rule IDs to
+   * @param logger - logger to write debug information to
    * @param indent - optional indent
    */
-  dumpRules(writer: (...data: unknown[]) => void = console.debug, indent = ""): void {
+  dumpRules(logger: Logger, indent = ""): void {
     this.#rules
       .map((section) => section.id)
       .forEach((id) => {
-        writer(`${indent}${id}`);
+        logger.debug(`${indent}${id}`);
       });
   }
 
