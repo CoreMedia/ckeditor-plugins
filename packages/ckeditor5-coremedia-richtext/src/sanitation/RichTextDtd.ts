@@ -39,13 +39,13 @@ export type RichTextElementName = typeof richTextElementNames[number];
 export type SupportedRichTextElements = Record<RichTextElementName, ElementConfig>;
 
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % LanguageCode "NMTOKEN">
  * ```
  */
 export const acLanguageCode = acNmToken;
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % Number "CDATA">
  * ```
  */
@@ -58,13 +58,13 @@ export const acNumber: AttributeContent = {
   },
 };
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % URI "CDATA">
  * ```
  */
 export const acUri = acCData;
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % Text "CDATA">
  * ```
  */
@@ -72,7 +72,7 @@ export const acText = acCData;
 
 const lengthRegEx = /^\d+%?$/;
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % Length "CDATA">
  * ```
  */
@@ -87,7 +87,7 @@ export const acLength: AttributeContent = {
 
 const coreClassAttr = parseAttributeDefinitionConfig({ localName: "class", content: acCData });
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % coreattrs
  *   "class       CDATA          #IMPLIED"
  * >
@@ -102,7 +102,7 @@ export const i18nXmlLangAttr = parseAttributeDefinitionConfig({
 });
 export const i18nDirAttr = parseAttributeDefinitionConfig({ localName: "dir", content: acEnum("ltr", "rtl") });
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % i18n
  *   "lang        %LanguageCode; #IMPLIED
  *    xml:lang    %LanguageCode; #IMPLIED
@@ -112,81 +112,81 @@ export const i18nDirAttr = parseAttributeDefinitionConfig({ localName: "dir", co
  */
 export const i18nAttrs: ParsedAttributeDefinitionConfig[] = [i18nLangAttr, i18nXmlLangAttr, i18nDirAttr];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % attrs "%coreattrs; %i18n;">
  * ```
  */
 export const commonAttrs: ParsedAttributeDefinitionConfig[] = [...coreAttrs, ...i18nAttrs];
 
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % special "br | span | img">
  * ```
  */
 export const special: ElementContent[] = ["br", "span", "img"];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % phrase "em | strong | sub | sup">
  * ```
  */
 export const phrase: ElementContent[] = ["em", "strong", "sub", "sup"];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % inline "a | %special; | %phrase;">
  * ```
  */
 export const inline: ElementContent[] = ["a", ...special, ...phrase];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % Inline "(#PCDATA | %inline;)*">
  * ```
  */
 export const Inline: ElementContent[] = [allowEmpty, pcdata, ...inline];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % lists "ul | ol">
  * ```
  */
 export const lists: ElementContent[] = ["ul", "ol"];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % blocktext "pre | blockquote">
  * ```
  */
 export const blocktext: ElementContent[] = ["pre", "blockquote"];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % block "p | %lists; | %blocktext; | table">
  * ```
  */
 export const block: ElementContent[] = ["p", ...lists, ...blocktext, "table"];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % Block "(%block;)*">
  * ```
  */
 export const Block: ElementContent[] = [allowEmpty, ...block];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % Flow "(#PCDATA | %block; | %inline;)*">
  * ```
  */
 export const Flow: ElementContent[] = [allowEmpty, pcdata, ...block, ...inline];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % a.content "(#PCDATA | %special; | %phrase;)*">
  * ```
  */
 export const aContent: ElementContent[] = [allowEmpty, pcdata, ...special, ...phrase];
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % pre.content "(#PCDATA | a | br | span | %phrase;)*">
  * ```
  */
 export const preContent: ElementContent[] = [allowEmpty, pcdata, "a", "br", "span", ...phrase];
 
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT div %Block;>
  * <!ATTLIST div
  *   xmlns       %URI;          #FIXED 'http://www.coremedia.com/2003/richtext-1.0'
@@ -196,7 +196,7 @@ export const preContent: ElementContent[] = [allowEmpty, pcdata, "a", "br", "spa
  */
 export const divElement = new ElementConfig(Block);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT p %Inline;>
  * <!ATTLIST p
  *   %attrs;
@@ -205,7 +205,7 @@ export const divElement = new ElementConfig(Block);
  */
 export const pElement = new ElementConfig(Inline, commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT ul (li)+>
  * <!ATTLIST ul
  *   %attrs;
@@ -214,7 +214,7 @@ export const pElement = new ElementConfig(Inline, commonAttrs);
  */
 export const ulElement = new ElementConfig(["li"], commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT ol (li)+>
  * <!ATTLIST ol
  *   %attrs;
@@ -223,7 +223,7 @@ export const ulElement = new ElementConfig(["li"], commonAttrs);
  */
 export const olElement = new ElementConfig(["li"], commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT li %Flow;>
  * <!ATTLIST li
  *   %attrs;
@@ -238,7 +238,7 @@ export const preXmlSpaceAttr = parseAttributeDefinitionConfig({
   fixed: "preserve",
 });
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT pre %pre.content;>
  * <!ATTLIST pre
  *   %attrs;
@@ -252,7 +252,7 @@ export const blockquoteCiteAttr = parseAttributeDefinitionConfig({
   content: acUri,
 });
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT blockquote %Block;>
  * <!ATTLIST blockquote
  *   %attrs;
@@ -298,7 +298,7 @@ export const aSpecialAttrs = [
   aXLinkActuateAttr,
 ];
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT a %a.content;>
  * <!ATTLIST a
  *   %attrs;
@@ -317,7 +317,7 @@ export const aSpecialAttrs = [
  */
 export const aElement = new ElementConfig(aContent, [...commonAttrs, ...aSpecialAttrs]);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT span %Inline;>
  * <!ATTLIST span
  *   %attrs;
@@ -326,7 +326,7 @@ export const aElement = new ElementConfig(aContent, [...commonAttrs, ...aSpecial
  */
 export const spanElement = new ElementConfig(Inline, commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT br EMPTY>
  * <!ATTLIST br
  *   %coreattrs;
@@ -335,28 +335,28 @@ export const spanElement = new ElementConfig(Inline, commonAttrs);
  */
 export const brElement = new ElementConfig([], coreAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT em %Inline;>
  * <!ATTLIST em %attrs;>
  * ```
  */
 export const emElement = new ElementConfig(Inline, commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT strong %Inline;>
  * <!ATTLIST strong %attrs;>
  * ```
  */
 export const strongElement = new ElementConfig(Inline, commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT sub %Inline;>
  * <!ATTLIST sub %attrs;>
  * ```
  */
 export const subElement = new ElementConfig(Inline, commonAttrs);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT sup %Inline;>
  * <!ATTLIST sup %attrs;>
  * ```
@@ -411,7 +411,7 @@ export const imgSpecialAttrs = [
   imgXLinkActuateAttr,
 ];
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT img EMPTY>
  * <!ATTLIST img
  *   %attrs;
@@ -431,7 +431,7 @@ export const imgSpecialAttrs = [
  */
 export const imgElement = new ElementConfig([], [...commonAttrs, ...imgSpecialAttrs]);
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % cellhalign "align (left|center|right) #IMPLIED">
  * ```
  */
@@ -440,7 +440,7 @@ export const cellHAlignAttr = parseAttributeDefinitionConfig({
   content: acEnum("left", "center", "right"),
 });
 /**
- * ```dtd
+ * ```text
  * <!ENTITY % cellvalign "valign (top|middle|bottom|baseline) #IMPLIED">
  * ```
  */
@@ -451,7 +451,7 @@ export const cellVAlignAttr = parseAttributeDefinitionConfig({
 export const tableSummaryAttr = parseAttributeDefinitionConfig({ localName: "summary", content: acText });
 
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT table    (tbody|tr+)>
  * <!ATTLIST table
  *   %attrs;
@@ -461,7 +461,7 @@ export const tableSummaryAttr = parseAttributeDefinitionConfig({ localName: "sum
  */
 export const tableElement = new ElementConfig(["tbody", "tr"], [...commonAttrs, tableSummaryAttr]);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT tbody    (tr)+>
  * <!ATTLIST tbody
  *   %attrs;
@@ -472,7 +472,7 @@ export const tableElement = new ElementConfig(["tbody", "tr"], [...commonAttrs, 
  */
 export const tbodyElement = new ElementConfig(["tr"], [...commonAttrs, cellHAlignAttr, cellVAlignAttr]);
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT tr       (td)+>
  * <!ATTLIST tr
  *   %attrs;
@@ -486,7 +486,7 @@ export const tdAbbrAttr = parseAttributeDefinitionConfig({ localName: "abbr", co
 export const tdRowspanAttr = parseAttributeDefinitionConfig({ localName: "rowspan", content: acNumber });
 export const tdColspanAttr = parseAttributeDefinitionConfig({ localName: "colspan", content: acNumber });
 /**
- * ```dtd
+ * ```text
  * <!ELEMENT td       %Flow;>
  * <!ATTLIST td
  *   %attrs;
