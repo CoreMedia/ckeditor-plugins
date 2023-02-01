@@ -125,7 +125,7 @@ export class HtmlDomConverter {
     if (logger.isDebugEnabled()) {
       logger.debug(`convert(${originalNode.nodeName}); Stage: imported`, {
         input: originalNodeString,
-        imported: nodeToString(originalNode),
+        imported: nodeToString(result === skip ? undefined : result),
       });
     }
 
