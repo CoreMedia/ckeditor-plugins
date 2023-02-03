@@ -9,7 +9,8 @@
   ],
   "version": "11.0.3-rc.0",
   "engines": {
-    "node": ">=16.0.0"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "license": "Apache-2.0",
   "scripts": {
