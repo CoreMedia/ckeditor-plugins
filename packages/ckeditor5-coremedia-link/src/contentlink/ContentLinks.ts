@@ -4,7 +4,6 @@ import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtensio
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
-import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { addClassToTemplate, createDecoratorHook } from "../utils";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
@@ -14,7 +13,15 @@ import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
+import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import { Subscription } from "rxjs";
+
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
+import { closeContextualBalloon } from "./ContentLinkViewUtils";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -22,6 +29,50 @@ import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } fro
  */
 export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
+
+  #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
+  #serviceRegisteredSubscription: Subscription | null;
+
+  constructor(editor: Editor) {
+    super(editor);
+
+    const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
+      if (services.length === 0) {
+        this.#logger.debug("No WorkArea service registered yet");
+        return;
+      }
+
+      if (this.#serviceRegisteredSubscription) {
+        this.#serviceRegisteredSubscription.unsubscribe();
+      }
+      const clipboardService = services[0];
+      this.#listenForActiveEntityChanges(clipboardService)
+        .then(() => {
+          this.#logger.debug("Observing WorkArea Service.");
+        })
+        .catch((reason) => {
+          this.#logger.warn("Initialization of ContentLinks plugin failed. ", reason);
+        });
+    };
+
+    this.#serviceRegisteredSubscription = serviceAgent
+      .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
+      .subscribe(onServiceRegisteredFunction);
+  }
+
+  /**
+   * Closes the contextual balloon whenever a new active entity is set.
+   *
+   * @param workAreaService - the workAreaService
+   * @private
+   */
+  async #listenForActiveEntityChanges(workAreaService: WorkAreaService): Promise<void> {
+    await workAreaService.observe_activeEntity().subscribe({
+      next: () => {
+        closeContextualBalloon(this.editor);
+      },
+    });
+  }
 
   static readonly requires = [
     Link,
