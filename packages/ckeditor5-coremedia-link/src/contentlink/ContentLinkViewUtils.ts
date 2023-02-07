@@ -43,4 +43,4 @@ export const closeContextualBalloon = (editor: Editor): void => {
       balloon.remove(balloon.visibleView);
     }
   });
-}
+};
