@@ -8,6 +8,7 @@ import MockContentPlugin from "./MockContentPlugin";
 import MockContent from "./MockContent";
 import { BlobType } from "./MutableProperties";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Observable, Subject } from "rxjs";
 
 class MockWorkAreaService implements WorkAreaService {
   static #LOGGER = LoggerProvider.getLogger("WorkAreaService");
@@ -18,8 +19,11 @@ class MockWorkAreaService implements WorkAreaService {
    */
   lastOpenedEntities: unknown[] = [];
 
+  #activeEntitySubject: Subject<any>;
+
   constructor(editor: Editor) {
     this.#editor = editor;
+    this.#activeEntitySubject = new Subject<any>();
   }
 
   async openEntitiesInTabs(entities: unknown[]): Promise<unknown> {
@@ -61,6 +65,10 @@ class MockWorkAreaService implements WorkAreaService {
 
   getName(): string {
     return "workAreaService";
+  }
+
+  observe_activeEntity(): Observable<any> {
+    return this.#activeEntitySubject;
   }
 }
 
