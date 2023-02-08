@@ -15,6 +15,7 @@ on:
 env:
   NODE_VERSION: 18
   PNPM_VERSION: ^7.26
+  NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
 
 jobs:
   build:
@@ -23,8 +24,6 @@ jobs:
     timeout-minutes: 10
     # do not run when if it is a manual trigger on the main branch as we have other CI for this. This one is only for feature branches
     if: (github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main') && !github.event.pull_request.draft
-    env:
-      NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,12 +38,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Use PNPM ${{ env.PNPM_VERSION }}
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          # Run install later, once we have set up our repository access.
-          run_install: false
       - name: Configure NPM
         run: |
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)
@@ -57,8 +50,11 @@ jobs:
         run: |
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
-      - name: Install
-        run: pnpm install
+      - name: Use PNPM ${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          # run_install: false
       - name: Set prerelease version (if triggered manually)
         if: github.event_name == 'workflow_dispatch'
         run: |
