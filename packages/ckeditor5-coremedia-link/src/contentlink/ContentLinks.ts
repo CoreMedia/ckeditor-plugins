@@ -46,13 +46,7 @@ export default class ContentLinks extends Plugin {
         this.#serviceRegisteredSubscription.unsubscribe();
       }
       const clipboardService = services[0];
-      this.#listenForActiveEntityChanges(clipboardService)
-        .then(() => {
-          this.#logger.debug("Observing WorkArea Service.");
-        })
-        .catch((reason) => {
-          this.#logger.warn("Initialization of ContentLinks plugin failed. ", reason);
-        });
+      this.#listenForActiveEntityChanges(clipboardService);
     };
 
     this.#serviceRegisteredSubscription = serviceAgent
@@ -66,8 +60,8 @@ export default class ContentLinks extends Plugin {
    * @param workAreaService - the workAreaService
    * @private
    */
-  async #listenForActiveEntityChanges(workAreaService: WorkAreaService): Promise<void> {
-    await workAreaService.observe_activeEntity().subscribe({
+  #listenForActiveEntityChanges(workAreaService: WorkAreaService): void {
+    workAreaService.observe_activeEntity().subscribe({
       next: () => {
         closeContextualBalloon(this.editor);
       },
