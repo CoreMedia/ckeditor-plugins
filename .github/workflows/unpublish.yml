@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Resolve NPM_AUTH_TOKEN
         run: |
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)

@@ -14,6 +14,11 @@ on:
         description: 'Release type. Allowed values: "major", "minor", "patch"'
         required: true
         default: 'patch'
+
+env:
+  NODE_VERSION: 18
+  PNPM_VERSION: ^7.26
+
 jobs:
   build:
     name: Build
@@ -24,7 +29,7 @@ jobs:
     if: github.actor != 'coremedia-ci' && github.actor != 'github-action[bot]'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Manual workflow trigger precondition check
         if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' || startsWith(github.ref, 'maintenance/'))
         run: |
@@ -42,10 +47,16 @@ jobs:
         run: |
           echo "For maintenance branches only patch versions are allowed."
           exit 1
-      - name: Setup NodeJS
-        uses: actions/setup-node@v2
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Use PNPM ${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          # Run install later, once we have set up our repository access.
+          run_install: false
       - name: Configure NPM
         run: |
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)
@@ -53,8 +64,6 @@ jobs:
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           
-          npm install -g npm@latest
-          npm install -g pnpm@latest
           npm install -g semver
       - name: Setup Git
         run: |
