@@ -38,13 +38,14 @@ export default class ContentLinks extends Plugin {
 
     const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
       if (services.length === 0) {
-        this.#logger.debug("No WorkArea service registered yet");
+        this.#logger.debug("No WorkAreaService registered yet");
         return;
       }
-
       if (this.#serviceRegisteredSubscription) {
         this.#serviceRegisteredSubscription.unsubscribe();
       }
+
+      this.#logger.debug("WorkAreaService is registered now, listening for activeEntities will be started");
       const clipboardService = services[0];
       this.#listenForActiveEntityChanges(clipboardService);
     };
@@ -62,7 +63,8 @@ export default class ContentLinks extends Plugin {
    */
   #listenForActiveEntityChanges(workAreaService: WorkAreaService): void {
     workAreaService.observe_activeEntity().subscribe({
-      next: () => {
+      next: (activeEntities) => {
+        this.#logger.debug("Closing balloon because active entity changed", activeEntities);
         closeContextualBalloon(this.editor);
       },
     });
