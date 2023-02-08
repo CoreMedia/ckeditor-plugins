@@ -36,7 +36,7 @@ interface WorkAreaService {
    *
    * @returns the observable for the active entity.
    */
-  observe_activeEntity(): Observable<any>;
+  observe_activeEntity(): Observable<unknown>;
 }
 
 export default WorkAreaService;

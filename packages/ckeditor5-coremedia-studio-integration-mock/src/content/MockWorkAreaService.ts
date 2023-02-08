@@ -19,11 +19,11 @@ class MockWorkAreaService implements WorkAreaService {
    */
   lastOpenedEntities: unknown[] = [];
 
-  #activeEntitySubject: Subject<any>;
+  #activeEntitySubject: Subject<unknown>;
 
   constructor(editor: Editor) {
     this.#editor = editor;
-    this.#activeEntitySubject = new Subject<any>();
+    this.#activeEntitySubject = new Subject<unknown>();
   }
 
   async openEntitiesInTabs(entities: unknown[]): Promise<unknown> {
@@ -33,6 +33,7 @@ class MockWorkAreaService implements WorkAreaService {
       const textnode: Text = document.createTextNode(`Open Content ${entity} in Studio Tab`);
       node.appendChild(textnode);
       document.getElementById("notifications")?.appendChild(node);
+      this.#activeEntitySubject.next([entity]);
       setTimeout(() => {
         document.getElementById("notifications")?.removeChild(node);
       }, 4000);
@@ -67,7 +68,7 @@ class MockWorkAreaService implements WorkAreaService {
     return "workAreaService";
   }
 
-  observe_activeEntity(): Observable<any> {
+  observe_activeEntity(): Observable<unknown> {
     return this.#activeEntitySubject;
   }
 }
