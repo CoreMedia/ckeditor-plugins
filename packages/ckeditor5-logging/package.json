@@ -9,8 +9,8 @@
     "logging"
   ],
   "engines": {
-    "node": ">=16.0.0",
-    "pnpm": "7"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "exports": {
     "./*": "./dist/*.js"

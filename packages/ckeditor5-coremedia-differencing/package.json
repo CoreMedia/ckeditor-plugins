@@ -9,8 +9,8 @@
     "differencing"
   ],
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=5.7.1"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "exports": {
     "./*": "./dist/*.js"
