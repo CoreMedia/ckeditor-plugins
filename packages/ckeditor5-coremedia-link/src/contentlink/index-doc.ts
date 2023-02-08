@@ -19,3 +19,5 @@ export { default as ContentLinks } from "./ContentLinks";
 export { default as LinkUserActionsPlugin } from "./LinkUserActionsPlugin";
 
 export * as ContentLinkViewUtils from "./ContentLinkViewUtils";
+
+export * from "./LinkBalloonConfig";

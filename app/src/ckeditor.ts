@@ -63,6 +63,7 @@ import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/compatibility/v10/rules/ReplaceBy";
 import { getHashParam } from "./HashParams";
+import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
 
 const {
   //@ts-expect-error We have no way to extend icon typing, yet.
@@ -340,6 +341,11 @@ ClassicEditor.create(sourceElement, {
       // because CKEditor is not configured to handle it.
       { name: "mark", inherit: "span" },
     ],
+  },
+  [COREMEDIA_LINK_CONFIG_KEY]: {
+    linkBalloon: {
+      keepOpenIds: ["example-to-keep-the-link-balloon-open-on-click"],
+    },
   },
   [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
     // Demonstrates, how you may add more contents on the fly.

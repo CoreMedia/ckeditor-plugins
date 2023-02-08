@@ -22,6 +22,7 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -83,6 +84,7 @@ export default class ContentLinks extends Plugin {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link") as LinkCommand;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    parseLinkBalloonConfig(editor.config);
     removeInitialMouseDownListener(linkUI);
     addMouseEventListenerToHideDialog(linkUI);
     this.#extendFormView(linkUI);

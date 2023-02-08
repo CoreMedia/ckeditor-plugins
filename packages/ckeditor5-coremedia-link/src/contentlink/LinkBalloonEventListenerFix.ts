@@ -1,5 +1,6 @@
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { keepOpen } from "./LinkBalloonConfig";
 
 /**
  * Removes the mousedown listener in the linkUI plugin.
@@ -87,9 +88,7 @@ const addCustomClickOutsideHandler = ({
         }
       }
 
-      // TODO access editor config to determine these elements
-      const library = document.getElementById("collection-view-container");
-      if (library && path.includes(library)) {
+      if (keepOpen(path)) {
         return;
       }
 
@@ -124,9 +123,7 @@ const addCustomClickOutsideHandler = ({
         }
       }
 
-      // TODO access editor config to determine these elements
-      const library = document.getElementById("collection-view-container");
-      if (library && path.includes(library)) {
+      if (keepOpen(path)) {
         return;
       }
 
