@@ -64,6 +64,8 @@ jobs:
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
           git pull
+      - name: Install
+        run: pnpm install
       # BY MANUAL TRIGGER ONLY!
       # Set the release version to actual MAJOR.MINOR.PATCH version.
       # If a prerelease is triggered manually, we keep the prerelease version for this workflow.

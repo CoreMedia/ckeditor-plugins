@@ -51,6 +51,8 @@ jobs:
         run: |
           git config --global user.name 'coremedia-ci'
           git config --global user.email 'coremedia-ci@coremedia.com'
+      - name: Install
+        run: pnpm install
       - name: Set prerelease version (if triggered manually)
         if: github.event_name == 'workflow_dispatch'
         run: |
