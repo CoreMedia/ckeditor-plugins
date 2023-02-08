@@ -87,6 +87,12 @@ const addCustomClickOutsideHandler = ({
         }
       }
 
+      // TODO access editor config to determine these elements
+      const library = document.getElementById("collection-view-container");
+      if (library && path.includes(library)) {
+        return;
+      }
+
       if (domEvt.target.draggable && !pathIncludesAnyEditor) {
         return;
       }
@@ -116,6 +122,12 @@ const addCustomClickOutsideHandler = ({
         if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {
           return;
         }
+      }
+
+      // TODO access editor config to determine these elements
+      const library = document.getElementById("collection-view-container");
+      if (library && path.includes(library)) {
+        return;
       }
 
       for (const contextElement of contextElements) {
