@@ -83,7 +83,6 @@ export default class ContentLinks extends Plugin {
   #removeEditorFocusAndSelection(): void {
     window.getSelection()?.removeAllRanges();
     if (document.activeElement instanceof HTMLElement) {
-      console.log("blur");
       document.activeElement.blur();
     }
   }
