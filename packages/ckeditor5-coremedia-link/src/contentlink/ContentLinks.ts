@@ -66,9 +66,26 @@ export default class ContentLinks extends Plugin {
     workAreaService.observe_activeEntity().subscribe({
       next: (activeEntities) => {
         this.#logger.debug("Closing balloon because active entity changed", activeEntities);
+        this.#removeEditorFocusAndSelection();
         closeContextualBalloon(this.editor);
       },
     });
+  }
+
+  /**
+   * Removes the focus on the editor and clears the selection
+   * via Web API.
+   * Can be used to clear all activity on the editor when contextual
+   * balloons are closed manually
+   *
+   * @private
+   */
+  #removeEditorFocusAndSelection(): void {
+    window.getSelection()?.removeAllRanges();
+    if (document.activeElement instanceof HTMLElement) {
+      console.log("blur");
+      document.activeElement.blur();
+    }
   }
 
   static readonly requires = [
