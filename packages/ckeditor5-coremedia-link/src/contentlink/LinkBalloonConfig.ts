@@ -67,11 +67,7 @@ export const parseLinkBalloonConfig = (config: Config): void => {
  * @param elementHierarchy - the element hierarchy to check if it contains one of the
  *                           configured element ids.
  */
-export const keepOpen = (elementHierarchy: Element[]): boolean =>
-  linkBalloonConfig.keepOpenIds.some((elementId) => {
-    const element = document.getElementById(elementId);
-    if (!element) {
-      return false;
-    }
-    return elementHierarchy.includes(element);
-  });
+export const keepOpen = (elementHierarchy: Element[]): boolean => {
+  const elementHierarchyIds: string[] = elementHierarchy.map((element) => element.id).filter((id) => !!id);
+  return linkBalloonConfig.keepOpenIds.some((elementId) => elementHierarchyIds.includes(elementId));
+};
