@@ -21,3 +21,4 @@ export { default as LinkUserActionsPlugin } from "./LinkUserActionsPlugin";
 export * as ContentLinkViewUtils from "./ContentLinkViewUtils";
 
 export * from "./LinkBalloonConfig";
+export { default as LinkBalloonConfig } from "./LinkBalloonConfig";
