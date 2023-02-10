@@ -18,7 +18,10 @@ export default interface LinkBalloonConfig {
    *         // ...
    *        "coremedia:link": {
    *            linkBalloon: {
-   *                keepOpenIds: ["example-to-keep-the-link-balloon-open-on-click"],
+   *                keepOpen: {
+   *                  ids: ["example-to-keep-the-link-balloon-open-on-click"],
+   *                  classes: ["example-class],
+   *                },
    *            },
    *        },
    *     } )
@@ -26,21 +29,24 @@ export default interface LinkBalloonConfig {
    *     .catch( ... );
    * ```
    */
-  keepOpenIds: string[];
+  keepOpen: { ids: string[]; classes: string[] };
 }
 
 const linkBalloonConfig: LinkBalloonConfig = {
-  keepOpenIds: [],
+  keepOpen: { ids: [], classes: [] },
 };
 
 /**
- * Parses the editor configuration and creates an fills an internal LinkBalloonObject.
+ * Parses the editor configuration and fills an internal LinkBalloonConfig Object.
  *
  * Example configuration:
  * ```
  * "coremedia:link": {
  *            linkBalloon: {
- *                keepOpenIds: ["example-to-keep-the-link-balloon-open-on-click"],
+ *                keepOpen: {
+ *                  ids: ["example-to-keep-the-link-balloon-open-on-click"],
+ *                  classes: ["example-class],
+ *                },
  *            },
  *        },
  * ```
@@ -48,16 +54,23 @@ const linkBalloonConfig: LinkBalloonConfig = {
  * @param config - editor configuration
  */
 export const parseLinkBalloonConfig = (config: Config): void => {
-  const balloonKeepOpenIdsRaw: unknown = config.get(`${COREMEDIA_LINK_CONFIG_KEY}.linkBalloon.keepOpenIds`);
-  if (!balloonKeepOpenIdsRaw) {
+  const balloonKeepOpenIdsRaw: unknown = config.get(`${COREMEDIA_LINK_CONFIG_KEY}.linkBalloon.keepOpen.ids`);
+  const balloonKeepOpenClassesRaw: unknown = config.get(`${COREMEDIA_LINK_CONFIG_KEY}.linkBalloon.keepOpen.classes`);
+  if (!balloonKeepOpenIdsRaw && !balloonKeepOpenClassesRaw) {
     return;
   }
-  if (!Array.isArray(balloonKeepOpenIdsRaw)) {
+  if (balloonKeepOpenIdsRaw && !Array.isArray(balloonKeepOpenIdsRaw)) {
+    throw new Error("Wrong configuration, Array expexted for link.linkBalloon.keepOpenIds");
+  }
+  if (balloonKeepOpenClassesRaw && !Array.isArray(balloonKeepOpenClassesRaw)) {
     throw new Error("Wrong configuration, Array expexted for link.linkBalloon.keepOpenIds");
   }
   const rawIds: unknown[] = balloonKeepOpenIdsRaw as unknown[];
+  const rawClasses: unknown[] = balloonKeepOpenClassesRaw as unknown[];
   const ids = rawIds.filter((id) => typeof id === "string").map((id) => id as string);
-  linkBalloonConfig.keepOpenIds.push(...ids);
+  const classes = rawClasses.filter((id) => typeof id === "string").map((id) => id as string);
+  linkBalloonConfig.keepOpen.ids.push(...ids);
+  linkBalloonConfig.keepOpen.classes.push(...classes);
 };
 
 /**
@@ -65,9 +78,19 @@ export const parseLinkBalloonConfig = (config: Config): void => {
  * for is part of the given element hierarchy.
  *
  * @param elementHierarchy - the element hierarchy to check if it contains one of the
- *                           configured element ids.
+ *                           configured element ids or classes.
  */
 export const keepOpen = (elementHierarchy: Element[]): boolean => {
   const elementHierarchyIds: string[] = elementHierarchy.map((element) => element.id).filter((id) => !!id);
-  return linkBalloonConfig.keepOpenIds.some((elementId) => elementHierarchyIds.includes(elementId));
+  const idExistInHierarchy = linkBalloonConfig.keepOpen.ids.some((elementId) =>
+    elementHierarchyIds.includes(elementId)
+  );
+
+  const elementHierarchyClassLists: DOMTokenList[] = elementHierarchy
+    .map((element) => element.classList)
+    .filter((classList) => !!classList);
+  const classExistInHierarchy = linkBalloonConfig.keepOpen.classes.some((aClass) =>
+    elementHierarchyClassLists.some((domTokenList) => domTokenList.contains(aClass))
+  );
+  return idExistInHierarchy || classExistInHierarchy;
 };

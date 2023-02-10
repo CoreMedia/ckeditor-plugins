@@ -7,6 +7,7 @@ describe("Link Balloon", () => {
   let application: ApplicationWrapper;
   let draggableDivId: string;
   let configuredClickKeepOpenDivId: string;
+  let configuredClickKeepOpenDivClass: string;
 
   beforeAll(async () => {
     application = await ApplicationWrapper.start();
@@ -14,7 +15,8 @@ describe("Link Balloon", () => {
     // Wait for CKEditor to be available prior to executing/continuing the tests.
     await expect(application).waitForCKEditorToBeAvailable();
     draggableDivId = await injectDraggable();
-    configuredClickKeepOpenDivId = await injectDiv();
+    configuredClickKeepOpenDivId = await injectKeepOpenWithIdDiv();
+    configuredClickKeepOpenDivClass = await injectKeepOpenWithClassDiv();
   });
 
   afterAll(async () => {
@@ -31,7 +33,7 @@ describe("Link Balloon", () => {
   });
 
   describe("Close behavior on click on other elements", () => {
-    it("Should stay open when click on configured element id", async () => {
+    it("Should stay open when click on configured element id or element class", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Lorem ipsum";
       const { editor, mockContent } = application;
@@ -55,6 +57,9 @@ describe("Link Balloon", () => {
       await expect(linkActionsView).waitToBeVisible();
 
       await page.locator(`#${configuredClickKeepOpenDivId}`).click();
+      await expect(linkActionsView).waitToBeVisible();
+
+      await page.locator(`.${configuredClickKeepOpenDivClass}`).click();
       await expect(linkActionsView).waitToBeVisible();
     });
 
@@ -133,7 +138,7 @@ const injectDraggable = async (): Promise<string> => {
  * Creates a div element with an id configured in CKEditor to not close the link balloon
  * on click.
  */
-const injectDiv = async (): Promise<string> => {
+const injectKeepOpenWithIdDiv = async (): Promise<string> => {
   const id = "example-to-keep-the-link-balloon-open-on-click";
   await page.evaluate((id) => {
     const htmlDivElement = document.createElement("div");
@@ -144,4 +149,22 @@ const injectDiv = async (): Promise<string> => {
     document.body.appendChild(htmlDivElement);
   }, id);
   return Promise.resolve(id);
+};
+
+/**
+ * Creates a div element with a class configured in CKEditor to not close the link balloon
+ * on click.
+ */
+const injectKeepOpenWithClassDiv = async (): Promise<string> => {
+  const aClass = "example-class-to-keep-the-link-balloon-open-on-click";
+  await page.evaluate((aClass) => {
+    const htmlDivElementWithClass = document.createElement("div");
+    htmlDivElementWithClass.id = "unknownId";
+    htmlDivElementWithClass.classList.add(aClass);
+    htmlDivElementWithClass.style.width = "50px";
+    htmlDivElementWithClass.style.height = "50px";
+    htmlDivElementWithClass.style.backgroundColor = "#00FF00";
+    document.body.appendChild(htmlDivElementWithClass);
+  }, aClass);
+  return Promise.resolve(aClass);
 };
