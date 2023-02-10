@@ -73,18 +73,16 @@ export default class ContentLinks extends Plugin {
   }
 
   /**
-   * Removes the focus on the editor and clears the selection
-   * via Web API.
+   * Removes the focus on the editor and clears the selection.
    * Can be used to clear all activity on the editor when contextual
-   * balloons are closed manually
+   * balloons are closed manually.
    *
    * @private
    */
   #removeEditorFocusAndSelection(): void {
-    window.getSelection()?.removeAllRanges();
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
+    const linkUI: LinkUI = this.editor.plugins.get(LinkUI);
+    //@ts-expect-error private API
+    linkUI._hideUI();
   }
 
   static readonly requires = [
