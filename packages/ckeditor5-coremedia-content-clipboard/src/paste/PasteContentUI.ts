@@ -32,6 +32,7 @@ export default class PasteContentUI extends Plugin {
       button.icon = pasteIcon;
       button.tooltip = true;
       button.keystroke = PASTE_KEYSTROKE;
+      button.class = "paste-content-button";
       button.bind("isEnabled").to(pasteContentCommand, "isEnabled");
 
       this.listenTo(button, "execute", () => {
