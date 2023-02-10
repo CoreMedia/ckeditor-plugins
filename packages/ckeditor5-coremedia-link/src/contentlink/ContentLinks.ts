@@ -82,6 +82,7 @@ export default class ContentLinks extends Plugin {
   #removeEditorFocusAndSelection(): void {
     const linkUI: LinkUI = this.editor.plugins.get(LinkUI);
     //@ts-expect-error private API
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     linkUI._hideUI();
   }
 
