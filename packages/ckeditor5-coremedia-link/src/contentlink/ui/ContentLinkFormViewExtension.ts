@@ -43,6 +43,8 @@ class ContentLinkFormViewExtension extends Plugin {
 
   static readonly requires = [LinkUI, ContentLinkCommandHook];
 
+  #initialized = false;
+
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
 
@@ -50,19 +52,24 @@ class ContentLinkFormViewExtension extends Plugin {
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (visibleView === linkUI.formView && !this.#initialized) {
+        this.initializeFormView(linkUI);
+        this.#initialized = true;
+      }
+    });
+
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
       if (visibleView === linkUI.formView) {
-        this.onVisibleViewChanged(linkUI);
+        this.onFormViewGetsActive(linkUI);
       }
     });
 
     reportInitEnd(initInformation);
   }
 
-  onVisibleViewChanged(linkUI: LinkUI): void {
-    const { editor } = linkUI;
+  initializeFormView(linkUI: LinkUI): void {
     const { formView } = linkUI;
-    const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
-    const linkCommand = editor.commands.get("link") as Command;
+    const linkCommand = linkUI.editor.commands.get("link") as Command;
 
     formView.set({
       contentUriPath: undefined,
@@ -74,6 +81,15 @@ class ContentLinkFormViewExtension extends Plugin {
       .to(linkCommand, "value", (value: unknown) =>
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
       );
+
+    this.#extendView(linkUI);
+  }
+
+  onFormViewGetsActive(linkUI: LinkUI): void {
+    const { editor } = linkUI;
+    const { formView } = linkUI;
+    const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
+    const linkCommand = editor.commands.get("link") as Command;
 
     linkUI.formView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
@@ -121,8 +137,6 @@ class ContentLinkFormViewExtension extends Plugin {
         priority: "high",
       }
     );
-
-    this.#extendView(linkUI);
   }
 
   /**
