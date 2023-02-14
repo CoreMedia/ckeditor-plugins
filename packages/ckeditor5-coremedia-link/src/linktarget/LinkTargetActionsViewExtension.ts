@@ -12,9 +12,10 @@ import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "../link/FocusUtils";
+import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -31,14 +32,18 @@ import { handleFocusManagement, LinkViewWithFocusables } from "../link/FocusUtil
 class LinkTargetActionsViewExtension extends Plugin {
   static readonly pluginName: string = "LinkTargetActionsViewExtension";
   static readonly requires = [LinkUI, CustomLinkTargetUI];
+  static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
 
-  async init(): Promise<void> {
+  init(): void {
     const initInformation = reportInitStart(this);
-
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-
-    await this.#extendView(linkUI);
+    const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (visibleView === linkUI.actionsView) {
+        this.#extendView(linkUI);
+      }
+    });
 
     reportInitEnd(initInformation);
   }
@@ -51,9 +56,13 @@ class LinkTargetActionsViewExtension extends Plugin {
    *
    * @param linkUI - the linkUI plugin
    */
-  async #extendView(linkUI: LinkUI): Promise<void> {
+  #extendView(linkUI: LinkUI): void {
     const actionsView: LinkActionsView = linkUI.actionsView;
-    const linkTargetCommand = await ifCommand(this.editor, "linkTarget");
+    const linkTargetCommand = linkUI.editor.commands.get("linkTarget");
+    if (!linkTargetCommand) {
+      LinkTargetActionsViewExtension.#logger.warn("Command 'linkTarget' not found");
+      return;
+    }
     const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config);
 
     // convert button configurations to buttonView instances

@@ -5,13 +5,15 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { showContentLinkField } from "../ContentLinkViewUtils";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
-import { LINK_COMMAND_NAME } from "../../link/Constants";
-import { Command } from "@ckeditor/ckeditor5-core";
-import { hasContentUriPath } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusUtils";
+import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import Command from "@ckeditor/ckeditor5-core/src/command";
+import { LINK_COMMAND_NAME } from "../../link/Constants";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { hasContentUriPath } from "./ViewExtensions";
+import { showContentLinkField } from "../ContentLinkViewUtils";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -22,14 +24,26 @@ import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusU
  */
 class ContentLinkActionsViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkActionsViewExtension";
+  static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
   static readonly requires = [LinkUI];
 
-  async init(): Promise<void> {
+  init(): void {
     const initInformation = reportInitStart(this);
-
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (linkUI.actionsView === visibleView) {
+        this.onVisibleViewChanged(linkUI);
+      }
+    });
+
+    reportInitEnd(initInformation);
+  }
+
+  onVisibleViewChanged(linkUI: LinkUI): void {
+    const { editor } = linkUI;
 
     linkUI.actionsView.set({
       contentUriPath: undefined,
@@ -43,7 +57,11 @@ class ContentLinkActionsViewExtension extends Plugin {
         );
     };
 
-    await ifCommand(editor, LINK_COMMAND_NAME).then((command) => bindContentUriPathTo(command));
+    ifCommand(editor, LINK_COMMAND_NAME)
+      .then((command) => bindContentUriPathTo(command))
+      .catch((e) => {
+        ContentLinkActionsViewExtension.#logger.warn(e);
+      });
 
     /*
      * We need to update the visibility of the inputs when the value of the content link changes
@@ -65,8 +83,6 @@ class ContentLinkActionsViewExtension extends Plugin {
     });
 
     this.#extendView(linkUI);
-
-    reportInitEnd(initInformation);
   }
 
   #extendView(linkUI: LinkUI): void {

@@ -5,15 +5,16 @@ import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { addClassToTemplate, createDecoratorHook } from "../utils";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
+import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
+import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -33,8 +34,18 @@ export default class ContentLinks extends Plugin {
 
   init(): void {
     const editor = this.editor;
-    const linkCommand = editor.commands.get("link") as LinkCommand;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (visibleView === linkUI.actionsView) {
+        this.onVisibleViewChanged(linkUI);
+      }
+    });
+  }
+
+  onVisibleViewChanged(linkUI: LinkUI): void {
+    const { editor } = linkUI;
+    const linkCommand = editor.commands.get("link") as LinkCommand;
     ContentLinks.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI);
     this.#extendFormView(linkUI);

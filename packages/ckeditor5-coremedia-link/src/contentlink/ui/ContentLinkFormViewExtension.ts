@@ -28,6 +28,7 @@ import {
 import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
 import View from "@ckeditor/ckeditor5-ui/src/view";
+import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -47,6 +48,18 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (visibleView === linkUI.formView) {
+        this.onVisibleViewChanged(linkUI);
+      }
+    });
+
+    reportInitEnd(initInformation);
+  }
+
+  onVisibleViewChanged(linkUI: LinkUI): void {
+    const { editor } = linkUI;
     const { formView } = linkUI;
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = editor.commands.get("link") as Command;
@@ -110,8 +123,6 @@ class ContentLinkFormViewExtension extends Plugin {
     );
 
     this.#extendView(linkUI);
-
-    reportInitEnd(initInformation);
   }
 
   /**
