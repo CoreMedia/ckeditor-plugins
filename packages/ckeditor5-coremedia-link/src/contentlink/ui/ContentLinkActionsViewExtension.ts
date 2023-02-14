@@ -103,7 +103,7 @@ class ContentLinkActionsViewExtension extends Plugin {
       }
     });
 
-    actionsView.once("render", () => ContentLinkActionsViewExtension.#render(actionsView, contentLinkView));
+    ContentLinkActionsViewExtension.#render(actionsView, contentLinkView);
 
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
