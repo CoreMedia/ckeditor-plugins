@@ -3,6 +3,19 @@ import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { keepOpen } from "./LinkBalloonConfig";
 
 /**
+ * Whether the mouseDown event occurred on a whitelisted element.
+ * Background: The mouseDown and click events may not always share the same path.
+ * (E.g. when dragging elements like the CoreMedia Studio library)
+ *
+ * This would result in a close of the balloon even though the mouseDown was performed
+ * on an element, for which the balloon should stay open.
+ *
+ * Therefore, this field links both listeners and makes sure the balloon is not closed on mouseUp
+ * (click) when the mouseDown happened on the whitelisted element, by exiting the click listener early.
+ */
+let mouseDownOnWhiteListedElement = false;
+
+/**
  * Removes the mousedown listener in the linkUI plugin.
  * Context: CKEditor closes contextual balloons when a mousedown outside
  * the editor is detected. If a different behavior is to be implemented,
@@ -89,6 +102,7 @@ const addCustomClickOutsideHandler = ({
       }
 
       if (keepOpen(path)) {
+        mouseDownOnWhiteListedElement = true;
         return;
       }
 
@@ -110,6 +124,12 @@ const addCustomClickOutsideHandler = ({
     document as unknown as Emitter,
     "click",
     (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
+      if (mouseDownOnWhiteListedElement) {
+        // we already checked that this click (mouseDown) occurred on a whitelisted element
+        mouseDownOnWhiteListedElement = false;
+        return;
+      }
+
       if (!activator()) {
         return;
       }
@@ -121,10 +141,6 @@ const addCustomClickOutsideHandler = ({
         if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {
           return;
         }
-      }
-
-      if (keepOpen(path)) {
-        return;
       }
 
       for (const contextElement of contextElements) {
