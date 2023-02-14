@@ -18,7 +18,6 @@ import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } fro
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 import { Subscription } from "rxjs";
 
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
