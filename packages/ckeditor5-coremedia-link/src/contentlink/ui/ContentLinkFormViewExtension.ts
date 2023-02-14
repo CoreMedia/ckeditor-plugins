@@ -14,7 +14,7 @@ import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import { hasContentUriPathAndName } from "./ViewExtensions";
+import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
@@ -62,6 +62,30 @@ class ContentLinkFormViewExtension extends Plugin {
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
       );
 
+    linkUI.formView.on("change:contentUriPath", (evt) => {
+      const { source } = evt;
+      const { formView } = linkUI;
+
+      if (!hasContentUriPath(source)) {
+        // set visibility of url and content field
+        showContentLinkField(formView, false);
+        return;
+      }
+
+      const { contentUriPath: value } = source;
+
+      // content link value has changed. set urlInputView accordingly
+      // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
+      // re-trigger a set of utlInputView here
+      if (value !== null) {
+        formView.urlInputView.fieldView.set({
+          value: value ?? "",
+        });
+      }
+
+      // set visibility of url and content field
+      showContentLinkField(formView, !!value);
+    });
     this.#rebindSaveEnabled(linkCommand, formView);
 
     // We need to propagate the content name prior to the LinkCommand being executed.

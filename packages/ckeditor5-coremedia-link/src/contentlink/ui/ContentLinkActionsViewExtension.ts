@@ -51,28 +51,16 @@ class ContentLinkActionsViewExtension extends Plugin {
      */
     linkUI.actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
-      const { formView } = linkUI;
 
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
-        showContentLinkField(formView, false);
         showContentLinkField(linkUI.actionsView, false);
         return;
       }
 
       const { contentUriPath: value } = source;
 
-      // content link value has changed. set urlInputView accordingly
-      // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
-      // re-trigger a set of utlInputView here
-      if (value !== null) {
-        formView.urlInputView.fieldView.set({
-          value: value ?? "",
-        });
-      }
-
       // set visibility of url and content field
-      showContentLinkField(formView, !!value);
       showContentLinkField(linkUI.actionsView, !!value);
     });
 
