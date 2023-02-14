@@ -32,29 +32,7 @@ export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
 
   #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
-  #serviceRegisteredSubscription: Subscription | null;
-
-  constructor(editor: Editor) {
-    super(editor);
-
-    const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
-      if (services.length === 0) {
-        this.#logger.debug("No WorkAreaService registered yet");
-        return;
-      }
-      if (this.#serviceRegisteredSubscription) {
-        this.#serviceRegisteredSubscription.unsubscribe();
-      }
-
-      this.#logger.debug("WorkAreaService is registered now, listening for activeEntities will be started");
-      const clipboardService = services[0];
-      this.#listenForActiveEntityChanges(clipboardService);
-    };
-
-    this.#serviceRegisteredSubscription = serviceAgent
-      .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
-      .subscribe(onServiceRegisteredFunction);
-  }
+  #serviceRegisteredSubscription: Subscription | undefined = undefined;
 
   /**
    * Closes the contextual balloon whenever a new active entity is set.
@@ -102,6 +80,25 @@ export default class ContentLinks extends Plugin {
     parseLinkBalloonConfig(editor.config);
     removeInitialMouseDownListener(linkUI);
     addMouseEventListenerToHideDialog(linkUI);
+
+    const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
+      if (services.length === 0) {
+        this.#logger.debug("No WorkAreaService registered yet");
+        return;
+      }
+      if (this.#serviceRegisteredSubscription) {
+        this.#serviceRegisteredSubscription.unsubscribe();
+      }
+
+      this.#logger.debug("WorkAreaService is registered now, listening for activeEntities will be started");
+      const clipboardService = services[0];
+      this.#listenForActiveEntityChanges(clipboardService);
+    };
+
+    this.#serviceRegisteredSubscription = serviceAgent
+      .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
+      .subscribe(onServiceRegisteredFunction);
+
     this.#extendFormView(linkUI);
     ContentLinks.#extendActionsView(linkUI);
     createDecoratorHook(
