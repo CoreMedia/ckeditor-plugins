@@ -345,7 +345,7 @@ ClassicEditor.create(sourceElement, {
   [COREMEDIA_LINK_CONFIG_KEY]: {
     linkBalloon: {
       keepOpen: {
-        ids: ["example-to-keep-the-link-balloon-open-on-click"],
+        ids: ["example-to-keep-the-link-balloon-open-on-click", "inputExampleContentButton"],
         classes: ["example-class-to-keep-the-link-balloon-open-on-click"],
       },
     },
