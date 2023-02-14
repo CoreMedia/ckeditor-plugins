@@ -168,8 +168,8 @@ class ContentLinkFormViewExtension extends Plugin {
   #extendView(linkUI: LinkUI): void {
     const { formView } = linkUI;
     const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
+    ContentLinkFormViewExtension.#render(contentLinkView, linkUI);
 
-    formView.once("render", () => ContentLinkFormViewExtension.#render(contentLinkView, linkUI));
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
