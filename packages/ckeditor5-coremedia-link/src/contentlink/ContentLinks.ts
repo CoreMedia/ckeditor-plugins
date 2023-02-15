@@ -5,8 +5,7 @@ import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import { addClassToTemplate, createDecoratorHook } from "../utils";
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
+import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
@@ -47,7 +46,6 @@ export default class ContentLinks extends Plugin {
     const linkCommand = editor.commands.get("link") as LinkCommand;
     ContentLinks.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI);
-    this.#extendFormView(linkUI);
     createDecoratorHook(
       linkUI,
       "_hideUI",
@@ -179,26 +177,5 @@ export default class ContentLinks extends Plugin {
         linkUI._hideUI();
       },
     });
-  }
-
-  #extendFormView(linkUI: LinkUI): void {
-    const { formView } = linkUI;
-
-    const t = this.editor.locale.t;
-    formView.urlInputView.set({
-      label: t("Link"),
-      class: ["cm-ck-external-link-field"],
-    });
-    formView.urlInputView.fieldView.set({
-      placeholder: t("Enter url or drag and drop content onto this area."),
-    });
-
-    ContentLinks.#customizeFormView(formView);
-  }
-
-  static #customizeFormView(formView: LinkFormView): void {
-    const CM_LINK_FORM_CLS = "cm-ck-link-form";
-    const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
-    addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
   }
 }

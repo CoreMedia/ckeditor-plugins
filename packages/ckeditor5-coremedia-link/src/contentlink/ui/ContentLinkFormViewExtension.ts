@@ -29,6 +29,7 @@ import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusU
 import ContentLinkView from "./ContentLinkView";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { addClassToTemplate } from "../../utils";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -169,7 +170,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const { formView } = linkUI;
     const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
     ContentLinkFormViewExtension.#render(contentLinkView, linkUI);
-
+    this.#adaptFormViewFields(linkUI);
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
@@ -212,6 +213,27 @@ class ContentLinkFormViewExtension extends Plugin {
     handleFocusManagement(formView as LinkViewWithFocusables, contentLinkButtons, formView.urlInputView);
 
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
+  }
+
+  #adaptFormViewFields(linkUI: LinkUI): void {
+    const { formView } = linkUI;
+
+    const t = this.editor.locale.t;
+    formView.urlInputView.set({
+      label: t("Link"),
+      class: ["cm-ck-external-link-field"],
+    });
+    formView.urlInputView.fieldView.set({
+      placeholder: t("Enter url or drag and drop content onto this area."),
+    });
+
+    const CM_LINK_FORM_CLS = "cm-ck-link-form";
+    const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
+    if (!formView.element) {
+      ContentLinkFormViewExtension.#logger.error("FormView must be rendered to provide classes");
+    }
+    addClassToTemplate(formView, CM_LINK_FORM_CLS);
+    addClassToTemplate(formView, CM_FORM_VIEW_CLS);
   }
 
   /**
