@@ -4,7 +4,6 @@ import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtensio
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
-import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { addClassToTemplate, createDecoratorHook } from "../utils";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
@@ -14,6 +13,15 @@ import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
+import { serviceAgent } from "@coremedia/service-agent";
+import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import { Subscription } from "rxjs";
+
+import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
+import { closeContextualBalloon } from "./ContentLinkViewUtils";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -21,6 +29,39 @@ import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
  */
 export default class ContentLinks extends Plugin {
   static readonly pluginName: string = "ContentLinks";
+
+  #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
+  #serviceRegisteredSubscription: Subscription | undefined = undefined;
+
+  /**
+   * Closes the contextual balloon whenever a new active entity is set.
+   *
+   * @param workAreaService - the workAreaService
+   * @private
+   */
+  #listenForActiveEntityChanges(workAreaService: WorkAreaService): void {
+    workAreaService.observe_activeEntity().subscribe({
+      next: (activeEntities) => {
+        this.#logger.debug("Closing balloon because active entity changed", activeEntities);
+        this.#removeEditorFocusAndSelection();
+        closeContextualBalloon(this.editor);
+      },
+    });
+  }
+
+  /**
+   * Removes the focus on the editor and clears the selection.
+   * Can be used to clear all activity on the editor when contextual
+   * balloons are closed manually.
+   *
+   * @private
+   */
+  #removeEditorFocusAndSelection(): void {
+    const linkUI: LinkUI = this.editor.plugins.get(LinkUI);
+    //@ts-expect-error private API
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    linkUI._hideUI();
+  }
 
   static readonly requires = [
     Link,
@@ -35,8 +76,28 @@ export default class ContentLinks extends Plugin {
     const editor = this.editor;
     const linkCommand = editor.commands.get("link") as LinkCommand;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-    ContentLinks.#removeInitialMouseDownListener(linkUI);
-    this.#addMouseEventListenerToHideDialog(linkUI);
+    parseLinkBalloonConfig(editor.config);
+    removeInitialMouseDownListener(linkUI);
+    addMouseEventListenerToHideDialog(linkUI);
+
+    const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
+      if (services.length === 0) {
+        this.#logger.debug("No WorkAreaService registered yet");
+        return;
+      }
+      if (this.#serviceRegisteredSubscription) {
+        this.#serviceRegisteredSubscription.unsubscribe();
+      }
+
+      this.#logger.debug("WorkAreaService is registered now, listening for activeEntities will be started");
+      const clipboardService = services[0];
+      this.#listenForActiveEntityChanges(clipboardService);
+    };
+
+    this.#serviceRegisteredSubscription = serviceAgent
+      .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
+      .subscribe(onServiceRegisteredFunction);
+
     this.#extendFormView(linkUI);
     ContentLinks.#extendActionsView(linkUI);
     createDecoratorHook(
@@ -53,123 +114,6 @@ export default class ContentLinks extends Plugin {
     );
     // registers the openInTab command for content links, used to open a content when clicking the content link
     editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
-  }
-
-  static #removeInitialMouseDownListener(linkUI: LinkUI): void {
-    const { formView } = linkUI;
-    formView.stopListening(document as unknown as Emitter, "mousedown");
-  }
-
-  /**
-   * This function listens to mousedown events to hide the balloon.
-   *
-   * The linkUI balloon used to hide as soon as we "mousedown" anywhere in the
-   * document. This behaviour was removed above. Now we need to reactivate it.
-   * The difference between the former event listener and this one:
-   *
-   * We now check if "mousedown" was performed on a draggable element. We will
-   * not hide the balloon if this is the case. In this case, we will also listen
-   * and react to click events.
-   *
-   * Why not always listen to click events?
-   *
-   * The CKEditor5 performs other actions on mousedown. Listening to click
-   * events would be too late. E.g., if you listen to click events, clicking on
-   * an existing link does not work. CKEditor would open the link's actions view
-   * before this listener would receive the click event. This could be too late
-   * to work if the activator param checks if the UI panel already exists. In
-   * that case, the UI would be closed again.
-   */
-  #addCustomClickOutsideHandler({
-    emitter,
-    activator,
-    callback,
-    contextElements,
-  }: {
-    emitter: Emitter;
-    activator: () => boolean;
-    callback: () => void;
-    contextElements: HTMLElement[];
-  }): void {
-    const EDITOR_CLASS = "ck-editor";
-    emitter.listenTo(
-      document as unknown as Emitter,
-      "mousedown",
-      (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
-        if (!activator()) {
-          return;
-        }
-
-        // Check if `composedPath` is `undefined` in case the browser does not support native shadow DOM.
-        // Can be removed when all supported browsers support native shadow DOM.
-        const path: Element[] = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
-
-        // Do not close balloon if user clicked on draggable outside any editor component
-        const editorElements = document.getElementsByClassName(EDITOR_CLASS);
-        let pathIncludesAnyEditor = false;
-        for (const editorElement of editorElements) {
-          if (path.includes(editorElement)) {
-            pathIncludesAnyEditor = true;
-          }
-        }
-
-        if (domEvt.target.draggable && !pathIncludesAnyEditor) {
-          return;
-        }
-
-        // Do not close balloon if user clicked on balloon
-        for (const contextElement of contextElements) {
-          if (contextElement.contains(domEvt.target) || path.includes(contextElement)) {
-            return;
-          }
-        }
-
-        callback();
-      }
-    );
-    emitter.listenTo(
-      document as unknown as Emitter,
-      "click",
-      (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
-        if (!activator()) {
-          return;
-        }
-
-        const path = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
-        const editorElements = document.getElementsByClassName(EDITOR_CLASS);
-
-        for (const editorElement of editorElements) {
-          if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {
-            return;
-          }
-        }
-
-        for (const contextElement of contextElements) {
-          if (contextElement.contains(domEvt.target) || path.includes(contextElement)) {
-            return;
-          }
-        }
-        callback();
-      }
-    );
-  }
-
-  #addMouseEventListenerToHideDialog(linkUI: LinkUI): void {
-    const { formView } = linkUI;
-
-    this.#addCustomClickOutsideHandler({
-      emitter: formView,
-      // @ts-expect-error TODO Fix Typings
-      activator: () => linkUI._isUIInPanel as boolean,
-      // @ts-expect-error TODO Fix Typings
-      // eslint-disable-next-line
-      contextElements: [linkUI._balloon.view.element],
-      callback: () => {
-        // @ts-expect-error TODO Fix Typings
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        linkUI._hideUI();
-      },
-    });
   }
 
   #extendFormView(linkUI: LinkUI): void {

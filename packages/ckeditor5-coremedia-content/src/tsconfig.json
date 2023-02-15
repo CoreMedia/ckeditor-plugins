@@ -8,16 +8,12 @@
     "declarationMap": true,
     "paths": {
       "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"],
-      "@coremedia/ckeditor5-core-common/*": ["../../ckeditor5-core-common/src/*"],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": ["../../ckeditor5-coremedia-studio-integration/src/*"]
     }
   },
   "references": [
     {
       "path": "../../ckeditor5-logging/src"
-    },
-    {
-      "path": "../../ckeditor5-core-common/src"
     },
     {
       "path": "../../ckeditor5-coremedia-studio-integration/src"

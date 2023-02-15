@@ -366,7 +366,6 @@ importers:
       '@ckeditor/ckeditor5-ui': ^35.4.0
       '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
       '@coremedia-internal/ckeditor5-jest-test-helpers': ^1.0.0
-      '@coremedia/ckeditor5-core-common': 11.0.3-rc.1
       '@coremedia/ckeditor5-coremedia-studio-integration': 11.0.3-rc.1
       '@coremedia/ckeditor5-logging': 11.0.3-rc.1
       '@coremedia/service-agent': ^1.1.5
@@ -378,7 +377,6 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.8.2
     dependencies:
-      '@coremedia/ckeditor5-core-common': link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration': link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
