@@ -94,7 +94,13 @@ class ContentLinkActionsViewExtension extends Plugin {
     contentLinkView.set({
       renderAsTextLink: true,
     });
-    // @ts-expect-error TODO: Check Typings or provide some workaround.
+    if (!hasContentUriPath(linkUI.actionsView)) {
+      ContentLinkActionsViewExtension.#logger.warn(
+        "ActionsView does not have a property contentUriPath. Is it already bound?",
+        linkUI.actionsView
+      );
+      return;
+    }
     contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
