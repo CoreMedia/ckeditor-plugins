@@ -42,6 +42,9 @@ class ContentLinkFormViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkFormViewExtension";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkFormViewExtension.pluginName);
 
+  static readonly #CM_LINK_FORM_CLS = "cm-ck-link-form";
+  static readonly #CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
+
   static readonly requires = [LinkUI, ContentLinkCommandHook];
 
   #initialized = false;
@@ -117,6 +120,14 @@ class ContentLinkFormViewExtension extends Plugin {
       showContentLinkField(formView, !!value);
     });
     this.#rebindSaveEnabled(linkCommand, formView);
+
+    // If the form view has a content uri path, add the behavior to show the content view.
+    if (hasContentUriPath(formView)) {
+      formView.element?.classList.add(ContentLinkFormViewExtension.#CM_FORM_VIEW_CLS);
+      formView.element?.classList.add(ContentLinkFormViewExtension.#CM_LINK_FORM_CLS);
+      const value = formView.contentUriPath;
+      showContentLinkField(formView, !!value);
+    }
 
     // We need to propagate the content name prior to the LinkCommand being executed.
     // This is required for collapsed selections, where the LinkCommand wants to
@@ -227,13 +238,11 @@ class ContentLinkFormViewExtension extends Plugin {
       placeholder: t("Enter url or drag and drop content onto this area."),
     });
 
-    const CM_LINK_FORM_CLS = "cm-ck-link-form";
-    const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
     if (!formView.element) {
       ContentLinkFormViewExtension.#logger.error("FormView must be rendered to provide classes");
     }
-    addClassToTemplate(formView, CM_LINK_FORM_CLS);
-    addClassToTemplate(formView, CM_FORM_VIEW_CLS);
+    addClassToTemplate(formView, ContentLinkFormViewExtension.#CM_LINK_FORM_CLS);
+    addClassToTemplate(formView, ContentLinkFormViewExtension.#CM_FORM_VIEW_CLS);
   }
 
   /**
