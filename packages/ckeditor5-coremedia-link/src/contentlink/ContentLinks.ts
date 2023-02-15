@@ -6,7 +6,6 @@ import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { addClassToTemplate, createDecoratorHook } from "../utils";
-import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
@@ -49,7 +48,6 @@ export default class ContentLinks extends Plugin {
     ContentLinks.#removeInitialMouseDownListener(linkUI);
     this.#addMouseEventListenerToHideDialog(linkUI);
     this.#extendFormView(linkUI);
-    ContentLinks.#extendActionsView(linkUI);
     createDecoratorHook(
       linkUI,
       "_hideUI",
@@ -196,17 +194,6 @@ export default class ContentLinks extends Plugin {
     });
 
     ContentLinks.#customizeFormView(formView);
-  }
-
-  static #extendActionsView(linkUI: LinkUI): void {
-    ContentLinks.#customizeActionsView(linkUI.actionsView);
-  }
-
-  static #customizeActionsView(actionsView: LinkActionsView): void {
-    const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
-    const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
-    addClassToTemplate(actionsView, [CM_FORM_VIEW_CLS]);
-    addClassToTemplate(actionsView.previewButtonView, [CM_PREVIEW_BUTTON_VIEW_CLS]);
   }
 
   static #customizeFormView(formView: LinkFormView): void {

@@ -43,6 +43,12 @@ class ContentLinkActionsViewExtension extends Plugin {
       }
     });
 
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (linkUI.actionsView === visibleView) {
+        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(linkUI.actionsView);
+      }
+    });
+
     reportInitEnd(initInformation);
   }
 
@@ -143,8 +149,30 @@ class ContentLinkActionsViewExtension extends Plugin {
     }
 
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
+    ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
     const linkViewWithFocusable = actionsView as LinkViewWithFocusables;
     handleFocusManagement(linkViewWithFocusable, [simpleContentLinkView], actionsView.previewButtonView);
+  }
+
+  /**
+   * Add classes to the actions view which enables to distinguish if the extension is active.
+   *
+   * @param actionsView - the rendered actionsView of the linkUI
+   * @private
+   */
+  static #addCoreMediaClassesToActionsView(actionsView: LinkActionsView): void {
+    if (!actionsView.isRendered) {
+      ContentLinkActionsViewExtension.#logger.warn(
+        "ActionsView is not rendered yet, but classes must be added to the rendered actionsView",
+        actionsView
+      );
+      return;
+    }
+
+    const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
+    const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
+    actionsView.element?.classList.add(CM_FORM_VIEW_CLS);
+    actionsView.previewButtonView.element?.classList.add(CM_PREVIEW_BUTTON_VIEW_CLS);
   }
 }
 
