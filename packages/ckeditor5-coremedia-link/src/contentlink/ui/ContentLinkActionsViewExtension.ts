@@ -120,11 +120,25 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   static #render(actionsView: LinkActionsView, simpleContentLinkView: ContentLinkView): void {
+    if (!actionsView.element || !actionsView.editButtonView.element) {
+      ContentLinkActionsViewExtension.#logger.error(
+        "ActionsView or the edit button has no element yet, this indicates the actionsView is not rendered yet. Can't customize.",
+        actionsView
+      );
+      return;
+    }
     actionsView.registerChild(simpleContentLinkView);
     if (!simpleContentLinkView.isRendered) {
       simpleContentLinkView.render();
     }
-    // @ts-expect-error TODO: Element may be null; we should check that
+    if (!simpleContentLinkView.element) {
+      ContentLinkActionsViewExtension.#logger.error(
+        "ContentLinkView is rendered, but element does not exist.",
+        simpleContentLinkView
+      );
+      return;
+    }
+
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
     const linkViewWithFocusable = actionsView as LinkViewWithFocusables;
     handleFocusManagement(linkViewWithFocusable, [simpleContentLinkView], actionsView.previewButtonView);
