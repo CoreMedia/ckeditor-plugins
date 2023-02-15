@@ -28,21 +28,25 @@ class ContentLinkActionsViewExtension extends Plugin {
 
   static readonly requires = [LinkUI];
 
+  #initialized = false;
+
   init(): void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
+
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView === visibleView) {
-        this.onVisibleViewChanged(linkUI);
+      if (linkUI.actionsView === visibleView && !this.#initialized) {
+        this.#initialize(linkUI);
+        this.#initialized = true;
       }
     });
 
     reportInitEnd(initInformation);
   }
 
-  onVisibleViewChanged(linkUI: LinkUI): void {
+  #initialize(linkUI: LinkUI): void {
     const { editor } = linkUI;
 
     linkUI.actionsView.set({
@@ -81,7 +85,6 @@ class ContentLinkActionsViewExtension extends Plugin {
       // set visibility of url and content field
       showContentLinkField(linkUI.actionsView, !!value);
     });
-
     this.#extendView(linkUI);
   }
 
