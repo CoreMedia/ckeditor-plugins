@@ -255,21 +255,24 @@ class ContentLinkFormViewExtension extends Plugin {
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     const { formView } = linkUI;
-
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
-    // @ts-expect-error TODO We must check for null/undefined here.
-    contentLinkView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
-    });
-    // @ts-expect-error TODO We must check for null/undefined here.
-    contentLinkView.fieldView.element.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
 
-    // @ts-expect-error TODO We must check for null/undefined here.
-    formView.urlInputView.fieldView.element.addEventListener("drop", (dragEvent: DragEvent) => {
+    if (!contentLinkView.fieldView.element) {
+      logger.warn("ContentLinkView not completely rendered. Drag and drop won't work.", contentLinkView);
+    }
+
+    contentLinkView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
-    // @ts-expect-error TODO We must check for null/undefined here.
-    formView.urlInputView.fieldView.element.addEventListener(
+    contentLinkView.fieldView.element?.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
+
+    if (!formView.urlInputView.fieldView.element) {
+      logger.warn("FormView.urlInputView not completely rendered. Drag and drop won't work.", formView);
+    }
+    formView.urlInputView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
+      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+    });
+    formView.urlInputView.fieldView.element?.addEventListener(
       "dragover",
       ContentLinkFormViewExtension.#onDragOverLinkField
     );
