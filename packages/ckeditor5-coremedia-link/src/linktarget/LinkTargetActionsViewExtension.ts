@@ -34,14 +34,17 @@ class LinkTargetActionsViewExtension extends Plugin {
   static readonly requires = [LinkUI, CustomLinkTargetUI];
   static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
 
+  #initialized = false;
+
   init(): void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView === linkUI.actionsView) {
+      if (visibleView === linkUI.actionsView && !this.#initialized) {
         this.#extendView(linkUI);
+        this.#initialized = true;
       }
     });
 
@@ -93,10 +96,10 @@ class LinkTargetActionsViewExtension extends Plugin {
       actionsView.registerChild([separatorLeft, separatorRight, ...buttons]);
 
       // no need to render the buttons manually, just add them to the DOM
-      actionsView.once("render", () => this.#addButtons(actionsView, [separatorLeft, ...buttons, separatorRight]));
+      this.#addButtons(actionsView, [separatorLeft, ...buttons, separatorRight]);
     }
 
-    actionsView.once("render", () => LinkTargetActionsViewExtension.#render(actionsView, buttons));
+    LinkTargetActionsViewExtension.#render(actionsView, buttons);
   }
 
   static #render(actionsView: LinkActionsView, addedButtons: View[]): void {
