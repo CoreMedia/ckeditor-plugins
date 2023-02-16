@@ -79,6 +79,12 @@ export const editingDowncastXlinkHref =
   (editor: Editor, modelElementName: string): DowncastConversionHelperFunction =>
   (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data): void => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (data.attributeNewValue === "") {
+        // There was no xlink-href set for this image, therefore we can skip applying
+        // the loading spinner and resolving the image src
+        return;
+      }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       onXlinkHrefEditingDowncast(editor, eventInfo, data);
     });
@@ -94,9 +100,17 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
     throw new Error(`Unexpected type ${typeof xlinkHref} of attribute xlink-href (value: ${xlinkHref}).`);
   }
 
-  const uriPath: UriPath = toUriPath(xlinkHref);
-  const property: string = toProperty(xlinkHref);
+  let uriPath: UriPath;
+  try {
+    uriPath = toUriPath(xlinkHref);
+  } catch (e) {
+    // toUriPath() might throw an exception, but an unresolvable
+    // uriPath should not result in an error, which would break the editor.
+    // Therefore: Return early. An endless loading spinner will be displayed as a result.
+    return;
+  }
 
+  const property: string = toProperty(xlinkHref);
   void serviceAgent
     .fetchService(createBlobDisplayServiceDescriptor())
     .then((blobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
