@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-core-common",
-  "version": "11.0.3-rc.0",
+  "version": "13.0.0",
   "description": "Assistive Utilities for `@ckeditor/ckeditor5-core`.",
   "keywords": [
     "coremedia",
@@ -9,8 +9,8 @@
     "ckeditor5-core"
   ],
   "engines": {
-    "node": ">=16.0.0",
-    "pnpm": "7"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "exports": {
     "./*": "./dist/*.js"
@@ -33,8 +33,8 @@
     "@ckeditor/ckeditor5-core": "^36.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-logging": "11.0.3-rc.0"
+    "@coremedia/ckeditor5-common": "^13.0.0",
+    "@coremedia/ckeditor5-logging": "^13.0.0"
   },
   "scripts": {
     "clean": "rimraf ./dist",

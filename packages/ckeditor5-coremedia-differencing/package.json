@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-differencing",
-  "version": "11.0.3-rc.0",
+  "version": "13.0.0",
   "description": "Server-side differencing support in CoreMedia Studio.",
   "keywords": [
     "coremedia",
@@ -9,8 +9,8 @@
     "differencing"
   ],
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=5.7.1"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "exports": {
     "./*": "./dist/*.js"
@@ -41,12 +41,12 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-core-common": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-coremedia-richtext": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-dom-converter": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-dom-support": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-logging": "11.0.3-rc.0"
+    "@coremedia/ckeditor5-common": "^13.0.0",
+    "@coremedia/ckeditor5-core-common": "^13.0.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "^13.0.0",
+    "@coremedia/ckeditor5-dom-converter": "^13.0.0",
+    "@coremedia/ckeditor5-dom-support": "^13.0.0",
+    "@coremedia/ckeditor5-logging": "^13.0.0"
   },
   "scripts": {
     "clean": "rimraf ./dist",

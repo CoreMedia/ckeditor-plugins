@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext-support",
-  "version": "11.0.3-rc.0",
+  "version": "13.0.0",
   "description": "CoreMedia RichText 1.0 DTD: Registers known elements/attributes",
   "keywords": [
     "coremedia",
@@ -10,7 +10,8 @@
     "grs"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "license": "Apache-2.0",
   "scripts": {
@@ -50,7 +51,7 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "11.0.3-rc.0",
-    "@coremedia/ckeditor5-core-common": "11.0.3-rc.0"
+    "@coremedia/ckeditor5-logging": "^13.0.0",
+    "@coremedia/ckeditor5-core-common": "^13.0.0"
   }
 }

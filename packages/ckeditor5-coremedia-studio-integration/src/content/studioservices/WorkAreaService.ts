@@ -4,6 +4,8 @@
  *
  * @see serviceAgent
  */
+import { Observable } from "rxjs";
+
 interface WorkAreaService {
   /**
    * Opens entities given by their REST URIs in Studio tabs.
@@ -25,6 +27,16 @@ interface WorkAreaService {
    * @returns the promise holding whether the entities can be opened in a tab
    */
   canBeOpenedInTab(entityUris: unknown[]): Promise<unknown>;
+
+  /**
+   * Observes the currently active work area entity.
+   *
+   * If the entity is a {@link RemoteBean}, its URI path is returned. Otherwise, the
+   * whole entity is returned.
+   *
+   * @returns the observable for the active entity.
+   */
+  observe_activeEntity(): Observable<unknown>;
 }
 
 export default WorkAreaService;

@@ -1,5 +1,8 @@
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
+import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 /**
  * Adds or removes "cm-ck-link-view--show-content-link" to the form view's (and action view's) element or to the corresponding
@@ -26,4 +29,18 @@ export const showContentLinkField = (view: View, show: boolean): void => {
   } else {
     removeClassFromTemplate(view, showContentLinkFieldClass);
   }
+};
+
+/**
+ * Closes the currently opened contextual balloon.
+ *
+ * @param editor - the editor
+ */
+export const closeContextualBalloon = (editor: Editor): void => {
+  void ifPlugin(editor, ContextualBalloon).then((balloon) => {
+    while (balloon.visibleView) {
+      // it is not sufficient to just hide the visibleView, we need to remove it
+      balloon.remove(balloon.visibleView);
+    }
+  });
 };

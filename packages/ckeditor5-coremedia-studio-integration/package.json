@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration",
-  "version": "11.0.3-rc.0",
+  "version": "13.0.0",
   "description": "CoreMedia Studio: Communication facade for Studio integration",
   "keywords": [
     "coremedia",
@@ -9,7 +9,8 @@
     "studio"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "license": "Apache-2.0",
   "scripts": {
@@ -41,7 +42,7 @@
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "11.0.3-rc.0",
+    "@coremedia/ckeditor5-logging": "^13.0.0",
     "node-esapi": "^0.0.1",
     "rxjs": "^7.5.6"
   }

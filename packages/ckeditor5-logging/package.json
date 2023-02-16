@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-logging",
-  "version": "11.0.3-rc.0",
+  "version": "13.0.0",
   "description": "Logging Facade",
   "keywords": [
     "coremedia",
@@ -9,8 +9,8 @@
     "logging"
   ],
   "engines": {
-    "node": ">=16.0.0",
-    "pnpm": "7"
+    "node": "18",
+    "pnpm": "^7.26"
   },
   "exports": {
     "./*": "./dist/*.js"
