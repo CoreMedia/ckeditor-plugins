@@ -49,6 +49,8 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #initialized = false;
 
+  #contentLinkView: LabeledFieldView | undefined = undefined;
+
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
 
@@ -118,6 +120,9 @@ class ContentLinkFormViewExtension extends Plugin {
 
       // set visibility of url and content field
       showContentLinkField(formView, !!value);
+
+      // focus contentLinkView when formView is opened and urlInputView is not visible
+      this.#focusContentLinkViewIfVisible(formView);
     });
     this.#rebindSaveEnabled(linkCommand, formView);
 
@@ -128,6 +133,9 @@ class ContentLinkFormViewExtension extends Plugin {
       const value = formView.contentUriPath;
       showContentLinkField(formView, !!value);
     }
+
+    // focus contentLinkView when formView is opened and urlInputView is not visible
+    this.#focusContentLinkViewIfVisible(formView);
 
     // We need to propagate the content name prior to the LinkCommand being executed.
     // This is required for collapsed selections, where the LinkCommand wants to
@@ -149,6 +157,21 @@ class ContentLinkFormViewExtension extends Plugin {
         priority: "high",
       }
     );
+  }
+
+  /**
+   * Focus the ContentLinkView if the UrlInputView is hidden.
+   *
+   * @param formView - the formView
+   * @private
+   */
+  #focusContentLinkViewIfVisible(formView: LinkFormView): void {
+    if (!formView.urlInputView.element || formView.urlInputView.element.style.visibility === "") {
+      // the urlInput is hidden, focus contentView instead
+      if (this.#contentLinkView) {
+        this.#contentLinkView.focus();
+      }
+    }
   }
 
   /**
@@ -180,6 +203,7 @@ class ContentLinkFormViewExtension extends Plugin {
   #extendView(linkUI: LinkUI): void {
     const { formView } = linkUI;
     const contentLinkView = createContentLinkView(linkUI, this.editor);
+    this.#contentLinkView = contentLinkView;
     ContentLinkFormViewExtension.#render(contentLinkView, linkUI);
     this.#adaptFormViewFields(linkUI);
     formView.on("cancel", () => {
@@ -188,21 +212,6 @@ class ContentLinkFormViewExtension extends Plugin {
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
-
-    // focus contentLinkView when formView is opened and urlInputView is not visible
-    this.listenTo(
-      linkUI.actionsView,
-      "edit",
-      () => {
-        if (!formView.urlInputView.element || formView.urlInputView.element.style.visibility === "") {
-          // the urlInput is hidden, focus contentView instead
-          contentLinkView.focus();
-        }
-      },
-      {
-        priority: "lowest",
-      }
-    );
   }
 
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
