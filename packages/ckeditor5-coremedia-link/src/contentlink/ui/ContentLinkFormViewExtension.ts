@@ -179,7 +179,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #extendView(linkUI: LinkUI): void {
     const { formView } = linkUI;
-    const contentLinkView = createContentLinkView(this.editor.locale, linkUI);
+    const contentLinkView = createContentLinkView(linkUI, this.editor);
     ContentLinkFormViewExtension.#render(contentLinkView, linkUI);
     this.#adaptFormViewFields(linkUI);
     formView.on("cancel", () => {

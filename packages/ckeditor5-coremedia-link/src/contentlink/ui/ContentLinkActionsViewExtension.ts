@@ -97,7 +97,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   #extendView(linkUI: LinkUI): void {
     const { formView } = linkUI;
     const actionsView: LinkActionsView = linkUI.actionsView;
-    const contentLinkView = new ContentLinkView(this.editor.locale, linkUI, {
+    const contentLinkView = new ContentLinkView(this.editor, {
       renderTypeIcon: true,
     });
     contentLinkView.set({
