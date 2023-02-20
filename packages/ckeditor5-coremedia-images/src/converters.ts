@@ -75,6 +75,7 @@ export const preventUpcastImageSrc =
  *
  * @param editor - the editor instance
  * @param modelElementName - the element name to convert
+ * @param logger - the logger
  */
 export const editingDowncastXlinkHref =
   (editor: Editor, modelElementName: string, logger: Logger): DowncastConversionHelperFunction =>

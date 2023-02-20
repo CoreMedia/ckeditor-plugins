@@ -96,7 +96,9 @@ export default class ContentImageEditingPlugin extends Plugin {
     });
 
     //For editing-view the xlink-href attribute has to be converted to a src-attribute.
-    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
+    editor.conversion
+      .for("editingDowncast")
+      .add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
   }
 
   /**
