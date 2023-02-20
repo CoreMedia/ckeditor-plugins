@@ -121,6 +121,37 @@ describe("Image Features", () => {
     });
   });
 
+  describe("Image with invalid xlink:href", () => {
+    it("Should correctly render broken image with empty src", async () => {
+      const { currentTestName } = expect.getState();
+      const name = currentTestName ?? "Unknown Test";
+      const { editor } = application;
+      const { ui } = editor;
+
+      const data = richtext(
+        p(
+          img({
+            "alt": name,
+            "xlink:href": "",
+          })
+        )
+      );
+
+      await editor.setDataAndGetDataView(data);
+      const editableHandle = await ui.getEditableElement();
+
+      await expect(editableHandle).toHaveSelector("img");
+
+      const imgHandleWithAltAttribute = await editableHandle.$("img[alt]");
+      // There is an image with an alt attribute
+      await waitForExpect(() => expect(imgHandleWithAltAttribute).not.toBeNull());
+
+      const imgHandleWithSrcAttribute = await editableHandle.$("img[src]");
+      // There is no image with a src attribute
+      await waitForExpect(() => expect(imgHandleWithSrcAttribute).toBeNull());
+    });
+  });
+
   describe("Image Alignment", () => {
     it("Should correctly set Image Alignment", async () => {
       const { currentTestName } = expect.getState();
@@ -200,7 +231,7 @@ describe("Image Features", () => {
       expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
 
-    it("Should not be able to trigger open in tab for image from ballon", async () => {
+    it("Should not be able to trigger open in tab for image from balloon", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Unknown Test";
       const { editor, mockContent } = application;
