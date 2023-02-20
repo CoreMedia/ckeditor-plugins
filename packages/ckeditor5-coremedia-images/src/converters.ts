@@ -17,6 +17,7 @@ import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -76,7 +77,7 @@ export const preventUpcastImageSrc =
  * @param modelElementName - the element name to convert
  */
 export const editingDowncastXlinkHref =
-  (editor: Editor, modelElementName: string): DowncastConversionHelperFunction =>
+  (editor: Editor, modelElementName: string, logger: Logger): DowncastConversionHelperFunction =>
   (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
       if (!data.attributeNewValue) {
@@ -85,11 +86,16 @@ export const editingDowncastXlinkHref =
         return;
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      onXlinkHrefEditingDowncast(editor, eventInfo, data);
+      onXlinkHrefEditingDowncast(editor, eventInfo, data, logger);
     });
   };
 
-const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: DowncastEventData): void => {
+const onXlinkHrefEditingDowncast = (
+  editor: Editor,
+  eventInfo: EventInfo,
+  data: DowncastEventData,
+  logger: Logger
+): void => {
   const spinnerPreviewAttributes = createSpinnerImagePreviewAttributes(editor);
   updateImagePreviewAttributes(editor, data.item, spinnerPreviewAttributes, true);
 
@@ -106,6 +112,7 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
     // toUriPath() might throw an exception, but an unresolvable
     // uriPath should not result in an error, which would break the editor.
     // Therefore: Return early. An endless loading spinner will be displayed as a result.
+    logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref);
     return;
   }
 

@@ -11,6 +11,8 @@ import {
   reportInitStart,
 } from "@coremedia/ckeditor5-core-common/Plugins";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 /**
  * Plugin to support images from CoreMedia RichText.
@@ -23,6 +25,7 @@ import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/command
  */
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName: string = "ContentImageEditingPlugin";
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
 
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
   static readonly IMAGE_INLINE_VIEW_ELEMENT_NAME = "img";
@@ -93,7 +96,7 @@ export default class ContentImageEditingPlugin extends Plugin {
     });
 
     //For editing-view the xlink-href attribute has to be converted to a src-attribute.
-    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref(editor, modelElementName));
+    editor.conversion.for("editingDowncast").add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
   }
 
   /**
