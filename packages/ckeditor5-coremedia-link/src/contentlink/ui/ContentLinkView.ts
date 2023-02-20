@@ -10,7 +10,6 @@ import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 /**
@@ -216,8 +215,6 @@ export default class ContentLinkView extends ButtonView {
                 contentName: received.content.name,
                 ariaLabelText: `${received.type.name}: ${received.content.name}`,
               });
-              const contextualBalloon: ContextualBalloon = this.#editor.plugins.get(ContextualBalloon);
-              contextualBalloon.updatePosition();
             },
           })
         );

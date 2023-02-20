@@ -204,6 +204,16 @@ class ContentLinkFormViewExtension extends Plugin {
     const { formView } = linkUI;
     const contentLinkView = createContentLinkView(linkUI, this.editor);
     this.#contentLinkView = contentLinkView;
+
+    contentLinkView.on("change:contentName", () => {
+      if (!this.editor.isReadOnly) {
+        const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
+        if (contextualBalloon.visibleView === linkUI.formView) {
+          contextualBalloon.updatePosition();
+        }
+      }
+    });
+
     ContentLinkFormViewExtension.#render(contentLinkView, linkUI);
     this.#adaptFormViewFields(linkUI);
     formView.on("cancel", () => {
