@@ -78,8 +78,7 @@ export const preventUpcastImageSrc =
 export const editingDowncastXlinkHref =
   (editor: Editor, modelElementName: string): DowncastConversionHelperFunction =>
   (dispatcher: DowncastDispatcher) => {
-    dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data): void => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
       if (data.attributeNewValue === "") {
         // There was no xlink-href set for this image, therefore we can skip applying
         // the loading spinner and resolving the image src
