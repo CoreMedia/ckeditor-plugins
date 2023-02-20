@@ -79,7 +79,7 @@ export const editingDowncastXlinkHref =
   (editor: Editor, modelElementName: string): DowncastConversionHelperFunction =>
   (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
-      if (data.attributeNewValue === "") {
+      if (!data.attributeNewValue) {
         // There was no xlink-href set for this image, therefore we can skip applying
         // the loading spinner and resolving the image src
         return;
