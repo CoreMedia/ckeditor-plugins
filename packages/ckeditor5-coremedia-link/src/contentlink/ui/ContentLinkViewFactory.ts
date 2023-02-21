@@ -1,8 +1,8 @@
 import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
-import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import "../../../theme/contentlinkview.css";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkView from "./ContentLinkView";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -10,16 +10,16 @@ import ContentLinkView from "./ContentLinkView";
  *
  * The ContentLinkView is a LabeledFieldView, which contains a ContentView.
  *
- * @param locale - the editor's locale
  * @param linkUI - the linkUI plugin
+ * @param editor - the editor
  */
-const createContentLinkView = (locale: Locale, linkUI: LinkUI): LabeledFieldView => {
-  const { t } = locale;
+const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
+  const { t } = editor.locale;
   const { formView } = linkUI;
   const contentLinkView: LabeledFieldView = new LabeledFieldView(
-    locale,
+    editor.locale,
     () =>
-      new ContentLinkView(locale, linkUI, {
+      new ContentLinkView(editor, {
         renderTypeIcon: true,
         renderCancelButton: true,
       })

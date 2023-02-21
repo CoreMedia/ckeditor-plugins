@@ -4,15 +4,14 @@ import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtensio
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
 import Link from "@ckeditor/ckeditor5-link/src/link";
-import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
-import { addClassToTemplate, createDecoratorHook } from "../utils";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
+import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
+import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
+import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
@@ -32,6 +31,7 @@ export default class ContentLinks extends Plugin {
 
   #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
   #serviceRegisteredSubscription: Subscription | undefined = undefined;
+  #initialized = false;
 
   /**
    * Closes the contextual balloon whenever a new active entity is set.
@@ -74,11 +74,23 @@ export default class ContentLinks extends Plugin {
 
   init(): void {
     const editor = this.editor;
-    const linkCommand = editor.commands.get("link") as LinkCommand;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-    parseLinkBalloonConfig(editor.config);
+
+    const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
+    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
+      if (visibleView === linkUI.actionsView && !this.#initialized) {
+        this.onVisibleViewChanged(linkUI);
+        this.#initialized = true;
+      }
+    });
+  }
+
+  onVisibleViewChanged(linkUI: LinkUI): void {
+    const { editor } = linkUI;
+    const linkCommand = editor.commands.get("link") as LinkCommand;
     removeInitialMouseDownListener(linkUI);
     addMouseEventListenerToHideDialog(linkUI);
+    parseLinkBalloonConfig(editor.config);
 
     const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
       if (services.length === 0) {
@@ -93,13 +105,10 @@ export default class ContentLinks extends Plugin {
       const clipboardService = services[0];
       this.#listenForActiveEntityChanges(clipboardService);
     };
-
     this.#serviceRegisteredSubscription = serviceAgent
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
 
-    this.#extendFormView(linkUI);
-    ContentLinks.#extendActionsView(linkUI);
     createDecoratorHook(
       linkUI,
       "_hideUI",
@@ -114,37 +123,5 @@ export default class ContentLinks extends Plugin {
     );
     // registers the openInTab command for content links, used to open a content when clicking the content link
     editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
-  }
-
-  #extendFormView(linkUI: LinkUI): void {
-    const { formView } = linkUI;
-
-    const t = this.editor.locale.t;
-    formView.urlInputView.set({
-      label: t("Link"),
-      class: ["cm-ck-external-link-field"],
-    });
-    formView.urlInputView.fieldView.set({
-      placeholder: t("Enter url or drag and drop content onto this area."),
-    });
-
-    ContentLinks.#customizeFormView(formView);
-  }
-
-  static #extendActionsView(linkUI: LinkUI): void {
-    ContentLinks.#customizeActionsView(linkUI.actionsView);
-  }
-
-  static #customizeActionsView(actionsView: LinkActionsView): void {
-    const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
-    const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
-    addClassToTemplate(actionsView, [CM_FORM_VIEW_CLS]);
-    addClassToTemplate(actionsView.previewButtonView, [CM_PREVIEW_BUTTON_VIEW_CLS]);
-  }
-
-  static #customizeFormView(formView: LinkFormView): void {
-    const CM_LINK_FORM_CLS = "cm-ck-link-form";
-    const CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
-    addClassToTemplate(formView, [CM_LINK_FORM_CLS, CM_FORM_VIEW_CLS]);
   }
 }

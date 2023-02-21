@@ -252,10 +252,8 @@ describe("Paste Button", () => {
     await page.waitForSelector(toolbarItemsLocator);
     const inputElement = page.locator(inputElementSelector);
     await inputElement.dblclick();
-    const allButtons = page.locator(toolbarItemsLocator).locator("button");
-    expect(await allButtons.count()).toBe(67);
-    const pasteButton = allButtons.nth(56);
-    await expect(pasteButton).toBeEnabled();
-    await pasteButton.click();
+    const pasteContentButton = page.locator(toolbarItemsLocator).locator(".paste-content-button");
+    await expect(pasteContentButton).toBeEnabled();
+    await pasteContentButton.click();
   }
 });

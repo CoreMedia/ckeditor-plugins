@@ -1,4 +1,3 @@
-import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
@@ -10,8 +9,8 @@ import {
 import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import CoreMediaIconView from "./CoreMediaIconView";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import CancelButtonView from "./CancelButtonView";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 /**
  * A ContentView that renders a custom template, containing of 2 different components.
@@ -27,6 +26,13 @@ export default class ContentLinkView extends ButtonView {
    */
   #acceptSubscriptions = true;
 
+  /**
+   * The editor
+   *
+   * @private
+   */
+  #editor: Editor;
+
   #contentSubscription: Subscription | undefined = undefined;
   readonly #typeIcon: CoreMediaIconView | undefined = undefined;
   readonly #statusIcon: CoreMediaIconView | undefined = undefined;
@@ -36,18 +42,18 @@ export default class ContentLinkView extends ButtonView {
   declare contentName: string | undefined;
 
   constructor(
-    locale: Locale,
-    linkUI: LinkUI,
+    editor: Editor,
     renderOptions?: {
       renderTypeIcon?: boolean;
       renderStatusIcon?: boolean;
       renderCancelButton?: boolean;
     }
   ) {
-    super(locale);
+    super(editor.locale);
 
     const bind = this.bindTemplate;
     this.renderOptions = renderOptions;
+    this.#editor = editor;
 
     /*
      * The value of the content uri path.
