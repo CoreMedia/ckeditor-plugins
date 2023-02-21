@@ -17,6 +17,7 @@ import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
 import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
+import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -74,17 +75,28 @@ export const preventUpcastImageSrc =
  *
  * @param editor - the editor instance
  * @param modelElementName - the element name to convert
+ * @param logger - the logger
  */
 export const editingDowncastXlinkHref =
-  (editor: Editor, modelElementName: string): DowncastConversionHelperFunction =>
+  (editor: Editor, modelElementName: string, logger: Logger): DowncastConversionHelperFunction =>
   (dispatcher: DowncastDispatcher) => {
-    dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data): void => {
+    dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
+      if (!data.attributeNewValue) {
+        // There was no xlink-href set for this image, therefore we can skip applying
+        // the loading spinner and resolving the image src
+        return;
+      }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      onXlinkHrefEditingDowncast(editor, eventInfo, data);
+      onXlinkHrefEditingDowncast(editor, eventInfo, data, logger);
     });
   };
 
-const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: DowncastEventData): void => {
+const onXlinkHrefEditingDowncast = (
+  editor: Editor,
+  eventInfo: EventInfo,
+  data: DowncastEventData,
+  logger: Logger
+): void => {
   const spinnerPreviewAttributes = createSpinnerImagePreviewAttributes(editor);
   updateImagePreviewAttributes(editor, data.item, spinnerPreviewAttributes, true);
 
@@ -94,9 +106,18 @@ const onXlinkHrefEditingDowncast = (editor: Editor, eventInfo: EventInfo, data: 
     throw new Error(`Unexpected type ${typeof xlinkHref} of attribute xlink-href (value: ${xlinkHref}).`);
   }
 
-  const uriPath: UriPath = toUriPath(xlinkHref);
-  const property: string = toProperty(xlinkHref);
+  let uriPath: UriPath;
+  try {
+    uriPath = toUriPath(xlinkHref);
+  } catch (e) {
+    // toUriPath() might throw an exception, but an unresolvable
+    // uriPath should not result in an error, which would break the editor.
+    // Therefore: Return early. An endless loading spinner will be displayed as a result.
+    logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref);
+    return;
+  }
 
+  const property: string = toProperty(xlinkHref);
   void serviceAgent
     .fetchService(createBlobDisplayServiceDescriptor())
     .then((blobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
