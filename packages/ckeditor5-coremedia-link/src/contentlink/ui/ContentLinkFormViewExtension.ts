@@ -58,14 +58,14 @@ class ContentLinkFormViewExtension extends Plugin {
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView === linkUI.formView && !this.#initialized) {
+      if (visibleView !== null && visibleView === linkUI.formView && !this.#initialized) {
         this.initializeFormView(linkUI);
         this.#initialized = true;
       }
     });
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView === linkUI.formView) {
+      if (visibleView !== null && visibleView === linkUI.formView) {
         this.onFormViewGetsActive(linkUI);
       }
     });
@@ -208,7 +208,7 @@ class ContentLinkFormViewExtension extends Plugin {
     contentLinkView.on("change:contentName", () => {
       if (!this.editor.isReadOnly) {
         const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
-        if (contextualBalloon.visibleView === linkUI.formView) {
+        if (contextualBalloon.visibleView !== null && contextualBalloon.visibleView === linkUI.formView) {
           contextualBalloon.updatePosition();
         }
       }

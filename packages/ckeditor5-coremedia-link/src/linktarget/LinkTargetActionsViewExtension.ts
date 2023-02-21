@@ -42,7 +42,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView === linkUI.actionsView && !this.#initialized) {
+      if (visibleView !== null && visibleView === linkUI.actionsView && !this.#initialized) {
         this.#extendView(linkUI);
         this.#initialized = true;
       }
