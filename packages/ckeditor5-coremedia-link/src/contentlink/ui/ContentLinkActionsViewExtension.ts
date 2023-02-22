@@ -121,7 +121,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     contentLinkView.on("change:contentName", () => {
       if (!this.editor.isReadOnly) {
         const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
-        if (contextualBalloon.visibleView !== null && contextualBalloon.visibleView === linkUI.actionsView) {
+        if (contextualBalloon.visibleView && contextualBalloon.visibleView === linkUI.actionsView) {
           contextualBalloon.updatePosition();
         }
       }

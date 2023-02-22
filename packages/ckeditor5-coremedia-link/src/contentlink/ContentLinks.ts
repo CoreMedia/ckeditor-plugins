@@ -78,7 +78,7 @@ export default class ContentLinks extends Plugin {
 
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView !== null && visibleView === linkUI.actionsView && !this.#initialized) {
+      if (visibleView && visibleView === linkUI.actionsView && !this.#initialized) {
         this.onVisibleViewChanged(linkUI);
         this.#initialized = true;
       }
