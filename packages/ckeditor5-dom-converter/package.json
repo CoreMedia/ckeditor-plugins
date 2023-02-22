@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dom-converter",
-  "version": "14.0.2-rc.0",
+  "version": "14.0.2",
   "description": "DOM Converter Utilities",
   "keywords": [
     "coremedia",
@@ -30,8 +30,8 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-dom-support": "14.0.2-rc.0",
-    "@coremedia/ckeditor5-logging": "14.0.2-rc.0"
+    "@coremedia/ckeditor5-dom-support": "^14.0.2",
+    "@coremedia/ckeditor5-logging": "^14.0.2"
   },
   "scripts": {
     "clean": "rimraf ./dist",
