@@ -37,14 +37,14 @@ class ContentLinkActionsViewExtension extends Plugin {
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView === visibleView && !this.#initialized) {
+      if (linkUI.actionsView && linkUI.actionsView === visibleView && !this.#initialized) {
         this.#initialize(linkUI);
         this.#initialized = true;
       }
     });
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView === visibleView) {
+      if (linkUI.actionsView && linkUI.actionsView === visibleView) {
         ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(linkUI.actionsView);
       }
     });
