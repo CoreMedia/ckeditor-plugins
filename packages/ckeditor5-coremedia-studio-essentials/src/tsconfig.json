@@ -8,7 +8,8 @@
     "declarationMap": true,
     "paths": {
       "@coremedia/ckeditor5-coremedia-richtext/*": ["../../ckeditor5-coremedia-richtext/src/*"],
-      "@coremedia/ckeditor5-coremedia-richtext-support/*": ["../../ckeditor5-coremedia-richtext-support/src/*"]
+      "@coremedia/ckeditor5-coremedia-richtext-support/*": ["../../ckeditor5-coremedia-richtext-support/src/*"],
+      "@coremedia/ckeditor5-coremedia-context-aware/*": ["../../ckeditor5-coremedia-context-aware/src/*"]
     }
   },
   "references": [
@@ -17,6 +18,9 @@
     },
     {
       "path": "../../ckeditor5-coremedia-richtext-support/src"
+    },
+    {
+      "path": "../../ckeditor5-coremedia-context-aware/src"
     }
   ],
   "extends": "../../../tsconfig.json"

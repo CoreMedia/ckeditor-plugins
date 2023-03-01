@@ -325,6 +325,15 @@ ClassicEditor.create(sourceElement, {
       });
     },
   },
+  ["coremedia:contextualize"]: {
+    contextAwareSave(currentEditor: ClassicEditor) {
+      console.log("Save triggered...");
+      const start = performance.now();
+      return saveData(currentEditor, "autosave").then(() => {
+        console.log(`Saved data within ${performance.now() - start} ms.`);
+      });
+    },
+  },
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     // Defaults to: Loose
     strictness: Strictness.STRICT,

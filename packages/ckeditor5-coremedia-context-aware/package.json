@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-studio-essentials",
+  "name": "@coremedia/ckeditor5-coremedia-context-aware",
   "version": "14.0.2",
   "description": "CoreMedia Studio: Aggregator Plugin for essential plugins",
   "keywords": [
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.19.0",
+    "@ckeditor/ckeditor5-autosave": "^36.0.1",
     "@ckeditor/ckeditor5-core": "^36.0.1",
     "@ckeditor/ckeditor5-engine": "^36.0.1",
     "@ckeditor/ckeditor5-link": "^36.0.1",
@@ -39,6 +40,7 @@
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
     "@types/ckeditor__ckeditor5-engine": "^32.0.11",
     "@types/ckeditor__ckeditor5-link": "^32.0.4",
+    "@types/ckeditor__ckeditor5-autosave": "^32.0.0",
     "@types/ckeditor__ckeditor5-typing": "^32.0.1",
     "@types/ckeditor__ckeditor5-ui": "^32.0.2",
     "@types/ckeditor__ckeditor5-utils": "^28.0.14",
@@ -50,6 +52,7 @@
     "typescript": "^4.8.2"
   },
   "peerDependencies": {
+    "@ckeditor/ckeditor5-autosave": "^36.0.1",
     "@ckeditor/ckeditor5-core": "^36.0.1",
     "@ckeditor/ckeditor5-engine": "^36.0.1",
     "@ckeditor/ckeditor5-typing": "^36.0.1",
@@ -57,8 +60,8 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
+    "@coremedia/ckeditor5-logging": "^14.0.2",
     "@coremedia/ckeditor5-coremedia-richtext": "^14.0.2",
-    "@coremedia/ckeditor5-coremedia-richtext-support": "^14.0.2",
-    "@coremedia/ckeditor5-coremedia-context-aware": "^14.0.2"
+    "@coremedia/ckeditor5-coremedia-richtext-support": "^14.0.2"
   }
 }
