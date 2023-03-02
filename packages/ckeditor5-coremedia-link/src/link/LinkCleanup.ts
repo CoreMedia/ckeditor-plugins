@@ -6,6 +6,7 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
@@ -45,6 +46,8 @@ interface LinkCleanupRegistry {
  */
 class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly pluginName: string = "LinkCleanup";
+  static readonly #logger = LoggerProvider.getLogger(LinkCleanup.pluginName);
+  static readonly #unrecommendedAttributeNames: string[] = [];
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
@@ -74,7 +77,19 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     this.#watchedAttributes.clear();
   }
 
+  static #warnOnUnrecommendedAttributeName(modelAttributeName: string): void {
+    if (!modelAttributeName.startsWith("link") && !this.#unrecommendedAttributeNames.includes(modelAttributeName)) {
+      const logger = LinkCleanup.#logger;
+      // See getLinkAttributesAllowedOnText in link editing.
+      logger.warn(
+        `Registering "${modelAttributeName}" for cleanup: Not starting with recommended 'link' prefix to benefit from additional cleanup options.`
+      );
+      this.#unrecommendedAttributeNames.push(modelAttributeName);
+    }
+  }
+
   registerDependentAttribute(modelAttributeName: string): void {
+    LinkCleanup.#warnOnUnrecommendedAttributeName(modelAttributeName);
     this.#watchedAttributes.add(modelAttributeName);
     this.#registerForTwoStepCaretMovement(modelAttributeName);
   }
