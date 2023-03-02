@@ -6,6 +6,7 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
@@ -47,7 +48,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
-  static readonly requires = [LinkUI];
+  static readonly requires = [LinkUI, TwoStepCaretMovement];
 
   init(): void {
     const initInformation = reportInitStart(this);
@@ -61,6 +62,13 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     reportInitEnd(initInformation);
   }
 
+  #registerForTwoStepCaretMovement(modelAttributeName: string): void {
+    const { editor } = this;
+    const { plugins } = editor;
+    const twoStepCaretMovementPlugin = plugins.get(TwoStepCaretMovement);
+    twoStepCaretMovementPlugin.registerAttribute(modelAttributeName);
+  }
+
   destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
@@ -68,6 +76,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
 
   registerDependentAttribute(modelAttributeName: string): void {
     this.#watchedAttributes.add(modelAttributeName);
+    this.#registerForTwoStepCaretMovement(modelAttributeName);
   }
 
   unregisterDependentAttribute(modelAttributeName: string): boolean {
