@@ -5,29 +5,8 @@ import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeelement";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-
-/**
- * To benefit from CKEditor's Link Feature integration and its
- * handling of cursor position, all model names of related
- * link attributes should start with `link`. This type helps to
- * apply to the recommended name pattern.
- */
-export type LinkAttributeName = `link${string}`;
-
-/**
- * Configuration to register attribute bound to link.
- */
-export interface RegisterAttributeConfig {
-  /**
-   * Model name. Recommended to be prefixed with `link`.
-   */
-  model: LinkAttributeName;
-  /**
-   * Name of attribute in view (assumed to be identical in editing and
-   * data view.
-   */
-  view: string;
-}
+import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
+import { parseAttributesConfig } from "./LinkAttributesConfig";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
@@ -55,6 +34,19 @@ export class LinkAttributes extends Plugin {
   static readonly pluginName: string = "LinkAttributes";
 
   static readonly requires = [LinkCleanup];
+
+  init(): void {
+    const { editor } = this;
+    const { config } = editor;
+
+    // Provide opportunity to register not yet explicitly handled
+    // link attributes as to belong to the given link.
+    // Typically, these are attributes only registered via GHS/GRS.
+    const { attributes } = parseAttributesConfig(config);
+    for (const attribute of attributes) {
+      this.registerAttribute(attribute);
+    }
+  }
 
   registerAttribute(config: RegisterAttributeConfig): void {
     const { editor } = this;
@@ -107,18 +99,18 @@ type DowncastFunction = (value: string, api: DowncastConversionApi) => Attribute
  */
 const provideDowncastFunction =
   (view: string): DowncastFunction =>
-  (modelAttributeValue: string, { writer }: DowncastConversionApi): AttributeElement => {
-    const element = writer.createAttributeElement(
-      "a",
-      {
-        [view]: modelAttributeValue,
-      },
-      { priority: LINK_ATTRIBUTE_PRIORITY }
-    );
-    // Signal Link-Plugin, that this is a link, too.
-    writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);
-    return element;
-  };
+    (modelAttributeValue: string, { writer }: DowncastConversionApi): AttributeElement => {
+      const element = writer.createAttributeElement(
+        "a",
+        {
+          [view]: modelAttributeValue,
+        },
+        { priority: LINK_ATTRIBUTE_PRIORITY }
+      );
+      // Signal Link-Plugin, that this is a link, too.
+      writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);
+      return element;
+    };
 
 /**
  * Retrieve an instance of LinkAttributes-Plugin for registering attributes
