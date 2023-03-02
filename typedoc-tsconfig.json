@@ -13,6 +13,9 @@
       "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
         "./packages/ckeditor5-coremedia-content-clipboard/src/*"
       ],
+      "@coremedia/ckeditor5-coremedia-context-aware/*": [
+        "./packages/ckeditor5-coremedia-context-aware/src/*"
+      ],
       "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
         "./packages/ckeditor5-coremedia-example-data/src/*"
       ],
