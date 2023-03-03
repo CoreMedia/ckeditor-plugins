@@ -33,5 +33,10 @@
 export * as Constants from "./Constants";
 export * as FocusUtils from "./FocusUtils";
 
+export * from "./LinkAttributes";
+export * from "./LinkAttributesConfig";
+
 export * from "./LinkCleanup";
 export { default as LinkCleanup } from "./LinkCleanup";
+
+export * from "./RegisterAttributeConfig";
