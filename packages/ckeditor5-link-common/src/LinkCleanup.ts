@@ -46,7 +46,6 @@ interface LinkCleanupRegistry {
 class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly pluginName: string = "LinkCleanup";
   static readonly #logger = LoggerProvider.getLogger(LinkCleanup.pluginName);
-  static readonly #unrecommendedAttributeNames: string[] = [];
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
   static readonly requires = [];
@@ -75,19 +74,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     this.#watchedAttributes.clear();
   }
 
-  static #warnOnUnrecommendedAttributeName(modelAttributeName: string): void {
-    if (!modelAttributeName.startsWith("link") && !this.#unrecommendedAttributeNames.includes(modelAttributeName)) {
-      const logger = LinkCleanup.#logger;
-      // See getLinkAttributesAllowedOnText in link editing.
-      logger.warn(
-        `Registering "${modelAttributeName}" for cleanup: Not starting with recommended 'link' prefix to benefit from additional cleanup options.`
-      );
-      this.#unrecommendedAttributeNames.push(modelAttributeName);
-    }
-  }
-
   registerDependentAttribute(modelAttributeName: string): void {
-    LinkCleanup.#warnOnUnrecommendedAttributeName(modelAttributeName);
     this.#watchedAttributes.add(modelAttributeName);
   }
 
