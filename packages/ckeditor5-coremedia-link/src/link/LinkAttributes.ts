@@ -23,11 +23,62 @@ const LINK_CUSTOM_PROPERTY = "link";
 /**
  * This generic plugin lets you register attributes, that are meant to
  * be bound to links only. It will take care to register corresponding
- * up- and downcasts, as well as listening to selection changes, similar
+ * up- and downcast, as well as listening to selection changes, similar
  * as CKEditor's link feature does.
  *
- * To benefit from CKEditor's link feature, it is highly recommended, that
+ * To benefit from CKEditor's link feature, it is highly recommended that
  * all model attributes start with `link` in their names.
+ *
+ * **Configuration API**
+ *
+ * To register attributes to handle as being part of links, you may call
+ * `registerAttribute`. To ease this process, a utility method
+ * `getLinkAttributes` exists, that may be invoked like this:
+ *
+ * ```typescript
+ * getLinkAttributes(editor)?.registerAttribute({
+ *   model: "linkCustomAttribute",
+ *   view: "data-custom-attribute",
+ * });
+ * ```
+ *
+ * **CKEditor Configuration**
+ *
+ * As an alternative to configuring these attributes via API, you may also
+ * define corresponding attributes as part of the CKEditor Link Feature
+ * configuration – with an extended section `attributes`:
+ *
+ * ```typescript
+ * const linkAttributesConfig: LinkAttributesConfig = {
+ *   attributes: [
+ *     { view: "title", model: "linkTitle" },
+ *     { view: "data-xlink-actuate", model: "linkActuate" },
+ *   ],
+ * };
+ *
+ * ClassicEditor.create(sourceElement, {
+ *   plugins: [
+ *     LinkAttributes,
+ *     Link,
+ *     // ...
+ *   ],
+ *   link: {
+ *     defaultProtocol: "https://",
+ *     ...linkAttributesConfig,
+ *   },
+ * };
+ * ```
+ *
+ * Declaring this as a constant is recommended to get IDE support regarding
+ * the available fields and valid values. You will note, that the type of
+ * the field `model` requires, that the value starts with `link`. This
+ * automatically triggers some behavior in the Link Plugin.
+ *
+ * Configuration as part of the CKEditor 5 Configuration section is highly
+ * recommended, when it is about attributes that are not yet handled by any
+ * dedicated plugin, that provides editing features for that attribute. If
+ * a plugin gets added, that handles the corresponding attribute, the
+ * configuration needs to be adapted accordingly.
  */
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
@@ -48,6 +99,17 @@ export class LinkAttributes extends Plugin {
     }
   }
 
+  /**
+   * Register an attribute as being bound to links.
+   *
+   * This method automatically registers the corresponding up- and downcast
+   * configuration and extends the model schema.
+   *
+   * It also registers the attribute for clean-up, when a link gets
+   * removed (via `LinkCleanup` plugin).
+   *
+   * @param config - configuration of the link attribute
+   */
   registerAttribute(config: RegisterAttributeConfig): void {
     const { editor } = this;
     const { model } = editor;
@@ -99,18 +161,18 @@ type DowncastFunction = (value: string, api: DowncastConversionApi) => Attribute
  */
 const provideDowncastFunction =
   (view: string): DowncastFunction =>
-    (modelAttributeValue: string, { writer }: DowncastConversionApi): AttributeElement => {
-      const element = writer.createAttributeElement(
-        "a",
-        {
-          [view]: modelAttributeValue,
-        },
-        { priority: LINK_ATTRIBUTE_PRIORITY }
-      );
-      // Signal Link-Plugin, that this is a link, too.
-      writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);
-      return element;
-    };
+  (modelAttributeValue: string, { writer }: DowncastConversionApi): AttributeElement => {
+    const element = writer.createAttributeElement(
+      "a",
+      {
+        [view]: modelAttributeValue,
+      },
+      { priority: LINK_ATTRIBUTE_PRIORITY }
+    );
+    // Signal Link-Plugin, that this is a link, too.
+    writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);
+    return element;
+  };
 
 /**
  * Retrieve an instance of LinkAttributes-Plugin for registering attributes
