@@ -79,6 +79,11 @@ const LINK_CUSTOM_PROPERTY = "link";
  * dedicated plugin, that provides editing features for that attribute. If
  * a plugin gets added, that handles the corresponding attribute, the
  * configuration needs to be adapted accordingly.
+ *
+ * While this plugin does not depend on `LinkEditing` explicitly, it is
+ * best used with `LinkEditing` to be available. Otherwise, some clean-up
+ * tasks we implicitly rely on (like for all model attributes prefixed
+ * with `link`) won't work.
  */
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
