@@ -1,4 +1,4 @@
-# CKEditor 5 Core Common
+# CKEditor 5 Link Common
 
-This package contains some assistive tooling around `@ckeditor/ckeditor5-core`
-API to ease implementation of plugins.
+This package contains some assistive tooling around `@ckeditor/ckeditor5-link`
+API to ease integration with the link feature.
