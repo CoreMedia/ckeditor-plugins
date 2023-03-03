@@ -7,11 +7,15 @@ import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeeleme
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
+import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
  * It is important that this is the same priority as for href
- * attributes as otherwise `<a>` elements won't merge when transformed
+ * attributes as otherwise the `<a>` elements won't merge when transformed
  * to data.
  */
 const LINK_ATTRIBUTE_PRIORITY = 5;
@@ -70,7 +74,7 @@ const LINK_CUSTOM_PROPERTY = "link";
  * ```
  *
  * Declaring this as a constant is recommended to get IDE support regarding
- * the available fields and valid values. You will note, that the type of
+ * the available fields and valid values. You will note that the type of
  * the field `model` requires, that the value starts with `link`. This
  * automatically triggers some behavior in the Link Plugin.
  *
@@ -88,12 +92,24 @@ const LINK_CUSTOM_PROPERTY = "link";
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
   static readonly pluginName: string = "LinkAttributes";
+  static readonly #logger = LoggerProvider.getLogger(LinkAttributes.pluginName);
 
-  static readonly requires = [LinkCleanup];
+  static readonly requires = [LinkCleanup, TwoStepCaretMovement];
 
   init(): void {
+    const initInformation = reportInitStart(this);
+
     const { editor } = this;
     const { config } = editor;
+
+    if (!editor.plugins.has(LinkEditing)) {
+      // This plugin will continue to work.
+      // It is just that other means should provide some clean-up actions.
+      const logger = LinkAttributes.#logger;
+      logger.info(
+        "LinkEditing unavailable. Registered link attributes may miss, for example, some expected cleanup on editing actions."
+      );
+    }
 
     // Provide opportunity to register not yet explicitly handled
     // link attributes as to belong to the given link.
@@ -102,6 +118,8 @@ export class LinkAttributes extends Plugin {
     for (const attribute of attributes) {
       this.registerAttribute(attribute);
     }
+
+    reportInitEnd(initInformation);
   }
 
   /**
@@ -130,7 +148,7 @@ export class LinkAttributes extends Plugin {
     });
 
     // Upcast: Input (Data & Editing) -> Model
-    // Take the view target-attribute of a-element and transform it to
+    // Take the view target-attribute of the <a>-element and transform it to
     // linkTarget attribute in the model.
     editor.conversion.for("upcast").elementToAttribute({
       view: {
@@ -147,6 +165,14 @@ export class LinkAttributes extends Plugin {
     });
 
     getLinkCleanup(editor)?.registerDependentAttribute(modelName);
+    this.#registerForTwoStepCaretMovement(modelName);
+  }
+
+  #registerForTwoStepCaretMovement(modelAttributeName: string): void {
+    const { editor } = this;
+    const { plugins } = editor;
+    const twoStepCaretMovementPlugin = plugins.get(TwoStepCaretMovement);
+    twoStepCaretMovementPlugin.registerAttribute(modelAttributeName);
   }
 }
 

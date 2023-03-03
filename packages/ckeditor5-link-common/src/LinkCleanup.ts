@@ -2,7 +2,6 @@
 
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
@@ -10,6 +9,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -50,15 +50,23 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly #unrecommendedAttributeNames: string[] = [];
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
-  // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
-  static readonly requires = [LinkUI, TwoStepCaretMovement];
+  static readonly requires = [];
 
   init(): void {
     const initInformation = reportInitStart(this);
 
-    const editor = this.editor;
-    const model = editor.model;
-    const document = model.document;
+    const { editor } = this;
+    const { model } = editor;
+    const { document } = model;
+
+    if (!editor.plugins.has(LinkEditing)) {
+      // Not having LinkEditing available, there is nothing to do for
+      // this plugin.
+      //
+      // We are implicitly bound to the UnlinkCommand defined by the
+      // LinkEditing plugin.
+      return;
+    }
 
     document.registerPostFixer(this.#fixOrphanedAttributes);
 
