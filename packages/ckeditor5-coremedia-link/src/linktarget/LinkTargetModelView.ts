@@ -4,7 +4,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./command/LinkTargetCommand";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { getLinkAttributes, LinkAttributes } from "../link/LinkAttributes";
+import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented

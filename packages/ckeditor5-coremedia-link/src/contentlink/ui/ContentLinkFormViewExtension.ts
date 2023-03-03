@@ -25,7 +25,7 @@ import {
   isLinkable,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
-import { handleFocusManagement, LinkViewWithFocusables } from "../../link/FocusUtils";
+import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";

@@ -13,7 +13,7 @@ import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
 import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { handleFocusManagement, LinkViewWithFocusables } from "../link/FocusUtils";
+import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 

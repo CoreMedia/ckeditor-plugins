@@ -46,6 +46,9 @@
       "@coremedia/ckeditor5-dom-support/*": [
         "./packages/ckeditor5-dom-support/src/*"
       ],
+      "@coremedia/ckeditor5-link-common/*": [
+        "./packages/ckeditor5-core-common/src/*"
+      ],
       "@coremedia/ckeditor5-logging/*": [
         "./packages/ckeditor5-logging/src/*"
       ],

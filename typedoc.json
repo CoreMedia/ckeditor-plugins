@@ -17,6 +17,7 @@
     "./packages/ckeditor5-dom-converter/src/index-doc.ts",
     "./packages/ckeditor5-dom-support/src/index-doc.ts",
     "./packages/ckeditor5-font-mapper/src/index-doc.ts",
+    "./packages/ckeditor5-link-common/src/index-doc.ts",
     "./packages/ckeditor5-logging/src/index-doc.ts"
   ],
   "excludeExternals": true,
