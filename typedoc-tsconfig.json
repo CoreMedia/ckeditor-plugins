@@ -1,20 +1,20 @@
 {
   "compilerOptions": {
     "paths": {
+      "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
+        "./packages/ckeditor5-coremedia-example-data/src/*"
+      ],
       "@coremedia/ckeditor5-common/*": [
         "./packages/ckeditor5-common/src/*"
       ],
       "@coremedia/ckeditor5-core-common/*": [
         "./packages/ckeditor5-core-common/src/*"
       ],
-      "@coremedia/ckeditor5-coremedia-content/*": [
-        "./packages/ckeditor5-coremedia-content/src/*"
-      ],
       "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
         "./packages/ckeditor5-coremedia-content-clipboard/src/*"
       ],
-      "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
-        "./packages/ckeditor5-coremedia-example-data/src/*"
+      "@coremedia/ckeditor5-coremedia-content/*": [
+        "./packages/ckeditor5-coremedia-content/src/*"
       ],
       "@coremedia/ckeditor5-coremedia-images/*": [
         "./packages/ckeditor5-coremedia-images/src/*"
@@ -22,17 +22,17 @@
       "@coremedia/ckeditor5-coremedia-link/*": [
         "./packages/ckeditor5-coremedia-link/src/*"
       ],
-      "@coremedia/ckeditor5-coremedia-richtext/*": [
-        "./packages/ckeditor5-coremedia-richtext/src/*"
-      ],
       "@coremedia/ckeditor5-coremedia-richtext-support/*": [
         "./packages/ckeditor5-coremedia-richtext-support/src/*"
       ],
-      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
-        "./packages/ckeditor5-coremedia-studio-integration/src/*"
+      "@coremedia/ckeditor5-coremedia-richtext/*": [
+        "./packages/ckeditor5-coremedia-richtext/src/*"
       ],
       "@coremedia/ckeditor5-coremedia-studio-integration-mock/*": [
         "./packages/ckeditor5-coremedia-studio-integration-mock/src/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
+        "./packages/ckeditor5-coremedia-studio-integration/src/*"
       ],
       "@coremedia/ckeditor5-dataprocessor-support/*": [
         "./packages/ckeditor5-dataprocessor-support/src/*"
@@ -40,20 +40,17 @@
       "@coremedia/ckeditor5-dom-converter/*": [
         "./packages/ckeditor5-dom-converter/src/*"
       ],
-      "@coremedia/ckeditor5-dom-converter/*": [
-        "./packages/ckeditor5-dom-converter/src/*"
-      ],
       "@coremedia/ckeditor5-dom-support/*": [
         "./packages/ckeditor5-dom-support/src/*"
       ],
+      "@coremedia/ckeditor5-font-mapper/*": [
+        "./packages/ckeditor5-font-mapper/src/*"
+      ],
       "@coremedia/ckeditor5-link-common/*": [
-        "./packages/ckeditor5-core-common/src/*"
+        "./packages/ckeditor5-link-common/src/*"
       ],
       "@coremedia/ckeditor5-logging/*": [
         "./packages/ckeditor5-logging/src/*"
-      ],
-      "@coremedia/ckeditor5-font-mapper/*": [
-        "./packages/ckeditor5-font-mapper/src/*"
       ]
     }
   },
