@@ -60,12 +60,10 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     const { document } = model;
 
     if (!editor.plugins.has(LinkEditing)) {
-      // Not having LinkEditing available, there is nothing to do for
-      // this plugin.
-      //
       // We are implicitly bound to the UnlinkCommand defined by the
       // LinkEditing plugin.
-      return;
+      const logger = LinkCleanup.#logger;
+      logger.info("LinkEditing unavailable. Registered link attributes may not be handled as possibly expected.");
     }
 
     document.registerPostFixer(this.#fixOrphanedAttributes);
