@@ -168,6 +168,12 @@ export class LinkAttributes extends Plugin {
     this.#registerForTwoStepCaretMovement(modelName);
   }
 
+  /**
+   * Registers the attribute to be automatically removed when exiting the
+   * link "area" by a second cursor left or right click.
+   *
+   * @param modelAttributeName name of the attribute in model
+   */
   #registerForTwoStepCaretMovement(modelAttributeName: string): void {
     const { editor } = this;
     const { plugins } = editor;
