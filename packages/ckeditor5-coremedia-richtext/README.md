@@ -656,6 +656,66 @@ attribute.
 Thus, such a mapping has to be carefully designed and its side effects have to
 be evaluated and rated if they apply to you or not.
 
+## Integrations
+
+### CKEditor 5: Link Feature
+
+This CoreMedia Rich Text Plugin integrates with the CKEditor 5 Link Feature,
+if available. As part of the integration, it registers the fixed attribute
+`xlink:type` (always of value `simple`) as known attribute for links. Thus,
+the attribute is also removed, when removing a link.
+
+Note that any link attributes not handled explicitly by a given plugin,
+should be registered also for clean-up and other editing interactions.
+
+Data-processing provides the following attributes in data view:
+
+| Rich Text       | Data View            | Comment                                                   |
+|-----------------|----------------------|-----------------------------------------------------------|
+| `xlink:actuate` | `data-xlink-actuate` | Unhandled. See below for recommended actions to take.     |
+| `xlink:href`    | `href`               | Attribute automatically handled by Link Plugin.           |
+| `xlink:role`    | `target`<sup>*</sup> | Combined with `xlink:show`. Requires `LinkTarget` plugin. |
+| `xlink:show`    | `target`<sup>*</sup> | Combined with `xlink:role`. Requires `LinkTarget` plugin. |
+| `xlink:title`   | `title`              | Unhandled. See below for recommended actions to take.     |
+| `xlink:type`    | `data-xlink-type`    | Fixed attribute already registered: Nothing to do         |
+
+Unless you have enabled plugins to handle the attributes, you should define them
+manually as belonging to a link. As, for example, there is not yet a plugin
+available to handle `title` and `data-xlink-actuate`, you should extend your
+configuration like this:
+
+```typescript
+import Link from "@ckeditor/ckeditor5-link/src/link";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
+
+const linkAttributesConfig: LinkAttributesConfig = {
+  attributes: [
+    { view: "title", model: "linkTitle" },
+    { view: "data-xlink-actuate", model: "linkActuate" },
+  ],
+};
+
+ClassicEditor.create(sourceElement, {
+  plugins: [
+    Link,
+    LinkAttributes,
+    /* ... */
+  ],
+  link: {
+    defaultProtocol: "https://",
+    ...linkAttributesConfig,
+    /* ... */
+  }
+});
+```
+
+If not doing so, you may experience, e.g., when removing a link, that
+orphaned attributes remain.
+
+Other possible symptoms are, that when moving the cursor to the end or to the
+beginning of a link and start typing, you may experience a link without `href`
+attribute but with these orphaned attributes being created.
+
 ## See Also
 
 * [GFMDataProcessor - CKEditor 5 API docs][gfmdataprocessor]

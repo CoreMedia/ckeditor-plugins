@@ -54,6 +54,7 @@
     "@coremedia/ckeditor5-dataprocessor-support": "^14.0.2",
     "@coremedia/ckeditor5-dom-converter": "^14.0.2",
     "@coremedia/ckeditor5-dom-support": "^14.0.2",
+    "@coremedia/ckeditor5-link-common": "^14.0.2",
     "@coremedia/ckeditor5-logging": "^14.0.2"
   }
 }

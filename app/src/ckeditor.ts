@@ -148,7 +148,6 @@ const linkAttributesConfig: LinkAttributesConfig = {
   attributes: [
     { view: "title", model: "linkTitle" },
     { view: "data-xlink-actuate", model: "linkActuate" },
-    { view: "data-xlink-type", model: "linkType" },
   ],
 };
 
