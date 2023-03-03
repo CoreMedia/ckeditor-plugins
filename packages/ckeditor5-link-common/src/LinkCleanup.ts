@@ -6,7 +6,6 @@ import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/mode
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
@@ -71,13 +70,6 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     reportInitEnd(initInformation);
   }
 
-  #registerForTwoStepCaretMovement(modelAttributeName: string): void {
-    const { editor } = this;
-    const { plugins } = editor;
-    const twoStepCaretMovementPlugin = plugins.get(TwoStepCaretMovement);
-    twoStepCaretMovementPlugin.registerAttribute(modelAttributeName);
-  }
-
   destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
@@ -97,7 +89,6 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   registerDependentAttribute(modelAttributeName: string): void {
     LinkCleanup.#warnOnUnrecommendedAttributeName(modelAttributeName);
     this.#watchedAttributes.add(modelAttributeName);
-    this.#registerForTwoStepCaretMovement(modelAttributeName);
   }
 
   unregisterDependentAttribute(modelAttributeName: string): boolean {
