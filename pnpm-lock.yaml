@@ -680,6 +680,7 @@ importers:
       '@coremedia/ckeditor5-dataprocessor-support': ^14.0.2
       '@coremedia/ckeditor5-dom-converter': ^14.0.2
       '@coremedia/ckeditor5-dom-support': ^14.0.2
+      '@coremedia/ckeditor5-link-common': ^14.0.2
       '@coremedia/ckeditor5-logging': ^14.0.2
       '@types/ckeditor__ckeditor5-core': ^33.0.3
       '@types/ckeditor__ckeditor5-engine': ^32.0.11
@@ -696,6 +697,7 @@ importers:
       '@coremedia/ckeditor5-dataprocessor-support': link:../ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter': link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support': link:../ckeditor5-dom-support
+      '@coremedia/ckeditor5-link-common': link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging': link:../ckeditor5-logging
     devDependencies:
       '@babel/cli': 7.18.10_@babel+core@7.19.0
