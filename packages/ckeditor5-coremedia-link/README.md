@@ -19,7 +19,7 @@ The plugins provided in `ckeditor5-link` extend the
   function to support ContentLinks in the **ContentClipboard** plugin.
 
 To ease integration into CKEditor's Link plugin, we also have [assistive
-tooling](src/link/README.md).
+tooling](../ckeditor5-link-common/src/README.md).
 
 ## Installation
 

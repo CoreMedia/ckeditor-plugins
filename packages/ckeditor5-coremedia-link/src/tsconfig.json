@@ -24,6 +24,9 @@
       ],
       "@coremedia/ckeditor5-coremedia-studio-integration/*": [
         "../../ckeditor5-coremedia-studio-integration/src/*"
+      ],
+      "@coremedia/ckeditor5-link-common/*": [
+        "../../ckeditor5-link-common/src/*"
       ]
     }
   },
@@ -45,6 +48,9 @@
     },
     {
       "path": "../../ckeditor5-coremedia-studio-integration/src"
+    },
+    {
+      "path": "../../ckeditor5-link-common/src"
     }
   ],
   "extends": "../../../tsconfig.json"

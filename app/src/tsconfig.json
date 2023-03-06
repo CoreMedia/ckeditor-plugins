@@ -41,6 +41,9 @@
       ],
       "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
         "../../packages/ckeditor5-coremedia-example-data/src/*"
+      ],
+      "@coremedia/ckeditor5-link-common/*": [
+        "../../packages/ckeditor5-link-common/src/*"
       ]
     }
   },
@@ -74,6 +77,9 @@
     },
     {
       "path": "../../packages/ckeditor5-font-mapper/src"
+    },
+    {
+      "path": "../../packages/ckeditor5-link-common/src"
     },
     {
       "path": "../../packages/ckeditor5-logging/src"

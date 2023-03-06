@@ -70,6 +70,8 @@ class CoreMediaRichText10Dtd {
     {
       name: "a",
       attributes: {
+        // href is the data-processed result of xlink:href
+        "href": true,
         // Data-Processed by merging xlink:show and xlink:role
         "target": true,
         // Data-processed from xlink:title

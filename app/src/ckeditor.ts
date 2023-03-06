@@ -64,6 +64,8 @@ import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-s
 import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/compatibility/v10/rules/ReplaceBy";
 import { getHashParam } from "./HashParams";
 import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
+import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/LinkAttributesConfig";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
 
 const {
   //@ts-expect-error We have no way to extend icon typing, yet.
@@ -133,6 +135,22 @@ const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
   },
 };
 
+/**
+ * Configuration that holds all link-related attributes, that are not
+ * covered yet by any plugin.
+ *
+ * Similar to GHS/GRS, they are just registered as being _valid_ **and**
+ * (this is important) register them to belong to a link element, which again
+ * ensures, that they are removed on remove-link, that cursor positioning
+ * handles them correctly, etc.
+ */
+const linkAttributesConfig: LinkAttributesConfig = {
+  attributes: [
+    { view: "title", model: "linkTitle" },
+    { view: "data-xlink-actuate", model: "linkActuate" },
+  ],
+};
+
 ClassicEditor.create(sourceElement, {
   licenseKey: "",
   placeholder: "Type your text here...",
@@ -156,6 +174,7 @@ ClassicEditor.create(sourceElement, {
     Italic,
     AutoLink,
     Link,
+    LinkAttributes,
     LinkImage,
     LinkTarget,
     CoreMediaStudioEssentials,
@@ -250,6 +269,7 @@ ClassicEditor.create(sourceElement, {
   },
   link: {
     defaultProtocol: "https://",
+    ...linkAttributesConfig,
     /*decorators: {
       hasTitle: {
         mode: "manual",

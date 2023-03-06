@@ -1,32 +1,24 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-link",
+  "name": "@coremedia/ckeditor5-link-common",
   "version": "14.0.2",
-  "description": "Support for Content Link, Link Target Specification",
+  "description": "Assistive Utilities for `@ckeditor/ckeditor5-link`.",
   "keywords": [
     "coremedia",
     "ckeditor",
     "ckeditor5",
-    "links"
+    "ckeditor5-core"
   ],
   "engines": {
     "node": "18",
     "pnpm": "^7.26"
   },
-  "license": "Apache-2.0",
-  "scripts": {
-    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
-    "clean": "rimraf ./dist",
-    "jest": "jest --passWithNoTests",
-    "jest:coverage": "jest --collect-coverage --passWithNoTests",
-    "npm-check-updates": "npm-check-updates --upgrade"
-  },
   "exports": {
     "./*": "./dist/*.js"
   },
+  "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.19.0",
-    "@ckeditor/ckeditor5-clipboard": "^36.0.1",
     "@ckeditor/ckeditor5-core": "^36.0.1",
     "@ckeditor/ckeditor5-engine": "^36.0.1",
     "@ckeditor/ckeditor5-link": "^36.0.1",
@@ -35,8 +27,6 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5",
-    "@types/ckeditor__ckeditor5-clipboard": "^29.0.5",
     "@types/ckeditor__ckeditor5-core": "^33.0.3",
     "@types/ckeditor__ckeditor5-engine": "^32.0.11",
     "@types/ckeditor__ckeditor5-link": "^32.0.4",
@@ -45,29 +35,28 @@
     "@types/ckeditor__ckeditor5-utils": "^28.0.14",
     "@types/jest": "^28.1.8",
     "jest": "^28.1.3",
-    "jest-each": "^28.1.3",
-    "jest-xml-matcher": "^1.2.0",
+    "jest-config": "^28.1.3",
     "rimraf": "^3.0.2",
     "typescript": "^4.8.2"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^36.0.1",
     "@ckeditor/ckeditor5-core": "^36.0.1",
     "@ckeditor/ckeditor5-engine": "^36.0.1",
     "@ckeditor/ckeditor5-link": "^36.0.1",
     "@ckeditor/ckeditor5-typing": "^36.0.1",
     "@ckeditor/ckeditor5-ui": "^36.0.1",
-    "@ckeditor/ckeditor5-utils": "^36.0.1",
-    "@coremedia/service-agent": "^1.1.5"
+    "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "^14.0.2",
     "@coremedia/ckeditor5-core-common": "^14.0.2",
-    "@coremedia/ckeditor5-coremedia-content": "^14.0.2",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "^14.0.2",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "^14.0.2",
-    "@coremedia/ckeditor5-link-common": "^14.0.2",
-    "@coremedia/ckeditor5-logging": "^14.0.2",
-    "rxjs": "^7.5.6"
+    "@coremedia/ckeditor5-logging": "^14.0.2"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "jest": "jest --passWithNoTests",
+    "jest:coverage": "jest --collect-coverage --passWithNoTests",
+    "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

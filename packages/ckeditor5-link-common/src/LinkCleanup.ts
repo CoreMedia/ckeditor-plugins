@@ -2,12 +2,13 @@
 
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -23,7 +24,7 @@ interface LinkCleanupRegistry {
   registerDependentAttribute(modelAttributeName: string): void;
 
   /**
-   * Unregisters an attribute, which in result, will not be removed anymore
+   * Unregisters an attribute, which in return, will not be removed anymore
    * when a `linkHref` attribute got removed.
    *
    * @param modelAttributeName - name of the model attribute not to remove anymore
@@ -44,17 +45,24 @@ interface LinkCleanupRegistry {
  */
 class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly pluginName: string = "LinkCleanup";
+  static readonly #logger = LoggerProvider.getLogger(LinkCleanup.pluginName);
   readonly #watchedAttributes: Set<string> = new Set<string>();
 
-  // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
-  static readonly requires = [LinkUI];
+  static readonly requires = [];
 
   init(): void {
     const initInformation = reportInitStart(this);
 
-    const editor = this.editor;
-    const model = editor.model;
-    const document = model.document;
+    const { editor } = this;
+    const { model } = editor;
+    const { document } = model;
+
+    if (!editor.plugins.has(LinkEditing)) {
+      // We are implicitly bound to the UnlinkCommand defined by the
+      // LinkEditing plugin.
+      const logger = LinkCleanup.#logger;
+      logger.info("LinkEditing unavailable. Registered link attributes may not be handled as possibly expected.");
+    }
 
     document.registerPostFixer(this.#fixOrphanedAttributes);
 
@@ -79,7 +87,8 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
    * bound to `linkHref`.
    *
    * @param writer - writer to apply changes
-   * @returns `true` if changes got applied, and post-fix chain shall be re-triggered; `false` on no changes
+   * @returns `true` if changes got applied, and the post-fix chain shall be
+   * re-triggered; `false` on no changes
    */
   readonly #fixOrphanedAttributes = (writer: Writer): boolean => {
     const todoAttributes = [...this.#watchedAttributes];
@@ -112,11 +121,9 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
    * @param writer - writer to get relevant diff-items from
    */
   static readonly #getLinkHrefRemovalRanges = (writer: Writer): Iterable<Range> => {
-    const model = writer.model;
-    return model.document.differ
-      .getChanges()
-      .filter(isRemoveLinkHrefAttribute)
-      .map((c) => (c as DiffItemAttribute).range);
+    const { differ } = writer.model.document;
+    const changes = differ.getChanges();
+    return changes.filter(isRemoveLinkHrefAttribute).map((c) => (c as DiffItemAttribute).range);
   };
 
   static readonly #fixOrphanedAttribute = (
@@ -157,13 +164,14 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }
-  const diffItemAttribute: DiffItemAttribute = diffItem;
+
+  const { attributeKey, attributeNewValue } = diffItem;
+
   // We must not simply check for 'falsy' here, as an empty string does not
-  // represent a deletion of the attribute, but signals (you guessed it), that
+  // represent a deletion of the attribute, but signals (you guessed it) that
   // the attribute got set to an empty string.
-  const isDeleteAttribute =
-    diffItemAttribute.attributeNewValue === null || diffItemAttribute.attributeNewValue === undefined;
-  return isDeleteAttribute && diffItemAttribute.attributeKey === LINK_HREF_MODEL;
+  const isDeleteAttribute = attributeNewValue === null || attributeNewValue === undefined;
+  return isDeleteAttribute && attributeKey === LINK_HREF_MODEL;
 };
 
 export { getLinkCleanup, LinkCleanupRegistry };
