@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-link-common",
-  "version": "14.0.3-rc.0",
+  "version": "14.0.3-rc.1",
   "description": "Assistive Utilities for `@ckeditor/ckeditor5-link`.",
   "keywords": [
     "coremedia",
@@ -48,9 +48,9 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "14.0.3-rc.0",
-    "@coremedia/ckeditor5-core-common": "14.0.3-rc.0",
-    "@coremedia/ckeditor5-logging": "14.0.3-rc.0"
+    "@coremedia/ckeditor5-common": "14.0.3-rc.1",
+    "@coremedia/ckeditor5-core-common": "14.0.3-rc.1",
+    "@coremedia/ckeditor5-logging": "14.0.3-rc.1"
   },
   "scripts": {
     "clean": "rimraf ./dist",
