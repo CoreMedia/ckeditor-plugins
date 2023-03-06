@@ -9,6 +9,7 @@
  */
 
 export * as compatibility from "./compatibility/index-doc";
+export * as integrations from "./integrations/index-doc";
 export * as rules from "./rules/index-doc";
 export * as sanitation from "./sanitation/index-doc";
 
