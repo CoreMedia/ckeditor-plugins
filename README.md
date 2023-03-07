@@ -128,7 +128,6 @@ previously `setData()` call. A typical approach is:
 ## See Also
 
 * **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
-* **[API Documentation][api:ckeditor-plugins]:** API Documentation
 * **[Development](./DEVELOPMENT.md):** Hints for developing within this workspace
 * **[License](./LICENSE):** Apache 2.0 License Text
 * **[Versioning](./VERSIONING.md):** Versioning Policy
