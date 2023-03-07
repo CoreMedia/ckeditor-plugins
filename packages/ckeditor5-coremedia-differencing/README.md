@@ -1,5 +1,12 @@
 # CoreMedia Differencing Plugin
 
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_differencing.html> "@coremedia/ckeditor5-coremedia-differencing"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-coremedia-differencing`
+
 Other than possibly suggested by the plugin-name, this plugin does not take
 care of calculating differences by itself. It is meant to ensure, that
 differencing data as generated in CoreMedia Studio are forwarded to editing

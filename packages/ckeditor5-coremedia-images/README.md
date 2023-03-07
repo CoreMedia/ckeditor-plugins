@@ -1,5 +1,12 @@
 # CoreMedia CKEditor 5 Images
 
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_images.html> "@coremedia/ckeditor5-coremedia-images"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-coremedia-images`
+
 ## General Information
 
 The `ckeditor5-coremedia-images` package is responsible for showing and editing

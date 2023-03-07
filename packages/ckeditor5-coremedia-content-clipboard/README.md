@@ -1,5 +1,12 @@
 # CoreMedia CKEditor 5 Content Clipboard Plugin
 
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_content_clipboard.html> "@coremedia/ckeditor5-coremedia-content-clipboard"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-coremedia-content-clipboard`
+
 The CoreMedia Content Clipboard plugin extends the
 [CKEditor 5 Clipboard Feature][cke5:docs:clipboard:feature].
 

@@ -1,5 +1,7 @@
 # Shared Babel Configuration
 
+**Module:** `@coremedia-internal/ckeditor5-babel-config`
+
 This internal module contains some configuration for Babel shared across
 all packages.
 

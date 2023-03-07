@@ -1,6 +1,11 @@
 # CKEditor Plugin: Font Mapper
 
-[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_font_mapper.html> "@coremedia/ckeditor5-font-mapper"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-font-mapper`
 
 The Font Mapper plugin extends the
 [CKEditor 5 Clipboard Feature][cke5:docs:clipboard:feature].
@@ -175,5 +180,3 @@ font referenced in `font-family` `style` attributes.
 * [CKEditor 5 Paste from Office feature – CKEditor 5 API docs](https://ckeditor.com/docs/ckeditor5/latest/api/paste-from-office.html)
 
 [cke5:docs:clipboard:feature]: <https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/clipboard.html> "Clipboard - CKEditor 5 Documentation"
-[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
-[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_font_mapper.html> "Module ckeditor5-font-mapper"

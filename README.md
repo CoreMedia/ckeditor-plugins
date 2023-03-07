@@ -2,7 +2,7 @@
 
 [![License: Apache 2.0][badge:license:Apache2]](./LICENSE)
 [![Documentation at GitHub Pages][badge:docs:GHPages]][gp:ckeditor-plugins]
-[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+[![API Documentation][docs:api:badge]][docs:api]
 
 _CoreMedia's CKEditor 5 Plugins_ provides plugins for [CKEditor 5][] with focus
 on integration into [CoreMedia CMS][]. Since 2022 (CMS v2210.1) CKEditor 5
@@ -12,7 +12,7 @@ replaces the previous integration of [CKEditor 4][].
 
 ```text
 $ pnpm install
-$ pnpm build
+$ pnpm -r build
 $ pnpm start
 ```
 
@@ -35,6 +35,7 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 | [`ckeditor5-babel-config`][]                      | Internal: Shared Babel configuration.                                    |
 | [`ckeditor5-common`][]                            | Common Utilities, independent from CKEditor                              |
 | [`ckeditor5-core-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-core`                       |
+| [`ckeditor5-coremedia-content`][]                 | Content Related Commands                                                 |
 | [`ckeditor5-coremedia-content-clipboard`][]       | Clipboard Support for CoreMedia Contents                                 |
 | [`ckeditor5-coremedia-differencing`][]            | Support server-side differencing in CoreMedia Studio                     |
 | [`ckeditor5-coremedia-example-data`][]            | Internal: Eases setup of Mock Data for testing purpose                   |
@@ -50,6 +51,7 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 | [`ckeditor5-dom-support`][]                       | Utilities for handling DOM objects                                       |
 | [`ckeditor5-font-mapper`][]                       | Replaces characters in given font to alternative representation on paste |
 | [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                                                   |
+| [`ckeditor5-link-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-link`                       |
 | [`ckeditor5-logging`][]                           | Logging Facade                                                           |
 
 The subtle difference between `ckeditor5-coremedia-richtext` and
@@ -136,17 +138,15 @@ previously `setData()` call. A typical approach is:
 [`ckeditor5-babel-config`]: <./packages/ckeditor5-babel-config> "@coremedia-internal/ckeditor5-babel-config"
 [`ckeditor5-common`]: <./packages/ckeditor5-common> "@coremedia/ckeditor5-common"
 [`ckeditor5-core-common`]: <./packages/ckeditor5-core-common> "@coremedia/ckeditor5-core-common"
+[`ckeditor5-coremedia-content`]: <./packages/ckeditor5-coremedia-content> "@coremedia/ckeditor5-coremedia-content"
 [`ckeditor5-coremedia-content-clipboard`]: <./packages/ckeditor5-coremedia-content-clipboard> "@coremedia/ckeditor5-coremedia-content-clipboard"
 [`ckeditor5-coremedia-differencing`]: <./packages/ckeditor5-coremedia-differencing> "@coremedia/ckeditor5-coremedia-differencing"
 [`ckeditor5-coremedia-example-data`]: <./packages/ckeditor5-coremedia-example-data> "@coremedia-internal/ckeditor5-coremedia-example-data"
 [`ckeditor5-coremedia-images`]: <./packages/ckeditor5-coremedia-images> "@coremedia/ckeditor5-coremedia-images"
 [`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link> "@coremedia/ckeditor5-coremedia-link"
 [`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext> "@coremedia/ckeditor5-coremedia-richtext"
-
 [`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support> "@coremedia/ckeditor5-coremedia-richtext-support"
-
 [`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials> "@coremedia/ckeditor5-coremedia-studio-essentials"
-
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration> "@coremedia/ckeditor5-coremedia-studio-integration"
 [`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia/ckeditor5-coremedia-studio-integration-mock"
 [`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support> "@coremedia/ckeditor5-dataprocessor-support"
@@ -154,9 +154,10 @@ previously `setData()` call. A typical approach is:
 [`ckeditor5-dom-support`]: <./packages/ckeditor5-dom-support> "@coremedia/ckeditor5-dom-support"
 [`ckeditor5-font-mapper`]: <./packages/ckeditor5-font-mapper> "@coremedia/ckeditor5-font-mapper"
 [`ckeditor5-jest-test-helpers`]: <./packages/ckeditor5-jest-test-helpers> "@coremedia-internal/ckeditor5-jest-test-helpers"
+[`ckeditor5-link-common`]: <./packages/ckeditor5-link-common> "@coremedia/ckeditor5-link-common"
 [`ckeditor5-logging`]: <./packages/ckeditor5-logging> "@coremedia/ckeditor5-logging"
-[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/> "CoreMedia CKEditor 5 Plugins – API Documentation"
-[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/> "CoreMedia CKEditor 5 Plugins – API Documentation"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
 [badge:docs:GHPages]: <https://img.shields.io/badge/docs-%F0%9F%93%9D%20GH%20Pages-informational?style=for-the-badge>
 [badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-blue?style=for-the-badge>
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
