@@ -1,6 +1,11 @@
 # CoreMedia CKEditor 5 Essentials
 
-[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_studio_essentials.html> "@coremedia/ckeditor5-coremedia-studio-essentials"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-coremedia-studio-essentials`
 
 Provides a plugin for CKEditor 5 which consolidates the essential plugins for
 CoreMedia Studio. The plugins, provided by this package, are crucial to make
@@ -33,6 +38,3 @@ by loading it into a CKEditor only containing the essential plugins above.
 plugins, many elements and attributes cannot be edited, we strongly recommend
 adding CKEditor's Source Code Editing Plugin, if you did not add any other
 plugins.
-
-[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
-[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_studio_essentials.html> "Module ckeditor5-coremedia-studio-essentials"

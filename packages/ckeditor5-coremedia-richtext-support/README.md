@@ -1,6 +1,11 @@
 # CoreMedia General RichText Support
 
-[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_richtext_support.html> "@coremedia/ckeditor5-coremedia-richtext-support"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-coremedia-richtext-support`
 
 The General RichText Support (“GRS”) ensures that any valid CoreMedia RichText,
 especially attributes, may be loaded into CKEditor 5. It does not provide any
@@ -375,5 +380,3 @@ by GRS.
 [Editing engine]: <https://ckeditor.com/docs/ckeditor5/latest/framework/guides/architecture/editing-engine.html> "Editing engine - CKEditor 5 Documentation"
 [GHS]: <https://ckeditor.com/docs/ckeditor5/latest/api/html-support.html> "CKEditor 5 HTML Support feature - CKEditor 5 API docs"
 [Highlight feature]: <https://ckeditor.com/docs/ckeditor5/latest/features/highlight.html> "Highlight - CKEditor 5 Documentation"
-[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
-[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_richtext_support.html> "Module ckeditor5-coremedia-richtext-support"

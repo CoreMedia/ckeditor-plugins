@@ -1,6 +1,11 @@
 # CKEditor 5 Plugin: CoreMedia Richtext 1.0 DataProcessor
 
-[![API Documentation][badge:docs:api]][api:ckeditor-plugins]
+[![API Documentation][docs:api:badge]][docs:api]
+
+[docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_richtext.html> "@coremedia/ckeditor5-coremedia-richtext"
+[docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
+**Module:** `@coremedia/ckeditor5-coremedia-richtext`
 
 This plugin is required to edit
 [CoreMedia Richtext 1.0](coremedia-richtext-1.0.dtd),
@@ -724,7 +729,5 @@ attribute but with these orphaned attributes being created.
 
 [highlight]: <https://ckeditor.com/docs/ckeditor5/latest/features/highlight.html> "Highlight - CKEditor 5 Documentation"
 [mark]: <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark> "<mark>: The Mark Text element - HTML: HyperText Markup Language | MDN"
-[badge:docs:api]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
-[api:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/docs/api/modules/ckeditor5_coremedia_richtext.html> "Module ckeditor5-coremedia-richtext"
 [gfmdataprocessor]: <https://ckeditor.com/docs/ckeditor5/latest/api/module_markdown-gfm_gfmdataprocessor-GFMDataProcessor.html> "Class GFMDataProcessor (markdown-gfm/gfmdataprocessor~GFMDataProcessor) - CKEditor 5 API docs"
 [mdn-dataset]: <https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset> "HTMLElement.dataset - Web APIs | MDN"
