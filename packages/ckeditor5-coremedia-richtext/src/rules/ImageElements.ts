@@ -30,8 +30,10 @@ export const imageElements: RuleConfig = {
         // is not meant to be stored in data. Blob references are stored
         // in xlink:href, which are tracked separately.
         node.removeAttribute("src");
-        // title: Not mapping xlink:title to title yet, as we use the title
-        // for generating tooltips regarding the related content.
+        // title: The title is used to provide a tooltip for the linked
+        // image content. It should not even occur on data-processing layer.
+        // The xlink:title instead is stored in data-xlink-title handled
+        // above in setXLinkAttributes.
         node.removeAttribute("title");
       }
     },

@@ -94,8 +94,6 @@ class CoreMediaRichText10Dtd {
         // Will hold the Blob URL to load for displaying the image.
         // The actual Blob reference is stored in `data-xlink-href`.
         "src": true,
-        // Data-processed from xlink:title
-        "title": true,
         "width": true,
         // Data-Processed from xlink:actuate
         "data-xlink-actuate": /^(onRequest|onLoad)$/,
@@ -105,6 +103,8 @@ class CoreMediaRichText10Dtd {
         "data-xlink-role": true,
         // Data-Processed from xlink:show
         "data-xlink-show": /^(embed)$/,
+        // Data-processed from xlink:title
+        "data-xlink-title": true,
         // Data-Processed from xlink:type
         "data-xlink-type": /^(simple)$/,
       },
