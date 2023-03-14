@@ -143,13 +143,18 @@ const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
  * (this is important) register them to belong to a link element, which again
  * ensures, that they are removed on remove-link, that cursor positioning
  * handles them correctly, etc.
+ *
+ * For demonstration purpose, the link attributes configuration can be disabled
+ * via hash parameter `skipLinkAttributes`.
  */
-const linkAttributesConfig: LinkAttributesConfig = {
-  attributes: [
-    { view: "title", model: "linkTitle" },
-    { view: "data-xlink-actuate", model: "linkActuate" },
-  ],
-};
+const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttributes")
+  ? { attributes: [] }
+  : {
+      attributes: [
+        { view: "title", model: "linkTitle" },
+        { view: "data-xlink-actuate", model: "linkActuate" },
+      ],
+    };
 
 ClassicEditor.create(sourceElement, {
   licenseKey: "",
@@ -383,7 +388,9 @@ ClassicEditor.create(sourceElement, {
         "main-editor": newEditor,
       },
       {
-        isCollapsed: true,
+        // With hash parameter #expandInspector you may expand the
+        // inspector by default.
+        isCollapsed: !getHashParam("expandInspector"),
       }
     );
 
