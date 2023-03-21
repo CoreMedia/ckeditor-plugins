@@ -11,11 +11,11 @@ import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarsepa
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
 import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { LazyLinkUIPropertiesNotInitializedYetError } from "../contentlink/LazyLinkUIPropertiesNotInitializedYetError";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -60,7 +60,10 @@ class LinkTargetActionsViewExtension extends Plugin {
    * @param linkUI - the linkUI plugin
    */
   #extendView(linkUI: LinkUI): void {
-    const actionsView: LinkActionsView = linkUI.actionsView;
+    const actionsView: LinkActionsView | null = linkUI.actionsView;
+    if (!actionsView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     const linkTargetCommand = linkUI.editor.commands.get("linkTarget");
     if (!linkTargetCommand) {
       LinkTargetActionsViewExtension.#logger.warn("Command 'linkTarget' not found");
@@ -78,6 +81,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     });
 
     const separatorLeft = new ToolbarSeparatorView();
+    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     separatorLeft.set({ class: "cm-ck-item-separator" });
     separatorLeft.extendTemplate({
       attributes: {
@@ -111,7 +115,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * custom target value in an extra dialog.
    */
   #createTargetOtherButton(): ButtonView {
-    const { ui } = requireEditorWithUI(this.editor);
+    const { ui } = this.editor;
     return ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName) as ButtonView;
   }
 

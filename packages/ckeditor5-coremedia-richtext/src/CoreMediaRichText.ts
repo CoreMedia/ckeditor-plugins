@@ -2,7 +2,7 @@ import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import V10RichTextDataProcessor from "./compatibility/v10/V10RichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import RichTextDataProcessor from "./RichTextDataProcessor";
 import { getCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 import { LinkIntegration } from "./integrations/LinkIntegration";
@@ -35,7 +35,6 @@ export default class CoreMediaRichText extends Plugin {
         throw new Error(`Incompatible configuration: ${compatibility}`);
     }
 
-    // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
     this.editor.data.processor = dataProcessor;
 
     reportInitEnd(initInformation);

@@ -11,7 +11,6 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
-import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 import {
   ContentReferenceResponse,
@@ -196,11 +195,11 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      ifPlugin(editor, UndoSupport)
-        .then(enableUndo)
-        .catch((reason) => {
-          this.#logger.warn("Unable to reenable UndoCommand", reason);
-        });
+      if (editor.plugins.has(UndoSupport)) {
+        enableUndo(editor.plugins.get(UndoSupport));
+      } else {
+        this.#logger.warn('Unable to reenable UndoCommand because Plugin "UndoSupport" does not exist');
+      }
     }
   }
 
@@ -292,11 +291,7 @@ export default class DataToModelMechanism {
    * @param textRanges - ranges to apply attributes to
    * @param attributes - attributes to apply
    */
-  static #applyAttributes(
-    writer: Writer,
-    textRanges: Range[],
-    attributes: [string, string | number | boolean][]
-  ): void {
+  static #applyAttributes(writer: Writer, textRanges: Range[], attributes: [string, unknown][]): void {
     for (const attribute of attributes) {
       for (const range of textRanges) {
         writer.setAttribute(attribute[0], attribute[1], range);

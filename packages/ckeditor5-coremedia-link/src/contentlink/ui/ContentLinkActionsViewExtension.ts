@@ -14,6 +14,7 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
+import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -27,7 +28,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
   static readonly requires = [LinkUI];
-
+  contentUriPath: string | undefined | null;
   #initialized = false;
 
   init(): void {
@@ -54,13 +55,21 @@ class ContentLinkActionsViewExtension extends Plugin {
 
   #initialize(linkUI: LinkUI): void {
     const { editor } = linkUI;
-
-    linkUI.actionsView.set({
+    const { actionsView } = linkUI;
+    if (!actionsView) {
+      ContentLinkActionsViewExtension.#logger.error(
+        "ActionsView is not initialized but should be. Can't apply the ContentLinkActionsViewExtension."
+      );
+      return;
+    }
+    actionsView.set({
+      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       contentUriPath: undefined,
     });
 
     const bindContentUriPathTo = (command: Command): void => {
-      linkUI.actionsView
+      actionsView
+        // @ts-expect-errors since 37.0.0, how to extend the view with another property?
         .bind("contentUriPath")
         .to(command, "value", (value: unknown) =>
           typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
@@ -77,26 +86,30 @@ class ContentLinkActionsViewExtension extends Plugin {
      * We need to update the visibility of the inputs when the value of the content link changes
      * If the value was removed: show external link field, otherwise show the content link field
      */
-    linkUI.actionsView.on("change:contentUriPath", (evt) => {
+    actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
 
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
-        showContentLinkField(linkUI.actionsView, false);
+        showContentLinkField(actionsView, false);
         return;
       }
 
       const { contentUriPath: value } = source;
 
       // set visibility of url and content field
-      showContentLinkField(linkUI.actionsView, !!value);
+      showContentLinkField(actionsView, !!value);
     });
     this.#extendView(linkUI);
   }
 
   #extendView(linkUI: LinkUI): void {
-    const { formView } = linkUI;
-    const actionsView: LinkActionsView = linkUI.actionsView;
+    const { formView, actionsView } = linkUI;
+
+    if (!actionsView || !formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
+
     const contentLinkView = new ContentLinkView(this.editor, {
       renderTypeIcon: true,
     });
@@ -110,7 +123,8 @@ class ContentLinkActionsViewExtension extends Plugin {
       );
       return;
     }
-    contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
+    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+    contentLinkView.bind("uriPath").to(actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
       if (contentLinkView.uriPath) {
@@ -131,7 +145,8 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
-      linkUI.actionsView.set({
+      actionsView.set({
+        // @ts-expect-errors since 37.0.0, how to extend the view with another property?
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });

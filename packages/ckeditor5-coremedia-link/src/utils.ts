@@ -105,6 +105,7 @@ export const createDecoratorHook = (
     !(methodParentCmp as DecorableCmp)._events ||
     !(methodParentCmp as DecorableCmp)._events.hasOwnProperty(methodName)
   ) {
+    // @ts-expect-errors since 37.0.0 - decorate parameter is defined as a method from the component, which is wrong typed in our method definiton.
     methodParentCmp.decorate(methodName);
   }
 

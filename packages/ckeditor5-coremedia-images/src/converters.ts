@@ -16,7 +16,6 @@ import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from ".
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
@@ -121,13 +120,15 @@ const onXlinkHrefEditingDowncast = (
   void serviceAgent
     .fetchService(createBlobDisplayServiceDescriptor())
     .then((blobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
-    .then(async (inlinePreviewObservable) => {
+    .then((inlinePreviewObservable) => {
       const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
         updateImagePreviewAttributes(editor, data.item, inlinePreview, false);
       });
-      await ifPlugin(editor, ModelBoundSubscriptionPlugin)
-        .then((plugin) => plugin.addSubscription(data.item, subscription))
-        .catch(optionalPluginNotFound);
+      if (editor.plugins.has(ModelBoundSubscriptionPlugin)) {
+        editor.plugins.get(ModelBoundSubscriptionPlugin).addSubscription(data.item, subscription);
+      } else {
+        logger.debug(`Optional Plugin ${ModelBoundSubscriptionPlugin} not found.`);
+      }
     });
 };
 

@@ -1,7 +1,7 @@
 import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -125,9 +125,6 @@ class RichTextDataProcessor implements DataProcessor {
      *
      * See also: ckeditor/ckeditor5#12324
      */
-    // @ts-expect-error Typings at DefinitelyTyped only allow this to contain
-    // `pre` element. But for TypeScript migration, CKEditor replaced typing
-    // by `string[]` instead.
     this.#delegate.domConverter.preElements.push("xdiff:span");
   }
 
@@ -213,7 +210,7 @@ class RichTextDataProcessor implements DataProcessor {
    *
    * @param data - data to transform
    */
-  toView(data: string): ViewDocumentFragment | null {
+  toView(data: string): ViewDocumentFragment {
     const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
@@ -298,7 +295,6 @@ class RichTextDataProcessor implements DataProcessor {
     htmlDomFragment: Node | DocumentFragment;
     fragmentAsStringForDebugging: string;
   } {
-    // @ts-expect-error Typings did not incorporate 35.0.1 signature change yet: 2nd Document Argument is gone.
     const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 

@@ -47,6 +47,7 @@ export const handleFocusManagement = (
 const addViewsToFocusables = (parentView: LinkViewWithFocusables, childViews: View[]): void => {
   childViews.forEach((view: View) => {
     if (view.element) {
+      //@ts-expect-error _focusable is private api.
       parentView._focusables.add(view);
     }
   });
@@ -62,10 +63,12 @@ const addViewsToFocusTracker = (parentView: LinkActionsView | LinkFormView, chil
 
 const removeExistingFocusables = (view: LinkViewWithFocusables): View[] => {
   const removedViews: View[] = [];
+  //@ts-expect-error _focusable is private api
   const viewArray = Array.from(view._focusables);
-  viewArray.forEach((childView) => {
+  viewArray.forEach((childView: unknown) => {
+    //@ts-expect-error _focusable is private api
     view._focusables.remove(childView);
-    removedViews.push(childView);
+    removedViews.push(childView as View);
   });
   return removedViews;
 };

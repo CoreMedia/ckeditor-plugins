@@ -21,6 +21,8 @@ import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/c
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -87,7 +89,6 @@ export default class ContentLinks extends Plugin {
 
   onVisibleViewChanged(linkUI: LinkUI): void {
     const { editor } = linkUI;
-    const linkCommand = editor.commands.get("link") as LinkCommand;
     removeInitialMouseDownListener(linkUI);
     addMouseEventListenerToHideDialog(linkUI);
     parseLinkBalloonConfig(editor.config);
@@ -109,19 +110,30 @@ export default class ContentLinks extends Plugin {
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
 
-    createDecoratorHook(
-      linkUI,
-      "_hideUI",
-      () => {
-        const commandValue: string = linkCommand?.value ?? "";
-        const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
-        const { formView } = linkUI;
-        formView.set({ contentUriPath: value });
-        linkUI.actionsView.set({ contentUriPath: value });
-      },
-      this
-    );
+    createDecoratorHook(linkUI, "_hideUI", this.onHideUiCallback(editor), this);
     // registers the openInTab command for content links, used to open a content when clicking the content link
     editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
+  }
+
+  onHideUiCallback(editor: Editor): () => void {
+    return () => {
+      const linkCommand = editor.commands.get("link") as LinkCommand;
+      const linkUI: LinkUI = editor.plugins.get(LinkUI);
+      if (!linkUI || !linkCommand) {
+        return;
+      }
+      const { formView } = linkUI;
+      const { actionsView } = linkUI;
+      if (!formView || !actionsView) {
+        throw new LazyLinkUIPropertiesNotInitializedYetError();
+      }
+
+      const commandValue: string = linkCommand.value ?? "";
+      const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
+      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+      formView.set({ contentUriPath: value });
+      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+      actionsView.set({ contentUriPath: value });
+    };
   }
 }

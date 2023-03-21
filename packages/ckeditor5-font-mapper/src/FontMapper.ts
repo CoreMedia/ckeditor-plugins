@@ -5,7 +5,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import { ifPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
 import { Mode } from "./FontMapping";
@@ -62,7 +62,7 @@ export default class FontMapper extends Plugin {
 
   static readonly requires = [ClipboardPipeline];
 
-  async init(): Promise<void> {
+  init(): void {
     const initInformation = reportInitStart(this);
 
     const editor = this.editor;
@@ -73,11 +73,17 @@ export default class FontMapper extends Plugin {
 
     // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
     // We also need to use a priority higher than "low" to process the input in time.
-    await ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
-      this.listenTo(p, FontMapper.#clipboardEventName, FontMapper.#handleClipboardInputTransformationEvent, {
-        priority: "normal",
-      })
-    );
+    if (editor.plugins.has(ClipboardPipeline)) {
+      const clipboardPipeline = editor.plugins.get(ClipboardPipeline);
+      this.listenTo(
+        clipboardPipeline,
+        FontMapper.#clipboardEventName,
+        FontMapper.#handleClipboardInputTransformationEvent,
+        {
+          priority: "normal",
+        }
+      );
+    }
 
     reportInitEnd(initInformation);
   }

@@ -40,6 +40,8 @@ export default class ContentLinkView extends ButtonView {
 
   declare uriPath: string | undefined;
   declare contentName: string | undefined;
+  declare renderAsTextLink: boolean;
+  declare ariaLabelText: string;
 
   constructor(
     editor: Editor,
@@ -118,6 +120,7 @@ export default class ContentLinkView extends ButtonView {
       attributes: {
         "class": [
           "cm-ck-content-link-view",
+          // @ts-expect-errors since 37.0.0, how to extend the view with another property?
           bind.if("underlined", "cm-ck-button--underlined"),
           bind.if("renderAsTextLink", "ck-link-actions__preview"),
         ],
@@ -151,11 +154,19 @@ export default class ContentLinkView extends ButtonView {
 
       this.#endContentSubscription();
 
+      const hasUriPath = this.hasUriPathProperty(evt.source);
+      if (!hasUriPath) {
+        return;
+      }
       const value = evt.source.uriPath;
       if (typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
         this.#subscribeToContent(requireContentUriPath(value));
       }
     });
+  }
+
+  hasUriPathProperty(obj: object): obj is { uriPath: string } {
+    return "uriPath" in obj;
   }
 
   render(): void {

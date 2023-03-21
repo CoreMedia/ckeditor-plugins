@@ -12,7 +12,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
-import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
+import ModelItem from "@ckeditor/ckeditor5-engine/src/model/item";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
@@ -89,7 +89,7 @@ class TrackingData {
  *
  * @param range - range to get included items for
  */
-const getItems = (range: Range): Item[] => [...range.getItems({ shallow: true })];
+const getItems = (range: Range): ModelItem[] => [...range.getItems({ shallow: true })];
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -301,7 +301,6 @@ class ContentLinkCommandHook extends Plugin {
       // We first need to remove the text, as otherwise it will be merged with
       // the next text to add.
       writer.remove(textProxy);
-      // @ts-expect-error TODO Check Typings
       writer.insertText(name, attrs, position);
 
       return true;
@@ -371,7 +370,7 @@ class ContentLinkCommandHook extends Plugin {
       return false;
     }
 
-    const onlyItem: Item = itemsInRange[0];
+    const onlyItem: ModelItem = itemsInRange[0];
 
     if (!onlyItem.is("model:$textProxy")) {
       /*

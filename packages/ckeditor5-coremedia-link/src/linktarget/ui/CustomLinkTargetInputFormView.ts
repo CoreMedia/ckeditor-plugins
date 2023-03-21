@@ -14,6 +14,7 @@ import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.c
 import "../../../theme/customlinktargetform.css";
 import { icons } from "@ckeditor/ckeditor5-core";
 import Command from "@ckeditor/ckeditor5-core/src/command";
+import { InputTextView } from "@ckeditor/ckeditor5-ui";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
@@ -24,7 +25,7 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 export default class CustomLinkTargetInputFormView extends View {
   readonly focusTracker: FocusTracker;
   readonly keystrokes: KeystrokeHandler;
-  readonly labeledInput: LabeledFieldView;
+  readonly labeledInput: LabeledFieldView<InputTextView>;
   readonly saveButtonView: ButtonView;
   readonly cancelButtonView: ButtonView;
   readonly #focusables: ViewCollection;
@@ -174,10 +175,9 @@ export default class CustomLinkTargetInputFormView extends View {
    *
    * @returns {@link LabeledFieldView} Labeled field view instance.
    */
-  #createLabeledInputView(): LabeledFieldView {
+  #createLabeledInputView(): LabeledFieldView<InputTextView> {
     const t = this.locale?.t;
-    // @ts-expect-error TODO Possibly bad typing for Constructor of LabeledFieldView
-    const labeledInput: LabeledFieldView = new LabeledFieldView(this.locale, createLabeledInputText);
+    const labeledInput = new LabeledFieldView<InputTextView>(this.locale, createLabeledInputText);
     labeledInput.label = t?.("Target") ?? "Target";
     return labeledInput;
   }

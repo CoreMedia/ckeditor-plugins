@@ -32,7 +32,7 @@ export class MockContentPluginWrapper extends JSWrapper<MockContentPlugin> {
         }
         // We need to access the plugin via its name rather than via descriptor,
         // as the descriptor is unknown in remote context.
-        return editor.plugins.get(pluginName) as MockContentPlugin;
+        return editor.plugins.get(pluginName) as unknown as MockContentPlugin;
       }, MockContentPlugin.pluginName)
     );
   }

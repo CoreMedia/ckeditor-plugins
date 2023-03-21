@@ -57,5 +57,5 @@ export interface ItemContext {
 export interface InsertionContext {
   insertionId: number;
   batch: Batch;
-  selectedAttributes: [string, string | number | boolean][];
+  selectedAttributes: [string, unknown][];
 }

@@ -30,6 +30,7 @@ import ContentLinkView from "./ContentLinkView";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 import { addClassToTemplate } from "../../utils";
+import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -76,13 +77,17 @@ class ContentLinkFormViewExtension extends Plugin {
   initializeFormView(linkUI: LinkUI): void {
     const { formView } = linkUI;
     const linkCommand = linkUI.editor.commands.get("link") as Command;
-
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     formView.set({
+      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       contentUriPath: undefined,
       contentName: undefined,
     });
 
     formView
+      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       .bind("contentUriPath")
       .to(linkCommand, "value", (value: unknown) =>
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
@@ -97,9 +102,15 @@ class ContentLinkFormViewExtension extends Plugin {
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = editor.commands.get("link") as Command;
 
-    linkUI.formView.on("change:contentUriPath", (evt) => {
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
+    formView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
       const { formView } = linkUI;
+      if (!formView) {
+        throw new LazyLinkUIPropertiesNotInitializedYetError();
+      }
 
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
@@ -202,6 +213,9 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #extendView(linkUI: LinkUI): void {
     const { formView } = linkUI;
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     const contentLinkView = createContentLinkView(linkUI, this.editor);
     this.#contentLinkView = contentLinkView;
 
@@ -219,6 +233,7 @@ class ContentLinkFormViewExtension extends Plugin {
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
+        // @ts-expect-errors since 37.0.0, how to extend the view with another property?
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
@@ -227,7 +242,9 @@ class ContentLinkFormViewExtension extends Plugin {
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     const { formView } = linkUI;
-
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
 
@@ -247,7 +264,9 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #adaptFormViewFields(linkUI: LinkUI): void {
     const { formView } = linkUI;
-
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     const t = this.editor.locale.t;
     formView.urlInputView.set({
       label: t("Link"),
@@ -283,6 +302,9 @@ class ContentLinkFormViewExtension extends Plugin {
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     const { formView } = linkUI;
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
 
     if (!contentLinkView.fieldView.element) {
@@ -379,35 +401,49 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
-    const view = linkUI.formView;
+    const { formView } = linkUI;
+    if (!formView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
+
     if (loading) {
-      view.element?.classList.add("cm-ck-form-view--loading");
+      formView.element?.classList.add("cm-ck-form-view--loading");
     } else {
-      view.element?.classList.remove("cm-ck-form-view--loading");
+      formView.element?.classList.remove("cm-ck-form-view--loading");
     }
   }
 
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
-    const { formView } = linkUI;
+    const { formView, actionsView } = linkUI;
+    if (!formView || !actionsView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     formView.urlInputView.fieldView.set("value", data);
+    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     formView.set("contentUriPath", null);
-    linkUI.actionsView.set("contentUriPath", null);
+    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+    actionsView.set("contentUriPath", null);
     showContentLinkField(formView, false);
-    showContentLinkField(linkUI.actionsView, false);
+    showContentLinkField(actionsView, false);
   }
 
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
-    const { formView } = linkUI;
+    const { formView, actionsView } = linkUI;
+    if (!formView || !actionsView) {
+      throw new LazyLinkUIPropertiesNotInitializedYetError();
+    }
     // Check if the balloon is visible. If it was closed, while data was loaded, just return.
     // We can use element.offsetParent to check if the balloon's HTML element is visible.
     if (!formView.element?.offsetParent) {
       return;
     }
-    formView.urlInputView.fieldView.set("value", null);
+    formView.urlInputView.fieldView.set("value", undefined);
+    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     formView.set("contentUriPath", data);
-    linkUI.actionsView.set("contentUriPath", data);
+    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+    actionsView.set("contentUriPath", data);
     showContentLinkField(formView, true);
-    showContentLinkField(linkUI.actionsView, true);
+    showContentLinkField(actionsView, true);
   }
 
   /**

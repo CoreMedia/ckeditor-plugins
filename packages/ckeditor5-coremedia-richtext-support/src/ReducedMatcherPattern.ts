@@ -5,6 +5,7 @@
  * defined by the DTD. Such as the `dir` attribute may only hold values
  * `ltr` and `rtl`.
  */
+
 type AttributesType = Record<string, string | RegExp | boolean | number>;
 
 /**

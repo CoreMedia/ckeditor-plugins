@@ -13,14 +13,6 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
  * properly insert a content object with a given type (e.g. "link" or "image").
  *
  * The ContentToModelRegistry can be accessed by other plugins via the {@link ContentClipboardEditing} plugin.
- *
- * @example
- * ```
- * await ifPlugin(editor, ContentClipboardEditing)
-      .then((plugin) => {
-        plugin.registerToModelFunction(type, createLinkModelFunctionCreator);
-      })
- * ```
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ContentToModelRegistry {

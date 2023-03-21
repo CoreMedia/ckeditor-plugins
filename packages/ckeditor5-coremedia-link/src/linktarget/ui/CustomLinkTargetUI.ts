@@ -11,8 +11,8 @@ import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
+import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -62,7 +62,7 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns well-defined attribute values, which should not be handled by `_other` in `otherNames`;
    * button-configuration in `myConfig`
    */
-  #parseConfig(config: Config): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
+  #parseConfig(config: Config<EditorConfig>): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
     const linkTargetDefinitions = parseLinkTargetConfig(config);
 
     const otherNames = linkTargetDefinitions
@@ -90,7 +90,7 @@ export default class CustomLinkTargetUI extends Plugin {
     const editor = this.editor;
     const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
-    const { ui } = requireEditorWithUI(this.editor);
+    const { ui } = this.editor;
 
     ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
       const view = new ButtonView(locale);
@@ -216,8 +216,6 @@ export default class CustomLinkTargetUI extends Plugin {
     // https://github.com/ckeditor/ckeditor5-image/issues/114
     labeledInput.fieldView.value = (labeledInput.fieldView.element as HTMLInputElement).value = initialValue;
 
-    // @ts-expect-error TODO Check Typings/Usage
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.#form.labeledInput.fieldView.select();
 
     this.#form.enableCssTransitions();

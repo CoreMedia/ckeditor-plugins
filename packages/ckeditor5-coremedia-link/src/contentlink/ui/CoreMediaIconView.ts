@@ -6,6 +6,9 @@ import View from "@ckeditor/ckeditor5-ui/src/view";
  * Renders a span with css icon classes.
  */
 export default class CoreMediaIconView extends View {
+  declare iconClass: string | undefined;
+  declare id: string;
+
   constructor() {
     super();
 

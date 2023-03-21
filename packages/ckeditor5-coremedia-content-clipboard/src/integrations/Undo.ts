@@ -59,7 +59,7 @@ export class UndoSupport extends Plugin {
   #applyToCommands(handler: CommandHandler): void {
     const { editor } = this;
     const commandNames = UndoSupport.#commandNames;
-    commandNames.forEach((commandName) => {
+    commandNames.forEach((commandName: string) => {
       ifCommand(editor, commandName).then(handler).catch(optionalCommandNotFound);
     });
   }

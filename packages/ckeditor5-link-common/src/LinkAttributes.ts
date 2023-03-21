@@ -11,6 +11,7 @@ import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
+import { ViewElement } from "@ckeditor/ckeditor5-engine";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
@@ -159,7 +160,7 @@ export class LinkAttributes extends Plugin {
       },
       model: {
         key: modelName,
-        value: (viewElement) => viewElement.getAttribute(viewName) ?? null,
+        value: (viewElement: ViewElement) => viewElement.getAttribute(viewName) ?? null,
       },
       converterPriority: "low",
     });

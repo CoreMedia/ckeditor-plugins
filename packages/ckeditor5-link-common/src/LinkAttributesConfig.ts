@@ -1,5 +1,6 @@
 import { isRegisterAttributeConfig, RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 /**
  * Configuration, that is expected as part of the CKEditor 5
@@ -46,7 +47,7 @@ const emptyConfig = (): LinkAttributesConfig => ({
  *
  * @param config editor configuration to parse
  */
-export const parseAttributesConfig = (config: Config): LinkAttributesConfig => {
+export const parseAttributesConfig = (config: Config<EditorConfig>): LinkAttributesConfig => {
   const fromConfig: unknown = config.get("link.attributes");
   if (!fromConfig) {
     return emptyConfig();

@@ -3,6 +3,7 @@
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
 import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 /**
  * Provides the given targets to select from.
@@ -56,7 +57,7 @@ interface LinkTargetConfig {
  *
  * @param config - CKEditor configuration to parse
  */
-export const parseLinkTargetConfig = (config: Config): Required<LinkTargetOptionDefinition>[] => {
+export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<LinkTargetOptionDefinition>[] => {
   const fromConfig: unknown = config.get("link.targets");
   const result: Required<LinkTargetOptionDefinition>[] = [];
   if (fromConfig === null || fromConfig === undefined) {

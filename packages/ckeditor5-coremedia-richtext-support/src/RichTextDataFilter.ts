@@ -106,6 +106,7 @@ class RichTextDataFilter extends Plugin {
    */
   #loadAllowedConfig(config: ReducedMatcherPattern[]): void {
     this.#config.push(...config);
+    //@ts-expect-errors since 37.0.0 Expects a type of MatcherPattern. First convert to a MatcherPattern?
     this.#delegate?.loadAllowedConfig(config);
   }
 

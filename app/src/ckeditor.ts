@@ -18,7 +18,6 @@ import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import Link from "@ckeditor/ckeditor5-link/src/link";
-//@ts-expect-error not part of @types/ckeditor__ckeditor5-list@32.0.1, check for newer versions from time to time
 import DocumentList from "@ckeditor/ckeditor5-list/src/documentlist";
 import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
@@ -68,7 +67,6 @@ import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/LinkAttri
 import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
 
 const {
-  //@ts-expect-error We have no way to extend icon typing, yet.
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
@@ -208,7 +206,6 @@ ClassicEditor.create(sourceElement, {
     "bold",
     "italic",
     "underline",
-    //@ts-expect-error - incorrect types, types expect an array of strings here
     {
       label: "More formatting",
       icon: "threeVerticalDots",
@@ -338,6 +335,7 @@ ClassicEditor.create(sourceElement, {
     ui: editorLanguage,
     // Won't change language of content.
     content: "en",
+    // @ts-expect-error TODO: Upgrade 37.0.0 text part language only available with plugin activated, types are incorrect?
     textPartLanguage: [],
   },
   autosave: {

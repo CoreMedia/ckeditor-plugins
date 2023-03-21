@@ -12,7 +12,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { ifPlugin, recommendPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { recommendPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 
@@ -47,17 +47,18 @@ export default class ContentLinkClipboardPlugin extends Plugin {
   static readonly pluginName: string = "ContentLinkClipboardPlugin";
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkClipboardPlugin.pluginName);
 
-  async init(): Promise<void> {
+  init(): void {
     const logger = ContentLinkClipboardPlugin.#logger;
     const { editor } = this;
 
     const initInformation = reportInitStart(this);
 
-    await ifPlugin(editor, ContentClipboardEditing)
-      .then((plugin) => {
-        plugin.registerToModelFunction("link", createLinkModelFunctionCreator);
-      })
-      .catch(recommendPlugin("Creating Content Links from Clipboard not activated.", logger));
+    if (editor.plugins.has(ContentClipboardEditing)) {
+      const contentClipboardEditing = editor.plugins.get(ContentClipboardEditing);
+      contentClipboardEditing.registerToModelFunction("link", createLinkModelFunctionCreator);
+    } else {
+      recommendPlugin("Creating Content Links from Clipboard not activated.", logger);
+    }
 
     reportInitEnd(initInformation);
   }

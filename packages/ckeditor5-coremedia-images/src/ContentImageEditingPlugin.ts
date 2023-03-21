@@ -4,12 +4,7 @@ import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import {
-  ifPlugin,
-  optionalPluginNotFound,
-  reportInitEnd,
-  reportInitStart,
-} from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -87,7 +82,6 @@ export default class ContentImageEditingPlugin extends Plugin {
       allowAttributes: [modelAttributeName],
     });
     editor.conversion.for("dataDowncast").attributeToAttribute({
-      // @ts-expect-error TODO Validate with typings from DefinitelyTyped
       model: {
         name: modelElementName,
         key: modelAttributeName,
@@ -107,9 +101,13 @@ export default class ContentImageEditingPlugin extends Plugin {
    *
    * @param editor - Editor
    */
-  static async #initializeModelBoundSubscriptionPlugin(editor: Editor): Promise<void> {
-    await ifPlugin(editor, ModelBoundSubscriptionPlugin)
-      .then((plugin) => plugin.registerModelElement(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME))
-      .catch(optionalPluginNotFound);
+  static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
+    if (editor.plugins.has(ModelBoundSubscriptionPlugin)) {
+      editor.plugins
+        .get(ModelBoundSubscriptionPlugin)
+        .registerModelElement(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME);
+    } else {
+      ContentImageEditingPlugin.#logger.debug(`Optional Plugin ${ModelBoundSubscriptionPlugin} not found.`);
+    }
   }
 }

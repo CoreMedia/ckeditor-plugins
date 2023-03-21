@@ -13,12 +13,8 @@ import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard/src/clipboardo
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import {
-  ifPlugin,
-  optionalPluginNotFound,
-  reportInitEnd,
-  reportInitStart,
-} from "@coremedia/ckeditor5-core-common/Plugins";
+import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
+import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";
 import { insertContentMarkers } from "./ContentMarkers";
@@ -28,6 +24,7 @@ import {
   IsDroppableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
 import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
+import { StylesProcessor } from "@ckeditor/ckeditor5-engine";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -101,7 +98,7 @@ export default class ContentClipboard extends Plugin {
   static readonly requires = [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
 
   init(): void {
-    const initInformation = reportInitStart(this);
+    const initInformation: InitInformation = reportInitStart(this);
     this.#initEventListeners();
     reportInitEnd(initInformation);
   }
@@ -120,9 +117,10 @@ export default class ContentClipboard extends Plugin {
     // Priority `low` required, so that we can control the `dropEffect`.
     this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
 
-    void ifPlugin(editor, ClipboardPipeline).then((p) =>
-      this.listenTo(p, "inputTransformation", this.#inputTransformation)
-    );
+    if (editor.plugins.has(ClipboardPipeline)) {
+      const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
+      this.listenTo(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
+    }
   }
 
   destroy(): void {
@@ -132,9 +130,9 @@ export default class ContentClipboard extends Plugin {
 
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
-    ifPlugin(editor, ClipboardPipeline)
-      .then((p) => this.stopListening(p, "inputTransformation", this.#inputTransformation))
-      .catch(optionalPluginNotFound);
+    if (editor.plugins.has(ClipboardPipeline)) {
+      this.stopListening(editor.plugins.get(ClipboardPipeline), "inputTransformation", this.#inputTransformation);
+    }
   }
 
   /**
@@ -204,7 +202,7 @@ export default class ContentClipboard extends Plugin {
     // This is kinda hacky, we need to set content to skip the default
     // clipboardInputHandler by setting content, we mark this event as
     // "already resolved".
-    data.content = new ViewDocumentFragment();
+    data.content = new ViewDocumentFragment(new ViewDocument(new StylesProcessor()));
   };
 
   /**
@@ -269,7 +267,9 @@ export default class ContentClipboard extends Plugin {
     //
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterwards.
-    void ifPlugin(editor, UndoSupport).then(disableUndo);
+    if (editor.plugins.has(UndoSupport)) {
+      disableUndo(editor.plugins.get(UndoSupport));
+    }
 
     const { model } = editor;
 

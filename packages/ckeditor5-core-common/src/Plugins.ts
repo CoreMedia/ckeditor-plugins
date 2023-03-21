@@ -1,7 +1,6 @@
-import Plugin, { PluginInterface } from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Plugin, { PluginClassConstructor, PluginConstructor } from "@ckeditor/ckeditor5-core/src/plugin";
 
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 
@@ -9,7 +8,7 @@ const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
  * Error, which signals that a requested plugin could not be found.
  */
 export class PluginNotFoundError extends Error {
-  readonly #key: PluginInterface;
+  readonly #key: PluginClassConstructor;
 
   /**
    * Constructor.
@@ -17,7 +16,7 @@ export class PluginNotFoundError extends Error {
    * @param key - key of the plugin, which could not be found
    * @param message - error message
    */
-  constructor(key: PluginInterface, message: string) {
+  constructor(key: PluginClassConstructor, message: string) {
     super(message);
     Object.setPrototypeOf(this, PluginNotFoundError.prototype);
     this.#key = key;
@@ -27,7 +26,7 @@ export class PluginNotFoundError extends Error {
    * Provides the key of the plugin, which was searched
    * for unsuccessfully.
    */
-  get pluginKey(): PluginInterface {
+  get pluginKey(): PluginClassConstructor {
     return this.#key;
   }
 
@@ -74,36 +73,6 @@ export const recommendPlugin = (
 };
 
 /**
- * Promise, which either resolves immediately to the given plugin or rejects
- * with `Error` if not available.
- *
- * If you refer to a required plugin, skipping `catch` for the promise
- * may be fine. For optional plugins (trigger an action if plugin is available)
- * you may want to use {@link optionalPluginNotFound} as handler, which just
- * logs a debug note on a not existing plugin.
- *
- * @example
- * ```typescript
- * ifPlugin(editor, OptionalPlugin)
- *   .then(...)
- *   .catch(optionalPluginNotFound);
- * ```
- * @param editor - editor to find requested plugin
- * @param key - plugin key
- * @returns `Promise` for requested plugin
- * @throws PluginNotFoundError if plugin could not be found
- */
-// Promise used to benefit from then-API.
-// eslint-disable-next-line @typescript-eslint/require-await
-export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInterface<T>): Promise<T> => {
-  if (editor.plugins.has(key)) {
-    return editor.plugins.get(key);
-  } else {
-    throw new PluginNotFoundError(key, `Plugin ${key.name} unavailable.`);
-  }
-};
-
-/**
  * Initialization Information.
  */
 export interface InitInformation {
@@ -127,7 +96,7 @@ export interface InitInformation {
 export const reportInitStart = (plugin: Plugin): InitInformation => {
   const timestamp: number = performance.now();
   // Workaround https://github.com/Microsoft/TypeScript/issues/3841
-  const pluginName = (plugin.constructor as typeof Plugin).pluginName ?? "Unnamed Plugin";
+  const pluginName = (plugin.constructor as PluginConstructor).pluginName ?? "Unnamed Plugin";
   pluginsLogger.debug(`Initializing ${pluginName}...`);
   return {
     pluginName,

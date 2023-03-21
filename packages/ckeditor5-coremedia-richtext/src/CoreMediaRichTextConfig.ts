@@ -2,6 +2,7 @@ import { defaultStrictness, Strictness } from "./Strictness";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
 import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { EditorConfig } from "@ckeditor/ckeditor5-core";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -89,7 +90,7 @@ export const defaultCoreMediaRichTextConfig: DefaultCoreMediaRichTextConfig = {
 };
 
 export const getCoreMediaRichTextConfig = (
-  config?: CKEditorConfig
+  config?: CKEditorConfig<EditorConfig>
 ): CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const rawConfig: CoreMediaRichTextConfig = (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ||
     {}) as CoreMediaRichTextConfig;
@@ -109,7 +110,7 @@ export const getCoreMediaRichTextConfig = (
 };
 
 export const getLatestCoreMediaRichTextConfig = (
-  config?: CKEditorConfig
+  config?: CKEditorConfig<EditorConfig>
 ): LatestCoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const withDefaults = getCoreMediaRichTextConfig(config);
   if (!isLatestCoreMediaRichTextConfig(withDefaults)) {
@@ -119,7 +120,7 @@ export const getLatestCoreMediaRichTextConfig = (
 };
 
 export const getV10CoreMediaRichTextConfig = (
-  config?: CKEditorConfig
+  config?: CKEditorConfig<EditorConfig>
 ): V10CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const withDefaults = getCoreMediaRichTextConfig(config);
   if (!isV10CoreMediaRichTextConfig(withDefaults)) {

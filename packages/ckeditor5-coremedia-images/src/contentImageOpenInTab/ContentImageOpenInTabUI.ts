@@ -1,12 +1,11 @@
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
 
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
+import { Editor } from "@ckeditor/ckeditor5-core";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in
@@ -21,15 +20,13 @@ export default class ContentImageOpenInTabUI extends Plugin {
   static readonly requires = [ContentImageEditingPlugin];
 
   init(): void {
-    const editor = this.editor;
-
     const initInformation = reportInitStart(this);
-    this.#createToolbarLinkImageButton(editor as EditorWithUI);
+    this.#createToolbarLinkImageButton(this.editor);
     reportInitEnd(initInformation);
   }
 
-  #createToolbarLinkImageButton(editor: EditorWithUI): void {
-    const { ui } = requireEditorWithUI(this.editor);
+  #createToolbarLinkImageButton(editor: Editor): void {
+    const { ui } = editor;
     const t = editor.t;
 
     const openInTabCommand = editor.commands.get("openImageInTab");
@@ -47,7 +44,6 @@ export default class ContentImageOpenInTabUI extends Plugin {
         openInTabCommand.execute();
       }
     });
-
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
       const button = new ButtonView(locale);
 

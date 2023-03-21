@@ -169,6 +169,8 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
       (event) =>
         console.log("CKEditor's Editing-Controller rendered data.", {
           source: event.source,
+          // @ts-expect-error TODO: Upgrade 37.0.0 Type Guard?
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           innerHtml: (event.source.getDomRoot() as unknown as HTMLDivElement).innerHTML,
         }),
       {

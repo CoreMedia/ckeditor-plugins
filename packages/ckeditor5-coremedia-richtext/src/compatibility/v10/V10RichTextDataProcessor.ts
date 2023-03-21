@@ -1,7 +1,7 @@
 import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -12,7 +12,7 @@ import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
-import { HtmlWriter } from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
+import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "../../ToDataProcessor";
 import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
@@ -65,7 +65,6 @@ class V10RichTextDataProcessor implements DataProcessor {
      *
      * See also: ckeditor/ckeditor5#12324
      */
-    // @ts-expect-error Typings at DefinitelyTyped only allow this to contain
     // `pre` element. But for TypeScript migration, CKEditor replaced typing
     // by `string[]` instead.
     this.#delegate.domConverter.preElements.push("xdiff:span");
@@ -152,7 +151,6 @@ class V10RichTextDataProcessor implements DataProcessor {
     fragmentAsStringForDebugging: string;
   } {
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
-    // @ts-expect-error Typings did not incorporate 35.0.1 signature change yet: 2nd Document Argument is gone.
     const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 
@@ -209,7 +207,7 @@ class V10RichTextDataProcessor implements DataProcessor {
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
 
-  toView(data: string): ViewDocumentFragment | null {
+  toView(data: string): ViewDocumentFragment {
     const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
