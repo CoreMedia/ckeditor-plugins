@@ -3,6 +3,8 @@ import "../../../theme/contentlinkview.css";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkView from "./ContentLinkView";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -14,6 +16,8 @@ import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
  * @param editor - the editor
  */
 const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
+  const logger = LoggerProvider.getLogger("ContentLinkView");
+
   const { t } = editor.locale;
   const { formView } = linkUI;
   const contentLinkView: LabeledFieldView = new LabeledFieldView(
@@ -31,17 +35,24 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
     class: "cm-ck-content-link-view-wrapper",
   });
 
+  const { fieldView } = contentLinkView;
+
   // Propagate URI-Path from formView (see FormViewExtension) to ContentLinkView
   // @ts-expect-error TODO Fix According to Typings
-  contentLinkView.fieldView.bind("uriPath").to(formView, "contentUriPath");
-  // Propagate Content Name from ContentLinkView to FormView, as we require to
-  // know the name in some link insertion scenarios.
+  fieldView.bind("uriPath").to(formView, "contentUriPath");
+  // Propagate Content Name from ContentLinkView to FormView, as we require
+  // knowing the name in some link insertion scenarios.
   formView.bind("contentName").to(contentLinkView.fieldView);
-  contentLinkView.fieldView.on("contentClick", () => {
-    linkUI.editor.commands.get("openLinkInTab")?.execute();
+  fieldView.on("contentClick", () => {
+    // @ts-expect-error - Fix typings.
+    const { uriPath } = fieldView;
+    if (typeof uriPath === "string") {
+      logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
+      executeOpenContentInTabCommand(editor, [uriPath]);
+    }
   });
 
-  contentLinkView.fieldView.on("executeCancel", () => {
+  fieldView.on("executeCancel", () => {
     formView.set({
       contentUriPath: undefined,
     });

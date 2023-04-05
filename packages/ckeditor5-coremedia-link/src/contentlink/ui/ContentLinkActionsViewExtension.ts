@@ -14,6 +14,7 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
+import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -95,6 +96,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   #extendView(linkUI: LinkUI): void {
+    const logger = ContentLinkActionsViewExtension.#logger;
     const { formView } = linkUI;
     const actionsView: LinkActionsView = linkUI.actionsView;
     const contentLinkView = new ContentLinkView(this.editor, {
@@ -104,17 +106,18 @@ class ContentLinkActionsViewExtension extends Plugin {
       renderAsTextLink: true,
     });
     if (!hasContentUriPath(linkUI.actionsView)) {
-      ContentLinkActionsViewExtension.#logger.warn(
-        "ActionsView does not have a property contentUriPath. Is it already bound?",
-        linkUI.actionsView
-      );
+      logger.warn("ActionsView does not have a property contentUriPath. Is it already bound?", {
+        actionsView,
+      });
       return;
     }
     contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
-      if (contentLinkView.uriPath) {
-        this.editor.commands.get("openLinkInTab")?.execute();
+      const { uriPath } = contentLinkView;
+      if (uriPath) {
+        logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
+        executeOpenContentInTabCommand(this.editor, [uriPath]);
       }
     });
 
@@ -164,7 +167,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   /**
-   * Add classes to the actions view which enables to distinguish if the extension is active.
+   * Add classes to the actions view that enables to distinguish if the extension is active.
    *
    * @param actionsView - the rendered actionsView of the linkUI
    * @private

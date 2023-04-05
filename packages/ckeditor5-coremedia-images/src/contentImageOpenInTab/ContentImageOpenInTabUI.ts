@@ -7,6 +7,7 @@ import "../lang/contentImageOpenInTab";
 import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
+import { executeOpenImageInTabCommand, requireOpenImageInTabCommand } from "./OpenImageInTabCommand";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in
@@ -32,20 +33,13 @@ export default class ContentImageOpenInTabUI extends Plugin {
     const { ui } = requireEditorWithUI(this.editor);
     const t = editor.t;
 
-    const openInTabCommand = editor.commands.get("openImageInTab");
-    if (!openInTabCommand) {
-      throw new Error('The command "openImageInTab" is required.');
-    }
-
     const OPEN_IN_TAB_KEYSTROKE = "Ctrl+Shift+O";
 
     editor.keystrokes.set(OPEN_IN_TAB_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
 
-      if (openInTabCommand.isEnabled) {
-        openInTabCommand.execute();
-      }
+      executeOpenImageInTabCommand(editor);
     });
 
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
@@ -59,10 +53,10 @@ export default class ContentImageOpenInTabUI extends Plugin {
         tooltip: true,
       });
 
-      button.bind("isEnabled").to(openInTabCommand, "isEnabled");
+      button.bind("isEnabled").to(requireOpenImageInTabCommand(editor), "isEnabled");
 
       this.listenTo(button, "execute", () => {
-        openInTabCommand.execute();
+        executeOpenImageInTabCommand(editor);
       });
       return button;
     });

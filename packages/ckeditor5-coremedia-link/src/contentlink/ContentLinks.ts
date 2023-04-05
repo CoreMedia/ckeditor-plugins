@@ -10,7 +10,6 @@ import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
@@ -21,6 +20,7 @@ import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/c
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
+import { registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -51,7 +51,7 @@ export default class ContentLinks extends Plugin {
 
   /**
    * Removes the focus on the editor and clears the selection.
-   * Can be used to clear all activity on the editor when contextual
+   * Can be used to clear all activity in the editor when contextual
    * balloons are closed manually.
    *
    * @private
@@ -83,6 +83,8 @@ export default class ContentLinks extends Plugin {
         this.#initialized = true;
       }
     });
+
+    registerOpenContentInTabCommand(editor);
   }
 
   onVisibleViewChanged(linkUI: LinkUI): void {
@@ -121,7 +123,5 @@ export default class ContentLinks extends Plugin {
       },
       this
     );
-    // registers the openInTab command for content links, used to open a content when clicking the content link
-    editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
   }
 }
