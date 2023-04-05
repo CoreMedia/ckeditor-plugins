@@ -10,11 +10,17 @@ import { canBeOpenedInTab, openEntitiesInTabs, OpenEntitiesInTabsResult } from "
 
 // noinspection JSConstantReassignment
 /**
- * An abstract command for opening contents in a tab.
+ * A command for opening contents in a tab.
  *
  * By default, has no value and is always enabled. Provides method
  * `refreshValueAndEnabledState` to update value and enabled state
- * based on the given value.
+ * based on the given value. This method are meant to be invoked
+ * by extending commands.
+ *
+ * The command itself, without further adaptations, may be used to
+ * directly open commands via `execute()` method. As the value is
+ * not updated by default, it is expected that URI paths to open are
+ * given explicitly then.
  *
  * @augments module:core/command~Command
  */
