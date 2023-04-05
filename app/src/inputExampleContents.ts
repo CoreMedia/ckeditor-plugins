@@ -9,12 +9,12 @@ const INPUT_EXAMPLE_CONTENT_DIV_CLASS = "inputExampleContentDiv";
 const initInputExampleContent = (editor: ClassicEditor) => {
   const mockContentPlugin = editor.plugins.get(MockContentPlugin);
   const mockInputExamplePlugin = editor.plugins.get(MockInputExamplePlugin);
-  // Just ensure, that the default content provided by MockContentPlugin
+  // Just ensure that the default content provided by MockContentPlugin
   // still fulfills our expectations.
   const requireExplicitContent = mockContentPlugin.requireExplicitContent;
 
-  // Add some content of not insertable type. (By default only contents of type 'document'
-  // are considered insertable.
+  // Add some content of not insertable type. By default, only contents of type
+  // 'document' are considered insertable.
   mockContentPlugin.addContents({
     id: 40,
     type: "notinsertable",
