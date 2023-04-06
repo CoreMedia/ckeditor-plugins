@@ -4,9 +4,9 @@
 export const knownNamespacePrefixes = ["xml", "xlink", "xdiff"];
 
 /**
- * Type of well-known namespace prefixes.
+ * The type of well-known namespace prefixes.
  */
-export type KnownNamespacePrefix = typeof knownNamespacePrefixes[number];
+export type KnownNamespacePrefix = (typeof knownNamespacePrefixes)[number];
 
 /**
  * Type guard, if the given value represents a well-known namespace prefix.
