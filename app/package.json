@@ -58,7 +58,7 @@
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "@types/node": "^18.15.11",
     "circular-dependency-plugin": "^5.2.2",
-    "css-loader": "^6.7.1",
+    "css-loader": "^6.7.3",
     "http-server": "^14.1.1",
     "postcss": "^8.4.21",
     "postcss-loader": "^7.2.4",
