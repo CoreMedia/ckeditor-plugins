@@ -537,9 +537,6 @@ importers:
       '@ckeditor/ckeditor5-core':
         specifier: ^36.0.1
         version: 36.0.1
-      '@ckeditor/ckeditor5-ui':
-        specifier: ^36.0.1
-        version: 36.0.1
       '@coremedia-internal/ckeditor5-babel-config':
         specifier: ^1.0.0
         version: link:../ckeditor5-babel-config
@@ -552,9 +549,6 @@ importers:
       '@types/ckeditor__ckeditor5-core':
         specifier: ^33.0.3
         version: 33.0.3
-      '@types/ckeditor__ckeditor5-ui':
-        specifier: ^32.0.2
-        version: 32.0.2
       '@types/jest':
         specifier: ^28.1.8
         version: 28.1.8
