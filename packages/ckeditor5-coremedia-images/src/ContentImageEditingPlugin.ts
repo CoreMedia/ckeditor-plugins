@@ -41,7 +41,7 @@ export default class ContentImageEditingPlugin extends Plugin {
    * RichText.
    *
    * `xlink:href` is represented in the data-view as `data-xlink-href` and in
-   * model as `xlink-href`. When downcast to the editing-view it will be
+   * model as `xlink-href`. When downcast to the editing-view, it will be
    * resolved to the image src-attribute by fetching the URL from the
    * `BlobDisplayService`
    */
@@ -53,9 +53,9 @@ export default class ContentImageEditingPlugin extends Plugin {
       ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME
     );
 
-    // We have to prevent to write src-attribute to model because we fetch the
+    // We have to prevent writing src-attribute to model because we fetch the
     // src attribute for the editing view asynchronously.
-    // If not prevented the src-attribute from GRS would be written to the model.
+    // If not prevented, the src-attribute from GRS would be written to the model.
     this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
   }
 
@@ -89,7 +89,7 @@ export default class ContentImageEditingPlugin extends Plugin {
       view: dataAttributeName,
     });
 
-    //For editing-view the xlink-href attribute has to be converted to a src-attribute.
+    // For editing-view, the xlink-href attribute has to be converted to a src-attribute.
     editor.conversion
       .for("editingDowncast")
       .add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
