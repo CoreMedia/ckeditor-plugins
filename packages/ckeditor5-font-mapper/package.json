@@ -26,7 +26,7 @@
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^28.1.8",
-    "@types/webpack": "^5.28.0",
+    "@types/webpack": "^5.28.1",
     "jest": "^28.1.3",
     "rimraf": "^3.0.2",
     "typescript": "^4.8.2"
