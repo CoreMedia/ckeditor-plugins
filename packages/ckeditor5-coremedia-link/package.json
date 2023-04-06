@@ -61,6 +61,6 @@
     "@coremedia/ckeditor5-coremedia-studio-integration": "14.1.2-rc.0",
     "@coremedia/ckeditor5-link-common": "14.1.2-rc.0",
     "@coremedia/ckeditor5-logging": "14.1.2-rc.0",
-    "rxjs": "^7.5.6"
+    "rxjs": "^7.8.0"
   }
 }
