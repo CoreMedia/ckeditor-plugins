@@ -144,37 +144,37 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-differencing':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-differencing
       '@coremedia/ckeditor5-coremedia-images':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-images
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-essentials':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-dom-converter
       '@coremedia/ckeditor5-font-mapper':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-font-mapper
       '@coremedia/ckeditor5-link-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-link-common
       '@coremedia/service-agent':
         specifier: ^1.1.5
@@ -322,16 +322,16 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-jest-test-helpers
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@types/ckeditor__ckeditor5-core':
         specifier: ^33.0.3
@@ -442,7 +442,7 @@ importers:
   packages/ckeditor5-common:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -479,10 +479,10 @@ importers:
   packages/ckeditor5-core-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -522,10 +522,10 @@ importers:
   packages/ckeditor5-coremedia-content:
     dependencies:
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -574,16 +574,16 @@ importers:
   packages/ckeditor5-coremedia-content-clipboard:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -668,22 +668,22 @@ importers:
   packages/ckeditor5-coremedia-differencing:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-dom-converter':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -771,19 +771,19 @@ importers:
   packages/ckeditor5-coremedia-images:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.5.6
@@ -856,25 +856,25 @@ importers:
   packages/ckeditor5-coremedia-link:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-link-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.5.6
@@ -959,25 +959,25 @@ importers:
   packages/ckeditor5-coremedia-richtext:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-link-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -1035,10 +1035,10 @@ importers:
   packages/ckeditor5-coremedia-richtext-support:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -1099,10 +1099,10 @@ importers:
   packages/ckeditor5-coremedia-studio-essentials:
     dependencies:
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-richtext-support':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-richtext-support
     devDependencies:
       '@babel/cli':
@@ -1175,7 +1175,7 @@ importers:
   packages/ckeditor5-coremedia-studio-integration:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
       node-esapi:
         specifier: ^0.0.1
@@ -1224,13 +1224,13 @@ importers:
   packages/ckeditor5-coremedia-studio-integration-mock:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.5.6
@@ -1285,10 +1285,10 @@ importers:
   packages/ckeditor5-dataprocessor-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -1343,10 +1343,10 @@ importers:
   packages/ckeditor5-dom-converter:
     dependencies:
       '@coremedia/ckeditor5-dom-support':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -1410,10 +1410,10 @@ importers:
   packages/ckeditor5-font-mapper:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':
@@ -1495,13 +1495,13 @@ importers:
   packages/ckeditor5-link-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: ^14.1.1
+        specifier: 14.1.2-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@babel/cli':

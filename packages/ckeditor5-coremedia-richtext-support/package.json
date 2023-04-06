@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext-support",
-  "version": "14.1.1",
+  "version": "14.1.2-rc.0",
   "description": "CoreMedia RichText 1.0 DTD: Registers known elements/attributes",
   "keywords": [
     "coremedia",
@@ -51,7 +51,7 @@
     "@ckeditor/ckeditor5-utils": "^36.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "^14.1.1",
-    "@coremedia/ckeditor5-core-common": "^14.1.1"
+    "@coremedia/ckeditor5-logging": "14.1.2-rc.0",
+    "@coremedia/ckeditor5-core-common": "14.1.2-rc.0"
   }
 }
