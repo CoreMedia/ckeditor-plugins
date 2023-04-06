@@ -24,9 +24,9 @@ export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
  */
 export const compatibilityKeys = ["latest", "v10"];
 /**
- * Type of compatibility keys.
+ * The type of compatibility keys.
  */
-export type CompatibilityKey = typeof compatibilityKeys[number];
+export type CompatibilityKey = (typeof compatibilityKeys)[number];
 
 export interface CompatibilityConfig {
   /**
