@@ -7,7 +7,7 @@
   ],
   "engines": {
     "node": "18",
-    "pnpm": "^7.26"
+    "pnpm": "^8.1"
   },
   "exports": {
     "./*": "./dist/*.js"

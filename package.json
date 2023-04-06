@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "18",
-    "pnpm": "^7.26"
+    "pnpm": "^8.1"
   },
   "private": true,
   "description": "Plugins required or recommended to use CKEditor 5 within CoreMedia Studio.",
