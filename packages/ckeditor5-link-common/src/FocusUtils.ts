@@ -48,6 +48,7 @@ const addViewsToFocusables = (parentView: LinkViewWithFocusables, childViews: Vi
   childViews.forEach((view: View) => {
     if (view.element) {
       //@ts-expect-error _focusable is private api.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       parentView._focusables.add(view);
     }
   });
@@ -64,9 +65,11 @@ const addViewsToFocusTracker = (parentView: LinkActionsView | LinkFormView, chil
 const removeExistingFocusables = (view: LinkViewWithFocusables): View[] => {
   const removedViews: View[] = [];
   //@ts-expect-error _focusable is private api
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const viewArray = Array.from(view._focusables);
   viewArray.forEach((childView: unknown) => {
     //@ts-expect-error _focusable is private api
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
     view._focusables.remove(childView);
     removedViews.push(childView as View);
   });
