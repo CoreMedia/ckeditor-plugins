@@ -13,7 +13,7 @@ export class BodyCollectionWrapper extends JSWrapper<BodyCollection> implements 
   readonly #parent: EditorUIViewWrapper;
 
   constructor(parent: EditorUIViewWrapper) {
-    super(parent.evaluateHandle((parent) => parent.body as BodyCollection));
+    super(parent.evaluateHandle((parent) => parent.body));
     this.#parent = parent;
   }
 
