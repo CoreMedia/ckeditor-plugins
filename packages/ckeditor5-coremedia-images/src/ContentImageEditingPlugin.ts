@@ -15,7 +15,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * The plugin takes the `xlink:href` represented in the data-view by
  * `data-xlink-href` and writes it to the model.
  *
- * The model attribute afterwards will be downcast to the editing-view where it
+ * The model attribute afterward will be downcast to the editing-view where it
  * is represented by the src-attribute of the `img`-tag.
  */
 export default class ContentImageEditingPlugin extends Plugin {
