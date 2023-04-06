@@ -1,4 +1,4 @@
-import format = require("xml-formatter");
+import xmlFormat from "xml-formatter";
 
 const WITH_PREVIEW_CLASS = "with-preview";
 const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
@@ -19,7 +19,7 @@ const updatePreview = (data: string) => {
     return;
   }
   preview.innerText = data
-    ? format(data, {
+    ? xmlFormat(data, {
         indentation: "   ",
         collapseContent: false,
       })
