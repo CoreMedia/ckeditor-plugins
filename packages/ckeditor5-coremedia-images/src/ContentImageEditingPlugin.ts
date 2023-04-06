@@ -45,8 +45,8 @@ export default class ContentImageEditingPlugin extends Plugin {
    * resolved to the image src-attribute by fetching the URL from the
    * `BlobDisplayService`
    */
-  async afterInit(): Promise<void> {
-    await ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
+  afterInit(): void {
+    ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
     ContentImageEditingPlugin.#setupXlinkHrefConversion(
       this.editor,
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
