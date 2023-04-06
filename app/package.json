@@ -53,15 +53,15 @@
     "xml-formatter": "^2.6.1"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-utils": "^30.5.0",
+    "@ckeditor/ckeditor5-dev-utils": "^36.0.1",
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^30.5.0",
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "@types/node": "^18.8.1",
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.7.1",
     "http-server": "^14.1.1",
-    "postcss": "^8.4.16",
-    "postcss-loader": "^7.0.1",
+    "postcss": "^8.4.21",
+    "postcss-loader": "^7.2.4",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
     "style-loader": "^3.3.1",
