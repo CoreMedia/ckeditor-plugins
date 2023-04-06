@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^36.0.1",
-    "@ckeditor/ckeditor5-dev-webpack-plugin": "^30.5.0",
+    "@ckeditor/ckeditor5-dev-webpack-plugin": "^31.1.13",
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "@types/node": "^18.8.1",
     "circular-dependency-plugin": "^5.2.2",
