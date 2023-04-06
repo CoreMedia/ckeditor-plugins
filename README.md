@@ -3,6 +3,10 @@
 [![License: Apache 2.0][badge:license:Apache2]](./LICENSE)
 [![Documentation at GitHub Pages][badge:docs:GHPages]][gp:ckeditor-plugins]
 [![API Documentation][docs:api:badge]][docs:api]
+![CKEditor 5 Version Badge][badge:ckeditor]
+![TypeScript Version Badge][badge:lang:typescript]
+![Node.js Version Badge][badge:engine:nodejs]
+![pnpm Version Badge][badge:engine:pnpm]
 
 _CoreMedia's CKEditor 5 Plugins_ provides plugins for [CKEditor 5][] with focus
 on integration into [CoreMedia CMS][]. Since 2022 (CMS v2210.1) CKEditor 5
@@ -158,7 +162,11 @@ previously `setData()` call. A typical approach is:
 [docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/> "CoreMedia CKEditor 5 Plugins – API Documentation"
 [docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
 [badge:docs:GHPages]: <https://img.shields.io/badge/docs-%F0%9F%93%9D%20GH%20Pages-informational?style=for-the-badge>
-[badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-blue?style=for-the-badge>
+[badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-informational?style=for-the-badge>
+[badge:engine:nodejs]: <https://img.shields.io/badge/Node.js-18-informational?style=for-the-badge&logo=node.js&logoColor=white>
+[badge:engine:pnpm]: <https://img.shields.io/badge/pnpm-8.1-informational?style=for-the-badge&logo=pnpm&logoColor=white>
+[badge:lang:typescript]: <https://img.shields.io/badge/TypeScript-4.8.2-informational?style=for-the-badge&logo=typescript&logoColor=white>
+[badge:ckeditor]: <https://img.shields.io/badge/CKEditor-36.0.1-informational?style=for-the-badge&logo=ckeditor5&logoColor=white>
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
 [CKEditor 5]: <https://ckeditor.com/ckeditor-5/> "CKEditor 5 | Powerful Framework with Modular Architecture"
 [CoreMedia CMS]: <https://www.coremedia.com/> "Best-of-Breed Digital Experience Platform CoreMedia"
