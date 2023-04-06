@@ -36,7 +36,7 @@
     "jest-each": "^28.1.3",
     "jest-xml-matcher": "^1.2.0",
     "rimraf": "^4.4.1",
-    "typescript": "^4.8.2"
+    "typescript": "^4.9.5"
   },
   "peerDependencies": {
     "@coremedia/service-agent": "^1.1.5"
