@@ -14,7 +14,7 @@ export type LinkViewWithFocusables = (LinkActionsView | LinkFormView) & { _focus
  * after manually adding buttons to the views.
  *
  * This utility helps to add new components to the focus tracking.
- * It adds the given views (e.g. buttons) to the view's focusTracker and inserts the views to the
+ * It adds the given views (e.g., buttons) to the view's focusTracker and inserts the views to the
  * internal _focusables collection by removing all existing views and re-adding all views again in
  * the correct order.
  *
