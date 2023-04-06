@@ -50,7 +50,7 @@
     "@coremedia/ckeditor5-font-mapper": "14.1.2-rc.0",
     "@coremedia/ckeditor5-link-common": "14.1.2-rc.0",
     "@coremedia/service-agent": "^1.1.5",
-    "xml-formatter": "^2.6.1"
+    "xml-formatter": "^3.3.2"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "^36.0.1",
