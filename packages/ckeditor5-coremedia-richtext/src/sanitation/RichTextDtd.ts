@@ -31,7 +31,7 @@ export const richTextElementNames = [
 /**
  * A well-known CoreMedia Rich Text 1.0 element name.
  */
-export type RichTextElementName = typeof richTextElementNames[number];
+export type RichTextElementName = (typeof richTextElementNames)[number];
 /**
  * Type for supported rich text elements and their configurations according
  * to the CoreMedia RichText 1.0 DTD.
