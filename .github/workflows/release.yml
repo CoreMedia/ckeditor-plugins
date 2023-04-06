@@ -19,7 +19,7 @@ env:
   NODE_VERSION: 18
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^7.26
+  PNPM_VERSION: ^8.1
   NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
 
 jobs:
