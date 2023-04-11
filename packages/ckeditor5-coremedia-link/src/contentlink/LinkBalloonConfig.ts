@@ -61,10 +61,10 @@ export const parseLinkBalloonConfig = (config: Config<EditorConfig>): void => {
     return;
   }
   if (balloonKeepOpenIdsRaw && !Array.isArray(balloonKeepOpenIdsRaw)) {
-    throw new Error("Wrong configuration, Array expexted for link.linkBalloon.keepOpenIds");
+    throw new Error("Wrong configuration, Array expected for link.linkBalloon.keepOpenIds");
   }
   if (balloonKeepOpenClassesRaw && !Array.isArray(balloonKeepOpenClassesRaw)) {
-    throw new Error("Wrong configuration, Array expexted for link.linkBalloon.keepOpenIds");
+    throw new Error("Wrong configuration, Array expected for link.linkBalloon.keepOpenIds");
   }
   const rawIds: unknown[] = balloonKeepOpenIdsRaw as unknown[];
   const rawClasses: unknown[] = balloonKeepOpenClassesRaw as unknown[];
