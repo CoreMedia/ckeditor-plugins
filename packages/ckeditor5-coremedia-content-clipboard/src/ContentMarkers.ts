@@ -1,6 +1,6 @@
 import { Editor } from "@ckeditor/ckeditor5-core";
-import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { Range as ModelRange } from "@ckeditor/ckeditor5-engine";
+import { Writer } from "@ckeditor/ckeditor5-engine";
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";

@@ -1,4 +1,4 @@
-import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
+import { Batch } from "@ckeditor/ckeditor5-engine";
 
 /**
  * A cache to store data about content input.

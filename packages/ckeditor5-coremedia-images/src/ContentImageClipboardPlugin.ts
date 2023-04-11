@@ -1,6 +1,6 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Node from "@ckeditor/ckeditor5-engine/src/model/node";
+import { Writer } from "@ckeditor/ckeditor5-engine";
+import { Node } from "@ckeditor/ckeditor5-engine";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";

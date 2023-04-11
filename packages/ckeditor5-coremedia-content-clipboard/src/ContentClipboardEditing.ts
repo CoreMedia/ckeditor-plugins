@@ -1,7 +1,7 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import "../theme/loadmask.css";
 
-import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import { DowncastDispatcher } from "@ckeditor/ckeditor5-engine";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";

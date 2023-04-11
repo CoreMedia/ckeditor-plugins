@@ -1,11 +1,11 @@
 import { ViewDocument } from "@ckeditor/ckeditor5-engine";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import { ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
+import { HtmlDataProcessor } from "@ckeditor/ckeditor5-engine";
+import { DataProcessor } from "@ckeditor/ckeditor5-engine";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
+import { DomConverter } from "@ckeditor/ckeditor5-engine";
 import RichTextXmlWriter from "../../RichTextXmlWriter";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";

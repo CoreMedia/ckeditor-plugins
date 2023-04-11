@@ -1,8 +1,8 @@
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import ModelPosition from "@ckeditor/ckeditor5-engine/src/model/position";
+import { Position as ModelPosition } from "@ckeditor/ckeditor5-engine";
 import ContentInputDataCache from "./ContentInputDataCache";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { Writer } from "@ckeditor/ckeditor5-engine";
 
 type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
 

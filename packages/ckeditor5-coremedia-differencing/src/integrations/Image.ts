@@ -1,6 +1,6 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { PluginIntegrationHook } from "../PluginIntegrationHook";
-import Model from "@ckeditor/ckeditor5-engine/src/model/model";
+import { Model } from "@ckeditor/ckeditor5-engine";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";

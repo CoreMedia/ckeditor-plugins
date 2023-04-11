@@ -1,5 +1,5 @@
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Node from "@ckeditor/ckeditor5-engine/src/model/node";
+import { Writer } from "@ckeditor/ckeditor5-engine";
+import { Node } from "@ckeditor/ckeditor5-engine";
 
 export type CreateModelFunction = (writer: Writer) => Node;
 export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;

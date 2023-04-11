@@ -1,5 +1,5 @@
 import { JSWrapper } from "./JSWrapper";
-import EditingController from "@ckeditor/ckeditor5-engine/src/controller/editingcontroller";
+import { EditingController } from "@ckeditor/ckeditor5-engine";
 import { ViewWrapper } from "./ViewWrapper";
 import { EditorWrapper } from "./EditorWrapper";
 

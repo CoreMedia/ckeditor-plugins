@@ -2,15 +2,15 @@
 
 import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
+import { DowncastDispatcher } from "@ckeditor/ckeditor5-engine";
+import { ViewElement } from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
 import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
-import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
+import { DowncastWriter } from "@ckeditor/ckeditor5-engine";
+import { Element as ModelElement } from "@ckeditor/ckeditor5-engine";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";

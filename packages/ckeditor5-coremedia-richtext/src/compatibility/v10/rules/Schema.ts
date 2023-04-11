@@ -4,7 +4,7 @@ import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/
 import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
 import RichTextSchema from "../RichTextSchema";
 import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import { DataProcessor } from "@ckeditor/ckeditor5-engine";
 import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";
 

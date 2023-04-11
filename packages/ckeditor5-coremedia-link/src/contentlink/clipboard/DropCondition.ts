@@ -1,4 +1,4 @@
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
+import { Range } from "@ckeditor/ckeditor5-engine";
 
 /**
  * Meta-data on drop.

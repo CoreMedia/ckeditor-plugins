@@ -2,7 +2,7 @@ import { Plugin } from "@ckeditor/ckeditor5-core";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
+import { ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
 import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
