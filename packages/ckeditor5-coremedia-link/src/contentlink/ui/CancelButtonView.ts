@@ -1,5 +1,5 @@
 import { Locale } from "@ckeditor/ckeditor5-utils";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import CoreMediaIconView from "./CoreMediaIconView";
 
 /**

@@ -7,7 +7,7 @@ import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";

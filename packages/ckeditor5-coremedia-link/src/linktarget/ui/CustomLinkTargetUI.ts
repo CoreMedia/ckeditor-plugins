@@ -1,11 +1,11 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { Locale, Config } from "@ckeditor/ckeditor5-utils";
 import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
-import clickOutsideHandler from "@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler";
+import { clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";

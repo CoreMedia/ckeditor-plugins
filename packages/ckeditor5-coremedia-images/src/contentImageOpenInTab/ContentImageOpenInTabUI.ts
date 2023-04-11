@@ -1,4 +1,4 @@
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";

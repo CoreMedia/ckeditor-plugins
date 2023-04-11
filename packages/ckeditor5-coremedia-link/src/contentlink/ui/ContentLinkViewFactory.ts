@@ -1,4 +1,4 @@
-import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
+import { LabeledFieldView } from "@ckeditor/ckeditor5-ui";
 import "../../../theme/contentlinkview.css";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkView from "./ContentLinkView";

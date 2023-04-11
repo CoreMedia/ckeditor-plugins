@@ -9,7 +9,7 @@ import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
+import { LabeledFieldView } from "@ckeditor/ckeditor5-ui";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
@@ -27,8 +27,8 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
 import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
-import View from "@ckeditor/ckeditor5-ui/src/view";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { View } from "@ckeditor/ckeditor5-ui";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { addClassToTemplate } from "../../utils";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
 

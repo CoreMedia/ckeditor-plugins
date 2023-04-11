@@ -1,5 +1,5 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import pasteIcon from "../../theme/icons/paste.svg";
 import "../lang/paste";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";

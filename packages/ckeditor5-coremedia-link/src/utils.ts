@@ -1,4 +1,4 @@
-import View from "@ckeditor/ckeditor5-ui/src/view";
+import { View } from "@ckeditor/ckeditor5-ui";
 import { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
@@ -105,7 +105,8 @@ export const createDecoratorHook = (
     !(methodParentCmp as DecorableCmp)._events ||
     !(methodParentCmp as DecorableCmp)._events.hasOwnProperty(methodName)
   ) {
-    // @ts-expect-errors since 37.0.0 - decorate parameter is defined as a method from the component, which is wrong typed in our method definiton.
+    // TODO[cke] Fix typings.
+    // @ts-expect-errors since 37.0.0 - decorate parameter is defined as a method from the component, which is wrong typed in our method definition.
     methodParentCmp.decorate(methodName);
   }
 

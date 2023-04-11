@@ -7,7 +7,7 @@ import {
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";

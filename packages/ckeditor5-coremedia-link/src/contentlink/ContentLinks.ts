@@ -8,7 +8,7 @@ import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import LinkCommand from "@ckeditor/ckeditor5-link/src/linkcommand";
