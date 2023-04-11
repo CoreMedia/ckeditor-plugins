@@ -9,8 +9,7 @@ import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import mix from "@ckeditor/ckeditor5-utils/src/mix";
+import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
 import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
@@ -53,7 +52,7 @@ export const isRichTextDataProcessor = (value: unknown): value is RichTextDataPr
 /**
  * Data-Processor for CoreMedia RichText 1.0.
  */
-class RichTextDataProcessor implements DataProcessor {
+export default class RichTextDataProcessor extends ObservableMixin() implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -96,6 +95,8 @@ class RichTextDataProcessor implements DataProcessor {
    * @param editor - editor instance, the plugin belongs to
    */
   constructor(editor: Editor) {
+    super();
+
     const document: ViewDocument = editor.data.viewDocument;
 
     this.#delegate = new HtmlDataProcessor(document);
@@ -387,10 +388,3 @@ class RichTextDataProcessor implements DataProcessor {
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RichTextDataProcessor extends Observable {}
-
-mix(RichTextDataProcessor, ObservableMixin);
-
-export default RichTextDataProcessor;
