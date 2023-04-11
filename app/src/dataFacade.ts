@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { updatePreview } from "./preview";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 
 const LastSetVersion = Symbol("LastSetVersion");
 const LastSetData = Symbol("LastSetData");

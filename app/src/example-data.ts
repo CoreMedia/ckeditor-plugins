@@ -12,7 +12,7 @@ import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-
 import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
 import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";

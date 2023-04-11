@@ -5,7 +5,7 @@ import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
 import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import Code from "@ckeditor/ckeditor5-basic-styles/src/code";
 import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
 import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
