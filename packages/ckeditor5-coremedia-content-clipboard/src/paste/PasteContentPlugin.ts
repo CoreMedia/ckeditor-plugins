@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 
 import PasteContentUI from "./PasteContentUI";
 import PasteContentEditing from "./PasteContentEditing";

@@ -1,6 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
@@ -8,7 +8,7 @@ import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-stu
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import Command from "@ckeditor/ckeditor5-core/src/command";
+import { Command } from "@ckeditor/ckeditor5-core";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";

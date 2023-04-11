@@ -7,7 +7,7 @@ import {
   requireContentUriPath,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 // noinspection JSConstantReassignment

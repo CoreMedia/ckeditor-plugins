@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import Node from "@ckeditor/ckeditor5-engine/src/model/node";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";

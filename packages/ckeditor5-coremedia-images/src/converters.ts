@@ -8,7 +8,7 @@ import { serviceAgent } from "@coremedia/service-agent";
 import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
 import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
 import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";

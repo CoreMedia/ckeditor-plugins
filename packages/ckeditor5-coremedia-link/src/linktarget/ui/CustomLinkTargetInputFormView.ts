@@ -14,7 +14,7 @@ import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import "../../../theme/customlinktargetform.css";
 import { icons } from "@ckeditor/ckeditor5-core";
-import Command from "@ckeditor/ckeditor5-core/src/command";
+import { Command } from "@ckeditor/ckeditor5-core";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.

@@ -8,7 +8,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
 import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";

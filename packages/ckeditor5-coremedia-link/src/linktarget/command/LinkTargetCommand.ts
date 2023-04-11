@@ -1,4 +1,4 @@
-import Command from "@ckeditor/ckeditor5-core/src/command";
+import { Command } from "@ckeditor/ckeditor5-core";
 import Element from "@ckeditor/ckeditor5-engine/src/model/element";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Schema from "@ckeditor/ckeditor5-engine/src/model/schema";

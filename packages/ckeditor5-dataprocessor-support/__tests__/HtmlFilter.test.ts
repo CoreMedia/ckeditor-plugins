@@ -3,7 +3,7 @@
 
 import "jest-xml-matcher";
 import HtmlFilter, { FilterRuleSet } from "../src/HtmlFilter";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 

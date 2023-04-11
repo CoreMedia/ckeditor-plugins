@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";

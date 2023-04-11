@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
 import Range from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";

@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";

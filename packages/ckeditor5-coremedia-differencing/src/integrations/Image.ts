@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { PluginIntegrationHook } from "../PluginIntegrationHook";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";

@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import pasteIcon from "../../theme/icons/paste.svg";
 import "../lang/paste";

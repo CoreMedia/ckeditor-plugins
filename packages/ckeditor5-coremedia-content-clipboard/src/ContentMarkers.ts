@@ -1,4 +1,4 @@
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";

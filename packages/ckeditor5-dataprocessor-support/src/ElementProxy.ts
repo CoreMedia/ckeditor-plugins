@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**

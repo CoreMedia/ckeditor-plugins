@@ -1,4 +1,4 @@
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ModelPosition from "@ckeditor/ckeditor5-engine/src/model/position";
 import ContentInputDataCache from "./ContentInputDataCache";

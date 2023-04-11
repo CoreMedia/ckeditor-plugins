@@ -1,5 +1,5 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import View from "@ckeditor/ckeditor5-engine/src/view/view";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";

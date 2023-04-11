@@ -1,6 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -13,7 +13,7 @@ import { LabeledFieldView, View, ContextualBalloon } from "@ckeditor/ckeditor5-u
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
-import Command from "@ckeditor/ckeditor5-core/src/command";
+import { Command } from "@ckeditor/ckeditor5-core";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";

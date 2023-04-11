@@ -1,5 +1,5 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";

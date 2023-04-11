@@ -1,6 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./command/LinkTargetCommand";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";

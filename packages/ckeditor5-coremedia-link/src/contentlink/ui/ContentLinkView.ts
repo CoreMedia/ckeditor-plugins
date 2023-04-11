@@ -10,7 +10,7 @@ import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/con
 import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 
 /**
  * A ContentView that renders a custom template, containing of 2 different components.

@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import "jest-xml-matcher";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import TextProxy, { TextFilterRule } from "../src/TextProxy";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");

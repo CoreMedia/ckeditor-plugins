@@ -10,7 +10,7 @@ import RichTextXmlWriter from "../../RichTextXmlWriter";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";

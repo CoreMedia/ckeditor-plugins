@@ -1,7 +1,7 @@
 import { Command } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardService";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardItemRepresentation";
