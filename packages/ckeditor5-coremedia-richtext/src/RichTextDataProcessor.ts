@@ -1,4 +1,4 @@
-import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
+import { ViewDocument } from "@ckeditor/ckeditor5-engine";
 import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
 import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
 import DataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
