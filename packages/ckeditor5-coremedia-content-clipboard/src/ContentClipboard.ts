@@ -3,8 +3,8 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
-import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
+import { Clipboard } from "@ckeditor/ckeditor5-clipboard";
+import { ClipboardPipeline } from "@ckeditor/ckeditor5-clipboard";
 import {
   Range as ModelRange,
   ViewRange,
