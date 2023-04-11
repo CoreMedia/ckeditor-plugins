@@ -1,19 +1,16 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import { ButtonView } from "@ckeditor/ckeditor5-ui";
+import { ButtonView, ToolbarSeparatorView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import Command from "@ckeditor/ckeditor5-core/src/command";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
-import { ToolbarSeparatorView } from "@ckeditor/ckeditor5-ui";
-import { View } from "@ckeditor/ckeditor5-ui";
 import "../../theme/linktargetactionsviewextension.css";
 import { Locale } from "@ckeditor/ckeditor5-utils";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
-import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../contentlink/LazyLinkUIPropertiesNotInitializedYetError";
 

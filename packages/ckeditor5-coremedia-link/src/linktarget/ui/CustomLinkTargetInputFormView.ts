@@ -1,18 +1,20 @@
-import { View } from "@ckeditor/ckeditor5-ui";
-import { LabeledFieldView } from "@ckeditor/ckeditor5-ui";
-import { ButtonView } from "@ckeditor/ckeditor5-ui";
-import { ViewCollection } from "@ckeditor/ckeditor5-ui";
+import {
+  View,
+  LabeledFieldView,
+  ButtonView,
+  ViewCollection,
+  FocusCycler,
+  injectCssTransitionDisabler,
+  submitHandler,
+  InputTextView,
+} from "@ckeditor/ckeditor5-ui";
 import { createLabeledInputText } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
 import { Locale, FocusTracker, KeystrokeHandler } from "@ckeditor/ckeditor5-utils";
-import { FocusCycler } from "@ckeditor/ckeditor5-ui";
-import { injectCssTransitionDisabler } from "@ckeditor/ckeditor5-ui";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import { submitHandler } from "@ckeditor/ckeditor5-ui";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import "../../../theme/customlinktargetform.css";
 import { icons } from "@ckeditor/ckeditor5-core";
 import Command from "@ckeditor/ckeditor5-core/src/command";
-import { InputTextView } from "@ckeditor/ckeditor5-ui";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
