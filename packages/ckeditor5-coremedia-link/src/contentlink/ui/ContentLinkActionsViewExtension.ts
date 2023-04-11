@@ -173,6 +173,8 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
     ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
+    // TODO[cke] Sounds like a severe typing issue, we need to analyze here. Type evaluates to "never" in IDE.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const linkViewWithFocusable = actionsView as LinkViewWithFocusables;
     handleFocusManagement(linkViewWithFocusable, [simpleContentLinkView], actionsView.previewButtonView);
   }

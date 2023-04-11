@@ -1,9 +1,8 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
+import { LinkUI, Link, LinkCommand } from "@ckeditor/ckeditor5-link";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
-import { Link } from "@ckeditor/ckeditor5-link";
 import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
@@ -11,7 +10,6 @@ import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
-import { LinkCommand } from "@ckeditor/ckeditor5-link";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";

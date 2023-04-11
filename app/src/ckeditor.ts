@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Alignment } from "@ckeditor/ckeditor5-alignment";
-import { AutoLink } from "@ckeditor/ckeditor5-link";
+import { AutoLink, Link, LinkImage } from "@ckeditor/ckeditor5-link";
 import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
 import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
@@ -16,7 +16,6 @@ import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockedi
 import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
-import { Link } from "@ckeditor/ckeditor5-link";
 import DocumentList from "@ckeditor/ckeditor5-list/src/documentlist";
 import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
@@ -29,7 +28,6 @@ import Table from "@ckeditor/ckeditor5-table/src/table";
 import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar";
 import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline";
 import Highlight from "@ckeditor/ckeditor5-highlight/src/highlight";
-import { LinkImage } from "@ckeditor/ckeditor5-link";
 
 import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
