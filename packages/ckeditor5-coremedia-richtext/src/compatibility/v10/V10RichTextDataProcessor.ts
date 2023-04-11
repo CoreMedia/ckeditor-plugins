@@ -15,14 +15,13 @@ import { getConfig } from "./V10CoreMediaRichTextConfig";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "../../ToDataProcessor";
-import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import mix from "@ckeditor/ckeditor5-utils/src/mix";
+import ObservableMixin from "@ckeditor/ckeditor5-utils/src/observablemixin";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
 
 /**
  * Data-Processor for CoreMedia RichText 1.0.
  */
-class V10RichTextDataProcessor implements DataProcessor {
+export default class V10RichTextDataProcessor extends ObservableMixin() implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -39,6 +38,8 @@ class V10RichTextDataProcessor implements DataProcessor {
   readonly #noParserErrorNamespace: boolean;
 
   constructor(editor: Editor) {
+    super();
+
     const document: ViewDocument = editor.data.viewDocument;
 
     const { schema, toData, toView } = getConfig(editor.config);
@@ -265,10 +266,3 @@ class V10RichTextDataProcessor implements DataProcessor {
     return viewFragment;
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface V10RichTextDataProcessor extends Observable {}
-
-mix(V10RichTextDataProcessor, ObservableMixin);
-
-export default V10RichTextDataProcessor;
