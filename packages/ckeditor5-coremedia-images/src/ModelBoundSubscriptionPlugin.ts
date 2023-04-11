@@ -1,9 +1,8 @@
 /* eslint no-null/no-null: off */
 
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { Element as ModelElement } from "@ckeditor/ckeditor5-engine";
+import { Element as ModelElement, Writer } from "@ckeditor/ckeditor5-engine";
 import { DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import { Writer } from "@ckeditor/ckeditor5-engine";
 import SubscriptionCache from "./SubscriptionCache";
 import { Subscription } from "rxjs";
 

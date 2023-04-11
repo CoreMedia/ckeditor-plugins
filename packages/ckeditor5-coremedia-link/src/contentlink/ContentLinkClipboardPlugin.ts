@@ -1,6 +1,5 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { Writer } from "@ckeditor/ckeditor5-engine";
-import { Node } from "@ckeditor/ckeditor5-engine";
+import { Writer, Node } from "@ckeditor/ckeditor5-engine";
 import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";

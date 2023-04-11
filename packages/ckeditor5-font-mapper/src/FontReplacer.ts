@@ -1,8 +1,4 @@
-import { ViewNode } from "@ckeditor/ckeditor5-engine";
-import { ViewElement } from "@ckeditor/ckeditor5-engine";
-import { ViewText } from "@ckeditor/ckeditor5-engine";
-import { UpcastWriter } from "@ckeditor/ckeditor5-engine";
-import { ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
+import { ViewNode, ViewElement, ViewText, UpcastWriter, ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
 import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";

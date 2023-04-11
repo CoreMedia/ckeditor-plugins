@@ -1,7 +1,5 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { TextProxy } from "@ckeditor/ckeditor5-engine";
-import { Range } from "@ckeditor/ckeditor5-engine";
-import { Writer } from "@ckeditor/ckeditor5-engine";
+import { TextProxy, Range, Writer, Item as ModelItem } from "@ckeditor/ckeditor5-engine";
 import {
   ModelUri,
   requireContentCkeModelUri,
@@ -12,7 +10,6 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
-import { Item as ModelItem } from "@ckeditor/ckeditor5-engine";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";

@@ -5,14 +5,17 @@ import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
-import { Range as ModelRange } from "@ckeditor/ckeditor5-engine";
-import { ViewRange } from "@ckeditor/ckeditor5-engine";
+import {
+  Range as ModelRange,
+  ViewRange,
+  DocumentFragment as ModelDocumentFragment,
+  ViewDocumentFragment,
+  ViewDocument,
+  StylesProcessor,
+} from "@ckeditor/ckeditor5-engine";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentClipboardEditing from "./ContentClipboardEditing";
-import { DocumentFragment as ModelDocumentFragment } from "@ckeditor/ckeditor5-engine";
-import { ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
-import { ViewDocument, StylesProcessor } from "@ckeditor/ckeditor5-engine";
 import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common/AdvancedTypes";

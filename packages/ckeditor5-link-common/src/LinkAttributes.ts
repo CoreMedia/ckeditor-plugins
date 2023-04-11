@@ -3,14 +3,13 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import { AttributeElement } from "@ckeditor/ckeditor5-engine";
+import { AttributeElement, ViewElement } from "@ckeditor/ckeditor5-engine";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
 import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
-import { ViewElement } from "@ckeditor/ckeditor5-engine";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).

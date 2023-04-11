@@ -3,8 +3,7 @@ import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentInputDataCache from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import { Item as ModelItem } from "@ckeditor/ckeditor5-engine";
-import { Range as ModelRange } from "@ckeditor/ckeditor5-engine";
+import { Item as ModelItem, Range as ModelRange } from "@ckeditor/ckeditor5-engine";
 
 export interface AddMarkerEventData {
   markerName: string;

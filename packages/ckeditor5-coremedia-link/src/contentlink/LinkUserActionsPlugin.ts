@@ -1,15 +1,17 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import { View } from "@ckeditor/ckeditor5-engine";
-import { ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
-import { ViewElement } from "@ckeditor/ckeditor5-engine";
+import {
+  View,
+  ViewDocumentFragment,
+  ViewElement,
+  TextProxy,
+  Element as ModelElement,
+  Node as ModelNode,
+} from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 import { openLink } from "@ckeditor/ckeditor5-link/src/utils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import { TextProxy } from "@ckeditor/ckeditor5-engine";
-import { Element as ModelElement } from "@ckeditor/ckeditor5-engine";
-import { Node as ModelNode } from "@ckeditor/ckeditor5-engine";
 import {
   isModelUriPath,
   requireContentUriPath,
