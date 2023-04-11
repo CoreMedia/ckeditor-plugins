@@ -12,9 +12,10 @@ import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
 import FindAndReplace from "@ckeditor/ckeditor5-find-and-replace/src/findandreplace";
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-import ImageTextAlternative from "@ckeditor/ckeditor5-image/src/imagetextalternative";
-import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
+import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
+import { ImageStyle } from "@ckeditor/ckeditor5-image";
+import { ImageTextAlternative } from "@ckeditor/ckeditor5-image";
+import { ImageToolbar } from "@ckeditor/ckeditor5-image";
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import Link from "@ckeditor/ckeditor5-link/src/link";
@@ -30,7 +31,6 @@ import Table from "@ckeditor/ckeditor5-table/src/table";
 import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar";
 import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline";
 import Highlight from "@ckeditor/ckeditor5-highlight/src/highlight";
-import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
 import LinkImage from "@ckeditor/ckeditor5-link/src/linkimage";
 
 import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
@@ -53,7 +53,7 @@ import CoreMediaStudioEssentials, {
 import { initInputExampleContent } from "./inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
-import { Command, icons } from "@ckeditor/ckeditor5-core";
+import { Command, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
@@ -89,7 +89,7 @@ if (showHideExampleContentButton && inputExampleContentFrame) {
 
 setupPreview();
 
-const imagePlugins = [
+const imagePlugins: PluginConstructor[] = [
   ContentImagePlugin,
   ImageInline,
   ImageBlockEditing,
@@ -312,6 +312,7 @@ ClassicEditor.create(sourceElement, {
           name: "inline",
           title: "Page default",
           icon: pageDefaultIcon,
+          modelElements: ["imageInline"],
         },
       ],
     },
