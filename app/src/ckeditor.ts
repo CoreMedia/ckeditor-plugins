@@ -13,9 +13,7 @@ import FindAndReplace from "@ckeditor/ckeditor5-find-and-replace/src/findandrepl
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
-import { ImageStyle } from "@ckeditor/ckeditor5-image";
-import { ImageTextAlternative } from "@ckeditor/ckeditor5-image";
-import { ImageToolbar } from "@ckeditor/ckeditor5-image";
+import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import Link from "@ckeditor/ckeditor5-link/src/link";
