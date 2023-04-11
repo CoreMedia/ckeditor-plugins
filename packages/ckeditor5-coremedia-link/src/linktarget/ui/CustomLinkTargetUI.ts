@@ -1,4 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin, Command } from "@ckeditor/ckeditor5-core";
 import { ButtonView, ContextualBalloon, clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
 import { Locale, Config } from "@ckeditor/ckeditor5-utils";
 import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
@@ -7,7 +7,6 @@ import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
-import { Command } from "@ckeditor/ckeditor5-core";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 

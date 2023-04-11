@@ -13,8 +13,7 @@ import { Locale, FocusTracker, KeystrokeHandler } from "@ckeditor/ckeditor5-util
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import "../../../theme/customlinktargetform.css";
-import { icons } from "@ckeditor/ckeditor5-core";
-import { Command } from "@ckeditor/ckeditor5-core";
+import { icons, Command } from "@ckeditor/ckeditor5-core";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.

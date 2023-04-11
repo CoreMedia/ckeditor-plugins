@@ -1,10 +1,9 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeelement";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
 import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";

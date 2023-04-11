@@ -1,5 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import "../theme/loadmask.css";
 
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";

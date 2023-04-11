@@ -1,10 +1,9 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin, Command } from "@ckeditor/ckeditor5-core";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import { ButtonView, ToolbarSeparatorView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
-import { Command } from "@ckeditor/ckeditor5-core";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";

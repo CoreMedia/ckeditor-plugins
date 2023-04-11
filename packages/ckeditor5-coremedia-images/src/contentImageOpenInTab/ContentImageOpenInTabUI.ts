@@ -1,11 +1,10 @@
 import { ButtonView } from "@ckeditor/ckeditor5-ui";
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
 
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
-import { Editor } from "@ckeditor/ckeditor5-core";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in

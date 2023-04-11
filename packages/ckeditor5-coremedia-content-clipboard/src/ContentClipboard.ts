@@ -1,9 +1,8 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";

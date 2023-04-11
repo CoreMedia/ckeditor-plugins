@@ -1,4 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
@@ -21,7 +21,6 @@ import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/c
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
 
 /**

@@ -1,4 +1,4 @@
-import { Command } from "@ckeditor/ckeditor5-core";
+import { Command, Editor } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
 import {
@@ -7,7 +7,6 @@ import {
   requireContentUriPath,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 
 // noinspection JSConstantReassignment
