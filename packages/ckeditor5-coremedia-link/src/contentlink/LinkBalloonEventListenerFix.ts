@@ -1,4 +1,4 @@
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { keepOpen } from "./LinkBalloonConfig";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";

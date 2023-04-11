@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import { Plugin, Command } from "@ckeditor/ckeditor5-core";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import createContentLinkView from "./ContentLinkViewFactory";

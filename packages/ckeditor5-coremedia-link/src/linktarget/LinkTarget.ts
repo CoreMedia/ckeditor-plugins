@@ -1,6 +1,6 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import LinkTargetModelView from "./LinkTargetModelView";
-import Link from "@ckeditor/ckeditor5-link/src/link";
+import { Link } from "@ckeditor/ckeditor5-link";
 import LinkTargetActionsViewExtension from "./LinkTargetActionsViewExtension";
 import "../lang/linktarget";
 /**

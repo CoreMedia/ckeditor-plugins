@@ -3,7 +3,7 @@ import { ButtonView, ContextualBalloon, clickOutsideHandler } from "@ckeditor/ck
 import { Locale, Config } from "@ckeditor/ckeditor5-utils";
 import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";

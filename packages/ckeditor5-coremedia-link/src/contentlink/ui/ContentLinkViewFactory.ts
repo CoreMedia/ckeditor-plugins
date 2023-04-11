@@ -1,6 +1,6 @@
 import { LabeledFieldView } from "@ckeditor/ckeditor5-ui";
 import "../../../theme/contentlinkview.css";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 import ContentLinkView from "./ContentLinkView";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";

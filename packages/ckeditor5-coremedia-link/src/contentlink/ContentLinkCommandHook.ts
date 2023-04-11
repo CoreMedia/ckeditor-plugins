@@ -8,7 +8,7 @@ import {
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
+import { LinkEditing } from "@ckeditor/ckeditor5-link";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
 import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
 import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";

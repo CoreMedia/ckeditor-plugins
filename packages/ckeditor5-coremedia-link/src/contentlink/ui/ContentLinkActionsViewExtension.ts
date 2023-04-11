@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import { Plugin, Command } from "@ckeditor/ckeditor5-core";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
