@@ -3,9 +3,7 @@ import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfie
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
 import { createLabeledInputText } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
-import { Locale } from "@ckeditor/ckeditor5-utils";
-import { FocusTracker } from "@ckeditor/ckeditor5-utils";
-import { KeystrokeHandler } from "@ckeditor/ckeditor5-utils";
+import { Locale, FocusTracker, KeystrokeHandler } from "@ckeditor/ckeditor5-utils";
 import FocusCycler from "@ckeditor/ckeditor5-ui/src/focuscycler";
 import injectCssTransitionDisabler from "@ckeditor/ckeditor5-ui/src/bindings/injectcsstransitiondisabler";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
