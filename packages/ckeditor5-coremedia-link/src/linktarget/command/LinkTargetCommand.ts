@@ -5,7 +5,7 @@ import Schema from "@ckeditor/ckeditor5-engine/src/model/schema";
 import { LINK_TARGET_MODEL } from "../Constants";
 import DocumentSelection from "@ckeditor/ckeditor5-engine/src/model/documentselection";
 import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/Constants";
-import first from "@ckeditor/ckeditor5-utils/src/first";
+import { first } from "@ckeditor/ckeditor5-utils";
 import findAttributeRange from "@ckeditor/ckeditor5-typing/src/utils/findattributerange";
 import Position from "@ckeditor/ckeditor5-engine/src/model/position";
 import Model from "@ckeditor/ckeditor5-engine/src/model/model";

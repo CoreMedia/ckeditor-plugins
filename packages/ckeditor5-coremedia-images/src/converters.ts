@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
 import { serviceAgent } from "@coremedia/service-agent";

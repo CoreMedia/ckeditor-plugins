@@ -1,5 +1,5 @@
 /* eslint no-null/no-null: off */
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
 import ContentInputDataCache from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";

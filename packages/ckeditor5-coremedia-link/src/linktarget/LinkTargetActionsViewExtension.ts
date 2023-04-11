@@ -10,7 +10,7 @@ import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarseparatorview";
 import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
-import Locale from "@ckeditor/ckeditor5-utils/src/locale";
+import { Locale } from "@ckeditor/ckeditor5-utils";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";

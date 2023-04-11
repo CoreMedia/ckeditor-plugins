@@ -1,5 +1,5 @@
 import { isRegisterAttributeConfig, RegisterAttributeConfig } from "./RegisterAttributeConfig";
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { Config } from "@ckeditor/ckeditor5-utils";
 import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 /**

@@ -19,7 +19,7 @@ import { listRules } from "./rules/List";
 import { defaultStrictness, Strictness } from "../../Strictness";
 import { getV10CoreMediaRichTextConfig } from "../../CoreMediaRichTextConfig";
 import { EditorConfig } from "@ckeditor/ckeditor5-core";
-import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
+import { Config as CKEditorConfig } from "@ckeditor/ckeditor5-utils";
 
 /**
  * Configuration options for CoreMedia RichText Data Processing.

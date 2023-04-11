@@ -1,6 +1,6 @@
 import { defaultStrictness, Strictness } from "./Strictness";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
+import { Config as CKEditorConfig } from "@ckeditor/ckeditor5-utils";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
 import { EditorConfig } from "@ckeditor/ckeditor5-core";
 

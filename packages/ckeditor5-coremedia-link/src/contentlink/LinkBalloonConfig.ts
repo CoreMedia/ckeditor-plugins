@@ -1,4 +1,4 @@
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { Config } from "@ckeditor/ckeditor5-utils";
 import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 export const COREMEDIA_LINK_CONFIG_KEY = "coremedia:link";

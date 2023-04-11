@@ -1,10 +1,10 @@
 /* eslint no-null/no-null: off */
 
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { Config } from "@ckeditor/ckeditor5-utils";
 import { parseLinkTargetConfig } from "../../../src/linktarget/config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";
 
-jest.mock("@ckeditor/ckeditor5-utils/src/config");
+jest.mock("@ckeditor/ckeditor5-utils");
 
 const someFunction = () => {
   // irrelevant, only type required
@@ -12,6 +12,8 @@ const someFunction = () => {
 
 describe("LinkTargetConfig", () => {
   describe("parseLinkTargetConfig", () => {
+    // TODO[cke] Fix typings.
+    // @ts-expect-error - Requires generic type since CKEditor 37.x.
     let config: Config;
 
     beforeEach(() => {

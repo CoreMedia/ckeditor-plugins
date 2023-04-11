@@ -15,7 +15,7 @@ import { getConfig } from "./V10CoreMediaRichTextConfig";
 import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "../../ToDataProcessor";
-import ObservableMixin from "@ckeditor/ckeditor5-utils/src/observablemixin";
+import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
 
 /**

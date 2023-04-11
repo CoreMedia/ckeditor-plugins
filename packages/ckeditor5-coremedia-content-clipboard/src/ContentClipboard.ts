@@ -8,7 +8,7 @@ import Clipboard from "@ckeditor/ckeditor5-clipboard/src/clipboard";
 import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
 import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
 import ViewRange from "@ckeditor/ckeditor5-engine/src/view/range";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
+import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import ModelDocumentFragment from "@ckeditor/ckeditor5-engine/src/model/documentfragment";
