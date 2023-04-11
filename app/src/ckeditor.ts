@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
+import { Alignment } from "@ckeditor/ckeditor5-alignment";
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
 import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
