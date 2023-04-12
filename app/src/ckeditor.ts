@@ -337,6 +337,8 @@ ClassicEditor.create(sourceElement, {
   },
   autosave: {
     waitingTime: 1000, // in ms
+    // TODO[cke] Adapt typings.
+    // @ts-expect-error - Typings changed here.
     save(currentEditor: ClassicEditor) {
       console.log("Save triggered...");
       const start = performance.now();
