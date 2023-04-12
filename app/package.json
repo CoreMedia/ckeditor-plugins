@@ -63,7 +63,7 @@
     "postcss": "^8.4.21",
     "postcss-loader": "^7.2.4",
     "raw-loader": "^4.0.2",
-    "rimraf": "^4.4.1",
+    "rimraf": "^5.0.0",
     "style-loader": "^3.3.2",
     "terser-webpack-plugin": "^5.3.7",
     "ts-loader": "^9.4.2",
