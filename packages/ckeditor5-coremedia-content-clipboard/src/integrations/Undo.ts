@@ -1,5 +1,5 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
+import { UndoEditing } from "@ckeditor/ckeditor5-undo";
 import {
   CommandHandler,
   disableCommand,
