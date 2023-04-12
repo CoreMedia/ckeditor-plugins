@@ -3,7 +3,7 @@ import { Element, Range, Schema, DocumentSelection, Position, Model, Writer } fr
 import { LINK_TARGET_MODEL } from "../Constants";
 import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/Constants";
 import { first } from "@ckeditor/ckeditor5-utils";
-import findAttributeRange from "@ckeditor/ckeditor5-typing/src/utils/findattributerange";
+import { findAttributeRange } from "@ckeditor/ckeditor5-typing";
 
 /**
  * Signals to delete a target.
