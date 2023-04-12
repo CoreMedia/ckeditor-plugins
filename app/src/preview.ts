@@ -1,4 +1,4 @@
-import xmlFormat from "xml-formatter";
+import format = require("xml-formatter");
 
 const WITH_PREVIEW_CLASS = "with-preview";
 const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
@@ -19,8 +19,8 @@ const updatePreview = (data: string) => {
     return;
   }
   preview.innerText = data
-    ? xmlFormat(data, {
-        indentation: "   ",
+    ? format(data, {
+        indentation: "  ",
         collapseContent: false,
       })
     : "empty";
