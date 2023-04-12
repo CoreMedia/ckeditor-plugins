@@ -2,7 +2,7 @@ import "jest-xml-matcher";
 import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
 import HtmlFilter from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { TextFilterRule } from "../src/TextProxy";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");

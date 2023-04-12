@@ -3,7 +3,7 @@
 import ElementProxy, { ElementFilterRule, ElementFilterParams } from "../src/ElementProxy";
 
 import "jest-xml-matcher";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 

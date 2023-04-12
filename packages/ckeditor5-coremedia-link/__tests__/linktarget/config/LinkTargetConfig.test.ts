@@ -1,10 +1,10 @@
 /* eslint no-null/no-null: off */
 
-import { Config } from "@ckeditor/ckeditor5-utils";
+import Config from "@ckeditor/ckeditor5-utils/src/config";
 import { parseLinkTargetConfig } from "../../../src/linktarget/config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";
 
-jest.mock("@ckeditor/ckeditor5-utils");
+jest.mock("@ckeditor/ckeditor5-utils/src/config");
 
 const someFunction = () => {
   // irrelevant, only type required
