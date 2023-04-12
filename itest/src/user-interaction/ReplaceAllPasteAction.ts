@@ -5,7 +5,7 @@ import WindowBrowserAccessor from "../browser/WindowBrowserAccessor";
  * replaces everything by pasting from the clipboard.
  *
  * The action is using keyboard shortcuts to select everything and paste.
- * Select and paste is supported for Linux, Max and Windows.
+ * Select and paste is supported for Linux, Mac and Windows.
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ReplaceAllPasteAction {
@@ -16,18 +16,13 @@ export default class ReplaceAllPasteAction {
    */
   static async execute(): Promise<void> {
     const userAgent = await WindowBrowserAccessor.getUserAgent();
-    if (!userAgent.includes("Mac")) {
-      await page.keyboard.down("Control");
-      await page.keyboard.press("a");
-      await page.keyboard.press("v");
-      await page.keyboard.up("Control");
-      console.debug(`ReplaceAllPasteAction: Processed Ctrl+A, Ctrl+V (for ${userAgent})`);
-    } else {
-      await page.keyboard.down("Meta");
-      await page.keyboard.press("a");
-      await page.keyboard.press("v");
-      await page.keyboard.up("Meta");
-      console.debug(`ReplaceAllPasteAction: Processed Meta+A, Meta+V (for ${userAgent})`);
-    }
+    const { keyboard } = page;
+    const metaKey = userAgent.includes("Mac") ? "Meta" : "Control";
+    const press = (key: string): Promise<unknown> => Promise.all([keyboard.down(key), keyboard.up(key)]);
+    const selectAllAndPaste = (metaKey: "Control" | "Meta"): Promise<unknown> =>
+      Promise.all([keyboard.down(metaKey), press("a"), press("v"), keyboard.up(metaKey)]);
+
+    await selectAllAndPaste(metaKey);
+    console.debug(`ReplaceAllPasteAction: Processed ${metaKey}+A, ${metaKey}+V (for ${userAgent})`);
   }
 }
