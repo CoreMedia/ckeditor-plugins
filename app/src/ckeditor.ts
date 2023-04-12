@@ -10,7 +10,9 @@ import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { FindAndReplace } from "@ckeditor/ckeditor5-find-and-replace";
 import { Heading } from "@ckeditor/ckeditor5-heading";
+// ImageInline: See ckeditor/ckeditor5#12027.
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+// ImageBlockEditing: See ckeditor/ckeditor5#12027.
 import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
 import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import { Indent } from "@ckeditor/ckeditor5-indent";

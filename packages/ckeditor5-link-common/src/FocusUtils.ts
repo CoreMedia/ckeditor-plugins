@@ -1,5 +1,7 @@
 import { View, ViewCollection } from "@ckeditor/ckeditor5-ui";
+// LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
+// LinkFormView: See ckeditor/ckeditor5#12027.
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 
 /**

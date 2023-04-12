@@ -2,6 +2,7 @@
 
 import { Plugin, Command } from "@ckeditor/ckeditor5-core";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
+// LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";

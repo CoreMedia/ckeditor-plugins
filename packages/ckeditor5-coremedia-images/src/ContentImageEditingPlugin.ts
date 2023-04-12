@@ -1,8 +1,10 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
+// ImageUtils: See ckeditor/ckeditor5#12027.
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
-import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
+// ImageInline: See ckeditor/ckeditor5#12027.
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";

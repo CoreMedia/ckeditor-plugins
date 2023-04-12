@@ -1,5 +1,6 @@
 import { Plugin, Command } from "@ckeditor/ckeditor5-core";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
+// LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import { ButtonView, ToolbarSeparatorView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";

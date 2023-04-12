@@ -12,6 +12,7 @@ import {
 import { LabeledFieldView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
+// LinkFormView: See ckeditor/ckeditor5#12027.
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
