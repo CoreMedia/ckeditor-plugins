@@ -183,8 +183,8 @@ importers:
         specifier: ^1.1.5
         version: 1.1.5
       xml-formatter:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ^2.6.1
+        version: 2.6.1
     devDependencies:
       '@ckeditor/ckeditor5-dev-utils':
         specifier: ^36.0.1
@@ -3673,7 +3673,7 @@ packages:
     dependencies:
       '@types/node': 18.15.11
       tapable: 2.2.1
-      webpack: 5.78.0
+      webpack: 5.78.0(webpack-cli@5.0.1)
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
@@ -9138,7 +9138,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.1
       terser: 5.16.8
-      webpack: 5.78.0
+      webpack: 5.78.0(webpack-cli@5.0.1)
     dev: true
 
   /terser@5.16.8:
@@ -9626,46 +9626,6 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack@5.78.0:
-    resolution: {integrity: sha512-gT5DP72KInmE/3azEaQrISjTvLYlSM0j1Ezhht/KLVkrqtv10JoP/RXhwmX/frrutOPuSq3o5Vq0ehR/4Vmd1g==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    peerDependencies:
-      webpack-cli: '*'
-    peerDependenciesMeta:
-      webpack-cli:
-        optional: true
-    dependencies:
-      '@types/eslint-scope': 3.7.4
-      '@types/estree': 0.0.51
-      '@webassemblyjs/ast': 1.11.1
-      '@webassemblyjs/wasm-edit': 1.11.1
-      '@webassemblyjs/wasm-parser': 1.11.1
-      acorn: 8.8.2
-      acorn-import-assertions: 1.8.0(acorn@8.8.2)
-      browserslist: 4.21.5
-      chrome-trace-event: 1.0.3
-      enhanced-resolve: 5.12.0
-      es-module-lexer: 0.9.3
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.1.1
-      tapable: 2.2.1
-      terser-webpack-plugin: 5.3.7(webpack@5.78.0)
-      watchpack: 2.4.0
-      webpack-sources: 3.2.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-    dev: true
-
   /webpack@5.78.0(webpack-cli@5.0.1):
     resolution: {integrity: sha512-gT5DP72KInmE/3azEaQrISjTvLYlSM0j1Ezhht/KLVkrqtv10JoP/RXhwmX/frrutOPuSq3o5Vq0ehR/4Vmd1g==}
     engines: {node: '>=10.13.0'}
@@ -9824,11 +9784,11 @@ packages:
         optional: true
     dev: false
 
-  /xml-formatter@3.3.2:
-    resolution: {integrity: sha512-ld34F1b7+2UQGNkfsAV4MN3/b7cdUstyMj3XJhzKFasOPtMToVCkqmrNcmrRuSlPxgH1K9tXPkqr75gAT3ix2g==}
-    engines: {node: '>= 14'}
+  /xml-formatter@2.6.1:
+    resolution: {integrity: sha512-dOiGwoqm8y22QdTNI7A+N03tyVfBlQ0/oehAzxIZtwnFAHGeSlrfjF73YQvzSsa/Kt6+YZasKsrdu6OIpuBggw==}
+    engines: {node: '>= 10'}
     dependencies:
-      xml-parser-xo: 4.0.5
+      xml-parser-xo: 3.2.0
     dev: false
 
   /xml-name-validator@4.0.0:
@@ -9836,9 +9796,9 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /xml-parser-xo@4.0.5:
-    resolution: {integrity: sha512-UWXOHMQ4ySxpUiU3S/9KzPOhninlL8SN1xFfWgX9WjgoZWoLKtEeJIEz4jhKtdFsoZBCYjg9rDEP3qfnpiHagQ==}
-    engines: {node: '>= 14'}
+  /xml-parser-xo@3.2.0:
+    resolution: {integrity: sha512-8LRU6cq+d7mVsoDaMhnkkt3CTtAs4153p49fRo+HIB3I1FD1o5CeXRjRH29sQevIfVJIcPjKSsPU/+Ujhq09Rg==}
+    engines: {node: '>= 10'}
     dev: false
 
   /xmlchars@2.2.0:
