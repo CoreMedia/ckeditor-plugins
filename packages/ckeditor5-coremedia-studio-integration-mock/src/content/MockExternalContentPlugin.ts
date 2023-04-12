@@ -1,4 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
