@@ -1,9 +1,8 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { ClipboardPipeline } from "@ckeditor/ckeditor5-clipboard";
+import { ClipboardPipeline, ClipboardEventData } from "@ckeditor/ckeditor5-clipboard";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { ViewDocumentFragment, DataTransfer as ViewDataTransfer } from "@ckeditor/ckeditor5-engine";
-import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
