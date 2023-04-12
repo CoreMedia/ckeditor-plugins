@@ -56,6 +56,13 @@ export class ApplicationConsole {
   close() {
     this.#handler && this.#page.off("console", this.#handler);
     this.#handler = undefined;
+    // Dump may contain valuable information for debugging (e.g., log outputs from tests).
+    let debugDump = `ApplicationConsole dump (${this.messages.length}):`;
+    this.messages.forEach((message) => {
+      const { url, lineNumber, columnNumber } = message.location();
+      return (debugDump = `${debugDump}\n  [${message.type()}] ${message.text()} (${url}#${lineNumber}:${columnNumber})`);
+    });
+    console.debug(debugDump);
     this.clear();
   }
 

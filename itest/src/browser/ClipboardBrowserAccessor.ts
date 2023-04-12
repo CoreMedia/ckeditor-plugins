@@ -26,14 +26,20 @@ export default class ClipboardBrowserAccessor {
    */
   static async write(itemConfig: ClipboardItemConfig): Promise<void> {
     return page.evaluate(async (itemToCopy): Promise<void> => {
-      //Blob and ClipboardItem are only available in the browser, therefore we
-      //have to create Blob and ClipboardItem in the same function where we write
-      //it to the clipboard.
+      // Blob and ClipboardItem are only available in the browser, therefore, we
+      // have to create Blob and ClipboardItem in the same function where we write
+      // it to the clipboard.
       const blob = new Blob([itemToCopy.content], { type: itemToCopy.type });
       const clipboardItem = new ClipboardItem({
         [itemToCopy.type]: blob,
       });
-      await navigator.clipboard.write([clipboardItem]);
+      try {
+        await navigator.clipboard.write([clipboardItem]);
+        console.debug("Written to clipboard.", { ...itemToCopy });
+      } catch (e) {
+        console.debug("Failed writing to clipboard.", { ...itemToCopy }, e);
+        throw e;
+      }
     }, itemConfig);
   }
 }

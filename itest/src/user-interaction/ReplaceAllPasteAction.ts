@@ -21,11 +21,13 @@ export default class ReplaceAllPasteAction {
       await page.keyboard.press("a");
       await page.keyboard.press("v");
       await page.keyboard.up("Control");
+      console.debug(`ReplaceAllPasteAction: Processed Ctrl+A, Ctrl+V (for ${userAgent})`);
     } else {
       await page.keyboard.down("Meta");
       await page.keyboard.press("a");
       await page.keyboard.press("v");
       await page.keyboard.up("Meta");
+      console.debug(`ReplaceAllPasteAction: Processed Meta+A, Meta+V (for ${userAgent})`);
     }
   }
 }
