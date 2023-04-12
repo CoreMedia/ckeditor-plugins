@@ -119,8 +119,7 @@ export default class ContentLinks extends Plugin {
       if (!linkUI || !linkCommand) {
         return;
       }
-      const { formView } = linkUI;
-      const { actionsView } = linkUI;
+      const { formView, actionsView } = linkUI;
       if (!formView || !actionsView) {
         throw new LazyLinkUIPropertiesNotInitializedYetError();
       }
