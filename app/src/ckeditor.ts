@@ -44,7 +44,7 @@ import CoreMediaStudioEssentials, {
 import { initInputExampleContent } from "./inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
-import { Command, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
+import { Command, DataApi, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
@@ -339,9 +339,8 @@ ClassicEditor.create(sourceElement, {
   },
   autosave: {
     waitingTime: 1000, // in ms
-    // TODO[cke] Adapt typings.
-    // @ts-expect-error - Typings changed here.
-    save(currentEditor: ClassicEditor) {
+    // @ts-expect-error - ckeditor/ckeditor5/issues/13904
+    save(currentEditor: Editor & DataApi) {
       console.log("Save triggered...");
       const start = performance.now();
       return saveData(currentEditor, "autosave").then(() => {
