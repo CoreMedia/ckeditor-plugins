@@ -139,7 +139,7 @@ const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
  *
  * Similar to GHS/GRS, they are just registered as being _valid_ **and**
  * (this is important) register them to belong to a link element, which again
- * ensures, that they are removed on remove-link, that cursor positioning
+ * ensures that they are removed on remove-link, that cursor positioning
  * handles them correctly, etc.
  *
  * For demonstration purpose, the link attributes configuration can be disabled
@@ -234,7 +234,7 @@ ClassicEditor.create(sourceElement, {
   alignment: {
     // The following alternative to signal alignment was used in CKEditor 4
     // of CoreMedia CMCC 10 and before.
-    // Note, that in contrast to CKEditor 4 approach, these classes are now
+    // Note that in contrast to CKEditor 4 approach, these classes are now
     // applicable to any block element, while it supported only `<p>` in the
     // past.
     options: [
@@ -277,7 +277,7 @@ ClassicEditor.create(sourceElement, {
         label: "Title",
         attributes: {
           title:
-            'Example how standard-decorators of the link-plugin works. To enable/disable, just rename decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
+            'Example how standard-decorators of the link-plugin works. To enable/disable, just rename the decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
         },
       },
     },*/
@@ -333,7 +333,7 @@ ClassicEditor.create(sourceElement, {
   language: {
     // Language switch only applies to editor instance.
     ui: editorLanguage,
-    // Won't change language of content.
+    // Won't change the language of content.
     content: "en",
   },
   autosave: {
@@ -350,7 +350,7 @@ ClassicEditor.create(sourceElement, {
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     // Defaults to: Loose
     strictness: Strictness.STRICT,
-    // Latest is the default. Use v10 for first data-processor architecture,
+    // The Latest is the default. Use v10 for first data-processor architecture,
     // for example.
     compatibility: richTextCompatibility,
     rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
