@@ -44,7 +44,7 @@ import CoreMediaStudioEssentials, {
 import { initInputExampleContent } from "./inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
-import { Command, DataApi, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
+import { Command, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
@@ -155,7 +155,6 @@ const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttribu
     };
 
 ClassicEditor.create(sourceElement, {
-  licenseKey: "",
   placeholder: "Type your text here...",
   plugins: [
     ...imagePlugins,
@@ -347,6 +346,7 @@ ClassicEditor.create(sourceElement, {
       });
     },
   },
+  // @ts-expect-error - TODO[cke] Fix Typings
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     // Defaults to: Loose
     strictness: Strictness.STRICT,
