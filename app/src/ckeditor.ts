@@ -44,7 +44,7 @@ import CoreMediaStudioEssentials, {
 import { initInputExampleContent } from "./inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
 
-import { Command, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
+import { Command, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
@@ -56,6 +56,15 @@ import { getHashParam } from "./HashParams";
 import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
 import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/LinkAttributesConfig";
 import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
+
+/**
+ * Typings for CKEditorInspector, as it does not ship with typings yet.
+ */
+// See https://github.com/ckeditor/ckeditor5-inspector/issues/173
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+declare class CKEditorInspector {
+  static attach(editorOrConfig: Editor | Record<string, Editor>, options?: { isCollapsed?: boolean }): string[];
+}
 
 const {
   objectInline: withinTextIcon,
@@ -371,8 +380,6 @@ ClassicEditor.create(sourceElement, {
   },
 })
   .then((newEditor: ClassicEditor) => {
-    // @ts-expect-error imported in html
-    // eslint-disable-next-line
     CKEditorInspector.attach(
       {
         "main-editor": newEditor,
