@@ -7,7 +7,7 @@ const LastSetData = Symbol("LastSetData");
 
 /**
  * A small facade around editor.setData, which remembers the last data
- * set explicitly. This simulates similar approach in studio-client.
+ * set explicitly. This simulates a similar approach as in studio-client.
  */
 export const setData = (editor: Editor & DataApi, data: string) => {
   const { document } = editor.model;
@@ -32,7 +32,7 @@ export const setData = (editor: Editor & DataApi, data: string) => {
 
 /**
  * Save method with additional recognition, if there is an actual change.
- * This represents, how we could prevent auto-checkout in CoreMedia
+ * This represents how we could prevent auto-checkout in CoreMedia
  * Studio for irrelevant changes, because they are semantically equivalent.
  *
  * @param editor - the editor instance whose data to save
