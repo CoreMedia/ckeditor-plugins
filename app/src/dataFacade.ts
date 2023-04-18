@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { updatePreview } from "./preview";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
+import { DataApi, Editor } from "@ckeditor/ckeditor5-core";
 
 const LastSetVersion = Symbol("LastSetVersion");
 const LastSetData = Symbol("LastSetData");
@@ -9,7 +9,7 @@ const LastSetData = Symbol("LastSetData");
  * A small facade around editor.setData, which remembers the last data
  * set explicitly. This simulates similar approach in studio-client.
  */
-export const setData = (editor: ClassicEditor, data: string) => {
+export const setData = (editor: Editor & DataApi, data: string) => {
   const { document } = editor.model;
 
   const versionBefore = document.version;
@@ -40,7 +40,7 @@ export const setData = (editor: ClassicEditor, data: string) => {
  */
 // async: In production scenarios, this will be an asynchronous call.
 // eslint-disable-next-line @typescript-eslint/require-await
-export const saveData = async (editor: ClassicEditor, source: string) => {
+export const saveData = async (editor: Editor & DataApi, source: string) => {
   const data = editor.getData({
     // set to `none`, to trigger data-processing for empty text, too
     // possible values: empty, none (default: empty)
