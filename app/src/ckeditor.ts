@@ -327,8 +327,6 @@ ClassicEditor.create(sourceElement, {
     ui: editorLanguage,
     // Won't change language of content.
     content: "en",
-    // @ts-expect-error TODO: Upgrade 37.0.0 text part language only available with plugin activated, types are incorrect?
-    textPartLanguage: [],
   },
   autosave: {
     waitingTime: 1000, // in ms
