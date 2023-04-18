@@ -339,8 +339,7 @@ ClassicEditor.create(sourceElement, {
   },
   autosave: {
     waitingTime: 1000, // in ms
-    // @ts-expect-error - ckeditor/ckeditor5/issues/13904
-    save(currentEditor: Editor & DataApi) {
+    save(currentEditor: Editor) {
       console.log("Save triggered...");
       const start = performance.now();
       return saveData(currentEditor, "autosave").then(() => {
