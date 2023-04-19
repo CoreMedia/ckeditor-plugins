@@ -774,8 +774,6 @@ type AttributeValue = string | null;
 /**
  * The attributes of an element.
  */
-// TODO: We should migrate this to a map instead. This would also solve issues
-//       like @typescript-eslint/no-dynamic-delete.
 type AttributeMap = Record<string, AttributeValue>;
 
 /**
