@@ -21,7 +21,7 @@ import { LazyLinkUIPropertiesNotInitializedYetError } from "../contentlink/LazyL
  * * executing a button will result in setting the target of a given link
  *
  * When clicking the "Open in Frame" button, an additional balloon with a text input
- * opens and allows to set a custom target.
+ * opens and allows setting a custom target.
  *
  * The buttons to be rendered can be set in the editor's configuration.
  * The default configuration is defined in {@link linktarget.config.DefaultTarget}.
@@ -143,7 +143,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       isToggleable: true,
     });
 
-    // Corner Case: `_self` is also on, if no target is set yet.
+    // Corner Case: `_self` is also on if target is not yet set.
     view
       .bind("isOn")
       .to(
