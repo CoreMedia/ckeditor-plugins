@@ -181,7 +181,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   /**
-   * Add classes to the actions view which enables to distinguish if the extension is active.
+   * Add classes to the actions view that enables to distinguish if the extension is active.
    *
    * @param actionsView - the rendered actionsView of the linkUI
    * @private
