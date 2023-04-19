@@ -1,5 +1,4 @@
 import { type ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
 
 /**
  * We require accessing some of the internal properties/methods of `LinkUI`.
@@ -24,7 +23,7 @@ const isHasHideUI = (linkUI: object): linkUI is Pick<InternalLinkUI, "_hideUI"> 
 const isHasIsUIInPanel = (linkUI: object): linkUI is Pick<InternalLinkUI, "_isUIInPanel"> =>
   "_isUIInPanel" in linkUI && typeof linkUI._isUIInPanel === "boolean";
 
-const isInternalLinkUI = (linkUI: unknown): linkUI is LinkUI & InternalLinkUI =>
+const isInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI =>
   typeof linkUI === "object" && !!linkUI && isHasBalloon(linkUI) && isHasHideUI(linkUI) && isHasIsUIInPanel(linkUI);
 
 /**
