@@ -20,6 +20,8 @@ import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
+import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
+import { Observable } from "@ckeditor/ckeditor5-utils";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -107,10 +109,10 @@ export default class ContentLinks extends Plugin {
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
 
-    if (isHasHideUiMethod(linkUI)) {
-      createDecoratorHook(linkUI, "_hideUI", this.onHideUiCallback(editor), this);
-    } else {
-      this.#logger.warn(`Failed decorating _hideUI of LinkUI. CKEditor 5 may have changed its internal API.`);
+    const internalLinkUI: Observable = linkUI;
+
+    if (hasRequiredInternalLinkUI(internalLinkUI)) {
+      createDecoratorHook(internalLinkUI, "_hideUI", this.onHideUiCallback(editor), this);
     }
 
     // registers the openInTab command for content links, used to open a content when clicking the content link
@@ -138,10 +140,3 @@ export default class ContentLinks extends Plugin {
     };
   }
 }
-
-interface HasHideUiMethod {
-  _hideUI(): void;
-}
-
-const isHasHideUiMethod = (value: object): value is HasHideUiMethod =>
-  "_hideUI" in value && typeof value._hideUI === "function";

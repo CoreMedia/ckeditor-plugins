@@ -2,6 +2,7 @@ import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { keepOpen } from "./LinkBalloonConfig";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
+import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 
 /**
  * Whether the mouseDown event occurred on a whitelisted element.
@@ -59,17 +60,24 @@ export const addMouseEventListenerToHideDialog = (linkUI: LinkUI): void => {
   if (!formView) {
     throw new LazyLinkUIPropertiesNotInitializedYetError();
   }
+
+  const internalLinkUI: unknown = linkUI;
+  if (!hasRequiredInternalLinkUI(internalLinkUI)) {
+    return;
+  }
+
+  const {
+    _balloon: {
+      view: { element },
+    },
+  } = internalLinkUI;
+
   addCustomClickOutsideHandler({
     emitter: formView,
-    // @ts-expect-error TODO Fix Typings
-    activator: () => linkUI._isUIInPanel as boolean,
-    // @ts-expect-error TODO Fix Typings
-    // eslint-disable-next-line
-    contextElements: [linkUI._balloon.view.element],
+    activator: () => internalLinkUI._isUIInPanel,
+    contextElements: element ? [element] : [],
     callback: () => {
-      // @ts-expect-error TODO Fix Typings
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      linkUI._hideUI();
+      internalLinkUI._hideUI();
     },
   });
 };
