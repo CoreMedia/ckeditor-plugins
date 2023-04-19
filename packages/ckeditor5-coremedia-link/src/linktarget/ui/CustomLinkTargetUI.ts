@@ -118,9 +118,8 @@ export default class CustomLinkTargetUI extends Plugin {
        * although it will open with an empty editor when clicked (as specified, as we may fix the orphaned value of
        * xlink:show="other" this way).
        */
-      // @ts-expect-error TODO Check Typings
-      view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: string) => {
-        if (isOn && value !== OTHER_TARGET_NAME) {
+      view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: unknown) => {
+        if (isOn && value !== OTHER_TARGET_NAME && typeof value === "string") {
           return `${this.editor.locale.t(definition.title)}: "${this.editor.locale.t(value)}"`;
         }
         return true;
