@@ -5,15 +5,15 @@ import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIProperti
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 
 /**
- * Whether the mouseDown event occurred on a whitelisted element.
+ * Whether the mouseDown event occurred on an allow-listed element.
  * Background: The mouseDown and click events may not always share the same path.
- * (E.g. when dragging elements like the CoreMedia Studio library)
+ * (E.g., when dragging elements like the CoreMedia Studio library)
  *
  * This would result in a close of the balloon even though the mouseDown was performed
  * on an element, for which the balloon should stay open.
  *
  * Therefore, this field links both listeners and makes sure the balloon is not closed on mouseUp
- * (click) when the mouseDown happened on the whitelisted element, by exiting the click listener early.
+ * (click) when the mouseDown happened on the allow-listed element, by exiting the click listener early.
  */
 let mouseDownOnWhiteListedElement = false;
 
@@ -139,7 +139,7 @@ const addCustomClickOutsideHandler = ({
     "click",
     (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
       if (mouseDownOnWhiteListedElement) {
-        // we already checked that this click (mouseDown) occurred on a whitelisted element
+        // we already checked that this click (mouseDown) occurred on an allow-listed element
         mouseDownOnWhiteListedElement = false;
         return;
       }
