@@ -219,11 +219,11 @@ export const initExamples = (editor: ClassicEditor) => {
     throw new Error("Required components for Example-Data Loading missing.");
   }
 
-  // Clear input on focus (otherwise, only matched option is shown)
+  // Clear input on focus (otherwise, only the matched option is shown)
   xmpInput.addEventListener("focus", () => {
     xmpInput.value = "";
   });
-  // On change, set the data – or show an error, if data are unknown.
+  // On change, set the data – or show an error if data are unknown.
   xmpInput.addEventListener("change", () => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {
