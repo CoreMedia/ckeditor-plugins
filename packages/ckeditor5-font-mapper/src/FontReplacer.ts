@@ -3,6 +3,7 @@ import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
 const logger: Logger = LoggerProvider.getLogger("FontMapper");
@@ -201,11 +202,10 @@ const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElemen
 const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: ViewElement): void => {
   const textElements = findTextNodeChildren(element);
   for (const textElement of textElements) {
-    //@ts-expect-error TODO _textData is protected
-    const oldTextData: string = textElement._textData as string;
+    const hasTextData = asHasTextData(textElement);
+    const oldTextData: string = hasTextData._textData;
     logger.debug("Searching replacement character for textElement:", textElement);
-    //@ts-expect-error TODO _textData is protected
-    textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
+    hasTextData._textData = fontMapping.toReplacementCharacter(oldTextData);
   }
 };
 
@@ -219,3 +219,21 @@ const findTextNodeChildren = (element: ViewElement): ViewText[] =>
   Array.from<ViewNode>(element.getChildren())
     .filter((value) => value instanceof ViewText)
     .map((value) => value as ViewText);
+
+/**
+ * Provides access to private API of `Text`.
+ */
+interface HasTextData {
+  _textData: string;
+}
+
+const isHasTextData = (value: unknown): value is HasTextData =>
+  typeof value === "object" && !!value && "_textData" in value && typeof value._textData === "string";
+
+const asHasTextData = (value: unknown): HasTextData => {
+  if (isHasTextData(value)) {
+    return value;
+  }
+  console.debug("Required internal API _textData unavailable.", value);
+  throw new IncompatibleInternalApiUsageError("Required internal API _textData unavailable.");
+};
