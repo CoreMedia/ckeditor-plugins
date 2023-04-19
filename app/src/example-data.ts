@@ -13,6 +13,7 @@ import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-da
 import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
 import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
+import { View } from "@ckeditor/ckeditor5-engine";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -162,17 +163,22 @@ const exampleData: Record<string, string> = {
 };
 
 export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
+  const {
+    editing: { view },
+  } = editor;
   try {
     // noinspection InnerHTMLJS
-    editor.editing.view.once(
+    view.once(
       "render",
-      (event) =>
-        console.log("CKEditor's Editing-Controller rendered data.", {
-          source: event.source,
-          // @ts-expect-error TODO: Upgrade 37.0.0 Type Guard?
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-          innerHtml: (event.source.getDomRoot() as unknown as HTMLDivElement).innerHTML,
-        }),
+      (event) => {
+        const { source } = event;
+        if (source instanceof View) {
+          console.log("CKEditor's Editing-Controller rendered data.", {
+            source,
+            innerHtml: source.getDomRoot()?.innerHTML,
+          });
+        }
+      },
       {
         priority: "lowest",
       }
