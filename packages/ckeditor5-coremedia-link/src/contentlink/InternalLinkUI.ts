@@ -16,7 +16,7 @@ export interface InternalLinkUI {
 }
 
 const isHasBalloon = (linkUI: object): linkUI is Pick<InternalLinkUI, "_balloon"> =>
-  "_balloon" in linkUI && typeof linkUI._balloon === "boolean";
+  "_balloon" in linkUI && typeof linkUI._balloon === "object";
 
 const isHasHideUI = (linkUI: object): linkUI is Pick<InternalLinkUI, "_hideUI"> =>
   "_hideUI" in linkUI && typeof linkUI._hideUI === "function";
@@ -50,6 +50,10 @@ const isInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI =>
 export const hasRequiredInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI => {
   const result = isInternalLinkUI(linkUI);
   if (!result) {
+    console.debug(
+      "hasRequiredInternalLinkUI: Required internal properties (_balloon, _hideUI, _isUIInPanel) not available",
+      linkUI
+    );
     throw new IncompatibleInternalApiUsageError("Required internal API of LinkUI unavailable.");
   }
   return result;
