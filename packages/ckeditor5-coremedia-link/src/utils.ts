@@ -12,9 +12,10 @@ import { TemplateIfBinding } from "@ckeditor/ckeditor5-ui/src/template";
  * @param classNames - a classname or an array of classname strings
  */
 export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
-  // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-  const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
+  const { template } = view;
+  const attributes = template?.attributes;
+  // .includes below does not work with AttributeValues type. unknown[] is enough here for us.
+  const classes: unknown[] = attributes?.class ?? [];
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
