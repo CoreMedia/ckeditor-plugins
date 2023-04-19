@@ -107,7 +107,12 @@ export default class ContentLinks extends Plugin {
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
 
-    createDecoratorHook(linkUI, "_hideUI", this.onHideUiCallback(editor), this);
+    if (isHasHideUiMethod(linkUI)) {
+      createDecoratorHook(linkUI, "_hideUI", this.onHideUiCallback(editor), this);
+    } else {
+      this.#logger.warn(`Failed decorating _hideUI of LinkUI. CKEditor 5 may have changed its internal API.`);
+    }
+
     // registers the openInTab command for content links, used to open a content when clicking the content link
     editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
   }
@@ -133,3 +138,10 @@ export default class ContentLinks extends Plugin {
     };
   }
 }
+
+interface HasHideUiMethod {
+  _hideUI(): void;
+}
+
+const isHasHideUiMethod = (value: object): value is HasHideUiMethod =>
+  "_hideUI" in value && typeof value._hideUI === "function";

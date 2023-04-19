@@ -94,25 +94,39 @@ export const removeClass = (view: View, classNames: string[] | string): void => 
  * @param options - (optional) options object for listener priority
  */
 
-export const createDecoratorHook = (
-  methodParentCmp: Observable,
-  methodName: string,
+export const createDecoratorHook = <O extends Observable>(
+  methodParentCmp: O,
+  methodName: keyof O & string,
   callback: () => void,
   listenerCmp: Emitter,
   options?: { priority?: number | PriorityString }
 ): void => {
-  if (
-    !(methodParentCmp as DecorableCmp)._events ||
-    !(methodParentCmp as DecorableCmp)._events.hasOwnProperty(methodName)
-  ) {
-    // TODO[cke] Fix typings.
-    // @ts-expect-errors since 37.0.0 - decorate parameter is defined as a method from the component, which is wrong typed in our method definition.
+  if (!isDecorated(methodParentCmp, methodName)) {
     methodParentCmp.decorate(methodName);
+    if (!isDecorated(methodParentCmp, methodName)) {
+      console.warn(
+        `createDecoratorHook: Issues while decorating ${methodName}. CKEditor may have changed its internal API around Emitter Mixin. Detection for _is decorated_ needs to be adapted.`
+      );
+    }
   }
 
   listenerCmp.listenTo(methodParentCmp, methodName, callback, options);
 };
 
-interface DecorableCmp extends Observable {
-  _events: unknown[];
+/**
+ * When decorating, the internal `_events` property gets set, that we use here.
+ * See `Observable.decorate()` and `getEvents` in Emitter Mixin.
+ */
+interface EmitterInternal {
+  _events: Record<string, unknown>;
 }
+
+const isEmitterInternal = (observable: object): observable is EmitterInternal => {
+  if ("_events" in observable) {
+    return typeof observable._events === "object";
+  }
+  return false;
+};
+
+const isDecorated = (observable: Observable, methodName: string): boolean =>
+  isEmitterInternal(observable) && observable._events.hasOwnProperty(methodName);
