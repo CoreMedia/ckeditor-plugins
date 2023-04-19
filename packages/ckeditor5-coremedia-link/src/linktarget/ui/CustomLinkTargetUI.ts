@@ -1,7 +1,6 @@
 import { Plugin, Command } from "@ckeditor/ckeditor5-core";
 import { ButtonView, ContextualBalloon, clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
-import { Locale, Config } from "@ckeditor/ckeditor5-utils";
-import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
+import { Locale, Config, PositionOptions } from "@ckeditor/ckeditor5-utils";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
@@ -9,6 +8,7 @@ import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/Def
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -257,9 +257,29 @@ export default class CustomLinkTargetUI extends Plugin {
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
-  #getBalloonPositionData(): Options {
-    // @ts-expect-error TODO Check Typings/Usage (most likely private API, we need to deal with somehow).
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    return this.linkUI._getBalloonPositionData() as Options;
+  #getBalloonPositionData(): Partial<PositionOptions> {
+    const { linkUI } = this;
+    return asHasGetBalloonPositionData(linkUI)._getBalloonPositionData();
   }
 }
+
+/**
+ * Exposes private API of LinkUI.
+ */
+interface HasGetBalloonPositionData {
+  _getBalloonPositionData(): Partial<PositionOptions>;
+}
+
+const isHasGetBalloonPositionData = (value: unknown): value is HasGetBalloonPositionData =>
+  typeof value === "object" &&
+  !!value &&
+  "_getBalloonPositionData" in value &&
+  typeof value._getBalloonPositionData === "function";
+
+const asHasGetBalloonPositionData = (value: unknown): HasGetBalloonPositionData => {
+  if (isHasGetBalloonPositionData(value)) {
+    return value;
+  }
+  console.debug("Required internal API _getBalloonPositionData unavailable.", value);
+  throw new IncompatibleInternalApiUsageError("Required internal API _getBalloonPositionData unavailable.");
+};
