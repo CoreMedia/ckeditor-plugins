@@ -161,13 +161,15 @@ class LinkTargetCommand extends Command {
 
     if (selection.isCollapsed) {
       const findAttributeRanges = LinkTargetCommand.#findAttributeRanges;
-      return findAttributeRanges(
-        selection.getFirstPosition(),
-        LINK_HREF_MODEL,
-        // @ts-expect-error TODO Handle not yet handled types like number, etc.
-        selection?.getAttribute(LINK_HREF_MODEL),
-        model
-      );
+      const linkHrefModel = selection?.getAttribute(LINK_HREF_MODEL);
+
+      if (typeof linkHrefModel !== "string") {
+        throw new Error(
+          `Unexpected type for attribute ${LINK_HREF_MODEL}. Expected "string" but value is: ${linkHrefModel}`
+        );
+      }
+
+      return findAttributeRanges(selection.getFirstPosition(), LINK_HREF_MODEL, linkHrefModel, model);
     }
 
     return [...model.schema.getValidRanges([...selection.getRanges()], LINK_HREF_MODEL)];
