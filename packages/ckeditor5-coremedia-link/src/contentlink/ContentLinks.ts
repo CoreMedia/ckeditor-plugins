@@ -52,7 +52,7 @@ export default class ContentLinks extends Plugin {
 
   /**
    * Removes the focus on the editor and clears the selection.
-   * Can be used to clear all activity on the editor when contextual
+   * Can be used to clear all activity in the editor when contextual
    * balloons are closed manually.
    *
    * @private
