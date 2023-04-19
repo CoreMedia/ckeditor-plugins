@@ -31,6 +31,21 @@ import { addClassToTemplate } from "../../utils";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
 
 /**
+ * We add `contentUriPath` and `contentName` to the form view.
+ */
+interface AugmentedFormView {
+  contentUriPath?: string;
+  contentName?: string;
+}
+
+/**
+ * Provides augmented typing for form view.
+ *
+ * @param formView - formView to augment
+ */
+const augmentFormView = <T extends object>(formView: T): T & AugmentedFormView => formView;
+
+/**
  * Extends the form view for Content link display. This includes:
  *
  * * render name of linked content (or placeholder for unreadable content)
@@ -74,18 +89,20 @@ class ContentLinkFormViewExtension extends Plugin {
 
   initializeFormView(linkUI: LinkUI): void {
     const { formView } = linkUI;
+
     const linkCommand = linkUI.editor.commands.get("link") as Command;
     if (!formView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
     }
-    formView.set({
-      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+
+    const augmentedFormView = augmentFormView(formView);
+
+    augmentedFormView.set({
       contentUriPath: undefined,
       contentName: undefined,
     });
 
-    formView
-      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+    augmentedFormView
       .bind("contentUriPath")
       .to(linkCommand, "value", (value: unknown) =>
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
@@ -196,7 +213,7 @@ class ContentLinkFormViewExtension extends Plugin {
     // the save button. This is because we must not submit a content-link when
     // we don't know its name yet.
     const saveButtonView = formView.saveButtonView;
-    const enabledProperties = [linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath"];
+    const augmentedFormView = augmentFormView(formView);
     const enabledHandler = (
       isEnabled: boolean,
       contentName: string | undefined,
@@ -205,8 +222,17 @@ class ContentLinkFormViewExtension extends Plugin {
       // Either contentUriPath must be unset or contentName must be set.
       isEnabled && (!contentUriPath || !!contentName);
     saveButtonView.unbind("isEnabled");
-    // @ts-expect-error TODO Fix after Migrating to Types from DefinitelyTyped
-    saveButtonView.bind("isEnabled").to(...enabledProperties, enabledHandler);
+    saveButtonView
+      .bind("isEnabled")
+      .to(
+        linkCommand,
+        "isEnabled",
+        augmentedFormView,
+        "contentName",
+        augmentedFormView,
+        "contentUriPath",
+        enabledHandler
+      );
   }
 
   #extendView(linkUI: LinkUI): void {
