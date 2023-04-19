@@ -1,7 +1,5 @@
 import { View } from "@ckeditor/ckeditor5-ui";
-import { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { Observable, PriorityString, Emitter } from "@ckeditor/ckeditor5-utils";
 
 /**
  * Adds a CSS class, or an array of CSS classes to a view template.
