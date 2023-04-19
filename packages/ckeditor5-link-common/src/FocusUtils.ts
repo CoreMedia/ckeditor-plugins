@@ -1,14 +1,9 @@
-import { View, ViewCollection } from "@ckeditor/ckeditor5-ui";
+import { View } from "@ckeditor/ckeditor5-ui";
 // LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 // LinkFormView: See ckeditor/ckeditor5#12027.
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
-
-/**
- * Extended LinkView type to use when managing focus tracking in LinkFormView and LinkActionsView.
- * Use if you need to access the internal _focusable property.
- */
-export type LinkViewWithFocusables = (LinkActionsView | LinkFormView) & { _focusables: ViewCollection };
+import { hasRequiredInternalFocusablesProperty } from "./HasFocusables";
 
 /**
  * Utility function to handle focus tracking for extended linkViews.
@@ -26,7 +21,7 @@ export type LinkViewWithFocusables = (LinkActionsView | LinkFormView) & { _focus
  * @param positionRelativeToAnchorView - defines whether to add the childViews before or after the anchorView in focus order
  */
 export const handleFocusManagement = (
-  parentView: LinkViewWithFocusables,
+  parentView: LinkActionsView | LinkFormView,
   childViews: View[],
   anchorView: View,
   positionRelativeToAnchorView: "before" | "after" = "after"
@@ -46,12 +41,14 @@ export const handleFocusManagement = (
   });
 };
 
-const addViewsToFocusables = (parentView: LinkViewWithFocusables, childViews: View[]): void => {
+const addViewsToFocusables = (parentView: LinkActionsView | LinkFormView, childViews: View[]): void => {
+  const internalParentView: unknown = parentView;
+  if (!hasRequiredInternalFocusablesProperty(internalParentView)) {
+    return;
+  }
   childViews.forEach((view: View) => {
     if (view.element) {
-      //@ts-expect-error _focusable is private api.
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      parentView._focusables.add(view);
+      internalParentView._focusables.add(view);
     }
   });
 };
@@ -64,16 +61,18 @@ const addViewsToFocusTracker = (parentView: LinkActionsView | LinkFormView, chil
   });
 };
 
-const removeExistingFocusables = (view: LinkViewWithFocusables): View[] => {
+const removeExistingFocusables = (view: LinkActionsView | LinkFormView): View[] => {
+  const internalView: unknown = view;
+
+  if (!hasRequiredInternalFocusablesProperty(internalView)) {
+    return [];
+  }
+
   const removedViews: View[] = [];
-  //@ts-expect-error _focusable is private api
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const viewArray = Array.from(view._focusables);
-  viewArray.forEach((childView: unknown) => {
-    //@ts-expect-error _focusable is private api
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    view._focusables.remove(childView);
-    removedViews.push(childView as View);
+  const viewArray = Array.from(internalView._focusables);
+  viewArray.forEach((childView) => {
+    internalView._focusables.remove(childView);
+    removedViews.push(childView);
   });
   return removedViews;
 };

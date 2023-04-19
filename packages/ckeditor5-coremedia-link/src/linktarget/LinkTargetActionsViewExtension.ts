@@ -10,7 +10,7 @@ import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";
 import { Locale } from "@ckeditor/ckeditor5-utils";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
+import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../contentlink/LazyLinkUIPropertiesNotInitializedYetError";
 
@@ -104,7 +104,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   }
 
   static #render(actionsView: LinkActionsView, addedButtons: View[]): void {
-    handleFocusManagement(actionsView as LinkViewWithFocusables, addedButtons, actionsView.unlinkButtonView, "before");
+    handleFocusManagement(actionsView, addedButtons, actionsView.unlinkButtonView, "before");
   }
 
   /**

@@ -25,7 +25,7 @@ import {
   isLinkable,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
-import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
+import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
@@ -255,7 +255,7 @@ class ContentLinkFormViewExtension extends Plugin {
     formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
 
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
-    handleFocusManagement(formView as LinkViewWithFocusables, contentLinkButtons, formView.urlInputView);
+    handleFocusManagement(formView, contentLinkButtons, formView.urlInputView);
 
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }

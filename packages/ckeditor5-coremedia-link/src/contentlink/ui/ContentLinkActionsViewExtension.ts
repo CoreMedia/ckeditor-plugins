@@ -7,7 +7,7 @@ import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
+import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
@@ -174,10 +174,7 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
     ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
-    // TODO[cke] Sounds like a severe typing issue, we need to analyze here. Type evaluates to "never" in IDE.
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const linkViewWithFocusable = actionsView as LinkViewWithFocusables;
-    handleFocusManagement(linkViewWithFocusable, [simpleContentLinkView], actionsView.previewButtonView);
+    handleFocusManagement(actionsView, [simpleContentLinkView], actionsView.previewButtonView);
   }
 
   /**
