@@ -277,8 +277,22 @@ class ContentLinkFormViewExtension extends Plugin {
       contentLinkView.render();
     }
 
-    // @ts-expect-error TODO We must check for null/undefined here.
-    formView.element.insertBefore(contentLinkView.element, formView.urlInputView.element.nextSibling);
+    const {
+      element: formViewElement,
+      urlInputView: { element: urlInputViewElement },
+    } = formView;
+    const { element: contentLinkViewElement } = contentLinkView;
+
+    if (!formViewElement || !contentLinkViewElement || !urlInputViewElement) {
+      logger.debug("Unexpected state on render: Required elements are missing", {
+        formViewElement,
+        contentLinkViewElement,
+        urlInputViewElement,
+      });
+      throw new Error("Unexpected state on render: Required elements are missing.");
+    }
+
+    formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
 
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     handleFocusManagement(formView, contentLinkButtons, formView.urlInputView);
