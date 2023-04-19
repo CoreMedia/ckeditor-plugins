@@ -112,6 +112,7 @@ export default class CustomLinkTargetInputFormView extends View {
       children: [this.labeledInput, this.saveButtonView, this.cancelButtonView],
     });
 
+    // TODO[cke] Address Deprecation
     injectCssTransitionDisabler(this);
   }
 
