@@ -1208,6 +1208,9 @@ importers:
 
   packages/ckeditor5-font-mapper:
     dependencies:
+      '@coremedia/ckeditor5-common':
+        specifier: 14.1.2-rc.0
+        version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
         specifier: 14.1.2-rc.0
         version: link:../ckeditor5-core-common
