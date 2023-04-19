@@ -130,12 +130,17 @@ export default class CustomLinkTargetInputFormView extends View {
     submitHandler({ view: this });
 
     [this.labeledInput, this.saveButtonView, this.cancelButtonView].forEach((v) => {
+      const { element } = v;
+
+      if (!element) {
+        console.debug("Unexpected state. Required 'element' unset.", v);
+        throw new Error("Unexpected state. Required 'element' unset.");
+      }
       // Register the view as focusable.
       this.#focusables.add(v);
 
       // Register the view in the focus tracker.
-      // @ts-expect-error TODO Handle Element being null.
-      this.focusTracker.add(v.element);
+      this.focusTracker.add(element);
     });
   }
 
