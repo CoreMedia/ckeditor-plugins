@@ -165,15 +165,6 @@ interface PreParsedToDataAndView {
 class FilterRuleSetConfigurationParser {
   readonly #configuration: FilterRuleSetConfiguration;
   readonly #parsedToData: FilterRuleSet;
-  // TODO[cke] Possibly introduce a pre-parsed toView-mapping, which is still grouped by toData-Element-Names.
-  //    This would allow: hierarchical for same toData-element, but sequential for different ones. Thus, we would
-  //    eventually end up with:
-  //            toView = {
-  //              p: {
-  //                customHandleH1(defaultHandleH1);
-  //                customHandleH2(defaultHandleH2);
-  //              }
-  //            }
   readonly #preParsedToView: PreParsedToView;
 
   constructor(configuration: FilterRuleSetConfiguration, preParsedDefault?: PreParsedToDataAndView) {
