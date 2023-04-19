@@ -4,4 +4,5 @@
  * @module ckeditor5-common
  */
 export * from "./AdvancedTypes";
+export * from "./IncompatibleInternalApiUsageError";
 export * from "./Strings";

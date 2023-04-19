@@ -1,4 +1,5 @@
 import { type ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
 
 /**
  * We require accessing some of the internal properties/methods of `LinkUI`.
@@ -29,7 +30,7 @@ const isInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI =>
 /**
  * Type-guard for internal LinkUI with side effect.
  *
- * As a side effect, for unmatched internal API, a warning is filed. This is
+ * As a side effect, for unmatched internal API, an error is thrown. This is
  * because we need to be aware of internal API changes we need to respond to.
  *
  * **Usage Example:**
@@ -48,8 +49,8 @@ const isInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI =>
  */
 export const hasRequiredInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI => {
   const result = isInternalLinkUI(linkUI);
-  console.warn(
-    "requireInternalLinkUI: Required internal API of LinkUI unavailable. Most likely, internal API changed on CKEditor 5 upgrade and needs to be adapted."
-  );
+  if (!result) {
+    throw new IncompatibleInternalApiUsageError("Required internal API of LinkUI unavailable.");
+  }
   return result;
 };
