@@ -35,7 +35,7 @@ import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropert
  *
  * * render name of linked content (or placeholder for unreadable content)
  * * allow dropping of drag items into the URL field
- * * provide `onClick` handler to open a content in a new Studio tab
+ * * to provide `onClick` handler to open a content in a new Studio tab
  */
 class ContentLinkFormViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkFormViewExtension";
@@ -148,7 +148,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     // We need to propagate the content name prior to the LinkCommand being executed.
     // This is required for collapsed selections, where the LinkCommand wants to
-    // write the URL into the text. For content-links this must be the content name
+    // write the URL into the text. For content-links, this must be the content name
     // instead.
     this.listenTo(
       formView,
@@ -162,7 +162,7 @@ class ContentLinkFormViewExtension extends Plugin {
         }
       },
       {
-        // We need to register the content name prior to the LinkCommand being executed.
+        // We need to register the content's name prior to the LinkCommand being executed.
         priority: "high",
       }
     );
@@ -188,12 +188,12 @@ class ContentLinkFormViewExtension extends Plugin {
    * enabled/disabled state of Save-Button. Which is: We must only activate the
    * save-button when we know the content-name to write for collapsed selections.
    *
-   * @param linkCommand - command, which is originally bound to enabled state
+   * @param linkCommand - command, which is originally bound to the enabled state
    * @param formView - formView to rebind enabled state of saveButtonView for
    */
   #rebindSaveEnabled(linkCommand: Command, formView: LinkFormView): void {
     // We have to extend the algorithm of LinkUI to calculate the enabled state of
-    // the save button. This is because, we must not submit a content-link when
+    // the save button. This is because we must not submit a content-link when
     // we don't know its name yet.
     const saveButtonView = formView.saveButtonView;
     const enabledProperties = [linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath"];
@@ -447,8 +447,8 @@ class ContentLinkFormViewExtension extends Plugin {
   /**
    * On dragover we have to decide if a drop is allowed here or not.
    * A drop must be allowed if it is any URL (for external links) or if it is a content, which is allowed to drop.
-   * A content is allowed to drop if the DragDropService has any data and if the given content from DragDropService is
-   * a CMLinkable.
+   * A content is allowed to drop if the DragDropService has any data, and if the given content from DragDropService is
+   * a `CMLinkable`.
    *
    * @param dragEvent - the drag event.
    */
