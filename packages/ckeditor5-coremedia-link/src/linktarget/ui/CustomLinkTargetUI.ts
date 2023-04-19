@@ -168,12 +168,17 @@ export default class CustomLinkTargetUI extends Plugin {
       cancel();
     });
 
+    const { element } = this.#balloon.view;
+
+    if (!element) {
+      throw new Error("Unexpected state. Element of balloon view is unavailable.");
+    }
+
     // Close on click outside of balloon panel element.
     clickOutsideHandler({
       emitter: this.#form,
       activator: () => this.#isVisible,
-      // @ts-expect-error TODO Handle possible null values.
-      contextElements: [this.#balloon.view.element],
+      contextElements: [element],
       callback: () => this.#hideForm(),
     });
   }
