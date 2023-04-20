@@ -24,7 +24,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * result of the default data-processing.
  */
 class RichTextDataFilter extends Plugin {
-  static readonly pluginName: string = "GeneralRichTextDataFilter";
+  public static readonly pluginName = "GeneralRichTextDataFilter" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(RichTextDataFilter.pluginName);
 
   static readonly requires = [DataFilter];

@@ -8,7 +8,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * General HTML Support feature.
  */
 class GeneralRichTextSupport extends Plugin {
-  static readonly pluginName: string = "GeneralRichTextSupport";
+  public static readonly pluginName = "GeneralRichTextSupport" as const;
 
   static readonly requires = [GeneralHtmlSupport, RichTextDataFilter];
 
