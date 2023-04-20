@@ -86,7 +86,7 @@ class RichTextDataFilter extends Plugin {
     ]);
 
     const config = getConfig(editor.config);
-    // Doing this as extra step, allows using previously introduced aliases
+    // Doing this as an extra step, allows using previously introduced aliases
     // (see above) as reference. Thus, you may also define an alias for
     // `<h1>` now.
     this.loadAliases(config.aliases ?? []);
@@ -112,8 +112,8 @@ class RichTextDataFilter extends Plugin {
 
   /**
    * Adds the given inheriting patterns to the filter configuration.
-   * Patterns added this way, are available as inheritance pattern
-   * afterwards.
+   * Patterns added this way, are available as an inheritance pattern
+   * afterward.
    *
    * For convenience, also normal patterns not being an alias/not inheriting
    * another pattern, can be added this way.

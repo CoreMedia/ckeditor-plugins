@@ -3,17 +3,17 @@ import ReducedMatcherPattern, { mergePatterns } from "./ReducedMatcherPattern";
 /**
  * Represents the CoreMedia RichText 1.0 DTD as required for configuration
  * of General HTML Support feature. It follows a similar structure as the
- * original DTD. Note, that ambiguous attributes like `xml:lang` and `lang`
+ * original DTD. Note that ambiguous attributes like `xml:lang` and `lang`
  * are only handled for one attribute name. Mapping to this one attribute name
  * has to be done in data-processing.
  *
- * **HTML Data Layer Takes the Lead:** It is important to mention, that, while
+ * **HTML Data Layer Takes the Lead:** It is important to mention that, while
  * the configuration is based on the subsequent representation of CoreMedia
  * RichText **after** data-processing, which in general is an HTML
  * representation.
  *
  * **Example:** To store the attribute `xlink:actuate` unknown to HTML, we
- * expect it to be mapped to `data-xlink-actuate` for HTML. That is, why
+ * expect it to be mapped to `data-xlink-actuate` for HTML. That is why
  * the configuration adds the known attribute `data-xlink-actuate` for
  * element `<a>`, for example.
  */
@@ -158,7 +158,7 @@ class CoreMediaRichText10Dtd {
 }
 
 /**
- * Represents CoreMedia RichText 1.0 as configuration suitable for
+ * Represents CoreMedia RichText 1.0 as the configuration suitable for
  * configuring General HTML Support.
  */
 const COREMEDIA_RICHTEXT_1_0_CONFIG = [

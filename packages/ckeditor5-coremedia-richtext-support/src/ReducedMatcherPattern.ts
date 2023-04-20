@@ -15,7 +15,7 @@ type AttributesType = Record<string, string | RegExp | boolean | number>;
 interface ReducedMatcherPattern {
   name?: string | RegExp;
   /**
-   * While `MatcherPattern` allows for example defining a regular expression for
+   * While `MatcherPattern` allows, for example, defining a regular expression for
    * matching classes, we are only interested in allowing or disallowing classes
    * in general in the context of General RichText Support (GRS).
    */
@@ -29,7 +29,7 @@ interface ReducedMatcherPattern {
  */
 interface InheritingMatcherPattern extends ReducedMatcherPattern {
   /**
-   * Name of pattern to inherit. For existing patterns with regular expressions,
+   * Name of the pattern to inherit. For existing patterns with regular expressions,
    * this string will be matched towards this regular expression.
    *
    * If unset, this pattern is assumed to be a new pattern without
@@ -39,8 +39,8 @@ interface InheritingMatcherPattern extends ReducedMatcherPattern {
 }
 
 /**
- * Merges MatcherPatterns (of specific object type). `classes` of the resulting
- * pattern will be `true` if any of the patterns sets `classes` to `true`.
+ * Merges MatcherPatterns (of the specific object type). `classes` of the resulting
+ * pattern will be `true` if any of the patterns set `classes` to `true`.
  * For `name` and nested `attributes` patterns later in the list may override
  * previously defined definitions. Thus, merging
  * `[{ name: "a" }, { name: "b" }]` will result in pattern `{ name: "b" }`.
@@ -96,7 +96,7 @@ const findFirstPattern = (name: string, ...patterns: ReducedMatcherPattern[]): R
 };
 
 /**
- * Strategy to lookup existing matcher patterns. Returns `undefined`, if no
+ * Strategy to lookup existing matcher patterns. Returns `undefined` if no
  * matcher pattern has been found.
  */
 type MatcherPatternLookup = (name: string) => ReducedMatcherPattern | undefined;
@@ -125,7 +125,7 @@ const resolveInheritance = (
   const { inherit, ...rest } = pattern;
 
   if (!inherit) {
-    // We may just return pattern here, but this way, we ensure, that for example
+    // We may just return the pattern here, but this way, we ensure, that, for example,
     // even an empty string is inheritance is ignored, but does not make it into
     // the result.
     return rest;

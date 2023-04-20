@@ -22,7 +22,7 @@ interface CoreMediaRichTextSupportConfig {
    * If your data-processing also includes extracting extra attributes, you may
    * declare them in addition to the alias. For example, if you want to provide
    * an attribute `data-priority` derived from an additional class at the
-   * `<span>` element you may register it as follows:
+   * `<span>` element, you may register it as follows:
    *
    * ```
    * {
