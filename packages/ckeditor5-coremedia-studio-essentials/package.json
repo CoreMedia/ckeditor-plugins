@@ -22,6 +22,7 @@
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
+  "main": "./src/index.ts",
   "exports": {
     "./*": "./dist/*.js"
   },
