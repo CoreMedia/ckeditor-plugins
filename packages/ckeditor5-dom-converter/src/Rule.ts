@@ -47,9 +47,9 @@ export type RuleConfig = RequireSelected<RuleConfigBase, "toData"> | RequireSele
  * 3. importedWithChildren
  * 4. appended
  *
- * Note, that for a given node, first all _prepare_ steps are executed for
- * a given node, then all _imported_ steps, and so on. Thus, do not
- * expect by default, that a node handled in `prepare` step comes unchanged
+ * Note that for a given node, first all `prepare` steps are executed for
+ * a given node, then all `imported` steps, and so on. Thus, do not
+ * expect by default that a node handled in `prepare` step comes unchanged
  * to the next step _imported_.
  */
 export interface RuleSectionConfigBase {
@@ -59,40 +59,40 @@ export interface RuleSectionConfigBase {
    */
   id?: string;
   /**
-   * This methods may operate on the source node prior to importing it into
-   * the target document. This may be useful, if the source API is richer
+   * This method may operate on the source node prior to importing it into
+   * the target document. This may be useful if the source API is richer
    * than available later in processing. Like, for to data mapping, the data
    * view may contain `HTMLElement` providing access to `HTMLElement.dataset`,
-   * while the XML element in target document later is a raw `Element`.
+   * while the XML element in the target document later is a raw `Element`.
    *
-   * Note, that some limitations apply to actions performed in this stage:
+   * Note that some limitations apply to actions performed in this stage:
    *
    * * You must not relocate or remove the node handed over.
    * * You must not modify any DOM nodes outside the given node.
    *
-   * Thus, it is safe for example, to add or remove child nodes or attributes
+   * Thus, it is safe, for example, to add or remove child nodes or attributes
    * in this stage.
    */
   prepare?: PrepareFunction;
   /**
-   * This method operates on a just imported node to target document. It is
-   * neither attached to DOM yet and does not contain any child nodes.
+   * This method operates on a just imported node to the target document. It is
+   * neither attached to DOM and does not contain any child nodes.
    *
    * Note, that information provided via context (such as the original source
    * node) must not be manipulated.
    *
-   * Also note, that previous processing may have already adapted or even
+   * Also note that previous processing may have already adapted or even
    * exchanged the imported node. So, it may make sense to do some checks
    * on the original node instead, like, if a given rule is applicable.
    *
-   * Typical behaviors done in this stage:
+   * Typical behaviors done at this stage:
    *
    * * Adapt attributes.
    * * Exchange node by another (just by returning a new one).
    *
    * You may also append child nodes in this state. Original child nodes will
    * then be appended. Nevertheless, structural changes are best applied
-   * in `importedWithChildren` step, as you have full control on the
+   * in the `importedWithChildren` step, as you have full control of the
    * structure then.
    *
    * Alternative to this, you may add children to the original
@@ -104,21 +104,21 @@ export interface RuleSectionConfigBase {
    * while processing the parent node, the source node reference in context
    * refers to the original representation of the parent node.
    *
-   * Note, that while in general `parent` should be of type `ParentNode` and
+   * Note that while in general `parent` should be of type `ParentNode` and
    * child of type `ChildNode`, previous processing may have provided a
-   * different state. Thus, you may require to apply corresponding type
+   * different state. Thus, you may require applying corresponding type
    * checks first.
    */
   appended?: AppendedFunction;
   /**
-   * This method operates on an imported node to target document. While it
+   * This method operates on an imported node to the target document. While it
    * is not attached to DOM yet, children already got converted and
    * appended.
    *
    * Note, that information provided via context (such as the original source
    * node) must not be manipulated.
    *
-   * Also note, that previous processing may have already adapted or even
+   * Also note that previous processing may have already adapted or even
    * exchanged the imported node. So, it may make sense to do some checks
    * on the original node instead, like, if a given rule is applicable.
    */
@@ -157,7 +157,7 @@ export type RuleSection = TransformPropertyType<RuleSectionConfig, "priority", n
 
 /**
  * Represents a rule section, that does not know about its priority anymore.
- * Typically used as input type, to express, that incoming lists of rule
+ * Typically used as an input type, to express that incoming lists of rule
  * sections are already sorted.
  */
 export type SortedRuleSection = Omit<RuleSection, "priority">;
@@ -234,7 +234,7 @@ export const mergeRuleSections = (sections1: RuleSection[], sections2: RuleSecti
 
 /**
  * Method to compare two prioritized objects to sort them by ascending priority
- * (thus descending number). Note, that the sort order adapts the number
+ * (thus descending number). Note that the sort order adapts the number
  * representation for high and low priorities as defined by
  * CKEditor's `PriorityString`.
  *

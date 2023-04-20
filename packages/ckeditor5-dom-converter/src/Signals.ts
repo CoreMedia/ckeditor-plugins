@@ -1,9 +1,9 @@
 /**
- * Signals to skip further processing. Examples are, that a node and its
+ * Signals to skip further processing. Examples are that a node and its
  * children got removed.
  */
 export const skip = Symbol("skip");
 /**
- * Type of `skip`.
+ * The type of `skip`.
  */
 export type Skip = typeof skip;

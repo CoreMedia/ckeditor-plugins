@@ -7,7 +7,7 @@ import { Skip } from "./Signals";
  */
 export interface ConversionListener {
   /**
-   * Prior to importing the original node, you may want to modify it. Note,
+   * Prior to importing the original node, you may want to modify it. Note
    * that allowed modification is limited, though.
    *
    * @param originalNode - original (mutable!) node
@@ -17,7 +17,7 @@ export interface ConversionListener {
 
   /**
    * Provides the possibility to handle a just imported node. The node is
-   * neither attached to DOM yet, nor children are available.
+   * neither attached to DOM, nor children are available.
    *
    * @param importedNode - the just imported node
    * @param context - current conversion context
