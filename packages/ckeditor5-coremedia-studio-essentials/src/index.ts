@@ -3,3 +3,5 @@
  */
 
 export { default as CoreMediaStudioEssentials } from "./CoreMediaStudioEssentials";
+
+import "./augmentation";
