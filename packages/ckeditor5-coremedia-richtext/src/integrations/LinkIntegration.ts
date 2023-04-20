@@ -6,7 +6,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * Provides integration with the CKEditor 5 Link Feature.
  */
 export class LinkIntegration extends Plugin {
-  static readonly pluginName: string = "LinkIntegration";
+  public static readonly pluginName = "LinkIntegration" as const;
 
   static readonly requires = [LinkAttributes];
 

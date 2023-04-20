@@ -22,7 +22,7 @@ export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
  *   to HtmlFilter in CKEditor 4, but is rather limited regarding
  *   more complex scenarios such as mapping data-set attributes.
  */
-export const compatibilityKeys = ["latest", "v10"];
+export const compatibilityKeys: readonly string[] = ["latest", "v10"];
 /**
  * The type of compatibility keys.
  */
@@ -78,7 +78,7 @@ const isV10CoreMediaRichTextConfig = (value: unknown): value is V10CoreMediaRich
 /**
  * Configuration as given at CKEditor initialization.
  */
-type CoreMediaRichTextConfig = LatestCoreMediaRichTextConfig | V10CoreMediaRichTextConfig;
+type CoreMediaRichTextConfig = Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig;
 export default CoreMediaRichTextConfig;
 
 export type DefaultCoreMediaRichTextConfig = Required<
@@ -92,8 +92,7 @@ export const defaultCoreMediaRichTextConfig: DefaultCoreMediaRichTextConfig = {
 export const getCoreMediaRichTextConfig = (
   config?: CKEditorConfig<EditorConfig>
 ): CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
-  const rawConfig: CoreMediaRichTextConfig = (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ||
-    {}) as CoreMediaRichTextConfig;
+  const rawConfig = config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ?? {};
   const withDefaults = {
     ...defaultCoreMediaRichTextConfig,
     ...rawConfig,

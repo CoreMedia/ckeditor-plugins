@@ -11,7 +11,7 @@ import { LinkIntegration } from "./integrations/LinkIntegration";
  * Applies a data-processor for CoreMedia RichText 1.0 support.
  */
 export default class CoreMediaRichText extends Plugin {
-  static readonly pluginName: string = COREMEDIA_RICHTEXT_PLUGIN_NAME;
+  public static readonly pluginName = COREMEDIA_RICHTEXT_PLUGIN_NAME;
 
   static readonly requires = [LinkIntegration];
 
