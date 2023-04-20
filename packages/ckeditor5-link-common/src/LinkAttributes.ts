@@ -90,7 +90,7 @@ const LINK_CUSTOM_PROPERTY = "link";
  */
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
-  static readonly pluginName: string = "LinkAttributes";
+  public static readonly pluginName = "LinkAttributes" as const;
   static readonly #logger = LoggerProvider.getLogger(LinkAttributes.pluginName);
 
   static readonly requires = [LinkCleanup, TwoStepCaretMovement];

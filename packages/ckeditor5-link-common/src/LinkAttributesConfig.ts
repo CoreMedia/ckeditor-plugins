@@ -48,16 +48,17 @@ const emptyConfig = (): LinkAttributesConfig => ({
  * @param config editor configuration to parse
  */
 export const parseAttributesConfig = (config: Config<EditorConfig>): LinkAttributesConfig => {
-  const fromConfig: unknown = config.get("link.attributes");
-  if (!fromConfig) {
+  const pluginConfig = config.get("link.attributes");
+  if (!pluginConfig) {
     return emptyConfig();
   }
-  if (!Array.isArray(fromConfig)) {
-    throw new Error(`link.attributes: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`);
+  if (!Array.isArray(pluginConfig)) {
+    throw new Error(
+      `link.attributes: Unexpected configuration. Array expected but is: ${JSON.stringify(pluginConfig)}`
+    );
   }
   const attributes: RegisterAttributeConfig[] = [];
-  const attributesConfig: unknown[] = fromConfig;
-  attributesConfig.forEach((entry: unknown): void => {
+  pluginConfig.forEach((entry: unknown): void => {
     if (isRegisterAttributeConfig(entry)) {
       attributes.push(entry);
     }
