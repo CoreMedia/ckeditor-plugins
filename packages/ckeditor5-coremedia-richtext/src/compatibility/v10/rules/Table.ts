@@ -25,11 +25,11 @@ const TFOOT_ROW_CLASS = "tr--footer";
 /**
  * CoreMedia RichText tables neither supports `<thead>` nor `<tfoot>` and
  * only supports one `<tbody>`. Prior to processing the children of the table,
- * the following _onBefore_ mapper ensures, that the original structure is kept
+ * the following _onBefore_ mapper ensures that the original structure is kept
  * at best effort.
  *
- * Note, that during data processing, we do not have higher element interfaces
- * at hand such as HTMLTableElement. A `<table>` is represented as normal
+ * Note that during data processing, we do not have higher element interfaces
+ * at hand such as HTMLTableElement. A `<table>` is represented as a normal
  * element, which just shares the same tagName as a `HTMLTableElement`. That's
  * why implementation needs to be more complex.
  *
@@ -65,13 +65,13 @@ const toDataProcessTableContents = (tableElement: TableWrapper): void => {
  * elements such as `thead` or `tfoot` this structure is rebuilt based on
  * probably assigned classes.
  *
- * Note, that during data processing, we do not have higher element interfaces
- * at hand such as HTMLTableElement. A `<table>` is represented as normal
+ * Note that during data processing, we do not have higher element interfaces
+ * at hand such as HTMLTableElement. A `<table>` is represented as a normal
  * element, which just shares the same tagName as a `HTMLTableElement`. That's
  * why implementation needs to be more complex.
  *
  * This is especially workaround for ckeditor/ckeditor5#9360, which makes some
- * conflicting assumptions on `<th>` elements outside `<thead>`. This is,
+ * conflicting assumptions on `<th>` elements outside `<thead>`. This is
  * why it is important to remember and restore the state of a row being part
  * of `<thead>` in view.
  *
@@ -124,10 +124,10 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
     toData: (params) => {
       langMapper.toData(params);
       params.node.removeChildren = params.node.isEmpty((el, idx, children) => {
-        // !Reverted logic! `true` signals, that the element should be considered,
+        // !Reverted logic! `true` signals that the element should be considered,
         //   when judging on "is empty".
 
-        // Only filter, if there is only one child. While it may be argued, if this
+        // Only filter if there is only one child. While it may be argued, if this
         // is useful, this is the behavior as we had it for CKEditor 4.
         if (children.length !== 1) {
           return true;
@@ -141,12 +141,12 @@ export const tableRules: ElementsFilterRuleSetConfiguration = {
         if (el.nodeName.toLowerCase() === "br") {
           return false;
         }
-        // Next gate: Further analysis only required, if current element is <p>
+        // Next gate: Further analysis only required if the current element is <p>
         if (el.nodeName.toLowerCase() !== "p") {
           return true;
         }
         // Only respect p-element, if it is considered non-empty.
-        // Because of the check above, we already know, that, the element
+        // Because of the check above, we already know that the element
         // has at maximum one child.
         return el.hasChildNodes() && el.firstChild?.nodeName.toLowerCase() !== "br";
       });

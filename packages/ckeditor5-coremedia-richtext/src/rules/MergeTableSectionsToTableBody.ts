@@ -35,7 +35,7 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         }
 
         const { tHead, tFoot, ownerDocument } = node;
-        // Create snapshot of tBodies before creating a new one.
+        // Create a snapshot of tBodies before creating a new one.
         const tBodies = [...node.tBodies];
         const targetBody = node.createTBody();
 
@@ -104,7 +104,7 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         if (!isHTMLTableElement(node)) {
           return node;
         }
-        // Get snapshot of current rows.
+        // Get a snapshot of current rows.
         const rows = [...node.rows];
         const previousBodies = [...node.tBodies];
         // DevNote: Methods also directly attach sections to table.

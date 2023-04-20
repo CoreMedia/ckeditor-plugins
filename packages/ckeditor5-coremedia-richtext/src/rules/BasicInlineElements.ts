@@ -15,7 +15,7 @@ export const legacyBoldElements = replaceElementByElement({
 });
 
 /**
- * Applies bijective mapping for underline element.
+ * Applies bijective mapping for the underline element.
  *
  * ```xml
  * <span class="underline">Lorem</span>
@@ -36,7 +36,7 @@ export const underlineElements = replaceElementByElementAndClass({
 });
 
 /**
- * Applies bijective mapping for italic element.
+ * Applies bijective mapping for the italic element.
  *
  * ```xml
  * <em>Lorem</em>
@@ -55,7 +55,7 @@ export const underlineElements = replaceElementByElementAndClass({
 export const italicElements = replaceElementByElement({ viewLocalName: "i", dataLocalName: "em" });
 
 /**
- * Preferred bijective mapping for strikethrough element.
+ * Preferred bijective mapping for the strikethrough element.
  *
  * ```xml
  * <span class="strike">Lorem</span>
@@ -75,7 +75,7 @@ const preferredStrikeConfig: ReplaceElementByElementAndClassConfig = {
   dataReservedClass: "strike",
 };
 /**
- * Support for possibly legacy strikethrough elements, that may have been
+ * Support for possibly legacy strikethrough elements that may have been
  * configured. Mappings only ensure transformation on `toData` processing.
  */
 const legacyStrikeMappings = ["del", "strike"].map((viewLocalName) =>

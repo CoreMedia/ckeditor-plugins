@@ -34,8 +34,8 @@ export const defaultPreferLangAttributeConfig: Required<PreferLangAttributeConfi
 };
 
 /**
- * Extract language attribute value. Extracting means, that all corresponding
- * attributes will be removed and if any attribute provides a value, it is
+ * Extract language attribute value. Extracting means that all corresponding
+ * attributes will be removed, and if any attribute provides a value, it is
  * returned.
  *
  * Value is provided by preferring `xml:lang` over `lang`, as defined for
@@ -46,8 +46,8 @@ export const defaultPreferLangAttributeConfig: Required<PreferLangAttributeConfi
 const extractLangAttributes = (el: Element): string | null => {
   const preferredAttr: Attr | null = [
     el.getAttributeNodeNS(nsXml, "lang"),
-    // For some reason in processing we may have an attribute without
-    // correct namespace URI applied.
+    // For some reason in processing, we may have an attribute without
+    // the correct namespace URI applied.
     el.getAttributeNodeNS(null, "xml:lang"),
     el.getAttributeNodeNS(el.namespaceURI, "lang"),
     el.getAttributeNodeNS(null, "lang"),
@@ -76,7 +76,7 @@ const extractLangAttributes = (el: Element): string | null => {
  * Just as in the [standard definition](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-lang),
  * `xml:lang` is preferred over `lang` when both are set in CoreMedia RichText.
  *
- * Note, that on transformation to data, the language will always be stored
+ * Note that on transformation to data, the language will always be stored
  * in `xml:lang`.
  */
 export const preferLangAttribute = (config?: PreferLangAttributeConfig): RuleConfig => {

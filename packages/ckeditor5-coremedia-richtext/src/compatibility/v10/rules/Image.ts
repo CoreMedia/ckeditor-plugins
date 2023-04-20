@@ -12,7 +12,7 @@ import { langMapper } from "./Lang";
 import { INLINE_IMG } from "../../../rules/ImageElements";
 
 /**
- * Valides, if the given element has an `xlink:href` set.
+ * Valides, if the given element has a `xlink:href` set.
  *
  * @param attributes - the proxy to check the attributes of
  * @param attributes.attributes - attributes to check
@@ -27,7 +27,7 @@ export const handleImage: ToDataAndViewElementConfiguration = {
   toData: (params) => {
     const { node } = params;
     delete node.attributes.src;
-    // Just ensure, that we have the required alt Attribute if it is unset.
+    // Just ensure that we have the required alt Attribute if it is unset.
     node.attributes.alt = node.attributes.alt ?? "";
     xLinkActuateMapper.toData(params);
     xLinkHrefMapper.toData(params);

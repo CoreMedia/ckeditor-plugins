@@ -35,17 +35,17 @@ export const paragraphToHeading: ElementFilterRule = (params) => {
   const classes = [...node.classList];
   const matchedHeading = HEADING_CLASSES.find((c) => classes.includes(c));
   if (!matchedHeading) {
-    // Cannot determine number. Perhaps someone already removed the class.
+    // Cannot determine number. Perhaps someone has already removed the class.
     return;
   }
   const match = HEADING_BY_CLASS_NUMBER_PATTERN.exec(matchedHeading);
   if (!match) {
-    // Should not happen, as we matched array of headings before.
+    // Should not happen, as we matched the array of headings before.
     return;
   }
   const headingLevel: number = +match[1];
   if (headingLevel < 1 || headingLevel > 6) {
-    // Should not happen, as we matched array of headings before.
+    // Should not happen, as we matched the array of headings before.
     return;
   }
   node.name = `h${headingLevel}`;

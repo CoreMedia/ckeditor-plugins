@@ -267,8 +267,8 @@ export const parseTarget = (target: string): Partial<Pick<XLinkAttributes, "show
       case "_role":
         handleRole = false;
         if (!suggestedRole) {
-          // artificial state: someone added this target, while an expected
-          // role is missing. Assuming, that this should be handled as a normal
+          // Artificial state: someone added this target, while an expected
+          // role is missing. Assuming that this should be handled as a normal
           // target.
           newAttrs.show = "other";
           newAttrs.role = target;
@@ -297,7 +297,7 @@ export const parseTarget = (target: string): Partial<Pick<XLinkAttributes, "show
  * Transforms attributes of an anchor element (if identified as an anchor element)
  * to suitable attributes in data representation.
  *
- * Note, that this should be called early in data-processing when still
+ * Note that this should be called early in data-processing when still
  * operating on HTML DOM representation to benefit from richer API.
  *
  * @param node - node to possibly adapt

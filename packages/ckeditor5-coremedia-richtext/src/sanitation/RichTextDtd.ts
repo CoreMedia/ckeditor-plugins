@@ -5,7 +5,7 @@ import { parseAttributeDefinitionConfig, ParsedAttributeDefinitionConfig } from 
 import { ElementConfig } from "./ElementConfig";
 
 /**
- * List of well known CoreMedia Rich Text 1.0 element names.
+ * List of well-known CoreMedia Rich Text 1.0 element names.
  */
 export const richTextElementNames = [
   "div",
@@ -508,7 +508,7 @@ export const tdElement = new ElementConfig(Flow, [
 ]);
 
 /**
- * Supported CoreMedia Rich Text 1.0 elements. Note, that it is expected, that
+ * Supported CoreMedia Rich Text 1.0 elements. Note that it is expected that
  * all elements are of the same namespace as the root element.
  */
 // DevNote: To support different namespaceURIs of elements, it needs to become

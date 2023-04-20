@@ -7,7 +7,7 @@ export interface ReplaceByChildrenConfig {
   localName: string;
   /**
    * Direction can go only into one direction. As any information on the
-   * removed element is list, it cannot be bijective.
+   * removed element is lost, it cannot be bijective.
    */
   direction?: Exclude<Direction, "bijective">;
   priority?: PriorityString;

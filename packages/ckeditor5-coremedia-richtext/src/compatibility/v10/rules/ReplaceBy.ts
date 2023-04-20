@@ -27,16 +27,16 @@ export function replaceBy(name: string, className?: string): ElementFilterRule {
  *
  * **Ambiguity:** This rule replaces the element name by a new name (and thus,
  * gets a new element). Rules, which matched the original element name will
- * be executed afterwards (contained in `subSequentRules`). This handles
- * ambiguous mappings by overriding each others.
+ * be executed afterward (contained in `subSequentRules`). This handles
+ * ambiguous mappings by overriding each other.
  *
  * An example: You have mapping rules `<span class="u">` to element `<u>` and
- * `<span class="s">` to element `<s>` and vice versa. Now, what about an
+ * `<span class="s">` to the element `<s>` and vice versa. Now, what about an
  * incoming `<span class="s u">`? One of the mapping rules will be first,
- * for example, replacing the element to `<s>`. As intermediate state, we will
- * have `<s class="u">`. But: In `subsequentRules` we will still have the rule
+ * for example, replacing the element to `<s>`. As an intermediate state, we will
+ * have `<s class="u">`. **But:** In `subsequentRules` we will still have the rule
  * mapping by class `"u"`. Now, the element gets mapped to `<u>` in subsequent
- * rules, the last class being removed. Note, that the order of mapping cannot
+ * rules, the last class being removed. Note that the order of mapping cannot
  * be guaranteed here (we have no predictable order in rules being executed).
  *
  * This approach is considered _as designed_, which is, we have to deal
@@ -68,7 +68,7 @@ export function replaceElementAndClassBy(
         // Files a warning for #101 use-case, which we consider as
         // _by design_ as it resolves ambiguous states eventually.
         warnOnAmbiguousElementState(
-          `<${originalName}> already got mapped to <${node.name}> by previous rule. Will override previous mapping to replace element to <${newName}> as denoted by class "${className}".`
+          `<${originalName}> already got mapped to <${node.name}> by previous rule. Will override previous mapping to replace the element to <${newName}> as denoted by class "${className}".`
         );
       }
       node.classList.remove(className);

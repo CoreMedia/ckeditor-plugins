@@ -11,7 +11,7 @@ import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataproc
  * Just as in the [standard definition](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-lang),
  * `xml:lang` is preferred over `lang` when both are set in CoreMedia RichText.
  *
- * Note, that on transformation to data, the language will always be stored
+ * Note that on transformation to data, the language will always be stored
  * in `xml:lang`.
  */
 const langMapper = preserveAttributeAs("xml:lang", "lang", "lang");

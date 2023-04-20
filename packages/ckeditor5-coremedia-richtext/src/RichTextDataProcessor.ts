@@ -68,7 +68,7 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
    * Set of rules to apply on data view to data mapping (or: from CKEditor HTML
    * in data view to CoreMedia Rich Text 1.0 in data).
    *
-   * Note, that any update is expected to sort the rule sections according
+   * Note that any update is expected to sort the rule sections according
    * to their priority.
    */
   readonly #toDataRules: RuleSection[] = [];
@@ -76,7 +76,7 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
    * Set of rules to apply on view to data view mapping (or: from CoreMedia
    * Rich Text 1.0 in data to CKEditor HTML in data view).
    *
-   * Note, that any update is expected to sort the rule sections according
+   * Note that any update is expected to sort the rule sections according
    * to their priority.
    */
   readonly #toViewRules: RuleSection[] = [];
@@ -141,7 +141,7 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
 
   /**
    * Adds a single rule without triggering resorting. Prior to adding,
-   * parses the configuration and adds result to corresponding sections
+   * parses the configuration and adds the result to corresponding sections
    * for `toData` or `toView` mapping or both.
    *
    * @param config - configuration to parse and add
@@ -159,7 +159,7 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
   /**
    * Adds a single rule configuration.
    *
-   * Note, that for adding multiple rules at once, `addRules` is preferred
+   * Note that for adding multiple rules at once, `addRules` is preferred
    * instead.
    *
    * @param config - configuration to add
@@ -252,11 +252,11 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
   }
 
   /**
-   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note, that
+   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note that
    * to trigger data processor for empty text as well, you have to set the
    * option `trim: 'none'` on `CKEditor.getData()`.
    *
-   * @param viewFragment - fragment from view model to process
+   * @param viewFragment - fragment from the view model to process
    * @returns CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {

@@ -39,7 +39,7 @@ export type TrackingSanitationListenerConsole = Pick<Console, "debug" | "info" |
  * The tracking sanitation listener listens to sanitation events and especially
  * provides some statistics, which may help to optimize sanitation. Its main
  * purpose though is to report visible on possible misconfiguration, that needs
- * to be adapted. That is why on some events the final statistics is logged
+ * to be adapted. That is why in some events, the final statistics are logged
  * with a warning.
  */
 export class TrackingSanitationListener extends SanitationListener {

@@ -5,7 +5,7 @@ import { replaceElementByElementAndClass } from "./ReplaceElementByElementAndCla
  * elements from data view have been mapped to `<p>` in data without applying
  * reverse mapping.
  *
- * Note, that this behavior is backwards compatible, as in CoreMedia
+ * Note that this behavior is backwards compatible, as in CoreMedia
  * Rich Text 1.0 data, before and after these `<div>` elements are stored
  * as `<p>` elements. But in contrast to previous state, these paragraphs
  * are not marked with a reserved class `p--div`, which allows to transparently
