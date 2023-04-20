@@ -10,6 +10,7 @@
     "node": "18",
     "pnpm": "^8.1"
   },
+  "main": "./src/index.ts",
   "exports": {
     "./*": "./dist/*.js"
   },
