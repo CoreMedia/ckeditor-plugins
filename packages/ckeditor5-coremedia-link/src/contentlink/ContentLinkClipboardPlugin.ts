@@ -43,7 +43,7 @@ const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, na
  * should be displayed as a link.
  */
 export default class ContentLinkClipboardPlugin extends Plugin {
-  static readonly pluginName: string = "ContentLinkClipboardPlugin";
+  public static readonly pluginName = "ContentLinkClipboardPlugin" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkClipboardPlugin.pluginName);
 
   init(): void {

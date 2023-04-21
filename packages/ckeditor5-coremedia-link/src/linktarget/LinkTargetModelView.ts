@@ -13,7 +13,7 @@ import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-com
  * @see {@link https://stackoverflow.com/questions/51303892/how-to-add-target-attribute-to-a-tag-in-ckeditor5 | How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow}
  */
 export default class LinkTargetModelView extends Plugin {
-  static readonly pluginName: string = "LinkTargetModelView";
+  public static readonly pluginName = "LinkTargetModelView" as const;
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
   static readonly requires = [LinkAttributes];

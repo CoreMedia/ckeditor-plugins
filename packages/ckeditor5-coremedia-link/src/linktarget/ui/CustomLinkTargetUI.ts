@@ -16,7 +16,7 @@ import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/I
  * `linkTarget`.
  */
 export default class CustomLinkTargetUI extends Plugin {
-  static readonly pluginName: string = "CustomLinkTargetUI";
+  public static readonly pluginName = "CustomLinkTargetUI" as const;
 
   static readonly customTargetButtonName: string = "customLinkTargetButton";
 

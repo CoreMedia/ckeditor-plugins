@@ -24,7 +24,7 @@ import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropert
  *     (rather than opening an external URL in a new browser tab).
  */
 class ContentLinkActionsViewExtension extends Plugin {
-  static readonly pluginName: string = "ContentLinkActionsViewExtension";
+  public static readonly pluginName = "ContentLinkActionsViewExtension" as const;
   static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
   static readonly requires = [LinkUI, ContextualBalloon];

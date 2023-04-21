@@ -28,7 +28,7 @@ import { Observable } from "@ckeditor/ckeditor5-utils";
  * Content Links will be displayed as a content item.
  */
 export default class ContentLinks extends Plugin {
-  static readonly pluginName: string = "ContentLinks";
+  public static readonly pluginName = "ContentLinks" as const;
 
   #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
   #serviceRegisteredSubscription: Subscription | undefined = undefined;

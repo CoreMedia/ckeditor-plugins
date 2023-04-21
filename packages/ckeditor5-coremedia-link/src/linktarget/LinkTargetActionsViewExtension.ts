@@ -27,7 +27,7 @@ import { LazyLinkUIPropertiesNotInitializedYetError } from "../contentlink/LazyL
  * The default configuration is defined in {@link linktarget.config.DefaultTarget}.
  */
 class LinkTargetActionsViewExtension extends Plugin {
-  static readonly pluginName: string = "LinkTargetActionsViewExtension";
+  public static readonly pluginName = "LinkTargetActionsViewExtension" as const;
   static readonly requires = [LinkUI, CustomLinkTargetUI];
   static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
 

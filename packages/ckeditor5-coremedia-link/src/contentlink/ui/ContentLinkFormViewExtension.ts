@@ -53,7 +53,7 @@ const augmentFormView = <T extends object>(formView: T): T & AugmentedFormView =
  * * to provide `onClick` handler to open a content in a new Studio tab
  */
 class ContentLinkFormViewExtension extends Plugin {
-  static readonly pluginName: string = "ContentLinkFormViewExtension";
+  public static readonly pluginName = "ContentLinkFormViewExtension" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkFormViewExtension.pluginName);
 
   static readonly #CM_LINK_FORM_CLS = "cm-ck-link-form";

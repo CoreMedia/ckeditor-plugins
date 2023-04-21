@@ -137,7 +137,7 @@ const getItems = (range: Range): ModelItem[] => [...range.getItems({ shallow: tr
  * content-links.
  */
 class ContentLinkCommandHook extends Plugin {
-  static readonly pluginName: string = "ContentLinkCommandHook";
+  public static readonly pluginName = "ContentLinkCommandHook" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkCommandHook.pluginName);
 
   readonly #trackingData: TrackingData = new TrackingData();

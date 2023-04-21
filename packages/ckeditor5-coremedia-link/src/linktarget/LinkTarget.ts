@@ -10,7 +10,7 @@ import "../lang/linktarget";
  * @see {@link https://stackoverflow.com/questions/51303892/how-to-add-target-attribute-to-a-tag-in-ckeditor5 | How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow}
  */
 export default class LinkTarget extends Plugin {
-  static readonly pluginName: string = "LinkTarget";
+  public static readonly pluginName = "LinkTarget" as const;
 
   static readonly requires = [Link, LinkTargetModelView, LinkTargetActionsViewExtension];
 }

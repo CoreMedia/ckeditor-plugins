@@ -32,7 +32,7 @@ import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
  * browser tab instead of the same tab and content links in a new work area tab.
  */
 export default class LinkUserActionsPlugin extends Plugin {
-  static readonly pluginName: string = "LinkUserActionsPlugin";
+  public static readonly pluginName = "LinkUserActionsPlugin" as const;
   static readonly LOG: Logger = LoggerProvider.getLogger(LinkUserActionsPlugin.pluginName);
   static readonly requires = [];
 
