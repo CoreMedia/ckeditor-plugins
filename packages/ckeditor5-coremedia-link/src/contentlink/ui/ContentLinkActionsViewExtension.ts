@@ -27,7 +27,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   static readonly pluginName: string = "ContentLinkActionsViewExtension";
   static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
-  static readonly requires = [LinkUI];
+  static readonly requires = [LinkUI, ContextualBalloon];
   contentUriPath: string | undefined | null;
   #initialized = false;
 
