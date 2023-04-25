@@ -21,6 +21,10 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  */
 export default class ContentImageEditingPlugin extends Plugin {
   static readonly pluginName = "ContentImageEditingPlugin" as const;
+  /**
+   * Command name for bound `openImageInTab`.
+   */
+  static readonly openImageInTab = "openImageInTab" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
 
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
@@ -33,7 +37,10 @@ export default class ContentImageEditingPlugin extends Plugin {
   init(): void {
     const editor = this.editor;
     const initInformation = reportInitStart(this);
-    editor.commands.add("openImageInTab", new OpenInTabCommand(editor, "xlink-href", "imageInline"));
+    editor.commands.add(
+      ContentImageEditingPlugin.openImageInTab,
+      new OpenInTabCommand(editor, "xlink-href", "imageInline")
+    );
     reportInitEnd(initInformation);
   }
 

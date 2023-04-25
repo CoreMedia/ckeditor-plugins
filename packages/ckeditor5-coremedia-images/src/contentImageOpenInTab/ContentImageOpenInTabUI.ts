@@ -28,7 +28,7 @@ export default class ContentImageOpenInTabUI extends Plugin {
     const { ui } = editor;
     const t = editor.t;
 
-    const openInTabCommand = editor.commands.get("openImageInTab");
+    const openInTabCommand = editor.commands.get(ContentImageEditingPlugin.openImageInTab);
     if (!openInTabCommand) {
       throw new Error('The command "openImageInTab" is required.');
     }
