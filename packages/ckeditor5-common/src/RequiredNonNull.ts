@@ -22,6 +22,7 @@ export class RequiredNonNullPropertiesMissingError extends Error {
  *
  * @param obj - object to validate
  * @param propertyNames - property names to enforce being non-null
+ * @throws RequiredNonNullPropertiesMissingError if criteria are unmet
  */
 export const requireNonNulls = <T extends object | Record<string, unknown>, K extends keyof T>(
   obj: T,
