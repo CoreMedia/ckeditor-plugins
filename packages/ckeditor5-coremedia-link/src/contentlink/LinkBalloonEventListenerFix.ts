@@ -1,8 +1,8 @@
 import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
 import { keepOpen } from "./LinkBalloonConfig";
-import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
+import { requireNonNulls } from "@coremedia/ckeditor5-common/RequiredNonNull";
 
 /**
  * Whether the mouseDown event occurred on an allow-listed element.
@@ -26,10 +26,7 @@ let mouseDownOnWhiteListedElement = false;
  * @param linkUI - the linkUI plugin
  */
 export const removeInitialMouseDownListener = (linkUI: LinkUI): void => {
-  const { formView } = linkUI;
-  if (!formView) {
-    throw new LazyLinkUIPropertiesNotInitializedYetError();
-  }
+  const { formView } = requireNonNulls(linkUI, "formView");
   formView.stopListening(document as unknown as Emitter, "mousedown");
 };
 
@@ -56,10 +53,7 @@ export const removeInitialMouseDownListener = (linkUI: LinkUI): void => {
  * @param linkUI - the linkUI plugin
  */
 export const addMouseEventListenerToHideDialog = (linkUI: LinkUI): void => {
-  const { formView } = linkUI;
-  if (!formView) {
-    throw new LazyLinkUIPropertiesNotInitializedYetError();
-  }
+  const { formView } = requireNonNulls(linkUI, "formView");
 
   const internalLinkUI: unknown = linkUI;
   if (!hasRequiredInternalLinkUI(internalLinkUI)) {

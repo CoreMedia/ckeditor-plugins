@@ -26,10 +26,9 @@ import {
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
-import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
 import { AugmentedLinkFormView } from "./AugmentedLinkFormView";
 import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
-import { asAugmentedLinkUI, AugmentedLinkUI } from "./AugmentedLinkUI";
+import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -55,17 +54,19 @@ class ContentLinkFormViewExtension extends Plugin {
     const initInformation = reportInitStart(this);
 
     const editor = this.editor;
-    const linkUI = asAugmentedLinkUI(editor.plugins.get(LinkUI));
+    const linkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView && visibleView === linkUI.formView && !this.#initialized) {
+      const { formView } = linkUI;
+      if (formView && formView === visibleView && !this.#initialized) {
         this.initializeFormView(linkUI);
         this.#initialized = true;
       }
     });
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView && visibleView === linkUI.formView) {
+      const { formView } = linkUI;
+      if (formView && formView === visibleView) {
         this.onFormViewGetsActive(linkUI);
       }
     });
@@ -73,13 +74,9 @@ class ContentLinkFormViewExtension extends Plugin {
     reportInitEnd(initInformation);
   }
 
-  initializeFormView(linkUI: AugmentedLinkUI): void {
-    const { formView } = linkUI;
+  initializeFormView(linkUI: LinkUI): void {
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
     const linkCommand = linkUI.editor.commands.get("link") as Command;
-
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
 
     formView.set({
       contentUriPath: undefined,
@@ -92,24 +89,17 @@ class ContentLinkFormViewExtension extends Plugin {
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
       );
 
-    this.#extendView(linkUI);
+    this.#extendView(linkUI, formView);
   }
 
-  onFormViewGetsActive(linkUI: AugmentedLinkUI): void {
+  onFormViewGetsActive(linkUI: LinkUI): void {
     const { editor } = linkUI;
-    const { formView } = linkUI;
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = editor.commands.get("link") as Command;
 
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
     formView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
-      const { formView } = linkUI;
-      if (!formView) {
-        throw new LazyLinkUIPropertiesNotInitializedYetError();
-      }
 
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
@@ -210,13 +200,7 @@ class ContentLinkFormViewExtension extends Plugin {
       .to(linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath", enabledHandler);
   }
 
-  #extendView(linkUI: AugmentedLinkUI): void {
-    const { formView } = linkUI;
-
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
-
+  #extendView(linkUI: LinkUI, formView: AugmentedLinkFormView): void {
     const contentLinkView = createContentLinkView(linkUI, this.editor);
     this.#contentLinkView = contentLinkView;
 
@@ -229,8 +213,8 @@ class ContentLinkFormViewExtension extends Plugin {
       }
     });
 
-    ContentLinkFormViewExtension.#render(contentLinkView, linkUI);
-    this.#adaptFormViewFields(linkUI);
+    ContentLinkFormViewExtension.#render(contentLinkView, linkUI, formView);
+    this.#adaptFormViewFields(formView);
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
@@ -239,12 +223,9 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView, linkUI: AugmentedLinkUI): void {
+  static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
-    const { formView } = linkUI;
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
 
@@ -273,14 +254,10 @@ class ContentLinkFormViewExtension extends Plugin {
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     handleFocusManagement(formView, contentLinkButtons, formView.urlInputView);
 
-    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
+    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
   }
 
-  #adaptFormViewFields(linkUI: AugmentedLinkUI): void {
-    const { formView } = linkUI;
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+  #adaptFormViewFields(formView: LinkFormView): void {
     const t = this.editor.locale.t;
     formView.urlInputView.set({
       label: t("Link"),
@@ -313,12 +290,9 @@ class ContentLinkFormViewExtension extends Plugin {
     return buttons;
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: AugmentedLinkUI): void {
+  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
-    const { formView } = linkUI;
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
 
     if (!contentLinkView.fieldView.element) {
@@ -343,7 +317,7 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug("Finished adding drag and drop listeners.");
   }
 
-  static #onDropOnLinkField(dragEvent: DragEvent, linkUI: AugmentedLinkUI): void {
+  static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
       return;
@@ -414,11 +388,8 @@ class ContentLinkFormViewExtension extends Plugin {
     return contentImportService.import(contentReference.request);
   }
 
-  static #toggleUrlInputLoadingState(linkUI: AugmentedLinkUI, loading: boolean) {
-    const { formView } = linkUI;
-    if (!formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+  static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
 
     if (loading) {
       formView.element?.classList.add("cm-ck-form-view--loading");
@@ -427,11 +398,8 @@ class ContentLinkFormViewExtension extends Plugin {
     }
   }
 
-  static #setDataAndSwitchToExternalLink(linkUI: AugmentedLinkUI, data: string): void {
-    const { formView, actionsView } = linkUI;
-    if (!formView || !actionsView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+  static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
+    const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
     formView.urlInputView.fieldView.set("value", data);
     formView.set("contentUriPath", null);
     actionsView.set("contentUriPath", null);
@@ -439,11 +407,9 @@ class ContentLinkFormViewExtension extends Plugin {
     showContentLinkField(actionsView, false);
   }
 
-  static #setDataAndSwitchToContentLink(linkUI: AugmentedLinkUI, data: string): void {
-    const { formView, actionsView } = linkUI;
-    if (!formView || !actionsView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+  static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
+    const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
+
     // Check if the balloon is visible. If it was closed, while data was loaded, just return.
     // We can use element.offsetParent to check if the balloon's HTML element is visible.
     if (!formView.element?.offsetParent) {

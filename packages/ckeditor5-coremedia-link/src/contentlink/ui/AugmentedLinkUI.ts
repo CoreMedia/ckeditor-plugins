@@ -2,6 +2,7 @@ import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 import { AugmentedLinkFormView } from "./AugmentedLinkFormView";
 import { ViewWithCssTransitionDisabler } from "@ckeditor/ckeditor5-ui";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
+import { RequiredNonNull, requireNonNulls } from "@coremedia/ckeditor5-common/RequiredNonNull";
 
 /**
  * Augmented properties for `LinkUI`.
@@ -21,7 +22,7 @@ export type AugmentedLinkUI = Omit<LinkUI, "actionsView" | "formView"> & LinkUIA
  *
  * @param linkUI - LinkUI to augment
  */
-export const asAugmentedLinkUI = (linkUI: LinkUI): AugmentedLinkUI =>
+export const asAugmentedLinkUI = (linkUI: LinkUI | AugmentedLinkUI): AugmentedLinkUI =>
   // We will just ignore the error for now, here. It is mostly dedicated to
   // https://github.com/ckeditor/ckeditor5/issues/13965, that we cannot set
   // properties to use in the context of observables as optional. Instead, we
@@ -33,3 +34,14 @@ export const asAugmentedLinkUI = (linkUI: LinkUI): AugmentedLinkUI =>
   // expect that we can just remove the following ts-expect-error.
   // @ts-expect-error - Wait for decision on https://github.com/ckeditor/ckeditor5/issues/13965
   linkUI;
+
+/**
+ * Casts to `AugmentedLinkUI` and ensures, the given views are actually set.
+ *
+ * @param linkUI - LinkUI to augment
+ * @param views - views to ensure to be non-null
+ */
+export const requireNonNullsAugmentedLinkUI = <K extends keyof LinkUIAugmentation>(
+  linkUI: LinkUI | AugmentedLinkUI,
+  ...views: K[]
+): RequiredNonNull<AugmentedLinkUI, K> => requireNonNulls(asAugmentedLinkUI(linkUI), ...views);

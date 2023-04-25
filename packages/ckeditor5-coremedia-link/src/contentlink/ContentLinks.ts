@@ -19,10 +19,9 @@ import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/c
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
-import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 import { Observable } from "@ckeditor/ckeditor5-utils";
-import { asAugmentedLinkUI } from "./ui/AugmentedLinkUI";
+import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -127,10 +126,7 @@ export default class ContentLinks extends Plugin {
       if (!linkUI || !linkCommand) {
         return;
       }
-      const { formView, actionsView } = linkUI;
-      if (!formView || !actionsView) {
-        throw new LazyLinkUIPropertiesNotInitializedYetError();
-      }
+      const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
 
       const commandValue: string = linkCommand.value ?? "";
       const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;

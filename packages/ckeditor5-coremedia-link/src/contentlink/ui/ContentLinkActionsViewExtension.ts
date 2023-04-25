@@ -14,8 +14,8 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
-import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
-import { asAugmentedLinkUI, AugmentedLinkUI } from "./AugmentedLinkUI";
+import { asAugmentedLinkUI, AugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -39,31 +39,25 @@ class ContentLinkActionsViewExtension extends Plugin {
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView && linkUI.actionsView === visibleView && !this.#initialized) {
-        this.#initialize(linkUI);
+      const { actionsView } = linkUI;
+      if (actionsView && actionsView === visibleView && !this.#initialized) {
+        this.#initialize(linkUI, actionsView);
         this.#initialized = true;
       }
     });
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView && linkUI.actionsView === visibleView) {
-        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(linkUI.actionsView);
+      const { actionsView } = linkUI;
+      if (actionsView && actionsView === visibleView) {
+        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
       }
     });
 
     reportInitEnd(initInformation);
   }
 
-  #initialize(linkUI: AugmentedLinkUI): void {
+  #initialize(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
     const { editor } = linkUI;
-    const { actionsView } = linkUI;
-
-    if (!actionsView) {
-      ContentLinkActionsViewExtension.#logger.error(
-        "ActionsView is not initialized but should be. Can't apply the ContentLinkActionsViewExtension."
-      );
-      return;
-    }
 
     actionsView.set({
       contentUriPath: undefined,
@@ -101,15 +95,11 @@ class ContentLinkActionsViewExtension extends Plugin {
       // set visibility of url and content field
       showContentLinkField(actionsView, !!value);
     });
-    this.#extendView(linkUI);
+    this.#extendView(linkUI, actionsView);
   }
 
-  #extendView(linkUI: AugmentedLinkUI): void {
-    const { formView, actionsView } = linkUI;
-
-    if (!actionsView || !formView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+  #extendView(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
 
     const contentLinkView = new ContentLinkView(this.editor, {
       renderTypeIcon: true,

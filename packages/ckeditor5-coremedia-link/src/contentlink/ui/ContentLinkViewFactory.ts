@@ -2,8 +2,8 @@ import { LabeledFieldView } from "@ckeditor/ckeditor5-ui";
 import "../../../theme/contentlinkview.css";
 import ContentLinkView from "./ContentLinkView";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
-import { AugmentedLinkUI } from "./AugmentedLinkUI";
+import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -14,13 +14,9 @@ import { AugmentedLinkUI } from "./AugmentedLinkUI";
  * @param linkUI - the linkUI plugin
  * @param editor - the editor
  */
-const createContentLinkView = (linkUI: AugmentedLinkUI, editor: Editor): LabeledFieldView => {
+const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
   const { t } = editor.locale;
-  const { formView } = linkUI;
-  const { actionsView } = linkUI;
-  if (!formView || !actionsView) {
-    throw new LazyLinkUIPropertiesNotInitializedYetError();
-  }
+  const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
 
   const contentLinkView = new LabeledFieldView(
     editor.locale,

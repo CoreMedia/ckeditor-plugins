@@ -12,7 +12,7 @@ import { Locale } from "@ckeditor/ckeditor5-utils";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { LazyLinkUIPropertiesNotInitializedYetError } from "../contentlink/LazyLinkUIPropertiesNotInitializedYetError";
+import { requireNonNulls } from "@coremedia/ckeditor5-common/RequiredNonNull";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -57,10 +57,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * @param linkUI - the linkUI plugin
    */
   #extendView(linkUI: LinkUI): void {
-    const actionsView: LinkActionsView | null = linkUI.actionsView;
-    if (!actionsView) {
-      throw new LazyLinkUIPropertiesNotInitializedYetError();
-    }
+    const { actionsView } = requireNonNulls(linkUI, "actionsView");
     const linkTargetCommand = linkUI.editor.commands.get("linkTarget");
     if (!linkTargetCommand) {
       LinkTargetActionsViewExtension.#logger.warn("Command 'linkTarget' not found");
