@@ -74,8 +74,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       }
     });
 
-    const separatorLeft = new ToolbarSeparatorView();
-    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
+    const separatorLeft: ToolbarSeparatorView & { class?: string } = new ToolbarSeparatorView();
     separatorLeft.set({ class: "cm-ck-item-separator" });
     separatorLeft.extendTemplate({
       attributes: {
