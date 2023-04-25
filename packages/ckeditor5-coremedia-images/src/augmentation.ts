@@ -5,7 +5,7 @@ import type {
   ContentImagePlugin,
   ModelBoundSubscriptionPlugin,
 } from "./index";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/dist/commands/OpenInTabCommand";
+import type { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/dist/commands/OpenInTabCommand";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {
