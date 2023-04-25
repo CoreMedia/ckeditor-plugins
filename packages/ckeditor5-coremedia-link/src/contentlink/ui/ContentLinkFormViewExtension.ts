@@ -12,8 +12,6 @@ import {
 import { LabeledFieldView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
-// LinkFormView: See ckeditor/ckeditor5#12027.
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
@@ -29,21 +27,9 @@ import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUti
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
-
-/**
- * We add `contentUriPath` and `contentName` to the form view.
- */
-interface AugmentedFormView {
-  contentUriPath?: string;
-  contentName?: string;
-}
-
-/**
- * Provides augmented typing for form view.
- *
- * @param formView - formView to augment
- */
-const augmentFormView = <T extends object>(formView: T): T & AugmentedFormView => formView;
+import { AugmentedLinkFormView } from "./AugmentedLinkFormView";
+import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
+import { asAugmentedLinkUI, AugmentedLinkUI } from "./AugmentedLinkUI";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -69,7 +55,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const initInformation = reportInitStart(this);
 
     const editor = this.editor;
-    const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    const linkUI = asAugmentedLinkUI(editor.plugins.get(LinkUI));
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
       if (visibleView && visibleView === linkUI.formView && !this.#initialized) {
@@ -87,22 +73,20 @@ class ContentLinkFormViewExtension extends Plugin {
     reportInitEnd(initInformation);
   }
 
-  initializeFormView(linkUI: LinkUI): void {
+  initializeFormView(linkUI: AugmentedLinkUI): void {
     const { formView } = linkUI;
-
     const linkCommand = linkUI.editor.commands.get("link") as Command;
+
     if (!formView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
     }
 
-    const augmentedFormView = augmentFormView(formView);
-
-    augmentedFormView.set({
+    formView.set({
       contentUriPath: undefined,
       contentName: undefined,
     });
 
-    augmentedFormView
+    formView
       .bind("contentUriPath")
       .to(linkCommand, "value", (value: unknown) =>
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
@@ -111,7 +95,7 @@ class ContentLinkFormViewExtension extends Plugin {
     this.#extendView(linkUI);
   }
 
-  onFormViewGetsActive(linkUI: LinkUI): void {
+  onFormViewGetsActive(linkUI: AugmentedLinkUI): void {
     const { editor } = linkUI;
     const { formView } = linkUI;
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
@@ -208,38 +192,31 @@ class ContentLinkFormViewExtension extends Plugin {
    * @param linkCommand - command, which is originally bound to the enabled state
    * @param formView - formView to rebind enabled state of saveButtonView for
    */
-  #rebindSaveEnabled(linkCommand: Command, formView: LinkFormView): void {
+  #rebindSaveEnabled(linkCommand: Command, formView: AugmentedLinkFormView): void {
     // We have to extend the algorithm of LinkUI to calculate the enabled state of
     // the save button. This is because we must not submit a content-link when
     // we don't know its name yet.
     const saveButtonView = formView.saveButtonView;
-    const augmentedFormView = augmentFormView(formView);
     const enabledHandler = (
       isEnabled: boolean,
-      contentName: string | undefined,
-      contentUriPath: string | undefined
+      contentName: string | undefined | null,
+      contentUriPath: string | undefined | null
     ): boolean =>
       // Either contentUriPath must be unset or contentName must be set.
       isEnabled && (!contentUriPath || !!contentName);
     saveButtonView.unbind("isEnabled");
     saveButtonView
       .bind("isEnabled")
-      .to(
-        linkCommand,
-        "isEnabled",
-        augmentedFormView,
-        "contentName",
-        augmentedFormView,
-        "contentUriPath",
-        enabledHandler
-      );
+      .to(linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath", enabledHandler);
   }
 
-  #extendView(linkUI: LinkUI): void {
+  #extendView(linkUI: AugmentedLinkUI): void {
     const { formView } = linkUI;
+
     if (!formView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
     }
+
     const contentLinkView = createContentLinkView(linkUI, this.editor);
     this.#contentLinkView = contentLinkView;
 
@@ -257,13 +234,12 @@ class ContentLinkFormViewExtension extends Plugin {
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       formView.set({
-        // @ts-expect-errors since 37.0.0, how to extend the view with another property?
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
+  static #render(contentLinkView: LabeledFieldView, linkUI: AugmentedLinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     const { formView } = linkUI;
     if (!formView) {
@@ -300,7 +276,7 @@ class ContentLinkFormViewExtension extends Plugin {
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI);
   }
 
-  #adaptFormViewFields(linkUI: LinkUI): void {
+  #adaptFormViewFields(linkUI: AugmentedLinkUI): void {
     const { formView } = linkUI;
     if (!formView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
@@ -337,7 +313,7 @@ class ContentLinkFormViewExtension extends Plugin {
     return buttons;
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
+  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: AugmentedLinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     const { formView } = linkUI;
     if (!formView) {
@@ -367,7 +343,7 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug("Finished adding drag and drop listeners.");
   }
 
-  static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
+  static #onDropOnLinkField(dragEvent: DragEvent, linkUI: AugmentedLinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
       return;
@@ -438,7 +414,7 @@ class ContentLinkFormViewExtension extends Plugin {
     return contentImportService.import(contentReference.request);
   }
 
-  static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
+  static #toggleUrlInputLoadingState(linkUI: AugmentedLinkUI, loading: boolean) {
     const { formView } = linkUI;
     if (!formView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
@@ -451,21 +427,19 @@ class ContentLinkFormViewExtension extends Plugin {
     }
   }
 
-  static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
+  static #setDataAndSwitchToExternalLink(linkUI: AugmentedLinkUI, data: string): void {
     const { formView, actionsView } = linkUI;
     if (!formView || !actionsView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
     }
     formView.urlInputView.fieldView.set("value", data);
-    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     formView.set("contentUriPath", null);
-    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     actionsView.set("contentUriPath", null);
     showContentLinkField(formView, false);
     showContentLinkField(actionsView, false);
   }
 
-  static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
+  static #setDataAndSwitchToContentLink(linkUI: AugmentedLinkUI, data: string): void {
     const { formView, actionsView } = linkUI;
     if (!formView || !actionsView) {
       throw new LazyLinkUIPropertiesNotInitializedYetError();
@@ -476,9 +450,7 @@ class ContentLinkFormViewExtension extends Plugin {
       return;
     }
     formView.urlInputView.fieldView.set("value", undefined);
-    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     formView.set("contentUriPath", data);
-    // @ts-expect-errors since 37.0.0, how to extend the view with another property?
     actionsView.set("contentUriPath", data);
     showContentLinkField(formView, true);
     showContentLinkField(actionsView, true);

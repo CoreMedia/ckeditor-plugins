@@ -22,6 +22,7 @@ import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "./LazyLinkUIPropertiesNotInitializedYetError";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 import { Observable } from "@ckeditor/ckeditor5-utils";
+import { asAugmentedLinkUI } from "./ui/AugmentedLinkUI";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -58,10 +59,10 @@ export default class ContentLinks extends Plugin {
    * @private
    */
   #removeEditorFocusAndSelection(): void {
-    const linkUI: LinkUI = this.editor.plugins.get(LinkUI);
-    //@ts-expect-error private API
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    linkUI._hideUI();
+    const linkUI: unknown = this.editor.plugins.get(LinkUI);
+    if (hasRequiredInternalLinkUI(linkUI)) {
+      linkUI._hideUI();
+    }
   }
 
   static readonly requires = [
@@ -122,7 +123,7 @@ export default class ContentLinks extends Plugin {
   onHideUiCallback(editor: Editor): () => void {
     return () => {
       const linkCommand = editor.commands.get("link") as LinkCommand;
-      const linkUI: LinkUI = editor.plugins.get(LinkUI);
+      const linkUI = asAugmentedLinkUI(editor.plugins.get(LinkUI));
       if (!linkUI || !linkCommand) {
         return;
       }
@@ -133,9 +134,7 @@ export default class ContentLinks extends Plugin {
 
       const commandValue: string = linkCommand.value ?? "";
       const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
-      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       formView.set({ contentUriPath: value });
-      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       actionsView.set({ contentUriPath: value });
     };
   }

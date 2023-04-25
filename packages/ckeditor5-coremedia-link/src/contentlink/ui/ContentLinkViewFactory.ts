@@ -1,9 +1,9 @@
 import { LabeledFieldView } from "@ckeditor/ckeditor5-ui";
 import "../../../theme/contentlinkview.css";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
 import ContentLinkView from "./ContentLinkView";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropertiesNotInitializedYetError";
+import { AugmentedLinkUI } from "./AugmentedLinkUI";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -14,14 +14,15 @@ import { LazyLinkUIPropertiesNotInitializedYetError } from "../LazyLinkUIPropert
  * @param linkUI - the linkUI plugin
  * @param editor - the editor
  */
-const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
+const createContentLinkView = (linkUI: AugmentedLinkUI, editor: Editor): LabeledFieldView => {
   const { t } = editor.locale;
   const { formView } = linkUI;
   const { actionsView } = linkUI;
   if (!formView || !actionsView) {
     throw new LazyLinkUIPropertiesNotInitializedYetError();
   }
-  const contentLinkView: LabeledFieldView = new LabeledFieldView(
+
+  const contentLinkView = new LabeledFieldView(
     editor.locale,
     () =>
       new ContentLinkView(editor, {
@@ -38,24 +39,22 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
 
   // Propagate URI-Path from formView (see FormViewExtension) to ContentLinkView
 
-  // @ts-expect-errors since 37.0.0, how to extend the view with another property?
-  contentLinkView.fieldView.bind("uriPath").to(formView, "contentUriPath");
+  const { fieldView } = contentLinkView;
+
+  fieldView.bind("uriPath").to(formView, "contentUriPath");
   // Propagate Content Name from ContentLinkView to FormView, as we require to
   // know the name in some link insertion scenarios.
 
-  // @ts-expect-errors since 37.0.0, how to extend the view with another property?
   formView.bind("contentName").to(contentLinkView.fieldView);
-  contentLinkView.fieldView.on("contentClick", () => {
+  fieldView.on("contentClick", () => {
     linkUI.editor.commands.get("openLinkInTab")?.execute();
   });
 
-  contentLinkView.fieldView.on("executeCancel", () => {
+  fieldView.on("executeCancel", () => {
     formView.set({
-      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       contentUriPath: undefined,
     });
     actionsView.set({
-      // @ts-expect-errors since 37.0.0, how to extend the view with another property?
       contentUriPath: undefined,
     });
     formView.urlInputView.focus();

@@ -38,7 +38,7 @@ export default class ContentLinkView extends ButtonView {
   readonly #statusIcon: CoreMediaIconView | undefined = undefined;
   readonly #cancelButton: ButtonView | undefined = undefined;
 
-  declare uriPath: string | undefined;
+  declare uriPath: string | null | undefined;
   declare contentName: string | undefined;
   declare renderAsTextLink: boolean;
   declare ariaLabelText: string;
