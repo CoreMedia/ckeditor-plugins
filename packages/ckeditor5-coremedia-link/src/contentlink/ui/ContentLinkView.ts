@@ -40,6 +40,7 @@ export default class ContentLinkView extends ButtonView {
 
   declare uriPath: string | null | undefined;
   declare contentName: string | undefined;
+  declare underlined: boolean;
   declare renderAsTextLink: boolean;
   declare ariaLabelText: string;
 
@@ -120,7 +121,6 @@ export default class ContentLinkView extends ButtonView {
       attributes: {
         "class": [
           "cm-ck-content-link-view",
-          // @ts-expect-errors since 37.0.0, how to extend the view with another property?
           bind.if("underlined", "cm-ck-button--underlined"),
           bind.if("renderAsTextLink", "ck-link-actions__preview"),
         ],
