@@ -40,7 +40,7 @@ const createImageModelFunction: CreateImageModelFunction =
  * should be displayed as a preview image.
  */
 export default class ContentImageClipboardPlugin extends Plugin {
-  static readonly pluginName: string = "ContentImageClipboardPlugin";
+  static readonly pluginName = "ContentImageClipboardPlugin" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
   init(): void {

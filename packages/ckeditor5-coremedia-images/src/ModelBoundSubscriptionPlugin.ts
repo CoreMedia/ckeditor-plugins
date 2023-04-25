@@ -31,9 +31,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly #SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
   static readonly PLUGIN_NAME = "ModelBoundSubscriptionPlugin";
 
-  static get pluginName(): string {
-    return ModelBoundSubscriptionPlugin.PLUGIN_NAME;
-  }
+  static readonly pluginName = ModelBoundSubscriptionPlugin.PLUGIN_NAME;
 
   /**
    * Registers `change:data` listeners.

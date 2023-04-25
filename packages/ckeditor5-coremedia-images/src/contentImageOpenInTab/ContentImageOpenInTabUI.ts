@@ -14,7 +14,7 @@ import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
  * ContentImageEditingPlugin, which therefore is required.
  */
 export default class ContentImageOpenInTabUI extends Plugin {
-  static readonly pluginName: string = "ContentImageOpenInTabUI";
+  static readonly pluginName = "ContentImageOpenInTabUI" as const;
 
   static readonly requires = [ContentImageEditingPlugin];
 

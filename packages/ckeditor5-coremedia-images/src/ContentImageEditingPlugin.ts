@@ -20,7 +20,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * is represented by the src-attribute of the `img`-tag.
  */
 export default class ContentImageEditingPlugin extends Plugin {
-  static readonly pluginName: string = "ContentImageEditingPlugin";
+  static readonly pluginName = "ContentImageEditingPlugin" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
 
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
