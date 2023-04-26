@@ -16,7 +16,7 @@ const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
  * corresponding commands.
  */
 export class UndoSupport extends Plugin {
-  static readonly pluginName: string = PLUGIN_NAME;
+  static readonly pluginName = PLUGIN_NAME;
   static readonly #disableHandler = disableCommand(PLUGIN_NAME);
   static readonly #enableHandler = enableCommand(PLUGIN_NAME);
   static readonly #commandNames = ["undo", "redo"];
