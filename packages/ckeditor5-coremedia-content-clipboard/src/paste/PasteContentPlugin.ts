@@ -9,6 +9,8 @@ import PasteContentEditing from "./PasteContentEditing";
  * Includes the PasteContentUI (the button) and PasteContentEditing (the command).
  */
 export default class PasteContentPlugin extends Plugin {
+  static readonly pluginName = "pasteContent";
+
   static get requires() {
     return [PasteContentEditing, PasteContentUI];
   }

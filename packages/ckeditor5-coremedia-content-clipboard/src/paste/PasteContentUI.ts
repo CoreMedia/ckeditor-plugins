@@ -5,6 +5,8 @@ import "../lang/paste";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 export default class PasteContentUI extends Plugin {
+  static readonly pluginName = "pasteContentUI";
+
   init() {
     const initInformation = reportInitStart(this);
     const editor: Editor = this.editor;
