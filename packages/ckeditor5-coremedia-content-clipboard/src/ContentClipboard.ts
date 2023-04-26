@@ -3,7 +3,14 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { Clipboard, ClipboardPipeline } from "@ckeditor/ckeditor5-clipboard";
+import {
+  Clipboard,
+  ClipboardContentInsertionEvent,
+  ClipboardInputTransformationData,
+  ClipboardInputTransformationEvent,
+  ClipboardPipeline,
+  ViewDocumentClipboardInputEvent,
+} from "@ckeditor/ckeditor5-clipboard";
 import {
   Range as ModelRange,
   ViewRange,
@@ -11,9 +18,14 @@ import {
   ViewDocumentFragment,
   ViewDocument,
   StylesProcessor,
+  DomEventData,
 } from "@ckeditor/ckeditor5-engine";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import { ClipboardEventData } from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
+import {
+  ClipboardEventData,
+  ClipboardInputEventData,
+  ViewDocumentDragOverEvent,
+} from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
@@ -31,7 +43,7 @@ const PLUGIN_NAME = "ContentClipboardPlugin";
 /**
  * Artificial interface of `ClipboardEventData`, which holds a content.
  */
-declare interface ContentEventData<T> extends ClipboardEventData {
+export interface ContentEventData<T> extends ClipboardEventData {
   content: T;
 }
 
@@ -42,50 +54,6 @@ declare interface ContentEventData<T> extends ClipboardEventData {
  */
 const isContentEventData = <T extends ClipboardEventData>(value: T): value is T & ContentEventData<unknown> =>
   isRaw<ContentEventData<unknown>>(value, "content");
-
-/**
- * Specifies the additional data provided by ClipboardPipeline's
- * `contentInsertion` event.
- */
-declare interface ContentInsertionEventData extends ContentEventData<ModelDocumentFragment> {
-  method: "paste" | "drop";
-  targetRanges: ViewRange[];
-  resultRange?: ModelRange;
-}
-
-/**
- * Specifies the additional data provided by ClipboardPipeline's
- * `inputTransformation` event.
- */
-declare interface InputTransformationEventData extends ContentEventData<ViewDocumentFragment> {
-  /**
-   * Whether the event was triggered by a paste or drop operation.
-   */
-  method: "paste" | "drop";
-  /**
-   * The target drop ranges.
-   */
-  targetRanges: ViewRange[];
-}
-
-/**
- * Event data of `clipboardInput` event in `view.Document`.
- */
-declare interface ClipboardInputEvent extends ClipboardEventData {
-  /**
-   * Required for hack to mark event as consumed.
-   */
-  content?: ViewDocumentFragment;
-  // noinspection GrazieInspection - copied original description
-  /**
-   * Ranges which are the target of the operation (usually – into which the
-   * content should be inserted). If the clipboard input was triggered by a
-   * paste operation, this property is not set. If by a drop operation, then it
-   * is the drop position (which can be different than the selection
-   * at the moment of drop).
-   */
-  targetRanges: ViewRange[];
-}
 
 /**
  * This plugin takes care of linkable Studio contents, which are dropped
@@ -113,13 +81,19 @@ export default class ContentClipboard extends Plugin {
     const viewDocument = view.document;
 
     // Processing pasted or dropped content.
-    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
+    this.listenTo<ViewDocumentClipboardInputEvent>(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     // Priority `low` required, so that we can control the `dropEffect`.
-    this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, { priority: "low" });
+    this.listenTo<ViewDocumentDragOverEvent>(viewDocument, "dragover", ContentClipboard.#dragOverHandler, {
+      priority: "low",
+    });
 
     if (editor.plugins.has(ClipboardPipeline)) {
       const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
-      this.listenTo(clipboardPipelinePlugin, "inputTransformation", this.#inputTransformation);
+      this.listenTo<ClipboardInputTransformationEvent>(
+        clipboardPipelinePlugin,
+        "inputTransformation",
+        this.#inputTransformation
+      );
     }
   }
 
@@ -135,6 +109,7 @@ export default class ContentClipboard extends Plugin {
     }
   }
 
+  // noinspection JSUnusedLocalSymbols
   /**
    * Drag-over handler to control drop-effect icons, which is, to forbid for
    * any content-sets containing types, which are not allowed to be linked.
@@ -142,7 +117,7 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  static #dragOverHandler(evt: EventInfo, data: ClipboardEventData): void {
+  static #dragOverHandler(evt: EventInfo<"dragover">, data: DomEventData<DragEvent> & ClipboardEventData): void {
     // The clipboard content was already processed by the listener on the
     // higher priority (for example, while pasting into the code block).
     if (isContentEventData(data) && !!data.content) {
@@ -153,8 +128,6 @@ export default class ContentClipboard extends Plugin {
       return;
     }
 
-    // @ts-expect-error Bad typing, DefinitelyTyped/DefinitelyTyped#60966
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     data.preventDefault();
 
     if (isDroppableEvaluationResult === "PENDING") {
@@ -182,7 +155,10 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  #clipboardInputHandler = (evt: EventInfo, data: ClipboardInputEvent): void => {
+  #clipboardInputHandler = (
+    evt: EventInfo<"clipboardInput">,
+    data: DomEventData<ClipboardEvent | DragEvent> & ClipboardInputEventData
+  ): void => {
     const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
     if (!dataTransfer) {
       return;
@@ -220,7 +196,7 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  #inputTransformation = (evt: EventInfo, data: InputTransformationEventData): void => {
+  #inputTransformation = (evt: EventInfo<"inputTransformation">, data: ClipboardInputTransformationData): void => {
     const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
     if (!dataTransfer) {
       return;
@@ -278,12 +254,12 @@ export default class ContentClipboard extends Plugin {
     // handlers to run in the same block without post-fixers called in between
     // (i.e., the selection post-fixer).
     model.change(() => {
-      this.fire("contentInsertion", {
+      this.fire<ClipboardContentInsertionEvent>("contentInsertion", {
         content: new ModelDocumentFragment(),
         method: data.method,
         dataTransfer: data.dataTransfer,
         targetRanges: data.targetRanges,
-      } as ContentInsertionEventData);
+      });
     });
   };
 
@@ -293,7 +269,7 @@ export default class ContentClipboard extends Plugin {
    * @param editor - current editor instance
    * @param data - event data
    */
-  static #evaluateTargetRange(editor: Editor, data: InputTransformationEventData): ModelRange | null {
+  static #evaluateTargetRange(editor: Editor, data: ClipboardInputTransformationData): ModelRange | null {
     if (!data.targetRanges) {
       return editor.model.document.selection.getFirstRange();
     }
