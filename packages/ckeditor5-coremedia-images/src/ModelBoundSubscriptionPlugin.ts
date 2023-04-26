@@ -11,7 +11,7 @@ import { Subscription } from "rxjs";
  * element.
  *
  * If a ModelElement has a subscription to an asynchronous service
- * (e.g., image `xlink-href`, which resolves the `src` attribute asynchronously)
+ * (e.g., image `xlink-href`, which resolves the `src` attribute asynchronously),
  * this plugin can be used to track those subscriptions.
  *
  * Tracked subscriptions will be unsubscribed on destroy or when the
@@ -21,7 +21,7 @@ import { Subscription } from "rxjs";
  * model elements. It listens to changes in the document regarding the
  * registered model elements.
  *
- * If a registered model element is removed all subscriptions will be
+ * If a registered model element is removed, all subscriptions will be
  * unsubscribed. Subscriptions have to be added manually to the
  * `ModelBoundSubscriptionPlugin` by calling `addSubscription`.
  */
@@ -86,7 +86,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    * If a registered model element is found on the graveyard it unsubscribes all
    * added subscriptions.
    *
-   * The search is recursively if a container gets removed. Elements contained
+   * The search is recursive if a container gets removed. Elements contained
    * in the container are not an explicit change in the change set.
    */
   #unsubscribeOnElementRemoval(): void {
@@ -119,7 +119,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    * Adds a `change:data` listener to the model document, which adds a
    * `cmSubscriptionId` for registered model elements.
    *
-   * The search is recursively if a container gets removed. Elements contained
+   * The search is recursive if a container gets removed. Elements contained
    * in the container are not an explicit change in the change set.
    */
   #addSubscriptionIdToInsertedElementListener(): void {
