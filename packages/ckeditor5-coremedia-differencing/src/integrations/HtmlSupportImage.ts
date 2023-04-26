@@ -13,7 +13,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * the corresponding `<span class="html-object-embed">` element.
  */
 export class HtmlImageElementSupport extends Plugin {
-  static readonly pluginName: string = "DifferencingHtmlImageElementSupport";
+  static readonly pluginName = "DifferencingHtmlImageElementSupport";
   static readonly requires = [];
 
   static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);

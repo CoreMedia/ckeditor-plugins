@@ -7,7 +7,7 @@ import { xDiffElements } from "./XDiffElements";
  * rule to map `xdiff:span` elements as expected/required.
  */
 export class RichTextDataProcessorIntegration extends Plugin {
-  static readonly pluginName: string = "RichTextDataProcessorIntegration";
+  static readonly pluginName = "RichTextDataProcessorIntegration";
 
   /**
    * Runs as late initialization to add mapping rules for `xdiff:span`

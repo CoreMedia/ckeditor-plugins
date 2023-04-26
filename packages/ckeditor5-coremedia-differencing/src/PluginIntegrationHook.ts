@@ -15,7 +15,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * to provide some better integration point.
  */
 export class PluginIntegrationHook extends Plugin {
-  static readonly pluginName: string = "PluginIntegrationHook";
+  static readonly pluginName = "PluginIntegrationHook";
   static readonly #logger: Logger = LoggerProvider.getLogger(PluginIntegrationHook.pluginName);
 
   init(): void {

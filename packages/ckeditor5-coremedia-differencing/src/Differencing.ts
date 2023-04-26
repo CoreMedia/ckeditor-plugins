@@ -34,7 +34,7 @@ import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataPro
  * ```
  */
 export default class Differencing extends Plugin {
-  static readonly pluginName: string = "Differencing";
+  static readonly pluginName = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport, RichTextDataProcessorIntegration];
   static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
 

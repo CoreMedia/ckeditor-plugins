@@ -15,7 +15,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * the corresponding `<span class="image-inline">` for inline images.
  */
 export class ImageElementSupport extends Plugin {
-  static readonly pluginName: string = "DifferencingImageElementSupport";
+  static readonly pluginName = "DifferencingImageElementSupport";
   static readonly requires = [PluginIntegrationHook];
 
   static readonly #logger: Logger = LoggerProvider.getLogger(ImageElementSupport.pluginName);
