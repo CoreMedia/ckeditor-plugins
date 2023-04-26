@@ -15,5 +15,4 @@ declare module "@ckeditor/ckeditor5-core" {
     [PluginIntegrationHook.pluginName]: PluginIntegrationHook;
     [RichTextDataProcessorIntegration.pluginName]: RichTextDataProcessorIntegration;
   }
-  interface CommandsMap {}
 }
