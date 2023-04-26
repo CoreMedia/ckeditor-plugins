@@ -14,6 +14,7 @@ import {
   createContentReferenceServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const UTILITY_NAME = "DataToModelMechanism";
 
@@ -192,10 +193,11 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      if (editor.plugins.has(UndoSupport)) {
-        enableUndo(editor.plugins.get(UndoSupport));
-      } else {
-        this.#logger.warn('Unable to re-enable UndoCommand because Plugin "UndoSupport" does not exist');
+      const undoSupport = getOptionalPlugin(editor, UndoSupport, (pluginName) =>
+        this.#logger.warn(`Unable to re-enable UndoCommand because plugin ${pluginName} does not exist`)
+      );
+      if (undoSupport) {
+        enableUndo(undoSupport);
       }
     }
   }

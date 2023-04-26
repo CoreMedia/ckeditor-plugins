@@ -5,7 +5,7 @@ import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 // ImageInline: See ckeditor/ckeditor5#12027.
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
@@ -110,12 +110,8 @@ export default class ContentImageEditingPlugin extends Plugin {
    * @param editor - Editor
    */
   static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
-    if (editor.plugins.has(ModelBoundSubscriptionPlugin)) {
-      editor.plugins
-        .get(ModelBoundSubscriptionPlugin)
-        .registerModelElement(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME);
-    } else {
-      ContentImageEditingPlugin.#logger.debug(`Optional Plugin ${ModelBoundSubscriptionPlugin} not found.`);
-    }
+    getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.registerModelElement(
+      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME
+    );
   }
 }

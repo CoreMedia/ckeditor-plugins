@@ -66,17 +66,16 @@ export default class FontMapper extends Plugin {
     // pasteFromOffice plugin (uses "high" priority), if enabled.
     // We also need to use a priority higher than "low" to process the input in time.
 
-    if (editor.plugins.has(ClipboardPipeline)) {
-      const clipboardPipeline = editor.plugins.get(ClipboardPipeline);
-      this.listenTo(
-        clipboardPipeline,
-        FontMapper.#clipboardEventName,
-        FontMapper.#handleClipboardInputTransformationEvent,
-        {
-          priority: "normal",
-        }
-      );
-    }
+    const clipboardPipeline = editor.plugins.get(ClipboardPipeline);
+    // TODO[cke] Check listenTo usage. Should use generics meanwhile.
+    this.listenTo(
+      clipboardPipeline,
+      FontMapper.#clipboardEventName,
+      FontMapper.#handleClipboardInputTransformationEvent,
+      {
+        priority: "normal",
+      }
+    );
 
     reportInitEnd(initInformation);
   }

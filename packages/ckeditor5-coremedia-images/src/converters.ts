@@ -14,6 +14,7 @@ import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
 import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -121,11 +122,8 @@ const onXlinkHrefEditingDowncast = (
       const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
         updateImagePreviewAttributes(editor, data.item, inlinePreview, false);
       });
-      if (editor.plugins.has(ModelBoundSubscriptionPlugin)) {
-        editor.plugins.get(ModelBoundSubscriptionPlugin).addSubscription(data.item, subscription);
-      } else {
-        logger.debug(`Optional Plugin ${ModelBoundSubscriptionPlugin} not found.`);
-      }
+
+      getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.addSubscription(data.item, subscription);
     });
 };
 

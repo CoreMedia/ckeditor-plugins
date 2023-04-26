@@ -11,7 +11,8 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
  * All registry entries will then be evaluated in the {@link DataToModelMechanism} to
  * properly insert a content object with a given type (e.g. "link" or "image").
  *
- * The ContentToModelRegistry can be accessed by other plugins via the {@link ContentClipboardEditing} plugin.
+ * The ContentToModelRegistry can be accessed by other plugins via the
+ * {@link ContentClipboardEditing} plugin.
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ContentToModelRegistry {

@@ -243,9 +243,7 @@ export default class ContentClipboard extends Plugin {
     //
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterward.
-    if (editor.plugins.has(UndoSupport)) {
-      disableUndo(editor.plugins.get(UndoSupport));
-    }
+    disableUndo(editor.plugins.get(UndoSupport));
 
     const { model } = editor;
 

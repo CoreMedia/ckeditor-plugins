@@ -9,7 +9,7 @@ import {
   CreateModelFunctionCreator,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { recommendPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -49,11 +49,10 @@ export default class ContentImageClipboardPlugin extends Plugin {
 
     const initInformation = reportInitStart(this);
 
-    if (editor.plugins.has(ContentClipboardEditing)) {
-      editor.plugins.get(ContentClipboardEditing).registerToModelFunction("image", createImageModelFunctionCreator);
-    } else {
-      recommendPlugin("Creating Content Images from Clipboard not activated.", logger);
-    }
+    getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
+      logger.warn(`Recommended plugin ${pluginName} not found. Creating content images from clipboard not activated.`)
+    )?.registerToModelFunction("image", createImageModelFunctionCreator);
+
     reportInitEnd(initInformation);
   }
 }
