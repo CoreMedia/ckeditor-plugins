@@ -28,14 +28,14 @@ export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) 
  * A method to prevent the upcast of the src-attribute of an image.
  *
  * The `src` attribute for CoreMedia Images is not stored as a URL but as a
- * reference to a content property in a `xlink:href` attribute. In this case it
+ * reference to a content property in a `xlink:href` attribute. In this case, it
  * does not make sense to work with `src`-attributes in the model and side
  * effects of an existing `src`-attribute (like GHS) have to be prevented.
  *
  * Preventing the `src` attribute to become part of the model means to consume
  * the attribute.
  *
- * Unfortunately CKEditor does not check if the attribute has already been
+ * Unfortunately, CKEditor 5 does not check if the attribute has already been
  * consumed:
  *
  * * [#11327: image conversion (imageInline and imageBlock) does not test if src is consumed.](https://github.com/ckeditor/ckeditor5/issues/11327)
@@ -44,9 +44,9 @@ export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) 
  *
  * * [#11530: The image upcast converter does not consume the `src` attribute](https://github.com/ckeditor/ckeditor5/issues/11530)
  *
- * the `src` attribute will be upcasted if the `src` attribute exists as view
- * attribute. To fully prevent the upcast we have to consume the attribute and
- * remove the `src`  from the view node.
+ * the `src` attribute will be upcast if the `src` attribute exists as view
+ * attribute. To fully prevent the upcast, we have to consume the attribute and
+ * remove the `src` from the view node.
  */
 export const preventUpcastImageSrc =
   () =>
@@ -78,8 +78,8 @@ export const editingDowncastXlinkHref =
   (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
       if (!data.attributeNewValue) {
-        // There was no xlink-href set for this image, therefore we can skip applying
-        // the loading spinner and resolving the image src
+        // There was no xlink-href set for this image, therefore, we can skip
+        // applying the loading spinner and resolving the image src
         return;
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -154,8 +154,8 @@ const updateImagePreviewAttributes = (
     return;
   }
 
-  //preload the image. An image ca be multiple megabytes. Preloading ensures
-  // that the spinner will stay until the image is loaded.
+  // Preload the image. An image size can be multiple megabytes. Preloading
+  // ensures that the spinner will stay until the image is loaded.
   const image = new Image();
   image.onload = () => writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
   image.src = inlinePreview.thumbnailSrc;
