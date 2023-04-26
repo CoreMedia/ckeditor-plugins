@@ -27,12 +27,13 @@ export default class ContentClipboardEditing extends Plugin {
   static readonly requires = [UndoSupport];
 
   /**
-   * All markers which are not yet finally inserted.
+   * All markers that are not yet finally inserted.
    *
-   * Every marker which is set and started to be processed will be added to this list.
-   * While updating the position of a marker CKEditor internally removes and adds the marker again.
-   * Therefore, the marker will be added multiple times. This can be prevented by checking if the newly added marker
-   * is in the pendingMarkerNames list.
+   * Every marker that is set and started to be processed will be added to this
+   * list. While updating the position of a marker, CKEditor internally removes
+   * and adds the marker again. Therefore, the marker will be added multiple
+   * times. This can be prevented by checking if the newly added marker is in
+   * the pendingMarkerNames list.
    *
    * This is a performance optimization.
    *
@@ -71,7 +72,7 @@ export default class ContentClipboardEditing extends Plugin {
    * {@link DataToModelMechanism} will fall back to the default "toModel"
    * function or throw an error.
    *
-   * @param type - the identifier for the content (e.g. "link" or "image")
+   * @param type - the identifier for the content (e.g., "link" or "image")
    * @param createModelFunctionCreator - a function that expects a contentUri as
    * parameter and returns a promise of type CreateModelFunction
    */

@@ -5,7 +5,7 @@ import { Batch } from "@ckeditor/ckeditor5-engine";
  * This cache stores ContentInputData objects, which consist of 2 parts:
  *
  * 1. An itemContext, which holds information about the inserted item itself
- * 2. An insertionContext, that holds information about the insertion
+ * 2. An insertionContext, which holds information about the insertion
  *
  * The data object must be saved by using the corresponding marker name as the map key.
  */

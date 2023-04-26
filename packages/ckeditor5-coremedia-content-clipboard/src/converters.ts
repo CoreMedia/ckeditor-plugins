@@ -26,9 +26,9 @@ export interface RemoveMarkerEventData {
  * The added UIElement renders a loading spinner into the editing view without
  * changing the model.
  *
- * @param pendingMarkerNames - all markers which are not yet finally inserted.
+ * @param pendingMarkerNames - all markers that are not yet finally inserted.
  * @param callback - the callback to be executed after the UIElement has been
- * added (Usually to load the data for the loading spinner). Gets the
+ * added (Usually to load the data for the loading spinner). Get the
  * markerData of the corresponding marker as the sole argument.
  */
 export const addContentMarkerConversion =
@@ -74,7 +74,8 @@ export const addContentMarkerConversion =
  * Conversion function used in DowncastDispatcher event listeners.
  * Removes a previously added UIElement from the editing view at a given marker
  * position.
- * Does not change the model.
+ *
+ * It does not change the model.
  *
  * @param evt - eventInfo
  * @param data - the remove marker event data

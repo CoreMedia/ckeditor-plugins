@@ -56,7 +56,7 @@ export default class MarkerRepositionUtil {
 
   static #moveMarkersTo(editor: Editor, markerData: MarkerData[], position: ModelPosition): void {
     markerData.forEach((moveMarkerData: MarkerData) => {
-      //Each Marker has its own batch so everything is executed in one step and in the end everything is one undo/redo step.
+      //Each Marker has its own batch, so everything is executed in one step, and in the end, everything is one undo/redo step.
       const moveMarkerName = ContentClipboardMarkerDataUtils.toMarkerNameFromData(moveMarkerData);
 
       //Check if the marker we want to move still exists.
@@ -75,15 +75,15 @@ export default class MarkerRepositionUtil {
     const itemIndex = markerData.itemIndex;
     const insertionId = markerData.insertionId;
 
-    //insertionId = Timestamp when a group of marker have been created.
-    //If we are in the same group of markers (part of one insertion) we want to adapt all markers with a
-    //smaller index.
+    // insertionId = Timestamp when a group of markers has been created.
+    // If we are in the same group of markers (part of one insertion), we want to adapt all markers with a
+    // smaller index.
     if (otherMarkerData.insertionId === insertionId) {
       return otherMarkerData.itemIndex < itemIndex;
     }
 
-    //If an insertion done later to the same position, we want to make sure all the inserted
-    //items stay on the left of the marker.
+    // If an insertion done later to the same position, we want to make sure all the inserted
+    // items stay on the left of the marker.
     return otherMarkerData.insertionId > insertionId;
   };
 
@@ -91,9 +91,9 @@ export default class MarkerRepositionUtil {
     const itemIndex = markerData.itemIndex;
     const insertionId = markerData.insertionId;
 
-    //insertionId = Timestamp when a group of marker have been created.
-    //If we are in the same group of markers (part of one insertion) we want to adapt all markers with a
-    //bigger index.
+    // insertionId = Timestamp when a group of markers has been created.
+    // If we are in the same group of markers (part of one insertion), we want to adapt all markers with a
+    // bigger index.
     if (otherMarkerData.insertionId === insertionId) {
       return otherMarkerData.itemIndex > itemIndex;
     }

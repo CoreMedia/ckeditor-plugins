@@ -118,7 +118,7 @@ export default class ContentClipboard extends Plugin {
    * @param data - clipboard data
    */
   static #dragOverHandler(evt: EventInfo<"dragover">, data: DomEventData<DragEvent> & ClipboardEventData): void {
-    // The clipboard content was already processed by the listener on the
+    // The listener already processed the clipboard content on the
     // higher priority (for example, while pasting into the code block).
     if (isContentEventData(data) && !!data.content) {
       return;
@@ -237,12 +237,12 @@ export default class ContentClipboard extends Plugin {
     // A drop with multiple items will result in different requests that might
     // differ in response time, for example.
     //
-    // Triggering undo/redo while only a part of the input has already been
+    // Triggering undo/redo, while only a part of the input has already been
     // resolved, will cause an inconsistent state between content and
     // placeholder elements.
     //
     // The best solution for this seems to disable the undo command before the
-    // input and enable it again afterwards.
+    // input and enable it again afterward.
     if (editor.plugins.has(UndoSupport)) {
       disableUndo(editor.plugins.get(UndoSupport));
     }
