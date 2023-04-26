@@ -18,7 +18,7 @@ import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration
  */
 export class PasteContentCommand extends Command {
   #logger = LoggerProvider.getLogger("PasteContentCommand");
-  #serviceRegisteredSubscription: Subscription | null;
+  readonly #serviceRegisteredSubscription: Subscription | null;
 
   constructor(editor: Editor) {
     super(editor);
