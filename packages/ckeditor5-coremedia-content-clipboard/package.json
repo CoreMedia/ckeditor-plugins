@@ -41,6 +41,7 @@
     "rxjs": "^7.8.0",
     "typescript": "^4.9.5"
   },
+  "main": "./src/index.ts",
   "exports": {
     "./*": "./dist/*.js"
   },
