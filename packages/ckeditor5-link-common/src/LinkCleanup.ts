@@ -67,7 +67,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     reportInitEnd(initInformation);
   }
 
-  destroy(): void {
+  override destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
   }
