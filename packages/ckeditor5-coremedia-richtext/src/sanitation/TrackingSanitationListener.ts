@@ -51,11 +51,11 @@ export class TrackingSanitationListener extends SanitationListener {
     this.#console = con;
   }
 
-  started() {
+  override started() {
     this.#state = new TrackingState();
   }
 
-  stopped() {
+  override stopped() {
     this.#state.endTimeStamp = performance.now();
     if (this.#state.hasSevereIssues()) {
       this.#console.warn(`Sanitation done with issues (turn on debug logging for details): ${this.#state}`);
@@ -64,16 +64,16 @@ export class TrackingSanitationListener extends SanitationListener {
     }
   }
 
-  fatal(...data: unknown[]) {
+  override fatal(...data: unknown[]) {
     this.#console.error(data);
   }
 
-  enteringElement(element: Element, depth: number) {
+  override enteringElement(element: Element, depth: number) {
     this.#state.visitedElements++;
     this.#state.maxElementDepth = Math.max(this.#state.maxElementDepth, depth);
   }
 
-  removeNode(node: Node, cause: ElementCause) {
+  override removeNode(node: Node, cause: ElementCause) {
     this.#state.removedElements.total++;
     if (severeElementCauses.includes(cause)) {
       this.#state.removedElements.severe++;
@@ -93,7 +93,7 @@ export class TrackingSanitationListener extends SanitationListener {
     }
   }
 
-  removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause) {
+  override removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause) {
     this.#console.debug(
       `Removing invalid attribute ${attr.localName} at ${attributeOwner.localName} (value: "${attr.value}"): ${cause}`
     );

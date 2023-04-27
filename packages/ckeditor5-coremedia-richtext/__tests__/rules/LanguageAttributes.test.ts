@@ -1,5 +1,5 @@
 import * as aut from "../../src/rules/LanguageAttributes";
-import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
+import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
 import { bijective, TestDirection, toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
