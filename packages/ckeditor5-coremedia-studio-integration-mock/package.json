@@ -16,7 +16,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "build": "tsc --project ./tsconfig.release.json",
     "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
