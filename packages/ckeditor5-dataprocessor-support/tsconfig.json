@@ -4,6 +4,7 @@
     "outDir": "./dist"
   },
   "include": [
+    "./__tests__",
     "./src",
   ]
 }
