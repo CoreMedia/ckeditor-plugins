@@ -7,8 +7,8 @@ import { AttributeElement, ViewElement } from "@ckeditor/ckeditor5-engine";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
 import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**

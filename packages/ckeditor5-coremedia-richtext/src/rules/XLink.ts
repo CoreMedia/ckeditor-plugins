@@ -1,4 +1,4 @@
-import { capitalize } from "@coremedia/ckeditor5-common/Strings";
+import { capitalize } from "@coremedia/ckeditor5-common/src/Strings";
 
 export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink" as const;
 export const xLinkPrefix = "xlink" as const;

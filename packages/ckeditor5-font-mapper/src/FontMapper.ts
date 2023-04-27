@@ -1,10 +1,10 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { ClipboardEventData, ClipboardPipeline } from "@ckeditor/ckeditor5-clipboard";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { DataTransfer as ViewDataTransfer, ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
 import { COREMEDIA_FONT_MAPPER_CONFIG_KEY, FontMapperConfig, FontMapperConfigEntry } from "./FontMapperConfig";

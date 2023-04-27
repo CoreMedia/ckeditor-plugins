@@ -3,7 +3,7 @@ import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
 
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 
 /**

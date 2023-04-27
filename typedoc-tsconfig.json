@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "paths": {
       "@coremedia-internal/ckeditor5-coremedia-example-data/*": [
@@ -54,6 +55,5 @@
       ]
     }
   },
-  "exclude": ["itest", "app"],
-  "extends": "./tsconfig.json"
+  "exclude": ["itest", "app"]
 }

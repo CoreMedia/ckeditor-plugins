@@ -1,15 +1,15 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { Writer, Node } from "@ckeditor/ckeditor5-engine";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import {
   CreateModelFunction,
   CreateModelFunctionCreator,
-} from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
-import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+} from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentToModelRegistry";
+import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboardEditing";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 

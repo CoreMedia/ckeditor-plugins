@@ -1,6 +1,6 @@
-import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/RuleBasedConversionListener";
-import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/HtmlDomConverter";
+import { byPriority, parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/src/RuleBasedConversionListener";
+import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/src/HtmlDomConverter";
 
 /**
  * Lightweight "data processor" just providing access to the DOM Converter API.

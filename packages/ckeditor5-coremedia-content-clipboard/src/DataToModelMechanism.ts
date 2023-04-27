@@ -3,18 +3,18 @@ import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardM
 import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Writer, Node, Position, Range } from "@ckeditor/ckeditor5-engine";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 import {
   ContentReferenceResponse,
   createContentReferenceServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const UTILITY_NAME = "DataToModelMechanism";
 

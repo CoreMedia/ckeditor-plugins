@@ -3,9 +3,9 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import { Writer, Range } from "@ckeditor/ckeditor5-engine";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { LINK_HREF_MODEL } from "./Constants";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**

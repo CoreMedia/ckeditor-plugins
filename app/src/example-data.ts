@@ -2,16 +2,16 @@
 import {
   PREDEFINED_MOCK_BLOB_DATA,
   PREDEFINED_MOCK_LINK_DATA,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
 import { setData } from "./dataFacade";
-import { welcomeTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
-import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
-import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
-import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
-import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
-import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
-import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
-import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
+import { welcomeTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/WelcomeTextData";
+import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/DifferencingData";
+import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/GrsData";
+import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LoremIpsumData";
+import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LinkTargetData";
+import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
+import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextDOM";
+import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/EntitiesData";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { View } from "@ckeditor/ckeditor5-engine";
 

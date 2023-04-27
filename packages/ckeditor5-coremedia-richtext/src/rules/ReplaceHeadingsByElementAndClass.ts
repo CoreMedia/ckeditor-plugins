@@ -1,7 +1,7 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Direction, resolveDirectionToConfig } from "./Direction";
-import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
 
 const headingRegEx = /^h(?<level>\d)$/;
 

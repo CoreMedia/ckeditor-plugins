@@ -1,5 +1,5 @@
 import { JSWrapper } from "../JSWrapper";
-import MockWorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockWorkAreaService";
+import MockWorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockWorkAreaService";
 import { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
 
 export class WorkAreaServiceWrapper extends JSWrapper<MockWorkAreaService> {

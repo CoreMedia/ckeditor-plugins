@@ -1,6 +1,4 @@
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
-import { isAttr } from "@coremedia/ckeditor5-dom-support/Attrs";
-import { lookupDocumentDefaultNamespaceURI } from "@coremedia/ckeditor5-dom-support/Nodes";
+import { isElement, isAttr, lookupDocumentDefaultNamespaceURI } from "@coremedia/ckeditor5-dom-support";
 
 /**
  * Contextual information and API during DOM conversion.

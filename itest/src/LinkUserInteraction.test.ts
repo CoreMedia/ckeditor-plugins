@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import "./expect/Expectations";

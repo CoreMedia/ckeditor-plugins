@@ -1,7 +1,7 @@
 import { View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Adds or removes "cm-ck-link-view--show-content-link" to the form view's (and action view's) element or to the corresponding

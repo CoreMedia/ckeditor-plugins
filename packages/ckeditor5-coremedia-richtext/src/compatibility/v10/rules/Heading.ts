@@ -1,7 +1,7 @@
-import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
+import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 import { langMapper } from "./Lang";
-import { warnOnAmbiguousElementState } from "@coremedia/ckeditor5-dataprocessor-support/RulesLogger";
+import { warnOnAmbiguousElementState } from "@coremedia/ckeditor5-dataprocessor-support/src/RulesLogger";
 
 const HEADING_NUMBER_PATTERN = /^h(\d+)$/;
 const HEADING_CLASSES = Array.from(Array(6).keys()).map((i) => `p--heading-${i + 1}`);

@@ -2,13 +2,13 @@
 
 import { HtmlDomConverter } from "../src/HtmlDomConverter";
 import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
-import { documentFromHtml, documentFromXml } from "@coremedia/ckeditor5-dom-support/Documents";
-import { extractNodeContents, serializeToXmlString } from "@coremedia/ckeditor5-dom-support/Nodes";
+import { documentFromHtml, documentFromXml } from "@coremedia/ckeditor5-dom-support/src/Documents";
+import { extractNodeContents, serializeToXmlString } from "@coremedia/ckeditor5-dom-support/src/Nodes";
 import { toData, toDataView } from "./DataProcessorSimulation";
-import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/Elements";
-import { wrapIfTableElement } from "@coremedia/ckeditor5-dom-support/HTMLTableElements";
+import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import { wrapIfTableElement } from "@coremedia/ckeditor5-dom-support/src/HTMLTableElements";
 import { skip, Skip } from "../src/Signals";
-import { wrapIfHTMLElement } from "@coremedia/ckeditor5-dom-support/HTMLElements";
+import { wrapIfHTMLElement } from "@coremedia/ckeditor5-dom-support/src/HTMLElements";
 import { ConversionContext } from "../src/ConversionContext";
 
 describe("HtmlDomConverter", () => {

@@ -5,9 +5,9 @@ import {
   setXLinkDataSetEntries,
   XLinkAttributes,
 } from "./XLink";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support/HTMLAnchorElements";
-import { ConversionApi } from "@coremedia/ckeditor5-dom-converter/ConversionApi";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support/src/HTMLAnchorElements";
+import { ConversionApi } from "@coremedia/ckeditor5-dom-converter/src/ConversionApi";
 
 export const contentUriPathPrefix = "content" as const;
 

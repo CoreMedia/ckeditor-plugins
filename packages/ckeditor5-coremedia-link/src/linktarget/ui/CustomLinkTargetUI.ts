@@ -6,9 +6,9 @@ import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
 import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if

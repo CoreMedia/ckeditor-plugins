@@ -6,10 +6,10 @@ import {
   DomConverter,
 } from "@ckeditor/ckeditor5-engine";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import RichTextXmlWriter from "../../RichTextXmlWriter";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
 import { Editor } from "@ckeditor/ckeditor5-core";

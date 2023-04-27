@@ -1,13 +1,13 @@
 import { Command, Editor } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   CONTENT_URI_PATH_REGEXP,
   requireContentUriPath,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 
 // noinspection JSConstantReassignment
 /**

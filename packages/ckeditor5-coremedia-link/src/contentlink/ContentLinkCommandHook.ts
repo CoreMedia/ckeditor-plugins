@@ -4,15 +4,15 @@ import {
   ModelUri,
   requireContentCkeModelUri,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
-import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
-import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
+import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/Constants";
+import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Alias for easier readable code.

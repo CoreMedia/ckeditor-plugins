@@ -1,9 +1,9 @@
 import { ViewNode, ViewElement, ViewText, UpcastWriter, ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
 import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
 const logger: Logger = LoggerProvider.getLogger("FontMapper");

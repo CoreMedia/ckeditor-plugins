@@ -2,8 +2,8 @@
 
 import ElementProxy, { ElementFilterRule } from "./ElementProxy";
 import TextProxy, { TextFilterRule } from "./TextProxy";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { Editor } from "@ckeditor/ckeditor5-core";
 
 enum FilterMode {

@@ -1,14 +1,14 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import "./expect/Expectations";
-import { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
+import { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
 import waitForExpect from "wait-for-expect";
-import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
+import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContent";
 import {
   PNG_BLUE_240x135,
   PNG_GREEN_240x135,
   PNG_RED_240x135,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockFixtures";
 import { ctrlOrMeta } from "./browser/UserAgent";
 
 const oneLink: MockContentConfig[] = [

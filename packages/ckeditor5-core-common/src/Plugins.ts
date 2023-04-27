@@ -1,5 +1,4 @@
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import Plugin, {
   PluginClassConstructor,
   PluginConstructor,

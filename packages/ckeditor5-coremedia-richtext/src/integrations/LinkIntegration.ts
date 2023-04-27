@@ -1,6 +1,6 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Provides integration with the CKEditor 5 Link Feature.

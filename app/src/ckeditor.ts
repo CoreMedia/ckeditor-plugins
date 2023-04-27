@@ -24,14 +24,13 @@ import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Highlight } from "@ckeditor/ckeditor5-highlight";
 
-import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
-import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
-import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
-import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
-import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
+import LinkTarget from "@coremedia/ckeditor5-coremedia-link/src/linktarget/LinkTarget";
+import ContentLinks from "@coremedia/ckeditor5-coremedia-link/src/contentlink/ContentLinks";
+import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboard";
+import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/src/ContentImagePlugin";
 
-import CoreMediaFontMapper from "@coremedia/ckeditor5-font-mapper/FontMapper";
-import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
+import CoreMediaFontMapper from "@coremedia/ckeditor5-font-mapper/src/FontMapper";
+import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
 import { setupPreview, updatePreview } from "./preview";
 import { initReadOnlyMode } from "./readOnlySupport";
@@ -40,22 +39,23 @@ import CoreMediaStudioEssentials, {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness,
-} from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
+} from "@coremedia/ckeditor5-coremedia-studio-essentials/src/CoreMediaStudioEssentials";
 import { initInputExampleContent } from "./inputExampleContents";
-import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 
 import { Command, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
-import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
-import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
+import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
+import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/src/paste/PasteContentPlugin";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/src/rules/ReplaceElementByElementAndClass";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/compatibility/v10/rules/ReplaceBy";
+import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/src/compatibility/v10/rules/ReplaceBy";
 import { getHashParam } from "./HashParams";
-import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
-import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/LinkAttributesConfig";
-import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
+import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/src/contentlink/LinkBalloonConfig";
+import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/src/LinkAttributesConfig";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 
 /**
  * Typings for CKEditorInspector, as it does not ship with typings yet.

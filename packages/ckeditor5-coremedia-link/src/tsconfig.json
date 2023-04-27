@@ -1,57 +1,8 @@
 {
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "../dist",
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "declarationMap": true,
-    "paths": {
-      "@coremedia/ckeditor5-common/*": [
-        "../../ckeditor5-common/src/*"
-      ],
-      "@coremedia/ckeditor5-core-common/*": [
-        "../../ckeditor5-core-common/src/*"
-      ],
-      "@coremedia/ckeditor5-coremedia-content/*": [
-        "../../ckeditor5-coremedia-content/src/*"
-      ],
-      "@coremedia/ckeditor5-logging/*": [
-        "../../ckeditor5-logging/src/*"
-      ],
-      "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
-        "../../ckeditor5-coremedia-content-clipboard/src/*"
-      ],
-      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
-        "../../ckeditor5-coremedia-studio-integration/src/*"
-      ],
-      "@coremedia/ckeditor5-link-common/*": [
-        "../../ckeditor5-link-common/src/*"
-      ]
-    }
   },
-  "references": [
-    {
-      "path": "../../ckeditor5-common/src"
-    },
-    {
-      "path": "../../ckeditor5-core-common/src"
-    },
-    {
-      "path": "../../ckeditor5-coremedia-content/src"
-    },
-    {
-      "path": "../../ckeditor5-logging/src"
-    },
-    {
-      "path": "../../ckeditor5-coremedia-content-clipboard/src"
-    },
-    {
-      "path": "../../ckeditor5-coremedia-studio-integration/src"
-    },
-    {
-      "path": "../../ckeditor5-link-common/src"
-    }
-  ],
-  "extends": "../../../tsconfig.json"
 }

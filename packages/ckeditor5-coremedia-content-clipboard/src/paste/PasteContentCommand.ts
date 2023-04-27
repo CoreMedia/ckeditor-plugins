@@ -1,14 +1,14 @@
 import { Command, Editor } from "@ckeditor/ckeditor5-core";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
-import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardService";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardItemRepresentation";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
+import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardService";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardItemRepresentation";
 import type { Subscription } from "rxjs";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import { insertContentMarkers } from "../ContentMarkers";
-import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardServiceUtil";
+import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardServiceUtil";
 
 /**
  * Command to insert Content from the ClipboardService into the document at the actual selection.

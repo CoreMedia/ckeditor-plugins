@@ -2,9 +2,9 @@ import { Editor } from "@ckeditor/ckeditor5-core";
 import { Range as ModelRange, Writer } from "@ckeditor/ckeditor5-engine";
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import type { Model } from "@ckeditor/ckeditor5-engine";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");

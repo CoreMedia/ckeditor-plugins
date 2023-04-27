@@ -1,9 +1,9 @@
-import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardService";
-import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ClipboardItemRepresentation";
+import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardService";
+import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardItemRepresentation";
 import { Observable, Subject, Subscriber, TeardownLogic } from "rxjs";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 
 export default class MockClipboardService implements ClipboardService {
   static readonly #logger: Logger = LoggerProvider.getLogger("MockClipboardService");

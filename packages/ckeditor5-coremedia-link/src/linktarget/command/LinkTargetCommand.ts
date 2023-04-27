@@ -1,7 +1,7 @@
 import { Command } from "@ckeditor/ckeditor5-core";
 import { Element, Range, Schema, DocumentSelection, Position, Model, Writer } from "@ckeditor/ckeditor5-engine";
 import { LINK_TARGET_MODEL } from "../Constants";
-import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/Constants";
+import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/src/Constants";
 import { first } from "@ckeditor/ckeditor5-utils";
 import { findAttributeRange } from "@ckeditor/ckeditor5-typing";
 

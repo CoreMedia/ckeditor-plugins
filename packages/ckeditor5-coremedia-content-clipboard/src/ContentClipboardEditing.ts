@@ -7,7 +7,7 @@ import { addContentMarkerConversion, removeContentMarkerConversion } from "./con
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 import { UndoSupport } from "./integrations/Undo";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const PLUGIN_NAME = "ContentClipboardEditing";
 

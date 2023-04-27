@@ -1,9 +1,9 @@
 /* eslint no-null/no-null: off */
 
-import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
+import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
+import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/TextProxy";
 import RichTextSchema from "../RichTextSchema";
-import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 import { DataProcessor } from "@ckeditor/ckeditor5-engine";
 import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";

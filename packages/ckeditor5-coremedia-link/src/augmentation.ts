@@ -12,7 +12,7 @@ import type {
   LinkUserActionsPlugin,
 } from "./index";
 // TODO[cke] Use index import.
-import type { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
+import type { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {

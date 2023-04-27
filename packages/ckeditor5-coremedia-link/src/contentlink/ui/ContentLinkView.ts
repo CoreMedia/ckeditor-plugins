@@ -1,12 +1,12 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentUriPath,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentAsLink";
 import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";

@@ -14,9 +14,6 @@
     "node": "18",
     "pnpm": "^8.1"
   },
-  "exports": {
-    "./*": "./dist/*.js"
-  },
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.21.0",

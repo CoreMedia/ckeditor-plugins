@@ -1,8 +1,7 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { priorities } from "@ckeditor/ckeditor5-utils";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * This plugin provides an extension point, to wait for (optional)

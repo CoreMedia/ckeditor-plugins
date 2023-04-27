@@ -2,7 +2,7 @@ import MockContent from "./MockContent";
 import { map } from "rxjs/operators";
 import { combineLatest, Observable } from "rxjs";
 import { observeEditing, observeName, observeReadable } from "./MutableProperties";
-import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
+import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/DisplayHint";
 import Delayed from "./Delayed";
 import { capitalize } from "./MockContentUtils";
 

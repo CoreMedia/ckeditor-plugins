@@ -6,8 +6,8 @@ import {
   enableCommand,
   ifCommand,
   optionalCommandNotFound,
-} from "@coremedia/ckeditor5-core-common/Commands";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+} from "@coremedia/ckeditor5-core-common/src/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
 

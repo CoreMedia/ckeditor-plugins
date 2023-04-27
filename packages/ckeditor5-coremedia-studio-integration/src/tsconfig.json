@@ -1,19 +1,8 @@
 {
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "../dist",
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "declarationMap": true,
-    "paths": {
-      "@coremedia/ckeditor5-logging/*": ["../../ckeditor5-logging/src/*"]
-    }
   },
-  "references": [
-    {
-      "path": "../../ckeditor5-logging/src"
-    }
-  ],
-  "extends": "../../../tsconfig.json"
 }

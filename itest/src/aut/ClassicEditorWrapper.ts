@@ -3,7 +3,7 @@ import { EditorWrapper } from "./EditorWrapper";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
+import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/src/RichTextDataProcessor";
 import { Locatable, visible } from "./Locatable";
 import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 

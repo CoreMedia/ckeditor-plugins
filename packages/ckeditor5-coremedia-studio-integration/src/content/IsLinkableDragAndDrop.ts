@@ -1,5 +1,5 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { receiveDraggedItemsFromService } from "./studioservices/DragDropServiceWrapper";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";

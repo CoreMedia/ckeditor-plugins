@@ -1,10 +1,9 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { PluginIntegrationHook } from "../PluginIntegrationHook";
 import { Model } from "@ckeditor/ckeditor5-engine";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * Hooks into `ImageInline` and `ImageBlock` plugin, if available and

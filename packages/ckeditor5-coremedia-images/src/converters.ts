@@ -4,17 +4,17 @@ import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engin
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { DowncastDispatcher, ViewElement, DowncastWriter, Element as ModelElement } from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
-import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
-import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayServiceDescriptor";
+import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayService";
+import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 

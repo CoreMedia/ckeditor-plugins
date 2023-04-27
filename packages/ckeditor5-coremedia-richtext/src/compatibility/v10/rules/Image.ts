@@ -1,5 +1,5 @@
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
 import {
   xLinkActuateMapper,
   xLinkHrefMapper,

@@ -1,6 +1,6 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { DataFilter } from "@ckeditor/ckeditor5-html-support";
 import ReducedMatcherPattern, {
   InheritingMatcherPattern,
@@ -9,7 +9,7 @@ import ReducedMatcherPattern, {
 } from "./ReducedMatcherPattern";
 import { COREMEDIA_RICHTEXT_1_0_CONFIG } from "./CoreMediaRichText10Dtd";
 import { getConfig } from "./CoreMediaRichTextSupportConfig";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Plugin, which configures CKEditor's General HTML Support, so that

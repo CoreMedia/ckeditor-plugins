@@ -8,14 +8,14 @@ import {
   Node as ModelNode,
 } from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
 import { openLink } from "@ckeditor/ckeditor5-link/src/utils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import {
   isModelUriPath,
   requireContentUriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
 
 /**

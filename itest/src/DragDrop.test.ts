@@ -1,18 +1,18 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
 import "./expect/Expectations";
-import { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
+import { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
 import waitForExpect from "wait-for-expect";
-import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
+import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContent";
 import {
   PNG_BLUE_240x135,
   PNG_GREEN_240x135,
   PNG_RED_240x135,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
-import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
-import { MockExternalContent } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockExternalContentPlugin";
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockFixtures";
+import { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
+import { MockExternalContent } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockExternalContentPlugin";
 import WindowBrowserAccessor from "./browser/WindowBrowserAccessor";
-import { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
+import { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
 
 const oneLink: MockContentConfig[] = [
   {

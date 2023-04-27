@@ -2,9 +2,9 @@ import {
   asDataFilterRule,
   asViewFilterRule,
   preserveAttributeAs,
-} from "@coremedia/ckeditor5-dataprocessor-support/Attributes";
-import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+} from "@coremedia/ckeditor5-dataprocessor-support/src/Attributes";
+import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
+import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 
 /**
  * Maps `xml:lang` and `lang` from data (CoreMedia RichText) to `lang`.

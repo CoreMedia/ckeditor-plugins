@@ -2,28 +2,28 @@
 
 import { Plugin, Command } from "@ckeditor/ckeditor5-core";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentCkeModelUri,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { LabeledFieldView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
-import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropServiceWrapper";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
+import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropServiceWrapper";
 import {
   getEvaluationResult,
   isLinkable,
   IsLinkableEvaluationResult,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
-import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/FocusUtils";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
+import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { AugmentedLinkFormView } from "./AugmentedLinkFormView";

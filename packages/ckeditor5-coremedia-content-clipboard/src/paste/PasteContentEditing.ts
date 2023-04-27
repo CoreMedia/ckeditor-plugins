@@ -1,5 +1,5 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { PasteContentCommand } from "./PasteContentCommand";
 
 export default class PasteContentEditing extends Plugin {

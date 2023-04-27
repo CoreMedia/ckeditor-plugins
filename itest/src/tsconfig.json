@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
@@ -53,5 +54,4 @@
       "path": "../../packages/ckeditor5-coremedia-studio-integration-mock/src"
     }
   ],
-  "extends": "../../tsconfig.json"
 }

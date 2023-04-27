@@ -1,18 +1,18 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import {
   IsDroppableEvaluationResult,
   isDroppableUris,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsDroppableInRichtext";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
 import {
   IsLinkableEvaluationResult,
   isLinkableUris,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/IsLinkableDragAndDrop";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
 
 /**
  * Describes a div-element that can be created by this plugin.

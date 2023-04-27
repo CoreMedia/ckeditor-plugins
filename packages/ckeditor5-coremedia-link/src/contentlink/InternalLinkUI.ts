@@ -1,5 +1,5 @@
 import { type ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
  * We require accessing some of the internal properties/methods of `LinkUI`.

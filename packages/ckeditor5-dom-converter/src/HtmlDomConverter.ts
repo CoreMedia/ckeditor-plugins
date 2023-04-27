@@ -1,13 +1,15 @@
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
-import { isAttr } from "@coremedia/ckeditor5-dom-support/Attrs";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
+import {
+  isElement,
+  isAttr,
+  isParentNode,
+  isCharacterData,
+  fragmentToString,
+  isDocumentFragment,
+} from "@coremedia/ckeditor5-dom-support";
 import { skip, Skip } from "./Signals";
-import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas";
 import { ConversionContext } from "./ConversionContext";
 import { ConversionApi } from "./ConversionApi";
-import { fragmentToString, isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFragments";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { ConversionListener } from "./ConversionListener";
 
 const nodeToString = (node: Node | null | undefined): string => {

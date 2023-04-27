@@ -1,6 +1,5 @@
 import { Editor, Command } from "@ckeditor/ckeditor5-core";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 

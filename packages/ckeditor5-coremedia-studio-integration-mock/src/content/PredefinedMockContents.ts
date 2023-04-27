@@ -15,7 +15,7 @@ import {
   PNG_RED_240x135,
 } from "./MockFixtures";
 import { capitalize } from "./MockContentUtils";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { defaultTypeById } from "./MockContentType";
 
 type PredefinedMockContentConfig = { comment?: string } & MockContentConfig;

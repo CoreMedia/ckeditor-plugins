@@ -1,18 +1,11 @@
 {
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
     "noEmit": true,
-    "paths": {
-      "@coremedia/ckeditor5-coremedia-studio-integration/*": [
-        "../../ckeditor5-coremedia-studio-integration/src/*"
-      ]
-    }
   },
   "references": [{
     "path": "../src"
-  },{
-    "path": "../../ckeditor5-coremedia-studio-integration/src"
   }],
-  "extends": "../../../tsconfig.json",
 }

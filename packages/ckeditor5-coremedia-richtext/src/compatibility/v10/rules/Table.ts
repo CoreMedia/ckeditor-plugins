@@ -1,6 +1,6 @@
-import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 import { replaceByElementAndClassBackAndForth } from "./ReplaceBy";
-import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
 import { langMapper, langMapperConfiguration, langViewFilterRule } from "./Lang";
 
 /**

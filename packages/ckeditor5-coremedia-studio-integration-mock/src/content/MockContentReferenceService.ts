@@ -2,11 +2,11 @@ import {
   ContentReferenceResponse,
   createContentReferenceServiceDescriptor,
   IContentReferenceService,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 import MockContentPlugin from "./MockContentPlugin";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 
 export class MockContentReferenceService implements IContentReferenceService {
   #editor: Editor;

@@ -3,7 +3,7 @@ import {
   PNG_EMPTY_24x24,
   PNG_LOCK_24x24,
   PNG_RED_240x135,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockFixtures";
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockFixtures";
 import "./expect/Expectations";
 import { ElementHandle } from "playwright-core";
 import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
@@ -16,7 +16,7 @@ import ImageContextualBalloonToolbar from "./aut/components/balloon/ImageContext
 import LinkActionsViewWrapper from "./aut/components/balloon/LinkActionsViewWrapper";
 import ContentLinkViewWrapper from "./aut/components/balloon/ContentLinkViewWrapper";
 import waitForExpect from "wait-for-expect";
-import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContent";
+import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContent";
 
 describe("Image Features", () => {
   let application: ApplicationWrapper;

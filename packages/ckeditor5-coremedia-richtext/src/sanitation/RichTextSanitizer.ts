@@ -1,7 +1,7 @@
 import { ActiveStrictness, Strictness } from "../Strictness";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
 import { namespaces } from "../Namespaces";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
+import { isParentNode } from "@coremedia/ckeditor5-dom-support/src/ParentNodes";
 import { supportedElements } from "./RichTextDtd";
 
 /**

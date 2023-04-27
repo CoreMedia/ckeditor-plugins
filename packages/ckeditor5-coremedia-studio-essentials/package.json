@@ -23,9 +23,6 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "main": "./src/index.ts",
-  "exports": {
-    "./*": "./dist/*.js"
-  },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.4",

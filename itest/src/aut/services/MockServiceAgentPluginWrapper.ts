@@ -1,6 +1,6 @@
 import { JSWrapper } from "../JSWrapper";
 import { ClassicEditorWrapper } from "../ClassicEditorWrapper";
-import type MockServiceAgentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockServiceAgentPlugin";
+import type MockServiceAgentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockServiceAgentPlugin";
 import { WorkAreaServiceWrapper } from "./WorkAreaServiceWrapper";
 
 export class MockServiceAgentPluginWrapper extends JSWrapper<MockServiceAgentPlugin> {

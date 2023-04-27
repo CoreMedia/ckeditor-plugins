@@ -1,5 +1,5 @@
 import { ViewCollection } from "@ckeditor/ckeditor5-ui";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/IncompatibleInternalApiUsageError";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
  * Internal API of `LinkFormView` and `LinkActionsView` we need to expose

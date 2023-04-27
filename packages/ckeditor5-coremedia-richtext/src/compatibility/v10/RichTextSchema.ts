@@ -8,10 +8,10 @@
  * =============================================================================
  */
 
-import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import TextProxy from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
+import TextProxy from "@coremedia/ckeditor5-dataprocessor-support/src/TextProxy";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { Strictness } from "../../Strictness";
 
 /**

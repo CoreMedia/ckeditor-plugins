@@ -1,7 +1,7 @@
 /* eslint-disable no-null/no-null */
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
 import { namespaces } from "../Namespaces";
 
 const nsXml = namespaces.xml;
