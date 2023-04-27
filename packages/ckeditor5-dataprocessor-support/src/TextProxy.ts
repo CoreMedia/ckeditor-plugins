@@ -79,7 +79,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
    * Access owner document.
    */
   // Override, as we know, that it is non-null here.
-  public get ownerDocument(): Document {
+  public override get ownerDocument(): Document {
     return this.delegate.ownerDocument;
   }
 
@@ -103,7 +103,7 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
   /**
    * For kept text-nodes it possibly sets changed text.
    */
-  protected persistKeepOrReplace(): PersistResponse {
+  protected override persistKeepOrReplace(): PersistResponse {
     const response = super.persistKeepOrReplace();
     if (!response.abort && this.#text !== undefined) {
       this.delegate.textContent = this.textContent;

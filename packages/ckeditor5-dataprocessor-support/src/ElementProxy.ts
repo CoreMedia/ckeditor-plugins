@@ -385,7 +385,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   /**
    * @inheritDoc NodeProxy.delegate
    */
-  get delegate(): Element {
+  override get delegate(): Element {
     return this.#replacement ?? super.delegate;
   }
 
@@ -393,7 +393,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * Access owner document.
    */
   // Override, as we know, that it is non-null here.
-  get ownerDocument(): Document {
+  override get ownerDocument(): Document {
     return this.delegate.ownerDocument;
   }
 
@@ -428,7 +428,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * to replace the element by a new one.
    *
    */
-  protected persistKeepOrReplace(): PersistResponse {
+  protected override persistKeepOrReplace(): PersistResponse {
     const response = super.persistKeepOrReplace();
     if (response.abort) {
       return response;
@@ -628,7 +628,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * Retrieve the name of the element.
    * If the name got changed, will return this changed name instead.
    */
-  public get name(): string {
+  public override get name(): string {
     return this.#name ?? super.name;
   }
 
@@ -639,7 +639,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    *
    * @param newName - new name for the element; case does not matter.
    */
-  public set name(newName: string) {
+  public override set name(newName: string) {
     this.requireMutable();
     this.#name = newName.toLowerCase();
   }
