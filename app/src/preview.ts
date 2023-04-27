@@ -1,4 +1,4 @@
-import format = require("xml-formatter");
+import { default as format } from "xml-formatter";
 
 const WITH_PREVIEW_CLASS = "with-preview";
 const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
