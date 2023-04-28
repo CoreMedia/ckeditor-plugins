@@ -17,6 +17,7 @@
     "newLine": "LF",
     "noImplicitAny": true,
     "noImplicitOverride": true,
+    "pretty": true,
     "removeComments": true,
     "skipLibCheck": true,
     "sourceMap": true,
