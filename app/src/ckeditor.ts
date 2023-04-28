@@ -24,22 +24,21 @@ import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Highlight } from "@ckeditor/ckeditor5-highlight";
 
-import LinkTarget from "@coremedia/ckeditor5-coremedia-link/src/linktarget/LinkTarget";
-import ContentLinks from "@coremedia/ckeditor5-coremedia-link/src/contentlink/ContentLinks";
-import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboard";
-import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/src/ContentImagePlugin";
-
-import CoreMediaFontMapper from "@coremedia/ckeditor5-font-mapper/src/FontMapper";
+import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
+import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
+import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
 import { setupPreview, updatePreview } from "./preview";
 import { initReadOnlyMode } from "./readOnlySupport";
 import { initExamples, setExampleData } from "./example-data";
-import CoreMediaStudioEssentials, {
+import {
+  CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness,
-} from "@coremedia/ckeditor5-coremedia-studio-essentials/src/CoreMediaStudioEssentials";
+} from "@coremedia/ckeditor5-coremedia-studio-essentials";
 import { initInputExampleContent } from "./inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 
@@ -346,12 +345,12 @@ ClassicEditor.create(sourceElement, {
       });
     },
   },
-  // @ts-expect-error - TODO[cke] Fix Typings
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     // Defaults to: Loose
     strictness: Strictness.STRICT,
     // The Latest is the default. Use v10 for first data-processor architecture,
     // for example.
+    // @ts-expect-error - TODO[cke] Fix Typings
     compatibility: richTextCompatibility,
     rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
   },

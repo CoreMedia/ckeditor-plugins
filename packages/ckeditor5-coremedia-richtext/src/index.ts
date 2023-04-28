@@ -5,14 +5,16 @@
 export { default as CoreMediaRichText } from "./CoreMediaRichText";
 export {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
+  compatibilityKeys,
+  defaultCoreMediaRichTextConfig,
+} from "./CoreMediaRichTextConfig";
+export type {
+  default as CoreMediaRichTextConfig,
   CommonCoreMediaRichTextConfig,
   CompatibilityConfig,
   CompatibilityKey,
   LatestCoreMediaRichTextConfig,
   V10CoreMediaRichTextConfig,
-  compatibilityKeys,
-  default as CoreMediaRichTextConfig,
-  defaultCoreMediaRichTextConfig,
 } from "./CoreMediaRichTextConfig";
 export { default as RichTextDataProcessor } from "./RichTextDataProcessor";
 export { default as RichTextXmlWriter } from "./RichTextXmlWriter";
@@ -30,15 +32,15 @@ export { LinkIntegration } from "./integrations/LinkIntegration";
  * `rules/`
  */
 
-export { ReplaceByChildrenConfig, replaceByChildren } from "./rules/ReplaceByChildren";
-export { ReplaceElementByElementConfig, replaceElementByElement } from "./rules/ReplaceElementByElement";
+export { replaceByChildren, type ReplaceByChildrenConfig } from "./rules/ReplaceByChildren";
+export { replaceElementByElement, type ReplaceElementByElementConfig } from "./rules/ReplaceElementByElement";
 export {
-  ReplaceElementByElementAndClassConfig,
   replaceElementByElementAndClass,
+  type ReplaceElementByElementAndClassConfig,
 } from "./rules/ReplaceElementByElementAndClass";
 export {
-  ReplaceHeadingsByElementAndClassConfig,
   replaceHeadingsByElementAndClass,
+  type ReplaceHeadingsByElementAndClassConfig,
 } from "./rules/ReplaceHeadingsByElementAndClass";
 
 import "./augmentation";

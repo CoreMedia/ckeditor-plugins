@@ -3,4 +3,10 @@
  */
 
 export {} from "./Commands";
-export { getOptionalPlugin, OnMissingPlugin, reportInitStart, reportInitEnd, InitInformation } from "./Plugins";
+export {
+  getOptionalPlugin,
+  reportInitEnd,
+  reportInitStart,
+  type InitInformation,
+  type OnMissingPlugin,
+} from "./Plugins";

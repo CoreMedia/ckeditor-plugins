@@ -6,7 +6,11 @@
  */
 
 export { default as FontMapper } from "./FontMapper";
-export { FontMapperConfigEntry, FontMapperConfig, COREMEDIA_FONT_MAPPER_CONFIG_KEY } from "./FontMapperConfig";
-export { Mode } from "./FontMapping";
+export {
+  COREMEDIA_FONT_MAPPER_CONFIG_KEY,
+  type FontMapperConfig,
+  type FontMapperConfigEntry,
+} from "./FontMapperConfig";
+export type { Mode } from "./FontMapping";
 
 import "./augmentation";

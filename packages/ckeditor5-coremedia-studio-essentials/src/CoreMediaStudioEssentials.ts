@@ -16,6 +16,10 @@ export default class CoreMediaStudioEssentials extends Plugin {
   static readonly requires = [CoreMediaRichText, GeneralRichTextSupport];
 }
 
-export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext-support/src/CoreMediaRichTextSupportConfig";
-export { Strictness } from "@coremedia/ckeditor5-coremedia-richtext/src/Strictness";
-export { COREMEDIA_RICHTEXT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext/src/CoreMediaRichTextConfig";
+/*
+ * Deprecated (since 15.x) dependency convenience. Use `index.ts` instead on import.
+ */
+
+export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext-support";
+export { Strictness } from "@coremedia/ckeditor5-coremedia-richtext";
+export { COREMEDIA_RICHTEXT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext";
