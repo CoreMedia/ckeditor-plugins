@@ -187,7 +187,7 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Clears resources, i.e., the name cache.
    */
-  destroy(): void {
+  override destroy(): void {
     const { editor } = this;
 
     ifCommand(editor, LINK_COMMAND_NAME)
@@ -232,11 +232,10 @@ class ContentLinkCommandHook extends Plugin {
    */
   static #isTextNodeInsertion(value: DiffItem): boolean {
     if (value.type === "insert") {
-      const insertion = value;
       // Unfortunately, insertion.position.textNode does not (yet) represent
       // the now added text node, but the text node the inserted one
       // may have been merged with.
-      return insertion.name === "$text";
+      return value.name === "$text";
     }
     return false;
   }

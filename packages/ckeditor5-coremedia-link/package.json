@@ -14,7 +14,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "build": "tsc --project ./tsconfig.release.json",
     "clean": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
@@ -22,8 +22,6 @@
   },
   "main": "./src/index.ts",
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.4",
     "@ckeditor/ckeditor5-clipboard": "^37.0.1",
     "@ckeditor/ckeditor5-core": "^37.0.1",
     "@ckeditor/ckeditor5-engine": "^37.0.1",
@@ -31,7 +29,6 @@
     "@ckeditor/ckeditor5-typing": "^37.0.1",
     "@ckeditor/ckeditor5-ui": "^37.0.1",
     "@ckeditor/ckeditor5-utils": "^37.0.1",
-    "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.0",

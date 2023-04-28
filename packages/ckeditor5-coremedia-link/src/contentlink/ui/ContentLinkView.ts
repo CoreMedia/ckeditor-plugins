@@ -169,7 +169,7 @@ export default class ContentLinkView extends ButtonView {
     return "uriPath" in obj;
   }
 
-  render(): void {
+  override render(): void {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
       if (!this.#statusIcon) {
@@ -239,7 +239,7 @@ export default class ContentLinkView extends ButtonView {
     return this.#cancelButton;
   }
 
-  destroy(): void {
+  override destroy(): void {
     // Prevent possible asynchronous events from re-triggering subscription.
     this.#acceptSubscriptions = false;
     this.#endContentSubscription();

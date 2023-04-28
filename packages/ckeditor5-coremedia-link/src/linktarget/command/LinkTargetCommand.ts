@@ -23,7 +23,7 @@ class LinkTargetCommand extends Command {
   /**
    * Update value and enabled state.
    */
-  refresh(): void {
+  override refresh(): void {
     const model = this.editor.model;
     const document = model.document;
     const schema = model.schema;
@@ -114,7 +114,7 @@ class LinkTargetCommand extends Command {
    *
    * @param target - target to set; empty string/null/undefined to trigger removal of `linkTarget` attribute
    */
-  execute(target: Target): void {
+  override execute(target: Target): void {
     const editor = this.editor;
     const model = editor.model;
     const findCurrentLinkHrefRanges = LinkTargetCommand.#findCurrentLinkHrefRanges;
