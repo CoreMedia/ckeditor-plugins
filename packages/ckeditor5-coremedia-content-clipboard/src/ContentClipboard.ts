@@ -97,7 +97,7 @@ export default class ContentClipboard extends Plugin {
     }
   }
 
-  destroy(): void {
+  override destroy(): void {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
