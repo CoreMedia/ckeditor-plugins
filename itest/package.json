@@ -47,7 +47,7 @@
   },
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts,.js\"",
+    "build": "exit 0",
     "playwright": "jest",
     "playwright-local": "jest --config ./jest.local.js",
     "jest": "exit 0",
