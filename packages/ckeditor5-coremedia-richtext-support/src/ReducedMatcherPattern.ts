@@ -53,7 +53,7 @@ const mergePatterns = (...sources: ReducedMatcherPattern[]): ReducedMatcherPatte
   if (supportsClasses) {
     result.classes = true;
   }
-  sources.forEach((s) => {
+  sources.forEach((s): void => {
     if (s.name) {
       // Will override any previously defined name.
       result.name = s.name;

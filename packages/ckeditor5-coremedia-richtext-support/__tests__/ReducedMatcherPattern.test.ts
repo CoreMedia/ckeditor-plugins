@@ -230,7 +230,9 @@ describe("ReducedMatcherPattern", () => {
         name: "custom",
         inherit: "not-existing",
       };
-      const failing = () => resolveInheritance(pattern, strategy);
+      const failing = (): void => {
+        resolveInheritance(pattern, strategy);
+      };
       expect(failing).toThrowError();
     });
 
