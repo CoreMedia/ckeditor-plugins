@@ -1,10 +1,18 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "types": [
+      "jest",
+      "playwright",
+      "wait-for-expect",
+      "jest-playwright-preset",
+      "expect-playwright",
+      "node"
+    ],
     "outDir": "./dist",
   },
   "include": [
     "./src",
     "./test-data"
-  ]
+  ],
 }
