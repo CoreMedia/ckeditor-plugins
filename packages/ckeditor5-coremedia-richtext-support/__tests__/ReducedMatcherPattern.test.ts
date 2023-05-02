@@ -5,7 +5,7 @@ import ReducedMatcherPattern, {
   mergePatterns,
   resolveInheritance,
   toLookupStrategy,
-} from "../dist/ReducedMatcherPattern";
+} from "../src/ReducedMatcherPattern";
 
 /**
  * Abbreviated form of `ReducedMatcherPattern` to ease providing data for tests.
