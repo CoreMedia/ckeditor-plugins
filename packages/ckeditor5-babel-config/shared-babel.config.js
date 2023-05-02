@@ -15,9 +15,10 @@ module.exports = {
       require.resolve("@babel/preset-env"),
       {
         targets: {
-          node: 18,
+          node: "current",
         },
       },
+      require.resolve("@babel/preset-typescript"),
     ],
   ],
 };
