@@ -350,7 +350,7 @@ ClassicEditor.create(sourceElement, {
     strictness: Strictness.STRICT,
     // The Latest is the default. Use v10 for first data-processor architecture,
     // for example.
-    // @ts-expect-error - TODO[cke] Fix Typings
+    // @ts-expect-error - TODO[cke] 37.x Fix Typings
     compatibility: richTextCompatibility,
     rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
   },

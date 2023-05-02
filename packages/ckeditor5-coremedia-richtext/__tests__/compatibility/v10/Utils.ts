@@ -50,7 +50,6 @@ const richTextConfig: CoreMediaRichTextConfig = {
 };
 // Need to mock `get` as starting with v11 we cannot provide an empty
 // configuration anymore, as we have to set the compatibility explicitly.
-// TODO[cke] Fix typing.
 // @ts-expect-error - Requires Generic Type since CKEditor 5 37.x.
 const v10Config: Pick<CKEditorConfig, "get"> & { [COREMEDIA_RICHTEXT_CONFIG_KEY]: CoreMediaRichTextConfig } = {
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: richTextConfig,

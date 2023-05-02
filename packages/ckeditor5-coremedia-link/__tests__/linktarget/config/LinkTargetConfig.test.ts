@@ -12,7 +12,6 @@ const someFunction = () => {
 
 describe("LinkTargetConfig", () => {
   describe("parseLinkTargetConfig", () => {
-    // TODO[cke] Fix typings.
     // @ts-expect-error - Requires generic type since CKEditor 37.x.
     let config: Config;
 
