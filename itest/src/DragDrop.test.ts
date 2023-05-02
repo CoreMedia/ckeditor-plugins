@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
 import "./expect/Expectations";
 import { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
 import waitForExpect from "wait-for-expect";

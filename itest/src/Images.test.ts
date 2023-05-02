@@ -6,10 +6,10 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockFixtures";
 import "./expect/Expectations";
 import { ElementHandle } from "playwright-core";
-import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
-import { a, img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/Images";
+import { a, img, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
-import { linkReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Links";
+import { linkReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/Links";
 import { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";
 import ToolbarViewWrapper from "./aut/components/ToolbarViewWrapper";
 import ImageContextualBalloonToolbar from "./aut/components/balloon/ImageContextualBalloonToolbar";
