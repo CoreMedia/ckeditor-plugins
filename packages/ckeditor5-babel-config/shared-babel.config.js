@@ -13,7 +13,7 @@ module.exports = {
       require.resolve("@babel/preset-env"),
       {
         targets: {
-          node: 12,
+          node: 18,
         },
       },
     ],
