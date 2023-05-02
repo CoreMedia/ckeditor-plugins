@@ -240,12 +240,6 @@ importers:
 
   itest:
     devDependencies:
-      '@babel/cli':
-        specifier: ^7.21.0
-        version: 7.21.0(@babel/core@7.21.4)
-      '@babel/core':
-        specifier: ^7.21.4
-        version: 7.21.4
       '@ckeditor/ckeditor5-core':
         specifier: ^37.0.1
         version: 37.0.1
@@ -261,9 +255,6 @@ importers:
       '@ckeditor/ckeditor5-ui':
         specifier: ^37.0.1
         version: 37.0.1
-      '@coremedia-internal/ckeditor5-babel-config':
-        specifier: ^1.0.0
-        version: link:../packages/ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
@@ -291,9 +282,6 @@ importers:
       '@types/node':
         specifier: ^18.15.11
         version: 18.15.11
-      babel-jest:
-        specifier: ^29.5.0
-        version: 29.5.0(@babel/core@7.21.4)
       expect-playwright:
         specifier: ^0.8.0
         version: 0.8.0
