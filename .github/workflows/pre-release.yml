@@ -23,7 +23,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 13
     # do not run when if it is a manual trigger on the main branch as we have other CI for this. This one is only for feature branches
     if: (github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main') && !github.event.pull_request.draft
     steps:
