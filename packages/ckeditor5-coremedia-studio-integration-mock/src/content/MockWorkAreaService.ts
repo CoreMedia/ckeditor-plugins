@@ -6,7 +6,6 @@ import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/s
 import { Editor } from "@ckeditor/ckeditor5-core";
 import MockContentPlugin from "./MockContentPlugin";
 import MockContent from "./MockContent";
-import { BlobType } from "./MutableProperties";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { Observable, Subject } from "rxjs";
 
@@ -54,13 +53,10 @@ class MockWorkAreaService implements WorkAreaService {
       .map((uri) => mockContentPlugin.getContent(uri))
       .every((mockContent: MockContent): boolean => {
         const allReadable = mockContent.readable.every((isReadable) => isReadable);
-        if (!mockContent.embeddable) {
-          MockWorkAreaService.#LOGGER.debug(`Content is not embeddable and readable is ${allReadable}`);
-          return allReadable;
-        }
-        const dataIsSet = mockContent.blob.every((blobData: BlobType) => blobData?.value);
-        MockWorkAreaService.#LOGGER.debug(`Content is embeddable and readable is ${allReadable}`);
-        return allReadable && dataIsSet;
+        MockWorkAreaService.#LOGGER.debug(
+          `Content ${mockContent.id} is considered ${allReadable ? "" : "un"}readable.`
+        );
+        return allReadable;
       });
   }
 
