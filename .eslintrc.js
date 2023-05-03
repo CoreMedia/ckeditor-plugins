@@ -171,7 +171,6 @@ module.exports = {
             definedTags: ["category", "packageDocumentation", "typeParam"],
           },
         ],
-        "jsdoc/newline-after-description": "error",
         // allowWhitespace: Must be true not to collide with Markdown.
         "jsdoc/no-multi-asterisks": ["error", { allowWhitespace: true }],
         "jsdoc/require-jsdoc": "error",
