@@ -12,6 +12,7 @@
     "node": "18",
     "pnpm": "^8.1"
   },
+  "main": "./src/index.ts",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
