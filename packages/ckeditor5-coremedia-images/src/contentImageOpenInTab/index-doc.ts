@@ -4,3 +4,4 @@
  * @module ckeditor5-coremedia-images
  */
 export { default as ContentImageOpenInTabUI } from "./ContentImageOpenInTabUI";
+export * from "./OpenImageInTabCommand";

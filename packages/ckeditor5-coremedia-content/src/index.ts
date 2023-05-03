@@ -3,3 +3,10 @@
  */
 
 export { OpenInTabCommand } from "./commands/OpenInTabCommand";
+export {
+  emptyOpenEntitiesInTabsResult,
+  type OpenEntitiesInTabsResult,
+  canBeOpenedInTab,
+  canAllBeOpenedInTab,
+  openEntitiesInTabs,
+} from "./OpenInTab";

@@ -5,3 +5,4 @@
  */
 
 export * as commands from "./commands/index-doc";
+export * from "./OpenInTab";

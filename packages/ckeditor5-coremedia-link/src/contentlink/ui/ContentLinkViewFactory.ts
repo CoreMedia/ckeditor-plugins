@@ -4,6 +4,8 @@ import ContentLinkView from "./ContentLinkView";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -15,6 +17,7 @@ import { LinkUI } from "@ckeditor/ckeditor5-link";
  * @param editor - the editor
  */
 const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
+  const logger = LoggerProvider.getLogger("ContentLinkView");
   const { t } = editor.locale;
   const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
 
@@ -39,11 +42,15 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
 
   fieldView.bind("uriPath").to(formView, "contentUriPath");
   // Propagate Content Name from ContentLinkView to FormView, as we require to
-  // know the name in some link insertion scenarios.
+  // knowing the name in some link insertion scenarios.
 
   formView.bind("contentName").to(contentLinkView.fieldView);
   fieldView.on("contentClick", () => {
-    linkUI.editor.commands.get("openLinkInTab")?.execute();
+    const { uriPath } = fieldView;
+    if (typeof uriPath === "string") {
+      logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
+      executeOpenContentInTabCommand(editor, [uriPath]);
+    }
   });
 
   fieldView.on("executeCancel", () => {

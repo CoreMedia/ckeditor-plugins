@@ -22,3 +22,5 @@ export * as ContentLinkViewUtils from "./ContentLinkViewUtils";
 
 export * from "./LinkBalloonConfig";
 export { default as LinkBalloonConfig } from "./LinkBalloonConfig";
+
+export * from "./OpenContentInTabCommand";

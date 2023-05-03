@@ -12,6 +12,7 @@ export { default as ContentLinkClipboardPlugin } from "./contentlink/ContentLink
 export { default as ContentLinkCommandHook } from "./contentlink/ContentLinkCommandHook";
 export { default as ContentLinks } from "./contentlink/ContentLinks";
 export { default as LinkUserActionsPlugin } from "./contentlink/LinkUserActionsPlugin";
+export { OpenContentInTabCommand } from "./contentlink/OpenContentInTabCommand";
 export { default as ContentLinkActionsViewExtension } from "./contentlink/ui/ContentLinkActionsViewExtension";
 export { default as ContentLinkFormViewExtension } from "./contentlink/ui/ContentLinkFormViewExtension";
 

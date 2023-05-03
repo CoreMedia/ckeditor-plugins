@@ -6,9 +6,12 @@ import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import {
+  openImageInTabCommandName,
+  registerOpenImageInTabCommand,
+} from "./contentImageOpenInTab/OpenImageInTabCommand";
 
 /**
  * Plugin to support images from CoreMedia RichText.
@@ -24,7 +27,7 @@ export default class ContentImageEditingPlugin extends Plugin {
   /**
    * Command name for bound `openImageInTab`.
    */
-  static readonly openImageInTab = "openImageInTab" as const;
+  static readonly openImageInTab = openImageInTabCommandName;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
 
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
@@ -37,10 +40,7 @@ export default class ContentImageEditingPlugin extends Plugin {
   init(): void {
     const editor = this.editor;
     const initInformation = reportInitStart(this);
-    editor.commands.add(
-      ContentImageEditingPlugin.openImageInTab,
-      new OpenInTabCommand(editor, "xlink-href", "imageInline")
-    );
+    registerOpenImageInTabCommand(editor);
     reportInitEnd(initInformation);
   }
 

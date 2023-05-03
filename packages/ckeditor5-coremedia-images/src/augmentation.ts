@@ -6,8 +6,8 @@ import type {
   ContentImageOpenInTabUI,
   ContentImagePlugin,
   ModelBoundSubscriptionPlugin,
+  OpenImageInTabCommand,
 } from "./index";
-import type { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {
@@ -18,6 +18,6 @@ declare module "@ckeditor/ckeditor5-core" {
     [ModelBoundSubscriptionPlugin.pluginName]: ModelBoundSubscriptionPlugin;
   }
   interface CommandsMap {
-    [ContentImageEditingPlugin.openImageInTab]: OpenInTabCommand;
+    [ContentImageEditingPlugin.openImageInTab]: OpenImageInTabCommand;
   }
 }

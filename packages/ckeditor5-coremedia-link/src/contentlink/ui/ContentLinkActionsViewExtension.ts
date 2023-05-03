@@ -16,6 +16,7 @@ import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import { asAugmentedLinkUI, AugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
+import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -99,6 +100,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   }
 
   #extendView(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
+    const logger = ContentLinkActionsViewExtension.#logger;
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
 
     const contentLinkView = new ContentLinkView(this.editor, {
@@ -110,18 +112,17 @@ class ContentLinkActionsViewExtension extends Plugin {
     });
 
     if (!hasContentUriPath(linkUI.actionsView)) {
-      ContentLinkActionsViewExtension.#logger.warn(
-        "ActionsView does not have a property contentUriPath. Is it already bound?",
-        linkUI.actionsView
-      );
+      logger.warn("ActionsView does not have a property contentUriPath. Is it already bound?", linkUI.actionsView);
       return;
     }
 
     contentLinkView.bind("uriPath").to(actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
-      if (contentLinkView.uriPath) {
-        this.editor.commands.get("openLinkInTab")?.execute();
+      const { uriPath } = contentLinkView;
+      if (uriPath) {
+        logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
+        executeOpenContentInTabCommand(this.editor, [uriPath]);
       }
     });
 

@@ -5,6 +5,9 @@ import "../lang/contentImageOpenInTab";
 
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
+import { executeOpenImageInTabCommand, requireOpenImageInTabCommand } from "./OpenImageInTabCommand";
+import Logger from "@coremedia/ckeditor5-logging/dist/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/dist/src/logging/LoggerProvider";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in
@@ -18,6 +21,8 @@ export default class ContentImageOpenInTabUI extends Plugin {
 
   static readonly requires = [ContentImageEditingPlugin];
 
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageOpenInTabUI.pluginName);
+
   init(): void {
     const initInformation = reportInitStart(this);
     this.#createToolbarLinkImageButton(this.editor);
@@ -25,13 +30,9 @@ export default class ContentImageOpenInTabUI extends Plugin {
   }
 
   #createToolbarLinkImageButton(editor: Editor): void {
+    const logger = ContentImageOpenInTabUI.#logger;
     const { ui } = editor;
     const t = editor.t;
-
-    const openInTabCommand = editor.commands.get(ContentImageEditingPlugin.openImageInTab);
-    if (!openInTabCommand) {
-      throw new Error('The command "openImageInTab" is required.');
-    }
 
     const OPEN_IN_TAB_KEYSTROKE = "Ctrl+Shift+O";
 
@@ -39,10 +40,15 @@ export default class ContentImageOpenInTabUI extends Plugin {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
 
-      if (openInTabCommand.isEnabled) {
-        openInTabCommand.execute();
-      }
+      void executeOpenImageInTabCommand(editor)
+        ?.then((result) => {
+          logger.debug("Result for OpenImageInTabCommand by keystroke:", result);
+        })
+        .catch((reason) => {
+          logger.warn("Failed executing OpenImageInTabCommand invoked by keystroke:", reason);
+        });
     });
+
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
       const button = new ButtonView(locale);
 
@@ -54,10 +60,16 @@ export default class ContentImageOpenInTabUI extends Plugin {
         tooltip: true,
       });
 
-      button.bind("isEnabled").to(openInTabCommand, "isEnabled");
+      button.bind("isEnabled").to(requireOpenImageInTabCommand(editor), "isEnabled");
 
       this.listenTo(button, "execute", () => {
-        openInTabCommand.execute();
+        void executeOpenImageInTabCommand(editor)
+          ?.then((result) => {
+            logger.debug("Result for OpenImageInTabCommand by button click:", result);
+          })
+          .catch((reason) => {
+            logger.warn("Failed executing OpenImageInTabCommand invoked by button click:", reason);
+          });
       });
       return button;
     });
