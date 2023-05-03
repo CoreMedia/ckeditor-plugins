@@ -1,4 +1,4 @@
-/* async: Methods require to be asynchronous in production scenario. */
+/* async: Methods require to be asynchronous in a production scenario. */
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
@@ -13,12 +13,12 @@ class MockWorkAreaService implements WorkAreaService {
   static #LOGGER = LoggerProvider.getLogger("WorkAreaService");
   readonly #editor: Editor;
   /**
-   * The entities which were triggered to open latest.
+   * The entities that were triggered to open latest.
    * Used for testing purposes to verify if the openEntitiesInTab has been triggered.
    */
   lastOpenedEntities: unknown[] = [];
 
-  #activeEntitySubject: Subject<unknown>;
+  readonly #activeEntitySubject: Subject<unknown>;
 
   constructor(editor: Editor) {
     this.#editor = editor;
@@ -29,8 +29,8 @@ class MockWorkAreaService implements WorkAreaService {
     entities.forEach((entity: unknown): void => {
       const node: Element = document.createElement("DIV");
       node.classList.add("notification");
-      const textnode: Text = document.createTextNode(`Open Content ${entity} in Studio Tab`);
-      node.appendChild(textnode);
+      const textNode: Text = document.createTextNode(`Open Content ${entity} in Studio Tab`);
+      node.appendChild(textNode);
       document.getElementById("notifications")?.appendChild(node);
       this.#activeEntitySubject.next([entity]);
       setTimeout(() => {
