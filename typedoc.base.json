@@ -1,0 +1,14 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "cleanOutputDir": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "githubPages": false,
+  "htmlLang": "en",
+  "includeVersion": false,
+  "navigationLinks": {
+    "CoreMedia": "https://coremedia.com/",
+    "Pages": "https://coremedia.github.io/ckeditor-plugins/"
+  }
+}
