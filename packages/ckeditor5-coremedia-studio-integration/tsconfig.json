@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
+  "main": "./src/index.ts",
   "include": [
     "./__tests__",
-    "./src",
+    "./src"
   ]
 }
