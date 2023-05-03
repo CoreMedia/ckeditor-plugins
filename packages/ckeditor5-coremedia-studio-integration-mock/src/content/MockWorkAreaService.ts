@@ -9,6 +9,8 @@ import MockContent from "./MockContent";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { Observable, Subject } from "rxjs";
 
+const isString = (value: unknown): value is string => typeof value === "string";
+
 class MockWorkAreaService implements WorkAreaService {
   static #LOGGER = LoggerProvider.getLogger("WorkAreaService");
   readonly #editor: Editor;
@@ -25,8 +27,10 @@ class MockWorkAreaService implements WorkAreaService {
     this.#activeEntitySubject = new Subject<unknown>();
   }
 
-  async openEntitiesInTabs(entities: unknown[]): Promise<unknown> {
-    entities.forEach((entity: unknown): void => {
+  async openEntitiesInTabs(entities: unknown[]): Promise<{ accepted: string[]; rejected: string[] }> {
+    const accepted: string[] = [];
+    entities.filter(isString).forEach((entity: string): void => {
+      accepted.push(entity);
       const node: Element = document.createElement("DIV");
       node.classList.add("notification");
       const textNode: Text = document.createTextNode(`Open Content ${entity} in Studio Tab`);
@@ -39,14 +43,14 @@ class MockWorkAreaService implements WorkAreaService {
     });
 
     this.lastOpenedEntities = entities;
-    return { success: true };
+    return { accepted, rejected: [] };
   }
 
   getLastOpenedEntities(): unknown[] {
     return this.lastOpenedEntities;
   }
 
-  async canBeOpenedInTab(entityUris: unknown[]): Promise<unknown> {
+  async canBeOpenedInTab(entityUris: unknown[]): Promise<boolean> {
     const mockContentPlugin = this.#editor.plugins.get(MockContentPlugin.pluginName) as MockContentPlugin;
     const uris = entityUris as string[];
     return uris
