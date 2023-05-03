@@ -14,7 +14,7 @@ export { default as ContentLinks } from "./contentlink/ContentLinks";
 export { default as LinkUserActionsPlugin } from "./contentlink/LinkUserActionsPlugin";
 export { default as ContentLinkActionsViewExtension } from "./contentlink/ui/ContentLinkActionsViewExtension";
 export { default as ContentLinkFormViewExtension } from "./contentlink/ui/ContentLinkFormViewExtension";
-export { default as LinkBalloonConfig } from "./contentlink/LinkBalloonConfig";
+export { COREMEDIA_LINK_CONFIG_KEY } from "./contentlink/LinkBalloonConfig";
 
 /*
  * =============================================================================
