@@ -8,6 +8,7 @@ module.exports = {
     "dist/",
     "docs/",
     "node_modules/",
+    "typings/",
     "*.orig",
     // Ignore compiled JavaScript files, as they are generated automatically.
     "src/**/*.js",
