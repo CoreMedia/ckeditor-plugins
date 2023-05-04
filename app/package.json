@@ -73,7 +73,7 @@
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
-    "clean:src": "rimraf --glob \"src/**/*.@(js|d.ts|d.ts.map)\"",
+    "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "build": "webpack --mode production --stats-error-details",
     "npm-check-updates": "npm-check-updates --upgrade",

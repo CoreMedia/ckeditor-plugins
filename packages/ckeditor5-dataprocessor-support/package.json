@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
     "clean": "pnpm clean:src && pnpm clean:dist",
-    "clean:src": "rimraf --glob \"src/**/*.@(js|d.ts|d.ts.map)\"",
+    "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "jest": "jest",
     "jest:coverage": "jest --collect-coverage",
