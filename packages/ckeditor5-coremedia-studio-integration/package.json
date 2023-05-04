@@ -20,7 +20,6 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
-    "postbuild": "copyfiles -u 2 src/theme/* src/theme/**/* dist/theme",
     "clean": "pnpm clean:src && clean:dist",
     "clean:src": "npx rimraf \"src/**/*.@(js|d.ts)\"",
     "clean:dist": "npx rimraf ./dist",
@@ -32,7 +31,6 @@
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.0",
-    "copyfiles": "^2.4.1",
     "jest": "^29.5.0",
     "jest-each": "^29.5.0",
     "jest-xml-matcher": "^1.2.0",
