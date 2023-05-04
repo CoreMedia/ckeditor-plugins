@@ -36,14 +36,15 @@
     "jest-runner": "^29.5.0",
     "playwright": "^1.32.3",
     "playwright-core": "^1.32.3",
+    "rimraf": "^5.0.0",
     "tslib": "^2.5.0",
     "typescript": "^4.9.5",
     "wait-for-expect": "^3.0.2"
   },
   "scripts": {
     "clean": "pnpm clean:src && clean:dist",
-    "clean:src": "npx rimraf \"src/**/*.@(js|d.ts)\"",
-    "clean:dist": "npx rimraf ./dist",
+    "clean:src": "rimraf \"src/**/*.@(js|d.ts)\"",
+    "clean:dist": "rimraf ./dist",
     "build": "exit 0",
     "playwright": "jest",
     "playwright-local": "jest --config ./jest.local.js",

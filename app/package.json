@@ -64,6 +64,7 @@
     "postcss": "^8.4.21",
     "postcss-loader": "^7.2.4",
     "raw-loader": "^4.0.2",
+    "rimraf": "^5.0.0",
     "style-loader": "^3.3.2",
     "terser-webpack-plugin": "^5.3.7",
     "typescript": "^4.9.5",
@@ -72,8 +73,8 @@
   },
   "scripts": {
     "clean": "pnpm clean:src && clean:dist",
-    "clean:src": "npx rimraf \"src/**/*.@(js|d.ts)\"",
-    "clean:dist": "npx rimraf ./dist",
+    "clean:src": "rimraf \"src/**/*.@(js|d.ts)\"",
+    "clean:dist": "rimraf ./dist",
     "build": "webpack --mode production --stats-error-details",
     "npm-check-updates": "npm-check-updates --upgrade",
     "start": "http-server . --port 0 -d false -o sample"
