@@ -11,9 +11,9 @@ module.exports = {
     "typings/",
     "*.orig",
     // Ignore compiled JavaScript files, as they are generated automatically.
-    "src/**/*.js",
+    "**/src/**/*.js",
     // Also, do not check typing declarations, too.
-    "src/**/*.d.ts",
+    "**/src/**/*.d.ts",
   ],
   overrides: [
     {
