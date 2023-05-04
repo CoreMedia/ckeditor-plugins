@@ -86,14 +86,14 @@
       console.log("Default locale. No need to load further resources.");
     } else {
       const scriptEl = document.createElement("script");
-      scriptEl.src = "../dist/translations/" + locale + ".js";
+      scriptEl.src = "../src/translations/" + locale + ".js";
       document.body.appendChild(scriptEl);
     }
   };
 
   const loadCKEditor = (locale) => {
     const scriptEl = document.createElement("script");
-    scriptEl.src = "../dist/ckeditor.js";
+    scriptEl.src = "../src/ckeditor.js";
     scriptEl.dataset["lang"] = locale;
     document.body.appendChild(scriptEl);
   };
