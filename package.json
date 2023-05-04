@@ -32,7 +32,7 @@
     "bootstrap": "pnpm install",
     "publishall": "pnpm --recursive publish",
     "setversion": "set-version",
-    "clean": "pnpm --recursive clean && rimraf ./dist",
+    "clean": "pnpm --recursive clean",
     "clean:node_modules": "npx rimraf ./**/node_modules",
     "build": "pnpm --recursive build",
     "doc": "typedoc",
@@ -64,7 +64,6 @@
     "eslint-plugin-tsdoc": "^0.2.17",
     "eslint-plugin-unused-imports": "^2.0.0",
     "prettier": "^2.8.7",
-    "rimraf": "^5.0.0",
     "typedoc": "^0.24.6",
     "typescript": "^4.9.5"
   }
