@@ -32,6 +32,10 @@ build/
 dist/
 node_modules/
 
+# Ignore compiled TypeScript files.
+src/**/*.js
+src/**/*.d.ts
+
 # Temporary Output
 
 *.log
