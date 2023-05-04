@@ -33,10 +33,10 @@ dist/
 node_modules/
 
 # Ignore compiled TypeScript files.
-src/**/*.js
-src/**/*.js.map
-src/**/*.d.ts
-src/**/*.d.ts.map
+**/src/**/*.js
+**/src/**/*.js.map
+**/src/**/*.d.ts
+**/src/**/*.d.ts.map
 
 # Ignore TypeScript Buildinfo
 
