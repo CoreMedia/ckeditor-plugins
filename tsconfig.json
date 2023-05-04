@@ -28,5 +28,8 @@
     "types": [
       "jest"
     ]
-  }
+  },
+  "include": [
+    "./typings/"
+  ]
 }
