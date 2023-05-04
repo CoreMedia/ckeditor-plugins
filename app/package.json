@@ -72,8 +72,8 @@
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
-    "clean": "pnpm clean:src && clean:dist",
-    "clean:src": "rimraf \"src/**/*.@(js|d.ts)\"",
+    "clean": "pnpm clean:src && pnpm clean:dist",
+    "clean:src": "rimraf --glob \"src/**/*.@(js|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "build": "webpack --mode production --stats-error-details",
     "npm-check-updates": "npm-check-updates --upgrade",
