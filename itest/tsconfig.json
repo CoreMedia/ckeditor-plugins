@@ -9,7 +9,6 @@
       "expect-playwright",
       "node"
     ],
-    "outDir": "./dist",
   },
   "include": [
     "./src",
