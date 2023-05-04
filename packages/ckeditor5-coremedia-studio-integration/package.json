@@ -12,10 +12,10 @@
     "node": "18",
     "pnpm": "^8.1"
   },
-  "main": "./dist/src/index.js",
-  "types": "./src/index.ts",
+  "main": "./src/index.ts",
   "publishConfig": {
-    "types": "./dist/src/index.d.ts"
+    "main": "./src/index.js",
+    "types": "./src/index.d.ts"
   },
   "license": "Apache-2.0",
   "scripts": {

@@ -22,7 +22,6 @@
     "coremedia cms",
     "coremedia studio"
   ],
-  "main": "index.js",
   "repository": {
     "url": "https://github.com/CoreMedia/ckeditor-plugins",
     "type": "git"
