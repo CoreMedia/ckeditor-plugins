@@ -1,5 +1,5 @@
 import { LinkAttributes } from "./LinkAttributes";
-import { LinkAttributesConfig } from "./LinkAttributesConfig";
+import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {
@@ -15,6 +15,6 @@ declare module "@ckeditor/ckeditor5-link" {
      * `two-step-caret-movement` and they will be removed, when triggering
      * unlink command.
      */
-    attributes?: LinkAttributesConfig;
+    attributes?: RegisterAttributeConfig[];
   }
 }
