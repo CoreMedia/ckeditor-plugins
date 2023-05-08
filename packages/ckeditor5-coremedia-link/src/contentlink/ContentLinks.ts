@@ -9,7 +9,6 @@ import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
@@ -22,6 +21,7 @@ import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 import { Observable } from "@ckeditor/ckeditor5-utils";
 import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
+import { registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -84,6 +84,8 @@ export default class ContentLinks extends Plugin {
         this.#initialized = true;
       }
     });
+
+    registerOpenContentInTabCommand(editor);
   }
 
   onVisibleViewChanged(linkUI: LinkUI): void {
@@ -114,9 +116,6 @@ export default class ContentLinks extends Plugin {
     if (hasRequiredInternalLinkUI(internalLinkUI)) {
       createDecoratorHook(internalLinkUI, "_hideUI", this.onHideUiCallback(editor), this);
     }
-
-    // registers the openInTab command for content links, used to open a content when clicking the content link
-    editor.commands.add("openLinkInTab", new OpenInTabCommand(editor, "linkHref"));
   }
 
   onHideUiCallback(editor: Editor): () => void {

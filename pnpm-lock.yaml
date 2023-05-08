@@ -432,9 +432,6 @@ importers:
       '@ckeditor/ckeditor5-core':
         specifier: ^37.0.1
         version: 37.0.1
-      '@ckeditor/ckeditor5-ui':
-        specifier: ^37.0.1
-        version: 37.0.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers

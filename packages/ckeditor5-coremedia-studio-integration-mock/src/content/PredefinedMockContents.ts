@@ -81,6 +81,12 @@ const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
     editing: [true, false],
     readable: [true, true, true, false, false, false],
   },
+  {
+    id: 114,
+    comment: "Single letter (unicode symbol) name.",
+    name: "\u{1F54A}",
+    editing: [true, false],
+  },
 ];
 const NAME_CHALLENGE_MOCKS: PredefinedMockContentConfig[] = [
   {

@@ -36,6 +36,12 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: [32],
     },
     {
+      label: "Short Name",
+      tooltip: "Document with short name (1-unicode char)",
+      classes: ["linkable", "type-document"],
+      items: [114],
+    },
+    {
       label: "Document (edit)",
       tooltip: "Document which is actively edited",
       classes: ["linkable", "type-document"],

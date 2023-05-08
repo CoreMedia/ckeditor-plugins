@@ -10,9 +10,8 @@ import type {
   LinkTargetCommand,
   LinkTargetModelView,
   LinkUserActionsPlugin,
+  OpenContentInTabCommand,
 } from "./index";
-// TODO[cke] Use index import.
-import type { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {
@@ -31,7 +30,7 @@ declare module "@ckeditor/ckeditor5-core" {
   interface CommandsMap {
     // While part of ckeditor5-coremedia-content, the command is added here
     // within the ContentLinks plugin. Thus, we should declare it here.
-    openLinkInTab: OpenInTabCommand;
+    openLinkInTab: OpenContentInTabCommand;
     linkTarget: LinkTargetCommand;
   }
 }
