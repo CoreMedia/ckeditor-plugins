@@ -1,18 +1,14 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
+// ImageUtils: See ckeditor/ckeditor5#12027.
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
-import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
+// ImageInline: See ckeditor/ckeditor5#12027.
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import {
-  ifPlugin,
-  optionalPluginNotFound,
-  reportInitEnd,
-  reportInitStart,
-} from "@coremedia/ckeditor5-core-common/Plugins";
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/commands/OpenInTabCommand";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 
 /**
  * Plugin to support images from CoreMedia RichText.
@@ -20,11 +16,15 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * The plugin takes the `xlink:href` represented in the data-view by
  * `data-xlink-href` and writes it to the model.
  *
- * The model attribute afterwards will be downcast to the editing-view where it
+ * The model attribute afterward will be downcast to the editing-view where it
  * is represented by the src-attribute of the `img`-tag.
  */
 export default class ContentImageEditingPlugin extends Plugin {
-  static readonly pluginName: string = "ContentImageEditingPlugin";
+  static readonly pluginName = "ContentImageEditingPlugin" as const;
+  /**
+   * Command name for bound `openImageInTab`.
+   */
+  static readonly openImageInTab = "openImageInTab" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
 
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
@@ -37,7 +37,10 @@ export default class ContentImageEditingPlugin extends Plugin {
   init(): void {
     const editor = this.editor;
     const initInformation = reportInitStart(this);
-    editor.commands.add("openImageInTab", new OpenInTabCommand(editor, "xlink-href", "imageInline"));
+    editor.commands.add(
+      ContentImageEditingPlugin.openImageInTab,
+      new OpenInTabCommand(editor, "xlink-href", "imageInline")
+    );
     reportInitEnd(initInformation);
   }
 
@@ -46,21 +49,21 @@ export default class ContentImageEditingPlugin extends Plugin {
    * RichText.
    *
    * `xlink:href` is represented in the data-view as `data-xlink-href` and in
-   * model as `xlink-href`. When downcast to the editing-view it will be
+   * model as `xlink-href`. When downcast to the editing-view, it will be
    * resolved to the image src-attribute by fetching the URL from the
    * `BlobDisplayService`
    */
-  async afterInit(): Promise<void> {
-    await ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
+  afterInit(): void {
+    ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
     ContentImageEditingPlugin.#setupXlinkHrefConversion(
       this.editor,
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
       ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME
     );
 
-    // We have to prevent to write src-attribute to model because we fetch the
+    // We have to prevent writing src-attribute to model because we fetch the
     // src attribute for the editing view asynchronously.
-    // If not prevented the src-attribute from GRS would be written to the model.
+    // If not prevented, the src-attribute from GRS would be written to the model.
     this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
   }
 
@@ -87,7 +90,6 @@ export default class ContentImageEditingPlugin extends Plugin {
       allowAttributes: [modelAttributeName],
     });
     editor.conversion.for("dataDowncast").attributeToAttribute({
-      // @ts-expect-error TODO Validate with typings from DefinitelyTyped
       model: {
         name: modelElementName,
         key: modelAttributeName,
@@ -95,7 +97,7 @@ export default class ContentImageEditingPlugin extends Plugin {
       view: dataAttributeName,
     });
 
-    //For editing-view the xlink-href attribute has to be converted to a src-attribute.
+    // For editing-view, the xlink-href attribute has to be converted to a src-attribute.
     editor.conversion
       .for("editingDowncast")
       .add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
@@ -107,9 +109,9 @@ export default class ContentImageEditingPlugin extends Plugin {
    *
    * @param editor - Editor
    */
-  static async #initializeModelBoundSubscriptionPlugin(editor: Editor): Promise<void> {
-    await ifPlugin(editor, ModelBoundSubscriptionPlugin)
-      .then((plugin) => plugin.registerModelElement(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME))
-      .catch(optionalPluginNotFound);
+  static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
+    getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.registerModelElement(
+      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME
+    );
   }
 }

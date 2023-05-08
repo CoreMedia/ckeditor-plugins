@@ -2,17 +2,18 @@
 import {
   PREDEFINED_MOCK_BLOB_DATA,
   PREDEFINED_MOCK_LINK_DATA,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/PredefinedMockContents";
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
 import { setData } from "./dataFacade";
-import { welcomeTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/WelcomeTextData";
-import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/DifferencingData";
-import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/GrsData";
-import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LoremIpsumData";
-import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/LinkTargetData";
-import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
-import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextDOM";
-import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/data/EntitiesData";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import { welcomeTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/WelcomeTextData";
+import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/DifferencingData";
+import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/GrsData";
+import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LoremIpsumData";
+import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LinkTargetData";
+import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
+import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextDOM";
+import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/EntitiesData";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
+import { View } from "@ckeditor/ckeditor5-engine";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -162,15 +163,22 @@ const exampleData: Record<string, string> = {
 };
 
 export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
+  const {
+    editing: { view },
+  } = editor;
   try {
     // noinspection InnerHTMLJS
-    editor.editing.view.once(
+    view.once(
       "render",
-      (event) =>
-        console.log("CKEditor's Editing-Controller rendered data.", {
-          source: event.source,
-          innerHtml: (event.source.getDomRoot() as unknown as HTMLDivElement).innerHTML,
-        }),
+      (event) => {
+        const { source } = event;
+        if (source instanceof View) {
+          console.log("CKEditor's Editing-Controller rendered data.", {
+            source,
+            innerHtml: source.getDomRoot()?.innerHTML,
+          });
+        }
+      },
       {
         priority: "lowest",
       }
@@ -211,11 +219,11 @@ export const initExamples = (editor: ClassicEditor) => {
     throw new Error("Required components for Example-Data Loading missing.");
   }
 
-  // Clear input on focus (otherwise, only matched option is shown)
+  // Clear input on focus (otherwise, only the matched option is shown)
   xmpInput.addEventListener("focus", () => {
     xmpInput.value = "";
   });
-  // On change, set the data – or show an error, if data are unknown.
+  // On change, set the data – or show an error if data are unknown.
   xmpInput.addEventListener("change", () => {
     const newValue = xmpInput.value;
     if (exampleData.hasOwnProperty(newValue)) {

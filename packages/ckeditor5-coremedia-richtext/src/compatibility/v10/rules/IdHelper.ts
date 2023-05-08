@@ -128,7 +128,7 @@ const parseContentBlobId = (blobId: string): ContentBlobIdResult | undefined => 
 };
 
 /**
- * Possibly formats a new link, if the given link is either a
+ * Possibly formats a new link if the given link is either a
  * CoreMedia Unified API (UAPI) Content or Content Blob Identifier. Otherwise,
  * returns the given string unmodified.
  *

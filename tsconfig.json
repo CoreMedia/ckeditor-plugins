@@ -1,26 +1,35 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": true,
     "lib": [
-      "dom",
-      "dom.iterable",
-      "es5",
-      "esnext"
+      "DOM",
+      "DOM.Iterable",
+      "ES5",
+      "ESNext"
     ],
-    "module": "commonJS",
+    "module": "ES6",
     "moduleResolution": "Node",
     "newLine": "LF",
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "pretty": false,
     "removeComments": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES6",
-    "composite": true,
-    "incremental": true,
-    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "target": "ES2020",
     "types": [
       "jest"
     ]
-  }
+  },
+  "include": [
+    "./typings/"
+  ]
 }

@@ -1,7 +1,6 @@
 import Delayed from "../../src/content/Delayed";
-import { NameHintConfig, unreadableNameHint } from "../../src/content/DisplayHints";
-import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/content/DisplayHint";
-import { observeNameHint } from "../../dist/content/DisplayHints";
+import { NameHintConfig, unreadableNameHint, observeNameHint } from "../../src/content/DisplayHints";
+import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/DisplayHint";
 import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
 const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };

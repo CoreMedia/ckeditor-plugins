@@ -1,21 +1,18 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { TextProxy, Range, Writer, Item as ModelItem } from "@ckeditor/ckeditor5-engine";
 import {
   ModelUri,
   requireContentCkeModelUri,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import LinkEditing from "@ckeditor/ckeditor5-link/src/linkediting";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
-import { Item } from "@ckeditor/ckeditor5-engine/src/model/item";
-import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/content/Constants";
-import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/Commands";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { LinkEditing } from "@ckeditor/ckeditor5-link";
+import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
+import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/Constants";
+import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Alias for easier readable code.
@@ -89,7 +86,7 @@ class TrackingData {
  *
  * @param range - range to get included items for
  */
-const getItems = (range: Range): Item[] => [...range.getItems({ shallow: true })];
+const getItems = (range: Range): ModelItem[] => [...range.getItems({ shallow: true })];
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -140,7 +137,7 @@ const getItems = (range: Range): Item[] => [...range.getItems({ shallow: true })
  * content-links.
  */
 class ContentLinkCommandHook extends Plugin {
-  static readonly pluginName: string = "ContentLinkCommandHook";
+  public static readonly pluginName = "ContentLinkCommandHook" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkCommandHook.pluginName);
 
   readonly #trackingData: TrackingData = new TrackingData();
@@ -190,7 +187,7 @@ class ContentLinkCommandHook extends Plugin {
   /**
    * Clears resources, i.e., the name cache.
    */
-  destroy(): void {
+  override destroy(): void {
     const { editor } = this;
 
     ifCommand(editor, LINK_COMMAND_NAME)
@@ -235,11 +232,10 @@ class ContentLinkCommandHook extends Plugin {
    */
   static #isTextNodeInsertion(value: DiffItem): boolean {
     if (value.type === "insert") {
-      const insertion = value;
       // Unfortunately, insertion.position.textNode does not (yet) represent
       // the now added text node, but the text node the inserted one
       // may have been merged with.
-      return insertion.name === "$text";
+      return value.name === "$text";
     }
     return false;
   }
@@ -301,7 +297,6 @@ class ContentLinkCommandHook extends Plugin {
       // We first need to remove the text, as otherwise it will be merged with
       // the next text to add.
       writer.remove(textProxy);
-      // @ts-expect-error TODO Check Typings
       writer.insertText(name, attrs, position);
 
       return true;
@@ -371,7 +366,7 @@ class ContentLinkCommandHook extends Plugin {
       return false;
     }
 
-    const onlyItem: Item = itemsInRange[0];
+    const onlyItem: ModelItem = itemsInRange[0];
 
     if (!onlyItem.is("model:$textProxy")) {
       /*

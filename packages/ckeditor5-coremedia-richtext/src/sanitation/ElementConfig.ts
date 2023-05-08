@@ -2,12 +2,12 @@ import { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 import { ActiveStrictness } from "../Strictness";
 import { SanitationListener } from "./SanitationListener";
-import { isText } from "@coremedia/ckeditor5-dom-support/Texts";
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { isText } from "@coremedia/ckeditor5-dom-support/src/Texts";
+import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
-import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/HasNamespaceUris";
-import { lookupNamespaceURI } from "@coremedia/ckeditor5-dom-support/Nodes";
+import { isParentNode } from "@coremedia/ckeditor5-dom-support/src/ParentNodes";
+import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/src/HasNamespaceUris";
+import { lookupNamespaceURI } from "@coremedia/ckeditor5-dom-support/src/Nodes";
 
 const defaultPrefix = Symbol("default");
 type DefaultPrefix = typeof defaultPrefix;
@@ -25,7 +25,7 @@ const removeInvalidAtParent = (
   child: ChildNode | (ChildNode & ParentNode),
   listener: SanitationListener
 ) => {
-  // Used internally and as state to possibly trigger revalidation.
+  // Used internally and as a state to possibly trigger revalidation.
   let replacedByChildren = false;
   listener.removeNode(child, "invalidAtParent");
   try {
@@ -79,7 +79,7 @@ export class ElementConfig {
   }
 
   /**
-   * Pre-fills maps for lookup during validation process.
+   * Pre-fills maps for lookup during the validation process.
    *
    * @param config - attribute configuration to register
    */
@@ -95,9 +95,9 @@ export class ElementConfig {
   }
 
   /**
-   * Add to known attributes for given element.
+   * Add to known attributes for the given element.
    *
-   * @param prefix - prefix of element; `defaultPrefix` for `null` in DOM.
+   * @param prefix - prefix of the element; `defaultPrefix` for `null` in DOM.
    * @param localName - local name of attribute
    * @param config - attribute configuration
    */
@@ -117,9 +117,9 @@ export class ElementConfig {
   }
 
   /**
-   * Add to required attributes for given element.
+   * Add to required attributes for the given element.
    *
-   * @param prefix - prefix of element; `defaultPrefix` for `null` in DOM.
+   * @param prefix - prefix of the element; `defaultPrefix` for `null` in DOM.
    * @param localName - local name of attribute
    * @param defaultValue - default value to apply for missing required
    * attribute.
@@ -153,8 +153,8 @@ export class ElementConfig {
   }
 
   /**
-   * Checks if the given child node is valid according to configuration.
-   * Prior to checking the configuration, the method will ensure, that a
+   * Checks if the given child node is valid, according to configuration.
+   * Prior to checking the configuration, the method will ensure that a
    * given child shares the same `namespaceURI` as its parent.
    *
    * @param node - child node to analyze
@@ -184,7 +184,7 @@ export class ElementConfig {
    * Strictly speaking, if they are the same. But for any unset `namespaceURI`
    * at node, they are considered compatible.
    *
-   * It also checks, that both, child node and parent, have a compatible
+   * It also checks that both child node and parent have a compatible
    * prefix declaration.
    *
    * @param node - node to validate regarding its namespace (URI and prefix)
@@ -214,7 +214,7 @@ export class ElementConfig {
   /**
    * Removes all invalid children of given node, including elements and
    * character data. Strategies include removing a child directly or
-   * replacing it by its child nodes. As the latter process may result in
+   * replacing it with its child nodes. As the latter process may result in
    * additional invalid child nodes, processing continues until all child
    * nodes are considered valid.
    *
@@ -249,11 +249,11 @@ export class ElementConfig {
   }
 
   /**
-   * Removes element, if it is (now) empty and must not be empty.
+   * Removes the element if it is (now) empty and must not be empty.
    *
    * @param element - element to validate
    * @param listener - listener to inform on issues
-   * @returns `true` if element got removed (or: should have been removed);
+   * @returns `true` if the element got removed (or: should have been removed);
    * `false` if not
    */
   #removeOnInvalidEmptyState(element: Element, listener: SanitationListener): boolean {
@@ -316,7 +316,7 @@ export class ElementConfig {
         element.removeAttributeNode(attribute);
       }
 
-      // We may, as suggested by TSDoc, also remove irrelevant attributes, if
+      // We may, as suggested by TSDoc, also remove irrelevant attributes if
       // they match the default values as provided by DTD. Skipped for now.
     }
   }
@@ -345,10 +345,10 @@ export class ElementConfig {
   }
 
   /**
-   * Get configuration of _known_ attribute, `undefined` if corresponding
-   * attribute is not defined. Note, that for proper namespace/prefix support,
+   * Get configuration of _known_ attribute, `undefined` if the corresponding
+   * attribute is not defined. Note that for proper namespace/prefix support,
    * attributes must have been created with full namespace support. Thus,
-   * using `setAttribute("xml:lang", "en")` would create an attribute, that
+   * using `setAttribute("xml:lang", "en")` would create an attribute that
    * cannot be handled by this, as the prefix will be `null` for this attribute
    * then.
    *

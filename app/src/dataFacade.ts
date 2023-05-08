@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { updatePreview } from "./preview";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 
 const LastSetVersion = Symbol("LastSetVersion");
 const LastSetData = Symbol("LastSetData");
 
 /**
  * A small facade around editor.setData, which remembers the last data
- * set explicitly. This simulates similar approach in studio-client.
+ * set explicitly. This simulates a similar approach as in studio-client.
  */
-export const setData = (editor: ClassicEditor, data: string) => {
+export const setData = (editor: Editor, data: string) => {
   const { document } = editor.model;
+  const { data: dataController } = editor;
 
   const versionBefore = document.version;
-  editor.setData(data);
+  dataController.set(data);
   const versionAfter = document.version;
 
   //@ts-expect-error problem with symbols
@@ -24,7 +25,7 @@ export const setData = (editor: ClassicEditor, data: string) => {
 
   console.log(`Editor Data Set.`, {
     data,
-    transformedData: editor.getData(),
+    transformedData: dataController.get(),
     versionBefore,
     versionAfter,
   });
@@ -32,7 +33,7 @@ export const setData = (editor: ClassicEditor, data: string) => {
 
 /**
  * Save method with additional recognition, if there is an actual change.
- * This represents, how we could prevent auto-checkout in CoreMedia
+ * This represents how we could prevent auto-checkout in CoreMedia
  * Studio for irrelevant changes, because they are semantically equivalent.
  *
  * @param editor - the editor instance whose data to save
@@ -40,8 +41,8 @@ export const setData = (editor: ClassicEditor, data: string) => {
  */
 // async: In production scenarios, this will be an asynchronous call.
 // eslint-disable-next-line @typescript-eslint/require-await
-export const saveData = async (editor: ClassicEditor, source: string) => {
-  const data = editor.getData({
+export const saveData = async (editor: Editor, source: string) => {
+  const data = editor.data.get({
     // set to `none`, to trigger data-processing for empty text, too
     // possible values: empty, none (default: empty)
     trim: "empty",

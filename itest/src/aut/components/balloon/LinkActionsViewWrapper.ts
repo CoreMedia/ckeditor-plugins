@@ -1,5 +1,6 @@
 import ViewWrapper from "../ViewWrapper";
 import { JSWrapper } from "../../JSWrapper";
+// LinkActionsView: See ckeditor/ckeditor5#12027.
 import type LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkViewWrapper from "./ContentLinkViewWrapper";
 

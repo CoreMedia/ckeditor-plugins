@@ -2,7 +2,7 @@ import { ConversionContext } from "./ConversionContext";
 import { Skip } from "./Signals";
 
 /**
- * Prior to importing the original node, you may want to modify it. Note,
+ * Prior to importing the original node, you may want to modify it. Note
  * that allowed modification is limited, though. Expected use-cases are:
  *
  * * Modify attributes prior to import.
@@ -20,7 +20,7 @@ export type PrepareFunction = (node: Node) => void;
 
 /**
  * Provides the possibility to handle a just imported node. The node is
- * neither attached to DOM yet, nor children are available.
+ * neither attached to DOM, nor children are available.
  *
  * **Implementation Notes:**
  *
@@ -31,13 +31,13 @@ export type PrepareFunction = (node: Node) => void;
  *   fixed in later processing, though.
  *
  * * In general, it is not recommended to exchange a `ParentNode` with
- *   some node, that may not hold any children in this stage, as children
+ *   some node that may not hold any children at this stage, as children
  *   will not be handled at all. Better do so in later processing.
  *
  * * You may _expand_ a given node to a set of nodes by returning
  *   a `DocumentFragment` instead. Note, though, that in this stage
  *   subsequent child nodes will be appended to this `DocumentFragment`
- *   which may be unexpected. In general such _expansion_ should be done
+ *   which may be unexpected. In general, such _expansion_ should be done
  *   at a later stage.
  *
  * * To ignore this node, but still process the children, you may return
@@ -49,16 +49,16 @@ export type PrepareFunction = (node: Node) => void;
  *
  * * If you want to replace, for example, an element by just some
  *   character data, it is recommended to do this in later processing
- *   when also the children have been processed. Otherwise, ensure
- *   you understand possible implications doing this in this early stage,
+ *   when the children have been processed. Otherwise, ensure
+ *   you understand possible implications of doing this in this early stage,
  *   such as that children not being converted to CharacterData are
  *   ignored, and that CharacterData are just appended without taking
  *   the actual type of data into account.
  *
  * * When transforming from HTML to XML, you may experience a rather
  *   limited API for `importedNode` compared to the original node.
- *   Like in XML there is no `HTMLElement.dataset`. Dealing with this
- *   richer API is best done in setup phase by overriding
+ *   Like in XML, there is no `HTMLElement.dataset`. Dealing with this
+ *   richer API is best done in the setup phase by overriding
  *   `prepareForImport`. Here you may modify the DOM with some restrictions
  *   to ease further processing.
  *
@@ -75,7 +75,7 @@ export type ImportedFunction = (node: Node, context: ConversionContext) => Node 
  *
  * **Implementation Notes:**
  *
- * * To replace a node by its children, you may return a `DocumentFragment`
+ * * To replace a node with its children, you may return a `DocumentFragment`
  *   with the corresponding children here.
  *
  * * Returning `skip` is semantically similar to returning an empty

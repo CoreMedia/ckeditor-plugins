@@ -1,7 +1,8 @@
 import { defaultStrictness, Strictness } from "./Strictness";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import { Config as CKEditorConfig } from "@ckeditor/ckeditor5-utils";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { EditorConfig } from "@ckeditor/ckeditor5-core";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
@@ -21,11 +22,11 @@ export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
  *   to HtmlFilter in CKEditor 4, but is rather limited regarding
  *   more complex scenarios such as mapping data-set attributes.
  */
-export const compatibilityKeys = ["latest", "v10"];
+export const compatibilityKeys: readonly string[] = ["latest", "v10"];
 /**
- * Type of compatibility keys.
+ * The type of compatibility keys.
  */
-export type CompatibilityKey = typeof compatibilityKeys[number];
+export type CompatibilityKey = (typeof compatibilityKeys)[number];
 
 export interface CompatibilityConfig {
   /**
@@ -77,7 +78,7 @@ const isV10CoreMediaRichTextConfig = (value: unknown): value is V10CoreMediaRich
 /**
  * Configuration as given at CKEditor initialization.
  */
-type CoreMediaRichTextConfig = LatestCoreMediaRichTextConfig | V10CoreMediaRichTextConfig;
+type CoreMediaRichTextConfig = Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig;
 export default CoreMediaRichTextConfig;
 
 export type DefaultCoreMediaRichTextConfig = Required<
@@ -89,10 +90,9 @@ export const defaultCoreMediaRichTextConfig: DefaultCoreMediaRichTextConfig = {
 };
 
 export const getCoreMediaRichTextConfig = (
-  config?: CKEditorConfig
+  config?: CKEditorConfig<EditorConfig>
 ): CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
-  const rawConfig: CoreMediaRichTextConfig = (config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ||
-    {}) as CoreMediaRichTextConfig;
+  const rawConfig = config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ?? {};
   const withDefaults = {
     ...defaultCoreMediaRichTextConfig,
     ...rawConfig,
@@ -109,7 +109,7 @@ export const getCoreMediaRichTextConfig = (
 };
 
 export const getLatestCoreMediaRichTextConfig = (
-  config?: CKEditorConfig
+  config?: CKEditorConfig<EditorConfig>
 ): LatestCoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const withDefaults = getCoreMediaRichTextConfig(config);
   if (!isLatestCoreMediaRichTextConfig(withDefaults)) {
@@ -119,7 +119,7 @@ export const getLatestCoreMediaRichTextConfig = (
 };
 
 export const getV10CoreMediaRichTextConfig = (
-  config?: CKEditorConfig
+  config?: CKEditorConfig<EditorConfig>
 ): V10CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const withDefaults = getCoreMediaRichTextConfig(config);
   if (!isV10CoreMediaRichTextConfig(withDefaults)) {

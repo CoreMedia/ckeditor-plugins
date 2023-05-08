@@ -1,28 +1,29 @@
-import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import {
+  ViewDocument,
+  ViewDocumentFragment,
+  HtmlDataProcessor,
+  DataProcessor,
+  DomConverter,
+} from "@ckeditor/ckeditor5-engine";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import RichTextXmlWriter from "../../RichTextXmlWriter";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
-import { HtmlWriter } from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
+import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
 import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 import ToDataProcessor from "../../ToDataProcessor";
-import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import mix from "@ckeditor/ckeditor5-utils/src/mix";
+import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
 
 /**
  * Data-Processor for CoreMedia RichText 1.0.
  */
-class V10RichTextDataProcessor implements DataProcessor {
+export default class V10RichTextDataProcessor extends ObservableMixin() implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -39,6 +40,8 @@ class V10RichTextDataProcessor implements DataProcessor {
   readonly #noParserErrorNamespace: boolean;
 
   constructor(editor: Editor) {
+    super();
+
     const document: ViewDocument = editor.data.viewDocument;
 
     const { schema, toData, toView } = getConfig(editor.config);
@@ -65,7 +68,6 @@ class V10RichTextDataProcessor implements DataProcessor {
      *
      * See also: ckeditor/ckeditor5#12324
      */
-    // @ts-expect-error Typings at DefinitelyTyped only allow this to contain
     // `pre` element. But for TypeScript migration, CKEditor replaced typing
     // by `string[]` instead.
     this.#delegate.domConverter.preElements.push("xdiff:span");
@@ -152,7 +154,6 @@ class V10RichTextDataProcessor implements DataProcessor {
     fragmentAsStringForDebugging: string;
   } {
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
-    // @ts-expect-error Typings did not incorporate 35.0.1 signature change yet: 2nd Document Argument is gone.
     const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 
@@ -209,7 +210,7 @@ class V10RichTextDataProcessor implements DataProcessor {
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
 
-  toView(data: string): ViewDocumentFragment | null {
+  toView(data: string): ViewDocumentFragment {
     const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
@@ -267,10 +268,3 @@ class V10RichTextDataProcessor implements DataProcessor {
     return viewFragment;
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface V10RichTextDataProcessor extends Observable {}
-
-mix(V10RichTextDataProcessor, ObservableMixin);
-
-export default V10RichTextDataProcessor;

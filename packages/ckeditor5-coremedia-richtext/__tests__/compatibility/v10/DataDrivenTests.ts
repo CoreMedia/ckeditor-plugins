@@ -1,5 +1,5 @@
 import "jest-xml-matcher";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import { getV10Config, parseXml } from "./Utils";
 import { silenced } from "../../Silenced";

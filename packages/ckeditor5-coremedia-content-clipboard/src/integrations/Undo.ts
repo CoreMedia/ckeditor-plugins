@@ -1,13 +1,13 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import UndoEditing from "@ckeditor/ckeditor5-undo/src/undoediting";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { UndoEditing } from "@ckeditor/ckeditor5-undo";
 import {
   CommandHandler,
   disableCommand,
   enableCommand,
   ifCommand,
   optionalCommandNotFound,
-} from "@coremedia/ckeditor5-core-common/Commands";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+} from "@coremedia/ckeditor5-core-common/src/Commands";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
 
@@ -16,7 +16,7 @@ const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
  * corresponding commands.
  */
 export class UndoSupport extends Plugin {
-  static readonly pluginName: string = PLUGIN_NAME;
+  static readonly pluginName = PLUGIN_NAME;
   static readonly #disableHandler = disableCommand(PLUGIN_NAME);
   static readonly #enableHandler = enableCommand(PLUGIN_NAME);
   static readonly #commandNames = ["undo", "redo"];
@@ -59,7 +59,7 @@ export class UndoSupport extends Plugin {
   #applyToCommands(handler: CommandHandler): void {
     const { editor } = this;
     const commandNames = UndoSupport.#commandNames;
-    commandNames.forEach((commandName) => {
+    commandNames.forEach((commandName: string) => {
       ifCommand(editor, commandName).then(handler).catch(optionalCommandNotFound);
     });
   }

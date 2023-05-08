@@ -10,7 +10,16 @@ module.exports = {
     "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": require.resolve("jest-transform-stub"),
   },
   transform: {
-    "^.+\\.[jt]sx?$": [require.resolve("babel-jest"), babelConfig],
+    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        // ts-jest configuration goes here
+      },
+    ],
+    // Required, e.g., for CKEditor 5 Dependencies.
+    "^.+\\.jsx?$": [require.resolve("babel-jest"), babelConfig],
     // https://www.npmjs.com/package/jest-transform-stub
     "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": require.resolve("jest-transform-stub"),
   },

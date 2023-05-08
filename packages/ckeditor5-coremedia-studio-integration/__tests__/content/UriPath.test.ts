@@ -1,5 +1,4 @@
-import { requireContentUriPath } from "../../src/content/UriPath";
-import { requireContentCkeModelUri } from "../../dist/content/UriPath";
+import { requireContentUriPath, requireContentCkeModelUri } from "../../src/content/UriPath";
 
 test("requireContentCkeModelUri: should replace / with : for a CoreMedia Studio Uri", () => {
   const actual = requireContentCkeModelUri("content/12345");
@@ -12,11 +11,15 @@ test("requireContentCkeModelUri: should do nothing when it is a cke model uri", 
 });
 
 test("requireContentCkeModelUri: should throw error when no content-id is part of the CoreMedia Studio Uri", () => {
-  expect(() => requireContentCkeModelUri("content/")).toThrowError();
+  expect((): void => {
+    requireContentCkeModelUri("content/");
+  }).toThrowError();
 });
 
 test("requireContentCkeModelUri: should throw error if it is completely other stuff", () => {
-  expect(() => requireContentCkeModelUri("any text might be here")).toThrowError();
+  expect((): void => {
+    requireContentCkeModelUri("any text might be here");
+  }).toThrowError();
 });
 
 test("requireContentUriPath: should replace : with / for a CKE Model URI", () => {

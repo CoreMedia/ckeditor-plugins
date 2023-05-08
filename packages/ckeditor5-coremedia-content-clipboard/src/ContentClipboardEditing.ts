@@ -1,14 +1,13 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import "../theme/loadmask.css";
 
-import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+import { DowncastDispatcher } from "@ckeditor/ckeditor5-engine";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 import { UndoSupport } from "./integrations/Undo";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const PLUGIN_NAME = "ContentClipboardEditing";
 
@@ -28,12 +27,13 @@ export default class ContentClipboardEditing extends Plugin {
   static readonly requires = [UndoSupport];
 
   /**
-   * All markers which are not yet finally inserted.
+   * All markers that are not yet finally inserted.
    *
-   * Every marker which is set and started to be processed will be added to this list.
-   * While updating the position of a marker CKEditor internally removes and adds the marker again.
-   * Therefore, the marker will be added multiple times. This can be prevented by checking if the newly added marker
-   * is in the pendingMarkerNames list.
+   * Every marker that is set and started to be processed will be added to this
+   * list. While updating the position of a marker, CKEditor internally removes
+   * and adds the marker again. Therefore, the marker will be added multiple
+   * times. This can be prevented by checking if the newly added marker is in
+   * the pendingMarkerNames list.
    *
    * This is a performance optimization.
    *
@@ -72,7 +72,7 @@ export default class ContentClipboardEditing extends Plugin {
    * {@link DataToModelMechanism} will fall back to the default "toModel"
    * function or throw an error.
    *
-   * @param type - the identifier for the content (e.g. "link" or "image")
+   * @param type - the identifier for the content (e.g., "link" or "image")
    * @param createModelFunctionCreator - a function that expects a contentUri as
    * parameter and returns a promise of type CreateModelFunction
    */

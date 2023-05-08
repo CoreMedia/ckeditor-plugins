@@ -1,9 +1,9 @@
 import { JSHandle, Locator, Page } from "playwright";
-import type ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { EditorWrapper } from "./EditorWrapper";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/RichTextDataProcessor";
+import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/src/RichTextDataProcessor";
 import { Locatable, visible } from "./Locatable";
 import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 
@@ -67,7 +67,6 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
     return this.evaluate(
       (editor, value): Promise<string> =>
         new Promise<string>((resolve, reject) => {
-          // @ts-expect-error Bad Typing, DefinitelyTyped/DefinitelyTyped#60965
           const processor = editor.data.processor as RichTextDataProcessor;
           // Prior to setting data, wait for them being processed.
           processor.once("richtext:toView", (eventInfo, eventData) => {

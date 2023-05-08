@@ -1,6 +1,6 @@
 /**
  * We must ensure, that entities defined by CoreMedia RichText 1.0 are known
- * prior to parsing the XML. Note, that we cannot add the full DTD, as it
+ * prior to parsing the XML. Note that we cannot add the full DTD, as it
  * makes use of Parameter Entities (to shorten the DTD). These are not supported
  * in inline DTDs.
  *

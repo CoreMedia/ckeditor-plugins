@@ -1,5 +1,6 @@
 import { JSWrapper } from "./JSWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
+// ClassicEditorUIView: See ckeditor/ckeditor5#12027.
 import type ClassicEditorUIView from "@ckeditor/ckeditor5-editor-classic/src/classiceditoruiview";
 import { BodyCollectionWrapper } from "./BodyCollectionWrapper";
 import { Locator } from "playwright";

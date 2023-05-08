@@ -1,23 +1,20 @@
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Node from "@ckeditor/ckeditor5-engine/src/model/node";
-import Position from "@ckeditor/ckeditor5-engine/src/model/position";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Writer, Node, Position, Range } from "@ckeditor/ckeditor5-engine";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
-import { ifPlugin } from "@coremedia/ckeditor5-core-common/Plugins";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 import {
   ContentReferenceResponse,
   createContentReferenceServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const UTILITY_NAME = "DataToModelMechanism";
 
@@ -35,7 +32,7 @@ const UTILITY_NAME = "DataToModelMechanism";
  * cursor position.
  *
  * Markers are used to indicate or highlight different things in the editor's
- * view and in this case are used to display a loading animation since the
+ * view, and in this case, are used to display a loading animation since the
  * actual contents might take a while to load. The
  * {@link ContentClipboardEditing} plugin listens to markers getting added and
  * triggers the {@link DataToModelMechanism} if needed.
@@ -66,7 +63,7 @@ export default class DataToModelMechanism {
    * It then renders the content in the editor and finally removes the marker.
    *
    * @param editor - the editor
-   * @param pendingMarkerNames - all markers which are not yet finally inserted.
+   * @param pendingMarkerNames - all markers that are not yet finally inserted.
    * @param markerData - object that holds information about the marker and the associated content insertion
    */
   static triggerLoadAndWriteToModel(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
@@ -83,16 +80,16 @@ export default class DataToModelMechanism {
     logger.debug(`Looking for replace marker (${markerName}) with content ${contentInputData.itemContext.uri}`);
 
     // Fetch Object Type (e.g. document, image, video) Maybe this should be a
-    // string, which is unrelated to content type. I guess it has to be
-    // something that is unrelated to content type to make it possible
-    // to map custom content types. As soon as we do it like this
+    // string, which is unrelated to the content type. I guess it has to be
+    // something that is unrelated to the content type to make it possible
+    // to map custom content types. As soon as we do it like this,
     // it is a breaking change as implementors with own doc type models have to
     // provide the mapping.
     //
     // We could implement a legacy mode where we assume embedded contents are
     // images. The only two attributes to distinguish contents are linkable and
     // embeddable. Lookup an extender with the object type, call the `create`
-    // model stuff. take a promise and execute writeItemToModel
+    // model stuff. Take a promise and execute writeItemToModel.
     const uri = contentInputData.itemContext.uri;
     serviceAgent
       .fetchService(createContentReferenceServiceDescriptor())
@@ -161,22 +158,22 @@ export default class DataToModelMechanism {
   }
 
   /**
-   * Uses the {@link RichtextConfigurationService} to asynchronously fetch the content type
-   * of a given contentUri.
+   * Uses the {@link RichtextConfigurationService} to asynchronously fetch the
+   * content type of given contentUri.
    *
    * @param contentUri - the contentUri
    * @returns a Promise containing the type of the content
    */
   static #getType(contentUri: string): Promise<string> {
     // This would probably be replaced with another service agent call, which
-    // asks studio for the type.
+    // asks Studio for the type.
     //
     // There we can implement a legacy service, which works like below and a
     // new one, which can be more fine-grained.
     //
-    // Do we need embeddable/linkable still at this point if we ask studio for
+    // Do we need embeddable/linkable still at this point if we ask Studio for
     // more data? This point is not extendable here but in CoreMedia Studio.
-    // If the studio response delivers another type then link or image
+    // If the studio response delivers another type, then link or image,
     // it would be possible to provide another model rendering.
     return serviceAgent
       .fetchService(createRichtextConfigurationServiceDescriptor())
@@ -196,11 +193,12 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
     );
     if (markers.length === 0) {
-      ifPlugin(editor, UndoSupport)
-        .then(enableUndo)
-        .catch((reason) => {
-          this.#logger.warn("Unable to reenable UndoCommand", reason);
-        });
+      const undoSupport = getOptionalPlugin(editor, UndoSupport, (pluginName) =>
+        this.#logger.warn(`Unable to re-enable UndoCommand because plugin ${pluginName} does not exist`)
+      );
+      if (undoSupport) {
+        enableUndo(undoSupport);
+      }
     }
   }
 
@@ -210,7 +208,7 @@ export default class DataToModelMechanism {
    * Please note: This method might split the parent container.
    *
    * @param editor - the editor
-   * @param pendingMarkerNames - all markers which are not yet finally inserted.
+   * @param pendingMarkerNames - all markers that are not yet finally inserted.
    * @param contentInputData - the contentInputData object
    * @param markerData - the markerData object
    * @param createItemFunction - the function to create the model element
@@ -245,7 +243,7 @@ export default class DataToModelMechanism {
       // Evaluate if the container element has to be split after the element has
       // been inserted.
       //
-      // Split is necessary if the link is not rendered inline and if we are not
+      // Split is necessary if the link is not rendered inline, and if we are not
       // at the end of a container/document. This prevents empty paragraphs
       // after the inserted element.
       let finalAfterInsertPosition: Position = range.end;
@@ -266,7 +264,7 @@ export default class DataToModelMechanism {
    * the {@link ContentInputDataCache}.
    *
    * @param editor - the editor
-   * @param pendingMarkerNames - all markers which are not yet finally inserted.
+   * @param pendingMarkerNames - all markers that are not yet finally inserted.
    * @param markerData - the markerData object
    */
   static #markerCleanup(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
@@ -292,11 +290,7 @@ export default class DataToModelMechanism {
    * @param textRanges - ranges to apply attributes to
    * @param attributes - attributes to apply
    */
-  static #applyAttributes(
-    writer: Writer,
-    textRanges: Range[],
-    attributes: [string, string | number | boolean][]
-  ): void {
+  static #applyAttributes(writer: Writer, textRanges: Range[], attributes: [string, unknown][]): void {
     for (const attribute of attributes) {
       for (const range of textRanges) {
         writer.setAttribute(attribute[0], attribute[1], range);

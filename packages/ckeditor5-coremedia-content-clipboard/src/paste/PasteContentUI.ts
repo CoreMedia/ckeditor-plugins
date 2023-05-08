@@ -1,14 +1,15 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import pasteIcon from "../../theme/icons/paste.svg";
 import "../lang/paste";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 export default class PasteContentUI extends Plugin {
+  static readonly pluginName = "pasteContentUI";
+
   init() {
     const initInformation = reportInitStart(this);
-    const editor = this.editor as EditorWithUI;
+    const editor: Editor = this.editor;
     const t = editor.t;
     const pasteContentCommand = editor.commands.get("pasteContentCommand");
     if (!pasteContentCommand) {

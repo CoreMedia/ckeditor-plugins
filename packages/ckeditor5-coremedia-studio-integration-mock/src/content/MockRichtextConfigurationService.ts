@@ -1,10 +1,10 @@
 /* async: Methods require to be asynchronous in production scenario. */
 /* eslint-disable @typescript-eslint/require-await */
-import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationService";
+import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationService";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
-import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 

@@ -2,3 +2,7 @@
 dist
 docs
 node_modules
+# Ignore compiled JavaScript files, as they are generated automatically.
+src/**/*.js
+# Also, do not check typing declarations, too.
+src/**/*.d.ts

@@ -1,10 +1,10 @@
 /* eslint no-null/no-null: off */
 
-import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/TextProxy";
+import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
+import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/TextProxy";
 import RichTextSchema from "../RichTextSchema";
-import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import { DataProcessor } from "@ckeditor/ckeditor5-engine";
 import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";
 
@@ -31,7 +31,7 @@ export const getSchema = ({ editor }: ElementFilterParams | TextFilterParams): R
 
 /**
  * Rules meant as final check for schema validity. The task is to prevent any
- * data, which cannot be stored on the CoreMedia CMS Server.
+ * data that cannot be stored on the CoreMedia CMS Server.
  */
 export const schemaRules: ElementsFilterRuleSetConfiguration = {
   $: (params) => {

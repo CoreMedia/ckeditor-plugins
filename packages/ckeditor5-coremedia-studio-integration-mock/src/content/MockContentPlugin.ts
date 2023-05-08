@@ -1,6 +1,6 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import MockContent, {
   asStaticContent,
   isMockContentConfigs,
@@ -9,9 +9,9 @@ import MockContent, {
 } from "./MockContent";
 import Delayed from "./Delayed";
 import { isObject } from "./MockContentUtils";
-import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { PREDEFINED_MOCK_CONTENTS } from "./PredefinedMockContents";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * If states shall change, it will be done with this fixed

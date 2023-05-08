@@ -1,23 +1,20 @@
 /* eslint no-null/no-null: off */
 
 import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import DowncastDispatcher from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
+import { EventInfo } from "@ckeditor/ckeditor5-utils";
+import { DowncastDispatcher, ViewElement, DowncastWriter, Element as ModelElement } from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayServiceDescriptor";
-import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/content/BlobDisplayService";
-import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import DowncastWriter from "@ckeditor/ckeditor5-engine/src/view/downcastwriter";
-import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayServiceDescriptor";
+import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayService";
+import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
-import { ifPlugin, optionalPluginNotFound } from "@coremedia/ckeditor5-core-common/Plugins";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -32,14 +29,14 @@ export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) 
  * A method to prevent the upcast of the src-attribute of an image.
  *
  * The `src` attribute for CoreMedia Images is not stored as a URL but as a
- * reference to a content property in a `xlink:href` attribute. In this case it
+ * reference to a content property in a `xlink:href` attribute. In this case, it
  * does not make sense to work with `src`-attributes in the model and side
  * effects of an existing `src`-attribute (like GHS) have to be prevented.
  *
  * Preventing the `src` attribute to become part of the model means to consume
  * the attribute.
  *
- * Unfortunately CKEditor does not check if the attribute has already been
+ * Unfortunately, CKEditor 5 does not check if the attribute has already been
  * consumed:
  *
  * * [#11327: image conversion (imageInline and imageBlock) does not test if src is consumed.](https://github.com/ckeditor/ckeditor5/issues/11327)
@@ -48,9 +45,9 @@ export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) 
  *
  * * [#11530: The image upcast converter does not consume the `src` attribute](https://github.com/ckeditor/ckeditor5/issues/11530)
  *
- * the `src` attribute will be upcasted if the `src` attribute exists as view
- * attribute. To fully prevent the upcast we have to consume the attribute and
- * remove the `src`  from the view node.
+ * the `src` attribute will be upcast if the `src` attribute exists as view
+ * attribute. To fully prevent the upcast, we have to consume the attribute and
+ * remove the `src` from the view node.
  */
 export const preventUpcastImageSrc =
   () =>
@@ -82,8 +79,8 @@ export const editingDowncastXlinkHref =
   (dispatcher: DowncastDispatcher) => {
     dispatcher.on(`attribute:xlink-href:${modelElementName}`, (eventInfo: EventInfo, data: DowncastEventData): void => {
       if (!data.attributeNewValue) {
-        // There was no xlink-href set for this image, therefore we can skip applying
-        // the loading spinner and resolving the image src
+        // There was no xlink-href set for this image, therefore, we can skip
+        // applying the loading spinner and resolving the image src
         return;
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -121,13 +118,12 @@ const onXlinkHrefEditingDowncast = (
   void serviceAgent
     .fetchService(createBlobDisplayServiceDescriptor())
     .then((blobDisplayService) => blobDisplayService.observe_asInlinePreview(uriPath, property))
-    .then(async (inlinePreviewObservable) => {
+    .then((inlinePreviewObservable) => {
       const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
         updateImagePreviewAttributes(editor, data.item, inlinePreview, false);
       });
-      await ifPlugin(editor, ModelBoundSubscriptionPlugin)
-        .then((plugin) => plugin.addSubscription(data.item, subscription))
-        .catch(optionalPluginNotFound);
+
+      getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.addSubscription(data.item, subscription);
     });
 };
 
@@ -156,8 +152,8 @@ const updateImagePreviewAttributes = (
     return;
   }
 
-  //preload the image. An image ca be multiple megabytes. Preloading ensures
-  // that the spinner will stay until the image is loaded.
+  // Preload the image. An image size can be multiple megabytes. Preloading
+  // ensures that the spinner will stay until the image is loaded.
   const image = new Image();
   image.onload = () => writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
   image.src = inlinePreview.thumbnailSrc;

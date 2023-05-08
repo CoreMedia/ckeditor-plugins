@@ -1,15 +1,14 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
 import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import AttributeElement from "@ckeditor/ckeditor5-engine/src/view/attributeelement";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { AttributeElement, ViewElement } from "@ckeditor/ckeditor5-engine";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
 import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**
@@ -91,7 +90,7 @@ const LINK_CUSTOM_PROPERTY = "link";
  */
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
-  static readonly pluginName: string = "LinkAttributes";
+  public static readonly pluginName = "LinkAttributes" as const;
   static readonly #logger = LoggerProvider.getLogger(LinkAttributes.pluginName);
 
   static readonly requires = [LinkCleanup, TwoStepCaretMovement];
@@ -159,7 +158,7 @@ export class LinkAttributes extends Plugin {
       },
       model: {
         key: modelName,
-        value: (viewElement) => viewElement.getAttribute(viewName) ?? null,
+        value: (viewElement: ViewElement) => viewElement.getAttribute(viewName) ?? null,
       },
       converterPriority: "low",
     });

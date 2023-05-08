@@ -5,10 +5,12 @@
  * @module ckeditor5-font-mapper
  */
 
+export * from "./ConfigToMapUtil";
+
 export * from "./FontMapper";
 export { default as FontMapper } from "./FontMapper";
 
-export * from "./ConfigToMapUtil";
+export * from "./FontMapperConfig";
 
 export * from "./FontMapping";
 

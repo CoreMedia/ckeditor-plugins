@@ -1,19 +1,21 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { Command, Plugin } from "@ckeditor/ckeditor5-core";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
+// LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
-import Command from "@ckeditor/ckeditor5-core/src/command";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/Constants";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
+import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
+import { asAugmentedLinkUI, AugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -23,44 +25,46 @@ import { showContentLinkField } from "../ContentLinkViewUtils";
  *     (rather than opening an external URL in a new browser tab).
  */
 class ContentLinkActionsViewExtension extends Plugin {
-  static readonly pluginName: string = "ContentLinkActionsViewExtension";
+  public static readonly pluginName = "ContentLinkActionsViewExtension" as const;
   static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
 
-  static readonly requires = [LinkUI];
-
+  static readonly requires = [LinkUI, ContextualBalloon];
+  contentUriPath: string | undefined | null;
   #initialized = false;
 
   init(): void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
-    const linkUI: LinkUI = editor.plugins.get(LinkUI);
+    const linkUI = asAugmentedLinkUI(editor.plugins.get(LinkUI));
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView && linkUI.actionsView === visibleView && !this.#initialized) {
-        this.#initialize(linkUI);
+      const { actionsView } = linkUI;
+      if (actionsView && actionsView === visibleView && !this.#initialized) {
+        this.#initialize(linkUI, actionsView);
         this.#initialized = true;
       }
     });
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (linkUI.actionsView && linkUI.actionsView === visibleView) {
-        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(linkUI.actionsView);
+      const { actionsView } = linkUI;
+      if (actionsView && actionsView === visibleView) {
+        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
       }
     });
 
     reportInitEnd(initInformation);
   }
 
-  #initialize(linkUI: LinkUI): void {
+  #initialize(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
     const { editor } = linkUI;
 
-    linkUI.actionsView.set({
+    actionsView.set({
       contentUriPath: undefined,
     });
 
     const bindContentUriPathTo = (command: Command): void => {
-      linkUI.actionsView
+      actionsView
         .bind("contentUriPath")
         .to(command, "value", (value: unknown) =>
           typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
@@ -77,32 +81,34 @@ class ContentLinkActionsViewExtension extends Plugin {
      * We need to update the visibility of the inputs when the value of the content link changes
      * If the value was removed: show external link field, otherwise show the content link field
      */
-    linkUI.actionsView.on("change:contentUriPath", (evt) => {
+    actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
 
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
-        showContentLinkField(linkUI.actionsView, false);
+        showContentLinkField(actionsView, false);
         return;
       }
 
       const { contentUriPath: value } = source;
 
       // set visibility of url and content field
-      showContentLinkField(linkUI.actionsView, !!value);
+      showContentLinkField(actionsView, !!value);
     });
-    this.#extendView(linkUI);
+    this.#extendView(linkUI, actionsView);
   }
 
-  #extendView(linkUI: LinkUI): void {
-    const { formView } = linkUI;
-    const actionsView: LinkActionsView = linkUI.actionsView;
+  #extendView(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
+
     const contentLinkView = new ContentLinkView(this.editor, {
       renderTypeIcon: true,
     });
+
     contentLinkView.set({
       renderAsTextLink: true,
     });
+
     if (!hasContentUriPath(linkUI.actionsView)) {
       ContentLinkActionsViewExtension.#logger.warn(
         "ActionsView does not have a property contentUriPath. Is it already bound?",
@@ -110,7 +116,8 @@ class ContentLinkActionsViewExtension extends Plugin {
       );
       return;
     }
-    contentLinkView.bind("uriPath").to(linkUI.actionsView, "contentUriPath");
+
+    contentLinkView.bind("uriPath").to(actionsView, "contentUriPath");
 
     contentLinkView.on("contentClick", () => {
       if (contentLinkView.uriPath) {
@@ -131,7 +138,7 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
-      linkUI.actionsView.set({
+      actionsView.set({
         contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
       });
     });
@@ -159,12 +166,11 @@ class ContentLinkActionsViewExtension extends Plugin {
 
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
     ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
-    const linkViewWithFocusable = actionsView as LinkViewWithFocusables;
-    handleFocusManagement(linkViewWithFocusable, [simpleContentLinkView], actionsView.previewButtonView);
+    handleFocusManagement(actionsView, [simpleContentLinkView], actionsView.previewButtonView);
   }
 
   /**
-   * Add classes to the actions view which enables to distinguish if the extension is active.
+   * Add classes to the actions view that enables to distinguish if the extension is active.
    *
    * @param actionsView - the rendered actionsView of the linkUI
    * @private

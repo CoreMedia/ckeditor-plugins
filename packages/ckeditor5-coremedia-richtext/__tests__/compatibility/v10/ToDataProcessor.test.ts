@@ -3,7 +3,7 @@
 import "jest-xml-matcher";
 import ToDataProcessor from "../../../src/ToDataProcessor";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/HtmlFilter";
+import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
 import { getV10Config } from "./Utils";
 
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");

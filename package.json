@@ -22,7 +22,6 @@
     "coremedia cms",
     "coremedia studio"
   ],
-  "main": "index.js",
   "repository": {
     "url": "https://github.com/CoreMedia/ckeditor-plugins",
     "type": "git"
@@ -32,8 +31,8 @@
     "bootstrap": "pnpm install",
     "publishall": "pnpm --recursive publish",
     "setversion": "set-version",
-    "clean": "pnpm --recursive clean && rimraf ./dist",
-    "clean:node_modules": "npx rimraf ./**/node_modules",
+    "clean": "pnpm --recursive clean",
+    "clean:node_modules": "rimraf ./**/node_modules",
     "build": "pnpm --recursive build",
     "doc": "typedoc",
     "doc:config": "typedoc --showConfig",
@@ -52,21 +51,20 @@
     "@coremedia/set-version": "1.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.8",
-    "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/parser": "^5.36.2",
-    "eslint": "^8.23.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^39.3.6",
+    "@types/jest": "^29.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^41.1.1",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-tsdoc": "^0.2.16",
+    "eslint-plugin-tsdoc": "^0.2.17",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "typedoc": "^0.23.14",
-    "typedoc-plugin-merge-modules": "^4.0.1",
-    "typescript": "^4.8.2"
+    "prettier": "^2.8.7",
+    "rimraf": "^5.0.0",
+    "typedoc": "^0.24.6",
+    "typescript": "^4.9.5"
   }
 }

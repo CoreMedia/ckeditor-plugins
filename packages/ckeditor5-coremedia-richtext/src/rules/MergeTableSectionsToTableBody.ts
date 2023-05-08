@@ -1,9 +1,9 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
 import { Direction, resolveDirectionToConfig } from "./Direction";
-import { isHTMLTableElement } from "@coremedia/ckeditor5-dom-support/HTMLTableElements";
-import { removeClass } from "@coremedia/ckeditor5-dom-support/Elements";
-import { copyAttributesFrom } from "@coremedia/ckeditor5-dom-support/Attrs";
+import { isHTMLTableElement } from "@coremedia/ckeditor5-dom-support/src/HTMLTableElements";
+import { removeClass } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import { copyAttributesFrom } from "@coremedia/ckeditor5-dom-support/src/Attrs";
 
 export interface MergeTableSectionsToTableBodyConfig {
   headerRowClass?: string;
@@ -35,7 +35,7 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         }
 
         const { tHead, tFoot, ownerDocument } = node;
-        // Create snapshot of tBodies before creating a new one.
+        // Create a snapshot of tBodies before creating a new one.
         const tBodies = [...node.tBodies];
         const targetBody = node.createTBody();
 
@@ -104,7 +104,7 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         if (!isHTMLTableElement(node)) {
           return node;
         }
-        // Get snapshot of current rows.
+        // Get a snapshot of current rows.
         const rows = [...node.rows];
         const previousBodies = [...node.tBodies];
         // DevNote: Methods also directly attach sections to table.

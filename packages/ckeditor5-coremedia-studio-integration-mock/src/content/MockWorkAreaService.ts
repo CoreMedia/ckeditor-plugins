@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/WorkAreaService";
+import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/WorkAreaService";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import MockContentPlugin from "./MockContentPlugin";
 import MockContent from "./MockContent";
 import { BlobType } from "./MutableProperties";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { Observable, Subject } from "rxjs";
 
 class MockWorkAreaService implements WorkAreaService {

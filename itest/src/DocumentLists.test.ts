@@ -17,9 +17,9 @@ import {
   td,
   tr,
   ul,
-} from "@coremedia-internal/ckeditor5-coremedia-example-data/RichText";
+} from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
 import "./expect/Expectations";
-import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/Images";
+import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/Images";
 
 const olString = "ol";
 const ulString = "ul";

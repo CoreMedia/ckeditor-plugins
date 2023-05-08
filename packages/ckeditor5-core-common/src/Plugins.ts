@@ -1,107 +1,77 @@
-import Plugin, { PluginInterface } from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import Plugin, {
+  PluginClassConstructor,
+  PluginConstructor,
+  PluginInterface,
+} from "@ckeditor/ckeditor5-core/src/plugin";
+import { Editor, PluginsMap } from "@ckeditor/ckeditor5-core";
 
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 
 /**
- * Error, which signals that a requested plugin could not be found.
+ * Handler that is invoked if an optional plugin is not available. May be used
+ * to file a warning or info on possible effects, for example.
+ *
+ * The callback will get the plugin name as a parameter that you may use for
+ * reporting.
  */
-export class PluginNotFoundError extends Error {
-  readonly #key: PluginInterface;
+export type OnMissingPlugin = (pluginName: string) => void;
 
-  /**
-   * Constructor.
-   *
-   * @param key - key of the plugin, which could not be found
-   * @param message - error message
-   */
-  constructor(key: PluginInterface, message: string) {
-    super(message);
-    Object.setPrototypeOf(this, PluginNotFoundError.prototype);
-    this.#key = key;
+export function getOptionalPlugin<
+  TConstructor extends PluginClassConstructor<TContext>,
+  TContext extends Editor = Editor
+>(editor: TContext, key: TConstructor, onMissing?: OnMissingPlugin): InstanceType<TConstructor> | undefined;
+
+export function getOptionalPlugin<TName extends string, TContext extends Editor = Editor>(
+  editor: TContext,
+  key: TName,
+  onMissing?: OnMissingPlugin
+): PluginsMap[TName] | undefined;
+
+/**
+ * Tries to get the recommended plugin (invokes `has` prior to getting it) and
+ * returns it, if available.
+ *
+ * If missing, `undefined` is returned and prior to that optional `onMissing`
+ * gets invoked. `onMissing` may be used, to log relevant effects.
+ *
+ * @param editor - the editor instance to get the plugin from
+ * @param key - identifier for the plugin (by name or constructor)
+ * @param onMissing - optional callback invoked with plugin name, if plugin
+ * is missing. Defaults to some generic message on not found plugin at debug
+ * level.
+ */
+export function getOptionalPlugin(
+  editor: Editor,
+  key: PluginClassConstructor | string,
+  onMissing?: OnMissingPlugin
+): PluginInterface | undefined {
+  const { plugins } = editor;
+
+  if (plugins.has(key)) {
+    if (typeof key === "string") {
+      return plugins.get(key);
+    } else {
+      return plugins.get(key);
+    }
   }
 
-  /**
-   * Provides the key of the plugin, which was searched
-   * for unsuccessfully.
-   */
-  get pluginKey(): PluginInterface {
-    return this.#key;
-  }
+  let pluginName: string;
 
-  /**
-   * Provides the name of the plugin, which was searched
-   * for unsuccessfully.
-   */
-  get pluginName(): string {
-    return this.pluginKey.name;
-  }
-}
-
-/**
- * Error handler, if plugin could not be found.
- */
-export type PluginNotFoundErrorHandler = (e: PluginNotFoundError) => void;
-
-/**
- * Suggested alternative `catch` handler, if a plugin is not found.
- * It will trigger a debug log statement.
- *
- * @param e - error to ignore
- */
-export const optionalPluginNotFound: PluginNotFoundErrorHandler = (e: PluginNotFoundError) =>
-  pluginsLogger.debug(`Optional plugin '${e.pluginName}' not found.`, e);
-
-/**
- * Provides a `catch` handler, if a recommended plugin is not found.
- * It will trigger a warning log statement and a debug log statement with more details.
- *
- * @param effectIfMissingMessage - optional effect, what will happen if the plugin is missing
- * @param logger - optional logger to use instead of default
- */
-export const recommendPlugin = (
-  effectIfMissingMessage = "",
-  logger: Logger = pluginsLogger
-): PluginNotFoundErrorHandler => {
-  const messageSuffix = effectIfMissingMessage ? ` ${effectIfMissingMessage}` : "";
-  return (e) => {
-    const message = `Recommended plugin '${e.pluginName}' not found.${messageSuffix}`;
-    logger.warn(message);
-    logger.debug(`Details on: ${message}`, e);
-  };
-};
-
-/**
- * Promise, which either resolves immediately to the given plugin or rejects
- * with `Error` if not available.
- *
- * If you refer to a required plugin, skipping `catch` for the promise
- * may be fine. For optional plugins (trigger an action if plugin is available)
- * you may want to use {@link optionalPluginNotFound} as handler, which just
- * logs a debug note on a not existing plugin.
- *
- * @example
- * ```typescript
- * ifPlugin(editor, OptionalPlugin)
- *   .then(...)
- *   .catch(optionalPluginNotFound);
- * ```
- * @param editor - editor to find requested plugin
- * @param key - plugin key
- * @returns `Promise` for requested plugin
- * @throws PluginNotFoundError if plugin could not be found
- */
-// Promise used to benefit from then-API.
-// eslint-disable-next-line @typescript-eslint/require-await
-export const ifPlugin = async <T extends Plugin>(editor: Editor, key: PluginInterface<T>): Promise<T> => {
-  if (editor.plugins.has(key)) {
-    return editor.plugins.get(key);
+  if (typeof key === "string") {
+    pluginName = key;
   } else {
-    throw new PluginNotFoundError(key, `Plugin ${key.name} unavailable.`);
+    pluginName = (key as PluginConstructor).pluginName ?? key.name;
   }
-};
+
+  if (onMissing) {
+    onMissing(pluginName);
+  } else {
+    pluginsLogger.debug(`getOptionalPlugin: Queried plugin ${pluginName} is unavailable.`);
+  }
+
+  return undefined;
+}
 
 /**
  * Initialization Information.
@@ -127,7 +97,7 @@ export interface InitInformation {
 export const reportInitStart = (plugin: Plugin): InitInformation => {
   const timestamp: number = performance.now();
   // Workaround https://github.com/Microsoft/TypeScript/issues/3841
-  const pluginName = (plugin.constructor as typeof Plugin).pluginName ?? "Unnamed Plugin";
+  const pluginName = (plugin.constructor as PluginConstructor).pluginName ?? "Unnamed Plugin";
   pluginsLogger.debug(`Initializing ${pluginName}...`);
   return {
     pluginName,

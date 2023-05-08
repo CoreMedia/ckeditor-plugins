@@ -9,6 +9,6 @@ module.exports = {
   testTimeout: 60000,
   preset: "jest-playwright-preset",
   // Override from shared config.
-  testEnvironment: "jest-playwright-preset",
+  testEnvironment: require.resolve("jest-playwright-preset"),
   setupFilesAfterEnv: [require.resolve("expect-playwright")],
 };

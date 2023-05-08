@@ -4,4 +4,4 @@
  * @module ckeditor5-coremedia-content
  */
 
-export * as ui from "./commands/index-doc";
+export * as commands from "./commands/index-doc";

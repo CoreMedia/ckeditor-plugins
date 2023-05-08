@@ -1,9 +1,9 @@
-import { capitalize } from "@coremedia/ckeditor5-common/Strings";
+import { capitalize } from "@coremedia/ckeditor5-common/src/Strings";
 
 export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink" as const;
 export const xLinkPrefix = "xlink" as const;
 export const xLinkAttributes = ["type", "href", "role", "title", "show", "actuate"];
-export type XLinkAttributeKey = typeof xLinkAttributes[number];
+export type XLinkAttributeKey = (typeof xLinkAttributes)[number];
 export type XLinkAttributes = Partial<Record<XLinkAttributeKey, string>>;
 export type XLinkAttributeQualifiedName = `${typeof xLinkPrefix}:${XLinkAttributeKey}`;
 /**
@@ -48,6 +48,7 @@ export const extractXLinkDataSetEntries = (element: HTMLElement): XLinkAttribute
         // again may open a door to XSS attacks if not carefully designed.
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete element.dataset[key];
+        // noinspection SuspiciousTypeOfGuard
         if (typeof value === "string") {
           return {
             [localName]: value,

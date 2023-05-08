@@ -1,13 +1,11 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Writer, Range } from "@ckeditor/ckeditor5-engine";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { LINK_HREF_MODEL } from "./Constants";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { LinkEditing } from "@ckeditor/ckeditor5-link";
 
 /**
@@ -69,7 +67,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     reportInitEnd(initInformation);
   }
 
-  destroy(): void {
+  override destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
   }

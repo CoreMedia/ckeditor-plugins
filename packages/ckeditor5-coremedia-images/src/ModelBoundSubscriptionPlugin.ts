@@ -1,9 +1,8 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Element as ModelElement, Writer } from "@ckeditor/ckeditor5-engine";
 import { DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
 import SubscriptionCache from "./SubscriptionCache";
 import { Subscription } from "rxjs";
 
@@ -12,7 +11,7 @@ import { Subscription } from "rxjs";
  * element.
  *
  * If a ModelElement has a subscription to an asynchronous service
- * (e.g., image `xlink-href`, which resolves the `src` attribute asynchronously)
+ * (e.g., image `xlink-href`, which resolves the `src` attribute asynchronously),
  * this plugin can be used to track those subscriptions.
  *
  * Tracked subscriptions will be unsubscribed on destroy or when the
@@ -22,7 +21,7 @@ import { Subscription } from "rxjs";
  * model elements. It listens to changes in the document regarding the
  * registered model elements.
  *
- * If a registered model element is removed all subscriptions will be
+ * If a registered model element is removed, all subscriptions will be
  * unsubscribed. Subscriptions have to be added manually to the
  * `ModelBoundSubscriptionPlugin` by calling `addSubscription`.
  */
@@ -32,9 +31,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly #SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
   static readonly PLUGIN_NAME = "ModelBoundSubscriptionPlugin";
 
-  static get pluginName(): string {
-    return ModelBoundSubscriptionPlugin.PLUGIN_NAME;
-  }
+  static readonly pluginName = ModelBoundSubscriptionPlugin.PLUGIN_NAME;
 
   /**
    * Registers `change:data` listeners.
@@ -47,7 +44,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   /**
    * Makes sure to unsubscribe all subscriptions when the editor is destroyed.
    */
-  destroy(): void {
+  override destroy(): void {
     ModelBoundSubscriptionPlugin.#SUBSCRIPTION_CACHE.unsubscribeAll();
   }
 
@@ -89,7 +86,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    * If a registered model element is found on the graveyard it unsubscribes all
    * added subscriptions.
    *
-   * The search is recursively if a container gets removed. Elements contained
+   * The search is recursive if a container gets removed. Elements contained
    * in the container are not an explicit change in the change set.
    */
   #unsubscribeOnElementRemoval(): void {
@@ -122,7 +119,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    * Adds a `change:data` listener to the model document, which adds a
    * `cmSubscriptionId` for registered model elements.
    *
-   * The search is recursively if a container gets removed. Elements contained
+   * The search is recursive if a container gets removed. Elements contained
    * in the container are not an explicit change in the change set.
    */
   #addSubscriptionIdToInsertedElementListener(): void {

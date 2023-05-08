@@ -1,12 +1,9 @@
-import ViewNode from "@ckeditor/ckeditor5-engine/src/view/node";
-import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
-import ViewText from "@ckeditor/ckeditor5-engine/src/view/text";
-import UpcastWriter from "@ckeditor/ckeditor5-engine/src/view/upcastwriter";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
+import { ViewNode, ViewElement, ViewText, UpcastWriter, ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
 import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
 const logger: Logger = LoggerProvider.getLogger("FontMapper");
@@ -44,11 +41,7 @@ export const replaceFontInDocumentFragment = (
     // So, if no text node child exists, we can skip the replacement for now
     if (hasTextChild(alteredChildElement)) {
       const childIndex: number = documentFragment.getChildIndex(child);
-      //@ts-expect-error TODO _removeChildren is protected for Element
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       documentFragment._removeChildren(childIndex, 1);
-      //@ts-expect-error TODO _insertChild is protected for Element
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       documentFragment._insertChild(childIndex, alteredChildElement);
 
       // In this case, we just replaced the child element with a clone
@@ -114,8 +107,6 @@ const computeFontMappingForElement = (
     if (fontMapping) {
       //if a font mapping is available for the current font family the font family has to be removed.
       logger.debug(`Found ${fontMapping}. Will remove font-family ${fontFamily} from element ${element?.name}`);
-      //@ts-expect-error TODO _removeStyle is protected
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       element._removeStyle(fontFamily);
     }
     return fontMapping;
@@ -195,8 +186,6 @@ export const escapeFontFamily = (fontFamilyStyle: string): string =>
  */
 const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElement): ViewElement => {
   const clone: ViewElement = new UpcastWriter(element.document).clone(element, true);
-  //@ts-expect-error TODO _removeStyle is protected
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   clone._removeStyle(FONT_FAMILY_PROPERTY_NAME);
   replaceCharactersInTextNodeChildren(fontMapping, clone);
   return clone;
@@ -213,11 +202,10 @@ const createAlteredElementClone = (fontMapping: FontMapping, element: ViewElemen
 const replaceCharactersInTextNodeChildren = (fontMapping: FontMapping, element: ViewElement): void => {
   const textElements = findTextNodeChildren(element);
   for (const textElement of textElements) {
-    //@ts-expect-error TODO _textData is protected
-    const oldTextData: string = textElement._textData as string;
+    const hasTextData = asHasTextData(textElement);
+    const oldTextData: string = hasTextData._textData;
     logger.debug("Searching replacement character for textElement:", textElement);
-    //@ts-expect-error TODO _textData is protected
-    textElement._textData = fontMapping.toReplacementCharacter(oldTextData);
+    hasTextData._textData = fontMapping.toReplacementCharacter(oldTextData);
   }
 };
 
@@ -231,3 +219,21 @@ const findTextNodeChildren = (element: ViewElement): ViewText[] =>
   Array.from<ViewNode>(element.getChildren())
     .filter((value) => value instanceof ViewText)
     .map((value) => value as ViewText);
+
+/**
+ * Provides access to private API of `Text`.
+ */
+interface HasTextData {
+  _textData: string;
+}
+
+const isHasTextData = (value: unknown): value is HasTextData =>
+  typeof value === "object" && !!value && "_textData" in value && typeof value._textData === "string";
+
+const asHasTextData = (value: unknown): HasTextData => {
+  if (isHasTextData(value)) {
+    return value;
+  }
+  console.debug("Required internal API _textData unavailable.", value);
+  throw new IncompatibleInternalApiUsageError("Required internal API _textData unavailable.");
+};

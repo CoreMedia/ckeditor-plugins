@@ -1,8 +1,5 @@
-import View from "@ckeditor/ckeditor5-ui/src/view";
-import { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
-import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import { TemplateIfBinding } from "@ckeditor/ckeditor5-ui/src/template";
+import { View } from "@ckeditor/ckeditor5-ui";
+import { Observable, PriorityString, Emitter } from "@ckeditor/ckeditor5-utils";
 
 /**
  * Adds a CSS class, or an array of CSS classes to a view template.
@@ -12,9 +9,10 @@ import { TemplateIfBinding } from "@ckeditor/ckeditor5-ui/src/template";
  * @param classNames - a classname or an array of classname strings
  */
 export const addClassToTemplate = (view: View, classNames: string[] | string): void => {
-  // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-  const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
+  const { template } = view;
+  const attributes = template?.attributes;
+  // .includes below does not work with AttributeValues type. unknown[] is enough here for us.
+  const classes: unknown[] = attributes?.class ?? [];
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -33,9 +31,11 @@ export const addClassToTemplate = (view: View, classNames: string[] | string): v
  * @param classNames - a classname or an array of classname strings
  */
 export const removeClassFromTemplate = (view: View, classNames: string[] | string): void => {
-  // @ts-expect-error TODO: view.template may be false/undefined. We should handle this.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-  const classes: (string | TemplateIfBinding)[] = view.template.attributes.class;
+  const { template } = view;
+  const attributes = template?.attributes;
+  // The array operations below do not work with AttributeValues type.
+  // `unknown[]` is enough here for us.
+  const classes: unknown[] = attributes?.class ?? [];
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -94,23 +94,39 @@ export const removeClass = (view: View, classNames: string[] | string): void => 
  * @param options - (optional) options object for listener priority
  */
 
-export const createDecoratorHook = (
-  methodParentCmp: Observable,
-  methodName: string,
+export const createDecoratorHook = <O extends Observable>(
+  methodParentCmp: O,
+  methodName: keyof O & string,
   callback: () => void,
   listenerCmp: Emitter,
   options?: { priority?: number | PriorityString }
 ): void => {
-  if (
-    !(methodParentCmp as DecorableCmp)._events ||
-    !(methodParentCmp as DecorableCmp)._events.hasOwnProperty(methodName)
-  ) {
+  if (!isDecorated(methodParentCmp, methodName)) {
     methodParentCmp.decorate(methodName);
+    if (!isDecorated(methodParentCmp, methodName)) {
+      console.warn(
+        `createDecoratorHook: Issues while decorating ${methodName}. CKEditor may have changed its internal API around Emitter Mixin. Detection for _is decorated_ needs to be adapted.`
+      );
+    }
   }
 
   listenerCmp.listenTo(methodParentCmp, methodName, callback, options);
 };
 
-interface DecorableCmp extends Observable {
-  _events: unknown[];
+/**
+ * When decorating, the internal `_events` property gets set, that we use here.
+ * See `Observable.decorate()` and `getEvents` in Emitter Mixin.
+ */
+interface EmitterInternal {
+  _events: Record<string, unknown>;
 }
+
+const isEmitterInternal = (observable: object): observable is EmitterInternal => {
+  if ("_events" in observable) {
+    return typeof observable._events === "object";
+  }
+  return false;
+};
+
+const isDecorated = (observable: Observable, methodName: string): boolean =>
+  isEmitterInternal(observable) && observable._events.hasOwnProperty(methodName);

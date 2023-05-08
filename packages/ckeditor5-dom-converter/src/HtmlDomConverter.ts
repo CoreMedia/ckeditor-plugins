@@ -1,13 +1,15 @@
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
-import { isAttr } from "@coremedia/ckeditor5-dom-support/Attrs";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
+import {
+  isElement,
+  isAttr,
+  isParentNode,
+  isCharacterData,
+  fragmentToString,
+  isDocumentFragment,
+} from "@coremedia/ckeditor5-dom-support";
 import { skip, Skip } from "./Signals";
-import { isCharacterData } from "@coremedia/ckeditor5-dom-support/CharacterDatas";
 import { ConversionContext } from "./ConversionContext";
 import { ConversionApi } from "./ConversionApi";
-import { fragmentToString, isDocumentFragment } from "@coremedia/ckeditor5-dom-support/DocumentFragments";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { ConversionListener } from "./ConversionListener";
 
 const nodeToString = (node: Node | null | undefined): string => {
@@ -27,7 +29,7 @@ const nodeToString = (node: Node | null | undefined): string => {
 /**
  * The HTML DOM Converter is dedicated to XML grammars, that are closely related
  * to HTML. Typically, the counterpart offers a subset of elements and
- * attributes compare to HTML.
+ * attributes compared to HTML.
  *
  * This is an important restriction regarding DOM transformation, as some
  * candy during transformation only comes for HTML elements, such as access to
@@ -59,7 +61,7 @@ export class HtmlDomConverter {
   /**
    * Converts the given original node via `convert` and subsequently
    * appends the result to `targetParentNode`. Different to `convert` this
-   * ensures, that `appended` handler is also called when appending to
+   * ensures that `appended` handler is also called when appending to
    * target parent node.
    *
    * @param originalNode - original node to transform
@@ -82,9 +84,9 @@ export class HtmlDomConverter {
    * Converts the given node and its children to the target
    * document. The processing is performed in this order:
    *
-   * 1. **imported:** Node is imported into current document, possibly
+   * 1. **imported:** Node is imported into the current document, possibly
    *    transforming default namespace towards the new document default.
-   *    In post-processing the imported node may be replaced by a new
+   *    In post-processing, the imported node may be replaced by a new
    *    node.
    * 2. **post-process imported:** An optional post-processing may now
    *    replace the given node.
@@ -93,7 +95,7 @@ export class HtmlDomConverter {
    *
    * @param originalNode - node to convert
    * @returns the imported, not yet attached, node along with converted child
-   * nodes; `undefined` if the node is to be ignored in target document.
+   * nodes; `undefined` if the node is to be ignored in the target document.
    */
   convert(originalNode: Node): Node | undefined {
     const logger = HtmlDomConverter.#logger;
@@ -108,7 +110,7 @@ export class HtmlDomConverter {
     });
 
     // Context is irrelevant in this stage: The source node is the same
-    // as the one given here and the convenience API is bound to the target
+    // as the one given here, and the convenience API is bound to the target
     // document and thus irrelevant for modifying the DOM of the original
     // node.
     this.#prepareForImport(originalNode);
@@ -154,7 +156,7 @@ export class HtmlDomConverter {
   }
 
   /**
-   * Prior to importing the original node, you may want to modify it. Note,
+   * Prior to importing the original node, you may want to modify it. Note
    * that allowed modification is limited, though.
    *
    * @param originalNode - original (mutable!) node
@@ -166,7 +168,7 @@ export class HtmlDomConverter {
 
   /**
    * Provides the possibility to handle a just imported node. The node is
-   * neither attached to DOM yet, nor children are available.
+   * neither attached to DOM, nor children are available.
    *
    * @param importedNode - the just imported node
    * @param context - current conversion context
@@ -225,7 +227,7 @@ export class HtmlDomConverter {
 
   /**
    * Appends the given child and raises a signal via `appended` as soon as it
-   * got appended successfully. Note, that special handling for document
+   * got appended successfully. Note that special handling for document
    * fragments is applied, as they dissolve when appended. Thus, the signal
    * is raised for each child node contained in the fragment, rather than
    * for the fragment itself.
@@ -266,10 +268,10 @@ export class HtmlDomConverter {
   /**
    * Called to append a just imported child node to its parent.
    *
-   * This method is called, when the original node was a parent node having
+   * This method is called when the original node was a parent node having
    * children.
    *
-   * Note, that processing may have transformed the original parent node to
+   * Note that processing may have transformed the original parent node to
    * a non-parent node (such as `CharacterData`). While this is rather
    * unexpected, the default implementation handles this case at least when
    * also the imported child is `CharacterData` by appending these data
@@ -310,11 +312,11 @@ export class HtmlDomConverter {
     } else if (isCharacterData(importedParentNode)) {
       /*
        * While rather unexpected, we do our best here to handle this state.
-       * We reached this state, when the original node was a ParentNode
+       * We reached this state when the original node was a ParentNode
        * but got transformed to `CharacterData` instead.
        * It is better to perform a transformation of `importedNode` to
        * `CharacterData` when all children have been processed.
-       * As alternative, previous processing could have created a
+       * As an alternative, previous processing could have created a
        * `DocumentFragment` as replacement, which holds the character
        * data derived from the `originalNode`.
        */

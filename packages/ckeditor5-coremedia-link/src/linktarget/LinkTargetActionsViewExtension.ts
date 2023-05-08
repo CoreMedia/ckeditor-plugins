@@ -1,21 +1,18 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
+import { Plugin, Command } from "@ckeditor/ckeditor5-core";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
+// LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+import { ButtonView, ToolbarSeparatorView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
-import Command from "@ckeditor/ckeditor5-core/src/command";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
-import ToolbarSeparatorView from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarseparatorview";
-import View from "@ckeditor/ckeditor5-ui/src/view";
 import "../../theme/linktargetactionsviewextension.css";
-import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { handleFocusManagement, LinkViewWithFocusables } from "@coremedia/ckeditor5-link-common/FocusUtils";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Locale } from "@ckeditor/ckeditor5-utils";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { requireNonNulls } from "@coremedia/ckeditor5-common/src/RequiredNonNull";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -24,13 +21,13 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider"
  * * executing a button will result in setting the target of a given link
  *
  * When clicking the "Open in Frame" button, an additional balloon with a text input
- * opens and allows to set a custom target.
+ * opens and allows setting a custom target.
  *
  * The buttons to be rendered can be set in the editor's configuration.
  * The default configuration is defined in {@link linktarget.config.DefaultTarget}.
  */
 class LinkTargetActionsViewExtension extends Plugin {
-  static readonly pluginName: string = "LinkTargetActionsViewExtension";
+  public static readonly pluginName = "LinkTargetActionsViewExtension" as const;
   static readonly requires = [LinkUI, CustomLinkTargetUI];
   static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
 
@@ -60,7 +57,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * @param linkUI - the linkUI plugin
    */
   #extendView(linkUI: LinkUI): void {
-    const actionsView: LinkActionsView = linkUI.actionsView;
+    const { actionsView } = requireNonNulls(linkUI, "actionsView");
     const linkTargetCommand = linkUI.editor.commands.get("linkTarget");
     if (!linkTargetCommand) {
       LinkTargetActionsViewExtension.#logger.warn("Command 'linkTarget' not found");
@@ -77,7 +74,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       }
     });
 
-    const separatorLeft = new ToolbarSeparatorView();
+    const separatorLeft: ToolbarSeparatorView & { class?: string } = new ToolbarSeparatorView();
     separatorLeft.set({ class: "cm-ck-item-separator" });
     separatorLeft.extendTemplate({
       attributes: {
@@ -103,7 +100,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   }
 
   static #render(actionsView: LinkActionsView, addedButtons: View[]): void {
-    handleFocusManagement(actionsView as LinkViewWithFocusables, addedButtons, actionsView.unlinkButtonView, "before");
+    handleFocusManagement(actionsView, addedButtons, actionsView.unlinkButtonView, "before");
   }
 
   /**
@@ -111,7 +108,7 @@ class LinkTargetActionsViewExtension extends Plugin {
    * custom target value in an extra dialog.
    */
   #createTargetOtherButton(): ButtonView {
-    const { ui } = requireEditorWithUI(this.editor);
+    const { ui } = this.editor;
     return ui.componentFactory.create(CustomLinkTargetUI.customTargetButtonName) as ButtonView;
   }
 
@@ -142,7 +139,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       isToggleable: true,
     });
 
-    // Corner Case: `_self` is also on, if no target is set yet.
+    // Corner Case: `_self` is also on if target is not yet set.
     view
       .bind("isOn")
       .to(

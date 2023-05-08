@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import ContentImageEditingPlugin from "./ContentImageEditingPlugin";
 import ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
 import ContentImageOpenInTabUI from "./contentImageOpenInTab/ContentImageOpenInTabUI";
@@ -8,7 +8,7 @@ import ContentImageOpenInTabUI from "./contentImageOpenInTab/ContentImageOpenInT
  * `ContentImageClipboardPlugin`.
  */
 export default class ContentImagePlugin extends Plugin {
-  static readonly pluginName: string = "ContentImagePlugin";
+  static readonly pluginName = "ContentImagePlugin" as const;
 
   static readonly requires = [ContentImageOpenInTabUI, ContentImageEditingPlugin, ContentImageClipboardPlugin];
 }

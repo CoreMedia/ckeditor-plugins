@@ -1,11 +1,10 @@
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import ModelRange from "@ckeditor/ckeditor5-engine/src/model/range";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import { Range as ModelRange, Writer } from "@ckeditor/ckeditor5-engine";
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import type { Model } from "@ckeditor/ckeditor5-engine";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
@@ -18,7 +17,7 @@ const logger = LoggerProvider.getLogger("ContentMarkers");
  * This function also stores data for the input item (ContentInputData) to
  * the ContentInputDataCache.
  *
- * To resolve the identifiers for the created markers use ContentClipboardMarkerDataUtils.toMarkerName.
+ * To resolve the identifiers for the created markers, use ContentClipboardMarkerDataUtils.toMarkerName.
  *
  * @param editor - the editor
  * @param targetRange - the range to insert the contents to
@@ -38,7 +37,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
   const attributes = Array.from(model.document.selection.getAttributes());
 
   // Use the current timestamp as the insertionId to mark multiple Contents as part of one insertion.
-  // Multiple insertions might happen at the same time and maybe even at the same position (e.g. for slower loading contents).
+  // Multiple insertions might happen at the same time and maybe even at the same position (e.g., for slower loading contents).
   // By adding a timestamp for each insertion, those situations can be handled.
   const insertionId = Date.now();
   const multipleInputItems = contentUris.length > 1;
@@ -47,9 +46,9 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
     batch,
     selectedAttributes: attributes,
   };
-  //If a range is not collapsed it means that the new content must replace the selected part.
-  //Therefore, we remove the targetRange and create a collapsed range at the start of the
-  //replaced range.
+  // If a range is not collapsed, it means that the new content must replace the selected part.
+  // Therefore, we remove the targetRange and create a collapsed range at the start of the
+  // replaced range.
   const collapsedInsertRange = handleExpandedRange(model, targetRange);
 
   // Add a content marker for each item.
@@ -76,7 +75,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
 /**
  * Handles expanded ranges by removing everything inside the range and creates a
  * collapsed range at the start of the expanded range.
- * If the given range is already collapsed the range will be returned without any changes.
+ * If the given range is already collapsed, the range will be returned without any changes.
  *
  * @param model - the model to modify if expanded range is given.
  * @param range - the range to
@@ -116,7 +115,7 @@ const createContentInputData = (
 });
 
 /**
- * Adds a marker to the editors model at the given range.
+ * Adds a marker to the editor's model at the given range.
  *
  * A marker itself is inserted without the option to use undo to revert it.
  *

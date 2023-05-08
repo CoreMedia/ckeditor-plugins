@@ -1,10 +1,10 @@
 /* eslint no-null/no-null: off */
 
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./command/LinkTargetCommand";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -13,7 +13,7 @@ import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-com
  * @see {@link https://stackoverflow.com/questions/51303892/how-to-add-target-attribute-to-a-tag-in-ckeditor5 | How to add "target" attribute to `a` tag in ckeditor5? - Stack Overflow}
  */
 export default class LinkTargetModelView extends Plugin {
-  static readonly pluginName: string = "LinkTargetModelView";
+  public static readonly pluginName = "LinkTargetModelView" as const;
 
   // LinkUI: Registers the commands, which are expected to set/unset `linkHref`
   static readonly requires = [LinkAttributes];

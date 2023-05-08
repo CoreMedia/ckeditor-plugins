@@ -1,8 +1,7 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * Hooks into GHS' `DataSchema` plugin, if available and registers additional
@@ -13,7 +12,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * the corresponding `<span class="html-object-embed">` element.
  */
 export class HtmlImageElementSupport extends Plugin {
-  static readonly pluginName: string = "DifferencingHtmlImageElementSupport";
+  static readonly pluginName = "DifferencingHtmlImageElementSupport";
   static readonly requires = [];
 
   static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);

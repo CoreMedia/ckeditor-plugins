@@ -1,11 +1,9 @@
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
 
-import { EditorWithUI } from "@ckeditor/ckeditor5-core/src/editor/editorwithui";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 
 /**
@@ -16,23 +14,21 @@ import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
  * ContentImageEditingPlugin, which therefore is required.
  */
 export default class ContentImageOpenInTabUI extends Plugin {
-  static readonly pluginName: string = "ContentImageOpenInTabUI";
+  static readonly pluginName = "ContentImageOpenInTabUI" as const;
 
   static readonly requires = [ContentImageEditingPlugin];
 
   init(): void {
-    const editor = this.editor;
-
     const initInformation = reportInitStart(this);
-    this.#createToolbarLinkImageButton(editor as EditorWithUI);
+    this.#createToolbarLinkImageButton(this.editor);
     reportInitEnd(initInformation);
   }
 
-  #createToolbarLinkImageButton(editor: EditorWithUI): void {
-    const { ui } = requireEditorWithUI(this.editor);
+  #createToolbarLinkImageButton(editor: Editor): void {
+    const { ui } = editor;
     const t = editor.t;
 
-    const openInTabCommand = editor.commands.get("openImageInTab");
+    const openInTabCommand = editor.commands.get(ContentImageEditingPlugin.openImageInTab);
     if (!openInTabCommand) {
       throw new Error('The command "openImageInTab" is required.');
     }
@@ -47,7 +43,6 @@ export default class ContentImageOpenInTabUI extends Plugin {
         openInTabCommand.execute();
       }
     });
-
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
       const button = new ButtonView(locale);
 

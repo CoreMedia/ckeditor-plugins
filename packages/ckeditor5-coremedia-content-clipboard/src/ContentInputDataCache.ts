@@ -1,11 +1,11 @@
-import Batch from "@ckeditor/ckeditor5-engine/src/model/batch";
+import { Batch } from "@ckeditor/ckeditor5-engine";
 
 /**
  * A cache to store data about content input.
  * This cache stores ContentInputData objects, which consist of 2 parts:
  *
  * 1. An itemContext, which holds information about the inserted item itself
- * 2. An insertionContext, that holds information about the insertion
+ * 2. An insertionContext, which holds information about the insertion
  *
  * The data object must be saved by using the corresponding marker name as the map key.
  */
@@ -57,5 +57,5 @@ export interface ItemContext {
 export interface InsertionContext {
   insertionId: number;
   batch: Batch;
-  selectedAttributes: [string, string | number | boolean][];
+  selectedAttributes: [string, unknown][];
 }

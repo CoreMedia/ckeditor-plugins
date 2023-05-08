@@ -1,5 +1,5 @@
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
-import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
+import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import ElementProxy from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
 import { xLinkActuateMapper, xLinkTitleMapper, xLinkTypeMapper } from "./XLink";
 import { langMapper } from "./Lang";
 import { formatLink } from "./IdHelper";
@@ -51,7 +51,7 @@ const hrefToXLinkHref = ({ attributes }: ElementProxy): void => {
  */
 const contentLinkToModel = (href: string): string => {
   // If data or not retrieved via CoreMedia Studio Server, we may have
-  // UAPI Links in our data (for example from source editing). `formatLink`
+  // UAPI Links in our data (for example, from source editing). `formatLink`
   // will respect such URIs and transform them according to our expectations.
   const link = formatLink(href);
   const match = CONTENT_LINK_DATA_REGEXP.exec(link);
@@ -70,7 +70,7 @@ const xLinkHrefToHref = ({ attributes }: ElementProxy): void => {
 
 const targetToXLinkAttributes = ({ attributes }: ElementProxy): void => {
   const target = attributes.target ?? "";
-  // Just ensure, that even no empty target is written.
+  // Just ensure that even no empty target is written.
   delete attributes.target;
 
   const newAttrs = parseTarget(target);

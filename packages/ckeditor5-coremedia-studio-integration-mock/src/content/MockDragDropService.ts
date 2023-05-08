@@ -1,4 +1,4 @@
-import DragDropService from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/DragDropService";
+import DragDropService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropService";
 
 /**
  * MockDragDropService for the example app.

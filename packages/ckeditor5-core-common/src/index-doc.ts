@@ -5,5 +5,4 @@
  * @module ckeditor5-core-common
  */
 export * from "./Commands";
-export * from "./Editors";
 export * from "./Plugins";

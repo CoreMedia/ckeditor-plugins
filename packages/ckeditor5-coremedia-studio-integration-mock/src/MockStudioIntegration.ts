@@ -1,4 +1,4 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import MockContentDisplayService from "./content/MockContentDisplayService";
 import MockRichtextConfigurationService from "./content/MockRichtextConfigurationService";
 
@@ -8,14 +8,14 @@ import MockWorkAreaService from "./content/MockWorkAreaService";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import MockClipboardService from "./content/MockClipboardService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ClipboardServiceDesriptor";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
 import { MockContentReferenceService } from "./content/MockContentReferenceService";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/IContentReferenceService";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/studioservices/ContentImportService";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 

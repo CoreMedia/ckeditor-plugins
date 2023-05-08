@@ -1,6 +1,6 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import CoreMediaRichText from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichText";
-import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import CoreMediaRichText from "@coremedia/ckeditor5-coremedia-richtext/src/CoreMediaRichText";
+import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/src/GeneralRichTextSupport";
 
 /**
  * Essential editing features for CKEditor 5 in the CoreMedia Studio wrapped in one plugin.
@@ -11,11 +11,15 @@ import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-supp
  * * {@link ckeditor5-coremedia-richtext-support.GeneralRichTextSupport CoreMedia General RichText Support}
  */
 export default class CoreMediaStudioEssentials extends Plugin {
-  static readonly pluginName: string = "CoreMediaStudioEssentials";
+  public static readonly pluginName = "CoreMediaStudioEssentials" as const;
 
   static readonly requires = [CoreMediaRichText, GeneralRichTextSupport];
 }
 
-export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext-support/CoreMediaRichTextSupportConfig";
-export { Strictness } from "@coremedia/ckeditor5-coremedia-richtext/Strictness";
-export { COREMEDIA_RICHTEXT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext/CoreMediaRichTextConfig";
+/*
+ * Deprecated (since 15.x) dependency convenience. Use `index.ts` instead on import.
+ */
+
+export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext-support";
+export { Strictness } from "@coremedia/ckeditor5-coremedia-richtext";
+export { COREMEDIA_RICHTEXT_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-richtext";

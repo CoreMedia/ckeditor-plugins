@@ -1,5 +1,6 @@
 import { isRegisterAttributeConfig, RegisterAttributeConfig } from "./RegisterAttributeConfig";
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { Config } from "@ckeditor/ckeditor5-utils";
+import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 /**
  * Configuration, that is expected as part of the CKEditor 5
@@ -46,17 +47,18 @@ const emptyConfig = (): LinkAttributesConfig => ({
  *
  * @param config editor configuration to parse
  */
-export const parseAttributesConfig = (config: Config): LinkAttributesConfig => {
-  const fromConfig: unknown = config.get("link.attributes");
-  if (!fromConfig) {
+export const parseAttributesConfig = (config: Config<EditorConfig>): LinkAttributesConfig => {
+  const pluginConfig = config.get("link.attributes");
+  if (!pluginConfig) {
     return emptyConfig();
   }
-  if (!Array.isArray(fromConfig)) {
-    throw new Error(`link.attributes: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`);
+  if (!Array.isArray(pluginConfig)) {
+    throw new Error(
+      `link.attributes: Unexpected configuration. Array expected but is: ${JSON.stringify(pluginConfig)}`
+    );
   }
   const attributes: RegisterAttributeConfig[] = [];
-  const attributesConfig: unknown[] = fromConfig;
-  attributesConfig.forEach((entry: unknown): void => {
+  pluginConfig.forEach((entry: unknown): void => {
     if (isRegisterAttributeConfig(entry)) {
       attributes.push(entry);
     }

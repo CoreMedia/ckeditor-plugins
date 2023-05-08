@@ -1,14 +1,14 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { GeneralHtmlSupport } from "@ckeditor/ckeditor5-html-support";
 import RichTextDataFilter from "./RichTextDataFilter";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Wrapper plugin to enable GeneralRichTextSupport based on CKEditor's
  * General HTML Support feature.
  */
 class GeneralRichTextSupport extends Plugin {
-  static readonly pluginName: string = "GeneralRichTextSupport";
+  public static readonly pluginName = "GeneralRichTextSupport" as const;
 
   static readonly requires = [GeneralHtmlSupport, RichTextDataFilter];
 

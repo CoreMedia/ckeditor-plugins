@@ -1,6 +1,4 @@
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
-import { isAttr } from "@coremedia/ckeditor5-dom-support/Attrs";
-import { lookupDocumentDefaultNamespaceURI } from "@coremedia/ckeditor5-dom-support/Nodes";
+import { isElement, isAttr, lookupDocumentDefaultNamespaceURI } from "@coremedia/ckeditor5-dom-support";
 
 /**
  * Contextual information and API during DOM conversion.
@@ -49,9 +47,9 @@ export class ConversionApi {
 
   /**
    * Creates the element with given local name with default namespace of
-   * target document.
+   * the target document.
    *
-   * @param localName - local name of element to create
+   * @param localName - local name of the element to create
    */
   createElement(localName: string): Element {
     return this.createElementNS(this.targetDefaultNamespaceURI, localName);
@@ -61,7 +59,7 @@ export class ConversionApi {
    * Forwards to `createElementNS` in targetDocument.
    *
    * @param namespaceURI - namespace URI
-   * @param qualifiedName - qualified name of element to create
+   * @param qualifiedName - qualified name of the element to create
    */
   createElementNS(namespaceURI: string | null, qualifiedName: string): Element {
     return this.targetDocument.createElementNS(namespaceURI, qualifiedName);
@@ -132,7 +130,7 @@ export class ConversionApi {
   }
 
   /**
-   * Forwards to `importNode` of target document.
+   * Forwards to `importNode` of the target document.
    *
    * @param node - node to import
    * @param deep - if to include child nodes

@@ -39,7 +39,8 @@ describe("Font Mapper features", () => {
    * has to be replaced with the symbol-character to test.
    * Those symbol-characters are the input for the test.
    */
-  it.each([
+  // TODO[cke] Headless testing does not work currently. Clipboard is not written as expected.
+  it.skip.each([
     "test-data/font-mapper/word-template.html",
     "test-data/font-mapper/word-template-table.html",
     "test-data/font-mapper/word-template-table-inherit-font.html",

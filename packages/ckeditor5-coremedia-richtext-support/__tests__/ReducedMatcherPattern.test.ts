@@ -5,7 +5,7 @@ import ReducedMatcherPattern, {
   mergePatterns,
   resolveInheritance,
   toLookupStrategy,
-} from "../dist/ReducedMatcherPattern";
+} from "../src/ReducedMatcherPattern";
 
 /**
  * Abbreviated form of `ReducedMatcherPattern` to ease providing data for tests.
@@ -230,7 +230,9 @@ describe("ReducedMatcherPattern", () => {
         name: "custom",
         inherit: "not-existing",
       };
-      const failing = () => resolveInheritance(pattern, strategy);
+      const failing = (): void => {
+        resolveInheritance(pattern, strategy);
+      };
       expect(failing).toThrowError();
     });
 

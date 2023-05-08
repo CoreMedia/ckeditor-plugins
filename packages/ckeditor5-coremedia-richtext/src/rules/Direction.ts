@@ -1,4 +1,4 @@
-import { RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 
 /**
  * Direction for mapping to apply.

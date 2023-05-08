@@ -23,15 +23,15 @@ export class TestSanitationListener extends SanitationListener {
     return this.totalLength === 0;
   }
 
-  fatal(...data: unknown[]): void {
+  override fatal(...data: unknown[]): void {
     this.fatals.push(data.join("|"));
   }
 
-  removeNode(node: Node, cause: ElementCause): void {
+  override removeNode(node: Node, cause: ElementCause): void {
     this.removedNodes.push(`${node.nodeName}|${cause}`);
   }
 
-  removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause): void {
+  override removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause): void {
     this.removedInvalidAttrs.push(`${attributeOwner.nodeName}.${attr.localName}|${cause}`);
   }
 }

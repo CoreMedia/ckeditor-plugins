@@ -1,5 +1,6 @@
-import CKEditorConfig from "@ckeditor/ckeditor5-utils/src/config";
 import { InheritingMatcherPattern } from "./ReducedMatcherPattern";
+import { EditorConfig } from "@ckeditor/ckeditor5-core";
+import { Config } from "@ckeditor/ckeditor5-utils";
 
 const COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY = "coremedia:richtextSupport";
 
@@ -21,7 +22,7 @@ interface CoreMediaRichTextSupportConfig {
    * If your data-processing also includes extracting extra attributes, you may
    * declare them in addition to the alias. For example, if you want to provide
    * an attribute `data-priority` derived from an additional class at the
-   * `<span>` element you may register it as follows:
+   * `<span>` element, you may register it as follows:
    *
    * ```
    * {
@@ -39,8 +40,8 @@ interface CoreMediaRichTextSupportConfig {
   aliases?: InheritingMatcherPattern[];
 }
 
-const getConfig = (config?: CKEditorConfig): CoreMediaRichTextSupportConfig =>
-  (config?.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) || {}) as CoreMediaRichTextSupportConfig;
+const getConfig = (config: Config<EditorConfig>): CoreMediaRichTextSupportConfig =>
+  config.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) ?? {};
 
 export default CoreMediaRichTextSupportConfig;
 export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY, getConfig };

@@ -1,10 +1,9 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { PluginIntegrationHook } from "../PluginIntegrationHook";
-import Model from "@ckeditor/ckeditor5-engine/src/model/model";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { Model } from "@ckeditor/ckeditor5-engine";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * Hooks into `ImageInline` and `ImageBlock` plugin, if available and
@@ -15,7 +14,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * the corresponding `<span class="image-inline">` for inline images.
  */
 export class ImageElementSupport extends Plugin {
-  static readonly pluginName: string = "DifferencingImageElementSupport";
+  static readonly pluginName = "DifferencingImageElementSupport";
   static readonly requires = [PluginIntegrationHook];
 
   static readonly #logger: Logger = LoggerProvider.getLogger(ImageElementSupport.pluginName);

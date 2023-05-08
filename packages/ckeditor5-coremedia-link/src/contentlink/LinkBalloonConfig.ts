@@ -1,4 +1,5 @@
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { Config } from "@ckeditor/ckeditor5-utils";
+import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
 
 export const COREMEDIA_LINK_CONFIG_KEY = "coremedia:link";
 
@@ -53,17 +54,17 @@ const linkBalloonConfig: LinkBalloonConfig = {
  *
  * @param config - editor configuration
  */
-export const parseLinkBalloonConfig = (config: Config): void => {
+export const parseLinkBalloonConfig = (config: Config<EditorConfig>): void => {
   const balloonKeepOpenIdsRaw: unknown = config.get(`${COREMEDIA_LINK_CONFIG_KEY}.linkBalloon.keepOpen.ids`);
   const balloonKeepOpenClassesRaw: unknown = config.get(`${COREMEDIA_LINK_CONFIG_KEY}.linkBalloon.keepOpen.classes`);
   if (!balloonKeepOpenIdsRaw && !balloonKeepOpenClassesRaw) {
     return;
   }
   if (balloonKeepOpenIdsRaw && !Array.isArray(balloonKeepOpenIdsRaw)) {
-    throw new Error("Wrong configuration, Array expexted for link.linkBalloon.keepOpenIds");
+    throw new Error("Wrong configuration, Array expected for link.linkBalloon.keepOpenIds");
   }
   if (balloonKeepOpenClassesRaw && !Array.isArray(balloonKeepOpenClassesRaw)) {
-    throw new Error("Wrong configuration, Array expexted for link.linkBalloon.keepOpenIds");
+    throw new Error("Wrong configuration, Array expected for link.linkBalloon.keepOpenIds");
   }
   const rawIds: unknown[] = balloonKeepOpenIdsRaw as unknown[];
   const rawClasses: unknown[] = balloonKeepOpenClassesRaw as unknown[];

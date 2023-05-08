@@ -1,19 +1,19 @@
-import View from "@ckeditor/ckeditor5-ui/src/view";
-import LabeledFieldView from "@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import ViewCollection from "@ckeditor/ckeditor5-ui/src/viewcollection";
+import {
+  View,
+  LabeledFieldView,
+  ButtonView,
+  ViewCollection,
+  FocusCycler,
+  injectCssTransitionDisabler,
+  submitHandler,
+  InputTextView,
+} from "@ckeditor/ckeditor5-ui";
 import { createLabeledInputText } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
-import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import FocusTracker from "@ckeditor/ckeditor5-utils/src/focustracker";
-import KeystrokeHandler from "@ckeditor/ckeditor5-utils/src/keystrokehandler";
-import FocusCycler from "@ckeditor/ckeditor5-ui/src/focuscycler";
-import injectCssTransitionDisabler from "@ckeditor/ckeditor5-ui/src/bindings/injectcsstransitiondisabler";
+import { Locale, FocusTracker, KeystrokeHandler } from "@ckeditor/ckeditor5-utils";
 import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import submitHandler from "@ckeditor/ckeditor5-ui/src/bindings/submithandler";
 import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
 import "../../../theme/customlinktargetform.css";
-import { icons } from "@ckeditor/ckeditor5-core";
-import Command from "@ckeditor/ckeditor5-core/src/command";
+import { icons, Command } from "@ckeditor/ckeditor5-core";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
@@ -24,7 +24,7 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 export default class CustomLinkTargetInputFormView extends View {
   readonly focusTracker: FocusTracker;
   readonly keystrokes: KeystrokeHandler;
-  readonly labeledInput: LabeledFieldView;
+  readonly labeledInput: LabeledFieldView<InputTextView>;
   readonly saveButtonView: ButtonView;
   readonly cancelButtonView: ButtonView;
   readonly #focusables: ViewCollection;
@@ -112,6 +112,7 @@ export default class CustomLinkTargetInputFormView extends View {
       children: [this.labeledInput, this.saveButtonView, this.cancelButtonView],
     });
 
+    // TODO[cke] Address Deprecation
     injectCssTransitionDisabler(this);
   }
 
@@ -129,12 +130,17 @@ export default class CustomLinkTargetInputFormView extends View {
     submitHandler({ view: this });
 
     [this.labeledInput, this.saveButtonView, this.cancelButtonView].forEach((v) => {
+      const { element } = v;
+
+      if (!element) {
+        console.debug("Unexpected state. Required 'element' unset.", v);
+        throw new Error("Unexpected state. Required 'element' unset.");
+      }
       // Register the view as focusable.
       this.#focusables.add(v);
 
       // Register the view in the focus tracker.
-      // @ts-expect-error TODO Handle Element being null.
-      this.focusTracker.add(v.element);
+      this.focusTracker.add(element);
     });
   }
 
@@ -174,10 +180,9 @@ export default class CustomLinkTargetInputFormView extends View {
    *
    * @returns {@link LabeledFieldView} Labeled field view instance.
    */
-  #createLabeledInputView(): LabeledFieldView {
+  #createLabeledInputView(): LabeledFieldView<InputTextView> {
     const t = this.locale?.t;
-    // @ts-expect-error TODO Possibly bad typing for Constructor of LabeledFieldView
-    const labeledInput: LabeledFieldView = new LabeledFieldView(this.locale, createLabeledInputText);
+    const labeledInput = new LabeledFieldView<InputTextView>(this.locale, createLabeledInputText);
     labeledInput.label = t?.("Target") ?? "Target";
     return labeledInput;
   }

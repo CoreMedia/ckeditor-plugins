@@ -1,5 +1,5 @@
 import * as aut from "../../src/integrations/XDiffElements";
-import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
+import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
 import { TestDirection, toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 

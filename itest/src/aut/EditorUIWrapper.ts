@@ -1,6 +1,7 @@
 import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { ElementHandle } from "playwright-core";
+// ClassicEditorUI: See ckeditor/ckeditor5#12027.
 import type ClassicEditorUI from "@ckeditor/ckeditor5-editor-classic/src/classiceditorui";
 import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
 import { Locatable, visible } from "./Locatable";

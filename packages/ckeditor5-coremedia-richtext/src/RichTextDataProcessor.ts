@@ -1,26 +1,27 @@
-import ViewDocument from "@ckeditor/ckeditor5-engine/src/view/document";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import HtmlDataProcessor from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor";
-import { DataProcessor } from "@ckeditor/ckeditor5-engine/src/dataprocessor/dataprocessor";
+import {
+  ViewDocument,
+  ViewDocumentFragment,
+  HtmlDataProcessor,
+  DataProcessor,
+  DomConverter,
+} from "@ckeditor/ckeditor5-engine";
 import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import DomConverter from "@ckeditor/ckeditor5-engine/src/view/domconverter";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import ObservableMixin, { Observable } from "@ckeditor/ckeditor5-utils/src/observablemixin";
-import mix from "@ckeditor/ckeditor5-utils/src/mix";
-import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
+import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { Strictness } from "./Strictness";
-import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/Namespaces";
+import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/src/Namespaces";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
-import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/RuleBasedConversionListener";
-import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/HtmlDomConverter";
+import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/src/RuleBasedConversionListener";
+import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/src/HtmlDomConverter";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -53,7 +54,7 @@ export const isRichTextDataProcessor = (value: unknown): value is RichTextDataPr
 /**
  * Data-Processor for CoreMedia RichText 1.0.
  */
-class RichTextDataProcessor implements DataProcessor {
+export default class RichTextDataProcessor extends ObservableMixin() implements DataProcessor {
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
@@ -67,7 +68,7 @@ class RichTextDataProcessor implements DataProcessor {
    * Set of rules to apply on data view to data mapping (or: from CKEditor HTML
    * in data view to CoreMedia Rich Text 1.0 in data).
    *
-   * Note, that any update is expected to sort the rule sections according
+   * Note that any update is expected to sort the rule sections according
    * to their priority.
    */
   readonly #toDataRules: RuleSection[] = [];
@@ -75,7 +76,7 @@ class RichTextDataProcessor implements DataProcessor {
    * Set of rules to apply on view to data view mapping (or: from CoreMedia
    * Rich Text 1.0 in data to CKEditor HTML in data view).
    *
-   * Note, that any update is expected to sort the rule sections according
+   * Note that any update is expected to sort the rule sections according
    * to their priority.
    */
   readonly #toViewRules: RuleSection[] = [];
@@ -96,6 +97,8 @@ class RichTextDataProcessor implements DataProcessor {
    * @param editor - editor instance, the plugin belongs to
    */
   constructor(editor: Editor) {
+    super();
+
     const document: ViewDocument = editor.data.viewDocument;
 
     this.#delegate = new HtmlDataProcessor(document);
@@ -125,9 +128,6 @@ class RichTextDataProcessor implements DataProcessor {
      *
      * See also: ckeditor/ckeditor5#12324
      */
-    // @ts-expect-error Typings at DefinitelyTyped only allow this to contain
-    // `pre` element. But for TypeScript migration, CKEditor replaced typing
-    // by `string[]` instead.
     this.#delegate.domConverter.preElements.push("xdiff:span");
   }
 
@@ -141,7 +141,7 @@ class RichTextDataProcessor implements DataProcessor {
 
   /**
    * Adds a single rule without triggering resorting. Prior to adding,
-   * parses the configuration and adds result to corresponding sections
+   * parses the configuration and adds the result to corresponding sections
    * for `toData` or `toView` mapping or both.
    *
    * @param config - configuration to parse and add
@@ -159,7 +159,7 @@ class RichTextDataProcessor implements DataProcessor {
   /**
    * Adds a single rule configuration.
    *
-   * Note, that for adding multiple rules at once, `addRules` is preferred
+   * Note that for adding multiple rules at once, `addRules` is preferred
    * instead.
    *
    * @param config - configuration to add
@@ -213,7 +213,7 @@ class RichTextDataProcessor implements DataProcessor {
    *
    * @param data - data to transform
    */
-  toView(data: string): ViewDocumentFragment | null {
+  toView(data: string): ViewDocumentFragment {
     const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
 
@@ -252,11 +252,11 @@ class RichTextDataProcessor implements DataProcessor {
   }
 
   /**
-   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note, that
+   * Transforms CKEditor HTML to CoreMedia RichText 1.0. Note that
    * to trigger data processor for empty text as well, you have to set the
    * option `trim: 'none'` on `CKEditor.getData()`.
    *
-   * @param viewFragment - fragment from view model to process
+   * @param viewFragment - fragment from the view model to process
    * @returns CoreMedia RichText 1.0 XML as string
    */
   toData(viewFragment: ViewDocumentFragment): string {
@@ -298,7 +298,6 @@ class RichTextDataProcessor implements DataProcessor {
     htmlDomFragment: Node | DocumentFragment;
     fragmentAsStringForDebugging: string;
   } {
-    // @ts-expect-error Typings did not incorporate 35.0.1 signature change yet: 2nd Document Argument is gone.
     const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
 
@@ -391,10 +390,3 @@ class RichTextDataProcessor implements DataProcessor {
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RichTextDataProcessor extends Observable {}
-
-mix(RichTextDataProcessor, ObservableMixin);
-
-export default RichTextDataProcessor;

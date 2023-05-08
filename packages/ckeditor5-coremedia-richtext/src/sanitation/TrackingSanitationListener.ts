@@ -1,6 +1,6 @@
 import { AttributeCause, ElementCause, severeElementCauses } from "./Causes";
 import { SanitationListener } from "./SanitationListener";
-import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/HasNamespaceUris";
+import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/src/HasNamespaceUris";
 
 class TrackingState {
   removedElements: {
@@ -39,7 +39,7 @@ export type TrackingSanitationListenerConsole = Pick<Console, "debug" | "info" |
  * The tracking sanitation listener listens to sanitation events and especially
  * provides some statistics, which may help to optimize sanitation. Its main
  * purpose though is to report visible on possible misconfiguration, that needs
- * to be adapted. That is why on some events the final statistics is logged
+ * to be adapted. That is why in some events, the final statistics are logged
  * with a warning.
  */
 export class TrackingSanitationListener extends SanitationListener {
@@ -51,11 +51,11 @@ export class TrackingSanitationListener extends SanitationListener {
     this.#console = con;
   }
 
-  started() {
+  override started() {
     this.#state = new TrackingState();
   }
 
-  stopped() {
+  override stopped() {
     this.#state.endTimeStamp = performance.now();
     if (this.#state.hasSevereIssues()) {
       this.#console.warn(`Sanitation done with issues (turn on debug logging for details): ${this.#state}`);
@@ -64,16 +64,16 @@ export class TrackingSanitationListener extends SanitationListener {
     }
   }
 
-  fatal(...data: unknown[]) {
+  override fatal(...data: unknown[]) {
     this.#console.error(data);
   }
 
-  enteringElement(element: Element, depth: number) {
+  override enteringElement(element: Element, depth: number) {
     this.#state.visitedElements++;
     this.#state.maxElementDepth = Math.max(this.#state.maxElementDepth, depth);
   }
 
-  removeNode(node: Node, cause: ElementCause) {
+  override removeNode(node: Node, cause: ElementCause) {
     this.#state.removedElements.total++;
     if (severeElementCauses.includes(cause)) {
       this.#state.removedElements.severe++;
@@ -93,7 +93,7 @@ export class TrackingSanitationListener extends SanitationListener {
     }
   }
 
-  removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause) {
+  override removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause) {
     this.#console.debug(
       `Removing invalid attribute ${attr.localName} at ${attributeOwner.localName} (value: "${attr.value}"): ${cause}`
     );

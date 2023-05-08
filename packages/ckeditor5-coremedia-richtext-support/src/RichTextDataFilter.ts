@@ -1,7 +1,7 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import DataFilter from "@ckeditor/ckeditor5-html-support/src/datafilter";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { DataFilter } from "@ckeditor/ckeditor5-html-support";
 import ReducedMatcherPattern, {
   InheritingMatcherPattern,
   resolveInheritance,
@@ -9,7 +9,7 @@ import ReducedMatcherPattern, {
 } from "./ReducedMatcherPattern";
 import { COREMEDIA_RICHTEXT_1_0_CONFIG } from "./CoreMediaRichText10Dtd";
 import { getConfig } from "./CoreMediaRichTextSupportConfig";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**
  * Plugin, which configures CKEditor's General HTML Support, so that
@@ -24,7 +24,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * result of the default data-processing.
  */
 class RichTextDataFilter extends Plugin {
-  static readonly pluginName: string = "GeneralRichTextDataFilter";
+  public static readonly pluginName = "GeneralRichTextDataFilter" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(RichTextDataFilter.pluginName);
 
   static readonly requires = [DataFilter];
@@ -86,7 +86,7 @@ class RichTextDataFilter extends Plugin {
     ]);
 
     const config = getConfig(editor.config);
-    // Doing this as extra step, allows using previously introduced aliases
+    // Doing this as an extra step, allows using previously introduced aliases
     // (see above) as reference. Thus, you may also define an alias for
     // `<h1>` now.
     this.loadAliases(config.aliases ?? []);
@@ -106,13 +106,14 @@ class RichTextDataFilter extends Plugin {
    */
   #loadAllowedConfig(config: ReducedMatcherPattern[]): void {
     this.#config.push(...config);
+    //@ts-expect-errors since 37.0.0 Expects a type of MatcherPattern. First convert to a MatcherPattern?
     this.#delegate?.loadAllowedConfig(config);
   }
 
   /**
    * Adds the given inheriting patterns to the filter configuration.
-   * Patterns added this way, are available as inheritance pattern
-   * afterwards.
+   * Patterns added this way, are available as an inheritance pattern
+   * afterward.
    *
    * For convenience, also normal patterns not being an alias/not inheriting
    * another pattern, can be added this way.

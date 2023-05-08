@@ -1,23 +1,13 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import ClipboardPipeline from "@ckeditor/ckeditor5-clipboard/src/clipboardpipeline";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import ClipboardEventData from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
-import EventInfo from "@ckeditor/ckeditor5-utils/src/eventinfo";
-import { ifPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { ClipboardEventData, ClipboardPipeline } from "@ckeditor/ckeditor5-clipboard";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { DataTransfer as ViewDataTransfer, ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
+import { EventInfo } from "@ckeditor/ckeditor5-utils";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
-import { Mode } from "./FontMapping";
-
-export const COREMEDIA_FONT_MAPPER_CONFIG_KEY = "coremedia:fontMapper";
-export interface FontMapperConfigEntry {
-  font: string;
-  mode?: Mode;
-  map: Record<number, string>;
-}
-
-type FontMapperConfig = FontMapperConfigEntry[];
+import { COREMEDIA_FONT_MAPPER_CONFIG_KEY, FontMapperConfig, FontMapperConfigEntry } from "./FontMapperConfig";
 
 /**
  * This plugin maps characters of a given font-family to their alternative
@@ -54,7 +44,8 @@ type FontMapperConfig = FontMapperConfigEntry[];
  * has been applied.
  */
 export default class FontMapper extends Plugin {
-  static readonly pluginName: string = "FontMapper";
+  public static readonly pluginName = "FontMapper" as const;
+
   static readonly #logger: Logger = LoggerProvider.getLogger(FontMapper.pluginName);
 
   static readonly #supportedDataFormat: string = "text/html";
@@ -62,21 +53,28 @@ export default class FontMapper extends Plugin {
 
   static readonly requires = [ClipboardPipeline];
 
-  async init(): Promise<void> {
+  init(): void {
     const initInformation = reportInitStart(this);
 
-    const editor = this.editor;
-    const customFontMapperConfig: FontMapperConfig | undefined = editor.config.get(
-      COREMEDIA_FONT_MAPPER_CONFIG_KEY
-    ) as FontMapperConfig;
+    const { editor } = this;
+    const { config } = editor;
+
+    const customFontMapperConfig = config.get(COREMEDIA_FONT_MAPPER_CONFIG_KEY);
     FontMapper.#applyPluginConfig(customFontMapperConfig);
 
-    // We need to handle the input event AFTER it has been processed by the pasteFromOffice plugin (uses "high" priority), if enabled.
+    // We need to handle the input event AFTER it has been processed by the
+    // pasteFromOffice plugin (uses "high" priority), if enabled.
     // We also need to use a priority higher than "low" to process the input in time.
-    await ifPlugin(editor, ClipboardPipeline).then((p: Plugin) =>
-      this.listenTo(p, FontMapper.#clipboardEventName, FontMapper.#handleClipboardInputTransformationEvent, {
+
+    const clipboardPipeline = editor.plugins.get(ClipboardPipeline);
+    // TODO[cke] Check listenTo usage. Should use generics meanwhile.
+    this.listenTo(
+      clipboardPipeline,
+      FontMapper.#clipboardEventName,
+      FontMapper.#handleClipboardInputTransformationEvent,
+      {
         priority: "normal",
-      })
+      }
     );
 
     reportInitEnd(initInformation);
@@ -121,6 +119,6 @@ export default class FontMapper extends Plugin {
  * Event data of `clipboardInput` event in `view.Document`.
  */
 declare interface ClipboardInputEvent extends ClipboardEventData {
-  dataTransfer: DataTransfer;
+  dataTransfer: ViewDataTransfer;
   content?: ViewDocumentFragment;
 }

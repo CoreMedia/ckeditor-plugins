@@ -1,16 +1,15 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Node from "@ckeditor/ckeditor5-engine/src/model/node";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/RichtextConfigurationServiceDescriptor";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Writer, Node } from "@ckeditor/ckeditor5-engine";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import {
   CreateModelFunction,
   CreateModelFunctionCreator,
-} from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentToModelRegistry";
-import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboardEditing";
-import { ifPlugin, recommendPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+} from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentToModelRegistry";
+import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboardEditing";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
@@ -41,20 +40,18 @@ const createImageModelFunction: CreateImageModelFunction =
  * should be displayed as a preview image.
  */
 export default class ContentImageClipboardPlugin extends Plugin {
-  static readonly pluginName: string = "ContentImageClipboardPlugin";
+  static readonly pluginName = "ContentImageClipboardPlugin" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
 
-  async init(): Promise<void> {
+  init(): void {
     const logger = ContentImageClipboardPlugin.#logger;
     const { editor } = this;
 
     const initInformation = reportInitStart(this);
 
-    await ifPlugin(editor, ContentClipboardEditing)
-      .then((plugin) => {
-        plugin.registerToModelFunction("image", createImageModelFunctionCreator);
-      })
-      .catch(recommendPlugin("Creating Content Images from Clipboard not activated.", logger));
+    getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
+      logger.warn(`Recommended plugin ${pluginName} not found. Creating content images from clipboard not activated.`)
+    )?.registerToModelFunction("image", createImageModelFunctionCreator);
 
     reportInitEnd(initInformation);
   }

@@ -1,15 +1,9 @@
-import Command from "@ckeditor/ckeditor5-core/src/command";
-import Element from "@ckeditor/ckeditor5-engine/src/model/element";
-import Range from "@ckeditor/ckeditor5-engine/src/model/range";
-import Schema from "@ckeditor/ckeditor5-engine/src/model/schema";
+import { Command } from "@ckeditor/ckeditor5-core";
+import { Element, Range, Schema, DocumentSelection, Position, Model, Writer } from "@ckeditor/ckeditor5-engine";
 import { LINK_TARGET_MODEL } from "../Constants";
-import DocumentSelection from "@ckeditor/ckeditor5-engine/src/model/documentselection";
-import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/Constants";
-import first from "@ckeditor/ckeditor5-utils/src/first";
-import findAttributeRange from "@ckeditor/ckeditor5-typing/src/utils/findattributerange";
-import Position from "@ckeditor/ckeditor5-engine/src/model/position";
-import Model from "@ckeditor/ckeditor5-engine/src/model/model";
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
+import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/src/Constants";
+import { first } from "@ckeditor/ckeditor5-utils";
+import { findAttributeRange } from "@ckeditor/ckeditor5-typing";
 
 /**
  * Signals to delete a target.
@@ -29,7 +23,7 @@ class LinkTargetCommand extends Command {
   /**
    * Update value and enabled state.
    */
-  refresh(): void {
+  override refresh(): void {
     const model = this.editor.model;
     const document = model.document;
     const schema = model.schema;
@@ -120,7 +114,7 @@ class LinkTargetCommand extends Command {
    *
    * @param target - target to set; empty string/null/undefined to trigger removal of `linkTarget` attribute
    */
-  execute(target: Target): void {
+  override execute(target: Target): void {
     const editor = this.editor;
     const model = editor.model;
     const findCurrentLinkHrefRanges = LinkTargetCommand.#findCurrentLinkHrefRanges;
@@ -167,13 +161,15 @@ class LinkTargetCommand extends Command {
 
     if (selection.isCollapsed) {
       const findAttributeRanges = LinkTargetCommand.#findAttributeRanges;
-      return findAttributeRanges(
-        selection.getFirstPosition(),
-        LINK_HREF_MODEL,
-        // @ts-expect-error TODO Handle not yet handled types like number, etc.
-        selection?.getAttribute(LINK_HREF_MODEL),
-        model
-      );
+      const linkHrefModel = selection?.getAttribute(LINK_HREF_MODEL);
+
+      if (typeof linkHrefModel !== "string") {
+        throw new Error(
+          `Unexpected type for attribute ${LINK_HREF_MODEL}. Expected "string" but value is: ${linkHrefModel}`
+        );
+      }
+
+      return findAttributeRanges(selection.getFirstPosition(), LINK_HREF_MODEL, linkHrefModel, model);
     }
 
     return [...model.schema.getValidRanges([...selection.getRanges()], LINK_HREF_MODEL)];

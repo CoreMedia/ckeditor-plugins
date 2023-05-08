@@ -1,9 +1,9 @@
 import { replaceElementByElementAndClass } from "./ReplaceElementByElementAndClass";
 import { mergeTableSectionsToTableBody } from "./MergeTableSectionsToTableBody";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 
 /**
- * Applies bijective mapping for table header cells element.
+ * Applies bijective mapping for the table header cells element.
  *
  * ```xml
  * <td class="td--header">Lorem</td>
@@ -54,12 +54,12 @@ export const tableHeaderElements = replaceElementByElementAndClass({
  *
  * * **Attribute Handling:**
  *
- *   As there is no representation as element for `<thead>` and `<tfoot>` in
+ *   As there is no representation as an element for `<thead>` and `<tfoot>` in
  *   CoreMedia Rich Text 1.0, their attributes and those of `<tbody>` need to
- *   be dealt with. Decision for now is, that it is expected, that all share
+ *   be dealt with. The Decision for now is that it is expected that all share
  *   the same attributes. Thus, on `toData` processing all attributes are
- *   merged into `<tbody>` element, while on `toView` processing all resulting
- *   table sections will share the same attributes afterwards.
+ *   merged into the `<tbody>` element, while on `toView` processing all resulting
+ *   table sections will share the same attributes afterward.
  *
  *   This behavior may be changed with corresponding rules with higher
  *   priority.
@@ -80,7 +80,7 @@ export const tableHeaderElements = replaceElementByElementAndClass({
  *   corresponding data, once such a feature ships with CKEditor 5 or is
  *   provided via custom plugin.
  *
- *   Note though, that this mapping is not yet bijective: Multiple `<tbody>`
+ *   Note, though, that this mapping is not yet bijective: Multiple `<tbody>`
  *   sections are merged into one on `toData` processing and cannot be restored
  *   later. If this is required, you may want to store the corresponding
  *   body index in an artificial class attribute value, like `tr--body-1` and

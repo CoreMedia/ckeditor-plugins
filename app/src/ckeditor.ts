@@ -1,74 +1,71 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
-import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
-import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
-import Autosave from "@ckeditor/ckeditor5-autosave/src/autosave";
-import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
-import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
-import Code from "@ckeditor/ckeditor5-basic-styles/src/code";
-import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
-import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
-import FindAndReplace from "@ckeditor/ckeditor5-find-and-replace/src/findandreplace";
-import Heading from "@ckeditor/ckeditor5-heading/src/heading";
+import { Alignment } from "@ckeditor/ckeditor5-alignment";
+import { AutoLink, Link, LinkImage } from "@ckeditor/ckeditor5-link";
+import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
+import { Autosave } from "@ckeditor/ckeditor5-autosave";
+import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
+import { Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline } from "@ckeditor/ckeditor5-basic-styles";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
+import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
+import { Essentials } from "@ckeditor/ckeditor5-essentials";
+import { FindAndReplace } from "@ckeditor/ckeditor5-find-and-replace";
+import { Heading } from "@ckeditor/ckeditor5-heading";
+// ImageInline: See ckeditor/ckeditor5#12027.
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-import ImageTextAlternative from "@ckeditor/ckeditor5-image/src/imagetextalternative";
-import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
-import Indent from "@ckeditor/ckeditor5-indent/src/indent";
-import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
-import Link from "@ckeditor/ckeditor5-link/src/link";
-//@ts-expect-error not part of @types/ckeditor__ckeditor5-list@32.0.1, check for newer versions from time to time
-import DocumentList from "@ckeditor/ckeditor5-list/src/documentlist";
-import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
-import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
-import RemoveFormat from "@ckeditor/ckeditor5-remove-format/src/removeformat";
-import Strikethrough from "@ckeditor/ckeditor5-basic-styles/src/strikethrough";
-import SourceEditing from "@ckeditor/ckeditor5-source-editing/src/sourceediting";
-import Subscript from "@ckeditor/ckeditor5-basic-styles/src/subscript";
-import Superscript from "@ckeditor/ckeditor5-basic-styles/src/superscript";
-import Table from "@ckeditor/ckeditor5-table/src/table";
-import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar";
-import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline";
-import Highlight from "@ckeditor/ckeditor5-highlight/src/highlight";
+// ImageBlockEditing: See ckeditor/ckeditor5#12027.
 import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
-import LinkImage from "@ckeditor/ckeditor5-link/src/linkimage";
+import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
+import { Indent } from "@ckeditor/ckeditor5-indent";
+import { DocumentList } from "@ckeditor/ckeditor5-list";
+import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
+import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
+import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
+import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
+import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
+import { Highlight } from "@ckeditor/ckeditor5-highlight";
 
-import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
-import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
-import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
-import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
-import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
-
-import CoreMediaFontMapper from "@coremedia/ckeditor5-font-mapper/FontMapper";
-import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/MockStudioIntegration";
+import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
+import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
+import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
+import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
 import { setupPreview, updatePreview } from "./preview";
 import { initReadOnlyMode } from "./readOnlySupport";
 import { initExamples, setExampleData } from "./example-data";
-import CoreMediaStudioEssentials, {
+import {
+  CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   Strictness,
-} from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
+} from "@coremedia/ckeditor5-coremedia-studio-essentials";
 import { initInputExampleContent } from "./inputExampleContents";
-import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockContentPlugin";
+import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 
-import { Command, icons } from "@ckeditor/ckeditor5-core";
+import { Command, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "./dataFacade";
-import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockInputExamplePlugin";
-import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/rules/ReplaceElementByElementAndClass";
+import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
+import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/src/paste/PasteContentPlugin";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/src/rules/ReplaceElementByElementAndClass";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/compatibility/v10/rules/ReplaceBy";
+import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/src/compatibility/v10/rules/ReplaceBy";
 import { getHashParam } from "./HashParams";
-import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
-import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/LinkAttributesConfig";
-import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
+import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/src/contentlink/LinkBalloonConfig";
+import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/src/LinkAttributesConfig";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+
+/**
+ * Typings for CKEditorInspector, as it does not ship with typings yet.
+ */
+// See https://github.com/ckeditor/ckeditor5-inspector/issues/173
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+declare class CKEditorInspector {
+  static attach(editorOrConfig: Editor | Record<string, Editor>, options?: { isCollapsed?: boolean }): string[];
+}
 
 const {
-  //@ts-expect-error We have no way to extend icon typing, yet.
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
@@ -91,7 +88,7 @@ if (showHideExampleContentButton && inputExampleContentFrame) {
 
 setupPreview();
 
-const imagePlugins = [
+const imagePlugins: PluginConstructor[] = [
   ContentImagePlugin,
   ImageInline,
   ImageBlockEditing,
@@ -141,7 +138,7 @@ const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
  *
  * Similar to GHS/GRS, they are just registered as being _valid_ **and**
  * (this is important) register them to belong to a link element, which again
- * ensures, that they are removed on remove-link, that cursor positioning
+ * ensures that they are removed on remove-link, that cursor positioning
  * handles them correctly, etc.
  *
  * For demonstration purpose, the link attributes configuration can be disabled
@@ -157,7 +154,6 @@ const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttribu
     };
 
 ClassicEditor.create(sourceElement, {
-  licenseKey: "",
   placeholder: "Type your text here...",
   plugins: [
     ...imagePlugins,
@@ -208,7 +204,6 @@ ClassicEditor.create(sourceElement, {
     "bold",
     "italic",
     "underline",
-    //@ts-expect-error - incorrect types, types expect an array of strings here
     {
       label: "More formatting",
       icon: "threeVerticalDots",
@@ -238,7 +233,7 @@ ClassicEditor.create(sourceElement, {
   alignment: {
     // The following alternative to signal alignment was used in CKEditor 4
     // of CoreMedia CMCC 10 and before.
-    // Note, that in contrast to CKEditor 4 approach, these classes are now
+    // Note that in contrast to CKEditor 4 approach, these classes are now
     // applicable to any block element, while it supported only `<p>` in the
     // past.
     options: [
@@ -281,7 +276,7 @@ ClassicEditor.create(sourceElement, {
         label: "Title",
         attributes: {
           title:
-            'Example how standard-decorators of the link-plugin works. To enable/disable, just rename decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
+            'Example how standard-decorators of the link-plugin works. To enable/disable, just rename the decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
         },
       },
     },*/
@@ -315,6 +310,7 @@ ClassicEditor.create(sourceElement, {
           name: "inline",
           title: "Page default",
           icon: pageDefaultIcon,
+          modelElements: ["imageInline"],
         },
       ],
     },
@@ -336,13 +332,12 @@ ClassicEditor.create(sourceElement, {
   language: {
     // Language switch only applies to editor instance.
     ui: editorLanguage,
-    // Won't change language of content.
+    // Won't change the language of content.
     content: "en",
-    textPartLanguage: [],
   },
   autosave: {
     waitingTime: 1000, // in ms
-    save(currentEditor: ClassicEditor) {
+    save(currentEditor: Editor) {
       console.log("Save triggered...");
       const start = performance.now();
       return saveData(currentEditor, "autosave").then(() => {
@@ -353,8 +348,9 @@ ClassicEditor.create(sourceElement, {
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
     // Defaults to: Loose
     strictness: Strictness.STRICT,
-    // Latest is the default. Use v10 for first data-processor architecture,
+    // The Latest is the default. Use v10 for first data-processor architecture,
     // for example.
+    // @ts-expect-error - TODO[cke] 37.x Fix Typings
     compatibility: richTextCompatibility,
     rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
   },
@@ -381,8 +377,6 @@ ClassicEditor.create(sourceElement, {
   },
 })
   .then((newEditor: ClassicEditor) => {
-    // @ts-expect-error imported in html
-    // eslint-disable-next-line
     CKEditorInspector.attach(
       {
         "main-editor": newEditor,

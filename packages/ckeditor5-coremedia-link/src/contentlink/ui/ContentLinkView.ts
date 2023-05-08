@@ -1,16 +1,16 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentDisplayServiceDescriptor";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayServiceDescriptor";
 import { Subscription } from "rxjs";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentUriPath,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/content/ContentAsLink";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentAsLink";
+import { ButtonView } from "@ckeditor/ckeditor5-ui";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "@ckeditor/ckeditor5-core";
 
 /**
  * A ContentView that renders a custom template, containing of 2 different components.
@@ -38,8 +38,11 @@ export default class ContentLinkView extends ButtonView {
   readonly #statusIcon: CoreMediaIconView | undefined = undefined;
   readonly #cancelButton: ButtonView | undefined = undefined;
 
-  declare uriPath: string | undefined;
+  declare uriPath: string | null | undefined;
   declare contentName: string | undefined;
+  declare underlined: boolean;
+  declare renderAsTextLink: boolean;
+  declare ariaLabelText: string;
 
   constructor(
     editor: Editor,
@@ -151,6 +154,10 @@ export default class ContentLinkView extends ButtonView {
 
       this.#endContentSubscription();
 
+      const hasUriPath = this.hasUriPathProperty(evt.source);
+      if (!hasUriPath) {
+        return;
+      }
       const value = evt.source.uriPath;
       if (typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value)) {
         this.#subscribeToContent(requireContentUriPath(value));
@@ -158,7 +165,11 @@ export default class ContentLinkView extends ButtonView {
     });
   }
 
-  render(): void {
+  hasUriPathProperty(obj: object): obj is { uriPath: string } {
+    return "uriPath" in obj;
+  }
+
+  override render(): void {
     super.render();
     if (this.renderOptions?.renderStatusIcon) {
       if (!this.#statusIcon) {
@@ -228,7 +239,7 @@ export default class ContentLinkView extends ButtonView {
     return this.#cancelButton;
   }
 
-  destroy(): void {
+  override destroy(): void {
     // Prevent possible asynchronous events from re-triggering subscription.
     this.#acceptSubscriptions = false;
     this.#endContentSubscription();

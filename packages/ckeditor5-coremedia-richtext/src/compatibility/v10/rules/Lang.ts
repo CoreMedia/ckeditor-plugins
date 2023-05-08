@@ -2,16 +2,16 @@ import {
   asDataFilterRule,
   asViewFilterRule,
   preserveAttributeAs,
-} from "@coremedia/ckeditor5-dataprocessor-support/Attributes";
-import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/ElementProxy";
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/Rules";
+} from "@coremedia/ckeditor5-dataprocessor-support/src/Attributes";
+import { ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
+import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 
 /**
  * Maps `xml:lang` and `lang` from data (CoreMedia RichText) to `lang`.
  * Just as in the [standard definition](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-lang),
  * `xml:lang` is preferred over `lang` when both are set in CoreMedia RichText.
  *
- * Note, that on transformation to data, the language will always be stored
+ * Note that on transformation to data, the language will always be stored
  * in `xml:lang`.
  */
 const langMapper = preserveAttributeAs("xml:lang", "lang", "lang");

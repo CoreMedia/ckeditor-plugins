@@ -1,20 +1,21 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import View from "@ckeditor/ckeditor5-engine/src/view/view";
-import ViewDocumentFragment from "@ckeditor/ckeditor5-engine/src/view/documentfragment";
-import ViewElement from "@ckeditor/ckeditor5-engine/src/view/element";
+import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
+import {
+  View,
+  ViewDocumentFragment,
+  ViewElement,
+  TextProxy,
+  Element as ModelElement,
+  Node as ModelNode,
+} from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/content/WorkAreaServiceDescriptor";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
 import { openLink } from "@ckeditor/ckeditor5-link/src/utils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import TextProxy from "@ckeditor/ckeditor5-engine/src/model/textproxy";
-import ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
-import ModelNode from "@ckeditor/ckeditor5-engine/src/model/node";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import {
   isModelUriPath,
   requireContentUriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
+} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
 
 /**
@@ -31,7 +32,7 @@ import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
  * browser tab instead of the same tab and content links in a new work area tab.
  */
 export default class LinkUserActionsPlugin extends Plugin {
-  static readonly pluginName: string = "LinkUserActionsPlugin";
+  public static readonly pluginName = "LinkUserActionsPlugin" as const;
   static readonly LOG: Logger = LoggerProvider.getLogger(LinkUserActionsPlugin.pluginName);
   static readonly requires = [];
 

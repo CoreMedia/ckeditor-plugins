@@ -1,5 +1,4 @@
-import Writer from "@ckeditor/ckeditor5-engine/src/model/writer";
-import Node from "@ckeditor/ckeditor5-engine/src/model/node";
+import { Writer, Node } from "@ckeditor/ckeditor5-engine";
 
 export type CreateModelFunction = (writer: Writer) => Node;
 export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
@@ -12,15 +11,8 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
  * All registry entries will then be evaluated in the {@link DataToModelMechanism} to
  * properly insert a content object with a given type (e.g. "link" or "image").
  *
- * The ContentToModelRegistry can be accessed by other plugins via the {@link ContentClipboardEditing} plugin.
- *
- * @example
- * ```
- * await ifPlugin(editor, ContentClipboardEditing)
-      .then((plugin) => {
-        plugin.registerToModelFunction(type, createLinkModelFunctionCreator);
-      })
- * ```
+ * The ContentToModelRegistry can be accessed by other plugins via the
+ * {@link ContentClipboardEditing} plugin.
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class ContentToModelRegistry {

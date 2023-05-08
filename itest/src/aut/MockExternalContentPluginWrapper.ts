@@ -2,7 +2,7 @@ import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import MockExternalContentPlugin, {
   MockExternalContent,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/content/MockExternalContentPlugin";
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockExternalContentPlugin";
 
 /**
  * Provides access to the `MockExternalContentPlugin`.
@@ -36,7 +36,7 @@ export class MockExternalContentPluginWrapper extends JSWrapper<MockExternalCont
         }
         // We need to access the plugin via its name rather than via descriptor,
         // as the descriptor is unknown in remote context.
-        return editor.plugins.get(pluginName) as MockExternalContentPlugin;
+        return editor.plugins.get(pluginName) as unknown as MockExternalContentPlugin;
       }, MockExternalContentPlugin.pluginName)
     );
   }

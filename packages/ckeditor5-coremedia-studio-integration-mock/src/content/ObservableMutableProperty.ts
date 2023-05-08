@@ -113,7 +113,7 @@ class MutablePropertyObservationHandler<T> {
       }
 
       // Start looping.
-      timerId = setTimeout(handler, changeDelayMs);
+      timerId = window.setTimeout(handler, changeDelayMs);
       // Required for immediate call.
       return timerId;
     };
@@ -122,13 +122,13 @@ class MutablePropertyObservationHandler<T> {
     if (initialDelayMs < 1) {
       timerId = handler() ?? undefined;
     } else {
-      timerId = setTimeout(handler, initialDelayMs);
+      timerId = window.setTimeout(handler, initialDelayMs);
     }
 
     return () => {
       // Does nothing, if timerId is undefined.
       // see https://developer.mozilla.org/en-US/docs/Web/API/clearTimeout#notes
-      clearTimeout(timerId);
+      window.clearTimeout(timerId);
     };
   };
 

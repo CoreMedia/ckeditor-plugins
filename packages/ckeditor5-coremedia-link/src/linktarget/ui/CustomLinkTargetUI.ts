@@ -1,18 +1,14 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import ContextualBalloon from "@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon";
-import Locale from "@ckeditor/ckeditor5-utils/src/locale";
-import { Options } from "@ckeditor/ckeditor5-utils/src/dom/position";
+import { Plugin, Command } from "@ckeditor/ckeditor5-core";
+import { ButtonView, ContextualBalloon, clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
+import { Locale, Config, PositionOptions } from "@ckeditor/ckeditor5-utils";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
-import LinkUI from "@ckeditor/ckeditor5-link/src/linkui";
-import Config from "@ckeditor/ckeditor5-utils/src/config";
-import clickOutsideHandler from "@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler";
+import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
-import Command from "@ckeditor/ckeditor5-core/src/command";
-import { requireEditorWithUI } from "@coremedia/ckeditor5-core-common/Editors";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
+import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -20,7 +16,7 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/Commands";
  * `linkTarget`.
  */
 export default class CustomLinkTargetUI extends Plugin {
-  static readonly pluginName: string = "CustomLinkTargetUI";
+  public static readonly pluginName = "CustomLinkTargetUI" as const;
 
   static readonly customTargetButtonName: string = "customLinkTargetButton";
 
@@ -62,7 +58,7 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns well-defined attribute values, which should not be handled by `_other` in `otherNames`;
    * button-configuration in `myConfig`
    */
-  #parseConfig(config: Config): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
+  #parseConfig(config: Config<EditorConfig>): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
     const linkTargetDefinitions = parseLinkTargetConfig(config);
 
     const otherNames = linkTargetDefinitions
@@ -90,7 +86,7 @@ export default class CustomLinkTargetUI extends Plugin {
     const editor = this.editor;
     const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
-    const { ui } = requireEditorWithUI(this.editor);
+    const { ui } = this.editor;
 
     ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
       const view = new ButtonView(locale);
@@ -122,9 +118,8 @@ export default class CustomLinkTargetUI extends Plugin {
        * although it will open with an empty editor when clicked (as specified, as we may fix the orphaned value of
        * xlink:show="other" this way).
        */
-      // @ts-expect-error TODO Check Typings
-      view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: string) => {
-        if (isOn && value !== OTHER_TARGET_NAME) {
+      view.bind("tooltip").to(view, "isOn", linkTargetCommand, "value", (isOn: boolean, value: unknown) => {
+        if (isOn && value !== OTHER_TARGET_NAME && typeof value === "string") {
           return `${this.editor.locale.t(definition.title)}: "${this.editor.locale.t(value)}"`;
         }
         return true;
@@ -173,12 +168,17 @@ export default class CustomLinkTargetUI extends Plugin {
       cancel();
     });
 
+    const { element } = this.#balloon.view;
+
+    if (!element) {
+      throw new Error("Unexpected state. Element of balloon view is unavailable.");
+    }
+
     // Close on click outside of balloon panel element.
     clickOutsideHandler({
       emitter: this.#form,
       activator: () => this.#isVisible,
-      // @ts-expect-error TODO Handle possible null values.
-      contextElements: [this.#balloon.view.element],
+      contextElements: [element],
       callback: () => this.#hideForm(),
     });
   }
@@ -216,8 +216,6 @@ export default class CustomLinkTargetUI extends Plugin {
     // https://github.com/ckeditor/ckeditor5-image/issues/114
     labeledInput.fieldView.value = (labeledInput.fieldView.element as HTMLInputElement).value = initialValue;
 
-    // @ts-expect-error TODO Check Typings/Usage
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.#form.labeledInput.fieldView.select();
 
     this.#form.enableCssTransitions();
@@ -264,9 +262,29 @@ export default class CustomLinkTargetUI extends Plugin {
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
-  #getBalloonPositionData(): Options {
-    // @ts-expect-error TODO Check Typings/Usage (most likely private API, we need to deal with somehow).
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    return this.linkUI._getBalloonPositionData() as Options;
+  #getBalloonPositionData(): Partial<PositionOptions> {
+    const { linkUI } = this;
+    return asHasGetBalloonPositionData(linkUI)._getBalloonPositionData();
   }
 }
+
+/**
+ * Exposes private API of LinkUI.
+ */
+interface HasGetBalloonPositionData {
+  _getBalloonPositionData(): Partial<PositionOptions>;
+}
+
+const isHasGetBalloonPositionData = (value: unknown): value is HasGetBalloonPositionData =>
+  typeof value === "object" &&
+  !!value &&
+  "_getBalloonPositionData" in value &&
+  typeof value._getBalloonPositionData === "function";
+
+const asHasGetBalloonPositionData = (value: unknown): HasGetBalloonPositionData => {
+  if (isHasGetBalloonPositionData(value)) {
+    return value;
+  }
+  console.debug("Required internal API _getBalloonPositionData unavailable.", value);
+  throw new IncompatibleInternalApiUsageError("Required internal API _getBalloonPositionData unavailable.");
+};

@@ -3,7 +3,18 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint", "jsdoc", "eslint-plugin-tsdoc", "no-null", "import", "unused-imports"],
   root: true,
-  ignorePatterns: ["dist/", "docs/", "node_modules/", "*.orig"],
+  ignorePatterns: [
+    // Ignore compiled JavaScript files (old build setup, changed on 2023-05-04 to _build to src/_.
+    "dist/",
+    "docs/",
+    "node_modules/",
+    "typings/",
+    "*.orig",
+    // Ignore compiled JavaScript files, as they are generated automatically.
+    "**/src/**/*.js",
+    // Also, do not check typing declarations, too.
+    "**/src/**/*.d.ts",
+  ],
   overrides: [
     {
       files: ["**/*.js", "**/*.ts", "**/*.tsx"],

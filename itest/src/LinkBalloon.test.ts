@@ -1,7 +1,7 @@
 import "./expect/Expectations";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/content/UriPath";
-import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/RichTextBase";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
 
 describe("Link Balloon", () => {
   let application: ApplicationWrapper;

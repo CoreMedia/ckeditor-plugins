@@ -1,8 +1,7 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import priorities from "@ckeditor/ckeditor5-utils/src/priorities";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
+import { Plugin } from "@ckeditor/ckeditor5-core";
+import { priorities } from "@ckeditor/ckeditor5-utils";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * This plugin provides an extension point, to wait for (optional)
@@ -15,7 +14,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  * to provide some better integration point.
  */
 export class PluginIntegrationHook extends Plugin {
-  static readonly pluginName: string = "PluginIntegrationHook";
+  static readonly pluginName = "PluginIntegrationHook";
   static readonly #logger: Logger = LoggerProvider.getLogger(PluginIntegrationHook.pluginName);
 
   init(): void {

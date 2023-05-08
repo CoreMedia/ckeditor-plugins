@@ -15,7 +15,7 @@ export interface AttributeDefinitionConfig {
    */
   prefix?: string | null;
   /**
-   * Namespace URI of attribute. If unset, may be guessed from prefix, if it
+   * Namespace URI of attribute. If unset, it may be guessed from prefix if it
    * is a well-known prefix.
    */
   namespaceURI?: string | null;
@@ -24,7 +24,7 @@ export interface AttributeDefinitionConfig {
    */
   required?: string | false;
   /**
-   * If the value is fixed. It is expected, that at least strict validation
+   * If the value is fixed. It is expected that at least strict validation
    * would consider any other value despite the fixed value as invalid.
    */
   fixed?: string | null;
@@ -56,7 +56,7 @@ export const parseAttributeDefinitionConfig = (config: AttributeDefinitionConfig
   const content = config.content ?? acAny;
   // eslint-disable-next-line no-null/no-null
   const prefix = config.prefix ?? null;
-  // Simplified to fall back to default namespace. May need to be adjusted, if
+  // Simplified to fall back to default namespace. May need to be adjusted if
   // we want to provide more sophisticated namespace support.
   let namespaceURI = config.namespaceURI ?? namespaces.default;
   if (!namespaceURI && isKnownNamespacePrefix(prefix)) {

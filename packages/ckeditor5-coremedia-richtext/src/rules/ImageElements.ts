@@ -4,9 +4,9 @@ import {
   setXLinkAttributes,
   setXLinkDataSetEntries,
 } from "./XLink";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/Rule";
-import { isHTMLImageElement } from "@coremedia/ckeditor5-dom-support/HTMLImageElements";
-import { isElement } from "@coremedia/ckeditor5-dom-support/Elements";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { isHTMLImageElement } from "@coremedia/ckeditor5-dom-support/src/HTMLImageElements";
+import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
 import { namespaces } from "../Namespaces";
 
 /**
@@ -24,14 +24,14 @@ export const imageElements: RuleConfig = {
     prepare: (node): void => {
       if (isHTMLImageElement(node)) {
         setXLinkAttributes(node, extractXLinkDataSetEntries(node));
-        // Ensure, that alt attribute is set as required in data.
+        // Ensure that alt attribute is set as required in data.
         node.alt = node.alt ?? "";
         // src attribute only contains a link to some displayable blob and
         // is not meant to be stored in data. Blob references are stored
         // in xlink:href, which are tracked separately.
         node.removeAttribute("src");
         // title: The title is used to provide a tooltip for the linked
-        // image content. It should not even occur on data-processing layer.
+        // image content. It should not even occur on the data-processing layer.
         // The xlink:title instead is stored in data-xlink-title handled
         // above in setXLinkAttributes.
         node.removeAttribute("title");

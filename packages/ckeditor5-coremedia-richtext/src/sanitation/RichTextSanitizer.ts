@@ -1,12 +1,12 @@
 import { ActiveStrictness, Strictness } from "../Strictness";
 import { SanitationListener, silentSanitationListener } from "./SanitationListener";
 import { namespaces } from "../Namespaces";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/ParentNodes";
+import { isParentNode } from "@coremedia/ckeditor5-dom-support/src/ParentNodes";
 import { supportedElements } from "./RichTextDtd";
 
 /**
  * Sanitizes CoreMedia Rich Text 1.0, so that it can be stored at CoreMedia CMS
- * without validation issues. Note, that less strict checking may violate this
+ * without validation issues. Note that less strict checking may violate this
  * goal.
  */
 export class RichTextSanitizer {
@@ -65,7 +65,7 @@ export class RichTextSanitizer {
   }
 
   /**
-   * Sanitizes a given element. As checks for allowed children is only
+   * Sanitizes a given element. As checks for allowed children are only
    * possible, when processing of children finished, child nodes will be
    * sanitized first as recursive call.
    *
@@ -91,7 +91,7 @@ export class RichTextSanitizer {
     // processing the parent element.
     if (!prefix) {
       // If this element is not supported, it is expected to be cleaned up
-      // when parent node is processed. This again requires, that the root
+      //  when the parent node is processed. This again requires that the root
       // element gets extra processing applied.
       supportedElements[localName]?.process(element, strictness, listener);
     }

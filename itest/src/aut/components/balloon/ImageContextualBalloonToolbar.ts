@@ -1,7 +1,6 @@
 import ToolbarViewWrapper from "../ToolbarViewWrapper";
 import ButtonViewWrapper from "./ButtonViewWrapper";
-import type { ButtonView } from "@ckeditor/ckeditor5-ui";
-import type { ItemsView } from "@ckeditor/ckeditor5-ui/src/toolbar/toolbarview";
+import { type ButtonView, ToolbarView } from "@ckeditor/ckeditor5-ui";
 
 export default class ImageContextualBalloonToolbar {
   #toolbarViewWrapper: ToolbarViewWrapper;
@@ -36,12 +35,12 @@ export default class ImageContextualBalloonToolbar {
 
   #getButtonViewWrapper(buttonIndex: number): ButtonViewWrapper {
     const buttonInstance = this.#toolbarViewWrapper.evaluateHandle((toolbarView, buttonIndex: number) => {
-      const itemsView: unknown = toolbarView.children.get(0) as unknown as ItemsView;
+      const itemsView: unknown = toolbarView.children.get(0) as unknown as ToolbarView;
       if (!itemsView) {
-        throw new Error("Toolbarview has no items view");
+        throw new Error("ToolbarView has no items view");
       }
 
-      const buttonView = (itemsView as ItemsView).children.get(buttonIndex) as unknown as ButtonView;
+      const buttonView = (itemsView as ToolbarView).children.get(buttonIndex) as unknown as ButtonView;
       if (!buttonView) {
         throw new Error(`No button found for button index ${buttonIndex}.`);
       }

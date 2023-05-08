@@ -1,10 +1,10 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/Plugins";
-import Logger from "@coremedia/ckeditor5-logging/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
 
 /**
@@ -34,7 +34,7 @@ import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataPro
  * ```
  */
 export default class Differencing extends Plugin {
-  static readonly pluginName: string = "Differencing";
+  static readonly pluginName = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport, RichTextDataProcessorIntegration];
   static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
 
