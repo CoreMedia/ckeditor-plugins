@@ -6,8 +6,8 @@ import "../lang/contentImageOpenInTab";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 import { executeOpenImageInTabCommand, requireOpenImageInTabCommand } from "./OpenImageInTabCommand";
-import Logger from "@coremedia/ckeditor5-logging/dist/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/dist/src/logging/LoggerProvider";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in
