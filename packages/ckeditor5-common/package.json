@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-common",
-  "version": "14.1.2-rc.1",
+  "version": "14.1.2-rc.2",
   "description": "Common Utilities, independent from CKEditor",
   "keywords": [
     "coremedia"
@@ -19,7 +19,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "14.1.2-rc.1"
+    "@coremedia/ckeditor5-logging": "14.1.2-rc.2"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
