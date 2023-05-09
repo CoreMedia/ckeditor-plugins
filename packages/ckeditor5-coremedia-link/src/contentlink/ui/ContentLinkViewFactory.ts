@@ -50,7 +50,13 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
     const { uriPath } = fieldView;
     if (typeof uriPath === "string") {
       logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
-      executeOpenContentInTabCommand(editor, [requireContentUriPath(uriPath)]);
+      executeOpenContentInTabCommand(editor, [requireContentUriPath(uriPath)])
+        ?.then((result) => {
+          logger.debug("Result for OpenContentInTabCommand by click:", result);
+        })
+        .catch((reason) => {
+          logger.warn("Failed executing OpenContentInTabCommand invoked by click:", reason);
+        });
     }
   });
 

@@ -121,7 +121,13 @@ class ContentLinkActionsViewExtension extends Plugin {
       if (uriPath) {
         logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
         const uriPaths: UriPath[] = [requireContentUriPath(uriPath)];
-        executeOpenContentInTabCommand(this.editor, uriPaths);
+        executeOpenContentInTabCommand(this.editor, uriPaths)
+          ?.then((result) => {
+            logger.debug("Result for OpenContentInTabCommand by click:", result);
+          })
+          .catch((reason) => {
+            logger.warn("Failed executing OpenContentInTabCommand invoked by click:", reason);
+          });
       }
     });
 
