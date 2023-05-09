@@ -5,7 +5,7 @@ import { LinkUI } from "@ckeditor/ckeditor5-link";
 // LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { requireContentUriPath, isModelUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
@@ -67,9 +67,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     const bindContentUriPathTo = (command: Command): void => {
       actionsView
         .bind("contentUriPath")
-        .to(command, "value", (value: unknown) =>
-          typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
-        );
+        .to(command, "value", (value: unknown) => (isModelUriPath(value) ? value : undefined));
     };
 
     ifCommand(editor, LINK_COMMAND_NAME)
@@ -122,7 +120,8 @@ class ContentLinkActionsViewExtension extends Plugin {
       const { uriPath } = contentLinkView;
       if (uriPath) {
         logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
-        executeOpenContentInTabCommand(this.editor, [uriPath]);
+        const uriPaths: UriPath[] = [requireContentUriPath(uriPath)];
+        executeOpenContentInTabCommand(this.editor, uriPaths);
       }
     });
 
@@ -140,7 +139,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       actionsView.set({
-        contentUriPath: CONTENT_CKE_MODEL_URI_REGEXP.test(initialValue) ? initialValue : null,
+        contentUriPath: isModelUriPath(initialValue) ? initialValue : null,
       });
     });
   }

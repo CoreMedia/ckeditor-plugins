@@ -6,6 +6,7 @@ import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { LinkUI } from "@ckeditor/ckeditor5-link";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
+import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.
@@ -49,7 +50,7 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
     const { uriPath } = fieldView;
     if (typeof uriPath === "string") {
       logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
-      executeOpenContentInTabCommand(editor, [uriPath]);
+      executeOpenContentInTabCommand(editor, [requireContentUriPath(uriPath)]);
     }
   });
 

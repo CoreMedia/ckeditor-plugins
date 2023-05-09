@@ -2,6 +2,7 @@ import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/com
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Default command name used to register at editor instance.
@@ -73,6 +74,6 @@ export const requireOpenImageInTabCommand = (
  */
 export const executeOpenImageInTabCommand = (
   editor: Editor,
-  uriPaths: string[] = [],
+  uriPaths: UriPath[] = [],
   name = openImageInTabCommandName
 ) => editor.commands.get(name)?.execute(...uriPaths);

@@ -10,4 +10,7 @@ export { createRichtextConfigurationServiceDescriptor } from "./content/Richtext
 
 // Helpers
 export { UriPath } from "./content/UriPath";
+export { requireContentUriPath } from "./content/UriPath";
+export { isModelUriPath } from "./content/UriPath";
+
 export { default as ContentAsLink } from "./content/ContentAsLink";
