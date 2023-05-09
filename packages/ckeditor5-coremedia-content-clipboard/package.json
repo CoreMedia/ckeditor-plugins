@@ -7,7 +7,7 @@
     "ckeditor5",
     "clipboard"
   ],
-  "version": "15.0.1-rc.0",
+  "version": "15.0.1-rc.1",
   "engines": {
     "node": "18",
     "pnpm": "^8.1"
@@ -56,9 +56,9 @@
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "15.0.1-rc.0",
-    "@coremedia/ckeditor5-core-common": "15.0.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "15.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "15.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "15.0.1-rc.1",
+    "@coremedia/ckeditor5-core-common": "15.0.1-rc.1",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "15.0.1-rc.1",
+    "@coremedia/ckeditor5-logging": "15.0.1-rc.1"
   }
 }
