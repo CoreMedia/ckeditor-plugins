@@ -3,6 +3,7 @@ import first from "@ckeditor/ckeditor5-utils/src/first";
 import type Schema from "@ckeditor/ckeditor5-engine/src/model/schema";
 import type ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
 import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Default command name used to register at editor instance.
@@ -60,7 +61,7 @@ export const registerOpenContentInTabCommand = (editor: Editor, name = openConte
  */
 export const executeOpenContentInTabCommand = (
   editor: Editor,
-  uriPaths: string[] = [],
+  uriPaths: UriPath[] = [],
   name = openContentInTabCommandName
 ) => editor.commands.get(name)?.execute(...uriPaths);
 
