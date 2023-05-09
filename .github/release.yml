@@ -1,0 +1,24 @@
+# .github/release.yml
+# https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
+
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - release:major
+        - breaking
+    - title: New Features 🎉
+      labels:
+        - type:feature
+    - title: Improvements 💪
+      labels:
+        - type:improvement
+    - title: Bug Fixes 🩹
+      labels:
+        - type:bug
+    - title: Other Changes
+      labels:
+        - "*"
