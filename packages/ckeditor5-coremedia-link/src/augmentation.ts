@@ -30,7 +30,7 @@ declare module "@ckeditor/ckeditor5-core" {
   interface CommandsMap {
     // While part of ckeditor5-coremedia-content, the command is added here
     // within the ContentLinks plugin. Thus, we should declare it here.
-    openLinkInTab: OpenContentInTabCommand;
+    [ContentLinks.openLinkInTab]: OpenContentInTabCommand;
     linkTarget: LinkTargetCommand;
   }
 }

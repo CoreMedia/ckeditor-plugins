@@ -8,7 +8,7 @@ import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 /**
  * Default command name used to register at editor instance.
  */
-export const openContentInTabCommandName = "openContentInTab";
+export const openContentInTabCommandName = "openContentInTab" as const;
 
 /**
  * A command to open either a given URI path (on `execute`) or the URI path

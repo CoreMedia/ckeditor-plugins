@@ -21,7 +21,7 @@ import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 import { Observable } from "@ckeditor/ckeditor5-utils";
 import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
-import { registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
+import { openContentInTabCommandName, registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.
@@ -29,6 +29,8 @@ import { registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
  */
 export default class ContentLinks extends Plugin {
   public static readonly pluginName = "ContentLinks" as const;
+
+  static readonly openLinkInTab = openContentInTabCommandName;
 
   #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
   #serviceRegisteredSubscription: Subscription | undefined = undefined;
