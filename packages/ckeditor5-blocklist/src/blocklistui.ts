@@ -49,6 +49,9 @@ export default class Blocklistui extends Plugin {
 
     this.blocklistActionsView.bind("blockedWords").to(blocklistCommand, "value");
 
+    // listen to changes in blocklistCommand and refresh the list in the blocklist view accordingly
+    blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
+
     // TODO remove this line
     blocklistCommand.set("value", ["Blocklisted", "Words"]);
   }

@@ -1,14 +1,9 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
- */
-
-/**
  * @module blocklist/ui/blocklistactionsview
  */
 
-import { View, ViewCollection, FocusCycler } from "@ckeditor/ckeditor5-ui";
-import { FocusTracker, KeystrokeHandler, type LocaleTranslate, type Locale } from "@ckeditor/ckeditor5-utils";
+import { View, ViewCollection, FocusCycler, ListView } from "@ckeditor/ckeditor5-ui";
+import { FocusTracker, KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import BlocklistInputView from "./blocklistInputView";
 import BlockedWordView from "./blockedWordView";
@@ -18,41 +13,45 @@ import BlockedWordView from "./blockedWordView";
  * to add new words to the list.
  */
 export default class BlocklistActionsView extends View {
+  // Focus handling
   readonly focusTracker = new FocusTracker();
-
   readonly keystrokes = new KeystrokeHandler();
-
-  blocklistInputView: BlocklistInputView;
-
-  blockedWordViews: BlockedWordView[];
-
-  /**
-   * And array of blocked words.
-   * This field is controlled via the blocklistCommand.
-   * Every word in this array will create a new BlockedWordView to display the given value.
-   *
-   */
-  public declare blockedWords: string[];
-
-  /**
-   * A collection of views that can be focused in the view.
-   */
   readonly #focusables = new ViewCollection();
-
   readonly #focusCycler: FocusCycler;
 
-  public declare t: LocaleTranslate;
+  /**
+   * A view, holding an input field to add new words to the list.
+   */
+  blocklistInputView: BlocklistInputView;
+
+  /**
+   * A list, displaying currently selected words from the list.
+   */
+  blockedWordlistView: ListView;
+
+  /**
+   * The editor instance.
+   */
+  editor: Editor;
+
+  /**
+   * The list of words, to be displayed in this view.
+   * Used to create a ViewList, that represents the words in the current selection.
+   */
+  public declare blockedWords: string[];
 
   constructor(editor: Editor) {
     super(editor.locale);
 
-    // TODO remove this line
-    this.blockedWords = ["hello", "world"];
+    this.editor = editor;
 
+    this.blockedWords = [];
+
+    // create all views
     this.blocklistInputView = this.createBlocklistInputView(editor.locale);
+    this.blockedWordlistView = this.createBlockedWordListView(editor.locale);
 
-    this.blockedWordViews = this.createBlockedWordsViews(editor.locale);
-
+    // init focus handling
     this.#focusCycler = new FocusCycler({
       focusables: this.#focusables,
       focusTracker: this.focusTracker,
@@ -66,25 +65,30 @@ export default class BlocklistActionsView extends View {
       },
     });
 
+    // set the view template
     this.setTemplate({
       tag: "div",
-
       attributes: {
         class: ["ck", "cm-ck-blocklist-form", "ck-vertical-form"],
-
-        // https://github.com/ckeditor/ckeditor5-link/issues/90
         tabindex: "-1",
       },
+      children: [this.blockedWordlistView, this.blocklistInputView],
+    });
+  }
 
-      children: [...this.blockedWordViews, this.blocklistInputView],
+  refreshList() {
+    this.blockedWordlistView.items.clear();
+    this.blockedWords.forEach((word) => {
+      const view = new BlockedWordView(this.editor.locale);
+      view.set("label", word);
+      this.blockedWordlistView.items.add(view);
     });
   }
 
   public override render(): void {
     super.render();
 
-    const childViews = [...this.blockedWordViews, this.blocklistInputView];
-
+    const childViews = [this.blockedWordlistView, this.blocklistInputView];
     childViews.forEach((childView) => {
       // Register the view as focusable.
       this.#focusables.add(childView);
@@ -103,7 +107,6 @@ export default class BlocklistActionsView extends View {
 
   public override destroy(): void {
     super.destroy();
-
     this.focusTracker.destroy();
     this.keystrokes.destroy();
   }
@@ -112,16 +115,28 @@ export default class BlocklistActionsView extends View {
     this.#focusCycler.focusFirst();
   }
 
+  /**
+   * Creates the input view, used to add new words to the list.
+   *
+   * @param locale - the editor's locale.
+   */
   createBlocklistInputView(locale: Locale): BlocklistInputView {
-    const blockListInputView = new BlocklistInputView(locale);
-    return blockListInputView;
+    return new BlocklistInputView(locale);
   }
 
-  createBlockedWordsViews(locale: Locale): BlockedWordView[] {
-    return this.blockedWords.map((word) => {
+  /**
+   * Creates the list view, used to display all words in the list,
+   * based on the current selection inside the editor.
+   *
+   * @param locale - the editor's locale.
+   */
+  createBlockedWordListView(locale: Locale): ListView {
+    const listView = new ListView();
+    this.blockedWords.forEach((word) => {
       const view = new BlockedWordView(locale);
       view.set("label", word);
-      return view;
+      listView.items.add(view);
     });
+    return listView;
   }
 }
