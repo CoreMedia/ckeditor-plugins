@@ -41,6 +41,7 @@
     "@coremedia/ckeditor5-coremedia-differencing": "^15.0.1",
     "@coremedia/ckeditor5-coremedia-images": "^15.0.1",
     "@coremedia/ckeditor5-coremedia-link": "^15.0.1",
+    "@coremedia/ckeditor5-coremedia-blocklist": "^15.0.1",
     "@coremedia/ckeditor5-coremedia-richtext": "^15.0.1",
     "@coremedia/ckeditor5-coremedia-studio-essentials": "^15.0.1",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "^15.0.1",

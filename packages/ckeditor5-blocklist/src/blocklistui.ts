@@ -1,0 +1,297 @@
+import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
+import Command from "@ckeditor/ckeditor5-core/src/command";
+import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
+import blocklistIcon from "../theme/icons/blacklist.svg";
+import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { ViewDocumentClickEvent } from "@ckeditor/ckeditor5-engine";
+import { PositionOptions } from "@ckeditor/ckeditor5-utils";
+import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
+import BlocklistActionsView from "./ui/blocklistActionsView";
+import "./lang/blocklist";
+
+const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
+
+/**
+ * The Blocklist UI plugin. It introduces the `'blocklist'` button and support for the <kbd>Ctrl+Shift+B</kbd> keystroke.
+ * It also creates the views, that are displayed inside the contextual balloon when triggered by the button, click or
+ * keystroke.
+ *
+ * It uses the
+ * {@link module:ui/panel/balloon/contextualballoon~ContextualBalloon contextual balloon plugin}.
+ */
+export default class Blocklistui extends Plugin {
+  static readonly pluginName: string = "BlocklistUI";
+  static readonly requires = [ContextualBalloon];
+
+  blocklistActionsView: BlocklistActionsView;
+
+  #balloon: ContextualBalloon | undefined = undefined;
+
+  constructor(editor: Editor) {
+    super(editor);
+    this.blocklistActionsView = this.#createBlocklistActionsView();
+  }
+
+  async init(): Promise<void> {
+    const editor = this.editor;
+    const blocklistCommand: BlocklistCommand = (await ifCommand(editor, BLOCKLIST_COMMAND_NAME)) as BlocklistCommand;
+
+    this.#balloon = editor.plugins.get(ContextualBalloon);
+
+    // listen to click and key events to open the blocklist balloon
+    this.#initBalloonListeners();
+
+    // adds a blocklist button to the componentFactory
+    this.#createBlocklistToolbarButton(blocklistCommand);
+
+    // listen to click and key events while the balloon is open (to navigate or close the balloon)
+    this.#initBalloonViewListeners();
+
+    this.blocklistActionsView.bind("blockedWords").to(blocklistCommand, "value");
+
+    // TODO remove this line
+    blocklistCommand.set("value", ["Blocklisted", "Words"]);
+  }
+
+  /**
+   * Creates the blocklist view, that will be displayed inside a contextual balloon.
+   * Also registers a listener to close the view on ESC when the view is focused.
+   *
+   * @private
+   */
+  #createBlocklistActionsView(): BlocklistActionsView {
+    const editor = this.editor;
+
+    const blocklistActionsView = new BlocklistActionsView(editor);
+
+    // Close the panel on esc key press when the **form has focus**.
+    blocklistActionsView.keystrokes.set("Esc", (data, cancel) => {
+      this.#hideBlocklistBalloon();
+      cancel();
+    });
+
+    return blocklistActionsView;
+  }
+
+  /**
+   * The button for the editor's main toolbar that opens the blocklist view in the balloon.
+   *
+   * @param command - the blocklist command
+   * @private
+   */
+  #createBlocklistToolbarButton(command: Command) {
+    const editor = this.editor;
+    const t = editor.t;
+
+    editor.ui.componentFactory.add("blocklist", (locale) => {
+      const button = new ButtonView(locale);
+
+      button.isEnabled = true;
+      button.label = t("Manage Blocklist");
+      button.icon = blocklistIcon;
+      button.keystroke = BLOCKLIST_KEYSTROKE;
+      button.tooltip = true;
+      button.isToggleable = true;
+
+      // Bind button to the command.
+      button.bind("isEnabled").to(command, "isEnabled");
+      button.bind("isOn").to(command, "value", (value) => !!value);
+
+      // Show the panel on button click.
+      this.listenTo(button, "execute", () => this.#showBlocklistBalloon(true));
+
+      return button;
+    });
+  }
+
+  /**
+   * Opens the balloon with the blocklist actions view.
+   *
+   * @param forceFocus - forces the balloon to focus blocklist view.
+   * @private
+   */
+  #showBlocklistBalloon(forceFocus = false): void {
+    if (!this.#balloon) {
+      return;
+    }
+
+    this.#addBalloonView();
+
+    if (forceFocus) {
+      this.blocklistActionsView.focus();
+    }
+
+    // Begin responding to ui#update once the UI is added.
+    //TODO this.#startUpdatingUI();
+  }
+
+  /**
+   * Closes the blocklist actions view in the contextual balloon.
+   * If another view is present, that one will be shown instead.
+   *
+   * @private
+   */
+  #hideBlocklistBalloon(): void {
+    const editor = this.editor;
+
+    this.stopListening(editor.ui, "update");
+    this.stopListening(this.#balloon, "change:visibleView");
+
+    // Make sure the focus always gets back to the editable _before_ removing the focused form view.
+    // Doing otherwise causes issues in some browsers. See https://github.com/ckeditor/ckeditor5-link/issues/193.
+    editor.editing.view.focus();
+
+    // Blur the input element before removing it from DOM to prevent issues in some browsers.
+    // See https://github.com/ckeditor/ckeditor5/issues/1501.
+    if (this.blocklistActionsView) {
+      this.blocklistActionsView.blocklistInputView.saveButtonView.focus();
+    }
+    // Then remove the blocklist.
+    if (this.#balloon && this.blocklistActionsView) {
+      this.#balloon.remove(this.blocklistActionsView);
+    }
+  }
+
+  /**
+   * Adds the blocklist view to the balloon views.
+   * This will result in opening the balloon, if it was not visible until now.
+   *
+   * @private
+   */
+  #addBalloonView(): void {
+    if (!this.blocklistActionsView) {
+      this.#createBlocklistActionsView();
+    }
+
+    if (!this.#balloon) {
+      return;
+    }
+
+    this.#balloon.add({
+      view: this.blocklistActionsView,
+      position: this.#getBalloonPositionData(),
+    });
+  }
+
+  // TODO we need to make sure we position the balloon centered on the selected blocklisted word if existing
+  #getBalloonPositionData(): Partial<PositionOptions> {
+    const view = this.editor.editing.view;
+    const viewDocument = view.document;
+
+    const selection = view.document.selection;
+    const selectedElement = selection.getSelectedElement();
+    const target: PositionOptions["target"] = () => {
+      const targetWord = selectedElement;
+
+      if (targetWord) {
+        const targetWordViewElement = view.domConverter.mapViewToDom(targetWord);
+        if (targetWordViewElement) {
+          return targetWordViewElement;
+        }
+      }
+
+      // Otherwise attach panel to the selection.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return view.domConverter.viewRangeToDom(viewDocument.selection.getFirstRange()!);
+    };
+    return { target };
+  }
+
+  /**
+   * Initializes listeners to open the balloon, or switch to the blocklist balloon view.
+   * The balloon opens, if the command is enabled and the shortcut is pressed,
+   * or if a block-listed word is clicked on.
+   *
+   * @private
+   */
+  #initBalloonListeners(): void {
+    const editor = this.editor;
+    const viewDocument = editor.editing.view.document;
+
+    // Handle click on view document and show panel when selection is placed inside a blocked element.
+    this.listenTo<ViewDocumentClickEvent>(viewDocument, "click", () => {
+      const blockedElement = this.#getSelectedBlocklistWord();
+
+      if (blockedElement) {
+        // Then show panel but keep focus inside editor editable.
+        this.#showBlocklistBalloon();
+      }
+    });
+
+    // Handle the blocklist keystroke and show the panel.
+    editor.keystrokes.set(BLOCKLIST_KEYSTROKE, (keyEvtData, cancel) => {
+      // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
+      cancel();
+
+      if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
+        this.#showBlocklistBalloon(true);
+      }
+    });
+  }
+
+  /**
+   * Initializes listeners to close the balloon, or navigate the blocklist balloon view.
+   * These listeners will only execute while the balloon is shown and the blocklist view is visible.
+   *
+   * @private
+   */
+  #initBalloonViewListeners(): void {
+    // Focus the blocklist view if the balloon is visible and the Tab key has been pressed.
+    this.editor.keystrokes.set(
+      "Tab",
+      (data, cancel) => {
+        if (this.#isBlocklistVisible() && !this.blocklistActionsView.focusTracker.isFocused) {
+          this.blocklistActionsView.focus();
+          cancel();
+        }
+      },
+      {
+        // Use the normal priority because the link UI navigation is more important
+        priority: "normal",
+      }
+    );
+
+    // Close the panel on the Esc key press when the editable has focus and the balloon is visible.
+    this.editor.keystrokes.set("Esc", (data, cancel) => {
+      if (this.#isBlocklistVisible()) {
+        this.#hideBlocklistBalloon();
+        cancel();
+      }
+    });
+
+    // Close on click outside of balloon panel element.
+    clickOutsideHandler({
+      emitter: this.blocklistActionsView,
+      activator: () => this.#isBlocklistViewInBalloonPanel(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      contextElements: () => [this.#balloon!.view.element!],
+      callback: () => this.#hideBlocklistBalloon(),
+    });
+  }
+
+  /**
+   * Returns `true` when {@link #blocklistActionsView} is in the balloon and it is
+   * currently visible.
+   */
+  #isBlocklistVisible(): boolean {
+    if (!this.#balloon) {
+      return false;
+    }
+    return !!this.blocklistActionsView && this.#balloon.visibleView === this.blocklistActionsView;
+  }
+
+  /**
+   * Returns `true` when {@link #blocklistActionsView} is in the balloon.
+   */
+  #isBlocklistViewInBalloonPanel(): boolean {
+    if (!this.#balloon) {
+      return false;
+    }
+    return !!this.blocklistActionsView && this.#balloon.hasView(this.blocklistActionsView);
+  }
+
+  // TODO implement
+  #getSelectedBlocklistWord() {
+    return false;
+  }
+}
