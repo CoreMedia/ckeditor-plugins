@@ -80,6 +80,7 @@ export default class BlocklistActionsView extends View {
     this.blockedWordlistView.items.clear();
     this.blockedWords.forEach((word) => {
       const view = new BlockedWordView(this.editor.locale);
+      view.delegate("unblock").to(this);
       view.set("label", word);
       this.blockedWordlistView.items.add(view);
     });
@@ -135,6 +136,7 @@ export default class BlocklistActionsView extends View {
     this.blockedWords.forEach((word) => {
       const view = new BlockedWordView(locale);
       view.set("label", word);
+      view.delegate("unblock").to(this);
       listView.items.add(view);
     });
     return listView;

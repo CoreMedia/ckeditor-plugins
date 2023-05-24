@@ -78,14 +78,10 @@ export default class BlocklistInputView extends View {
 
     this.setTemplate({
       tag: "form",
-
       attributes: {
         class: ["ck", "cm-ck-blocklist-input", "ck-responsive-form"],
-
-        // https://github.com/ckeditor/ckeditor5-link/issues/90
         tabindex: "-1",
       },
-
       children: this.children,
     });
   }

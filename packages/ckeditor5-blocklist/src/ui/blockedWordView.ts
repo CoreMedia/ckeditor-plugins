@@ -12,7 +12,6 @@ import "../lang/blocklist";
  * The word can be removed from the list via the button.
  */
 export default class BlockedWordView extends View {
-
   readonly keystrokes = new KeystrokeHandler();
 
   /**
@@ -113,6 +112,10 @@ export default class BlockedWordView extends View {
       },
     });
 
+    button.on("execute", () => {
+      this.fire("unblock", this.label);
+    });
+
     return button;
   }
 
@@ -129,4 +132,9 @@ export default class BlockedWordView extends View {
 
     return label;
   }
+}
+
+export interface UnblockEvent {
+  name: "unblock";
+  args: [string];
 }

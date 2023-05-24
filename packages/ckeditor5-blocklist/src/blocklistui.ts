@@ -8,6 +8,7 @@ import { PositionOptions } from "@ckeditor/ckeditor5-utils";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
+import { UnblockEvent } from "./ui/blockedWordView";
 
 const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
 
@@ -25,6 +26,8 @@ export default class Blocklistui extends Plugin {
 
   blocklistActionsView: BlocklistActionsView;
 
+  blocklistCommand: BlocklistCommand | undefined;
+
   #balloon: ContextualBalloon | undefined = undefined;
 
   constructor(editor: Editor) {
@@ -34,7 +37,7 @@ export default class Blocklistui extends Plugin {
 
   async init(): Promise<void> {
     const editor = this.editor;
-    const blocklistCommand: BlocklistCommand = (await ifCommand(editor, BLOCKLIST_COMMAND_NAME)) as BlocklistCommand;
+    this.blocklistCommand = (await ifCommand(editor, BLOCKLIST_COMMAND_NAME)) as BlocklistCommand;
 
     this.#balloon = editor.plugins.get(ContextualBalloon);
 
@@ -42,18 +45,18 @@ export default class Blocklistui extends Plugin {
     this.#initBalloonListeners();
 
     // adds a blocklist button to the componentFactory
-    this.#createBlocklistToolbarButton(blocklistCommand);
+    this.#createBlocklistToolbarButton(this.blocklistCommand);
 
     // listen to click and key events while the balloon is open (to navigate or close the balloon)
     this.#initBalloonViewListeners();
 
-    this.blocklistActionsView.bind("blockedWords").to(blocklistCommand, "value");
+    this.blocklistActionsView.bind("blockedWords").to(this.blocklistCommand, "value");
 
     // listen to changes in blocklistCommand and refresh the list in the blocklist view accordingly
-    blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
+    this.blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
 
     // TODO remove this line
-    blocklistCommand.set("value", ["Blocklisted", "Words"]);
+    this.blocklistCommand.set("value", ["Blocklisted", "Words"]);
   }
 
   /**
@@ -66,6 +69,36 @@ export default class Blocklistui extends Plugin {
     const editor = this.editor;
 
     const blocklistActionsView = new BlocklistActionsView(editor);
+
+    this.listenTo(blocklistActionsView.blocklistInputView, "submit", () => {
+      //TODO escape input?
+      const { value } = this.blocklistActionsView.blocklistInputView.wordToBlockInputView.fieldView
+        .element as HTMLInputElement;
+
+      if (!this.blocklistCommand) {
+        return;
+      }
+
+      const blacklistCommandValue = this.blocklistCommand.value;
+      if (blacklistCommandValue.includes(value)) {
+        return;
+      }
+
+      const newValue = [...blacklistCommandValue, value];
+      this.blocklistCommand.set("value", newValue);
+    });
+
+    // Execute unblock command after clicking on the "remove" button.
+    this.listenTo<UnblockEvent>(blocklistActionsView, "unblock", (eventInfo, wordToUnblock) => {
+      if (!this.blocklistCommand) {
+        return;
+      }
+
+      const blacklistCommandValue = this.blocklistCommand.value;
+      const index = blacklistCommandValue.indexOf(wordToUnblock);
+      blacklistCommandValue.splice(index, 1);
+      this.blocklistCommand.set("value", [...blacklistCommandValue]);
+    });
 
     // Close the panel on esc key press when the **form has focus**.
     blocklistActionsView.keystrokes.set("Esc", (data, cancel) => {
@@ -273,7 +306,7 @@ export default class Blocklistui extends Plugin {
   }
 
   /**
-   * Returns `true` when {@link #blocklistActionsView} is in the balloon and it is
+   * Returns `true` when {@link #blocklistActionsView} is in the balloon, and it is
    * currently visible.
    */
   #isBlocklistVisible(): boolean {
