@@ -369,6 +369,9 @@ importers:
 
   packages/ckeditor5-blocklist:
     dependencies:
+      '@ckeditor/ckeditor5-find-and-replace':
+        specifier: ^37.1.0
+        version: 37.1.0
       '@coremedia/ckeditor5-core-common':
         specifier: ^15.0.1
         version: link:../ckeditor5-core-common

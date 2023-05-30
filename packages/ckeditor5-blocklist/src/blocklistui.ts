@@ -3,7 +3,13 @@ import Command from "@ckeditor/ckeditor5-core/src/command";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
 import blocklistIcon from "../theme/icons/blacklist.svg";
 import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { ViewDocumentClickEvent } from "@ckeditor/ckeditor5-engine";
+import {
+  ViewAttributeElement,
+  ViewDocumentClickEvent,
+  ViewDocumentFragment,
+  ViewNode,
+  ViewPosition,
+} from "@ckeditor/ckeditor5-engine";
 import { PositionOptions } from "@ckeditor/ckeditor5-utils";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
@@ -72,20 +78,24 @@ export default class Blocklistui extends Plugin {
 
     this.listenTo(blocklistActionsView.blocklistInputView, "submit", () => {
       //TODO escape input?
-      const { value } = this.blocklistActionsView.blocklistInputView.wordToBlockInputView.fieldView
+      const blockWordInput = this.blocklistActionsView.blocklistInputView.wordToBlockInputView.fieldView
         .element as HTMLInputElement;
 
       if (!this.blocklistCommand) {
         return;
       }
 
+      // return, if the word is already in the blocklist
       const blacklistCommandValue = this.blocklistCommand.value;
-      if (blacklistCommandValue.includes(value)) {
+      if (blacklistCommandValue.includes(blockWordInput.value)) {
         return;
       }
 
-      const newValue = [...blacklistCommandValue, value];
+      const newValue = [...blacklistCommandValue, blockWordInput.value];
       this.blocklistCommand.set("value", newValue);
+
+      // clear the input
+      blockWordInput.value = "";
     });
 
     // Execute unblock command after clicking on the "remove" button.
@@ -156,9 +166,6 @@ export default class Blocklistui extends Plugin {
     if (forceFocus) {
       this.blocklistActionsView.focus();
     }
-
-    // Begin responding to ui#update once the UI is added.
-    //TODO this.#startUpdatingUI();
   }
 
   /**
@@ -246,18 +253,24 @@ export default class Blocklistui extends Plugin {
 
     // Handle click on view document and show panel when selection is placed inside a blocked element.
     this.listenTo<ViewDocumentClickEvent>(viewDocument, "click", () => {
-      const blockedElement = this.#getSelectedBlocklistWord();
-
-      if (blockedElement) {
-        // Then show panel but keep focus inside editor editable.
-        this.#showBlocklistBalloon();
+      const blockedWords = this.#getSelectedBlocklistWords();
+      if (!blockedWords || blockedWords.length === 0) {
+        return;
       }
+
+      // Set the currently selected words in the blocklist command
+      this.blocklistCommand?.set("value", blockedWords);
+
+      // Then show panel but keep focus inside editor editable.
+      this.#showBlocklistBalloon();
     });
 
     // Handle the blocklist keystroke and show the panel.
     editor.keystrokes.set(BLOCKLIST_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
+
+      //TODO also check for cursor position when using keyboard / button?
 
       if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
         this.#showBlocklistBalloon(true);
@@ -326,8 +339,59 @@ export default class Blocklistui extends Plugin {
     return !!this.blocklistActionsView && this.#balloon.hasView(this.blocklistActionsView);
   }
 
-  // TODO implement
-  #getSelectedBlocklistWord() {
-    return false;
+  /**
+   * Returns a list of blocked words, based on the current cursor position.
+   * A list will only be returned if the selection is collapsed.
+   *
+   * @returns All words, displayed by markers at the current position
+   */
+  #getSelectedBlocklistWords(): string[] | undefined {
+    const view = this.editor.editing.view;
+    const selection = view.document.selection;
+
+    const firstPosition = selection.getFirstPosition();
+    if (!firstPosition) {
+      return undefined;
+    }
+
+    if (selection.isCollapsed) {
+      return this.#getAllBlocklistedWordsForPosition(firstPosition);
+    }
+    return undefined;
+  }
+
+  /**
+   * Returns whether a node is of type ViewAttributeElement or not.
+   * Returns true for different types, such as element, node, view:attributeElement, view:element etc.
+   *
+   * @param node - the ViewNode or ViewDocumentFragment to be checked.
+   * @returns true if the node is of type ViewAttributeElement
+   */
+  #isViewAttributeElement(node: ViewNode | ViewDocumentFragment): boolean {
+    return node.is("attributeElement");
+  }
+
+  /**
+   * Returns the value of the data attribute that holds the value of the blocklisted word.
+   *
+   * @param node - the node, containing the attribute
+   * @returns the attribute value or undefined if not existing
+   */
+  #getBlocklistWordAttribute(node: ViewAttributeElement): string | undefined {
+    return node.getAttribute("data-blocklist-blocked-word");
+  }
+
+  /**
+   * Returns all blocklisted words for the current selection position.
+   *
+   * @param position - the position to check for
+   * @returns the list of words
+   */
+  #getAllBlocklistedWordsForPosition(position: ViewPosition): string[] {
+    return position
+      .getAncestors()
+      .filter((ancestor): ancestor is ViewAttributeElement => this.#isViewAttributeElement(ancestor))
+      .map((ancestor) => this.#getBlocklistWordAttribute(ancestor))
+      .filter((attribute) => attribute !== undefined) as string[];
   }
 }

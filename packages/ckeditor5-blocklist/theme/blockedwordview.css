@@ -20,3 +20,7 @@
   min-width: 0;
   width: 100%;
 }
+
+.cm-ck-blocklisted {
+  background-color: #FEE7E1;
+}
