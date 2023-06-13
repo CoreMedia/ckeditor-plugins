@@ -82,19 +82,10 @@ export default class ContentLinks extends Plugin {
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
       if (visibleView && visibleView === linkUI.actionsView && !this.#initialized) {
-        this.onVisibleViewChanged(linkUI);
+        this.initializeLinkBalloonListeners(linkUI);
         this.#initialized = true;
       }
     });
-
-    registerOpenContentInTabCommand(editor);
-  }
-
-  onVisibleViewChanged(linkUI: LinkUI): void {
-    const { editor } = linkUI;
-    removeInitialMouseDownListener(linkUI);
-    addMouseEventListenerToHideDialog(linkUI);
-    parseLinkBalloonConfig(editor.config);
 
     const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
       if (services.length === 0) {
@@ -113,6 +104,14 @@ export default class ContentLinks extends Plugin {
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
 
+    registerOpenContentInTabCommand(editor);
+  }
+
+  initializeLinkBalloonListeners(linkUI: LinkUI): void {
+    const { editor } = linkUI;
+    removeInitialMouseDownListener(linkUI);
+    addMouseEventListenerToHideDialog(linkUI);
+    parseLinkBalloonConfig(editor.config);
     const internalLinkUI: Observable = linkUI;
 
     if (hasRequiredInternalLinkUI(internalLinkUI)) {
