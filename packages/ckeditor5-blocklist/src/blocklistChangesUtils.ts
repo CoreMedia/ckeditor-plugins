@@ -2,9 +2,7 @@ import { Collection, uid } from "@ckeditor/ckeditor5-utils";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { DiffItem, DiffItemAttribute, Element, Item, Marker, Model, Node, Range } from "@ckeditor/ckeditor5-engine";
 import { FindAndReplaceUtils } from "@ckeditor/ckeditor5-find-and-replace";
-
-// TODO example data, replace with actual blocklist service
-const BLOCKED_WORDS_LIST: string[] = ["example", "ample", "use", "instance", "showcase", "showca", "owcase"];
+import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 
 // copied from @ckeditor/ckeditor5-find-and-replace/src/findandreplace.d.ts since not exported in index.js
 export interface ResultType {
@@ -66,7 +64,27 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
     });
   });
 
-  // used for array mapping in the searchCallback
+  // Run search callback again on updated nodes.
+  changedNodes.forEach((nodeToCheck) => {
+    getBlocklistCommandValue(editor).forEach((wordToBlock: string) => {
+      updateFindResultFromRange(
+        wordToBlock,
+        editor,
+        model.createRangeOn(nodeToCheck),
+        model,
+        createSearchCallback(wordToBlock),
+        results
+      );
+    });
+  });
+};
+
+const getBlocklistCommandValue = (editor: Editor): string[] => {
+  const command = editor.commands.get(BLOCKLIST_COMMAND_NAME) as BlocklistCommand;
+  return command ? command.value : [];
+};
+
+export const createSearchCallback = (word: string) => {
   const regexpMatchToFindResult = (matchResult: RegExpMatchArray): ResultType => {
     const lastGroupIndex = matchResult.length - 1;
     let startOffset = matchResult.index ?? 0;
@@ -84,21 +102,15 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
     };
   };
 
-  // Run search callback again on updated nodes.
-  changedNodes.forEach((nodeToCheck) => {
-    BLOCKED_WORDS_LIST.forEach((wordToBlock: string) => {
-      const regExp = new RegExp("gui", `(${wordToBlock})`);
-      const searchCallback = ({ text }: { text: string }) => {
-        const matches = [...text.matchAll(regExp)];
-        return matches.map(regexpMatchToFindResult);
-      };
-
-      updateFindResultFromRange(wordToBlock, editor, model.createRangeOn(nodeToCheck), model, searchCallback, results);
-    });
-  });
+  const regExp = new RegExp(`(${word})`, "gui");
+  const searchCallback = ({ text }: { text: string }) => {
+    const matches = [...text.matchAll(regExp)];
+    return matches.map(regexpMatchToFindResult);
+  };
+  return searchCallback;
 };
 
-const updateFindResultFromRange = (
+export const updateFindResultFromRange = (
   blockedWord: string,
   editor: Editor,
   range: Range,

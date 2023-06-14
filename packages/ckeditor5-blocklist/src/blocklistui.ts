@@ -15,6 +15,7 @@ import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
 import { UnblockEvent } from "./ui/blockedWordView";
+import BlocklistEditing from "./blocklistediting";
 
 const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
 
@@ -28,7 +29,7 @@ const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
  */
 export default class Blocklistui extends Plugin {
   static readonly pluginName: string = "BlocklistUI";
-  static readonly requires = [ContextualBalloon];
+  static readonly requires = [ContextualBalloon, BlocklistEditing];
 
   blocklistActionsView: BlocklistActionsView;
 
@@ -62,7 +63,7 @@ export default class Blocklistui extends Plugin {
     this.blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
 
     // TODO remove this line
-    this.blocklistCommand.set("value", ["Blocklisted", "Words"]);
+    this.blocklistCommand.set("value", ["and", "more"]);
   }
 
   /**
@@ -77,7 +78,6 @@ export default class Blocklistui extends Plugin {
     const blocklistActionsView = new BlocklistActionsView(editor);
 
     this.listenTo(blocklistActionsView.blocklistInputView, "submit", () => {
-      //TODO escape input?
       const blockWordInput = this.blocklistActionsView.blocklistInputView.wordToBlockInputView.fieldView
         .element as HTMLInputElement;
 
@@ -85,16 +85,20 @@ export default class Blocklistui extends Plugin {
         return;
       }
 
-      // return, if the word is already in the blocklist
+      // Return, if the word is already in the blocklist
       const blacklistCommandValue = this.blocklistCommand.value;
       if (blacklistCommandValue.includes(blockWordInput.value)) {
         return;
       }
 
+      // Add markers
+      const editingPlugin = editor.plugins.get(BlocklistEditing);
+      editingPlugin.addMarkersForWord(blockWordInput.value);
+
       const newValue = [...blacklistCommandValue, blockWordInput.value];
       this.blocklistCommand.set("value", newValue);
 
-      // clear the input
+      // Clear the input
       blockWordInput.value = "";
     });
 
@@ -103,6 +107,10 @@ export default class Blocklistui extends Plugin {
       if (!this.blocklistCommand) {
         return;
       }
+
+      // Remove markers
+      const editingPlugin = editor.plugins.get(BlocklistEditing);
+      editingPlugin.removeMarkersForWord(wordToUnblock);
 
       const blacklistCommandValue = this.blocklistCommand.value;
       const index = blacklistCommandValue.indexOf(wordToUnblock);
