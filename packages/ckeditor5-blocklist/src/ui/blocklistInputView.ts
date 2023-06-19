@@ -63,6 +63,8 @@ export default class BlocklistInputView extends View {
     this.saveButtonView = this.#createSaveButton(locale);
     this.children = this.#createFormChildren();
 
+    this.#addInputEventListener(this.wordToBlockInputView, this.saveButtonView);
+
     this.#focusCycler = new FocusCycler({
       focusables: this.#focusables,
       focusTracker: this.focusTracker,
@@ -125,6 +127,18 @@ export default class BlocklistInputView extends View {
     this.#focusCycler.focusFirst();
   }
 
+  #addInputEventListener(wordToBlockInputView: LabeledFieldView, saveButton: ButtonView): void {
+    const blockWordInput = wordToBlockInputView.fieldView.element as HTMLInputElement;
+    const handleInputChange = () => {
+      if (blockWordInput.value.length > 2) {
+        saveButton.set("isEnabled", true);
+      } else {
+        saveButton.set("isEnabled", false);
+      }
+    };
+    blockWordInput.addEventListener("input", handleInputChange);
+  }
+
   /**
    * Creates a labeled input view.
    *
@@ -150,6 +164,7 @@ export default class BlocklistInputView extends View {
     button.set({
       label: locale.t("Add word to blocklist"),
       icon: icons.check,
+      isEnabled: false,
       type: "submit",
       tooltip: true,
     });
