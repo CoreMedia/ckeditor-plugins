@@ -25,6 +25,11 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
 
   // Get nodes in which changes happened to re-run a search callback on them.
   changes.forEach((change) => {
+    if (!change.position) {
+      // If a link is created on a selection, the changes is missing a position.
+      // It's okay to skip this change because no change in the editor text appeared.
+      return;
+    }
     if (change.name === "$text" || (change.position.nodeAfter && model.schema.isInline(change.position.nodeAfter))) {
       changedNodes.add(change.position.parent as Element);
 
