@@ -71,6 +71,7 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
 
   // Run search callback again on updated nodes.
   changedNodes.forEach((nodeToCheck) => {
+    // TODO this should iterate the internal blocklist instead
     getBlocklistCommandValue(editor).forEach((wordToBlock: string) => {
       updateFindResultFromRange(
         wordToBlock,
