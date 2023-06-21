@@ -11,6 +11,11 @@ export { default as BlobDisplayService } from "./BlobDisplayService";
 
 export * from "./BlobDisplayServiceDescriptor";
 
+export * from "./BlocklistService";
+export { default as BlocklistService } from "./BlocklistService";
+
+export * from "./BlocklistServiceDescriptor";
+
 export * from "./ContentAsLink";
 export { default as ContentAsLink } from "./ContentAsLink";
 
