@@ -88,7 +88,7 @@ export default class BlocklistEditing extends Plugin {
   #listenForBlocklistChanges(blocklistService: BlocklistService): void {
     blocklistService.observe_blocklist().subscribe({
       next: (blockedWords: string[]) => {
-        // Get all words in blockedWords array, that are not present in command array
+        // Get all words that differ from blockedWords and internalBlocklist
         const { addedWords, removedWords } = this.#getAddedAndRemovedWords(blockedWords, this.internalBlocklist);
 
         addedWords.forEach((word) => {
