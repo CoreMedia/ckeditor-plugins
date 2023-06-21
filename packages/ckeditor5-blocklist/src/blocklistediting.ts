@@ -39,13 +39,16 @@ export default class BlocklistEditing extends Plugin {
     const editor = this.editor;
     editor.commands.add(BLOCKLIST_COMMAND_NAME, new BlocklistCommand(editor));
 
+    // TODO remove
+    this.internalBlocklist = ["and", "more"];
+
     // model to editing view downcast
     this.#defineConversion();
 
     // whenever the data in the editor changes, we need to check new nodes
     // for blocklisted words, or remove markers if nodes have been removed
     editor.model.document.on("change:data", () => {
-      onDocumentChange(this.blockedWordMarkers, editor);
+      onDocumentChange(this.blockedWordMarkers, editor, this.internalBlocklist);
     });
 
     // Connect to the BlockList Service to retrieve the list of words to highlight

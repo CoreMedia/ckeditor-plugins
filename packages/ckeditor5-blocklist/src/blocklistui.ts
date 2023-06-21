@@ -61,9 +61,6 @@ export default class Blocklistui extends Plugin {
 
     // listen to changes in blocklistCommand and refresh the list in the blocklist view accordingly
     this.blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
-
-    // TODO remove this line
-    this.blocklistCommand.set("value", ["and", "more"]);
   }
 
   /**

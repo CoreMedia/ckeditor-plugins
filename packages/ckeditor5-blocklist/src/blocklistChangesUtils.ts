@@ -2,7 +2,6 @@ import { Collection, uid } from "@ckeditor/ckeditor5-utils";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { DiffItem, DiffItemAttribute, Element, Item, Marker, Model, Node, Range } from "@ckeditor/ckeditor5-engine";
 import { FindAndReplaceUtils } from "@ckeditor/ckeditor5-find-and-replace";
-import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 
 // copied from @ckeditor/ckeditor5-find-and-replace/src/findandreplace.d.ts since not exported in index.js
 export interface ResultType {
@@ -16,7 +15,7 @@ export interface ResultType {
 /**
  * Reacts to document changes in order to update search list.
  */
-export const onDocumentChange = (results: Collection<ResultType>, editor: Editor) => {
+export const onDocumentChange = (results: Collection<ResultType>, editor: Editor, blockedWordsList: string[]) => {
   const changedNodes = new Set<Node>();
   const removedMarkers = new Set<string>();
   const model = editor.model;
@@ -71,8 +70,7 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
 
   // Run search callback again on updated nodes.
   changedNodes.forEach((nodeToCheck) => {
-    // TODO this should iterate the internal blocklist instead
-    getBlocklistCommandValue(editor).forEach((wordToBlock: string) => {
+    blockedWordsList.forEach((wordToBlock: string) => {
       updateFindResultFromRange(
         wordToBlock,
         editor,
@@ -83,11 +81,6 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
       );
     });
   });
-};
-
-const getBlocklistCommandValue = (editor: Editor): string[] => {
-  const command = editor.commands.get(BLOCKLIST_COMMAND_NAME) as BlocklistCommand;
-  return command ? command.value : [];
 };
 
 export const createSearchCallback = (word: string) => {
