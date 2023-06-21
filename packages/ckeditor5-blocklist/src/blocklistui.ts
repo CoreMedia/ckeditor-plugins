@@ -91,9 +91,9 @@ export default class Blocklistui extends Plugin {
         return;
       }
 
-      // Add markers
+      // Add markers and sync with service
       const editingPlugin = editor.plugins.get(BlocklistEditing);
-      editingPlugin.addMarkersForWord(blockWordInput.value);
+      editingPlugin.addBlocklistWord(blockWordInput.value);
 
       const newValue = [...blacklistCommandValue, blockWordInput.value];
       this.blocklistCommand.set("value", newValue);
@@ -110,7 +110,7 @@ export default class Blocklistui extends Plugin {
 
       // Remove markers
       const editingPlugin = editor.plugins.get(BlocklistEditing);
-      editingPlugin.removeMarkersForWord(wordToUnblock);
+      editingPlugin.removeBlocklistWord(wordToUnblock);
 
       const blacklistCommandValue = this.blocklistCommand.value;
       const index = blacklistCommandValue.indexOf(wordToUnblock);
@@ -224,7 +224,6 @@ export default class Blocklistui extends Plugin {
     });
   }
 
-  // TODO we need to make sure we position the balloon centered on the selected blocklisted word if existing
   #getBalloonPositionData(): Partial<PositionOptions> {
     const view = this.editor.editing.view;
     const viewDocument = view.document;

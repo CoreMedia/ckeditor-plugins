@@ -2,11 +2,38 @@ import { Plugin } from "@ckeditor/ckeditor5-core";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import { Collection } from "@ckeditor/ckeditor5-utils";
 import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
-
+import { serviceAgent } from "@coremedia/service-agent";
+import { Subscription } from "rxjs";
+import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
+import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 export default class BlocklistEditing extends Plugin {
   static readonly pluginName: string = "BlocklistEditing";
+  static readonly #logger: Logger = LoggerProvider.getLogger(BlocklistEditing.pluginName);
 
+  /**
+   * A list of markers, used to highlight blocklisted words in the editor.
+   */
   blockedWordMarkers: Collection<ResultType> = new Collection<ResultType>();
+
+  /**
+   * A "copy" of the list, retrieved from an external service.
+   * This list will be overridden whenever new data from the service is observed,
+   * but can be more up-to-date if the service does not provide real-time data.
+   *
+   * Example: In case a word is added or removed via the editor UI, the internal list
+   * will update immediately. The service will also be notified and should eventually
+   * return the updated list, but we cannot assume that this happens in an instant.
+   *
+   * Therefore, immediate UI changes and user feedback should rely on this internal list.
+   */
+  internalBlocklist: string[] = [];
+
+  /**
+   * Subscription on the serviceAgent until the blocklist service is available.
+   * @private
+   */
+  #blocklistServiceSubscription: Subscription | undefined = undefined;
 
   init(): void {
     const editor = this.editor;
@@ -20,6 +47,157 @@ export default class BlocklistEditing extends Plugin {
     editor.model.document.on("change:data", () => {
       onDocumentChange(this.blockedWordMarkers, editor);
     });
+
+    // Connect to the BlockList Service to retrieve the list of words to highlight
+    this.#subscribeToBlocklistService();
+  }
+
+  #subscribeToBlocklistService(): void {
+    const onServiceRegisteredFunction = (services: BlocklistService[]): void => {
+      // No BlocklistService registered yet, no need to compute further
+      if (services.length === 0) {
+        return;
+      }
+
+      // BlocklistService found, we may unsubscribe now
+      if (this.#blocklistServiceSubscription) {
+        this.#blocklistServiceSubscription.unsubscribe();
+      }
+
+      // BlocklistService is now available, use it
+      serviceAgent
+        .fetchService(createBlocklistServiceDescriptor())
+        .then(this.#listenForBlocklistChanges.bind(this))
+        .catch((reason): void => {
+          BlocklistEditing.#logger.warn("BlocklistService not available.", reason);
+        });
+    };
+
+    // Wait for the service to be available
+    this.#blocklistServiceSubscription = serviceAgent
+      .observeServices<BlocklistService>(createBlocklistServiceDescriptor())
+      .subscribe(onServiceRegisteredFunction);
+  }
+
+  /**
+   * Updates the internal list of blocked words and all affected markers whenever
+   * the blocklist from the serviceAgent blocklistService changes.
+   * @param blocklistService - the blocklist service
+   * @private
+   */
+  #listenForBlocklistChanges(blocklistService: BlocklistService): void {
+    blocklistService.observe_blocklist().subscribe({
+      next: (blockedWords: string[]) => {
+        // Get all words in blockedWords array, that are not present in command array
+        const { addedWords, removedWords } = this.#getAddedAndRemovedWords(blockedWords, this.internalBlocklist);
+
+        addedWords.forEach((word) => {
+          this.#addMarkersForWord(word);
+        });
+
+        removedWords.forEach((word) => {
+          this.#removeMarkersForWord(word);
+        });
+
+        // Set new value in internal list
+        if (addedWords.length > 0 || removedWords.length > 0) {
+          this.internalBlocklist = [...blockedWords];
+        }
+      },
+    });
+  }
+
+  /**
+   * Compares 2 string lists and returns the differences between the lists.
+   * All words, that exist in the newList, but not in the oldList, are handled as "added".
+   * All words in the oldList, that do not exist in the newList, are handled as "removed".
+   *
+   * When used to differentiate between the internally stored list and the list, provided
+   * by an external service, the oldList represents the internal list and the data from the
+   * service is used as the newList.
+   *
+   * @param newList - the more recent list
+   * @param oldList - the older list
+   * @returns an object, holding information about changes between the lists
+   * @private
+   */
+  #getAddedAndRemovedWords(newList: string[], oldList: string[]): { addedWords: string[]; removedWords: string[] } {
+    const addedWords = newList.filter((word) => !oldList.includes(word));
+    const removedWords = oldList.filter((word) => !newList.includes(word));
+    return { addedWords, removedWords };
+  }
+
+  /**
+   * Adds a word to the blocklist.
+   * Use this method for changes, triggered by the UI, not by the service.
+   *
+   * This method updates the internal list, changes the markers accordingly
+   * and triggers the blocklistService.
+   *
+   * @param wordToBlock - the word to add to the list
+   */
+  addBlocklistWord(wordToBlock: string): void {
+    // Update internal list
+    this.#addToInternalBlocklist(wordToBlock);
+    // Update markers
+    this.#addMarkersForWord(wordToBlock);
+    // Update value in service
+    serviceAgent
+      .fetchService(createBlocklistServiceDescriptor())
+      .then((blocklistService: BlocklistService) => blocklistService.addToBlocklist(wordToBlock))
+      .catch((reason) => {
+        BlocklistEditing.#logger.warn("Error while adding word to blocklist", reason);
+      });
+  }
+
+  /**
+   * Removes a word from the blocklist.
+   * Use this method for changes, triggered by the UI, not by the service.
+   *
+   * This method updates the internal list, changes the markers accordingly
+   * and triggers the blocklistService.
+   *
+   * @param wordToUnblock - the word to remove from the list
+   */
+  removeBlocklistWord(wordToUnblock: string): void {
+    // Update internal list
+    this.#removeFromInternalBlocklist(wordToUnblock);
+    // Update markers
+    this.#removeMarkersForWord(wordToUnblock);
+    // Update value in service
+    serviceAgent
+      .fetchService(createBlocklistServiceDescriptor())
+      .then((blocklistService: BlocklistService) => blocklistService.removeFromBlocklist(wordToUnblock))
+      .catch((reason) => {
+        BlocklistEditing.#logger.warn("Error while removing word from blocklist", reason);
+      });
+  }
+
+  /**
+   * Adds a word to the internal blocklist.
+   * Words will be transformed to lowercase before added.
+   *
+   * @param wordToBlock - the word to add
+   * @private
+   */
+  #addToInternalBlocklist(wordToBlock: string) {
+    const lowerCaseWord = wordToBlock.toLowerCase();
+    if (!this.internalBlocklist.includes(lowerCaseWord)) {
+      this.internalBlocklist.push(lowerCaseWord);
+    }
+  }
+
+  /**
+   * Removes a word from the internal blocklist.
+   *
+   * @param wordToUnblock - the word to remove
+   * @private
+   */
+  #removeFromInternalBlocklist(wordToUnblock: string) {
+    const lowerCaseWord = wordToUnblock.toLowerCase();
+    if (!this.internalBlocklist.includes(lowerCaseWord)) {
+      this.internalBlocklist = this.internalBlocklist.filter((word) => word !== lowerCaseWord);
+    }
   }
 
   /**
@@ -31,7 +209,7 @@ export default class BlocklistEditing extends Plugin {
    *
    * @param wordToUnblock - the word, defining the markers that will be removed
    */
-  removeMarkersForWord(wordToUnblock: string): void {
+  #removeMarkersForWord(wordToUnblock: string): void {
     const model = this.editor.model;
     const markers = this.blockedWordMarkers;
     const markersToRemove: string[] = [];
@@ -66,7 +244,7 @@ export default class BlocklistEditing extends Plugin {
    *
    * @param wordToBlock - the word, defining the markers that will be added
    */
-  addMarkersForWord(wordToBlock: string): void {
+  #addMarkersForWord(wordToBlock: string): void {
     const model = this.editor.model;
 
     // Initial search for word is done on all nodes in all roots inside the content.
