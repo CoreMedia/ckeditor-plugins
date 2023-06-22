@@ -39,7 +39,7 @@ class MockBlocklistService implements BlocklistService {
           this.addToBlocklist(word);
         }
       }
-    }, 5000);
+    }, 2000);
   }
 
   /**

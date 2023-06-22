@@ -34,29 +34,30 @@ Most packages are published with scope `@coremedia/` as for example
 `@coremedia/ckeditor5-coremedia-link`. Others, only meant for internal
 workspace usage, are not published and have scope `@coremedia-internal/`.
 
-| Name                                              | Description                                                              |
-|---------------------------------------------------|--------------------------------------------------------------------------|
-| [`ckeditor5-babel-config`][]                      | Internal: Shared Babel configuration.                                    |
-| [`ckeditor5-common`][]                            | Common Utilities, independent from CKEditor                              |
-| [`ckeditor5-core-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-core`                       |
-| [`ckeditor5-coremedia-content`][]                 | Content Related Commands                                                 |
-| [`ckeditor5-coremedia-content-clipboard`][]       | Clipboard Support for CoreMedia Contents                                 |
-| [`ckeditor5-coremedia-differencing`][]            | Support server-side differencing in CoreMedia Studio                     |
-| [`ckeditor5-coremedia-example-data`][]            | Internal: Eases setup of Mock Data for testing purpose                   |
-| [`ckeditor5-coremedia-images`][]                  | Support for CMS BLOB References like images                              |
-| [`ckeditor5-coremedia-link`][]                    | Support for Content Link, Link Target Specification                      |
-| [`ckeditor5-coremedia-richtext`][]                | CoreMedia RichText 1.0 DTD: Data-Processor                               |
-| [`ckeditor5-coremedia-richtext-support`][]        | CoreMedia RichText 1.0 DTD: Registers known elements/attributes          |
-| [`ckeditor5-coremedia-studio-essentials`][]       | CoreMedia Studio: Aggregator Plugin for essential plugins                |
-| [`ckeditor5-coremedia-studio-integration`][]      | CoreMedia Studio: Communication facade for Studio integration            |
-| [`ckeditor5-coremedia-studio-integration-mock`][] | CoreMedia Studio: Mock Communication facade for testing                  |
-| [`ckeditor5-dataprocessor-support`][]             | _Deprecated:_ Utilities for providing custom CKEditor 5 DataProcessors   |
-| [`ckeditor5-dom-converter`][]                     | Base architecture for data-processing                                    |
-| [`ckeditor5-dom-support`][]                       | Utilities for handling DOM objects                                       |
-| [`ckeditor5-font-mapper`][]                       | Replaces characters in given font to alternative representation on paste |
-| [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                                                   |
-| [`ckeditor5-link-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-link`                       |
-| [`ckeditor5-logging`][]                           | Logging Facade                                                           |
+| Name                                              | Description                                                                |
+|---------------------------------------------------|----------------------------------------------------------------------------|
+| [`ckeditor5-babel-config`][]                      | Internal: Shared Babel configuration.                                      |
+| [`ckeditor5-common`][]                            | Common Utilities, independent from CKEditor                                |
+| [`ckeditor5-core-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-core`                         |
+| [`ckeditor5-coremedia-blocklist`][]               | Highlights words in the editor content and allows to adjust list of words. |
+| [`ckeditor5-coremedia-content`][]                 | Content Related Commands                                                   |
+| [`ckeditor5-coremedia-content-clipboard`][]       | Clipboard Support for CoreMedia Contents                                   |
+| [`ckeditor5-coremedia-differencing`][]            | Support server-side differencing in CoreMedia Studio                       |
+| [`ckeditor5-coremedia-example-data`][]            | Internal: Eases setup of Mock Data for testing purpose                     |
+| [`ckeditor5-coremedia-images`][]                  | Support for CMS BLOB References like images                                |
+| [`ckeditor5-coremedia-link`][]                    | Support for Content Link, Link Target Specification                        |
+| [`ckeditor5-coremedia-richtext`][]                | CoreMedia RichText 1.0 DTD: Data-Processor                                 |
+| [`ckeditor5-coremedia-richtext-support`][]        | CoreMedia RichText 1.0 DTD: Registers known elements/attributes            |
+| [`ckeditor5-coremedia-studio-essentials`][]       | CoreMedia Studio: Aggregator Plugin for essential plugins                  |
+| [`ckeditor5-coremedia-studio-integration`][]      | CoreMedia Studio: Communication facade for Studio integration              |
+| [`ckeditor5-coremedia-studio-integration-mock`][] | CoreMedia Studio: Mock Communication facade for testing                    |
+| [`ckeditor5-dataprocessor-support`][]             | _Deprecated:_ Utilities for providing custom CKEditor 5 DataProcessors     |
+| [`ckeditor5-dom-converter`][]                     | Base architecture for data-processing                                      |
+| [`ckeditor5-dom-support`][]                       | Utilities for handling DOM objects                                         |
+| [`ckeditor5-font-mapper`][]                       | Replaces characters in given font to alternative representation on paste   |
+| [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                                                     |
+| [`ckeditor5-link-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-link`                         |
+| [`ckeditor5-logging`][]                           | Logging Facade                                                             |
 
 The subtle difference between `ckeditor5-coremedia-richtext` and
 `ckeditor5-coremedia-richtext-support` is, that the latter one just adds support
@@ -143,6 +144,7 @@ previously `setData()` call. A typical approach is:
 [`ckeditor5-babel-config`]: <./packages/ckeditor5-babel-config> "@coremedia-internal/ckeditor5-babel-config"
 [`ckeditor5-common`]: <./packages/ckeditor5-common> "@coremedia/ckeditor5-common"
 [`ckeditor5-core-common`]: <./packages/ckeditor5-core-common> "@coremedia/ckeditor5-core-common"
+[`ckeditor5-coremedia-blocklist`]: <./packages/ckeditor5-coremedia-blocklist> "@coremedia/ckeditor5-coremedia-blocklist"
 [`ckeditor5-coremedia-content`]: <./packages/ckeditor5-coremedia-content> "@coremedia/ckeditor5-coremedia-content"
 [`ckeditor5-coremedia-content-clipboard`]: <./packages/ckeditor5-coremedia-content-clipboard> "@coremedia/ckeditor5-coremedia-content-clipboard"
 [`ckeditor5-coremedia-differencing`]: <./packages/ckeditor5-coremedia-differencing> "@coremedia/ckeditor5-coremedia-differencing"
