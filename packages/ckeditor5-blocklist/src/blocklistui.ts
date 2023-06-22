@@ -23,8 +23,7 @@ const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
  * It also creates the views, that are displayed inside the contextual balloon when triggered by the button, click or
  * keystroke.
  *
- * It uses the
- * {@link module:ui/panel/balloon/contextualballoon~ContextualBalloon contextual balloon plugin}.
+ * It uses the contextual balloon plugin}.
  */
 export default class Blocklistui extends Plugin {
   static readonly pluginName: string = "BlocklistUI";
