@@ -10,6 +10,8 @@
 
 .ck.cm-ck-blocklist-input {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ck.cm-ck-blocklist-form .ck-labeled-field-view {
