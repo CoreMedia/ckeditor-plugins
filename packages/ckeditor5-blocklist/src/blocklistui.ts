@@ -1,5 +1,4 @@
 import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
-import Command from "@ckeditor/ckeditor5-core/src/command";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
 import blocklistIcon from "../theme/icons/blacklist.svg";
 import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
@@ -135,7 +134,7 @@ export default class Blocklistui extends Plugin {
    * @param command - the blocklist command
    * @private
    */
-  #createBlocklistToolbarButton(command: Command) {
+  #createBlocklistToolbarButton(command: BlocklistCommand) {
     const editor = this.editor;
     const t = editor.t;
 
@@ -151,7 +150,7 @@ export default class Blocklistui extends Plugin {
 
       // Bind button to the command.
       button.bind("isEnabled").to(command, "isEnabled");
-      button.bind("isOn").to(command, "value", (value) => !!value);
+      button.bind("isOn").to(command, "value", (value: string[]) => value && value.length > 0);
 
       // Show the panel on button click.
       this.listenTo(button, "execute", () => this.#showBlocklistBalloon(true));
@@ -203,6 +202,9 @@ export default class Blocklistui extends Plugin {
     if (this.#balloon && this.blocklistActionsView) {
       this.#balloon.remove(this.blocklistActionsView);
     }
+
+    // reset the command value
+    this.blocklistCommand?.set("value", []);
   }
 
   /**
