@@ -109,10 +109,15 @@ export default class Blocklistui extends Plugin {
       const editingPlugin = editor.plugins.get(BlocklistEditing);
       editingPlugin.removeBlocklistWord(wordToUnblock);
 
-      const blacklistCommandValue = this.blocklistCommand.value;
-      const index = blacklistCommandValue.indexOf(wordToUnblock);
-      blacklistCommandValue.splice(index, 1);
-      this.blocklistCommand.set("value", [...blacklistCommandValue]);
+      const blocklistCommandValue = this.blocklistCommand.value;
+      const index = blocklistCommandValue.indexOf(wordToUnblock);
+      blocklistCommandValue.splice(index, 1);
+      this.blocklistCommand.set("value", [...blocklistCommandValue]);
+
+      // Close blocklist balloon if last word has been unblocked
+      if (blocklistCommandValue.length === 0) {
+        this.#hideBlocklistBalloon();
+      }
     });
 
     // Close the panel on esc key press when the **form has focus**.
@@ -273,8 +278,6 @@ export default class Blocklistui extends Plugin {
     editor.keystrokes.set(BLOCKLIST_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
-
-      //TODO also check for cursor position when using keyboard / button?
 
       if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
         this.#showBlocklistBalloon(true);
