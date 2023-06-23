@@ -148,6 +148,7 @@ export default class BlocklistInputView extends View {
   #createWordToBlockInput(locale: Locale): LabeledFieldView<InputTextView> {
     const labeledInput = new LabeledFieldView(locale, createLabeledInputText);
     labeledInput.label = locale.t("Block");
+    labeledInput.fieldView.placeholder = locale.t("Enter word to block");
 
     return labeledInput;
   }

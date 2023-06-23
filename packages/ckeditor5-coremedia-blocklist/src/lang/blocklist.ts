@@ -6,8 +6,9 @@
 import { add } from "@ckeditor/ckeditor5-utils/src/translation-service";
 
 add("de", {
-  "Manage Blocklist": "Blockliste verwalten",
+  "Edit blocklist": "Blockliste bearbeiten",
   "Block": "Sperren",
-  "Add word to blocklist": "Wort zur Blockliste hinzufügen",
-  "Remove word from blocklist": "Wort aus Blockliste löschen",
+  "Add word to blocklist": "Begriff zur Blockliste hinzufügen",
+  "Remove word from blocklist": "Begriff aus Blockliste löschen",
+  "Enter word to block": "Begriff zur Liste hinzufügen",
 });
