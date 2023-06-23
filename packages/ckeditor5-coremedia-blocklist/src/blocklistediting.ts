@@ -39,9 +39,6 @@ export default class BlocklistEditing extends Plugin {
     const editor = this.editor;
     editor.commands.add(BLOCKLIST_COMMAND_NAME, new BlocklistCommand(editor));
 
-    // TODO remove
-    this.internalBlocklist = ["and", "more"];
-
     // model to editing view downcast
     this.#defineConversion();
 
