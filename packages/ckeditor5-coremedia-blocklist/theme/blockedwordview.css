@@ -15,7 +15,7 @@
 }
 
 .ck.cm-ck-blocklist-form .ck-labeled-field-view {
-  margin: var(--ck-spacing-large) var(--ck-spacing-large) var(--ck-spacing-small);
+  margin: var(--ck-spacing-small) var(--ck-spacing-large) var(--ck-spacing-small) 0;
 }
 
 .ck.cm-ck-blocklist-form .ck-labeled-field-view .ck-input-text {
@@ -24,5 +24,5 @@
 }
 
 .cm-ck-blocklisted {
-  background-color: #FEE7E1;
+  background-color: rgba(255, 215, 205, .5);
 }
