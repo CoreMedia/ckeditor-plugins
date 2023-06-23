@@ -1,7 +1,7 @@
 import { ButtonView, View, ViewCollection, submitHandler } from "@ckeditor/ckeditor5-ui";
 import { KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
-import { icons } from "@ckeditor/ckeditor5-core";
 import { BindChain } from "@ckeditor/ckeditor5-ui/src/template";
+import trashbinIcon from "../../theme/icons/trashbin.svg";
 import "../../theme/blockedwordview.css";
 import "../lang/blocklist";
 
@@ -102,7 +102,7 @@ export default class BlockedWordView extends View {
 
     button.set({
       label: locale.t("Remove word from blocklist"),
-      icon: icons.cancel,
+      icon: trashbinIcon,
       tooltip: true,
     });
 
