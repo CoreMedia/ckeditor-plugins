@@ -386,6 +386,10 @@ export default class Blocklistui extends Plugin {
       // @ts-expect-error weifhwe
       node.data !== undefined;
 
+    // Regex to remove special characters, like commas, that appear when a highlighted section is within
+    // the selection
+    const regex = /[^a-zA-Z0-9\s-]/g;
+
     if (range) {
       const items = Array.from(range.getItems());
       return items
@@ -396,7 +400,8 @@ export default class Blocklistui extends Plugin {
           }
           return "";
         })
-        .join();
+        .join()
+        .replace(regex, "");
     }
     return "";
   }
