@@ -50,7 +50,7 @@ export default class BlocklistInputView extends View {
     this.saveButtonView = this.#createSaveButton(locale);
     this.children = this.#createFormChildren();
 
-    this.#addInputEventListener(this.wordToBlockInputView, this.saveButtonView);
+    this.#addInputEventListener();
 
     this.setTemplate({
       tag: "form",
@@ -75,16 +75,19 @@ export default class BlocklistInputView extends View {
     }
   }
 
-  #addInputEventListener(wordToBlockInputView: LabeledFieldView, saveButton: ButtonView): void {
-    const blockWordInput = wordToBlockInputView.fieldView.element as HTMLInputElement;
-    const handleInputChange = () => {
-      if (blockWordInput.value.length > 2) {
-        saveButton.set("isEnabled", true);
-      } else {
-        saveButton.set("isEnabled", false);
-      }
-    };
-    blockWordInput.addEventListener("input", handleInputChange);
+  #addInputEventListener(): void {
+    const blockWordInput = this.getInputElement();
+    blockWordInput.addEventListener("input", this.#validateAfterInputChange.bind(this));
+  }
+
+  #validateAfterInputChange(): void {
+    const blockWordInput = this.getInputElement();
+    const saveButton = this.saveButtonView;
+    if (blockWordInput.value.length > 2) {
+      saveButton.set("isEnabled", true);
+    } else {
+      saveButton.set("isEnabled", false);
+    }
   }
 
   /**
@@ -139,5 +142,21 @@ export default class BlocklistInputView extends View {
     children.add(this.saveButtonView);
 
     return children;
+  }
+
+  /**
+   * Sets the value of the input element.
+   * @param text - the new value
+   */
+  setInputText(text: string): void {
+    this.getInputElement().value = text;
+    this.#validateAfterInputChange();
+  }
+
+  /**
+   * Returns the input element.
+   */
+  getInputElement(): HTMLInputElement {
+    return this.wordToBlockInputView.fieldView.element as HTMLInputElement;
   }
 }

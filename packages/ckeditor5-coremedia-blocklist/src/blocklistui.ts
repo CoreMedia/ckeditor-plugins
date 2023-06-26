@@ -3,6 +3,7 @@ import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
 import blocklistIcon from "../theme/icons/blacklist.svg";
 import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import {
+  TextProxy,
   ViewAttributeElement,
   ViewDocumentClickEvent,
   ViewDocumentFragment,
@@ -73,8 +74,7 @@ export default class Blocklistui extends Plugin {
     const blocklistActionsView = new BlocklistActionsView(editor);
 
     this.listenTo(blocklistActionsView.blocklistInputView, "submit", () => {
-      const blockWordInput = this.blocklistActionsView.blocklistInputView.wordToBlockInputView.fieldView
-        .element as HTMLInputElement;
+      const blockWordInput = this.blocklistActionsView.blocklistInputView.getInputElement();
 
       if (!this.blocklistCommand) {
         return;
@@ -94,7 +94,7 @@ export default class Blocklistui extends Plugin {
       this.blocklistCommand.set("value", newValue);
 
       // Clear the input
-      blockWordInput.value = "";
+      this.blocklistActionsView.blocklistInputView.setInputText("");
     });
 
     // Execute unblock command after clicking on the "remove" button.
@@ -168,6 +168,10 @@ export default class Blocklistui extends Plugin {
     if (!this.#balloon) {
       return;
     }
+
+    // Set the value of the input element in the blocklist balloon to the current selection
+    // For clicks on a blocklisted word, no value is set since the selection is collapsed
+    this.blocklistActionsView.blocklistInputView.setInputText(this.#getSelectedText());
 
     this.#addBalloonView();
 
@@ -366,6 +370,35 @@ export default class Blocklistui extends Plugin {
       return this.#getAllBlocklistedWordsForPosition(firstPosition);
     }
     return undefined;
+  }
+
+  /**
+   * Returns the raw text in the currently selected editor content.
+   *
+   * @private
+   */
+  #getSelectedText(): string {
+    const view = this.editor.editing.view;
+    const selection = view.document.selection;
+    const range = selection.getFirstRange();
+
+    const isTextProxy = (node: unknown): node is TextProxy =>
+      // @ts-expect-error weifhwe
+      node.data !== undefined;
+
+    if (range) {
+      const items = Array.from(range.getItems());
+      return items
+        .filter((item) => isTextProxy(item))
+        .map((item) => {
+          if (isTextProxy(item)) {
+            return item.data;
+          }
+          return "";
+        })
+        .join();
+    }
+    return "";
   }
 
   /**
