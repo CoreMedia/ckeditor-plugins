@@ -89,16 +89,21 @@ export default class BlocklistActionsView extends View {
   public override render(): void {
     super.render();
 
-    const childViews = [this.blockedWordlistView, this.blocklistInputView];
-    childViews.forEach((childView) => {
-      // Register the view as focusable.
-      this.#focusables.add(childView);
+    this.#focusables.add(this.blocklistInputView.wordToBlockInputView);
+    this.#focusables.add(this.blocklistInputView.saveButtonView);
+    this.#focusables.add(this.blockedWordlistView);
 
-      // Register the view in the focus tracker.
-      if (childView.element) {
-        this.focusTracker.add(childView.element);
-      }
-    });
+    if (this.blocklistInputView.wordToBlockInputView.element) {
+      this.focusTracker.add(this.blocklistInputView.wordToBlockInputView.element);
+    }
+
+    if (this.blocklistInputView.saveButtonView.element) {
+      this.focusTracker.add(this.blocklistInputView.saveButtonView.element);
+    }
+
+    if (this.blockedWordlistView.element) {
+      this.focusTracker.add(this.blockedWordlistView.element);
+    }
 
     // Start listening for the keystrokes coming from #element.
     if (this.element) {

@@ -1,6 +1,5 @@
 import {
   ButtonView,
-  FocusCycler,
   LabeledFieldView,
   View,
   ViewCollection,
@@ -8,7 +7,7 @@ import {
   submitHandler,
   type InputTextView,
 } from "@ckeditor/ckeditor5-ui";
-import { FocusTracker, KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
+import { KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
 import { icons } from "@ckeditor/ckeditor5-core";
 import "../lang/blocklist";
 
@@ -19,11 +18,6 @@ import "../lang/blocklist";
  * This view is controlled via the blocklistCommand and addToBlocklistCommand.
  */
 export default class BlocklistInputView extends View {
-  /**
-   * Tracks information about DOM focus in the form.
-   */
-  readonly focusTracker = new FocusTracker();
-
   /**
    * An instance of the KeystrokeHandler.
    */
@@ -45,13 +39,6 @@ export default class BlocklistInputView extends View {
   readonly children: ViewCollection;
 
   /**
-   * A collection of views that can be focused in the form.
-   */
-  readonly #focusables = new ViewCollection();
-
-  readonly #focusCycler: FocusCycler;
-
-  /**
    * Creates an instance of the views and initializes the focus management.
    *
    * @param locale - The editor's locale.
@@ -64,19 +51,6 @@ export default class BlocklistInputView extends View {
     this.children = this.#createFormChildren();
 
     this.#addInputEventListener(this.wordToBlockInputView, this.saveButtonView);
-
-    this.#focusCycler = new FocusCycler({
-      focusables: this.#focusables,
-      focusTracker: this.focusTracker,
-      keystrokeHandler: this.keystrokes,
-      actions: {
-        // Navigate form fields backwards using the Shift + Tab keystroke.
-        focusPrevious: "shift + tab",
-
-        // Navigate form fields forwards using the Tab key.
-        focusNext: "tab",
-      },
-    });
 
     this.setTemplate({
       tag: "form",
@@ -95,36 +69,10 @@ export default class BlocklistInputView extends View {
       view: this,
     });
 
-    const childViews = [this.wordToBlockInputView, this.saveButtonView];
-
-    childViews.forEach((childView) => {
-      // Register the view as focusable.
-      this.#focusables.add(childView);
-
-      // Register the view in the focus tracker.
-      if (childView.element) {
-        this.focusTracker.add(childView.element);
-      }
-    });
-
     // Start listening for the keystrokes coming from #element.
     if (this.element) {
       this.keystrokes.listenTo(this.element);
     }
-  }
-
-  public override destroy(): void {
-    super.destroy();
-
-    this.focusTracker.destroy();
-    this.keystrokes.destroy();
-  }
-
-  /**
-   * Focuses the fist focusable in the form.
-   */
-  public focus(): void {
-    this.#focusCycler.focusFirst();
   }
 
   #addInputEventListener(wordToBlockInputView: LabeledFieldView, saveButton: ButtonView): void {
