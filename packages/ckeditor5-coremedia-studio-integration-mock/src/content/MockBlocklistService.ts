@@ -20,7 +20,7 @@ class MockBlocklistService implements BlocklistService {
    * Constructor with some configuration options for the mock service.
    */
   constructor() {
-    this.#blocklist = [];
+    this.#blocklist = ["studio", "provided"];
     this.#blocklistSubject = new Subject<string[]>();
     this.#addExamples();
   }
@@ -30,7 +30,7 @@ class MockBlocklistService implements BlocklistService {
    * @private
    */
   #addExamples(): void {
-    const wordsToAdd = ["studio", "provided", "others", "function"];
+    const wordsToAdd = ["others", "function"];
     // eslint-disable-next-line no-restricted-globals
     setInterval(() => {
       if (wordsToAdd.length > 0) {
@@ -74,6 +74,15 @@ class MockBlocklistService implements BlocklistService {
       this.#blocklist = this.#blocklist.filter((word) => word !== lowerCaseWord);
       this.#blocklistSubject.next(this.#blocklist);
     }
+  }
+
+  /**
+   * Returns all entries of the blocklist.
+   *
+   * @returns The whole blocklist
+   */
+  getList(): Promise<string[]> {
+    return Promise.resolve(this.#blocklist);
   }
 
   /**

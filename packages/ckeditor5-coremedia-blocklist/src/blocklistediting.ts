@@ -85,7 +85,7 @@ export default class BlocklistEditing extends Plugin {
    * @param blocklistService - the blocklist service
    * @private
    */
-  #listenForBlocklistChanges(blocklistService: BlocklistService): void {
+  async #listenForBlocklistChanges(blocklistService: BlocklistService): Promise<void> {
     blocklistService.observe_blocklist().subscribe({
       next: (blockedWords: string[]) => {
         // Get all words that differ from blockedWords and internalBlocklist
@@ -105,6 +105,12 @@ export default class BlocklistEditing extends Plugin {
         }
       },
     });
+
+    const initialWords = await blocklistService.getList();
+    initialWords.forEach((word) => {
+      this.#addMarkersForWord(word);
+    });
+    this.internalBlocklist = [...initialWords];
   }
 
   /**

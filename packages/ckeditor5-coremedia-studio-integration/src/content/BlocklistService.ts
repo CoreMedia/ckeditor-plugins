@@ -37,6 +37,13 @@ interface BlocklistService {
   removeFromBlocklist(wordToUnblock: string): void;
 
   /**
+   * Returns all entries of the blocklist.
+   *
+   * @returns The whole blocklist
+   */
+  getList(): Promise<string[]>;
+
+  /**
    * Observes the blocklist and returns the whole list when words are added or removed.
    * If only changed values are relevant, a previous state of the list must be stored
    * so that changes can be restored by comparing with the current state of the list.
