@@ -3,6 +3,7 @@ import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
 import { LinkActionsViewWrapper } from "./LinkActionsViewWrapper";
 import { LinkFormViewWrapper } from "./LinkFormViewWrapper";
+import { BlocklistActionsViewWrapper } from "./BlocklistActionsViewWrapper";
 
 export class BalloonPanelViewWrapper implements Locatable {
   readonly #parent: Locatable;
@@ -25,6 +26,10 @@ export class BalloonPanelViewWrapper implements Locatable {
 
   get linkFormView(): LinkFormViewWrapper {
     return LinkFormViewWrapper.fromParent(this);
+  }
+
+  get blocklistActionsView(): BlocklistActionsViewWrapper {
+    return BlocklistActionsViewWrapper.fromParent(this);
   }
 
   static fromParent(wrapper: Locatable) {
