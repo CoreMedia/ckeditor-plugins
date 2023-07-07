@@ -3,6 +3,6 @@ import Blocklistui from "./blocklistui";
 import BlocklistEditing from "./blocklistediting";
 
 export default class Blocklist extends Plugin {
-  static readonly pluginName: string = "Blocklist";
+  public static readonly pluginName = "Blocklist" as const;
   static readonly requires = [BlocklistEditing, Blocklistui];
 }
