@@ -4,6 +4,12 @@ import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
 import { Config } from "@ckeditor/ckeditor5-utils";
 import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
+import {
+  isTargetDefaultRuleDefinitionWithFilter,
+  isTargetDefaultRuleDefinitionWithType,
+  TargetDefaultRuleDefinition,
+  TargetDefaultRuleDefinitionWithFilter,
+} from "./LinkTargetDefaultRuleDefinition";
 
 /**
  * Provides the given targets to select from.
@@ -48,7 +54,63 @@ import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
  */
 interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
+  defaultTargets?: TargetDefaultRuleDefinition[];
 }
+
+/**
+ * Parses a possibly existing configuration option as part of CKEditor's
+ * link plugin configuration. It expects an entry `defaultTargets` which contains an
+ * array of default targets for different kind of link types.
+ *
+ * @param config - CKEditor configuration to parse
+ */
+const parseDefaultLinkTargetConfig = (config: Config<EditorConfig>): TargetDefaultRuleDefinitionWithFilter[] => {
+  const fromConfig: unknown = config.get("link.defaultTargets");
+  const result: TargetDefaultRuleDefinitionWithFilter[] = [];
+
+  if (!Array.isArray(fromConfig)) {
+    throw new Error(
+      `link.defaultTargets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`
+    );
+  }
+  const defaultTargetsArray: unknown[] = fromConfig;
+  defaultTargetsArray.forEach((entry: unknown): void => {
+    if (isTargetDefaultRuleDefinitionWithFilter(entry)) {
+      result.push(entry);
+    } else if (isTargetDefaultRuleDefinitionWithType(entry)) {
+      const externalLinkFilter = (url: string) => (url ? url.startsWith("https://") : false);
+      const contentLinkFilter = (url: string) => (url ? url.startsWith("content") : false);
+      const filter =
+        entry.type === "externalLink" ? externalLinkFilter : entry.type === "contentLink" ? contentLinkFilter : null;
+      if (filter) {
+        result.push({
+          filter,
+          target: entry.target,
+        });
+      }
+    }
+  });
+
+  return result;
+};
+
+/**
+ * Returns a default target for a given url, based on the link configuration.
+ *
+ * @param url - the url of the link
+ * @param config - the editor config
+ * @returns the default linkTarget or undefined if no matching filter rule exists
+ */
+export const computeDefaultLinkTargetForUrl = (url: string, config: Config<EditorConfig>): string | undefined => {
+  const defaultTargetConfig = parseDefaultLinkTargetConfig(config);
+  let result: string | undefined;
+  defaultTargetConfig.forEach((defaultTarget) => {
+    if (defaultTarget.filter(url)) {
+      result = defaultTarget.target;
+    }
+  });
+  return result;
+};
 
 /**
  * Parses a possibly existing configuration option as part of CKEditor's
