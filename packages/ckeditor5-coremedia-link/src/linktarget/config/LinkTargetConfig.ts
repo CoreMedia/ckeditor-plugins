@@ -12,7 +12,8 @@ import {
 } from "./LinkTargetDefaultRuleDefinition";
 
 /**
- * Provides the given targets to select from.
+ * Provides the given targets to select from and a list of rules to
+ * set the default target for different types of links.
  *
  * The configuration is provided as extension to CKEditor's link feature
  * configuration:
@@ -41,6 +42,12 @@ import {
  *                 title: "Custom Target",
  *               },
  *             ],
+ *             defaultTargets: [
+ *               {
+ *                 type: "externalLink",
+ *                 target: "_blank",
+ *               }
+ *             ]
  *         }
  *     } )
  *     .then( ... )
@@ -51,6 +58,9 @@ import {
  * this plugin, while `"myCustomTarget"` provides a custom fixed target.
  * `"myCustomTarget"` will be represented in model by `linkTarget="myCustomTarget"`
  * and will get a toggle button with given icon and title.
+ *
+ * It is also possible to provide a `filter` instead of a `type`
+ * for the default target rules.
  */
 interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
