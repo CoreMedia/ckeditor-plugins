@@ -12,6 +12,9 @@ import type {
   LinkUserActionsPlugin,
   OpenContentInTabCommand,
 } from "./index";
+import DefaultTarget from "./linktarget/config/DefaultTarget";
+import LinkTargetOptionDefinition from "./linktarget/config/LinkTargetOptionDefinition";
+import { TargetDefaultRuleDefinition } from "./linktarget/config/LinkTargetDefaultRuleDefinition";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {
@@ -32,5 +35,12 @@ declare module "@ckeditor/ckeditor5-core" {
     // within the ContentLinks plugin. Thus, we should declare it here.
     [ContentLinks.openLinkInTab]: OpenContentInTabCommand;
     linkTarget: LinkTargetCommand;
+  }
+}
+
+declare module "@ckeditor/ckeditor5-link" {
+  interface LinkConfig {
+    targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
+    defaultTargets?: TargetDefaultRuleDefinition[];
   }
 }
