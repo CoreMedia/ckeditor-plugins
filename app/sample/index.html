@@ -72,6 +72,13 @@
         <div id="preview" class="preview hidden" hidden></div>
       </div>
     </div>
+    <div class="row">
+      <div class="row-editor">
+        <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
+        <!-- The data inside are given in data-format of CKEditor, which is CoreMedia RichText 1.0. -->
+        <div id="bbcodeEditor"></div>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -80,46 +87,7 @@
     <a href="https://www.coremedia.com/" target="_blank" rel="noopener">CoreMedia</a>
   </p>
 </footer>
-<script>
-  const loadTranslations = (locale) => {
-    if (locale === "en") {
-      console.log("Default locale. No need to load further resources.");
-    } else {
-      const scriptEl = document.createElement("script");
-      scriptEl.src = "../dist/translations/" + locale + ".js";
-      document.body.appendChild(scriptEl);
-    }
-  };
-
-  const loadCKEditor = (locale) => {
-    const scriptEl = document.createElement("script");
-    scriptEl.src = "../dist/ckeditor.js";
-    scriptEl.dataset["lang"] = locale;
-    document.body.appendChild(scriptEl);
-  };
-
-  const initLanguage = () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const languageFlag = 'lang';
-    const language = urlParams.get(languageFlag)?.toLowerCase() || 'en';
-    const languageToggle = document.getElementById(languageFlag);
-    let label, hrefLang;
-    if (language === "de") {
-      label = "EN | <strong>DE</strong>";
-      hrefLang = "en";
-    } else {
-      label = "<strong>EN</strong> | DE";
-      hrefLang = "de";
-    }
-    languageToggle.setAttribute("href", `.?lang=${hrefLang}`);
-    languageToggle.innerHTML = label;
-    return language;
-  };
-
-  const lang = initLanguage();
-  loadCKEditor(lang);
-  loadTranslations(lang);
-</script>
+  <script src="../dist/translations/de.js"></script>
+  <script src="../dist/ckeditor.js"></script>
 </body>
 </html>
