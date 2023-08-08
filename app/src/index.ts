@@ -36,6 +36,47 @@ const initLanguage = () => {
   return language;
 };
 
+const initToggleEditorTabs = () => {
+  const hideAllEditorRows = () => {
+    const rows = document.getElementsByClassName("editor-row");
+    Array.from(rows).forEach((rowEl) => {
+      const divElement = rowEl as HTMLDivElement;
+      if (divElement) {
+        divElement.style.display = "none";
+      }
+    });
+
+    const tabs = document.getElementsByClassName("editor-tab");
+    Array.from(tabs).forEach((tabsEl) => {
+      const divElement = tabsEl as HTMLDivElement;
+      if (divElement) {
+        divElement.classList.remove("active");
+      }
+    });
+  };
+
+  const initToggleEditorTab = (buttonSelector: string, editorRowSelector: string) => {
+    const editorTab = document.querySelector(buttonSelector) as HTMLButtonElement;
+    editorTab.addEventListener("click", () => {
+      const editorRow = document.querySelector(editorRowSelector) as HTMLDivElement;
+      hideAllEditorRows();
+      editorTab.classList.add("active");
+      editorRow.style.display = "block";
+    });
+  };
+
+  initToggleEditorTab("#defaultEditorTab", "#defaultEditorRow");
+  initToggleEditorTab("#bbcodeEditorTab", "#bbcodeEditorRow");
+
+  hideAllEditorRows();
+  const defaultEditorRow = document.querySelector("#defaultEditorRow") as HTMLDivElement;
+  const defaultEditorTab = document.querySelector("#defaultEditorTab") as HTMLButtonElement;
+  defaultEditorTab.classList.add("active");
+  defaultEditorRow.style.display = "block";
+};
+
+initToggleEditorTabs();
+
 const lang = initLanguage();
 
 setupPreview();
