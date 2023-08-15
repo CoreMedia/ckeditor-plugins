@@ -11,3 +11,6 @@ export { default as LinkTargetConfig } from "./LinkTargetConfig";
 
 export * from "./LinkTargetOptionDefinition";
 export { default as LinkTargetOptionDefinition } from "./LinkTargetOptionDefinition";
+
+export * from "./DefaultTargetTypeFilters";
+export * from "./LinkTargetDefaultRuleDefinition";
