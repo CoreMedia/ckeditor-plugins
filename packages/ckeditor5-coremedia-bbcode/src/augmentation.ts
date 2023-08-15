@@ -1,0 +1,7 @@
+import { BBCode } from "./index";
+
+declare module "@ckeditor/ckeditor5-core" {
+  interface PluginsMap {
+    [BBCode.pluginName]: BBCode;
+  }
+}
