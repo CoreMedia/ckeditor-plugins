@@ -11,7 +11,8 @@ on:
       - ready_for_review
   # Manual trigger means we want to produce published prerelease artifacts for retesting purposes
   workflow_dispatch:
-
+permissions:
+  contents: write
 env:
   NODE_VERSION: 18
   # https://github.com/actions/runner-images/issues/70
