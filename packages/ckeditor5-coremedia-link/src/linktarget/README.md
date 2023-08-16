@@ -19,6 +19,7 @@ the `LinkActionsView` of CKEditor's link feature.
     * [_embed][]
     * [_other][]
   * [Advanced Configuration][]
+  * [Default-Target Configuration][]
 * [CoreMedia RichText 1.0 Integration][]
   * [CKEditor 4 Behavior][]
 
@@ -42,6 +43,9 @@ ClassicEditor
       targets: [
         // ...
       ],
+      defaultTargets: [
+        // ...
+      ]
     }
   })
   .then(...)
@@ -63,7 +67,7 @@ The plugin can be configured as part of CKEditor's Link Feature configuration.
 
 [Default Configuration]: <#default-configuration>
 
-| [[Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] |
+| [Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] | [Default-Target Configuration][] |
 
 The following example shows the default configuration, which is applied, if no
 configuration is given:
@@ -233,7 +237,7 @@ mapping from `xlink:show` and `xlink:role` as required for CoreMedia RichText
 
 [Advanced Configuration]: <#advanced-configuration>
 
-| [Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] |
+| [Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] | [Default-Target Configuration][] |
 
 You may add any custom button for predefined `linkTarget` values. For example to
 support standard HTML option values `_top` and `_parent` you may add them to the
@@ -295,6 +299,59 @@ The title defaults to the name of the target option if unset.
 
 **icon:** Icons will be scaled to 20×20. Thus, it is recommended providing SVGs
 having this initial size.
+
+### Default-Target Configuration
+
+[Default-Target Configuration]: <#default-target-configuration>
+
+| [Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] | [Default-Target Configuration][] |
+
+You can add defaults for link targets. These ```defaultTargets``` define how a
+link is opened, based on the ```type``` of the link. The config for these targets
+distinguishes between content links and external links, where content links are
+all links to contents in CoreMedia Studio and external links are links, prefixed
+with ```https://```.
+
+```typescript
+ClassicEditor
+  .create(document.querySelector("#editor"), {
+    // ...
+    link: {
+      defaultTargets: [
+        {
+          type: "externalLink",
+          target: "_blank"
+        }
+      ],
+    }
+  })
+  .then(...)
+  .catch(...);
+```
+
+Please note, that you can also set a ```filter``` property instead of a ```type```
+to specify additional default targets:
+
+```typescript
+ClassicEditor
+  .create(document.querySelector("#editor"), {
+    // ...
+    link: {
+      defaultTargets: [
+        {
+          filter: (url: string) => (url ? url.startsWith("http://") : false),
+          target: "_embed"
+        }
+      ],
+    }
+  })
+  .then(...)
+  .catch(...);
+```
+
+It's important to know that the order of default targets is relevant. For each
+link, all target rules will be applied in the exact order, determined by the config.
+If there are multiple matching types or filters, the last one will always be applied.
 
 ## CoreMedia RichText 1.0 Integration
 

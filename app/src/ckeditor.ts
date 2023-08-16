@@ -269,6 +269,12 @@ ClassicEditor.create(sourceElement, {
   },
   link: {
     defaultProtocol: "https://",
+    /*defaultTargets: [
+      {
+        type: "externalLink",
+        target: "_blank",
+      },
+    ],*/
     ...linkAttributesConfig,
     /*decorators: {
       hasTitle: {
