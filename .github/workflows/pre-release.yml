@@ -11,7 +11,8 @@ on:
       - ready_for_review
   # Manual trigger means we want to produce published prerelease artifacts for retesting purposes
   workflow_dispatch:
-
+permissions:
+  contents: write
 env:
   NODE_VERSION: 18
   # https://github.com/actions/runner-images/issues/70
@@ -40,49 +41,5 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Configure NPM
-        run: |
-          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)
-          echo "::add-mask::$NPM_AUTH_TOKEN"
-          echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-
-          npm install -g pnpm@${{ env.PNPM_VERSION }}
-          npm install -g semver
-      - name: Setup Git
-        run: |
-          git config --global user.name 'coremedia-ci'
-          git config --global user.email 'coremedia-ci@coremedia.com'
-      - name: Install
-        run: pnpm install
-      - name: Set prerelease version (if triggered manually)
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git status
-            echo "error:: There are unexpected changes in git!";
-            exit 1
-          fi
-          actual_version=$(cat .release-version)
-          prnumber=${{ steps.read-prnumber.outputs.prnumber }}
-          next_version=$(semver --increment prerelease --preid pr${prnumber}-${{ github.run_number }} ${actual_version})
-          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
-          pnpm install --no-frozen-lockfile
-          git commit -am "Set PR Version: ${next_version}"
-          echo "Chosen Pre-Release Version: ${next_version}"
-      - name: Build
-        run: pnpm build
-      - name: Lint
-        run: pnpm lint
-      - name: Test
-        run: pnpm jest
-      - name: Playwright Tests
-        run: pnpm playwright
-      - name: TypeDoc
-        run: pnpm doc
-      - name: Publish prerelease
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          pnpm install --production
-          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall --registry=https://npm.coremedia.io --no-git-checks --tag pullrequest
+      - name: Push commits
+        run: git checkout -b ci/fix-github-actions-test && git push origin ci/fix-github-actions-test
