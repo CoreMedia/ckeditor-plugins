@@ -91,7 +91,7 @@ export default class LinkTargetModelView extends Plugin {
    * Computes the range for any inserted or edited link elements.
    * @param diffItem - the diffItem to be checked
    * @param writer - the writer, needed to create a range for inserted links
-   * @returns the rangeor undefined
+   * @returns the range or undefined
    * @private
    */
   #getLinkRange(diffItem: DiffItem, writer: Writer): Range {
@@ -113,19 +113,14 @@ export default class LinkTargetModelView extends Plugin {
     if (this.#isDiffItemAttribute(diffItem)) {
       // The linkHref attribute was added/changed for this node
       // This might happen if an existing link gets edited e.g. if the link url gets changed.
-      const linkTarget = computeDefaultLinkTargetForUrl(diffItem.attributeNewValue as string, this.editor.config);
-      return linkTarget;
+      return computeDefaultLinkTargetForUrl(diffItem.attributeNewValue as string, this.editor.config);
     }
 
     if (this.#isDiffItemInsert(diffItem)) {
       // An entry with linkHref attribute was inserted
       // This applies to links, created via the link balloon and contents dropped into the
       // editor or into the link balloon
-      const linkTarget = computeDefaultLinkTargetForUrl(
-        diffItem.attributes.get("linkHref") as string,
-        this.editor.config
-      );
-      return linkTarget;
+      return computeDefaultLinkTargetForUrl(diffItem.attributes.get("linkHref") as string, this.editor.config);
     }
   }
 }
