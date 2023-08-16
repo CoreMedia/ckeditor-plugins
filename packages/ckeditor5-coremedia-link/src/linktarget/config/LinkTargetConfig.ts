@@ -79,6 +79,10 @@ const parseDefaultLinkTargetConfig = (config: Config<EditorConfig>): TargetDefau
   const fromConfig: unknown = config.get("link.defaultTargets");
   const result: TargetDefaultRuleDefinitionWithFilter[] = [];
 
+  if (fromConfig === null || fromConfig === undefined) {
+    return [];
+  }
+
   if (!Array.isArray(fromConfig)) {
     throw new Error(
       `link.defaultTargets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`
