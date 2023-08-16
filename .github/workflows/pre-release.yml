@@ -41,4 +41,4 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Push commits
-        run: git push -u origin ci/fix-github-actions:ci/fix-github-actions-test
+        run: git checkout -b ci/fix-github-actions-test && git push origin ci/fix-github-actions-test
