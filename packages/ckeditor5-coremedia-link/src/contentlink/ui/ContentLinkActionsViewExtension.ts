@@ -5,7 +5,8 @@ import { LinkUI } from "@ckeditor/ckeditor5-link";
 // LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
-import { requireContentUriPath, isModelUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { requireContentUriPath, isModelUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
 import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
