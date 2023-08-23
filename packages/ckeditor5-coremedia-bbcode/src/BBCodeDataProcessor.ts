@@ -1,5 +1,5 @@
 import {
-  DataProcessor,
+  DataProcessor, DomConverter,
   HtmlDataProcessor,
   MatcherPattern,
   ViewDocument,
@@ -8,6 +8,8 @@ import {
 
 import { bbcode2html } from "./bbcode2html/bbcode2html";
 import { html2bbcode } from "./html2bbcode/html2bbcode";
+import { defaultRules, HTML2BBCodeRule } from "./html2bbcode/rules/DefaultRules";
+import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 
 /**
  * Data processor for BBCode.
@@ -20,11 +22,20 @@ export default class BBCodeDataProcessor implements DataProcessor {
    */
   readonly #htmlDataProcessor: HtmlDataProcessor;
 
+  readonly #domConverter: DomConverter;
+
+  #toDataRules: HTML2BBCodeRule[];
+
   /**
    * Creates a new instance of the BBCode data processor class.
    */
   constructor(document: ViewDocument) {
     this.#htmlDataProcessor = new HtmlDataProcessor(document);
+    // Remember and re-use DOM converter.
+    this.#domConverter = this.#htmlDataProcessor.domConverter;
+
+    // TODO might be extended in the future
+    this.#toDataRules = defaultRules;
   }
 
   /**
@@ -46,9 +57,26 @@ export default class BBCodeDataProcessor implements DataProcessor {
    * @returns BBCode string.
    */
   public toData(viewFragment: ViewDocumentFragment): string {
-    const html = this.#htmlDataProcessor.toData(viewFragment);
-    return html2bbcode(html);
+    const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
+    //const htmlWriter = new BasicHtmlWriter();
+
+    //htmlWriter.getHtml( htmlDomFragment );
+    const bbcode2 = html2bbcode(htmlDomFragment, this.#toDataRules);
+    console.log("BBCO_DP", bbcode2);
+    const bbcode = this.#htmlDataProcessor.toData(viewFragment);
+    console.log("HTML_DP", bbcode);
+    return bbcode2;
   }
+
+  /*public getBBCode( fragment: DocumentFragment ): string {
+    const doc = document.implementation.createHTMLDocument( "" );
+    const container = doc.createElement( "div" );
+
+    const bbcode2 = html2bbcode(htmlDomFragment, this.#toDataRules);
+    container.appendChild( fragment );
+
+    return container.innerHTML;
+  }*/
 
   /**
    * Registers a {@link module:engine/view/matcher~MatcherPattern} for view elements whose content should be treated as raw data

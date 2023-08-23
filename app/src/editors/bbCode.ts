@@ -8,7 +8,6 @@ import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { saveData } from "../dataFacade";
 import { getHashParam } from "../HashParams";
 
 /**
@@ -40,12 +39,9 @@ export const createBBCodeEditor = (language = "en") => {
     },
     autosave: {
       waitingTime: 1000, // in ms
-      save(currentEditor: Editor) {
+      save() {
         console.log("BBCode Save triggered...");
-        const start = performance.now();
-        return saveData(currentEditor, "autosave").then(() => {
-          console.log(`Saved BBCode data within ${performance.now() - start} ms.`);
-        });
+        return Promise.resolve();
       },
     },
   })
