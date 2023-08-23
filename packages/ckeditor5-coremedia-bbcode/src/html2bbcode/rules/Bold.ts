@@ -2,11 +2,11 @@ import { HTML2BBCodeRule } from "./DefaultRules";
 
 export const boldRule: HTML2BBCodeRule = {
   id: "Bold",
-  toData: (node) => {
+  toData: (node, content: string) => {
     if (!isBold(node)) {
       return node;
     }
-    return `[b]${node.textContent}[/b]`;
+    return `[b]${content}[/b]`;
   },
 };
 

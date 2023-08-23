@@ -2,11 +2,11 @@ import { HTML2BBCodeRule } from "./DefaultRules";
 
 export const italicRule: HTML2BBCodeRule = {
   id: "Italic",
-  toData: (node) => {
+  toData: (node, content: string) => {
     if (!isItalic(node)) {
       return node;
     }
-    return `[i]${node.textContent}[/i]`;
+    return `[i]${content}[/i]`;
   },
 };
 

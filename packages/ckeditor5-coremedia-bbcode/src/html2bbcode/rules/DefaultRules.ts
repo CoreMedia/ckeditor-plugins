@@ -4,7 +4,7 @@ import { underlineRule } from "./Underline";
 
 export interface HTML2BBCodeRule {
   id: string;
-  toData: (node: Node) => string | Node;
+  toData: (node: Node, content: string) => string | Node;
 }
 
 export const defaultRules: HTML2BBCodeRule[] = [boldRule, italicRule, underlineRule];

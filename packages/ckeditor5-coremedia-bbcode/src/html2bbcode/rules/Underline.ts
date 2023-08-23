@@ -2,11 +2,11 @@ import { HTML2BBCodeRule } from "./DefaultRules";
 
 export const underlineRule: HTML2BBCodeRule = {
   id: "Underline",
-  toData: (node) => {
+  toData: (node, content: string) => {
     if (!isItalic(node)) {
       return node;
     }
-    return `[u]${node.textContent}[/u]`;
+    return `[u]${content}[/u]`;
   },
 };
 

@@ -2,11 +2,11 @@ import { HTML2BBCodeRule } from "./DefaultRules";
 
 export const hyperlinkRule: HTML2BBCodeRule = {
   id: "Hyperlink",
-  toData: (node) => {
+  toData: (node, content: string) => {
     if (!isHyperlink(node)) {
       return node;
     }
-    return `[url]${node.textContent}[/url]`;
+    return `[url]${content}[/url]`;
   },
 };
 
