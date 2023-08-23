@@ -12,7 +12,7 @@ propagated to the outside.
 
 ## Motivation
 
-As described in a [corresponding CKEditor 5 issue][ckeditor/ckeditor5-11900],
+As described in a [corresponding CKEditor 5 issue][ckeditor:ckeditor5:11900],
 just set data may not be strictly equal to the retrieved data. One possible
 reason is the underlying model, that hides some details like the order of
 elements.
@@ -113,4 +113,4 @@ another solution.
 
 TODO: We may want to also provide a solution here.
 
-[ckeditor/ckeditor5-11900]: <https://github.com/ckeditor/ckeditor5/issues/11900> "Veto Autosave on "no semantic change" · Issue #11900 · ckeditor/ckeditor5"
+[ckeditor:ckeditor5:11900]: <https://github.com/ckeditor/ckeditor5/issues/11900> "Veto Autosave on 'no semantic change' · Issue #11900 · ckeditor/ckeditor5"
