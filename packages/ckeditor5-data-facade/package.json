@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-data-facade",
-  "version": "15.0.2-rc.0",
+  "version": "15.0.2-rc.1",
   "description": "CKEditor 5 Data Facade",
   "keywords": [
     "coremedia",
@@ -44,7 +44,7 @@
     "@ckeditor/ckeditor5-utils": "^37.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "15.0.2-rc.0",
-    "@coremedia/ckeditor5-logging": "15.0.2-rc.0"
+    "@coremedia/ckeditor5-core-common": "15.0.2-rc.1",
+    "@coremedia/ckeditor5-logging": "15.0.2-rc.1"
   }
 }
