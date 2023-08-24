@@ -58,25 +58,8 @@ export default class BBCodeDataProcessor implements DataProcessor {
    */
   public toData(viewFragment: ViewDocumentFragment): string {
     const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
-    //const htmlWriter = new BasicHtmlWriter();
-
-    //htmlWriter.getHtml( htmlDomFragment );
-    const bbcode2 = html2bbcode(htmlDomFragment, this.#toDataRules);
-    console.log("BBCO_DP", bbcode2);
-    const bbcode = this.#htmlDataProcessor.toData(viewFragment);
-    console.log("HTML_DP", bbcode);
-    return bbcode2;
+    return html2bbcode(htmlDomFragment, this.#toDataRules);
   }
-
-  /*public getBBCode( fragment: DocumentFragment ): string {
-    const doc = document.implementation.createHTMLDocument( "" );
-    const container = doc.createElement( "div" );
-
-    const bbcode2 = html2bbcode(htmlDomFragment, this.#toDataRules);
-    container.appendChild( fragment );
-
-    return container.innerHTML;
-  }*/
 
   /**
    * Registers a {@link module:engine/view/matcher~MatcherPattern} for view elements whose content should be treated as raw data
