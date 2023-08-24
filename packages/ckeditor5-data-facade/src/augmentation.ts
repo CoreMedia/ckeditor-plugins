@@ -1,7 +1,7 @@
-import type { DataFacade } from "./index";
+import type { CachingDataFacade } from "./index";
 
 declare module "@ckeditor/ckeditor5-core" {
   interface PluginsMap {
-    [DataFacade.pluginName]: DataFacade;
+    [CachingDataFacade.pluginName]: CachingDataFacade;
   }
 }

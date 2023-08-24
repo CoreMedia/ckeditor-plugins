@@ -2,6 +2,6 @@
  * @module ckeditor5-data-facade
  */
 
-export { DataFacade } from "./DataFacade";
+export { CachingDataFacade } from "./CachingDataFacade";
 
 import "./augmentation";

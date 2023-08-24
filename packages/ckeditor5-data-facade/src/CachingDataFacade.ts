@@ -42,9 +42,9 @@ export const defaultGetDataOptions: Required<Pick<NonNullable<GetDataOptions>, "
  * may cause overhead such as additional network communication, subsequent
  * publication steps or even may trigger translation processes.
  */
-export class DataFacade extends Plugin {
-  public static readonly pluginName = "DataFacade";
-  static readonly #logger: Logger = LoggerProvider.getLogger(DataFacade.pluginName);
+export class CachingDataFacade extends Plugin {
+  public static readonly pluginName = "CachingDataFacade";
+  static readonly #logger: Logger = LoggerProvider.getLogger(CachingDataFacade.pluginName);
   readonly #lastSetData: LastSetData = new LastSetData();
   #active = false;
 
@@ -70,7 +70,7 @@ export class DataFacade extends Plugin {
    * triggers propagation initially, if required.
    */
   #onEditorReady(): void {
-    const logger = DataFacade.#logger;
+    const logger = CachingDataFacade.#logger;
 
     this.#active = true;
     logger.debug("DataFacade gets active as Editor instance is ready.");
@@ -81,7 +81,7 @@ export class DataFacade extends Plugin {
    * Propagates the data to the editor, once it is ready.
    */
   #propagateData(): void {
-    const logger = DataFacade.#logger;
+    const logger = CachingDataFacade.#logger;
 
     if (this.#active) {
       logger.debug("Going to propagate data.");
@@ -97,7 +97,7 @@ export class DataFacade extends Plugin {
    * @param options - options for setting data
    */
   setData(data: SetDataData, options: SetDataOptions = {}): void {
-    const logger = DataFacade.#logger;
+    const logger = CachingDataFacade.#logger;
 
     this.#lastSetData.data = normalizeData(data);
     this.#lastSetData.options = options;
@@ -113,7 +113,7 @@ export class DataFacade extends Plugin {
    * `rootName` any other options are ignored if data are retrieved from cache.
    */
   getData(options: GetDataOptions = {}): string {
-    const logger = DataFacade.#logger;
+    const logger = CachingDataFacade.#logger;
 
     const { data: dataController } = this.editor;
     const lastSetData = this.#lastSetData;
@@ -138,7 +138,7 @@ export class DataFacade extends Plugin {
    * @throws CKEditorError if no data exist for given `rootName` (simulates behavior of `DataController`)
    */
   #getCachedData(data: Record<string, string>, options: GetDataOptions, errorContext?: object | null): string {
-    const logger = DataFacade.#logger;
+    const logger = CachingDataFacade.#logger;
 
     const optionsWithDefaults = {
       ...defaultGetDataOptions,
