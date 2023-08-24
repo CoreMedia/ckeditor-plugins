@@ -1,19 +1,11 @@
-import { EditorReadyEvent, Plugin } from "@ckeditor/ckeditor5-core";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Editor, EditorReadyEvent, Plugin } from "@ckeditor/ckeditor5-core";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerTypes";
-import { LastSetData } from "./LastSetData";
-import { CKEditorError } from "@ckeditor/ckeditor5-utils";
-import { normalizeData } from "./Data";
-
-/**
- * Default options as used in `DataController`.
- */
-export const defaultGetDataOptions: Required<Pick<NonNullable<GetDataOptions>, "rootName" | "trim">> = {
-  rootName: "main",
-  trim: "empty",
-};
+import { DataApi } from "./DataApi";
+import { ContextAwareCachedDataAccess } from "./ContextAwareCachedDataAccess";
+import { CachedDataAccess } from "./CachedDataAccess";
+import { ContextOptions } from "./Context";
+import { InvalidData } from "./InvalidData";
 
 /**
  * This facade is meant to control data in- and output. It ensures that any
@@ -42,11 +34,14 @@ export const defaultGetDataOptions: Required<Pick<NonNullable<GetDataOptions>, "
  * may cause overhead such as additional network communication, subsequent
  * publication steps or even may trigger translation processes.
  */
-export class CachingDataFacade extends Plugin {
+export class CachingDataFacade extends Plugin implements DataApi {
   public static readonly pluginName = "CachingDataFacade";
-  static readonly #logger: Logger = LoggerProvider.getLogger(CachingDataFacade.pluginName);
-  readonly #lastSetData: LastSetData = new LastSetData();
-  #active = false;
+  readonly #dataApi: CachedDataAccess;
+
+  constructor(editor: Editor) {
+    super(editor);
+    this.#dataApi = new ContextAwareCachedDataAccess(editor);
+  }
 
   /**
    * Initializes plugin and starts waiting for the editor to become ready.
@@ -57,7 +52,7 @@ export class CachingDataFacade extends Plugin {
     editor.once<EditorReadyEvent>(
       "ready",
       () => {
-        this.#onEditorReady();
+        this.#dataApi.activate();
       },
       // Propagate the state late.
       { priority: "lowest" }
@@ -65,28 +60,9 @@ export class CachingDataFacade extends Plugin {
     reportInitEnd(initInformation);
   }
 
-  /**
-   * Marks the data-facade as being actively propagating state to editor and
-   * triggers propagation initially, if required.
-   */
-  #onEditorReady(): void {
-    const logger = CachingDataFacade.#logger;
-
-    this.#active = true;
-    logger.debug("DataFacade gets active as Editor instance is ready.");
-    this.#propagateData();
-  }
-
-  /**
-   * Propagates the data to the editor, once it is ready.
-   */
-  #propagateData(): void {
-    const logger = CachingDataFacade.#logger;
-
-    if (this.#active) {
-      logger.debug("Going to propagate data.");
-      this.#lastSetData.propagateData(this.editor);
-    }
+  override destroy() {
+    super.destroy();
+    this.#dataApi.deactivate();
   }
 
   /**
@@ -96,13 +72,8 @@ export class CachingDataFacade extends Plugin {
    * @param data - data to set
    * @param options - options for setting data
    */
-  setData(data: SetDataData, options: SetDataOptions = {}): void {
-    const logger = CachingDataFacade.#logger;
-
-    this.#lastSetData.data = normalizeData(data);
-    this.#lastSetData.options = options;
-    logger.debug(`Set data.`, { data: this.#lastSetData });
-    this.#propagateData();
+  setData(data: SetDataData, options: SetDataOptions & ContextOptions = {}): void {
+    this.#dataApi.setData(data, options);
   }
 
   /**
@@ -112,48 +83,7 @@ export class CachingDataFacade extends Plugin {
    * @param options - options for retrieving data; note, that despite the
    * `rootName` any other options are ignored if data are retrieved from cache.
    */
-  getData(options: GetDataOptions = {}): string {
-    const logger = CachingDataFacade.#logger;
-
-    const { data: dataController } = this.editor;
-    const lastSetData = this.#lastSetData;
-    const { data } = lastSetData;
-
-    if (data === undefined || (this.#active && !lastSetData.isCurrent(this.editor))) {
-      // Undefined data: No data have been set: We directly forward the state from the editor.
-      // isCurrent: If not current, data changed meanwhile. Read data directly from the editor.
-      logger.debug("Retrieving data directly from editor.");
-      return dataController.get(options);
-    }
-
-    return this.#getCachedData(data, options, dataController);
-  }
-
-  /**
-   * Get cached data.
-   *
-   * @param data - cached data to use.
-   * @param options - options, required to retrieve the `rootName` from
-   * @param errorContext - context for raising error
-   * @throws CKEditorError if no data exist for given `rootName` (simulates behavior of `DataController`)
-   */
-  #getCachedData(data: Record<string, string>, options: GetDataOptions, errorContext?: object | null): string {
-    const logger = CachingDataFacade.#logger;
-
-    const optionsWithDefaults = {
-      ...defaultGetDataOptions,
-      ...options,
-    };
-
-    const { rootName } = optionsWithDefaults;
-
-    if (rootName in data) {
-      const selectedData = data[rootName];
-      logger.debug("Fallback to last set data.", { data: selectedData });
-      return selectedData;
-    }
-    // We simulate the failure from DataController, as if the requested root
-    // does not exist.
-    throw new CKEditorError("datacontroller-get-non-existent-root", errorContext);
+  getData(options: GetDataOptions & ContextOptions = {}): string | InvalidData {
+    return this.#dataApi.getData(options);
   }
 }
