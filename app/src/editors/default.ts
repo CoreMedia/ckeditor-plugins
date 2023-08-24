@@ -55,6 +55,10 @@ import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/s
 import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/src/LinkAttributesConfig";
 import { LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+import type {
+  LatestCoreMediaRichTextConfig,
+  V10CoreMediaRichTextConfig,
+} from "@coremedia/ckeditor5-coremedia-richtext";
 /**
  * Typings for CKEditorInspector, as it does not ship with typings yet.
  */
@@ -132,6 +136,25 @@ const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttribu
     };
 
 const editorElementSelector = "#editor";
+
+const getRichTextConfig = (
+  richTextCompatibility: string | true
+): Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig => {
+  //  Use v10 for first data-processor architecture, for example.
+  if (richTextCompatibility === "v10") {
+    return {
+      // Defaults to: Loose
+      strictness: Strictness.STRICT,
+      compatibility: "v10",
+      rules: v10RichTextRuleConfigurations,
+    };
+  }
+  return {
+    strictness: Strictness.STRICT,
+    compatibility: "latest",
+    rules: richTextRuleConfigurations,
+  };
+};
 
 export const createDefaultEditor = (language = "en") => {
   const sourceElement = document.querySelector(editorElementSelector) as HTMLElement;
@@ -331,16 +354,7 @@ export const createDefaultEditor = (language = "en") => {
         });
       },
     },
-    [COREMEDIA_RICHTEXT_CONFIG_KEY]: {
-      // Defaults to: Loose
-      strictness: Strictness.STRICT,
-      // The Latest is the default. Use v10 for first data-processor architecture,
-      // for example.
-      // @ts-expect-error - TODO[cke] 37.x Fix Typings
-      compatibility: richTextCompatibility,
-      //@ts-expect-error the types do not match here rules may not be RuleConfig[] TODO
-      rules: richTextCompatibility === "v10" ? v10RichTextRuleConfigurations : richTextRuleConfigurations,
-    },
+    [COREMEDIA_RICHTEXT_CONFIG_KEY]: getRichTextConfig(richTextCompatibility),
     [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
       aliases: [
         // As we represent `<mark>` as `<span class="mark">`, we must ensure,
