@@ -4,7 +4,7 @@ export const italicRule: HTML2BBCodeRule = {
   id: "Italic",
   toData: (node, content: string) => {
     if (!isItalic(node)) {
-      return node;
+      return undefined;
     }
     return `[i]${content}[/i]`;
   },

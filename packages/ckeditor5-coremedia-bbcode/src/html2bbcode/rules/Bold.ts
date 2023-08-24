@@ -4,7 +4,7 @@ export const boldRule: HTML2BBCodeRule = {
   id: "Bold",
   toData: (node, content: string) => {
     if (!isBold(node)) {
-      return node;
+      return undefined;
     }
     return `[b]${content}[/b]`;
   },

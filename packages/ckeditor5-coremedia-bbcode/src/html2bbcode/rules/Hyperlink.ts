@@ -4,7 +4,7 @@ export const hyperlinkRule: HTML2BBCodeRule = {
   id: "Hyperlink",
   toData: (node, content: string) => {
     if (!isHyperlink(node)) {
-      return node;
+      return undefined;
     }
     return `[url]${content}[/url]`;
   },

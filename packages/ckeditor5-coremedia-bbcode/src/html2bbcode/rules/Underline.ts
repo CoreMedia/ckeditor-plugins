@@ -4,7 +4,7 @@ export const underlineRule: HTML2BBCodeRule = {
   id: "Underline",
   toData: (node, content: string) => {
     if (!isItalic(node)) {
-      return node;
+      return undefined;
     }
     return `[u]${content}[/u]`;
   },
