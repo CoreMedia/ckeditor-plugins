@@ -1,4 +1,5 @@
 import { HTML2BBCodeRule } from "./DefaultRules";
+import { isElement } from "@coremedia/ckeditor5-dom-support";
 
 export const hyperlinkRule: HTML2BBCodeRule = {
   id: "Hyperlink",
@@ -6,7 +7,11 @@ export const hyperlinkRule: HTML2BBCodeRule = {
     if (!isHyperlink(node)) {
       return undefined;
     }
-    return `[url]${content}[/url]`;
+    if (!isElement(node)) {
+      return `[url]${content}[/url]`;
+    }
+    const href = node.getAttribute("href");
+    return `[url=${href}]${content}[/url]`;
   },
 };
 
