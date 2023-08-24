@@ -2,7 +2,7 @@
  * @module ckeditor5-data-facade
  */
 
-export { CachingDataFacade } from "./CachingDataFacade";
+export { DataFacade } from "./DataFacade";
 export { DataApi } from "./DataApi";
 export {
   dataUnavailable,

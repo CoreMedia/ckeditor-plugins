@@ -34,7 +34,7 @@ import { InvalidData } from "./InvalidData";
  * may cause overhead such as additional network communication, subsequent
  * publication steps or even may trigger translation processes.
  */
-export class CachingDataFacade extends Plugin implements DataApi {
+export class DataFacade extends Plugin implements DataApi {
   public static readonly pluginName = "CachingDataFacade";
   readonly #dataApi: CachedDataAccess;
 
