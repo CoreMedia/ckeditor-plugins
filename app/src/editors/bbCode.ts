@@ -1,5 +1,5 @@
 import { Autosave } from "@ckeditor/ckeditor5-autosave";
-import { Bold, Italic } from "@ckeditor/ckeditor5-basic-styles";
+import { Bold, Italic, Underline } from "@ckeditor/ckeditor5-basic-styles";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { BBCode } from "@coremedia/ckeditor5-coremedia-bbcode";
@@ -9,6 +9,7 @@ import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { getHashParam } from "../HashParams";
+import { Link } from "@ckeditor/ckeditor5-link";
 
 /**
  * Typings for CKEditorInspector, as it does not ship with typings yet.
@@ -29,8 +30,8 @@ export const createBBCodeEditor = (language = "en") => {
 
   ClassicEditor.create(document.querySelector(editorElementSelector) as HTMLElement, {
     placeholder: "Type your text here...",
-    plugins: [Autosave, Bold, Essentials, Heading, Italic, Paragraph, SourceEditing, BBCode],
-    toolbar: ["undo", "redo", "|", "heading", "|", "bold", "italic", "sourceEditing"],
+    plugins: [Autosave, Bold, Essentials, Heading, Italic, Underline, Paragraph, SourceEditing, Link, BBCode],
+    toolbar: ["undo", "redo", "|", "heading", "|", "bold", "italic", "underline", "|", "link", "|", "sourceEditing"],
     language: {
       // Language switch only applies to editor instance.
       ui: language,
