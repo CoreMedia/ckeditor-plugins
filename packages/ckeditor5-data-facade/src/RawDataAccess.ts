@@ -10,7 +10,7 @@ import { InvalidData } from "./InvalidData";
  * of the editor instance.
  */
 export class RawDataAccess implements DataApi {
-  static readonly #logger: Logger = LoggerProvider.getLogger(RawDataAccess.constructor.name);
+  static readonly #logger: Logger = LoggerProvider.getLogger("RawDataAccess");
   readonly editor: Editor;
 
   /**

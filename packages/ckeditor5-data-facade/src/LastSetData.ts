@@ -7,7 +7,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvi
  * Represents the data last directly set at the editor.
  */
 export class LastSetData {
-  static readonly #logger: Logger = LoggerProvider.getLogger(LastSetData.constructor.name);
+  static readonly #logger: Logger = LoggerProvider.getLogger("LastSetData");
 
   /**
    * The data if set.
@@ -40,7 +40,7 @@ export class LastSetData {
   propagateData(editor: Editor): void {
     const logger = LastSetData.#logger;
 
-    const dataToSet = this.#data;
+    const dataToSet = this.data;
     if (dataToSet === undefined) {
       logger.debug("Skipping propagation: No data set yet.");
       return;
@@ -50,18 +50,31 @@ export class LastSetData {
       data,
       model: { document },
     } = editor;
+    const { version: previousVersion } = document;
 
     if (this.isCurrent(editor)) {
       // No need to propagate. The editor already has the data.
-      logger.debug("Skipping propagation: Editor is already up-to-date.");
+      logger.debug(`Skipping propagation: Editor is already up-to-date having version ${previousVersion}.`);
       return;
     }
 
     logger.debug("Propagating data to editor.", { data: dataToSet });
 
-    data.set(dataToSet, this.#options);
+    data.set(dataToSet, this.options);
     // Update the current version number.
-    this.#version = document.version;
+    this.version = document.version;
+
+    logger.debug("Propagated data to editor.", {
+      data: dataToSet,
+      version: { before: previousVersion, after: this.version },
+    });
+  }
+
+  /**
+   * Signals, if data are known to have been propagated.
+   */
+  get propagated(): boolean {
+    return this.version !== undefined;
   }
 
   /**
@@ -71,7 +84,7 @@ export class LastSetData {
    * @param editor - editor to validate the state of
    */
   isCurrent(editor: Editor): boolean {
-    return this.#version === editor.model.document.version;
+    return this.version === editor.model.document.version;
   }
 
   /**
@@ -130,7 +143,7 @@ export class LastSetData {
     return this.#version;
   }
 
-  toString(): string {
-    return `LastSetData:\n\tdata: ${String(this.#data)}\n\toptions: ${this.#options}\n\tversion: ${this.#version}`;
+  toStringHurz(): string {
+    return `LastSetData:\n\tdata: ${String(this.data)}\n\toptions: ${this.options}\n\tversion: ${this.version}`;
   }
 }

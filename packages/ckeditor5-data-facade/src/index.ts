@@ -2,17 +2,17 @@
  * @module ckeditor5-data-facade
  */
 
-export { ContextOptions } from "./Context";
+export type { ContextOptions } from "./Context";
 export { SetDataData, SetDataOptions, GetDataOptions } from "./DataControllerTypes";
 export { DataApi } from "./DataApi";
 export { DataFacade, findDataApi } from "./DataFacade";
 export {
   dataUnavailable,
-  DataUnavailable,
-  InvalidData,
+  type DataUnavailable,
+  type InvalidData,
   isInvalidData,
   invalidContext,
-  InvalidContext,
+  type InvalidContext,
 } from "./InvalidData";
 
 import "./augmentation";

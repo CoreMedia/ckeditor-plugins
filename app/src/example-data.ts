@@ -14,6 +14,7 @@ import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-exampl
 import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/EntitiesData";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { View } from "@ckeditor/ckeditor5-engine";
+import { challengingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/ChallengingData";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -150,6 +151,7 @@ const exampleData: Record<string, string> = {
   ...loremIpsumData,
   ...grsData,
   ...welcomeTextData,
+  ...challengingData,
   "Content Links": contentLinkExamples(),
   "Various Links": PREDEFINED_MOCK_LINK_DATA,
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,

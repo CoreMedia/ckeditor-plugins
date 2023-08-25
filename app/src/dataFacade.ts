@@ -1,33 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { updatePreview } from "./preview";
 import { Editor } from "@ckeditor/ckeditor5-core";
-
-const LastSetVersion = Symbol("LastSetVersion");
-const LastSetData = Symbol("LastSetData");
+import { findDataApi, isInvalidData } from "@coremedia/ckeditor5-data-facade";
 
 /**
  * A small facade around editor.setData, which remembers the last data
  * set explicitly. This simulates a similar approach as in studio-client.
  */
-export const setData = (editor: Editor, data: string) => {
-  const { document } = editor.model;
+export const setData = (editor: Editor, data: string): void => {
   const { data: dataController } = editor;
 
-  const versionBefore = document.version;
-  dataController.set(data);
-  const versionAfter = document.version;
-
-  //@ts-expect-error problem with symbols
-  window[LastSetData] = data;
-
-  //@ts-expect-error problem with symbols
-  window[LastSetVersion] = versionAfter;
+  findDataApi(editor).setData(data);
 
   console.log(`Editor Data Set.`, {
     data,
-    transformedData: dataController.get(),
-    versionBefore,
-    versionAfter,
+    transformedData: dataController.get({
+      trim: "empty",
+    }),
   });
 };
 
@@ -41,42 +29,20 @@ export const setData = (editor: Editor, data: string) => {
  */
 // async: In production scenarios, this will be an asynchronous call.
 // eslint-disable-next-line @typescript-eslint/require-await
-export const saveData = async (editor: Editor, source: string) => {
-  const data = editor.data.get({
+export const saveData = async (editor: Editor, source: string): Promise<void> => {
+  const data = findDataApi(editor).getData({
     // set to `none`, to trigger data-processing for empty text, too
     // possible values: empty, none (default: empty)
     trim: "empty",
   });
-  const currentVersion = editor.model.document.version;
-  //@ts-expect-error problem with symbols
-  const lastSetVersion = window[LastSetVersion];
-  //@ts-expect-error problem with symbols
-  const lastSetData = window[LastSetData];
 
-  const logInfo = (isUpdate: boolean) => ({
-    isUpdate,
-    currentVersion,
-    lastSetVersion,
-    data,
-    lastSetData,
-  });
-
-  let previewData: string;
-
-  if (lastSetVersion !== undefined && lastSetVersion === currentVersion) {
-    console.log(
-      `Would skip saving data triggered by ${source} as they represent the same data as set originally. Note, that the actual data may differ, but they are semantically equivalent.`,
-      logInfo(false)
-    );
-    previewData = lastSetData;
-  } else {
-    console.log(`Saving data triggered by ${source}.`, logInfo(true));
-    previewData = data;
+  if (isInvalidData(data)) {
+    throw new Error(`Failed retrieving data for ${source}: They are considered invalid.`);
   }
 
   // Similar to CoreMedia Studio, we prefer the originally set data, when
   // there is no semantic difference compared to the data as returned by
   // CKEditor.
-  console.log(`Update Preview triggered by ${source}.`, { previewData });
-  updatePreview(previewData);
+  console.log(`Update Preview triggered by ${source}.`, { data });
+  updatePreview(data);
 };

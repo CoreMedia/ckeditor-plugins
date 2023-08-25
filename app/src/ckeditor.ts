@@ -55,6 +55,7 @@ import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/s
 import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/src/LinkAttributesConfig";
 import { LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 
 /**
  * Typings for CKEditorInspector, as it does not ship with typings yet.
@@ -166,6 +167,7 @@ ClassicEditor.create(sourceElement, {
     CodeBlock,
     ContentLinks,
     ContentClipboard,
+    DataFacade,
     Differencing,
     Essentials,
     FindAndReplace,

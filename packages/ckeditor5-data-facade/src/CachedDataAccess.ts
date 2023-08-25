@@ -7,6 +7,13 @@ import { normalizeData } from "./Data";
 import { RawDataAccess } from "./RawDataAccess";
 import { dataUnavailable, DataUnavailable, InvalidData } from "./InvalidData";
 
+export enum CachedDataState {
+  cacheEmpty = "cacheEmpty",
+  cacheNotPropagatedYet = "cacheNotPropagatedYet",
+  cacheOutdated = "cacheOutdated",
+  cacheUpToDate = "cacheUpToDate",
+}
+
 /**
  * This facade is meant to control data in- and output. It ensures that any
  * data set is returned unchanged, unless editorial actions have been performed
@@ -35,7 +42,7 @@ import { dataUnavailable, DataUnavailable, InvalidData } from "./InvalidData";
  * publication steps or even may trigger translation processes.
  */
 export class CachedDataAccess extends RawDataAccess {
-  static readonly #logger: Logger = LoggerProvider.getLogger(CachedDataAccess.constructor.name);
+  static readonly #logger: Logger = LoggerProvider.getLogger("CachedDataAccess");
   readonly #lastSetData: LastSetData = new LastSetData();
   #active = false;
 
@@ -66,20 +73,29 @@ export class CachedDataAccess extends RawDataAccess {
   override setData(data: SetDataData, options: SetDataOptions = {}): void {
     const logger = CachedDataAccess.#logger;
 
-    this.#lastSetData.data = normalizeData(data);
+    const normalizedData = normalizeData(data);
+    this.#lastSetData.data = normalizedData;
     this.#lastSetData.options = options;
-    logger.debug(`Set data.`, { data: this.#lastSetData });
+    logger.debug(`Cached data.`, { data: normalizedData });
     this.propagateData();
   }
 
   /**
-   * Signals, if to retrieve the data directly from the editor rather
-   * than using cached data.
+   * Signals the state of the cache.
    */
-  isGetDataDirectly(): boolean {
+  get cachedDataState(): CachedDataState {
     const lastSetData = this.#lastSetData;
     const { data } = lastSetData;
-    return data === undefined || !lastSetData.isCurrent(this.editor);
+    if (data === undefined) {
+      return CachedDataState.cacheEmpty;
+    }
+    if (!lastSetData.propagated) {
+      return CachedDataState.cacheNotPropagatedYet;
+    }
+    if (lastSetData.isCurrent(this.editor)) {
+      return CachedDataState.cacheUpToDate;
+    }
+    return CachedDataState.cacheOutdated;
   }
 
   /**
@@ -91,11 +107,13 @@ export class CachedDataAccess extends RawDataAccess {
   override getData(options: GetDataOptions = {}): string | InvalidData {
     const logger = CachedDataAccess.#logger;
 
-    if (this.isGetDataDirectly()) {
-      logger.debug("Retrieving data directly from editor.");
+    const state = this.cachedDataState;
+    if ([CachedDataState.cacheEmpty, CachedDataState.cacheOutdated].includes(state)) {
+      logger.debug(`Retrieving data directly from editor. Cached data state: ${state}`);
       return super.getData(options);
     }
 
+    logger.debug(`Retrieving data from cache. Cached data state: ${state}`);
     return this.getCachedData(options);
   }
 

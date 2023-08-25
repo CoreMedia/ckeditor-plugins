@@ -7,6 +7,9 @@ import { CachedDataAccess } from "./CachedDataAccess";
 import { ContextOptions } from "./Context";
 import { InvalidData } from "./InvalidData";
 import { RawDataAccess } from "./RawDataAccess";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+
+const logger = LoggerProvider.getLogger("DataFacade");
 
 /**
  * This facade is meant to control data in- and output. It ensures that any
@@ -36,12 +39,13 @@ import { RawDataAccess } from "./RawDataAccess";
  * publication steps or even may trigger translation processes.
  */
 export class DataFacade extends Plugin implements DataApi {
-  public static readonly pluginName = "CachingDataFacade";
+  public static readonly pluginName = "DataFacade";
   readonly #dataApi: CachedDataAccess;
 
   constructor(editor: Editor) {
     super(editor);
     this.#dataApi = new ContextAwareCachedDataAccess(editor);
+    logger.debug("Using Data Access Layer: ContextAwareCachedDataAccess");
   }
 
   /**
@@ -101,8 +105,11 @@ export const findDataApi = (editor: Editor): DataApi => {
   if (editor.plugins.has(DataFacade)) {
     const dataFacade = editor.plugins.get(DataFacade);
     if (dataFacade.isEnabled) {
+      logger.debug("Found Data API: DataFacade Plugin");
       return dataFacade;
     }
   }
-  return new RawDataAccess(editor);
+  const dataAccess = new RawDataAccess(editor);
+  logger.debug("Found Data API: RawDataAccess");
+  return dataAccess;
 };
