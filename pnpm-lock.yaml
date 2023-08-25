@@ -165,6 +165,9 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
         specifier: 15.0.2-rc.1
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
+      '@coremedia/ckeditor5-data-facade':
+        specifier: 15.0.2-rc.1
+        version: link:../packages/ckeditor5-data-facade
       '@coremedia/ckeditor5-dataprocessor-support':
         specifier: 15.0.2-rc.1
         version: link:../packages/ckeditor5-dataprocessor-support
