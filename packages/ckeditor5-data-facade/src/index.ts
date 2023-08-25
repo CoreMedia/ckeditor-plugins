@@ -2,8 +2,10 @@
  * @module ckeditor5-data-facade
  */
 
-export { DataFacade } from "./DataFacade";
+export { ContextOptions } from "./Context";
+export { SetDataData, SetDataOptions, GetDataOptions } from "./DataControllerTypes";
 export { DataApi } from "./DataApi";
+export { DataFacade, findDataApi } from "./DataFacade";
 export {
   dataUnavailable,
   DataUnavailable,

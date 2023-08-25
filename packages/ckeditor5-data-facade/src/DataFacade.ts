@@ -6,6 +6,7 @@ import { ContextAwareCachedDataAccess } from "./ContextAwareCachedDataAccess";
 import { CachedDataAccess } from "./CachedDataAccess";
 import { ContextOptions } from "./Context";
 import { InvalidData } from "./InvalidData";
+import { RawDataAccess } from "./RawDataAccess";
 
 /**
  * This facade is meant to control data in- and output. It ensures that any
@@ -66,8 +67,9 @@ export class DataFacade extends Plugin implements DataApi {
   }
 
   /**
-   * Sets the data to set at editor. If editor is not ready yet, data will
-   * be forwarded as soon as the editor is ready.
+   * Sets the data to set at editor.
+   * If the editor is not ready yet, data will be forwarded as soon as the
+   * editor is ready.
    *
    * @param data - data to set
    * @param options - options for setting data
@@ -87,3 +89,20 @@ export class DataFacade extends Plugin implements DataApi {
     return this.#dataApi.getData(options);
   }
 }
+
+/**
+ * Tries to find the recommended `DataFacade` plugin as `DataApi` to use.
+ * Falls back to providing an API for direct, uncached data-access if the
+ * plugin is not installed or enabled.
+ *
+ * @param editor - editor to get data access API for.
+ */
+export const findDataApi = (editor: Editor): DataApi => {
+  if (editor.plugins.has(DataFacade)) {
+    const dataFacade = editor.plugins.get(DataFacade);
+    if (dataFacade.isEnabled) {
+      return dataFacade;
+    }
+  }
+  return new RawDataAccess(editor);
+};
