@@ -1,5 +1,5 @@
 import { CachedDataAccess } from "./CachedDataAccess";
-import { Context, ContextOptions, DefaultContext } from "./Context";
+import { Context, ContextOptions, defaultContext } from "./Context";
 import { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerTypes";
 import { invalidContext, InvalidData } from "./InvalidData";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
@@ -8,7 +8,7 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvi
 export class ContextAwareCachedDataAccess extends CachedDataAccess {
   static readonly #logger: Logger = LoggerProvider.getLogger("ContextAwareCachedDataAccess");
 
-  #lastContext: Context = DefaultContext;
+  #lastContext: Context = defaultContext;
 
   set context(context: Context) {
     const logger = ContextAwareCachedDataAccess.#logger;
@@ -24,14 +24,14 @@ export class ContextAwareCachedDataAccess extends CachedDataAccess {
   }
 
   override setData(data: SetDataData, options: SetDataOptions & ContextOptions = {}): void {
-    const { context = DefaultContext } = options;
+    const { context = defaultContext } = options;
     super.setData(data, options);
     this.context = context;
   }
 
   override getData(options: GetDataOptions & ContextOptions = {}): string | InvalidData {
     const logger = ContextAwareCachedDataAccess.#logger;
-    const { context = DefaultContext } = options;
+    const { context = defaultContext } = options;
     if (this.context !== context) {
       logger.debug(
         `Trying to get data for mismatched context. Actual Context: ${String(
