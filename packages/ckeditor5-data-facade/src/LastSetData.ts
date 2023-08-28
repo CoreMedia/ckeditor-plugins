@@ -142,8 +142,4 @@ export class LastSetData {
   get version(): number | undefined {
     return this.#version;
   }
-
-  toStringHurz(): string {
-    return `LastSetData:\n\tdata: ${String(this.data)}\n\toptions: ${this.options}\n\tversion: ${this.version}`;
-  }
 }
