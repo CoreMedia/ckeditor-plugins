@@ -54,6 +54,8 @@ export class DataFacade extends Plugin implements DataApi {
   init(): void {
     const initInformation = reportInitStart(this);
     const { editor } = this;
+    // Propagates _editor ready_. This ensures that our set data win over
+    // the initialization behavior, which respects `EditorConfig.initialData`.
     editor.once<EditorReadyEvent>(
       "ready",
       () => {
