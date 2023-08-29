@@ -155,52 +155,47 @@ export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">)
   const { show, role } = attributes;
   let target = "";
 
-  if (!show) {
-    if (role) {
-      // artificial state, which should not happen (but may happen due to UAPI calls).
-      target = `_role_${role}`;
-    }
-  } else {
-    // Signals, if to (still) handle the role. May be reset, once the role
-    // has been handled. Signals an artificial state if the role is unexpected
-    // for a given show attribute (like "replace").
-    let handleRole = !!role;
-    switch (show.toLowerCase()) {
-      case "replace":
-        target = "_self";
-        break;
-      case "new":
-        target = "_blank";
-        break;
-      case "embed":
-        target = "_embed";
-        break;
-      case "none":
-        target = "_none";
-        break;
-      case "other":
-        if (!role) {
-          target = "_other";
-        } else {
-          target = role;
-          handleRole = false;
-        }
-        break;
-      default:
-        if (handleRole) {
-          target = `_role_${role}`;
-          console.warn(`Invalid value for xlink:show="${show}". Only xlink:role respected in target attribute.`);
-        } else {
-          console.warn(`Invalid value for xlink:show="${show}". Empty target provided.`);
-        }
+  const normalizedShow = show?.toLowerCase().trim() ?? "";
+  const hasShow = !!normalizedShow;
+
+  // Signals, if to (still) handle the role. May be reset, once the role
+  // has been handled. Signals an artificial state if the role is unexpected
+  // for a given show attribute (like "replace").
+  let handleRole = !!role;
+  switch (normalizedShow) {
+    case "replace":
+      target = "_self";
+      break;
+    case "new":
+      target = "_blank";
+      break;
+    case "embed":
+      target = "_embed";
+      break;
+    case "none":
+      target = "_none";
+      break;
+    case "other":
+      if (!role) {
+        target = "_other";
+      } else {
+        target = role;
         handleRole = false;
-    }
-    if (handleRole) {
-      target = `${target}_${role}`;
-      console.info(
-        `Unexpected xlink:role="${role}" for xlink:show="${show}". Providing artificial target="${target}".`
-      );
-    }
+      }
+      break;
+    default:
+      if (handleRole) {
+        target = `_role_${role}`;
+        hasShow &&
+          console.warn(`Invalid value for xlink:show="${show}". Only xlink:role respected in target attribute.`);
+      } else {
+        hasShow && console.warn(`Invalid value for xlink:show="${show}". Empty target provided.`);
+      }
+      handleRole = false;
+  }
+  if (handleRole) {
+    target = `${target}_${role}`;
+    console.info(`Unexpected xlink:role="${role}" for xlink:show="${show}". Providing artificial target="${target}".`);
   }
   return target;
 };
