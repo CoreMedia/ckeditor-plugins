@@ -137,6 +137,28 @@ export const formatHrefForView = (value: DataContentLink | string): ViewContentL
 };
 
 /**
+ * Invoked by default if the given value of `xlink:role` has not been processed
+ * yet during the transformation to data-view.
+ *
+ * @param target - already processed target information; possibly empty
+ * @param artificialRole - artificial, thus, yet unhandled role attribute value
+ * @returns new target, including the representation of the artificial role
+ */
+export const defaultArtificialRoleToTarget = (target: string, artificialRole: string): string => {
+  let result: string;
+
+  if (!target) {
+    result = `_role_${artificialRole}`;
+    console.warn(`Unexpected xlink:role="${artificialRole}". Providing artificial target="${result}".`);
+  } else {
+    result = `${target}_${artificialRole}`;
+    console.info(`Unexpected xlink:role="${artificialRole}". Providing artificial target="${result}".`);
+  }
+
+  return result;
+};
+
+/**
  * Formats value for `target` attribute of an anchor element, so that it can
  * be edited as part of the CKEditor 5 Link feature (with additional
  * CoreMedia Plugin).
@@ -156,12 +178,13 @@ export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">)
   let target = "";
 
   const normalizedShow = show?.toLowerCase().trim() ?? "";
+  const hasRole = !!role;
   const hasShow = !!normalizedShow;
 
   // Signals, if to (still) handle the role. May be reset, once the role
   // has been handled. Signals an artificial state if the role is unexpected
   // for a given show attribute (like "replace").
-  let hasUnhandledRole = !!role;
+  let hasUnhandledRole = hasRole;
   switch (normalizedShow) {
     case "replace":
       target = "_self";
@@ -187,18 +210,8 @@ export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">)
       hasShow && console.warn(`Ignoring unsupported value for xlink:show="${show}".`);
   }
 
-  const hasParsedShow = !!target;
-
-  if (hasUnhandledRole) {
-    if (hasParsedShow) {
-      target = `${target}_${role}`;
-      console.info(
-        `Unexpected xlink:role="${role}" for xlink:show="${show}". Providing artificial target="${target}".`
-      );
-    } else {
-      target = `_role_${role}`;
-      console.warn(`Unexpected xlink:role="${role}". Providing artificial target="${target}".`);
-    }
+  if (hasRole && hasUnhandledRole) {
+    target = defaultArtificialRoleToTarget(target, role);
   }
 
   return target;
