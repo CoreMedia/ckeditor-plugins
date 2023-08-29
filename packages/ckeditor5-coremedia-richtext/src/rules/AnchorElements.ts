@@ -161,7 +161,7 @@ export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">)
   // Signals, if to (still) handle the role. May be reset, once the role
   // has been handled. Signals an artificial state if the role is unexpected
   // for a given show attribute (like "replace").
-  let handleRole = !!role;
+  let hasUnhandledRole = !!role;
   switch (normalizedShow) {
     case "replace":
       target = "_self";
@@ -180,23 +180,27 @@ export const formatTarget = (attributes: Pick<XLinkAttributes, "role" | "show">)
         target = "_other";
       } else {
         target = role;
-        handleRole = false;
+        hasUnhandledRole = false;
       }
       break;
     default:
-      if (handleRole) {
-        target = `_role_${role}`;
-        hasShow &&
-          console.warn(`Invalid value for xlink:show="${show}". Only xlink:role respected in target attribute.`);
-      } else {
-        hasShow && console.warn(`Invalid value for xlink:show="${show}". Empty target provided.`);
-      }
-      handleRole = false;
+      hasShow && console.warn(`Ignoring unsupported value for xlink:show="${show}".`);
   }
-  if (handleRole) {
-    target = `${target}_${role}`;
-    console.info(`Unexpected xlink:role="${role}" for xlink:show="${show}". Providing artificial target="${target}".`);
+
+  const hasParsedShow = !!target;
+
+  if (hasUnhandledRole) {
+    if (hasParsedShow) {
+      target = `${target}_${role}`;
+      console.info(
+        `Unexpected xlink:role="${role}" for xlink:show="${show}". Providing artificial target="${target}".`
+      );
+    } else {
+      target = `_role_${role}`;
+      console.warn(`Unexpected xlink:role="${role}". Providing artificial target="${target}".`);
+    }
   }
+
   return target;
 };
 
