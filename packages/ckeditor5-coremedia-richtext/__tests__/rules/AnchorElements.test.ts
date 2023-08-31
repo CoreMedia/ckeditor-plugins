@@ -199,4 +199,70 @@ describe("AnchorElement", () => {
       }
     );
   });
+
+  describe("Data Processing (Artificial Role Mapping)", () => {
+    const ruleConfigurations = [
+      aut.anchorElements,
+      /*
+       * Stores artificial `xlink:role` as class token with prefix `role_` in
+       * `toView` processing and later restores in from `class` attribute in
+       * `toData` processing.
+       *
+       * Note: If this configuration changes, please review the TSdoc of
+       * `mapArtificialXLinkRole` regarding the example given in the
+       * example.
+       */
+      aut.mapArtificialXLinkRole({
+        toView: (element, role) => {
+          const sanitizedRole = role.replaceAll(/\s/g, "_");
+          element.classList.add(`role_${sanitizedRole}`);
+        },
+        toData: (element) => {
+          const matcher = /^role_(\S*)$/;
+          const matchedClasses: string[] = [];
+          let role: string | undefined;
+          for (const cls of element.classList) {
+            const match = cls.match(matcher);
+            if (match) {
+              const [matchedCls, matchedRole] = match;
+              role = matchedRole;
+              matchedClasses.push(matchedCls);
+            }
+          }
+          // Clean-up any matched classes and possibly left-over `class=""`.
+          element.classList.remove(...matchedClasses);
+          if (element.classList.length === 0) {
+            element.removeAttribute("class");
+          }
+          return role;
+        },
+      }),
+    ];
+
+    const url = "https://e.org/";
+    const text = "T";
+
+    describe.each`
+      data                                                                                         | direction    | view
+      ${`<a xlink:role="ROLE" xlink:show="replace" xlink:href="${url}">${text}</a>`}               | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_self">${text}</a>`}
+      ${`<a xlink:role="ROLE" xlink:show="new" xlink:href="${url}">${text}</a>`}                   | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_blank">${text}</a>`}
+      ${`<a xlink:role="ROLE" xlink:show="embed" xlink:href="${url}">${text}</a>`}                 | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_embed">${text}</a>`}
+      ${`<a xlink:role="ROLE" xlink:show="none" xlink:href="${url}">${text}</a>`}                  | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_none">${text}</a>`}
+      ${`<a class="CLASS" xlink:role="ROLE" xlink:show="replace" xlink:href="${url}">${text}</a>`} | ${bijective} | ${`<a class="CLASS role_ROLE" href="${url}" target="_self">${text}</a>`}
+      ${`<a xlink:show="other" xlink:role="ROLE" xlink:href="${url}">${text}</a>`}                 | ${bijective} | ${`<a href="${url}" target="ROLE">${text}</a>`}
+    `(
+      "[$#] Should transform data to view and vice versa: data: $data, view: $view",
+      ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
+        const dataString = richtext(p(data));
+        const htmlString = `<body><p>${view}</p></body>`;
+        const tester = new RulesTester(ruleConfigurations, "p > *");
+
+        tester.executeTests({
+          dataString,
+          direction,
+          htmlString,
+        });
+      }
+    );
+  });
 });
