@@ -10,6 +10,11 @@
     "pnpm": "^8.1"
   },
   "license": "Apache-2.0",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./src/index.js",
+    "types": "./src/index.d.ts"
+  },
   "devDependencies": {
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^29.5.1",
