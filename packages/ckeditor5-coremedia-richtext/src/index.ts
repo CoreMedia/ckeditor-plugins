@@ -42,5 +42,10 @@ export {
   replaceHeadingsByElementAndClass,
   type ReplaceHeadingsByElementAndClassConfig,
 } from "./rules/ReplaceHeadingsByElementAndClass";
+export {
+  mapArtificialXLinkRole,
+  preProcessAnchorElement,
+  type HTMLAnchorElementPreprocessor,
+} from "./rules/AnchorElements";
 
 import "./augmentation";

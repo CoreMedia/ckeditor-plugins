@@ -4,10 +4,12 @@ import {
   setXLinkAttributes,
   setXLinkDataSetEntries,
   XLinkAttributes,
+  xLinkNamespaceUri,
 } from "./XLink";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support/src/HTMLAnchorElements";
 import { ConversionApi } from "@coremedia/ckeditor5-dom-converter/src/ConversionApi";
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 
 export const contentUriPathPrefix = "content" as const;
 
@@ -387,3 +389,198 @@ export const anchorElements: RuleConfig = {
     imported: transformLinkAttributesToView,
   },
 };
+
+/**
+ * Pre-processors to run prior to transforming anchor elements.
+ */
+export interface HTMLAnchorElementPreprocessor {
+  /**
+   * Rule to possibly pre-process the `HTMLAnchorElement` prior to default
+   * `toData` processing.
+   *
+   * @param element - the element to transform
+   */
+  toData?: (element: HTMLAnchorElement) => void;
+  /**
+   * Rule to possibly pre-process the `HTMLAnchorElement` prior to default
+   * `toView` processing.
+   *
+   * @param element - the element to transform
+   */
+  toView?: (element: HTMLAnchorElement) => void;
+}
+
+/**
+ * Get a rule configuration suitable to intercept the processing of an anchor
+ * element, prior to the default handlers apply.
+ *
+ * The pre-processor must not modify the node's identity. It is meant to deal
+ * with the corresponding attributes.
+ *
+ * @param preProcessor - pre-processor to run
+ * @param ruleId - ID to use for the provided rule configuration
+ */
+export const preProcessAnchorElement = (
+  preProcessor:
+    | RequireSelected<HTMLAnchorElementPreprocessor, "toData">
+    | RequireSelected<HTMLAnchorElementPreprocessor, "toView">,
+  ruleId = "pre-process-anchor-element"
+): RuleConfig => {
+  const { toData: toDataMapper, toView: toViewMapper } = preProcessor;
+
+  const toData: RuleSectionConfig = {
+    id: `toData-${ruleId}`,
+    prepare: (node: Node): void => {
+      if (isHTMLAnchorElement(node)) {
+        toDataMapper?.(node);
+      }
+    },
+  };
+
+  const toView: RuleSectionConfig = {
+    id: `toView-${ruleId}`,
+    imported: (node: Node): Node => {
+      if (isHTMLAnchorElement(node)) {
+        toViewMapper?.(node);
+      }
+      return node;
+    },
+  };
+
+  return {
+    id: ruleId,
+    // Need to run before default processing.
+    priority: "high",
+    toData,
+    toView,
+  };
+};
+
+/**
+ * Maps artificial `xlink:role` according to given pre-processors.
+ *
+ * **What are artificial `xlink:role` attributes?**
+ *
+ * Despite for `xlink:show="other"` the attribute `xlink:role` is expected
+ * to be unset, when it comes to representing the attributes as `target`
+ * attribute in view layers of CKEditor 5.
+ *
+ * Thus, if `xlink:show` is different to `"other"`, but `xlink:role` is set,
+ * this attribute is denoted as being _artificial_.
+ *
+ * **What happens to an artificial `xlink:role` attribute by default?**
+ *
+ * By default, such an attribute is encoded into the `target` attribute
+ * in a bijective manner, which is, that from the given `target` attribute
+ * value in view layers, the corresponding `xlink:show` and `xlink:role` values
+ * can still be determined.
+ *
+ * **When to use `mapArtificialXLinkRole`?**
+ *
+ * As the CoreMedia Rich Text 1.0 DTD does not define an artificial
+ * `xlink:role` as invalid, it is perfectly fine, if `xlink:role` is used
+ * to hold data unrelated to the `target` behavior.
+ *
+ * Creating a rule configuration by this factory method and applying it to
+ * your custom rules configuration provides the opportunity to store such
+ * `xlink:role` in a different attribute.
+ *
+ * **How to deal with `toData` processing?**
+ *
+ * If you stored the role in a different attribute, you should restore its
+ * value here and return it.
+ *
+ * **Caveat:**
+ *
+ * Editors may trigger the default mapping to handle `xlink:role` even for
+ * `xlink:show` states different to `other`, for example, if setting `target`
+ * in view layers to `_embed_someRole`. In these cases, the default processing
+ * will override any `xlink:role` created by the mapping generated here.
+ *
+ * This is assumed to be a very rare corner-case, though.
+ *
+ * **The _all defaults_ scenario:**
+ *
+ * If you just invoke `mapArtificialXLinkRole()` it will, by default, create
+ * a rule configuration that strips any artificial roles in `toView` mapping
+ * and of course does not apply any `xlink:role` in its `toData` mapping.
+ *
+ * **Example: Store in `class` attribute:**
+ *
+ * The following example demonstrates how to possibly store an artificial
+ * role within the class attribute of the anchor element:
+ *
+ * ```typescript
+ * mapArtificialXLinkRole({
+ *   toView: (element, role) => {
+ *     // Class token must not contain spaces.
+ *     const sanitizedRole = role.replaceAll(/\s/g, "_");
+ *     element.classList.add(`role_${sanitizedRole}`);
+ *   },
+ *   toData: (element) => {
+ *     const matcher = /^role_(\S*)$/;
+ *     const matchedClasses: string[] = [];
+ *     let role: string | undefined;
+ *     for (const cls of element.classList) {
+ *       const match = cls.match(matcher);
+ *       if (match) {
+ *         const [matchedCls, matchedRole] = match;
+ *         // The last matched role will win.
+ *         role = matchedRole;
+ *         // Used to clean any class, that represents a role.
+ *         matchedClasses.push(matchedCls);
+ *       }
+ *     }
+ *     // Clean-up any matched classes and possibly left-over `class=""`.
+ *     element.classList.remove(...matchedClasses);
+ *     if (element.classList.length === 0) {
+ *       element.removeAttribute("class");
+ *     }
+ *     // If falsy, `xlink:role` will not be added.
+ *     return role;
+ *   },
+ * })
+ * ```
+ *
+ * **Note for Custom Attributes:**
+ *
+ * For any other attribute you have chosen to store the role in, ensure, to
+ * register it as belonging to a link, so that, for example, removing the link
+ * will also clean up the role-representing attribute.
+ *
+ * @param rolePreProcessor - pre-processors for artificial role mapping
+ * @param rolePreProcessor.toData - strategy to extract the role attribute value
+ * from the element; any truthy value returned will be applied as `xlink:role` attribute.
+ * @param rolePreProcessor.toView - the `toView` mapping, which may store the
+ * given value of `xlink:role` in some other attribute
+ * @param excludeShow - excluded values of `show` when not to apply the
+ * artificial role mapping; defaults to the recommended default `["other"]`
+ */
+export const mapArtificialXLinkRole = (
+  rolePreProcessor: {
+    toData?: (element: HTMLAnchorElement) => string | undefined;
+    toView?: (element: HTMLAnchorElement, role: string) => void;
+  } = {},
+  excludeShow: ("replace" | "new" | "embed" | "none" | "other" | string | undefined)[] = ["other"]
+): RuleConfig =>
+  preProcessAnchorElement(
+    {
+      toData: (element: HTMLAnchorElement): void => {
+        const role = rolePreProcessor.toData?.(element);
+        if (role) {
+          setXLinkAttributes(element, { role });
+        }
+      },
+      toView: (element: HTMLAnchorElement): void => {
+        const showAttribute = element.getAttributeNodeNS(xLinkNamespaceUri, "show");
+        const roleAttribute = element.getAttributeNodeNS(xLinkNamespaceUri, "role");
+        const show = showAttribute?.value;
+        const role = roleAttribute?.value;
+        if (role && !excludeShow.includes(show)) {
+          element.removeAttributeNode(roleAttribute);
+          rolePreProcessor.toView?.(element, role);
+        }
+      },
+    },
+    "map-artificial-xlink-role"
+  );
