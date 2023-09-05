@@ -12,8 +12,7 @@ export { default as BlocklistService } from "./content/BlocklistService";
 export { createBlocklistServiceDescriptor } from "./content/BlocklistServiceDescriptor";
 
 // Helpers
-export { UriPath } from "./content/UriPath";
-export { requireContentUriPath } from "./content/UriPath";
-export { isModelUriPath } from "./content/UriPath";
+export type { UriPath } from "./content/UriPath";
+export { isModelUriPath, requireContentUriPath } from "./content/UriPath";
 
 export { default as ContentAsLink } from "./content/ContentAsLink";
