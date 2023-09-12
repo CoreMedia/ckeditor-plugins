@@ -7,7 +7,7 @@ declare module "@ckeditor/ckeditor5-core" {
      * if you do not want to get Markup cleaned up from elements or attributes
      * that are not supported in the editor instance.
      */
-    [COREMEDIA_RICHTEXT_CONFIG_KEY]: CoreMediaRichTextConfig;
+    [COREMEDIA_RICHTEXT_CONFIG_KEY]?: CoreMediaRichTextConfig;
   }
 
   interface PluginsMap {
