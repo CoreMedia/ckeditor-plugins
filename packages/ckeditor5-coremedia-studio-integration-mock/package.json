@@ -46,6 +46,6 @@
     "@coremedia/ckeditor5-core-common": "^16.0.0",
     "@coremedia/ckeditor5-coremedia-studio-integration": "^16.0.0",
     "@coremedia/ckeditor5-logging": "^16.0.0",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.1"
   }
 }
