@@ -11,16 +11,21 @@ on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Release type. Allowed values: "major", "minor", "patch"'
+        description: 'Release type.'
         required: true
         default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 permissions:
   contents: write
 env:
   NODE_VERSION: 18
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^8.1
+  PNPM_VERSION: ^8.6.9
   NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
 
 jobs:

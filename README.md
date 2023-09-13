@@ -166,9 +166,9 @@ previously `setData()` call. A typical approach is:
 [badge:docs:GHPages]: <https://img.shields.io/badge/docs-%F0%9F%93%9D%20GH%20Pages-informational?style=for-the-badge>
 [badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-informational?style=for-the-badge>
 [badge:engine:nodejs]: <https://img.shields.io/badge/Node.js-18-informational?style=for-the-badge&logo=node.js&logoColor=white>
-[badge:engine:pnpm]: <https://img.shields.io/badge/pnpm-8.1-informational?style=for-the-badge&logo=pnpm&logoColor=white>
+[badge:engine:pnpm]: <https://img.shields.io/badge/pnpm-8.6.9-informational?style=for-the-badge&logo=pnpm&logoColor=white>
 [badge:lang:typescript]: <https://img.shields.io/badge/TypeScript-4.9.5-informational?style=for-the-badge&logo=typescript&logoColor=white>
-[badge:ckeditor]: <https://img.shields.io/badge/CKEditor-37.1.0-informational?style=for-the-badge&logo=ckeditor5&logoColor=white>
+[badge:ckeditor]: <https://img.shields.io/badge/CKEditor-39.0.2-informational?style=for-the-badge&logo=ckeditor5&logoColor=white>
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
 [CKEditor 5]: <https://ckeditor.com/ckeditor-5/> "CKEditor 5 | Powerful Framework with Modular Architecture"
 [CoreMedia CMS]: <https://www.coremedia.com/> "Best-of-Breed Digital Experience Platform CoreMedia"
