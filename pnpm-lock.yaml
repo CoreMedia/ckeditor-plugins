@@ -1013,6 +1013,9 @@ importers:
 
   packages/ckeditor5-dom-converter:
     dependencies:
+      '@coremedia/ckeditor5-common':
+        specifier: 15.0.2-rc.2
+        version: link:../ckeditor5-common
       '@coremedia/ckeditor5-dom-support':
         specifier: 15.0.2-rc.2
         version: link:../ckeditor5-dom-support

@@ -28,6 +28,7 @@
     "@ckeditor/ckeditor5-utils": "^37.0.1"
   },
   "dependencies": {
+    "@coremedia/ckeditor5-common": "15.0.2-rc.2",
     "@coremedia/ckeditor5-dom-support": "15.0.2-rc.2",
     "@coremedia/ckeditor5-logging": "15.0.2-rc.2"
   },

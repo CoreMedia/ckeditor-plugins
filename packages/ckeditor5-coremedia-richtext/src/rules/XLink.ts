@@ -1,4 +1,5 @@
 import { capitalize } from "@coremedia/ckeditor5-common/src/Strings";
+import { describeAttr } from "@coremedia/ckeditor5-dom-support";
 
 export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink" as const;
 export const xLinkPrefix = "xlink" as const;
@@ -66,7 +67,13 @@ export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes
       const qualifiedName: XLinkAttributeQualifiedName = `${xLinkPrefix}:${key}`;
       const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, qualifiedName);
       xlinkAttribute.value = value;
-      element.setAttributeNodeNS(xlinkAttribute);
+      const previousNode = element.setAttributeNodeNS(xlinkAttribute);
+      if (previousNode) {
+        // This may happen if some other data-processing already set a value here.
+        console.debug(
+          `Overwriting existing attribute node ${describeAttr(previousNode)} by ${describeAttr(xlinkAttribute)}.`
+        );
+      }
     }
   });
 };

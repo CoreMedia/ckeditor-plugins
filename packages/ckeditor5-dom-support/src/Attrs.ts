@@ -22,3 +22,14 @@ export const copyAttributesFrom = (source: Element, target: Element): void => {
     target.setAttributeNodeNS(importedAttribute);
   }
 };
+
+/**
+ * Provide some description for the given attribute suitable for debugging
+ * purpose.
+ *
+ * @param attr - attribute to describe
+ */
+export const describeAttr = (attr: Attr): string => {
+  const { localName, value, prefix, name, namespaceURI } = attr;
+  return `Attr(${JSON.stringify({ namespaceURI, prefix, localName, name, value })})`;
+};

@@ -6,6 +6,7 @@ import {
   ImportedWithChildrenFunction,
   PrepareFunction,
 } from "./DomConverterStages";
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 
 export interface RuleConfigBase {
   /**
@@ -21,12 +22,6 @@ export interface RuleConfigBase {
    */
   priority?: PriorityString;
 }
-
-/**
- * Utility type to mark selected properties as required.
- */
-export type RequireSelected<Type extends object, Key extends keyof Type> = Pick<Type, keyof Omit<Type, Key>> &
-  Required<Pick<Type, Key>>;
 
 /**
  * A rule configuration containing related `toData` and `toView` mapping
