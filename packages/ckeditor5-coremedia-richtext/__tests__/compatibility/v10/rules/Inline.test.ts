@@ -113,7 +113,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
           dataView: wrapContent(`<p><${data} lang="en">${text}</${data}></p>`),
         },
       ];
-    })
+    }),
   );
 
   const replaceInlineBySpanFixtures: DataProcessingTestCase[] = flatten(
@@ -182,7 +182,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
           dataView: wrapContent(`<p><${view} lang="en">${text}</${view}></p>`),
         },
       ];
-    })
+    }),
   );
 
   const asIsFixtures: DataProcessingTestCase[] = flatten(
@@ -224,7 +224,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
           dataView: wrapContent(`<p><${el} lang="de">${text}</${el}></p>`),
         },
       ];
-    })
+    }),
   );
 
   const data: DataProcessingTestCase[] = [
@@ -260,7 +260,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
           // Either <u> or <s>
           expect(actual).toMatch(/<([us])>[^<]*<\/\1>/);
         }
-      }
+      },
     );
   });
 });

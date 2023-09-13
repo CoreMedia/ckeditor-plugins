@@ -23,7 +23,7 @@ export type ObservableAssertions<T> = (actual: T[]) => void;
 export const testShouldRetrieveValuesThat = <T>(
   name: string,
   observable: Observable<T>,
-  assertions: ObservableAssertions<T>
+  assertions: ObservableAssertions<T>,
 ) => {
   const retrievedValues: T[] = [];
 

@@ -33,7 +33,7 @@ export class JSWrapper<T> {
    */
   async evaluate<R, Arg, O extends T = T>(
     pageFunction: PageFunctionOn<O, Arg | void, R>,
-    arg?: Arg | unknown
+    arg?: Arg | unknown,
   ): Promise<R> {
     const instance = await this.instance;
     return instance.evaluate(pageFunction, arg);
@@ -49,7 +49,7 @@ export class JSWrapper<T> {
    */
   async evaluateHandle<R, Arg, O extends T = T>(
     pageFunction: PageFunctionOn<O, Arg | void, R>,
-    arg?: Arg | unknown
+    arg?: Arg | unknown,
   ): Promise<SmartHandle<R>> {
     const instance = await this.instance;
     return instance.evaluateHandle(pageFunction, arg);

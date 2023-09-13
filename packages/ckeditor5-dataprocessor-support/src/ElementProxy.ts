@@ -56,7 +56,7 @@ class ClassList implements DOMTokenList {
       }
       if (/\s/.test(v)) {
         throw new DOMException(
-          `${toValidate.length > 1 ? "A" : "The"} provided token ('${v}') contains invalid characters.`
+          `${toValidate.length > 1 ? "A" : "The"} provided token ('${v}') contains invalid characters.`,
         );
       }
     });
@@ -504,7 +504,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
       uri: string | undefined,
       prefix: string,
       key: string,
-      value: string | null
+      value: string | null,
     ) => {
       if (value === null) {
         if (uri) {

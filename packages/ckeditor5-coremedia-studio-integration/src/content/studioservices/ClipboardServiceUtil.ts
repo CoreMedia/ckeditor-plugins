@@ -11,7 +11,7 @@ export async function toContentUris(items: ClipboardItemRepresentation[]): Promi
   // blob.text() returns an Array of a json. The JSON is an Array of uris.
   // We have to parse the arrays and put them in one flat array.
   const jsonUriArrays: string[] = await Promise.all(
-    items.map((item) => item.data["cm-studio-rest/uri-list"]).map(async (blob) => blob.text())
+    items.map((item) => item.data["cm-studio-rest/uri-list"]).map(async (blob) => blob.text()),
   );
   const arrayOfUriArrays = jsonUriArrays.map((value): string[] => JSON.parse(value) as string[]);
   return arrayOfUriArrays.flat();

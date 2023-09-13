@@ -18,7 +18,7 @@ expect.extend({
   toHaveNoErrorsOrWarnings: (c: ApplicationConsole): jest.CustomMatcherResult => ({
     message: () =>
       `expected that no errors or warnings got logged but got ${c.errorsAndWarnings.length}:\n${messagesToString(
-        c.errorsAndWarnings
+        c.errorsAndWarnings,
       )}`,
     pass: c.errorsAndWarnings.length === 0,
   }),

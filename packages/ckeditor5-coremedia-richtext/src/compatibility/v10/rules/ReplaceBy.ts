@@ -68,7 +68,7 @@ export function replaceElementAndClassBy(
         // Files a warning for #101 use-case, which we consider as
         // _by design_ as it resolves ambiguous states eventually.
         warnOnAmbiguousElementState(
-          `<${originalName}> already got mapped to <${node.name}> by previous rule. Will override previous mapping to replace the element to <${newName}> as denoted by class "${className}".`
+          `<${originalName}> already got mapped to <${node.name}> by previous rule. Will override previous mapping to replace the element to <${newName}> as denoted by class "${className}".`,
         );
       }
       node.classList.remove(className);
@@ -91,7 +91,7 @@ export function replaceByElementAndClassBackAndForth(
   viewName: string,
   dataName: string,
   dataClassName: string,
-  attributeMapper?: AttributeMapper
+  attributeMapper?: AttributeMapper,
 ): ToDataAndViewElementConfiguration {
   const toDataRule = !attributeMapper
     ? replaceBy(dataName, dataClassName)

@@ -28,7 +28,7 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
       new ContentLinkView(editor, {
         renderTypeIcon: true,
         renderCancelButton: true,
-      })
+      }),
   );
 
   contentLinkView.set({

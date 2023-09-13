@@ -17,7 +17,7 @@ export const extendingWaitForExpect = async (
   matcherName: string,
   expectation: Expectation,
   negatedExpectation: Expectation,
-  context: jest.MatcherContext
+  context: jest.MatcherContext,
 ): Promise<jest.CustomMatcherResult> => {
   const { isNot } = context;
   if (isNot) {

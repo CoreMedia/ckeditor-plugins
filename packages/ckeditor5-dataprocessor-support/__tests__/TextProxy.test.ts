@@ -17,7 +17,7 @@ function parseAndValidate(xmlString: string): Document {
     "/parsererror/text()",
     xmlDocument,
     null,
-    XPathResult.STRING_TYPE
+    XPathResult.STRING_TYPE,
   );
   if (xPathResult.stringValue) {
     throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
@@ -81,7 +81,7 @@ describe("TextProxy.applyRules()", () => {
      * A name/description for the test (will be printed to output).
      */
     string,
-    TextFilterTestData
+    TextFilterTestData,
   ];
 
   const asciiText = "Lorem ipsum dolor sit amet.";
@@ -153,12 +153,12 @@ describe("TextProxy.applyRules()", () => {
         testData.nodePath,
         inputDocument,
         null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
       ).singleNodeValue as Text;
 
       if (!textNode) {
         throw new Error(
-          `Test Setup Issue: Unable resolving XPath '${testData.nodePath}' to element under test in: ${testData.from}`
+          `Test Setup Issue: Unable resolving XPath '${testData.nodePath}' to element under test in: ${testData.from}`,
         );
       }
       return textNode;
@@ -172,11 +172,11 @@ describe("TextProxy.applyRules()", () => {
         testData.restartPath,
         expectedDocument,
         null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
       ).singleNodeValue as Node;
       if (!restartNode) {
         throw new Error(
-          `Test Setup Issue: Unable resolving XPath '${testData.restartPath}' to expected restart node in: ${testData.to}`
+          `Test Setup Issue: Unable resolving XPath '${testData.restartPath}' to expected restart node in: ${testData.to}`,
         );
       }
       return restartNode;

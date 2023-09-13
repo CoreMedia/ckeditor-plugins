@@ -16,7 +16,7 @@ export type XLinkAttributeDataSetKey = `${typeof xLinkPrefix}${Capitalize<XLinkA
 
 const mergeXLinkAttributes = (
   previous: XLinkAttributes | undefined,
-  current: XLinkAttributes | undefined
+  current: XLinkAttributes | undefined,
 ): XLinkAttributes => ({
   ...previous,
   ...current,
@@ -71,7 +71,7 @@ export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes
       if (previousNode) {
         // This may happen if some other data-processing already set a value here.
         console.debug(
-          `Overwriting existing attribute node ${describeAttr(previousNode)} by ${describeAttr(xlinkAttribute)}.`
+          `Overwriting existing attribute node ${describeAttr(previousNode)} by ${describeAttr(xlinkAttribute)}.`,
         );
       }
     }

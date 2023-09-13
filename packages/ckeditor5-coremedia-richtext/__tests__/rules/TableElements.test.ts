@@ -42,6 +42,6 @@ describe("TableElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

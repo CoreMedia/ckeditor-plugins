@@ -28,7 +28,7 @@ it.each([
       mode,
     });
     expect(spy).toBeCalledWith(configToMap(fontMap), mode);
-  }
+  },
 );
 
 it.each([
@@ -47,5 +47,5 @@ it.each([
     });
     const newFontMapping = fontMappingRegistry.getFontMapping("anotherFont");
     expect(newFontMapping).toBeDefined();
-  }
+  },
 );

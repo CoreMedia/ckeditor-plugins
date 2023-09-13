@@ -31,7 +31,7 @@ describe("HasNamespaceUris", () => {
       "[$#] should not match any other objects than HasNamespaceUris: $unmatched",
       ({ unmatched }: { unmatched: unknown }) => {
         expect(isHasNamespaceUri(unmatched)).toBeFalsy();
-      }
+      },
     );
   });
 });

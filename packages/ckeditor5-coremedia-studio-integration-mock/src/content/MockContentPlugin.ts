@@ -165,7 +165,7 @@ class MockContentPlugin extends Plugin {
     if (logger.isDebugEnabled()) {
       // Sorted by ID is more convenient to lookup possible IDs to use.
       const sortedMocks = new Map<number, MockContentConfig>(
-        [...this.#registeredContents].sort(([id1], [id2]) => id1 - id2)
+        [...this.#registeredContents].sort(([id1], [id2]) => id1 - id2),
       );
       const len = sortedMocks.size;
       // Intentional logging-guard quirk: We want to be more verbose, when debug logging is activated.

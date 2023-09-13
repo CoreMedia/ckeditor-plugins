@@ -37,7 +37,7 @@ describe("DocumentFragments", () => {
       "[$#] should not match any other objects than DocumentFragments: $unmatched",
       ({ unmatched }: { unmatched: unknown }) => {
         expect(isDocumentFragment(unmatched)).toBeFalsy();
-      }
+      },
     );
   });
 });

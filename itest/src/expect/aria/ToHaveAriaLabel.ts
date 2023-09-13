@@ -15,7 +15,7 @@ expect.extend({
         expect(ariaLabel).toBeDefined();
         expect(await ariaLabel).not.toStrictEqual(expectedAriaLabel);
       },
-      this
+      this,
     );
   },
 });

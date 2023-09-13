@@ -54,7 +54,7 @@ export const parseAttributesConfig = (config: Config<EditorConfig>): LinkAttribu
   }
   if (!Array.isArray(pluginConfig)) {
     throw new Error(
-      `link.attributes: Unexpected configuration. Array expected but is: ${JSON.stringify(pluginConfig)}`
+      `link.attributes: Unexpected configuration. Array expected but is: ${JSON.stringify(pluginConfig)}`,
     );
   }
   const attributes: RegisterAttributeConfig[] = [];

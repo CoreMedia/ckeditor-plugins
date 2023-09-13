@@ -34,7 +34,7 @@ describe("Attrs", () => {
       "[$#] should not match any other objects than Attributes: $unmatched",
       ({ unmatched }: { unmatched: unknown }) => {
         expect(isAttr(unmatched)).toBeFalsy();
-      }
+      },
     );
   });
 
@@ -49,7 +49,7 @@ describe("Attrs", () => {
       copyAttributesFrom(documentElement, targetElement);
 
       expect(serializeToXmlString(onlyRootXmlDocument)).toStrictEqual(
-        `<root lang="en" id="ID"><child lang="en" id="ID"/></root>`
+        `<root lang="en" id="ID"><child lang="en" id="ID"/></root>`,
       );
     });
   });

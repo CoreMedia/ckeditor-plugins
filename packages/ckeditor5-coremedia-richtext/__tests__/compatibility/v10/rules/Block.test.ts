@@ -83,7 +83,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Block Tags", () => {
           dataView: wrapContent(`<${el} lang="de"/>`),
         },
       ];
-    })
+    }),
   );
 
   const data: DataProcessingTestCase[] = [

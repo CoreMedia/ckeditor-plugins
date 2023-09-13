@@ -217,7 +217,7 @@ class ContentLinkCommandHook extends Plugin {
    * as stored in the model (`content:123`).
    * @param name - resolved name
    */
-  registerContentName(uriOrPath: UriPath | ModelUri, name: string): void {
+  registerContentName(uriOrPath: UriPath, name: string): void {
     this.#trackingData.replacement = {
       modelUri: requireContentCkeModelUri(uriOrPath),
       name,

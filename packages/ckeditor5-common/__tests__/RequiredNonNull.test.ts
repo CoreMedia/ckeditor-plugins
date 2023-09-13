@@ -8,7 +8,10 @@ interface WithOptionalNullableValues {
 }
 
 class WithOptionalNullableValuesImpl implements WithOptionalNullableValues {
-  constructor(public requiredNullable: number | null, public optionalNullable?: number | null) {}
+  constructor(
+    public requiredNullable: number | null,
+    public optionalNullable?: number | null,
+  ) {}
 }
 
 describe("RequiredNonNull", () => {
@@ -33,7 +36,7 @@ describe("RequiredNonNull", () => {
 
     // Just use to satisfy static code analysis.
     [defaultProbe, allRequiredNonNullProbe, onlySelectedRequiredNonNullProbe, erredProbe].forEach((probe) =>
-      expect(probe).toBeDefined()
+      expect(probe).toBeDefined(),
     );
   });
 

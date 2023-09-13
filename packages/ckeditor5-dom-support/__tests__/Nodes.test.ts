@@ -157,7 +157,7 @@ describe("Nodes", () => {
             }
             const actual = lookupNamespaceURI(node, prefix, force);
             expect(actual).toStrictEqual(expected);
-          }
+          },
         );
       });
     });

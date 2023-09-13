@@ -52,7 +52,7 @@ describe("LinkTargetConfig", () => {
         const definitions = parseLinkTargetConfig(config);
         expect(definitions).toHaveLength(1);
         expect(definitions[0]?.title).toStrictEqual(expectedTitle);
-      }
+      },
     );
 
     test.each`
@@ -74,7 +74,7 @@ describe("LinkTargetConfig", () => {
         expect(definitions).toHaveLength(1);
         // This also tests for "auto-completing object".
         expect(definitions[0]?.title).toStrictEqual(expectedTitle);
-      }
+      },
     );
 
     test.each`
@@ -197,7 +197,7 @@ describe("LinkTargetConfig", () => {
       ({ entry: invalidEntry }) => {
         config.set("link.targets", [invalidEntry]);
         expect(() => parseLinkTargetConfig(config)).toThrow();
-      }
+      },
     );
   });
 });

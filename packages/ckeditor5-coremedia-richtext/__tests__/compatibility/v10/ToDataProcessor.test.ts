@@ -59,7 +59,7 @@ function parseAndValidate(xmlString: string): Document {
     "/parsererror/text()",
     xmlDocument,
     null,
-    XPathResult.STRING_TYPE
+    XPathResult.STRING_TYPE,
   );
   if (xPathResult.stringValue) {
     throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
@@ -97,7 +97,7 @@ type NamedTestData = [
    * A name/description for the test (will be printed to output).
    */
   string,
-  TestData
+  TestData,
 ];
 
 /**
@@ -310,10 +310,10 @@ describe("RichTextDataProcessor.toData", () => {
 
       console.log(
         `${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(
-          1
+          1,
         )} ms vs. allowed ${
           maximumMilliseconds > 0 ? maximumMilliseconds.toFixed(1) : "<unlimited>"
-        } ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`
+        } ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`,
       );
 
       if (maximumMilliseconds >= 0) {

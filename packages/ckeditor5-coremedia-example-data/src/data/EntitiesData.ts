@@ -293,11 +293,11 @@ const tableHeader = (...headers: string[]): string =>
 const entitiesExample = richtext(
   `${h1("Entities")}${entitiesDescription}${h2("XML Entities")}<table>${tableHeader(
     "Entity",
-    "Character"
+    "Character",
   )}${xmlEntityRows}</table>${h2("CoreMedia RichText&nbsp;1.0 Entities")}<table>${tableHeader(
     "Entity",
-    "Character"
-  )}${richTextEntityRows}</table>`
+    "Character",
+  )}${richTextEntityRows}</table>`,
 );
 
 // noinspection JSUnusedGlobalSymbols Used in Example App

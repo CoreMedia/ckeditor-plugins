@@ -76,7 +76,7 @@ const evaluateIsLinkable = async (uris: string[]): Promise<IsLinkableEvaluationR
 
 const isLinkableUriInformation = async (uri: string): Promise<boolean> => {
   const richTextConfigurationService: RichtextConfigurationService = await serviceAgent.fetchService(
-    createRichtextConfigurationServiceDescriptor()
+    createRichtextConfigurationServiceDescriptor(),
   );
   return richTextConfigurationService.hasLinkableType(uri);
 };

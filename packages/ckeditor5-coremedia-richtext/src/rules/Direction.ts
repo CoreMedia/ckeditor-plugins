@@ -27,7 +27,7 @@ export type RuleSectionConfigSupplier = () => RuleSectionConfig;
 
 export const ifIncludesToData = (
   direction: Direction,
-  supplier: RuleSectionConfigSupplier
+  supplier: RuleSectionConfigSupplier,
 ): RuleSectionConfig | undefined => {
   if (includesToData(direction)) {
     return supplier();
@@ -36,7 +36,7 @@ export const ifIncludesToData = (
 
 export const ifIncludesToView = (
   direction: Direction,
-  supplier: RuleSectionConfigSupplier
+  supplier: RuleSectionConfigSupplier,
 ): RuleSectionConfig | undefined => {
   if (includesToView(direction)) {
     return supplier();

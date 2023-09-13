@@ -53,12 +53,12 @@ class MockStudioIntegration extends Plugin {
     const contentReferenceService = new MockContentReferenceService(this.editor);
     serviceAgent.registerService<MockContentReferenceService>(
       contentReferenceService,
-      createContentReferenceServiceDescriptor()
+      createContentReferenceServiceDescriptor(),
     );
     const contentImportService = new MockContentImportService(this.editor);
     serviceAgent.registerService<MockContentImportService>(
       contentImportService,
-      createContentImportServiceDescriptor()
+      createContentImportServiceDescriptor(),
     );
 
     reportInitEnd(initInformation);

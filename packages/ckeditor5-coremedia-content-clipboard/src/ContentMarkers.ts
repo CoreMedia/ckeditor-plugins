@@ -61,7 +61,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
           insertionContext,
           contentUri,
           !embeddableType && !multipleInputItems,
-          index
+          index,
         );
         addContentInputMarker(editor, collapsedInsertRange, contentInputData);
         return embeddableType;
@@ -104,7 +104,7 @@ const createContentInputData = (
   insertionContext: InsertionContext,
   uri: string,
   isInline: boolean,
-  itemIndex: number
+  itemIndex: number,
 ): ContentInputData => ({
   insertionContext,
   itemContext: {
@@ -126,7 +126,7 @@ const createContentInputData = (
 const addContentInputMarker = (editor: Editor, markerRange: ModelRange, contentInputData: ContentInputData): void => {
   const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
     contentInputData.insertionContext.insertionId,
-    contentInputData.itemContext.itemIndex
+    contentInputData.itemContext.itemIndex,
   );
   logger.debug("Adding content-input marker", markerName, contentInputData);
   editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {

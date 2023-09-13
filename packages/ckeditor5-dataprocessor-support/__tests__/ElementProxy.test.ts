@@ -25,7 +25,7 @@ function requireValidXml(xmlString: string): Document {
     "/parsererror/text()",
     xmlDocument,
     null,
-    XPathResult.STRING_TYPE
+    XPathResult.STRING_TYPE,
   );
   if (xPathResult.stringValue) {
     throw new Error(`Error while parsing XML: ${xPathResult.stringValue}\n\tXML: ${xmlString}`);
@@ -257,7 +257,7 @@ describe("ElementProxy.classList", () => {
         }
 
         validate(before, after, count);
-      }
+      },
     );
 
     test.each`
@@ -308,7 +308,7 @@ describe("ElementProxy.classList", () => {
         cmpElement.classList.replace(replace, replaceBy);
 
         validate(before, after, count);
-      }
+      },
     );
 
     test.each`
@@ -324,7 +324,7 @@ describe("ElementProxy.classList", () => {
 
         expect(proxyFunc).toThrow();
         expect(cmpFunc).toThrow();
-      }
+      },
     );
   });
 
@@ -351,7 +351,7 @@ describe("ElementProxy.classList", () => {
         cmpElement.classList.toggle(toggle, force);
 
         validate(before, after, count);
-      }
+      },
     );
 
     test.each`
@@ -368,7 +368,7 @@ describe("ElementProxy.classList", () => {
 
         expect(proxyFunc).toThrow();
         expect(cmpFunc).toThrow();
-      }
+      },
     );
   });
 });
@@ -389,7 +389,7 @@ type ApplyRulesData = [
     from: string;
     to: string;
     restart?: string;
-  }
+  },
 ];
 
 describe("ElementProxy.applyRules()", () => {
@@ -870,7 +870,7 @@ describe("ElementProxy.applyRules()", () => {
         .singleNodeValue
     ) {
       throw new Error(
-        `Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`
+        `Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`,
       );
     }
 
@@ -883,7 +883,7 @@ describe("ElementProxy.applyRules()", () => {
         testData.restart,
         xmlDocument,
         null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
       ).singleNodeValue;
       expect(appliedRulesResult).toStrictEqual(expectedRestart);
     } else {

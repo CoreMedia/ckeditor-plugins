@@ -424,7 +424,7 @@ export const preProcessAnchorElement = (
   preProcessor:
     | RequireSelected<HTMLAnchorElementPreprocessor, "toData">
     | RequireSelected<HTMLAnchorElementPreprocessor, "toView">,
-  ruleId = "pre-process-anchor-element"
+  ruleId = "pre-process-anchor-element",
 ): RuleConfig => {
   const { toData: toDataMapper, toView: toViewMapper } = preProcessor;
 
@@ -561,7 +561,7 @@ export const mapArtificialXLinkRole = (
     toData?: (element: HTMLAnchorElement) => string | undefined;
     toView?: (element: HTMLAnchorElement, role: string) => void;
   } = {},
-  excludeShow: ("replace" | "new" | "embed" | "none" | "other" | string | undefined)[] = ["other"]
+  excludeShow: ("replace" | "new" | "embed" | "none" | "other" | string | undefined)[] = ["other"],
 ): RuleConfig =>
   preProcessAnchorElement(
     {
@@ -582,5 +582,5 @@ export const mapArtificialXLinkRole = (
         }
       },
     },
-    "map-artificial-xlink-role"
+    "map-artificial-xlink-role",
   );

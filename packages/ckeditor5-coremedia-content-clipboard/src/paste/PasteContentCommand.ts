@@ -101,7 +101,7 @@ export class PasteContentCommand extends Command {
 
   static async resolvePastableStates(uris: string[]): Promise<boolean[]> {
     const richtextConfigurationService = await serviceAgent.fetchService(
-      createRichtextConfigurationServiceDescriptor()
+      createRichtextConfigurationServiceDescriptor(),
     );
     const pastableStatePromises: Promise<boolean>[] = uris.map(async (uri): Promise<boolean> => {
       const isLinkable = await richtextConfigurationService.hasLinkableType(uri);

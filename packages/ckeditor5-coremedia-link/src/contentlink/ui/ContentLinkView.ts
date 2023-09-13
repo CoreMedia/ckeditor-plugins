@@ -50,7 +50,7 @@ export default class ContentLinkView extends ButtonView {
       renderTypeIcon?: boolean;
       renderStatusIcon?: boolean;
       renderCancelButton?: boolean;
-    }
+    },
   ) {
     super(editor.locale);
 
@@ -174,7 +174,7 @@ export default class ContentLinkView extends ButtonView {
     if (this.renderOptions?.renderStatusIcon) {
       if (!this.#statusIcon) {
         throw new Error(
-          "Unexpected State: Although render options request rendering a status icon, the required status icon is not available."
+          "Unexpected State: Although render options request rendering a status icon, the required status icon is not available.",
         );
       }
       this.children.add(this.#statusIcon);
@@ -183,7 +183,7 @@ export default class ContentLinkView extends ButtonView {
     if (this.renderOptions?.renderCancelButton) {
       if (!this.#cancelButton) {
         throw new Error(
-          "Unexpected State: Although render options request rendering a cancel icon, the required cancel icon is not available."
+          "Unexpected State: Although render options request rendering a cancel icon, the required cancel icon is not available.",
         );
       }
       this.children.add(this.#cancelButton);
@@ -227,7 +227,7 @@ export default class ContentLinkView extends ButtonView {
                 ariaLabelText: `${received.type.name}: ${received.content.name}`,
               });
             },
-          })
+          }),
         );
       })
       .catch((reason): void => {

@@ -14,7 +14,7 @@ import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ck
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 
 const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
-  contentUri: string
+  contentUri: string,
 ): Promise<CreateModelFunction> => {
   const configurationService = await serviceAgent.fetchService(createRichtextConfigurationServiceDescriptor());
   const blobUriPath = await configurationService.resolveBlobPropertyReference(contentUri);
@@ -50,7 +50,7 @@ export default class ContentImageClipboardPlugin extends Plugin {
     const initInformation = reportInitStart(this);
 
     getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
-      logger.warn(`Recommended plugin ${pluginName} not found. Creating content images from clipboard not activated.`)
+      logger.warn(`Recommended plugin ${pluginName} not found. Creating content images from clipboard not activated.`),
     )?.registerToModelFunction("image", createImageModelFunctionCreator);
 
     reportInitEnd(initInformation);

@@ -25,7 +25,7 @@ describe("Differencing", () => {
     const actual = xdiff.simpleImg(uri, { type: "added", ...EOD });
     // noinspection HtmlUnknownAttribute
     expect(actual).toStrictEqual(
-      `<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0"><img xlink:href="some:uri" alt="Some Image" xdiff:changetype="diff-added-image"/></xdiff:span>`
+      `<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0"><img xlink:href="some:uri" alt="Some Image" xdiff:changetype="diff-added-image"/></xdiff:span>`,
     );
   });
 

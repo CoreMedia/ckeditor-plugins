@@ -30,7 +30,7 @@ describe("AnchorElement", () => {
       "[$#] Should parse $data to $expectedId",
       ({ data, expectedId }: { data: string; expectedId: number | undefined }) => {
         expect(aut.parseDataContentLink(data)).toStrictEqual(expectedId);
-      }
+      },
     );
   });
 
@@ -48,7 +48,7 @@ describe("AnchorElement", () => {
       "[$#] Should parse $view to $expectedId",
       ({ view, expectedId }: { view: string; expectedId: number | undefined }) => {
         expect(aut.parseViewContentLink(view)).toStrictEqual(expectedId);
-      }
+      },
     );
   });
 
@@ -89,7 +89,7 @@ describe("AnchorElement", () => {
       "[$#] Should format data view representation $view to HREF for data: $expectedHref",
       ({ view, expectedHref }: { view: string; expectedHref: string }) => {
         expect(aut.formatHrefForData(view)).toStrictEqual(expectedHref);
-      }
+      },
     );
   });
 
@@ -115,7 +115,7 @@ describe("AnchorElement", () => {
       "[$#] Should format data representation $data to HREF well supported by CKEditor 5 Link Feature: $expectedHref",
       ({ data, expectedHref }: { data: string; expectedHref: number | undefined }) => {
         expect(aut.formatHrefForView(data)).toStrictEqual(expectedHref);
-      }
+      },
     );
   });
 
@@ -164,7 +164,7 @@ describe("AnchorElement", () => {
             expect(aut.parseTarget(target)).toEqual({ show, role });
           });
         }
-      }
+      },
     );
   });
 
@@ -196,7 +196,7 @@ describe("AnchorElement", () => {
           direction,
           htmlString,
         });
-      }
+      },
     );
   });
 
@@ -262,7 +262,7 @@ describe("AnchorElement", () => {
           direction,
           htmlString,
         });
-      }
+      },
     );
   });
 });

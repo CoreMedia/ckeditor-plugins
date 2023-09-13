@@ -29,6 +29,6 @@ describe("HeadingElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

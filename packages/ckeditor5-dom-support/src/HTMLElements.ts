@@ -39,7 +39,7 @@ export class HTMLElementWrapper {
 
   moveDataAttributesToChildElements(
     elementName: keyof HTMLElementTagNameMap | string = defaultDataAttributeElementName,
-    classNamePrefix: string = defaultDataAttributeClassNamePrefix
+    classNamePrefix: string = defaultDataAttributeClassNamePrefix,
   ): void {
     const { ownerDocument, element } = this;
 
@@ -61,7 +61,7 @@ export class HTMLElementWrapper {
 
   moveDataAttributeChildElementToDataAttributes(
     elementName: keyof HTMLElementTagNameMap | string = defaultDataAttributeElementName,
-    classNamePrefix: string = defaultDataAttributeClassNamePrefix
+    classNamePrefix: string = defaultDataAttributeClassNamePrefix,
   ): void {
     const { element } = this;
     [...element.children].forEach((child) => {

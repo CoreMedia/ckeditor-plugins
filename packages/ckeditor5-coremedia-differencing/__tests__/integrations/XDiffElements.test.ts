@@ -30,6 +30,6 @@ describe("XDiffElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

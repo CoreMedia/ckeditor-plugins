@@ -32,6 +32,6 @@ describe("HeadingElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

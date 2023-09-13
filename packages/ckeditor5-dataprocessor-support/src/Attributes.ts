@@ -54,7 +54,7 @@ const renameAttribute = (
   });
   if (ambiguousAttributeNames.length > 0) {
     warnOnAmbiguousAttributeState(
-      `<${node.name}> contained ambiguous attributes to be mapped to attribute "${targetName}". Used value "${value}" provided by attribute "${firstExistingName}". Ignored conflicting attributes: ${ambiguousAttributeNames}.`
+      `<${node.name}> contained ambiguous attributes to be mapped to attribute "${targetName}". Used value "${value}" provided by attribute "${firstExistingName}". Ignored conflicting attributes: ${ambiguousAttributeNames}.`,
     );
   }
   node.attributes[targetName] = value;

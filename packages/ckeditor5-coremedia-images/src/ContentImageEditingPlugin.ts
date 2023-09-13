@@ -58,7 +58,7 @@ export default class ContentImageEditingPlugin extends Plugin {
     ContentImageEditingPlugin.#setupXlinkHrefConversion(
       this.editor,
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
-      ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME
+      ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME,
     );
 
     // We have to prevent writing src-attribute to model because we fetch the
@@ -72,7 +72,7 @@ export default class ContentImageEditingPlugin extends Plugin {
       editor,
       ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME,
       modelAttributeName,
-      dataAttributeName
+      dataAttributeName,
     );
     editor.conversion.for("upcast").attributeToAttribute({
       model: modelAttributeName,
@@ -84,7 +84,7 @@ export default class ContentImageEditingPlugin extends Plugin {
     editor: Editor,
     modelElementName: "imageInline",
     modelAttributeName: string,
-    dataAttributeName: string
+    dataAttributeName: string,
   ): void {
     editor.model.schema.extend(modelElementName, {
       allowAttributes: [modelAttributeName],
@@ -111,7 +111,7 @@ export default class ContentImageEditingPlugin extends Plugin {
    */
   static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
     getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.registerModelElement(
-      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME
+      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME,
     );
   }
 }

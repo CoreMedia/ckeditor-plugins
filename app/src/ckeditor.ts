@@ -391,7 +391,7 @@ ClassicEditor.create(sourceElement, {
         // With hash parameter #expandInspector you may expand the
         // inspector by default.
         isCollapsed: !getHashParam("expandInspector"),
-      }
+      },
     );
 
     (newEditor.plugins.get("Differencing") as Differencing)?.activateDifferencing();

@@ -36,7 +36,7 @@ describe("MockContentDisplayService", () => {
         expect(result?.type?.classes).toContain("icon--document-document");
         expect(result?.state?.name).toStrictEqual("Checked In");
         expect(result?.state?.classes).toContain("icon--checked-in");
-      }
+      },
     );
   });
 });

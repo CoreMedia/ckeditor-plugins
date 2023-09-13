@@ -16,7 +16,7 @@ import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ck
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 
 const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
-  contentUri: string
+  contentUri: string,
 ): Promise<CreateModelFunction> => {
   const contentDisplayService = await serviceAgent.fetchService(createContentDisplayServiceDescriptor());
   const contentName = await contentDisplayService.name(contentUri);
@@ -53,7 +53,7 @@ export default class ContentLinkClipboardPlugin extends Plugin {
     const initInformation = reportInitStart(this);
 
     getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
-      logger.warn(`Recommended plugin ${pluginName} not found. Creating content links from clipboard not activated.`)
+      logger.warn(`Recommended plugin ${pluginName} not found. Creating content links from clipboard not activated.`),
     )?.registerToModelFunction("link", createLinkModelFunctionCreator);
 
     reportInitEnd(initInformation);

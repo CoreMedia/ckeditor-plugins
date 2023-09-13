@@ -162,7 +162,7 @@ describe("Paste Button", () => {
             await expect(linkElements[i]).toHaveText(contentMocks[i].name);
           }
         });
-      }
+      },
     );
     it("Should paste a link using keyboard shorcut.", async () => {
       const inputElementClass = "paste-via-keyboard-link";
@@ -224,7 +224,7 @@ describe("Paste Button", () => {
             await expect(image).toMatchAttribute("title", contentMocks[i].name);
           }
         });
-      }
+      },
     );
   });
 
@@ -246,7 +246,7 @@ describe("Paste Button", () => {
   async function copyPaste(
     contentMocks: MockContentConfig[],
     inputElementSelector: string,
-    toolbarItemsLocator: string
+    toolbarItemsLocator: string,
   ): Promise<void> {
     await page.waitForSelector(inputElementSelector);
     await page.waitForSelector(toolbarItemsLocator);

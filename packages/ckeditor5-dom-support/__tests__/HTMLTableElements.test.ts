@@ -27,7 +27,7 @@ describe("HTMLTableElements", () => {
       "[$#] should not match any other objects than HTMLTableElement: $unmatched",
       ({ unmatched }: { unmatched: unknown }) => {
         expect(isHTMLTableElement(unmatched)).toBeFalsy();
-      }
+      },
     );
   });
 

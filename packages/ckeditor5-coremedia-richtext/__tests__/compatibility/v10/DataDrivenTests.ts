@@ -125,7 +125,7 @@ const isOnly = (data: any): data is OnlyTestCase => {
 export const ddTest = <T extends NamedTestCase>(
   direction: Direction,
   data: T | (T & SkippableTestCase) | (T & OnlyTestCase) | (T & DirectionRestriction),
-  fn: (data: T) => void
+  fn: (data: T) => void,
 ): void => {
   const testFn = () => {
     fn(data);
@@ -188,7 +188,7 @@ export const applyFilter = (
   filter: HtmlFilter,
   input: string,
   silent?: boolean,
-  postProcessor?: DocumentPostProcessor
+  postProcessor?: DocumentPostProcessor,
 ): string => {
   const xmlDocument: Document = parseXml(input);
   silenced(() => filter.applyTo(xmlDocument.documentElement), silent);
@@ -198,7 +198,7 @@ export const applyFilter = (
 
 export const dataProcessingTest = (
   direction: Direction.toData | Direction.toDataView,
-  data: DataProcessingTestCase
+  data: DataProcessingTestCase,
 ): void => {
   const filter: HtmlFilter = getFilter(direction);
   let input: string;
@@ -220,7 +220,7 @@ export const dataProcessingTest = (
 
 export const eachDataProcessingTest = (
   direction: Direction.toData | Direction.toDataView,
-  testCases: DataProcessingTestCase[]
+  testCases: DataProcessingTestCase[],
 ): void => {
   const name = `[%#] %s`;
   const data = testData(testCases);

@@ -123,7 +123,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(1);
                 expect(listener.removedNodes).toHaveLength(1);
               });
-            }
+            },
           );
         });
       });
@@ -149,7 +149,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(validElement);
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -178,7 +178,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -213,7 +213,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(1);
                 expect(listener.removedNodes).toHaveLength(1);
               });
-            }
+            },
           );
         });
       });
@@ -245,7 +245,7 @@ describe("RichTextSanitizer", () => {
               ({ validElement }: { validElement: string }) => {
                 const validXml = richtext(validElement);
                 expectSanitationResult(sanitizer, validXml, validXml);
-              }
+              },
             );
 
             it("Should remove invalid attributes", () => {
@@ -274,7 +274,7 @@ describe("RichTextSanitizer", () => {
                   expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                   expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
                 });
-              }
+              },
             );
           });
 
@@ -315,10 +315,10 @@ describe("RichTextSanitizer", () => {
                   expect(listener.totalLength).toBeGreaterThanOrEqual(1);
                   expect(listener.removedNodes.length).toBeGreaterThanOrEqual(1);
                 });
-              }
+              },
             );
           });
-        }
+        },
       );
 
       // =======================================================================================================[ <li> ]
@@ -343,7 +343,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(container(validElement));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -372,7 +372,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -406,7 +406,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(1);
                 expect(listener.removedNodes).toHaveLength(1);
               });
-            }
+            },
           );
         });
       });
@@ -432,7 +432,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(validElement);
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -470,7 +470,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -504,7 +504,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(1);
                 expect(listener.removedNodes).toHaveLength(1);
               });
-            }
+            },
           );
         });
       });
@@ -532,7 +532,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(validElement);
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -561,7 +561,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -625,7 +625,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(p(validElement));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -674,7 +674,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -709,7 +709,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(1);
                 expect(listener.removedNodes).toHaveLength(1);
               });
-            }
+            },
           );
         });
       });
@@ -750,7 +750,7 @@ describe("RichTextSanitizer", () => {
               ({ validElement }: { validElement: string }) => {
                 const validXml = richtext(p(validElement));
                 expectSanitationResult(sanitizer, validXml, validXml);
-              }
+              },
             );
 
             it("Should remove invalid attributes", () => {
@@ -779,7 +779,7 @@ describe("RichTextSanitizer", () => {
                   expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                   expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
                 });
-              }
+              },
             );
           });
 
@@ -814,10 +814,10 @@ describe("RichTextSanitizer", () => {
                   expect(listener.totalLength).toStrictEqual(1);
                   expect(listener.removedNodes).toHaveLength(1);
                 });
-              }
+              },
             );
           });
-        }
+        },
       );
 
       // ======================================================================================================[ <img> ]
@@ -845,14 +845,14 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(p(validElement));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
             const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "", "class": "I" }))).replace(
               "class",
-              "invalid"
+              "invalid",
             );
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
               expect(listener.totalLength).toStrictEqual(1);
@@ -900,7 +900,7 @@ describe("RichTextSanitizer", () => {
               const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
               const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "" }))).replace(
                 "<img",
-                `<img ${invalidAttribute}`
+                `<img ${invalidAttribute}`,
               );
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
               const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
@@ -909,7 +909,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -921,7 +921,7 @@ describe("RichTextSanitizer", () => {
           `("[$#] Should clean up invalid children: $invalidChild", ({ invalidChild }: { invalidChild: string }) => {
             const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "" }))).replace(
               "/>",
-              `>${invalidChild}</img>`
+              `>${invalidChild}</img>`,
             );
             const sanitizedXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
             expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -954,7 +954,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(validElement);
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -983,7 +983,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -1044,7 +1044,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(table(validElement));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -1075,7 +1075,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -1089,7 +1089,7 @@ describe("RichTextSanitizer", () => {
             ({ validChildren }: { validChildren: string | string[] }) => {
               const validXml = richtext(table(tbody(validChildren)));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove illegal empty element", () => {
@@ -1139,7 +1139,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(table(validElement));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -1170,7 +1170,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -1184,7 +1184,7 @@ describe("RichTextSanitizer", () => {
             ({ validChildren }: { validChildren: string | string[] }) => {
               const validXml = richtext(table(tr(validChildren)));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove illegal empty element", () => {
@@ -1237,7 +1237,7 @@ describe("RichTextSanitizer", () => {
             ({ validElement }: { validElement: string }) => {
               const validXml = richtext(table(tr(validElement)));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           it("Should remove invalid attributes", () => {
@@ -1268,7 +1268,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
 
           it.each`
@@ -1287,7 +1287,7 @@ describe("RichTextSanitizer", () => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
                 expect(listener.removedInvalidAttrs).toHaveLength(expectedInvalidAttributes);
               });
-            }
+            },
           );
         });
 
@@ -1304,7 +1304,7 @@ describe("RichTextSanitizer", () => {
             ({ validChildren }: { validChildren: string | string[] }) => {
               const validXml = richtext(table(tr(td(validChildren))));
               expectSanitationResult(sanitizer, validXml, validXml);
-            }
+            },
           );
 
           test.each`

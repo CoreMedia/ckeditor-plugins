@@ -284,7 +284,7 @@ describe("CoreMediaRichTextConfig: Anchors", () => {
       // if it shall be silent or not.
       testData.silent = true;
       return testData;
-    }
+    },
   );
 
   // noinspection HtmlUnknownAttribute

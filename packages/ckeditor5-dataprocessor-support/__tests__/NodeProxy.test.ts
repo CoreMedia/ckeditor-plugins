@@ -340,7 +340,7 @@ describe("NodeProxy.findFirst", () => {
       } else {
         expect(new NodeProxy(node).findFirst(childPredicate)?.delegate).toStrictEqual(firstChild);
       }
-    }
+    },
   );
 });
 
@@ -463,7 +463,7 @@ describe("NodeProxy.persistToDom", () => {
           data.expectedRestartFromXPath,
           document,
           null,
-          XPathResult.FIRST_ORDERED_NODE_TYPE
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
         ).singleNodeValue as Node;
       }
       data.action(proxy);

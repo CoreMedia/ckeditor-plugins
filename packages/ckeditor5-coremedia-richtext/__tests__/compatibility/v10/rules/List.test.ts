@@ -107,7 +107,7 @@ describe("CoreMediaRichTextConfig: Lists", () => {
           dataView: wrapContent(`<${el}><li lang="de">${text}</li></${el}>`),
         },
       ];
-    })
+    }),
   );
 
   allDataProcessingTests(data);

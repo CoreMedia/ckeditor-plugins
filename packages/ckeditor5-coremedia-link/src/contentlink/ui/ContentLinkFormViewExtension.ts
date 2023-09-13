@@ -86,7 +86,7 @@ class ContentLinkFormViewExtension extends Plugin {
     formView
       .bind("contentUriPath")
       .to(linkCommand, "value", (value: unknown) =>
-        typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined
+        typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined,
       );
 
     this.#extendView(linkUI, formView);
@@ -155,7 +155,7 @@ class ContentLinkFormViewExtension extends Plugin {
       {
         // We need to register the content's name prior to the LinkCommand being executed.
         priority: "high",
-      }
+      },
     );
   }
 
@@ -190,7 +190,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const enabledHandler = (
       isEnabled: boolean,
       contentName: string | undefined | null,
-      contentUriPath: string | undefined | null
+      contentUriPath: string | undefined | null,
     ): boolean =>
       // Either contentUriPath must be unset or contentName must be set.
       isEnabled && (!contentUriPath || !!contentName);
@@ -312,7 +312,7 @@ class ContentLinkFormViewExtension extends Plugin {
     });
     formView.urlInputView.fieldView.element?.addEventListener(
       "dragover",
-      ContentLinkFormViewExtension.#onDragOverLinkField
+      ContentLinkFormViewExtension.#onDragOverLinkField,
     );
     logger.debug("Finished adding drag and drop listeners.");
   }
@@ -441,7 +441,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     if (!isLinkableEvaluationResult) {
       logger.debug(
-        "DragOverEvent: No URI received from DragDropService. Assuming that is any text (like an url) and allow it."
+        "DragOverEvent: No URI received from DragDropService. Assuming that is any text (like an url) and allow it.",
       );
       dragEvent.dataTransfer.dropEffect = "copy";
       return;
@@ -454,7 +454,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     if (isLinkableEvaluationResult.uris?.length !== 1) {
       logger.debug(
-        `DragOverEvent: Received ${isLinkableEvaluationResult.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`
+        `DragOverEvent: Received ${isLinkableEvaluationResult.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`,
       );
       dragEvent.dataTransfer.dropEffect = "none";
       return;
