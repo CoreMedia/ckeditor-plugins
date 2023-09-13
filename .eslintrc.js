@@ -88,6 +88,8 @@ module.exports = {
         // some argument. Unfortunately, there is no exclusion but only
         // inclusion mechanism for this rule.
         "jsdoc/empty-tags": "off",
+        // Not relevant for TypeScript.
+        "jsdoc/no-undefined-types": "off",
         // Collides with `@example` syntax for TypeDoc. May be possibly
         // fine-tuned by more explicit configuration.
         "jsdoc/tag-lines": "off",
