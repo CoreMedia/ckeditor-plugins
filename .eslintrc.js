@@ -269,6 +269,10 @@ module.exports = {
         "@typescript-eslint/no-invalid-void-type": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-non-null-assertion": "error",
+        // Sometimes a result of composite types, sometimes used for better
+        // IDE support, providing hints, such as `"lorem" | string` would
+        // propose "lorem" as a possible option.
+        "@typescript-eslint/no-redundant-type-constituents": "off",
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/no-unsafe-argument": "error",
