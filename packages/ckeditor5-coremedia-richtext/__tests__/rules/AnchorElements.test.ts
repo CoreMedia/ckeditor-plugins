@@ -205,7 +205,7 @@ describe("AnchorElement", () => {
       aut.anchorElements,
       /*
        * Stores artificial `xlink:role` as class token with prefix `role_` in
-       * `toView` processing and later restores in from `class` attribute in
+       * `toView` processing and later restores it from `class` attribute in
        * `toData` processing.
        *
        * Note: If this configuration changes, please review the TSdoc of
