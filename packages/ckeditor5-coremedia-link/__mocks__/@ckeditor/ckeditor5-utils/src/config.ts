@@ -1,7 +1,7 @@
 class Config {
   #config: Map<string, unknown> = new Map<string, unknown>();
 
-  get(name: string): unknown | undefined {
+  get(name: string): unknown {
     return this.#config.get(name);
   }
 
