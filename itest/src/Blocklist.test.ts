@@ -1,7 +1,7 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+import { richtext, p } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
 import "./expect/Expectations";
-import WindowBrowserAccessor from "./browser/WindowBrowserAccessor";
+import { ctrlOrMeta } from "./browser/UserAgent";
 
 /**
  * Tests the blocklist feature.
@@ -39,7 +39,7 @@ describe("Blocklist", () => {
       const { view } = ui;
 
       // Initialize editor
-      const data = richtext(`<p>Hello World!</p><p>Content</p><p>This is an example text for test purposes.</p>`);
+      const data = richtext(`(${p("Hello World!")}${p("Content")}${p("This is an example text for test purposes.")}`);
       await editor.setData(data);
       const helloWorldText = view.locator.locator(`p`, { hasText: "Hello World!" });
 
@@ -49,9 +49,7 @@ describe("Blocklist", () => {
       await contentText.click({ modifiers });
 
       // Open Blocklist Balloon via Shortcut
-      const userAgent = await WindowBrowserAccessor.getUserAgent();
-      const metaKey = userAgent.includes("Mac") ? "Meta" : "Control";
-      await page.keyboard.down(metaKey);
+      await page.keyboard.down(await ctrlOrMeta());
       await page.keyboard.down("Shift");
       await page.keyboard.press("B");
 
