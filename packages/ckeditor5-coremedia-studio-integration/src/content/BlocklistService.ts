@@ -1,8 +1,8 @@
 import { Observable } from "rxjs";
 
 /**
- * Service, used to manage a list of blocklisted words within CKEditor.
- * Blocklisted words are words that should not appear in the editor content
+ * Service, used to manage a list of blocked words within CKEditor.
+ * Blocked words are words that should not appear in the editor content
  * and should be taken care of by an editor.
  * They are therefore highlighted within the text.
  *

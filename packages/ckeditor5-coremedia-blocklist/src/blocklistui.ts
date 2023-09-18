@@ -24,7 +24,7 @@ const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
  * It also creates the views, that are displayed inside the contextual balloon when triggered by the button, click or
  * keystroke.
  *
- * It uses the contextual balloon plugin}.
+ * It uses the contextual balloon plugin.
  */
 export default class Blocklistui extends Plugin {
   static readonly pluginName: string = "BlocklistUI";
@@ -170,7 +170,7 @@ export default class Blocklistui extends Plugin {
     }
 
     // Set the value of the input element in the blocklist balloon to the current selection
-    // For clicks on a blocklisted word, no value is set since the selection is collapsed
+    // For clicks on a blocked word, no value is set since the selection is collapsed
     this.blocklistActionsView.blocklistInputView.setInputText(this.#getSelectedText());
 
     this.#addBalloonView();
@@ -257,7 +257,7 @@ export default class Blocklistui extends Plugin {
   /**
    * Initializes listeners to open the balloon, or switch to the blocklist balloon view.
    * The balloon opens, if the command is enabled and the shortcut is pressed,
-   * or if a block-listed word is clicked on.
+   * or if a blocked word is clicked on.
    *
    * @private
    */
@@ -367,7 +367,7 @@ export default class Blocklistui extends Plugin {
     }
 
     if (selection.isCollapsed) {
-      return this.#getAllBlocklistedWordsForPosition(firstPosition);
+      return this.#getAllBlockedWordsForPosition(firstPosition);
     }
     return undefined;
   }
@@ -418,7 +418,7 @@ export default class Blocklistui extends Plugin {
   }
 
   /**
-   * Returns the value of the data attribute that holds the value of the blocklisted word.
+   * Returns the value of the data attribute that holds the value of the blocked word.
    *
    * @param node - the node, containing the attribute
    * @returns the attribute value or undefined if not existing
@@ -428,12 +428,12 @@ export default class Blocklistui extends Plugin {
   }
 
   /**
-   * Returns all blocklisted words for the current selection position.
+   * Returns all blocked words for the current selection position.
    *
    * @param position - the position to check for
    * @returns the list of words
    */
-  #getAllBlocklistedWordsForPosition(position: ViewPosition): string[] {
+  #getAllBlockedWordsForPosition(position: ViewPosition): string[] {
     return position
       .getAncestors()
       .filter((ancestor): ancestor is ViewAttributeElement => this.#isViewAttributeElement(ancestor))

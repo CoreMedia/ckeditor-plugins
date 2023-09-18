@@ -12,7 +12,7 @@ export default class BlocklistEditing extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(BlocklistEditing.pluginName);
 
   /**
-   * A list of markers, used to highlight blocklisted words in the editor.
+   * A list of markers, used to highlight blocked words in the editor.
    */
   blockedWordMarkers: Collection<ResultType> = new Collection<ResultType>();
 
@@ -43,7 +43,7 @@ export default class BlocklistEditing extends Plugin {
     this.#defineConversion();
 
     // whenever the data in the editor changes, we need to check new nodes
-    // for blocklisted words, or remove markers if nodes have been removed
+    // for blocked words, or remove markers if nodes have been removed
     editor.model.document.on("change:data", () => {
       onDocumentChange(this.blockedWordMarkers, editor, this.internalBlocklist);
     });
@@ -114,7 +114,7 @@ export default class BlocklistEditing extends Plugin {
   }
 
   /**
-   * Compares 2 string lists and returns the differences between the lists.
+   * Compares two string lists and returns the differences between the lists.
    * All words, that exist in the newList, but not in the oldList, are handled as "added".
    * All words in the oldList, that do not exist in the newList, are handled as "removed".
    *
@@ -207,7 +207,7 @@ export default class BlocklistEditing extends Plugin {
   }
 
   /**
-   * Removes all markers for a given blocklisted word.
+   * Removes all markers for a given blocked word.
    * This means:
    * * The local collection of markers will be cleared of
    * all markers for the given word.
@@ -238,13 +238,13 @@ export default class BlocklistEditing extends Plugin {
   }
 
   /**
-   * Adds markers for a given blocklisted word.
+   * Adds markers for a given blocked word.
    * This means:
    * * New markers for the given word will be pushed to the
    * local collection of markers.
    * * The model is adjusted accordingly.
    *
-   * Important: This function does not know whether the blocklisted word is already
+   * Important: This function does not know whether the blocked word is already
    * marked in the gui. Calling it twice, will result in a dirty ui with multiple
    * nested marker spans.
    *
@@ -277,7 +277,7 @@ export default class BlocklistEditing extends Plugin {
    *
    * The corresponding word in the blocklist will be saved as
    * a data attribute on the span. This is necessary, because such
-   * spans can also be split up, e.g. if 2 spans are overlapping.
+   * spans can also be split up, e.g. if two spans are overlapping.
    */
   #defineConversion(): void {
     const { editor } = this;
@@ -292,7 +292,7 @@ export default class BlocklistEditing extends Plugin {
         // A minimal option is to return a new object for each converted marker...
         return {
           name: "span",
-          classes: ["cm-ck-blocklisted"],
+          classes: ["cm-ck-blocked-word"],
           attributes: {
             // ...however, adding a unique attribute should be future-proof..
             "data-blocklist-word": id,
@@ -304,7 +304,7 @@ export default class BlocklistEditing extends Plugin {
   }
 
   /**
-   * Splits a marker name into id and blocklisted word
+   * Splits a marker name into id and blocked word
    *
    * @param markerName - the marker name
    * @private
