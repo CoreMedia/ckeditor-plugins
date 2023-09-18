@@ -1,6 +1,6 @@
 import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
-import blocklistIcon from "../theme/icons/blacklist.svg";
+import blocklistIcon from "../theme/icons/blocklist.svg";
 import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import {
   TextProxy,
@@ -81,8 +81,8 @@ export default class Blocklistui extends Plugin {
       }
 
       // Return, if the word is already in the blocklist
-      const blacklistCommandValue = this.blocklistCommand.value;
-      if (blacklistCommandValue.includes(blockWordInput.value)) {
+      const blocklistCommandValue = this.blocklistCommand.value;
+      if (blocklistCommandValue.includes(blockWordInput.value)) {
         return;
       }
 
@@ -90,7 +90,7 @@ export default class Blocklistui extends Plugin {
       const editingPlugin = editor.plugins.get(BlocklistEditing);
       editingPlugin.addBlocklistWord(blockWordInput.value);
 
-      const newValue = [...blacklistCommandValue, blockWordInput.value];
+      const newValue = [...blocklistCommandValue, blockWordInput.value];
       this.blocklistCommand.set("value", newValue);
 
       // Clear the input
