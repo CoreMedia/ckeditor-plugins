@@ -3,14 +3,11 @@ import BlocklistService from "@coremedia/ckeditor5-coremedia-studio-integration/
 import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlocklistServiceDescriptor";
 
 /**
- * Mock Display Service for use in example app.
+ * Mock BlocklistService for use in example app.
  *
- * By default, the service provides just some static content with some
- * predefined settings given a content-ID or the content's URI path.
- *
- * For custom contents, like for example to simulate actively modified
- * contents, simulate slow loading contents, you may register such contents
- * with a given ID at `MockContentPlugin`.
+ * The service provides an empty list and adds the
+ * words, that are present in the default example app
+ * editor after a short period of time.
  */
 class MockBlocklistService implements BlocklistService {
   #blocklist: string[];
@@ -81,7 +78,7 @@ class MockBlocklistService implements BlocklistService {
    *
    * @returns The whole blocklist
    */
-  getList(): Promise<string[]> {
+  getBlocklist(): Promise<string[]> {
     return Promise.resolve(this.#blocklist);
   }
 

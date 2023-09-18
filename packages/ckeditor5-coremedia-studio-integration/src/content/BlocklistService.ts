@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
  * This service interface allows to add or remove words and observe the whole list.
  * It is used in the `ckeditor5-blocklist` plugin.
  *
- * The service has to be registered globally by `serviceAgent` and may then
+ * The service has to be registered globally on the `serviceAgent` and may then
  * be retrieved by its descriptor, for example:
  *
  * @example
@@ -41,7 +41,7 @@ interface BlocklistService {
    *
    * @returns The whole blocklist
    */
-  getList(): Promise<string[]>;
+  getBlocklist(): Promise<string[]>;
 
   /**
    * Observes the blocklist and returns the whole list when words are added or removed.

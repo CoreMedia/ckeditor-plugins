@@ -106,7 +106,7 @@ export default class BlocklistEditing extends Plugin {
       },
     });
 
-    const initialWords = await blocklistService.getList();
+    const initialWords = await blocklistService.getBlocklist();
     initialWords.forEach((word) => {
       this.#addMarkersForWord(word);
     });
