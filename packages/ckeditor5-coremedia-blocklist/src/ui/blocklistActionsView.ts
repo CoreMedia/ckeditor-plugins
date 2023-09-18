@@ -27,7 +27,7 @@ export default class BlocklistActionsView extends View {
   /**
    * A list, displaying currently selected words from the list.
    */
-  blockedWordlistView: ListView;
+  blockedWordListView: ListView;
 
   /**
    * The editor instance.
@@ -49,7 +49,7 @@ export default class BlocklistActionsView extends View {
 
     // create all views
     this.blocklistInputView = this.createBlocklistInputView(editor.locale);
-    this.blockedWordlistView = this.createBlockedWordListView(editor.locale);
+    this.blockedWordListView = this.createBlockedWordListView(editor.locale);
 
     // init focus handling
     this.#focusCycler = new FocusCycler({
@@ -72,17 +72,17 @@ export default class BlocklistActionsView extends View {
         class: ["ck", "cm-ck-blocklist-form", "ck-vertical-form"],
         tabindex: "-1",
       },
-      children: [this.blockedWordlistView, this.blocklistInputView],
+      children: [this.blockedWordListView, this.blocklistInputView],
     });
   }
 
   refreshList() {
-    this.blockedWordlistView.items.clear();
+    this.blockedWordListView.items.clear();
     this.blockedWords.forEach((word) => {
       const view = new BlockedWordView(this.editor.locale);
       view.delegate("unblock").to(this);
       view.set("label", word);
-      this.blockedWordlistView.items.add(view);
+      this.blockedWordListView.items.add(view);
     });
   }
 
@@ -91,7 +91,7 @@ export default class BlocklistActionsView extends View {
 
     this.#focusables.add(this.blocklistInputView.wordToBlockInputView);
     this.#focusables.add(this.blocklistInputView.saveButtonView);
-    this.#focusables.add(this.blockedWordlistView);
+    this.#focusables.add(this.blockedWordListView);
 
     if (this.blocklistInputView.wordToBlockInputView.element) {
       this.focusTracker.add(this.blocklistInputView.wordToBlockInputView.element);
@@ -101,8 +101,8 @@ export default class BlocklistActionsView extends View {
       this.focusTracker.add(this.blocklistInputView.saveButtonView.element);
     }
 
-    if (this.blockedWordlistView.element) {
-      this.focusTracker.add(this.blockedWordlistView.element);
+    if (this.blockedWordListView.element) {
+      this.focusTracker.add(this.blockedWordListView.element);
     }
 
     // Start listening for the keystrokes coming from #element.
