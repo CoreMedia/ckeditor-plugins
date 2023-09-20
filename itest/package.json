@@ -46,6 +46,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "build": "exit 0",
+    "preplaywright": "npx playwright install chromium",
     "playwright": "jest",
     "playwright-local": "jest --config ./jest.local.js",
     "jest": "exit 0",
