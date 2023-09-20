@@ -91,14 +91,14 @@ const evaluateIsDroppable = async (uris: string[]): Promise<IsDroppableEvaluatio
 
   const droppableUriInformation = await Promise.all(uris.map((uri) => isDroppableUriInformation(uri)));
   const isDroppable = droppableUriInformation.every(
-    (droppableInformation) => droppableInformation.isEmbeddable || droppableInformation.isLinkable
+    (droppableInformation) => droppableInformation.isEmbeddable || droppableInformation.isLinkable,
   );
   return Promise.resolve({ uris, isDroppable });
 };
 
 const isDroppableUriInformation = async (uri: string): Promise<DroppableUriInformation> => {
   const richTextConfigurationService: RichtextConfigurationService = await serviceAgent.fetchService(
-    createRichtextConfigurationServiceDescriptor()
+    createRichtextConfigurationServiceDescriptor(),
   );
   const isEmbeddable: boolean = await richTextConfigurationService.isEmbeddableType(uri);
   const isLinkable: boolean = await richTextConfigurationService.hasLinkableType(uri);

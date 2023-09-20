@@ -39,7 +39,7 @@ export default class MockClipboardService implements ClipboardService {
   observe_items(): Observable<ClipboardItemRepresentation[]> {
     return new Observable((subscriber: Subscriber<ClipboardItemRepresentation[]>): TeardownLogic => {
       const subscription = this.#subject.subscribe((items: ClipboardItemRepresentation[]): void =>
-        subscriber.next(items)
+        subscriber.next(items),
       );
 
       return (): void => subscription.unsubscribe();

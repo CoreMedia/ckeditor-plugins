@@ -90,7 +90,7 @@ export const defaultCoreMediaRichTextConfig: DefaultCoreMediaRichTextConfig = {
 };
 
 export const getCoreMediaRichTextConfig = (
-  config?: CKEditorConfig<EditorConfig>
+  config?: CKEditorConfig<EditorConfig>,
 ): CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const rawConfig = config?.get(COREMEDIA_RICHTEXT_CONFIG_KEY) ?? {};
   const withDefaults = {
@@ -109,7 +109,7 @@ export const getCoreMediaRichTextConfig = (
 };
 
 export const getLatestCoreMediaRichTextConfig = (
-  config?: CKEditorConfig<EditorConfig>
+  config?: CKEditorConfig<EditorConfig>,
 ): LatestCoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const withDefaults = getCoreMediaRichTextConfig(config);
   if (!isLatestCoreMediaRichTextConfig(withDefaults)) {
@@ -119,7 +119,7 @@ export const getLatestCoreMediaRichTextConfig = (
 };
 
 export const getV10CoreMediaRichTextConfig = (
-  config?: CKEditorConfig<EditorConfig>
+  config?: CKEditorConfig<EditorConfig>,
 ): V10CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
   const withDefaults = getCoreMediaRichTextConfig(config);
   if (!isV10CoreMediaRichTextConfig(withDefaults)) {

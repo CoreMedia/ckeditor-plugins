@@ -16,7 +16,7 @@ describe("ObservableMutableProperty", () => {
       const observable = observeMutableProperty(delays, values);
 
       testShouldRetrieveValues(observable, values);
-    }
+    },
   );
 
   describe.each`
@@ -32,7 +32,7 @@ describe("ObservableMutableProperty", () => {
       const observable = observeMutableProperty(delays, values);
 
       testShouldRetrieveValues(observable, values);
-    }
+    },
   );
 
   describe.each`

@@ -156,7 +156,7 @@ const linkTargetExamples = () => {
     },
     {
       comment: `artificial state, as a 'role' would have been expected; on ${em(
-        "Save"
+        "Save",
       )} the empty editor value will trigger the deletion of target attribute value`,
       show: "other",
       role: null,

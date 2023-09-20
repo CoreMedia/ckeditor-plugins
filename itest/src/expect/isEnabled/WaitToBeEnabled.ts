@@ -8,7 +8,7 @@ expect.extend({
       "waitToBeEnabled",
       async () => expect(await enabled).toStrictEqual(true),
       async () => expect(await enabled).toStrictEqual(false),
-      this
+      this,
     );
   },
 });

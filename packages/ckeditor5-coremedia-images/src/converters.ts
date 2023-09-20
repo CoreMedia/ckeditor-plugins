@@ -63,7 +63,7 @@ export const preventUpcastImageSrc =
           data.viewItem._removeAttribute("src");
         }
       },
-      { priority: "highest" }
+      { priority: "highest" },
     );
   };
 
@@ -92,7 +92,7 @@ const onXlinkHrefEditingDowncast = (
   editor: Editor,
   eventInfo: EventInfo,
   data: DowncastEventData,
-  logger: Logger
+  logger: Logger,
 ): void => {
   const spinnerPreviewAttributes = createSpinnerImagePreviewAttributes(editor);
   updateImagePreviewAttributes(editor, data.item, spinnerPreviewAttributes, true);
@@ -140,7 +140,7 @@ const updateImagePreviewAttributes = (
   editor: Editor,
   modelElement: ModelElement,
   inlinePreview: InlinePreview,
-  withSpinnerClass: boolean
+  withSpinnerClass: boolean,
 ): void => {
   const imgTag = findImgTag(editor, modelElement);
   if (!imgTag) {
@@ -163,7 +163,7 @@ const writeImageToView = (
   editor: Editor,
   inlinePreview: InlinePreview,
   imgTag: ViewElement,
-  withSpinnerClass: boolean
+  withSpinnerClass: boolean,
 ): void => {
   editor.editing.view.change((writer: DowncastWriter) => {
     writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);

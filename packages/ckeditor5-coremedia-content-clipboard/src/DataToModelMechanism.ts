@@ -71,7 +71,7 @@ export default class DataToModelMechanism {
 
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
       markerData.insertionId,
-      markerData.itemIndex
+      markerData.itemIndex,
     );
     const contentInputData = ContentInputDataCache.lookupData(markerName);
     if (!contentInputData) {
@@ -121,7 +121,7 @@ export default class DataToModelMechanism {
           pendingMarkerNames,
           contentInputData,
           markerData,
-          createItemFunction
+          createItemFunction,
         );
       })
       .catch((reason) => {
@@ -190,11 +190,11 @@ export default class DataToModelMechanism {
    */
   static #finishInsertion(editor: Editor): void {
     const markers = Array.from(
-      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX)
+      editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX),
     );
     if (markers.length === 0) {
       const undoSupport = getOptionalPlugin(editor, UndoSupport, (pluginName) =>
-        this.#logger.warn(`Unable to re-enable UndoCommand because plugin ${pluginName} does not exist`)
+        this.#logger.warn(`Unable to re-enable UndoCommand because plugin ${pluginName} does not exist`),
       );
       if (undoSupport) {
         enableUndo(undoSupport);
@@ -218,7 +218,7 @@ export default class DataToModelMechanism {
     pendingMarkerNames: string[],
     contentInputData: ContentInputData,
     markerData: MarkerData,
-    createItemFunction: (writer: Writer) => Node
+    createItemFunction: (writer: Writer) => Node,
   ): void {
     editor.model.enqueueChange(contentInputData.insertionContext.batch, (writer: Writer): void => {
       const item: Node = createItemFunction(writer);

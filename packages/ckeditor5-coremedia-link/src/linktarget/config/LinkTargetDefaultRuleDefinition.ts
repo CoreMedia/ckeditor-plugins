@@ -51,7 +51,7 @@ export interface TargetDefaultRuleDefinitionWithType {
  * @param value - the variable to check
  */
 export const isTargetDefaultRuleDefinitionWithFilter = (
-  value: unknown
+  value: unknown,
 ): value is TargetDefaultRuleDefinitionWithFilter => {
   if (typeof value !== "object" || !value) {
     return false;

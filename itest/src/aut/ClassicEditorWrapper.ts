@@ -74,8 +74,8 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
               if (eventData.data !== value) {
                 reject(
                   new Error(
-                    `Unexpected data being processed. Concurrent changes applied?\n\tExpected: ${value}\n\tActual: ${eventData.data}`
-                  )
+                    `Unexpected data being processed. Concurrent changes applied?\n\tExpected: ${value}\n\tActual: ${eventData.data}`,
+                  ),
                 );
               }
               resolve(eventData.dataView);
@@ -84,7 +84,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
           });
           editor.setData(value);
         }),
-      value
+      value,
     );
   }
 
@@ -127,7 +127,7 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
         throw new Error(`Editor instance not available as ${name}`);
       }, name),
       page,
-      name
+      name,
     );
   }
 }

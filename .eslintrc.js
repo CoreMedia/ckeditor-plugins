@@ -88,6 +88,8 @@ module.exports = {
         // some argument. Unfortunately, there is no exclusion but only
         // inclusion mechanism for this rule.
         "jsdoc/empty-tags": "off",
+        // Not relevant for TypeScript.
+        "jsdoc/no-undefined-types": "off",
         // Collides with `@example` syntax for TypeDoc. May be possibly
         // fine-tuned by more explicit configuration.
         "jsdoc/tag-lines": "off",
@@ -269,6 +271,10 @@ module.exports = {
         "@typescript-eslint/no-invalid-void-type": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-non-null-assertion": "error",
+        // Sometimes a result of composite types, sometimes used for better
+        // IDE support, providing hints, such as `"lorem" | string` would
+        // propose "lorem" as a possible option.
+        "@typescript-eslint/no-redundant-type-constituents": "off",
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/no-unsafe-argument": "error",
@@ -288,7 +294,7 @@ module.exports = {
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-includes": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
-        "@typescript-eslint/prefer-nullish-coalescing": "error",
+        "@typescript-eslint/prefer-nullish-coalescing": ["error", { ignoreConditionalTests: true }],
         "@typescript-eslint/prefer-optional-chain": "error",
         "@typescript-eslint/prefer-readonly": "error",
         "@typescript-eslint/prefer-ts-expect-error": "error",

@@ -88,7 +88,7 @@ class MockContentDisplayService implements ContentDisplayService {
         content: nameHint,
         type: typeHint,
         state: stateHint,
-      })
+      }),
     );
 
     return combineLatest([nameSubscription, typeSubscription, stateSubscription]).pipe(toContentAsLink);

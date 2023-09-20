@@ -26,7 +26,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
     return this.evaluate(
       (plugin: MockInputExamplePlugin, contentIds): IsDroppableEvaluationResult | undefined =>
         plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
-      uris
+      uris,
     );
   }
 
@@ -34,7 +34,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
     return this.evaluate(
       (plugin: MockInputExamplePlugin, contentIds): IsLinkableEvaluationResult | undefined =>
         plugin.ensureIsDroppableInLinkBalloon(contentIds),
-      uris
+      uris,
     );
   }
 
@@ -60,7 +60,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
         // use the pluginName property directly. Importing from MockInputExamplePlugin
         // would result in a serviceAgent instance during test runs, which then would
         // prevent the test from finishing.
-      }, "MockInputExamplePlugin")
+      }, "MockInputExamplePlugin"),
     );
   }
 }

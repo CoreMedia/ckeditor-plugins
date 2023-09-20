@@ -22,6 +22,6 @@ export class ContentLinkData {
     /**
      * The respective `linkHref` value to set in model, e.g., `content:42`.
      */
-    readonly href: string
+    readonly href: string,
   ) {}
 }

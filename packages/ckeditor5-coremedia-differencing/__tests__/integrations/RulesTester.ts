@@ -14,7 +14,7 @@ export class RulesTester {
   constructor(
     public readonly rules: RuleConfig[],
     public readonly xmlElementSelector: string,
-    public readonly htmlElementSelector: string = xmlElementSelector
+    public readonly htmlElementSelector: string = xmlElementSelector,
   ) {
     this.factory.addRules(rules);
   }

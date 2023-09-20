@@ -23,6 +23,6 @@ describe("SuppressedElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

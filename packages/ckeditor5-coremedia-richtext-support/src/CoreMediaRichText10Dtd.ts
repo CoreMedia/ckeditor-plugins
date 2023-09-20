@@ -37,15 +37,15 @@ class CoreMediaRichText10Dtd {
   };
   static readonly attrs: ReducedMatcherPattern = mergePatterns(
     CoreMediaRichText10Dtd.coreattrs,
-    CoreMediaRichText10Dtd.i18n
+    CoreMediaRichText10Dtd.i18n,
   );
   static attrsBlockElements: ReducedMatcherPattern = mergePatterns(
     { name: /^(p|ul|ol|li)$/ },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static attrsInlineElements: ReducedMatcherPattern = mergePatterns(
     { name: /^(span|em|strong|sub|sup)$/ },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static pre: ReducedMatcherPattern = mergePatterns(
     {
@@ -55,7 +55,7 @@ class CoreMediaRichText10Dtd {
         "xml:space": /^(preserve)$/,
       },
     },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static blockquote: ReducedMatcherPattern = mergePatterns(
     {
@@ -64,7 +64,7 @@ class CoreMediaRichText10Dtd {
         cite: true,
       },
     },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static a: ReducedMatcherPattern = mergePatterns(
     {
@@ -82,7 +82,7 @@ class CoreMediaRichText10Dtd {
         "data-xlink-type": /^(simple)$/,
       },
     },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static br: ReducedMatcherPattern = mergePatterns({ name: "br" }, CoreMediaRichText10Dtd.coreattrs);
   static img: ReducedMatcherPattern = mergePatterns(
@@ -109,7 +109,7 @@ class CoreMediaRichText10Dtd {
         "data-xlink-type": /^(simple)$/,
       },
     },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static table: ReducedMatcherPattern = mergePatterns(
     {
@@ -118,7 +118,7 @@ class CoreMediaRichText10Dtd {
         summary: true,
       },
     },
-    CoreMediaRichText10Dtd.attrs
+    CoreMediaRichText10Dtd.attrs,
   );
   static cellhalign: ReducedMatcherPattern = {
     attributes: {
@@ -134,13 +134,13 @@ class CoreMediaRichText10Dtd {
     { name: "tbody" },
     CoreMediaRichText10Dtd.attrs,
     CoreMediaRichText10Dtd.cellhalign,
-    CoreMediaRichText10Dtd.cellvalign
+    CoreMediaRichText10Dtd.cellvalign,
   );
   static tr: ReducedMatcherPattern = mergePatterns(
     { name: "tr" },
     CoreMediaRichText10Dtd.attrs,
     CoreMediaRichText10Dtd.cellhalign,
-    CoreMediaRichText10Dtd.cellvalign
+    CoreMediaRichText10Dtd.cellvalign,
   );
   static td: ReducedMatcherPattern = mergePatterns(
     {
@@ -153,7 +153,7 @@ class CoreMediaRichText10Dtd {
     },
     CoreMediaRichText10Dtd.attrs,
     CoreMediaRichText10Dtd.cellhalign,
-    CoreMediaRichText10Dtd.cellvalign
+    CoreMediaRichText10Dtd.cellvalign,
   );
 }
 

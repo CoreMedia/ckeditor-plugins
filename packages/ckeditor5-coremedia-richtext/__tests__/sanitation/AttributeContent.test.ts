@@ -64,6 +64,6 @@ describe("AttributeContent", () => {
           expect(acUnderTest.validateValue(value, strictness)).toStrictEqual(expected);
         });
       });
-    }
+    },
   );
 });

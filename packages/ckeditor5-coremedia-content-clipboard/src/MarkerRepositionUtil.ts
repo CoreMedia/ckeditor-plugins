@@ -11,7 +11,7 @@ export default class MarkerRepositionUtil {
     editor: Editor,
     markerData: MarkerData,
     beforeItemPosition: ModelPosition,
-    afterItemPosition: ModelPosition
+    afterItemPosition: ModelPosition,
   ): void {
     MarkerRepositionUtil.#moveMarkerForNextItemsToTheRight(editor, afterItemPosition, markerData);
     MarkerRepositionUtil.#moveMarkerForPreviousItemsToLeft(editor, beforeItemPosition, markerData);
@@ -21,7 +21,7 @@ export default class MarkerRepositionUtil {
     const markers: MarkerData[] = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
-      MarkerRepositionUtil.#markerBeforeFilterPredicate
+      MarkerRepositionUtil.#markerBeforeFilterPredicate,
     );
 
     MarkerRepositionUtil.#moveMarkersTo(editor, markers, beforeItemPosition);
@@ -31,7 +31,7 @@ export default class MarkerRepositionUtil {
     const markers: MarkerData[] = MarkerRepositionUtil.#findMarkers(
       editor,
       markerData,
-      MarkerRepositionUtil.#markerAfterFilterPredicate
+      MarkerRepositionUtil.#markerAfterFilterPredicate,
     );
     MarkerRepositionUtil.#moveMarkersTo(editor, markers, afterItemPosition);
   }
@@ -44,7 +44,7 @@ export default class MarkerRepositionUtil {
     const markersAtSamePosition = MarkerRepositionUtil.#markersAtPosition(editor, marker.getStart());
 
     return markersAtSamePosition.filter((otherMarkerData: MarkerData): boolean =>
-      filterFunction(markerData, otherMarkerData)
+      filterFunction(markerData, otherMarkerData),
     );
   }
 

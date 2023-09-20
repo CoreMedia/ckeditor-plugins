@@ -62,7 +62,7 @@ export const registerOpenContentInTabCommand = (editor: Editor, name = openConte
 export const executeOpenContentInTabCommand = (
   editor: Editor,
   uriPaths: UriPath[] = [],
-  name = openContentInTabCommandName
+  name = openContentInTabCommandName,
 ) => editor.commands.get(name)?.execute(...uriPaths);
 
 /**

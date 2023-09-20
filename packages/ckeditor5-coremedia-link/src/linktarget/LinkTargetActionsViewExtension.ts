@@ -127,7 +127,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   #createTargetButton(
     locale: Locale,
     buttonConfig: LinkTargetOptionDefinition,
-    linkTargetCommand: Command
+    linkTargetCommand: Command,
   ): ButtonView {
     const view = new ButtonView();
     view.set({
@@ -145,7 +145,7 @@ class LinkTargetActionsViewExtension extends Plugin {
       .to(
         linkTargetCommand,
         "value",
-        (value: unknown) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self")
+        (value: unknown) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self"),
       );
 
     view.bind("isEnabled").to(linkTargetCommand);

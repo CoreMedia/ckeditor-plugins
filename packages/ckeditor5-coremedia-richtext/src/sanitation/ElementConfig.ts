@@ -23,7 +23,7 @@ type DefaultPrefix = typeof defaultPrefix;
 const removeInvalidAtParent = (
   parent: ParentNode,
   child: ChildNode | (ChildNode & ParentNode),
-  listener: SanitationListener
+  listener: SanitationListener,
 ) => {
   // Used internally and as a state to possibly trigger revalidation.
   let replacedByChildren = false;
@@ -71,7 +71,10 @@ export class ElementConfig {
    * @param allowed - allowed nested elements
    * @param attributes - allowed attributes along with their definitions
    */
-  constructor(public allowed: ElementContent[] = [], public attributes: ParsedAttributeDefinitionConfig[] = []) {
+  constructor(
+    public allowed: ElementContent[] = [],
+    public attributes: ParsedAttributeDefinitionConfig[] = [],
+  ) {
     // Parse Attribute Configuration for faster lookup.
     this.attributes.forEach((config) => {
       this.#registerAttributeDefinitionConfig(config);
@@ -104,7 +107,7 @@ export class ElementConfig {
   #addToKnownAttributes(
     prefix: string | DefaultPrefix,
     localName: string,
-    config: ParsedAttributeDefinitionConfig
+    config: ParsedAttributeDefinitionConfig,
   ): void {
     const byPrefix = this.#attributesByPrefixAndLocalName.get(prefix);
     if (!byPrefix) {
@@ -296,7 +299,7 @@ export class ElementConfig {
     element: Element,
     attribute: Attr,
     listener: SanitationListener,
-    strictness: ActiveStrictness
+    strictness: ActiveStrictness,
   ): void {
     const config = this.#getAttributeConfig(attribute);
 
@@ -372,7 +375,7 @@ export class ElementConfig {
    */
   #getAttributeConfigFromCachedData(
     prefix: string | DefaultPrefix,
-    localName: string
+    localName: string,
   ): ParsedAttributeDefinitionConfig | undefined {
     const byPrefix = this.#attributesByPrefixAndLocalName.get(prefix);
     const result = byPrefix?.get(localName);

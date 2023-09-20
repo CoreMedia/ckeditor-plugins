@@ -85,7 +85,7 @@ const parseDefaultLinkTargetConfig = (config: Config<EditorConfig>): TargetDefau
 
   if (!Array.isArray(fromConfig)) {
     throw new Error(
-      `link.defaultTargets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`
+      `link.defaultTargets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`,
     );
   }
   const defaultTargetsArray: unknown[] = fromConfig;
@@ -200,7 +200,7 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
       result.push(mergedDefinition);
     } else {
       throw new Error(
-        `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(fromConfig)}`
+        `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(fromConfig)}`,
       );
     }
   });

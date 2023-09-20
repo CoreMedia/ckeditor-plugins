@@ -24,6 +24,6 @@ describe("CodeElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

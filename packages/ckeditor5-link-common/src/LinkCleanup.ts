@@ -127,7 +127,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly #fixOrphanedAttribute = (
     writer: Writer,
     relevantRanges: Iterable<Range>,
-    modelAttributeName: string
+    modelAttributeName: string,
   ): void => {
     const model = writer.model;
     const validRanges = Array.from(model.schema.getValidRanges([...relevantRanges], modelAttributeName));

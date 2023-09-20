@@ -62,7 +62,7 @@ export class HtmlImageElementSupport extends Plugin {
           evt.return = true;
         }
       },
-      { priority: "high" }
+      { priority: "high" },
     );
   }
 }

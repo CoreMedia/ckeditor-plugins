@@ -25,7 +25,7 @@ type ApplyToData = [
     rules: FilterRuleSet;
     from: string;
     to: string;
-  }
+  },
 ];
 
 describe("HtmlFilter.applyTo()", () => {

@@ -18,7 +18,7 @@ import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration
  */
 export class PasteContentCommand extends Command {
   #logger = LoggerProvider.getLogger("PasteContentCommand");
-  readonly #serviceRegisteredSubscription: Subscription | null;
+  readonly #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | null;
 
   constructor(editor: Editor) {
     super(editor);
@@ -101,7 +101,7 @@ export class PasteContentCommand extends Command {
 
   static async resolvePastableStates(uris: string[]): Promise<boolean[]> {
     const richtextConfigurationService = await serviceAgent.fetchService(
-      createRichtextConfigurationServiceDescriptor()
+      createRichtextConfigurationServiceDescriptor(),
     );
     const pastableStatePromises: Promise<boolean>[] = uris.map(async (uri): Promise<boolean> => {
       const isLinkable = await richtextConfigurationService.hasLinkableType(uri);

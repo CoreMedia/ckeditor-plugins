@@ -27,6 +27,6 @@ export class DropCondition {
     /**
      * Model attributes at drop position to possibly apply to dropped text.
      */
-    readonly selectedAttributes: [string, string | number | boolean][]
+    readonly selectedAttributes: [string, string | number | boolean][],
   ) {}
 }

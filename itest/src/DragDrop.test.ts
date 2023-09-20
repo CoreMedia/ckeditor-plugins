@@ -249,7 +249,7 @@ describe("Drag and Drop", () => {
             await expect(linkElements[i]).toHaveText(contentMocks[i].name);
           }
         });
-      }
+      },
     );
   });
 
@@ -283,7 +283,7 @@ describe("Drag and Drop", () => {
             await expect(linkElements[i]).toHaveText(contentMocks[i].contentAfterImport.name);
           }
         });
-      }
+      },
     );
   });
 
@@ -376,7 +376,7 @@ describe("Drag and Drop", () => {
             await expect(image).toMatchAttribute("title", contentMocks[i].name);
           }
         });
-      }
+      },
     );
   });
 
@@ -397,7 +397,7 @@ describe("Drag and Drop", () => {
 
   async function setupExternalScenario(
     dragElementClass: string,
-    externalContentMocks: MockExternalContent[]
+    externalContentMocks: MockExternalContent[],
   ): Promise<void> {
     for (const externalContentMock of externalContentMocks) {
       await application.mockExternalContent.addContents(externalContentMock);

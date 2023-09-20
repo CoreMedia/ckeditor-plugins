@@ -27,6 +27,6 @@ describe("BasicInlineElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

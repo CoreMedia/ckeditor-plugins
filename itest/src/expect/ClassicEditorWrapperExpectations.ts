@@ -10,7 +10,7 @@ expect.extend({
       "waitForDataContaining",
       async () => expect(await w.getData()).toContain(expectedData),
       async () => expect(await w.getData()).not.toContain(expectedData),
-      this
+      this,
     );
   },
   async waitForDataEqualTo(w: ClassicEditorWrapper, expectedData: string): Promise<jest.CustomMatcherResult> {
@@ -18,7 +18,7 @@ expect.extend({
       "waitForDataEqualTo",
       async () => expect(await w.getData()).toStrictEqual(expectedData),
       async () => expect(await w.getData()).not.toStrictEqual(expectedData),
-      this
+      this,
     );
   },
 });

@@ -24,7 +24,7 @@ export const handleFocusManagement = (
   parentView: LinkActionsView | LinkFormView,
   childViews: View[],
   anchorView: View,
-  positionRelativeToAnchorView: "before" | "after" = "after"
+  positionRelativeToAnchorView: "before" | "after" = "after",
 ): void => {
   addViewsToFocusTracker(parentView, childViews);
   const existingChildViews = removeExistingFocusables(parentView);

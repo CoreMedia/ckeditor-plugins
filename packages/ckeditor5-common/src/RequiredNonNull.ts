@@ -33,7 +33,7 @@ export const requireNonNulls = <T extends object | Record<string, unknown>, K ex
   if (unmatchedProperties.length > 0) {
     const label = unmatchedProperties.length > 1 ? "properties" : "property";
     throw new RequiredNonNullPropertiesMissingError(
-      `Required non-null ${label} missing of ${obj.constructor.name}: ${unmatchedProperties}`
+      `Required non-null ${label} missing of ${obj.constructor.name}: ${unmatchedProperties}`,
     );
   }
   return obj as RequiredNonNull<T, K>;

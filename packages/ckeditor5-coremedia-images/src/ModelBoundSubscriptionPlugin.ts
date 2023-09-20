@@ -102,7 +102,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         const nodeAfter = entry.position.nodeAfter;
         if (nodeAfter?.is("element")) {
           allRemovedElementsWithSubscriptions.push(
-            ...ModelBoundSubscriptionPlugin.#recursiveSearch(nodeAfter as ModelElement)
+            ...ModelBoundSubscriptionPlugin.#recursiveSearch(nodeAfter as ModelElement),
           );
         }
       }

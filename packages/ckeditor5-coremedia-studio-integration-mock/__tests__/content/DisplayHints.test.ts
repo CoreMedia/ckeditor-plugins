@@ -26,7 +26,7 @@ describe("DisplayHints", () => {
         (name: string): DisplayHint => ({
           name,
           classes,
-        })
+        }),
       );
       testShouldRetrieveValues(observeNameHint(config), expectedValues);
     });
@@ -64,10 +64,10 @@ describe("DisplayHints", () => {
 
         const expectedReadableStates = [...readableStates, ...readableStates.slice(0, loop ? 1 : 0)];
         const expectedValues: DisplayHint[] = expectedReadableStates.map(
-          (readable: boolean): DisplayHint => (readable ? expectedReadableHint : expectedUnreadableHint)
+          (readable: boolean): DisplayHint => (readable ? expectedReadableHint : expectedUnreadableHint),
         );
         testShouldRetrieveValues(observeNameHint(config), expectedValues);
-      }
+      },
     );
   });
 });

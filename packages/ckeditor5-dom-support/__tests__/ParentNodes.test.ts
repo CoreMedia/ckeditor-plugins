@@ -31,7 +31,7 @@ describe("ParentNodes", () => {
       "[$#] should not match any other objects than ParentNodes: $unmatched",
       ({ unmatched }: { unmatched: unknown }) => {
         expect(isParentNode(unmatched)).toBeFalsy();
-      }
+      },
     );
   });
 });

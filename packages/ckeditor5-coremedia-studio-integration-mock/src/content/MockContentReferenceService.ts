@@ -25,10 +25,10 @@ export class MockContentReferenceService implements IContentReferenceService {
 
   getContentReference(request: string): Promise<ContentReferenceResponse> {
     const mockContentPlugin: MockContentPlugin = this.#editor.plugins.get(
-      MockContentPlugin.pluginName
+      MockContentPlugin.pluginName,
     ) as MockContentPlugin;
     const mockExternalContentPlugin: MockExternalContentPlugin = this.#editor.plugins.get(
-      MockExternalContentPlugin.pluginName
+      MockExternalContentPlugin.pluginName,
     ) as MockExternalContentPlugin;
     const response = this.#evaluateResponse(mockContentPlugin, mockExternalContentPlugin, request);
     return response ? Promise.resolve(response) : Promise.reject();
@@ -37,7 +37,7 @@ export class MockContentReferenceService implements IContentReferenceService {
   #evaluateResponse(
     mockContentPlugin: MockContentPlugin,
     mockExternalContentPlugin: MockExternalContentPlugin,
-    request: string
+    request: string,
   ): ContentReferenceResponse | undefined {
     if (!request) {
       return undefined;

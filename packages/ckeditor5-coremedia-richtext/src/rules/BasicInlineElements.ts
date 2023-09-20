@@ -83,7 +83,7 @@ const legacyStrikeMappings = ["del", "strike"].map((viewLocalName) =>
     ...preferredStrikeConfig,
     viewLocalName,
     direction: "toData",
-  })
+  }),
 );
 
 /**

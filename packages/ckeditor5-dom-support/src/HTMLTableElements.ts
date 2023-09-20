@@ -16,7 +16,7 @@ import { querySelectorAllDirectChildren, querySelectorDirectChild } from "./Pare
  * @param delegate - delegate to wrap
  */
 export const wrapIfTableElement = (
-  delegate: Node | Element | HTMLTableElement
+  delegate: Node | Element | HTMLTableElement,
 ): HTMLTableElementWrapper | undefined => {
   if (!isElement(delegate) || (delegate.localName !== "table" && !isHTMLTableElement(delegate))) {
     return undefined;
@@ -363,7 +363,7 @@ export class HTMLTableElementWrapper {
   querySelectorAllDirectChildrenInSectionsAndSelf(selectors: string): Element[] {
     const acceptedParents = [this.#delegate, ...this.sections];
     return acceptedParents.flatMap((parent) =>
-      [...parent.querySelectorAll(selectors)].filter((e) => parent.isSameNode(e.parentElement))
+      [...parent.querySelectorAll(selectors)].filter((e) => parent.isSameNode(e.parentElement)),
     );
   }
 }

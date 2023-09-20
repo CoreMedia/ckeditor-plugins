@@ -19,13 +19,13 @@ export type OnMissingPlugin = (pluginName: string) => void;
 
 export function getOptionalPlugin<
   TConstructor extends PluginClassConstructor<TContext>,
-  TContext extends Editor = Editor
+  TContext extends Editor = Editor,
 >(editor: TContext, key: TConstructor, onMissing?: OnMissingPlugin): InstanceType<TConstructor> | undefined;
 
 export function getOptionalPlugin<TName extends string, TContext extends Editor = Editor>(
   editor: TContext,
   key: TName,
-  onMissing?: OnMissingPlugin
+  onMissing?: OnMissingPlugin,
 ): PluginsMap[TName] | undefined;
 
 /**
@@ -44,7 +44,7 @@ export function getOptionalPlugin<TName extends string, TContext extends Editor 
 export function getOptionalPlugin(
   editor: Editor,
   key: PluginClassConstructor | string,
-  onMissing?: OnMissingPlugin
+  onMissing?: OnMissingPlugin,
 ): PluginInterface | undefined {
   const { plugins } = editor;
 

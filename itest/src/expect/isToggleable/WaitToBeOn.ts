@@ -8,7 +8,7 @@ expect.extend({
       "waitToBeOn",
       async () => expect(await on).toStrictEqual(true),
       async () => expect(await on).toStrictEqual(false),
-      this
+      this,
     );
   },
 });

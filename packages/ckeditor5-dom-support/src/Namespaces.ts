@@ -30,7 +30,7 @@ export const registerNamespacePrefixes = (documentOrElement: Document | Element,
 
   if (!target) {
     throw new Error(
-      "Illegal State: Either given element to analyze must by attached to DOM or a targetElement must be provided."
+      "Illegal State: Either given element to analyze must by attached to DOM or a targetElement must be provided.",
     );
   }
 

@@ -595,7 +595,7 @@ export default class RichTextSchema {
     if (!parentName) {
       logger.debug(
         `Text nodes without parent element not allowed. Will signal 'not allowed at parent' for text node:`,
-        text
+        text,
       );
       return false;
     }
@@ -719,7 +719,7 @@ export default class RichTextSchema {
   #deleteNotAllowedAttributes(element: ElementProxy, specifiedAttributes: string[]) {
     const actualAttributes = Object.keys(element.attributes);
     const notAllowedAttributes: string[] = actualAttributes.filter(
-      (a) => !specifiedAttributes.includes(a.toLowerCase())
+      (a) => !specifiedAttributes.includes(a.toLowerCase()),
     );
 
     if (notAllowedAttributes.length > 0) {
@@ -728,7 +728,7 @@ export default class RichTextSchema {
         {
           element,
           attributes: notAllowedAttributes,
-        }
+        },
       );
       // To fix, we may migrate attributes to Map<> instead.
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -752,14 +752,14 @@ export default class RichTextSchema {
           const suggestedValue = invalidValueHandler(attributeValue, this.#strictness);
           if (suggestedValue === undefined) {
             RichTextSchema.#logger.debug(
-              `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`
+              `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`,
             );
             // To fix, we may migrate attributes to Map<> instead.
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
             RichTextSchema.#logger.debug(
-              `Adjusting attribute ${attributeName} for <${element.name}>: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`
+              `Adjusting attribute ${attributeName} for <${element.name}>: As its value "${attributeValue}" is invalid, changed it to "${suggestedValue}".`,
             );
             element.attributes[attributeName] = suggestedValue;
           }
@@ -771,11 +771,11 @@ export default class RichTextSchema {
   #setDefaultForMissingRequiredAttributes(
     element: ElementProxy,
     specifiedAttributes: string[],
-    attributeSpecifications: Attributes
+    attributeSpecifications: Attributes,
   ) {
     const validActualAttributes = Object.keys(element.attributes);
     const possiblyMissingAttributes = specifiedAttributes.filter(
-      (a) => !validActualAttributes.includes(a.toLowerCase())
+      (a) => !validActualAttributes.includes(a.toLowerCase()),
     );
 
     possiblyMissingAttributes.forEach((attributeName) => {
@@ -784,7 +784,7 @@ export default class RichTextSchema {
       const suggestedValue = handler();
       if (suggestedValue !== undefined) {
         RichTextSchema.#logger.debug(
-          `Adjusting attribute ${attributeName} for <${element.name}>: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`
+          `Adjusting attribute ${attributeName} for <${element.name}>: As required attribute "${attributeName}" is unset, set it to "${suggestedValue}".`,
         );
         element.attributes[attributeName] = suggestedValue;
       }

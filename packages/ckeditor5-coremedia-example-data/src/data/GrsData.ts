@@ -70,7 +70,7 @@ const grsIntro = (topic: string, elementName: string): string =>
 
 const lang = {
   intro: `${h3("Lang Precedence")}${p(
-    "'xml:lang' is always mapped to 'lang'. If both are set, 'xml:lang' takes precedence."
+    "'xml:lang' is always mapped to 'lang'. If both are set, 'xml:lang' takes precedence.",
   )}`,
   text: "Lang Precedence",
   attr: { "xml:lang": "en" },
@@ -106,7 +106,7 @@ const anchors: ExampleData = {
       "xlink:title": "Some Title",
       "xlink:type": "simple",
       ...allAttributes,
-    })} ipsum`
+    })} ipsum`,
   )}\
   ${lang.intro}\
   ${p(`Lorem ${a(lang.text, { "xlink:href": exampleUrl, ...lang.conflicting })} ipsum`)}\
@@ -172,7 +172,7 @@ const listBlock = (topic: string, elementName: string, list: List): ExampleData 
   ${list(li(plainText))}\
   ${p(
     `${strong("Separator")} CKEditor's List feature requires to \
-    separate independent lists. They are merged, otherwise.`
+    separate independent lists. They are merged, otherwise.`,
   )}
   ${list(li(allAttributesText), allAttributes)}\
   ${lang.intro}
@@ -219,7 +219,7 @@ const imgItem: ExampleData = {
     img({
       "xlink:href": INLINE_IMG,
       "alt": plainText,
-    })
+    }),
   )}\
   ${p(
     img({
@@ -233,7 +233,7 @@ const imgItem: ExampleData = {
       "xlink:type": "simple",
       "height": 48,
       "width": 48,
-    })
+    }),
   )}\
   ${lang.intro}\
   ${p(
@@ -241,7 +241,7 @@ const imgItem: ExampleData = {
       "xlink:href": INLINE_IMG,
       "alt": lang.text,
       ...lang.conflicting,
-    })
+    }),
   )}\
   `),
 };
@@ -253,17 +253,17 @@ const tableItem: ExampleData = {
       `\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   ${table(
     tbody(
       `\
     ${tr(`${td(allAttributesText)}${td(allAttributesText)}`)}\
     ${tr(`${td(allAttributesText)}${td(allAttributesText)}`)}\
-    `
+    `,
     ),
-    allAttributes
+    allAttributes,
   )}\
   ${lang.intro}\
   ${table(
@@ -271,9 +271,9 @@ const tableItem: ExampleData = {
       `\
     ${tr(`${td(lang.text)}${td(lang.text)}`)}\
     ${tr(`${td(lang.text)}${td(lang.text)}`)}\
-    `
+    `,
     ),
-    lang.conflicting
+    lang.conflicting,
   )}\
   `),
 };
@@ -285,8 +285,8 @@ const tbodyItem: ExampleData = {
       `\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   ${table(
     tbody(
@@ -298,8 +298,8 @@ const tbodyItem: ExampleData = {
         ...allAttributes,
         align: "center",
         valign: "middle",
-      }
-    )
+      },
+    ),
   )}\
   ${lang.intro}\
   ${table(
@@ -308,8 +308,8 @@ const tbodyItem: ExampleData = {
     ${tr(`${td(lang.text)}${td(lang.text)}`)}\
     ${tr(`${td(lang.text)}${td(lang.text)}`)}\
     `,
-      lang.conflicting
-    )
+      lang.conflicting,
+    ),
   )}\
   `),
 };
@@ -322,8 +322,8 @@ const trItem: ExampleData = {
     ${tr(`${td(plainText)}${td(plainText)}`)}\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   ${table(
     tbody(
@@ -335,8 +335,8 @@ const trItem: ExampleData = {
       align: "center",
     })}\
     ${tr(`${td("dolor")}${td("sit")}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   ${lang.intro}\
   ${table(
@@ -345,8 +345,8 @@ const trItem: ExampleData = {
     ${tr(`${td("Lorem")}${td("ipsum")}`)}\
     ${tr(`${td(lang.text)}${td(lang.text)}`, lang.conflicting)}\
     ${tr(`${td("dolor")}${td("sit")}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   `),
 };
@@ -364,8 +364,8 @@ const tdItem: ExampleData = {
     ${tr(`${td(plainText)}${td(plainText)}`)}\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
     ${tr(`${td(plainText)}${td(plainText)}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   ${table(
     tbody(
@@ -373,8 +373,8 @@ const tdItem: ExampleData = {
     ${tr(`${td("Lorem")}${td(allAttributesText, { ...tdAllAttributes, rowspan: 2 })}`)}\
     ${tr(td("ipsum"))}\
     ${tr(td(allAttributesText, { ...tdAllAttributes, colspan: 2 }))}\
-    `
-    )
+    `,
+    ),
   )}\
   ${lang.intro}\
   ${table(
@@ -383,8 +383,8 @@ const tdItem: ExampleData = {
     ${tr(`${td("Lorem")}${td("ipsum")}`)}\
     ${tr(`${td(lang.text, lang.conflicting)}${td("dolor")}`)}\
     ${tr(`${td("sit")}${td("amet")}`)}\
-    `
-    )
+    `,
+    ),
   )}\
   `),
 };

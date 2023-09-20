@@ -119,7 +119,7 @@ const toLookupStrategy =
  */
 const resolveInheritance = (
   pattern: InheritingMatcherPattern,
-  lookup: MatcherPatternLookup | ReducedMatcherPattern[]
+  lookup: MatcherPatternLookup | ReducedMatcherPattern[],
 ): ReducedMatcherPattern => {
   const strategy = typeof lookup === "function" ? lookup : toLookupStrategy(...lookup);
   const { inherit, ...rest } = pattern;

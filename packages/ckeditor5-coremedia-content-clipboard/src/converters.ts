@@ -84,7 +84,7 @@ export const addContentMarkerConversion =
 export const removeContentMarkerConversion = (
   evt: EventInfo,
   data: RemoveMarkerEventData,
-  conversionApi: DowncastConversionApi
+  conversionApi: DowncastConversionApi,
 ): void => {
   const elements = conversionApi.mapper.markerNameToElements(data.markerName);
   if (!elements) {

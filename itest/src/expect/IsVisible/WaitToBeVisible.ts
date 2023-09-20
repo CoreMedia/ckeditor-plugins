@@ -8,7 +8,7 @@ expect.extend({
       "waitToBeVisible",
       async () => expect(await visible).toStrictEqual(true),
       async () => expect(await visible).toStrictEqual(false),
-      this
+      this,
     );
   },
 });

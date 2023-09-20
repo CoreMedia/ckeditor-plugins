@@ -85,7 +85,7 @@ export const createElement = (ownerDocument: Document, definition: ElementDefini
 export const renameElement = (
   originalElement: Element,
   definition: ElementDefinitionType,
-  keepChildren = true
+  keepChildren = true,
 ): Element => {
   const newElement = createElement(originalElement.ownerDocument, definition);
 

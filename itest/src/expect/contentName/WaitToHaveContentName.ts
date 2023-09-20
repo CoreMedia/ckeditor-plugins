@@ -8,7 +8,7 @@ expect.extend({
       "waitToHaveContentName",
       async () => expect(await contentName).toStrictEqual(expectedName),
       async () => expect(await contentName).toStrictEqual(expectedName),
-      this
+      this,
     );
   },
 });

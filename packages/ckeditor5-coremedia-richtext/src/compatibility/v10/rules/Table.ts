@@ -227,7 +227,7 @@ class TableWrapper extends ElementWrapper {
   getDirectElementsInSectionsByTagName(tagName: string): Element[] {
     const acceptedParents = this.sections;
     return acceptedParents.flatMap((s) =>
-      [...s.querySelectorAll(tagName)].filter((e) => s.isSameNode(e.parentElement))
+      [...s.querySelectorAll(tagName)].filter((e) => s.isSameNode(e.parentElement)),
     );
   }
 

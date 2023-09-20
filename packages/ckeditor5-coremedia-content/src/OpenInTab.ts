@@ -40,7 +40,7 @@ export const canAllBeOpenedInTab = async (...uriPaths: string[]): Promise<boolea
       workAreaService.canBeOpenedInTab(uriPaths).catch((error): boolean => {
         logger.debug(`Failed to query "canBeOpenedInTab" for ${uriPaths}. Default to false.`, error);
         return false;
-      })
+      }),
   );
 };
 
@@ -62,6 +62,6 @@ export const openEntitiesInTabs = async (...uriPaths: string[]): Promise<OpenEnt
     return emptyOpenEntitiesInTabsResult;
   }
   return fetchWorkAreaService().then(
-    (workAreaService): Promise<OpenEntitiesInTabsResult> => workAreaService.openEntitiesInTabs(uriPaths)
+    (workAreaService): Promise<OpenEntitiesInTabsResult> => workAreaService.openEntitiesInTabs(uriPaths),
   );
 };

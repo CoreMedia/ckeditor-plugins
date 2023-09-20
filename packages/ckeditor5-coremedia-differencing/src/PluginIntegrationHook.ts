@@ -44,7 +44,7 @@ export class PluginIntegrationHook extends Plugin {
         //   `RealTimeCollaborationClient`, as RTC is stopping event
         //   propagation.
         priority: priorities.get("highest") + 1,
-      }
+      },
     );
   }
 

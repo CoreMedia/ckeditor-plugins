@@ -66,7 +66,7 @@ export default class MockBlobDisplayService implements BlobDisplayService {
           thumbnailTitle,
           isPlaceholder,
         };
-      })
+      }),
     );
   }
 

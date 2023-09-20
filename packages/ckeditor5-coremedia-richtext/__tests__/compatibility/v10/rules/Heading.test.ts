@@ -51,7 +51,7 @@ describe("CoreMediaRichTextConfig: Headings", () => {
           dataView: wrapContent(`<${el} lang="de"/>`),
         },
       ];
-    })
+    }),
   );
 
   const invalidHeadingFixtures: DataProcessingTestCase[] = flatten(
@@ -66,7 +66,7 @@ describe("CoreMediaRichTextConfig: Headings", () => {
           dataView: wrapContent(`<p class="${invalidHeadingClass}">${text}</p>`),
         },
       ];
-    })
+    }),
   );
 
   const data: DataProcessingTestCase[] = [

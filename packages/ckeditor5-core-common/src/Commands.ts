@@ -66,7 +66,7 @@ export const optionalCommandNotFound: CommandNotFoundErrorHandler = (e: CommandN
  */
 export const recommendCommand = (
   effectIfMissingMessage = "",
-  logger: Logger = commandsLogger
+  logger: Logger = commandsLogger,
 ): CommandNotFoundErrorHandler => {
   const messageSuffix = effectIfMissingMessage ? ` ${effectIfMissingMessage}` : "";
   return (e) => {
