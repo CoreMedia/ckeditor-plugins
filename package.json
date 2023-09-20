@@ -32,7 +32,7 @@
     "publishall": "pnpm --recursive publish",
     "setversion": "set-version",
     "clean": "pnpm --recursive clean",
-    "clean:node_modules": "rimraf ./**/node_modules",
+    "clean:node_modules": "rimraf --glob \"./**/node_modules\"",
     "build": "pnpm --recursive build",
     "doc": "typedoc",
     "doc:config": "typedoc --showConfig",
