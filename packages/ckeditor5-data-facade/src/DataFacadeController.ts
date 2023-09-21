@@ -277,7 +277,10 @@ export class DataFacadeController implements DataApi {
     const { context: actualContext } = options;
 
     if (expectedContext !== actualContext) {
-      throw new ContextMismatchError(`Data Context Mismatch: actual: ${actualContext}, expected: ${expectedContext}`);
+      throw new ContextMismatchError(`Data Context Mismatch: actual: ${actualContext}, expected: ${expectedContext}`, {
+        actual: actualContext,
+        expected: expectedContext,
+      });
     }
 
     if (!editor || cachedVersion === editor.model.document.version) {

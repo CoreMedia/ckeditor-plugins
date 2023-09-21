@@ -3,9 +3,29 @@
  * the current context anymore.
  */
 export class ContextMismatchError extends Error {
-  constructor(message?: string) {
+  /**
+   * The actual context as of previously set data.
+   */
+  readonly actual?: string;
+  /**
+   * The expected context data got requested for.
+   */
+  readonly expected?: string;
+
+  constructor(
+    message?: string,
+    contextInformation?: {
+      actual?: string;
+      expected?: string;
+    },
+  ) {
     super(message);
-    // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-2.html
-    Object.setPrototypeOf(this, new.target.prototype);
+
+    this.actual = contextInformation?.actual;
+    this.expected = contextInformation?.expected;
+  }
+
+  override toString(): string {
+    return `ContextMismatchError: ${this.message} {actual=${this.actual}, expected=${this.expected}}`;
   }
 }
