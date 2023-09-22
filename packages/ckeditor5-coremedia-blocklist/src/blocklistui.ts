@@ -30,16 +30,11 @@ export default class Blocklistui extends Plugin {
   static readonly pluginName: string = "BlocklistUI";
   static readonly requires = [ContextualBalloon, BlocklistEditing];
 
-  blocklistActionsView: BlocklistActionsView;
+  blocklistActionsView?: BlocklistActionsView;
 
   blocklistCommand: BlocklistCommand | undefined;
 
   #balloon: ContextualBalloon | undefined = undefined;
-
-  constructor(editor: Editor) {
-    super(editor);
-    this.blocklistActionsView = this.#createBlocklistActionsView();
-  }
 
   async init(): Promise<void> {
     const editor = this.editor;
@@ -56,10 +51,18 @@ export default class Blocklistui extends Plugin {
     // listen to click and key events while the balloon is open (to navigate or close the balloon)
     this.#initBalloonViewListeners();
 
+    this.blocklistActionsView = this.#createBlocklistActionsView();
     this.blocklistActionsView.bind("blockedWords").to(this.blocklistCommand, "value");
 
     // listen to changes in blocklistCommand and refresh the list in the blocklist view accordingly
     this.blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
+  }
+
+  #getBlocklistActionsView(): BlocklistActionsView {
+    if (!this.blocklistActionsView) {
+      this.blocklistActionsView = this.#createBlocklistActionsView();
+    }
+    return this.blocklistActionsView;
   }
 
   /**
@@ -74,7 +77,7 @@ export default class Blocklistui extends Plugin {
     const blocklistActionsView = new BlocklistActionsView(editor);
 
     this.listenTo(blocklistActionsView.blocklistInputView, "submit", () => {
-      const blockWordInput = this.blocklistActionsView.blocklistInputView.getInputElement();
+      const blockWordInput = blocklistActionsView.blocklistInputView.getInputElement();
 
       if (!this.blocklistCommand) {
         return;
@@ -94,7 +97,7 @@ export default class Blocklistui extends Plugin {
       this.blocklistCommand.set("value", newValue);
 
       // Clear the input
-      this.blocklistActionsView.blocklistInputView.setInputText("");
+      blocklistActionsView.blocklistInputView.setInputText("");
     });
 
     // Execute unblock command after clicking on the "remove" button.
@@ -171,12 +174,12 @@ export default class Blocklistui extends Plugin {
 
     // Set the value of the input element in the blocklist balloon to the current selection
     // For clicks on a blocked word, no value is set since the selection is collapsed
-    this.blocklistActionsView.blocklistInputView.setInputText(this.#getSelectedText());
+    this.#getBlocklistActionsView().blocklistInputView.setInputText(this.#getSelectedText());
 
     this.#addBalloonView();
 
     if (forceFocus) {
-      this.blocklistActionsView.focus();
+      this.#getBlocklistActionsView().focus();
     }
   }
 
@@ -217,16 +220,12 @@ export default class Blocklistui extends Plugin {
    * @private
    */
   #addBalloonView(): void {
-    if (!this.blocklistActionsView) {
-      this.#createBlocklistActionsView();
-    }
-
     if (!this.#balloon) {
       return;
     }
 
     this.#balloon.add({
-      view: this.blocklistActionsView,
+      view: this.#getBlocklistActionsView(),
       position: this.#getBalloonPositionData(),
     });
   }
@@ -301,8 +300,8 @@ export default class Blocklistui extends Plugin {
     this.editor.keystrokes.set(
       "Tab",
       (data, cancel) => {
-        if (this.#isBlocklistVisible() && !this.blocklistActionsView.focusTracker.isFocused) {
-          this.blocklistActionsView.focus();
+        if (this.#isBlocklistVisible() && !this.#getBlocklistActionsView().focusTracker.isFocused) {
+          this.#getBlocklistActionsView().focus();
           cancel();
         }
       },
@@ -322,7 +321,7 @@ export default class Blocklistui extends Plugin {
 
     // Close on click outside of balloon panel element.
     clickOutsideHandler({
-      emitter: this.blocklistActionsView,
+      emitter: this.#getBlocklistActionsView(),
       activator: () => this.#isBlocklistViewInBalloonPanel(),
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       contextElements: () => [this.#balloon!.view.element!],
@@ -383,16 +382,11 @@ export default class Blocklistui extends Plugin {
     const range = selection.getFirstRange();
 
     const isTextProxy = (node: unknown): node is TextProxy =>
-      // @ts-expect-error weifhwe
-      node.data !== undefined;
-
-    // Regex to remove special characters, like commas, that appear when a highlighted section is within
-    // the selection
-    const regex = /[^a-zA-Z0-9\s-]/g;
+      // eslint-disable-next-line no-null/no-null
+      typeof node === "object" && node !== null && "data" in node;
 
     if (range) {
-      const items = Array.from(range.getItems());
-      return items
+      const item = Array.from(range.getItems())
         .filter((item) => isTextProxy(item))
         .map((item) => {
           if (isTextProxy(item)) {
@@ -400,10 +394,24 @@ export default class Blocklistui extends Plugin {
           }
           return "";
         })
-        .join()
-        .replace(regex, "");
+        .join();
+      return this.#removeSpecialChars(item);
     }
     return "";
+  }
+
+  /**
+   * Remove special characters, like commas, in a string.
+   * Used to format strings within a selection to make sure a string only contains
+   * the actual word when a highlighted section is within the selection.
+   *
+   * @param input - the input string
+   * @returns the transformed string
+   * @private
+   */
+  #removeSpecialChars(input: string): string {
+    const regex = /[^a-zA-Z0-9\s-]/g;
+    return input.replace(regex, "");
   }
 
   /**
