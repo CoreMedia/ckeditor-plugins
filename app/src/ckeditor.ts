@@ -27,6 +27,7 @@ import { Highlight } from "@ckeditor/ckeditor5-highlight";
 import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
 import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
+import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
@@ -161,6 +162,7 @@ ClassicEditor.create(sourceElement, {
     Autoformat,
     Autosave,
     BlockQuote,
+    Blocklist,
     Bold,
     Code,
     CodeBlock,
@@ -227,6 +229,7 @@ ClassicEditor.create(sourceElement, {
     "|",
     "pasteContent",
     "findAndReplace",
+    "blocklist",
     "|",
     "sourceEditing",
   ],

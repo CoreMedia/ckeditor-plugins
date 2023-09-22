@@ -14,6 +14,9 @@ export { default as MigrateTo } from "./MigrateTo";
 
 export { default as MockBlobDisplayService } from "./MockBlobDisplayService";
 
+export * from "./MockBlocklistService";
+export { default as MockBlocklistService } from "./MockBlocklistService";
+
 export { default as MockClipboardService } from "./MockClipboardService";
 
 export * from "./MockContent";

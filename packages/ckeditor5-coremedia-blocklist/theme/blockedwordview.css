@@ -1,0 +1,28 @@
+.ck.cm-ck-blocklist-form .cm-ck-blocklist-entry .ck-button.ck-button-cancel {
+  margin-top: initial;
+}
+
+.ck.cm-ck-blocklist-form {
+  display: block;
+  min-width: var(--ck-input-width);
+  padding: 0;
+}
+
+.ck.cm-ck-blocklist-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ck.cm-ck-blocklist-form .ck-labeled-field-view {
+  margin: var(--ck-spacing-small) var(--ck-spacing-large) var(--ck-spacing-small) 0;
+}
+
+.ck.cm-ck-blocklist-form .ck-labeled-field-view .ck-input-text {
+  min-width: 0;
+  width: 100%;
+}
+
+.cm-ck-blocked-word {
+  background-color: rgba(255, 215, 205, .5);
+}
