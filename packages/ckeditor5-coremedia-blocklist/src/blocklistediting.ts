@@ -79,6 +79,13 @@ export default class BlocklistEditing extends Plugin {
       .subscribe(onServiceRegisteredFunction);
   }
 
+  override destroy() {
+    if (this.#blocklistServiceSubscription) {
+      this.#blocklistServiceSubscription.unsubscribe();
+    }
+    super.destroy();
+  }
+
   /**
    * Updates the internal list of blocked words and all affected markers whenever
    * the blocklist from the serviceAgent blocklistService changes.
