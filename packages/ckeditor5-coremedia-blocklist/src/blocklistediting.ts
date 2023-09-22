@@ -33,7 +33,7 @@ export default class BlocklistEditing extends Plugin {
    * Subscription on the serviceAgent until the blocklist service is available.
    * @private
    */
-  #blocklistServiceSubscription: Subscription | undefined = undefined;
+  #blocklistServiceSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
 
   init(): void {
     const editor = this.editor;
@@ -293,7 +293,7 @@ export default class BlocklistEditing extends Plugin {
         model.createRangeIn(rootElement),
         model,
         createSearchCallback(wordToBlock),
-        this.blockedWordMarkers
+        this.blockedWordMarkers,
       );
     }, undefined);
   }
