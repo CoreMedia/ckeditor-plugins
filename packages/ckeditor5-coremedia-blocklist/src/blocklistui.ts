@@ -395,23 +395,9 @@ export default class Blocklistui extends Plugin {
           return "";
         })
         .join();
-      return this.#removeSpecialChars(item);
+      return removeSpecialChars(item);
     }
     return "";
-  }
-
-  /**
-   * Remove special characters, like commas, in a string.
-   * Used to format strings within a selection to make sure a string only contains
-   * the actual word when a highlighted section is within the selection.
-   *
-   * @param input - the input string
-   * @returns the transformed string
-   * @private
-   */
-  #removeSpecialChars(input: string): string {
-    const regex = /[^a-zA-Z0-9\s-]/g;
-    return input.replace(regex, "");
   }
 
   /**
@@ -449,3 +435,18 @@ export default class Blocklistui extends Plugin {
       .filter((attribute) => attribute !== undefined) as string[];
   }
 }
+
+/**
+ * Remove special characters, like commas, in a string.
+ * Used to format strings within a selection to make sure a string only contains
+ * the actual word when a highlighted section is within the selection.
+ *
+ * @param input - the input string
+ * @returns the transformed string
+ * @private
+ */
+export const removeSpecialChars = (input: string): string => {
+  // This regex allows letters, numbers, whitespace, hyphens and single quotes.
+  const regex = /[^a-zA-Z0-9\s-']/g;
+  return input.replace(regex, "");
+};
