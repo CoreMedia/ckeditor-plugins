@@ -36,6 +36,6 @@ describe("ImageElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

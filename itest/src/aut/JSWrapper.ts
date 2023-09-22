@@ -31,10 +31,7 @@ export class JSWrapper<T> {
    * @param pageFunction - function to be evaluated in the page context
    * @param arg - optional argument to pass to `pageFunction`.
    */
-  async evaluate<R, Arg, O extends T = T>(
-    pageFunction: PageFunctionOn<O, Arg | void, R>,
-    arg?: Arg | unknown
-  ): Promise<R> {
+  async evaluate<R, Arg, O extends T = T>(pageFunction: PageFunctionOn<O, Arg | void, R>, arg?: Arg): Promise<R> {
     const instance = await this.instance;
     return instance.evaluate(pageFunction, arg);
   }
@@ -49,7 +46,7 @@ export class JSWrapper<T> {
    */
   async evaluateHandle<R, Arg, O extends T = T>(
     pageFunction: PageFunctionOn<O, Arg | void, R>,
-    arg?: Arg | unknown
+    arg?: Arg,
   ): Promise<SmartHandle<R>> {
     const instance = await this.instance;
     return instance.evaluateHandle(pageFunction, arg);

@@ -408,7 +408,7 @@ export type List = typeof ul | typeof ol;
 export const richtext = (
   innerXml: Content = "",
   addXmlDeclaration = true,
-  enforcedNamespaces: readonly string[] = []
+  enforcedNamespaces: readonly string[] = [],
 ): string => {
   let result = "";
   if (addXmlDeclaration) {

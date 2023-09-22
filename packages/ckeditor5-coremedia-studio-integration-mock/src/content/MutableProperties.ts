@@ -129,7 +129,7 @@ const MutablePropertiesDefaultDefaultProviders: Required<MutablePropertiesDefaul
  * @param input - default providers, which are more convenient
  */
 const transformDefaultProviders = <T extends MutablePropertiesConfig>(
-  input: MutablePropertiesDefaultProviders<T>
+  input: MutablePropertiesDefaultProviders<T>,
 ): InternalMutablePropertiesDefaultProviders<T> => {
   const allSet = { ...MutablePropertiesDefaultDefaultProviders, input };
   const { name: defaultName, editing: defaultEditing, readable: defaultReadable, blob: defaultBlob } = allSet;
@@ -176,7 +176,7 @@ const transformBlobConfig = (config: AtomicOrArray<BlobTypeConfig>): BlobType[] 
  */
 const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
   config: T,
-  defaultProviders: MutablePropertiesDefaultProviders<T> = MutablePropertiesDefaultDefaultProviders
+  defaultProviders: MutablePropertiesDefaultProviders<T> = MutablePropertiesDefaultDefaultProviders,
 ): MigrateTo<T, MutableProperties> => {
   const { name, editing, readable, blob } = config;
   const transformedProviders = transformDefaultProviders(defaultProviders);

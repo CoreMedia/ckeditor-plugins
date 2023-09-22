@@ -52,7 +52,7 @@ describe("CoreMediaRichTextConfig: Text Fixtures", () => {
           dataView: dataViewFromData,
         },
       ];
-    })
+    }),
   );
 
   const textCoreEntityFixtures: DataProcessingTestCase[] = ["&gt;", "&lt;", "&amp;"].map((entity, index) => ({

@@ -13,5 +13,5 @@ it.each([
   (input: string, expected: string) => {
     const actual = escapeFontFamily(input);
     expect(actual).toBe(expected);
-  }
+  },
 );

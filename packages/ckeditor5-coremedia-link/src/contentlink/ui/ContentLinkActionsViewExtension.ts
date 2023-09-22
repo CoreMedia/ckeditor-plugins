@@ -155,7 +155,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     if (!actionsView.element || !actionsView.editButtonView.element) {
       ContentLinkActionsViewExtension.#logger.error(
         "ActionsView or the edit button has no element yet, this indicates the actionsView is not rendered yet. Can't customize.",
-        actionsView
+        actionsView,
       );
       return;
     }
@@ -166,7 +166,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     if (!simpleContentLinkView.element) {
       ContentLinkActionsViewExtension.#logger.error(
         "ContentLinkView is rendered, but element does not exist.",
-        simpleContentLinkView
+        simpleContentLinkView,
       );
       return;
     }
@@ -186,7 +186,7 @@ class ContentLinkActionsViewExtension extends Plugin {
     if (!actionsView.isRendered) {
       ContentLinkActionsViewExtension.#logger.warn(
         "ActionsView is not rendered yet, but classes must be added to the rendered actionsView",
-        actionsView
+        actionsView,
       );
       return;
     }

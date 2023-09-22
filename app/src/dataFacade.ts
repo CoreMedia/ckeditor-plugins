@@ -66,7 +66,7 @@ export const saveData = async (editor: Editor, source: string) => {
   if (lastSetVersion !== undefined && lastSetVersion === currentVersion) {
     console.log(
       `Would skip saving data triggered by ${source} as they represent the same data as set originally. Note, that the actual data may differ, but they are semantically equivalent.`,
-      logInfo(false)
+      logInfo(false),
     );
     previewData = lastSetData;
   } else {

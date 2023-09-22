@@ -28,7 +28,7 @@ describe("HtmlDomConverter", () => {
         // it will get automatically transferred to default namespace of target
         // document.
         expect(serializeToXmlString(dataDocument)).toStrictEqual(
-          `<div xmlns="${dataNs}"><p class="CLASS">TEXT</p></div>`
+          `<div xmlns="${dataNs}"><p class="CLASS">TEXT</p></div>`,
         );
       });
     });
@@ -48,7 +48,7 @@ describe("HtmlDomConverter", () => {
         // it will get automatically transferred to default namespace of target
         // document.
         expect(serializeToXmlString(dataViewDocument.body)).toStrictEqual(
-          `<body xmlns="${dataViewNs}"><p class="CLASS">TEXT</p></body>`
+          `<body xmlns="${dataViewNs}"><p class="CLASS">TEXT</p></body>`,
         );
       });
     });
@@ -80,7 +80,7 @@ describe("HtmlDomConverter", () => {
       // production to minify the resulting XML (thus, at least for the
       // `toData` transformation, we should apply the propagation).
       expect(serializeToXmlString(dataViewDocument)).toStrictEqual(
-        `<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="https://example.org/custom"><head></head><body><c:customEl/></body></html>`
+        `<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="https://example.org/custom"><head></head><body><c:customEl/></body></html>`,
       );
     });
 
@@ -98,7 +98,7 @@ describe("HtmlDomConverter", () => {
       // it will get automatically transferred to default namespace of target
       // document.
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="${dataNs}"><p class="CLASS" id="ID" lang="en" dir="ltr"/></div>`
+        `<div xmlns="${dataNs}"><p class="CLASS" id="ID" lang="en" dir="ltr"/></div>`,
       );
     });
 
@@ -106,7 +106,7 @@ describe("HtmlDomConverter", () => {
       const customNs = "https://example.org/custom";
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
-        `<div xmlns="${dataNs}" xmlns:c="${customNs}"><p c:customAttr="CUSTOM"/></div>`
+        `<div xmlns="${dataNs}" xmlns:c="${customNs}"><p c:customAttr="CUSTOM"/></div>`,
       );
 
       const converter = new HtmlDomConverter(dataViewDocument);
@@ -119,7 +119,7 @@ describe("HtmlDomConverter", () => {
       // it will get automatically transferred to default namespace of target
       // document.
       expect(serializeToXmlString(dataViewDocument)).toStrictEqual(
-        `<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="https://example.org/custom"><head></head><body><p c:customAttr="CUSTOM"></p></body></html>`
+        `<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="https://example.org/custom"><head></head><body><p c:customAttr="CUSTOM"></p></body></html>`,
       );
     });
 
@@ -132,7 +132,7 @@ describe("HtmlDomConverter", () => {
       toData(converter, dataViewDocument, dataDocument);
 
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p><span class="CLASS">TEXT</span></p></div>`
+        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p><span class="CLASS">TEXT</span></p></div>`,
       );
     });
   });
@@ -163,7 +163,7 @@ describe("HtmlDomConverter", () => {
       toData(converter, dataViewDocument, dataDocument);
 
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p><span class="mark">TEXT</span></p></div>`
+        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p><span class="mark">TEXT</span></p></div>`,
       );
     });
 
@@ -182,7 +182,7 @@ describe("HtmlDomConverter", () => {
       toData(converter, dataViewDocument, dataDocument);
 
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p/></div>`
+        `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p/></div>`,
       );
     });
 
@@ -217,9 +217,9 @@ describe("HtmlDomConverter", () => {
         toData(converter, dataViewDocument, dataDocument);
 
         expect(serializeToXmlString(dataDocument)).toStrictEqual(
-          `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Marked Text</p></div>`
+          `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Marked Text</p></div>`,
         );
-      }
+      },
     );
 
     /**
@@ -256,7 +256,7 @@ describe("HtmlDomConverter", () => {
       toData(converter, dataViewDocument, dataDocument);
 
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`
+        `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`,
       );
     });
 
@@ -269,7 +269,7 @@ describe("HtmlDomConverter", () => {
     it("Restructure children for data to data view", () => {
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
-        `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`
+        `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`,
       );
 
       const converter = new HtmlDomConverter(dataViewDocument, {
@@ -282,7 +282,7 @@ describe("HtmlDomConverter", () => {
       toDataView(converter, dataDocument, dataViewDocument);
 
       expect(serializeToXmlString(dataViewDocument)).toStrictEqual(
-        `<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><table><thead><tr></tr></thead><tbody><tr></tr></tbody></table></body></html>`
+        `<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><table><thead><tr></tr></thead><tbody><tr></tr></tbody></table></body></html>`,
       );
     });
 
@@ -299,14 +299,14 @@ describe("HtmlDomConverter", () => {
       toData(converter, dataViewDocument, dataDocument);
 
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
-        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
+        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`,
       );
     });
 
     it("Data to Data View: Convert artificial element CoreMedia RichText 1.0 to attribute in HTML", () => {
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
-        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`
+        `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`,
       );
 
       const converter = new HtmlDomConverter(dataViewDocument, {
@@ -319,7 +319,7 @@ describe("HtmlDomConverter", () => {
       toDataView(converter, dataDocument, dataViewDocument);
 
       expect(serializeToXmlString(dataViewDocument.body)).toStrictEqual(
-        `<body xmlns="http://www.w3.org/1999/xhtml"><em data-editor="Peter">Text</em></body>`
+        `<body xmlns="http://www.w3.org/1999/xhtml"><em data-editor="Peter">Text</em></body>`,
       );
     });
   });

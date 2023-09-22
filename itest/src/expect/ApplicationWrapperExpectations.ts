@@ -10,7 +10,7 @@ expect.extend({
       "waitForCKEditorToBeAvailable",
       async () => expect(await a.editor.exists()).toBe(true),
       async () => expect(await a.editor.exists()).toBe(false),
-      this
+      this,
     );
   },
 });

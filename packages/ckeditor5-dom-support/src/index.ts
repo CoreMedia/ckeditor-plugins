@@ -2,7 +2,7 @@
  * @module ckeditor5-dom-support
  */
 
-export { copyAttributesFrom } from "./Attrs";
+export { copyAttributesFrom, describeAttr } from "./Attrs";
 export { fragmentFromNodeContents, fragmentToString } from "./DocumentFragments";
 export { documentFromHtml, documentFromXml } from "./Documents";
 export {

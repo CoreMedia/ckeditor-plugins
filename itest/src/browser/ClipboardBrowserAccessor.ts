@@ -28,14 +28,14 @@ export default class ClipboardBrowserAccessor {
     return page.evaluate(async (itemToCopy): Promise<void> => {
       const requireClipboardPermission = async (
         name: "read" | "write",
-        expectedState: PermissionState = "granted"
+        expectedState: PermissionState = "granted",
       ): Promise<void> => {
         const permissionName = `clipboard-${name}`;
         // @ts-expect-error - Bad typing for supported permission names.
         const permission = await navigator.permissions.query({ name: permissionName });
         if (permission.state !== expectedState) {
           throw Error(
-            `Insufficient permission for ${permissionName}: expected: ${expectedState}, actual: ${permission.state}`
+            `Insufficient permission for ${permissionName}: expected: ${expectedState}, actual: ${permission.state}`,
           );
         }
       };
@@ -81,7 +81,7 @@ export default class ClipboardBrowserAccessor {
 
       if (actualItemConfigs.length === 0) {
         throw new Error(
-          `Unexpected state: Clipboard (length: ${actualItemConfigs.length}) does not contain expected data, thus failed writing to clipboard: ${itemToCopy.type}: ${itemToCopy.content}`
+          `Unexpected state: Clipboard (length: ${actualItemConfigs.length}) does not contain expected data, thus failed writing to clipboard: ${itemToCopy.type}: ${itemToCopy.content}`,
         );
       }
     }, itemConfig);

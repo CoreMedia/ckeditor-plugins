@@ -157,8 +157,8 @@ const exampleData: Record<string, string> = {
   "Hello": richtext(`<p>Hello World!</p>`),
   "Invalid RichText": richtext(
     `${h1(
-      "Invalid RichText"
-    )}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`
+      "Invalid RichText",
+    )}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`,
   ).replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
@@ -181,7 +181,7 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
       },
       {
         priority: "lowest",
-      }
+      },
     );
     editor.data.once(
       "set",
@@ -193,7 +193,7 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
         }),
       {
         priority: "lowest",
-      }
+      },
     );
 
     const data = exampleData[exampleKey];

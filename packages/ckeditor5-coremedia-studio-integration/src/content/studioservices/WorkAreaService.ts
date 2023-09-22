@@ -21,7 +21,7 @@ interface WorkAreaService {
   openEntitiesInTabs(
     entities: unknown[],
     background?: boolean,
-    options?: unknown
+    options?: unknown,
   ): Promise<{ accepted: string[]; rejected: string[] }>;
 
   /**

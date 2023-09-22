@@ -99,13 +99,13 @@ export const createDecoratorHook = <O extends Observable>(
   methodName: keyof O & string,
   callback: () => void,
   listenerCmp: Emitter,
-  options?: { priority?: number | PriorityString }
+  options?: { priority?: number | PriorityString },
 ): void => {
   if (!isDecorated(methodParentCmp, methodName)) {
     methodParentCmp.decorate(methodName);
     if (!isDecorated(methodParentCmp, methodName)) {
       console.warn(
-        `createDecoratorHook: Issues while decorating ${methodName}. CKEditor may have changed its internal API around Emitter Mixin. Detection for _is decorated_ needs to be adapted.`
+        `createDecoratorHook: Issues while decorating ${methodName}. CKEditor may have changed its internal API around Emitter Mixin. Detection for _is decorated_ needs to be adapted.`,
       );
     }
   }

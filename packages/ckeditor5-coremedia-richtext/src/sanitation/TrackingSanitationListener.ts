@@ -95,7 +95,7 @@ export class TrackingSanitationListener extends SanitationListener {
 
   override removeInvalidAttr(attributeOwner: Element, attr: Attr, cause: AttributeCause) {
     this.#console.debug(
-      `Removing invalid attribute ${attr.localName} at ${attributeOwner.localName} (value: "${attr.value}"): ${cause}`
+      `Removing invalid attribute ${attr.localName} at ${attributeOwner.localName} (value: "${attr.value}"): ${cause}`,
     );
     this.#state.removedInvalidAttrs++;
   }

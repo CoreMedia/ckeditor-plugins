@@ -5,17 +5,17 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/core": "^7.21.8",
+    "@babel/core": "^7.22.17",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
-    "babel-jest": "^29.5.0",
-    "enhanced-resolve": "^5.13.0",
-    "jest-environment-jsdom": "^29.5.0",
+    "babel-jest": "^29.7.0",
+    "enhanced-resolve": "^5.15.0",
+    "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
-    "ts-jest": "^29.1.0",
-    "tslib": "^2.5.0"
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.6.2"
   },
   "engines": {
     "node": "18",
-    "pnpm": "^8.1"
+    "pnpm": "^8.6.9"
   }
 }

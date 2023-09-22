@@ -71,7 +71,7 @@ describe("Document List Feature", () => {
           "dir": "ltr",
           "xml:lang": "de",
           "lang": "de",
-        })
+        }),
       );
       const dataView = await editor.setDataAndGetDataView(data);
 
@@ -101,8 +101,8 @@ describe("Document List Feature", () => {
             "dir": "ltr",
             "xml:lang": "de",
             "lang": "de",
-          })
-        )
+          }),
+        ),
       );
       await editor.setDataAndGetDataView(data);
       const listElementEditable = editableHandle.$(`${listElement}`);
@@ -132,8 +132,8 @@ describe("Document List Feature", () => {
             "dir": "rtl",
             "xml:lang": "en",
             "lang": "en",
-          }
-        )
+          },
+        ),
       );
       await editor.setDataAndGetDataView(data);
       const listElementEditable = editableHandle.$(`${listElement}`);
@@ -217,7 +217,7 @@ describe("Document List Feature", () => {
         await expect(await actualNestedElement).toHaveText(text);
 
         await expect(actualNestedElement).toMatchAttribute(attributeKey, attributeValue);
-      }
+      },
     );
 
     it.each`
@@ -300,9 +300,9 @@ describe("Document List Feature", () => {
             img({
               "alt": text,
               "xlink:href": blobReference(42),
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
       await editor.setDataAndGetDataView(data);
       const listElementEditable = editableHandle.$(`${listElement}`);

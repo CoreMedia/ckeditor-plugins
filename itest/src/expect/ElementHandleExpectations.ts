@@ -11,7 +11,7 @@ expect.extend({
       "waitForInnerHtmlToContain",
       async () => expect(await handle.innerHTML()).toContain(expected),
       async () => expect(await handle.innerHTML()).not.toContain(expected),
-      this
+      this,
     );
   },
 });

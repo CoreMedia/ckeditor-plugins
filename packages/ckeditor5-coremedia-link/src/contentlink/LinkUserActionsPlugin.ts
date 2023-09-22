@@ -73,7 +73,7 @@ export default class LinkUserActionsPlugin extends Plugin {
         this.#onReadOnlyLinkClicked(editor, data.view, clickedElement);
       },
       //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
-      { priority: "high", context: "$capture" }
+      { priority: "high", context: "$capture" },
     );
   }
 
@@ -111,7 +111,7 @@ export default class LinkUserActionsPlugin extends Plugin {
           domTarget: Element;
           preventDefault: () => void;
           view: View;
-        }
+        },
       ) => {
         if (editor.isReadOnly) {
           return;
@@ -144,7 +144,7 @@ export default class LinkUserActionsPlugin extends Plugin {
         }
       },
       //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
-      { priority: "high", context: "$capture" }
+      { priority: "high", context: "$capture" },
     );
 
     this.listenTo(
@@ -167,7 +167,7 @@ export default class LinkUserActionsPlugin extends Plugin {
           this.#openInWorkAreaTab(requireContentUriPath(url));
         }
       },
-      { priority: "high" }
+      { priority: "high" },
     );
   }
 

@@ -106,7 +106,7 @@ export class LinkAttributes extends Plugin {
       // It is just that other means should provide some clean-up actions.
       const logger = LinkAttributes.#logger;
       logger.info(
-        "LinkEditing unavailable. Registered link attributes may miss, for example, some expected cleanup on editing actions."
+        "LinkEditing unavailable. Registered link attributes may miss, for example, some expected cleanup on editing actions.",
       );
     }
 
@@ -203,7 +203,7 @@ const provideDowncastFunction =
       {
         [view]: modelAttributeValue,
       },
-      { priority: LINK_ATTRIBUTE_PRIORITY }
+      { priority: LINK_ATTRIBUTE_PRIORITY },
     );
     // Signal Link-Plugin, that this is a link, too.
     writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);

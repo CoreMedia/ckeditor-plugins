@@ -92,7 +92,7 @@ export default class ContentClipboard extends Plugin {
       this.listenTo<ClipboardInputTransformationEvent>(
         clipboardPipelinePlugin,
         "inputTransformation",
-        this.#inputTransformation
+        this.#inputTransformation,
       );
     }
   }
@@ -157,7 +157,7 @@ export default class ContentClipboard extends Plugin {
    */
   #clipboardInputHandler = (
     evt: EventInfo<"clipboardInput">,
-    data: DomEventData<ClipboardEvent | DragEvent> & ClipboardInputEventData
+    data: DomEventData<ClipboardEvent | DragEvent> & ClipboardInputEventData,
   ): void => {
     const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
     if (!dataTransfer) {
@@ -272,7 +272,7 @@ export default class ContentClipboard extends Plugin {
       return editor.model.document.selection.getFirstRange();
     }
     const targetRanges: ModelRange[] = data.targetRanges.map(
-      (viewRange: ViewRange): ModelRange => editor.editing.mapper.toModelRange(viewRange)
+      (viewRange: ViewRange): ModelRange => editor.editing.mapper.toModelRange(viewRange),
     );
     if (targetRanges.length > 0) {
       return targetRanges[0];

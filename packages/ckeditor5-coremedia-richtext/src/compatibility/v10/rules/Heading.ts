@@ -62,7 +62,7 @@ export const paragraphToHeading: ElementFilterRule = (params) => {
 
   if (ambiguousClasses.length > 0) {
     warnOnAmbiguousElementState(
-      `Paragraph already got mapped to ${node.name} according to corresponding class. Ignored ambiguous heading classes: ${ambiguousClasses}.`
+      `Paragraph already got mapped to ${node.name} according to corresponding class. Ignored ambiguous heading classes: ${ambiguousClasses}.`,
     );
   }
 };

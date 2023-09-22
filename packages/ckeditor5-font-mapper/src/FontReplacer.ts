@@ -19,7 +19,7 @@ const logger: Logger = LoggerProvider.getLogger("FontMapper");
  */
 export const replaceFontInDocumentFragment = (
   documentFragment: ViewDocumentFragment | ViewElement,
-  parentFontMapping?: FontMapping
+  parentFontMapping?: FontMapping,
 ): void => {
   const childElements = findChildren(documentFragment);
   logger.debug("Starting to analyze children", childElements);
@@ -97,7 +97,7 @@ const findChildren = (documentFragment: ViewDocumentFragment | ViewElement): Vie
  */
 const computeFontMappingForElement = (
   element: ViewElement,
-  inheritedFontMapping?: FontMapping
+  inheritedFontMapping?: FontMapping,
 ): FontMapping | undefined => {
   logger.debug("Looking up fontFamily for element, respecting inheritedFontMapping", element, inheritedFontMapping);
   const fontFamily = evaluateFontFamily(element);

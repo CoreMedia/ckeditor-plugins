@@ -72,7 +72,7 @@ const observeNameHint = (config: NameHintConfig): Observable<DisplayHint> => {
         name,
         classes,
       };
-    })
+    }),
   );
 };
 
@@ -117,7 +117,7 @@ const observeEditingHint = (config: EditingHintConfig): Observable<DisplayHint> 
       // We don't respect the type here (folders cannot be checked-out), but
       // we rely on the config not providing folders, which are edited.
       return editing ? editingState : notEditingState;
-    })
+    }),
   );
 };
 

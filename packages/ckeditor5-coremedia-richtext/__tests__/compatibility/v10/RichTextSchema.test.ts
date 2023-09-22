@@ -809,7 +809,7 @@ describe("RichTextSchema.adjustAttributes", () => {
             testData.xpath,
             xmlDocument,
             null,
-            XPathResult.FIRST_ORDERED_NODE_TYPE
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
           );
           const element: Element = xPathResult.singleNodeValue as Element;
           const mutableElement = ElementProxy.instantiateForTest(element);
@@ -817,8 +817,8 @@ describe("RichTextSchema.adjustAttributes", () => {
           if (element === null) {
             throw new Error(
               `Unexpected state: Element located by ${testData.xpath} does not exist in: ${serializer.serializeToString(
-                xmlDocument.documentElement
-              )}`
+                xmlDocument.documentElement,
+              )}`,
             );
           }
 
@@ -831,7 +831,7 @@ describe("RichTextSchema.adjustAttributes", () => {
           expect(actualXml).toEqualXML(testData.expected);
         });
       }
-    }
+    },
   );
 });
 

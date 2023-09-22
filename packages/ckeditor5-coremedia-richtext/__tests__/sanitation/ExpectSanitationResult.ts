@@ -7,7 +7,7 @@ export const expectSanitationResult = (
   sanitizer: RichTextSanitizer,
   inputXml: string,
   sanitizedXml: string,
-  listenerExpectations: ListenerExpectations = expectNoIssues
+  listenerExpectations: ListenerExpectations = expectNoIssues,
 ): void => {
   const { strictness } = sanitizer;
   const disabled = strictness === Strictness.NONE;

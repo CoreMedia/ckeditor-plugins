@@ -84,14 +84,14 @@ export const parseLinkBalloonConfig = (config: Config<EditorConfig>): void => {
 export const keepOpen = (elementHierarchy: Element[]): boolean => {
   const elementHierarchyIds: string[] = elementHierarchy.map((element) => element.id).filter((id) => !!id);
   const idExistInHierarchy = linkBalloonConfig.keepOpen.ids.some((elementId) =>
-    elementHierarchyIds.includes(elementId)
+    elementHierarchyIds.includes(elementId),
   );
 
   const elementHierarchyClassLists: DOMTokenList[] = elementHierarchy
     .map((element) => element.classList)
     .filter((classList) => !!classList);
   const classExistInHierarchy = linkBalloonConfig.keepOpen.classes.some((aClass) =>
-    elementHierarchyClassLists.some((domTokenList) => domTokenList.contains(aClass))
+    elementHierarchyClassLists.some((domTokenList) => domTokenList.contains(aClass)),
   );
   return idExistInHierarchy || classExistInHierarchy;
 };

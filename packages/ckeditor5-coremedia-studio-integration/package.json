@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration",
-  "version": "15.0.2-rc.1",
+  "version": "16.0.1-rc.0",
   "description": "CoreMedia Studio: Communication facade for Studio integration",
   "keywords": [
     "coremedia",
@@ -10,7 +10,7 @@
   ],
   "engines": {
     "node": "18",
-    "pnpm": "^8.1"
+    "pnpm": "^8.6.9"
   },
   "main": "./src/index.ts",
   "publishConfig": {
@@ -30,19 +30,19 @@
   "devDependencies": {
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
-    "@types/jest": "^29.5.1",
-    "jest": "^29.5.0",
-    "jest-each": "^29.5.0",
+    "@types/jest": "^29.5.4",
+    "jest": "^29.7.0",
+    "jest-each": "^29.7.0",
     "jest-xml-matcher": "^1.2.0",
-    "rimraf": "^5.0.0",
+    "rimraf": "^5.0.1",
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "15.0.2-rc.1",
+    "@coremedia/ckeditor5-logging": "16.0.1-rc.0",
     "node-esapi": "^0.0.1",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.1"
   }
 }

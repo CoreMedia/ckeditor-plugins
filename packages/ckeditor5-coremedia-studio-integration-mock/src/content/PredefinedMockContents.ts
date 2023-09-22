@@ -299,7 +299,7 @@ const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
       return { name, uriPath };
     })
     .map(({ name, uriPath }) => `<p><a xlink:href="${uriPath}">${name}</a></p>`)
-    .join("")
+    .join(""),
 );
 
 // noinspection HtmlUnknownAttribute
@@ -331,9 +331,9 @@ const PREDEFINED_MOCK_BLOB_DATA = wrapInRichText(
     // Property is irrelevant for mocking.
     .map(
       ({ name, uriPath }) =>
-        `<p>${name}:<br/><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></p><p>${name} with link to self:<br/><a xlink:href="${uriPath}"><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></a></p>`
+        `<p>${name}:<br/><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></p><p>${name} with link to self:<br/><a xlink:href="${uriPath}"><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></a></p>`,
     )
-    .join("")
+    .join(""),
 );
 
 export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA, PREDEFINED_MOCK_BLOB_DATA, PredefinedMockContentConfig };

@@ -58,7 +58,7 @@ class MockWorkAreaService implements WorkAreaService {
       .every((mockContent: MockContent): boolean => {
         const allReadable = mockContent.readable.every((isReadable) => isReadable);
         MockWorkAreaService.#LOGGER.debug(
-          `Content ${mockContent.id} is considered ${allReadable ? "" : "un"}readable.`
+          `Content ${mockContent.id} is considered ${allReadable ? "" : "un"}readable.`,
         );
         return allReadable;
       });

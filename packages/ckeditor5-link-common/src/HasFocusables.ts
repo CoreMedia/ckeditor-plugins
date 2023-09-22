@@ -26,10 +26,10 @@ export const hasRequiredInternalFocusablesProperty = (value: unknown): value is 
   if (!result) {
     console.debug(
       "hasRequiredInternalFocusablesProperty: Required internal property _focusables missing or of unexpected type.",
-      value
+      value,
     );
     throw new IncompatibleInternalApiUsageError(
-      "Required internal API property _focusables missing or of unexpected type."
+      "Required internal API property _focusables missing or of unexpected type.",
     );
   }
   return result;

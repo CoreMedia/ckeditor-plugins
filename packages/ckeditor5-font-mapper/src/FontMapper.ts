@@ -74,7 +74,7 @@ export default class FontMapper extends Plugin {
       FontMapper.#handleClipboardInputTransformationEvent,
       {
         priority: "normal",
-      }
+      },
     );
 
     reportInitEnd(initInformation);

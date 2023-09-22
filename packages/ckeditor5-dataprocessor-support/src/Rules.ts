@@ -113,12 +113,12 @@ const mergePreParsedToViews = (preParsedConfig: PreParsedToView): FilterRuleSet 
 
 const parseFilterRuleSetConfigurations = (
   customFilterRuleSetConfiguration?: FilterRuleSetConfiguration,
-  defaultFilterRuleSetConfiguration?: FilterRuleSetConfiguration
+  defaultFilterRuleSetConfiguration?: FilterRuleSetConfiguration,
 ): ParsedToDataAndView => {
   const preParsedDefault = new FilterRuleSetConfigurationParser(defaultFilterRuleSetConfiguration ?? {}).parse();
   const preParsedToDataAndView: PreParsedToDataAndView = new FilterRuleSetConfigurationParser(
     customFilterRuleSetConfiguration ?? {},
-    preParsedDefault
+    preParsedDefault,
   ).parse();
   const preParsedToView: PreParsedToView = preParsedToDataAndView.toView;
   return {
@@ -239,7 +239,7 @@ class FilterRuleSetConfigurationParser {
   #mergeToViewElementsConfiguration(
     toDataKey: string,
     toViewConfig: ElementFilterRule | ElementFilterRulesByName | undefined,
-    hasToData: boolean
+    hasToData: boolean,
   ): void {
     if (!toViewConfig) {
       return;
@@ -262,7 +262,7 @@ class FilterRuleSetConfigurationParser {
   #addPreParsedToViewElementsRule(
     toViewKey: string,
     toDataKey: string,
-    filterRule: ElementFilterRule | undefined
+    filterRule: ElementFilterRule | undefined,
   ): void {
     if (!filterRule) {
       return;

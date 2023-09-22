@@ -71,7 +71,7 @@ describe("CoreMediaRichTextConfig: Table", () => {
       comment:
         "ckeditor/ckeditor5#9360: We must try at best effort to keep information about rows which are meant to be part of thead.",
       data: wrapContent(
-        `<table><tbody><tr class="tr--header"><td class="td--header">${text}</td></tr></tbody></table>`
+        `<table><tbody><tr class="tr--header"><td class="td--header">${text}</td></tr></tbody></table>`,
       ),
       dataView: wrapContent(`<table><thead><tr><th>${text}</th></tr></thead></table>`),
     },
@@ -85,10 +85,10 @@ describe("CoreMediaRichTextConfig: Table", () => {
       comment:
         "One contract is, that thead merges into existing tbody, so that e.g. class attributes at tbody are kept.",
       data: wrapContent(
-        `<table><tbody class="CLASS"><tr class="tr--header"><td>Head</td></tr><tr><td>Body</td></tr></tbody></table>`
+        `<table><tbody class="CLASS"><tr class="tr--header"><td>Head</td></tr><tr><td>Body</td></tr></tbody></table>`,
       ),
       dataView: wrapContent(
-        `<table><thead><tr><td>Head</td></tr></thead><tbody class="CLASS"><tr><td>Body</td></tr></tbody></table>`
+        `<table><thead><tr><td>Head</td></tr></thead><tbody class="CLASS"><tr><td>Body</td></tr></tbody></table>`,
       ),
     },
     {
@@ -153,7 +153,7 @@ describe("CoreMediaRichTextConfig: Table", () => {
     {
       name: "TABLE#16: th should be transformed to td with class and continue with normal tds.",
       data: wrapContent(
-        `<table><tbody><tr><td class="td--header">Head</td></tr><tr><td>Data</td></tr></tbody></table>`
+        `<table><tbody><tr><td class="td--header">Head</td></tr><tr><td>Data</td></tr></tbody></table>`,
       ),
       dataView: wrapContent(`<table><tbody><tr><th>Head</th></tr><tr><td>Data</td></tr></tbody></table>`),
     },
@@ -170,7 +170,7 @@ describe("CoreMediaRichTextConfig: Table", () => {
         "HTML may provide multiple tbodies, CoreMedia RichText may only have one. Design decision: Only keep attributes of first tbody.",
       data: wrapContent(`<table><tbody class="body1"><tr><td>Body 1</td></tr><tr><td>Body 2</td></tr></tbody></table>`),
       dataView: wrapContent(
-        `<table><tbody class="body1"><tr><td>Body 1</td></tr></tbody><tbody class="body2"><tr><td>Body 2</td></tr></tbody></table>`
+        `<table><tbody class="body1"><tr><td>Body 1</td></tr></tbody><tbody class="body2"><tr><td>Body 2</td></tr></tbody></table>`,
       ),
     },
   ];

@@ -104,7 +104,7 @@ describe("ReducedMatcherPattern", () => {
         const actual = mergePatterns(...patterns);
 
         expect(actual).toStrictEqual(iExpected);
-      }
+      },
     );
   });
 

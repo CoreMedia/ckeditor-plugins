@@ -160,7 +160,7 @@ describe("Differencing Feature", () => {
       // element.
       const expectedDifferenceInEditingView = `${xdiff.change(`<strong>bold&nbsp;</strong>`, EOD)}${xdiff.add(
         `<strong>&nbsp;</strong>`,
-        EOD
+        EOD,
       )}`;
 
       const innerHtml = `This ${strong(difference)}text.`;
@@ -230,9 +230,9 @@ describe("Differencing Feature", () => {
               "alt": name,
               "xlink:href": blobRef,
               "class": "float--right",
-            }
-          )
-        )
+            },
+          ),
+        ),
       );
 
       await editor.setDataAndGetDataView(data);
@@ -254,7 +254,7 @@ describe("Differencing Feature", () => {
         const innerHtml = await xdiffSpanHandle?.innerHTML();
         // Calm static code analysis. Should not happen.
         throw new Error(
-          `Unexpected: inlineImageSpanHandle is ${inlineImageSpanHandle} (innerHtml of xdiff:span: ${innerHtml}).`
+          `Unexpected: inlineImageSpanHandle is ${inlineImageSpanHandle} (innerHtml of xdiff:span: ${innerHtml}).`,
         );
       }
 

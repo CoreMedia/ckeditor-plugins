@@ -18,7 +18,7 @@ export class RichTextSanitizer {
    */
   constructor(
     public readonly strictness: Strictness = Strictness.STRICT,
-    public readonly listener: SanitationListener = silentSanitationListener
+    public readonly listener: SanitationListener = silentSanitationListener,
   ) {}
 
   /**

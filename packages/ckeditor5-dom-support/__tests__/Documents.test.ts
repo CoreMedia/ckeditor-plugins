@@ -26,7 +26,7 @@ describe("Documents", () => {
         expect(document.documentElement.localName).toStrictEqual("html");
         expect(document.documentElement.firstElementChild?.localName).toStrictEqual("head");
         expect(document.documentElement.lastElementChild?.localName).toStrictEqual("body");
-      }
+      },
     );
   });
 
@@ -55,7 +55,7 @@ describe("Documents", () => {
         const document = documentFromXml(xmlString);
         expect(document.documentElement.localName).toStrictEqual(expectedRootElement);
         expect(document.documentElement.firstElementChild?.localName).toStrictEqual(expectedFirstChildElement);
-      }
+      },
     );
   });
 

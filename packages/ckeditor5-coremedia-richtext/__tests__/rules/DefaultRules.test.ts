@@ -92,6 +92,6 @@ describe("DefaultRules", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

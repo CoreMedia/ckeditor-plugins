@@ -85,8 +85,8 @@ describe("Image Features", () => {
           img({
             "alt": content.name,
             "xlink:href": blobReference(content.id),
-          })
-        )
+          }),
+        ),
       );
 
       const dataView = await editor.setDataAndGetDataView(data);
@@ -133,8 +133,8 @@ describe("Image Features", () => {
           img({
             "alt": name,
             "xlink:href": "",
-          })
-        )
+          }),
+        ),
       );
 
       await editor.setDataAndGetDataView(data);
@@ -171,8 +171,8 @@ describe("Image Features", () => {
           img({
             "alt": name,
             "xlink:href": blobReference(id),
-          })
-        )
+          }),
+        ),
       );
 
       await editor.setDataAndGetDataView(data);
@@ -215,8 +215,8 @@ describe("Image Features", () => {
           img({
             "alt": name,
             "xlink:href": blobReference(id),
-          })
-        )
+          }),
+        ),
       );
       const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
 
@@ -247,8 +247,8 @@ describe("Image Features", () => {
           img({
             "alt": name,
             "xlink:href": blobReference(id),
-          })
-        )
+          }),
+        ),
       );
 
       await editor.setDataAndGetDataView(data);
@@ -278,8 +278,8 @@ describe("Image Features", () => {
           img({
             "alt": name,
             "xlink:href": blobReference(imageId),
-          })
-        )
+          }),
+        ),
       );
 
       await editor.setDataAndGetDataView(data);
@@ -307,7 +307,7 @@ describe("Image Features", () => {
         {
           id: linkedContentId,
           name: contentLinkDocumentName,
-        }
+        },
       );
 
       const data = richtext(
@@ -317,9 +317,9 @@ describe("Image Features", () => {
               "alt": name,
               "xlink:href": blobReference(imageId),
             }),
-            { "xlink:href": linkReference(linkedContentId) }
-          )
-        )
+            { "xlink:href": linkReference(linkedContentId) },
+          ),
+        ),
       );
 
       await editor.setDataAndGetDataView(data);
@@ -344,7 +344,7 @@ async function expectNoFloat(editableHandle: ElementHandle<HTMLElement>): Promis
 async function expectFloat(
   editableHandle: ElementHandle<HTMLElement>,
   floatClass: string,
-  computedStyle: string
+  computedStyle: string,
 ): Promise<void> {
   await expect(editableHandle).toHaveSelector("span.image-inline");
   const imgHandle = await editableHandle.$("span.image-inline");

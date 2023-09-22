@@ -23,6 +23,6 @@ describe("DivElements", () => {
         direction,
         htmlString,
       });
-    }
+    },
   );
 });

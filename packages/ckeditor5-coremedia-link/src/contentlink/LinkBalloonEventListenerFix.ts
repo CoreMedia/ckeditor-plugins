@@ -126,7 +126,7 @@ const addCustomClickOutsideHandler = ({
       }
 
       callback();
-    }
+    },
   );
   emitter.listenTo(
     document as unknown as Emitter,
@@ -157,6 +157,6 @@ const addCustomClickOutsideHandler = ({
         }
       }
       callback();
-    }
+    },
   );
 };

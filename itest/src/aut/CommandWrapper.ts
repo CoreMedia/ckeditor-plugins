@@ -29,7 +29,7 @@ export class CommandWrapper extends JSWrapper<Command> {
           throw new Error(`Command '${n}' not available. Available commands: ${[...c.names()].join(", ")}`);
         }
         return command;
-      }, commandName)
+      }, commandName),
     );
   }
 }

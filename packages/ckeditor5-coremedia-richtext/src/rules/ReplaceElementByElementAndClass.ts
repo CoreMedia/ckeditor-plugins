@@ -12,7 +12,7 @@ export interface ReplaceElementByElementAndClassConfig {
 }
 
 export const applyDefaultReplaceElementByElementAndClassConfig = (
-  config: ReplaceElementByElementAndClassConfig
+  config: ReplaceElementByElementAndClassConfig,
 ): Required<ReplaceElementByElementAndClassConfig> => ({
   dataReservedClass: config.viewLocalName,
   direction: "bijective",

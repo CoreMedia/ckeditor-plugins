@@ -21,7 +21,7 @@ required.
 In the `app/` folder, type:
 
 ```shell
-pnpm add "@ckeditor/ckeditor5-font@37.0.1"
+pnpm add "@ckeditor/ckeditor5-font@39.0.2"
 ```
 
 Ensure, to align the CKEditor 5-plugin version with your other CKEditor 5
