@@ -143,15 +143,24 @@ export default class BlocklistEditing extends Plugin {
    * @param wordToBlock - the word to add to the list
    */
   addBlocklistWord(wordToBlock: string): void {
-    // Update internal list
-    this.#addToInternalBlocklist(wordToBlock);
-    // Update markers
-    this.#addMarkersForWord(wordToBlock);
+    // Update internal list and markers
+    // This is a bet. We hope that the serviceAgent call to update the list returns successfully.
+    // Otherwise, these changes will have to be reverted later on.
+    const wasAdded = this.#addToInternalBlocklist(wordToBlock);
+    if (wasAdded) {
+      this.#addMarkersForWord(wordToBlock);
+    }
+
     // Update value in service
     serviceAgent
       .fetchService(createBlocklistServiceDescriptor())
       .then((blocklistService: BlocklistService) => blocklistService.addToBlocklist(wordToBlock))
       .catch((reason) => {
+        // The call was unsuccessful, therefore revert the previous changes:
+        if (wasAdded) {
+          this.#removeFromInternalBlocklist(wordToBlock);
+          this.#removeMarkersForWord(wordToBlock);
+        }
         BlocklistEditing.#logger.warn("Error while adding word to blocklist", reason);
       });
   }
@@ -166,15 +175,21 @@ export default class BlocklistEditing extends Plugin {
    * @param wordToUnblock - the word to remove from the list
    */
   removeBlocklistWord(wordToUnblock: string): void {
-    // Update internal list
-    this.#removeFromInternalBlocklist(wordToUnblock);
-    // Update markers
-    this.#removeMarkersForWord(wordToUnblock);
+    // Update internal list and update markers
+    const wasRemoved = this.#removeFromInternalBlocklist(wordToUnblock);
+    if (wasRemoved) {
+      this.#removeMarkersForWord(wordToUnblock);
+    }
+
     // Update value in service
     serviceAgent
       .fetchService(createBlocklistServiceDescriptor())
       .then((blocklistService: BlocklistService) => blocklistService.removeFromBlocklist(wordToUnblock))
       .catch((reason) => {
+        if (wasRemoved) {
+          this.#addToInternalBlocklist(wordToUnblock);
+          this.#addMarkersForWord(wordToUnblock);
+        }
         BlocklistEditing.#logger.warn("Error while removing word from blocklist", reason);
       });
   }
@@ -184,26 +199,32 @@ export default class BlocklistEditing extends Plugin {
    * Words will be transformed to lowercase before added.
    *
    * @param wordToBlock - the word to add
+   * @returns whether the word was added
    * @private
    */
-  #addToInternalBlocklist(wordToBlock: string) {
+  #addToInternalBlocklist(wordToBlock: string): boolean {
     const lowerCaseWord = wordToBlock.toLowerCase();
     if (!this.internalBlocklist.includes(lowerCaseWord)) {
       this.internalBlocklist.push(lowerCaseWord);
+      return true;
     }
+    return false;
   }
 
   /**
    * Removes a word from the internal blocklist.
    *
    * @param wordToUnblock - the word to remove
+   * @returns whether the word was removed
    * @private
    */
-  #removeFromInternalBlocklist(wordToUnblock: string) {
+  #removeFromInternalBlocklist(wordToUnblock: string): boolean {
     const lowerCaseWord = wordToUnblock.toLowerCase();
-    if (!this.internalBlocklist.includes(lowerCaseWord)) {
+    if (this.internalBlocklist.includes(lowerCaseWord)) {
       this.internalBlocklist = this.internalBlocklist.filter((word) => word !== lowerCaseWord);
+      return true;
     }
+    return false;
   }
 
   /**
