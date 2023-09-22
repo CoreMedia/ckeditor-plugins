@@ -308,7 +308,7 @@ export default class Blocklistui extends Plugin {
       {
         // Use the normal priority because the link UI navigation is more important
         priority: "normal",
-      }
+      },
     );
 
     // Close the panel on the Esc key press when the editable has focus and the balloon is visible.

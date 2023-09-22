@@ -77,7 +77,7 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
         model.createRangeOn(nodeToCheck),
         model,
         createSearchCallback(wordToBlock),
-        results
+        results,
       );
     });
   });
@@ -115,7 +115,7 @@ export const updateFindResultFromRange = (
   range: Range,
   model: Model,
   findCallback: ({ item, text }: { item: Item; text: string }) => ResultType[],
-  startResults: Collection<ResultType> | null
+  startResults: Collection<ResultType> | null,
 ): Collection<ResultType> => {
   const results = startResults ?? new Collection();
   const findAndReplaceUtils = new FindAndReplaceUtils(editor);
@@ -140,7 +140,7 @@ export const updateFindResultFromRange = (
               affectsData: false,
               range: writer.createRange(
                 writer.createPositionAt(item, foundItem.start),
-                writer.createPositionAt(item, foundItem.end)
+                writer.createPositionAt(item, foundItem.end),
               ),
             });
 
@@ -152,7 +152,7 @@ export const updateFindResultFromRange = (
                 label: foundItem.label,
                 marker,
               },
-              index
+              index,
             );
           });
         }

@@ -119,7 +119,7 @@ export default class BlockedWordView extends View {
     return button;
   }
 
-  #createBlockedWordLabel(locale: Locale, bind: BindChain<any>): View {
+  #createBlockedWordLabel(locale: Locale, bind: BindChain<typeof this>): View {
     const label = new View(locale);
 
     label.setTemplate({
