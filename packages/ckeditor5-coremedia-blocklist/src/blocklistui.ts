@@ -1,4 +1,4 @@
-import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin } from "@ckeditor/ckeditor5-core";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
 import blocklistIcon from "../theme/icons/blocklist.svg";
 import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";

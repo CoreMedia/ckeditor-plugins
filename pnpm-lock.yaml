@@ -145,7 +145,7 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-coremedia-blocklist':
-        specifier: ^15.0.1
+        specifier: 15.0.2-rc.1
         version: link:../packages/ckeditor5-coremedia-blocklist
       '@coremedia/ckeditor5-coremedia-content-clipboard':
         specifier: 15.0.2-rc.1
@@ -433,13 +433,13 @@ importers:
         specifier: ^37.1.0
         version: 37.1.0
       '@coremedia/ckeditor5-core-common':
-        specifier: ^15.0.1
+        specifier: 15.0.2-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^15.0.1
+        specifier: 15.0.2-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: ^15.0.1
+        specifier: 15.0.2-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
