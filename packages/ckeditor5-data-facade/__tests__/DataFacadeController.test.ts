@@ -2,6 +2,7 @@ import { ContextMismatchError, DataFacade, DataFacadeController, SetDataData } f
 import { Editor } from "@ckeditor/ckeditor5-core";
 import type { EditorUI } from "@ckeditor/ckeditor5-ui";
 import { CKEditorError } from "@ckeditor/ckeditor5-utils";
+import { Autosave } from "@ckeditor/ckeditor5-autosave";
 
 jest.mock("@ckeditor/ckeditor5-core");
 
@@ -41,7 +42,9 @@ describe("DataFacadeController", () => {
       const dataFixture = "DATA";
       const controller = new DataFacadeController();
       const editor = new DummyEditor({
-        plugins: [DataFacade],
+        // We manually need to add Autosave, as we did not mock resolving
+        // required plugins.
+        plugins: [DataFacade, Autosave],
       });
       const dataFacade = editor.plugins.get(DataFacade);
 
@@ -65,7 +68,9 @@ describe("DataFacadeController", () => {
       const dataFixture = "DATA";
       const controller = new DataFacadeController();
       const editor = new DummyEditor({
-        plugins: [DataFacade],
+        // We manually need to add Autosave, as we did not mock resolving
+        // required plugins.
+        plugins: [DataFacade, Autosave],
       });
       const dataFacade = editor.plugins.get(DataFacade);
 
@@ -89,7 +94,9 @@ describe("DataFacadeController", () => {
       const dataFixture = "DATA";
       const controller = new DataFacadeController();
       const editor = new DummyEditor({
-        plugins: [DataFacade],
+        // We manually need to add Autosave, as we did not mock resolving
+        // required plugins.
+        plugins: [DataFacade, Autosave],
       });
       const dataFacade = editor.plugins.get(DataFacade);
 
