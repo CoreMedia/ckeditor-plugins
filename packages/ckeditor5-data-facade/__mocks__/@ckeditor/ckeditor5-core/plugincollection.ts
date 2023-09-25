@@ -37,7 +37,7 @@ export class PluginCollection {
             return this.#dataFacade;
           case "Autosave":
             if (!this.#autosave) {
-              this.#autosave = new Autosave();
+              this.#autosave = new Autosave(this.#context);
             }
             return this.#autosave;
           default:

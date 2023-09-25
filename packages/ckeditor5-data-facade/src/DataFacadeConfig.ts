@@ -3,7 +3,7 @@ import { GetDataApi } from "./DataApi";
 /**
  * Save method type.
  */
-export type Save = (dataApi: GetDataApi) => Promise<never>;
+export type Save = (dataApi: GetDataApi) => Promise<void>;
 
 /**
  * The configuration of the `DataFacade`.
