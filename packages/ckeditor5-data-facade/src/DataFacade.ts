@@ -5,8 +5,7 @@ import type { DataContextOptions } from "./DataContextOptions";
 import { DataFacadeController } from "./DataFacadeController";
 import type { DataApi } from "./DataApi";
 import { Autosave } from "@ckeditor/ckeditor5-autosave";
-import type { AutosaveAdapter } from "@ckeditor/ckeditor5-autosave/src/autosave";
-import type { DataFacadeConfig } from "./DataFacadeConfig";
+import type { DataFacadeConfig, Save } from "./DataFacadeConfig";
 
 /**
  * This facade is meant to control data in- and output. It ensures that any
@@ -35,10 +34,11 @@ import type { DataFacadeConfig } from "./DataFacadeConfig";
  * may cause overhead such as additional network communication, subsequent
  * publication steps or even may trigger translation processes.
  */
-export class DataFacade extends Plugin implements DataApi, AutosaveAdapter {
+export class DataFacade extends Plugin implements DataApi {
   public static readonly pluginName = "DataFacade";
   readonly #dataController: DataFacadeController;
   readonly #config: DataFacadeConfig;
+  readonly #saveFn: Save | undefined;
 
   /**
    * @inheritDoc
@@ -51,6 +51,7 @@ export class DataFacade extends Plugin implements DataApi, AutosaveAdapter {
     super(editor);
 
     this.#config = editor.config.get("dataFacade") ?? {};
+    this.#saveFn = this.#config.save;
 
     this.#dataController = new DataFacadeController(editor);
   }
@@ -62,8 +63,14 @@ export class DataFacade extends Plugin implements DataApi, AutosaveAdapter {
     const initInformation = reportInitStart(this);
     const { editor } = this;
 
-    // Register as save adapter for `Autosave`.
-    editor.plugins.get(Autosave).adapter = this;
+    const saveCallback = () => this.#saveFn?.(this) ?? Promise.resolve();
+
+    if (saveCallback) {
+      // Register as save adapter for `Autosave`.
+      editor.plugins.get(Autosave).adapter = {
+        save: () => saveCallback(),
+      };
+    }
 
     // Propagates _editor ready_. This ensures that our set data win over
     // the initialization behavior, which respects `EditorConfig.initialData`.
@@ -83,14 +90,6 @@ export class DataFacade extends Plugin implements DataApi, AutosaveAdapter {
    */
   get data(): DataFacadeController {
     return this.#dataController;
-  }
-
-  /**
-   * Forwards `save` from `Autosave` to the configured `save` method using
-   * the `GetDataApi`.
-   */
-  async save(): Promise<void> {
-    await this.#config?.save?.(this);
   }
 
   /**
