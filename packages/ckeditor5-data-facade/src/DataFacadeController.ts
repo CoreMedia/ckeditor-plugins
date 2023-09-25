@@ -81,7 +81,7 @@ import { CKEditorError } from "@ckeditor/ckeditor5-utils";
  * ```
  */
 export class DataFacadeController implements DataApi {
-  #logger = LoggerProvider.getLogger("DataFacadeController");
+  static #logger = LoggerProvider.getLogger("DataFacadeController");
   #editor?: Editor;
   #cachedData?: CachedData;
   /**
@@ -142,7 +142,7 @@ export class DataFacadeController implements DataApi {
    * integration.
    */
   #initDelegation(): void {
-    const logger = this.#logger;
+    const logger = DataFacadeController.#logger;
     const editor = this.#editor;
 
     if (!editor) {
@@ -217,6 +217,7 @@ export class DataFacadeController implements DataApi {
    * delegate mode.
    */
   #propagateData(): void {
+    const logger = DataFacadeController.#logger;
     const { editor } = this;
     const cachedData = this.#cachedData;
 
@@ -234,6 +235,10 @@ export class DataFacadeController implements DataApi {
     editor.data.set(cachedData.data, cachedData.options);
 
     cachedData.version = editor.model.document.version;
+
+    logger.debug(`Propagated data of length ${cachedData.data.length} as document version ${cachedData.version}:`, {
+      data: cachedData,
+    });
   }
 
   /**
@@ -266,6 +271,8 @@ export class DataFacadeController implements DataApi {
    * `rootName` any other options are ignored if data are retrieved from cache.
    */
   getData(options: GetDataOptions & DataContextOptions = {}): string {
+    const logger = DataFacadeController.#logger;
+
     if (this.#delegate) {
       return this.#delegate.getData(options);
     }
@@ -274,6 +281,7 @@ export class DataFacadeController implements DataApi {
     const cachedData = this.#cachedData;
 
     if (!cachedData) {
+      logger.debug("getData: No cached data. Retrieving data directly from editor.");
       return editor?.data.get(options) ?? "";
     }
 
@@ -291,9 +299,28 @@ export class DataFacadeController implements DataApi {
       });
     }
 
-    if (!editor || cachedVersion === editor.model.document.version) {
-      return this.#pickData(data, options);
+    const currentVersion = editor?.model?.document?.version;
+
+    if (!editor || cachedVersion === currentVersion) {
+      const dataFromCache = this.#pickData(data, options);
+
+      if (logger.isDebugEnabled()) {
+        if (editor) {
+          logger.debug(
+            `getData: No editorial updates since last set data for version ${cachedVersion}. Serving data from cache:`,
+            { data: dataFromCache },
+          );
+        } else {
+          logger.debug(`getData: Editor unavailable, yet. Serving data from cache:`, { data: dataFromCache });
+        }
+      }
+
+      return dataFromCache;
     }
+
+    logger.debug(
+      `getData: Editorial changes applied (last version on set: ${cachedVersion}, current version: ${currentVersion}. Providing data directly from editor.`,
+    );
 
     return editor.data.get(options);
   }
