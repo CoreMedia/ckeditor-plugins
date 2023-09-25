@@ -1,1 +1,1 @@
-export class Autosave {}
+export { Autosave } from "./autosave";
