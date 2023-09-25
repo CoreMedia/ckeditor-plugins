@@ -6,7 +6,6 @@ import { DataApi } from "./DataApi";
 import { CachedData } from "./CachedData";
 import { ContextMismatchError } from "./ContextMismatchError";
 import { CKEditorError } from "@ckeditor/ckeditor5-utils";
-import { DataFacade } from "./DataFacade";
 
 /**
  * Controller for getting and setting data. It prefers providing data on get
@@ -82,9 +81,6 @@ import { DataFacade } from "./DataFacade";
  * ```
  */
 export class DataFacadeController implements DataApi {
-  static #instanceCount = 0;
-  readonly instanceId: number;
-
   #logger = LoggerProvider.getLogger("DataFacadeController");
   #editor?: Editor;
   #cachedData?: CachedData;
@@ -104,7 +100,6 @@ export class DataFacadeController implements DataApi {
    */
   constructor(editor?: Editor) {
     this.#editor = editor;
-    this.instanceId = DataFacadeController.#instanceCount++;
   }
 
   /**
@@ -156,12 +151,12 @@ export class DataFacadeController implements DataApi {
 
     const { plugins } = editor;
 
-    if (!plugins.has(DataFacade)) {
+    if (!plugins.has("DataFacade")) {
       logger.debug("Running in standalone mode only. No DataFacade available for given at instance.");
       return;
     }
 
-    const dataFacade = plugins.get(DataFacade);
+    const dataFacade = plugins.get("DataFacade");
 
     const { data: boundDataFacadeController } = dataFacade;
 
