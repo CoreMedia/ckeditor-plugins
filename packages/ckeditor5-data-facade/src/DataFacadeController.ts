@@ -1,6 +1,6 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
-import { DataContextOptions } from "./DataContextOptions";
+import type { DataContextOptions } from "./DataContextOptions";
 import type { Editor } from "@ckeditor/ckeditor5-core";
 import { DataApi } from "./DataApi";
 import { CachedData } from "./CachedData";
@@ -82,6 +82,9 @@ import { DataFacade } from "./DataFacade";
  * ```
  */
 export class DataFacadeController implements DataApi {
+  static #instanceCount = 0;
+  readonly instanceId: number;
+
   #logger = LoggerProvider.getLogger("DataFacadeController");
   #editor?: Editor;
   #cachedData?: CachedData;
@@ -101,6 +104,14 @@ export class DataFacadeController implements DataApi {
    */
   constructor(editor?: Editor) {
     this.#editor = editor;
+    this.instanceId = DataFacadeController.#instanceCount++;
+  }
+
+  /**
+   * Signals, if this data controller is in delegating mode.
+   */
+  get delegating(): boolean {
+    return this.#delegate !== undefined;
   }
 
   /**
@@ -121,8 +132,10 @@ export class DataFacadeController implements DataApi {
       this.#editor = editor;
     }
 
-    this.#initDelegation();
-    this.#propagateData();
+    if (this.editor) {
+      this.#initDelegation();
+      this.#propagateData();
+    }
   }
 
   /**
@@ -143,7 +156,7 @@ export class DataFacadeController implements DataApi {
 
     const { plugins } = editor;
 
-    if (plugins.has(DataFacade)) {
+    if (!plugins.has(DataFacade)) {
       logger.debug("Running in standalone mode only. No DataFacade available for given at instance.");
       return;
     }
@@ -158,7 +171,7 @@ export class DataFacadeController implements DataApi {
       return;
     }
 
-    if (this.#delegate) {
+    if (this.delegating) {
       if (this.#delegate !== boundDataFacadeController) {
         throw new Error("Cannot switch delegation.");
       }
@@ -212,7 +225,7 @@ export class DataFacadeController implements DataApi {
     const { editor } = this;
     const cachedData = this.#cachedData;
 
-    if (!editor || !cachedData || this.#delegate) {
+    if (!editor || !cachedData || this.delegating) {
       /*
        * Do not propagate:
        *
@@ -293,14 +306,19 @@ export class DataFacadeController implements DataApi {
   #pickData(data: SetDataData, options: Pick<NonNullable<GetDataOptions>, "rootName">): string {
     const { rootName = "main" } = options;
     if (typeof data === "string") {
-      return data;
-    }
-    if (rootName in data) {
+      if ("main" === rootName) {
+        return data;
+      }
+    } else if (rootName in data) {
       return data[rootName];
     }
 
     // We simulate the failure from DataController, as if the requested root
     // does not exist.
     throw new CKEditorError("datacontroller-get-non-existent-root", this.editor?.data);
+  }
+
+  toString(): string {
+    return `DataFacadeController{delegating=${this.delegating}, cache=${this.#cachedData ? "<filled>" : "<empty>"}}`;
   }
 }

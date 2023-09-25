@@ -3,7 +3,6 @@
   "include": [
     "./__mocks__",
     "./__tests__",
-    "./src",
-    "../../typings"
+    "./src"
   ]
 }

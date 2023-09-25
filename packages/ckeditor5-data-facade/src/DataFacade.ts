@@ -1,12 +1,12 @@
-import { Editor, EditorReadyEvent, Plugin } from "@ckeditor/ckeditor5-core";
+import { type Editor, type EditorReadyEvent, Plugin } from "@ckeditor/ckeditor5-core";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
-import { DataContextOptions } from "./DataContextOptions";
+import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
+import type { DataContextOptions } from "./DataContextOptions";
 import { DataFacadeController } from "./DataFacadeController";
-import { DataApi } from "./DataApi";
+import type { DataApi } from "./DataApi";
 import { Autosave } from "@ckeditor/ckeditor5-autosave";
-import { AutosaveAdapter } from "@ckeditor/ckeditor5-autosave/src/autosave";
-import { DataFacadeConfig } from "./DataFacadeConfig";
+import type { AutosaveAdapter } from "@ckeditor/ckeditor5-autosave/src/autosave";
+import type { DataFacadeConfig } from "./DataFacadeConfig";
 
 /**
  * This facade is meant to control data in- and output. It ensures that any

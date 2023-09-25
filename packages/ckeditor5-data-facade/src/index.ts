@@ -2,7 +2,7 @@
  * @module ckeditor5-data-facade
  */
 
-export type { ContextMismatchError } from "./ContextMismatchError";
+export { ContextMismatchError } from "./ContextMismatchError";
 
 export type { DataApi, GetDataApi, SetDataApi } from "./DataApi";
 
