@@ -23,16 +23,16 @@ export abstract class Editor {
   readonly config;
   readonly #eventsOnce = new Map<string, () => void>();
 
-  protected constructor(config: Record<string, unknown | unknown[]>) {
+  protected constructor(config?: Record<string, unknown | unknown[]>) {
     // Config should exist first, so that plugins may already access it.
-    this.config = new Config(config);
+    this.config = new Config(config ?? {});
     this.plugins = new PluginCollection(this, config?.plugins as unknown[] | undefined);
     this.instanceId = Editor.#instanceCount++;
 
     let delayInit = false;
 
     // Some special mock behavior configuration.
-    if (config.hasOwnProperty("mock")) {
+    if (config?.hasOwnProperty("mock")) {
       const mockConfig = config.mock as MockConfig;
       if (mockConfig.initDelay) {
         delayInit = true;
