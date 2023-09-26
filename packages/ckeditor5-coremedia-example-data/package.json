@@ -14,6 +14,11 @@
     "node": "18",
     "pnpm": "^8.6.9"
   },
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./src/index.js",
+    "types": "./src/index.d.ts"
+  },
   "license": "Apache-2.0",
   "devDependencies": {
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
