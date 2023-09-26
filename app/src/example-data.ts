@@ -12,8 +12,9 @@ import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-
 import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
 import { richTextDocument } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextDOM";
 import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/EntitiesData";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { View } from "@ckeditor/ckeditor5-engine";
+import { initExamples } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { Editor } from "@ckeditor/ckeditor5-core";
 
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
@@ -162,26 +163,22 @@ const exampleData: Record<string, string> = {
   ).replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
-export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
+const dumpEditingViewOnRender = (editor: Editor): void => {
   const {
     editing: { view },
   } = editor;
-  try {
-    // noinspection InnerHTMLJS
-    view.once(
-      "render",
-      (event) => {
-        const { source } = event;
-        if (source instanceof View) {
-          console.log("CKEditor's Editing-Controller rendered data.", {
-            source,
-            innerHtml: source.getDomRoot()?.innerHTML,
-          });
-        }
       },
-      {
-        priority: "lowest",
-      },
+
+  // noinspection InnerHTMLJS
+  view.once(
+    "render",
+    (event) => {
+      const { source } = event;
+      if (source instanceof View) {
+        console.log("CKEditor's Editing-Controller rendered data.", {
+          source,
+          innerHtml: source.getDomRoot()?.innerHTML,
+        });
     );
     editor.data.once(
       "set",
@@ -204,58 +201,34 @@ export const setExampleData = (editor: ClassicEditor, exampleKey: string) => {
     if (xmpInput) {
       xmpInput.value = exampleKey;
     }
-  } catch (e) {
-    console.error(`Failed setting data for ${exampleKey}.`, e);
-  }
+  );
 };
 
-export const initExamples = (editor: ClassicEditor) => {
-  const xmpInput = document.getElementById("xmp-input") as HTMLInputElement;
-  const xmpData = document.getElementById("xmp-data");
-  const reloadBtn = document.getElementById("xmp-reload");
-  const clearBtn = document.getElementById("xmp-clear");
-
-  if (!(xmpInput && xmpData && reloadBtn)) {
-    throw new Error("Required components for Example-Data Loading missing.");
-  }
-
-  // Clear input on focus (otherwise, only the matched option is shown)
-  xmpInput.addEventListener("focus", () => {
-    xmpInput.value = "";
-  });
-  // On change, set the data – or show an error if data are unknown.
-  xmpInput.addEventListener("change", () => {
-    const newValue = xmpInput.value;
-    if (exampleData.hasOwnProperty(newValue)) {
-      xmpInput.classList.remove("error");
-      setExampleData(editor, newValue);
-      xmpInput.blur();
-    } else {
-      xmpInput.classList.add("error");
-      xmpInput.select();
+const dumpDataViewOnRender = (editor: Editor): void => {
+  const { data } = editor;
+  data.once(
+    "set",
+    (event, details) =>
+      console.log("CKEditor's Data-Controller received data via 'set'.", {
+        event,
+        // eslint-disable-next-line
+        data: details[0],
+      }),
+    {
+      priority: "lowest",
     }
-  });
-  // Init the reload-button, to also listen to the value of example input field.
-  reloadBtn.addEventListener("click", () => {
-    const newValue = xmpInput.value;
-    if (exampleData.hasOwnProperty(newValue)) {
-      xmpInput.classList.remove("error");
-      setExampleData(editor, newValue);
-      xmpInput.blur();
-    }
-  });
+  );
+};
 
-  clearBtn?.addEventListener("click", () => {
-    xmpInput.blur();
-    setData(editor, "");
+export const initExamplesAndBindTo = (editor: Editor): void => {
+  initExamples({
+    id: "examples",
+    examples: exampleData,
+    default: "Welcome",
+    onChange: (data: string): void => {
+      dumpEditingViewOnRender(editor);
+      dumpDataViewOnRender(editor);
+      setData(editor, data);
+    },
   });
-
-  // Now add all examples
-  for (const exampleKey of Object.keys(exampleData).sort()) {
-    const option = document.createElement("option");
-    // noinspection InnerHTMLJS
-    option.innerHTML = exampleKey;
-    option.value = exampleKey;
-    xmpData?.appendChild(option);
-  }
 };

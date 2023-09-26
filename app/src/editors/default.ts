@@ -32,7 +32,7 @@ import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integra
 
 import { updatePreview } from "../preview";
 import { initReadOnlyMode } from "../readOnlySupport";
-import { initExamples, setExampleData } from "../example-data";
+import { initExamplesAndBindTo } from "../example-data";
 import {
   CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
@@ -392,7 +392,7 @@ export const createDefaultEditor = (language = "en") => {
       (newEditor.plugins.get("Differencing") as Differencing)?.activateDifferencing();
 
       initReadOnlyMode(newEditor);
-      initExamples(newEditor);
+      initExamplesAndBindTo(newEditor);
       initInputExampleContent(newEditor);
 
       const undoCommand: Command | undefined = newEditor.commands.get("undo");
@@ -410,7 +410,6 @@ export const createDefaultEditor = (language = "en") => {
       window.editor = newEditor;
       console.log("Exposed editor instance as `editor`.");
 
-      setExampleData(newEditor, "Welcome");
       // Initialize Preview
       updatePreview(newEditor.getData());
     })
