@@ -31,7 +31,6 @@ import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-map
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
 import { updatePreview } from "../preview";
-import { initReadOnlyMode } from "../readOnlySupport";
 import { initExamplesAndBindTo } from "../example-data";
 import {
   CoreMediaStudioEssentials,
@@ -59,6 +58,7 @@ import type {
   LatestCoreMediaRichTextConfig,
   V10CoreMediaRichTextConfig,
 } from "@coremedia/ckeditor5-coremedia-richtext";
+import { initReadOnlyToggle } from "../InitReadOnlyToggle";
 /**
  * Typings for CKEditorInspector, as it does not ship with typings yet.
  */
@@ -391,7 +391,16 @@ export const createDefaultEditor = (language = "en") => {
 
       (newEditor.plugins.get("Differencing") as Differencing)?.activateDifferencing();
 
-      initReadOnlyMode(newEditor);
+      initReadOnlyToggle({
+        toolbarId: "applicationToolbar",
+        onToggle: (readOnly) => {
+          if (readOnly) {
+            newEditor.enableReadOnlyMode("exampleApp");
+          } else {
+            newEditor.disableReadOnlyMode("exampleApp");
+          }
+        },
+      });
       initExamplesAndBindTo(newEditor);
       initInputExampleContent(newEditor);
 
