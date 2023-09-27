@@ -392,7 +392,6 @@ export const createDefaultEditor = (language = "en") => {
       (newEditor.plugins.get("Differencing") as Differencing)?.activateDifferencing();
 
       initReadOnlyToggle({
-        toolbarId: "applicationToolbar",
         onToggle: (readOnly) => {
           if (readOnly) {
             newEditor.enableReadOnlyMode("exampleApp");

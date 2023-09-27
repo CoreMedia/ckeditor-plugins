@@ -100,7 +100,7 @@ input.error {
 
 /* --------- PREVIEW STYLES  ---------------------------------------------------------------------------------------- */
 .preview {
-  display: inline-block;
+  display: none;
   vertical-align: top;
   background-color: white;
   padding: 2px 2em;
@@ -114,8 +114,8 @@ input.error {
   min-height: calc(var(--ck-sample-editor-min-height) + 38.67px);
 }
 
-.preview.hidden {
-  display: none;
+.with-preview .preview {
+  display: inline-block;
 }
 
 #input-examples.hidden {
@@ -159,7 +159,7 @@ main .ck-editor[role='application'] .ck.ck-content,
   padding: 1.5em 2em;
 }
 
-.ck.ck-editor.with-preview {
+.with-preview .ck.ck-editor {
   display: inline-block;
   vertical-align: top;
   width: calc(50% - 8px) !important;
@@ -383,5 +383,3 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
 .editor-tab.active:hover {
   opacity: 0.8;
 }
-
-

@@ -1,51 +1,91 @@
 import { dataFormatter } from "./DataFormatter";
+import { ApplicationToolbarConfig, requireApplicationToolbar } from "./ApplicationToolbar";
 
-const WITH_PREVIEW_CLASS = "with-preview";
-const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
+const previewToggleButtonId = "previewToggle";
+const showPreviewBtnLabel = "Show Preview";
+const hidePreviewBtnLabel = "Hide Preview";
+const visibleState = "visible";
+const hiddenState = "hidden";
 
-const getEditor = () => document.getElementsByClassName("ck-editor")[0];
+const withPreviewClass = "with-preview";
+const defaultPreviewPanelId = "preview";
+const previewClass = "preview";
 
-const setupPreview = () => {
-  const preview = getPreviewPanel();
+export interface PreviewConfig extends ApplicationToolbarConfig {
+  /**
+   * ID of the preview panel. Defaults to `preview`.
+   */
+  previewId?: string;
+}
+
+export const initPreview = (config?: PreviewConfig) => {
+  const { previewId = defaultPreviewPanelId } = config ?? {};
+
+  const toolbar = requireApplicationToolbar(config);
+  const preview = document.getElementById(previewId);
+  const previewParent = preview?.parentElement;
+
   if (!preview) {
-    throw new Error("No Preview Panel found.");
+    throw new Error(`Cannot find preview element having ID  "${previewId}".`);
   }
-  preview.innerText = "waiting for ckeditor changes...";
-};
 
-const updatePreview = (data: string, formatter: keyof typeof dataFormatter = "xml") => {
-  const preview = getPreviewPanel();
-  if (!preview) {
-    return;
+  if (!previewParent) {
+    throw new Error(`Preview with ID "${previewId}" misses required parent element.`);
   }
-  preview.innerText = dataFormatter[formatter](data, "empty");
-};
 
-const renderPreviewButton = () => {
-  const preview = getPreviewPanel();
-  if (!preview) {
-    return;
-  }
-  const previewButton = document.querySelector("#previewButton");
-  if (!previewButton) {
-    return;
-  }
-  previewButton.addEventListener("click", () => {
-    preview.hidden = !preview.hidden;
-    if (preview.hidden) {
-      // remove preview-mode
-      getEditor().classList.remove(WITH_PREVIEW_CLASS);
-      previewButton.textContent = "Show XML Preview";
-      preview.classList.add("hidden");
+  const button = document.createElement("button");
+
+  button.id = previewToggleButtonId;
+  button.title = `Shows preview of data as they would be stored via external service like CoreMedia CMS.`;
+  button.textContent = showPreviewBtnLabel;
+  button.dataset.currentState = hiddenState;
+
+  document.body.dataset.previewId = previewId;
+  preview.classList.add(previewClass);
+  preview.innerText = "No data received yet.";
+
+  toolbar.appendChild(button);
+
+  const showPreview = () => {
+    previewParent.classList.add(withPreviewClass);
+    button.textContent = hidePreviewBtnLabel;
+    button.dataset.currentState = visibleState;
+  };
+
+  const hidePreview = () => {
+    previewParent.classList.remove(withPreviewClass);
+    button.textContent = showPreviewBtnLabel;
+    button.dataset.currentState = hiddenState;
+  };
+
+  const isVisible = () => button.dataset.currentState === visibleState;
+
+  const togglePreview = () => {
+    if (isVisible()) {
+      hidePreview();
     } else {
-      // set preview-mode
-      getEditor().classList.add(WITH_PREVIEW_CLASS);
-      previewButton.textContent = "Hide XML Preview";
-      preview.classList.remove("hidden");
+      showPreview();
     }
-  });
+  };
+
+  button.addEventListener("click", togglePreview);
+
+  // The initial state of the preview.
+  hidePreview();
 };
 
-renderPreviewButton();
+const getPreviewPanel = (): HTMLElement => {
+  const previewId = document.body.dataset.previewId;
+  if (!previewId) {
+    throw new Error(`Preview ID not exposed at body.`);
+  }
+  const preview = document.getElementById(previewId);
+  if (!preview) {
+    throw new Error(`Preview with ID ${previewId} as denoted by body does not exist.`);
+  }
+  return preview;
+};
 
-export { setupPreview, updatePreview };
+export const updatePreview = (data: string, formatter: keyof typeof dataFormatter = "xml") => {
+  getPreviewPanel().innerText = dataFormatter[formatter](data, "empty");
+};

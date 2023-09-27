@@ -1,4 +1,4 @@
-import { setupPreview } from "./preview";
+import { initPreview } from "./preview";
 import { createDefaultEditor } from "./editors/default";
 import { createBBCodeEditor } from "./editors/bbCode";
 
@@ -79,6 +79,6 @@ initToggleEditorTabs();
 
 const lang = initLanguage();
 
-setupPreview();
+initPreview();
 createDefaultEditor(lang);
 createBBCodeEditor(lang);

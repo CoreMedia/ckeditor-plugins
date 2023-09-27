@@ -1,8 +1,6 @@
-export interface ReadOnlyToggleConfig {
-  /**
-   * ID of toolbar button to add the read only toggle button to.
-   */
-  toolbarId: string;
+import { ApplicationToolbarConfig, requireApplicationToolbar } from "./ApplicationToolbar";
+
+export interface ReadOnlyToggleConfig extends ApplicationToolbarConfig {
   /**
    * Callback to trigger on read-only change.
    *
@@ -18,13 +16,8 @@ const readWriteState = "read-write";
 const readOnlyState = "read-only";
 
 export const initReadOnlyToggle = (config: ReadOnlyToggleConfig): void => {
-  const { toolbarId, onToggle } = config;
-  const toolbar = document.getElementById(toolbarId);
-
-  if (!toolbar) {
-    throw new Error(`Cannot find toolbar element having ID  "${toolbarId}".`);
-  }
-
+  const { onToggle } = config;
+  const toolbar = requireApplicationToolbar(config);
   const button = document.createElement("button");
 
   button.id = readOnlyModeButtonId;

@@ -47,7 +47,6 @@
   </div>
   <div class="centered">
     <div id="applicationToolbar">
-      <button id="previewButton">Show XML Preview</button>
       <button id="inputExampleContentButton">Show Input Example Content</button>
     </div>
 
@@ -64,7 +63,9 @@
         <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
         <!-- The data inside are given in data-format of CKEditor, which is CoreMedia RichText 1.0. -->
         <div id="editor"></div>
-        <div id="preview" class="preview hidden" hidden></div>
+        <div id="preview">
+          <!-- The preview displaying the "stored data" will be rendered here. -->
+        </div>
       </div>
     </div>
     <div id="bbcodeEditorRow" class="row editor-row">
