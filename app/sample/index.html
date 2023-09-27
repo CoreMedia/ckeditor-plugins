@@ -8,19 +8,21 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
   <link rel="stylesheet" type="text/css" href="coremedia.css">
   <!--
-    Unfortunately it was not possible to simply import the CKEditorInspector in the ts file.
-    The CKEditorInspector was always undefined. This way it works, and it is fine for an example application.
+    Unfortunately, it was impossible to simply import the CKEditorInspector in
+    the ts file. The CKEditorInspector was always undefined. This way it works,
+    and it is fine for an example application.
   -->
   <script src="../node_modules/@ckeditor/ckeditor5-inspector/build/inspector.js"></script>
 </head>
 <body data-editor="ClassicEditor" data-collaboration="false">
 
-<div id="notifications"></div>
-
 <header>
+  <div id="notifications">
+    <!-- Place to render notifications like "open in tab" -->
+  </div>
   <div class="centered">
     <h1><a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener noreferrer"><img
-      src="https://c.cksource.com/a/1/logos/ckeditor5.svg" alt="CKEditor 5 logo">CKEditor 5</a></h1>
+            src="https://c.cksource.com/a/1/logos/ckeditor5.svg" alt="CKEditor 5 logo">CKEditor 5</a></h1>
     <nav>
       <ul>
         <li><a href="https://ckeditor.com/docs/ckeditor5/" target="_blank" rel="noopener noreferrer">Documentation</a>
@@ -32,7 +34,9 @@
       </ul>
     </nav>
   </div>
-  <div id="examples"></div>
+  <div id="examples">
+    <!-- Place to render example selection combobox to. -->
+  </div>
 </header>
 
 <main>
@@ -78,7 +82,7 @@
     <a href="https://www.coremedia.com/" target="_blank" rel="noopener">CoreMedia</a>
   </p>
 </footer>
-  <script src="../dist/translations/de.js"></script>
-  <script src="../dist/ckeditor.js"></script>
+<script src="../dist/translations/de.js"></script>
+<script src="../dist/ckeditor.js"></script>
 </body>
 </html>
