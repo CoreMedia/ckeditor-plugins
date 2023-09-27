@@ -1,4 +1,3 @@
-import { default as format } from "xml-formatter";
 import { dataFormatter } from "./DataFormatter";
 
 const WITH_PREVIEW_CLASS = "with-preview";
@@ -14,12 +13,12 @@ const setupPreview = () => {
   preview.innerText = "waiting for ckeditor changes...";
 };
 
-const updatePreview = (data: string) => {
+const updatePreview = (data: string, formatter: keyof typeof dataFormatter = "xml") => {
   const preview = getPreviewPanel();
   if (!preview) {
     return;
   }
-  preview.innerText = dataFormatter.xml(data, "empty");
+  preview.innerText = dataFormatter[formatter](data, "empty");
 };
 
 const renderPreviewButton = () => {
