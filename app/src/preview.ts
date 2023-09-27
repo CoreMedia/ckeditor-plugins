@@ -1,4 +1,5 @@
 import { default as format } from "xml-formatter";
+import { dataFormatter } from "./DataFormatter";
 
 const WITH_PREVIEW_CLASS = "with-preview";
 const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
@@ -18,12 +19,7 @@ const updatePreview = (data: string) => {
   if (!preview) {
     return;
   }
-  preview.innerText = data
-    ? format(data, {
-        indentation: "  ",
-        collapseContent: false,
-      })
-    : "empty";
+  preview.innerText = dataFormatter.xml(data, "empty");
 };
 
 const renderPreviewButton = () => {
