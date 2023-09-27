@@ -1,0 +1,16 @@
+import { SwitchButton, SwitchButtonConfig } from "./SwitchButton";
+
+const dataTypes = {
+  ["richtext" as const]: "Rich Text",
+  ["bbcode" as const]: "BBCode",
+};
+
+export const initDataTypeSwitch = (config: SwitchButtonConfig<keyof typeof dataTypes>): void => {
+  new SwitchButton({
+    id: "dataTypeSwitch",
+    default: "richtext",
+    states: dataTypes,
+    label: "Data Type",
+    ...config,
+  }).init();
+};

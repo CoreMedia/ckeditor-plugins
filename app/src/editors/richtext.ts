@@ -30,7 +30,6 @@ import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
-import { updatePreview } from "../preview";
 import { initExamplesAndBindTo } from "../example-data";
 import {
   CoreMediaStudioEssentials,
@@ -41,7 +40,7 @@ import {
 import { initInputExampleContent } from "../inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 
-import { Command, Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
+import { Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import { saveData } from "../dataFacade";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/src/paste/PasteContentPlugin";
@@ -58,15 +57,8 @@ import type {
   LatestCoreMediaRichTextConfig,
   V10CoreMediaRichTextConfig,
 } from "@coremedia/ckeditor5-coremedia-richtext";
-import { initReadOnlyToggle } from "../InitReadOnlyToggle";
-/**
- * Typings for CKEditorInspector, as it does not ship with typings yet.
- */
-// See https://github.com/ckeditor/ckeditor5-inspector/issues/173
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-declare class CKEditorInspector {
-  static attach(editorOrConfig: Editor | Record<string, Editor>, options?: { isCollapsed?: boolean }): string[];
-}
+import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
+import { ApplicationState } from "../ApplicationState";
 
 const {
   objectInline: withinTextIcon,
@@ -135,8 +127,6 @@ const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttribu
       ],
     };
 
-const editorElementSelector = "#editor";
-
 const getRichTextConfig = (
   richTextCompatibility: string | true
 ): Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig => {
@@ -156,13 +146,12 @@ const getRichTextConfig = (
   };
 };
 
-export const createDefaultEditor = (language = "en") => {
-  const sourceElement = document.querySelector(editorElementSelector) as HTMLElement;
-  if (!sourceElement) {
-    throw new Error(`No element with id ${editorElementSelector} defined in html. Nothing to create the editor in.`);
-  }
-
-  ClassicEditor.create(sourceElement, {
+export const createRichTextEditor: CKEditorInstanceFactory = (
+  sourceElement: HTMLElement,
+  state: ApplicationState
+): Promise<ClassicEditor> => {
+  const { uiLanguage } = state;
+  return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
     plugins: [
       ...imagePlugins,
@@ -340,7 +329,7 @@ export const createDefaultEditor = (language = "en") => {
     },
     language: {
       // Language switch only applies to editor instance.
-      ui: language,
+      ui: uiLanguage,
       // Won't change the language of content.
       content: "en",
     },
@@ -364,6 +353,7 @@ export const createDefaultEditor = (language = "en") => {
         { name: "mark", inherit: "span" },
       ],
     },
+    // @ts-expect-error - TODO: Typing issues as it seems.
     [COREMEDIA_LINK_CONFIG_KEY]: {
       linkBalloon: {
         keepOpen: {
@@ -376,52 +366,9 @@ export const createDefaultEditor = (language = "en") => {
       // Demonstrates, how you may add more contents on the fly.
       contents: [{ id: 2, name: "Some Example Document", type: "document" }],
     },
-  })
-    .then((newEditor: ClassicEditor) => {
-      CKEditorInspector.attach(
-        {
-          "main-editor": newEditor,
-        },
-        {
-          // With hash parameter #expandInspector you may expand the
-          // inspector by default.
-          isCollapsed: !getHashParam("expandInspector"),
-        }
-      );
-
-      (newEditor.plugins.get("Differencing") as Differencing)?.activateDifferencing();
-
-      initReadOnlyToggle({
-        onToggle: (readOnly) => {
-          if (readOnly) {
-            newEditor.enableReadOnlyMode("exampleApp");
-          } else {
-            newEditor.disableReadOnlyMode("exampleApp");
-          }
-        },
-      });
-      initExamplesAndBindTo(newEditor);
-      initInputExampleContent(newEditor);
-
-      const undoCommand: Command | undefined = newEditor.commands.get("undo");
-
-      if (undoCommand) {
-        //@ts-expect-error Editor extension, no typing available.
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-        newEditor.resetUndo = () => undoCommand.clearStack();
-        console.log("Registered `editor.resetUndo()` to clear undo history.");
-      }
-
-      // Do it late, so that we also have a clear signal (e.g., to integration
-      // tests), that the editor is ready.
-      //@ts-expect-error Unknown, but we set it.
-      window.editor = newEditor;
-      console.log("Exposed editor instance as `editor`.");
-
-      // Initialize Preview
-      updatePreview(newEditor.getData());
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  }).then((newEditor: ClassicEditor) => {
+    initExamplesAndBindTo(newEditor);
+    initInputExampleContent(newEditor);
+    return newEditor;
+  });
 };

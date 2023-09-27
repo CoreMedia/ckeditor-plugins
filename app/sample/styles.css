@@ -360,26 +360,3 @@ span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-obje
     font-size: 1.5em;
   }
 }
-
-
-.editor-tab {
-  padding: 10px 20px;
-  background-color: white;
-  color: #333;
-  border: 1px solid var(--ck-color-base-border);
-  margin-top: 16px;
-  margin-bottom: 4px;
-  opacity: 0.5;
-}
-
-.editor-tab:hover {
-  opacity: 0.3;
-}
-
-.editor-tab.active {
-  opacity: 1;
-}
-
-.editor-tab.active:hover {
-  opacity: 0.8;
-}

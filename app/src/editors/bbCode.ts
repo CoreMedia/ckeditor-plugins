@@ -7,34 +7,22 @@ import { Heading } from "@ckeditor/ckeditor5-heading";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 
-import { Editor } from "@ckeditor/ckeditor5-core";
-import { getHashParam } from "../HashParams";
 import { Link } from "@ckeditor/ckeditor5-link";
+import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
+import { ApplicationState } from "../ApplicationState";
 
-/**
- * Typings for CKEditorInspector, as it does not ship with typings yet.
- */
-// See https://github.com/ckeditor/ckeditor5-inspector/issues/173
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-declare class CKEditorInspector {
-  static attach(editorOrConfig: Editor | Record<string, Editor>, options?: { isCollapsed?: boolean }): string[];
-}
-
-const editorElementSelector = "#bbcodeEditor";
-
-export const createBBCodeEditor = (language = "en") => {
-  const sourceElement = document.querySelector(editorElementSelector) as HTMLElement;
-  if (!sourceElement) {
-    throw new Error(`No element with id ${editorElementSelector} defined in html. Nothing to create the editor in.`);
-  }
-
-  ClassicEditor.create(document.querySelector(editorElementSelector) as HTMLElement, {
+export const createBBCodeEditor: CKEditorInstanceFactory = (
+  sourceElement: HTMLElement,
+  state: ApplicationState
+): Promise<ClassicEditor> => {
+  const { uiLanguage } = state;
+  return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
     plugins: [Autosave, Bold, Essentials, Heading, Italic, Underline, Paragraph, SourceEditing, Link, BBCode],
     toolbar: ["undo", "redo", "|", "heading", "|", "bold", "italic", "underline", "|", "link", "|", "sourceEditing"],
     language: {
       // Language switch only applies to editor instance.
-      ui: language,
+      ui: uiLanguage,
       // Won't change the language of content.
       content: "en",
     },
@@ -45,20 +33,5 @@ export const createBBCodeEditor = (language = "en") => {
         return Promise.resolve();
       },
     },
-  })
-    .then((newEditor: ClassicEditor) => {
-      CKEditorInspector.attach(
-        {
-          "bbcode-editor": newEditor,
-        },
-        {
-          // With hash parameter #expandInspector you may expand the
-          // inspector by default.
-          isCollapsed: !getHashParam("expandInspector"),
-        }
-      );
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  });
 };
