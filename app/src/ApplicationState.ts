@@ -4,6 +4,7 @@ export type InspectorState = "expanded" | "collapsed";
 export type CompatibilityMode = "v10" | "latest";
 export type DataType = "richtext" | "bbcode";
 export type UiLanguage = "en" | "de";
+export type ReadOnlyMode = "rw" | "ro";
 
 export class ApplicationState {
   /**
@@ -21,20 +22,22 @@ export class ApplicationState {
    *   CoreMedia Rich Text.
    * * `latest`: Just assume the latest plugin version.
    */
-  readonly #compatibility: "v10" | "latest";
+  readonly #compatibility: CompatibilityMode;
   /**
    * The data type to support.
    */
-  readonly #dataType: "richtext" | "bbcode";
+  readonly #dataType: DataType;
+  #readOnlyMode: ReadOnlyMode;
 
   constructor(config: Record<string, string | boolean> = {}) {
-    const { uiLanguage, inspector, compatibility, dataType } = config;
+    const { uiLanguage, inspector, compatibility, dataType, readOnly } = config;
 
     this.#uiLanguage = typeof uiLanguage === "string" && uiLanguage.toLowerCase() === "de" ? "de" : "en";
     this.#inspector =
       typeof inspector === "string" && inspector.toLowerCase() === "expanded" ? "expanded" : "collapsed";
     this.#compatibility = typeof compatibility === "string" && compatibility.toLowerCase() === "v10" ? "v10" : "latest";
     this.#dataType = typeof dataType === "string" && dataType.toLowerCase() === "bbcode" ? "bbcode" : "richtext";
+    this.#readOnlyMode = typeof readOnly === "boolean" && readOnly ? "ro" : "rw";
   }
 
   get uiLanguage(): UiLanguage {
@@ -69,5 +72,14 @@ export class ApplicationState {
     if (this.#dataType !== dataType) {
       setHashParam("dataType", dataType, true);
     }
+  }
+
+  get readOnlyMode(): ReadOnlyMode {
+    return this.#readOnlyMode;
+  }
+
+  set readOnlyMode(mode) {
+    this.#readOnlyMode = mode;
+    setHashParam("readOnly", mode === "ro");
   }
 }

@@ -105,7 +105,7 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
     throw new Error(`Required element with id ${editorElementId} not defined in HTML.`);
   }
 
-  const { dataType } = state;
+  const { dataType, uiLanguage, readOnlyMode } = state;
   let factory: CKEditorInstanceFactory;
   switch (dataType) {
     case "richtext":
@@ -119,8 +119,6 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
   }
 
   const editor = await factory(sourceElement, state);
-
-  const { uiLanguage } = state;
 
   initDataTypeSwitch({
     default: dataType,
@@ -141,12 +139,14 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
   optionallyActivateDifferencing(editor);
 
   initReadOnlyToggle({
+    default: readOnlyMode,
     onSwitch: (mode) => {
       if (mode === "ro") {
         editor.enableReadOnlyMode("exampleApp");
       } else {
         editor.disableReadOnlyMode("exampleApp");
       }
+      state.readOnlyMode = mode;
     },
   });
 
