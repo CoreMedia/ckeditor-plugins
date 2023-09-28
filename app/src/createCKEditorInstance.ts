@@ -98,7 +98,7 @@ const initializePreviewData = (editor: ClassicEditor, { dataType }: ApplicationS
   }
 };
 
-export const createCKEditorInstance = (state: ApplicationState): Promise<ClassicEditor> => {
+export const createCKEditorInstance = async (state: ApplicationState): Promise<ClassicEditor> => {
   const sourceElement = document.getElementById(editorElementId);
 
   if (!sourceElement) {
@@ -117,39 +117,41 @@ export const createCKEditorInstance = (state: ApplicationState): Promise<Classic
     default:
       throw new Error(`Unknown data type: ${dataType}`);
   }
-  return factory(sourceElement, state).then((editor) => {
-    const { dataType, uiLanguage } = state;
 
-    initDataTypeSwitch({
-      default: dataType,
-      onSwitch(mode): void {
-        state.dataType = mode;
-      },
-    });
+  const editor = await factory(sourceElement, state);
 
-    initUiLanguageSwitch({
-      default: uiLanguage,
-      onSwitch(lang): void {
-        state.uiLanguage = lang;
-      },
-    });
+  const { uiLanguage } = state;
 
-    attachInspector(editor, state);
-    optionallyActivateDifferencing(editor);
-    initReadOnlyToggle({
-      onSwitch: (mode) => {
-        if (mode === "ro") {
-          editor.enableReadOnlyMode("exampleApp");
-        } else {
-          editor.disableReadOnlyMode("exampleApp");
-        }
-      },
-    });
-    registerResetUndo(editor);
-    initializePreviewData(editor, state);
-
-    registerGlobalEditor(editor);
-
-    return editor;
+  initDataTypeSwitch({
+    default: dataType,
+    onSwitch(mode): void {
+      state.dataType = mode;
+    },
   });
+
+  initUiLanguageSwitch({
+    default: uiLanguage,
+    onSwitch(lang): void {
+      state.uiLanguage = lang;
+    },
+  });
+
+  attachInspector(editor, state);
+
+  optionallyActivateDifferencing(editor);
+
+  initReadOnlyToggle({
+    onSwitch: (mode) => {
+      if (mode === "ro") {
+        editor.enableReadOnlyMode("exampleApp");
+      } else {
+        editor.disableReadOnlyMode("exampleApp");
+      }
+    },
+  });
+
+  registerResetUndo(editor);
+  initializePreviewData(editor, state);
+  registerGlobalEditor(editor);
+  return editor;
 };
