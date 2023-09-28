@@ -3,7 +3,7 @@ import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { Command, Editor } from "@ckeditor/ckeditor5-core";
 import { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
-import { initReadOnlyToggle } from "./InitReadOnlyToggle";
+import { initReadOnlyToggle } from "./ReadOnlySwitch";
 import { updatePreview } from "./preview";
 import { createRichTextEditor } from "./editors/richtext";
 import { createBBCodeEditor } from "./editors/bbCode";
@@ -117,7 +117,7 @@ export const createCKEditorInstance = (state: ApplicationState): Promise<Classic
     default:
       throw new Error(`Unknown data type: ${dataType}`);
   }
-  return factory(sourceElement, state).then(async (editor) => {
+  return factory(sourceElement, state).then((editor) => {
     const { dataType, uiLanguage } = state;
 
     initDataTypeSwitch({
@@ -137,8 +137,8 @@ export const createCKEditorInstance = (state: ApplicationState): Promise<Classic
     attachInspector(editor, state);
     optionallyActivateDifferencing(editor);
     initReadOnlyToggle({
-      onToggle: (readOnly) => {
-        if (readOnly) {
+      onSwitch: (mode) => {
+        if (mode === "ro") {
           editor.enableReadOnlyMode("exampleApp");
         } else {
           editor.disableReadOnlyMode("exampleApp");

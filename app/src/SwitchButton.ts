@@ -5,6 +5,7 @@ export interface SwitchButtonConfig<T extends string = string> extends Applicati
   default?: T;
   states?: Record<T, string>;
   label?: string;
+  enableDelay?: boolean;
   onSwitch: (state: T) => void;
 }
 
@@ -13,8 +14,13 @@ const sortKeysByValue = <T extends string = string>(states: Record<T, string>): 
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([k]) => k as T);
 
-export type StrictSwitchButtonConfig<T extends string = string> = Required<Omit<SwitchButtonConfig<T>, "toolbarId">> &
+export type StrictSwitchButtonConfig<T extends string = string> = Required<
+  Omit<SwitchButtonConfig<T>, "toolbarId" | "enableDelay">
+> &
+  Pick<SwitchButtonConfig<T>, "enableDelay"> &
   ApplicationToolbarConfig;
+
+const delayTitle = "Delay Modifiers: Ctrl/Cmd: 10s, Shift: 60s, Ctrl/Cmd+Shift: 120s";
 
 export class SwitchButton<T extends string = string> {
   readonly config: StrictSwitchButtonConfig<T>;
@@ -24,7 +30,7 @@ export class SwitchButton<T extends string = string> {
   }
 
   init() {
-    const { id, default: defaultState, states, label, onSwitch } = this.config;
+    const { id, default: defaultState, states, label, onSwitch, enableDelay = false } = this.config;
     const toolbar = requireApplicationToolbar(this.config);
     const button = document.createElement("button");
     const keys = sortKeysByValue(states);
@@ -40,16 +46,35 @@ export class SwitchButton<T extends string = string> {
       return keys[nextIdx];
     };
 
-    const switchState = () => {
+    let switchDelayTimer: number;
+
+    const switchState = (countDownSeconds = 0) => {
       const switchTo = (button.dataset.next ?? defaultState) as T;
       const switchNext = nextState(switchTo);
-      button.title = `Press to switch to ${states[switchNext]}.`;
-      button.textContent = `${label}: ${states[switchTo]}`;
-      button.dataset.next = switchNext;
-      onSwitch(switchTo);
+      if (countDownSeconds <= 0) {
+        button.title = `Press to switch to ${states[switchNext]}.${enableDelay ? ` ${delayTitle}` : ""}`;
+        button.textContent = `${label}: ${states[switchTo]}`;
+        button.dataset.next = switchNext;
+        onSwitch(switchTo);
+      } else {
+        button.textContent = `${label}: ${states[switchTo]} (in ${countDownSeconds} s)`;
+        switchDelayTimer = window.setTimeout(switchState, 1000, countDownSeconds - 1);
+      }
     };
 
-    button.addEventListener("click", () => switchState());
+    button.addEventListener("click", (evt: MouseEvent): void => {
+      let countDownSeconds = 0;
+      if (enableDelay) {
+        window.clearTimeout(switchDelayTimer);
+        const ctrlOrCommandKey = evt.ctrlKey || evt.metaKey;
+        if (evt.shiftKey) {
+          countDownSeconds = ctrlOrCommandKey ? 120 : 60;
+        } else if (ctrlOrCommandKey) {
+          countDownSeconds = 10;
+        }
+      }
+      switchState(countDownSeconds);
+    });
 
     // Init with default state.
     switchState();

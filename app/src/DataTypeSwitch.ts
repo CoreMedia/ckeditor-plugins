@@ -1,6 +1,6 @@
 import { SwitchButton, SwitchButtonConfig } from "./SwitchButton";
 
-const dataTypes = {
+export const dataTypes = {
   ["richtext" as const]: "Rich Text",
   ["bbcode" as const]: "BBCode",
 };
