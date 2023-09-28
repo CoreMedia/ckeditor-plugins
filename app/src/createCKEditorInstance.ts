@@ -4,7 +4,7 @@ import { Command, Editor } from "@ckeditor/ckeditor5-core";
 import { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import { initReadOnlyToggle } from "./ReadOnlySwitch";
-import { updatePreview } from "./preview";
+import { initPreview, updatePreview } from "./preview";
 import { createRichTextEditor } from "./editors/richtext";
 import { createBBCodeEditor } from "./editors/bbCode";
 import { initDataTypeSwitch } from "./DataTypeSwitch";
@@ -149,6 +149,8 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
       state.readOnlyMode = mode;
     },
   });
+
+  initPreview(state);
 
   registerResetUndo(editor);
   initializePreviewData(editor, state);

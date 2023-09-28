@@ -1,21 +1,14 @@
 import { dataFormatter } from "./DataFormatter";
-import { ApplicationToolbarConfig } from "./ApplicationToolbar";
 import { initPreviewSwitch } from "./PreviewSwitch";
+import { ApplicationState } from "./ApplicationState";
 
 const previewToggleButtonId = "previewToggle";
 const withPreviewClass = "with-preview";
-const defaultPreviewPanelId = "preview";
+const previewPanelId = "preview";
 const previewClass = "preview";
 
-export interface PreviewConfig extends ApplicationToolbarConfig {
-  /**
-   * ID of the preview panel. Defaults to `preview`.
-   */
-  previewId?: string;
-}
-
-export const initPreview = (config?: PreviewConfig) => {
-  const { previewId = defaultPreviewPanelId } = config ?? {};
+export const initPreview = (state: ApplicationState) => {
+  const previewId = previewPanelId;
 
   const preview = document.getElementById(previewId);
   const previewParent = preview?.parentElement;
@@ -40,15 +33,15 @@ export const initPreview = (config?: PreviewConfig) => {
 
   initPreviewSwitch({
     id: previewToggleButtonId,
-    default: "hidden",
-    onSwitch(state) {
-      if (state === "visible") {
+    default: state.previewState,
+    onSwitch(previewState) {
+      if (previewState === "visible") {
         showPreview();
       } else {
         hidePreview();
       }
+      state.previewState = previewState;
     },
-    toolbarId: config?.toolbarId,
   });
 
   preview.classList.add(previewClass);

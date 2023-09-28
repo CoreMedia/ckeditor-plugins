@@ -1,4 +1,3 @@
-import { initPreview } from "./preview";
 import { createCKEditorInstance } from "./createCKEditorInstance";
 import { ApplicationState } from "./ApplicationState";
 import { getHashParams } from "./HashParams";
@@ -14,8 +13,6 @@ if (showHideExampleContentButton && inputExampleContentFrame) {
     } input example contents`;
   });
 }
-
-initPreview();
 
 void createCKEditorInstance(new ApplicationState(getHashParams())).catch((error) => {
   console.error(error);
