@@ -1,12 +1,8 @@
 import { dataFormatter } from "./DataFormatter";
-import { ApplicationToolbarConfig, requireApplicationToolbar } from "./ApplicationToolbar";
+import { ApplicationToolbarConfig } from "./ApplicationToolbar";
+import { initPreviewSwitch } from "./PreviewSwitch";
 
 const previewToggleButtonId = "previewToggle";
-const showPreviewBtnLabel = "Show Preview";
-const hidePreviewBtnLabel = "Hide Preview";
-const visibleState = "visible";
-const hiddenState = "hidden";
-
 const withPreviewClass = "with-preview";
 const defaultPreviewPanelId = "preview";
 const previewClass = "preview";
@@ -21,7 +17,6 @@ export interface PreviewConfig extends ApplicationToolbarConfig {
 export const initPreview = (config?: PreviewConfig) => {
   const { previewId = defaultPreviewPanelId } = config ?? {};
 
-  const toolbar = requireApplicationToolbar(config);
   const preview = document.getElementById(previewId);
   const previewParent = preview?.parentElement;
 
@@ -33,45 +28,31 @@ export const initPreview = (config?: PreviewConfig) => {
     throw new Error(`Preview with ID "${previewId}" misses required parent element.`);
   }
 
-  const button = document.createElement("button");
-
-  button.id = previewToggleButtonId;
-  button.title = `Shows preview of data as they would be stored via external service like CoreMedia CMS.`;
-  button.textContent = showPreviewBtnLabel;
-  button.dataset.currentState = hiddenState;
-
   document.body.dataset.previewId = previewId;
-  preview.classList.add(previewClass);
-  preview.innerText = "No data received yet.";
-
-  toolbar.appendChild(button);
 
   const showPreview = () => {
     previewParent.classList.add(withPreviewClass);
-    button.textContent = hidePreviewBtnLabel;
-    button.dataset.currentState = visibleState;
   };
 
   const hidePreview = () => {
     previewParent.classList.remove(withPreviewClass);
-    button.textContent = showPreviewBtnLabel;
-    button.dataset.currentState = hiddenState;
   };
 
-  const isVisible = () => button.dataset.currentState === visibleState;
+  initPreviewSwitch({
+    id: previewToggleButtonId,
+    default: "hidden",
+    onSwitch(state) {
+      if (state === "visible") {
+        showPreview();
+      } else {
+        hidePreview();
+      }
+    },
+    toolbarId: config?.toolbarId,
+  });
 
-  const togglePreview = () => {
-    if (isVisible()) {
-      hidePreview();
-    } else {
-      showPreview();
-    }
-  };
-
-  button.addEventListener("click", togglePreview);
-
-  // The initial state of the preview.
-  hidePreview();
+  preview.classList.add(previewClass);
+  preview.innerText = "No data received yet.";
 };
 
 const getPreviewPanel = (): HTMLElement => {
