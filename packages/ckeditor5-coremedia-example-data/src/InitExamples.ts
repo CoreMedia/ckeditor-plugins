@@ -1,3 +1,5 @@
+import { ExampleData } from "./ExampleData";
+
 const createLabelFor = (inputElement: HTMLInputElement): HTMLLabelElement => {
   const { id: inputId } = inputElement;
   const element = document.createElement("label");
@@ -188,7 +190,7 @@ export interface ExamplesConfig {
    * Set of examples to initialize. The key is the title to render within
    * the option selection; the value represents the data to set.
    */
-  examples: Record<string, string>;
+  examples: ExampleData;
   /**
    * Listener, that will be informed on any valid selection about the data
    * to set at the editor.
