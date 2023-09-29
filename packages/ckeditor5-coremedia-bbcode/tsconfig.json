@@ -2,6 +2,12 @@
   "extends": "../../tsconfig.json",
   "include": [
     "./__tests__",
-    "./src",
-  ]
+    "./src"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@bbob/html/es": ["./types/@bbob/html/es/index.d.ts"],
+      "@bbob/preset-html5": ["./types/@bbob/preset-html5/index.d.ts"],
+    }
+  }
 }

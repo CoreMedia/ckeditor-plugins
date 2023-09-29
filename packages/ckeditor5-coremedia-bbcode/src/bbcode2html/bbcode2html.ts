@@ -4,6 +4,4 @@ import presetHTML5 from "@bbob/preset-html5";
 /**
  * Parses BBCode to HTML.
  */
-export const bbcode2html = (bbcode: string): string => {
-  return bbobHTML(bbcode, presetHTML5());
-};
+export const bbcode2html = (bbcode: string): string => bbobHTML(bbcode, presetHTML5());
