@@ -1026,6 +1026,49 @@ importers:
         specifier: ^4.9.5
         version: 4.9.5
 
+  packages/ckeditor5-data-facade:
+    dependencies:
+      '@coremedia/ckeditor5-core-common':
+        specifier: 16.0.1-rc.1
+        version: link:../ckeditor5-core-common
+      '@coremedia/ckeditor5-logging':
+        specifier: 16.0.1-rc.1
+        version: link:../ckeditor5-logging
+    devDependencies:
+      '@ckeditor/ckeditor5-autosave':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@ckeditor/ckeditor5-core':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@ckeditor/ckeditor5-engine':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@ckeditor/ckeditor5-ui':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@ckeditor/ckeditor5-utils':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@coremedia-internal/ckeditor5-jest-test-helpers':
+        specifier: ^1.0.0
+        version: link:../ckeditor5-jest-test-helpers
+      '@types/jest':
+        specifier: ^29.5.4
+        version: 29.5.5
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.17.18)
+      jest-each:
+        specifier: ^29.7.0
+        version: 29.7.0
+      rimraf:
+        specifier: ^5.0.1
+        version: 5.0.1
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
+
   packages/ckeditor5-dataprocessor-support:
     dependencies:
       '@coremedia/ckeditor5-common':
@@ -2536,7 +2579,6 @@ packages:
     dependencies:
       ckeditor5: 39.0.2
       lodash-es: 4.17.21
-    dev: false
 
   /@ckeditor/ckeditor5-basic-styles@39.0.2:
     resolution: {integrity: sha512-sp5sfE4d8Tng/zIssBK+SgaEkPfGcbmoGkjbHhPlWYAoQB9ONwvWkRZy9s3C+H0gfsEj3EqqxUKY70Us0yT8rA==}
@@ -6075,10 +6117,10 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/expect-utils': 29.5.0
-      jest-get-type: 29.4.3
+      jest-get-type: 29.6.3
       jest-matcher-utils: 29.5.0
       jest-message-util: 29.5.0
-      jest-util: 29.5.0
+      jest-util: 29.7.0
     dev: true
 
   /expect@29.7.0:
@@ -7315,11 +7357,6 @@ packages:
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
-  /jest-get-type@29.4.3:
-    resolution: {integrity: sha512-J5Xez4nRRMjk8emnTpWrlkyb9pfRQQanDrvWHhsR1+VUfbwxi30eVcZFlcdGInRibU4G5LwHXpI7IRHU0CY+gg==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dev: true
-
   /jest-get-type@29.6.3:
     resolution: {integrity: sha512-zrteXnqYxfQh7l5FHyL38jL39di8H8rHoecLH3JNxH3BwOrBsNeabdap5e0I23lD4HHI8W5VFBZqG4Eaq5LNcw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -7582,6 +7619,7 @@ packages:
       ci-info: 3.8.0
       graceful-fs: 4.2.11
       picomatch: 2.3.1
+    dev: false
 
   /jest-util@29.7.0:
     resolution: {integrity: sha512-z6EbKajIpqGKU56y5KBUgy1dt1ihhQJgWzUlZHArA/+X2ad7Cb5iF+AK1EWVL/Bo7Rz9uurpqw6SiBCefUbCGA==}
