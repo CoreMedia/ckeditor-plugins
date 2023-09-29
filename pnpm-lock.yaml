@@ -443,28 +443,28 @@ importers:
         version: link:../ckeditor5-core-common
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^37.1.0
-        version: 37.1.0
+        specifier: ^39.0.2
+        version: 39.0.2
       '@ckeditor/ckeditor5-engine':
-        specifier: ^37.1.0
-        version: 37.1.0
+        specifier: ^39.0.2
+        version: 39.0.2
       '@coremedia/ckeditor5-dom-support':
         specifier: 16.0.1-rc.2
         version: link:../ckeditor5-dom-support
       '@types/jest':
-        specifier: ^29.5.1
+        specifier: ^29.5.4
         version: 29.5.5
       jest:
-        specifier: ^29.5.0
+        specifier: ^29.7.0
         version: 29.7.0(@types/node@18.17.18)
       jest-each:
-        specifier: ^29.5.0
+        specifier: ^29.7.0
         version: 29.7.0
       jest-xml-matcher:
         specifier: ^1.2.0
         version: 1.2.0
       rimraf:
-        specifier: ^5.0.0
+        specifier: ^5.0.1
         version: 5.0.1
       typescript:
         specifier: ^4.9.5
@@ -2685,15 +2685,6 @@ packages:
       ckeditor5: 39.0.2
     dev: false
 
-  /@ckeditor/ckeditor5-core@37.1.0:
-    resolution: {integrity: sha512-edewiWlMCK5BPN9Can0A9skob9dNDMrv09khiKaUYK5PEobZZQSyUBck52vXpt255u2rnlmhF5phTqsQo5EiOw==}
-    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
-    dependencies:
-      '@ckeditor/ckeditor5-engine': 37.1.0
-      '@ckeditor/ckeditor5-utils': 37.1.0
-      lodash-es: 4.17.21
-    dev: true
-
   /@ckeditor/ckeditor5-core@39.0.2:
     resolution: {integrity: sha512-/xtor5vIXgwBVsAj+yO/wyzezQUmXabdkb/T8aSXtO2665zeOVbDbtSsJ1Ov7Tz5A4Ia1pA9d7iDCt7E8Kva7A==}
     dependencies:
@@ -2752,14 +2743,6 @@ packages:
     dependencies:
       ckeditor5: 39.0.2
       lodash-es: 4.17.21
-
-  /@ckeditor/ckeditor5-engine@37.1.0:
-    resolution: {integrity: sha512-D/xWNOgqk3G1qtv8P2UCmpHcIONjJE0NRJeJuJ8jppIgOYpbVG/7KSuzJYV7G1M9oGSBAeNb7U+lz7y/eg38Hw==}
-    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
-    dependencies:
-      '@ckeditor/ckeditor5-utils': 37.1.0
-      lodash-es: 4.17.21
-    dev: true
 
   /@ckeditor/ckeditor5-engine@39.0.2:
     resolution: {integrity: sha512-ERcEpIrmTML0/uhukkC+ZJSOx4mRaPbNG5vPEBXIentfDpzu1NrmUhGZRGXaw5lltL+NJbuTI0wjEINap0Hl3w==}
@@ -2921,13 +2904,6 @@ packages:
       '@ckeditor/ckeditor5-core': 39.0.2
       '@ckeditor/ckeditor5-ui': 39.0.2
       '@ckeditor/ckeditor5-utils': 39.0.2
-
-  /@ckeditor/ckeditor5-utils@37.1.0:
-    resolution: {integrity: sha512-r4rSbzMy0WFSuP0IRd+yYUMjzb279eiICksOEiHViiqoKQ8RqcGDlh+zOaACkgw6xvLxj96C5MwG2wsZsGJqcA==}
-    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
-    dependencies:
-      lodash-es: 4.17.21
-    dev: true
 
   /@ckeditor/ckeditor5-utils@39.0.2:
     resolution: {integrity: sha512-aqiGhPJxEihSLW21lGWcAvjVTTwJYxEbfMk1eLf/BEY3euy6iltRC6EqbXkyJDcKGU7cQtk6JXAIkH+D2FF87g==}
