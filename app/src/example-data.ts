@@ -4,30 +4,13 @@ import {
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
 import { setData } from "./dataFacade";
-import { welcomeTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/WelcomeTextData";
-import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/DifferencingData";
-import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/GrsData";
-import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LoremIpsumData";
-import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LinkTargetData";
-import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/EntitiesData";
 import { View } from "@ckeditor/ckeditor5-engine";
-import { initExamples } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { initExamples, richTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { contentLinkData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/ContentLinkData";
-import { invalidData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/InvalidData";
-import { simpleData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/SimpleData";
 
 // noinspection HtmlUnknownAttribute
 const exampleData: Record<string, string> = {
-  ...differencingData,
-  ...entitiesData,
-  ...linkTargetData,
-  ...loremIpsumData,
-  ...grsData,
-  ...welcomeTextData,
-  ...contentLinkData,
-  ...invalidData,
-  ...simpleData,
+  ...richTextData,
   "Various Links": PREDEFINED_MOCK_LINK_DATA,
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
 };
