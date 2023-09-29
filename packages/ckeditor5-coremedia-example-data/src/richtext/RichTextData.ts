@@ -8,6 +8,7 @@ import { loremIpsumData } from "./LoremIpsumData";
 import { simpleData } from "./SimpleData";
 import { welcomeTextData } from "./WelcomeTextData";
 import { ExampleData } from "../ExampleData";
+import { challengingData } from "./ChallengingData";
 
 export const richTextData: ExampleData = {
   ...contentLinkData,
@@ -19,4 +20,5 @@ export const richTextData: ExampleData = {
   ...loremIpsumData,
   ...simpleData,
   ...welcomeTextData,
+  ...challengingData,
 };
