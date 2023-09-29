@@ -9,13 +9,13 @@ import { differencingData } from "@coremedia-internal/ckeditor5-coremedia-exampl
 import { grsData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/GrsData";
 import { loremIpsumData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LoremIpsumData";
 import { linkTargetData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/LinkTargetData";
-import { h1, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
 import { entitiesData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/EntitiesData";
 import { View } from "@ckeditor/ckeditor5-engine";
 import { initExamples } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { contentLinkData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/ContentLinkData";
 import { invalidData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/InvalidData";
+import { simpleData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/SimpleData";
 
 // noinspection HtmlUnknownAttribute
 const exampleData: Record<string, string> = {
@@ -27,10 +27,9 @@ const exampleData: Record<string, string> = {
   ...welcomeTextData,
   ...contentLinkData,
   ...invalidData,
+  ...simpleData,
   "Various Links": PREDEFINED_MOCK_LINK_DATA,
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
-  "Empty": "",
-  "Hello": richtext(`<p>Hello World!</p>`),
 };
 
 const dumpEditingViewOnRender = (editor: Editor): void => {
