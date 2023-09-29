@@ -100,8 +100,7 @@ const addExampleOptions = (
   // Now add all examples
   for (const exampleKey of exampleKeys.sort()) {
     const option = document.createElement("option");
-    // noinspection InnerHTMLJS
-    option.innerHTML = exampleKey;
+    option.textContent = exampleKey;
     option.value = exampleKey;
     option.defaultSelected = exampleKey === defaultKey;
     dataList.appendChild(option);
