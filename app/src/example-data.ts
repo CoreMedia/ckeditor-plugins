@@ -15,6 +15,7 @@ import { View } from "@ckeditor/ckeditor5-engine";
 import { initExamples } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { contentLinkData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/ContentLinkData";
+import { invalidData } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/data/InvalidData";
 
 // noinspection HtmlUnknownAttribute
 const exampleData: Record<string, string> = {
@@ -25,15 +26,11 @@ const exampleData: Record<string, string> = {
   ...grsData,
   ...welcomeTextData,
   ...contentLinkData,
+  ...invalidData,
   "Various Links": PREDEFINED_MOCK_LINK_DATA,
   "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   "Empty": "",
   "Hello": richtext(`<p>Hello World!</p>`),
-  "Invalid RichText": richtext(
-    `${h1(
-      "Invalid RichText",
-    )}<p>Parsing cannot succeed below, because xlink-namespace declaration is missing.</p><p>LINK</p>`,
-  ).replace("LINK", `<a xlink:href="https://example.org/">Link</a>`),
 };
 
 const dumpEditingViewOnRender = (editor: Editor): void => {
