@@ -31,7 +31,6 @@ const dumpEditingViewOnRender = (editor: Editor): void => {
   const {
     editing: { view },
   } = editor;
-      },
 
   // noinspection InnerHTMLJS
   view.once(
@@ -43,28 +42,11 @@ const dumpEditingViewOnRender = (editor: Editor): void => {
           source,
           innerHtml: source.getDomRoot()?.innerHTML,
         });
-    );
-    editor.data.once(
-      "set",
-      (event, details) =>
-        console.log("CKEditor's Data-Controller received data via 'set'.", {
-          event,
-          // eslint-disable-next-line
-          data: details[0],
-        }),
-      {
-        priority: "lowest",
-      },
-    );
-
-    const data = exampleData[exampleKey];
-    console.log("Setting Example Data.", { [exampleKey]: data });
-    setData(editor, data);
-
-    const xmpInput = document.getElementById("xmp-input") as HTMLInputElement;
-    if (xmpInput) {
-      xmpInput.value = exampleKey;
-    }
+      }
+    },
+    {
+      priority: "lowest",
+    },
   );
 };
 
@@ -80,7 +62,7 @@ const dumpDataViewOnRender = (editor: Editor): void => {
       }),
     {
       priority: "lowest",
-    }
+    },
   );
 };
 
