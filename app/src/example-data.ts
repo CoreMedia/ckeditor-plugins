@@ -5,15 +5,27 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
 import { setData } from "./dataFacade";
 import { View } from "@ckeditor/ckeditor5-engine";
-import { initExamples, richTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import {
+  bbCodeData,
+  ExampleData,
+  initExamples,
+  richTextData,
+} from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { Editor } from "@ckeditor/ckeditor5-core";
 
-// noinspection HtmlUnknownAttribute
-const exampleData: Record<string, string> = {
-  ...richTextData,
-  "Various Links": PREDEFINED_MOCK_LINK_DATA,
-  "Various Images": PREDEFINED_MOCK_BLOB_DATA,
+const exampleData: {
+  richtext: ExampleData;
+  bbcode: ExampleData;
+} = {
+  richtext: {
+    ...richTextData,
+    "Various Links": PREDEFINED_MOCK_LINK_DATA,
+    "Various Images": PREDEFINED_MOCK_BLOB_DATA,
+  },
+  bbcode: bbCodeData,
 };
+
+export type ExampleDataType = keyof typeof exampleData;
 
 const dumpEditingViewOnRender = (editor: Editor): void => {
   const {
@@ -72,10 +84,10 @@ const dumpDataViewOnRender = (editor: Editor): void => {
   );
 };
 
-export const initExamplesAndBindTo = (editor: Editor): void => {
+export const initExamplesAndBindTo = (editor: Editor, examplesType: ExampleDataType = "richtext"): void => {
   initExamples({
     id: "examples",
-    examples: exampleData,
+    examples: exampleData[examplesType],
     default: "Welcome",
     onChange: (data: string): void => {
       dumpEditingViewOnRender(editor);

@@ -30,7 +30,6 @@ import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
-import { initExamplesAndBindTo } from "../example-data";
 import {
   CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
@@ -367,7 +366,6 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       contents: [{ id: 2, name: "Some Example Document", type: "document" }],
     },
   }).then((newEditor: ClassicEditor) => {
-    initExamplesAndBindTo(newEditor);
     initInputExampleContent(newEditor);
     return newEditor;
   });

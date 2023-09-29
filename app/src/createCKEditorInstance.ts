@@ -9,6 +9,7 @@ import { createRichTextEditor } from "./editors/richtext";
 import { createBBCodeEditor } from "./editors/bbCode";
 import { initDataTypeSwitch } from "./DataTypeSwitch";
 import { initUiLanguageSwitch } from "./UiLanguageSwitch";
+import { initExamplesAndBindTo } from "./example-data";
 
 /**
  * Typings for CKEditorInspector, as it does not ship with typings yet.
@@ -119,6 +120,8 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
   }
 
   const editor = await factory(sourceElement, state);
+
+  initExamplesAndBindTo(editor, dataType);
 
   initDataTypeSwitch({
     default: dataType,
