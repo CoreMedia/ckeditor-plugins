@@ -58,6 +58,7 @@ import type {
 } from "@coremedia/ckeditor5-coremedia-richtext";
 import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { ApplicationState } from "../ApplicationState";
+import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 
 const {
   objectInline: withinTextIcon,
@@ -127,7 +128,7 @@ const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttribu
     };
 
 const getRichTextConfig = (
-  richTextCompatibility: string | true
+  richTextCompatibility: string | true,
 ): Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig => {
   //  Use v10 for first data-processor architecture, for example.
   if (richTextCompatibility === "v10") {
@@ -147,7 +148,7 @@ const getRichTextConfig = (
 
 export const createRichTextEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
-  state: ApplicationState
+  state: ApplicationState,
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
   return ClassicEditor.create(sourceElement, {
@@ -157,6 +158,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       Alignment,
       Autoformat,
       Autosave,
+      Blocklist,
       BlockQuote,
       Bold,
       Code,
@@ -224,6 +226,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       "|",
       "pasteContent",
       "findAndReplace",
+      "blocklist",
       "|",
       "sourceEditing",
     ],
@@ -266,6 +269,13 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
     },
     link: {
       defaultProtocol: "https://",
+      defaultTargets: [
+        {
+          // May be used to experiment with default target selection.
+          filter: (url) => url.endsWith("#newTab"),
+          target: "_blank",
+        },
+      ],
       ...linkAttributesConfig,
       /*decorators: {
         hasTitle: {
