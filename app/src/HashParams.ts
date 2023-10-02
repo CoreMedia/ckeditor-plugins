@@ -4,21 +4,21 @@
  */
 export const hashParamRegExp = /([^=]*)=(.*)/;
 
-export const getHashParams = (): Record<string, string | boolean> => {
+export const getHashParams = (): Map<string, string | boolean> => {
   // Check for `window`: Required when used from within Jest tests, where
   // 'jsdom' is not available.
   const { location } = window ?? {};
   if (!location) {
-    return {};
+    return new Map();
   }
   const { hash: rawHash } = location;
   if (rawHash.length === 0) {
-    return {};
+    return new Map();
   }
   // substring: Remove hash
   const hash: string = rawHash.substring(1);
   const hashParams: string[] = hash.split(/&/);
-  const parsedHashParams: Record<string, string | boolean> = {};
+  const parsedHashParams = new Map<string, string | boolean>();
   for (const hashParam of hashParams) {
     const paramMatch: RegExpExecArray | null = hashParamRegExp.exec(hashParam);
     let key: string;
@@ -49,16 +49,16 @@ export const getHashParams = (): Record<string, string | boolean> => {
       key = hashParam;
       value = true;
     }
-    parsedHashParams[key] = value;
+    parsedHashParams.set(key, value);
   }
   return parsedHashParams;
 };
 
-export const toHashParam = (hashParams: Record<string, string | boolean>): string => {
+export const toHashParam = (hashParams: Map<string, string | boolean>): string => {
   let result = "";
-  for (const [key, value] of Object.entries(hashParams)) {
+  hashParams.forEach((value, key) => {
     result = `${result}${result ? "&" : ""}${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-  }
+  });
   return result;
 };
 
@@ -70,7 +70,7 @@ export const setHashParam = (key: string, value: string | boolean, reload = fals
   }
 
   const hashParams = getHashParams();
-  hashParams[key] = value;
+  hashParams.set(key, value);
   location.hash = toHashParam(hashParams);
   if (reload) {
     location.reload();
@@ -88,5 +88,5 @@ export const getHashParam = (key: string | undefined): string | boolean => {
   if (key === undefined) {
     return false;
   }
-  return getHashParams()[key] ?? false;
+  return getHashParams().get(key) ?? false;
 };

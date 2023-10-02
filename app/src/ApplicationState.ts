@@ -35,8 +35,13 @@ export class ApplicationState {
   #readOnlyMode: ReadOnlyMode;
   #previewState: PreviewState;
 
-  constructor(config: Record<string, string | boolean> = {}) {
-    const { uiLanguage, inspector, compatibility, dataType, readOnly, showPreview } = config;
+  constructor(config?: Map<string, string | boolean>) {
+    const uiLanguage = config?.get("uiLanguage") ?? "en";
+    const inspector = config?.get("inspector") ?? "collapsed";
+    const compatibility = config?.get("compatibility") ?? "latest";
+    const dataType = config?.get("dataType") ?? "richtext";
+    const readOnly = config?.get("readOnly") ?? false;
+    const showPreview = config?.get("showPreview") ?? false;
 
     this.#uiLanguage = typeof uiLanguage === "string" && uiLanguage.toLowerCase() === "de" ? "de" : "en";
     this.#inspector =
