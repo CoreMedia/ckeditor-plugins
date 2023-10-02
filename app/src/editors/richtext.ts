@@ -39,8 +39,7 @@ import {
 import { initInputExampleContent } from "../inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 
-import { Editor, icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
-import { saveData } from "../dataFacade";
+import { icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/src/paste/PasteContentPlugin";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
@@ -59,6 +58,8 @@ import type {
 import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { ApplicationState } from "../ApplicationState";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
+import { DataFacade } from "@coremedia/ckeditor5-data-facade";
+import { updatePreview } from "../preview";
 
 const {
   objectInline: withinTextIcon,
@@ -165,6 +166,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       CodeBlock,
       ContentLinks,
       ContentClipboard,
+      DataFacade,
       Differencing,
       Essentials,
       FindAndReplace,
@@ -344,12 +346,14 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
     },
     autosave: {
       waitingTime: 1000, // in ms
-      save(currentEditor: Editor) {
+    },
+    dataFacade: {
+      save(dataApi): Promise<void> {
         console.log("Save triggered...");
         const start = performance.now();
-        return saveData(currentEditor, "autosave").then(() => {
-          console.log(`Saved data within ${performance.now() - start} ms.`);
-        });
+        updatePreview(dataApi.getData(), "xml");
+        console.log(`Saved data within ${performance.now() - start} ms.`);
+        return Promise.resolve();
       },
     },
     [COREMEDIA_RICHTEXT_CONFIG_KEY]: getRichTextConfig(richTextCompatibility),

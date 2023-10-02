@@ -46,6 +46,7 @@
     "@coremedia/ckeditor5-coremedia-richtext": "16.0.1-rc.2",
     "@coremedia/ckeditor5-coremedia-studio-essentials": "16.0.1-rc.2",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "16.0.1-rc.2",
+    "@coremedia/ckeditor5-data-facade": "16.0.1-rc.2",
     "@coremedia/ckeditor5-dataprocessor-support": "16.0.1-rc.2",
     "@coremedia/ckeditor5-dom-converter": "16.0.1-rc.2",
     "@coremedia/ckeditor5-font-mapper": "16.0.1-rc.2",

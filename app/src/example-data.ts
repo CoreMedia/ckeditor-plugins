@@ -3,7 +3,6 @@ import {
   PREDEFINED_MOCK_BLOB_DATA,
   PREDEFINED_MOCK_LINK_DATA,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
-import { setData } from "./dataFacade";
 import { View } from "@ckeditor/ckeditor5-engine";
 import {
   bbCodeData,
@@ -12,6 +11,7 @@ import {
   richTextData,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { Editor } from "@ckeditor/ckeditor5-core";
+import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 
 const exampleData: {
   richtext: ExampleData;
@@ -74,7 +74,7 @@ export const initExamplesAndBindTo = (editor: Editor, examplesType: ExampleDataT
     onChange: (data: string): void => {
       dumpEditingViewOnRender(editor);
       dumpDataViewOnRender(editor);
-      setData(editor, data);
+      editor.plugins.get(DataFacade).setData(data);
     },
   });
 };
