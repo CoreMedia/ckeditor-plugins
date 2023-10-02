@@ -26,8 +26,7 @@ const replaceTrailingNewline = (text: string, replacement = ""): string => text.
  * * https://www.bbcode.org/how-to-use-bbcode-a-complete-guide.php
  */
 export const bbCode = {
-  heading: (text: string, level: 1 | 2 | 3 | 4 | 5 | 6) =>
-    `\n[h${level}]${replaceTrailingNewline(text)}[/h${level}]\n`,
+  heading: (text: string, level: 1 | 2 | 3 | 4 | 5 | 6) => `\n[h${level}]${replaceTrailingNewline(text)}[/h${level}]\n`,
   h1: (text: string) => bbCode.heading(text, 1),
   h2: (text: string) => bbCode.heading(text, 2),
   h3: (text: string) => bbCode.heading(text, 3),
