@@ -9,7 +9,8 @@ import {
 
 import { bbcode2html } from "./bbcode2html/bbcode2html";
 import { html2bbcode } from "./html2bbcode/html2bbcode";
-import { defaultRules, HTML2BBCodeRule } from "./html2bbcode/rules/DefaultRules";
+import { defaultRules } from "./html2bbcode/rules/DefaultRules";
+import { HTML2BBCodeRule } from "./html2bbcode/rules/HTML2BBCodeRule";
 
 /**
  * Data processor for BBCode.
