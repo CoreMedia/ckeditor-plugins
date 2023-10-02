@@ -9,7 +9,7 @@ export class TaggedElement {
   /**
    * Signals detected heading level.
    */
-  heading?: 1 | 2 | 3 | 4 | 5 | 6;
+  heading?: number;
   /**
    * Signal, if this element is considered **bold**.
    */

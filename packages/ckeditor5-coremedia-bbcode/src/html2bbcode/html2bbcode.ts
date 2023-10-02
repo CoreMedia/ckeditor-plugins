@@ -20,8 +20,7 @@ export class Html2BBCodeConverter {
     const { after = "", before = "" } = separator ?? {};
     const convertedContent = `${before}${content}${after}`;
     // Replace leading and trailing newlines.
-    convertedContent.replace(/(^[\n\r]*|[\n\r]*$)/, "");
-    return convertedContent;
+    return convertedContent.replace(/(^[\n\r]*|[\n\r]*$)/g, "");
   }
 
   #convertWithChildren(node: Node): {

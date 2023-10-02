@@ -4,5 +4,13 @@ import { underlineRule } from "./Underline";
 import { anchorRule } from "./Anchor";
 import { HTML2BBCodeRule } from "./HTML2BBCodeRule";
 import { paragraphRule } from "./Paragraph";
+import { headingRule } from "./Heading";
 
-export const defaultRules: HTML2BBCodeRule[] = [boldRule, italicRule, underlineRule, anchorRule, paragraphRule];
+export const defaultRules: HTML2BBCodeRule[] = [
+  anchorRule,
+  boldRule,
+  headingRule,
+  italicRule,
+  paragraphRule,
+  underlineRule,
+];
