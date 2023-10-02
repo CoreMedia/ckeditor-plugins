@@ -17,11 +17,11 @@ export const inlineFormatData: ExampleData = {
     `Lorem ${bbCode.style("ipsum", {
       size: "1.5em",
       color: "fuchsia",
-    })} dolor`
+    })} dolor`,
   ),
   Color: paragraphs(
     `${bbCode.h1("Colored Text")}`,
     `Lorem ${bbCode.color("ipsum", "fuchsia")} dolor`,
-    `Lorem ${bbCode.color("ipsum", "#ff0000")} dolor`
+    `Lorem ${bbCode.color("ipsum", "#ff0000")} dolor`,
   ),
 };

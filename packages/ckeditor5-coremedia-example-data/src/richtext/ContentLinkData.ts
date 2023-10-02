@@ -25,7 +25,8 @@ const createLink = (show: string, role: string, href = EXAMPLE_URL) => {
   return serializer.serializeToString(a);
 };
 
-const createContentLinkTableRow = ({ comment, id }: { comment: string; id: number }) => `<tr><td>${createLink("", "", `content:${id}`)}</td><td>${comment || ""}</td></tr>`;
+const createContentLinkTableRow = ({ comment, id }: { comment: string; id: number }) =>
+  `<tr><td>${createLink("", "", `content:${id}`)}</td><td>${comment || ""}</td></tr>`;
 
 const createContentLinkScenario = (title: string, scenarios: { comment: string; id: number }[]) => {
   const scenarioTitle = h1(title);

@@ -1,5 +1,6 @@
 import {
-  DataProcessor, DomConverter,
+  DataProcessor,
+  DomConverter,
   HtmlDataProcessor,
   MatcherPattern,
   ViewDocument,
@@ -9,7 +10,6 @@ import {
 import { bbcode2html } from "./bbcode2html/bbcode2html";
 import { html2bbcode } from "./html2bbcode/html2bbcode";
 import { defaultRules, HTML2BBCodeRule } from "./html2bbcode/rules/DefaultRules";
-import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
 
 /**
  * Data processor for BBCode.

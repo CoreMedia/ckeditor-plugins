@@ -9,7 +9,7 @@ export interface ApplicationToolbarConfig {
 }
 
 export const requireApplicationToolbar = (config?: ApplicationToolbarConfig): HTMLElement => {
-  const { toolbarId = defaultApplicationToolbarId} = config ?? {};
+  const { toolbarId = defaultApplicationToolbarId } = config ?? {};
   const toolbar = document.getElementById(toolbarId);
 
   if (!toolbar) {

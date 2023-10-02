@@ -63,7 +63,7 @@ export const toHashParam = (hashParams: Record<string, string | boolean>): strin
 };
 
 export const setHashParam = (key: string, value: string | boolean, reload = false): void => {
-  const { location, history } = window ?? {};
+  const { location } = window ?? {};
   if (!location) {
     console.info(`Skipped setting hash parameter ${key} to ${value} as window location and/or history is unknown.`);
     return;

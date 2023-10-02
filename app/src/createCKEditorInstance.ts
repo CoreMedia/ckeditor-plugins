@@ -41,7 +41,7 @@ const attachInspector = (editor: Editor, { dataType, inspector }: ApplicationSta
       // With hash parameter #expandInspector you may expand the
       // inspector by default.
       isCollapsed: inspector === "collapsed",
-    }
+    },
   );
 
 const optionallyActivateDifferencing = (editor: Editor): void => {
@@ -87,7 +87,7 @@ const registerGlobalEditor = (editor: Editor): void => {
  * Update preview with data from the editor initially.
  *
  * @param editor - editor to get data from
- * @param dataType - type of data
+ * @param { dataType } - type of data
  */
 const initializePreviewData = (editor: ClassicEditor, { dataType }: ApplicationState): void => {
   switch (dataType) {

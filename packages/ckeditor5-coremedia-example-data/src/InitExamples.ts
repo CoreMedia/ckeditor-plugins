@@ -97,7 +97,7 @@ const initExamplesUi = (parent: ParentNode): ExamplesUiElements => {
 const addExampleOptions = (
   dataList: HTMLDataListElement,
   defaultKey: string | undefined,
-  exampleKeys: string[]
+  exampleKeys: string[],
 ): void => {
   // Now add all examples
   for (const exampleKey of exampleKeys.sort()) {

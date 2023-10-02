@@ -7,6 +7,6 @@ declare module "@bbob/html/es" {
       onlyAllowTags?: string[];
       contextFreeTags?: string[];
       enableEscapeTags?: boolean;
-    }
+    },
   ): string;
 }

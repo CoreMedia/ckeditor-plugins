@@ -54,7 +54,8 @@ export const bbCode = {
     }
     return `[style ${styleOptions.trim()}]${text}[/style]`;
   },
-  color: (text: string, color: string) => color.startsWith("#") ? `[color=${color}]${text}[/color]` : `[color="${color}"]${text}[/color]`,
+  color: (text: string, color: string) =>
+    color.startsWith("#") ? `[color=${color}]${text}[/color]` : `[color="${color}"]${text}[/color]`,
   list: (entries: string[], listType: "ordered" | "unordered" = "unordered") => {
     let result = listType === "unordered" ? `[list]` : `[list=1]`;
     entries.forEach((entry) => {
