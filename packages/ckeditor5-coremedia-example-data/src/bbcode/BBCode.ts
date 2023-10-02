@@ -5,6 +5,8 @@ export interface StyleOptions {
   color?: string;
 }
 
+const replaceTrailingNewline = (text: string, replacement = ""): string => text.replace(/[\n\r]*$/, replacement);
+
 /**
  * BBCode formatting options. This API is just meant for internal use. It is
  * not robust for malicious BBCode.
@@ -24,13 +26,15 @@ export interface StyleOptions {
  * * https://www.bbcode.org/how-to-use-bbcode-a-complete-guide.php
  */
 export const bbCode = {
-  heading: (text: string, level: 1 | 2 | 3 | 4 | 5 | 6) => `[h${level}]${text}[/h${level}]`,
+  heading: (text: string, level: 1 | 2 | 3 | 4 | 5 | 6) =>
+    `\n[h${level}]${replaceTrailingNewline(text)}[/h${level}]\n`,
   h1: (text: string) => bbCode.heading(text, 1),
   h2: (text: string) => bbCode.heading(text, 2),
   h3: (text: string) => bbCode.heading(text, 3),
   h4: (text: string) => bbCode.heading(text, 4),
   h5: (text: string) => bbCode.heading(text, 5),
   h6: (text: string) => bbCode.heading(text, 6),
+  p: (text: string) => `\n${text.replace(/[\n\r]*$/, "\n\n")}`,
   bold: (text: string) => `[b]${text}[/b]`,
   italic: (text: string) => `[i]${text}[/i]`,
   underline: (text: string) => `[u]${text}[/u]`,
@@ -57,23 +61,23 @@ export const bbCode = {
   color: (text: string, color: string) =>
     color.startsWith("#") ? `[color=${color}]${text}[/color]` : `[color="${color}"]${text}[/color]`,
   list: (entries: string[], listType: "ordered" | "unordered" = "unordered") => {
-    let result = listType === "unordered" ? `[list]` : `[list=1]`;
+    let result = listType === "unordered" ? `\n[list]` : `\n[list=1]`;
     entries.forEach((entry) => {
-      result = `${result}\n[*]${entry}`;
+      result = `${result}\n[*]${replaceTrailingNewline(entry, "\n")}`;
     });
     result = `${result}\n[/list]\n`;
     return result;
   },
   table: (entries: string[][]) => {
-    let result = `[table]`;
+    let result = `\n[table]`;
     for (const row of entries) {
-      result = `${result}\n[tr]`;
+      result = `${result}\n[tr]\n`;
       for (const column of row) {
-        result = `${result}\n[td]${column}[/td]`;
+        result = `${result}\n[td]${replaceTrailingNewline(column)}[/td]\n`;
       }
-      result = `${result}\n[/tr]`;
+      result = `${result}\n[/tr]\n`;
     }
-    result = `${result}\n[/table]`;
+    result = `${result}\n[/table]\n`;
     return result;
   },
 };
