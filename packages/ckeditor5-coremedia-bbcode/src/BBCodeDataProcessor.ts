@@ -8,9 +8,7 @@ import {
 } from "@ckeditor/ckeditor5-engine";
 
 import { bbcode2html } from "./bbcode2html/bbcode2html";
-import { html2bbcode } from "./html2bbcode/html2bbcode";
-import { defaultRules } from "./html2bbcode/rules/DefaultRules";
-import { HTML2BBCodeRule } from "./html2bbcode/rules/HTML2BBCodeRule";
+import { html2bbcode } from "./html2bbcode";
 
 /**
  * Data processor for BBCode.
@@ -25,8 +23,6 @@ export default class BBCodeDataProcessor implements DataProcessor {
 
   readonly #domConverter: DomConverter;
 
-  #toDataRules: HTML2BBCodeRule[];
-
   /**
    * Creates a new instance of the BBCode data processor class.
    */
@@ -34,9 +30,6 @@ export default class BBCodeDataProcessor implements DataProcessor {
     this.#htmlDataProcessor = new HtmlDataProcessor(document);
     // Remember and re-use DOM converter.
     this.#domConverter = this.#htmlDataProcessor.domConverter;
-
-    // TODO might be extended in the future
-    this.#toDataRules = defaultRules;
   }
 
   /**
@@ -59,7 +52,7 @@ export default class BBCodeDataProcessor implements DataProcessor {
    */
   public toData(viewFragment: ViewDocumentFragment): string {
     const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
-    return html2bbcode(htmlDomFragment, this.#toDataRules);
+    return html2bbcode(htmlDomFragment);
   }
 
   /**

@@ -11,4 +11,3 @@ export { default as BBCode } from "./BBCode";
 export { default as BBCodeDataProcessor } from "./BBCodeDataProcessor";
 
 export * as bbcode2html from "./bbcode2html/index-doc";
-export * as html2bbcode from "./html2bbcode/index-doc";
