@@ -11,6 +11,38 @@ TODO: Rename to ckeditor5-bbcode... there is nothing CoreMedia specific inside h
 
 TODO: Documentation
 
+## Supported BBCode
+
+The BBCode to HTML processing is based on
+[JiLiZART/BBob](https://github.com/JiLiZART/BBob/tree/master) and its
+HTML5 Preset.
+
+As such, the following tags are supported:
+
+| Tag       | as HTML                                         |
+|-----------|-------------------------------------------------|
+| `[h1]`    | `<h1>`                                          |
+| `[h2]`    | `<h2>`                                          |
+| `[h3]`    | `<h3>`                                          |
+| `[h4]`    | `<h4>`                                          |
+| `[h5]`    | `<h5>`                                          |
+| `[h6]`    | `<h6>`                                          |
+| `[b]`     | `<span style="font-weight: bold;">`             |
+| `[i]`     | `<span style="font-style: italic;">`            |
+| `[u]`     | `<span style="text-decoration: underline;">`    |
+| `[s]`     | `<span style="text-decoration: line-through;">` |
+| `[url]`   | `<a href="...">`                                |
+| `[img]`   | `<img src="...">`                               |
+| `[quote]` | `<blockquote><p>`                               |
+| `[code]`  | `<pre>`                                         |
+| `[style]` | `<span style="...">`                            |
+| `[list]`  | `<ol>` or `<ul>`                                |
+| `[color]` | `<span style="color:...">`                      |
+
+If you experience resulting markup from being stripped within CKEditor 5,
+check your `plugins` configuration or configuration of the General HTML Support
+feature (GHS).
+
 ## Security Considerations
 
 ### Escaping
