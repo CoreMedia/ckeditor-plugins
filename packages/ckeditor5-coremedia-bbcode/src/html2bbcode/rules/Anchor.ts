@@ -3,7 +3,7 @@ import { HTML2BBCodeRule } from "./HTML2BBCodeRule";
 
 export const anchorRule: HTML2BBCodeRule = {
   id: "url",
-  tag(taggedElement): void {
+  process(taggedElement): void {
     const { element } = taggedElement;
     if (!isHTMLAnchorElement(element)) {
       return;

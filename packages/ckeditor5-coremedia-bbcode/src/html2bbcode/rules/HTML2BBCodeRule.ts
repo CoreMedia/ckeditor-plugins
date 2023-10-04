@@ -1,4 +1,4 @@
-import { TaggingRule } from "./TaggingRule";
+import { ProcessingRule } from "./ProcessingRule";
 import { TransformationRule } from "./TransformationRule";
 
 /**
@@ -27,7 +27,7 @@ export interface HTML2BBCodeRule {
    * order may consider, for example, class-list entries to toggle the format
    * to bold.
    */
-  tag?: TaggingRule;
+  process?: ProcessingRule;
   /**
    * Transform the tagged element to BBCode. Typical rules apply to only
    * one state, like if an element is considered bold.

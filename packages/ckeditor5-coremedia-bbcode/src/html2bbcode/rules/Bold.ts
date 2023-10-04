@@ -20,7 +20,7 @@ const parseFontWeight = (fontWeight: string): number | undefined => {
 
 export const boldRule: HTML2BBCodeRule = {
   id: "b",
-  tag(taggedElement): void {
+  process(taggedElement): void {
     const { element } = taggedElement;
     const {
       tagName,

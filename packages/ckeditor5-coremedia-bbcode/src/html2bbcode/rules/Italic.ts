@@ -6,7 +6,7 @@ const italicVetoStyle = "normal";
 
 export const italicRule: HTML2BBCodeRule = {
   id: "i",
-  tag(taggedElement): void {
+  process(taggedElement): void {
     const { element } = taggedElement;
     const {
       tagName,

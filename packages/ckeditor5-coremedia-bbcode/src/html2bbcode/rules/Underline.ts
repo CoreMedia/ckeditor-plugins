@@ -11,7 +11,7 @@ const underlineTags = ["u", "ins"];
  */
 export const underlineRule: HTML2BBCodeRule = {
   id: "u",
-  tag(taggedElement): void {
+  process(taggedElement): void {
     const { element } = taggedElement;
     const {
       tagName,

@@ -4,7 +4,7 @@ const headingRegEx = /^h(?<level>\d)$/;
 
 export const headingRule: HTML2BBCodeRule = {
   id: "p",
-  tag(taggedElement): void {
+  process(taggedElement): void {
     const { element } = taggedElement;
     if (element instanceof HTMLHeadingElement) {
       taggedElement.separator = {

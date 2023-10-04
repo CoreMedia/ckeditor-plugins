@@ -68,7 +68,7 @@ export class Html2BBCodeConverter {
 
     // Stage 1: Let all rules state their opinion about the state.
     for (const rule of rules) {
-      rule.tag?.(taggedElement);
+      rule.process?.(taggedElement);
     }
 
     const { separator: parentSeparator } = taggedElement;
