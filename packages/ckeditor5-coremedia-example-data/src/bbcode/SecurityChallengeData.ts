@@ -36,6 +36,12 @@ const htmlEntity = {
  * @see [XSS Filter Evasion – OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html)
  */
 export const securityChallengeData: ExampleData = {
+  "Security: Escaping in BBCode": lines(
+    `${bbCode.h1("Security: Escaping in BBCode")}`,
+    `${bbCode.p(`Lorem \\[b\\]ip\\sum\\[/b\\] dolor`)}`,
+    `${bbCode.h2("Remark")}`,
+    `${bbCode.p(`For safe processing we enable escaping by default. It is required, that parsers for stored BBCode apply the same escaping mechanism.`)}`,
+  ),
   "Security: Inline HTML in BBCode": lines(
     `${bbCode.h1("Security: Inline HTML in BBCode")}`,
     `${bbCode.p(`Lorem <strong>ipsum</strong> dolor`)}`,

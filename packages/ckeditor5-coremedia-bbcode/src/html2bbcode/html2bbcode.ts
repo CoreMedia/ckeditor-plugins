@@ -8,6 +8,20 @@ import { TaggedElement } from "./rules/TaggedElement";
 export const html2bbcode = (domFragment: Node, rules: HTML2BBCodeRule[]): string =>
   new Html2BBCodeConverter(rules).convert(domFragment);
 
+/**
+ * Adds backslashes to any possibly existing square brackets within the given
+ * text so that it is not interpreted by BBCode parser. Also, a backslash
+ * itself will be escaped.
+ *
+ * Note that it should be ensured that corresponding BBCode parsers reading
+ * the data, support this type of escaping.
+ *
+ * @param text - plain text to escape
+ */
+const escapeText = (text: string): string => {
+  return text.replace(/([\][\\])/g, "\\$1");
+};
+
 export class Html2BBCodeConverter {
   readonly #rules: HTML2BBCodeRule[];
 
@@ -31,7 +45,7 @@ export class Html2BBCodeConverter {
     };
   } {
     if (!isParentNode(node)) {
-      return { content: node.textContent ?? "" };
+      return { content: escapeText(node.textContent ?? "") };
     }
 
     const processedChildren = this.#convertChildren(node);
