@@ -18,9 +18,7 @@ export const html2bbcode = (domFragment: Node, rules: HTML2BBCodeRule[]): string
  *
  * @param text - plain text to escape
  */
-const escapeText = (text: string): string => {
-  return text.replace(/([\][\\])/g, "\\$1");
-};
+const escapeText = (text: string): string => text.replace(/([\][\\])/g, "\\$1");
 
 export class Html2BBCodeConverter {
   readonly #rules: HTML2BBCodeRule[];
