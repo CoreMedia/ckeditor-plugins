@@ -435,11 +435,14 @@ importers:
 
   packages/ckeditor5-coremedia-bbcode:
     dependencies:
+      '@bbob/core':
+        specifier: ^3.0.2
+        version: 3.0.2
       '@bbob/html':
-        specifier: ^3.0.0
+        specifier: ^3.0.2
         version: 3.0.2
       '@bbob/preset-html5':
-        specifier: ^3.0.0
+        specifier: ^3.0.2
         version: 3.0.2
       '@coremedia/ckeditor5-core-common':
         specifier: 16.0.1-rc.2
