@@ -16,11 +16,12 @@ import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
 import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
-import { DocumentList } from "@ckeditor/ckeditor5-list";
+import { DocumentList, DocumentListProperties } from "@ckeditor/ckeditor5-list";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
+import { Indent } from "@ckeditor/ckeditor5-indent";
 
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
@@ -40,8 +41,10 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       CodeBlock,
       DataFacade,
       DocumentList,
+      DocumentListProperties,
       Essentials,
       Heading,
+      Indent,
       Italic,
       Link,
       MockStudioIntegration,
@@ -110,6 +113,13 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       ui: uiLanguage,
       // Won't change the language of content.
       content: "en",
+    },
+    list: {
+      properties: {
+        startIndex: true,
+        styles: false,
+        reversed: false,
+      },
     },
     link: {
       defaultProtocol: "https://",
