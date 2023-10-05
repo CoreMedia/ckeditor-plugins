@@ -1,6 +1,7 @@
 import html5Preset from "@bbob/preset-html5/es";
 import { render } from "@bbob/html/es";
 import bbob from "@bbob/core";
+import { bbCodeLogger } from "./BBCodeLogger";
 
 interface EscapeRule {
   from: string;
@@ -31,16 +32,19 @@ const bbobProcessor = bbob(html5Preset());
  * Parses BBCode to HTML.
  */
 export const bbcode2html = (bbcode: string, allowedTags?: string[]): string => {
+  const logger = bbCodeLogger;
   const htmlEscapedBBCode = escapeForXml(bbcode);
   const processed = bbobProcessor.process(htmlEscapedBBCode, {
     render,
     enableEscapeTags: true,
     onlyAllowTags: allowedTags,
   });
-  // TODO: Add better logging here.
-  console.log("bbcode2html", {
-    processed,
-    allowedTags,
-  });
+  if (logger.isDebugEnabled()) {
+    logger.debug("bbcode2html done.", {
+      html: processed.html,
+      messages: processed.messages,
+      allowedTags,
+    });
+  }
   return processed.html;
 };
