@@ -11,6 +11,12 @@ import { bbcode2html } from "./bbcode2html/bbcode2html";
 import { html2bbcode } from "./html2bbcode";
 import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
+import { bbCodeLogger } from "./BBCodeLogger";
+
+const fragmentToString = (domFragment: Node | DocumentFragment): string =>
+  Array.from(domFragment.childNodes)
+    .map((cn) => (cn as Element).outerHTML || cn.nodeValue)
+    .reduce((result, s) => (result ?? "") + (s ?? "")) ?? "";
 
 /**
  * Data processor for BBCode.
@@ -85,8 +91,18 @@ export default class BBCodeDataProcessor implements DataProcessor {
    * @returns The converted view element.
    */
   public toView(data: string): ViewDocumentFragment {
+    const logger = bbCodeLogger;
+    const startTimestamp = performance.now();
     const html = bbcode2html(data, this.#supportedBBCodeTags);
-    return this.#htmlDataProcessor.toView(html);
+    const viewFragment = this.#htmlDataProcessor.toView(html);
+    if (logger.isDebugEnabled()) {
+      logger.debug(`Transformed BBCode to HTML within ${performance.now() - startTimestamp} ms:`, {
+        in: data,
+        out: html,
+        viewFragment,
+      });
+    }
+    return viewFragment;
   }
 
   /**
@@ -97,8 +113,18 @@ export default class BBCodeDataProcessor implements DataProcessor {
    * @returns BBCode string.
    */
   public toData(viewFragment: ViewDocumentFragment): string {
+    const logger = bbCodeLogger;
+    const startTimestamp = performance.now();
     const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
-    return html2bbcode(htmlDomFragment, this.#rules);
+    const fragmentAsString = logger.isDebugEnabled() ? fragmentToString(htmlDomFragment) : "uninitialized";
+    const bbCodeData = html2bbcode(htmlDomFragment, this.#rules);
+    if (logger.isDebugEnabled()) {
+      logger.debug(`Transformed HTML to BBCode within ${performance.now() - startTimestamp} ms:`, {
+        in: fragmentAsString,
+        out: bbCodeData,
+      });
+    }
+    return bbCodeData;
   }
 
   /**
