@@ -447,6 +447,9 @@ importers:
       '@coremedia/ckeditor5-core-common':
         specifier: 16.0.1-rc.2
         version: link:../ckeditor5-core-common
+      '@coremedia/ckeditor5-logging':
+        specifier: 16.0.1-rc.2
+        version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
         specifier: ^39.0.2
