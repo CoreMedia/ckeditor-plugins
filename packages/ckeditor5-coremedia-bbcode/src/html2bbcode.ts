@@ -1,7 +1,6 @@
 import { HasChildren, isHTMLElement, isParentNode } from "@coremedia/ckeditor5-dom-support";
 import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
-import { removeLeadingAndTrailingNewlines } from "./BBCodeUtils";
 
 /**
  * Parses HTML to BBCode.

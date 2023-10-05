@@ -6,9 +6,7 @@ import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
  *
  * @param href - HREF attribute to encode for use as BBCode attribute value
  */
-const escapeHref = (href: string): string => {
-  return href.replace(/\[/g, "%5B").replace(/]/g, "%5D");
-};
+const escapeHref = (href: string): string => href.replace(/\[/g, "%5B").replace(/]/g, "%5D");
 
 export class BBCodeUrl implements BBCodeProcessingRule {
   readonly id = "url";

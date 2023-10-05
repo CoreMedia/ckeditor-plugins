@@ -214,7 +214,7 @@ describe("BBob Integration", () => {
     it.each`
       bbCode                             | expected                      | comment
       ${"[code=javascript]lorem[/code]"} | ${"[code]\nlorem\n[/code]"}   | ${"HTML 5 Preset does not handle language attribute."}
-      ${"[quote=author]lorem[/quote]"}    | ${"[quote]\nlorem\n[/quote]"} | ${"We have no mapping for author to HTML."}
+      ${"[quote=author]lorem[/quote]"}   | ${"[quote]\nlorem\n[/quote]"} | ${"We have no mapping for author to HTML."}
     `(
       "[$#] should process back and forth with only minor change: $bbCode → $expected ($comment)",
       ({ bbCode, expected }: { bbCode: string; expected: string }) => {

@@ -1,5 +1,4 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
-import { removeLeadingAndTrailingNewlines } from "../BBCodeUtils";
 
 /**
  * Maps `<thead>`, `<tbody>`, `<tfoot>` to corresponding BBCode.
