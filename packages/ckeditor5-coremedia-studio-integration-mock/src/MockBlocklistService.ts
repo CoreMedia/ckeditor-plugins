@@ -9,7 +9,7 @@ import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia
  * words, that are present in the default example app
  * editor after a short period of time.
  */
-class MockBlocklistService implements BlocklistService {
+export class MockBlocklistService implements BlocklistService {
   #blocklist: string[];
   #blocklistSubject: Subject<string[]>;
 
@@ -91,5 +91,3 @@ class MockBlocklistService implements BlocklistService {
     return this.#blocklistSubject;
   }
 }
-
-export default MockBlocklistService;

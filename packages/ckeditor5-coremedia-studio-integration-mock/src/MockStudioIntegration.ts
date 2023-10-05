@@ -16,7 +16,7 @@ import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-co
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
-import MockBlocklistService from "./content/MockBlocklistService";
+import { MockBlocklistService } from "./MockBlocklistService";
 import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 const PLUGIN_NAME = "MockStudioIntegration";
