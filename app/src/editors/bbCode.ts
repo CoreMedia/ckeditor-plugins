@@ -1,5 +1,5 @@
 import { Autosave } from "@ckeditor/ckeditor5-autosave";
-import { Bold, Italic, Underline } from "@ckeditor/ckeditor5-basic-styles";
+import { Bold, Italic, Strikethrough, Underline } from "@ckeditor/ckeditor5-basic-styles";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { BBCode } from "@coremedia/ckeditor5-coremedia-bbcode";
@@ -7,11 +7,20 @@ import { Heading } from "@ckeditor/ckeditor5-heading";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 
-import { Link } from "@ckeditor/ckeditor5-link";
+import { AutoLink, Link } from "@ckeditor/ckeditor5-link";
 import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { ApplicationState } from "../ApplicationState";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import { updatePreview } from "../preview";
+import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
+import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
+import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
+import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
+import { DocumentList } from "@ckeditor/ckeditor5-list";
+import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
+import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
+import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
+import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
@@ -21,25 +30,58 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
   return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
     plugins: [
+      AutoLink,
+      Autoformat,
       Autosave,
       BBCode,
+      BlockQuote,
+      Blocklist,
       Bold,
+      CodeBlock,
       DataFacade,
+      DocumentList,
       Essentials,
       Heading,
       Italic,
       Link,
+      MockStudioIntegration,
       Paragraph,
+      PasteFromOffice,
+      RemoveFormat,
       SourceEditing,
+      Strikethrough,
+      Table,
+      TableToolbar,
       Underline,
     ],
-    toolbar: ["undo", "redo", "|", "heading", "|", "bold", "italic", "underline", "|", "link", "|", "sourceEditing"],
-    language: {
-      // Language switch only applies to editor instance.
-      ui: uiLanguage,
-      // Won't change the language of content.
-      content: "en",
-    },
+    toolbar: [
+      "undo",
+      "redo",
+      "|",
+      "heading",
+      "|",
+      "bold",
+      "italic",
+      "underline",
+      "strikethrough",
+      "removeFormat",
+      "|",
+      "link",
+      "|",
+      "blockQuote",
+      "codeBlock",
+      "|",
+      "insertTable",
+      "|",
+      "numberedList",
+      "bulletedList",
+      "outdent",
+      "indent",
+      "|",
+      "blocklist",
+      "|",
+      "sourceEditing",
+    ],
     autosave: {
       waitingTime: 1000, // in ms
     },
@@ -62,6 +104,18 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
         { model: "heading5", view: "h5", title: "Heading 5", class: "ck-heading_heading5" },
         { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" },
       ],
+    },
+    language: {
+      // Language switch only applies to editor instance.
+      ui: uiLanguage,
+      // Won't change the language of content.
+      content: "en",
+    },
+    link: {
+      defaultProtocol: "https://",
+    },
+    table: {
+      contentToolbar: ["tableColumn", "tableRow"],
     },
   });
 };
