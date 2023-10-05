@@ -10,6 +10,10 @@ import { bbCodeQuote } from "./BBCodeQuote";
 import { bbCodeCode } from "./BBCodeCode";
 import { bbCodeList } from "./BBCodeList";
 import { bbCodeListItem } from "./BBCodeListItem";
+import { bbCodeTable } from "./BBCodeTable";
+import { bbCodeTableCell } from "./BBCodeTableCell";
+import { bbCodeTableRow } from "./BBCodeTableRow";
+import { bbCodeTableSection } from "./BBCodeTableSection";
 
 export const bbCodeDefaultRules: BBCodeProcessingRule[] = [
   bbCodeBold,
@@ -21,6 +25,10 @@ export const bbCodeDefaultRules: BBCodeProcessingRule[] = [
   bbCodeParagraph,
   bbCodeQuote,
   bbCodeStrikethrough,
+  bbCodeTable,
+  bbCodeTableCell,
+  bbCodeTableRow,
+  bbCodeTableSection,
   bbCodeUnderline,
   bbCodeUrl,
 ];
