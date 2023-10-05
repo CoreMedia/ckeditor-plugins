@@ -16,7 +16,7 @@ export class BBCodeTableSection implements BBCodeProcessingRule {
       case "thead":
         return `[thead]\n${content}[/thead]\n`;
       case "tfoot":
-        return `[thead]\n${content}[/thead]\n`;
+        return `[tfoot]\n${content}[/tfoot]\n`;
       case "tbody":
         // More detailed handling below.
         break;
