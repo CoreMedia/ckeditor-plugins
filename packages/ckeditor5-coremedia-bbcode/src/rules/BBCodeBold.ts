@@ -5,6 +5,8 @@ const fontWeightBold = 700;
 const boldTags = ["b", "strong"];
 const nonBoldFontWeights = ["normal", "lighter"];
 
+const isNumericFontWeight = (weight: string): boolean => /^\d+$/.test(weight);
+
 /**
  * Parses a possibly set `fontWeight` attribute to some numeric representation
  * suitable to determine, if the `fontWeight` denotes some bold appearance.
@@ -12,15 +14,17 @@ const nonBoldFontWeights = ["normal", "lighter"];
  * @param fontWeight - font weight attribute value to parse
  */
 const parseFontWeight = (fontWeight: string): number | undefined => {
-  if (Number.isNaN(fontWeight)) {
-    const normalizedFontWeight = fontWeight.trim().toLowerCase();
-    if (normalizedFontWeight.startsWith("bold")) {
-      return fontWeightBold;
-    } else if (nonBoldFontWeights.includes(normalizedFontWeight)) {
-      return fontWeightNormal;
-    }
-  } else if (fontWeight) {
-    return Number(fontWeight);
+  const trimmedWeight = fontWeight.trim().toLowerCase();
+  if (!trimmedWeight) {
+    return;
+  }
+  if (isNumericFontWeight(trimmedWeight)) {
+    return Number(trimmedWeight);
+  }
+  if (trimmedWeight.startsWith("bold")) {
+    return fontWeightBold;
+  } else if (nonBoldFontWeights.includes(trimmedWeight)) {
+    return fontWeightNormal;
   }
 };
 

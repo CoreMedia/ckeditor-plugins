@@ -2,6 +2,8 @@ import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 const headingRegEx = /^h(?<level>\d)$/;
 
+const isValidHeadingLevel = (level: string): boolean => /^[1-6]+$/.test(level);
+
 export class BBCodeHeading implements BBCodeProcessingRule {
   readonly id = "heading";
   readonly tags = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -14,12 +16,9 @@ export class BBCodeHeading implements BBCodeProcessingRule {
     if (match) {
       // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
       const { level }: { level: string } = match.groups;
-      if (!Number.isNaN(level)) {
-        const headingNumber = Number(level);
-        if (headingNumber >= 1 && headingNumber <= 6) {
-          const tag = `h${headingNumber}`;
-          return `[${tag}]${content}[/${tag}]\n\n`;
-        }
+      if (!isValidHeadingLevel(level)) {
+        const tag = `h${level}`;
+        return `[${tag}]${content}[/${tag}]\n\n`;
       }
     }
   }
