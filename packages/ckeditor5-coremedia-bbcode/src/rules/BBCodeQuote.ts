@@ -10,8 +10,8 @@ export class BBCodeQuote implements BBCodeProcessingRule {
     if (!(element instanceof HTMLQuoteElement)) {
       return;
     }
-    const { tagName} = element;
-    if ("quote" !== tagName.toLowerCase()) {
+    const { tagName } = element;
+    if ("blockquote" !== tagName.toLowerCase()) {
       // No support for inline `<q>` element.
       return;
     }
