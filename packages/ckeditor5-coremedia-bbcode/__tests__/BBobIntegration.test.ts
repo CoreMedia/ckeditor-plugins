@@ -189,6 +189,12 @@ describe("BBob Integration", () => {
       ${"[list=I][*]lorem[/list]"}
       ${"[table][tr][td]lorem[/td][/tr][/table]"}
       ${"[table][thead][tr][th]HEAD[/th][/tr][/thead][tbody][tr][td]BODY[/td][/tr][/tbody][/table]"}
+      ${"[h1]lorem[/h1]"}
+      ${"[h2]lorem[/h2]"}
+      ${"[h3]lorem[/h3]"}
+      ${"[h4]lorem[/h4]"}
+      ${"[h5]lorem[/h5]"}
+      ${"[h6]lorem[/h6]"}
     `("[$#] should process back and forth without (relevant) change: $bbCode", ({ bbCode }: { bbCode: string }) => {
       const result = aut.bbcode2html2bbcode(bbCode);
       try {
