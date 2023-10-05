@@ -457,6 +457,9 @@ importers:
       '@ckeditor/ckeditor5-engine':
         specifier: ^39.0.2
         version: 39.0.2
+      '@coremedia-internal/ckeditor5-jest-test-helpers':
+        specifier: ^1.0.0
+        version: link:../ckeditor5-jest-test-helpers
       '@coremedia/ckeditor5-dom-support':
         specifier: 16.0.1-rc.2
         version: link:../ckeditor5-dom-support
