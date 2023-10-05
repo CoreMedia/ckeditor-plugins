@@ -57,3 +57,8 @@ backslash characters:
 [b]This is bold![/b]
 \[b\]This is not bold!\[/b\]
 ```
+
+## See Also
+
+* [BBCode - Wikipedia](https://en.wikipedia.org/wiki/BBCode)
+* [BBCode.org, BBCode users guide and tricks on web2 and web3](https://www.bbcode.org/)
