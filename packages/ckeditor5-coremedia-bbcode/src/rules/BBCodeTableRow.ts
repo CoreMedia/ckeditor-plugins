@@ -8,7 +8,7 @@ export class BBCodeTableRow implements BBCodeProcessingRule {
   readonly tags = ["tr"];
   toData(element: HTMLElement, content: string): undefined | string {
     if (element instanceof HTMLTableRowElement) {
-      return `[tr]\n${content}\n[/tr]\n`;
+      return `[tr]\n${content.trim()}\n[/tr]\n`;
     }
   }
 }

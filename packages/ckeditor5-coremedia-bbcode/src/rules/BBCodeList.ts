@@ -8,10 +8,10 @@ export class BBCodeList implements BBCodeProcessingRule {
   readonly tags = ["list"];
   toData(element: HTMLElement, content: string): undefined | string {
     if (element instanceof HTMLUListElement) {
-      return `[list]\n${content}\n[/list]\n`;
+      return `[list]\n${content.trim()}\n[/list]\n`;
     }
     if (element instanceof HTMLOListElement) {
-      return `[list=${element.type}]\n${content}[/list]\n`;
+      return `[list=${element.type}]\n${content.trim()}\n[/list]\n`;
     }
   }
 }

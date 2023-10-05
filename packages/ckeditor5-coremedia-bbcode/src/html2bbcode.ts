@@ -1,6 +1,7 @@
 import { HasChildren, isHTMLElement, isParentNode } from "@coremedia/ckeditor5-dom-support";
 import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
+import { removeLeadingAndTrailingNewlines } from "./BBCodeUtils";
 
 /**
  * Parses HTML to BBCode.
@@ -24,9 +25,7 @@ export class Html2BBCodeConverter {
   constructor(readonly rules: BBCodeProcessingRule[] = bbCodeDefaultRules) {}
 
   convert(node: Node): string {
-    const converted = this.#convertWithChildren(node);
-    // Replace leading and trailing newlines.
-    return converted.replace(/(^[\n\r]*|[\n\r]*$)/g, "");
+    return this.#convertWithChildren(node).trim();
   }
 
   #convertWithChildren(node: Node): string {

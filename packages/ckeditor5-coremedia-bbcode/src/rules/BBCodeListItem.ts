@@ -8,7 +8,7 @@ export class BBCodeListItem implements BBCodeProcessingRule {
   readonly tags = ["*"];
   toData(element: HTMLElement, content: string): undefined | string {
     if (element instanceof HTMLLIElement) {
-      return `[*] ${content}\n`;
+      return `[*] ${content.trim()}\n`;
     }
   }
 }

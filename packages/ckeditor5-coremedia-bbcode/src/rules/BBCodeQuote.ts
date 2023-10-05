@@ -15,7 +15,7 @@ export class BBCodeQuote implements BBCodeProcessingRule {
       // No support for inline `<q>` element.
       return;
     }
-    return `[quote]${content}[/quote]\n`;
+    return `[quote]\n${content.trim()}\n[/quote]\n`;
   }
 }
 

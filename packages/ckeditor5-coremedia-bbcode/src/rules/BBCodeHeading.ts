@@ -15,7 +15,7 @@ export class BBCodeHeading implements BBCodeProcessingRule {
       // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
       const { level }: { level: string } = match.groups;
       const tag = `h${level}`;
-      return `[${tag}]${content}[/${tag}]\n\n`;
+      return `[${tag}]${content.trim()}[/${tag}]\n\n`;
     }
   }
 }

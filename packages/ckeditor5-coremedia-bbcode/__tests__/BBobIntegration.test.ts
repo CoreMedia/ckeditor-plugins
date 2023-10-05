@@ -181,21 +181,21 @@ describe("BBob Integration", () => {
       ${"[u]lorem[/u]"}
       ${"[s]lorem[/s]"}
       ${"[url=https://example.org/]lorem[/url]"}
-      ${"[quote]lorem[/quote]"}
-      ${"[code]lorem[/code]"}
-      ${"[list][*]lorem[/list]"}
-      ${"[list=1][*]lorem[/list]"}
-      ${"[list=a][*]lorem[/list]"}
-      ${"[list=I][*]lorem[/list]"}
-      ${"[table][tr][td]lorem[/td][/tr][/table]"}
-      ${"[table][thead][tr][th]HEAD[/th][/tr][/thead][tbody][tr][td]BODY[/td][/tr][/tbody][/table]"}
+      ${"[quote]\nlorem\n[/quote]"}
+      ${"[code]\nlorem\n[/code]"}
+      ${"[list]\n[*] lorem\n[/list]"}
+      ${"[list=1]\n[*] lorem\n[/list]"}
+      ${"[list=a]\n[*] lorem\n[/list]"}
+      ${"[list=I]\n[*] lorem\n[/list]"}
+      ${"[table]\n[tr]\n[td]lorem[/td]\n[/tr]\n[/table]"}
+      ${"[table]\n[thead]\n[tr]\n[th]HEAD[/th]\n[/tr]\n[/thead]\n[tbody]\n[tr]\n[td]BODY[/td]\n[/tr]\n[/tbody]\n[/table]"}
       ${"[h1]lorem[/h1]"}
       ${"[h2]lorem[/h2]"}
       ${"[h3]lorem[/h3]"}
       ${"[h4]lorem[/h4]"}
       ${"[h5]lorem[/h5]"}
       ${"[h6]lorem[/h6]"}
-    `("[$#] should process back and forth without (relevant) change: $bbCode", ({ bbCode }: { bbCode: string }) => {
+    `("[$#] should process back and forth without change: $bbCode", ({ bbCode }: { bbCode: string }) => {
       const result = aut.bbcode2html2bbcode(bbCode);
       try {
         expect(result).toHaveProperty("fromHtml2BBCode", bbCode);
@@ -212,9 +212,9 @@ describe("BBob Integration", () => {
      * for example, provide a custom preset for bbcode2html.
      */
     it.each`
-      bbCode                             | expected                  | comment
-      ${"[code=javascript]lorem[/code]"} | ${"[code]lorem[/code]"}   | ${"HTML 5 Preset does not handle language attribute."}
-      ${"[quote=author]lorem[/code]"}    | ${"[quote]lorem[/quote]"} | ${"We have no mapping for author to HTML."}
+      bbCode                             | expected                      | comment
+      ${"[code=javascript]lorem[/code]"} | ${"[code]\nlorem\n[/code]"}   | ${"HTML 5 Preset does not handle language attribute."}
+      ${"[quote=author]lorem[/quote]"}    | ${"[quote]\nlorem\n[/quote]"} | ${"We have no mapping for author to HTML."}
     `(
       "[$#] should process back and forth with only minor change: $bbCode → $expected ($comment)",
       ({ bbCode, expected }: { bbCode: string; expected: string }) => {

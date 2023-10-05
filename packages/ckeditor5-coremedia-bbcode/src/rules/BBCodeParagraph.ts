@@ -7,7 +7,7 @@ export class BBCodeParagraph implements BBCodeProcessingRule {
     if (!(element instanceof HTMLParagraphElement)) {
       return;
     }
-    return `${content}\n\n`;
+    return `${content.trim()}\n\n`;
   }
 }
 

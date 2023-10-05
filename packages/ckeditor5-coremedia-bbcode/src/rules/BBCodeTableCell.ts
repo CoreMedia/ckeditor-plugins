@@ -13,9 +13,9 @@ export class BBCodeTableCell implements BBCodeProcessingRule {
     const { tagName } = element;
     switch (tagName.toLowerCase()) {
       case "td":
-        return `[td]${content}[/td]\n`;
+        return `[td]${content.trim()}[/td]\n`;
       case "th":
-        return `[th]${content}[/th]\n`;
+        return `[th]${content.trim()}[/th]\n`;
     }
   }
 }

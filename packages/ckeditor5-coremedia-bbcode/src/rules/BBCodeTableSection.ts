@@ -1,4 +1,5 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import { removeLeadingAndTrailingNewlines } from "../BBCodeUtils";
 
 /**
  * Maps `<thead>`, `<tbody>`, `<tfoot>` to corresponding BBCode.
@@ -14,9 +15,9 @@ export class BBCodeTableSection implements BBCodeProcessingRule {
     const normalizedTagName = tagName.toLowerCase();
     switch (normalizedTagName) {
       case "thead":
-        return `[thead]\n${content}[/thead]\n`;
+        return `[thead]\n${content.trim()}\n[/thead]\n`;
       case "tfoot":
-        return `[tfoot]\n${content}[/tfoot]\n`;
+        return `[tfoot]\n${content.trim()}\n[/tfoot]\n`;
       case "tbody":
         // More detailed handling below.
         break;
@@ -29,10 +30,10 @@ export class BBCodeTableSection implements BBCodeProcessingRule {
     const { parentElement } = element;
     if (parentElement?.childElementCount === 1) {
       // Just ignore this section element as being the only one
-      // within the table.
-      return;
+      // within the table. Thus, no need for surrounding `[tbody]`.
+      return content.trim();
     }
-    return `[tbody]\n${content}[/tbody]\n`;
+    return `[tbody]\n${content.trim()}\n[/tbody]\n`;
   }
 }
 
