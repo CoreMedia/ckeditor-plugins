@@ -7,7 +7,7 @@ import {
   ViewDocumentFragment,
 } from "@ckeditor/ckeditor5-engine";
 
-import { bbcode2html } from "./bbcode2html/bbcode2html";
+import { bbcode2html } from "./bbcode2html";
 import { html2bbcode } from "./html2bbcode";
 import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";

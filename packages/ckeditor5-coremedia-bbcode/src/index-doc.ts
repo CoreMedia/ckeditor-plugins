@@ -5,9 +5,4 @@
  * @module ckeditor5-coremedia-bbcode
  */
 
-export * from "./BBCode";
-export { default as BBCode } from "./BBCode";
-
-export { default as BBCodeDataProcessor } from "./BBCodeDataProcessor";
-
-export * as bbcode2html from "./bbcode2html/index-doc";
+export * from "./index";
