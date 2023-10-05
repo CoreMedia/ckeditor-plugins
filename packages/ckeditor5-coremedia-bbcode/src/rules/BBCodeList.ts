@@ -11,7 +11,7 @@ export class BBCodeList implements BBCodeProcessingRule {
       return `[list]\n${content}\n[/list]\n`;
     }
     if (element instanceof HTMLOListElement) {
-      return `[list=${element.start}]\n${content}[/list]\n`;
+      return `[list=${element.type}]\n${content}[/list]\n`;
     }
   }
 }
