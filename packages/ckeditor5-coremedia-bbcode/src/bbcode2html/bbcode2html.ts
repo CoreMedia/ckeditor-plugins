@@ -25,14 +25,22 @@ const escapeForXml = (text: string): string => {
   return result;
 };
 
+const bbobProcessor = bbob(html5Preset());
+
 /**
  * Parses BBCode to HTML.
  */
-export const bbcode2html = (bbcode: string): string => {
+export const bbcode2html = (bbcode: string, allowedTags?: string[]): string => {
   const htmlEscapedBBCode = escapeForXml(bbcode);
-  const processor = bbob(html5Preset());
-  const processed = processor.process(htmlEscapedBBCode, { render, enableEscapeTags: true });
+  const processed = bbobProcessor.process(htmlEscapedBBCode, {
+    render,
+    enableEscapeTags: true,
+    onlyAllowTags: allowedTags,
+  });
   // TODO: Add better logging here.
-  console.log("bbcode2html", processed);
+  console.log("bbcode2html", {
+    processed,
+    allowedTags,
+  });
   return processed.html;
 };
