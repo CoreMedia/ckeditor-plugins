@@ -20,8 +20,8 @@ import { DocumentList, DocumentListProperties } from "@ckeditor/ckeditor5-list";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
-import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
 import { Indent } from "@ckeditor/ckeditor5-indent";
+import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
@@ -47,7 +47,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       Indent,
       Italic,
       Link,
-      MockStudioIntegration,
+      MockBlocklistService,
       Paragraph,
       PasteFromOffice,
       RemoveFormat,

@@ -15,6 +15,11 @@
     "node": ">=16.0.0"
   },
   "license": "Apache-2.0",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./src/index.js",
+    "types": "./src/index.d.ts"
+  },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
     "clean": "pnpm clean:src && pnpm clean:dist",
