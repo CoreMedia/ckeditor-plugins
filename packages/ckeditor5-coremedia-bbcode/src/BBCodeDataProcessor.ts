@@ -24,7 +24,7 @@ const fragmentToString = (domFragment: Node | DocumentFragment): string =>
  * This data processor converts BBCode to HTML and uses the HtmlDataProcessor
  * to generate the resulting view tree.
  */
-export default class BBCodeDataProcessor implements DataProcessor {
+export class BBCodeDataProcessor implements DataProcessor {
   /**
    * HTML data processor used to process HTML produced by the third-party
    * `@bbob/html` converter.

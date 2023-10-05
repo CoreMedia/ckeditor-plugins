@@ -1,11 +1,11 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import BBCodeDataProcessor from "./BBCodeDataProcessor";
+import { BBCodeDataProcessor } from "./BBCodeDataProcessor";
 
 /**
  * Applies a data-processor for BBCode.
  */
-export default class BBCode extends Plugin {
+export class BBCode extends Plugin {
   public static readonly pluginName = "BBCodeDataProcessor";
 
   init(): void {
