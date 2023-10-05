@@ -7,9 +7,11 @@ import { bbCodeStrikethrough } from "./BBCodeStrikethrough";
 import { bbCodeUnderline } from "./BBCodeUnderline";
 import { bbCodeUrl } from "./BBCodeUrl";
 import { bbCodeQuote } from "./BBCodeQuote";
+import { bbCodeCode } from "./BBCodeCode";
 
 export const bbCodeDefaultRules: BBCodeProcessingRule[] = [
   bbCodeBold,
+  bbCodeCode,
   bbCodeHeading,
   bbCodeItalic,
   bbCodeParagraph,
