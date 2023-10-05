@@ -1,4 +1,4 @@
-import { WithRequired } from "@coremedia/ckeditor5-common";
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 
 export interface StyleOptions {
   size?: string;
@@ -43,7 +43,7 @@ export const bbCode = {
   emoji: (emoji: string) => `[${emoji}]`,
   quote: (text: string, author?: string) => (author ? `[quote="${author}"]${text}[/quote]` : `[quote]${text}[/quote]`),
   code: (text: string) => `[code]${text}[/code]`,
-  style: (text: string, style: WithRequired<StyleOptions, "size"> | WithRequired<StyleOptions, "color">) => {
+  style: (text: string, style: RequireSelected<StyleOptions, "size"> | RequireSelected<StyleOptions, "color">) => {
     let styleOptions = ``;
     if (style.size) {
       styleOptions = `${styleOptions} size="${style.size}"`;

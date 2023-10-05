@@ -3,7 +3,9 @@
  *
  * @module ckeditor5-common
  */
+
 export * from "./AdvancedTypes";
-export * from "./RequiredNonNull";
 export * from "./IncompatibleInternalApiUsageError";
+export * from "./RequiredNonNull";
+export * from "./RequireSelected";
 export * from "./Strings";

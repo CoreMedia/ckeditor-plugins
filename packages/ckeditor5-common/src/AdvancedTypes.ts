@@ -43,9 +43,3 @@ export const isRaw = <T>(value: unknown, ...requiredProperties: (keyof T)[]): va
   }
   return false;
 };
-
-/**
- * Utility type to mark selected properties as required.
- */
-export type RequireSelected<Type extends object, Key extends keyof Type> = Pick<Type, keyof Omit<Type, Key>> &
-  Required<Pick<Type, Key>>;
