@@ -11,7 +11,7 @@ export class BBCodeList implements BBCodeProcessingRule {
       return `[list]\n${content.trim()}\n[/list]\n`;
     }
     if (element instanceof HTMLOListElement) {
-      return `[list=${element.type}]\n${content.trim()}\n[/list]\n`;
+      return `[list=${element.type || "1"}]\n${content.trim()}\n[/list]\n`;
     }
   }
 }
