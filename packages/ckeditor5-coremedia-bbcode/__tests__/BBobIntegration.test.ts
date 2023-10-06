@@ -37,6 +37,8 @@ const aut = {
    * serve as _mediators_ between these two. Nevertheless, testing that
    * they _understand_ each other provides some confidence that nothing
    * broke.
+   *
+   * @param input - BBCode input (from Data)
    */
   bbcode2html2bbcode: (
     input: string,
@@ -53,7 +55,31 @@ const aut = {
       fromHtml2BBCode,
     };
   },
+  /**
+   * Transformation pipeline to validate, that the BBCode2HTML processing
+   * understands the BBCode produced by our proprietary HTML to BBCode
+   * processing.
+   *
+   * @param input - HTML input (from Data View)
+   */
+  html2bbcode2html: (
+    input: string,
+  ): {
+    input: string;
+    fromHtml2BBCode: string;
+    fromBBCode2Html: string;
+  } => {
+    const fromHtml2BBCode = html2bbcode(asFragment(input), rules);
+    const fromBBCode2Html = bbcode2html(fromHtml2BBCode, supportedTags);
+    return {
+      input,
+      fromBBCode2Html,
+      fromHtml2BBCode,
+    };
+  },
 };
+
+const link = "https://example.org/";
 
 /**
  * We have a some slightly slanted state regarding transformation
@@ -68,108 +94,73 @@ const aut = {
  * transforming `font-weight:bold` style to `<strong>` in the view layers.
  */
 describe("BBob Integration", () => {
+  /**
+   * These use-cases are important, as they validate, that our proprietary
+   * HTML to BBCode mapping is understood by the third-party library when
+   * processing the data back to HTML.
+   */
   describe("Important: HTML →[toData]→ BBCode →[toView]→ HTML", () => {
-    it("should not modify empty BBCode", () => {
-      const fromDataView = "";
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual("");
-    });
-
     it.each`
-      htmlElement
-      ${"strong"}
-      ${"b"}
-    `("[$#] should process <$htmlElement>", ({ htmlElement }: { htmlElement: string }) => {
-      const text = "lorem";
-      const fromDataView = `<${htmlElement}>${text}</${htmlElement}>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(`<span style="font-weight: bold;">${text}</span>`);
-    });
-
-    it.each`
-      htmlElement
-      ${"i"}
-      ${"em"}
-    `("[$#] should process <$htmlElement>", ({ htmlElement }: { htmlElement: string }) => {
-      const text = "lorem";
-      const fromDataView = `<${htmlElement}>${text}</${htmlElement}>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(`<span style="font-style: italic;">${text}</span>`);
-    });
-
-    it.each`
-      htmlElement
-      ${"ins"}
-      ${"u"}
-    `("[$#] should process <$htmlElement>", ({ htmlElement }: { htmlElement: string }) => {
-      const text = "lorem";
-      const fromDataView = `<${htmlElement}>${text}</${htmlElement}>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(`<span style="text-decoration: underline;">${text}</span>`);
-    });
-
-    it.each`
-      htmlElement
-      ${"del"}
-      ${"s"}
-    `("[$#] should process <$htmlElement>", ({ htmlElement }: { htmlElement: string }) => {
-      const text = "lorem";
-      const fromDataView = `<${htmlElement}>${text}</${htmlElement}>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(`<span style="text-decoration: line-through;">${text}</span>`);
-    });
-
-    it("should process link", () => {
-      const fromDataView = `<a href="https://example.org/">lorem</a>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(fromDataView);
-    });
-
-    it("should process blockquote", () => {
-      const text = "lorem";
-      const fromDataView = `<blockquote><p>${text}</p></blockquote>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(fromDataView);
-    });
-
-    it("should process pre", () => {
-      const text = "lorem";
-      const fromDataView = `<pre>${text}</pre>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(fromDataView);
-    });
-
-    it("should process unordered list", () => {
-      const text = "lorem";
-      const fromDataView = `<ul><li>${text}</li></ul>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(fromDataView);
-    });
-
-    it("should process ordered list", () => {
-      const text = "lorem";
-      const fromDataView = `<ol><li>${text}</li></ol>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(fromDataView);
-    });
-
-    it("should process minimal table", () => {
-      const text = "lorem";
-      const fromDataView = `<table><tr><td>${text}</td></tr></table>`;
-      const bbCodeFromDataView = aut.html2bbcode(fromDataView);
-      const htmlFromData = aut.bbcode2html(bbCodeFromDataView);
-      expect(htmlFromData).toEqual(fromDataView);
-    });
+      dataViewInput                                                | expectedStoredData                                 | expectedRestoredDataView                                      | comment
+      ${""}                                                        | ${""}                                              | ${""}                                                         | ${"empty data"}
+      ${`<strong>TEXT</strong>`}                                   | ${`[b]TEXT[/b]`}                                   | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
+      ${`<b>TEXT</b>`}                                             | ${`[b]TEXT[/b]`}                                   | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
+      ${`<em>TEXT</em>`}                                           | ${`[i]TEXT[/i]`}                                   | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
+      ${`<i>TEXT</i>`}                                             | ${`[i]TEXT[/i]`}                                   | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
+      ${`<ins>TEXT</ins>`}                                         | ${`[u]TEXT[/u]`}                                   | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
+      ${`<u>TEXT</u>`}                                             | ${`[u]TEXT[/u]`}                                   | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
+      ${`<del>TEXT</del>`}                                         | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
+      ${`<s>TEXT</s>`}                                             | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
+      ${`<a href="${link}">TEXT</a>`}                              | ${`[url=${link}]TEXT[/url]`}                       | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
+      ${`<a href="${link}">${link}</a>`}                           | ${`[url=${link}]${link}[/url]`}                    | ${`<a href="${link}">${link}</a>`}                            | ${"we don't offer url-tag optimization here"}
+      ${`<blockquote><p>TEXT</p></blockquote>`}                    | ${`[quote]\nTEXT\n[/quote]`}                       | ${`<blockquote><p>\nTEXT\n</p></blockquote>`}                 | ${"newlines part of minimal pretty-print behavior"}
+      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]`}                         | ${`<pre>\nTEXT\n</pre>`}                                      | ${"TODO: BBob HTML5 Preset generates HTML not understood by CKEditor"}
+      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]`}                     | ${`<pre>\nTEXT\n</pre>`}                                      | ${"TODO: Current processing tries to get language from wrong tag."}
+      ${`<ul><li>TEXT</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]`}                     | ${`<ul>\n<li> TEXT\n</li></ul>`}                              | ${"newlines part of minimal pretty-print behavior"}
+      ${`<ol><li>TEXT</li></ol>`}                                  | ${`[list=1]\n[*] TEXT\n[/list]`}                   | ${`<ol type="1">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor defaults to _no-type_, but BBob defaults to add it"}
+      ${`<ol type="a"><li>TEXT</li></ol>`}                         | ${`[list=a]\n[*] TEXT\n[/list]`}                   | ${`<ol type="a">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor may ignore type, if not configured to support this"}
+      ${`<table><tr><td>TEXT</td></tr></table>`}                   | ${`[table]\n[tr]\n[td]TEXT[/td]\n[/tr]\n[/table]`} | ${`<table>\n<tr>\n<td>TEXT</td>\n</tr>\n</table>`}            | ${"newlines part of minimal pretty-print behavior"}
+      ${`<h1>TEXT</h1>`}                                           | ${`[h1]TEXT[/h1]`}                                 | ${`<h1>TEXT</h1>`}                                            | ${"none"}
+      ${`<h2>TEXT</h2>`}                                           | ${`[h2]TEXT[/h2]`}                                 | ${`<h2>TEXT</h2>`}                                            | ${"none"}
+      ${`<h3>TEXT</h3>`}                                           | ${`[h3]TEXT[/h3]`}                                 | ${`<h3>TEXT</h3>`}                                            | ${"none"}
+      ${`<h4>TEXT</h4>`}                                           | ${`[h4]TEXT[/h4]`}                                 | ${`<h4>TEXT</h4>`}                                            | ${"none"}
+      ${`<h5>TEXT</h5>`}                                           | ${`[h5]TEXT[/h5]`}                                 | ${`<h5>TEXT</h5>`}                                            | ${"none"}
+      ${`<h6>TEXT</h6>`}                                           | ${`[h6]TEXT[/h6]`}                                 | ${`<h6>TEXT</h6>`}                                            | ${"none"}
+    `(
+      "[$#] Should transform data view to data, that are well understood by subsequent `toView` mapping for: `$dataViewInput` ($comment)",
+      ({
+        dataViewInput,
+        expectedStoredData,
+        expectedRestoredDataView,
+      }: {
+        dataViewInput: string;
+        expectedStoredData: string;
+        expectedRestoredDataView: string;
+      }) => {
+        const result = aut.html2bbcode2html(dataViewInput);
+        try {
+          // Precondition check: This is not THAT relevant, as the primary
+          // requirement is expressed in subsequent expectation: The stored data
+          // should be well understood when transforming them back to data view.
+          // In other words: If this fails, it may be ok, just to adjust the
+          // expectation.
+          expect(result).toHaveProperty("fromHtml2BBCode", expectedStoredData);
+          // When first written back in 2023, we used the default preset for
+          // HTML 5 for BBob library. This, for example, preferred style
+          // attributes for bold over corresponding tags. This is ok, as
+          // CKEditor's parsing from data view to model also accepts this
+          // to denote a bold style. It may be ok to adapt this expectation
+          // if the resulting HTML again is proven to be well-understood by
+          // CKEditor's processing.
+          expect(result).toHaveProperty("fromBBCode2Html", expectedRestoredDataView);
+        } catch (e) {
+          if (e instanceof Error) {
+            e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
+          }
+          throw e;
+        }
+      },
+    );
   });
 
   describe("Less important: BBCode →[toView]→ HTML →[toData]→ BBCode", () => {
