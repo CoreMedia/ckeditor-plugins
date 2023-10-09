@@ -7,8 +7,10 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@bbob/core": ["./types/@bbob/core/index.d.ts"],
+      "@bbob/core/es": ["./types/@bbob/core/es/index.d.ts"],
       "@bbob/html/es": ["./types/@bbob/html/es/index.d.ts"],
+      "@bbob/plugin-helper/es": ["./types/@bbob/plugin-helper/es/index.d.ts"],
+      "@bbob/preset/es": ["./types/@bbob/preset/es/index.d.ts"],
       "@bbob/preset-html5": ["./types/@bbob/preset-html5/es/index.d.ts"],
     }
   }

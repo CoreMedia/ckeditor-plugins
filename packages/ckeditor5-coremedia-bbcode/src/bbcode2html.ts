@@ -1,7 +1,7 @@
-import html5Preset from "@bbob/preset-html5/es";
 import { render } from "@bbob/html/es";
-import bbob from "@bbob/core";
+import bbob from "@bbob/core/es";
 import { bbCodeLogger } from "./BBCodeLogger";
+import { ckeditor5Preset } from "./ckeditor5Preset";
 
 interface EscapeRule {
   from: string;
@@ -26,7 +26,7 @@ const escapeForXml = (text: string): string => {
   return result;
 };
 
-const bbobProcessor = bbob(html5Preset());
+const bbobProcessor = bbob(ckeditor5Preset());
 
 /**
  * Parses BBCode to HTML.

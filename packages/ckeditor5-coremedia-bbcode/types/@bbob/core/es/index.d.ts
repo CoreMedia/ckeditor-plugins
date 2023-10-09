@@ -1,4 +1,4 @@
-declare module "@bbob/core" {
+declare module "@bbob/core/es" {
   export default function bbob(
     // eslint-disable-next-line @typescript-eslint/ban-types
     plugs?: Function | Function[],
