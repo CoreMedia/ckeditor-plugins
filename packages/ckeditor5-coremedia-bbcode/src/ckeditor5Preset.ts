@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/prefer-optional-chain,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 import { getUniqAttr, isStringNode, isTagNode, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 
 type DefaultTags = Parameters<typeof createPreset>[0];
 type TagMappingFn = DefaultTags[string];
 type Core = Parameters<TagMappingFn>[1];
-type Options = Parameters<TagMappingFn>[2];
 type RenderFn = Core["render"];
 type Tag = TagNode["tag"];
 type Content = TagNode["content"];
@@ -34,12 +34,12 @@ const asListItems = (content: Content): NonNullable<Content> => {
     listItems[listIdx] = listItems[listIdx] || val;
   };
   const addItem = (val: ValueType) => {
-    // @ts-expect-error - TODO: Analyze and understand preset-html5 behavior
+    // @ts-expect-error Copy & Paste from presetHTML5.
     if (listItems[listIdx] && listItems[listIdx].content) {
-      // @ts-expect-error - TODO: Analyze and understand preset-html5 behavior
+      // @ts-expect-error Copy & Paste from presetHTML5.
       listItems[listIdx].content = listItems[listIdx].content.concat(val);
     } else {
-      // @ts-expect-error - TODO: Analyze and understand preset-html5 behavior
+      // @ts-expect-error Copy & Paste from presetHTML5.
       listItems[listIdx] = listItems[listIdx].concat(val);
     }
   };
@@ -50,7 +50,7 @@ const asListItems = (content: Content): NonNullable<Content> => {
         listIdx++;
       }
       ensureListItem(createItemNode());
-      addItem(el.substr(1));
+      addItem(el.substring(1));
     } else if (isTagNode(el) && TagNode.isOf(el, "*")) {
       if (listItems[listIdx]) {
         listIdx++;
@@ -66,11 +66,11 @@ const asListItems = (content: Content): NonNullable<Content> => {
     }
   });
 
-  // @ts-expect-error - TODO: Analyze and understand preset-html5 behavior
+  // @ts-expect-error Copy & Paste from presetHTML5.
   return [].concat(listItems);
 };
 
-const renderUrl = (node: TagNode, render: RenderFn, options: Options): string =>
+const renderUrl = (node: TagNode, render: RenderFn): string =>
   getUniqAttr(node.attrs) ? getUniqAttr(node.attrs) : render(node.content);
 
 const toNode = (tag: Tag, attrs: Attrs, content: Content): TagNode => ({
@@ -86,11 +86,11 @@ const defaultTags: DefaultTags = {
   i: (node: TagNode) => toNode("span", toStyle("font-style: italic;"), node.content),
   u: (node: TagNode) => toNode("span", toStyle("text-decoration: underline;"), node.content),
   s: (node: TagNode) => toNode("span", toStyle("text-decoration: line-through;"), node.content),
-  url: (node, { render }, options) =>
+  url: (node, { render }) =>
     toNode(
       "a",
       {
-        href: renderUrl(node, render, options),
+        href: renderUrl(node, render),
       },
       node.content,
     ),
@@ -100,6 +100,7 @@ const defaultTags: DefaultTags = {
       {
         src: render(node.content),
       },
+      // eslint-disable-next-line no-null/no-null
       null,
     ),
   quote: (node) => toNode("blockquote", {}, [toNode("p", {}, node.content)]),
