@@ -21,6 +21,7 @@
     "@ckeditor/ckeditor5-engine": "39.0.2",
     "@ckeditor/ckeditor5-essentials": "39.0.2",
     "@ckeditor/ckeditor5-find-and-replace": "39.0.2",
+    "@ckeditor/ckeditor5-font": "39.0.2",
     "@ckeditor/ckeditor5-heading": "39.0.2",
     "@ckeditor/ckeditor5-highlight": "39.0.2",
     "@ckeditor/ckeditor5-image": "39.0.2",

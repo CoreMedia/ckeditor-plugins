@@ -22,6 +22,7 @@ import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Indent } from "@ckeditor/ckeditor5-indent";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { FontColor } from "@ckeditor/ckeditor5-font";
 
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
@@ -43,6 +44,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       DocumentList,
       DocumentListProperties,
       Essentials,
+      FontColor,
       Heading,
       Indent,
       Italic,
@@ -67,6 +69,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       "italic",
       "underline",
       "strikethrough",
+      "fontColor",
       "removeFormat",
       "|",
       "link",
@@ -95,6 +98,12 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
         updatePreview(dataApi.getData(), "text");
         console.log(`Saved data within ${performance.now() - start} ms.`);
         return Promise.resolve();
+      },
+    },
+    fontColor: {
+      colors: [],
+      colorPicker: {
+        format: "hex",
       },
     },
     heading: {
