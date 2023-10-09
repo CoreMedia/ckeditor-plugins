@@ -16,7 +16,10 @@ declare module "@bbob/preset/es" {
   ): {
     options?: object;
     extend: (
-      callback: (defTags: Parameters<typeof createPreset>[0], options: object) => ReturnType<typeof createPreset>,
+      callback: (
+        defTags: Parameters<typeof createPreset>[0],
+        options: object = {},
+      ) => Parameters<typeof createPreset>[0],
     ) => ReturnType<typeof createPreset>;
     // eslint-disable-next-line @typescript-eslint/ban-types
     (options: object = {}): {
