@@ -17,18 +17,6 @@ const asFragment = (innerHtml: string): DocumentFragment => {
 
 const aut = {
   /**
-   * Delegate to our proprietary HTML to BBCode processing.
-   */
-  html2bbcode: (s: string) => html2bbcode(asFragment(s), rules),
-  /**
-   * Delegate to third-party code. Note that on any failed expectation, it may
-   * be perfectly valid, adjusting the expectation. If, for example, BBob
-   * changes from parsing `[b]` to a `<span>` with `fontWeight` to some
-   * dedicated element like `<strong>` or `<b>`, we may well adapt the
-   * expectation.
-   */
-  bbcode2html: (s: string) => bbcode2html(s, supportedTags),
-  /**
    * Artificial test for consuming result of BBCode to HTML processing from
    * the third-party library directly by our proprietary HTML to BBCode
    * processing.
@@ -114,8 +102,8 @@ describe("BBob Integration", () => {
       ${`<a href="${link}">TEXT</a>`}                              | ${`[url=${link}]TEXT[/url]`}                       | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
       ${`<a href="${link}">${link}</a>`}                           | ${`[url=${link}]${link}[/url]`}                    | ${`<a href="${link}">${link}</a>`}                            | ${"we don't offer url-tag optimization here"}
       ${`<blockquote><p>TEXT</p></blockquote>`}                    | ${`[quote]\nTEXT\n[/quote]`}                       | ${`<blockquote><p>\nTEXT\n</p></blockquote>`}                 | ${"newlines part of minimal pretty-print behavior"}
-      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]`}                         | ${`<pre>\nTEXT\n</pre>`}                                      | ${"TODO: BBob HTML5 Preset generates HTML not understood by CKEditor"}
-      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]`}                     | ${`<pre>\nTEXT\n</pre>`}                                      | ${"TODO: Current processing tries to get language from wrong tag."}
+      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]`}                         | ${`<pre><code class="language-plaintext">TEXT</code></pre>`}  | ${"TODO: BBob HTML5 Preset generates HTML not understood by CKEditor"}
+      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]`}                     | ${`<pre><code class="language-css">TEXT</code></pre>`}        | ${"TODO: Current processing tries to get language from wrong tag."}
       ${`<ul><li>TEXT</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]`}                     | ${`<ul>\n<li> TEXT\n</li></ul>`}                              | ${"newlines part of minimal pretty-print behavior"}
       ${`<ol><li>TEXT</li></ol>`}                                  | ${`[list=1]\n[*] TEXT\n[/list]`}                   | ${`<ol type="1">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor defaults to _no-type_, but BBob defaults to add it"}
       ${`<ol type="a"><li>TEXT</li></ol>`}                         | ${`[list=a]\n[*] TEXT\n[/list]`}                   | ${`<ol type="a">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor may ignore type, if not configured to support this"}
@@ -200,12 +188,11 @@ describe("BBob Integration", () => {
 
     /**
      * We rate these deviations "acceptable" for now. To change, we may need,
-     * for example, provide a custom preset for bbcode2html.
+     * for example, to provide a custom preset for bbcode2html.
      */
     it.each`
-      bbCode                             | expected                      | comment
-      ${"[code=javascript]lorem[/code]"} | ${"[code]\nlorem\n[/code]"}   | ${"HTML 5 Preset does not handle language attribute."}
-      ${"[quote=author]lorem[/quote]"}   | ${"[quote]\nlorem\n[/quote]"} | ${"We have no mapping for author to HTML."}
+      bbCode                           | expected                      | comment
+      ${"[quote=author]lorem[/quote]"} | ${"[quote]\nlorem\n[/quote]"} | ${"We have no mapping for author to HTML."}
     `(
       "[$#] should process back and forth with only minor change: $bbCode → $expected ($comment)",
       ({ bbCode, expected }: { bbCode: string; expected: string }) => {
