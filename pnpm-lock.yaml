@@ -447,6 +447,9 @@ importers:
       '@bbob/preset':
         specifier: ^3.0.2
         version: 3.0.2
+      '@bbob/preset-html5':
+        specifier: ^3.0.2
+        version: 3.0.2
       '@coremedia/ckeditor5-core-common':
         specifier: 16.0.1-rc.2
         version: link:../ckeditor5-core-common
@@ -2638,6 +2641,13 @@ packages:
 
   /@bbob/plugin-helper@3.0.2:
     resolution: {integrity: sha512-t1wFB3hbUg3pKq7TXk+mnnMcKjX6D29HxTAxU/+2mIbsWXaqgHLfH9FFxhZ8s/sGaLH4qgOSH+lgynpF3zy62Q==}
+    dev: false
+
+  /@bbob/preset-html5@3.0.2:
+    resolution: {integrity: sha512-J+c3aOQKD6n1HXGxB+o3tQuRTeqHLXBifBMFY4rT/y19tU3dZySI8TT/07pDqJVeh1PAa1KPaCww7m3O4QS0oQ==}
+    dependencies:
+      '@bbob/plugin-helper': 3.0.2
+      '@bbob/preset': 3.0.2
     dev: false
 
   /@bbob/preset@3.0.2:
