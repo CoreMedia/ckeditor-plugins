@@ -82,9 +82,13 @@ const toNode = (tag: Tag, attrs: Attrs, content: Content): TagNode => ({
 const toStyle = (style: string): { style: string } => ({ style });
 
 const defaultTags: DefaultTags = {
+  // CKEditor 5 will "auto-fix" that to `<strong>`. Keep aligned with HTML5 Preset by BBCode.
   b: (node: TagNode) => toNode("span", toStyle("font-weight: bold;"), node.content),
+  // CKEditor 5 will "auto-fix" that to `<i>`. Keep aligned with HTML5 Preset by BBCode.
   i: (node: TagNode) => toNode("span", toStyle("font-style: italic;"), node.content),
+  // CKEditor 5 will "auto-fix" that to `<u>`. Keep aligned with HTML5 Preset by BBCode.
   u: (node: TagNode) => toNode("span", toStyle("text-decoration: underline;"), node.content),
+  // CKEditor 5 will "auto-fix" that to `<s>`. Keep aligned with HTML5 Preset by BBCode.
   s: (node: TagNode) => toNode("span", toStyle("text-decoration: line-through;"), node.content),
   url: (node, { render }) =>
     toNode(
@@ -104,7 +108,19 @@ const defaultTags: DefaultTags = {
       null,
     ),
   quote: (node) => toNode("blockquote", {}, [toNode("p", {}, node.content)]),
-  code: (node) => toNode("pre", {}, node.content),
+  /**
+   * Adapted for CKEditor 5: CKEditor 5 requires a nested `<code>` element and
+   * allows specifying the language via a corresponding class parameter.
+   */
+  code: (node) => {
+    if ("class" in node.attrs) {
+      // Break recursion: Nothing to do, it is our node we created before
+      // by assigning a language attribute.
+      return node;
+    }
+    const language = getUniqAttr(node.attrs) || "plaintext";
+    return toNode("pre", {}, [toNode("code", { class: `language-${language}` }, node.content)]);
+  },
   style: (node) => toNode("span", toStyle(getStyleFromAttrs(node.attrs)), node.content),
   list: (node) => {
     const type = getUniqAttr(node.attrs);
