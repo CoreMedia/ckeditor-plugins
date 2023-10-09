@@ -13,8 +13,17 @@ declare module "@bbob/preset/es" {
     defTags: Record<string, (node: TagNode, core: { render: (content: Content) => string }, options: object) => void>,
     // eslint-disable-next-line @typescript-eslint/ban-types
     processor?: Function,
+  ): {
+    options?: object;
+    extend: (
+      callback: (defTags: Parameters<typeof createPreset>[0], options: object) => ReturnType<typeof createPreset>,
+    ) => ReturnType<typeof createPreset>;
     // eslint-disable-next-line @typescript-eslint/ban-types
-  ): Function;
+    (options: object = {}): {
+      options?: object;
+      (tree: unknown, core: { render: (content: Content) => string }): unknown;
+    };
+  };
 
   export { createPreset };
   export default createPreset;
