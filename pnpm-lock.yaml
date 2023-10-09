@@ -96,6 +96,9 @@ importers:
       '@ckeditor/ckeditor5-find-and-replace':
         specifier: 39.0.2
         version: 39.0.2
+      '@ckeditor/ckeditor5-font':
+        specifier: 39.0.2
+        version: 39.0.2
       '@ckeditor/ckeditor5-heading':
         specifier: 39.0.2
         version: 39.0.2
@@ -2787,6 +2790,12 @@ packages:
       '@ckeditor/ckeditor5-ui': 39.0.2
       ckeditor5: 39.0.2
       lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-font@39.0.2:
+    resolution: {integrity: sha512-6sGgo9X23gAllVjzGH1gOkjIEHkvm2O40IqUKCBwzn0K6Ry6St4R4QtcQeFV5jxAMKn0eD7blPuhItVrjmN0hw==}
+    dependencies:
+      ckeditor5: 39.0.2
     dev: false
 
   /@ckeditor/ckeditor5-heading@39.0.2:
