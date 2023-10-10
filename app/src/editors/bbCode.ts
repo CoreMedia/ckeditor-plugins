@@ -2,7 +2,7 @@ import { Autosave } from "@ckeditor/ckeditor5-autosave";
 import { Bold, Italic, Strikethrough, Underline } from "@ckeditor/ckeditor5-basic-styles";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
-import { BBCode } from "@coremedia/ckeditor5-coremedia-bbcode";
+import { BBCode } from "@coremedia/ckeditor5-bbcode";
 import { Heading } from "@ckeditor/ckeditor5-heading";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";

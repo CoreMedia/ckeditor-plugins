@@ -38,7 +38,7 @@
     "@ckeditor/ckeditor5-ui": "39.0.2",
     "@ckeditor/ckeditor5-utils": "39.0.2",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
-    "@coremedia/ckeditor5-coremedia-bbcode": "16.0.1-rc.2",
+    "@coremedia/ckeditor5-bbcode": "16.0.1-rc.2",
     "@coremedia/ckeditor5-coremedia-blocklist": "16.0.1-rc.2",
     "@coremedia/ckeditor5-coremedia-content-clipboard": "16.0.1-rc.2",
     "@coremedia/ckeditor5-coremedia-differencing": "16.0.1-rc.2",

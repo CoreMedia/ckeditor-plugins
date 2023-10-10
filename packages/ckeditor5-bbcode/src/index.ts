@@ -1,5 +1,5 @@
 /**
- * @module ckeditor5-coremedia-bbcode
+ * @module ckeditor5-bbcode
  */
 
 export { BBCode } from "./BBCode";

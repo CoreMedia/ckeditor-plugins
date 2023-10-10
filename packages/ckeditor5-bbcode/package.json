@@ -1,5 +1,5 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-bbcode",
+  "name": "@coremedia/ckeditor5-bbcode",
   "version": "16.0.1-rc.2",
   "description": "BBCode Data-Processor",
   "keywords": [
