@@ -91,7 +91,7 @@ Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
 |-------|-------------------------------------|
 | `[b]` | `<span style="font-weight: bold;">` |
 
-This is well understood by the CKEditor 5 Bold plugin. The `toData`
+This is well understood by the Bold plugin of CKEditor 5. The `toData`
 transformation will accept the above representation as well as the default
 representation `<strong>Text</strong>` and will map them back to `[b]` again.
 
@@ -164,6 +164,21 @@ fontColor: {
 Formats such as HSL, RGB are not supported. With the `documentColors` enabled,
 also colors existing in the BBCode are offered for preselection.
 
+### Links
+
+Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+
+| Tag                      | as HTML                  |
+|--------------------------|--------------------------|
+| `[url=https://...]`      | `<a href="https://...">` |
+| `[url]https://...[/url]` | `<a href="https://...">` |
+
+In favor of shortened BBCode, also the `toData` processing uses the short
+notion for URL if text content and URL are strictly equal.
+
+**Escaping:** In case, the URL contains characters `[` or `]`, they will be
+encoded to the URL encoded form in `toData` processing.
+
 ### Code Blocks
 
 The BBCode Plugin ships with an adapted transformation compared to the
@@ -234,17 +249,85 @@ The `useAttribute` flag will signal, that the `<ol>` `type` attribute is used.
 selectors, you cannot distinguish in styling between `i` and `I` or `a`
 and `A`. The rendered BBCode, though, will respect the different cases.
 
-### Links
+### Tables
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
 
-| Tag                      | as HTML                  |
-|--------------------------|--------------------------|
-| `[url=https://...]`      | `<a href="https://...">` |
-| `[url]https://...[/url]` | `<a href="https://...">` |
+| Tag        | as HTML         |
+|------------|-----------------|
+| `[table]`  | `<table>`       |
+| `[thead]`  | `<thead>`       |
+| `[tbody]`  | `<tbody>`       |
+| `[tr]`     | `<tr>`          |
+| `[td]`     | `<td>`          |
+| `[th]`     | `<th>`          |
 
-In favor of shortened BBCode, also the `toData` processing uses the short
-notion for URL if text content and URL are strictly equal.
+As, for example, cells spanning multiple columns are not supported, the
+recommended configuration for the CKEditor 5 table feature is:
+
+```text
+table: {
+  contentToolbar: ["tableColumn", "tableRow"],
+},
+```
+
+**Limitation:** Note that mapping by [BBob][] to HTML is a rather simple
+1:1 mapping of BBCode tag to HTML tag. Having this, it does not respect, for
+example, the requirement, that a heading column must be placed into a `thead`
+section. Otherwise, the layout in CKEditor 5 will break.
+
+Thus, to make a table with `[th]` entries work in CKEditor 5 regarding the
+column and row headers, the BBCode must be as follows:
+
+```text
+[table]
+  [thead]
+    [tr]
+      [th]Head C/R[/th]
+      [th]Head R[/th]
+    [/tr]
+  [/thead]
+  [tbody]
+    [tr]
+      [th]Head C[/th]
+      [td]Data[/td]
+    [/tr]
+  [/tbody]
+[/table]
+```
+
+### Data Facade
+
+If you want to prevent unchanged data (thus, without editorial actions applied)
+to be written back to some backend that stores BBCode, you may want to use the
+CKEditor 5 Data Facade plugin. This will, for example, prevent re-ordering of
+inline style tags:
+
+```text
+[b][i]bold, italic[/i][/b]
+```
+
+may as well be rendered in `toData` processing as:
+
+```text
+[i][b]bold, italic[/b][/i]
+```
+
+Similarly, the data facade will prevent accidentally applied escaping to
+unknown tags to be written back to server. Without data facade, assume the
+following BBCode with some vendor-specific tag:
+
+```text
+[spoiler]Don't tell![/spoiler]
+```
+
+This will be written back as:
+
+```text
+\[spoiler\]Don't tell!\[/spoiler\]
+```
+
+With the Data Facade plugin enabled will only be written on editorial actions.
 
 ### Unsupported BBCode Tags
 
