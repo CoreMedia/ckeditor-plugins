@@ -61,8 +61,8 @@ export class BBCodeBold implements BBCodeProcessingRule {
       bold = parsedWeight > fontWeightNormal;
     }
     if (bold) {
-      // If it existed: We parsed it, no need for others to respect it.
-      style.fontWeight = "";
+      // If it existed, we parsed it, no need for others to respect it.
+      style.removeProperty("fontWeight");
       return `[b]${content}[/b]`;
     }
   }
