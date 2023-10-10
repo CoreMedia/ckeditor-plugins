@@ -18,7 +18,13 @@ export class BBCodeUrl implements BBCodeProcessingRule {
     }
     const { href } = element;
     if (href) {
-      return `[url=${escapeHref(href)}]${content}[/url]`;
+      const escapedHref = escapeHref(href);
+      if (href === escapedHref && href === content) {
+        // There was nothing to escape. We may now safely apply some pretty-print
+        // optimization if content and HREF are strictly equal to one another.
+        return `[url]${content}[/url]`;
+      }
+      return `[url=${escapedHref}]${content}[/url]`;
     }
   }
 }
