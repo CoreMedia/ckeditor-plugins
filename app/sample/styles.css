@@ -140,6 +140,22 @@ input.error {
   text-align: justify;
 }
 
+/* --------- CK List Styles (useAttribute: true)  ------------------------------------------------------------------- */
+
+.ck-content ol[type="1"] {
+  list-style-type: decimal;
+}
+
+/* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
+.ck-content ol[type="i"] {
+  list-style-type: lower-roman;
+}
+
+/* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
+.ck-content ol[type="a"] {
+  list-style-type: lower-alpha;
+}
+
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
 #ckeditor {

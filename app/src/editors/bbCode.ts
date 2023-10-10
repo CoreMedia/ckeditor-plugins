@@ -121,7 +121,40 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       },
     },
     fontColor: {
-      colors: [],
+      colors: [
+        {
+          color: "#000000",
+          label: "Black",
+        },
+        {
+          color: "#ff0000",
+          label: "Red",
+        },
+        {
+          color: "#ffff00",
+          label: "Yellow",
+        },
+        {
+          color: "#00ff00",
+          label: "Green",
+        },
+        {
+          color: "#00ffff",
+          label: "Cyan",
+        },
+        {
+          color: "#0000ff",
+          label: "Blue",
+        },
+        {
+          color: "#ff00ff",
+          label: "Fuchsia",
+        },
+        {
+          color: "#ffffff",
+          label: "White",
+        },
+      ],
       colorPicker: {
         format: "hex",
       },
@@ -145,8 +178,10 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     },
     list: {
       properties: {
-        startIndex: true,
-        styles: false,
+        startIndex: false,
+        styles: {
+          useAttribute: true,
+        },
         reversed: false,
       },
     },
