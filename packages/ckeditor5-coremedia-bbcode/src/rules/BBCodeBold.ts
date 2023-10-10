@@ -1,10 +1,26 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
+/**
+ * A font-weight, we consider _normal_ weighted.
+ */
 const fontWeightNormal = 400;
+/**
+ * A font-weight, we consider _bold_ weighted.
+ */
 const fontWeightBold = 700;
+/**
+ * Possible HTML tags that denote a bold style.
+ */
 const boldTags = ["b", "strong"];
+/**
+ * Font-weight entries, we identify to veto any possible bold tag.
+ */
 const nonBoldFontWeights = ["normal", "lighter"];
-
+/**
+ * Validate, if the given font-weight represents a numeric value.
+ *
+ * @param weight - weight parameter value to check
+ */
 const isNumericFontWeight = (weight: string): boolean => /^\d+$/.test(weight);
 
 /**
@@ -28,6 +44,10 @@ const parseFontWeight = (fontWeight: string): number | undefined => {
   }
 };
 
+/**
+ * Processing rule for transforming a bold style represented in HTML
+ * (either by tag or font-weight) to `[b]Text[/b]` in BBCode.
+ */
 export class BBCodeBold implements BBCodeProcessingRule {
   readonly id = "bold";
   readonly tags = ["b"];
@@ -48,4 +68,8 @@ export class BBCodeBold implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Processing rule instance for transforming a bold style represented in HTML
+ * (either by tag or font-weight) to `[b]Text[/b]` in BBCode.
+ */
 export const bbCodeBold = new BBCodeBold();
