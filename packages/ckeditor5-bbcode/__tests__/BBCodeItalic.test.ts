@@ -11,6 +11,7 @@ describe("BBCodeItalic", () => {
       ${`<i>TEXT</i>`}                                   | ${`[i]TEXT[/i]`} | ${`CKEditor 5 default data view representation`}
       ${`<em>TEXT</em>`}                                 | ${`[i]TEXT[/i]`} | ${`alternative HTML 5 representation`}
       ${`<i style="font-style: normal">TEXT</i>`}        | ${undefined}     | ${`vetoed italic tag; undefined, so other rules may kick in`}
+      ${`<b style="font-style: italic;">TEXT</b>`}       | ${`[i]TEXT[/i]`} | ${`Corner case: "<b>" will be handled by outer rules.`}
     `(
       "$[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
