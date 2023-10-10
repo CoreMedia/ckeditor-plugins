@@ -42,7 +42,7 @@ export const bbCode = {
   img: (url: string) => `[img]${url}[/img]`,
   emoji: (emoji: string) => `[${emoji}]`,
   quote: (text: string, author?: string) => (author ? `[quote="${author}"]${text}[/quote]` : `[quote]${text}[/quote]`),
-  code: (text: string) => `[code]${text}[/code]`,
+  code: (text: string, language?: string) => (language ? `[code=${language}]\n${text}\n[/code]` : `[code]\n${text}\n[/code]`),
   style: (text: string, style: RequireSelected<StyleOptions, "size"> | RequireSelected<StyleOptions, "color">) => {
     let styleOptions = ``;
     if (style.size) {

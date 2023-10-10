@@ -8,7 +8,6 @@ export const inlineFormatData: ExampleData = {
   Italic: paragraphs(`${bbCode.h1("Italic Text")}`, `Lorem ${bbCode.italic("ipsum")} dolor`),
   Underline: paragraphs(`${bbCode.h1("Underline Text")}`, `Lorem ${bbCode.underline("ipsum")} dolor`),
   Strikethrough: paragraphs(`${bbCode.h1("Strikethrough Text")}`, `Lorem ${bbCode.strikethrough("ipsum")} dolor`),
-  Code: paragraphs(`${bbCode.h1("Code Text")}`, `Lorem ${bbCode.code("ipsum")} dolor`),
   Styles: paragraphs(
     `${bbCode.h1("Text Using Styles")}`,
     `Lorem ${bbCode.style("ipsum", { size: "1.5em" })} dolor`,
