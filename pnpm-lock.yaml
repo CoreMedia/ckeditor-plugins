@@ -147,9 +147,9 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
-      '@coremedia/ckeditor5-coremedia-bbcode':
+      '@coremedia/ckeditor5-bbcode':
         specifier: 16.0.1-rc.2
-        version: link:../packages/ckeditor5-coremedia-bbcode
+        version: link:../packages/ckeditor5-bbcode
       '@coremedia/ckeditor5-coremedia-blocklist':
         specifier: 16.0.1-rc.2
         version: link:../packages/ckeditor5-coremedia-blocklist
@@ -436,7 +436,7 @@ importers:
         specifier: ^4.9.5
         version: 4.9.5
 
-  packages/ckeditor5-coremedia-bbcode:
+  packages/ckeditor5-bbcode:
     dependencies:
       '@bbob/core':
         specifier: ^3.0.2
