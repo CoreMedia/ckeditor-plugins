@@ -123,7 +123,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     fontColor: {
       colors: [
         {
-          color: "#000000",
+          color: "hsl(0,0%,0%)",
           label: "Black",
         },
         {
@@ -131,7 +131,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
           label: "Red",
         },
         {
-          color: "#ffff00",
+          color: "rgb(255,255,0)",
           label: "Yellow",
         },
         {
@@ -147,12 +147,17 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
           label: "Blue",
         },
         {
-          color: "#ff00ff",
+          color: "fuchsia",
           label: "Fuchsia",
         },
         {
           color: "#ffffff",
           label: "White",
+          hasBorder: true,
+        },
+        {
+          color: "rgba(0,0,0,0.63)",
+          label: "Darken",
         },
       ],
       colorPicker: {
