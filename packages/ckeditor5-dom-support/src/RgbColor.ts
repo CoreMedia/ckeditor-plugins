@@ -1,3 +1,5 @@
+import { w3ExtendedColorNames } from "./w3ExtendedColorNames";
+
 /**
  * Regular expression for parsing `rgb()` and `rgba()` encoded colors. Note
  * that browsers will automatically parse any other color code representation
@@ -63,10 +65,53 @@ export class RgbColor {
   readonly blue: number;
 
   /**
-   * We use `1000` as precision for `alpha`. This is similar to the precision
-   * browsers provide.
+   * The W3C extended color name matching the given RGB value. `undefined`
+   * if RGB(A) cannot be represented as W3C extended color name.
    */
-  readonly #alpha1000?: number;
+  readonly colorName: string | undefined;
+
+  /**
+   * Signals, if any alpha channel has been set.
+   */
+  readonly hasAlpha: boolean;
+
+  /**
+   * Signals, if this color is opaque (no alpha or alpha = 1.0).
+   */
+  readonly opaque: boolean;
+
+  /**
+   * Get alpha, if set. The alpha range is from 0.0 to 1.0 including.
+   */
+  readonly alpha: number | undefined;
+
+  /**
+   * The color as hexadecimal representation such as `#010aff`.
+   *
+   * A possibly set alpha channel is ignored.
+   */
+  readonly hex: `#${string}`;
+
+  /**
+   * The color as hexadecimal representation such as `#010af0a0`.
+   *
+   * An unset alpha will default to `FF` for full opacity.
+   */
+  readonly hexa: `#${string}`;
+
+  /**
+   * The color as `rgb()` representation.
+   *
+   * Any possibly set alpha channel is ignored.
+   */
+  readonly rgb: `rgb(${string})`;
+
+  /**
+   * The color as `rgba()` representation.
+   *
+   * An unset alpha will default to `1` for full opacity.
+   */
+  readonly rgba: `rgba(${string})`;
 
   /**
    * Constructor. Fails for invalid color components or alpha value.
@@ -82,7 +127,25 @@ export class RgbColor {
     this.red = vcc(red);
     this.green = vcc(green);
     this.blue = vcc(blue);
-    this.#alpha1000 = alpha === undefined ? undefined : Math.floor(va(alpha) * RgbColor.#alphaScale);
+
+    this.hasAlpha = va(alpha) !== undefined;
+
+    const alpha1000 = alpha === undefined ? undefined : Math.floor(alpha * RgbColor.#alphaScale);
+    // Used for Hex-Alpha representation.
+    const alpha255 = alpha === undefined ? 255 : Math.floor(alpha * 255);
+    // Used for Rgb-Alpha representation.
+    const alpha1 = alpha1000 === undefined ? 1 : alpha1000 / RgbColor.#alphaScale;
+
+    this.opaque = alpha === undefined || alpha1000 === RgbColor.#alphaScale;
+    this.alpha = alpha === undefined ? undefined : alpha1;
+    this.hex = `#${((1 << 24) | (red << 16) | (green << 8) | blue).toString(16).slice(1)}`;
+    this.hexa = `${this.hex}${((1 << 8) | alpha255).toString(16).slice(1)}`;
+    this.rgb = `rgb(${red},${green},${blue})`;
+    this.rgba = `rgba(${red},${green},${blue},${alpha1})`;
+
+    // Initialize color name. As we are immutable, only required to do once.
+    // We ignore alpha when it signals that the color is opaque.
+    this.colorName = this.opaque ? w3ExtendedColorNames[this.hex] : undefined;
   }
 
   /**
@@ -157,66 +220,6 @@ export class RgbColor {
   }
 
   /**
-   * Signals, if any alpha channel has been set.
-   */
-  get hasAlpha(): boolean {
-    return this.#alpha1000 !== undefined;
-  }
-
-  /**
-   * Invokes the given `onSet` callback, when alpha is set.
-   * Returns `undefined`, otherwise.
-   *
-   * @param onSet will be invoked with current alpha value when set
-   */
-  #ifAlpha<T = number>(onSet: (alpha: number) => T): T | undefined {
-    const alpha1000 = this.#alpha1000;
-    if (alpha1000 === undefined) {
-      return undefined;
-    }
-    return onSet(alpha1000 / RgbColor.#alphaScale);
-  }
-
-  /**
-   * Get alpha, if set. The alpha range is from 0.0 to 1.0 including.
-   */
-  get alpha(): number | undefined {
-    return this.#ifAlpha((a) => a);
-  }
-
-  /**
-   * Get alpha, if set. The alpha range is from 0 to 255 including.
-   * A value of 255 represents `alpha` = 1.0.
-   */
-  get alpha255(): number | undefined {
-    return this.#ifAlpha((a) => Math.floor(a * 255));
-  }
-
-  /**
-   * Transforms the color to its hexadecimal representation such as `#010aff`.
-   *
-   * A possibly set alpha channel is ignored.
-   */
-  get hex(): `#${string}` {
-    const r = this.red;
-    const g = this.green;
-    const b = this.blue;
-    return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-  }
-
-  /**
-   * Transforms the color to its hexadecimal representation such as `#010af0a0`
-   *
-   * An unset alpha will default to `FF` for full opacity.
-   */
-  get hexa(): `#${string}` {
-    const hexRgb = this.hex;
-    const alpha255 = this.alpha255 ?? 255;
-    const alphaString = ((1 << 8) | alpha255).toString(16).slice(1);
-    return `${hexRgb}${alphaString}`;
-  }
-
-  /**
    * Transforms the color to its hexadecimal representation.
    *
    * Depending on if the alpha channel is set or not, uses representation as
@@ -224,31 +227,6 @@ export class RgbColor {
    */
   toHex(): `#${string}` {
     return this.hasAlpha ? this.hexa : this.hex;
-  }
-
-  /**
-   * Transforms the color to its `rgb()` representation.
-   *
-   * Any possibly set alpha channel is ignored.
-   */
-  get rgb(): `rgb(${string})` {
-    const r = this.red;
-    const g = this.green;
-    const b = this.blue;
-    return `rgb(${r},${g},${b})`;
-  }
-
-  /**
-   * Transforms the color to its `rgba()` representation.
-   *
-   * An unset alpha will default to `1` for full opacity.
-   */
-  get rgba(): `rgba(${string})` {
-    const r = this.red;
-    const g = this.green;
-    const b = this.blue;
-    const a = this.alpha ?? 1;
-    return `rgba(${r},${g},${b},${a})`;
   }
 
   /**
@@ -261,7 +239,15 @@ export class RgbColor {
     return this.hasAlpha ? this.rgba : this.rgb;
   }
 
-  toString(): `rgb(${string})` | `rgba(${string})` {
+  /**
+   * Get (preferred) color name representation. Falls back to `hex` or `hexa`
+   * code, when it does not match a W3C extended color name.
+   */
+  toColorNameOrHex(): string | undefined {
+    return this.colorName ?? this.toHex();
+  }
+
+  toString(): string {
     return this.toRgb();
   }
 }

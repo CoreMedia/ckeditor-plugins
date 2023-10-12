@@ -150,6 +150,44 @@ describe("RgbColor", () => {
     });
   });
 
+  describe("Color Name Representation", () => {
+    describe("RgbColor.colorName", () => {
+      it.each`
+        rgb                          | expected     | comment
+        ${rgb(1, 2, 3)}              | ${undefined} | ${"no pre-defined W3C color"}
+        ${rgb(0, 0, 0)}              | ${"black"}   | ${""}
+        ${rgb(255, 255, 255)}        | ${"white"}   | ${""}
+        ${rgb(128, 128, 128)}        | ${"gray"}    | ${""}
+        ${rgb(128, 128, 128, 0)}     | ${undefined} | ${"no name if alpha is set"}
+        ${rgb(128, 128, 128, 1)}     | ${"gray"}    | ${"ignore alpha, if opaque"}
+        ${rgb(128, 128, 128, 0.255)} | ${undefined} | ${"no name if alpha is set"}
+      `(
+        "[$#] Should represent $rgb as color name: $expected ($comment)",
+        ({ rgb, expected }: { rgb: RgbColor; expected: string }) => {
+          expect(rgb.colorName).toStrictEqual(expected);
+        },
+      );
+    });
+
+    describe("RgbColor.toColorNameOrHex", () => {
+      it.each`
+        rgb                          | expected       | comment
+        ${rgb(1, 2, 3)}              | ${"#010203"}   | ${"fall-back to hex for unknown name"}
+        ${rgb(0, 0, 0)}              | ${"black"}     | ${""}
+        ${rgb(255, 255, 255)}        | ${"white"}     | ${""}
+        ${rgb(128, 128, 128)}        | ${"gray"}      | ${""}
+        ${rgb(128, 128, 128, 0)}     | ${"#80808000"} | ${"no name if alpha is set"}
+        ${rgb(128, 128, 128, 1)}     | ${"gray"}      | ${"ignore alpha, if opaque"}
+        ${rgb(128, 128, 128, 0.255)} | ${"#80808041"} | ${"no name if alpha is set"}
+      `(
+        "[$#] Should represent $rgb as preferred color name: $expected ($comment)",
+        ({ rgb, expected }: { rgb: RgbColor; expected: string }) => {
+          expect(rgb.toColorNameOrHex()).toStrictEqual(expected);
+        },
+      );
+    });
+  });
+
   describe("Alpha Handling", () => {
     describe("hasAlpha", () => {
       it.each`
@@ -180,22 +218,6 @@ describe("RgbColor", () => {
         "[$#] Should expose alpha for $rgb as: $expected ($comment)",
         ({ rgb, expected }: { rgb: RgbColor; expected: number }) => {
           expect(rgb.alpha).toStrictEqual(expected);
-        },
-      );
-    });
-
-    describe("alpha255", () => {
-      it.each`
-        rgb                    | expected
-        ${rgb(1, 2, 3)}        | ${undefined}
-        ${rgb(1, 2, 3, 0)}     | ${0}
-        ${rgb(1, 2, 3, 0.5)}   | ${127}
-        ${rgb(1, 2, 3, 1)}     | ${255}
-        ${rgb(1, 2, 3, 0.123)} | ${31}
-      `(
-        "[$#] Should expose alpha for $rgb as: $expected ($comment)",
-        ({ rgb, expected }: { rgb: RgbColor; expected: number }) => {
-          expect(rgb.alpha255).toStrictEqual(expected);
         },
       );
     });

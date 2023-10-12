@@ -20,3 +20,4 @@ export * from "./ParentNodes";
 export * from "./RgbColor";
 export * from "./Texts";
 export * from "./Types";
+export * from "./w3ExtendedColorNames";

@@ -47,4 +47,5 @@ export {
 } from "./TypeGuards";
 export { getColor } from "./CSSStyleDeclarations";
 export { RgbColor, rgb } from "./RgbColor";
+export { w3ExtendedColorNames } from "./w3ExtendedColorNames";
 export { type HasChildren, type HasNamespaceUri } from "./Types";
