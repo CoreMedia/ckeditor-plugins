@@ -45,4 +45,6 @@ export {
   isParentNode,
   isText,
 } from "./TypeGuards";
+export { getColor } from "./CSSStyleDeclarations";
+export { RgbColor, rgb } from "./RgbColor";
 export { type HasChildren, type HasNamespaceUri } from "./Types";
