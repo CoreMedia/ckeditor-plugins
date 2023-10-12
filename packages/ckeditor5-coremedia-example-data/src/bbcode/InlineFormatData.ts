@@ -18,9 +18,4 @@ export const inlineFormatData: ExampleData = {
       color: "fuchsia",
     })} dolor`,
   ),
-  Color: paragraphs(
-    `${bbCode.h1("Colored Text")}`,
-    `Lorem ${bbCode.color("ipsum", "fuchsia")} dolor`,
-    `Lorem ${bbCode.color("ipsum", "#ff0000")} dolor`,
-  ),
 };
