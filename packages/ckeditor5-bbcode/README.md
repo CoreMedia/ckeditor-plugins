@@ -135,9 +135,10 @@ representation `<s>Text</s>` and will map them back to `[s]` again.
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
 
-| Tag               | as HTML                          |
-|-------------------|----------------------------------|
-| `[color=#ff0000]` | `<span style="color: #ff0000;">` |
+| Tag                 | as HTML                            |
+|---------------------|------------------------------------|
+| `[color=#ff0000]`   | `<span style="color: #ff0000;">`   |
+| `[color=#ff0000a0]` | `<span style="color: #ff0000a0;">` |
 
 A possible recommended configuration for the CKEditor 5 font-color feature to
 support this, is:
@@ -151,8 +152,12 @@ fontColor: {
       label: "Black",
     },
     {
-      color: "#ff0000",
+      color: "red",
       label: "Red",
+    },
+    {
+      color: "rgba(0, 0, 255, 1.0)",
+      label: "Blue",
     },
   ],
   colorPicker: {
@@ -161,8 +166,9 @@ fontColor: {
 },
 ```
 
-Formats such as HSL, RGB are not supported. With the `documentColors` enabled,
-also colors existing in the BBCode are offered for preselection.
+Formats such as HSL, RGB are supported in `toData` mapping. They will be
+transparently transformed to the corresponding hex/hex-alpha codes suitable
+for the `[color]` tag.
 
 ### Links
 
