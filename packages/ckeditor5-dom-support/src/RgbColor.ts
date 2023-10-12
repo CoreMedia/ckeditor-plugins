@@ -243,7 +243,7 @@ export class RgbColor {
    * Get (preferred) color name representation. Falls back to `hex` or `hexa`
    * code, when it does not match a W3C extended color name.
    */
-  toColorNameOrHex(): string | undefined {
+  toColorNameOrHex(): string {
     return this.colorName ?? this.toHex();
   }
 
