@@ -1,5 +1,5 @@
 import { documentFromHtml, isHTMLElement, rgb, RgbColor } from "../src";
-import { getColor } from "../src/CSSStyleDeclarations";
+import { fontWeightToNumber, getColor, getFontWeightNumeric } from "../src/CSSStyleDeclarations";
 
 const parseFirstElement = (html: string): Element | undefined =>
   documentFromHtml(html).body.firstElementChild ?? undefined;
@@ -56,6 +56,32 @@ describe("CSSStyleDeclarations", () => {
         } else {
           expect(actual).toMatchObject(expected);
         }
+      },
+    );
+  });
+
+  describe("getFontWeightNumeric", () => {
+    it.each`
+      style                      | expected                      | comment
+      ${undefined}               | ${undefined}                  | ${`unset style`}
+      ${"color: fuchsia;"}       | ${undefined}                  | ${`No font-weight information.`}
+      ${"font-weight: bold;"}    | ${fontWeightToNumber.bold}    | ${``}
+      ${"font-weight: bolder;"}  | ${fontWeightToNumber.bolder}  | ${``}
+      ${"font-weight: lighter;"} | ${fontWeightToNumber.lighter} | ${``}
+      ${"font-weight: normal;"}  | ${fontWeightToNumber.normal}  | ${``}
+      ${"font-weight: inherit;"} | ${undefined}                  | ${``}
+      ${"font-weight: initial;"} | ${undefined}                  | ${``}
+      ${"font-weight: unset;"}   | ${undefined}                  | ${``}
+      ${"font-weight: 0;"}       | ${0}                          | ${``}
+      ${"font-weight: 400;"}     | ${400}                        | ${``}
+      ${"font-weight: 700;"}     | ${700}                        | ${``}
+      ${"font-weight: 900;"}     | ${900}                        | ${``}
+    `(
+      `[$#] Should parse style '$style' to numeric font-weight: $expected`,
+      ({ style: styleDecl, expected }: { style: string; expected: number | undefined }) => {
+        const declaration = style(styleDecl);
+        const actual = getFontWeightNumeric(declaration);
+        expect(actual).toBe(expected);
       },
     );
   });

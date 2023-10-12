@@ -34,3 +34,45 @@ export const getColor = (style: CSSStyleDeclaration): RgbColor | string | undefi
   // more or less simple parsing.
   return RgbColor.tryParseRgb(color);
 };
+
+/**
+ * Some simplistic assumptions on font-weight by key-word.
+ */
+export const fontWeightToNumber = {
+  lighter: 100,
+  normal: 400,
+  bold: 700,
+  bolder: 700,
+};
+
+/**
+ * Type-guard trick to "cast" to valid font-weight well-known key.
+ *
+ * @param value - value to guard
+ */
+const isWellKnownFontWeight = (value: unknown): value is keyof typeof fontWeightToNumber => typeof value === "string" && value in fontWeightToNumber;
+
+/**
+ * Tries to get the font-weight from `CSSStyleDeclaration` and transform it
+ * into some numeric representation. If the font-weight is unset or cannot be
+ * parsed, `undefined` is returned.
+ *
+ * Regarding relative font-weight-names (lighter, bolder) a normal weighted
+ * parent is assumed.
+ */
+export const getFontWeightNumeric = (style: CSSStyleDeclaration): number | undefined => {
+  const { fontWeight } = style;
+  const lowerFontWeight = fontWeight.trim().toLowerCase();
+  if (lowerFontWeight === "") {
+    // Unspecified. No need to continue.
+    return;
+  }
+  const nFontWeight = Number(lowerFontWeight);
+  if (Number.isNaN(nFontWeight)) {
+    if (isWellKnownFontWeight(lowerFontWeight)) {
+      return fontWeightToNumber[lowerFontWeight];
+    }
+  } else {
+    return nFontWeight;
+  }
+};
