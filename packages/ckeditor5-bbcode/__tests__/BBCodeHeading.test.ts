@@ -3,7 +3,7 @@ import { bbCodeHeading } from "../src";
 
 const prettyPrintNewlines = "\n\n";
 
-describe("BBCodeHeadings", () => {
+describe("BBCodeHeading", () => {
   describe("Default Configuration", () => {
     const rule = bbCodeHeading;
 
