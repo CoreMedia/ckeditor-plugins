@@ -1,48 +1,49 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import { FontWeightInformation, fontWeightToNumber, getFontWeight } from "@coremedia/ckeditor5-dom-support";
 
-/**
- * A font-weight, we consider _normal_ weighted.
- */
-const fontWeightNormal = 400;
-/**
- * A font-weight, we consider _bold_ weighted.
- */
-const fontWeightBold = 700;
 /**
  * Possible HTML tags that denote a bold style.
  */
 const boldTags = ["b", "strong"];
-/**
- * Font-weight entries, we identify to veto any possible bold tag.
- */
-const nonBoldFontWeights = ["normal", "lighter"];
-/**
- * Validate, if the given font-weight represents a numeric value.
- *
- * @param weight - weight parameter value to check
- */
-const isNumericFontWeight = (weight: string): boolean => /^\d+$/.test(weight);
 
 /**
- * Parses a possibly set `fontWeight` attribute to some numeric representation
- * suitable to determine, if the `fontWeight` denotes some bold appearance.
+ * Trigger final decision on bold state.
  *
- * @param fontWeight - font weight attribute value to parse
+ * May veto the current assumption.
+ *
+ * @param assumeBold - if up to now, we assume this to be bold (e.g., `true`
+ * when `<strong>` or `<b>` are the corresponding elements).
+ * @param fontWeight - font-weight information that could be determined
  */
-const parseFontWeight = (fontWeight: string): number | undefined => {
-  const trimmedWeight = fontWeight.trim().toLowerCase();
-  if (!trimmedWeight) {
-    return;
+export type IsBoldFontWeight = (assumedBold: boolean, fontWeight: FontWeightInformation) => boolean;
+
+/**
+ * Default `isBold` decision based on font-weight. For any font-weight
+ * greater than 400 (or `bold`/`bolder`) it will signal _bold_. For any
+ * font-weight less than or equal to 400 (or `normal`/`lighter`) it will
+ * signal _non-bold_. For undetermined state by font-weight `assumeBold`
+ * will be returned unchanged.
+ *
+ * @param assumeBold - if up to now we assume _bold_ state
+ * @param fontWeight - font-weight retrieved and parsed from `CSSStyleDeclaration`
+ * @param fontWeight.asNumber - numeric representation of the font-weight
+ */
+export const defaultIsBold: IsBoldFontWeight = (assumeBold, { asNumber }) => {
+  if (asNumber === undefined) {
+    return assumeBold;
   }
-  if (isNumericFontWeight(trimmedWeight)) {
-    return Number(trimmedWeight);
-  }
-  if (trimmedWeight.startsWith("bold")) {
-    return fontWeightBold;
-  } else if (nonBoldFontWeights.includes(trimmedWeight)) {
-    return fontWeightNormal;
-  }
+  return asNumber > fontWeightToNumber.normal;
 };
+
+/**
+ * Configuration for `BBCodeBold`.
+ */
+export interface BBCodeBoldConfig {
+  /**
+   * May override (or acknowledge) previously made _bold_ decision.
+   */
+  isBold?: IsBoldFontWeight;
+}
 
 /**
  * Processing rule for transforming a bold style represented in HTML
@@ -51,18 +52,27 @@ const parseFontWeight = (fontWeight: string): number | undefined => {
 export class BBCodeBold implements BBCodeProcessingRule {
   readonly id = "bold";
   readonly tags = ["b"];
+  readonly #isBold: IsBoldFontWeight;
+
+  constructor(config: BBCodeBoldConfig = {}) {
+    const { isBold = defaultIsBold } = config;
+    this.#isBold = isBold;
+  }
+
   toData(element: HTMLElement, content: string): undefined | string {
     const { tagName, style } = element;
-    const { fontWeight } = style;
-    const parsedWeight = parseFontWeight(fontWeight);
-    let bold = boldTags.includes(tagName.toLowerCase());
-    if (parsedWeight !== undefined) {
-      // If already bold, may also veto it.
-      bold = parsedWeight > fontWeightNormal;
-    }
-    if (bold) {
-      // If it existed, we parsed it, no need for others to respect it.
+    const boldByTag = boldTags.includes(tagName.toLowerCase());
+    const fontWeight = getFontWeight(style);
+    const bold = fontWeight === undefined ? boldByTag : this.#isBold(boldByTag, fontWeight);
+
+    if (bold || boldByTag !== bold) {
+      // We respected the font-weight, either we agreed or vetoed the
+      // bold decision. Thus, we may remove the `fontWeight` property
+      // as _consumed_.
       style.removeProperty("fontWeight");
+    }
+
+    if (bold) {
       return `[b]${content}[/b]`;
     }
   }
