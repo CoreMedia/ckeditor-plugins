@@ -6,12 +6,17 @@ describe("BBCodeCode", () => {
     const rule = bbCodeCode;
 
     it.each`
-      dataView                                                     | expected                         | comment
-      ${`<pre><code>TEXT</code></pre>`}                            | ${`[code]\nTEXT\n[/code]\n`}     | ${`newlines for minor pretty-printing`}
-      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]\n`} | ${`respect language`}
-      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]\n`}     | ${`strip irrelevant plaintext language`}
-      ${`<p>TEXT</p>`}                                             | ${undefined}                     | ${"ignore unmatched"}
-      ${`<pre>TEXT</pre>`}                                         | ${`[code]\nTEXT\n[/code]\n`}     | ${`robustness: ignore possible missing nested <code> element`}
+      dataView                                                     | expected                                 | comment
+      ${`<pre><code>TEXT</code></pre>`}                            | ${`[code]\nTEXT\n[/code]\n`}             | ${`newlines for minor pretty-printing`}
+      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]\n`}         | ${`respect language`}
+      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]\n`}             | ${`strip irrelevant plaintext language`}
+      ${`<pre>\n<code>TEXT</code>\n</pre>`}                        | ${`[code]\nTEXT\n[/code]\n`}             | ${`trimming: don't pile up newlines (here: in <pre>)`}
+      ${`<pre><code>\nTEXT\n</code></pre>`}                        | ${`[code]\nTEXT\n[/code]\n`}             | ${`trimming: don't pile up newlines (here: in <code>)`}
+      ${`<pre>\n\n<code>\n\nTEXT\n\n</code>\n\n</pre>`}            | ${`[code]\nTEXT\n[/code]\n`}             | ${`trimming: even remove extra newlines`}
+      ${`<pre><code>\n  TEXT1\n  TEXT2\n</code></pre>`}            | ${`[code]\n  TEXT1\n  TEXT2\n[/code]\n`} | ${`trimming: must not remove indents`}
+      ${`<pre><code>TEXT  \n</code></pre>`}                        | ${`[code]\nTEXT\n[/code]\n`}             | ${`trimming (Design Scope): We put some extra effort removing irrelevant blanks at the end.`}
+      ${`<p>TEXT</p>`}                                             | ${undefined}                             | ${"ignore unmatched"}
+      ${`<pre>TEXT</pre>`}                                         | ${`[code]\nTEXT\n[/code]\n`}             | ${`robustness: ignore possible missing nested <code> element`}
     `(
       "$[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {

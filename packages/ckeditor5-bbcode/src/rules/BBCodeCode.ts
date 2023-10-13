@@ -1,5 +1,5 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
-import { removeLeadingAndTrailingNewlines } from "../BBCodeUtils";
+import { trimLeadingAndTrailingNewlines } from "../BBCodeUtils";
 
 /**
  * The default extracted language by `HTMLElement.classList` that is considered
@@ -150,7 +150,10 @@ export class BBCodeCode implements BBCodeProcessingRule {
     }
     const startTag = this.#startTag(element);
     const endTag = "[/code]";
-    const trimmedContent = removeLeadingAndTrailingNewlines(content);
+    // We consider all whitespace at the end of a code block as irrelevant.
+    // For the start, we must only remove newlines, as otherwise we may break
+    // the desired indentations in the pre-section.
+    const trimmedContent = trimLeadingAndTrailingNewlines(content, { trimEndWhitespace: true });
     return `${startTag}\n${trimmedContent}\n${endTag}\n`;
   }
 }
