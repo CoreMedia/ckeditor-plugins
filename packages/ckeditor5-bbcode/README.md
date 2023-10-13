@@ -39,6 +39,35 @@ will become
 \[unknown\]Text\[/unknown\]
 ```
 
+## Extension Points
+
+As sketched, there is a minor extension point to add new `toData` rules. This
+implicitly also has a minor impact on the `toView` processing, as it will allow
+the configured `tags`. These, by default, will be forwarded as 1:1 mapping from
+BBCode to HTML, thus, the example `[unknown]` above, will become `<unknown>`
+in data view, if you mark it as supported. It is up to you, then, to provide
+a corresponding data-upcast to the model layer if this does not already
+represent a well-known HTML tag by CKEditor 5.
+
+### `toData` Rules Implementation Notes
+
+#### Rule Override
+
+TODO (implement) override defaults by ID
+
+#### Return: Undefined Or String?
+
+When it comes to implementing rules, a repeating question is, if to return
+`undefined` or a string.
+
+**The rule of thumb is to only return a string if a rule provides _relevant_
+content.**
+
+Thus, typically adding some BBCode tag (for paragraphs, which do not have an
+extra tag, it is adding newlines). There is no need to return the provided
+original content as-is. This is the default behavior of the outer processing,
+anyway.
+
 ## Supported BBCode
 
 The BBCode to HTML processing is essentially based on [BBob][] and a slightly
@@ -337,7 +366,7 @@ With the Data Facade plugin enabled will only be written on editorial actions.
 
 ### Unsupported BBCode Tags
 
-Yet unsupported BBCode tags (among many vendor-specific ones) are:
+Yet unsupported BBCode tags (among several vendor-specific ones) are:
 
 * `[img]`
 * `[style]`
