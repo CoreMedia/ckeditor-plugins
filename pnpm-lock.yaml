@@ -380,6 +380,61 @@ importers:
         specifier: ^7.22.15
         version: 7.22.15(@babel/core@7.22.20)
 
+  packages/ckeditor5-bbcode:
+    dependencies:
+      '@bbob/core':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@bbob/html':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@bbob/plugin-helper':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@bbob/preset':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@bbob/preset-html5':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@coremedia/ckeditor5-core-common':
+        specifier: 16.0.1-rc.2
+        version: link:../ckeditor5-core-common
+      '@coremedia/ckeditor5-logging':
+        specifier: 16.0.1-rc.2
+        version: link:../ckeditor5-logging
+    devDependencies:
+      '@ckeditor/ckeditor5-core':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@ckeditor/ckeditor5-engine':
+        specifier: ^39.0.2
+        version: 39.0.2
+      '@coremedia-internal/ckeditor5-jest-test-helpers':
+        specifier: ^1.0.0
+        version: link:../ckeditor5-jest-test-helpers
+      '@coremedia/ckeditor5-dom-support':
+        specifier: 16.0.1-rc.2
+        version: link:../ckeditor5-dom-support
+      '@types/jest':
+        specifier: ^29.5.4
+        version: 29.5.5
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.17.18)
+      jest-each:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-xml-matcher:
+        specifier: ^1.2.0
+        version: 1.2.0
+      rimraf:
+        specifier: ^5.0.1
+        version: 5.0.1
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
+
   packages/ckeditor5-common:
     dependencies:
       '@coremedia/ckeditor5-logging':
@@ -429,61 +484,6 @@ importers:
       jest-config:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@18.17.18)
-      rimraf:
-        specifier: ^5.0.1
-        version: 5.0.1
-      typescript:
-        specifier: ^4.9.5
-        version: 4.9.5
-
-  packages/ckeditor5-bbcode:
-    dependencies:
-      '@bbob/core':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@bbob/html':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@bbob/plugin-helper':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@bbob/preset':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@bbob/preset-html5':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
-        version: link:../ckeditor5-core-common
-      '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
-        version: link:../ckeditor5-logging
-    devDependencies:
-      '@ckeditor/ckeditor5-core':
-        specifier: ^39.0.2
-        version: 39.0.2
-      '@ckeditor/ckeditor5-engine':
-        specifier: ^39.0.2
-        version: 39.0.2
-      '@coremedia-internal/ckeditor5-jest-test-helpers':
-        specifier: ^1.0.0
-        version: link:../ckeditor5-jest-test-helpers
-      '@coremedia/ckeditor5-dom-support':
-        specifier: 16.0.1-rc.2
-        version: link:../ckeditor5-dom-support
-      '@types/jest':
-        specifier: ^29.5.4
-        version: 29.5.5
-      jest:
-        specifier: ^29.7.0
-        version: 29.7.0(@types/node@18.17.18)
-      jest-each:
-        specifier: ^29.7.0
-        version: 29.7.0
-      jest-xml-matcher:
-        specifier: ^1.2.0
-        version: 1.2.0
       rimraf:
         specifier: ^5.0.1
         version: 5.0.1
@@ -1209,6 +1209,10 @@ importers:
         version: 4.9.5
 
   packages/ckeditor5-dom-support:
+    dependencies:
+      '@coremedia/ckeditor5-common':
+        specifier: 16.0.1-rc.2
+        version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
