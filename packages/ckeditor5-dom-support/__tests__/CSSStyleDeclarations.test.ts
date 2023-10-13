@@ -1,5 +1,12 @@
 import { documentFromHtml, isHTMLElement, rgb, RgbColor } from "../src";
-import { fontWeightToNumber, getColor, getFontWeightNumeric } from "../src/CSSStyleDeclarations";
+import {
+  fontWeightToNumber,
+  FontWeightInformation,
+  getFontWeight,
+  getColor,
+  getFontWeightNumeric,
+} from "../src/CSSStyleDeclarations";
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 
 const parseFirstElement = (html: string): Element | undefined =>
   documentFromHtml(html).body.firstElementChild ?? undefined;
@@ -72,7 +79,9 @@ describe("CSSStyleDeclarations", () => {
       ${"font-weight: inherit;"} | ${undefined}                  | ${``}
       ${"font-weight: initial;"} | ${undefined}                  | ${``}
       ${"font-weight: unset;"}   | ${undefined}                  | ${``}
-      ${"font-weight: 0;"}       | ${0}                          | ${``}
+      ${"font-weight: 0;"}       | ${0}                          | ${`Less than minimum (1) according to MDN.`}
+      ${"font-weight: 1;"}       | ${1}                          | ${`Minimum font-weight`}
+      ${"font-weight: 1000;"}    | ${1000}                       | ${`Maximum font-weight`}
       ${"font-weight: 400;"}     | ${400}                        | ${``}
       ${"font-weight: 700;"}     | ${700}                        | ${``}
       ${"font-weight: 900;"}     | ${900}                        | ${``}
@@ -82,6 +91,66 @@ describe("CSSStyleDeclarations", () => {
         const declaration = style(styleDecl);
         const actual = getFontWeightNumeric(declaration);
         expect(actual).toBe(expected);
+      },
+    );
+  });
+
+  describe("getFontWeight", () => {
+    const fwAll = (asText: string, asNumber: number): Required<FontWeightInformation> => ({
+      asText,
+      asNumber,
+    });
+    const fwText = (asText: string, asNumber?: number): RequireSelected<FontWeightInformation, "asText"> =>
+      asNumber === undefined
+        ? {
+            asText,
+          }
+        : fwAll(asText, asNumber);
+    const fwNumber = (
+      asText: string | undefined,
+      asNumber: number,
+    ): RequireSelected<FontWeightInformation, "asNumber"> =>
+      asText === undefined
+        ? {
+            asNumber,
+          }
+        : fwAll(asText, asNumber);
+    // Both are undefined? Use `undefined` directly in expected test data, please.
+    const fw = (asText?: string, asNumber?: number): undefined | FontWeightInformation =>
+      asText === undefined
+        ? asNumber === undefined
+          ? undefined
+          : fwNumber(asText, asNumber)
+        : fwText(asText, asNumber);
+
+    it.each`
+      style                      | expected                                     | comment
+      ${undefined}               | ${undefined}                                 | ${`unset style`}
+      ${"color: fuchsia;"}       | ${undefined}                                 | ${`No font-weight information.`}
+      ${"font-weight: bold;"}    | ${fw("bold", fontWeightToNumber.bold)}       | ${``}
+      ${"font-weight: bolder;"}  | ${fw("bolder", fontWeightToNumber.bolder)}   | ${``}
+      ${"font-weight: lighter;"} | ${fw("lighter", fontWeightToNumber.lighter)} | ${``}
+      ${"font-weight: normal;"}  | ${fw("normal", fontWeightToNumber.normal)}   | ${``}
+      ${"font-weight: inherit;"} | ${fw("inherit")}                             | ${``}
+      ${"font-weight: initial;"} | ${fw("initial")}                             | ${``}
+      ${"font-weight: unset;"}   | ${fw("unset")}                               | ${``}
+      ${"font-weight: 0;"}       | ${fw(undefined, 0)}                          | ${`Less than minimum (1) according to MDN.`}
+      ${"font-weight: 1;"}       | ${fw(undefined, 1)}                          | ${`Minimum font-weight`}
+      ${"font-weight: 1000;"}    | ${fw(undefined, 1000)}                       | ${`Maximum font-weight`}
+      ${"font-weight: 100;"}     | ${fw(undefined, fontWeightToNumber.lighter)} | ${`Design Scope: Don't "guess" relative weights from bare numbers.`}
+      ${"font-weight: 400;"}     | ${fw("normal", fontWeightToNumber.normal)}   | ${``}
+      ${"font-weight: 700;"}     | ${fw("bold", fontWeightToNumber.bold)}       | ${``}
+      ${"font-weight: 900;"}     | ${fw(undefined, fontWeightToNumber.bolder)}  | ${`Design Scope: Don't "guess" relative weights from bare numbers.`}
+    `(
+      `[$#] Should parse style '$style' to font-weight: $expected`,
+      ({ style: styleDecl, expected }: { style: string; expected: FontWeightInformation | undefined }) => {
+        const declaration = style(styleDecl);
+        const actual = getFontWeight(declaration);
+        if (expected === undefined) {
+          expect(actual).toBeUndefined();
+        } else {
+          expect(actual).toMatchObject(expected);
+        }
       },
     );
   });
