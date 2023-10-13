@@ -60,8 +60,19 @@ export const bbCode = {
   },
   color: (text: string, color: string) =>
     color.startsWith("#") ? `[color=${color}]${text}[/color]` : `[color="${color}"]${text}[/color]`,
-  list: (entries: string[], listType: "ordered" | "unordered" = "unordered") => {
-    let result = listType === "unordered" ? `\n[list]` : `\n[list=1]`;
+  list: (entries: string[], listType: "ordered" | "unordered" | "i" | "I" | "a" | "A" | "1" = "unordered") => {
+    let startTag: string;
+    switch (listType) {
+      case "ordered":
+        startTag = "[list=1]";
+        break;
+      case "unordered":
+        startTag = "[list]";
+        break;
+      default:
+        startTag = `[list=${listType}]`;
+    }
+    let result = `\n${startTag}`;
     entries.forEach((entry) => {
       result = `${result}\n[*]${replaceTrailingNewline(entry, "\n")}`;
     });
