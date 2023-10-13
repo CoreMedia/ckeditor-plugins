@@ -8,8 +8,23 @@ export { BBCodeDataProcessor, ifBBCodeDataProcessor, isBBCodeDataProcessor } fro
 export { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
 export type { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 
-export { BBCodeBold, bbCodeBold } from "./rules/BBCodeBold";
-export { BBCodeCode, bbCodeCode } from "./rules/BBCodeCode";
+export {
+  BBCodeBold,
+  bbCodeBold,
+  defaultIsBold,
+  type BBCodeBoldConfig,
+  type IsBoldFontWeight,
+} from "./rules/BBCodeBold";
+export {
+  BBCodeCode,
+  bbCodeCode,
+  defaultIsUnset,
+  defaultLanguageByClass,
+  defaultPlainTextToken,
+  type BBCodeCodeConfig,
+  type IsUnset,
+  type LanguageByClass,
+} from "./rules/BBCodeCode";
 export { BBCodeHeading, bbCodeHeading } from "./rules/BBCodeHeading";
 export { BBCodeItalic, bbCodeItalic } from "./rules/BBCodeItalic";
 export { BBCodeList, bbCodeList } from "./rules/BBCodeList";
