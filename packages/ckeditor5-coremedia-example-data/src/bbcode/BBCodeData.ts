@@ -6,6 +6,8 @@ import { securityChallengeData } from "./SecurityChallengeData";
 import { codeBlockData } from "./BBCodeCodeData";
 import { colorData } from "./BBCodeColorData";
 import { headingData } from "./BBCodeHeadingData";
+import { simpleData } from "./SimpleData";
+import { listData } from "./BBCodeListData";
 
 export const bbCodeData: ExampleData = {
   ...challengingData,
@@ -13,6 +15,8 @@ export const bbCodeData: ExampleData = {
   ...colorData,
   ...headingData,
   ...inlineFormatData,
+  ...listData,
   ...securityChallengeData,
+  ...simpleData,
   ...welcomeTextData,
 };
