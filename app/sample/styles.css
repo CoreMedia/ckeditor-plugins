@@ -153,7 +153,7 @@ input.error {
 
 /* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
 .ck-content ol[type="a"] {
-  list-style-type: lower-alpha;
+  list-style-type: lower-latin;
 }
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
