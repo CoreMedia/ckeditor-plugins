@@ -1,5 +1,9 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
+/**
+ * Rule that transforms a paragraph element to its content followed by two
+ * newlines.
+ */
 export class BBCodeParagraph implements BBCodeProcessingRule {
   readonly id = "paragraph";
 
@@ -11,4 +15,8 @@ export class BBCodeParagraph implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Rule instance that transforms a paragraph element to its content followed by
+ * two newlines.
+ */
 export const bbCodeParagraph = new BBCodeParagraph();
