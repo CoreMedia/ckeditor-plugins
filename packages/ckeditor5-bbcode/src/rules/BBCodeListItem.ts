@@ -1,7 +1,7 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
- * Maps `<li>` to `[*]`.
+ * Rule that maps `<li>` to `[*]`.
  */
 export class BBCodeListItem implements BBCodeProcessingRule {
   readonly id = "list-item";
@@ -13,4 +13,7 @@ export class BBCodeListItem implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Rule instance that maps `<li>` to `[*]`.
+ */
 export const bbCodeListItem = new BBCodeListItem();

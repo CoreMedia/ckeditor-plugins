@@ -3,7 +3,7 @@ import { isHTMLElement } from "@coremedia/ckeditor5-dom-support";
 const parser = new DOMParser();
 const parseHtml = (html: string): Document => parser.parseFromString(html, "text/html");
 const parseFirstElement = (html: string): Element | undefined => parseHtml(html).body.firstElementChild ?? undefined;
-const asHTMLElement = (value: unknown): HTMLElement | undefined => (isHTMLElement(value) ? value : undefined);
+export const asHTMLElement = (value: unknown): HTMLElement | undefined => (isHTMLElement(value) ? value : undefined);
 
 /**
  * Parses the given HTML and returns contained `HTMLElement`.
