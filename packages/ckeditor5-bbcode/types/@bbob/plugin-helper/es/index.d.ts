@@ -5,7 +5,7 @@ declare module "@bbob/plugin-helper/es" {
     readonly tag: string;
     attrs: TagAttrs;
     content: (string | TagNode)[] | null;
-    append(value: string): void;
+    append?: (value: string) => void;
     static create: (tag: string, attrs: TagAttrs = {}, content: (string | TagNode)[] = []) => TagNode;
     static isOf: (node: TagNode, type: string) => node is TagNode & { tag: typeof type };
   }

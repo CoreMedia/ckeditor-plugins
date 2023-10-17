@@ -7,11 +7,11 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@bbob/core/es": ["./types/@bbob/core/es/index.d.ts"],
-      "@bbob/html/es": ["./types/@bbob/html/es/index.d.ts"],
-      "@bbob/plugin-helper/es": ["./types/@bbob/plugin-helper/es/index.d.ts"],
-      "@bbob/preset/es": ["./types/@bbob/preset/es/index.d.ts"],
-      "@bbob/preset-html5/es": ["./types/@bbob/preset-html5/es/index.d.ts"],
+      "@bbob/core/*": ["./types/@bbob/core/*"],
+      "@bbob/html/*": ["./types/@bbob/html/*"],
+      "@bbob/plugin-helper/*": ["./types/@bbob/plugin-helper/*"],
+      "@bbob/preset/*": ["./types/@bbob/preset/*"],
+      "@bbob/preset-html5/*": ["./types/@bbob/preset-html5/*"],
     }
   }
 }
