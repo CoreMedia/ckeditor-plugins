@@ -1,11 +1,12 @@
-type Attrs = Record<string, string>;
+type TagAttrs = Record<string, string>;
 
 declare module "@bbob/plugin-helper/es" {
   declare class TagNode {
-    tag: string;
-    attrs: Attrs;
+    readonly tag: string;
+    attrs: TagAttrs;
     content: (string | TagNode)[] | null;
-    static create: (tag: string, attrs: Attrs = {}, content: (string | TagNode)[] = []) => TagNode;
+    append(value: string): void;
+    static create: (tag: string, attrs: TagAttrs = {}, content: (string | TagNode)[] = []) => TagNode;
     static isOf: (node: TagNode, type: string) => node is TagNode & { tag: typeof type };
   }
 

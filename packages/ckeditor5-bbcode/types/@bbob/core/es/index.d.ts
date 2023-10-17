@@ -4,7 +4,7 @@ declare module "@bbob/core/es" {
     plugs?: Function | Function[],
   ): {
     process: (
-      input: string,
+      input: string | undefined,
       opts?: {
         // eslint-disable-next-line @typescript-eslint/ban-types
         parser?: Function;
