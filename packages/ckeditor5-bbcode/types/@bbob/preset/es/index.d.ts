@@ -1,6 +1,13 @@
-import { TagNode } from "@bbob/preset/es";
+import { TagNode } from "@bbob/plugin-helper/es";
 
-type Content = TagNode["content"];
+type Content = TagNode["content"] | TagNode;
+
+interface Options {
+  skipParse?: boolean;
+  parser?: unknown;
+  render: (content: Content, options?: Options) => string;
+  data?: unknown;
+}
 
 declare module "@bbob/preset/es" {
   /**
@@ -10,7 +17,7 @@ declare module "@bbob/preset/es" {
    * @returns preset function
    */
   declare function createPreset(
-    defTags: Record<string, (node: TagNode, core: { render: (content: Content) => string }, options: object) => void>,
+    defTags: Record<string, (node: TagNode, core: { render: Options["render"] }, options: object) => void>,
     // eslint-disable-next-line @typescript-eslint/ban-types
     processor?: Function,
   ): {
@@ -24,7 +31,7 @@ declare module "@bbob/preset/es" {
     // eslint-disable-next-line @typescript-eslint/ban-types
     (options: object = {}): {
       options?: object;
-      (tree: unknown, core: { render: (content: Content) => string }): unknown;
+      (tree: unknown, core: { render: Options["render"] }): unknown;
     };
   };
 

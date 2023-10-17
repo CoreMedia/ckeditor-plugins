@@ -6,7 +6,7 @@ declare module "@bbob/plugin-helper/es" {
     attrs: Attrs;
     content: (string | TagNode)[] | null;
     static create: (tag: string, attrs: Attrs = {}, content: (string | TagNode)[] = []) => TagNode;
-    static isOf: (node: TagNode, type: string) => boolean;
+    static isOf: (node: TagNode, type: string) => node is TagNode & { tag: typeof type };
   }
 
   declare function isTagNode(el: unknown): el is TagNode;
