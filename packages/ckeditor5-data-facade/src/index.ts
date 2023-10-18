@@ -2,7 +2,7 @@
  * @module ckeditor5-data-facade
  */
 
-export { ContextMismatchError } from "./ContextMismatchError";
+export { ContextMismatchError, isContextMismatchError } from "./ContextMismatchError";
 
 export type { DataApi, GetDataApi, SetDataApi } from "./DataApi";
 
@@ -24,5 +24,6 @@ export { DataFacade } from "./DataFacade";
 export type { DataFacadeConfig, Save } from "./DataFacadeConfig";
 
 export { DataFacadeController } from "./DataFacadeController";
+
 
 import "./augmentation";

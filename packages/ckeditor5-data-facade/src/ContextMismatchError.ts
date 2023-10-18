@@ -29,3 +29,11 @@ export class ContextMismatchError extends Error {
     return `ContextMismatchError: ${this.message} {actual=${this.actual}, expected=${this.expected}}`;
   }
 }
+
+/**
+ * Typeguard to check if an error is a `ContextMismatchError`.
+ *
+ * @param error - the error to check
+ */
+export const isContextMismatchError = (error: unknown): error is ContextMismatchError =>
+  error instanceof ContextMismatchError;

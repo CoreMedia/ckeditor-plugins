@@ -1,4 +1,4 @@
-import { ContextMismatchError } from "../src/ContextMismatchError";
+import { ContextMismatchError, isContextMismatchError } from "../src/ContextMismatchError";
 
 describe("ContextMismatchError", () => {
   it("should be possible to instantiate the error without a message", () => {
@@ -47,5 +47,13 @@ describe("ContextMismatchError", () => {
     expect(error).toHaveProperty("message", msg);
     expect(error).toHaveProperty("actual", actual);
     expect(error).toHaveProperty("expected", expected);
+  });
+
+  it("should be possible to check if an error is a ContextMismatchError", () => {
+    const error = new ContextMismatchError();
+    expect(isContextMismatchError(error)).toBe(true);
+
+    const anyError = new Error("This is any error and the typeguard should return false");
+    expect(isContextMismatchError(anyError)).toBe(false);
   });
 });
