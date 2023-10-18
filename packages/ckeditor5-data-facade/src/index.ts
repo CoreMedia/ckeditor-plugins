@@ -25,5 +25,4 @@ export type { DataFacadeConfig, Save } from "./DataFacadeConfig";
 
 export { DataFacadeController } from "./DataFacadeController";
 
-
 import "./augmentation";
