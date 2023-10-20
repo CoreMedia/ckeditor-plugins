@@ -1,66 +1,68 @@
-import { getUniqAttr, isEOL, isTagNode, TagNode } from "@bbob/plugin-helper/es";
+import { getUniqAttr, isTagNode, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
 import { paragraphAwareContent } from "./bbob/Paragraphs";
+import { Core, DefaultTags, Options } from "./bbob/types";
 
-type DefaultTags = Parameters<typeof createPreset>[0];
-type TagMappingFn = DefaultTags[string];
-type Core = Parameters<TagMappingFn>[1];
-type Options = Parameters<TagMappingFn>[2];
-type Tag = TagNode["tag"];
-type Content = TagNode["content"];
-type Attrs = TagNode["attrs"];
+const toNode = TagNode.create;
 
-// eslint-disable-next-line no-null/no-null
-const toNode = (tag: Tag, attrs: Attrs = {}, content: Content = null): TagNode => ({
-  tag,
-  attrs,
-  content,
-});
+/**
+ * To be able to handle paragraphs also on root-level within the defined
+ * tag-set, we need to create an artificial root node.
+ *
+ * As long as allowed tags are configured, there is no need to increase
+ * efforts to prevent collisions with same-named tag-nodes within the
+ * original BBCode.
+ */
+const rootNodeName = "paragraph:root" as const;
+
+/**
+ * Wraps tree contents into an artificial root-node, that may then respect
+ * paragraphs during processing.
+ *
+ * @param tree - tree to wrap
+ * @returns function to later unwrap the tree; unwrapping will fail with Error,
+ * when the tree changed in an unexpected way, i.e., does not have a singleton
+ * node of type _root-node_ anymore.
+ */
+const wrapInRoot = (tree: CoreTree): (() => void) => {
+  const treeContents = [...tree];
+  const rootNode = toNode(rootNodeName, {}, treeContents);
+  tree.length = 0;
+  tree.push(rootNode);
+
+  // Unwrap root node.
+  return () => {
+    if (tree.length !== 1) {
+      throw new Error(
+        `Failed to unwrap artificial root node due to an unexpected state. Expect a single artificial root node as entry, but tree size is ${tree.length}.`,
+      );
+    }
+    const [processedRootNode] = tree;
+    if (!isTagNode(processedRootNode) || !TagNode.isOf(processedRootNode, rootNodeName)) {
+      throw new Error(
+        `Failed to unwrap artificial root node due to an unexpected state. Singleton root node is not of expected type ${rootNodeName}: ${JSON.stringify(
+          tree,
+        )}`,
+      );
+    }
+    tree.length = 0;
+    tree.push(...processedRootNode.content);
+  };
+};
 
 /**
  * Copy of default processor with adaptations to incorporate workaround for
  * https://github.com/JiLiZART/BBob/issues/125.
  */
 const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options) => {
-  /*
-   * Brainstorming
-   *
-   * * On top-level it is clear, that each set of consecutive newlines
-   *   describes a paragraph.
-   *
-   * * Within inline-tags any paragraph is forbidden and should better be
-   *   ignored, possibly replaced by some BR? The only alternative here is
-   *   to ignore the newline(s).
-   *
-   * * We must not adapt anything, if we are inside a code-block. Newlines must
-   *   be kept as is.
-   *
-   * * We may leave it to explicit DefaultTags configuration, how newlines should
-   *   be handled within.
-   *
-   * * If we don't provide a "global handling", it requires any tag that should
-   *   handle doubled newlines, to be explicitly defined and not implicitly
-   *   converted. Such as `[h1]` is converted to `<h1>` without any further do.
-   *
-   * * Tags that should add special handling (thus, add paragraphs on demand):
-   *   [th], [td], [quote], [*] and "top level".
-   *
-   * * Regarding [*] Preset HTML transforms them to "li" TagNodes, which means
-   *   as an assumption that we can handle them with an extra [li] rule. Tests
-   *   show, that this is true, as the parents get processed prior to its
-   *   children. Thus, the rules will never process "*", as it already got
-   *   transformed to "li" when processing "list".
-   *
-   * * Having this, we could trick the processing, to create some intermediate
-   *   artificial child like "respect-paragraphs". This could then add
-   *   paragraphs where required. Only for root we need to find some other
-   *   solution, possibly introducing a virtual "root" even before handing
-   *   over to processing. The other option would be tracking the "depth"
-   *   within the process function and respond to "top-level" nodes.
-   */
-  tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
+  const unwrap = wrapInRoot(tree);
+  try {
+    tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
+  } finally {
+    unwrap();
+  }
 };
 
 /**
@@ -81,6 +83,13 @@ const basePreset: ReturnType<typeof createPreset> = createPreset(html5DefaultTag
 export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.extend(
   (tags: DefaultTags): DefaultTags => ({
     ...tags,
+    /**
+     * Processes artificial root-node to support paragraphs in root-level.
+     */
+    [rootNodeName]: (node) => {
+      node.content = paragraphAwareContent(node.content);
+      return node;
+    },
     td: (node) => {
       // Must enable extra processing for `td` to handle nested paragraphs
       // correctly.
@@ -93,6 +102,11 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
       node.content = paragraphAwareContent(node.content);
       return node;
     },
+    /**
+     * During default processing by HTML5 preset, `li` nodes get generated from
+     * `*` nodes. As a subsequent step, we add support for nested paragraphs
+     * within these tags.
+     */
     li: (node) => {
       // Processing the transformed result from BBob Preset HTML5. We must not
       // return a node with the same name here, but instead we directly modify
@@ -100,16 +114,16 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
       node.content = paragraphAwareContent(node.content);
       return node;
     },
-    quote: (node) => {
-      console.log("quote", {
-        node,
-        content: node.content,
-      });
-      return toNode("blockquote", {}, paragraphAwareContent(node.content, { requireParagraph: true }));
-    },
     /**
-     * Adapted for CKEditor 5: CKEditor 5 requires a nested `<code>` element and
-     * allows specifying the language via a corresponding class parameter.
+     * Transforms `quote` to `blockquote`. Ensures that only block-level
+     * nodes are contained within `blockquote`. Wraps, for example, plain text
+     * content into a paragraph node.
+     */
+    quote: (node) => toNode("blockquote", {}, paragraphAwareContent(node.content, { requireParagraph: true })),
+    /**
+     * Override default from HTML5 Preset for CKEditor 5: CKEditor 5 requires a
+     * nested `<code>` element and allows specifying the language via a
+     * corresponding class parameter.
      */
     code: (node: TagNode, { render }: Core): TagNode => {
       const language = getUniqAttr(node.attrs) || "plaintext";

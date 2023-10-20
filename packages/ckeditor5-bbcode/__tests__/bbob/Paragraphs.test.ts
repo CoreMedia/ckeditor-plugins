@@ -1,6 +1,7 @@
 import { paragraphAwareContent, ParagraphAwareContentOptions } from "../../src/bbob/Paragraphs";
-import { toNode } from "../../src/bbob/TagNodes";
 import { TagNode } from "@bbob/plugin-helper/es";
+
+const toNode = TagNode.create;
 
 type ContentFixture = NonNullable<TagNode["content"]>;
 
@@ -17,17 +18,6 @@ const q = (content: ContentFixture): TagNode => toNode("quote", {}, content);
 describe(`Paragraphs`, () => {
   // ==========================================================================================[ paragraphAwareContent ]
   describe(`paragraphAwareContent`, () => {
-    // -------------------------------------------------------------------------------------------------[ content=null ]
-    describe(`content=null`, () => {
-      it(`should return "null" with default options`, () => {
-        expect(paragraphAwareContent(null)).toBeNull();
-      });
-
-      it(`should return "null" even with "requireParagraph=true"`, () => {
-        expect(paragraphAwareContent(null, { requireParagraph: true })).toBeNull();
-      });
-    });
-
     // ---------------------------------------------------------------------------------------------------[ content=[] ]
     describe(`content=[]`, () => {
       it(`should return "[]" with default options`, () => {

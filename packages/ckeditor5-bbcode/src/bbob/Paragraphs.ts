@@ -1,5 +1,6 @@
-import { isEOL, isTagNode, TagNode } from "@bbob/plugin-helper/es";
-import { toNode } from "./TagNodes";
+import { isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
+
+const toNode = TagNode.create;
 
 /**
  * Options for `paragraphAwareContent`.
@@ -29,12 +30,19 @@ export interface ParagraphAwareContentOptions {
   blockTags?: TagNode["tag"][];
 }
 
+const headingTags = [...Array(6).keys()].map((n) => `h${n + 1}`);
+
 /**
  * Default tags to consider _block-level_. As child-contents were not processed
  * yet, these are raw BBCode elements and not intermediate elements such as
  * `blockquote`, that will later be transformed directly to HTML `<blockquote>`.
  */
-const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> = ["quote", "table", "list"];
+const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> = [
+  "quote",
+  "table",
+  "list",
+  ...headingTags,
+];
 
 /**
  * Processes the top level string nodes and possibly adds a paragraph, where
@@ -60,11 +68,6 @@ export const paragraphAwareContent = (
     blockTags = defaultBlockTags,
   } = options;
 
-  if (!content) {
-    // eslint-disable-next-line no-null/no-null
-    return null;
-  }
-
   if (content.length === 0) {
     if (fromConfigRequireParagraph) {
       return [toNode("p", {}, [])];
@@ -87,7 +90,7 @@ export const paragraphAwareContent = (
   // Intermediate buffer, that may need to go to a paragraph node.
   const buffer: NonNullable<TagNode["content"]> = [];
   // Collected EOLs
-  const trailingNewlineBuffer: "\n"[] = [];
+  const trailingNewlineBuffer: (typeof N)[] = [];
   // The result to return in the end.
   const result: NonNullable<TagNode["content"]> = [];
 
@@ -136,7 +139,7 @@ export const paragraphAwareContent = (
       trailingNewlineBuffer,
     });
     if (trailingNewlineBuffer.length > 0) {
-      buffer.push("\n");
+      buffer.push(N);
       // Clear buffer, we respected the newlines.
       trailingNewlineBuffer.length = 0;
     }

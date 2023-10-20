@@ -1,3 +1,5 @@
+import { TagNode } from "@bbob/plugin-helper/es";
+
 export type CoreWalk = (callback: (node: unknown) => void) => void;
 
 export interface CoreOptions {
@@ -15,14 +17,12 @@ export interface CoreOptions {
   onError?: (info: { message: string; tagName: string; lineNumber: number; columnNumber: number }) => void;
 }
 
-export interface CoreTree {
+export type CoreTree = (string | TagNode)[] & {
   messages: string[];
   options: CoreOptions;
   walk: CoreWalk;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  match: Function;
-  [idx: number]: unknown;
-}
+  match: (expression: unknown, callback: (node: string | TagNode) => string | TagNode) => unknown;
+};
 
 export default function bbob(
   // eslint-disable-next-line @typescript-eslint/ban-types

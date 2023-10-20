@@ -114,6 +114,7 @@ describe("BBob Integration", () => {
       ${`<h4>TEXT</h4>`}                                           | ${`[h4]TEXT[/h4]`}                                 | ${`<h4>TEXT</h4>`}                                            | ${"none"}
       ${`<h5>TEXT</h5>`}                                           | ${`[h5]TEXT[/h5]`}                                 | ${`<h5>TEXT</h5>`}                                            | ${"none"}
       ${`<h6>TEXT</h6>`}                                           | ${`[h6]TEXT[/h6]`}                                 | ${`<h6>TEXT</h6>`}                                            | ${"none"}
+      ${`<p>TEXT1</p><p>TEXT2</p>`}                                | ${`TEXT1\n\nTEXT2`}                                | ${`<p>TEXT1</p><p>TEXT2</p>`}                                 | ${"none"}
     `(
       "[$#] Should transform data view to data, that are well understood by subsequent `toView` mapping for: `$dataViewInput` ($comment)",
       ({
