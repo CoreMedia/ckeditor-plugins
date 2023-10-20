@@ -1,4 +1,5 @@
 import { isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
+import { Tag } from "./types";
 
 const toNode = TagNode.create;
 
@@ -27,15 +28,21 @@ export interface ParagraphAwareContentOptions {
    * Tag names to consider as _block_, which is, that they will not be embedded
    * within a `[p]` tag.
    */
-  blockTags?: TagNode["tag"][];
+  blockTags?: Tag[];
 }
 
+/**
+ * Represents heading tags h1 to h6.
+ */
 const headingTags = [...Array(6).keys()].map((n) => `h${n + 1}`);
 
 /**
  * Default tags to consider _block-level_. As child-contents were not processed
  * yet, these are raw BBCode elements and not intermediate elements such as
  * `blockquote`, that will later be transformed directly to HTML `<blockquote>`.
+ *
+ * Block-level elements must not be wrapped into paragraphs and may co-exist on
+ * the same layer as paragraphs.
  */
 const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> = [
   "quote",
@@ -49,7 +56,7 @@ const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> =
  * required.
  *
  * Note that processing ignores any possible contained "block-level" elements
- * that for valid HTML must not be contained within a paragraph.
+ * that for valid HTML5 must not be contained within a paragraph.
  *
  * **BBob API Note:** The tokenizer will split all newline characters into an
  * extra string-entry. This may be important to know to understand the
@@ -70,6 +77,8 @@ export const paragraphAwareContent = (
 
   if (content.length === 0) {
     if (fromConfigRequireParagraph) {
+      // We were told, a paragraph is required as nested tag. Thus,
+      // also add it for empty content.
       return [toNode("p", {}, [])];
     }
     return [];
@@ -82,28 +91,16 @@ export const paragraphAwareContent = (
    */
   let requireParagraph = fromConfigRequireParagraph;
 
-  console.debug("paragraphAwareContent", {
-    content: JSON.stringify(content),
-    options: JSON.stringify(options),
-  });
-
   // Intermediate buffer, that may need to go to a paragraph node.
   const buffer: NonNullable<TagNode["content"]> = [];
-  // Collected EOLs
+  // Collected EOLs. They will not make it to `buffer` until flushed.
   const trailingNewlineBuffer: (typeof N)[] = [];
   // The result to return in the end.
   const result: NonNullable<TagNode["content"]> = [];
 
-  const dumpState = (id = "dumpState") => {
-    console.debug(id, {
-      buffer: JSON.stringify(buffer),
-      trailingNewlineBuffer: JSON.stringify(trailingNewlineBuffer),
-      result: JSON.stringify(result),
-      requireParagraph,
-    });
-  };
-
-  // Clear Buffers.
+  /**
+   * Clear temporary buffers.
+   */
   const clearBuffers = (): void => {
     buffer.length = 0;
     trailingNewlineBuffer.length = 0;
@@ -119,12 +116,8 @@ export const paragraphAwareContent = (
    * @param content - content to add
    */
   const addCopyAsParagraph = (content: NonNullable<TagNode["content"]>): void => {
-    console.debug("addCopyAsParagraph", {
-      content: JSON.stringify(content),
-    });
     result.push(toNode("p", {}, [...content]));
     requireParagraph = true;
-    dumpState("addCopyAsParagraph done.");
   };
 
   /**
@@ -133,29 +126,22 @@ export const paragraphAwareContent = (
    * represent a relevant separator. But it is safe to squash them to one
    * single blank character. Just to keep the identity similar, we again use
    * a newline character as this squashed result.
+   *
+   * As an alternative, a `br` tag may be added here, in case we want to
+   * keep line-breaks.
    */
   const squashAndPushNewlinesToBuffer = (): void => {
-    console.debug("squashAndPushNewlinesToBuffer", {
-      trailingNewlineBuffer,
-    });
     if (trailingNewlineBuffer.length > 0) {
       buffer.push(N);
       // Clear buffer, we respected the newlines.
       trailingNewlineBuffer.length = 0;
     }
-    dumpState("squashAndPushNewlinesToBuffer done");
   };
 
   /**
    * Flush when we processed the last content entry.
    */
   const flushFinally = (): void => {
-    console.debug(`flushFinally`, {
-      buffer,
-      trailingNewlineBuffer,
-      result,
-    });
-
     if (requireParagraph) {
       // Design Scope: Ignore any trailing newlines as irrelevant.
       // buffer.length > 0: By default, add no empty paragraphs.
@@ -170,16 +156,13 @@ export const paragraphAwareContent = (
       squashAndPushNewlinesToBuffer();
       result.push(...buffer);
     }
-
-    dumpState("flushFinally done");
   };
 
+  /**
+   * Intermediate flush of `buffer` to the result. Any non-empty buffer
+   * will trigger wrapping the content into a paragraph node.
+   */
   const flush = (): void => {
-    console.debug(`flush`, {
-      buffer,
-      trailingNewlineBuffer,
-      result,
-    });
     if (buffer.length > 0) {
       // Any trailing EOLs may safely be ignored here.
       addCopyAsParagraph(buffer);
@@ -187,15 +170,18 @@ export const paragraphAwareContent = (
     // Design Scope: Not having an else-branch here also means that we
     // ignore any leading newlines.
     clearBuffers();
-    dumpState("flush done");
   };
 
+  /**
+   * Detects, if the current state denotes that the piled-up buffer entries
+   * are meant to be wrapped into a paragraph node.
+   *
+   * Otherwise, assuming this function gets called when a non-EOL-character
+   * was read, any pending newlines will be added to the buffer first.
+   * Pending newlines will be squashed into a single EOL character.
+   */
   const flushOnParagraph = (): void => {
     if (trailingNewlineBuffer.length >= newlineThreshold) {
-      console.debug(`flushOnParagraph: reached threshold`, {
-        trailingNewlineBuffer,
-        newlineThreshold,
-      });
       const onlyNewlinesAtStart = 0 === result.length + buffer.length;
       if (onlyNewlinesAtStart) {
         // This triggers a similar behavior to when we did not reach the
@@ -207,55 +193,49 @@ export const paragraphAwareContent = (
         flush();
       }
     } else {
-      console.debug(`flushOnParagraph: threshold not reached`, {
-        trailingNewlineBuffer,
-        newlineThreshold,
-      });
       squashAndPushNewlinesToBuffer();
     }
-    dumpState("flushOnParagraph done");
   };
 
+  /**
+   * Handles a tag-node on current level. Respects block-tags that may enforce
+   * previous buffer entries to be added as paragraph.
+   */
   const handleTagNode = (node: TagNode): void => {
     const { tag } = node;
     if (blockTags.includes(tag)) {
-      console.debug(`handleTagNode (as block tag): ${JSON.stringify(node)}`);
       // If it is a block-tag, put previous contents in a paragraph.
       flush();
       result.push(node);
     } else {
-      console.debug(`handleTagNode (standard behavior): ${JSON.stringify(node)}`);
       flushOnParagraph();
       buffer.push(node);
     }
-    dumpState("handleTagNode done");
   };
 
+  /**
+   * Handles a string entry on current level. Respects EOL characters, which
+   * will be added to the `trailingNewlineBuffer` instead.
+   */
   const handleString = (value: string): void => {
     if (isEOL(value)) {
-      console.debug(`handleString (as EOL): ${JSON.stringify(value)}`);
       trailingNewlineBuffer.push(value);
     } else {
-      console.debug(`handleString (as normal string): ${JSON.stringify(value)}`);
       flushOnParagraph();
       buffer.push(value);
     }
-    dumpState("handleString done");
   };
 
+  // Main processing of content items to possibly wrap into paragraphs.
   for (const contentItem of content) {
-    console.debug(`loop: ${JSON.stringify(contentItem)}`);
     if (isTagNode(contentItem)) {
       handleTagNode(contentItem);
     } else {
       handleString(contentItem);
     }
-    dumpState(`loop done: ${JSON.stringify(contentItem)}`);
   }
 
   flushFinally();
-
-  dumpState("paragraphAwareContent done");
 
   return result;
 };
