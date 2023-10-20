@@ -1,7 +1,7 @@
 // noinspection HtmlRequiredAltAttribute
 
 import html from "@bbob/html/es";
-import { ckeditor5Preset as preset } from "../src/ckeditor5Preset";
+import { ckeditor5Preset as preset } from "../../src/bbob/ckeditor5Preset";
 
 type HtmlInput = Parameters<typeof html>[0];
 type HtmlResult = ReturnType<typeof html>;

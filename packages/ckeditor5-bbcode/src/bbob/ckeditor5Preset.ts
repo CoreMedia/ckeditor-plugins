@@ -2,8 +2,8 @@ import { getUniqAttr, isTagNode, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
-import { paragraphAwareContent } from "./bbob/Paragraphs";
-import { Core, DefaultTags, Options } from "./bbob/types";
+import { paragraphAwareContent } from "./Paragraphs";
+import { Core, DefaultTags, Options } from "./types";
 
 const toNode = TagNode.create;
 

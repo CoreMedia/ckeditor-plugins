@@ -1,7 +1,7 @@
 import { render } from "@bbob/html/es";
 import bbob from "@bbob/core/es";
 import { bbCodeLogger } from "./BBCodeLogger";
-import { ckeditor5Preset } from "./ckeditor5Preset";
+import { ckeditor5Preset } from "./bbob/ckeditor5Preset";
 
 interface EscapeRule {
   from: string;
