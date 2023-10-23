@@ -164,10 +164,13 @@ export const paragraphAwareContent = (
       content,
       result,
       requireParagraph,
+      skipEmpty,
     });
 
-    if (isNonEmpty(content) || !skipEmpty) {
+    if (isNonEmpty(content)) {
       result.push(toNode("p", {}, [...content]));
+    } else if (requireParagraph || !skipEmpty) {
+      result.push(toNode("p", {}, []));
     }
 
     requireParagraph = true;
@@ -176,6 +179,7 @@ export const paragraphAwareContent = (
       content,
       result,
       requireParagraph,
+      skipEmpty,
     });
   };
 
