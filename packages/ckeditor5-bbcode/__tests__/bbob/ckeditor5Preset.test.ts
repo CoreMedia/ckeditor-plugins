@@ -144,19 +144,17 @@ describe("ckeditor5Preset", () => {
     // We have overridden the behavior to also include a nested `<code>`
     // element.
     describe("[code]", () => {
-      test("[code]monospaced text[/code]", () => {
-        const input = "[code]monospaced text[/code]";
-        const result = `<pre><code class="language-plaintext">monospaced text</code></pre>`;
-
-        expect(parse(input)).toBe(result);
-      });
-
-      test("[code]monospaced text[/code]", () => {
-        const input = "[code=css]monospaced text[/code]";
-        const result = `<pre><code class="language-css">monospaced text</code></pre>`;
-
-        expect(parse(input)).toBe(result);
-      });
+      test.each`
+        bbcode                         | expected                                                        | comment
+        ${"[code]text[/code]"}         | ${`<pre><code class="language-plaintext">text</code></pre>`}    | ${"CKEditor 5 Text Part Language uses 'plaintext' as the default."}
+        ${"[code=css]text[/code]"}     | ${`<pre><code class="language-css">text</code></pre>`}          | ${"CKEditor 5 Text Part Language encodes chosen languages into 'language-*' class"}
+        ${`[code=hack"me]text[/code]`} | ${`<pre><code class="language-hack&quot;me">text</code></pre>`} | ${"Prevent hacking attribute by encoding."}
+      `(
+        "[$#] Should transform $bbcode to: $expected ($comment)",
+        ({ bbcode, expected }: { bbcode: string; expected: string }) => {
+          expect(parse(bbcode)).toBe(expected);
+        },
+      );
     });
   });
 });
