@@ -4,6 +4,7 @@ import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
 import { paragraphAwareContent } from "./Paragraphs";
 import { Core, DefaultTags, Options } from "./types";
+import { bbCodeLogger } from "../BBCodeLogger";
 
 const toNode = TagNode.create;
 
@@ -88,8 +89,8 @@ const toParagraphAwareNode = (node: TagNode): TagNode =>
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
  */
-export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.extend(
-  (tags: DefaultTags): DefaultTags => ({
+export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.extend((tags: DefaultTags): DefaultTags => {
+  const extendedTags: DefaultTags = {
     ...tags,
     /**
      * Processes artificial root-node to support paragraphs in root-level.
@@ -129,5 +130,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
       const renderedCode = render(toNode("code", { class: `language-${language}` }, [trimmedRenderedCodeContent]));
       return toNode("pre", {}, [renderedCode]);
     },
-  }),
-);
+  };
+  bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
+  return extendedTags;
+});

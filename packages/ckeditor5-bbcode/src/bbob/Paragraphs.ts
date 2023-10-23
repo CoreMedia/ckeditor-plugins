@@ -1,5 +1,6 @@
 import { isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
 import { Tag } from "./types";
+import { bbCodeLogger } from "../BBCodeLogger";
 
 const toNode = TagNode.create;
 
@@ -15,6 +16,12 @@ export interface ParagraphAwareContentOptions {
    * Defaults to `false`.
    */
   requireParagraph?: boolean;
+  /**
+   * If to skip empty paragraphs.
+   *
+   * Defaults to `true`.
+   */
+  skipEmpty?: boolean;
   /**
    * Threshold of consecutive newlines that are meant to represent a paragraph.
    * Newlines that do not reach this limit will be taken as is to the
@@ -52,6 +59,21 @@ const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> =
 ];
 
 /**
+ * Debugging. Helps to understand the somewhat complex processing of paragraphs.
+ *
+ * @param msg - some message
+ * @param state - optional state; values will be represented as JSON (stringify)
+ */
+const debug = (msg: string, state?: Record<string, unknown>): void => {
+  const logger = bbCodeLogger;
+  if (state) {
+    logger.debug(msg, Object.fromEntries(Object.entries(state).map(([key, value]) => [key, JSON.stringify(value)])));
+  } else {
+    logger.debug(msg);
+  }
+};
+
+/**
  * Processes the top level string nodes and possibly adds a paragraph, where
  * required.
  *
@@ -71,9 +93,15 @@ export const paragraphAwareContent = (
 ): TagNode["content"] => {
   const {
     requireParagraph: fromConfigRequireParagraph = false,
+    skipEmpty = true,
     newlineThreshold = 2,
     blockTags = defaultBlockTags,
   } = options;
+
+  debug("Start: paragraphAwareContent", {
+    content,
+    options,
+  });
 
   if (content.length === 0) {
     if (fromConfigRequireParagraph) {
@@ -102,9 +130,25 @@ export const paragraphAwareContent = (
    * Clear temporary buffers.
    */
   const clearBuffers = (): void => {
+    debug("Start: clearBuffers", {
+      buffer,
+      trailingNewlineBuffer,
+    });
+
     buffer.length = 0;
     trailingNewlineBuffer.length = 0;
+
+    debug("Done: clearBuffers", {
+      buffer,
+      trailingNewlineBuffer,
+    });
   };
+
+  /**
+   * Signals, if the given content shall be considered empty or not.
+   */
+  const isNonEmpty = (content: NonNullable<TagNode["content"]>): boolean =>
+    content.some((entry) => isTagNode(entry) || entry.trim() !== "");
 
   /**
    * Adds a paragraph and triggers that all subsequent contents also
@@ -116,8 +160,23 @@ export const paragraphAwareContent = (
    * @param content - content to add
    */
   const addCopyAsParagraph = (content: NonNullable<TagNode["content"]>): void => {
-    result.push(toNode("p", {}, [...content]));
+    debug("Start: addCopyAsParagraph", {
+      content,
+      result,
+      requireParagraph,
+    });
+
+    if (isNonEmpty(content) || !skipEmpty) {
+      result.push(toNode("p", {}, [...content]));
+    }
+
     requireParagraph = true;
+
+    debug("Done: addCopyAsParagraph", {
+      content,
+      result,
+      requireParagraph,
+    });
   };
 
   /**
@@ -131,17 +190,34 @@ export const paragraphAwareContent = (
    * keep line-breaks.
    */
   const squashAndPushNewlinesToBuffer = (): void => {
+    debug("Start: squashAndPushNewlinesToBuffer", {
+      buffer,
+      trailingNewlineBuffer,
+    });
+
     if (trailingNewlineBuffer.length > 0) {
       buffer.push(N);
       // Clear buffer, we respected the newlines.
       trailingNewlineBuffer.length = 0;
     }
+
+    debug("Done: squashAndPushNewlinesToBuffer", {
+      buffer,
+      trailingNewlineBuffer,
+    });
   };
 
   /**
    * Flush when we processed the last content entry.
    */
   const flushFinally = (): void => {
+    debug("Start: flushFinally", {
+      requireParagraph,
+      buffer,
+      result,
+      fromConfigRequireParagraph,
+    });
+
     if (requireParagraph) {
       // Design Scope: Ignore any trailing newlines as irrelevant.
       // buffer.length > 0: By default, add no empty paragraphs.
@@ -156,6 +232,13 @@ export const paragraphAwareContent = (
       squashAndPushNewlinesToBuffer();
       result.push(...buffer);
     }
+
+    debug("Done: flushFinally", {
+      requireParagraph,
+      buffer,
+      result,
+      fromConfigRequireParagraph,
+    });
   };
 
   /**
@@ -163,6 +246,10 @@ export const paragraphAwareContent = (
    * will trigger wrapping the content into a paragraph node.
    */
   const flush = (): void => {
+    debug("Start: flush", {
+      buffer,
+    });
+
     if (buffer.length > 0) {
       // Any trailing EOLs may safely be ignored here.
       addCopyAsParagraph(buffer);
@@ -170,6 +257,10 @@ export const paragraphAwareContent = (
     // Design Scope: Not having an else-branch here also means that we
     // ignore any leading newlines.
     clearBuffers();
+
+    debug("Done: flush", {
+      buffer,
+    });
   };
 
   /**
@@ -181,6 +272,10 @@ export const paragraphAwareContent = (
    * Pending newlines will be squashed into a single EOL character.
    */
   const flushOnParagraph = (): void => {
+    debug("Start: flushOnParagraph", {
+      trailingNewlineBuffer,
+    });
+
     if (trailingNewlineBuffer.length >= newlineThreshold) {
       const onlyNewlinesAtStart = 0 === result.length + buffer.length;
       if (onlyNewlinesAtStart) {
@@ -195,6 +290,10 @@ export const paragraphAwareContent = (
     } else {
       squashAndPushNewlinesToBuffer();
     }
+
+    debug("Done: flushOnParagraph", {
+      trailingNewlineBuffer,
+    });
   };
 
   /**
@@ -202,6 +301,12 @@ export const paragraphAwareContent = (
    * previous buffer entries to be added as paragraph.
    */
   const handleTagNode = (node: TagNode): void => {
+    debug("Start: handleTagNode", {
+      node,
+      buffer,
+      result,
+    });
+
     const { tag } = node;
     if (blockTags.includes(tag)) {
       // If it is a block-tag, put previous contents in a paragraph.
@@ -211,6 +316,12 @@ export const paragraphAwareContent = (
       flushOnParagraph();
       buffer.push(node);
     }
+
+    debug("Done: handleTagNode", {
+      node,
+      buffer,
+      result,
+    });
   };
 
   /**
@@ -218,12 +329,24 @@ export const paragraphAwareContent = (
    * will be added to the `trailingNewlineBuffer` instead.
    */
   const handleString = (value: string): void => {
+    debug("Start: handleString", {
+      value,
+      buffer,
+      trailingNewlineBuffer,
+    });
+
     if (isEOL(value)) {
       trailingNewlineBuffer.push(value);
     } else {
       flushOnParagraph();
       buffer.push(value);
     }
+
+    debug("Done: handleString", {
+      value,
+      buffer,
+      trailingNewlineBuffer,
+    });
   };
 
   // Main processing of content items to possibly wrap into paragraphs.
@@ -236,6 +359,10 @@ export const paragraphAwareContent = (
   }
 
   flushFinally();
+
+  debug("Done: paragraphAwareContent", {
+    result,
+  });
 
   return result;
 };

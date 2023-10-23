@@ -1,4 +1,4 @@
-// noinspection HtmlRequiredAltAttribute
+// noinspection HtmlRequiredAltAttribute,HttpUrlsUsage
 
 import html from "@bbob/html/es";
 import { ckeditor5Preset as preset } from "../../src/bbob/ckeditor5Preset";
@@ -113,7 +113,9 @@ describe("ckeditor5Preset", () => {
     </li><li>Entry 2
     </li></ul>`;
 
-      expect(parse(input)).toBe(result);
+      // Patch: Leading Whitespace is trimmed meanwhile to get rid of extra paragraph.
+      // See `skipEmpty´ option. Thus, trimming expected result.
+      expect(parse(input)).toBe(result.trim());
     });
 
     test("[list=1][/list]", () => {
