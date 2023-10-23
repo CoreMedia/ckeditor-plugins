@@ -4,29 +4,6 @@ import { bbCodeLogger } from "./BBCodeLogger";
 import { ckeditor5Preset } from "./bbob/ckeditor5Preset";
 import { htmlAttributeSanitizer } from "./bbob/htmlAttributeSanitizer";
 
-interface EscapeRule {
-  from: string;
-  to: string;
-}
-
-/**
- * Escaping applied exactly in the given order.
- */
-const escapeRules: EscapeRule[] = [
-  { from: "&", to: "&amp;" },
-  { from: ">", to: "&gt;" },
-  { from: "<", to: "&lt;" },
-  { from: '"', to: "&quot;" },
-];
-
-const escapeForXml = (text: string): string => {
-  let result = text;
-  for (const escaping of escapeRules) {
-    result = result.replace(escaping.from, escaping.to);
-  }
-  return result;
-};
-
 const bbobProcessor = bbob([htmlAttributeSanitizer(), ckeditor5Preset()]);
 
 /**
@@ -34,8 +11,7 @@ const bbobProcessor = bbob([htmlAttributeSanitizer(), ckeditor5Preset()]);
  */
 export const bbcode2html = (bbcode: string, allowedTags?: string[]): string => {
   const logger = bbCodeLogger;
-  const htmlEscapedBBCode = escapeForXml(bbcode);
-  const processed = bbobProcessor.process(htmlEscapedBBCode, {
+  const processed = bbobProcessor.process(bbcode, {
     render,
     enableEscapeTags: true,
     onlyAllowTags: allowedTags,
