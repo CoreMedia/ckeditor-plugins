@@ -1,9 +1,6 @@
-interface BBNodeObject {
-  content: null | unknown;
-  tag: string;
-  attrs: unknown;
-}
-type BBNode = null | string | number | BBNodeObject | BBNode[];
+import { TagNode } from "@bbob/plugin-helper/es";
+
+type BBNode = null | string | number | TagNode | BBNode[];
 export default function toHTML(
   source: string,
   // eslint-disable-next-line @typescript-eslint/ban-types
