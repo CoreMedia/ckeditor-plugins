@@ -102,12 +102,12 @@ describe("ckeditor5Preset", () => {
     });
 
     test(`[list]*Entry 1[/list]`, () => {
-      const input = `
+      const input = `\
     [list]
     *Entry 1
     *Entry 2
     [/list]`;
-      const result = `
+      const result = `\
     <ul>
     <li>Entry 1
     </li><li>Entry 2

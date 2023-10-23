@@ -1,6 +1,6 @@
 import { TagNode } from "@bbob/plugin-helper/es";
 
-export type CoreWalk = (callback: (node: unknown) => void) => void;
+export type CoreWalk = (callback: (node: string | TagNode) => string | TagNode) => void;
 
 export interface CoreOptions {
   // eslint-disable-next-line @typescript-eslint/ban-types

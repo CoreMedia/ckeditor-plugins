@@ -15,7 +15,7 @@ const toNode = TagNode.create;
  * efforts to prevent collisions with same-named tag-nodes within the
  * original BBCode.
  */
-const rootNodeName = "paragraph:root" as const;
+const rootNodeName = "root" as const;
 
 /**
  * Wraps tree contents into an artificial root-node, that may then respect
@@ -59,6 +59,7 @@ const wrapInRoot = (tree: CoreTree): (() => void) => {
 const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options) => {
   const unwrap = wrapInRoot(tree);
   try {
+    //tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
     tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
   } finally {
     unwrap();
@@ -76,6 +77,13 @@ const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options
 const basePreset: ReturnType<typeof createPreset> = createPreset(html5DefaultTags, process);
 
 /**
+ * Transforms the node as is, but ensures that its content respects possible
+ * paragraph formatting.
+ */
+const toParagraphAwareNode = (node: TagNode): TagNode =>
+  toNode(node.tag, node.attrs, paragraphAwareContent(node.content));
+
+/**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
@@ -86,34 +94,15 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
     /**
      * Processes artificial root-node to support paragraphs in root-level.
      */
-    [rootNodeName]: (node) => {
-      node.content = paragraphAwareContent(node.content);
-      return node;
-    },
-    td: (node) => {
-      // Must enable extra processing for `td` to handle nested paragraphs
-      // correctly.
-      node.content = paragraphAwareContent(node.content);
-      return node;
-    },
-    th: (node) => {
-      // Must enable extra processing for `th` to handle nested paragraphs
-      // correctly.
-      node.content = paragraphAwareContent(node.content);
-      return node;
-    },
+    root: toParagraphAwareNode,
+    td: toParagraphAwareNode,
+    th: toParagraphAwareNode,
     /**
      * During default processing by HTML5 preset, `li` nodes get generated from
      * `*` nodes. As a subsequent step, we add support for nested paragraphs
      * within these tags.
      */
-    li: (node) => {
-      // Processing the transformed result from BBob Preset HTML5. We must not
-      // return a node with the same name here, but instead we directly modify
-      // the content.
-      node.content = paragraphAwareContent(node.content);
-      return node;
-    },
+    li: toParagraphAwareNode,
     /**
      * Transforms `quote` to `blockquote`. Ensures that only block-level
      * nodes are contained within `blockquote`. Wraps, for example, plain text
