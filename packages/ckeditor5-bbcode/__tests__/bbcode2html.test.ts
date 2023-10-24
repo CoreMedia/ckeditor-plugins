@@ -7,6 +7,11 @@ const aut = {
   bbcode2html: (input: string): string => bbcode2html(input, supportedTags),
 };
 
+/**
+ * These are high-level integration tests based on core processing by BBob.
+ * It uses all defaults typically applied for BBCode to HTML mapping when
+ * using the CKEditor 5 BBCode plugin.
+ */
 describe("bbcode2html", () => {
   describe("Security", () => {
     describe("tainted on* handlers", () => {
