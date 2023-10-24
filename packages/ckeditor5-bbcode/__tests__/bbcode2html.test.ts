@@ -71,7 +71,7 @@ describe("bbcode2html", () => {
       describe("Inline Tags", () => {
         it.each`
           data                   | expectedDataView                                                                          | comment
-          ${`[b]T`}              | ${'<span style="font-weight: bold;"></span>T'}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
+          ${`[b]T`}              | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
           ${`T[/b]`}             | ${`T`}                                                                                    | ${`perfectly fine: Just ignore orphaned close-tag`}
           ${`[b]T[/i]`}          | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
           ${`[b]A[i]B[/b]C[/i]`} | ${`<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`} | ${`surprise: only opening tag seems to control the hierarchy`}
@@ -82,6 +82,19 @@ describe("bbcode2html", () => {
           },
         );
       });
+    });
+
+    describe("Attribute Challenges", () => {
+      it.each`
+        data                                     | expectedDataView                            | comment
+        ${`[url=]T[/url]`}                       | ${`<a href="T">T</a>`}                      | ${`BBob: empty unique attribute handled as _not existing_`}
+        ${`[url=\nhttps://example.org/]T[/url]`} | ${`<a href="\nhttps://example.org/">T</a>`} | ${`BBob: ignores newlines within (unique) attributes`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+        },
+      );
     });
   });
 
