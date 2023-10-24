@@ -116,10 +116,9 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * corresponding class parameter.
      */
     code: (node: TagNode, { render }: Core): TagNode => {
+      // Using `||` also for possibly empty string.
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const language = getUniqAttr(node.attrs) || "plaintext";
-      // TODO: Possibly pass stripTags=true? We must prevent any plain script tag to appear.
-      // TODO: We may also need to prevent "onclick" etc. handlers, thus, strip any
-      //   unhandled attributes.
       const renderedCodeContent = render(node.content);
       // Remove some surrounding space from possible pretty-print BBCode.
       // If not doing so, you will see some extra lines above and below the
