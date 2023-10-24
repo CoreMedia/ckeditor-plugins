@@ -377,8 +377,7 @@ export default class Blocklistui extends Plugin {
    * @private
    */
   #getSelectedText(): string {
-    const view = this.editor.editing.view;
-    const selection = view.document.selection;
+    const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
 
     const isTextProxy = (node: unknown): node is TextProxy =>
@@ -386,7 +385,7 @@ export default class Blocklistui extends Plugin {
       typeof node === "object" && node !== null && "data" in node;
 
     if (range) {
-      const item = Array.from(range.getItems())
+      return Array.from(range.getItems())
         .filter((item) => isTextProxy(item))
         .map((item) => {
           if (isTextProxy(item)) {
@@ -394,8 +393,7 @@ export default class Blocklistui extends Plugin {
           }
           return "";
         })
-        .join();
-      return removeSpecialChars(item);
+        .join("");
     }
     return "";
   }
@@ -435,18 +433,3 @@ export default class Blocklistui extends Plugin {
       .filter((attribute) => attribute !== undefined) as string[];
   }
 }
-
-/**
- * Remove special characters, like commas, in a string.
- * Used to format strings within a selection to make sure a string only contains
- * the actual word when a highlighted section is within the selection.
- *
- * @param input - the input string
- * @returns the transformed string
- * @private
- */
-export const removeSpecialChars = (input: string): string => {
-  // This regex allows letters, numbers, whitespace, hyphens and single quotes.
-  const regex = /[^a-zA-Z0-9\s-']/g;
-  return input.replace(regex, "");
-};
