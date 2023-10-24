@@ -189,11 +189,6 @@ describe(`Paragraphs`, () => {
           `[$#] should handle consecutive EOL at threshold ($comment): $input`,
           ({ input, expected }: { input: ContentFixture; expected: ContentFixture }) => {
             const actual = paragraphAwareContent(input);
-            console.debug("DEBUG", {
-              input: JSON.stringify(input),
-              actual: JSON.stringify(actual),
-              expected: JSON.stringify(expected),
-            });
             expect(actual).toMatchObject(expected);
           },
         );
