@@ -68,20 +68,18 @@ describe("bbcode2html", () => {
      * the behavior of the BBob library.
      */
     describe("Formatting Errors", () => {
-      describe("Inline Tags", () => {
-        it.each`
-          data                   | expectedDataView                                                                          | comment
-          ${`[b]T`}              | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
-          ${`T[/b]`}             | ${`T`}                                                                                    | ${`perfectly fine: Just ignore orphaned close-tag`}
-          ${`[b]T[/i]`}          | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
-          ${`[b]A[i]B[/b]C[/i]`} | ${`<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`} | ${`surprise: only opening tag seems to control the hierarchy`}
-        `(
-          "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-          ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-            expect(aut.bbcode2html(data)).toBe(expectedDataView);
-          },
-        );
-      });
+      it.each`
+        data                   | expectedDataView                                                                          | comment
+        ${`[b]T`}              | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
+        ${`T[/b]`}             | ${`T`}                                                                                    | ${`perfectly fine: Just ignore orphaned close-tag`}
+        ${`[b]T[/i]`}          | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
+        ${`[b]A[i]B[/b]C[/i]`} | ${`<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`} | ${`surprise: only opening tag seems to control the hierarchy`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+        },
+      );
     });
 
     describe("Attribute Challenges", () => {
@@ -116,6 +114,19 @@ describe("bbcode2html", () => {
       `("[$#] Should prevent onclick-attack for: $tainted", ({ tainted }: { tainted: string }) => {
         expect(aut.bbcode2html(tainted)).not.toContain("onclick");
       });
+    });
+
+    describe("Raw HTML Injections", () => {
+      it.each`
+        data            | expectedDataView            | comment
+        ${`A <b>B</b>`} | ${`A &lt;b&gt;B&lt;/b&gt;`} | ${`Defaults to not supporting embedded HTML elements.`}
+        ${`A&amp;B`}    | ${`A&amp;amp;B`}            | ${`Defaults to not supporting entities, but to escape them.`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+        },
+      );
     });
 
     /**

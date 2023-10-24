@@ -2,9 +2,9 @@ import { render } from "@bbob/html/es";
 import bbob from "@bbob/core/es";
 import { bbCodeLogger } from "./BBCodeLogger";
 import { ckeditor5Preset } from "./bbob/ckeditor5Preset";
-import { htmlAttributeSanitizer } from "./bbob/htmlAttributeSanitizer";
+import { htmlSanitizer } from "./bbob/htmlSanitizer";
 
-const bbobProcessor = bbob([htmlAttributeSanitizer(), ckeditor5Preset()]);
+const bbobProcessor = bbob([htmlSanitizer(), ckeditor5Preset()]);
 
 /**
  * Parses BBCode to HTML.
