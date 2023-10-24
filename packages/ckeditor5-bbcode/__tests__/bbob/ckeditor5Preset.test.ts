@@ -156,5 +156,26 @@ describe("ckeditor5Preset", () => {
         },
       );
     });
+
+    describe("Paragraphs (denoted by double newline)", () => {
+      test.each`
+        bbcode                                         | expected                                                                        | comment
+        ${`Lorem\n\nIpsum`}                            | ${`<p>Lorem</p><p>Ipsum</p>`}                                                   | ${`standard paragraph processing`}
+        ${`Lorem\nIpsum`}                              | ${`Lorem\nIpsum`}                                                               | ${`nothing to do for single newline; Design Scope: We may have added <br> here.`}
+        ${`Lorem\n\n`}                                 | ${`Lorem\n`}                                                                    | ${`some trimming applied, but (just) newlines at the end never trigger paragraph processing`}
+        ${`\n\nLorem`}                                 | ${`\nLorem`}                                                                    | ${`newlines at the beginning do not trigger paragraph processing but get trimmed`}
+        ${`[quote]Lorem\n\nIpsum[/quote]`}             | ${`<blockquote><p>Lorem</p><p>Ipsum</p></blockquote>`}                          | ${`quote: add each paragraph separately`}
+        ${`[quote]Lorem[quote]Ipsum[/quote][/quote]`}  | ${`<blockquote><p>Lorem</p><blockquote><p>Ipsum</p></blockquote></blockquote>`} | ${`quote: handle nested blockquotes properly`}
+        ${`[quote]Lorem[list][*]Ipsum[/list][/quote]`} | ${`<blockquote><p>Lorem</p><ul><li>Ipsum</li></ul></blockquote>`}               | ${`quote: handle nested block-level elements properly`}
+        ${`[list][*]Lorem\n\nIpsum\n[/list]`}          | ${`<ul><li><p>Lorem</p><p>Ipsum</p></li></ul>`}                                 | ${`list/li: add each paragraph separately`}
+        ${`Lorem\n\nipsum\n[quote]dolor[/quote]\nsit`} | ${`<p>Lorem</p><p>ipsum</p><blockquote><p>dolor</p></blockquote><p>\nsit</p>`}  | ${`Continue with paragraphs, once we added them on a given hierarchy level. Extra newline (sit) is within design scope.`}
+        ${`[b]Lorem\n\nIpsum[/b]`}                     | ${`<span style="font-weight: bold;">Lorem\n\nIpsum</span>`}                       | ${`no paragraphs within inline tags`}
+      `(
+        "[$#] Should transform $bbcode to: $expected ($comment)",
+        ({ bbcode, expected }: { bbcode: string; expected: string }) => {
+          expect(parse(bbcode)).toBe(expected);
+        },
+      );
+    });
   });
 });
