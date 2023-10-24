@@ -2,13 +2,19 @@ import { CorePlugin, CoreTree } from "@bbob/core/es";
 import { escapeHTML, getUniqAttr, isTagNode } from "@bbob/plugin-helper/es";
 
 /**
- * Default attribute filter. Only forbids any `on*` handlers.
+ * Predicate for filtering attributes. This predicate is not applied to
+ * unique attributes.
  *
- * @param tagName - owning tag name
  * @param attributeName - name of attribute
+ * @param tagName - owning tag name
  */
-export const defaultIsAllowedAttribute = (tagName: string, attributeName: string): boolean =>
-  !attributeName.startsWith("on");
+export type AllowedAttributePredicate = (attributeName: string, tagName: string) => boolean;
+
+/**
+ * Default attribute filter. Only forbids any `on*` handlers.
+ */
+export const defaultIsAllowedAttribute: AllowedAttributePredicate = (attributeName: string): boolean =>
+  !attributeName.toLowerCase().startsWith("on");
 
 export interface HtmlSanitizerOptions {
   /**
@@ -24,7 +30,7 @@ export interface HtmlSanitizerOptions {
    * @param tagName - owning tag name
    * @param attributeName - name of attribute
    */
-  isAllowedAttribute?: typeof defaultIsAllowedAttribute;
+  isAllowedAttribute?: AllowedAttributePredicate;
 }
 
 const walk = <T extends CoreTree | CoreTree[number] | CoreTree[number][]>(
@@ -51,7 +57,7 @@ const walk = <T extends CoreTree | CoreTree[number] | CoreTree[number][]>(
       // by object.
       item.attrs = Object.fromEntries(
         Object.entries(item.attrs).filter(
-          ([attrName]) => uniqAttr === attrName || options.isAllowedAttribute(item.tag, attrName),
+          ([attrName]) => uniqAttr === attrName || options.isAllowedAttribute(attrName, item.tag),
         ),
       );
     } else {
