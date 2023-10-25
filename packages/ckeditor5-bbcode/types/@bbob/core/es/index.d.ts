@@ -3,8 +3,9 @@ import { TagNode } from "@bbob/plugin-helper/es";
 export type CoreWalk = (callback: (node: string | TagNode) => string | TagNode) => void;
 
 export type CoreParser = () => unknown;
-export type CoreRenderNode = null | string | number | TagNode | CoreRenderNode[];
-export type CoreRenderer = (node: CoreRenderNode, options: object) => string;
+export type CoreRenderable = null | string | number | TagNode;
+export type CoreRenderNode = CoreRenderable | CoreRenderable[];
+export type CoreRenderer = (node: CoreRenderNode, options?: object) => string;
 export type CoreData = unknown | null;
 
 export interface CoreOptions {
@@ -18,6 +19,7 @@ export interface CoreOptions {
   openTag?: string;
   closeTag?: string;
   onError?: (info: { message: string; tagName: string; lineNumber: number; columnNumber: number }) => void;
+  [key: string]: unknown;
 }
 
 export type CoreMatcher = (expression: unknown, callback: (node: string | TagNode) => string | TagNode) => unknown;
@@ -28,7 +30,6 @@ export type CoreTree = (string | TagNode)[] & {
   walk: CoreWalk;
   match: CoreMatcher;
 };
-
 
 export type CoreIterator = (tree: CoreTree, callback: (entry: CoreTree[number]) => CoreTree[number]) => CoreTree;
 
