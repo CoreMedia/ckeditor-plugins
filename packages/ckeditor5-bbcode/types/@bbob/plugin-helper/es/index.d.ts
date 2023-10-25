@@ -3,11 +3,11 @@ type TagAttrs = Record<string, string>;
 export declare class TagNode {
   readonly tag: string;
   attrs: TagAttrs;
-  content: (string | TagNode)[];
+  content: (string | TagNode)[] | null;
   attr: (name: string, value?: string) => string | undefined;
   append: (value: string) => void;
   readonly length: number;
-  static create: (tag: string, attrs: TagAttrs = {}, content: (string | TagNode)[] = []) => TagNode;
+  static create: (tag: string, attrs: TagAttrs = {}, content: (string | TagNode)[] | null = []) => TagNode;
   static isOf: (node: TagNode, type: string) => node is TagNode & { tag: typeof type };
 }
 
