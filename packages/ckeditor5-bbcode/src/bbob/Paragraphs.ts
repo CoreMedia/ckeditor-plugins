@@ -88,9 +88,9 @@ const debug = (msg: string, state?: Record<string, unknown>): void => {
  * @param options - options to respect
  */
 export const paragraphAwareContent = (
-  content: TagNode["content"],
+  content: NonNullable<TagNode["content"]>,
   options: ParagraphAwareContentOptions = {},
-): TagNode["content"] => {
+): NonNullable<TagNode["content"]> => {
   const {
     requireParagraph: fromConfigRequireParagraph = false,
     skipEmpty = true,
