@@ -73,7 +73,7 @@ const walk = <T extends CoreTree | CoreTree[number] | CoreTree[number][]>(
     }
   } else {
     if (isTagNode(item)) {
-      item.content = walk(item.content, options);
+      item.content = walk(item.content ?? [], options);
       // Notes:
       //
       // * Unique-Attributes such as `[url=xyz]` are represented in BBob with
