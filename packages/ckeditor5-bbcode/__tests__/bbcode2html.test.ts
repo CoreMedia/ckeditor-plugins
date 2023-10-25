@@ -54,6 +54,11 @@ describe("bbcode2html", () => {
         ${`[quote]T[/quote]`}                                                                                                      | ${`<blockquote><p>T</p></blockquote>`}
         ${`[table][tr][td]T[/td][/tr][/table]`}                                                                                    | ${`<table><tr><td>T</td></tr></table>`}
         ${`[table][thead][tr][th]H[/th][/tr][/thead][tbody][tr][td]T[/td][/tr][/tbody][tfoot][tr][td]F[/td][/tr][/tfoot][/table]`} | ${`<table><thead><tr><th>H</th></tr></thead><tbody><tr><td>T</td></tr></tbody><tfoot><tr><td>F</td></tr></tfoot></table>`}
+        ${`[code=css]T[/code]`}                                                                                                    | ${`<pre><code class="language-css">T</code></pre>`}
+        ${`[code=html]<i>T</i>[/code]`}                                                                                            | ${`<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`}
+        ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                                                                                  | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}
+        ${`[code][i]T[/i][/code]`}                                                                                                 | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`}
+        ${`[code][script]javascript:alert("X")[/script][/code]`}                                                                   | ${`<pre><code class="language-plaintext">javascript:alert(&quot;X&quot;)</code></pre>`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
