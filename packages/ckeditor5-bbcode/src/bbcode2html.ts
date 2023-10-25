@@ -1,10 +1,9 @@
-import { render } from "@bbob/html/es";
 import bbob from "@bbob/core/es";
 import { bbCodeLogger } from "./BBCodeLogger";
 import { ckeditor5Preset } from "./bbob/ckeditor5Preset";
-import { htmlSanitizer } from "./bbob/htmlSanitizer";
+import { renderHtmlDom } from "./bbob/renderHtmlDom";
 
-const bbobProcessor = bbob([htmlSanitizer(), ckeditor5Preset()]);
+const bbobProcessor = bbob(ckeditor5Preset());
 
 /**
  * Parses BBCode to HTML.
@@ -12,7 +11,7 @@ const bbobProcessor = bbob([htmlSanitizer(), ckeditor5Preset()]);
 export const bbcode2html = (bbcode: string, allowedTags?: string[]): string => {
   const logger = bbCodeLogger;
   const processed = bbobProcessor.process(bbcode, {
-    render,
+    render: renderHtmlDom,
     enableEscapeTags: true,
     onlyAllowTags: allowedTags,
   });
