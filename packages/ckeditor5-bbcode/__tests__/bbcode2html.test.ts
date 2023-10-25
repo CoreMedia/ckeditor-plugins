@@ -22,14 +22,16 @@ describe("bbcode2html", () => {
   describe("Standard Tag Processing", () => {
     describe("Supported Inline Tags", () => {
       it.each`
-        data                                   | expectedDataView
-        ${`[b]T[/b]`}                          | ${`<span style="font-weight: bold;">T</span>`}
-        ${`[color=red]T[/color]`}              | ${`<span style="color: red;">T</span>`}
-        ${`[i]T[/i]`}                          | ${'<span style="font-style: italic;">T</span>'}
-        ${`[s]T[/s]`}                          | ${`<span style="text-decoration: line-through;">T</span>`}
-        ${`[u]T[/u]`}                          | ${'<span style="text-decoration: underline;">T</span>'}
-        ${`[url=https://example.org/]T[/url]`} | ${'<a href="https://example.org/">T</a>'}
-        ${`[url]https://example.org/[/url]`}   | ${'<a href="https://example.org/">https://example.org/</a>'}
+        data                                               | expectedDataView
+        ${`[b]T[/b]`}                                      | ${`<span style="font-weight: bold;">T</span>`}
+        ${`[color=red]T[/color]`}                          | ${`<span style="color: red;">T</span>`}
+        ${`[i]T[/i]`}                                      | ${'<span style="font-style: italic;">T</span>'}
+        ${`[s]T[/s]`}                                      | ${`<span style="text-decoration: line-through;">T</span>`}
+        ${`[u]T[/u]`}                                      | ${'<span style="text-decoration: underline;">T</span>'}
+        ${`[url=https://example.org/]T[/url]`}             | ${'<a href="https://example.org/">T</a>'}
+        ${`[url]https://example.org/[/url]`}               | ${'<a href="https://example.org/">https://example.org/</a>'}
+        ${`[url=https://example.org/?one=1&two=2]T[/url]`} | ${'<a href="https://example.org/?one=1&two=2">T</a>'}
+        ${`[url]https://example.org/?one=1&two=2[/url]`}   | ${'<a href="https://example.org/?one=1&two=2">https://example.org/?one=1&amp;two=2</a>'}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {

@@ -9,13 +9,15 @@ describe("htmlSanitizer", () => {
     const process = (bbCode: string): string => processor.process(bbCode, { render }).html;
 
     it.each`
-      input                       | expected                  | comment
-      ${``}                       | ${``}                     | ${`Empty string handling`}
-      ${`Lorem`}                  | ${`Lorem`}                | ${`unsuspicious string handling`}
-      ${`[b]T[/b]`}               | ${`<b>T</b>`}             | ${`unsuspicious element handling`}
-      ${`<b>T</b>`}               | ${`&lt;b&gt;T&lt;/b&gt;`} | ${`encode HTML elements by default`}
-      ${`[b onclick=xss()]T[/b]`} | ${`<b>T</b>`}             | ${`remove suspicious attributes`}
-      ${`[b oNcLick=xss()]T[/b]`} | ${`<b>T</b>`}             | ${`remove suspicious attributes`}
+      input                                                     | expected                  | comment
+      ${``}                                                     | ${``}                     | ${`Empty string handling`}
+      ${`Lorem`}                                                | ${`Lorem`}                | ${`unsuspicious string handling`}
+      ${`[b]T[/b]`}                                             | ${`<b>T</b>`}             | ${`unsuspicious element handling`}
+      ${`<b>T</b>`}                                             | ${`&lt;b&gt;T&lt;/b&gt;`} | ${`encode HTML elements by default`}
+      ${`[b onclick=xss()]T[/b]`}                               | ${`<b>T</b>`}             | ${`remove suspicious attributes`}
+      ${`[b oNcLick=xss()]T[/b]`}                               | ${`<b>T</b>`}             | ${`remove suspicious attributes`}
+      ${`[url]https://example.org/?A=<script>T</script>[/url]`} | ${`TODO: undecided`}      | ${`URL 1) We must prevent unescaped "script" to appear in HTML.`}
+      ${`[url]https://example.org/?A=1&B=2[/url]`}              | ${`TODO: undecided`}      | ${`URL 2) On the other hand, we must not blindly escape content, that is later taken as attribute value; this will cause duplicate escaping.`}
     `(
       "[$#] $comment: Should process '$input' to '$expected'",
       ({ input, expected }: { input: string; expected: string }) => {
