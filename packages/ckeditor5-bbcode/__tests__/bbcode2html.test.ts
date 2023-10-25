@@ -58,7 +58,7 @@ describe("bbcode2html", () => {
         ${`[code=html]<i>T</i>[/code]`}                                                                                            | ${`<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`}
         ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                                                                                  | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}
         ${`[code][i]T[/i][/code]`}                                                                                                 | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`}
-        ${`[code][script]javascript:alert("X")[/script][/code]`}                                                                   | ${`<pre><code class="language-plaintext">javascript:alert(&quot;X&quot;)</code></pre>`}
+        ${`[code][script]javascript:alert("X")[/script][/code]`}                                                                   | ${'<pre><code class="language-plaintext">[script]javascript:alert(&quot;X&quot;)[/script]</code></pre>'}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {

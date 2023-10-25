@@ -1,4 +1,4 @@
-import { getUniqAttr, isTagNode, TagNode } from "@bbob/plugin-helper/es";
+import { getUniqAttr, isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
@@ -85,6 +85,32 @@ const toParagraphAwareNode = (node: TagNode): TagNode =>
   toNode(node.tag, node.attrs, paragraphAwareContent(node.content));
 
 /**
+ * Removes EOLs at the beginning and end, that may be a result of
+ * BBCode pretty-printing.
+ *
+ * @param contents - contents to trim
+ */
+const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
+  const result: TagNode["content"] = [];
+  const bufferedEOLs: (typeof N)[] = [];
+  for (const content of contents) {
+    if (isEOL(content)) {
+      // > 0: Ignore EOLs at the beginning
+      if (result.length > 0) {
+        bufferedEOLs.push(content);
+      }
+    } else {
+      // Push any EOLs collected up to now.
+      result.push(...bufferedEOLs);
+      result.push(content);
+    }
+  }
+  // Ignoring any bufferedEOLs at the end implements the "trim at end"
+  // feature.
+  return result;
+};
+
+/**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
@@ -115,20 +141,19 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * nested `<code>` element and allows specifying the language via a
      * corresponding class parameter.
      */
-    code: (node: TagNode, { render }: Core): TagNode => {
+    code: (node: TagNode): TagNode => {
       // Using `||` also for possibly empty string.
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const language = getUniqAttr(node.attrs) || "plaintext";
-      const renderedCodeContent = render(node.content);
-      // Remove some surrounding space from possible pretty-print BBCode.
-      // If not doing so, you will see some extra lines above and below the
-      // actual code within the code-block.
-      const trimmedRenderedCodeContent = renderedCodeContent.trim();
-      // Must not nest mapping to code-Node, as this would trigger an endless
-      // recursion. Render the node directly instead.
-      const renderedCode = render(toNode("code", { class: `language-${language}` }, [trimmedRenderedCodeContent]));
-      return toNode("pre", {}, [renderedCode]);
+      return toNode("pre", {}, [toNode("htmlCode", { class: `language-${language}` }, node.content)]);
     },
+    /**
+     * Processing of artificial intermediate node created via `code` parsing.
+     * We need this extra mapping, not to recurse into `code` parsing, thus,
+     * we must not add a `code` node within the `[code]` to `<pre>` processing,
+     * which again is required for proper code block support in CKEditor 5.
+     */
+    htmlCode: (node: TagNode): TagNode => toNode("code", node.attrs, trimEOL(node.content)),
   };
   bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
   return extendedTags;
