@@ -49,7 +49,7 @@ const wrapInRoot = (tree: CoreTree): (() => void) => {
       );
     }
     tree.length = 0;
-    tree.push(...processedRootNode.content);
+    tree.push(...(processedRootNode.content ?? []));
   };
 };
 
@@ -82,7 +82,7 @@ const basePreset: ReturnType<typeof createPreset> = createPreset(html5DefaultTag
  * paragraph formatting.
  */
 const toParagraphAwareNode = (node: TagNode): TagNode =>
-  toNode(node.tag, node.attrs, paragraphAwareContent(node.content));
+  toNode(node.tag, node.attrs, paragraphAwareContent(node.content ?? []));
 
 /**
  * Removes EOLs at the beginning and end, that may be a result of
@@ -93,7 +93,7 @@ const toParagraphAwareNode = (node: TagNode): TagNode =>
 const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
   const result: TagNode["content"] = [];
   const bufferedEOLs: (typeof N)[] = [];
-  for (const content of contents) {
+  for (const content of contents ?? []) {
     if (isEOL(content)) {
       // > 0: Ignore EOLs at the beginning
       if (result.length > 0) {
@@ -135,7 +135,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * nodes are contained within `blockquote`. Wraps, for example, plain text
      * content into a paragraph node.
      */
-    quote: (node) => toNode("blockquote", {}, paragraphAwareContent(node.content, { requireParagraph: true })),
+    quote: (node) => toNode("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true })),
     /**
      * Override default from HTML5 Preset for CKEditor 5: CKEditor 5 requires a
      * nested `<code>` element and allows specifying the language via a
