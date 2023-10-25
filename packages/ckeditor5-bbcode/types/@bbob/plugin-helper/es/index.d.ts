@@ -16,7 +16,7 @@ export declare function isStringNode(el: unknown): el is string;
 export declare function isEOL(el: unknown): el is "\n";
 export declare function escapeHTML(value: string): string;
 
-export declare function getUniqAttr(attrs: Record<string, string>): string | null;
+export declare function getUniqAttr(attrs: Record<string, unknown>): string | null;
 
 export declare const N: "\n";
 export declare const TAB: "\t";
