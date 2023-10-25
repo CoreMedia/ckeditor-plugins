@@ -4,7 +4,7 @@ export type CoreWalk = (callback: (node: string | TagNode) => string | TagNode) 
 
 export type CoreParser = () => unknown;
 export type CoreRenderNode = null | string | number | TagNode | CoreRenderNode[];
-export type CoreRenderer = (node: CoreRenderNode, options: object) => unknown;
+export type CoreRenderer = (node: CoreRenderNode, options: object) => string;
 export type CoreData = unknown | null;
 
 export interface CoreOptions {

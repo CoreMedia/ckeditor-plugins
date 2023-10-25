@@ -9,6 +9,7 @@ interface Options {
   parser?: unknown;
   render: RenderFn;
   data?: unknown;
+  [key: string]: unknown;
 }
 
 /**
@@ -18,7 +19,7 @@ interface Options {
  * @returns preset function
  */
 declare function createPreset(
-  defTags: Record<string, (node: TagNode, core: { render: RenderFn }, options: object) => string | TagNode>,
+  defTags: Record<string, (node: TagNode, core: { render: RenderFn }, options: Options) => string | TagNode>,
   // eslint-disable-next-line @typescript-eslint/ban-types
   processor?: Function,
 ): {
