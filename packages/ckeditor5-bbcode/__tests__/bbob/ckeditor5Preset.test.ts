@@ -140,6 +140,34 @@ describe("ckeditor5Preset", () => {
     });
   });
 
+  /**
+   * These tests demonstrate flawed behaviors, thus, known bugs, we may ignore
+   * or have to deal with. If any of these tests fail, a corresponding issue
+   * raised at BBob may have been fixed meanwhile.
+   *
+   * If you happen to see a test failing, search for the referenced issue ID
+   * within our sources and see, if corresponding actions are required.
+   *
+   * Added tests in here should reference an issue and specify a type, thus,
+   * if we just accepted it as known issue, or if we had to apply a workaround.
+   */
+  describe("BBob Flawed Behaviors", () => {
+    // noinspection HtmlUnknownTarget
+    test.each`
+      bbcode                                                       | expected                                                  | issue                                            | comment
+      ${`[url fakeUnique=fakeUnique]T[/url]`}                      | ${`<a href="fakeUnique">T</a>`}                           | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. This test just demonstrates the symptom.`}
+      ${`[url=https://example.org/ fakeUnique=fakeUnique]T[/url]`} | ${`<a href="fakeUnique">T</a>`}                           | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Demonstrates accidental override.`}
+      ${`[url=https://example.org/ hidden]T[/url]`}                | ${`<a href="hidden">T</a>`}                               | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Demonstrates accidental override, but with more realistic use-case.`}
+      ${`[table=onclick][tr][td]T[/td][/tr][/table]`}              | ${`<table onclick="onclick"><tr><td>T</td></tr></table>`} | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Only applicable, if mapping rules do not explicitly remove unhandled attributes.`}
+      ${`[table onclick=onclick][tr][td]T[/td][/tr][/table]`}      | ${`<table onclick="onclick"><tr><td>T</td></tr></table>`} | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Only applicable, if mapping rules do not explicitly remove unhandled attributes.`}
+    `(
+      "[$#] Expected flawed behavior: '$bbcode' to '$expected' ($issue, $comment)",
+      ({ bbcode, expected }: { bbcode: string; expected: string }) => {
+        expect(parse(bbcode)).toBe(expected);
+      },
+    );
+  });
+
   describe("CKEditor 5 Data View Specific Adaptations", () => {
     // We have overridden the behavior to also include a nested `<code>`
     // element.
@@ -169,7 +197,7 @@ describe("ckeditor5Preset", () => {
         ${`[quote]Lorem[list][*]Ipsum[/list][/quote]`} | ${`<blockquote><p>Lorem</p><ul><li>Ipsum</li></ul></blockquote>`}               | ${`quote: handle nested block-level elements properly`}
         ${`[list][*]Lorem\n\nIpsum\n[/list]`}          | ${`<ul><li><p>Lorem</p><p>Ipsum</p></li></ul>`}                                 | ${`list/li: add each paragraph separately`}
         ${`Lorem\n\nipsum\n[quote]dolor[/quote]\nsit`} | ${`<p>Lorem</p><p>ipsum</p><blockquote><p>dolor</p></blockquote><p>\nsit</p>`}  | ${`Continue with paragraphs, once we added them on a given hierarchy level. Extra newline (sit) is within design scope.`}
-        ${`[b]Lorem\n\nIpsum[/b]`}                     | ${`<span style="font-weight: bold;">Lorem\n\nIpsum</span>`}                       | ${`no paragraphs within inline tags`}
+        ${`[b]Lorem\n\nIpsum[/b]`}                     | ${`<span style="font-weight: bold;">Lorem\n\nIpsum</span>`}                     | ${`no paragraphs within inline tags`}
       `(
         "[$#] Should transform $bbcode to: $expected ($comment)",
         ({ bbcode, expected }: { bbcode: string; expected: string }) => {
