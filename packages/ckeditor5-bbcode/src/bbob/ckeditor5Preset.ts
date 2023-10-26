@@ -1,4 +1,4 @@
-import { getUniqAttr, isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
+import { getUniqAttr, isEOL, isStringNode, isTagNode, N, TagAttrs, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
@@ -110,6 +110,71 @@ const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
   return result;
 };
 
+const renderRaw = (node: NonNullable<TagNode["content"]>[number] | TagNode["content"]): string => {
+  if (!node) {
+    return "";
+  }
+
+  if (isStringNode(node)) {
+    return node;
+  }
+
+  if (isTagNode(node)) {
+    return renderRaw(node.content);
+  }
+
+  return node.map((entry) => renderRaw(entry)).join("");
+};
+
+const contentToAttrValue = (node: TagNode): string => {
+  const { content } = node;
+  let result: string;
+  if (!content) {
+    result = "";
+  } else {
+    result = renderRaw(node);
+  }
+  console.debug("contentToAttrValue", { result });
+  return result;
+};
+
+const allowedAnchorAttributes = [
+  "class",
+  "dir",
+  "download",
+  "href",
+  "hreflang",
+  "id",
+  "lang",
+  "name",
+  "target",
+  "title",
+  "type",
+];
+
+const toHtmlAnchorAttrs = (node: TagNode): TagAttrs => {
+  const { attrs } = node;
+  const uniqAttr = getUniqAttr(attrs);
+  let href: string;
+
+  if ("href" in attrs) {
+    href = attrs.href;
+  } else {
+    if (uniqAttr) {
+      href = uniqAttr;
+    } else {
+      href = contentToAttrValue(node);
+    }
+  }
+
+  return Object.fromEntries(
+    Object.entries({
+      ...attrs,
+      href,
+    }).filter(([name]) => allowedAnchorAttributes.includes(name)),
+  );
+};
+
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
@@ -154,6 +219,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * which again is required for proper code block support in CKEditor 5.
      */
     htmlCode: (node: TagNode): TagNode => toNode("code", node.attrs, trimEOL(node.content)),
+    url: (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content),
   };
   bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
   return extendedTags;

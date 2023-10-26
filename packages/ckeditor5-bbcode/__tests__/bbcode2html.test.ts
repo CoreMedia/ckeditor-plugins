@@ -22,16 +22,19 @@ describe("bbcode2html", () => {
   describe("Standard Tag Processing", () => {
     describe("Supported Inline Tags", () => {
       it.each`
-        data                                               | expectedDataView
-        ${`[b]T[/b]`}                                      | ${`<span style="font-weight: bold;">T</span>`}
-        ${`[color=red]T[/color]`}                          | ${`<span style="color: red;">T</span>`}
-        ${`[i]T[/i]`}                                      | ${'<span style="font-style: italic;">T</span>'}
-        ${`[s]T[/s]`}                                      | ${`<span style="text-decoration: line-through;">T</span>`}
-        ${`[u]T[/u]`}                                      | ${'<span style="text-decoration: underline;">T</span>'}
-        ${`[url=https://example.org/]T[/url]`}             | ${'<a href="https://example.org/">T</a>'}
-        ${`[url]https://example.org/[/url]`}               | ${'<a href="https://example.org/">https://example.org/</a>'}
-        ${`[url=https://example.org/?one=1&two=2]T[/url]`} | ${'<a href="https://example.org/?one=1&two=2">T</a>'}
-        ${`[url]https://example.org/?one=1&two=2[/url]`}   | ${'<a href="https://example.org/?one=1&two=2">https://example.org/?one=1&amp;two=2</a>'}
+        data                                                              | expectedDataView
+        ${`[b]T[/b]`}                                                     | ${`<span style="font-weight: bold;">T</span>`}
+        ${`[color=red]T[/color]`}                                         | ${`<span style="color: red;">T</span>`}
+        ${`[i]T[/i]`}                                                     | ${'<span style="font-style: italic;">T</span>'}
+        ${`[s]T[/s]`}                                                     | ${`<span style="text-decoration: line-through;">T</span>`}
+        ${`[u]T[/u]`}                                                     | ${`<span style="text-decoration: underline;">T</span>`}
+        ${`[url=https://example.org/]T[/url]`}                            | ${`<a href="https://example.org/">T</a>`}
+        ${`[url]https://example.org/[/url]`}                              | ${`<a href="https://example.org/">https://example.org/</a>`}
+        ${`[url=/relative]T[/url]`}                                       | ${`<a href="/relative">T</a>`}
+        ${`[url]/relative[/url]`}                                         | ${`<a href="/relative">/relative</a>`}
+        ${`[url=https://example.org/?one=1&two=2]T[/url]`}                | ${`<a href="https://example.org/?one=1&amp;two=2">T</a>`}
+        ${`[url]https://example.org/?one=1&two=2[/url]`}                  | ${`<a href="https://example.org/?one=1&amp;two=2">https://example.org/?one=1&amp;two=2</a>`}
+        ${`[url]https://example.org/?[b]predicate=x%3D42[/b]#_top[/url]`} | ${`<a href="https://example.org/?predicate=x%3D42#_top">https://example.org/?<span style="font-weight: bold;">predicate=x%3D42</span>#_top</a>`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
@@ -58,7 +61,7 @@ describe("bbcode2html", () => {
         ${`[code=html]<i>T</i>[/code]`}                                                                                            | ${`<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`}
         ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                                                                                  | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}
         ${`[code][i]T[/i][/code]`}                                                                                                 | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`}
-        ${`[code][script]javascript:alert("X")[/script][/code]`}                                                                   | ${'<pre><code class="language-plaintext">[script]javascript:alert(&quot;X&quot;)[/script]</code></pre>'}
+        ${`[code][script]javascript:alert("X")[/script][/code]`}                                                                   | ${`<pre><code class="language-plaintext">[script]javascript:alert("X")[/script]</code></pre>`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
@@ -146,11 +149,11 @@ describe("bbcode2html", () => {
      */
     describe("XSS attacks", () => {
       it.each`
-        tainted                                                                                                       | expected                                                                                                                                                                                                                                                                                          | comment
-        ${`[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==]sdfsdf[/url]`}                         | ${`<a href="data%3Atext/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==">sdfsdf</a>`}                                                                                                                                                                                                        | ${`source: https://security.snyk.io/vuln/SNYK-PYTHON-BBCODE-40502; BBob#escapeHTML disables denied protocols by escaping`}
-        ${`[url]javascript:alert('XSS');[/url]`}                                                                      | ${`<a href="javascript%3Aalert(&#039;XSS&#039;);">javascript:alert('XSS');</a>`}                                                                                                                                                                                                                  | ${`source: https://github.com/dcwatson/bbcode/issues/4; BBob#escapeHTML disables denied protocols by escaping`}
-        ${`[url]123" onmouseover="alert('Hacked');[/url]`}                                                            | ${`<a href="123&quot; onmouseover=&quot;alert(&#039;Hacked&#039;);">123" onmouseover="alert('Hacked');</a>`}                                                                                                                                                                                      | ${`source: https://github.com/dcwatson/bbcode/issues/4; BBob#escapeHTML escapes malicious characters such as quotes`}
-        ${`[url]https://google.com?[url] onmousemove=javascript:alert(String.fromCharCode(88,83,83));//[/url][/url]`} | ${`<a href="https://google.com?&lt;url&gt; onmousemove=javascript%3Aalert(String.fromCharCode(88,83,83));//&lt;/url&gt;">https://google.com?<a href=" onmousemove=javascript%3Aalert(String.fromCharCode(88,83,83));//"> onmousemove=javascript:alert(String.fromCharCode(88,83,83));//</a></a>`} | ${`source: https://github.com/dcwatson/bbcode/issues/4; No real issue, but tag nesting is surprising`}
+        tainted                                                                                                       | expected                                                                                                                                                                                        | comment
+        ${`[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==]sdfsdf[/url]`}                         | ${`<a>sdfsdf</a>`}                                                                                                                                                                              | ${`source: https://security.snyk.io/vuln/SNYK-PYTHON-BBCODE-40502; We will just remove malicious URLs. CKEditor 5 can handle this.`}
+        ${`[url]javascript:alert('XSS');[/url]`}                                                                      | ${`<a>javascript:alert('XSS');</a>`}                                                                                                                                                            | ${`source: https://github.com/dcwatson/bbcode/issues/4; We will just remove malicious URLs. CKEditor 5 can handle this.`}
+        ${`[url]123" onmouseover="alert('Hacked');[/url]`}                                                            | ${`<a href="123&quot; onmouseover=&quot;alert('Hacked');">123" onmouseover="alert('Hacked');</a>`}                                                                                              | ${`source: https://github.com/dcwatson/bbcode/issues/4`}
+        ${`[url]https://google.com?[url] onmousemove=javascript:alert(String.fromCharCode(88,83,83));//[/url][/url]`} | ${`<a href="https://google.com? onmousemove=javascript:alert(String.fromCharCode(88,83,83));//">https://google.com?<a> onmousemove=javascript:alert(String.fromCharCode(88,83,83));//</a></a>`} | ${`source: https://github.com/dcwatson/bbcode/issues/4; Slightly corrupted DOM, but attack did not pass through.`}
       `(
         "[$#] Should prevent XSS-attack for: $tainted, expected: $expected ($comment)",
         ({ tainted, expected }: { tainted: string; expected: string }) => {
