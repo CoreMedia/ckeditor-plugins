@@ -397,6 +397,9 @@ importers:
       '@bbob/preset-html5':
         specifier: ^3.0.2
         version: 3.0.2
+      '@coremedia/ckeditor5-common':
+        specifier: 16.0.1-rc.2
+        version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
         specifier: 16.0.1-rc.2
         version: link:../ckeditor5-core-common
