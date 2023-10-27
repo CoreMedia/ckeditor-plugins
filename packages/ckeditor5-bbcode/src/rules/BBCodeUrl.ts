@@ -16,7 +16,10 @@ export class BBCodeUrl implements BBCodeProcessingRule {
     if (!isHTMLAnchorElement(element)) {
       return;
     }
-    const { href } = element;
+    // Need to use `getAttribute` instead of HTMLAnchorElement.href as the
+    // latter one may contain an already parsed `href`, that, for example,
+    // already resolved relative links to absolute links.
+    const href = element.getAttribute("href");
     if (href) {
       const escapedHref = escapeHref(href);
       if (href === escapedHref && href === content) {
