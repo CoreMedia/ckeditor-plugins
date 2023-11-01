@@ -53,7 +53,7 @@ describe("Blocklist", () => {
       await expect(input).not.waitToBeVisible();
 
       await useOpenBlocklistShortcut();
-      await expect(input).waitToBeVisible();
+      await expect(view.body.balloonPanel.blocklistActionsView).waitToBeVisible();
       const allBlockedWords = await blocklistActionsView.allBlockedWords;
       await expect(allBlockedWords.length).toBe(2);
       await expect(allBlockedWords).toContain(blockedWord.toLowerCase());
@@ -66,5 +66,5 @@ const useOpenBlocklistShortcut = async () => {
   // Open Blocklist Balloon via Shortcut
   await page.keyboard.down(await ctrlOrMeta());
   await page.keyboard.down("Shift");
-  await page.keyboard.press("B");
+  await page.keyboard.press("b");
 };

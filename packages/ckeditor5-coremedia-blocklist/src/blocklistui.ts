@@ -303,6 +303,14 @@ export default class Blocklistui extends Plugin {
       cancel();
 
       if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
+        const blockedWords = this.#getSelectedBlocklistWords();
+        if (!blockedWords || blockedWords.length === 0) {
+          this.#showBlocklistBalloon(true);
+          return;
+        }
+
+        // Set the currently selected words in the blocklist command
+        this.blocklistCommand?.set("value", blockedWords);
         this.#showBlocklistBalloon(true);
       }
     });
