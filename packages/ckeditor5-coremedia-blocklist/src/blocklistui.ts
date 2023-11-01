@@ -155,7 +155,17 @@ export default class Blocklistui extends Plugin {
       button.bind("isOn").to(command, "value", (value: string[]) => value && value.length > 0);
 
       // Show the panel on button click.
-      this.listenTo(button, "execute", () => this.#showBlocklistBalloon(true));
+      this.listenTo(button, "execute", () => {
+        const blockedWords = this.#getSelectedBlocklistWords();
+        if (!blockedWords || blockedWords.length === 0) {
+          this.#showBlocklistBalloon(true);
+          return;
+        }
+
+        // Set the currently selected words in the blocklist command
+        this.blocklistCommand?.set("value", blockedWords);
+        this.#showBlocklistBalloon(true);
+      });
 
       return button;
     });
@@ -360,15 +370,17 @@ export default class Blocklistui extends Plugin {
     const view = this.editor.editing.view;
     const selection = view.document.selection;
 
-    const firstPosition = selection.getFirstPosition();
-    if (!firstPosition) {
+    const firstRange = selection.getFirstRange();
+    if (!firstRange) {
       return undefined;
     }
-
-    if (selection.isCollapsed) {
-      return this.#getAllBlockedWordsForPosition(firstPosition);
+    const positions = firstRange.getPositions();
+    const blockedWords: Set<string> = new Set<string>();
+    for (const position of positions) {
+      const words = this.#getAllBlockedWordsForPosition(position);
+      words.forEach((word) => blockedWords.add(word));
     }
-    return undefined;
+    return Array.from(blockedWords.values());
   }
 
   /**
