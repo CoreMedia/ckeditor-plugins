@@ -371,6 +371,61 @@ Yet unsupported BBCode tags (among several vendor-specific ones) are:
 * `[img]`
 * `[style]`
 
+## Security Considerations
+
+When it comes to parsing and transforming BBCode to HTML, you have to expect,
+that BBCode comes from _untrusted_ sources, such as comments on a web page.
+
+The BBCode plugin takes care of possible attack vectors regarding proper
+escaping on `toView` (BBCode to HTML) as well as in `toData` (HTML to BBCode)
+processing. This is ensured, for example, by using DOM API to set attributes
+in HTML rather than naive string concatenation.
+
+**But:** The BBCode does not filter any possibly malicious data on other layers.
+
+Some example scenarios:
+
+* An attacker creates BBCode such as `[h1 onclick='...']`.
+
+  The BBCode plugin, powered by BBob, will transform this into
+  `<h1 onclick="...">` without further checks. It is up to the editing layer,
+  to deal with this possibly malicious code.
+
+  CKEditor 5 ships with "default security enabled" feature, which is, that
+  any unknown attributes are just stripped and never make it to the editors'
+  view.
+
+  Care must be taken, not to enable these attributes/states by accident, either
+  by allowing `on*` handlers by a corresponding plugin or by improper
+  configuration of the General HTML Support (GHS) plugin, e.g., by using the
+  wildcard configuration: _any HTML is considered valid_.
+
+* An attacker tricks editors by malicious URLs in `[url=...]`.
+
+  Again, the BBCode plugin will not apply any filter here and trusts the
+  editing layer to handle possibly dangerous links with care. This is known
+  to work for current CKEditor 5 versions in that way, that any protocols
+  not on the allow-list (as of now, https, http, ftp, ftps and mailto) will
+  create links in the CKEditor 5 editing UI, that are sanitized (but can
+  still be edited).
+
+  Nevertheless, there is no additional filter on data-processing layer, that,
+  for example, removes URLs to malicious websites, as modifying data should be
+  a clear conscious editorial action. 
+
+### The \[url\] Tag
+
+#### Relative URLs
+
+Relative URLs are passed as is to the data view without any further
+intervention, assuming, that they should stay relative also during editorial
+actions.
+
+Nevertheless, consider that relative links edited in a different context they
+were written for or written at, may contain invalid links when clicked.
+This is true for the CKEditor 5 Contextual Link Balloon, as well as for a
+read-only view.
+
 ## See Also
 
 * [BBCode - Wikipedia](https://en.wikipedia.org/wiki/BBCode)
