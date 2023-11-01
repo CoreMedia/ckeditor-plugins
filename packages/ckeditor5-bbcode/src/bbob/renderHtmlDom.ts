@@ -1,33 +1,7 @@
 import { render as htmlRender } from "@bbob/html/es";
 import { CoreRenderable, CoreRenderer, CoreRenderNode } from "@bbob/core/es";
-import { isStringNode, isTagNode, TagAttrs } from "@bbob/plugin-helper/es";
-import { bbCodeLogger } from "../BBCodeLogger";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
-import { AttributeGuard, defaultAttributeGuard } from "./AttributeGuard";
-
-const setAttributes = (
-  element: HTMLElement,
-  attrs: TagAttrs,
-  tag: string,
-  options: RequireSelected<HtmlDomRendererOptions, "attributeGuard">,
-): void => {
-  const { attributeGuard } = options;
-  attributeGuard
-    .filteredEntries(attrs, {
-      owner: element,
-      tag,
-    })
-    .forEach(([name, value]) => {
-      try {
-        element.setAttribute(name, value);
-      } catch (e) {
-        bbCodeLogger.debug(
-          `Ignoring error for setting attribute '${name}' for element ${element.localName} to value '${value}'.`,
-          e,
-        );
-      }
-    });
-};
+import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
+import { setAttributesFromTagAttrs } from "./Attributes";
 
 const renderDomNode = (node: CoreRenderable, options: Required<HtmlDomRendererOptions>): Node => {
   if (typeof node === "number") {
@@ -54,7 +28,7 @@ const renderDomNode = (node: CoreRenderable, options: Required<HtmlDomRendererOp
   }
 
   const element = document.createElement(tag);
-  setAttributes(element, attrs, tag, options);
+  setAttributesFromTagAttrs(element, attrs);
 
   element.append(...renderedContents);
 
@@ -72,17 +46,6 @@ const renderTree = (node: CoreRenderable[], options: Required<HtmlDomRendererOpt
 
 export interface HtmlDomRendererOptions {
   /**
-   * Prior to adding an attribute, checks if an attribute should be added
-   * to a given element.
-   *
-   * @param attrName - attribute name to add
-   * @param context - context information that may be used for validation
-   * @param context.owner - element to add attribute to
-   * @param context.tag - node tag from BBCode processing
-   * @param context.value - value, the attribute shall get
-   */
-  attributeGuard?: AttributeGuard;
-  /**
    * If to strip any tags. If set on global level, only text-content will be
    * returned.
    */
@@ -90,7 +53,6 @@ export interface HtmlDomRendererOptions {
 }
 
 const defaultHtmlDomRendererOptions: Required<HtmlDomRendererOptions> = {
-  attributeGuard: defaultAttributeGuard,
   stripTags: false,
 };
 

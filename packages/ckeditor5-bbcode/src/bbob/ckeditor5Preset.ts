@@ -1,10 +1,12 @@
-import { getUniqAttr, isEOL, isStringNode, isTagNode, N, TagAttrs, TagNode } from "@bbob/plugin-helper/es";
+import { getUniqAttr, isEOL, isTagNode, N, TagAttrs, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
 import { paragraphAwareContent } from "./Paragraphs";
 import { Core, DefaultTags, Options } from "./types";
 import { bbCodeLogger } from "../BBCodeLogger";
+import { uniqueAttrToAttr } from "./Attributes";
+import { renderRaw } from "./renderRaw";
 
 const toNode = TagNode.create;
 
@@ -110,70 +112,8 @@ const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
   return result;
 };
 
-const renderRaw = (node: NonNullable<TagNode["content"]>[number] | TagNode["content"]): string => {
-  if (!node) {
-    return "";
-  }
-
-  if (isStringNode(node)) {
-    return node;
-  }
-
-  if (isTagNode(node)) {
-    return renderRaw(node.content);
-  }
-
-  return node.map((entry) => renderRaw(entry)).join("");
-};
-
-const contentToAttrValue = (node: TagNode): string => {
-  const { content } = node;
-  let result: string;
-  if (!content) {
-    result = "";
-  } else {
-    result = renderRaw(node);
-  }
-  console.debug("contentToAttrValue", { result });
-  return result;
-};
-
-const allowedAnchorAttributes = [
-  "class",
-  "dir",
-  "download",
-  "href",
-  "hreflang",
-  "id",
-  "lang",
-  "name",
-  "target",
-  "title",
-  "type",
-];
-
-const toHtmlAnchorAttrs = (node: TagNode): TagAttrs => {
-  const { attrs } = node;
-  const uniqAttr = getUniqAttr(attrs);
-  let href: string;
-
-  if ("href" in attrs) {
-    href = attrs.href;
-  } else {
-    if (uniqAttr) {
-      href = uniqAttr;
-    } else {
-      href = contentToAttrValue(node);
-    }
-  }
-
-  return Object.fromEntries(
-    Object.entries({
-      ...attrs,
-      href,
-    }).filter(([name]) => allowedAnchorAttributes.includes(name)),
-  );
-};
+const toHtmlAnchorAttrs = (node: TagNode): TagAttrs =>
+  uniqueAttrToAttr("href", node.attrs, false, () => renderRaw(node));
 
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
