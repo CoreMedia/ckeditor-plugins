@@ -71,12 +71,10 @@ export const htmlDomRenderer = (defaultOptions: HtmlDomRendererOptions = {}): Co
       // Main purpose is to intervene on render when `.html` is retrieved
       // from processed result. Here, we will get the complete tree as input.
       result = renderTree(node, optionsWithDefaults);
-      console.debug("htmlDomRenderer, mode: DOM", { result });
     } else {
       // Some defensive approach to fall back to an alternative rendering for
       // in-between processing.
       result = htmlRender(node, optionsWithDefaults);
-      console.debug("htmlDomRenderer, mode: Fallback", { result });
     }
     return result;
   };
