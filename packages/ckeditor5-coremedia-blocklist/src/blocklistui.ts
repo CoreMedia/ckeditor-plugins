@@ -147,6 +147,7 @@ export default class Blocklistui extends Plugin {
       button.label = t("Manage Blocklist");
       button.icon = blocklistIcon;
       button.keystroke = BLOCKLIST_KEYSTROKE;
+      button.class = "open-blocklist";
       button.tooltip = true;
       button.isToggleable = true;
 
