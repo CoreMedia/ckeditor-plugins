@@ -276,6 +276,14 @@ export default class Blocklistui extends Plugin {
 
     // Handle click on view document and show panel when selection is placed inside a blocked element.
     this.listenTo<ViewDocumentClickEvent>(viewDocument, "click", () => {
+      const view = this.editor.editing.view;
+      const selection = view.document.selection;
+      if (!selection.isCollapsed) {
+        // If an author is selecting a range of text, we suppose that the authors intention
+        // is not to open the blocked words balloon even if blocked words are part of the selection.
+        return;
+      }
+
       const blockedWords = this.#getSelectedBlocklistWords();
       if (!blockedWords || blockedWords.length === 0) {
         return;
