@@ -121,21 +121,27 @@ describe("bbcode2html", () => {
     });
 
     /**
-     * Testing with some XSS payloads. Note, that these tests only incorporate
-     * BBob processing. CKEditor 5 also provides an extra security layer, that
-     * may block additional attack vectors.
+     * Testing with some XSS payloads. Note, that the BBCode plugin just
+     * ensures proper rendering of HTML, thus, prevents possible attack
+     * vectors trying to trick a simple HTML rendering based on _search &amp;
+     * replace_ as it is sometimes used for BBCode to HTML processing.
+     *
+     * It is up to the editing layer, to deal with any possible other
+     * malicious attacks. Such as the CKEditor 5 link feature already does
+     * for possible malicious `data:text/html;` links.
      *
      * @see https://github.com/JiLiZART/BBob/issues/201
      * @see https://swarm.ptsecurity.com/fuzzing-for-xss-via-nested-parsers-condition/
      */
     describe("XSS attacks", () => {
+      // noinspection CssInvalidPropertyValue
       it.each`
-        tainted                                                                                                       | expected                                                                                                                                                                                        | comment
-        ${`[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==]sdfsdf[/url]`}                         | ${`<a>sdfsdf</a>`}                                                                                                                                                                              | ${`source: https://security.snyk.io/vuln/SNYK-PYTHON-BBCODE-40502; We will just remove malicious URLs. CKEditor 5 can handle this.`}
-        ${`[url]javascript:alert('XSS');[/url]`}                                                                      | ${`<a>javascript:alert('XSS');</a>`}                                                                                                                                                            | ${`source: https://github.com/dcwatson/bbcode/issues/4; We will just remove malicious URLs. CKEditor 5 can handle this.`}
-        ${`[url]123" onmouseover="alert('Hacked');[/url]`}                                                            | ${`<a href="123&quot; onmouseover=&quot;alert('Hacked');">123" onmouseover="alert('Hacked');</a>`}                                                                                              | ${`source: https://github.com/dcwatson/bbcode/issues/4`}
-        ${`[url]https://google.com?[url] onmousemove=javascript:alert(String.fromCharCode(88,83,83));//[/url][/url]`} | ${`<a href="https://google.com? onmousemove=javascript:alert(String.fromCharCode(88,83,83));//">https://google.com?<a> onmousemove=javascript:alert(String.fromCharCode(88,83,83));//</a></a>`} | ${`source: https://github.com/dcwatson/bbcode/issues/4; Slightly corrupted DOM, but attack did not pass through.`}
-        ${`[color="onmouseover=alert(0) style="]dare to move your mouse here[/color]`}                                | ${`<span style="color: null;">dare to move your mouse here</span>`}                                                                                                                             | ${`source: https://github.com/friendica/friendica/issues/9611; result of default HTML5 Preset - surprising "null" but no XSS issue: Fine!`}
+        tainted                                                                                                       | expected                                                                                                                                                                                                                                                               | comment
+        ${`[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==]sdfsdf[/url]`}                         | ${`<a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==">sdfsdf</a>`}                                                                                                                                                                               | ${`source: https://security.snyk.io/vuln/SNYK-PYTHON-BBCODE-40502; CKEditor 5 will prohibit clicking on these.`}
+        ${`[url]javascript:alert('XSS');[/url]`}                                                                      | ${`<a href="javascript:alert('XSS');">javascript:alert('XSS');</a>`}                                                                                                                                                                                                   | ${`source: https://github.com/dcwatson/bbcode/issues/4; Will be passed as is to CKEditor 5, which will take care not to make this clickable within the UI.`}
+        ${`[url]123" onmouseover="alert('Hacked');[/url]`}                                                            | ${`<a href="123&quot; onmouseover=&quot;alert('Hacked');">123" onmouseover="alert('Hacked');</a>`}                                                                                                                                                                     | ${`source: https://github.com/dcwatson/bbcode/issues/4`}
+        ${`[url]https://google.com?[url] onmousemove=javascript:alert(String.fromCharCode(88,83,83));//[/url][/url]`} | ${`<a href="https://google.com? onmousemove=javascript:alert(String.fromCharCode(88,83,83));//">https://google.com?<a href=" onmousemove=javascript:alert(String.fromCharCode(88,83,83));//"> onmousemove=javascript:alert(String.fromCharCode(88,83,83));//</a></a>`} | ${`source: https://github.com/dcwatson/bbcode/issues/4; Slightly corrupted DOM, but attack did not pass through.`}
+        ${`[color="onmouseover=alert(0) style="]dare to move your mouse here[/color]`}                                | ${`<span style="color: null;">dare to move your mouse here</span>`}                                                                                                                                                                                                    | ${`source: https://github.com/friendica/friendica/issues/9611; result of default HTML5 Preset - surprising "null" but no XSS issue: Fine!`}
       `(
         "[$#] Should prevent XSS-attack for: $tainted, expected: $expected ($comment)",
         ({ tainted, expected }: { tainted: string; expected: string }) => {
