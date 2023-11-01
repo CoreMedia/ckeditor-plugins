@@ -24,6 +24,10 @@ export class BlocklistActionsViewWrapper implements Locatable {
     };
   }
 
+  get allBlockedWords(): Promise<string[]> {
+    return this.locator.locator(".cm-ck-blocklist-entry .ck-form__header__label").allTextContents();
+  }
+
   get removeButton(): Locatable {
     const locator = this.locator.locator(".ck-button-cancel");
     return {
