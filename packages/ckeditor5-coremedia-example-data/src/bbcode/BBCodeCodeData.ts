@@ -22,14 +22,6 @@ No Language = Plain Text
 Some BBCode.
 \\[/code\\]
 [/code]
-
-[h2]Formatting[/h2]
-
-You may apply formatting within code blocks:
-
-[code=bbcode]
-[b]\\[i\\][/b]Italic[b]\\[/i\\][/b]
-[/code]
 `;
 
 export const codeBlockData: ExampleData = {
