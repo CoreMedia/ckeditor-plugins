@@ -67,6 +67,11 @@ const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> =
  */
 const debug = (msg: string, state?: Record<string, unknown>): void => {
   const logger = bbCodeLogger;
+
+  if (!logger.isDebugEnabled()) {
+    return;
+  }
+
   if (state) {
     logger.debug(msg, Object.fromEntries(Object.entries(state).map(([key, value]) => [key, JSON.stringify(value)])));
   } else {
