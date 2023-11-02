@@ -105,6 +105,7 @@ const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
       // Push any EOLs collected up to now.
       result.push(...bufferedEOLs);
       result.push(content);
+      bufferedEOLs.length = 0;
     }
   }
   // Ignoring any bufferedEOLs at the end implements the "trim at end"
