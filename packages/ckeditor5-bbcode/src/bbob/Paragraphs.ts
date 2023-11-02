@@ -52,9 +52,10 @@ const headingTags = [...Array(6).keys()].map((n) => `h${n + 1}`);
  * the same layer as paragraphs.
  */
 const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> = [
+  "code",
+  "list",
   "quote",
   "table",
-  "list",
   ...headingTags,
 ];
 
