@@ -2,6 +2,7 @@ import { render as htmlRender } from "@bbob/html/es";
 import { CoreRenderable, CoreRenderer, CoreRenderNode } from "@bbob/core/es";
 import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
 import { setAttributesFromTagAttrs } from "./Attributes";
+import { bbCodeLogger } from "../BBCodeLogger";
 
 const renderDomNode = (node: CoreRenderable, options: Required<HtmlDomRendererOptions>): Node => {
   if (typeof node === "number") {
@@ -39,9 +40,21 @@ const renderDomNodes = (node: CoreRenderable[], options: Required<HtmlDomRendere
   node.map((n) => renderDomNode(n, options));
 
 const renderTree = (node: CoreRenderable[], options: Required<HtmlDomRendererOptions>): string => {
+  const logger = bbCodeLogger;
+
+  if (logger.isDebugEnabled()) {
+    logger.debug(`renderTree starting with: ${JSON.stringify(node)}`);
+  }
+
   const container = document.createElement("div");
   container.append(...renderDomNodes(node, options));
-  return container.innerHTML;
+  const result = container.innerHTML;
+
+  if (logger.isDebugEnabled()) {
+    logger.debug(`renderTree done with: ${JSON.stringify(result)}`);
+  }
+
+  return result;
 };
 
 export interface HtmlDomRendererOptions {
