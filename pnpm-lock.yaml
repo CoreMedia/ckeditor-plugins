@@ -346,33 +346,6 @@ importers:
       '@babel/core':
         specifier: ^7.22.17
         version: 7.22.20
-      '@babel/plugin-transform-arrow-functions':
-        specifier: ^7.22.5
-        version: 7.22.5(@babel/core@7.22.20)
-      '@babel/plugin-transform-class-properties':
-        specifier: ^7.22.5
-        version: 7.22.5(@babel/core@7.22.20)
-      '@babel/plugin-transform-classes':
-        specifier: ^7.22.15
-        version: 7.22.15(@babel/core@7.22.20)
-      '@babel/plugin-transform-computed-properties':
-        specifier: ^7.22.5
-        version: 7.22.5(@babel/core@7.22.20)
-      '@babel/plugin-transform-for-of':
-        specifier: ^7.22.15
-        version: 7.22.15(@babel/core@7.22.20)
-      '@babel/plugin-transform-parameters':
-        specifier: ^7.22.15
-        version: 7.22.15(@babel/core@7.22.20)
-      '@babel/plugin-transform-private-methods':
-        specifier: ^7.22.5
-        version: 7.22.5(@babel/core@7.22.20)
-      '@babel/plugin-transform-shorthand-properties':
-        specifier: ^7.22.5
-        version: 7.22.5(@babel/core@7.22.20)
-      '@babel/plugin-transform-typescript':
-        specifier: ^7.22.15
-        version: 7.22.15(@babel/core@7.22.20)
       '@babel/preset-env':
         specifier: ^7.22.15
         version: 7.22.20(@babel/core@7.22.20)
