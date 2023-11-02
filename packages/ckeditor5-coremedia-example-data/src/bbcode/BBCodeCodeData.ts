@@ -1,21 +1,35 @@
-import { bbCode } from "./BBCode";
 import { ExampleData } from "../ExampleData";
 
-const text = `${bbCode.h1(`\\[code\\]: CKEditor 5 Code Blocks in BBCode`)}\
-${bbCode.p(`\
-The CKEditor 5 BBCode Plugin supports the \\[code\\] tag along with its \
-optional language identifier.`)}\
-${bbCode.h2("No Language Identifier")}
-${bbCode.p(`If no language identifier is given, it is assumed, that the code \
-block defaults to ${bbCode.italic("plain text")}.`)}
-${bbCode.code(`No Language`)}
-${bbCode.h2("With Language Identifier")}
-${bbCode.code(
-  `\
-\\[b\\]bold\\[/b\\]
-`,
-  "bbcode",
-)}
+const text = `\
+[h1]\\[code\\]: CKEditor 5 Code Blocks in BBCode[/h1]
+
+The CKEditor 5 BBCode Plugin supports the \\[code\\] tag along with its
+optional language identifier.
+
+[h2]No Language Identifier[/h2]
+
+If no language identifier is given, it is assumed, that the code block defaults
+to [i]plain text[/i].
+
+[code]
+No Language = Plain Text
+[/code]
+
+[h2]With Language Identifier[/h2]
+
+[code=bbcode]
+\\[code=bbcode\\]
+Some BBCode.
+\\[/code\\]
+[/code]
+
+[h2]Formatting[/h2]
+
+You may apply formatting within code blocks:
+
+[code=bbcode]
+[b]\\[i\\][/b]Italic[b]\\[/i\\][/b]
+[/code]
 `;
 
 export const codeBlockData: ExampleData = {
