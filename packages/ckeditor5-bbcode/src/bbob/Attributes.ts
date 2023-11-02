@@ -1,12 +1,31 @@
 import { getUniqAttr, TagAttrs } from "@bbob/plugin-helper/es";
 import { bbCodeLogger } from "../BBCodeLogger";
 
+/**
+ * Consumer for an attribute name and its value.
+ */
 export type AttributeConsumer = (attrName: string, attrValue: string) => void;
 
+/**
+ * Iterates over each attribute (key, value pair) and passes it to the
+ * given consumer.
+ *
+ * @param attrs - attributes to process
+ * @param consumer - consumer to work an attribute's key/value pair
+ */
 export const forEachAttribute = (attrs: TagAttrs, consumer: AttributeConsumer): void => {
   Object.entries(attrs).forEach(([attrName, attrValue]) => consumer(attrName, attrValue));
 };
 
+/**
+ * Sets attributes at given element from set of attributes.
+ *
+ * Any possibly invalid properties (that raise an error, when trying to be
+ * set) are ignored.
+ *
+ * @param element - element to set attributes at
+ * @param attrs - attributes to set
+ */
 export const setAttributesFromTagAttrs = (element: HTMLElement, attrs: TagAttrs): void => {
   const trySetAttribute: AttributeConsumer = (name, value): void => {
     try {
@@ -69,27 +88,14 @@ export const uniqueAttrToAttr = (
   override = true,
   defaultValueSupplier?: () => string,
 ): TagAttrs => {
-  const { uniqueAttrValue, otherAttrs } = stripUniqueAttr(attrs);
+  const { uniqueAttrValue = defaultValueSupplier?.(), otherAttrs } = stripUniqueAttr(attrs);
+  const valueFromOtherAttrs: string | undefined = otherAttrs[uniqueAttrName];
 
-  if (uniqueAttrValue === undefined) {
-    if (!defaultValueSupplier || (uniqueAttrName in attrs && typeof attrs[uniqueAttrName] === "string")) {
-      // Cannot provide a default value, or there is no need for a default value.
-      return attrs;
-    }
+  const result: TagAttrs = otherAttrs;
 
-    return {
-      [uniqueAttrName]: defaultValueSupplier(),
-      ...attrs,
-    };
+  if (uniqueAttrValue !== undefined && (override || valueFromOtherAttrs === undefined)) {
+    result[uniqueAttrName] = uniqueAttrValue;
   }
 
-  return override
-    ? {
-        ...otherAttrs,
-        [uniqueAttrName]: uniqueAttrValue,
-      }
-    : {
-        [uniqueAttrName]: uniqueAttrValue,
-        ...otherAttrs,
-      };
+  return result;
 };
