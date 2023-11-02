@@ -60,12 +60,22 @@ const wrapInRoot = (tree: CoreTree): (() => void) => {
  * https://github.com/JiLiZART/BBob/issues/125.
  */
 const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options) => {
+  const logger = bbCodeLogger;
+
+  if (logger.isDebugEnabled()) {
+    logger.debug(`Starting processing parsed AST: ${JSON.stringify(tree)}`);
+  }
+
   const unwrap = wrapInRoot(tree);
   try {
     //tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
     tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
   } finally {
     unwrap();
+  }
+
+  if (logger.isDebugEnabled()) {
+    logger.debug(`Done processing parsed AST: ${JSON.stringify(tree)}`);
   }
 };
 
