@@ -1,4 +1,3 @@
-
 type ClickModifiers = "Meta" | "Control";
 
 export const clickModifiers = async (): Promise<ClickModifiers[]> => ((await isMac()) ? ["Meta"] : ["Control"]);
