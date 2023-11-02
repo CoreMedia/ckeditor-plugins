@@ -6,7 +6,19 @@ import { bbcode2html } from "../src/bbcode2html";
 const supportedTags = bbCodeDefaultRules.flatMap((r) => r.tags ?? ([] as string[]));
 
 const aut = {
-  bbcode2html: (input: string): string => bbcode2html(input, supportedTags),
+  expectTransformation: ({ data, expectedDataView }: { data: string; expectedDataView: string }): void => {
+    const actual = bbcode2html(data, supportedTags);
+    try {
+      expect(actual).toBe(expectedDataView);
+    } catch (e) {
+      console.debug("Failed expectations.", {
+        data,
+        actual,
+        expectedDataView,
+      });
+      throw e;
+    }
+  },
 };
 
 /**
@@ -38,7 +50,7 @@ describe("bbcode2html", () => {
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+          aut.expectTransformation({ data, expectedDataView });
         },
       );
     });
@@ -57,18 +69,105 @@ describe("bbcode2html", () => {
         ${`[quote]T[/quote]`}                                                                                                      | ${`<blockquote><p>T</p></blockquote>`}
         ${`[table][tr][td]T[/td][/tr][/table]`}                                                                                    | ${`<table><tr><td>T</td></tr></table>`}
         ${`[table][thead][tr][th]H[/th][/tr][/thead][tbody][tr][td]T[/td][/tr][/tbody][tfoot][tr][td]F[/td][/tr][/tfoot][/table]`} | ${`<table><thead><tr><th>H</th></tr></thead><tbody><tr><td>T</td></tr></tbody><tfoot><tr><td>F</td></tr></tfoot></table>`}
-        ${`[code=css]T[/code]`}                                                                                                    | ${`<pre><code class="language-css">T</code></pre>`}
-        ${`[code=html]<i>T</i>[/code]`}                                                                                            | ${`<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`}
-        ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                                                                                  | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}
-        ${`[code][i]T[/i][/code]`}                                                                                                 | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`}
-        ${`[code][script]javascript:alert("X")[/script][/code]`}                                                                   | ${`<pre><code class="language-plaintext">[script]javascript:alert("X")[/script]</code></pre>`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+          aut.expectTransformation({ data, expectedDataView });
         },
       );
     });
+  });
+
+  describe("By Tag", () => {
+    // Some standard behaviors bundled.
+    describe.each`
+      tag          | openTag                   | closeTag      | openElement                                        | closeElement
+      ${`[b]`}     | ${`[b]`}                  | ${`[/b]`}     | ${`<span style="font-weight: bold;">`}             | ${`</span>`}
+      ${`[color]`} | ${`[color=red]`}          | ${`[/color]`} | ${`<span style="color: red;">`}                    | ${`</span>`}
+      ${`[h1]`}    | ${`[h1]`}                 | ${`[/h1]`}    | ${`<h1>`}                                          | ${`</h1>`}
+      ${`[h2]`}    | ${`[h2]`}                 | ${`[/h2]`}    | ${`<h2>`}                                          | ${`</h2>`}
+      ${`[h3]`}    | ${`[h3]`}                 | ${`[/h3]`}    | ${`<h3>`}                                          | ${`</h3>`}
+      ${`[h4]`}    | ${`[h4]`}                 | ${`[/h4]`}    | ${`<h4>`}                                          | ${`</h4>`}
+      ${`[h5]`}    | ${`[h5]`}                 | ${`[/h5]`}    | ${`<h5>`}                                          | ${`</h5>`}
+      ${`[h6]`}    | ${`[h6]`}                 | ${`[/h6]`}    | ${`<h6>`}                                          | ${`</h6>`}
+      ${`[i]`}     | ${`[i]`}                  | ${`[/i]`}     | ${`<span style="font-style: italic;">`}            | ${`</span>`}
+      ${`[s]`}     | ${`[s]`}                  | ${`[/s]`}     | ${`<span style="text-decoration: line-through;">`} | ${`</span>`}
+      ${`[u]`}     | ${`[u]`}                  | ${`[/u]`}     | ${`<span style="text-decoration: underline;">`}    | ${`</span>`}
+      ${`[url]`}   | ${`[url=https://e.org/]`} | ${`[/url]`}   | ${`<a href="https://e.org/">`}                     | ${`</a>`}
+    `(
+      "$tag (Standard Behaviors)",
+      ({
+        openTag,
+        closeTag,
+        openElement,
+        closeElement,
+      }: {
+        openTag: string;
+        closeTag: string;
+        openElement: string;
+        closeElement: string;
+      }) => {
+        it.each`
+          data                               | expectedDataView                           | comment
+          ${`${openTag}T${closeTag}`}        | ${`${openElement}T${closeElement}`}        | ${`default`}
+          ${`${openTag} T${closeTag}`}       | ${`${openElement} T${closeElement}`}       | ${`keep leading blanks`}
+          ${`${openTag}T ${closeTag}`}       | ${`${openElement}T ${closeElement}`}       | ${`keep trailing blanks`}
+          ${`${openTag}\nT${closeTag}`}      | ${`${openElement}\nT${closeElement}`}      | ${`keep leading single newlines`}
+          ${`${openTag}T\n${closeTag}`}      | ${`${openElement}T\n${closeElement}`}      | ${`keep trailing single newlines`}
+          ${`${openTag}T1\n\nT2${closeTag}`} | ${`${openElement}T1\n\nT2${closeElement}`} | ${`do not introduce a paragraph within element`}
+        `(
+          "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+          ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+            aut.expectTransformation({ data, expectedDataView });
+          },
+        );
+      },
+    );
+
+    describe("[code]", () => {
+      it.each`
+        data                                                     | expectedDataView                                                                                   | comment
+        ${`[code]T[/code]`}                                      | ${`<pre><code class="language-plaintext">T</code></pre>`}                                          | ${`Default to "plaintext" language`}
+        ${`[code=css]T[/code]`}                                  | ${`<pre><code class="language-css">T</code></pre>`}                                                | ${`Accept language attribute`}
+        ${`[code=html]<i>T</i>[/code]`}                          | ${`<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`}                            | ${`Properly encode nested HTML`}
+        ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}                                      | ${`Strip escapes`}
+        ${`[code][i]T[/i][/code]`}                               | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`} | ${`Accept and parse BBCode within "code" tag`}
+        ${`[code][script]javascript:alert("X")[/script][/code]`} | ${`<pre><code class="language-plaintext">[script]javascript:alert("X")[/script]</code></pre>`}     | ${`Do not transform, e.g., script-tag.`}
+        ${`[code]T1\n\nT2[/code]`}                               | ${`<pre><code class="language-plaintext">T1\n\nT2</code></pre>`}                                   | ${`Don't handle duplicate newlines as paragraphs.`}
+        ${`[code]  T1\n  T2[/code]`}                             | ${`<pre><code class="language-plaintext">  T1\n  T2</code></pre>`}                                 | ${`Keep space indents`}
+        ${`[code]\tT1\n\tT2[/code]`}                             | ${`<pre><code class="language-plaintext">\tT1\n\tT2</code></pre>`}                                 | ${`Keep tab indents`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          aut.expectTransformation({ data, expectedDataView });
+        },
+      );
+    });
+  });
+
+  describe("Paragraphs", () => {
+    it.each`
+      data                                                 | expectedDataView                                                             | comment
+      ${`P1\n\nP2`}                                        | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Standard Paragraph Behavior`}
+      ${``}                                                | ${``}                                                                        | ${`Do not create paragraphs on empty input`}
+      ${`\n`}                                              | ${`\n`}                                                                      | ${`Do not create paragraphs on only single newline`}
+      ${`\n\n`}                                            | ${`\n`}                                                                      | ${`Trim irrelevant newlines`}
+      ${`\n\n\n`}                                          | ${`\n`}                                                                      | ${`Trim irrelevant newlines`}
+      ${`\nP1\n\nP2`}                                      | ${`<p>\nP1</p><p>P2</p>`}                                                    | ${`Design Scope: Keep irrelevant leading newlines; simplifies processing`}
+      ${`P1\n\n\nP2`}                                      | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Trim obsolete newlines (trailing, 1)`}
+      ${`P1\n\nP2\n`}                                      | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Trim obsolete newlines (trailing, 2)`}
+      ${`[quote]P1\n\nP2[/quote]`}                         | ${`<blockquote><p>P1</p><p>P2</p></blockquote>`}                             | ${`Respect paragraphs in quote sections`}
+      ${`P1\n\n[quote]P2[/quote]\n\nP3`}                   | ${`<p>P1</p><blockquote><p>P2</p></blockquote><p>P3</p>`}                    | ${`Do not put blockquotes into paragraphs`}
+      ${`P1\n\n[code]P2[/code]\n\nP3`}                     | ${`<p>P1</p><pre><code class="language-plaintext">P2</code></pre><p>P3</p>`} | ${`Do not put code blocks into paragraphs`}
+      ${`P1\n\n[h1]P2[/h1]\n\nP3`}                         | ${`<p>P1</p><h1>P2</h1><p>P3</p>`}                                           | ${`Do not put headings into paragraphs`}
+      ${`P1\n\n[table][tr][td]P2[/td][/tr][/table]\n\nP3`} | ${`<p>P1</p><table><tr><td>P2</td></tr></table><p>P3</p>`}                   | ${`Do not put tables into paragraphs`}
+      ${`P1\n\n[list][*]P2[/list]\n\nP3`}                  | ${`<p>P1</p><ul><li>P2</li></ul><p>P3</p>`}                                  | ${`Do not put lists into paragraphs`}
+    `(
+      "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+      ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+        aut.expectTransformation({ data, expectedDataView });
+      },
+    );
   });
 
   describe("Tag Processing Challenges", () => {
@@ -87,7 +186,7 @@ describe("bbcode2html", () => {
       `(
         "[$#] Should process data '$data' to: $expectedDataView ($comment)",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+          aut.expectTransformation({ data, expectedDataView });
         },
       );
     });
@@ -100,7 +199,7 @@ describe("bbcode2html", () => {
       `(
         "[$#] Should process data '$data' to: $expectedDataView ($comment)",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+          aut.expectTransformation({ data, expectedDataView });
         },
       );
     });
@@ -115,7 +214,7 @@ describe("bbcode2html", () => {
       `(
         "[$#] Should process data '$data' to: $expectedDataView ($comment)",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          expect(aut.bbcode2html(data)).toBe(expectedDataView);
+          aut.expectTransformation({ data, expectedDataView });
         },
       );
     });
@@ -144,8 +243,8 @@ describe("bbcode2html", () => {
         ${`[color="onmouseover=alert(0) style="]dare to move your mouse here[/color]`}                                | ${`<span style="color: null;">dare to move your mouse here</span>`}                                                                                                                                                                                                    | ${`source: https://github.com/friendica/friendica/issues/9611; result of default HTML5 Preset - surprising "null" but no XSS issue: Fine!`}
       `(
         "[$#] Should prevent XSS-attack for: $tainted, expected: $expected ($comment)",
-        ({ tainted, expected }: { tainted: string; expected: string }) => {
-          expect(aut.bbcode2html(tainted)).toBe(expected);
+        ({ tainted: data, expected: expectedDataView }: { tainted: string; expected: string }) => {
+          aut.expectTransformation({ data, expectedDataView });
         },
       );
     });
