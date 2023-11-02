@@ -133,7 +133,7 @@ describe("bbcode2html", () => {
         ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                      | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}                                      | ${`Strip escapes`}
         ${`[code=bbcode]\\[code=text\\]T\\[/code\\][/code]`}           | ${`<pre><code class="language-bbcode">[code=text]T[/code]</code></pre>`}                           | ${`Strip escapes`}
         ${`[code=bbcode]\\[code=bbcode\\]T\\[/code\\][/code]`}         | ${`<pre><code class="language-bbcode">[code=bbcode]T[/code]</code></pre>`}                         | ${`Strip escapes`}
-        ${`[code=bbcode]\n\\[code=bbcode\\]\nT\n\\[/code\\]\n[/code]`} | ${`<pre><code class="language-bbcode">\n[code=bbcode]\nT\n[/code]\n</code></pre>`}                 | ${`Strip escapes and keep newlines`}
+        ${`[code=bbcode]\n\\[code=bbcode\\]\nT\n\\[/code\\]\n[/code]`} | ${`<pre><code class="language-bbcode">[code=bbcode]\nT\n[/code]</code></pre>`}                     | ${`Strip escapes and keep newlines`}
         ${`[code][i]T[/i][/code]`}                                     | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`} | ${`Accept and parse BBCode within "code" tag`}
         ${`[code][script]javascript:alert("X")[/script][/code]`}       | ${`<pre><code class="language-plaintext">[script]javascript:alert("X")[/script]</code></pre>`}     | ${`Do not transform, e.g., script-tag.`}
         ${`[code]T1\n\nT2[/code]`}                                     | ${`<pre><code class="language-plaintext">T1\n\nT2</code></pre>`}                                   | ${`Don't handle duplicate newlines as paragraphs.`}
