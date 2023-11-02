@@ -152,14 +152,15 @@ describe("ckeditor5Preset", () => {
    * if we just accepted it as known issue, or if we had to apply a workaround.
    */
   describe("BBob Flawed Behaviors", () => {
-    // noinspection HtmlUnknownTarget
+    // noinspection HtmlUnknownTarget,HtmlUnknownAttribute,BadExpressionStatementJS
     test.each`
-      bbcode                                                       | expected                                                  | issue                                            | comment
-      ${`[url fakeUnique=fakeUnique]T[/url]`}                      | ${`<a href="fakeUnique">T</a>`}                           | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. This test just demonstrates the symptom.`}
-      ${`[url=https://example.org/ fakeUnique=fakeUnique]T[/url]`} | ${`<a href="fakeUnique">T</a>`}                           | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Demonstrates accidental override.`}
-      ${`[url=https://example.org/ hidden]T[/url]`}                | ${`<a href="hidden">T</a>`}                               | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Demonstrates accidental override, but with more realistic use-case.`}
-      ${`[table=onclick][tr][td]T[/td][/tr][/table]`}              | ${`<table onclick="onclick"><tr><td>T</td></tr></table>`} | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Only applicable, if mapping rules do not explicitly remove unhandled attributes.`}
-      ${`[table onclick=onclick][tr][td]T[/td][/tr][/table]`}      | ${`<table onclick="onclick"><tr><td>T</td></tr></table>`} | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Only applicable, if mapping rules do not explicitly remove unhandled attributes.`}
+      bbcode                                                               | expected                                                                                      | issue                                            | comment
+      ${`[url fakeUnique=fakeUnique]T[/url]`}                              | ${`<a href="fakeUnique">T</a>`}                                                               | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. This test just demonstrates the symptom.`}
+      ${`[unknown=https://example.org/ fakeUnique=fakeUnique]T[/unknown]`} | ${`<unknown https://example.org/="https://example.org/" fakeUnique="fakeUnique">T</unknown>`} | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. This demonstrates a follow-up issue regarding the default HTML renderer (for BBob Plugin we use a custom renderer with slightly better behavior)`}
+      ${`[url=https://example.org/ fakeUnique=fakeUnique]T[/url]`}         | ${'<a https://example.org/="https://example.org/" href="fakeUnique">T</a>'}                   | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Demonstrates accidental override.`}
+      ${`[url=https://example.org/ hidden]T[/url]`}                        | ${`<a https://example.org/="https://example.org/" href="hidden">T</a>`}                       | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Demonstrates accidental override, but with more realistic use-case.`}
+      ${`[table=onclick][tr][td]T[/td][/tr][/table]`}                      | ${`<table onclick="onclick"><tr><td>T</td></tr></table>`}                                     | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Only applicable, if mapping rules do not explicitly remove unhandled attributes.`}
+      ${`[table onclick=onclick][tr][td]T[/td][/tr][/table]`}              | ${`<table onclick="onclick"><tr><td>T</td></tr></table>`}                                     | ${`https://github.com/JiLiZART/BBob/issues/202`} | ${`getUniqAttr flaw. Only applicable, if mapping rules do not explicitly remove unhandled attributes.`}
     `(
       "[$#] Expected flawed behavior: '$bbcode' to '$expected' ($issue, $comment)",
       ({ bbcode, expected }: { bbcode: string; expected: string }) => {
