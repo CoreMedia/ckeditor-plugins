@@ -34,6 +34,7 @@ export const extractXLinkAttributes = (element: Element): XLinkAttributes =>
           [localName]: value,
         };
       }
+      return undefined;
     })
     .reduce(mergeXLinkAttributes) ?? {};
 
@@ -56,6 +57,7 @@ export const extractXLinkDataSetEntries = (element: HTMLElement): XLinkAttribute
           };
         }
       }
+      return undefined;
     })
     .reduce(mergeXLinkAttributes) ?? {};
 
