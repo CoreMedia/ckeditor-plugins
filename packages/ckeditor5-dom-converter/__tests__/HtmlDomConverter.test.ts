@@ -1,15 +1,13 @@
-// noinspection HtmlRequiredLangAttribute,HtmlRequiredTitleElement,HtmlUnknownAttribute
+// noinspection HtmlRequiredLangAttribute,HtmlRequiredTitleElement,HtmlUnknownAttribute,HttpUrlsUsage
 
-import { HtmlDomConverter } from "../src/HtmlDomConverter";
+import { HtmlDomConverter, skip, Skip, ConversionContext } from "../src";
 import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "@coremedia/ckeditor5-dom-support/src/Documents";
 import { extractNodeContents, serializeToXmlString } from "@coremedia/ckeditor5-dom-support/src/Nodes";
 import { toData, toDataView } from "./DataProcessorSimulation";
 import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
 import { wrapIfTableElement } from "@coremedia/ckeditor5-dom-support/src/HTMLTableElements";
-import { skip, Skip } from "../src/Signals";
 import { wrapIfHTMLElement } from "@coremedia/ckeditor5-dom-support/src/HTMLElements";
-import { ConversionContext } from "../src/ConversionContext";
 
 describe("HtmlDomConverter", () => {
   describe(USE_CASE_NAME, () => {
@@ -131,6 +129,7 @@ describe("HtmlDomConverter", () => {
 
       toData(converter, dataViewDocument, dataDocument);
 
+      // noinspection HttpUrlsUsage
       expect(serializeToXmlString(dataDocument)).toStrictEqual(
         `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p><span class="CLASS">TEXT</span></p></div>`,
       );
