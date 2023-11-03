@@ -10,6 +10,7 @@ export class BBCodeListItem implements BBCodeProcessingRule {
     if (element instanceof HTMLLIElement) {
       return `[*] ${content.trim()}\n`;
     }
+    return undefined;
   }
 }
 
