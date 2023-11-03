@@ -43,6 +43,8 @@ export class BBCodeItalic implements BBCodeProcessingRule {
       style.removeProperty("fontStyle");
       return `[i]${content}[/i]`;
     }
+
+    return undefined;
   }
 }
 
