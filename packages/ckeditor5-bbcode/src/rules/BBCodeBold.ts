@@ -75,6 +75,8 @@ export class BBCodeBold implements BBCodeProcessingRule {
     if (bold) {
       return `[b]${content}[/b]`;
     }
+
+    return undefined;
   }
 }
 
