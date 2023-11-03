@@ -242,7 +242,8 @@ export class HTMLTableElementWrapper {
    */
   deleteTHead(): void {
     if (this.#tableDelegate) {
-      return this.#tableDelegate.deleteTHead();
+      this.#tableDelegate.deleteTHead();
+      return;
     }
 
     const element = this.tHead;
@@ -257,7 +258,8 @@ export class HTMLTableElementWrapper {
    */
   deleteTFoot(): void {
     if (this.#tableDelegate) {
-      return this.#tableDelegate.deleteTFoot();
+      this.#tableDelegate.deleteTFoot();
+      return;
     }
 
     const element = this.tFoot;
