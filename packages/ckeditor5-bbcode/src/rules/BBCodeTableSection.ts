@@ -9,7 +9,7 @@ export class BBCodeTableSection implements BBCodeProcessingRule {
   readonly tags = ["thead", "tbody", "tfoot"];
   toData(element: HTMLElement, content: string): undefined | string {
     if (!(element instanceof HTMLTableSectionElement)) {
-      return;
+      return undefined;
     }
     const { nextSibling, tagName } = element;
 
@@ -28,7 +28,7 @@ export class BBCodeTableSection implements BBCodeProcessingRule {
         // More detailed handling below.
         break;
       default:
-        return;
+        return undefined;
     }
 
     // We now know that we have a `<tbody>` element. Apply some
