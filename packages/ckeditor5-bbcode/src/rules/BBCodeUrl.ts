@@ -14,7 +14,7 @@ export class BBCodeUrl implements BBCodeProcessingRule {
 
   toData(element: HTMLElement, content: string): undefined | string {
     if (!isHTMLAnchorElement(element)) {
-      return;
+      return undefined;
     }
     // Need to use `getAttribute` instead of HTMLAnchorElement.href as the
     // latter one may contain an already parsed `href`, that, for example,
@@ -29,6 +29,7 @@ export class BBCodeUrl implements BBCodeProcessingRule {
       }
       return `[url=${escapedHref}]${content}[/url]`;
     }
+    return undefined;
   }
 }
 
