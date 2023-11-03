@@ -27,6 +27,8 @@ export class BBCodeStrikethrough implements BBCodeProcessingRule {
       style.textDecoration = "";
       return `[s]${content}[/s]`;
     }
+
+    return undefined;
   }
 }
 
