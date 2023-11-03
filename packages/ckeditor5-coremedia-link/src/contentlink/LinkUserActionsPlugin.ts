@@ -175,7 +175,7 @@ export default class LinkUserActionsPlugin extends Plugin {
     //@ts-expect-error bad typings, mapDomToView parameter is typed as model.element, but it should be the typescript element.
     const viewElement: ViewElement | ViewDocumentFragment | undefined = view.domConverter.mapDomToView(domElement);
     if (!viewElement || viewElement instanceof ViewDocumentFragment) {
-      return;
+      return undefined;
     }
     const viewRange = view.createRangeIn(viewElement);
     const modelRange = editor.editing.mapper.toModelRange(viewRange);
