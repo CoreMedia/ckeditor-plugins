@@ -31,6 +31,8 @@ export class BBCodeUnderline implements BBCodeProcessingRule {
       style.textDecoration = "";
       return `[u]${content}[/u]`;
     }
+
+    return undefined;
   }
 }
 
