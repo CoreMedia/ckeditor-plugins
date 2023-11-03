@@ -18,7 +18,7 @@ describe("BBCodeCode", () => {
       ${`<p>TEXT</p>`}                                             | ${undefined}                             | ${"ignore unmatched"}
       ${`<pre>TEXT</pre>`}                                         | ${`[code]\nTEXT\n[/code]\n`}             | ${`robustness: ignore possible missing nested <code> element`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");
@@ -33,7 +33,7 @@ describe("BBCodeCode", () => {
       ${`<pre><code class="language-css">TEXT</code></pre>`}     | ${`[code=css]\nTEXT\n[/code]\n`} | ${`respect language`}
       ${`<pre><code class="language-ignored">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]\n`}     | ${`strip irrelevant language by custom config`}
     `(
-      "$[$#] Custom isUnset: Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Custom isUnset: Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const rule = new BBCodeCode({
           isUnset: (lang) => lang === "ignored",
@@ -49,7 +49,7 @@ describe("BBCodeCode", () => {
       ${`<pre><code class="css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]\n`} | ${`respect language by custom extractor`}
       ${`<pre><code class="plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]\n`}     | ${`strip irrelevant plaintext language`}
     `(
-      "$[$#] Custom fromClass: Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Custom fromClass: Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const rule = new BBCodeCode({
           fromClass: (entry) => entry,
