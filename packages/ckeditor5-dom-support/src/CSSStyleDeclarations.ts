@@ -25,7 +25,7 @@ const assumeColorName = (color: string): boolean => colorNameExpression.test(col
 export const getColor = (style: CSSStyleDeclaration): RgbColor | string | undefined => {
   const { color } = style;
   if (!color) {
-    return;
+    return undefined;
   }
   if (assumeColorName(color)) {
     return color;
@@ -133,7 +133,7 @@ export const getFontWeight = (
   const lowerFontWeight = fontWeight.trim().toLowerCase();
   if (lowerFontWeight === "") {
     // Unspecified. No need to continue.
-    return;
+    return undefined;
   }
   const nFontWeight = Number(lowerFontWeight);
   if (Number.isNaN(nFontWeight)) {
@@ -171,7 +171,7 @@ export const getFontWeight = (
 export const getFontWeightNumeric = (style: CSSStyleDeclaration): number | undefined => {
   const fontWeightInformation = getFontWeight(style);
   if (!fontWeightInformation) {
-    return;
+    return undefined;
   }
   return fontWeightInformation.asNumber;
 };
