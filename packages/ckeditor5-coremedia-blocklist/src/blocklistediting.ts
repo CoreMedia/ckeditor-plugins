@@ -7,6 +7,7 @@ import { Subscription } from "rxjs";
 import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { getMarkerDetails, removeMarkerDetails } from "./blocklistMarkerUtils";
 export default class BlocklistEditing extends Plugin {
   static readonly pluginName: string = "BlocklistEditing";
   static readonly #logger: Logger = LoggerProvider.getLogger(BlocklistEditing.pluginName);
@@ -253,8 +254,9 @@ export default class BlocklistEditing extends Plugin {
         if (markerName === undefined || resultType.id === undefined) {
           return;
         }
-        const { blockedWord } = this.#splitMarkerName(markerName);
+        const { blockedWord } = getMarkerDetails(markerName);
         if (wordToUnblock === blockedWord) {
+          removeMarkerDetails(markerName);
           writer.removeMarker(markerName);
           markersToRemove.push(resultType.id);
         }
@@ -314,7 +316,7 @@ export default class BlocklistEditing extends Plugin {
     editor.conversion.for("editingDowncast").markerToHighlight({
       model: "blockedWord",
       view: ({ markerName }) => {
-        const { id, blockedWord } = this.#splitMarkerName(markerName);
+        const markerDetails = getMarkerDetails(markerName);
 
         // Marker removal from the view has a bug: https://github.com/ckeditor/ckeditor5/issues/7499
         // A minimal option is to return a new object for each converted marker...
@@ -323,25 +325,11 @@ export default class BlocklistEditing extends Plugin {
           classes: ["cm-ck-blocked-word"],
           attributes: {
             // ...however, adding a unique attribute should be future-proof..
-            "data-blocklist-word": id,
-            "data-blocklist-blocked-word": blockedWord,
+            "data-blocklist-word": markerDetails.id,
+            "data-blocklist-blocked-word": markerDetails.blockedWord ? markerDetails.blockedWord : "",
           },
         };
       },
     });
-  }
-
-  /**
-   * Splits a marker name into id and blocked word
-   *
-   * @param markerName - the marker name
-   * @private
-   */
-  #splitMarkerName(markerName: string): { id: string; blockedWord: string } {
-    const [, id, blockedWord] = markerName.split(":");
-    return {
-      id,
-      blockedWord,
-    };
   }
 }
