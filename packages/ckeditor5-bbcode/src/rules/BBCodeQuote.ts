@@ -19,4 +19,7 @@ export class BBCodeQuote implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Maps `<blockquote>` to `[quote]`.
+ */
 export const bbCodeQuote = new BBCodeQuote();

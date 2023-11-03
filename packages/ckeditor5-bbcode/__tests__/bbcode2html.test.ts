@@ -146,6 +146,23 @@ describe("bbcode2html", () => {
         },
       );
     });
+
+    describe("[quote]", () => {
+      it.each`
+        data                                                  | expectedDataView                                                                         | comment
+        ${`[quote]T[/quote]`}                                 | ${`<blockquote><p>T</p></blockquote>`}                                                   | ${`minimal scenario`}
+        ${`[quote=AUTHOR]T[/quote]`}                          | ${`<blockquote><p>T</p></blockquote>`}                                                   | ${`author information not supported`}
+        ${`[quote]\nT\n[/quote]`}                             | ${`<blockquote><p>\nT</p></blockquote>`}                                                 | ${`strip obsolete trailing newlines`}
+        ${`[quote]\nP1\n\nP2\n[/quote]`}                      | ${`<blockquote><p>\nP1</p><p>P2</p></blockquote>`}                                       | ${`paragraphs support`}
+        ${`[quote]\nP1\n[quote]\nP2\n[/quote]\nP3\n[/quote]`} | ${`<blockquote><p>\nP1</p><blockquote><p>\nP2</p></blockquote><p>\nP3</p></blockquote>`} | ${`nested quotes support`}
+        ${`[quote]\n[quote]\nT\n[/quote]\n[/quote]`}          | ${`<blockquote><blockquote><p>\nT</p></blockquote></blockquote>`}                        | ${`directly nested quotes support`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          aut.expectTransformation({ data, expectedDataView });
+        },
+      );
+    });
   });
 
   describe("Paragraphs", () => {
