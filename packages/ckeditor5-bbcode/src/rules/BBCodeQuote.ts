@@ -8,12 +8,12 @@ export class BBCodeQuote implements BBCodeProcessingRule {
   readonly tags = ["quote"];
   toData(element: HTMLElement, content: string): undefined | string {
     if (!(element instanceof HTMLQuoteElement)) {
-      return;
+      return undefined;
     }
     const { tagName } = element;
     if ("blockquote" !== tagName.toLowerCase()) {
       // No support for inline `<q>` element.
-      return;
+      return undefined;
     }
     return `[quote]\n${content.trim()}\n[/quote]\n`;
   }
