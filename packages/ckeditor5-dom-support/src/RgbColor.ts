@@ -196,7 +196,7 @@ export class RgbColor {
   static tryParseRgb(value: string): RgbColor | undefined {
     const match = rgbColorCodePattern.exec(value);
     if (!match) {
-      return;
+      return undefined;
     }
     // @ts-expect-error https://github.com/microsoft/TypeScript/issues/32098
     const { red, green, blue, alpha }: { red: string; green: string; blue: string; alpha?: string } = match.groups;
@@ -210,11 +210,11 @@ export class RgbColor {
     const va = RgbColor.#isValidAlpha;
 
     if ([nRed, nGreen, nBlue].some((n) => !vcc(n))) {
-      return;
+      return undefined;
     }
 
     if (!va(nAlpha)) {
-      return;
+      return undefined;
     }
     return new RgbColor(nRed, nGreen, nBlue, nAlpha);
   }
