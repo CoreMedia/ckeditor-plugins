@@ -156,6 +156,7 @@ describe("HtmlDomConverter", () => {
             renamed.classList.add("mark");
             return renamed;
           }
+          return undefined;
         },
       });
 
@@ -175,6 +176,7 @@ describe("HtmlDomConverter", () => {
           if (isElement(importedNode) && importedNode.localName === "mark") {
             return skip;
           }
+          return undefined;
         },
       });
 
@@ -202,6 +204,7 @@ describe("HtmlDomConverter", () => {
               // Drawback: No information to forward to children from current node.
               return api.createDocumentFragment();
             }
+            return undefined;
           },
 
           importedWithChildren(importedNode: Node): Node | undefined {
@@ -210,6 +213,7 @@ describe("HtmlDomConverter", () => {
               // Drawback: More complex operations required.
               return extractNodeContents(importedNode);
             }
+            return undefined;
           },
         });
 
