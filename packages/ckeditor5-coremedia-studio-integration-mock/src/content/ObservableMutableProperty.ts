@@ -109,7 +109,7 @@ class MutablePropertyObservationHandler<T> {
         //
         // Tests need to ensure, to trigger completion on their own, for
         // example by limiting the retrieved values via `take(number)` operator.
-        return;
+        return undefined;
       }
 
       // Start looping.
