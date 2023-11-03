@@ -122,5 +122,7 @@ export default class LinkTargetModelView extends Plugin {
       // editor or into the link balloon
       return computeDefaultLinkTargetForUrl(diffItem.attributes.get("linkHref") as string, this.editor.config);
     }
+
+    return undefined;
   }
 }
