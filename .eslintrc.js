@@ -99,6 +99,7 @@ module.exports = {
          * =====================================================================
          */
         "arrow-body-style": ["error", "as-needed"],
+        "consistent-return": "error",
         "constructor-super": "error",
         "curly": ["error", "multi-line"],
         "dot-notation": "error",
