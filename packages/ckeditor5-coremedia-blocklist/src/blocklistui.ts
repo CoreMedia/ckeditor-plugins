@@ -157,19 +157,30 @@ export default class Blocklistui extends Plugin {
 
       // Show the panel on button click.
       this.listenTo(button, "execute", () => {
-        const blockedWords = this.#getSelectedBlocklistWords();
-        if (!blockedWords || blockedWords.length === 0) {
-          this.#showBlocklistBalloon(true);
-          return;
-        }
-
-        // Set the currently selected words in the blocklist command
-        this.blocklistCommand?.set("value", blockedWords);
-        this.#showBlocklistBalloon(true);
+        this.#showBlocklistBalloonConsideringSelection();
       });
 
       return button;
     });
+  }
+
+  /**
+   * Opens the blocklist balloon, considering the current selection.
+   * If one or more blocked words are selected, the balloon will be opened with
+   * those words. Otherwise, the balloon will be opened with an empty list.
+   *
+   * @private
+   */
+  #showBlocklistBalloonConsideringSelection() {
+    const blockedWords = this.#getSelectedBlocklistWords();
+    if (!blockedWords || blockedWords.length === 0) {
+      this.#showBlocklistBalloon(true);
+      return;
+    }
+
+    // Set the currently selected words in the blocklist command
+    this.blocklistCommand?.set("value", blockedWords);
+    this.#showBlocklistBalloon(true);
   }
 
   /**
@@ -303,15 +314,7 @@ export default class Blocklistui extends Plugin {
       cancel();
 
       if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
-        const blockedWords = this.#getSelectedBlocklistWords();
-        if (!blockedWords || blockedWords.length === 0) {
-          this.#showBlocklistBalloon(true);
-          return;
-        }
-
-        // Set the currently selected words in the blocklist command
-        this.blocklistCommand?.set("value", blockedWords);
-        this.#showBlocklistBalloon(true);
+        this.#showBlocklistBalloonConsideringSelection();
       }
     });
   }
