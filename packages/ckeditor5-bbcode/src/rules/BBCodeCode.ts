@@ -40,7 +40,7 @@ const ckeditor5DefaultCodeBlockLanguagePattern = /^language-(\w+)$/;
  */
 export const defaultLanguageByClass: LanguageByClass = (classListEntry: string): string | undefined => {
   if (!classListEntry) {
-    return;
+    return undefined;
   }
   const languageMatch = ckeditor5DefaultCodeBlockLanguagePattern.exec(classListEntry);
   return languageMatch?.[1];
@@ -109,6 +109,8 @@ export class BBCodeCode implements BBCodeProcessingRule {
         };
       }
     }
+
+    return undefined;
   }
 
   /**
@@ -123,7 +125,7 @@ export class BBCodeCode implements BBCodeProcessingRule {
   #determineLanguage(element: HTMLPreElement): string | undefined {
     const { firstElementChild } = element;
     if (!(firstElementChild instanceof HTMLElement)) {
-      return;
+      return undefined;
     }
     const languageInformation = this.#findFirstLangauge(Array.from(firstElementChild.classList));
     if (languageInformation) {
@@ -134,6 +136,7 @@ export class BBCodeCode implements BBCodeProcessingRule {
         return language;
       }
     }
+    return undefined;
   }
 
   #startTag(element: HTMLPreElement): "[code]" | `[code=${string}]` {
@@ -146,7 +149,7 @@ export class BBCodeCode implements BBCodeProcessingRule {
 
   toData(element: HTMLElement, content: string): undefined | string {
     if (!(element instanceof HTMLPreElement)) {
-      return;
+      return undefined;
     }
     const startTag = this.#startTag(element);
     const endTag = "[/code]";
