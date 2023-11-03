@@ -15,7 +15,7 @@ export const tabToAriaLabel = async (ariaLabelContent: string): Promise<void> =>
   }
   const firstItemAriaLabelContent = await getAriaLabel(new LocatorWithAriaLabel(firstItem));
   if (!firstItemAriaLabelContent) {
-    return Promise.reject();
+    throw new Error("Failed identifying first aria labeled content.");
   }
 
   await page.keyboard.press("Tab");
