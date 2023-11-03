@@ -27,9 +27,16 @@ import { w3ExtendedColorNames } from "./w3ExtendedColorNames";
  * Note that the regular expression does not contain a range-check to enhance
  * maintainability. Thus, when accessing results from `groups`, they should be
  * validated if they fulfill the range-requirements.
+ *
+ * Maximum number of spaces limited (0 to maximum 2 space characters)to reduce
+ * possible impact of `js/polynomial-redos`.
+ *
+ * Similar, the precision for alpha detection is limited to at maximum 24
+ * fractional digits, which at least is more than enough for colors as
+ * typically parsed in `CSSStyleDeclaration` within browsers.
  */
 const rgbColorCodePattern =
-  /\s*rgba?\(\s*(?<red>\d{1,3})\s*,\s*(?<green>\d{1,3})\s*,\s*(?<blue>\d{1,3})\s*(?:,\s*(?<alpha>[0-9](?:\.[0-9]*)?)\s*)?\)\s*/i;
+  /^\s{0,2}rgba?\(\s{0,2}(?<red>\d{1,3})\s{0,2},\s{0,2}(?<green>\d{1,3})\s{0,2},\s{0,2}(?<blue>\d{1,3})\s{0,2}(?:,\s{0,2}(?<alpha>[0-9](?:\.[0-9]{0,24})?)\s{0,2})?\)\s{0,2}$/i;
 
 /**
  * Represents `rgb()` and `rgba()` color format as an immutable object.
