@@ -28,7 +28,7 @@ export class BBCodeHeading implements BBCodeProcessingRule {
 
   toData(element: HTMLElement, content: string): string | undefined {
     if (!(element instanceof HTMLHeadingElement)) {
-      return;
+      return undefined;
     }
     const match = element.localName.match(headingRegEx);
     if (match) {
@@ -38,6 +38,7 @@ export class BBCodeHeading implements BBCodeProcessingRule {
       // Adding newlines for minor pretty-printing.
       return `[${tag}]${content.trim()}[/${tag}]\n\n`;
     }
+    return undefined;
   }
 }
 
