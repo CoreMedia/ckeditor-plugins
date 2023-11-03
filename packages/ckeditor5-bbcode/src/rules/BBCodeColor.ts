@@ -72,6 +72,8 @@ export class BBCodeColor implements BBCodeProcessingRule {
         return `[color=${mappedColor}]${content}[/color]`;
       }
     }
+
+    return undefined;
   }
 }
 
