@@ -1,4 +1,4 @@
-const trimOnlyLeadingAndTrailingNewlines = (s: string): string => s.replace(/(^[\n\r]*|[\n\r]*$)/g, "");
+const trimOnlyLeadingAndTrailingNewlines = (s: string): string => s.replace(/(^[\n\r]+|(?<![\n\r])[\n\r]+$)/g, "");
 const trimOnlyLeadingNewLines = (s: string): string => s.replace(/^[\n\r]*/g, "");
 
 /**
