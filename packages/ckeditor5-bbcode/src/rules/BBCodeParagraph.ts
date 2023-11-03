@@ -8,10 +8,10 @@ export class BBCodeParagraph implements BBCodeProcessingRule {
   readonly id = "paragraph";
 
   toData(element: HTMLElement, content: string): string | undefined {
-    if (!(element instanceof HTMLParagraphElement)) {
-      return;
+    if (element instanceof HTMLParagraphElement) {
+      return `${content.trim()}\n\n`;
     }
-    return `${content.trim()}\n\n`;
+    return undefined;
   }
 }
 
