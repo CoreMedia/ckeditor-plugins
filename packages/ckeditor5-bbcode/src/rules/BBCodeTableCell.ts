@@ -8,7 +8,7 @@ export class BBCodeTableCell implements BBCodeProcessingRule {
   readonly tags = ["td", "th"];
   toData(element: HTMLElement, content: string): undefined | string {
     if (!(element instanceof HTMLTableCellElement)) {
-      return;
+      return undefined;
     }
     const { tagName } = element;
     switch (tagName.toLowerCase()) {
@@ -17,6 +17,7 @@ export class BBCodeTableCell implements BBCodeProcessingRule {
       case "th":
         return `[th]${content.trim()}[/th]\n`;
     }
+    return undefined;
   }
 }
 
