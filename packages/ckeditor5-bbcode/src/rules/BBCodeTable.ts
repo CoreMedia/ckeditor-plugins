@@ -10,6 +10,7 @@ export class BBCodeTable implements BBCodeProcessingRule {
     if (element instanceof HTMLTableElement) {
       return `[table]\n${content.trim()}\n[/table]\n`;
     }
+    return undefined;
   }
 }
 
