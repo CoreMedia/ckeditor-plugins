@@ -156,6 +156,11 @@ This is well understood by the CKEditor 5 Strikethrough plugin. The `toData`
 transformation will accept the above representation as well as the default
 representation `<u>Text</u>` and will map them back to `[u]` again.
 
+Further supported element in data-view representation, that will be mapped
+to `[u]`:
+
+* `<ins>`
+
 ### Basic Text Style: Strikethrough
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:

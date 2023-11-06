@@ -1,13 +1,16 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
+/**
+ * HTML Elements that may denote a "underline" state.
+ */
 const underlineTags = ["u", "ins"];
 
 /**
- * Maps `<u>` to `[u]`.
+ * Rule that maps `<u>` to `[u]`.
  *
  * While `<u>` is nowadays used to express _unarticulated annotation_,
  * CKEditor's _underline_ command still uses `<u>` in view layers. If this
- * changes, mappings need to be adjusted.
+ * changes, mappings may need to be adjusted.
  */
 export class BBCodeUnderline implements BBCodeProcessingRule {
   readonly id = "underline";
@@ -17,6 +20,8 @@ export class BBCodeUnderline implements BBCodeProcessingRule {
     const { textDecoration } = style;
     let underline = underlineTags.includes(tagName.toLowerCase());
 
+    // Possibly veto underline by name or enable underline by
+    // style option rather than by tag.
     if (textDecoration) {
       const normalizedTextDecoration = textDecoration.trim().toLowerCase();
       if (normalizedTextDecoration.includes("underline")) {
@@ -36,4 +41,7 @@ export class BBCodeUnderline implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Rule instance that maps `<u>` to `[u]`.
+ */
 export const bbCodeUnderline = new BBCodeUnderline();
