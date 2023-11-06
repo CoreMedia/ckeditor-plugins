@@ -1,9 +1,12 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
+/**
+ * HTML Elements that may denote a "strike-through" state.
+ */
 const strikethroughTags = ["strike", "s", "del"];
 
 /**
- * Maps `<s>` to `[s]`.
+ * Rule that maps `<s>` to `[s]`.
  */
 export class BBCodeStrikethrough implements BBCodeProcessingRule {
   readonly id = "strikethrough";
@@ -13,6 +16,8 @@ export class BBCodeStrikethrough implements BBCodeProcessingRule {
     const { textDecoration } = style;
     let strikethrough = strikethroughTags.includes(tagName.toLowerCase());
 
+    // Possibly veto strikethrough by name or enable strike-through by
+    // style option rather than by tag.
     if (textDecoration) {
       const normalizedTextDecoration = textDecoration.trim().toLowerCase();
       if (normalizedTextDecoration.includes("line-through")) {
@@ -32,4 +37,7 @@ export class BBCodeStrikethrough implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Rule instance that maps `<s>` to `[s]`.
+ */
 export const bbCodeStrikethrough = new BBCodeStrikethrough();

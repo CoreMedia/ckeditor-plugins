@@ -168,6 +168,12 @@ This is well understood by the CKEditor 5 Strikethrough plugin. The `toData`
 transformation will accept the above representation as well as the default
 representation `<s>Text</s>` and will map them back to `[s]` again.
 
+Further supported elements in data-view representation, that will be mapped
+to `[s]`:
+
+* `<strike>` (deprecated tag)
+* `<del>`
+
 ### Font Color
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
