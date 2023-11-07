@@ -10,6 +10,7 @@ import { simpleData } from "./SimpleData";
 import { listData } from "./BBCodeListData";
 import { quoteData } from "./BBCodeQuoteData";
 import { paragraphData } from "./BBCodeParagraphData";
+import { linkData } from "./BBCodeUrlData";
 
 export const bbCodeData: ExampleData = {
   ...challengingData,
@@ -17,6 +18,7 @@ export const bbCodeData: ExampleData = {
   ...colorData,
   ...headingData,
   ...inlineFormatData,
+  ...linkData,
   ...listData,
   ...paragraphData,
   ...quoteData,
