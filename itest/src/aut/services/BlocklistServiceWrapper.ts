@@ -1,5 +1,5 @@
 import { JSWrapper } from "../JSWrapper";
-import MockBlocklistService from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockBlocklistService";
+import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockBlocklistService";
 import { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
 
 export class BlocklistServiceWrapper extends JSWrapper<MockBlocklistService> {
