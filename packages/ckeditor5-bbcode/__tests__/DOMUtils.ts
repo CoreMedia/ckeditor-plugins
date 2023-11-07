@@ -25,3 +25,16 @@ export const requireHTMLElement = (html: string): HTMLElement => {
   }
   return parsed;
 };
+
+/**
+ * Parses the given HTML as fragment, suitable to represent the _data view_
+ * within the CKEditor 5 architecture.
+ *
+ * @param innerHtml - HTML to represent as fragment
+ */
+export const parseAsFragment = (innerHtml: string): DocumentFragment => {
+  const parsedDocument = parseHtml(`<body>${innerHtml}</body>`);
+  const result = new DocumentFragment();
+  result.append(...parsedDocument.body.childNodes);
+  return result;
+};

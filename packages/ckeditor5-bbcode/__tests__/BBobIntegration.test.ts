@@ -3,17 +3,10 @@
 import { bbCodeDefaultRules } from "../src";
 import { html2bbcode } from "../src/html2bbcode";
 import { bbcode2html } from "../src/bbcode2html";
+import { parseAsFragment } from "./DOMUtils";
 
 const rules = bbCodeDefaultRules;
 const supportedTags = rules.flatMap((r) => r.tags ?? ([] as string[]));
-const domParser = new DOMParser();
-
-const asFragment = (innerHtml: string): DocumentFragment => {
-  const parsedDocument = domParser.parseFromString(`<body>${innerHtml}</body>`, "text/html");
-  const result = new DocumentFragment();
-  result.append(...parsedDocument.body.childNodes);
-  return result;
-};
 
 const aut = {
   /**
@@ -36,7 +29,7 @@ const aut = {
     fromHtml2BBCode: string;
   } => {
     const fromBBCode2Html = bbcode2html(input, supportedTags);
-    const fromHtml2BBCode = html2bbcode(asFragment(fromBBCode2Html), rules);
+    const fromHtml2BBCode = html2bbcode(parseAsFragment(fromBBCode2Html), rules);
     return {
       input,
       fromBBCode2Html,
@@ -57,7 +50,7 @@ const aut = {
     fromHtml2BBCode: string;
     fromBBCode2Html: string;
   } => {
-    const fromHtml2BBCode = html2bbcode(asFragment(input), rules);
+    const fromHtml2BBCode = html2bbcode(parseAsFragment(input), rules);
     const fromBBCode2Html = bbcode2html(fromHtml2BBCode, supportedTags);
     return {
       input,
