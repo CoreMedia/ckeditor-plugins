@@ -15,12 +15,14 @@ import { bbCodeTableCell } from "./BBCodeTableCell";
 import { bbCodeTableRow } from "./BBCodeTableRow";
 import { bbCodeTableSection } from "./BBCodeTableSection";
 import { bbCodeColor } from "./BBCodeColor";
+import { bbCodeImg } from "./BBCodeImg";
 
 export const bbCodeDefaultRules: BBCodeProcessingRule[] = [
   bbCodeBold,
   bbCodeCode,
   bbCodeColor,
   bbCodeHeading,
+  bbCodeImg,
   bbCodeItalic,
   bbCodeList,
   bbCodeListItem,

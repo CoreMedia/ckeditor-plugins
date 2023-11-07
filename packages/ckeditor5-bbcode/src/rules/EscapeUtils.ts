@@ -70,3 +70,44 @@ export const toBBCodeUrl = (value: string): { asContent: string; asAttribute: st
   asContent: escapeUrlForBBCodeAttribute(value),
   asAttribute: toBBCodeUrlAttributeValue(value),
 });
+
+/**
+ * Characters that need to be encoded when represented as BBCode string
+ * argument.
+ */
+const attributeEncoded = {
+  doubleQuote: `\\"`,
+  openBracket: `&#x5B;`,
+  closeBracket: `&#x5D;`,
+};
+
+// noinspection GrazieInspection
+/**
+ * This method provides the most robust way to represent attribute values
+ * of type _string_ in BBCode with reference to BBob parsing.
+ *
+ * The following rules are applied:
+ *
+ * * **Wrapped in Quotes:** Attributes for BBob are best wrapped into quotes to
+ *   make BBob parser not struggle with spaces within attribute values. This
+ *   function uses double quotes, as BBob does not respect single quotes.
+ *
+ * * **Escaping with Backslash:** In general, BBob is configured in CKEditor 5
+ *   BBCode plugin to escape within text content via backslash. This works to
+ *   some degree also within attributes, like, for example, for double quote
+ *   to be escaped to `\"`.
+ *
+ *   Regarding square brackets, this method uses a defensive approach that
+ *   assumes BBCode to be rendered as HTML. Thus, brackets are replaced by
+ *   HTML entities.
+ *
+ * @param value - raw attribute value to transform
+ */
+// Issues regarding square bracket escaping: https://github.com/JiLiZART/BBob/issues/194
+export const toBBCodeStringAttributeValue = (value: string): string => {
+  const escaped = value
+    .replace(/"/g, attributeEncoded.doubleQuote)
+    .replace(/\[/g, attributeEncoded.openBracket)
+    .replace(/]/g, attributeEncoded.closeBracket);
+  return `"${escaped}"`;
+};

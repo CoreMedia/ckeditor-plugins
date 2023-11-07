@@ -5,7 +5,7 @@ import { CoreTree } from "@bbob/core/es";
 import { paragraphAwareContent } from "./Paragraphs";
 import { Core, DefaultTags, Options } from "./types";
 import { bbCodeLogger } from "../BBCodeLogger";
-import { uniqueAttrToAttr } from "./Attributes";
+import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
 import { renderRaw } from "./renderRaw";
 
 const toNode = TagNode.create;
@@ -68,8 +68,7 @@ const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options
 
   const unwrap = wrapInRoot(tree);
   try {
-    //tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
-    tree.walk((node) => (isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
+    tree.walk((node) => (node && isTagNode(node) && tags[node.tag] ? tags[node.tag](node, core, options) : node));
   } finally {
     unwrap();
   }
@@ -126,6 +125,24 @@ const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
 const toHtmlAnchorAttrs = (node: TagNode): TagAttrs =>
   uniqueAttrToAttr("href", node.attrs, false, () => renderRaw(node));
 
+const toHtmlImageAttrs = (node: TagNode): TagAttrs => {
+  const { attrs } = node;
+  // We ignore unique attributes here, but keep all others, just in case
+  // they got defined. Some BBCode dialects use the unique attribute to
+  // denote an image size like: [img=640x480], while others use
+  // [img width=640 height=480]. The latter one will pass here as is due
+  // to not stripping other attributes.
+  //
+  // This implicitly also opens doors for supporting the `alt` attribute,
+  // as provided with the CKEditor 5 image feature.
+  const { otherAttrs } = stripUniqueAttr(attrs);
+  // Keep other attributes, but override any possibly already set
+  // `src` with unexpected tags such as: `[img src=...]` which is not
+  // standard BBCode.
+  otherAttrs.src = renderRaw(node);
+  return otherAttrs;
+};
+
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
@@ -173,6 +190,11 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      */
     htmlCode: (node: TagNode): TagNode => toNode("code", node.attrs, trimEOL(node.content)),
     url: (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content),
+    img: (node: TagNode): TagNode => ({
+      ...toNode("img", toHtmlImageAttrs(node), null),
+      // Workaround: https://github.com/JiLiZART/BBob/issues/206
+      content: null,
+    }),
   };
   bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
   return extendedTags;
