@@ -156,6 +156,8 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * Override default from HTML5 Preset for CKEditor 5: CKEditor 5 requires a
      * nested `<code>` element and allows specifying the language via a
      * corresponding class parameter.
+     *
+     * See also: <https://github.com/JiLiZART/BBob/issues/205>.
      */
     code: (node: TagNode): TagNode => {
       // Using `||` also for possibly empty string.
