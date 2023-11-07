@@ -92,7 +92,7 @@ describe("BBob Integration", () => {
       ${`<u>TEXT</u>`}                                             | ${`[u]TEXT[/u]`}                                   | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
       ${`<del>TEXT</del>`}                                         | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
       ${`<s>TEXT</s>`}                                             | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
-      ${`<a href="${link}">TEXT</a>`}                              | ${`[url=${link}]TEXT[/url]`}                       | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
+      ${`<a href="${link}">TEXT</a>`}                              | ${`[url="${link}"]TEXT[/url]`}                     | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
       ${`<a href="${link}">${link}</a>`}                           | ${`[url]${link}[/url]`}                            | ${`<a href="${link}">${link}</a>`}                            | ${"pretty-print: shorten, if possible, in BBCode"}
       ${`<a>TEXT</a>`}                                             | ${`TEXT`}                                          | ${`TEXT`}                                                     | ${"there is no representation in BBCode for an anchor without href attribute"}
       ${`<blockquote><p>TEXT</p></blockquote>`}                    | ${`[quote]\nTEXT\n[/quote]`}                       | ${`<blockquote><p>\nTEXT</p></blockquote>`}                   | ${"newlines part of minimal pretty-print behavior"}
@@ -149,26 +149,26 @@ describe("BBob Integration", () => {
   describe("Less important: BBCode →[toView]→ HTML →[toData]→ BBCode", () => {
     it.each`
       bbCode
-      ${""}
-      ${"[b]lorem[/b]"}
-      ${"[i]lorem[/i]"}
-      ${"[u]lorem[/u]"}
-      ${"[s]lorem[/s]"}
-      ${"[url=https://example.org/]lorem[/url]"}
-      ${"[quote]\nlorem\n[/quote]"}
-      ${"[code]\nlorem\n[/code]"}
-      ${"[list]\n[*] lorem\n[/list]"}
-      ${"[list=1]\n[*] lorem\n[/list]"}
-      ${"[list=a]\n[*] lorem\n[/list]"}
-      ${"[list=I]\n[*] lorem\n[/list]"}
-      ${"[table]\n[tr]\n[td]lorem[/td]\n[/tr]\n[/table]"}
-      ${"[table]\n[thead]\n[tr]\n[th]HEAD[/th]\n[/tr]\n[/thead]\n[tbody]\n[tr]\n[td]BODY[/td]\n[/tr]\n[/tbody]\n[/table]"}
-      ${"[h1]lorem[/h1]"}
-      ${"[h2]lorem[/h2]"}
-      ${"[h3]lorem[/h3]"}
-      ${"[h4]lorem[/h4]"}
-      ${"[h5]lorem[/h5]"}
-      ${"[h6]lorem[/h6]"}
+      ${``}
+      ${`[b]lorem[/b]`}
+      ${`[i]lorem[/i]`}
+      ${`[u]lorem[/u]`}
+      ${`[s]lorem[/s]`}
+      ${`[url="https://example.org/"]lorem[/url]`}
+      ${`[quote]\nlorem\n[/quote]`}
+      ${`[code]\nlorem\n[/code]`}
+      ${`[list]\n[*] lorem\n[/list]`}
+      ${`[list=1]\n[*] lorem\n[/list]`}
+      ${`[list=a]\n[*] lorem\n[/list]`}
+      ${`[list=I]\n[*] lorem\n[/list]`}
+      ${`[table]\n[tr]\n[td]lorem[/td]\n[/tr]\n[/table]`}
+      ${`[table]\n[thead]\n[tr]\n[th]HEAD[/th]\n[/tr]\n[/thead]\n[tbody]\n[tr]\n[td]BODY[/td]\n[/tr]\n[/tbody]\n[/table]`}
+      ${`[h1]lorem[/h1]`}
+      ${`[h2]lorem[/h2]`}
+      ${`[h3]lorem[/h3]`}
+      ${`[h4]lorem[/h4]`}
+      ${`[h5]lorem[/h5]`}
+      ${`[h6]lorem[/h6]`}
     `("[$#] should process back and forth without change: $bbCode", ({ bbCode }: { bbCode: string }) => {
       const result = aut.bbcode2html2bbcode(bbCode);
       try {

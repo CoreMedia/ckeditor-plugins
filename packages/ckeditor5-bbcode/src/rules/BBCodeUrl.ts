@@ -1,6 +1,6 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
-import { escapeUrlForBBCodeAttribute } from "./EscapeUtils";
+import { toBBCodeUrl } from "./EscapeUtils";
 
 /**
  * Rule that maps anchors with `href` to `[url]` tag.
@@ -17,16 +17,22 @@ export class BBCodeUrl implements BBCodeProcessingRule {
     // latter one may contain an already parsed `href`, that, for example,
     // already resolved relative links to absolute links.
     const href = element.getAttribute("href");
-    if (href) {
-      const escapedHref = escapeUrlForBBCodeAttribute(href);
-      if (href === escapedHref && href === content) {
-        // There was nothing to escape. We may now safely apply some pretty-print
-        // optimization if content and HREF are strictly equal to one another.
-        return `[url]${content}[/url]`;
-      }
-      return `[url=${escapedHref}]${content}[/url]`;
+
+    if (!href) {
+      // No relevant URL represented by this anchor element. Leave it to
+      // other rules to map or to possibly replace by element content instead.
+      return undefined;
     }
-    return undefined;
+
+    const { asContent, asAttribute } = toBBCodeUrl(href);
+
+    if (href === asContent && href === content) {
+      // There was nothing to escape. We may now safely apply some pretty-print
+      // optimization if content and HREF are strictly equal to one another.
+      return `[url]${content}[/url]`;
+    }
+
+    return `[url=${asAttribute}]${content}[/url]`;
   }
 }
 
