@@ -141,6 +141,9 @@ importers:
       '@ckeditor/ckeditor5-ui':
         specifier: 39.0.2
         version: 39.0.2
+      '@ckeditor/ckeditor5-upload':
+        specifier: 39.0.2
+        version: 39.0.2
       '@ckeditor/ckeditor5-utils':
         specifier: 39.0.2
         version: 39.0.2
