@@ -4,7 +4,9 @@ import { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
 
 export class BlocklistServiceWrapper extends JSWrapper<MockBlocklistService> {
   async addWord(word: string): Promise<void> {
-    await this.evaluate((plugin, word) => plugin.addToBlocklist(word), word);
+    await this.evaluate((plugin, word): void => {
+      plugin.addToBlocklist(word);
+    }, word);
   }
 
   static fromServiceAgentPlugin(pluginWrapper: MockServiceAgentPluginWrapper) {
