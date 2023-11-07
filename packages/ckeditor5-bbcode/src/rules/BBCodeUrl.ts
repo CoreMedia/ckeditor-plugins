@@ -1,13 +1,10 @@
 import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
+import { escapeUrlForBBCodeAttribute } from "./EscapeUtils";
 
 /**
- * Escapes the given URL, so that it does not contain open or close bracket.
- *
- * @param href - HREF attribute to encode for use as BBCode attribute value
+ * Rule that maps anchors with `href` to `[url]` tag.
  */
-const escapeHref = (href: string): string => href.replace(/\[/g, "%5B").replace(/]/g, "%5D");
-
 export class BBCodeUrl implements BBCodeProcessingRule {
   readonly id = "url";
   readonly tags = ["url"];
@@ -21,7 +18,7 @@ export class BBCodeUrl implements BBCodeProcessingRule {
     // already resolved relative links to absolute links.
     const href = element.getAttribute("href");
     if (href) {
-      const escapedHref = escapeHref(href);
+      const escapedHref = escapeUrlForBBCodeAttribute(href);
       if (href === escapedHref && href === content) {
         // There was nothing to escape. We may now safely apply some pretty-print
         // optimization if content and HREF are strictly equal to one another.
@@ -33,4 +30,7 @@ export class BBCodeUrl implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * Rule instance that maps anchors with `href` to `[url]` tag.
+ */
 export const bbCodeUrl = new BBCodeUrl();
