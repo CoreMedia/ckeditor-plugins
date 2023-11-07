@@ -7,7 +7,7 @@ import { Heading } from "@ckeditor/ckeditor5-heading";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 
-import { AutoLink, Link } from "@ckeditor/ckeditor5-link";
+import { AutoLink, Link, LinkImage } from "@ckeditor/ckeditor5-link";
 import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { ApplicationState } from "../ApplicationState";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
@@ -23,6 +23,14 @@ import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Indent } from "@ckeditor/ckeditor5-indent";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import { FontColor } from "@ckeditor/ckeditor5-font";
+import {
+  AutoImage,
+  ImageBlock,
+  ImageInsert,
+  ImageInsertViaUrl,
+  ImageToolbar,
+} from "@ckeditor/ckeditor5-image";
+import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
@@ -32,9 +40,11 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
   return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
     plugins: [
+      AutoImage,
       AutoLink,
       Autoformat,
       Autosave,
+      Base64UploadAdapter,
       BBCode,
       BlockQuote,
       Blocklist,
@@ -46,9 +56,14 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       Essentials,
       FontColor,
       Heading,
+      ImageBlock,
+      ImageInsert,
+      ImageInsertViaUrl,
+      ImageToolbar,
       Indent,
       Italic,
       Link,
+      LinkImage,
       MockBlocklistService,
       Paragraph,
       PasteFromOffice,
@@ -73,6 +88,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       "removeFormat",
       "|",
       "link",
+      "imageInsert",
       "|",
       "blockQuote",
       "codeBlock",
@@ -174,6 +190,12 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
         { model: "heading5", view: "h5", title: "Heading 5", class: "ck-heading_heading5" },
         { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" },
       ],
+    },
+    image: {
+      toolbar: ["imageTextAlternative"],
+      upload: {
+        types: ["jpeg", "png", "gif", "bmp", "webp", "tiff", "avif"],
+      },
     },
     language: {
       // Language switch only applies to editor instance.
