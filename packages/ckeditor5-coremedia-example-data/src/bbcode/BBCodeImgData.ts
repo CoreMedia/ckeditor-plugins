@@ -41,6 +41,20 @@ Given the Base64 examples from above:
 [img alt="Green"]${pngGreen10x10}[/img]
 
 [img alt="Blue"]${pngBlue10x10}[/img]
+
+[h2]Images Are Inline[/h2]
+
+BBCode parsers in general assume images to be inline. So, you may represent
+RGB just within your text: [img]${pngRed10x10}[/img][img]${pngGreen10x10}[/img][img]${pngBlue10x10}[/img].
+
+[h2]Linking Images[/h2]
+
+If you enable the
+[url=https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkimage-LinkImage.html]CKEditor 5 LinkImage Plugin[/url]
+along with the
+[url=https://ckeditor.com/docs/ckeditor5/latest/api/link.html]CKEditor 5 Link Feature[/url]
+you may also embed images into links:
+[url=https://example.org/][img alt="Link to example.org"]${pngRed10x10}[/img][/url].
 `;
 
 export const imgData: ExampleData = {
