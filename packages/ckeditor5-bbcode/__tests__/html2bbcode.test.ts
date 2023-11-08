@@ -92,4 +92,27 @@ describe("html2bbcode", () => {
       },
     );
   });
+
+  describe("[img]", () => {
+    // noinspection HtmlRequiredAltAttribute
+    it.each`
+      dataView                                                       | expectedData                                                  | comment
+      ${`<img src="${url.absolute}">`}                               | ${`[img]${url.absolute}[/img]`}                               | ${`default (absolute)`}
+      ${`<a href="${url.absolute}"><img src="${url.absolute}"></a>`} | ${`[url="${url.absolute}"][img]${url.absolute}[/img][/url]`}  | ${`linked image`}
+      ${`<i>BEFORE<img src="${url.absolute}">AFTER</i>`}             | ${`[i]BEFORE[img]${url.absolute}[/img]AFTER[/i]`}             | ${`images are inline`}
+      ${`<img src="${url.absolute}?brackets=[]">`}                   | ${`[img]${url.absolute}?brackets=%5B%5D[/img]`}               | ${`escape brackets in URL`}
+      ${`<img src="${url.relative}">`}                               | ${`[img]${url.relative}[/img]`}                               | ${`default (relative)`}
+      ${`BEFORE<img src="">AFTER`}                                   | ${`BEFOREAFTER`}                                              | ${`design-scope: Remove irrelevant image with empty src`}
+      ${`<img alt="ALT" src="${url.absolute}">`}                     | ${`[img alt="ALT"]${url.absolute}[/img]`}                     | ${`alt attribute support (default)`}
+      ${`BEFORE<img alt="ALT" src="">AFTER`}                         | ${`BEFOREAFTER`}                                              | ${`design-scope: Remove irrelevant image with empty src, even if alt is set`}
+      ${`<img alt="with space" src="${url.absolute}">`}              | ${`[img alt="with space"]${url.absolute}[/img]`}              | ${`attribute with spaces; latest, that we require quotes for BBob`}
+      ${`<img alt="let's &quot;quote&quot;" src="${url.absolute}">`} | ${`[img alt="let's \\"quote\\""]${url.absolute}[/img]`}       | ${`alt text quote challenge (must not escape BBCode attribute)`}
+      ${`<img alt="in [brackets]" src="${url.absolute}">`}           | ${`[img alt="in &#x5B;brackets&#x5D;"]${url.absolute}[/img]`} | ${`alt text with square brackets; for best robustness in BBCode parsers encoded; design-scope: This introduces entities and thus assumes BBCode is always processed to some XML format.`}
+    `(
+      "[$#] Should process data view '$dataView' to: $expectedData ($comment)",
+      ({ dataView, expectedData }: { dataView: string; expectedData: string }) => {
+        aut.expectTransformation({ dataView, expectedData });
+      },
+    );
+  });
 });
