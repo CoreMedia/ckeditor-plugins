@@ -1,4 +1,4 @@
-// noinspection HtmlUnknownTarget,SpellCheckingInspection
+// noinspection HtmlUnknownTarget,SpellCheckingInspection,HtmlRequiredAltAttribute
 
 import { bbCodeDefaultRules } from "../src";
 import { bbcode2html } from "../src/bbcode2html";
@@ -47,6 +47,7 @@ describe("bbcode2html", () => {
         ${`[url=https://example.org/?one=1&two=2]T[/url]`}                | ${`<a href="https://example.org/?one=1&amp;two=2">T</a>`}
         ${`[url]https://example.org/?one=1&two=2[/url]`}                  | ${`<a href="https://example.org/?one=1&amp;two=2">https://example.org/?one=1&amp;two=2</a>`}
         ${`[url]https://example.org/?[b]predicate=x%3D42[/b]#_top[/url]`} | ${`<a href="https://example.org/?predicate=x%3D42#_top">https://example.org/?<span style="font-weight: bold;">predicate=x%3D42</span>#_top</a>`}
+        ${`[img]https://example.org/1.png[/img]`}                         | ${`<img src="https://example.org/1.png">`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
@@ -156,6 +157,23 @@ describe("bbcode2html", () => {
         ${`[quote]\nP1\n\nP2\n[/quote]`}                      | ${`<blockquote><p>\nP1</p><p>P2</p></blockquote>`}                                       | ${`paragraphs support`}
         ${`[quote]\nP1\n[quote]\nP2\n[/quote]\nP3\n[/quote]`} | ${`<blockquote><p>\nP1</p><blockquote><p>\nP2</p></blockquote><p>\nP3</p></blockquote>`} | ${`nested quotes support`}
         ${`[quote]\n[quote]\nT\n[/quote]\n[/quote]`}          | ${`<blockquote><blockquote><p>\nT</p></blockquote></blockquote>`}                        | ${`directly nested quotes support`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          aut.expectTransformation({ data, expectedDataView });
+        },
+      );
+    });
+
+    describe("[img]", () => {
+      it.each`
+        data                                                | expectedDataView                                       | comment
+        ${`[img]https://example.org/1.png[/img]`}           | ${`<img src="https://example.org/1.png">`}             | ${`minimal scenario`}
+        ${`[img alt="ALT"]https://example.org/1.png[/img]`} | ${`<img alt="ALT" src="https://example.org/1.png">`}   | ${`alt text support; order of attributes irrelevant, but set expected as it is now`}
+        ${`[img alt=""]https://example.org/1.png[/img]`}    | ${`<img alt="" src="https://example.org/1.png">`}      | ${`design-scope: may as well strip empty alt; kept for simplicity`}
+        ${`[img alt=1-PNG]https://example.org/1.png[/img]`} | ${`<img alt="1-PNG" src="https://example.org/1.png">`} | ${`alt without quotes (must not use spaces)`}
+        ${`A[img][/img]B`}                                  | ${`A<img src="">B`}                                    | ${`design-scope: May as well strip irrelevant img tag; kept for simplicity`}
+        ${`A [img]https://example.org/1.png[/img] B`}       | ${`A <img src="https://example.org/1.png"> B`}         | ${`images are meant to be inline (all known BBCode interpreters seem to expect that)`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView ($comment)",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
