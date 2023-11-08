@@ -107,6 +107,12 @@ Paragraph 1.
 Paragraph 2.
 ```
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Paragraph Feature](https://ckeditor.com/docs/ckeditor5/latest/api/paragraph.html)
+to be enabled.
+
 ### Headings
 
 Heading levels one to six are supported by BBCode tags:
@@ -120,6 +126,16 @@ Heading levels one to six are supported by BBCode tags:
 | `[h5]` | `<h5>`  |
 | `[h6]` | `<h6>`  |
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Headings Feature](https://ckeditor.com/docs/ckeditor5/latest/features/headings.html)
+to be enabled.
+
+Note that by default the Headings feature does not allow selecting heading
+level 1. Processing assumes, that you enabled `<h1>` as valid, supported
+element.
+
 ### Basic Text Style: Bold
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
@@ -132,6 +148,12 @@ This is well understood by the Bold plugin of CKEditor 5. The `toData`
 transformation will accept the above representation as well as the default
 representation `<strong>Text</strong>` and will map them back to `[b]` again.
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Bold Feature](https://ckeditor.com/docs/ckeditor5/latest/api/module_basic-styles_bold-Bold.html)
+to be enabled.
+
 ### Basic Text Style: Italic
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
@@ -143,6 +165,12 @@ Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
 This is well understood by the CKEditor 5 Italic plugin. The `toData`
 transformation will accept the above representation as well as the default
 representation `<i>Text</i>` and will map them back to `[i]` again.
+
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Italic Feature](https://ckeditor.com/docs/ckeditor5/latest/api/module_basic-styles_italic-Italic.html)
+to be enabled.
 
 ### Basic Text Style: Underline
 
@@ -160,6 +188,12 @@ Further supported element in data-view representation, that will be mapped
 to `[u]`:
 
 * `<ins>`
+
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Underline Feature](https://ckeditor.com/docs/ckeditor5/latest/api/module_basic-styles_underline-Underline.html)
+to be enabled.
 
 ### Basic Text Style: Strikethrough
 
@@ -179,6 +213,12 @@ to `[s]`:
 * `<strike>` (deprecated tag)
 * `<del>`
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Strikethrough Feature](https://ckeditor.com/docs/ckeditor5/latest/api/module_basic-styles_strikethrough-Strikethrough.html)
+to be enabled.
+
 ### Font Color
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
@@ -188,13 +228,18 @@ Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
 | `[color=#ff0000]`   | `<span style="color: #ff0000;">`   |
 | `[color=#ff0000a0]` | `<span style="color: #ff0000a0;">` |
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 FontColor Feature](https://ckeditor.com/docs/ckeditor5/latest/api/module_font_fontcolor-FontColor.html)
+to be enabled.
+
 A possible recommended configuration for the CKEditor 5 font-color feature to
 support this, is:
 
 ```text
 fontColor: {
   colors: [
-    // Some predefined colors. Should use Hex notation.
     {
       color: "#000000",
       label: "Black",
@@ -233,6 +278,12 @@ notion for URL if text content and URL are strictly equal.
 **Escaping:** In case, the URL contains characters `[` or `]`, they will be
 encoded to the URL encoded form in `toData` processing.
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Link Feature](https://ckeditor.com/docs/ckeditor5/latest/api/link.html)
+to be enabled.
+
 #### Relative URLs
 
 Relative URLs are passed as is to the data view without any further
@@ -262,6 +313,32 @@ entities, as this has shown the best robustness among various BBCode parsers.
 Nevertheless, this assumes, that BBCode is always rendered to HTML or some
 other entity-supporting representation.
 
+#### CKEditor 5 Integration
+
+Requires the following
+[CKEditor 5 Image Feature](https://ckeditor.com/docs/ckeditor5/latest/api/image.html)
+to be enabled.
+
+Due to several setup options, the following setup has proven to align best
+with BBCode support:
+
+* **Recommended Plugins:**
+
+  * [ImageInline](https://ckeditor.com/docs/ckeditor5/latest/api/module_image_imageinline-ImageInline.html)
+
+    In general, BBCode parsers expect `[img]` to be represented as inline
+    object. The glue plugin also automatically includes `alt` attribute
+    support.
+
+  * [ImageToolbar](https://ckeditor.com/docs/ckeditor5/latest/api/module_image_imagetoolbar-ImageToolbar.html)
+
+    Required to be able to edit the `alt` attribute. Ensure to enable
+    `imageTextAlternative` as `image.toolbar` option.
+
+  * [LinkImage](https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkimage-LinkImage.html)
+
+    Requires `ImageBlockEditing` to be installed.
+
 ### Code Blocks
 
 The BBCode Plugin ships with an adapted transformation compared to the
@@ -286,6 +363,12 @@ Thus, with adaptations applied, the language-aware mapping is as follows:
 
 This works as bijective mapping in both directions.
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Code Blocks Feature](https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html)
+to be enabled.
+
 ### Blockquotes
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
@@ -299,6 +382,12 @@ The `toData` transformation provides a bijective mapping of the above.
 Note that there is no mapping for the optional author-argument that may be
 set in BBCode. Thus, any applied author information will be lost.
 
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Block Quote Feature](https://ckeditor.com/docs/ckeditor5/latest/features/block-quote.html)
+to be enabled.
+
 ### Document Lists
 
 Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
@@ -309,6 +398,12 @@ Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
 | `[list=1]` | `<ol>`          |
 | `[list=a]` | `<ol type="a">` |
 | `[*]`      | `<li>`          |
+
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Document Lists Feature](https://ckeditor.com/docs/ckeditor5/latest/features/lists/document-lists.html)
+to be enabled.
 
 For the best support, you should configure the Document List Feature of
 CKEditor 5 as follows:
