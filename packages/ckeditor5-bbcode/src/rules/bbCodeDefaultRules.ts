@@ -16,6 +16,7 @@ import { bbCodeTableRow } from "./BBCodeTableRow";
 import { bbCodeTableSection } from "./BBCodeTableSection";
 import { bbCodeColor } from "./BBCodeColor";
 import { bbCodeImg } from "./BBCodeImg";
+import { bbCodeSize } from "./BBCodeSize";
 
 export const bbCodeDefaultRules: BBCodeProcessingRule[] = [
   bbCodeBold,
@@ -28,6 +29,7 @@ export const bbCodeDefaultRules: BBCodeProcessingRule[] = [
   bbCodeListItem,
   bbCodeParagraph,
   bbCodeQuote,
+  bbCodeSize,
   bbCodeStrikethrough,
   bbCodeTable,
   bbCodeTableCell,
