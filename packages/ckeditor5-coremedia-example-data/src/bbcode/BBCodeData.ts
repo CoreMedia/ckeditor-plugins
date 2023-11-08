@@ -11,12 +11,14 @@ import { listData } from "./BBCodeListData";
 import { quoteData } from "./BBCodeQuoteData";
 import { paragraphData } from "./BBCodeParagraphData";
 import { linkData } from "./BBCodeUrlData";
+import { imgData } from "./BBCodeImgData";
 
 export const bbCodeData: ExampleData = {
   ...challengingData,
   ...codeBlockData,
   ...colorData,
   ...headingData,
+  ...imgData,
   ...inlineFormatData,
   ...linkData,
   ...listData,
