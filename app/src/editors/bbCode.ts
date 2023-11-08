@@ -22,7 +22,7 @@ import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Indent } from "@ckeditor/ckeditor5-indent";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { FontColor } from "@ckeditor/ckeditor5-font";
+import { FontColor, FontSize } from "@ckeditor/ckeditor5-font";
 import { AutoImage, ImageInline, ImageInsert, ImageInsertViaUrl, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
@@ -51,6 +51,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       DocumentListProperties,
       Essentials,
       FontColor,
+      FontSize,
       Heading,
       // ImageBlockEditing: Required by LinkImage; but images in BBCode are always inline.
       ImageBlockEditing,
@@ -82,6 +83,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       "italic",
       "underline",
       "strikethrough",
+      "fontSize",
       "fontColor",
       "removeFormat",
       "|",
@@ -177,6 +179,11 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       colorPicker: {
         format: "hex",
       },
+    },
+    fontSize: {
+      options: [8, 9, 10, 11, 12, 14, 17, 21],
+      // Recommended, as we do not know values chosen by BBCode authors.
+      supportAllValues: true,
     },
     heading: {
       options: [
