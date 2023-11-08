@@ -244,6 +244,24 @@ were written for or written at, may contain invalid links when clicked.
 This is true for the CKEditor 5 Contextual Link Balloon, as well as for a
 read-only view.
 
+### Images
+
+The BBCode Plugin supports images in BBCode along with an `alt` attribute
+as supported by some BBCode parsers:
+
+| Tag                                | as HTML                             |
+|------------------------------------|-------------------------------------|
+| `[img]https://...[/img]`           | `<img src="https://...">`           |
+| `[img alt="ALT"]https://...[/img]` | `<img alt="ALT" src="https://...">` |
+
+**Escaping:** In case, the URL contains characters `[` or `]`, they will be
+encoded to the URL encoded form in `toData` processing.
+
+Similar, square brackets within the attribute are encoded to HTML numeric
+entities, as this has shown the best robustness among various BBCode parsers.
+Nevertheless, this assumes, that BBCode is always rendered to HTML or some
+other entity-supporting representation.
+
 ### Code Blocks
 
 The BBCode Plugin ships with an adapted transformation compared to the
@@ -398,7 +416,6 @@ With the Data Facade plugin enabled will only be written on editorial actions.
 
 Yet unsupported BBCode tags (among several vendor-specific ones) are:
 
-* `[img]`
 * `[style]`
 
 ## Security Considerations
