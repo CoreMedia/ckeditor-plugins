@@ -23,14 +23,9 @@ import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Indent } from "@ckeditor/ckeditor5-indent";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import { FontColor } from "@ckeditor/ckeditor5-font";
-import {
-  AutoImage,
-  ImageBlock,
-  ImageInsert,
-  ImageInsertViaUrl,
-  ImageToolbar,
-} from "@ckeditor/ckeditor5-image";
+import { AutoImage, ImageInline, ImageInsert, ImageInsertViaUrl, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
+import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
 
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
@@ -44,6 +39,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       AutoLink,
       Autoformat,
       Autosave,
+      // Base64: Not recommended in production use.
       Base64UploadAdapter,
       BBCode,
       BlockQuote,
@@ -56,7 +52,9 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       Essentials,
       FontColor,
       Heading,
-      ImageBlock,
+      // ImageBlockEditing: Required by LinkImage; but images in BBCode are always inline.
+      ImageBlockEditing,
+      ImageInline,
       ImageInsert,
       ImageInsertViaUrl,
       ImageToolbar,
@@ -194,7 +192,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     image: {
       toolbar: ["imageTextAlternative"],
       upload: {
-        types: ["jpeg", "png", "gif", "bmp", "webp", "tiff", "avif"],
+        types: ["jpeg", "png", "gif", "bmp", "webp", "tiff", "avif", "svg"],
       },
     },
     language: {
