@@ -151,6 +151,12 @@ const quote: DefaultTagsRule = (node) =>
 
 const url: DefaultTagsRule = (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content);
 
+const img: DefaultTagsRule = (node: TagNode): TagNode => ({
+  ...toNode("img", toHtmlImageAttrs(node), null),
+  // Workaround: https://github.com/JiLiZART/BBob/issues/206
+  content: null,
+});
+
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
@@ -175,11 +181,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
     code,
     htmlCode,
     url,
-    img: (node: TagNode): TagNode => ({
-      ...toNode("img", toHtmlImageAttrs(node), null),
-      // Workaround: https://github.com/JiLiZART/BBob/issues/206
-      content: null,
-    }),
+    img,
   };
   bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
   return extendedTags;
