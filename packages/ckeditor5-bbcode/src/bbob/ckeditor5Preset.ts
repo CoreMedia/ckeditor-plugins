@@ -149,6 +149,8 @@ const htmlCode: DefaultTagsRule = (node: TagNode): TagNode => toNode("code", nod
 const quote: DefaultTagsRule = (node) =>
   toNode("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true }));
 
+const url: DefaultTagsRule = (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content);
+
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
@@ -172,7 +174,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
     quote,
     code,
     htmlCode,
-    url: (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content),
+    url,
     img: (node: TagNode): TagNode => ({
       ...toNode("img", toHtmlImageAttrs(node), null),
       // Workaround: https://github.com/JiLiZART/BBob/issues/206
