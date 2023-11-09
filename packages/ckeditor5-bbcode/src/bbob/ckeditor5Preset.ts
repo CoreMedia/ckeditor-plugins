@@ -8,6 +8,7 @@ import { bbCodeLogger } from "../BBCodeLogger";
 import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
 import { renderRaw } from "./renderRaw";
 import { trimEOL } from "./TagNodes";
+import { fontSizes, normalSize } from "../utils/FontSizes";
 
 type DefaultTagsRule = DefaultTags[string];
 
@@ -157,6 +158,41 @@ const img: DefaultTagsRule = (node: TagNode): TagNode => ({
   content: null,
 });
 
+const toFontSizeSpanAttrs = (node: TagNode): TagAttrs => {
+  // Stage 1: Check if (expected) unique attribute exists; return only other attributes otherwise
+  const { uniqueAttrValue, otherAttrs } = stripUniqueAttr(node.attrs);
+  if (!uniqueAttrValue) {
+    return otherAttrs;
+  }
+
+  // Stage 2: Check if unique attribute represents a number; return only other attributes otherwise
+  const nValue = Number(uniqueAttrValue);
+  if (Number.isNaN(nValue)) {
+    return otherAttrs;
+  }
+
+  // Stage 3: Check if unique attribute represents a known number to map; return only other attributes otherwise
+  const matchedEntry = fontSizes.find((config) => config.matchesData(nValue));
+  if (!matchedEntry || matchedEntry.numeric === normalSize) {
+    return otherAttrs;
+  }
+
+  // Stage 4: Prepare new attributes including `class` attribute (possibly merge with existing)
+
+  const existingClass: string | undefined = otherAttrs.class;
+  const classValue = existingClass ? `${matchedEntry.className} ${existingClass}` : matchedEntry.className;
+  return {
+    ...otherAttrs,
+    class: classValue,
+  };
+};
+
+/**
+ * Parses the font-size given by `[size=number]` within BBCode and transforms
+ * it to a `<span>` with a size representing class attribute.
+ */
+const size: DefaultTagsRule = (node: TagNode): TagNode => toNode("span", toFontSizeSpanAttrs(node), node.content);
+
 /**
  * Mappings for nodes, that need to be aware of internal paragraph handling
  * (only).
@@ -186,6 +222,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
     htmlCode,
     url,
     img,
+    size,
   };
   bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
   return extendedTags;

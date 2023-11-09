@@ -180,11 +180,6 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
         format: "hex",
       },
     },
-    fontSize: {
-      options: [8, 9, 10, 11, "default", 12, 14, 17, 21],
-      // Recommended, as we do not know values chosen by BBCode authors.
-      supportAllValues: true,
-    },
     heading: {
       options: [
         { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
