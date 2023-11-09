@@ -9,6 +9,8 @@ import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
 import { renderRaw } from "./renderRaw";
 import { trimEOL } from "./TagNodes";
 
+type DefaultTagsRule = DefaultTags[string];
+
 const toNode = TagNode.create;
 
 /**
@@ -118,6 +120,20 @@ const toHtmlImageAttrs = (node: TagNode): TagAttrs => {
 };
 
 /**
+ * Override default from HTML5 Preset for CKEditor 5: CKEditor 5 requires a
+ * nested `<code>` element and allows specifying the language via a
+ * corresponding class parameter.
+ *
+ * See also: <https://github.com/JiLiZART/BBob/issues/205>.
+ */
+const code: DefaultTagsRule = (node: TagNode): TagNode => {
+  // Using `||` also for possibly empty string.
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const language = getUniqAttr(node.attrs) || "plaintext";
+  return toNode("pre", {}, [toNode("htmlCode", { class: `language-${language}` }, node.content)]);
+};
+
+/**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
@@ -143,19 +159,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * content into a paragraph node.
      */
     quote: (node) => toNode("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true })),
-    /**
-     * Override default from HTML5 Preset for CKEditor 5: CKEditor 5 requires a
-     * nested `<code>` element and allows specifying the language via a
-     * corresponding class parameter.
-     *
-     * See also: <https://github.com/JiLiZART/BBob/issues/205>.
-     */
-    code: (node: TagNode): TagNode => {
-      // Using `||` also for possibly empty string.
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      const language = getUniqAttr(node.attrs) || "plaintext";
-      return toNode("pre", {}, [toNode("htmlCode", { class: `language-${language}` }, node.content)]);
-    },
+    code,
     /**
      * Processing of artificial intermediate node created via `code` parsing.
      * We need this extra mapping, not to recurse into `code` parsing, thus,
