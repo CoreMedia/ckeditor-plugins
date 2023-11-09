@@ -1,4 +1,4 @@
-import { getUniqAttr, isEOL, isTagNode, N, TagAttrs, TagNode } from "@bbob/plugin-helper/es";
+import { getUniqAttr, isTagNode, TagAttrs, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
@@ -7,6 +7,7 @@ import { Core, DefaultTags, Options } from "./types";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
 import { renderRaw } from "./renderRaw";
+import { trimEOL } from "./TagNodes";
 
 const toNode = TagNode.create;
 
@@ -94,33 +95,6 @@ const basePreset: ReturnType<typeof createPreset> = createPreset(html5DefaultTag
  */
 const toParagraphAwareNode = (node: TagNode): TagNode =>
   toNode(node.tag, node.attrs, paragraphAwareContent(node.content ?? []));
-
-/**
- * Removes EOLs at the beginning and end, that may be a result of
- * BBCode pretty-printing.
- *
- * @param contents - contents to trim
- */
-const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
-  const result: TagNode["content"] = [];
-  const bufferedEOLs: (typeof N)[] = [];
-  for (const content of contents ?? []) {
-    if (isEOL(content)) {
-      // > 0: Ignore EOLs at the beginning
-      if (result.length > 0) {
-        bufferedEOLs.push(content);
-      }
-    } else {
-      // Push any EOLs collected up to now.
-      result.push(...bufferedEOLs);
-      result.push(content);
-      bufferedEOLs.length = 0;
-    }
-  }
-  // Ignoring any bufferedEOLs at the end implements the "trim at end"
-  // feature.
-  return result;
-};
 
 const toHtmlAnchorAttrs = (node: TagNode): TagAttrs =>
   uniqueAttrToAttr("href", node.attrs, false, () => renderRaw(node));
