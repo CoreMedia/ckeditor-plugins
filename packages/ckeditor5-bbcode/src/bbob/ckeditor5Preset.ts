@@ -134,6 +134,14 @@ const code: DefaultTagsRule = (node: TagNode): TagNode => {
 };
 
 /**
+ * Processing of artificial intermediate node created via `code` parsing.
+ * We need this extra mapping, not to recurse into `code` parsing, thus,
+ * we must not add a `code` node within the `[code]` to `<pre>` processing,
+ * which again is required for proper code block support in CKEditor 5.
+ */
+const htmlCode: DefaultTagsRule = (node: TagNode): TagNode => toNode("code", node.attrs, trimEOL(node.content));
+
+/**
  * Transforms `quote` to `blockquote`. Ensures that only block-level
  * nodes are contained within `blockquote`. Wraps, for example, plain text
  * content into a paragraph node.
@@ -163,13 +171,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
     li: toParagraphAwareNode,
     quote,
     code,
-    /**
-     * Processing of artificial intermediate node created via `code` parsing.
-     * We need this extra mapping, not to recurse into `code` parsing, thus,
-     * we must not add a `code` node within the `[code]` to `<pre>` processing,
-     * which again is required for proper code block support in CKEditor 5.
-     */
-    htmlCode: (node: TagNode): TagNode => toNode("code", node.attrs, trimEOL(node.content)),
+    htmlCode,
     url: (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content),
     img: (node: TagNode): TagNode => ({
       ...toNode("img", toHtmlImageAttrs(node), null),
