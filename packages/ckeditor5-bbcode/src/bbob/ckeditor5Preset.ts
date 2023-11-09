@@ -134,6 +134,14 @@ const code: DefaultTagsRule = (node: TagNode): TagNode => {
 };
 
 /**
+ * Transforms `quote` to `blockquote`. Ensures that only block-level
+ * nodes are contained within `blockquote`. Wraps, for example, plain text
+ * content into a paragraph node.
+ */
+const quote: DefaultTagsRule = (node) =>
+  toNode("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true }));
+
+/**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
@@ -153,12 +161,7 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
      * within these tags.
      */
     li: toParagraphAwareNode,
-    /**
-     * Transforms `quote` to `blockquote`. Ensures that only block-level
-     * nodes are contained within `blockquote`. Wraps, for example, plain text
-     * content into a paragraph node.
-     */
-    quote: (node) => toNode("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true })),
+    quote,
     code,
     /**
      * Processing of artificial intermediate node created via `code` parsing.
