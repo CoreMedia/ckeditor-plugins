@@ -158,6 +158,21 @@ const img: DefaultTagsRule = (node: TagNode): TagNode => ({
 });
 
 /**
+ * Mappings for nodes, that need to be aware of internal paragraph handling
+ * (only).
+ *
+ * Some remarks:
+ *
+ * * `root`: Processes artificial root-node to support paragraphs in root-level.
+ * * `li`: During default processing by HTML5 preset, `li` nodes get generated
+ *   from `*` nodes. As a subsequent step, we add support for nested paragraphs
+ *   within these tags.
+ */
+const paragraphAwareTags: DefaultTags = Object.fromEntries(
+  ["root", "td", "th", "li"].map((tag) => [tag, toParagraphAwareNode]),
+);
+
+/**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
@@ -165,18 +180,7 @@ const img: DefaultTagsRule = (node: TagNode): TagNode => ({
 export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.extend((tags: DefaultTags): DefaultTags => {
   const extendedTags: DefaultTags = {
     ...tags,
-    /**
-     * Processes artificial root-node to support paragraphs in root-level.
-     */
-    root: toParagraphAwareNode,
-    td: toParagraphAwareNode,
-    th: toParagraphAwareNode,
-    /**
-     * During default processing by HTML5 preset, `li` nodes get generated from
-     * `*` nodes. As a subsequent step, we add support for nested paragraphs
-     * within these tags.
-     */
-    li: toParagraphAwareNode,
+    ...paragraphAwareTags,
     quote,
     code,
     htmlCode,
