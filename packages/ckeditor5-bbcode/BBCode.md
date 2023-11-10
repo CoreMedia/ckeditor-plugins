@@ -15,6 +15,38 @@ options with default to classes `text-tiny`, `text-small`, `text-big` and
 `text-huge` (and of course unset, thus normal font-size). Thus, we had to
 identify a best-effort solution that combines both worlds.
 
+## General Formatting
+
+### Attributes
+
+All attributes to BBCode tags are best handled, if they are placed in double
+quotes. This is the default behavior for the `toData` transformation.
+
+### Paragraphs
+
+Paragraphs are created by an extra newline. Example mapping:
+
+```text
+Paragraph 1
+
+Paragraph 2
+```
+
+And the representation in data view:
+
+```html
+<p>Paragraph 1</p>
+<p>Paragraph 2</p>
+```
+
+### Escaping
+
+For escaping you may use the backslash character:
+
+```text
+\[b\]Not bold, because escaped.\[b\]
+```
+
 ## BBCode Tag Overview
 
 ### \[b\] – Bold
@@ -109,7 +141,7 @@ transformed back to data.
 
 **Example:**
 
-```wiki
+```text
 [size=70]g[/size][size=85]r[/size][size=140]o[/size][size=180]w[/size]
 ```
 
