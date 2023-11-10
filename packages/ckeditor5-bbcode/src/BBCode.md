@@ -17,7 +17,82 @@ identify a best-effort solution that combines both worlds.
 
 ## BBCode Tag Overview
 
-### \[size=number\]
+### \[b\] – Bold
+
+| Tag   | data view                           |
+|-------|-------------------------------------|
+| `[b]` | `<span style="font-weight: bold;">` |
+
+### \[code\] – Code Block
+
+| Tag           | data view                                |
+|---------------|------------------------------------------|
+| `[code]`      | `<pre><code class="language-plaintext">` |
+| `[code=html]` | `<pre><code class="language-html">`      |
+
+### \[color\] – Font Color
+
+| Tag                 | data view                          |
+|---------------------|------------------------------------|
+| `[color=#ff0000]`   | `<span style="color: #ff0000;">`   |
+| `[color=#ff0000a0]` | `<span style="color: #ff0000a0;">` |
+| `[color=red]`       | `<span style="color: red;">`       |
+
+### \[h1\] to \[h6\] – Headings
+
+| Tag    | data view |
+|--------|-----------|
+| `[h1]` | `<h1>`    |
+| `[h2]` | `<h2>`    |
+| `[h3]` | `<h3>`    |
+| `[h4]` | `<h4>`    |
+| `[h5]` | `<h5>`    |
+| `[h6]` | `<h6>`    |
+
+### \[i\] – Italic
+
+| Tag   | data view                            |
+|-------|--------------------------------------|
+| `[i]` | `<span style="font-style: italic;">` |
+
+### \[img\] – Image
+
+| Tag                                | data view                           |
+|------------------------------------|-------------------------------------|
+| `[img]https://...[/img]`           | `<img src="https://...">`           |
+| `[img alt="ALT"]https://...[/img]` | `<img alt="ALT" src="https://...">` |
+
+### \[list\] – Ordered and Unordered Lists
+
+| Tag        | data view       |
+|------------|-----------------|
+| `[list]`   | `<ul>`          |
+| `[list=1]` | `<ol>`          |
+| `[list=a]` | `<ol type="a">` |
+| `[*]`      | `<li>`          |
+
+
+### \[quote\] – Block Quote
+
+| Tag              | data view         |
+|------------------|-------------------|
+| `[quote]`        | `<blockquote><p>` |
+| `[quote=author]` | `<blockquote><p>` |
+
+Author information is stripped as unsupported in HTML. Subsequently, author
+information is stripped when written back to data.
+
+### \[s\] – Strikethrough
+
+| Tag   | data view                                       |
+|-------|-------------------------------------------------|
+| `[s]` | `<span style="text-decoration: line-through;">` |
+
+### \[size=number\] – Font Size
+
+| Tag         | data view                   |
+|-------------|-----------------------------|
+| `[size=85]` | `<span class="text-small">` |
 
 The number denotes a percentage-level, that is normalized to an enumeration:
 
@@ -29,4 +104,24 @@ The number denotes a percentage-level, that is normalized to an enumeration:
 | 120 ≤ N < 160 | `text-big`     |                `1.4em` |                    140 |
 |    160 ≤ N    | `text-huge`    |                `1.8em` |                    180 |
 
-TODO: To be continued
+Sizes normalized to 100 will neither be represented in data view nor later
+transformed back to data.
+
+**Example:**
+
+```wiki
+[size=70]g[/size][size=85]r[/size][size=140]o[/size][size=180]w[/size]
+```
+
+### \[u\] – Underline
+
+| Tag   | data view                                    |
+|-------|----------------------------------------------|
+| `[u]` | `<span style="text-decoration: underline;">` |
+
+### \[url\] – Link
+
+| Tag                      | data view                |
+|--------------------------|--------------------------|
+| `[url=https://...]`      | `<a href="https://...">` |
+| `[url]https://...[/url]` | `<a href="https://...">` |

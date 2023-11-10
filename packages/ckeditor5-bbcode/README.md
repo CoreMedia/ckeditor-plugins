@@ -344,9 +344,9 @@ with BBCode support:
 The BBCode Plugin ships with an adapted transformation compared to the
 original HTML5 Preset by [BBob][]:
 
-| Tag      | as HTML       |
-|----------|---------------|
-| `[code]` | `<pre><code>` |
+| Tag      | as HTML                                  |
+|----------|------------------------------------------|
+| `[code]` | `<pre><code class="language-plaintext">` |
 
 The adapted mapping ensures that it integrates effortless with CKEditor 5
 Code Block editing feature.
