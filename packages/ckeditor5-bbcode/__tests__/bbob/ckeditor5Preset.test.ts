@@ -207,4 +207,41 @@ describe("ckeditor5Preset", () => {
       );
     });
   });
+
+  describe("Additional Tag Support", () => {
+    // [size] Was supported in CKEditor 4 BBCode Plugin. The number represented
+    // a percentage value. As CKEditor 5 does not support percentage values in
+    // Font Size Feature, some enum-like mapping to classes is applied.
+    describe("[size]", () => {
+      test.each`
+        bbcode                                         | expected                               | comment
+        ${`[size]T[/size]`}                            | ${`<span>T</span>`}                    | ${"Corner Case: Ignore Invalid (because missing) size value"}
+        ${`[size=lorem]T[/size]`}                      | ${`<span>T</span>`}                    | ${"Corner Case: Ignore Invalid (because textual) size value"}
+        ${`[size=42px]T[/size]`}                       | ${`<span>T</span>`}                    | ${"Corner Case: Ignore Invalid (because with size unit) size value"}
+        ${`[size=${Number.MIN_SAFE_INTEGER}]T[/size]`} | ${`<span class="text-tiny">T</span>`}  | ${"Corner Case: Negative (minimal safe integer) maps to text-tiny"}
+        ${`[size=-1]T[/size]`}                         | ${`<span class="text-tiny">T</span>`}  | ${"Corner Case: Negative maps to text-tiny"}
+        ${`[size=+1]T[/size]`}                         | ${`<span class="text-tiny">T</span>`}  | ${"Corner Case: '+' prefix is ignored"}
+        ${`[size=0]T[/size]`}                          | ${`<span class="text-tiny">T</span>`}  | ${"Lower-Bound for text-tiny"}
+        ${`[size=70]T[/size]`}                         | ${`<span class="text-tiny">T</span>`}  | ${"Default for text-tiny"}
+        ${`[size=77]T[/size]`}                         | ${`<span class="text-tiny">T</span>`}  | ${"Upper-Bound for text-tiny"}
+        ${`[size=78]T[/size]`}                         | ${`<span class="text-small">T</span>`} | ${"Lower-Bound for text-small"}
+        ${`[size=85]T[/size]`}                         | ${`<span class="text-small">T</span>`} | ${"Default for text-small"}
+        ${`[size=92]T[/size]`}                         | ${`<span class="text-small">T</span>`} | ${"Upper-Bound for text-small"}
+        ${`[size=93]T[/size]`}                         | ${`<span>T</span>`}                    | ${"Lower-Bound for normal text size (no class)"}
+        ${`[size=100]T[/size]`}                        | ${`<span>T</span>`}                    | ${"Default for normal text size (no class)"}
+        ${`[size=119]T[/size]`}                        | ${`<span>T</span>`}                    | ${"Upper-Bound for normal text size (no class)"}
+        ${`[size=120]T[/size]`}                        | ${`<span class="text-big">T</span>`}   | ${"Lower-Bound for text-big"}
+        ${`[size=140]T[/size]`}                        | ${`<span class="text-big">T</span>`}   | ${"Default for text-big"}
+        ${`[size=159]T[/size]`}                        | ${`<span class="text-big">T</span>`}   | ${"Upper-Bound for text-big"}
+        ${`[size=160]T[/size]`}                        | ${`<span class="text-huge">T</span>`}  | ${"Lower-Bound for text-huge"}
+        ${`[size=180]T[/size]`}                        | ${`<span class="text-huge">T</span>`}  | ${"Default for text-huge"}
+        ${`[size=${Number.MAX_SAFE_INTEGER}]T[/size]`} | ${`<span class="text-huge">T</span>`}  | ${"Upper-Bound for text-huge"}
+      `(
+        "[$#] Should transform $bbcode to: $expected ($comment)",
+        ({ bbcode, expected }: { bbcode: string; expected: string }) => {
+          expect(parse(bbcode)).toBe(expected);
+        },
+      );
+    });
+  });
 });

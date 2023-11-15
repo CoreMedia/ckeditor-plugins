@@ -82,8 +82,17 @@ export const fontSizeRanges: Record<string, FontSizeRange> = {
   },
 };
 
+/**
+ * Considers, if a given size is within the configured range.
+ *
+ * Special handling exists for `Number.MAX_SAFE_INTEGER` given as upper bound:
+ * It will assume to match any value that just fulfills the lower bound.
+ *
+ * @param size - the font numeric font size
+ * @param range - the range to validate the size against
+ */
 const sizeWithinRange = (size: number, range: FontSizeRange): boolean =>
-  range.lowerInclusive <= size && size < range.upperExclusive;
+  range.lowerInclusive <= size && (size < range.upperExclusive || range.upperExclusive >= Number.MAX_SAFE_INTEGER);
 
 /**
  * Configuration of supported font-sizes.
