@@ -37,6 +37,7 @@ describe("bbcode2html", () => {
         data                                                              | expectedDataView
         ${`[b]T[/b]`}                                                     | ${`<span style="font-weight: bold;">T</span>`}
         ${`[color=red]T[/color]`}                                         | ${`<span style="color: red;">T</span>`}
+        ${`[size=85]T[/size]`}                                            | ${`<span class="text-small">T</span>`}
         ${`[i]T[/i]`}                                                     | ${'<span style="font-style: italic;">T</span>'}
         ${`[s]T[/s]`}                                                     | ${`<span style="text-decoration: line-through;">T</span>`}
         ${`[u]T[/u]`}                                                     | ${`<span style="text-decoration: underline;">T</span>`}
@@ -85,6 +86,7 @@ describe("bbcode2html", () => {
       tag          | openTag                   | closeTag      | openElement                                        | closeElement
       ${`[b]`}     | ${`[b]`}                  | ${`[/b]`}     | ${`<span style="font-weight: bold;">`}             | ${`</span>`}
       ${`[color]`} | ${`[color=red]`}          | ${`[/color]`} | ${`<span style="color: red;">`}                    | ${`</span>`}
+      ${`[size]`}  | ${`[size=85]`}            | ${`[/size]`}  | ${`<span class="text-small">`}                     | ${`</span>`}
       ${`[h1]`}    | ${`[h1]`}                 | ${`[/h1]`}    | ${`<h1>`}                                          | ${`</h1>`}
       ${`[h2]`}    | ${`[h2]`}                 | ${`[/h2]`}    | ${`<h2>`}                                          | ${`</h2>`}
       ${`[h3]`}    | ${`[h3]`}                 | ${`[/h3]`}    | ${`<h3>`}                                          | ${`</h3>`}
