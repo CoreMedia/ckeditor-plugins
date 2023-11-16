@@ -18,6 +18,11 @@ export type ColorMapper = (color: string | RgbColor) => string | undefined;
  * representation. Thus, strings are returned as is, while `RgbColor`
  * is transformed via `toColorNameOrHex()`.
  *
+ * As the original color name may be lost while traversing the CKEditor 5
+ * layers (data → data view → model → data view → data), this assumes, that most
+ * BBCode written manually, will prefer color names over hex-values. This
+ * mapping expresses this preference and makes it explicit.
+ *
  * @param color - color to map to string
  */
 export const defaultColorMapper: ColorMapper = (color: string | RgbColor): string => {
@@ -69,6 +74,13 @@ export class BBCodeColor implements BBCodeProcessingRule {
       style.removeProperty("color");
       const mappedColor = this.#mapper(color);
       if (mappedColor) {
+        // Wrap in quotes or not? For best robustness, arguments that are later
+        // parsed again by BBob should be wrapped into double quotes. For
+        // color names, we skipped this, as we do not assume colors containing
+        // spaces are similar for `toData` mapping. If we ever add such a
+        // color name (e.g., to `w3ExtendedColorNames`), we have to revisit
+        // this decision. For now, preferring the slightly shorter
+        // representation.
         return `[color=${mappedColor}]${content}[/color]`;
       }
     }
