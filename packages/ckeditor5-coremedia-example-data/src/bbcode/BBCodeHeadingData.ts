@@ -1,4 +1,3 @@
-import { bbCode } from "./BBCode";
 import { ExampleData } from "../ExampleData";
 
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
@@ -16,12 +15,14 @@ const bbCodeRainbow = rainbow
   })
   .join("\n\n");
 
-const text = `${bbCode.h1(`\\[h1\\] to \\[h6\\]: CKEditor 5 Headings in BBCode`)}\
-${bbCode.p(`\
-The CKEditor 5 BBCode Plugin supports the \\[h1\\] to \\[h6\\] tags to denote \
-different heading levels.`)}
+const text = `\
+[h1]\\[h1\\] to \\[h6\\]: CKEditor 5 Headings in BBCode[/h1]
 
-${bbCodeRainbow}`;
+The CKEditor 5 BBCode Plugin supports the \\[h1\\] to \\[h6\\] tags to denote
+different heading levels.
+
+${bbCodeRainbow}
+`;
 
 export const headingData: ExampleData = {
   Headings: text,
