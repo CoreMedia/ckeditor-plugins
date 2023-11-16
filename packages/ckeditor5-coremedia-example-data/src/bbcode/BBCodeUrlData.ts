@@ -10,10 +10,10 @@ Processing integrates with the
 [h2]Standard URL[/h2]
 
 [code=bbcode]
-\\[url=https://example.org/\\]Link\\[/url\\]
+\\[url="https://example.org/"\\]Link\\[/url\\]
 [/code]
 
-Renders as: [url=https://example.org/]Link[/url].
+Renders as: [url="https://example.org/"]Link[/url].
 
 [h2]URL = Text[/h2]
 
@@ -29,10 +29,10 @@ content and URL are alike, the shortened format will be generated.
 [h2]Auto-Encoding of Square Brackets[/h2]
 
 [code=bbcode]
-\\[url=https://example.org/?brackets=%5B%5D\\]Link\\[/url\\]
+\\[url="https://example.org/?brackets=%5B%5D"\\]Link\\[/url\\]
 [/code]
 
-Renders as: [url=https://example.org/?brackets=%5B%5D]Link[/url].
+Renders as: [url="https://example.org/?brackets=%5B%5D"]Link[/url].
 
 Data-Processing is put to the challenge, if you enter a perfectly valid URL
 having square brackets directly within the link dialog. They will be
@@ -60,7 +60,7 @@ Some examples:
 Renders as: [url="javascript:alert('Got you!');"]Link[/url].
 
 [code=bbcode]
-\\[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnR290IHlvdSEnKTs8L3NjcmlwdD4=\\]Link\\[/url\\]
+\\[url="data:text/html;base64,PHNjcmlwdD5hbGVydCgnR290IHlvdSEnKTs8L3NjcmlwdD4="\\]Link\\[/url\\]
 [/code]
 
 where the Base64 encoded string decodes to:
@@ -69,7 +69,7 @@ where the Base64 encoded string decodes to:
 <script>alert('Got you!');</script>
 [/code]
 
-Renders as: [url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnR290IHlvdSEnKTs8L3NjcmlwdD4=]Link[/url].
+Renders as: [url="data:text/html;base64,PHNjcmlwdD5hbGVydCgnR290IHlvdSEnKTs8L3NjcmlwdD4="]Link[/url].
 `;
 
 export const linkData: ExampleData = {
