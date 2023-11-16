@@ -12,6 +12,7 @@ import { quoteData } from "./BBCodeQuoteData";
 import { paragraphData } from "./BBCodeParagraphData";
 import { linkData } from "./BBCodeUrlData";
 import { imgData } from "./BBCodeImgData";
+import { sizeData } from "./BBCodeSizeData";
 
 export const bbCodeData: ExampleData = {
   ...challengingData,
@@ -26,5 +27,6 @@ export const bbCodeData: ExampleData = {
   ...quoteData,
   ...securityChallengeData,
   ...simpleData,
+  ...sizeData,
   ...welcomeTextData,
 };
