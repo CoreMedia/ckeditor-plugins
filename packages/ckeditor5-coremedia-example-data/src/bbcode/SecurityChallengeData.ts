@@ -1,34 +1,90 @@
 import { ExampleData } from "../ExampleData";
-import { bbCode } from "./BBCode";
 
-const lines = (...texts: string[]): string => texts.join("");
+// The following text uses `#` to represent a backslash character in BBCode.
+// This makes it easier to write the BBCode without struggling with escaping
+// within JavaScript. Subsequent, some replace operation will replace all
+// `#` by a backslash character to be placed into BBCode.
+const text = `\
+[h1]Security Challenges[/h1]
 
-const htmlEntity = {
-  lsqb: {
-    raw: `[`,
-    dec: `&#91;`,
-    hex: `&#x5B;`,
-    named: `&lsqb;`,
-  },
-  rsqb: {
-    raw: `]`,
-    dec: `&#93;`,
-    hex: `&#x5D;`,
-    named: `&rsqb;`,
-  },
-  gt: {
-    raw: `>`,
-    dec: `&#62;`,
-    hex: `&#x3E;`,
-    named: `&gt;`,
-  },
-  lt: {
-    raw: `<`,
-    dec: `&#60;`,
-    hex: `&#x3C;`,
-    named: `&lt;`,
-  },
-};
+BBCode is assumed to emerge from untrusted sources, input of any users
+(or robots) worldwide.
+
+Having this, care must be taken, not to propagate probably malicious data
+to the CKEditor 5 instance, as it may run in a trusted environment.
+
+Below are some examples, how attackers may try to misuse BBCode parsing to
+hack into the rendered HTML, for example.
+
+[h2]Escaping[/h2]
+
+Prior to the security challenges below, we enabled the BBCode escaping feature.
+While there is no defined standard, best practice is using backslash as
+escape character.
+
+Having set up some escaping is important to safely process possibly malicious
+data, also when later generating BBCode again from the HTML edited within
+CKEditor 5.
+
+[code=bbcode]
+Lorem ###[b###]ip####sum###[/b###] dolor
+[/code]
+
+Rendered as:
+
+[quote]
+Lorem #[b#]ip##sum#[/b#] dolor
+[/quote]
+
+[h2]Inline HTML[/h2]
+
+As we are [i]within[/i] BBCode, HTML element syntax has no meaning (which is
+different to Markdown that may transparently switch to HTML). As such, we need
+proper transformation to corresponding &lt; and &gt; entities in "toView"
+processing, not to generate possibly even malicious HTML. Similar to that,
+there is also no HTML entities in BBCode, so that these entities must be
+properly transformed, too.
+
+[code=bbcode]
+Lorem <strong>ip&sum</strong> dolor
+[/code]
+
+Rendered as:
+
+[quote]
+Lorem <strong>ip&sum</strong> dolor
+[/quote]
+
+[h2]Repetitive Processing Challenge[/h2]
+
+One layer deeper, we must ensure, that during a transformation sequence such
+as data → data view → model → data view → data → data view → model, we do not
+[i]escape the escaping[/i], thus, what was an entity for a square bracket
+originally, later is processed to a square bracket again in generated data,
+which again may trigger BBCode parsing.
+
+An malicious processing example may be easier to understand here:
+
+[list=1]
+[*] data (BBCode): &lsqb;b&rsqb;not bold&lsqb;/b&rsqb;
+[*] data view (HTML): #[b#]not bold#[/b#]
+[*] data from data view (BBCode again): #[b#]not bold#[/b#]
+[/list]
+
+We already intervene on first layer, as we do not let the HTML (data view) layer
+reach the HTML entities. And even later, thus, starting with
+#[b#]not bold#[/b#] in data view, it will later be transformed to escaped
+BBCode:
+
+[code=bbcode]
+###[b###]not bold###[/b###]
+[/code]
+
+Such examples are best challenged, if you switch the source editing, change
+some characters (to force CKEditor 5 to reparse the data), switch to editing
+view and back again to source editing. Ideally, you should not see any
+surprising BBCode.
+`.replace(/#/g, "\\");
 
 /**
  * Same possible challenges to BBCode to HTML and vice versa processing.
@@ -36,46 +92,5 @@ const htmlEntity = {
  * @see [XSS Filter Evasion – OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html)
  */
 export const securityChallengeData: ExampleData = {
-  "Security: Escaping in BBCode": lines(
-    `${bbCode.h1("Security: Escaping in BBCode")}`,
-    `${bbCode.p(`Lorem \\[b\\]ip\\sum\\[/b\\] dolor`)}`,
-    `${bbCode.h2("Remark")}`,
-    `${bbCode.p(
-      `For safe processing we enable escaping by default. It is required, that parsers for stored BBCode apply the same escaping mechanism.`,
-    )}`,
-  ),
-  "Security: Inline HTML in BBCode": lines(
-    `${bbCode.h1("Security: Inline HTML in BBCode")}`,
-    `${bbCode.p(`Lorem <strong>ipsum</strong> dolor`)}`,
-  ),
-  "Security: Escaped Inline HTML in BBCode (Decimal)": lines(
-    `${bbCode.h1("Security: Escaped Inline HTML in BBCode (Decimal)")}`,
-    `${bbCode.p(
-      `Lorem ${htmlEntity.lt.dec}strong${htmlEntity.gt.dec}ipsum${htmlEntity.lt.dec}/strong${htmlEntity.gt.dec} dolor`,
-    )}`,
-  ),
-  "Security: Escaped Inline HTML in BBCode (Hexadecimal)": lines(
-    `${bbCode.h1("Security: Escaped Inline HTML in BBCode (Hexadecimal)")}`,
-    `${bbCode.p(
-      `Lorem ${htmlEntity.lt.hex}strong${htmlEntity.gt.hex}ipsum${htmlEntity.lt.hex}/strong${htmlEntity.gt.hex} dolor`,
-    )}`,
-  ),
-  "Security: Escaped Inline HTML in BBCode (Named)": lines(
-    `${bbCode.h1("Security: Escaped Inline HTML in BBCode (Named)")}`,
-    `${bbCode.p(
-      `Lorem ${htmlEntity.lt.named}strong${htmlEntity.gt.named}ipsum${htmlEntity.lt.named}/strong${htmlEntity.gt.named} dolor`,
-    )}`,
-  ),
-  "Security: Square Bracket HTML Entity in BBCode (Decimal)": lines(
-    `${bbCode.h1("Security: Square Bracket HTML Entity in BBCode (Decimal)")}`,
-    `Lorem ${htmlEntity.lsqb.dec}b${htmlEntity.rsqb.dec}ipsum${htmlEntity.lsqb.dec}/b${htmlEntity.rsqb.dec} dolor`,
-  ),
-  "Security: Square Bracket HTML Entity in BBCode (Hexadecimal)": lines(
-    `${bbCode.h1("Security: Square Bracket HTML Entity in BBCode (Hexadecimal)")}`,
-    `Lorem ${htmlEntity.lsqb.hex}b${htmlEntity.rsqb.hex}ipsum${htmlEntity.lsqb.hex}/b${htmlEntity.rsqb.hex} dolor`,
-  ),
-  "Security: Square Bracket HTML Entity in BBCode (Named)": lines(
-    `${bbCode.h1("Security: Square Bracket HTML Entity in BBCode (Named)")}`,
-    `Lorem ${htmlEntity.lsqb.named}b${htmlEntity.rsqb.named}ipsum${htmlEntity.lsqb.named}/b${htmlEntity.rsqb.named} dolor`,
-  ),
+  "Security Challenges": text,
 };
