@@ -92,6 +92,10 @@ describe("BBob Integration", () => {
       ${`<u>TEXT</u>`}                                             | ${`[u]TEXT[/u]`}                                   | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
       ${`<del>TEXT</del>`}                                         | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
       ${`<s>TEXT</s>`}                                             | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
+      ${`<span class="text-tiny">TEXT</span>`}                     | ${`[size=70]TEXT[/size]`}                          | ${`<span class="text-tiny">TEXT</span>`}                      | ${"none"}
+      ${`<span class="text-small">TEXT</span>`}                    | ${`[size=85]TEXT[/size]`}                          | ${`<span class="text-small">TEXT</span>`}                     | ${"none"}
+      ${`<span class="text-big">TEXT</span>`}                      | ${`[size=140]TEXT[/size]`}                         | ${`<span class="text-big">TEXT</span>`}                       | ${"none"}
+      ${`<span class="text-huge">TEXT</span>`}                     | ${`[size=180]TEXT[/size]`}                         | ${`<span class="text-huge">TEXT</span>`}                      | ${"none"}
       ${`<a href="${link}">TEXT</a>`}                              | ${`[url="${link}"]TEXT[/url]`}                     | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
       ${`<a href="${link}">${link}</a>`}                           | ${`[url]${link}[/url]`}                            | ${`<a href="${link}">${link}</a>`}                            | ${"pretty-print: shorten, if possible, in BBCode"}
       ${`<a>TEXT</a>`}                                             | ${`TEXT`}                                          | ${`TEXT`}                                                     | ${"there is no representation in BBCode for an anchor without href attribute"}
@@ -184,6 +188,10 @@ describe("BBob Integration", () => {
       ${`[h4]lorem[/h4]`}
       ${`[h5]lorem[/h5]`}
       ${`[h6]lorem[/h6]`}
+      ${`[size=70]lorem[/size]`}
+      ${`[size=85]lorem[/size]`}
+      ${`[size=140]lorem[/size]`}
+      ${`[size=180]lorem[/size]`}
     `("[$#] should process back and forth without change: $bbCode", ({ bbCode }: { bbCode: string }) => {
       const result = aut.bbcode2html2bbcode(bbCode);
       try {
