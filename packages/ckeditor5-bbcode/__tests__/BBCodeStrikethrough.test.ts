@@ -15,7 +15,7 @@ describe("BBCodeStrikethrough", () => {
       ${`<s style="text-decoration: none;">TEXT</s>`}               | ${undefined}     | ${`vetoed by style; undefined, so other rules may kick in`}
       ${`<i style="text-decoration: line-through;">TEXT</i>`}       | ${`[s]TEXT[/s]`} | ${`corner case: "<i>" itself will be handled by outer rules`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");

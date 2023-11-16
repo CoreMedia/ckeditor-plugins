@@ -18,7 +18,7 @@ describe("BBCodeImg", () => {
       ${`<img src="?search=param">`}             | ${`[img]?search=param[/img]`}               | ${`Keep relative URLs, search-param only (2)`}
       ${`<img src="#hash">`}                     | ${`[img]#hash[/img]`}                       | ${`Keep relative URLs, hash-param only (3)`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element);

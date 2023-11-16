@@ -16,7 +16,7 @@ describe("BBCodeHeading", () => {
       ${`<h5>TEXT</h5>`} | ${`[h5]TEXT[/h5]${prettyPrintNewlines}`}
       ${`<h6>TEXT</h6>`} | ${`[h6]TEXT[/h6]${prettyPrintNewlines}`}
     `(
-      "$[$#] Should process '$dataView' to '$expected'",
+      "[$#] Should process '$dataView' to '$expected'",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");

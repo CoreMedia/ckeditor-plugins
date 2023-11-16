@@ -21,7 +21,7 @@ describe("BBCodeUrl", () => {
       ${`<a href="?search=param">TEXT</a>`}                                | ${`[url="?search=param"]TEXT[/url]`}                                    | ${`Keep relative URLs, search-param only (2)`}
       ${`<a href="#hash">TEXT</a>`}                                        | ${`[url="#hash"]TEXT[/url]`}                                            | ${`Keep relative URLs, hash-param only (3)`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");

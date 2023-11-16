@@ -9,7 +9,7 @@ describe("BBCodeListItem", () => {
       dataView           | expected
       ${`<li>TEXT</li>`} | ${`[*] TEXT\n`}
     `(
-      "$[$#] Should process '$dataView' to '$expected'",
+      "[$#] Should process '$dataView' to '$expected'",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const embeddedInListDataView = `<ul>${dataView}</ul>`;
         const listElement = requireHTMLElement(embeddedInListDataView);

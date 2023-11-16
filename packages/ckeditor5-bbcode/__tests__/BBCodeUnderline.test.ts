@@ -13,7 +13,7 @@ describe("BBCodeUnderline", () => {
       ${`<u style="text-decoration: none;">TEXT</u>`}            | ${undefined}     | ${`vetoed by style; undefined, so other rules may kick in`}
       ${`<i style="text-decoration: underline;">TEXT</i>`}       | ${`[u]TEXT[/u]`} | ${`corner case: "<i>" itself will be handled by outer rules`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");

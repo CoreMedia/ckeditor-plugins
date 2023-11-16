@@ -21,7 +21,7 @@ describe("BBCodeBold", () => {
       ${`<span style="font-weight: 1000;">TEXT</span>`}   | ${`[b]TEXT[/b]`} | ${`Maximum font-weight.`}
       ${`<i style="font-weight: bold;">TEXT</i>`}         | ${`[b]TEXT[/b]`} | ${`corner case: "<i>" itself will be handled by outer rules`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");
@@ -49,7 +49,7 @@ describe("BBCodeBold", () => {
       ${`<b style="font-weight: 400;">TEXT</b>`}          | ${`[b]TEXT[/b]`} | ${`Respect custom isBold rule to ignore font-weight style`}
       ${`<span style="font-weight: 700;">TEXT</span>`}    | ${undefined}     | ${`Respect custom isBold rule to ignore font-weight style`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");

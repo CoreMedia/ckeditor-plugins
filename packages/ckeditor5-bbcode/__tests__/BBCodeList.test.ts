@@ -23,7 +23,7 @@ describe("BBCodeList", () => {
       ${`<ol style="list-style-type: lower-roman"><li>TEXT</li></ol>`} | ${`[list=1]\n[*] TEXT\n[/list]\n`} | ${"Due to BBob Preset-HTML5 Restrictions not respecting list-style-type for now."}
       ${`<ul><li>TEXT\n\n</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]\n`}   | ${"pretty-print trimming"}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const content = mockListItemsContent(element);

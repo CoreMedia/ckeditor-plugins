@@ -11,7 +11,7 @@ describe("BBCodeParagraph", () => {
       dataView         | expected
       ${`<p>TEXT</p>`} | ${`TEXT${prettyPrintNewlines}`}
     `(
-      "$[$#] Should process '$dataView' to '$expected'",
+      "[$#] Should process '$dataView' to '$expected'",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");

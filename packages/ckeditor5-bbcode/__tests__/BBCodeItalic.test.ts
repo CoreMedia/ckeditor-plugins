@@ -13,7 +13,7 @@ describe("BBCodeItalic", () => {
       ${`<i style="font-style: normal">TEXT</i>`}        | ${undefined}     | ${`vetoed italic tag; undefined, so other rules may kick in`}
       ${`<b style="font-style: italic;">TEXT</b>`}       | ${`[i]TEXT[/i]`} | ${`Corner case: "<b>" will be handled by outer rules.`}
     `(
-      "$[$#] Should process '$dataView' to '$expected' ($comment)",
+      "[$#] Should process '$dataView' to '$expected' ($comment)",
       ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");
