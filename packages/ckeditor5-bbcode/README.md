@@ -16,6 +16,9 @@ with some recommended configuration options applied.
 The `toData` mapping is a proprietary implementation, which provides a slightly
 richer configuration API.
 
+For a quick overview of supported BBCode, take a look at the
+[BBCode Overview](./BBCode.md).
+
 ## Limitations
 
 This plugin does not expose the configuration API of [BBob][] and as such,
@@ -52,10 +55,6 @@ represent a well-known HTML tag by CKEditor 5.
 
 ### `toData` Rules Implementation Notes
 
-#### Rule Override
-
-TODO (implement) override defaults by ID
-
 #### Return: Undefined Or String?
 
 When it comes to implementing rules, a repeating question is, if to return
@@ -75,7 +74,7 @@ But if it is not applicable, or bold state got vetoed like in
 modify the processed element state to denote, that the `fontWeight` already
 got processed.
 
-## Supported BBCode
+## CKEditor 5 Integration of Supported BBCode
 
 The BBCode to HTML processing is essentially based on [BBob][] and a slightly
 customized HTML5 Preset. The allowed tags are limited be the assigned
@@ -84,18 +83,9 @@ customized HTML5 Preset. The allowed tags are limited be the assigned
 In the following, you will find the supported BBCode tags and how they best
 integrate with CKEditor 5.
 
-### Escaping
-
-While there is no standard escape mechanism for BBCode, the plugin is based
-on the most often used backslash-escaping syntax, that is also supported by
-[BBob][]. Thus, the following will provide valid BBCode that can be
-processed by this plugin in `toView` and `toData` mapping:
-
-```text
-[code=bbcode]
-\[b\]Bold Example\[/b\]
-[/code]
-```
+For a quick overview of supported BBCode itself, we summarized this BBCode
+in a dedicated [BBCode Overview](./BBCode.md) without further reference to
+CKEditor 5 integration.
 
 ### Paragraphs
 
@@ -262,6 +252,31 @@ fontColor: {
 Formats such as HSL, RGB are supported in `toData` mapping. They will be
 transparently transformed to the corresponding hex/hex-alpha codes suitable
 for the `[color]` tag.
+
+### Font Size
+
+Similar to the CKEditor 4 BBCode plugin, the CKEditor 5 BBCode Plugin supports
+the `[size]` tag. In `toView` it will be mapped as follows:
+
+| Tag          | as HTML                     |
+|--------------|-----------------------------|
+| `[size=70]`  | `<span class="text-tiny">`  |
+| `[size=85]`  | `<span class="text-small">` |
+| `[size=140]` | `<span class="text-big">`   |
+| `[size=180]` | `<span class="text-huge">`  |
+
+Numbers between are mapped to some reasonable closest matching number of
+the enumeration above, including 100, which denotes a _normal_ font size.
+
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 FontSize Feature](https://ckeditor.com/docs/ckeditor5/latest/api/module_font_fontsize-FontSize.html)
+to be enabled.
+
+The default configuration is best taken as is, as the mapping to
+`text-tiny` up to `text-huge` is already enabled by default in CKEditor 5
+FontSize Feature.
 
 ### Links
 
