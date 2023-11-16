@@ -146,6 +146,21 @@ describe("BBob Integration", () => {
     );
   });
 
+  /**
+   * These use-cases are less important, as they (only) validate, that our
+   * proprietary HTML to BBCode mapping produces the same result as the BBCode
+   * we originally parsed. This, though, may be subject to change, like, for
+   * example, if we decide to introduce "more pretty printing" to the resulting
+   * HTML to BBCode processing (like indents for lists). In these cases, it is
+   * expected, that we have to adapt our data.
+   *
+   * The focus of this test is more to check, that our created data are
+   * invariant: If we had newlines, if we had indents before, no additional
+   * newlines or blanks should be added on repeated iterations. Example: A
+   * naive mapping of `[code]` → `<pre>` `[code]` might just always add newlines
+   * to the inner block, resulting in newlines piling up on each iteration,
+   * with results such as: `[code]\n\n\n\nlorem\n\n\n\n[/code]` eventually.
+   */
   describe("Less important: BBCode →[toView]→ HTML →[toData]→ BBCode", () => {
     it.each`
       bbCode
