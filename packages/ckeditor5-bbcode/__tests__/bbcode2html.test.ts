@@ -291,4 +291,40 @@ describe("bbcode2html", () => {
       );
     });
   });
+
+  /**
+   * We have to expect BBCode data, that cannot even be parsed. As such, an
+   * error handling should provide a predictable behavior. Nevertheless, each
+   * error handling is part of the design-scope: Do we accept some data-loss by
+   * stripping only problematic BBCode? Or do we present an empty text on any
+   * error in CKEditor 5 editing view (as we do for erred CoreMedia Rich Text)?
+   *
+   * Decision for now is to stick with BBob, which just strips broken BBCode
+   * and tries to render the rest at best effort.
+   */
+  describe("Error Handling", () => {
+    it.each`
+      erred                           | expected                                                 | comment
+      ${`[/]`}                        | ${``}                                                    | ${`for "only invalid BBCode" provide empty text`}
+      ${`Before[/]After`}             | ${`BeforeAfter`}                                         | ${`should just ignore broken BBCode parts`}
+      ${`[c][/c][b]hello[/c][/b][b]`} | ${`[c]<span style="font-weight: bold;">hello</span>[b]`} | ${`example input from BBob tests`}
+    `(
+      "[$#] Should handle BBCode errors with care: $erred, expected: $expected ($comment)",
+      ({ erred: data, expected: expectedDataView }: { erred: string; expected: string }) => {
+        const originalConsoleError = console.error;
+        const errorCache: unknown[][] = [];
+        const silencedHandler: typeof console.error = (...data: unknown[]): void => {
+          errorCache.push(data);
+        };
+        try {
+          console.error = silencedHandler;
+          aut.expectTransformation({ data, expectedDataView });
+          // We expect at least one error reported to console.
+          expect(errorCache).not.toHaveLength(0);
+        } finally {
+          console.error = originalConsoleError;
+        }
+      },
+    );
+  });
 });

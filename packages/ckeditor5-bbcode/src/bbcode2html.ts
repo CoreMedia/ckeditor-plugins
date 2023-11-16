@@ -14,6 +14,10 @@ export const bbcode2html = (bbcode: string, allowedTags?: string[]): string => {
     render: renderHtmlDom,
     enableEscapeTags: true,
     onlyAllowTags: allowedTags,
+    onError: (error) =>
+      bbCodeLogger.error(
+        `Failure while processing BBCode (${error.tagName} at ${error.lineNumber}:${error.columnNumber}): ${error.message}`,
+      ),
   });
   if (logger.isDebugEnabled()) {
     logger.debug("bbcode2html done.", {
