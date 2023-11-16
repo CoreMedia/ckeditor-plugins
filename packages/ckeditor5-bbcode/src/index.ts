@@ -32,10 +32,6 @@ export { BBCodeListItem, bbCodeListItem } from "./rules/BBCodeListItem";
 export { BBCodeParagraph, bbCodeParagraph } from "./rules/BBCodeParagraph";
 export { BBCodeQuote, bbCodeQuote } from "./rules/BBCodeQuote";
 export { BBCodeStrikethrough, bbCodeStrikethrough } from "./rules/BBCodeStrikethrough";
-export { BBCodeTable, bbCodeTable } from "./rules/BBCodeTable";
-export { BBCodeTableCell, bbCodeTableCell } from "./rules/BBCodeTableCell";
-export { BBCodeTableRow, bbCodeTableRow } from "./rules/BBCodeTableRow";
-export { BBCodeTableSection, bbCodeTableSection } from "./rules/BBCodeTableSection";
 export { BBCodeUnderline, bbCodeUnderline } from "./rules/BBCodeUnderline";
 export { BBCodeUrl, bbCodeUrl } from "./rules/BBCodeUrl";
 

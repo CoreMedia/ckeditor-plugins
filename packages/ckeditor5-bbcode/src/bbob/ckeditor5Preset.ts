@@ -205,7 +205,7 @@ const size: DefaultTagsRule = (node: TagNode): TagNode => toNode("span", toFontS
  *   within these tags.
  */
 const paragraphAwareTags: DefaultTags = Object.fromEntries(
-  ["root", "td", "th", "li"].map((tag) => [tag, toParagraphAwareNode]),
+  ["root", "li"].map((tag) => [tag, toParagraphAwareNode]),
 );
 
 /**

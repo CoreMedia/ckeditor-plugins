@@ -69,8 +69,6 @@ describe("bbcode2html", () => {
         ${`[h6]T[/h6]`}                                                                                                            | ${`<h6>T</h6>`}
         ${`[list][*] T[/list]`}                                                                                                    | ${`<ul><li> T</li></ul>`}
         ${`[quote]T[/quote]`}                                                                                                      | ${`<blockquote><p>T</p></blockquote>`}
-        ${`[table][tr][td]T[/td][/tr][/table]`}                                                                                    | ${`<table><tr><td>T</td></tr></table>`}
-        ${`[table][thead][tr][th]H[/th][/tr][/thead][tbody][tr][td]T[/td][/tr][/tbody][tfoot][tr][td]F[/td][/tr][/tfoot][/table]`} | ${`<table><thead><tr><th>H</th></tr></thead><tbody><tr><td>T</td></tr></tbody><tfoot><tr><td>F</td></tr></tfoot></table>`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
@@ -200,7 +198,6 @@ describe("bbcode2html", () => {
       ${`P1\n\n[quote]P2[/quote]\n\nP3`}                   | ${`<p>P1</p><blockquote><p>P2</p></blockquote><p>P3</p>`}                    | ${`Do not put blockquotes into paragraphs`}
       ${`P1\n\n[code]P2[/code]\n\nP3`}                     | ${`<p>P1</p><pre><code class="language-plaintext">P2</code></pre><p>P3</p>`} | ${`Do not put code blocks into paragraphs`}
       ${`P1\n\n[h1]P2[/h1]\n\nP3`}                         | ${`<p>P1</p><h1>P2</h1><p>P3</p>`}                                           | ${`Do not put headings into paragraphs`}
-      ${`P1\n\n[table][tr][td]P2[/td][/tr][/table]\n\nP3`} | ${`<p>P1</p><table><tr><td>P2</td></tr></table><p>P3</p>`}                   | ${`Do not put tables into paragraphs`}
       ${`P1\n\n[list][*]P2[/list]\n\nP3`}                  | ${`<p>P1</p><ul><li>P2</li></ul><p>P3</p>`}                                  | ${`Do not put lists into paragraphs`}
     `(
       "[$#] Should process data '$data' to: $expectedDataView ($comment)",

@@ -105,7 +105,6 @@ describe("BBob Integration", () => {
       ${`<ul><li>TEXT</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]`}                     | ${`<ul>\n<li> TEXT\n</li></ul>`}                              | ${"newlines part of minimal pretty-print behavior"}
       ${`<ol><li>TEXT</li></ol>`}                                  | ${`[list=1]\n[*] TEXT\n[/list]`}                   | ${`<ol type="1">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor defaults to _no-type_, but BBob defaults to add it"}
       ${`<ol type="a"><li>TEXT</li></ol>`}                         | ${`[list=a]\n[*] TEXT\n[/list]`}                   | ${`<ol type="a">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor may ignore type, if not configured to support this"}
-      ${`<table><tr><td>TEXT</td></tr></table>`}                   | ${`[table]\n[tr]\n[td]TEXT[/td]\n[/tr]\n[/table]`} | ${`<table>\n<tr>\n<td>TEXT</td>\n</tr>\n</table>`}            | ${"newlines part of minimal pretty-print behavior"}
       ${`<h1>TEXT</h1>`}                                           | ${`[h1]TEXT[/h1]`}                                 | ${`<h1>TEXT</h1>`}                                            | ${"none"}
       ${`<h2>TEXT</h2>`}                                           | ${`[h2]TEXT[/h2]`}                                 | ${`<h2>TEXT</h2>`}                                            | ${"none"}
       ${`<h3>TEXT</h3>`}                                           | ${`[h3]TEXT[/h3]`}                                 | ${`<h3>TEXT</h3>`}                                            | ${"none"}
@@ -180,8 +179,6 @@ describe("BBob Integration", () => {
       ${`[list=1]\n[*] lorem\n[/list]`}
       ${`[list=a]\n[*] lorem\n[/list]`}
       ${`[list=I]\n[*] lorem\n[/list]`}
-      ${`[table]\n[tr]\n[td]lorem[/td]\n[/tr]\n[/table]`}
-      ${`[table]\n[thead]\n[tr]\n[th]HEAD[/th]\n[/tr]\n[/thead]\n[tbody]\n[tr]\n[td]BODY[/td]\n[/tr]\n[/tbody]\n[/table]`}
       ${`[h1]lorem[/h1]`}
       ${`[h2]lorem[/h2]`}
       ${`[h3]lorem[/h3]`}

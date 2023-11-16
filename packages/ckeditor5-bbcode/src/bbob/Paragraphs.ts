@@ -55,7 +55,6 @@ const defaultBlockTags: NonNullable<ParagraphAwareContentOptions["blockTags"]> =
   "code",
   "list",
   "quote",
-  "table",
   ...headingTags,
 ];
 

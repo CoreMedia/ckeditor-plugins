@@ -442,53 +442,6 @@ The `useAttribute` flag will signal, that the `<ol>` `type` attribute is used.
 selectors, you cannot distinguish in styling between `i` and `I` or `a`
 and `A`. The rendered BBCode, though, will respect the different cases.
 
-### Tables (Limited Support)
-
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
-
-| Tag        | as HTML         |
-|------------|-----------------|
-| `[table]`  | `<table>`       |
-| `[thead]`  | `<thead>`       |
-| `[tbody]`  | `<tbody>`       |
-| `[tr]`     | `<tr>`          |
-| `[td]`     | `<td>`          |
-| `[th]`     | `<th>`          |
-
-As, for example, cells spanning multiple columns are not supported, the
-recommended configuration for the CKEditor 5 table feature is:
-
-```text
-table: {
-  contentToolbar: ["tableColumn", "tableRow"],
-},
-```
-
-**Limitation:** Note that mapping by [BBob][] to HTML is a rather simple
-1:1 mapping of BBCode tag to HTML tag. Having this, it does not respect, for
-example, the requirement, that a heading column must be placed into a `thead`
-section. Otherwise, the layout in CKEditor 5 will break.
-
-Thus, to make a table with `[th]` entries work in CKEditor 5 regarding the
-column and row headers, the BBCode must be as follows:
-
-```text
-[table]
-  [thead]
-    [tr]
-      [th]Head C/R[/th]
-      [th]Head R[/th]
-    [/tr]
-  [/thead]
-  [tbody]
-    [tr]
-      [th]Head C[/th]
-      [td]Data[/td]
-    [/tr]
-  [/tbody]
-[/table]
-```
-
 ### Data Facade
 
 If you want to prevent unchanged data (thus, without editorial actions applied)
