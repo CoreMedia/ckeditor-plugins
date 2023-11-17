@@ -106,8 +106,8 @@ export class BBCodeDataProcessor implements DataProcessor {
   }
 
   /**
-   * Converts the provided {@link module:engine/view/documentfragment~DocumentFragment}
-   * to data format &mdash; in this case to a BBCode string.
+   * Converts the provided `DocumentFragment` to data format &mdash; in this
+   * case to a BBCode string.
    *
    * @param viewFragment - The viewFragment.
    * @returns BBCode string.
@@ -128,12 +128,11 @@ export class BBCodeDataProcessor implements DataProcessor {
   }
 
   /**
-   * Registers a {@link module:engine/view/matcher~MatcherPattern} for view
-   * elements whose content should be treated as raw data and not processed
-   * during the conversion from generated HTML to view elements.
+   * Registers a `MatcherPattern` for view elements whose content should be
+   * treated as raw data and not processed during the conversion from generated
+   * HTML to view elements.
    *
-   * The raw data can be later accessed by a
-   * {@link module:engine/view/element~Element#getCustomProperty custom property of a view element}
+   * The raw data can be later accessed by a custom property of a view element
    * called `"$rawContent"`.
    *
    * @param pattern - The pattern matching all view elements whose content should
