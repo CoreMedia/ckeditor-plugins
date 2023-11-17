@@ -42,4 +42,9 @@ export class BBCodeHeading implements BBCodeProcessingRule {
   }
 }
 
+/**
+ * General rule instance for any headings to map. Thus, supports BBCode tags
+ * `[h1]` to `[h6]`. While not supported by all vendors, it integrates
+ * nicely with the Heading Feature by CKEditor 5.
+ */
 export const bbCodeHeading = new BBCodeHeading();
