@@ -5,11 +5,6 @@
 export type CapitalLetter = Capitalize<string[0]>;
 
 /**
- * Type for capitalized strings.
- */
-export type Capitalized = Capitalize<string>;
-
-/**
  * Returns the first letter of the given string capitalized.
  *
  * @param value - string to provide first letter capitalized; must be non-empty
