@@ -93,7 +93,7 @@ export class BBCodeCode implements BBCodeProcessingRule {
    *
    * @param tokens - class list tokens to match
    */
-  #findFirstLangauge(tokens: string[]):
+  #findFirstLanguage(tokens: string[]):
     | {
         language: string;
         languageCls: string;
@@ -127,7 +127,7 @@ export class BBCodeCode implements BBCodeProcessingRule {
     if (!(firstElementChild instanceof HTMLElement)) {
       return undefined;
     }
-    const languageInformation = this.#findFirstLangauge(Array.from(firstElementChild.classList));
+    const languageInformation = this.#findFirstLanguage(Array.from(firstElementChild.classList));
     if (languageInformation) {
       const { language, languageCls } = languageInformation;
       // Mark as "consumed".
