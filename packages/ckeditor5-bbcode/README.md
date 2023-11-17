@@ -17,7 +17,7 @@ The `toData` mapping is a proprietary implementation, which provides a slightly
 richer configuration API.
 
 For a quick overview of supported BBCode, take a look at the
-[BBCode Overview](./BBCode.md).
+[CoreMedia BBCode Specification](#coremedia-bbcode-20-specification).
 
 ## Limitations
 
@@ -84,12 +84,13 @@ In the following, you will find the supported BBCode tags and how they best
 integrate with CKEditor 5.
 
 For a quick overview of supported BBCode itself, we summarized this BBCode
-in a dedicated [BBCode Overview](./BBCode.md) without further reference to
-CKEditor 5 integration.
+in a dedicated
+[CoreMedia BBCode Specification](#coremedia-bbcode-20-specification) without
+further reference to CKEditor 5 integration.
 
 ### Paragraphs
 
-Paragraphs are implicitly given by an additional newline:
+Paragraphs are implicitly given by an additional newline.
 
 ```text
 Paragraph 1.
@@ -105,16 +106,12 @@ to be enabled.
 
 ### Headings
 
-Heading levels one to six are supported by BBCode tags:
+Heading levels one to six are supported by BBCode tags.
 
-| Tag    | as HTML |
-|--------|---------|
-| `[h1]` | `<h1>`  |
-| `[h2]` | `<h2>`  |
-| `[h3]` | `<h3>`  |
-| `[h4]` | `<h4>`  |
-| `[h5]` | `<h5>`  |
-| `[h6]` | `<h6>`  |
+```text
+[h1]Heading 1[/h1]
+[h2]Heading 2[/h2]
+```
 
 #### CKEditor 5 Integration
 
@@ -128,15 +125,11 @@ element.
 
 ### Basic Text Style: Bold
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Text may be marked as bold.
 
-| Tag   | as HTML                             |
-|-------|-------------------------------------|
-| `[b]` | `<span style="font-weight: bold;">` |
-
-This is well understood by the Bold plugin of CKEditor 5. The `toData`
-transformation will accept the above representation as well as the default
-representation `<strong>Text</strong>` and will map them back to `[b]` again.
+```text
+[b]Bold[/b]
+```
 
 #### CKEditor 5 Integration
 
@@ -146,15 +139,11 @@ to be enabled.
 
 ### Basic Text Style: Italic
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Text may be marked as italic.
 
-| Tag   | as HTML                              |
-|-------|--------------------------------------|
-| `[i]` | `<span style="font-style: italic;">` |
-
-This is well understood by the CKEditor 5 Italic plugin. The `toData`
-transformation will accept the above representation as well as the default
-representation `<i>Text</i>` and will map them back to `[i]` again.
+```text
+[i]Italic[/i]
+```
 
 #### CKEditor 5 Integration
 
@@ -164,20 +153,11 @@ to be enabled.
 
 ### Basic Text Style: Underline
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Text may be marked as underlined.
 
-| Tag   | as HTML                                      |
-|-------|----------------------------------------------|
-| `[u]` | `<span style="text-decoration: underline;">` |
-
-This is well understood by the CKEditor 5 Strikethrough plugin. The `toData`
-transformation will accept the above representation as well as the default
-representation `<u>Text</u>` and will map them back to `[u]` again.
-
-Further supported element in data-view representation, that will be mapped
-to `[u]`:
-
-* `<ins>`
+```text
+[u]Underlined[/u]
+```
 
 #### CKEditor 5 Integration
 
@@ -187,21 +167,11 @@ to be enabled.
 
 ### Basic Text Style: Strikethrough
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Text may be marked as strikethrough.
 
-| Tag   | as HTML                                         |
-|-------|-------------------------------------------------|
-| `[s]` | `<span style="text-decoration: line-through;">` |
-
-This is well understood by the CKEditor 5 Strikethrough plugin. The `toData`
-transformation will accept the above representation as well as the default
-representation `<s>Text</s>` and will map them back to `[s]` again.
-
-Further supported elements in data-view representation, that will be mapped
-to `[s]`:
-
-* `<strike>` (deprecated tag)
-* `<del>`
+```text
+[s]Strikethrough[/s]
+```
 
 #### CKEditor 5 Integration
 
@@ -211,12 +181,13 @@ to be enabled.
 
 ### Font Color
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Text may be marked as having a text color.
 
-| Tag                 | as HTML                            |
-|---------------------|------------------------------------|
-| `[color=#ff0000]`   | `<span style="color: #ff0000;">`   |
-| `[color=#ff0000a0]` | `<span style="color: #ff0000a0;">` |
+```text
+[color=#ff0000]Red[/color]
+[color=red]Red[/color]
+[color=#ff0000a0]Transparent Red[/color]
+```
 
 #### CKEditor 5 Integration
 
@@ -256,14 +227,14 @@ for the `[color]` tag.
 ### Font Size
 
 Similar to the CKEditor 4 BBCode plugin, the CKEditor 5 BBCode Plugin supports
-the `[size]` tag. In `toView` it will be mapped as follows:
+the `[size]` tag.
 
-| Tag          | as HTML                     |
-|--------------|-----------------------------|
-| `[size=70]`  | `<span class="text-tiny">`  |
-| `[size=85]`  | `<span class="text-small">` |
-| `[size=140]` | `<span class="text-big">`   |
-| `[size=180]` | `<span class="text-huge">`  |
+```text
+[size=70]Tiny[/size]
+[size=85]Small[/size]
+[size=140]Big[/size]
+[size=180]Huge[/size]
+```
 
 Numbers between are mapped to some reasonable closest matching number of
 the enumeration above, including 100, which denotes a _normal_ font size.
@@ -280,18 +251,12 @@ FontSize Feature.
 
 ### Links
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+You may denote links in BBCode.
 
-| Tag                      | as HTML                  |
-|--------------------------|--------------------------|
-| `[url=https://...]`      | `<a href="https://...">` |
-| `[url]https://...[/url]` | `<a href="https://...">` |
-
-In favor of shortened BBCode, also the `toData` processing uses the short
-notion for URL if text content and URL are strictly equal.
-
-**Escaping:** In case, the URL contains characters `[` or `]`, they will be
-encoded to the URL encoded form in `toData` processing.
+```text
+[url="https://example.org/"]Example[/url]
+[url]https://example.org/[/url]
+```
 
 #### CKEditor 5 Integration
 
@@ -299,7 +264,7 @@ Requires the
 [CKEditor 5 Link Feature](https://ckeditor.com/docs/ckeditor5/latest/api/link.html)
 to be enabled.
 
-#### Relative URLs
+#### Remark on Relative URLs
 
 Relative URLs are passed as is to the data view without any further
 intervention, assuming, that they should stay relative also during editorial
@@ -312,21 +277,12 @@ read-only view.
 
 ### Images
 
-The BBCode Plugin supports images in BBCode along with an `alt` attribute
-as supported by some BBCode parsers:
+You may reference images along with setting some alternative text.
 
-| Tag                                | as HTML                             |
-|------------------------------------|-------------------------------------|
-| `[img]https://...[/img]`           | `<img src="https://...">`           |
-| `[img alt="ALT"]https://...[/img]` | `<img alt="ALT" src="https://...">` |
-
-**Escaping:** In case, the URL contains characters `[` or `]`, they will be
-encoded to the URL encoded form in `toData` processing.
-
-Similar, square brackets within the attribute are encoded to HTML numeric
-entities, as this has shown the best robustness among various BBCode parsers.
-Nevertheless, this assumes, that BBCode is always rendered to HTML or some
-other entity-supporting representation.
+```text
+[img]https://...[/img]
+[img alt="ALT"]https://...[/img]
+```
 
 #### CKEditor 5 Integration
 
@@ -356,12 +312,25 @@ with BBCode support:
 
 ### Code Blocks
 
-The BBCode Plugin ships with an adapted transformation compared to the
-original HTML5 Preset by [BBob][]:
+You may add code blocks, as well as selecting some language.
 
-| Tag      | as HTML                                  |
-|----------|------------------------------------------|
-| `[code]` | `<pre><code class="language-plaintext">` |
+```text
+[code]
+console.log("Hello World!");
+[/code]
+
+[code=bbcode]
+\[b\]Hello World!\[/b\]
+[/code]
+```
+
+#### CKEditor 5 Integration
+
+Requires the
+[CKEditor 5 Code Blocks Feature](https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html)
+to be enabled.
+
+##### Language Support
 
 The adapted mapping ensures that it integrates effortless with CKEditor 5
 Code Block editing feature.
@@ -370,29 +339,15 @@ Also, the optional language information is transformed expecting the default
 behavior of the Code Block editing feature adding a `class` entry prefixed
 with `language-` to the nested `<code>` element.
 
-Thus, with adaptations applied, the language-aware mapping is as follows:
-
-| Tag           | as HTML                             |
-|---------------|-------------------------------------|
-| `[code=html]` | `<pre><code class="language-html">` |
-
-This works as bijective mapping in both directions.
-
-#### CKEditor 5 Integration
-
-Requires the
-[CKEditor 5 Code Blocks Feature](https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html)
-to be enabled.
-
 ### Blockquotes
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Block quotes are supported in BBCode.
 
-| Tag       | as HTML           |
-|-----------|-------------------|
-| `[quote]` | `<blockquote><p>` |
-
-The `toData` transformation provides a bijective mapping of the above.
+```text
+[quote]
+Carpe diem!
+[/quote]
+```
 
 Note that there is no mapping for the optional author-argument that may be
 set in BBCode. Thus, any applied author information will be lost.
@@ -405,14 +360,18 @@ to be enabled.
 
 ### Document Lists
 
-Relying on the HTML5 Preset by [BBob][] the `toView` mapping is as follows:
+Lists are supported as either bullet lists or ordered lists. The latter ones
+are specified by a type-selector.
 
-| Tag        | as HTML         |
-|------------|-----------------|
-| `[list]`   | `<ul>`          |
-| `[list=1]` | `<ol>`          |
-| `[list=a]` | `<ol type="a">` |
-| `[*]`      | `<li>`          |
+```text
+[list]
+[*] Bullet 1
+[/list]
+
+[list=1]
+[*] First Ordered Entry
+[/list]
+```
 
 #### CKEditor 5 Integration
 
@@ -475,12 +434,6 @@ This will be written back as:
 
 With the Data Facade plugin enabled will only be written on editorial actions.
 
-### Unsupported BBCode Tags
-
-Yet unsupported BBCode tags (among several vendor-specific ones) are:
-
-* `[style]`
-
 ## Security Considerations
 
 When it comes to parsing and transforming BBCode to HTML, you have to expect,
@@ -522,6 +475,166 @@ Some example scenarios:
   Nevertheless, there is no additional filter on data-processing layer, that,
   for example, removes URLs to malicious websites, as modifying data should be
   a clear conscious editorial action. 
+
+## CoreMedia BBCode 2.0 Specification
+
+This section summarizes the "CoreMedia BBCode 2.0", i.e., how we interpret
+BBCode. It is "Version 2.0", as previous to that, no clear definition existed.
+But as BBCode is mostly vendor specific, a clear definition is required for
+consistent mapping to other formats such as HTML.
+
+The following specification adheres the conventions of the CKEditor 4
+BBCode Plugin with adaptions required for CKEditor 5.
+
+**Adaptation Example:** While in CKEditor 4 `[size=100]` got interpreted as
+percentage value (thus, `font-size: 100%` in HTML), CKEditor 5 Font Size
+Plugin only supports pixels (given as numeric values) or class based styling
+options with default to classes `text-tiny`, `text-small`, `text-big` and
+`text-huge` (and of course unset, thus normal font-size). Thus, we had to
+identify a best-effort solution that combines both worlds.
+
+### General Formatting
+
+#### Attributes
+
+All attributes to BBCode tags are best handled, if they are placed in double
+quotes. This is the default behavior for the `toData` transformation.
+
+#### Paragraphs
+
+Paragraphs are created by an extra newline. Example mapping:
+
+```text
+Paragraph 1
+
+Paragraph 2
+```
+
+And the representation in data view:
+
+```html
+<p>Paragraph 1</p>
+<p>Paragraph 2</p>
+```
+
+#### Escaping
+
+For escaping you may use the backslash character:
+
+```text
+\[b\]Not bold, because escaped.\[b\]
+```
+
+### BBCode Tag Overview
+
+#### \[b\] – Bold
+
+| Tag   | data view                           |
+|-------|-------------------------------------|
+| `[b]` | `<span style="font-weight: bold;">` |
+
+#### \[code\] – Code Block
+
+| Tag           | data view                                |
+|---------------|------------------------------------------|
+| `[code]`      | `<pre><code class="language-plaintext">` |
+| `[code=html]` | `<pre><code class="language-html">`      |
+
+#### \[color\] – Font Color
+
+| Tag                 | data view                          |
+|---------------------|------------------------------------|
+| `[color=#ff0000]`   | `<span style="color: #ff0000;">`   |
+| `[color=#ff0000a0]` | `<span style="color: #ff0000a0;">` |
+| `[color=red]`       | `<span style="color: red;">`       |
+
+#### \[h1\] to \[h6\] – Headings
+
+| Tag    | data view |
+|--------|-----------|
+| `[h1]` | `<h1>`    |
+| `[h2]` | `<h2>`    |
+| `[h3]` | `<h3>`    |
+| `[h4]` | `<h4>`    |
+| `[h5]` | `<h5>`    |
+| `[h6]` | `<h6>`    |
+
+#### \[i\] – Italic
+
+| Tag   | data view                            |
+|-------|--------------------------------------|
+| `[i]` | `<span style="font-style: italic;">` |
+
+#### \[img\] – Image
+
+| Tag                                | data view                           |
+|------------------------------------|-------------------------------------|
+| `[img]https://...[/img]`           | `<img src="https://...">`           |
+| `[img alt="ALT"]https://...[/img]` | `<img alt="ALT" src="https://...">` |
+
+#### \[list\] – Ordered and Unordered Lists
+
+| Tag        | data view       |
+|------------|-----------------|
+| `[list]`   | `<ul>`          |
+| `[list=1]` | `<ol>`          |
+| `[list=a]` | `<ol type="a">` |
+| `[*]`      | `<li>`          |
+
+
+#### \[quote\] – Block Quote
+
+| Tag              | data view         |
+|------------------|-------------------|
+| `[quote]`        | `<blockquote><p>` |
+| `[quote=author]` | `<blockquote><p>` |
+
+Author information is stripped as unsupported in HTML. Subsequently, author
+information is stripped when written back to data.
+
+#### \[s\] – Strikethrough
+
+| Tag   | data view                                       |
+|-------|-------------------------------------------------|
+| `[s]` | `<span style="text-decoration: line-through;">` |
+
+#### \[size=number\] – Font Size
+
+| Tag         | data view                   |
+|-------------|-----------------------------|
+| `[size=85]` | `<span class="text-small">` |
+
+The number denotes a percentage-level, that is normalized to an enumeration:
+
+|  Input Range  | `toView` Class | Suggested `em` mapping | `toData` Normalization |
+|:-------------:|----------------|-----------------------:|-----------------------:|
+|  0 ≤ N < 78   | `text-tiny`    |                `0.7em` |                     70 |
+|  78 ≤ N < 93  | `text-small`   |               `0.85em` |                     85 |
+| 93 ≤ N < 120  | _none_         |                  `1em` |                    100 |
+| 120 ≤ N < 160 | `text-big`     |                `1.4em` |                    140 |
+|    160 ≤ N    | `text-huge`    |                `1.8em` |                    180 |
+
+Sizes normalized to 100 will neither be represented in data view nor later
+transformed back to data.
+
+**Example:**
+
+```text
+[size=70]g[/size][size=85]r[/size][size=140]o[/size][size=180]w[/size]
+```
+
+#### \[u\] – Underline
+
+| Tag   | data view                                    |
+|-------|----------------------------------------------|
+| `[u]` | `<span style="text-decoration: underline;">` |
+
+#### \[url\] – Link
+
+| Tag                      | data view                |
+|--------------------------|--------------------------|
+| `[url=https://...]`      | `<a href="https://...">` |
+| `[url]https://...[/url]` | `<a href="https://...">` |
 
 ## See Also
 
