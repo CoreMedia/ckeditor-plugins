@@ -144,8 +144,7 @@ export class BBCodeDataProcessor implements DataProcessor {
 
   /**
    * This method does not have any effect on the data processor result. It
-   * exists for compatibility with the
-   * {@link module:engine/dataprocessor/dataprocessor~DataProcessor `DataProcessor` interface}.
+   * exists for compatibility with the `DataProcessor` interface.
    */
   public useFillerType(): void {
     this.#htmlDataProcessor.useFillerType("default");
