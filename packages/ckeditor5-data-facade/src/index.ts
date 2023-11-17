@@ -1,4 +1,6 @@
 /**
+ * Provides an additional control layer for setting and getting data.
+ *
  * @module ckeditor5-data-facade
  */
 
