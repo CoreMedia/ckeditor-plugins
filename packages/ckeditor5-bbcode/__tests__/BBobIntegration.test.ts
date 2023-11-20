@@ -82,36 +82,36 @@ describe("BBob Integration", () => {
    */
   describe("Important: HTML →[toData]→ BBCode →[toView]→ HTML", () => {
     it.each`
-      dataViewInput                                                | expectedStoredData                                 | expectedRestoredDataView                                      | comment
-      ${""}                                                        | ${""}                                              | ${""}                                                         | ${"empty data"}
-      ${`<strong>TEXT</strong>`}                                   | ${`[b]TEXT[/b]`}                                   | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
-      ${`<b>TEXT</b>`}                                             | ${`[b]TEXT[/b]`}                                   | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
-      ${`<em>TEXT</em>`}                                           | ${`[i]TEXT[/i]`}                                   | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
-      ${`<i>TEXT</i>`}                                             | ${`[i]TEXT[/i]`}                                   | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
-      ${`<ins>TEXT</ins>`}                                         | ${`[u]TEXT[/u]`}                                   | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
-      ${`<u>TEXT</u>`}                                             | ${`[u]TEXT[/u]`}                                   | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
-      ${`<del>TEXT</del>`}                                         | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
-      ${`<s>TEXT</s>`}                                             | ${`[s]TEXT[/s]`}                                   | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
-      ${`<span class="text-tiny">TEXT</span>`}                     | ${`[size=70]TEXT[/size]`}                          | ${`<span class="text-tiny">TEXT</span>`}                      | ${"none"}
-      ${`<span class="text-small">TEXT</span>`}                    | ${`[size=85]TEXT[/size]`}                          | ${`<span class="text-small">TEXT</span>`}                     | ${"none"}
-      ${`<span class="text-big">TEXT</span>`}                      | ${`[size=140]TEXT[/size]`}                         | ${`<span class="text-big">TEXT</span>`}                       | ${"none"}
-      ${`<span class="text-huge">TEXT</span>`}                     | ${`[size=180]TEXT[/size]`}                         | ${`<span class="text-huge">TEXT</span>`}                      | ${"none"}
-      ${`<a href="${link}">TEXT</a>`}                              | ${`[url="${link}"]TEXT[/url]`}                     | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
-      ${`<a href="${link}">${link}</a>`}                           | ${`[url]${link}[/url]`}                            | ${`<a href="${link}">${link}</a>`}                            | ${"pretty-print: shorten, if possible, in BBCode"}
-      ${`<a>TEXT</a>`}                                             | ${`TEXT`}                                          | ${`TEXT`}                                                     | ${"there is no representation in BBCode for an anchor without href attribute"}
-      ${`<blockquote><p>TEXT</p></blockquote>`}                    | ${`[quote]\nTEXT\n[/quote]`}                       | ${`<blockquote><p>\nTEXT</p></blockquote>`}                   | ${"newlines part of minimal pretty-print behavior"}
-      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]`}                         | ${`<pre><code class="language-plaintext">TEXT</code></pre>`}  | ${"adapted to nested pre, code to work in CKEditor 5"}
-      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]`}                     | ${`<pre><code class="language-css">TEXT</code></pre>`}        | ${"adapted to nested pre, code to work in CKEditor 5"}
-      ${`<ul><li>TEXT</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]`}                     | ${`<ul>\n<li> TEXT\n</li></ul>`}                              | ${"newlines part of minimal pretty-print behavior"}
-      ${`<ol><li>TEXT</li></ol>`}                                  | ${`[list=1]\n[*] TEXT\n[/list]`}                   | ${`<ol type="1">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor defaults to _no-type_, but BBob defaults to add it"}
-      ${`<ol type="a"><li>TEXT</li></ol>`}                         | ${`[list=a]\n[*] TEXT\n[/list]`}                   | ${`<ol type="a">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor may ignore type, if not configured to support this"}
-      ${`<h1>TEXT</h1>`}                                           | ${`[h1]TEXT[/h1]`}                                 | ${`<h1>TEXT</h1>`}                                            | ${"none"}
-      ${`<h2>TEXT</h2>`}                                           | ${`[h2]TEXT[/h2]`}                                 | ${`<h2>TEXT</h2>`}                                            | ${"none"}
-      ${`<h3>TEXT</h3>`}                                           | ${`[h3]TEXT[/h3]`}                                 | ${`<h3>TEXT</h3>`}                                            | ${"none"}
-      ${`<h4>TEXT</h4>`}                                           | ${`[h4]TEXT[/h4]`}                                 | ${`<h4>TEXT</h4>`}                                            | ${"none"}
-      ${`<h5>TEXT</h5>`}                                           | ${`[h5]TEXT[/h5]`}                                 | ${`<h5>TEXT</h5>`}                                            | ${"none"}
-      ${`<h6>TEXT</h6>`}                                           | ${`[h6]TEXT[/h6]`}                                 | ${`<h6>TEXT</h6>`}                                            | ${"none"}
-      ${`<p>TEXT1</p><p>TEXT2</p>`}                                | ${`TEXT1\n\nTEXT2`}                                | ${`<p>TEXT1</p><p>TEXT2</p>`}                                 | ${"none"}
+      dataViewInput                                                | expectedStoredData               | expectedRestoredDataView                                      | comment
+      ${""}                                                        | ${""}                            | ${""}                                                         | ${"empty data"}
+      ${`<strong>TEXT</strong>`}                                   | ${`[b]TEXT[/b]`}                 | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
+      ${`<b>TEXT</b>`}                                             | ${`[b]TEXT[/b]`}                 | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
+      ${`<em>TEXT</em>`}                                           | ${`[i]TEXT[/i]`}                 | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
+      ${`<i>TEXT</i>`}                                             | ${`[i]TEXT[/i]`}                 | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
+      ${`<ins>TEXT</ins>`}                                         | ${`[u]TEXT[/u]`}                 | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
+      ${`<u>TEXT</u>`}                                             | ${`[u]TEXT[/u]`}                 | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
+      ${`<del>TEXT</del>`}                                         | ${`[s]TEXT[/s]`}                 | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
+      ${`<s>TEXT</s>`}                                             | ${`[s]TEXT[/s]`}                 | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
+      ${`<span class="text-tiny">TEXT</span>`}                     | ${`[size=70]TEXT[/size]`}        | ${`<span class="text-tiny">TEXT</span>`}                      | ${"none"}
+      ${`<span class="text-small">TEXT</span>`}                    | ${`[size=85]TEXT[/size]`}        | ${`<span class="text-small">TEXT</span>`}                     | ${"none"}
+      ${`<span class="text-big">TEXT</span>`}                      | ${`[size=140]TEXT[/size]`}       | ${`<span class="text-big">TEXT</span>`}                       | ${"none"}
+      ${`<span class="text-huge">TEXT</span>`}                     | ${`[size=180]TEXT[/size]`}       | ${`<span class="text-huge">TEXT</span>`}                      | ${"none"}
+      ${`<a href="${link}">TEXT</a>`}                              | ${`[url="${link}"]TEXT[/url]`}   | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
+      ${`<a href="${link}">${link}</a>`}                           | ${`[url]${link}[/url]`}          | ${`<a href="${link}">${link}</a>`}                            | ${"pretty-print: shorten, if possible, in BBCode"}
+      ${`<a>TEXT</a>`}                                             | ${`TEXT`}                        | ${`TEXT`}                                                     | ${"there is no representation in BBCode for an anchor without href attribute"}
+      ${`<blockquote><p>TEXT</p></blockquote>`}                    | ${`[quote]\nTEXT\n[/quote]`}     | ${`<blockquote><p>\nTEXT</p></blockquote>`}                   | ${"newlines part of minimal pretty-print behavior"}
+      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]`}       | ${`<pre><code class="language-plaintext">TEXT</code></pre>`}  | ${"adapted to nested pre, code to work in CKEditor 5"}
+      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]`}   | ${`<pre><code class="language-css">TEXT</code></pre>`}        | ${"adapted to nested pre, code to work in CKEditor 5"}
+      ${`<ul><li>TEXT</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]`}   | ${`<ul>\n<li> TEXT\n</li></ul>`}                              | ${"newlines part of minimal pretty-print behavior"}
+      ${`<ol><li>TEXT</li></ol>`}                                  | ${`[list=1]\n[*] TEXT\n[/list]`} | ${`<ol type="1">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor defaults to _no-type_, but BBob defaults to add it"}
+      ${`<ol type="a"><li>TEXT</li></ol>`}                         | ${`[list=a]\n[*] TEXT\n[/list]`} | ${`<ol type="a">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor may ignore type, if not configured to support this"}
+      ${`<h1>TEXT</h1>`}                                           | ${`[h1]TEXT[/h1]`}               | ${`<h1>TEXT</h1>`}                                            | ${"none"}
+      ${`<h2>TEXT</h2>`}                                           | ${`[h2]TEXT[/h2]`}               | ${`<h2>TEXT</h2>`}                                            | ${"none"}
+      ${`<h3>TEXT</h3>`}                                           | ${`[h3]TEXT[/h3]`}               | ${`<h3>TEXT</h3>`}                                            | ${"none"}
+      ${`<h4>TEXT</h4>`}                                           | ${`[h4]TEXT[/h4]`}               | ${`<h4>TEXT</h4>`}                                            | ${"none"}
+      ${`<h5>TEXT</h5>`}                                           | ${`[h5]TEXT[/h5]`}               | ${`<h5>TEXT</h5>`}                                            | ${"none"}
+      ${`<h6>TEXT</h6>`}                                           | ${`[h6]TEXT[/h6]`}               | ${`<h6>TEXT</h6>`}                                            | ${"none"}
+      ${`<p>TEXT1</p><p>TEXT2</p>`}                                | ${`TEXT1\n\nTEXT2`}              | ${`<p>TEXT1</p><p>TEXT2</p>`}                                 | ${"none"}
     `(
       "[$#] Should transform data view to data, that are well understood by subsequent `toView` mapping for: `$dataViewInput` ($comment)",
       ({
