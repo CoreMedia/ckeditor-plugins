@@ -204,9 +204,7 @@ const size: DefaultTagsRule = (node: TagNode): TagNode => toNode("span", toFontS
  *   from `*` nodes. As a subsequent step, we add support for nested paragraphs
  *   within these tags.
  */
-const paragraphAwareTags: DefaultTags = Object.fromEntries(
-  ["root", "li"].map((tag) => [tag, toParagraphAwareNode]),
-);
+const paragraphAwareTags: DefaultTags = Object.fromEntries(["root", "li"].map((tag) => [tag, toParagraphAwareNode]));
 
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
