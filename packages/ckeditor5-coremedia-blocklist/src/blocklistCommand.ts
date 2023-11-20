@@ -19,6 +19,8 @@ export default class BlocklistCommand extends Command {
   constructor(editor: Editor) {
     super(editor);
     this.value = [];
+    // We don't modify any data.
+    this.affectsData = false;
   }
 
   override execute() {
