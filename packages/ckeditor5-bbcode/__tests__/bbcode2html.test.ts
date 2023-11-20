@@ -59,16 +59,16 @@ describe("bbcode2html", () => {
 
     describe("Supported Block Tags", () => {
       it.each`
-        data                                                                                                                       | expectedDataView
-        ${`[code]T[/code]`}                                                                                                        | ${`<pre><code class="language-plaintext">T</code></pre>`}
-        ${`[h1]T[/h1]`}                                                                                                            | ${`<h1>T</h1>`}
-        ${`[h2]T[/h2]`}                                                                                                            | ${`<h2>T</h2>`}
-        ${`[h3]T[/h3]`}                                                                                                            | ${`<h3>T</h3>`}
-        ${`[h4]T[/h4]`}                                                                                                            | ${`<h4>T</h4>`}
-        ${`[h5]T[/h5]`}                                                                                                            | ${`<h5>T</h5>`}
-        ${`[h6]T[/h6]`}                                                                                                            | ${`<h6>T</h6>`}
-        ${`[list][*] T[/list]`}                                                                                                    | ${`<ul><li> T</li></ul>`}
-        ${`[quote]T[/quote]`}                                                                                                      | ${`<blockquote><p>T</p></blockquote>`}
+        data                    | expectedDataView
+        ${`[code]T[/code]`}     | ${`<pre><code class="language-plaintext">T</code></pre>`}
+        ${`[h1]T[/h1]`}         | ${`<h1>T</h1>`}
+        ${`[h2]T[/h2]`}         | ${`<h2>T</h2>`}
+        ${`[h3]T[/h3]`}         | ${`<h3>T</h3>`}
+        ${`[h4]T[/h4]`}         | ${`<h4>T</h4>`}
+        ${`[h5]T[/h5]`}         | ${`<h5>T</h5>`}
+        ${`[h6]T[/h6]`}         | ${`<h6>T</h6>`}
+        ${`[list][*] T[/list]`} | ${`<ul><li> T</li></ul>`}
+        ${`[quote]T[/quote]`}   | ${`<blockquote><p>T</p></blockquote>`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView",
         ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
@@ -185,20 +185,20 @@ describe("bbcode2html", () => {
 
   describe("Paragraphs", () => {
     it.each`
-      data                                                 | expectedDataView                                                             | comment
-      ${`P1\n\nP2`}                                        | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Standard Paragraph Behavior`}
-      ${``}                                                | ${``}                                                                        | ${`Do not create paragraphs on empty input`}
-      ${`\n`}                                              | ${`\n`}                                                                      | ${`Do not create paragraphs on only single newline`}
-      ${`\n\n`}                                            | ${`\n`}                                                                      | ${`Trim irrelevant newlines`}
-      ${`\n\n\n`}                                          | ${`\n`}                                                                      | ${`Trim irrelevant newlines`}
-      ${`\nP1\n\nP2`}                                      | ${`<p>\nP1</p><p>P2</p>`}                                                    | ${`Design Scope: Keep irrelevant leading newlines; simplifies processing`}
-      ${`P1\n\n\nP2`}                                      | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Trim obsolete newlines (trailing, 1)`}
-      ${`P1\n\nP2\n`}                                      | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Trim obsolete newlines (trailing, 2)`}
-      ${`[quote]P1\n\nP2[/quote]`}                         | ${`<blockquote><p>P1</p><p>P2</p></blockquote>`}                             | ${`Respect paragraphs in quote sections`}
-      ${`P1\n\n[quote]P2[/quote]\n\nP3`}                   | ${`<p>P1</p><blockquote><p>P2</p></blockquote><p>P3</p>`}                    | ${`Do not put blockquotes into paragraphs`}
-      ${`P1\n\n[code]P2[/code]\n\nP3`}                     | ${`<p>P1</p><pre><code class="language-plaintext">P2</code></pre><p>P3</p>`} | ${`Do not put code blocks into paragraphs`}
-      ${`P1\n\n[h1]P2[/h1]\n\nP3`}                         | ${`<p>P1</p><h1>P2</h1><p>P3</p>`}                                           | ${`Do not put headings into paragraphs`}
-      ${`P1\n\n[list][*]P2[/list]\n\nP3`}                  | ${`<p>P1</p><ul><li>P2</li></ul><p>P3</p>`}                                  | ${`Do not put lists into paragraphs`}
+      data                                | expectedDataView                                                             | comment
+      ${`P1\n\nP2`}                       | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Standard Paragraph Behavior`}
+      ${``}                               | ${``}                                                                        | ${`Do not create paragraphs on empty input`}
+      ${`\n`}                             | ${`\n`}                                                                      | ${`Do not create paragraphs on only single newline`}
+      ${`\n\n`}                           | ${`\n`}                                                                      | ${`Trim irrelevant newlines`}
+      ${`\n\n\n`}                         | ${`\n`}                                                                      | ${`Trim irrelevant newlines`}
+      ${`\nP1\n\nP2`}                     | ${`<p>\nP1</p><p>P2</p>`}                                                    | ${`Design Scope: Keep irrelevant leading newlines; simplifies processing`}
+      ${`P1\n\n\nP2`}                     | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Trim obsolete newlines (trailing, 1)`}
+      ${`P1\n\nP2\n`}                     | ${`<p>P1</p><p>P2</p>`}                                                      | ${`Trim obsolete newlines (trailing, 2)`}
+      ${`[quote]P1\n\nP2[/quote]`}        | ${`<blockquote><p>P1</p><p>P2</p></blockquote>`}                             | ${`Respect paragraphs in quote sections`}
+      ${`P1\n\n[quote]P2[/quote]\n\nP3`}  | ${`<p>P1</p><blockquote><p>P2</p></blockquote><p>P3</p>`}                    | ${`Do not put blockquotes into paragraphs`}
+      ${`P1\n\n[code]P2[/code]\n\nP3`}    | ${`<p>P1</p><pre><code class="language-plaintext">P2</code></pre><p>P3</p>`} | ${`Do not put code blocks into paragraphs`}
+      ${`P1\n\n[h1]P2[/h1]\n\nP3`}        | ${`<p>P1</p><h1>P2</h1><p>P3</p>`}                                           | ${`Do not put headings into paragraphs`}
+      ${`P1\n\n[list][*]P2[/list]\n\nP3`} | ${`<p>P1</p><ul><li>P2</li></ul><p>P3</p>`}                                  | ${`Do not put lists into paragraphs`}
     `(
       "[$#] Should process data '$data' to: $expectedDataView ($comment)",
       ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
