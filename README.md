@@ -37,6 +37,7 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 | Name                                              | Description                                                                |
 |---------------------------------------------------|----------------------------------------------------------------------------|
 | [`ckeditor5-babel-config`][]                      | Internal: Shared Babel configuration.                                      |
+| [`ckeditor5-bbcode`][]                            | BBCode: Data-Processor                                                     |
 | [`ckeditor5-common`][]                            | Common Utilities, independent from CKEditor                                |
 | [`ckeditor5-core-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-core`                         |
 | [`ckeditor5-coremedia-blocklist`][]               | Highlights words in the editor content and allows to adjust list of words. |
@@ -51,6 +52,7 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 | [`ckeditor5-coremedia-studio-essentials`][]       | CoreMedia Studio: Aggregator Plugin for essential plugins                  |
 | [`ckeditor5-coremedia-studio-integration`][]      | CoreMedia Studio: Communication facade for Studio integration              |
 | [`ckeditor5-coremedia-studio-integration-mock`][] | CoreMedia Studio: Mock Communication facade for testing                    |
+| [`ckeditor5-data-facade`][]                       | Data I/O facade to prevent accidental data change propagation              |
 | [`ckeditor5-dataprocessor-support`][]             | _Deprecated:_ Utilities for providing custom CKEditor 5 DataProcessors     |
 | [`ckeditor5-dom-converter`][]                     | Base architecture for data-processing                                      |
 | [`ckeditor5-dom-support`][]                       | Utilities for handling DOM objects                                         |
@@ -78,8 +80,9 @@ For minimal CoreMedia RichText 1.0 support, the only module to install is
 pnpm install @coremedia/ckeditor5-coremedia-studio-essentials
 ```
 
-```javascript
-import CoreMediaStudioEssentials from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
+```ts
+import CoreMediaStudioEssentials from
+    "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 
 ClassicEditor.create(document.querySelector('#editor'), {
   plugins: [
@@ -104,6 +107,14 @@ targets (mapped to `xlink:role`/`xlink:show` in CoreMedia RichText).
 
 ### Autosave Feature
 
+> **Alternative:** For versions later than 16.0.0 we ship a so-called
+> _data facade_ plugin. This plugin takes care of a better behavior
+> for data coming from external data storages, preventing "no change" data
+> to be written back to server (without editorial interactions applied).
+>
+> Still, if not relying on this recommended plugin, the following information
+> may be valuable to you.
+
 It is recommended, using CKEditor's Autosave plugin for saving data into
 CoreMedia CMS. Note though, that the Autosave plugin is automatically triggered
 when initialized with data received from CoreMedia CMS:
@@ -111,7 +122,7 @@ when initialized with data received from CoreMedia CMS:
 > Create CKEditor → Set Data From Server → Autosave Data To Server
 
 As CKEditor applies/has to apply some normalization to the received data (such
-as removing ignorable whitespace), the data set and directly afterwards
+as removing ignorable whitespace), the data set and directly afterward
 received on Autosave via `getData()` may differ (while being semantically
 equal).
 
@@ -142,6 +153,7 @@ previously `setData()` call. A typical approach is:
 <!-- ===========================================================[References] -->
 
 [`ckeditor5-babel-config`]: <./packages/ckeditor5-babel-config> "@coremedia-internal/ckeditor5-babel-config"
+[`ckeditor5-bbcode`]: <./packages/ckeditor5-bbcode> "@coremedia/ckeditor5-bbcode"
 [`ckeditor5-common`]: <./packages/ckeditor5-common> "@coremedia/ckeditor5-common"
 [`ckeditor5-core-common`]: <./packages/ckeditor5-core-common> "@coremedia/ckeditor5-core-common"
 [`ckeditor5-coremedia-blocklist`]: <./packages/ckeditor5-coremedia-blocklist> "@coremedia/ckeditor5-coremedia-blocklist"
@@ -156,6 +168,7 @@ previously `setData()` call. A typical approach is:
 [`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials> "@coremedia/ckeditor5-coremedia-studio-essentials"
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration> "@coremedia/ckeditor5-coremedia-studio-integration"
 [`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia/ckeditor5-coremedia-studio-integration-mock"
+[`ckeditor5-data-facade`]: <./packages/ckeditor5-data-facade> "@coremedia/ckeditor5-data-facade"
 [`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support> "@coremedia/ckeditor5-dataprocessor-support"
 [`ckeditor5-dom-converter`]: <./packages/ckeditor5-dom-converter> "@coremedia/ckeditor5-dom-converter"
 [`ckeditor5-dom-support`]: <./packages/ckeditor5-dom-support> "@coremedia/ckeditor5-dom-support"
