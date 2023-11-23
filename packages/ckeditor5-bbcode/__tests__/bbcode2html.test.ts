@@ -76,6 +76,20 @@ describe("bbcode2html", () => {
         },
       );
     });
+
+    describe("Escaping", () => {
+      it.each`
+        data                           | expectedDataView              | comment
+        ${`\\[b\\]not bold\\[/b\\]`}   | ${`[b]not bold[/b]`}          | ${`"normal" escape, but design-scope (as it is configurable for BBob)`}
+        ${`\\[i\\]not italic\\[/i\\]`} | ${`[i]not italic[/i]`}        | ${`"normal" escape, but design-scope (as it is configurable for BBob)`}
+        ${`keep\\irrelevant\\escape`}  | ${`keep\\irrelevant\\escape`} | ${`accepting BBob behavior: If irrelevant, BBob ignore an escape character.`}
+      `(
+        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
+        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
+          aut.expectTransformation({ data, expectedDataView });
+        },
+      );
+    });
   });
 
   describe("By Tag", () => {
