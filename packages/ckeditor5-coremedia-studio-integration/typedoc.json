@@ -1,5 +1,5 @@
 {
   "extends": ["../../typedoc.base.json"],
-  "entryPoints": ["./src/index-doc.ts"],
+  "entryPoints": ["./src/index.ts"],
   "name": "ckeditor5-coremedia-studio-integration"
 }
