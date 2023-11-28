@@ -141,6 +141,9 @@ previously `setData()` call. A typical approach is:
 4. If `editor.model.document.version` is the same as remembered on `set` prevent
    forwarding the data to CoreMedia CMS.
 
+For convenience, you may consider using the [`ckeditor5-data-facade`][] that
+implements the described behavior.
+
 ## See Also
 
 * **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
