@@ -13,8 +13,8 @@ export { createContentDisplayServiceDescriptor } from "./content/ContentDisplayS
 export { default as RichtextConfigurationService } from "./content/RichtextConfigurationService";
 export { createRichtextConfigurationServiceDescriptor } from "./content/RichtextConfigurationServiceDescriptor";
 
-export { default as BlocklistService } from "./content/BlocklistService";
-export { createBlocklistServiceDescriptor } from "./content/BlocklistServiceDescriptor";
+export { default as BlocklistService } from "./BlocklistService";
+export { createBlocklistServiceDescriptor } from "./BlocklistServiceDescriptor";
 
 // Helpers
 export type { UriPath } from "./content/UriPath";
