@@ -7,11 +7,13 @@ on:
         description: |
           Search-Limit: Limits number of packages found.
         default: 100
+        required: false
         type: number
   workflow_call:
     inputs:
       searchLimit:
         default: 100
+        required: false
         type: number
 
 permissions: {}
@@ -28,7 +30,7 @@ jobs:
     env:
       NPM_HOST: ${{ needs.env.outputs.npm-host }}
       NPM_URL: ${{ needs.env.outputs.npm-url }}
-      SEARCH_LIMIT: ${{ github.event.inputs.searchLimit }}
+      SEARCH_LIMIT: ${{ inputs.searchLimit }}
     steps:
       - id: authorize
         name: "NPM Authorization"
