@@ -30,4 +30,4 @@ jobs:
           # Unfortunately, won't work as we need to expose it as output.
           echo "::add-mask::${result}"
           # Propagate Secret as NPM_AUTH_TOKEN
-          gh secret set NPM_AUTH_TOKEN --body "${result}" --env
+          gh secret set NPM_AUTH_TOKEN --body "${result}" --app actions
