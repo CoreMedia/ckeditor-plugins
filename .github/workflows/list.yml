@@ -53,7 +53,7 @@ jobs:
         name: "List: @coremedia/ckeditor*"
         run: |
           npmUrl="${{ env.NPM_URL }}"
-          readarray -t packageNames < <(npm search "@coremedia/ckeditor" --json | jq -r ".[].name"|sort)
+          readarray -t packageNames < <(npm search "@coremedia/ckeditor" --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
 
           echo "# Package List" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -78,7 +78,7 @@ jobs:
           for packageName in "${packageNames[@]}"; do
             echo "### \`${packageName}\`" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            readarray -t recentPackageVersions < <(npm view "${packageName}" versions --json |  jq -r '.[]' | tail -n ${versionsLimit})
+            readarray -t recentPackageVersions < <(npm view "${packageName}" versions --json --registry "${npmUrl}" |  jq -r '.[]' | tail -n ${versionsLimit})
 
             for recentPackageVersion in "${recentPackageVersions[@]}"; do
               echo "* ${recentPackageVersion}" >> $GITHUB_STEP_SUMMARY
