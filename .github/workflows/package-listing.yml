@@ -2,6 +2,8 @@ name: List packages
 on:
   workflow_dispatch:
 jobs:
+  proof-of-concept:
+    uses: "./.github/workflows/list.yml"
   build:
     name: Package listing
     env:
