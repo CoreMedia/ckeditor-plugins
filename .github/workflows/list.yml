@@ -62,8 +62,9 @@ jobs:
           echo "# Package List (${#packageNames[@]})" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if (( searchLimit == packageCount )); then
+          if [[ ${searchLimit} -eq ${packageCount} ]]; then
             echo "**Limit Reached:** ${packageCount} is the current search limit. You may have missed some packages."
+            echo "" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "## Package Overview" >> $GITHUB_STEP_SUMMARY
