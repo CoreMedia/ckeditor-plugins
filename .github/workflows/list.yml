@@ -43,19 +43,27 @@ jobs:
           echo "@coremedia:registry=${npmUrl}" >> .npmrc
           # We must not commit this change.
           git update-index --assume-unchanged .npmrc
-      - id: list-coremedia-ckeditor
-        name: "List: @coremedia/ckeditor*"
+      - id: npm-search
+        name: "NPM Search for @coremedia/ckeditor"
         run: |
           npmUrl="${{ env.NPM_URL }}"
           packages=$(npm search "@coremedia/ckeditor" --json --registry "${npmUrl}")
 
-          echo "# \`@coremedia/ckeditor*\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Package |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|" >> $GITHUB_STEP_SUMMARY
+      - id: list-coremedia-ckeditor
+        name: "List: @coremedia/ckeditor*"
+        run: |
+          npmUrl="${{ env.NPM_URL }}"
+          readarray -t packageNames < <(npm search "@ckeditor/ckeditor5-" --json | jq -r ".[].name"|sort)
 
-          for package in $(jq -r ".[].name" <(echo "${packages}")); do
-            echo "${package}"
-            echo "| \`${package}\` |" >> $GITHUB_STEP_SUMMARY
-            npm view "${package}" versions --registry "${npmUrl}"
+          echo "# Package List" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## \`@coremedia/ckeditor*\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | Latest |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          for packageName in "${packageNames[@]}"; do
+            latestVersion="$(npm view "${packageName}" version)"
+            echo "| \`${packageName}\` | ${latestVersion} | " >> $GITHUB_STEP_SUMMARY
+            npm view "${packageName}" versions --registry "${npmUrl}"
           done
