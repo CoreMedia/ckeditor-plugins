@@ -53,7 +53,10 @@ jobs:
         name: "List: @coremedia/ckeditor*"
         run: |
           npmUrl="${{ env.NPM_URL }}"
-          readarray -t packageNames < <(npm search "@coremedia/ckeditor5" --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
+          # searchLimit defaults to 20 if unset, thus, we may miss some
+          # packages.
+          searchLimit=100
+          readarray -t packageNames < <(npm search "@coremedia/ckeditor5" --searchlimit ${searchLimit} --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
 
           echo "# Package List" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -65,7 +68,6 @@ jobs:
           for packageName in "${packageNames[@]}"; do
             latestVersion="$(npm view "${packageName}" version)"
             echo "| \`${packageName}\` | ${latestVersion} |" >> $GITHUB_STEP_SUMMARY
-            npm view "${packageName}" versions --registry "${npmUrl}"
           done
 
           versionsLimit=10
