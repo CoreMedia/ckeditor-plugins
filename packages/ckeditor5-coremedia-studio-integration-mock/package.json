@@ -26,6 +26,9 @@
     "main": "./src/index.js",
     "types": "./src/index.d.ts"
   },
+  "files": [
+    "/src"
+  ],
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
     "clean": "pnpm clean:src && pnpm clean:dist",
