@@ -59,21 +59,3 @@ jobs:
             echo "| \`${package}\` |" >> $GITHUB_STEP_SUMMARY
             npm view "${package}" versions --registry "${npmUrl}"
           done
-      - id: list-coremedia-ckeditor-types
-        name: "List: @coremedia/types-ckeditor* (Deprecated)"
-        run: |
-          npmUrl="${{ env.NPM_URL }}"
-          packages=$(npm search "@coremedia/types-ckeditor__" --json --registry "${npmUrl}")
-
-          echo "# \`@coremedia/types-ckeditor__*\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Former manual typings prior to CKEditor 5 TypeScript release."
-          echo ""
-          echo "| Package |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|" >> $GITHUB_STEP_SUMMARY
-
-          for package in $(jq -r ".[].name" <(echo "${packages}")); do
-            echo "${package}"
-            echo "| \`${package}\` |" >> $GITHUB_STEP_SUMMARY
-            npm view "${package}" versions --registry "${npmUrl}"
-          done
