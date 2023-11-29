@@ -55,11 +55,17 @@ jobs:
           npmUrl="${{ env.NPM_URL }}"
           # searchLimit defaults to 20 if unset, thus, we may miss some
           # packages.
-          searchLimit=100
+          searchLimit=20
           readarray -t packageNames < <(npm search "@coremedia/ckeditor5" --searchlimit ${searchLimit} --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
+          packageCount=${#packageNames[@]}
 
-          echo "# Package List" >> $GITHUB_STEP_SUMMARY
+          echo "# Package List (${#packageNames[@]})" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+
+          if (( searchLimit == packageCount )); then
+            echo "**Limit Reached:** ${packageCount} is the current search limit. You may have missed some packages."
+          fi
+
           echo "## Package Overview" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Package | Latest |" >> $GITHUB_STEP_SUMMARY
