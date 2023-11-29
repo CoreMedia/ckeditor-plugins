@@ -23,6 +23,9 @@
     "main": "./src/index.js",
     "types": "./src/index.d.ts"
   },
+  "files": [
+    "/src"
+  ],
   "license": "Apache-2.0",
   "devDependencies": {
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
