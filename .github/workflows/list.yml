@@ -3,7 +3,6 @@ name: "List Packages"
 on:
   workflow_dispatch:
   workflow_call:
-    secrets: inherit
 
 permissions: {}
 
@@ -12,6 +11,7 @@ jobs:
     uses: "./.github/workflows/env.yml"
   authorize:
     uses: "./.github/workflows/authorize.yml"
+    secrets: inherit
   main:
     name: "Main"
     runs-on: ubuntu-latest

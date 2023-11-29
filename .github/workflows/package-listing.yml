@@ -4,6 +4,7 @@ on:
 jobs:
   proof-of-concept:
     uses: "./.github/workflows/list.yml"
+    secrets: inherit
   build:
     name: Package listing
     env:

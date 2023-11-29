@@ -2,7 +2,11 @@ name: "Authorize"
 
 on:
   workflow_call:
-    secrets: inherit
+    secrets:
+      CM_NPM_USER:
+        required: true
+      CM_NPM_PASSWORD:
+        required: true
     outputs:
       npm-auth-token:
         description: "NPM Authorization Token"
