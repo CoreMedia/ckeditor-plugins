@@ -33,6 +33,10 @@
     "main": "./src/index.js",
     "types": "./src/index.d.ts"
   },
+  "files": [
+    "/src",
+    "/theme"
+  ],
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "^39.0.2",
     "@ckeditor/ckeditor5-engine": "^39.0.2",
