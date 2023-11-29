@@ -53,7 +53,7 @@ jobs:
         name: "List: @coremedia/ckeditor*"
         run: |
           npmUrl="${{ env.NPM_URL }}"
-          readarray -t packageNames < <(npm search "@coremedia/ckeditor" --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
+          readarray -t packageNames < <(npm search "@coremedia/ckeditor5" --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
 
           echo "# Package List" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
