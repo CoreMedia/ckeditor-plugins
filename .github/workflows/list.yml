@@ -2,7 +2,17 @@ name: "List Packages"
 
 on:
   workflow_dispatch:
+    inputs:
+      searchLimit:
+        description: |
+          Search-Limit: Limits number of packages found.
+        default: 100
+        type: number
   workflow_call:
+    inputs:
+      searchLimit:
+        default: 100
+        type: number
 
 permissions: {}
 
@@ -18,6 +28,7 @@ jobs:
     env:
       NPM_HOST: ${{ needs.env.outputs.npm-host }}
       NPM_URL: ${{ needs.env.outputs.npm-url }}
+      SEARCH_LIMIT: ${{ github.event.inputs.searchLimit }}
     steps:
       - id: authorize
         name: "NPM Authorization"
@@ -55,7 +66,7 @@ jobs:
           npmUrl="${{ env.NPM_URL }}"
           # searchLimit defaults to 20 if unset, thus, we may miss some
           # packages.
-          searchLimit=20
+          searchLimit=${{ env.SEARCH_LIMIT }}
           readarray -t packageNames < <(npm search "@coremedia/ckeditor5" --searchlimit ${searchLimit} --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
           packageCount=${#packageNames[@]}
 
