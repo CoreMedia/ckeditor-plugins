@@ -9,38 +9,23 @@ permissions: {}
 jobs:
   env:
     uses: "./.github/workflows/env.yml"
-  authorize:
-    name: "Authorize"
+  main:
+    name: "Main"
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs:
       - env
     env:
       NPM_HOST: ${{ needs.env.outputs.npm-host }}
       NPM_URL: ${{ needs.env.outputs.npm-url }}
-    outputs:
-      npm-auth-token: ${{ steps.npm-auth.outputs.token }}
     steps:
-      - id: npm-auth
+      - id: authorize
         name: "NPM Authorization"
         run: |
           result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.NPM_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq -r .token)
           # Ensure, the token is not exposed in output.
           echo "::add-mask::${result}"
-          echo "token=${result}" >> $GITHUB_OUTPUT
-  main:
-    name: "Main"
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    needs:
-      - env
-      - authorize
-    env:
-      NPM_HOST: ${{ needs.env.outputs.npm-host }}
-      NPM_URL: ${{ needs.env.outputs.npm-url }}
-      NPM_AUTH_TOKEN: ${{ needs.authorize.outputs.npm-auth-token }}
-    steps:
+          echo "NPM_AUTH_TOKEN=${result}" >> $GITHUB_ENV
       - id: checkout
         name: 'Init: Checkout'
         uses: actions/checkout@v4
