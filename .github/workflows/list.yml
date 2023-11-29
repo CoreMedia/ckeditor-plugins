@@ -53,17 +53,34 @@ jobs:
         name: "List: @coremedia/ckeditor*"
         run: |
           npmUrl="${{ env.NPM_URL }}"
-          readarray -t packageNames < <(npm search "@ckeditor/ckeditor5-" --json | jq -r ".[].name"|sort)
+          readarray -t packageNames < <(npm search "@coremedia/ckeditor" --json | jq -r ".[].name"|sort)
 
           echo "# Package List" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## \`@coremedia/ckeditor*\`" >> $GITHUB_STEP_SUMMARY
+          echo "## Package Overview" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Package | Latest |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
 
           for packageName in "${packageNames[@]}"; do
             latestVersion="$(npm view "${packageName}" version)"
-            echo "| \`${packageName}\` | ${latestVersion} | " >> $GITHUB_STEP_SUMMARY
+            echo "| \`${packageName}\` | ${latestVersion} |" >> $GITHUB_STEP_SUMMARY
             npm view "${packageName}" versions --registry "${npmUrl}"
+          done
+
+          versionsLimit=10
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Versions Overview (Latest ${versionsLimit})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+
+          for packageName in "${packageNames[@]}"; do
+            echo "### \`${packageName}\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            readarray -t recentPackageVersions < <(npm view "${packageName}" versions --json |  jq -r '.[]' | tail -n ${versionsLimit})
+
+            for recentPackageVersion in "${recentPackageVersions[@]}"; do
+              echo "* ${recentPackageVersion}" >> $GITHUB_STEP_SUMMARY
+            done
           done
