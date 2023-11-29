@@ -21,6 +21,7 @@ jobs:
       - env
     env:
       NPM_URL: ${{ needs.env.outputs.npm-url }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - id: get-token
         name: "Get NPM Authorization Token"
