@@ -18,6 +18,9 @@
     "pnpm": "^8.6.9"
   },
   "license": "Apache-2.0",
+  "files": [
+    "/src"
+  ],
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
     "clean": "pnpm clean:src && pnpm clean:dist",
