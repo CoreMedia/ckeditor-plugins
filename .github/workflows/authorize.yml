@@ -23,6 +23,13 @@ jobs:
       NPM_URL: ${{ needs.env.outputs.npm-url }}
       GH_TOKEN: ${{ github.token }}
     steps:
+      # Checkout required to invoke "gh"
+      - id: checkout
+        name: 'Init: Checkout'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: false
       - id: get-token
         name: "Get NPM Authorization Token"
         run: |
