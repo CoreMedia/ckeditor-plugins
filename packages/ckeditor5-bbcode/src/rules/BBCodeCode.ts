@@ -60,7 +60,16 @@ export const defaultIsUnset: IsUnset = (languageToken: string): boolean => defau
  * Configuration for `BBCodeCode` rule.
  */
 export interface BBCodeCodeConfig {
+  /**
+   * Strategy to retrieve a language token from applied classes.
+   */
   fromClass?: LanguageByClass;
+  /**
+   * Predicate to validate, if a language token extracted by
+   * `fromClass` is to be considered _unset_. Typically used for values such
+   * as `plaintext`. Thus, `isUnset` should relate to the results of
+   * `fromClass`.
+   */
   isUnset?: IsUnset;
 }
 
