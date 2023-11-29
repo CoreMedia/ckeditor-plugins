@@ -46,8 +46,8 @@ jobs:
       - id: list-coremedia-ckeditor
         name: "List: @coremedia/ckeditor*"
         run: |
-          npmHost="${{ env.NPM_HOST }}"
-          packages=$(npm search "@coremedia/ckeditor" --json --registry "${npmHost}")
+          npmUrl="${{ env.NPM_URL }}"
+          packages=$(npm search "@coremedia/ckeditor" --json --registry "${npmUrl}")
 
           echo "# \`@coremedia/ckeditor*\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -57,13 +57,13 @@ jobs:
           for package in $(jq -r ".[].name" <(echo "${packages}")); do
             echo "${package}"
             echo "| \`${package}\` |" >> $GITHUB_STEP_SUMMARY
-            npm view "${package}" versions --registry "${npmHost}"
+            npm view "${package}" versions --registry "${npmUrl}"
           done
       - id: list-coremedia-ckeditor-types
         name: "List: @coremedia/types-ckeditor* (Deprecated)"
         run: |
-          npmHost="${{ env.NPM_HOST }}"
-          packages=$(npm search "@coremedia/types-ckeditor__" --json --registry "${npmHost}")
+          npmUrl="${{ env.NPM_URL }}"
+          packages=$(npm search "@coremedia/types-ckeditor__" --json --registry "${npmUrl}")
 
           echo "# \`@coremedia/types-ckeditor__*\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -75,5 +75,5 @@ jobs:
           for package in $(jq -r ".[].name" <(echo "${packages}")); do
             echo "${package}"
             echo "| \`${package}\` |" >> $GITHUB_STEP_SUMMARY
-            npm view "${package}" versions --registry "${npmHost}"
+            npm view "${package}" versions --registry "${npmUrl}"
           done
