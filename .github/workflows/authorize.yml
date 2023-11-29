@@ -1,0 +1,33 @@
+name: "Authorize"
+
+on:
+  workflow_call:
+    secrets: inherit
+    outputs:
+      npm-auth-token:
+        description: "NPM Authorization Token"
+        value: ${{ jobs.npm.outputs.auth-token }}
+
+permissions: {}
+
+jobs:
+  env:
+    uses: "./.github/workflows/env.yml"
+  npm:
+    name: "NPM Authorization"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - env
+    env:
+      NPM_URL: ${{ needs.env.outputs.npm-url }}
+    outputs:
+      auth-token: ${{ steps.get-token.outputs.result }}
+    steps:
+      - id: get-token
+        name: "Get NPM Authorization Token"
+        run: |
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.NPM_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq -r .token)
+          # Ensure, the token is not exposed in output.
+          echo "::add-mask::$result"
+          echo "result=${result}" >> $GITHUB_OUTPUT
