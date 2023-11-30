@@ -48,7 +48,6 @@ jobs:
           echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
 
           npm install -g pnpm@${{ env.PNPM_VERSION }}
-          npm install -g semver
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
@@ -65,10 +64,11 @@ jobs:
           fi
           actual_version=$(cat .release-version)
           prnumber=${{ steps.read-prnumber.outputs.prnumber }}
-          next_version=$(semver --increment prerelease --preid pr.${prnumber}.${{ github.run_number }} ${actual_version})
+          next_version=$(pnpm --silent "script:version" --pull-request ${prnumber} --run-number ${{ github.run_number }})
           pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          git commit -am "Set next pre-release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
-          git commit -am "Set PR Version: ${next_version}"
+          git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
           echo "**Pre-Release Version:** ${next_version}" >> $GITHUB_STEP_SUMMARY
       - name: Build
         run: pnpm build
