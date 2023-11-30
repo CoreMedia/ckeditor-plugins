@@ -50,7 +50,7 @@
     "lint:fix": "eslint --fix \"**/*.{js,ts,tsx}\"",
     "prettier": "prettier --check \"**/*.{js,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,ts,tsx}\"",
-    "preinstall": "npx --yes only-allow pnpm",
+    "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
     "update-latest": "pnpm update --interactive --latest --recursive"
   },
