@@ -45,12 +45,18 @@ importers:
       eslint-plugin-unused-imports:
         specifier: ^3.0.0
         version: 3.0.0(@typescript-eslint/eslint-plugin@6.7.2)(eslint@8.49.0)
+      minimist:
+        specifier: ^1.2.8
+        version: 1.2.8
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
       rimraf:
         specifier: ^5.0.1
         version: 5.0.1
+      semver:
+        specifier: ^7.5.4
+        version: 7.5.4
       typedoc:
         specifier: ^0.25.1
         version: 0.25.1(typescript@4.9.5)
@@ -2951,7 +2957,7 @@ packages:
       glob: 7.2.3
       js-yaml: 4.1.0
       lodash: 4.17.21
-      semver: 7.3.7
+      semver: 7.5.4
       yargs: 16.2.0
     dev: false
 
@@ -6789,7 +6795,7 @@ packages:
       html-encoding-sniffer: 3.0.0
       http-proxy: 1.18.1
       mime: 1.6.0
-      minimist: 1.2.6
+      minimist: 1.2.8
       opener: 1.5.2
       portfinder: 1.0.32
       secure-compare: 3.0.1
@@ -8102,10 +8108,6 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
-  /minimist@1.2.6:
-    resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
-    dev: true
-
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
@@ -8155,7 +8157,7 @@ packages:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.8
     dev: true
 
   /mkdirp@1.0.4:
@@ -9455,14 +9457,6 @@ packages:
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
-
-  /semver@7.3.7:
-    resolution: {integrity: sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: false
 
   /semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
