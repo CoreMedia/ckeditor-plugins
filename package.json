@@ -52,7 +52,8 @@
     "prettier:fix": "prettier --write \"**/*.{js,ts,tsx}\"",
     "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
-    "update-latest": "pnpm update --interactive --latest --recursive"
+    "update-latest": "pnpm update --interactive --latest --recursive",
+    "script:version": "node ./scripts/version.mjs"
   },
   "dependencies": {
     "@coremedia/set-version": "1.1.1"
@@ -69,8 +70,10 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "minimist": "^1.2.8",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
+    "semver": "^7.5.4",
     "typedoc": "^0.25.1",
     "typescript": "^4.9.5"
   }
