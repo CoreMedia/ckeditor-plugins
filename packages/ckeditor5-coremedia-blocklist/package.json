@@ -35,7 +35,8 @@
     "types": "./src/index.d.ts"
   },
   "files": [
-    "/src"
+    "/src",
+    "/theme"
   ],
   "devDependencies": {
     "@ckeditor/ckeditor5-clipboard": "^39.0.2",
