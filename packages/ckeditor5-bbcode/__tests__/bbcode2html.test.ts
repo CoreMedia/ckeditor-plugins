@@ -1,13 +1,33 @@
 // noinspection HtmlUnknownTarget,SpellCheckingInspection,HtmlRequiredAltAttribute
 
 import { bbCodeDefaultRules } from "../src";
-import { bbcode2html } from "../src/bbcode2html";
+import { bbcode2html, processBBCode } from "../src/bbcode2html";
+import { CoreTree } from "@bbob/core/es";
 
 const supportedTags = bbCodeDefaultRules.flatMap((r) => r.tags ?? ([] as string[]));
 
 const aut = {
-  expectTransformation: ({ data, expectedDataView }: { data: string; expectedDataView: string }): void => {
-    const actual = bbcode2html(data, supportedTags);
+  expectTransformation: (
+    { data, expectedDataView }: { data: string; expectedDataView: string },
+    expectedErrors = 0,
+  ): void => {
+    const originalConsoleError = console.error;
+    const errorCache: unknown[][] = [];
+    const silencedHandler: typeof console.error = (...data: unknown[]): void => {
+      errorCache.push(data);
+    };
+
+    let actual: string;
+
+    try {
+      console.error = silencedHandler;
+      actual = bbcode2html(data, supportedTags);
+    } finally {
+      console.error = originalConsoleError;
+    }
+
+    expect(errorCache).toHaveLength(expectedErrors);
+
     try {
       expect(actual).toBe(expectedDataView);
     } catch (e) {
@@ -19,6 +39,7 @@ const aut = {
       throw e;
     }
   },
+  process: (data: string): ReturnType<typeof processBBCode> => processBBCode(data, supportedTags),
 };
 
 /**
@@ -229,18 +250,31 @@ describe("bbcode2html", () => {
      * We may meet unexpected formatting. This is handled (and tested) by
      * BBob. These tests are mainly meant as proof-of-concept to understand
      * the behavior of the BBob library.
+     *
+     * The count of expected errors is more an integration test towards BBob.
+     * It is perfectly fine, if the expected error count needs to be adjusted
+     * after BBob upgrade. Thus, the current number of expected errors only
+     * represents the current behavior of BBob.
      */
     describe("Formatting Errors", () => {
       it.each`
-        data                   | expectedDataView                                                                          | comment
-        ${`[b]T`}              | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
-        ${`T[/b]`}             | ${`T`}                                                                                    | ${`perfectly fine: Just ignore orphaned close-tag`}
-        ${`[b]T[/i]`}          | ${`<span style="font-weight: bold;"></span>T`}                                            | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
-        ${`[b]A[i]B[/b]C[/i]`} | ${`<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`} | ${`surprise: only opening tag seems to control the hierarchy`}
+        data                   | expectedDataView                                                                          | expectedErrors | comment
+        ${`[b]T`}              | ${`<span style="font-weight: bold;"></span>T`}                                            | ${0}           | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
+        ${`T[/b]`}             | ${`T`}                                                                                    | ${1}           | ${`perfectly fine: Just ignore orphaned close-tag`}
+        ${`[b]T[/i]`}          | ${`<span style="font-weight: bold;"></span>T`}                                            | ${1}           | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
+        ${`[b]A[i]B[/b]C[/i]`} | ${`<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`} | ${0}           | ${`surprise: only opening tag seems to control the hierarchy`}
       `(
         "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+        ({
+          data,
+          expectedDataView,
+          expectedErrors,
+        }: {
+          data: string;
+          expectedDataView: string;
+          expectedErrors: number;
+        }) => {
+          aut.expectTransformation({ data, expectedDataView }, expectedErrors);
         },
       );
     });
@@ -325,19 +359,43 @@ describe("bbcode2html", () => {
     `(
       "[$#] Should handle BBCode errors with care: $erred, expected: $expected ($comment)",
       ({ erred: data, expected: expectedDataView }: { erred: string; expected: string }) => {
-        const originalConsoleError = console.error;
-        const errorCache: unknown[][] = [];
-        const silencedHandler: typeof console.error = (...data: unknown[]): void => {
-          errorCache.push(data);
-        };
-        try {
-          console.error = silencedHandler;
-          aut.expectTransformation({ data, expectedDataView });
-          // We expect at least one error reported to console.
-          expect(errorCache).not.toHaveLength(0);
-        } finally {
-          console.error = originalConsoleError;
-        }
+        // We expect BBob to raise an error for all the above data. If this
+        // changes, feel free to adapt the number of expected errors.
+        aut.expectTransformation({ data, expectedDataView }, 1);
+      },
+    );
+  });
+
+  /**
+   * Tests dedicated to the BBob integration. Typically applied to some lower
+   * aspects to either ease debugging or to validate unchanged behavior after
+   * BBob upgrade.
+   */
+  describe("BBob Integratino", () => {
+    /**
+     * Demonstrates (and validates) that the BBob parser is unaware of
+     * newline representations different to LF (Unix). As a result, we need
+     * to pre-process the incoming data to normalize newlines.
+     *
+     * If any of these tests fail, we may skip (or adapt) this extra processing.
+     *
+     * @see <https://github.com/JiLiZART/BBob/issues/212>
+     */
+    it.each`
+      newline     | expectedTree          | type
+      ${`\n`}     | ${["\n"]}             | ${`LF (Unix)`}
+      ${`\r\n`}   | ${["\r", "\n"]}       | ${`CRLF (Windows)`}
+      ${`\r`}     | ${["\r"]}             | ${`CR (classic MacOS)`}
+      ${`A\nB`}   | ${["A", "\n", "B"]}   | ${`LF (Unix)`}
+      ${`A\r\nB`} | ${["A\r", "\n", "B"]} | ${`CRLF (Windows)`}
+      ${`A\rB`}   | ${["A\rB"]}           | ${`CR (classic MacOS)`}
+    `(
+      "[$#] Should parse system dependent newline representation for $type as expected.",
+      ({ newline, expectedTree }: { newline: string; expectedTree: CoreTree }) => {
+        // deconstruct to remove extra "candy" like messages from the resulting
+        // array.
+        const tree = [...aut.process(newline).tree];
+        expect(tree).toEqual(expectedTree);
       },
     );
   });
