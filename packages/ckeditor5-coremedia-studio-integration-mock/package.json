@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration-mock",
-  "version": "16.0.1-rc.2",
+  "version": "16.0.1-rc.3",
   "description": "CoreMedia Studio: Mock Communication facade for testing",
   "author": {
     "name": "CoreMedia GmbH",
@@ -57,9 +57,9 @@
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "16.0.1-rc.2",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "16.0.1-rc.2",
-    "@coremedia/ckeditor5-logging": "16.0.1-rc.2",
+    "@coremedia/ckeditor5-core-common": "16.0.1-rc.3",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "16.0.1-rc.3",
+    "@coremedia/ckeditor5-logging": "16.0.1-rc.3",
     "rxjs": "^7.8.1"
   }
 }
