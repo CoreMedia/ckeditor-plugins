@@ -27,13 +27,13 @@ all model attributes start with <code>link</code> in their names.</p>
 <p>To register attributes to handle as being part of links, you may call
 <code>registerAttribute</code>. To ease this process, a utility method
 <code>getLinkAttributes</code> exists, that may be invoked like this:</p>
-<pre><code class="language-typescript"><span class="hl-2">getLinkAttributes</span><span class="hl-1">(</span><span class="hl-4">editor</span><span class="hl-1">)?.</span><span class="hl-2">registerAttribute</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-4">model:</span><span class="hl-1"> </span><span class="hl-7">&quot;linkCustomAttribute&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">view:</span><span class="hl-1"> </span><span class="hl-7">&quot;data-custom-attribute&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">});</span>
+<pre><code class="language-typescript"><span class="hl-5">getLinkAttributes</span><span class="hl-2">(</span><span class="hl-6">editor</span><span class="hl-2">)?.</span><span class="hl-5">registerAttribute</span><span class="hl-2">({</span><br/><span class="hl-2">  </span><span class="hl-6">model:</span><span class="hl-2"> </span><span class="hl-11">&quot;linkCustomAttribute&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">  </span><span class="hl-6">view:</span><span class="hl-2"> </span><span class="hl-11">&quot;data-custom-attribute&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">});</span>
 </code><button>Copy</button></pre>
 <p><strong>CKEditor Configuration</strong></p>
 <p>As an alternative to configuring these attributes via API, you may also
 define corresponding attributes as part of the CKEditor Link Feature
 configuration – with an extended section <code>attributes</code>:</p>
-<pre><code class="language-typescript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-16">linkAttributesConfig</span><span class="hl-1">: </span><span class="hl-3">LinkAttributesConfig</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-4">attributes:</span><span class="hl-1"> [</span><br/><span class="hl-1">    { </span><span class="hl-4">view:</span><span class="hl-1"> </span><span class="hl-7">&quot;title&quot;</span><span class="hl-1">, </span><span class="hl-4">model:</span><span class="hl-1"> </span><span class="hl-7">&quot;linkTitle&quot;</span><span class="hl-1"> },</span><br/><span class="hl-1">    { </span><span class="hl-4">view:</span><span class="hl-1"> </span><span class="hl-7">&quot;data-xlink-actuate&quot;</span><span class="hl-1">, </span><span class="hl-4">model:</span><span class="hl-1"> </span><span class="hl-7">&quot;linkActuate&quot;</span><span class="hl-1"> },</span><br/><span class="hl-1">  ],</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-4">ClassicEditor</span><span class="hl-1">.</span><span class="hl-2">create</span><span class="hl-1">(</span><span class="hl-4">sourceElement</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-4">plugins:</span><span class="hl-1"> [</span><br/><span class="hl-1">    </span><span class="hl-4">LinkAttributes</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">Link</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-5">// ...</span><br/><span class="hl-1">  ],</span><br/><span class="hl-1">  </span><span class="hl-4">link:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">defaultProtocol:</span><span class="hl-1"> </span><span class="hl-7">&quot;https://&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    ...</span><span class="hl-4">linkAttributesConfig</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">};</span>
+<pre><code class="language-typescript"><span class="hl-8">const</span><span class="hl-2"> </span><span class="hl-16">linkAttributesConfig</span><span class="hl-2">: </span><span class="hl-9">LinkAttributesConfig</span><span class="hl-2"> = {</span><br/><span class="hl-2">  </span><span class="hl-6">attributes:</span><span class="hl-2"> [</span><br/><span class="hl-2">    { </span><span class="hl-6">view:</span><span class="hl-2"> </span><span class="hl-11">&quot;title&quot;</span><span class="hl-2">, </span><span class="hl-6">model:</span><span class="hl-2"> </span><span class="hl-11">&quot;linkTitle&quot;</span><span class="hl-2"> },</span><br/><span class="hl-2">    { </span><span class="hl-6">view:</span><span class="hl-2"> </span><span class="hl-11">&quot;data-xlink-actuate&quot;</span><span class="hl-2">, </span><span class="hl-6">model:</span><span class="hl-2"> </span><span class="hl-11">&quot;linkActuate&quot;</span><span class="hl-2"> },</span><br/><span class="hl-2">  ],</span><br/><span class="hl-2">};</span><br/><br/><span class="hl-6">ClassicEditor</span><span class="hl-2">.</span><span class="hl-5">create</span><span class="hl-2">(</span><span class="hl-6">sourceElement</span><span class="hl-2">, {</span><br/><span class="hl-2">  </span><span class="hl-6">plugins:</span><span class="hl-2"> [</span><br/><span class="hl-2">    </span><span class="hl-6">LinkAttributes</span><span class="hl-2">,</span><br/><span class="hl-2">    </span><span class="hl-6">Link</span><span class="hl-2">,</span><br/><span class="hl-2">    </span><span class="hl-7">// ...</span><br/><span class="hl-2">  ],</span><br/><span class="hl-2">  </span><span class="hl-6">link:</span><span class="hl-2"> {</span><br/><span class="hl-2">    </span><span class="hl-6">defaultProtocol:</span><span class="hl-2"> </span><span class="hl-11">&quot;https://&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">    ...</span><span class="hl-6">linkAttributesConfig</span><span class="hl-2">,</span><br/><span class="hl-2">  },</span><br/><span class="hl-2">};</span>
 </code><button>Copy</button></pre>
 <p>Declaring this as a constant is recommended to get IDE support regarding
 the available fields and valid values. You will note that the type of
@@ -53,11 +53,11 @@ with <code>link</code>) won&#39;t work.</p>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li><a href="ckeditor5_blocklist.BlockList.html#constructor.new_BlockList" class="tsd-signature-type tsd-kind-constructor-signature">new BlockList</a>
+<li><a href="ckeditor5_coremedia_blocklist.BlockList.html#constructor.new_BlockList" class="tsd-signature-type tsd-kind-constructor-signature">new BlockList</a>
 <ul class="tsd-hierarchy">
 <li><span class="target">LinkAttributes</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/0f16398ff/packages/ckeditor5-link-common/src/LinkAttributes.ts#L91">packages/ckeditor5-link-common/src/LinkAttributes.ts:91</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/fae89310d/packages/ckeditor5-link-common/src/LinkAttributes.ts#L91">packages/ckeditor5-link-common/src/LinkAttributes.ts:91</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -101,12 +101,12 @@ with <code>link</code>) won&#39;t work.</p>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>plugin<wbr/>Name</span><a href="#pluginName" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">plugin<wbr/>Name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;LinkAttributes&quot;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/0f16398ff/packages/ckeditor5-link-common/src/LinkAttributes.ts#L93">packages/ckeditor5-link-common/src/LinkAttributes.ts:93</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/fae89310d/packages/ckeditor5-link-common/src/LinkAttributes.ts#L93">packages/ckeditor5-link-common/src/LinkAttributes.ts:93</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="requires" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>requires</span><a href="#requires" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">requires</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type ">default</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><a href="ckeditor5_link_common.LinkCleanup.html" class="tsd-signature-type tsd-kind-class">LinkCleanup</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/0f16398ff/packages/ckeditor5-link-common/src/LinkAttributes.ts#L96">packages/ckeditor5-link-common/src/LinkAttributes.ts:96</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/fae89310d/packages/ckeditor5-link-common/src/LinkAttributes.ts#L96">packages/ckeditor5-link-common/src/LinkAttributes.ts:96</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member"><a id="init" class="tsd-anchor"></a>
@@ -116,7 +116,7 @@ with <code>link</code>) won&#39;t work.</p>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/0f16398ff/packages/ckeditor5-link-common/src/LinkAttributes.ts#L98">packages/ckeditor5-link-common/src/LinkAttributes.ts:98</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/fae89310d/packages/ckeditor5-link-common/src/LinkAttributes.ts#L98">packages/ckeditor5-link-common/src/LinkAttributes.ts:98</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="registerAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>register<wbr/>Attribute</span><a href="#registerAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -139,7 +139,7 @@ removed (via <code>LinkCleanup</code> plugin).</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/0f16398ff/packages/ckeditor5-link-common/src/LinkAttributes.ts#L135">packages/ckeditor5-link-common/src/LinkAttributes.ts:135</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/fae89310d/packages/ckeditor5-link-common/src/LinkAttributes.ts#L135">packages/ckeditor5-link-common/src/LinkAttributes.ts:135</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -165,9 +165,10 @@ removed (via <code>LinkCleanup</code> plugin).</p>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../index.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>CoreMedia CKEditor 5 Plugins</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
+<li><a href="../modules/ckeditor5_bbcode.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-bbcode</a></li>
 <li><a href="../modules/ckeditor5_common.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-common</a></li>
 <li><a href="../modules/ckeditor5_core_common.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-core-common</a></li>
-<li><a href="../modules/ckeditor5_blocklist.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-blocklist</a></li>
+<li><a href="../modules/ckeditor5_coremedia_blocklist.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-blocklist</a></li>
 <li><a href="../modules/ckeditor5_coremedia_content.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-content</a></li>
 <li><a href="../modules/ckeditor5_coremedia_content_clipboard.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-content-clipboard</a></li>
 <li><a href="../modules/ckeditor5_coremedia_differencing.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-differencing</a></li>
@@ -178,7 +179,7 @@ removed (via <code>LinkCleanup</code> plugin).</p>
 <li><a href="../modules/ckeditor5_coremedia_studio_essentials.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-studio-essentials</a></li>
 <li><a href="../modules/ckeditor5_coremedia_studio_integration.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-studio-integration</a></li>
 <li><a href="../modules/ckeditor5_coremedia_studio_integration_mock.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-studio-integration-mock</a></li>
-<li><a href="../modules/ckeditor5_coremedia_link-1.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-link</a></li>
+<li><a href="../modules/ckeditor5_data_facade.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-data-facade</a></li>
 <li><a href="../modules/ckeditor5_dataprocessor_support.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-dataprocessor-support</a></li>
 <li><a href="../modules/ckeditor5_dom_converter.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-dom-converter</a></li>
 <li><a href="../modules/ckeditor5_dom_support.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-dom-support</a></li>

@@ -15,20 +15,20 @@
 <li><a href="../index.html">CoreMedia CKEditor 5 Plugins</a></li>
 <li><a href="../modules/ckeditor5_common.html">ckeditor5-common</a></li>
 <li><a href="ckeditor5_common.RequireSelected.html">RequireSelected</a></li></ul>
-<h1>Type alias RequireSelected&lt;Type, Key&gt;</h1></div>
-<div class="tsd-signature"><span class="tsd-kind-type-alias">Require<wbr/>Selected</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type tsd-kind-type-parameter">Key</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Pick</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type ">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type tsd-kind-type-parameter">Key</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type ">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Pick</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type tsd-kind-type-parameter">Key</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+<h1>Type alias RequireSelected&lt;T, K&gt;</h1></div>
+<div class="tsd-signature"><span class="tsd-kind-type-alias">Require<wbr/>Selected</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type tsd-kind-type-parameter">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{</span><br/><span>    </span><span class="tsd-signature-symbol">[</span><span class="tsd-kind-type-parameter">P</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-type tsd-kind-type-parameter">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">-?: </span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type tsd-kind-type-parameter">P</span><span class="tsd-signature-symbol">]</span><br/><span class="tsd-signature-symbol">}</span></div>
 <div class="tsd-comment tsd-typography"><p>Utility type to mark selected properties as required.</p>
 </div>
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">Type</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">object</span></h4></li>
+<h4><span class="tsd-kind-type-parameter">T</span></h4></li>
 <li>
-<h4><span class="tsd-kind-type-parameter">Key</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type tsd-kind-type-parameter">Type</span></h4></li></ul></section>
+<h4><span class="tsd-kind-type-parameter">K</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type tsd-kind-type-parameter">T</span> = <span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type tsd-kind-type-parameter">T</span></h4></li></ul></section>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/0f16398ff/packages/ckeditor5-common/src/AdvancedTypes.ts#L50">AdvancedTypes.ts:50</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/CoreMedia/ckeditor-plugins/blob/fae89310d/packages/ckeditor5-common/src/RequireSelected.ts#L4">RequireSelected.ts:4</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -45,9 +45,10 @@
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../index.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>CoreMedia CKEditor 5 Plugins</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
+<li><a href="../modules/ckeditor5_bbcode.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-bbcode</a></li>
 <li><a href="../modules/ckeditor5_common.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-common</a></li>
 <li><a href="../modules/ckeditor5_core_common.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-core-common</a></li>
-<li><a href="../modules/ckeditor5_blocklist.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-blocklist</a></li>
+<li><a href="../modules/ckeditor5_coremedia_blocklist.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-blocklist</a></li>
 <li><a href="../modules/ckeditor5_coremedia_content.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-content</a></li>
 <li><a href="../modules/ckeditor5_coremedia_content_clipboard.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-content-clipboard</a></li>
 <li><a href="../modules/ckeditor5_coremedia_differencing.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-differencing</a></li>
@@ -58,7 +59,7 @@
 <li><a href="../modules/ckeditor5_coremedia_studio_essentials.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-studio-essentials</a></li>
 <li><a href="../modules/ckeditor5_coremedia_studio_integration.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-studio-integration</a></li>
 <li><a href="../modules/ckeditor5_coremedia_studio_integration_mock.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-studio-integration-mock</a></li>
-<li><a href="../modules/ckeditor5_coremedia_link-1.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-coremedia-link</a></li>
+<li><a href="../modules/ckeditor5_data_facade.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-data-facade</a></li>
 <li><a href="../modules/ckeditor5_dataprocessor_support.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-dataprocessor-support</a></li>
 <li><a href="../modules/ckeditor5_dom_converter.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-dom-converter</a></li>
 <li><a href="../modules/ckeditor5_dom_support.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>ckeditor5-dom-support</a></li>
