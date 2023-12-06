@@ -157,46 +157,46 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-bbcode':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-bbcode
       '@coremedia/ckeditor5-coremedia-blocklist':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-blocklist
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-differencing':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-differencing
       '@coremedia/ckeditor5-coremedia-images':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-images
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-essentials':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-data-facade':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-data-facade
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-dom-converter
       '@coremedia/ckeditor5-font-mapper':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-font-mapper
       '@coremedia/ckeditor5-link-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-link-common
       '@coremedia/service-agent':
         specifier: ^1.1.5
@@ -284,16 +284,16 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-jest-test-helpers
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@types/express':
         specifier: ^4.17.17
@@ -380,13 +380,13 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -399,7 +399,7 @@ importers:
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
       '@coremedia/ckeditor5-dom-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dom-support
       '@types/jest':
         specifier: ^29.5.4
@@ -423,7 +423,7 @@ importers:
   packages/ckeditor5-common:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -448,10 +448,10 @@ importers:
   packages/ckeditor5-core-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -482,13 +482,13 @@ importers:
         specifier: ^39.0.2
         version: 39.0.2
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
@@ -531,10 +531,10 @@ importers:
   packages/ckeditor5-coremedia-content:
     dependencies:
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -565,16 +565,16 @@ importers:
   packages/ckeditor5-coremedia-content-clipboard:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
@@ -629,22 +629,22 @@ importers:
   packages/ckeditor5-coremedia-differencing:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-dom-converter':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -684,7 +684,7 @@ importers:
   packages/ckeditor5-coremedia-example-data:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -709,19 +709,19 @@ importers:
   packages/ckeditor5-coremedia-images:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
@@ -770,25 +770,25 @@ importers:
   packages/ckeditor5-coremedia-link:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-link-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
@@ -843,25 +843,25 @@ importers:
   packages/ckeditor5-coremedia-richtext:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-link-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -901,10 +901,10 @@ importers:
   packages/ckeditor5-coremedia-richtext-support:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -944,10 +944,10 @@ importers:
   packages/ckeditor5-coremedia-studio-essentials:
     dependencies:
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-richtext-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-richtext-support
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -993,7 +993,7 @@ importers:
   packages/ckeditor5-coremedia-studio-integration:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
       node-esapi:
         specifier: ^0.0.1
@@ -1030,13 +1030,13 @@ importers:
   packages/ckeditor5-coremedia-studio-integration-mock:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
@@ -1082,10 +1082,10 @@ importers:
   packages/ckeditor5-data-facade:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-autosave':
@@ -1125,10 +1125,10 @@ importers:
   packages/ckeditor5-dataprocessor-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
@@ -1165,13 +1165,13 @@ importers:
   packages/ckeditor5-dom-converter:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-dom-support':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-utils':
@@ -1196,7 +1196,7 @@ importers:
   packages/ckeditor5-dom-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1218,13 +1218,13 @@ importers:
   packages/ckeditor5-font-mapper:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
@@ -1288,13 +1288,13 @@ importers:
   packages/ckeditor5-link-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 16.0.1-rc.2
+        specifier: 16.0.1-rc.3
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
