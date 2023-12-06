@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-itest",
-  "version": "16.0.1-rc.3",
+  "version": "16.1.0",
   "description": "Integration Tests for CKEditor 5",
   "author": {
     "name": "CoreMedia GmbH",
@@ -24,10 +24,10 @@
     "@ckeditor/ckeditor5-ui": "^39.0.2",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/ckeditor5-coremedia-link": "16.0.1-rc.3",
-    "@coremedia/ckeditor5-coremedia-richtext": "16.0.1-rc.3",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "16.0.1-rc.3",
-    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "16.0.1-rc.3",
+    "@coremedia/ckeditor5-coremedia-link": "^16.1.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "^16.1.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^16.1.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "^16.1.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.4",
     "@types/node": "^18.17.15",

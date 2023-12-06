@@ -18,7 +18,7 @@
     "main": "./src/index.js",
     "types": "./src/index.d.ts"
   },
-  "version": "16.0.1-rc.3",
+  "version": "16.1.0",
   "engines": {
     "node": "18",
     "pnpm": "^8.6.9"
@@ -46,9 +46,9 @@
     "@ckeditor/ckeditor5-utils": "^39.0.2"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "16.0.1-rc.3",
-    "@coremedia/ckeditor5-core-common": "16.0.1-rc.3",
-    "@coremedia/ckeditor5-logging": "16.0.1-rc.3"
+    "@coremedia/ckeditor5-common": "^16.1.0",
+    "@coremedia/ckeditor5-core-common": "^16.1.0",
+    "@coremedia/ckeditor5-logging": "^16.1.0"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
