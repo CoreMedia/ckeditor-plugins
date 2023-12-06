@@ -19,7 +19,6 @@ import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
 import { DocumentList, DocumentListProperties } from "@ckeditor/ckeditor5-list";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
-import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Indent } from "@ckeditor/ckeditor5-indent";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import { FontColor, FontSize } from "@ckeditor/ckeditor5-font";
@@ -69,8 +68,6 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       RemoveFormat,
       SourceEditing,
       Strikethrough,
-      Table,
-      TableToolbar,
       Underline,
     ],
     toolbar: [
@@ -92,8 +89,6 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       "|",
       "blockQuote",
       "codeBlock",
-      "|",
-      "insertTable",
       "|",
       "numberedList",
       "bulletedList",
@@ -214,9 +209,6 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     },
     link: {
       defaultProtocol: "https://",
-    },
-    table: {
-      contentToolbar: ["tableColumn", "tableRow"],
     },
   });
 };
