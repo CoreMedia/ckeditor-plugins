@@ -56,7 +56,7 @@ export type ViewContentLink = `${typeof contentUriPathPrefix}:${number}`;
 export const parseDataContentLink = (value: DataContentLink | UapiContentLink | string): number | undefined => {
   const match = value.match(dataContentLinkPattern);
   if (!match) {
-    return;
+    return undefined;
   }
   // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
   const { id }: { id: string } = match.groups;
@@ -81,7 +81,7 @@ export const parseDataContentLink = (value: DataContentLink | UapiContentLink | 
 export const parseViewContentLink = (value: ViewContentLink | string): number | undefined => {
   const match = value.match(viewContentLinkPattern);
   if (!match) {
-    return;
+    return undefined;
   }
   // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
   const { id }: { id: string } = match.groups;

@@ -1,35 +1,7 @@
-name: List packages
+name: "List packages (deprecated)"
 on:
   workflow_dispatch:
 jobs:
-  build:
-    name: Package listing
-    env:
-      NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Resolve NPM_AUTH_TOKEN
-        run: |
-          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' https://npm.coremedia.io/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }} | jq -r .token)
-          echo "::add-mask::$NPM_AUTH_TOKEN"
-          echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo '//npm.coremedia.io/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-      - name: List all @coremedia/ckeditor5 packages with all versions
-        run: |
-          cmcke5packages=$(npm search "@coremedia/ckeditor" --json --registry https://npm.coremedia.io)
-          for i in $(jq -r ".[].name" <(echo "$cmcke5packages"))
-          do
-            echo $i
-            npm view "$i" versions --registry https://npm.coremedia.io
-          done
-      - name: List all @coremedia/types-ckeditor__ packages with all versions
-        run: |
-          cmcke5packages=$(npm search "@coremedia/types-ckeditor__" --json --registry https://npm.coremedia.io)
-          for i in $(jq -r ".[].name" <(echo "$cmcke5packages"))
-          do
-            echo $i
-            npm view "$i" versions --registry https://npm.coremedia.io
-          done
+  delegate:
+    uses: "./.github/workflows/list.yml"
+    secrets: inherit

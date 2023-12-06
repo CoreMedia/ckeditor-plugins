@@ -147,6 +147,7 @@ export default class Blocklistui extends Plugin {
       button.label = t("Manage Blocklist");
       button.icon = blocklistIcon;
       button.keystroke = BLOCKLIST_KEYSTROKE;
+      button.class = "open-blocklist";
       button.tooltip = true;
       button.isToggleable = true;
 
@@ -155,10 +156,31 @@ export default class Blocklistui extends Plugin {
       button.bind("isOn").to(command, "value", (value: string[]) => value && value.length > 0);
 
       // Show the panel on button click.
-      this.listenTo(button, "execute", () => this.#showBlocklistBalloon(true));
+      this.listenTo(button, "execute", () => {
+        this.#showBlocklistBalloonConsideringSelection();
+      });
 
       return button;
     });
+  }
+
+  /**
+   * Opens the blocklist balloon, considering the current selection.
+   * If one or more blocked words are selected, the balloon will be opened with
+   * those words. Otherwise, the balloon will be opened with an empty list.
+   *
+   * @private
+   */
+  #showBlocklistBalloonConsideringSelection() {
+    const blockedWords = this.#getSelectedBlocklistWords();
+    if (!blockedWords || blockedWords.length === 0) {
+      this.#showBlocklistBalloon(true);
+      return;
+    }
+
+    // Set the currently selected words in the blocklist command
+    this.blocklistCommand?.set("value", blockedWords);
+    this.#showBlocklistBalloon(true);
   }
 
   /**
@@ -266,6 +288,14 @@ export default class Blocklistui extends Plugin {
 
     // Handle click on view document and show panel when selection is placed inside a blocked element.
     this.listenTo<ViewDocumentClickEvent>(viewDocument, "click", () => {
+      const view = this.editor.editing.view;
+      const selection = view.document.selection;
+      if (!selection.isCollapsed) {
+        // If an author is selecting a range of text, we suppose that the authors intention
+        // is not to open the blocked words balloon even if blocked words are part of the selection.
+        return;
+      }
+
       const blockedWords = this.#getSelectedBlocklistWords();
       if (!blockedWords || blockedWords.length === 0) {
         return;
@@ -284,7 +314,7 @@ export default class Blocklistui extends Plugin {
       cancel();
 
       if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
-        this.#showBlocklistBalloon(true);
+        this.#showBlocklistBalloonConsideringSelection();
       }
     });
   }
@@ -360,15 +390,17 @@ export default class Blocklistui extends Plugin {
     const view = this.editor.editing.view;
     const selection = view.document.selection;
 
-    const firstPosition = selection.getFirstPosition();
-    if (!firstPosition) {
+    const firstRange = selection.getFirstRange();
+    if (!firstRange) {
       return undefined;
     }
-
-    if (selection.isCollapsed) {
-      return this.#getAllBlockedWordsForPosition(firstPosition);
+    const positions = firstRange.getPositions();
+    const blockedWords: Set<string> = new Set<string>();
+    for (const position of positions) {
+      const words = this.#getAllBlockedWordsForPosition(position);
+      words.forEach((word) => blockedWords.add(word));
     }
-    return undefined;
+    return Array.from(blockedWords.values());
   }
 
   /**
@@ -377,8 +409,7 @@ export default class Blocklistui extends Plugin {
    * @private
    */
   #getSelectedText(): string {
-    const view = this.editor.editing.view;
-    const selection = view.document.selection;
+    const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
 
     const isTextProxy = (node: unknown): node is TextProxy =>
@@ -386,7 +417,7 @@ export default class Blocklistui extends Plugin {
       typeof node === "object" && node !== null && "data" in node;
 
     if (range) {
-      const item = Array.from(range.getItems())
+      return Array.from(range.getItems())
         .filter((item) => isTextProxy(item))
         .map((item) => {
           if (isTextProxy(item)) {
@@ -394,8 +425,7 @@ export default class Blocklistui extends Plugin {
           }
           return "";
         })
-        .join();
-      return removeSpecialChars(item);
+        .join("");
     }
     return "";
   }
@@ -435,18 +465,3 @@ export default class Blocklistui extends Plugin {
       .filter((attribute) => attribute !== undefined) as string[];
   }
 }
-
-/**
- * Remove special characters, like commas, in a string.
- * Used to format strings within a selection to make sure a string only contains
- * the actual word when a highlighted section is within the selection.
- *
- * @param input - the input string
- * @returns the transformed string
- * @private
- */
-export const removeSpecialChars = (input: string): string => {
-  // This regex allows letters, numbers, whitespace, hyphens and single quotes.
-  const regex = /[^a-zA-Z0-9\s-']/g;
-  return input.replace(regex, "");
-};

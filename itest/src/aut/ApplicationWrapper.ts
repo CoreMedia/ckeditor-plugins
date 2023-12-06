@@ -22,6 +22,14 @@ interface StartResult {
 }
 
 /**
+ * Represents a hash parameter for urls.
+ */
+interface HashParameter {
+  key: string;
+  value: string;
+}
+
+/**
  * Type-guard, to check, whether given value represents an address information
  * holding a port.
  *
@@ -35,7 +43,7 @@ const isAddressInfo = (value: unknown): value is Pick<AddressInfo, "port"> =>
  * example application. Requires the application to be build prior to
  * running the tests.
  */
-const startServer = async (): Promise<StartResult> => {
+const startServer = async (hashParams: HashParameter[]): Promise<StartResult> => {
   const applicationFolder = path.resolve("../app");
   const app = express();
   app.use("/", express.static(applicationFolder));
@@ -51,7 +59,9 @@ const startServer = async (): Promise<StartResult> => {
   const { port } = address;
   const baseUrl = new URL(`http://localhost:${port}/`);
   const indexUrl = new URL("/sample/index.html", baseUrl);
-
+  hashParams.forEach((hashParameter: HashParameter) => {
+    indexUrl.hash += (indexUrl.hash ? "&" : "") + hashParameter.key + "=" + hashParameter.value;
+  });
   const shutdown = async () => {
     const start = performance.now();
 
@@ -102,8 +112,8 @@ export class ApplicationWrapper {
    * Starts the application and provides a wrapper to interact with
    * the example application.
    */
-  static async start(): Promise<ApplicationWrapper> {
-    const { indexUrl, shutdown } = await startServer();
+  static async start(hashParams: HashParameter[] = []): Promise<ApplicationWrapper> {
+    const { indexUrl, shutdown } = await startServer(hashParams);
     return new ApplicationWrapper(indexUrl, shutdown);
   }
 

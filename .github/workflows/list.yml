@@ -1,0 +1,108 @@
+name: "List Packages"
+
+on:
+  workflow_dispatch:
+    inputs:
+      searchLimit:
+        description: |
+          Search-Limit: Limits number of packages found.
+        default: 100
+        required: false
+        type: number
+  workflow_call:
+    inputs:
+      searchLimit:
+        default: 100
+        required: false
+        type: number
+
+permissions: {}
+
+jobs:
+  env:
+    uses: "./.github/workflows/env.yml"
+  main:
+    name: "Main"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs:
+      - env
+    env:
+      NPM_HOST: ${{ needs.env.outputs.npm-host }}
+      NPM_URL: ${{ needs.env.outputs.npm-url }}
+      SEARCH_LIMIT: ${{ inputs.searchLimit }}
+    steps:
+      - id: authorize
+        name: "NPM Authorization"
+        run: |
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.NPM_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq -r .token)
+          # Ensure, the token is not exposed in output.
+          echo "::add-mask::${result}"
+          echo "NPM_AUTH_TOKEN=${result}" >> $GITHUB_ENV
+      - id: checkout
+        name: 'Init: Checkout'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: false
+      - id: npmrc
+        name: "Init: .npmrc"
+        run: |
+          npmHost="${{ env.NPM_HOST }}"
+          npmUrl="${{ env.NPM_URL }}"
+          npmAuthToken="${{ env.NPM_AUTH_TOKEN }}"
+
+          echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
+          echo "@coremedia:registry=${npmUrl}" >> .npmrc
+          # We must not commit this change.
+          git update-index --assume-unchanged .npmrc
+      - id: npm-search
+        name: "NPM Search for @coremedia/ckeditor"
+        run: |
+          npmUrl="${{ env.NPM_URL }}"
+          packages=$(npm search "@coremedia/ckeditor" --json --registry "${npmUrl}")
+
+      - id: list-coremedia-ckeditor
+        name: "List: @coremedia/ckeditor*"
+        run: |
+          npmUrl="${{ env.NPM_URL }}"
+          # searchLimit defaults to 20 if unset, thus, we may miss some
+          # packages.
+          searchLimit=${{ env.SEARCH_LIMIT }}
+          readarray -t packageNames < <(npm search "@coremedia/ckeditor5" --searchlimit ${searchLimit} --json --registry "${npmUrl}" | jq -r ".[].name"|sort)
+          packageCount=${#packageNames[@]}
+
+          echo "# Package List (${#packageNames[@]})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if (( searchLimit == packageCount )); then
+            echo "**Limit Reached:** ${packageCount} is the current search limit. You may have missed some packages." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "## Package Overview" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | Latest |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          for packageName in "${packageNames[@]}"; do
+            latestVersion="$(npm view "${packageName}" version)"
+            echo "| \`${packageName}\` | ${latestVersion} |" >> $GITHUB_STEP_SUMMARY
+          done
+
+          versionsLimit=10
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Versions Overview (Latest ${versionsLimit})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+
+          for packageName in "${packageNames[@]}"; do
+            echo "### \`${packageName}\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            readarray -t recentPackageVersions < <(npm view "${packageName}" versions --json --registry "${npmUrl}" |  jq -r '.[]' | tail -n ${versionsLimit})
+
+            for recentPackageVersion in "${recentPackageVersions[@]}"; do
+              echo "* ${recentPackageVersion}" >> $GITHUB_STEP_SUMMARY
+            done
+          done

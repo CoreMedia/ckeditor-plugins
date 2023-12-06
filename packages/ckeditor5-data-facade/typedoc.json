@@ -1,5 +1,5 @@
 {
   "extends": ["../../typedoc.base.json"],
-  "entryPoints": ["./src/index-doc.ts"],
-  "name": "ckeditor5-coremedia-link"
+  "entryPoints": ["./src/index.ts"],
+  "name": "ckeditor5-data-facade"
 }

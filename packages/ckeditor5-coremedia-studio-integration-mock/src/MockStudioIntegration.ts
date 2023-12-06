@@ -16,8 +16,7 @@ import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-co
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
-import MockBlocklistService from "./content/MockBlocklistService";
-import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { MockBlocklistService } from "./MockBlocklistService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -27,7 +26,12 @@ const PLUGIN_NAME = "MockStudioIntegration";
 class MockStudioIntegration extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
 
-  static readonly requires = [MockContentPlugin, MockExternalContentPlugin, MockServiceAgentPlugin];
+  static readonly requires = [
+    MockBlocklistService,
+    MockContentPlugin,
+    MockExternalContentPlugin,
+    MockServiceAgentPlugin,
+  ];
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
@@ -36,9 +40,6 @@ class MockStudioIntegration extends Plugin {
 
     const contentDisplayService = new MockContentDisplayService(contentProvider);
     serviceAgent.registerService(contentDisplayService);
-
-    const blocklistService = new MockBlocklistService();
-    serviceAgent.registerService<MockBlocklistService>(blocklistService, createBlocklistServiceDescriptor());
 
     const richtextConfigurationService = new MockRichtextConfigurationService(this.editor, contentProvider);
     serviceAgent.registerService(richtextConfigurationService);

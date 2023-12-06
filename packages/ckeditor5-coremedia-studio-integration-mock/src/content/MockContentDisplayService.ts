@@ -57,15 +57,18 @@ class MockContentDisplayService implements ContentDisplayService {
         subscription?.unsubscribe();
         subscription = undefined;
         if (receivedReadable === undefined) {
-          return reject(new Error(`Failed accessing ${uriPath} (readable state).`));
+          reject(new Error(`Failed accessing ${uriPath} (readable state).`));
+          return;
         }
         if (receivedName === undefined) {
-          return reject(new Error(`Failed accessing ${uriPath} (name).`));
+          reject(new Error(`Failed accessing ${uriPath} (name).`));
+          return;
         }
         // By intention also delays rejection, as the result for unreadable
         // may take some time.
         if (!receivedReadable) {
-          return reject(new Error(`Content ${uriPath} is unreadable.`));
+          reject(new Error(`Content ${uriPath} is unreadable.`));
+          return;
         }
         resolve(receivedName);
       });

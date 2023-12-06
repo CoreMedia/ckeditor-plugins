@@ -45,4 +45,13 @@ export {
   isParentNode,
   isText,
 } from "./TypeGuards";
+export {
+  getColor,
+  getFontWeight,
+  getFontWeightNumeric,
+  fontWeightToNumber,
+  type FontWeightInformation,
+} from "./CSSStyleDeclarations";
+export { RgbColor, rgb } from "./RgbColor";
+export { w3ExtendedColorNames } from "./w3ExtendedColorNames";
 export { type HasChildren, type HasNamespaceUri } from "./Types";

@@ -66,7 +66,6 @@ jobs:
           echo "NPM_CONFIG_//npm.coremedia.io/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
 
           npm install -g pnpm@${{ env.PNPM_VERSION }}
-          npm install -g semver
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
@@ -85,14 +84,13 @@ jobs:
             echo "error:: There are unexpected changes in git!";
             exit 1
           fi
-          actual_version=$(cat .release-version)
-          next_version=$(semver --increment ${{ github.event.inputs.release_type }} ${actual_version})
-          echo "Current version: ${actual_version}"
+          # Also updates .release-version
+          next_version=$(pnpm --silent "script:version" --release ${{ github.event.inputs.release_type }} --write)
           echo "Next version: ${next_version}"
           pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=^${next_version}
+          git commit -am "ci: Set next release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
-          echo "${next_version}" > .release-version
-          git commit -am "Set release version ${next_version}"
+          git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
       # Set prerelease version.
       # On push, we only want to provide a possible rc, which is testable and maybe already testable by our customers.
       # Make sure to set the dependency versions to the concrete version as prerelease versions are not referenced by semver ranges.
@@ -106,14 +104,13 @@ jobs:
             echo "error:: There are unexpected changes in git!";
             exit 1
           fi
-          actual_version=$(cat .release-version)
-          next_version=$(semver --increment prerelease --preid rc ${actual_version})
-          echo "Current version: ${actual_version}"
+          # Also updates .release-version
+          next_version=$(pnpm --silent "script:version" --release-candidate --write)
           echo "Next version: ${next_version}"
           pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          git commit -am "Set next release-candidate version to: ${next_version}"
           pnpm install --no-frozen-lockfile
-          echo "${next_version}" > .release-version
-          git commit -am "Set next prerelease version ${next_version}"
+          git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
       - name: Build
         run: |
           pnpm build

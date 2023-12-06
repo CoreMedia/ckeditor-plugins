@@ -100,7 +100,7 @@ export class ConversionApi {
 
   #importAttr(attr: Attr): Attr | undefined {
     if (!this.#hasDocumentNamespace(attr)) {
-      return;
+      return undefined;
     }
     const imported = this.createAttribute(attr.localName);
     imported.value = attr.value;
@@ -109,7 +109,7 @@ export class ConversionApi {
 
   #importElement(element: Element, deep = false): Element | undefined {
     if (!this.#hasDocumentNamespace(element)) {
-      return;
+      return undefined;
     }
 
     const imported = this.createElement(element.localName);

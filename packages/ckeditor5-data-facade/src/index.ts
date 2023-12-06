@@ -1,8 +1,10 @@
 /**
+ * Provides an additional control layer for setting and getting data.
+ *
  * @module ckeditor5-data-facade
  */
 
-export { ContextMismatchError } from "./ContextMismatchError";
+export { ContextMismatchError, isContextMismatchError } from "./ContextMismatchError";
 
 export type { DataApi, GetDataApi, SetDataApi } from "./DataApi";
 

@@ -4,4 +4,7 @@
  * @module ckeditor5-common
  */
 
-export type { RequireSelected } from "./AdvancedTypes";
+export { type Raw, isRaw } from "./AdvancedTypes";
+export { type RequireSelected } from "./RequireSelected";
+export { type RequiredNonNull, requireNonNulls, type RequiredNonNullPropertiesMissingError } from "./RequiredNonNull";
+export { capitalize } from "./Strings";

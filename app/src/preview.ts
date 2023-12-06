@@ -1,56 +1,65 @@
-import { default as format } from "xml-formatter";
+import { dataFormatter } from "./DataFormatter";
+import { initPreviewSwitch } from "./PreviewSwitch";
+import { ApplicationState } from "./ApplicationState";
 
-const WITH_PREVIEW_CLASS = "with-preview";
-const getPreviewPanel = (): HTMLElement | null => document.getElementById("preview");
+const previewToggleButtonId = "previewToggle";
+const withPreviewClass = "with-preview";
+const previewPanelId = "preview";
+const previewClass = "preview";
 
-const getEditor = () => document.getElementsByClassName("ck-editor")[0];
+export const initPreview = (state: ApplicationState) => {
+  const previewId = previewPanelId;
 
-const setupPreview = () => {
-  const preview = getPreviewPanel();
+  const preview = document.getElementById(previewId);
+  const previewParent = preview?.parentElement;
+
   if (!preview) {
-    throw new Error("No Preview Panel found.");
+    throw new Error(`Cannot find preview element having ID  "${previewId}".`);
   }
-  preview.innerText = "waiting for ckeditor changes...";
-};
 
-const updatePreview = (data: string) => {
-  const preview = getPreviewPanel();
-  if (!preview) {
-    return;
+  if (!previewParent) {
+    throw new Error(`Preview with ID "${previewId}" misses required parent element.`);
   }
-  preview.innerText = data
-    ? format(data, {
-        indentation: "  ",
-        collapseContent: false,
-      })
-    : "empty";
-};
 
-const renderPreviewButton = () => {
-  const preview = getPreviewPanel();
-  if (!preview) {
-    return;
-  }
-  const previewButton = document.querySelector("#previewButton");
-  if (!previewButton) {
-    return;
-  }
-  previewButton.addEventListener("click", () => {
-    preview.hidden = !preview.hidden;
-    if (preview.hidden) {
-      // remove preview-mode
-      getEditor().classList.remove(WITH_PREVIEW_CLASS);
-      previewButton.textContent = "Show XML Preview";
-      preview.classList.add("hidden");
-    } else {
-      // set preview-mode
-      getEditor().classList.add(WITH_PREVIEW_CLASS);
-      previewButton.textContent = "Hide XML Preview";
-      preview.classList.remove("hidden");
-    }
+  document.body.dataset.previewId = previewId;
+
+  const showPreview = () => {
+    previewParent.classList.add(withPreviewClass);
+  };
+
+  const hidePreview = () => {
+    previewParent.classList.remove(withPreviewClass);
+  };
+
+  initPreviewSwitch({
+    id: previewToggleButtonId,
+    default: state.previewState,
+    onSwitch(previewState) {
+      if (previewState === "visible") {
+        showPreview();
+      } else {
+        hidePreview();
+      }
+      state.previewState = previewState;
+    },
   });
+
+  preview.classList.add(previewClass);
+  preview.innerText = "No data received yet.";
 };
 
-renderPreviewButton();
+const getPreviewPanel = (): HTMLElement => {
+  const previewId = document.body.dataset.previewId;
+  if (!previewId) {
+    throw new Error(`Preview ID not exposed at body.`);
+  }
+  const preview = document.getElementById(previewId);
+  if (!preview) {
+    throw new Error(`Preview with ID ${previewId} as denoted by body does not exist.`);
+  }
+  return preview;
+};
 
-export { setupPreview, updatePreview };
+export const updatePreview = (data: string, formatter: keyof typeof dataFormatter = "xml") => {
+  getPreviewPanel().innerText = dataFormatter[formatter](data, "empty");
+};

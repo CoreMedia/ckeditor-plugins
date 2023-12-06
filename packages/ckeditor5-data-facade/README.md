@@ -21,6 +21,20 @@ currentData = getData()
 assert newData === currentData
 ```
 
+To achieve this, all data communication from and to the outside must be
+tunneled through the data facade. Thus, to achieve strict equivalence of set
+and immediately retrieved data, the pseudocode above changes to:
+
+```text
+
+newData = "<p>Hello Data Facade!</p>"
+
+dataFacade.setData(newData)
+currentData = dataFacade.getData()
+
+assert newData === currentData
+```
+
 ## What is Normalization?
 
 Normalization starts, when, for example, providing options when getting data
@@ -35,7 +49,7 @@ CKEditor 5 will strip any contents within the data, that cannot be controlled
 or created by corresponding commands.
 
 As an example, assume, you have not enabled the bold style. You will
-experience this behavior (pseudocode):
+experience this behavior (pseudocode, without data facade in place):
 
 ```text
 newData = "<p>Hello <strong>World</strong>!</p>"
@@ -65,9 +79,9 @@ currentData = getData()
 
 assert currentData in [
   inputData,
-  `<p class="C2 C1" lang="en">Hello!</p>`,
-  `<p lang="en" class="C2 C1">Hello!</p>`,
-  `<p lang="en" class="C1 C2">Hello!</p>`,
+  `<p class="C2 C1" lang="en">Hello!</p>`, // Changed Class Order
+  `<p lang="en" class="C1 C2">Hello!</p>`, // Changed Attribute Order
+  `<p lang="en" class="C2 C1">Hello!</p>`, // Changed Class And Attribute Order
 ]
 ```
 
@@ -187,7 +201,19 @@ In mixed mode, you can combine lazy initialization and embedded mode. You
 just need to ensure to switch to delegating mode for the previous standalone
 controller during the initialization phase of the CKEditor instance.
 
-A typical setup may look as follows:
+> **When to choose mixed mode?** There may no explicit recommendation, when you
+> have to decide between standalone and mixed mode. The differences are minimal.
+>
+> The mixed mode mainly exists, so that you will not have different "ideas" of
+> the current data. Having the mixed mode, you may have several standalone
+> controllers bound to one CKEditor 5 instance. Note though, that there is no
+> specified contract for the order of "first-time binding" and possibly already
+> set data within the yet unbound standalone controllers.
+>
+> Another possible benefit of the mixed mode: Plugins that require it, may
+> depend on and use the `DataFacade` for their own purpose.
+
+A typical setup of the mixed mode may look as follows:
 
 ```typescript
 import { DataFacade, DataFacadeController } from "@coremedia/ckeditor5-data-facade";

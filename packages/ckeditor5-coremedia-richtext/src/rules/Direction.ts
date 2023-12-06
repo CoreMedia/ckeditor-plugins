@@ -32,6 +32,7 @@ export const ifIncludesToData = (
   if (includesToData(direction)) {
     return supplier();
   }
+  return undefined;
 };
 
 export const ifIncludesToView = (
@@ -41,6 +42,7 @@ export const ifIncludesToView = (
   if (includesToView(direction)) {
     return supplier();
   }
+  return undefined;
 };
 
 export interface ResolveDirectionToConfigConfig {

@@ -8,44 +8,32 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
   <link rel="stylesheet" type="text/css" href="coremedia.css">
   <!--
-    Unfortunately it was not possible to simply import the CKEditorInspector in the ts file.
-    The CKEditorInspector was always undefined. This way it works, and it is fine for an example application.
+    Unfortunately, it was impossible to simply import the CKEditorInspector in
+    the ts file. The CKEditorInspector was always undefined. This way it works,
+    and it is fine for an example application.
   -->
   <script src="../node_modules/@ckeditor/ckeditor5-inspector/build/inspector.js"></script>
 </head>
 <body data-editor="ClassicEditor" data-collaboration="false">
 
-<div id="notifications"></div>
-
 <header>
+  <div id="notifications">
+    <!-- Place to render notifications like "open in tab" -->
+  </div>
   <div class="centered">
     <h1><a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener noreferrer"><img
-      src="https://c.cksource.com/a/1/logos/ckeditor5.svg" alt="CKEditor 5 logo">CKEditor 5</a></h1>
+            src="https://c.cksource.com/a/1/logos/ckeditor5.svg" alt="CKEditor 5 logo">CKEditor 5</a></h1>
     <nav>
       <ul>
         <li><a href="https://ckeditor.com/docs/ckeditor5/" target="_blank" rel="noopener noreferrer">Documentation</a>
         </li>
         <li><a href="https://ckeditor.com/" target="_blank" rel="noopener noreferrer">Website</a></li>
         <li><a href=".?#ckdebug=verbose" rel="noopener noreferrer" id="debug">Debug Logging</a></li>
-        <li>Language: <a href="." rel="noopener noreferrer" id="lang" title="Switch language of editor UI."
-                         style="font-weight: initial;"></a></li>
       </ul>
     </nav>
   </div>
   <div id="examples">
-    <label for="xmp-input">
-      Example Data:
-    </label>
-    <input id="xmp-input"
-           list="xmp-data"
-           placeholder="Start typing..."
-           autocomplete="on"
-    >
-    <datalist id="xmp-data">
-      <!-- Will be filled from example-data.ts -->
-    </datalist>
-    <button id="xmp-reload" title="Reload">🔄</button>
-    <button id="xmp-clear" title="Clear">🚮</button>
+    <!-- Place to render example selection combobox to. -->
   </div>
 </header>
 
@@ -56,70 +44,32 @@
     </div>
   </div>
   <div class="centered">
-    <div>
-      <button id="readOnlyMode" title="Delay Modifiers: Ctrl/Cmd: 10s, Shift: 60s, Ctrl/Cmd+Shift: 120s">Enable Read-Only-Mode</button>
-      <button id="previewButton">Show XML Preview</button>
+    <div id="applicationToolbar">
       <button id="inputExampleContentButton">Show Input Example Content</button>
     </div>
+
     <div id="inputExampleContentDiv" hidden="hidden">
       <!-- The Drag Examples will be generated here. -->
     </div>
-    <div class="row">
+
+    <div id="defaultEditorRow" class="row editor-row">
       <div class="row-editor">
         <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
-        <!-- The data inside are given in data-format of CKEditor, which is CoreMedia RichText 1.0. -->
         <div id="editor"></div>
-        <div id="preview" class="preview hidden" hidden></div>
+        <div id="preview">
+          <!-- The preview displaying the "stored data" will be rendered here. -->
+        </div>
       </div>
     </div>
   </div>
 </main>
 
 <footer>
-  <p>Copyright © 2020-2022,
+  <p>Copyright © 2020-2023,
     <a href="https://www.coremedia.com/" target="_blank" rel="noopener">CoreMedia</a>
   </p>
 </footer>
-<script>
-  const loadTranslations = (locale) => {
-    if (locale === "en") {
-      console.log("Default locale. No need to load further resources.");
-    } else {
-      const scriptEl = document.createElement("script");
-      scriptEl.src = "../dist/translations/" + locale + ".js";
-      document.body.appendChild(scriptEl);
-    }
-  };
-
-  const loadCKEditor = (locale) => {
-    const scriptEl = document.createElement("script");
-    scriptEl.src = "../dist/ckeditor.js";
-    scriptEl.dataset["lang"] = locale;
-    document.body.appendChild(scriptEl);
-  };
-
-  const initLanguage = () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const languageFlag = 'lang';
-    const language = urlParams.get(languageFlag)?.toLowerCase() || 'en';
-    const languageToggle = document.getElementById(languageFlag);
-    let label, hrefLang;
-    if (language === "de") {
-      label = "EN | <strong>DE</strong>";
-      hrefLang = "en";
-    } else {
-      label = "<strong>EN</strong> | DE";
-      hrefLang = "de";
-    }
-    languageToggle.setAttribute("href", `.?lang=${hrefLang}`);
-    languageToggle.innerHTML = label;
-    return language;
-  };
-
-  const lang = initLanguage();
-  loadCKEditor(lang);
-  loadTranslations(lang);
-</script>
+<script src="../dist/translations/de.js"></script>
+<script src="../dist/ckeditor.js"></script>
 </body>
 </html>

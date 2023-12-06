@@ -100,7 +100,7 @@ input.error {
 
 /* --------- PREVIEW STYLES  ---------------------------------------------------------------------------------------- */
 .preview {
-  display: inline-block;
+  display: none;
   vertical-align: top;
   background-color: white;
   padding: 2px 2em;
@@ -114,8 +114,8 @@ input.error {
   min-height: calc(var(--ck-sample-editor-min-height) + 38.67px);
 }
 
-.preview.hidden {
-  display: none;
+.with-preview .preview {
+  display: inline-block;
 }
 
 #input-examples.hidden {
@@ -140,6 +140,22 @@ input.error {
   text-align: justify;
 }
 
+/* --------- CK List Styles (useAttribute: true)  ------------------------------------------------------------------- */
+
+.ck-content ol[type="1"] {
+  list-style-type: decimal;
+}
+
+/* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
+.ck-content ol[type="i"] {
+  list-style-type: lower-roman;
+}
+
+/* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
+.ck-content ol[type="a"] {
+  list-style-type: lower-latin;
+}
+
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
 #ckeditor {
@@ -159,7 +175,7 @@ main .ck-editor[role='application'] .ck.ck-content,
   padding: 1.5em 2em;
 }
 
-.ck.ck-editor.with-preview {
+.with-preview .ck.ck-editor {
   display: inline-block;
   vertical-align: top;
   width: calc(50% - 8px) !important;

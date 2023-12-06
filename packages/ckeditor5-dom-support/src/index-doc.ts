@@ -6,6 +6,7 @@
 export * from "./Attrs";
 export * from "./CharacterDatas";
 export * from "./Comments";
+export * from "./CSSStyleDeclarations";
 export * from "./DocumentFragments";
 export * from "./Documents";
 export * from "./Elements";
@@ -16,5 +17,7 @@ export * from "./HTMLTableElements";
 export * from "./Namespaces";
 export * from "./Nodes";
 export * from "./ParentNodes";
+export * from "./RgbColor";
 export * from "./Texts";
 export * from "./Types";
+export * from "./w3ExtendedColorNames";

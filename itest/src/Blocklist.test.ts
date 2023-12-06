@@ -2,6 +2,7 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { richtext, p } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
 import "./expect/Expectations";
 import { ctrlOrMeta } from "./browser/UserAgent";
+import { clickModifiers } from "./aria/KeyboardUtils";
 
 /**
  * Tests the blocklist feature.
@@ -16,7 +17,7 @@ describe("Blocklist", () => {
   beforeAll(async () => {
     application = await ApplicationWrapper.start();
     await application.goto();
-    await expect(application).waitForCKEditorToBeAvailable();
+    expect(application).waitForCKEditorToBeAvailable();
   });
 
   afterAll(async () => {
@@ -49,9 +50,7 @@ describe("Blocklist", () => {
       await contentText.click({ modifiers });
 
       // Open Blocklist Balloon via Shortcut
-      await page.keyboard.down(await ctrlOrMeta());
-      await page.keyboard.down("Shift");
-      await page.keyboard.press("B");
+      await useOpenBlocklistShortcut();
 
       // Make sure balloon and input are visible
       const { input, submitButton } = editor.ui.view.body.balloonPanel.blocklistActionsView;
@@ -93,11 +92,9 @@ describe("Blocklist", () => {
   });
 });
 
-type ClickModifiers = "Meta" | "Control";
-
-const clickModifiers = async (): Promise<ClickModifiers[]> => ((await isMac()) ? ["Meta"] : ["Control"]);
-
-const isMac = async (): Promise<boolean> => {
-  const response = String(await page.evaluate(() => navigator.userAgent));
-  return response.includes("Mac");
+const useOpenBlocklistShortcut = async () => {
+  // Open Blocklist Balloon via Shortcut
+  await page.keyboard.down(await ctrlOrMeta());
+  await page.keyboard.down("Shift");
+  await page.keyboard.press("B");
 };

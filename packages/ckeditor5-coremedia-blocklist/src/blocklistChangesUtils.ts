@@ -1,7 +1,8 @@
-import { Collection, uid } from "@ckeditor/ckeditor5-utils";
+import { Collection } from "@ckeditor/ckeditor5-utils";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { DiffItem, DiffItemAttribute, Element, Item, Marker, Model, Node, Range } from "@ckeditor/ckeditor5-engine";
 import { FindAndReplaceUtils } from "@ckeditor/ckeditor5-find-and-replace";
+import { createMarkerNameAndStoreWord } from "./blocklistMarkerUtils";
 
 // copied from @ckeditor/ckeditor5-find-and-replace/src/findandreplace.d.ts since not exported in index.js
 export interface ResultType {
@@ -134,8 +135,8 @@ export const updateFindResultFromRange = (
           }
 
           foundItems.forEach((foundItem) => {
-            const resultId = `blockedWord:${uid()}:${blockedWord}`;
-            const marker = writer.addMarker(resultId, {
+            const markerName = createMarkerNameAndStoreWord(blockedWord);
+            const marker = writer.addMarker(markerName, {
               usingOperation: false,
               affectsData: false,
               range: writer.createRange(
@@ -148,7 +149,7 @@ export const updateFindResultFromRange = (
 
             results.add(
               {
-                id: resultId,
+                id: markerName,
                 label: foundItem.label,
                 marker,
               },

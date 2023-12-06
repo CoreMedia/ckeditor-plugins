@@ -134,7 +134,8 @@ export const ddTest = <T extends NamedTestCase>(
 
   if (hasDirectionRestriction(data)) {
     if (data.direction !== Direction.both && data.direction !== direction) {
-      return test.skip(`Not applicable for current data processing direction: ${name}`, testFn);
+      test.skip(`Not applicable for current data processing direction: ${name}`, testFn);
+      return;
     }
   }
 
@@ -146,12 +147,14 @@ export const ddTest = <T extends NamedTestCase>(
       } else {
         skipName = `Skipped: ${name} (${data.skip})`;
       }
-      return test.skip(skipName, testFn);
+      test.skip(skipName, testFn);
+      return;
     }
   }
   if (isOnly(data)) {
     if (data.only) {
-      return test.only(name, testFn);
+      test.only(name, testFn);
+      return;
     }
   }
   test(name, testFn);

@@ -319,7 +319,7 @@ export class DataFacadeController implements DataApi {
     }
 
     logger.debug(
-      `getData: Editorial changes applied (last version on set: ${cachedVersion}, current version: ${currentVersion}. Providing data directly from editor.`,
+      `getData: Editorial changes applied (last version on set: ${cachedVersion}, current version: ${currentVersion}). Providing data directly from editor.`,
     );
 
     return editor.data.get(options);

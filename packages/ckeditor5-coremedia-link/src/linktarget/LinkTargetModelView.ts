@@ -43,7 +43,7 @@ export default class LinkTargetModelView extends Plugin {
     /**
      * This function is used in the postFixer, registered further below.
      * The postFixer checks, if a change includes a link and computes the default link target.
-     * Afterwards, this function is called to apply the target to the link element in the model.
+     * Afterward, this function is called to apply the target to the link element in the model.
      *
      * @param linkTarget - the computed link target
      * @param range - the range of the changed element
@@ -122,5 +122,7 @@ export default class LinkTargetModelView extends Plugin {
       // editor or into the link balloon
       return computeDefaultLinkTargetForUrl(diffItem.attributes.get("linkHref") as string, this.editor.config);
     }
+
+    return undefined;
   }
 }
