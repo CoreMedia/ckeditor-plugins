@@ -33,10 +33,14 @@ jobs:
           result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq --raw-output .token)
           # Ensure, the token is not exposed in output.
           echo "::add-mask::${result}"
-          echo "npmAuthToken=${result}" >> $GITHUB_ENV
+          echo "NODE_AUTH_TOKEN=${result}" >> $GITHUB_ENV
       - id: initNpmConfiguration
         name: "Initialize NPM Configuration"
         run: |
+          npmHost="${{ env.npmHost }}"
+          npmUrl="${{ env.npmUrl }}"
+          npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
+
           echo "npm_config_//${npmHost}/:_authToken=${npmAuthToken}" >> $GITHUB_ENV
           echo "npm_config_@coremedia:registry=${npmUrl}" >> $GITHUB_ENV
       - id: checkout
