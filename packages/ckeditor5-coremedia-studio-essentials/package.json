@@ -16,10 +16,6 @@
     "richtext",
     "grs"
   ],
-  "engines": {
-    "node": "18",
-    "pnpm": "^8.6.9"
-  },
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",

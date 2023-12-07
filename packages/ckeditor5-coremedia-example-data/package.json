@@ -16,10 +16,6 @@
     "testing",
     "private"
   ],
-  "engines": {
-    "node": "18",
-    "pnpm": "^8.6.9"
-  },
   "main": "./src/index.ts",
   "publishConfig": {
     "main": "./src/index.js",
