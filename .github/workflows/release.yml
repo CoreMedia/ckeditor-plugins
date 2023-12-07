@@ -73,6 +73,8 @@ jobs:
           git pull
       - name: Install
         run: pnpm install
+      - name: "Validate peerDependencies"
+        run: pnpm script:validate-peers
       # BY MANUAL TRIGGER ONLY!
       # Set the release version to actual MAJOR.MINOR.PATCH version.
       # If a prerelease is triggered manually, we keep the prerelease version for this workflow.
