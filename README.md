@@ -14,6 +14,26 @@ replaces the previous integration of [CKEditor 4][].
 
 ## Quick Start
 
+### Requirements
+
+* Install the required Node.js version according to `engines` in `package.json`
+  (also: `.nvmrc`).
+
+  If you have `nvm` installed, `nvm use` and/or `nvm install` will switch to the
+  required Node.js version.
+
+  > **NVM for Windows**
+  >
+  > `nvm use` is only available for the original Linux distribution of NVM.
+  > Alternatives, such as `CoreyButler.NVMforWindows` (winget ID) are not
+  > aware of it. A possible alternative is `nvm use $(Get-Content .nvmrc)` or
+  > use Windows Subsystem Linux (WSL).
+
+* Install the required `pnpm` version according to the `engines` entry in
+  `package.json`.
+
+### Build and Start
+
 ```text
 $ pnpm install
 $ pnpm -r build
@@ -183,7 +203,7 @@ implements the described behavior.
 [docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
 [badge:docs:GHPages]: <https://img.shields.io/badge/docs-%F0%9F%93%9D%20GH%20Pages-informational?style=for-the-badge>
 [badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-informational?style=for-the-badge>
-[badge:engine:nodejs]: <https://img.shields.io/badge/Node.js-18-informational?style=for-the-badge&logo=node.js&logoColor=white>
+[badge:engine:nodejs]: <https://img.shields.io/badge/Node.js-20-informational?style=for-the-badge&logo=node.js&logoColor=white>
 [badge:engine:pnpm]: <https://img.shields.io/badge/pnpm-8.6.9-informational?style=for-the-badge&logo=pnpm&logoColor=white>
 [badge:lang:typescript]: <https://img.shields.io/badge/TypeScript-4.9.5-informational?style=for-the-badge&logo=typescript&logoColor=white>
 [badge:ckeditor]: <https://img.shields.io/badge/CKEditor-39.0.2-informational?style=for-the-badge&logo=ckeditor5&logoColor=white>

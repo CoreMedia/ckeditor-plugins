@@ -12,8 +12,8 @@
     "coremedia"
   ],
   "engines": {
-    "node": "18",
-    "pnpm": "^8.6.9"
+    "node": "20",
+    "pnpm": "^8.6"
   },
   "license": "Apache-2.0",
   "devDependencies": {

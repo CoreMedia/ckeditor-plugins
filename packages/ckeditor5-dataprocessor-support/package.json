@@ -13,10 +13,6 @@
     "ckeditor5",
     "dataprocessor"
   ],
-  "engines": {
-    "node": "18",
-    "pnpm": "^8.6.9"
-  },
   "license": "Apache-2.0",
   "files": [
     "/src"

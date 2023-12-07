@@ -30,7 +30,7 @@ on:
 env:
   NPM_REPOSITORY: npm.coremedia.io
   NPM_REPOSITORY_URL: https://npm.coremedia.io
-  NODE_VERSION: 18
+  NODE_VERSION: 20
 
 jobs:
   run:

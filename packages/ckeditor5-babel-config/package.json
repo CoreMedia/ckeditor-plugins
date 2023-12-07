@@ -23,9 +23,5 @@
   },
   "exports": {
     ".": "./shared-babel.config.js"
-  },
-  "engines": {
-    "node": "18",
-    "pnpm": "^8.6.9"
   }
 }
