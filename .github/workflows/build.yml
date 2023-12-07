@@ -3,8 +3,15 @@ name: "Build"
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      CM_NPM_USER:
+        required: true
+      CM_NPM_PASSWORD:
+        required: true
 
 jobs:
+  env:
+    uses: "./.github/workflows/env.yml"
   get-engines:
     uses: "./.github/workflows/get-engines.yml"
     secrets: inherit
@@ -12,11 +19,26 @@ jobs:
     name: "Main"
     runs-on: ubuntu-latest
     needs:
+      - env
       - get-engines
     env:
       nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
       pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
+      npmHost: ${{ needs.env.outputs.npm-host }}
+      npmUrl: ${{ needs.env.outputs.npm-url }}
     steps:
+      - id: authorize
+        name: "NPM Authorization"
+        run: |
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq --raw-output .token)
+          # Ensure, the token is not exposed in output.
+          echo "::add-mask::${result}"
+          echo "npmAuthToken=${result}" >> $GITHUB_ENV
+      - id: initNpmConfiguration
+        name: "Initialize NPM Configuration"
+        run: |
+          echo "npm_config_//${npmHost}/:_authToken=${npmAuthToken}" >> $GITHUB_ENV
+          echo "npm_config_@coremedia:registry=${npmUrl}" >> $GITHUB_ENV
       - id: checkout
         name: Checkout
         uses: actions/checkout@v4
