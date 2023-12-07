@@ -8,7 +8,18 @@ name: get-engines
 
 on:
   workflow_dispatch:
+    inputs:
+      verbose:
+        description: "If to output the resulting versions as summary."
+        required: false
+        type: boolean
+        default: false
   workflow_call:
+    inputs:
+      verbose:
+        required: false
+        type: boolean
+        default: false
     outputs:
       nodeVersion:
         description: "Determined node version from package.json"
@@ -46,7 +57,7 @@ jobs:
           echo "result=${result}" >> $GITHUB_OUTPUT
   report:
     name: "Report results"
-    if: github.event_name == 'workflow_dispatch'
+    if: ${{ inputs.verbose }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs:
