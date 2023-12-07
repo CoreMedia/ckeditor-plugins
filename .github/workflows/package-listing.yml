@@ -20,3 +20,5 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "* Node Version: ${{ env.nodeVersion }}" >> $GITHUB_STEP_SUMMARY
           echo "* PNPM Version: ${{ env.pnpmVersion }}" >> $GITHUB_STEP_SUMMARY
+  build:
+    uses: "./.github/workflows/build.yml"
