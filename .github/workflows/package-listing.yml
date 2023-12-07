@@ -1,7 +1,22 @@
-name: "List packages (deprecated)"
+name: "GitHub Actions Playground"
 on:
   workflow_dispatch:
 jobs:
-  delegate:
-    uses: "./.github/workflows/list.yml"
+  get-engines:
+    uses: "./.github/workflows/get-engines.yml"
     secrets: inherit
+  output-engines:
+    runs-on: ubuntu-latest
+    needs:
+      - get-engines
+    env:
+      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
+      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
+    steps:
+      - id: main
+        name: "Main"
+        run: |
+          echo "# Detected Engines" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "* Node Version: ${{ env.nodeVersion }}" >> $GITHUB_STEP_SUMMARY
+          echo "* PNPM Version: ${{ env.pnpmVersion }}" >> $GITHUB_STEP_SUMMARY

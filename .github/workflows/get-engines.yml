@@ -1,0 +1,64 @@
+# Retrieves engine information form package.json
+#
+# On manual call outputs the versions found.
+# On reusable workflow call provides version information as
+# `nodeVersion` and `pnpmVersion`.
+
+name: get-engines
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      nodeVersion:
+        description: "Determined node version from package.json"
+        value: ${{ jobs.main.outputs.nodeVersion }}
+      pnpmVersion:
+        description: "Determined pnpm version from package.json"
+        value: ${{ jobs.main.outputs.pnpmVersion }}
+
+permissions: {}
+
+jobs:
+  main:
+    name: "Get Engine Information"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      nodeVersion: ${{ steps.get-node-version.outputs.result }}
+      pnpmVersion: ${{ steps.get-pnpm-version.outputs.result }}
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: ./package.json
+      - id: get-node-version
+        name: "Get Node.js version"
+        run: |
+          result=$(cat package.json | jq ".engines.node")
+          echo "result=${result}" >> $GITHUB_OUTPUT
+      - id: get-pnpm-version
+        name: "Get PNPM version"
+        run: |
+          result=$(cat package.json | jq ".engines.pnpm")
+          echo "result=${result}" >> $GITHUB_OUTPUT
+  report:
+    name: "Report results"
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - main
+    env:
+      nodeVersion: ${{ needs.main.outputs.nodeVersion }}
+      pnpmVersion: ${{ needs.main.outputs.pnpmVersion }}
+    steps:
+      - id: main
+        name: "Main"
+        run: |
+          echo "# Detected Engines" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "* Node Version: ${{ env.nodeVersion }}" >> $GITHUB_STEP_SUMMARY
+          echo "* PNPM Version: ${{ env.pnpmVersion }}" >> $GITHUB_STEP_SUMMARY
