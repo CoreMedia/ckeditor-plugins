@@ -27,6 +27,9 @@ jobs:
       npmHost: ${{ needs.env.outputs.npm-host }}
       npmUrl: ${{ needs.env.outputs.npm-url }}
     steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v4
       - id: authorize
         name: "NPM Authorization"
         run: |
@@ -41,11 +44,10 @@ jobs:
           npmUrl="${{ env.npmUrl }}"
           npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
 
-          echo "npm_config_//${npmHost}/:_authToken=${npmAuthToken}" >> $GITHUB_ENV
-          echo "npm_config_@coremedia:registry=${npmUrl}" >> $GITHUB_ENV
-      - id: checkout
-        name: Checkout
-        uses: actions/checkout@v4
+          echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
+          echo "@coremedia:registry=${npmUrl}" >> .npmrc
+          # We must not commit this change.
+          git update-index --assume-unchanged .npmrc
       - id: installPnpm
         name: "Install: Use PNPM ${{ env.pnpmVersion }}"
         uses: pnpm/action-setup@v2
