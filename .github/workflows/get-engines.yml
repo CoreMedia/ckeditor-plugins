@@ -37,12 +37,12 @@ jobs:
       - id: get-node-version
         name: "Get Node.js version"
         run: |
-          result=$(cat package.json | jq ".engines.node")
+          result=$(cat package.json | jq --raw-output ".engines.node")
           echo "result=${result}" >> $GITHUB_OUTPUT
       - id: get-pnpm-version
         name: "Get PNPM version"
         run: |
-          result=$(cat package.json | jq ".engines.pnpm")
+          result=$(cat package.json | jq --raw-output ".engines.pnpm")
           echo "result=${result}" >> $GITHUB_OUTPUT
   report:
     name: "Report results"
