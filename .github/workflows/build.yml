@@ -57,8 +57,12 @@ on:
 run-name: |
   ${{ github.workflow }} (lint: ${{ github.event.inputs.lint }}, utest: ${{ github.event.inputs.utest }}, itest: ${{ github.event.inputs.itest }})
 
+env:
+  # https://github.com/actions/runner-images/issues/70
+  NODE_OPTIONS: "--max_old_space_size=4096"
+
 jobs:
-  env:
+  get-env:
     name: "Get Environment"
     uses: "./.github/workflows/env.yml"
   get-engines:
@@ -69,13 +73,13 @@ jobs:
     name: "Main"
     runs-on: ubuntu-latest
     needs:
-      - env
+      - get-env
       - get-engines
     env:
       nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
       pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
-      npmHost: ${{ needs.env.outputs.npm-host }}
-      npmUrl: ${{ needs.env.outputs.npm-url }}
+      npmHost: ${{ needs.get-env.outputs.npm-host }}
+      npmUrl: ${{ needs.get-env.outputs.npm-url }}
     steps:
       - id: checkout
         name: Checkout
