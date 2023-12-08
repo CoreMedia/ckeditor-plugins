@@ -32,6 +32,10 @@ on:
         required: false
         type: boolean
         default: false
+    outputs:
+      version:
+        description: "The determined version."
+        value: ${{ jobs.main.outputs.version }}
 
 permissions: {}
 
@@ -77,25 +81,25 @@ jobs:
           pnpm install --frozen-lockfile --dev --filter "@coremedia/ckeditor5"
       - id: for-release
         name: "Version for Release"
-        if: ${{ inputs.release_type == "major" || inputs.release_type == "minor" || inputs.release_type == "patch" }}
+        if: ${{ inputs.release_type == 'major' || inputs.release_type == 'minor' || inputs.release_type == 'patch' }}
         run: |
           version=$(pnpm --silent "script:version" --release ${{ inputs.release_type }})
           echo "VERSION=${version}" >> $GITHUB_ENV
       - id: for-release-candidate
         name: "Version for Release Candidate"
-        if: ${{ inputs.release_type == "release-candidate" }}
+        if: ${{ inputs.release_type == 'release-candidate' }}
         run: |
           version=$(pnpm --silent "script:version" --release-candidate)
           echo "VERSION=${version}" >> $GITHUB_ENV
       - id: for-current
         name: "Current Version"
-        if: ${{ inputs.release_type == "current" }}
+        if: ${{ inputs.release_type == 'current' }}
         run: |
           version=$(pnpm --silent "script:version" --current)
           echo "VERSION=${version}" >> $GITHUB_ENV
       - id: for-pull-request
         name: "Version for Pull Request"
-        if: ${{ inputs.release_type == "pull-request" }}
+        if: ${{ inputs.release_type == 'pull-request' }}
         run: |
           # For example: `173/merge`
           ref="${{ github.ref_name }}"
