@@ -105,7 +105,7 @@ jobs:
           ref="${{ github.ref }}"
           run="${{ github.run_number }}"
           # Keep only the number.
-          pullRequestNumber="$(expr match "${ref}" '.*/\([0-9]*\)/.*')"
+          pullRequestNumber="$(echo "$ref" | sed "s#^.*/\([0-9]*\)/.*\$#\1#g")"
           version=$(pnpm --silent "script:version" --pull-request ${pullRequestNumber} --run-number ${run})
           echo "VERSION=${version}" >> $GITHUB_ENV
       - id: unmatched-release-type
