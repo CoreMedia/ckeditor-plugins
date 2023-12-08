@@ -55,21 +55,11 @@ jobs:
         run: |
           result=$(cat package.json | jq --raw-output ".engines.pnpm")
           echo "result=${result}" >> $GITHUB_OUTPUT
-  report:
-    name: "Report results"
-    if: ${{ inputs.verbose }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs:
-      - main
-    env:
-      nodeVersion: ${{ needs.main.outputs.nodeVersion }}
-      pnpmVersion: ${{ needs.main.outputs.pnpmVersion }}
-    steps:
-      - id: main
-        name: "Main"
+      - id: output-results
+        if: ${{ inputs.verbose }}
+        name: "Output Results"
         run: |
           echo "# Detected Engines" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "* Node Version: ${{ env.nodeVersion }}" >> $GITHUB_STEP_SUMMARY
-          echo "* PNPM Version: ${{ env.pnpmVersion }}" >> $GITHUB_STEP_SUMMARY
+          echo "* Node Version: ${{ steps.get-node-version.outputs.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "* PNPM Version: ${{ steps.get-pnpm-version.outputs.result }}" >> $GITHUB_STEP_SUMMARY
