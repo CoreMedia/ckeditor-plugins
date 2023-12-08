@@ -143,3 +143,9 @@ jobs:
         name: "Build Documentation"
         run: |
           pnpm doc
+      - name: Add Documentation Artifact
+        if: ${{ inputs.doc }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-doc
+          path: docs/
