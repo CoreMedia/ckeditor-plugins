@@ -41,10 +41,15 @@ on:
       CM_NPM_PASSWORD:
         required: true
 
+run-name: |
+  ${{ github.workflow }} (lint: ${{ github.event.inputs.lint }}, utest: ${{ github.event.inputs.utest }}, itest: ${{ github.event.inputs.itest }})
+
 jobs:
   env:
+    name: "Get Environment"
     uses: "./.github/workflows/env.yml"
   get-engines:
+    name: "Get Engines"
     uses: "./.github/workflows/get-engines.yml"
     secrets: inherit
   main:
