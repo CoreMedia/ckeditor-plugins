@@ -19,64 +19,39 @@ jobs:
   # Possibly use caching here. We may then also think of splitting up
   # build.yml to different reusable workflows, smaller than the original
   # one.
+  #
+  # !github.event.pull_request.draft:
+  #
+  # Run minimal set of steps if pull request is in draft mode, still.
   build:
     name: "Build"
     uses: "./.github/workflows/build.yml"
     secrets: inherit
   lint:
     name: "Linter"
+    if: ${{ !github.event.pull_request.draft }}
     uses: "./.github/workflows/build.yml"
     secrets: inherit
     with:
       lint: true
   utest:
     name: "Unit Tests"
+    if: ${{ !github.event.pull_request.draft }}
     uses: "./.github/workflows/build.yml"
     secrets: inherit
     with:
       utest: true
   itest:
     name: "Integration Tests"
+    if: ${{ !github.event.pull_request.draft }}
     uses: "./.github/workflows/build.yml"
     secrets: inherit
     with:
       itest: true
   doc:
     name: "Generate Documentation"
+    if: ${{ !github.event.pull_request.draft }}
     uses: "./.github/workflows/build.yml"
     secrets: inherit
     with:
       doc: true
-  done:
-    name: "Done"
-    needs:
-      - build
-      - lint
-      - utest
-      - itest
-      - doc
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - id: summary
-        name: "Print Summary"
-        run: |
-          echo "# Done" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Key | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| SHA | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| RUN_NUMBER | ${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REF | ${{ github.ref }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REF_NAME | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| HEAD_REF | ${{ github.head_ref }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| ACTOR | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| BASE_REF | ${{ github.base_ref }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REPOSITORY | ${{ github.repository }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REPOSITORY_ID | ${{ github.repository_id }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REPOSITORY_OWNER | ${{ github.repository_owner }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REPOSITORY_OWNER_ID | ${{ github.repository_owner_id }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| REPOSITORY_URL | ${{ github.repositoryUrl }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| RUN_ID | ${{ github.run_id }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| SERVER_URL | ${{ github.server_url }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| WORKSPACE | ${{ github.workspace }} |" >> $GITHUB_STEP_SUMMARY
