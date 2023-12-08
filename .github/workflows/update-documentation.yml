@@ -1,4 +1,4 @@
-name: "Lint"
+name: "Update Documentation"
 
 on:
   workflow_dispatch:
@@ -37,7 +37,8 @@ jobs:
         run: |
           # We only need dev dependencies in root `package.json`
           pnpm install --frozen-lockfile --dev --filter "@coremedia/ckeditor5"
-      - id: lint
-        name: "Run Linter"
+      - id: doc
+        name: "Run TypeDoc"
         run: |
-          pnpm lint
+          pnpm doc
+# Possibly persist changes.

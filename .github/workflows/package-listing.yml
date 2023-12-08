@@ -43,3 +43,7 @@ jobs:
     secrets: inherit
     with:
       itest: true
+  doc:
+    name: "Generate Documentation"
+    uses: "./.github/workflows/update-documentation.yml"
+    secrets: inherit
