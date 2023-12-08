@@ -3,7 +3,8 @@ name: "Pull Request Push"
 on:
   # On push on a PR we want to trigger a normal build without publishing anything
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
     types:
       - opened
       - reopened
@@ -66,6 +67,7 @@ jobs:
           echo "|-----|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| SHA | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
           echo "| RUN_NUMBER | ${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REF | ${{ github.ref }} |" >> $GITHUB_STEP_SUMMARY
           echo "| REF_NAME | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
           echo "| HEAD_REF | ${{ github.head_ref }} |" >> $GITHUB_STEP_SUMMARY
           echo "| ACTOR | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
