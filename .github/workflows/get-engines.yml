@@ -1,0 +1,65 @@
+# Retrieves engine information form package.json
+#
+# On manual call outputs the versions found.
+# On reusable workflow call provides version information as
+# `nodeVersion` and `pnpmVersion`.
+
+name: get-engines
+
+on:
+  workflow_dispatch:
+    inputs:
+      verbose:
+        description: "If to output the resulting versions as summary."
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      verbose:
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      nodeVersion:
+        description: "Determined node version from package.json"
+        value: ${{ jobs.main.outputs.nodeVersion }}
+      pnpmVersion:
+        description: "Determined pnpm version from package.json"
+        value: ${{ jobs.main.outputs.pnpmVersion }}
+
+permissions: {}
+
+jobs:
+  main:
+    name: "Get Engine Information"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      nodeVersion: ${{ steps.get-node-version.outputs.result }}
+      pnpmVersion: ${{ steps.get-pnpm-version.outputs.result }}
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: ./package.json
+      - id: get-node-version
+        name: "Get Node.js version"
+        run: |
+          result=$(cat package.json | jq --raw-output ".engines.node")
+          echo "result=${result}" >> $GITHUB_OUTPUT
+      - id: get-pnpm-version
+        name: "Get PNPM version"
+        run: |
+          result=$(cat package.json | jq --raw-output ".engines.pnpm")
+          echo "result=${result}" >> $GITHUB_OUTPUT
+      - id: output-results
+        if: ${{ inputs.verbose }}
+        name: "Output Results"
+        run: |
+          echo "# Detected Engines" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "* Node Version: ${{ steps.get-node-version.outputs.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "* PNPM Version: ${{ steps.get-pnpm-version.outputs.result }}" >> $GITHUB_STEP_SUMMARY

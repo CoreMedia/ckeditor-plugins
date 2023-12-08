@@ -1,0 +1,57 @@
+name: "On Pull Request Push"
+
+on:
+  # On push on a PR we want to trigger a normal build without publishing anything
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+run-name: |
+  ${{ github.workflow }}: ${{ github.head_ref }}
+
+jobs:
+  # To-Do: Ideally, we share artifacts already created in build step.
+  # Possibly use caching here. We may then also think of splitting up
+  # build.yml to different reusable workflows, smaller than the original
+  # one.
+  #
+  # !github.event.pull_request.draft:
+  #
+  # Run minimal set of steps if pull request is in draft mode, still.
+  build:
+    name: "Build"
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+  lint:
+    name: "Linter"
+    if: ${{ !github.event.pull_request.draft }}
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      lint: true
+  utest:
+    name: "Unit Tests"
+    if: ${{ !github.event.pull_request.draft }}
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      utest: true
+  itest:
+    name: "Integration Tests"
+    if: ${{ !github.event.pull_request.draft }}
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      itest: true
+  doc:
+    name: "Generate Documentation"
+    if: ${{ !github.event.pull_request.draft }}
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      doc: true

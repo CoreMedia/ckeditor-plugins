@@ -1,7 +1,11 @@
-name: "List packages (deprecated)"
+name: "GitHub Actions Playground"
 on:
   workflow_dispatch:
 jobs:
-  delegate:
-    uses: "./.github/workflows/list.yml"
+  get-version-1:
+    name: "Get Version 1"
+    uses: "./.github/workflows/get-version.yml"
     secrets: inherit
+    with:
+      release_type: pull-request
+      verbose: true

@@ -1,0 +1,159 @@
+name: "Build"
+
+on:
+  workflow_dispatch:
+    inputs:
+      lint:
+        description: "Linter"
+        type: boolean
+        required: false
+        default: false
+      utest:
+        description: "Unit Tests"
+        type: boolean
+        required: false
+        default: false
+      itest:
+        description: "Integration Tests"
+        type: boolean
+        required: false
+        default: false
+      # doc: Just used to "test the documentation", if it would build.
+      #      Helps to identify, for example, access to yet private API from
+      #      public API.
+      doc:
+        description: "Build Documentation (No Publish)"
+        type: boolean
+        required: false
+        default: false
+  workflow_call:
+    inputs:
+      lint:
+        description: "Linter"
+        type: boolean
+        required: false
+        default: false
+      utest:
+        description: "Unit Tests"
+        type: boolean
+        required: false
+        default: false
+      itest:
+        description: "Integration Tests"
+        type: boolean
+        required: false
+        default: false
+      doc:
+        description: "Build Documentation (No Publish)"
+        type: boolean
+        required: false
+        default: false
+    secrets:
+      CM_NPM_USER:
+        required: true
+      CM_NPM_PASSWORD:
+        required: true
+
+run-name: |
+  ${{ github.workflow }} (lint: ${{ github.event.inputs.lint }}, utest: ${{ github.event.inputs.utest }}, itest: ${{ github.event.inputs.itest }})
+
+env:
+  # https://github.com/actions/runner-images/issues/70
+  NODE_OPTIONS: "--max_old_space_size=4096"
+
+permissions: {}
+
+jobs:
+  get-env:
+    name: "Get Environment"
+    uses: "./.github/workflows/env.yml"
+  get-engines:
+    name: "Get Engines"
+    uses: "./.github/workflows/get-engines.yml"
+    secrets: inherit
+  main:
+    name: "Main"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+      - get-env
+      - get-engines
+    env:
+      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
+      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
+      npmHost: ${{ needs.get-env.outputs.npm-host }}
+      npmUrl: ${{ needs.get-env.outputs.npm-url }}
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v4
+      - id: authorize
+        name: "NPM Authorization"
+        run: |
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq --raw-output .token)
+          # Ensure, the token is not exposed in output.
+          echo "::add-mask::${result}"
+          echo "NODE_AUTH_TOKEN=${result}" >> $GITHUB_ENV
+      - id: initNpmConfiguration
+        name: "Initialize NPM Configuration"
+        run: |
+          npmHost="${{ env.npmHost }}"
+          npmUrl="${{ env.npmUrl }}"
+          npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
+
+          echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
+          echo "@coremedia:registry=${npmUrl}" >> .npmrc
+          # We must not commit this change.
+          git update-index --assume-unchanged .npmrc
+      - id: installPnpm
+        name: "Install: Use PNPM ${{ env.pnpmVersion }}"
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.pnpmVersion }}
+          run_install: false
+      - id: installNodeJs
+        name: "Install: Use Node.js ${{ env.nodeVersion }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.nodeVersion }}
+          cache: "pnpm"
+      - id: install
+        name: Install
+        run: |
+          pnpm install --frozen-lockfile
+      - id: build
+        name: "Build"
+        run: |
+          pnpm -r build
+      # To move the below steps to reusable workflow, we would need to be able
+      # to share artifacts (downloaded dependencies as well as built artifacts).
+      # Skipping for now. Instead, an outer workflow may run jobs in parallel,
+      # with some extra effort that all of them need to set up authentication,
+      # build, etc.
+      - id: lint
+        if: ${{ inputs.lint }}
+        name: "Lint"
+        run: |
+          pnpm -r build
+      - id: utest
+        if: ${{ inputs.utest }}
+        name: "Unit Tests"
+        run: |
+          pnpm jest
+      - id: itest
+        if: ${{ inputs.itest }}
+        name: "Integration Tests"
+        run: |
+          pnpm playwright
+      - id: doc
+        if: ${{ inputs.doc }}
+        name: "Build Documentation"
+        run: |
+          pnpm doc
+      - name: Add Documentation Artifact
+        if: ${{ inputs.doc }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-doc
+          path: docs/
+          retention-days: 10
