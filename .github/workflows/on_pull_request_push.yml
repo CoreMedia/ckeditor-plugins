@@ -11,7 +11,7 @@ on:
       - ready_for_review
 
 run-name: |
-  ${{ github.workflow }} (ref: ${{ github.ref_name }}, head: ${{ github.head_ref }}, sha: ${{ github.sha }}run: ${{ github.run_number }})
+  ${{ github.workflow }}: ${{ github.head_ref }}
 
 jobs:
   # To-Do: Ideally, we share artifacts already created in build step.
@@ -46,3 +46,35 @@ jobs:
     secrets: inherit
     with:
       doc: true
+  done:
+    name: "Done"
+    needs:
+      - build
+      - lint
+      - utest
+      - itest
+      - doc
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - id: summary
+        name: "Print Summary"
+        run: |
+          echo "# Done" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Key | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| SHA | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| RUN_NUMBER | ${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REF_NAME | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| HEAD_REF | ${{ github.head_ref }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ACTOR | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| BASE_REF | ${{ github.base_ref }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REPOSITORY | ${{ github.repository }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REPOSITORY_ID | ${{ github.repository_id }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REPOSITORY_OWNER | ${{ github.repository_owner }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REPOSITORY_OWNER_ID | ${{ github.repository_owner_id }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| REPOSITORY_URL | ${{ github.repositoryUrl }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| RUN_ID | ${{ github.run_id }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| SERVER_URL | ${{ github.server_url }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| WORKSPACE | ${{ github.workspace }} |" >> $GITHUB_STEP_SUMMARY
