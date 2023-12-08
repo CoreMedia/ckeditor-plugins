@@ -101,11 +101,11 @@ jobs:
         name: "Version for Pull Request"
         if: ${{ inputs.release_type == 'pull-request' }}
         run: |
-          # For example: `173/merge`
-          ref="${{ github.ref_name }}"
+          # For example: `refs/pull/173/merge`
+          ref="${{ github.ref }}"
           run="${{ github.run_number }}"
-          # Keep only the number (removing longest matching path from the back up to including `/`)
-          pullRequestNumber="${ref%%/*}"
+          # Keep only the number.
+          pullRequestNumber="$(expr match "${ref}" '.*/\([0-9]*\)/.*')"
           version=$(pnpm --silent "script:version" --pull-request ${pullRequestNumber} --run-number ${run})
           echo "VERSION=${version}" >> $GITHUB_ENV
       - id: unmatched-release-type
