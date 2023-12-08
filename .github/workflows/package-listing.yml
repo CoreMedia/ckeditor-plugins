@@ -7,47 +7,5 @@ jobs:
     uses: "./.github/workflows/get-version.yml"
     secrets: inherit
     with:
-      release_type: major
-      verbose: true
-  get-version-2:
-    name: "Get Version 2"
-    uses: "./.github/workflows/get-version.yml"
-    secrets: inherit
-    with:
-      release_type: minor
-      verbose: true
-  get-version-3:
-    name: "Get Version 3"
-    uses: "./.github/workflows/get-version.yml"
-    secrets: inherit
-    with:
-      release_type: patch
-      verbose: true
-  get-version-4:
-    name: "Get Version 4"
-    uses: "./.github/workflows/get-version.yml"
-    secrets: inherit
-    with:
-      release_type: release-candidate
-      verbose: true
-  get-version-5:
-    name: "Get Version 5"
-    uses: "./.github/workflows/get-version.yml"
-    secrets: inherit
-    with:
       release_type: pull-request
-      verbose: true
-  get-version-6:
-    name: "Get Version 6"
-    uses: "./.github/workflows/get-version.yml"
-    secrets: inherit
-    with:
-      release_type: current
-      verbose: true
-  get-version-7:
-    name: "Get Version 7"
-    uses: "./.github/workflows/get-version.yml"
-    secrets: inherit
-    with:
-      release_type: unknown
       verbose: true

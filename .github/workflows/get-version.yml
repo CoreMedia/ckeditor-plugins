@@ -101,11 +101,10 @@ jobs:
         name: "Version for Pull Request"
         if: ${{ inputs.release_type == 'pull-request' }}
         run: |
-          # For example: `refs/pull/173/merge`
-          ref="${{ github.ref }}"
           run="${{ github.run_number }}"
-          # Keep only the number.
-          pullRequestNumber="$(echo "$ref" | sed "s#^.*/\([0-9]*\)/.*\$#\1#g")"
+          # Parsing just github.ref, for example, does not seem to work in
+          # all scenarios.
+          pullRequestNumber=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{github.repository}}/pulls?head=${{github.repository_owner}}:${{github.ref}} | jq -r '.[] | .number' )
           version=$(pnpm --silent "script:version" --pull-request ${pullRequestNumber} --run-number ${run})
           echo "VERSION=${version}" >> $GITHUB_ENV
       - id: unmatched-release-type
