@@ -149,3 +149,4 @@ jobs:
         with:
           name: api-doc
           path: docs/
+          retention-days: 10
