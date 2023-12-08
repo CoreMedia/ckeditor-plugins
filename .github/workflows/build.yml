@@ -2,7 +2,39 @@ name: "Build"
 
 on:
   workflow_dispatch:
+    inputs:
+      lint:
+        description: "Linter"
+        type: boolean
+        required: false
+        default: false
+      utest:
+        description: "Unit Tests"
+        type: boolean
+        required: false
+        default: false
+      itest:
+        description: "Integration Tests"
+        type: boolean
+        required: false
+        default: false
   workflow_call:
+    inputs:
+      lint:
+        description: "Linter"
+        type: boolean
+        required: false
+        default: false
+      utest:
+        description: "Unit Tests"
+        type: boolean
+        required: false
+        default: false
+      itest:
+        description: "Integration Tests"
+        type: boolean
+        required: false
+        default: false
     secrets:
       CM_NPM_USER:
         required: true
@@ -68,3 +100,23 @@ jobs:
         name: "Build"
         run: |
           pnpm -r build
+      # To move the below steps to reusable workflow, we would need to be able
+      # to share artifacts (downloaded dependencies as well as built artifacts).
+      # Skipping for now. Instead, an outer workflow may run jobs in parallel,
+      # with some extra effort that all of them need to set up authentication,
+      # build, etc.
+      - id: lint
+        if: ${{ inputs.lint }}
+        name: "Lint"
+        run: |
+          pnpm -r build
+      - id: utest
+        if: ${{ inputs.utest }}
+        name: "Unit Tests"
+        run: |
+          pnpm jest
+      - id: itest
+        if: ${{ inputs.itest }}
+        name: "Integration Tests"
+        run: |
+          pnpm playwright

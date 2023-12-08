@@ -21,7 +21,24 @@ jobs:
           echo "* Node Version: ${{ env.nodeVersion }}" >> $GITHUB_STEP_SUMMARY
           echo "* PNPM Version: ${{ env.pnpmVersion }}" >> $GITHUB_STEP_SUMMARY
   build:
+    name: "Build"
     uses: "./.github/workflows/build.yml"
     secrets: inherit
   lint:
-    uses: "./.github/workflows/lint.yml"
+    name: "Linter"
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      lint: true
+  utest:
+    name: "Unit Tests"
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      utest: true
+  itest:
+    name: "Integration Tests"
+    uses: "./.github/workflows/build.yml"
+    secrets: inherit
+    with:
+      itest: true
