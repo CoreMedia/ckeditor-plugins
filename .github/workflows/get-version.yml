@@ -112,7 +112,7 @@ jobs:
         name: "On Unmatched Release Type"
         if: ${{ !env.VERSION }}
         run: |
-          echo "::error Invalid release-type: ${{ inputs.release_type }}"
+          echo "::error::Invalid release-type: ${{ inputs.release_type }}"
           exit 1
       - id: output-version
         name: "Output Version"
