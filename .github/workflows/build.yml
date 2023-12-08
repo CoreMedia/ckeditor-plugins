@@ -61,6 +61,8 @@ env:
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
 
+permissions: {}
+
 jobs:
   get-env:
     name: "Get Environment"
