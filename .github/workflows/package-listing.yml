@@ -2,50 +2,52 @@ name: "GitHub Actions Playground"
 on:
   workflow_dispatch:
 jobs:
-  get-engines:
-    name: "Get Engines"
-    uses: "./.github/workflows/get-engines.yml"
-    secrets: inherit
-  output-engines:
-    runs-on: ubuntu-latest
-    needs:
-      - get-engines
-    env:
-      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
-      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
-    steps:
-      - id: main
-        name: "Main"
-        run: |
-          echo "# Detected Engines" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "* Node Version: ${{ env.nodeVersion }}" >> $GITHUB_STEP_SUMMARY
-          echo "* PNPM Version: ${{ env.pnpmVersion }}" >> $GITHUB_STEP_SUMMARY
-  build:
-    name: "Build"
-    uses: "./.github/workflows/build.yml"
-    secrets: inherit
-  lint:
-    name: "Linter"
-    uses: "./.github/workflows/build.yml"
+  get-version-1:
+    name: "Get Version 1"
+    uses: "./.github/workflows/get-version.yml"
     secrets: inherit
     with:
-      lint: true
-  utest:
-    name: "Unit Tests"
-    uses: "./.github/workflows/build.yml"
+      release_type: major
+      verbose: true
+  get-version-2:
+    name: "Get Version 2"
+    uses: "./.github/workflows/get-version.yml"
     secrets: inherit
     with:
-      utest: true
-  itest:
-    name: "Integration Tests"
-    uses: "./.github/workflows/build.yml"
+      release_type: minor
+      verbose: true
+  get-version-3:
+    name: "Get Version 3"
+    uses: "./.github/workflows/get-version.yml"
     secrets: inherit
     with:
-      itest: true
-  doc:
-    name: "Generate Documentation"
-    uses: "./.github/workflows/build.yml"
+      release_type: patch
+      verbose: true
+  get-version-4:
+    name: "Get Version 4"
+    uses: "./.github/workflows/get-version.yml"
     secrets: inherit
     with:
-      doc: true
+      release_type: release-candidate
+      verbose: true
+  get-version-5:
+    name: "Get Version 5"
+    uses: "./.github/workflows/get-version.yml"
+    secrets: inherit
+    with:
+      release_type: pull-request
+      verbose: true
+  get-version-6:
+    name: "Get Version 6"
+    uses: "./.github/workflows/get-version.yml"
+    secrets: inherit
+    with:
+      release_type: current
+      verbose: true
+  get-version-7:
+    name: "Get Version 7"
+    uses: "./.github/workflows/get-version.yml"
+    secrets: inherit
+    with:
+      release_type: unknown
+      verbose: true

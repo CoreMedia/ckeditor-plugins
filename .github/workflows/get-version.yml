@@ -1,0 +1,126 @@
+name: "Get Version"
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type.'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - release-candidate
+          - pull-request
+          - current
+      verbose:
+        description: "If to output the resulting versions as summary."
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      release_type:
+        description: 'Release type.'
+        required: true
+        default: 'patch'
+        type: string
+      verbose:
+        description: "If to output the resulting versions as summary."
+        required: false
+        type: boolean
+        default: false
+
+permissions: {}
+
+jobs:
+  get-engines:
+    uses: "./.github/workflows/get-engines.yml"
+    secrets: inherit
+  main:
+    name: "Main"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - get-engines
+    env:
+      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
+      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            ./package.json
+            ./.release-version
+            ./scripts
+      - id: installPnpm
+        name: "Install: Use PNPM ${{ env.pnpmVersion }}"
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.pnpmVersion }}
+          run_install: false
+      - id: installNodeJs
+        name: "Install: Use Node.js ${{ env.nodeVersion }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.nodeVersion }}
+          cache: "pnpm"
+      - id: install
+        name: Install
+        run: |
+          # We only need dev dependencies in root `package.json`
+          pnpm install --frozen-lockfile --dev --filter "@coremedia/ckeditor5"
+      - id: for-release
+        name: "Version for Release"
+        if: ${{ inputs.release_type == "major" || inputs.release_type == "minor" || inputs.release_type == "patch" }}
+        run: |
+          version=$(pnpm --silent "script:version" --release ${{ inputs.release_type }})
+          echo "VERSION=${version}" >> $GITHUB_ENV
+      - id: for-release-candidate
+        name: "Version for Release Candidate"
+        if: ${{ inputs.release_type == "release-candidate" }}
+        run: |
+          version=$(pnpm --silent "script:version" --release-candidate)
+          echo "VERSION=${version}" >> $GITHUB_ENV
+      - id: for-current
+        name: "Current Version"
+        if: ${{ inputs.release_type == "current" }}
+        run: |
+          version=$(pnpm --silent "script:version" --current)
+          echo "VERSION=${version}" >> $GITHUB_ENV
+      - id: for-pull-request
+        name: "Version for Pull Request"
+        if: ${{ inputs.release_type == "pull-request" }}
+        run: |
+          # For example: `173/merge`
+          ref="${{ github.ref_name }}"
+          run="${{ github.run_number }}"
+          # Keep only the number (removing longest matching path from the back up to including `/`)
+          pullRequestNumber="${ref%%/*}"
+          version=$(pnpm --silent "script:version" --pull-request ${pullRequestNumber} --run-number ${run})
+          echo "VERSION=${version}" >> $GITHUB_ENV
+      - id: unmatched-release-type
+        name: "On Unmatched Release Type"
+        if: ${{ !env.VERSION }}
+        run: |
+          echo "::error Invalid release-type: ${{ inputs.release_type }}"
+          exit 1
+      - id: output-version
+        name: "Output Version"
+        if: ${{ env.VERSION }}
+        run: |
+          echo "version=${{ env.VERSION }}" >> $GITHUB_OUTPUT
+      - id: summary
+        if: ${{ inputs.verbose }}
+        name: "Output Version Summary"
+        run: |
+          echo "# Version" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Version for ${{ inputs.release_type }}: ${{ steps.output-version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+    outputs:
+      version: ${{ steps.output-version.outputs.version }}
