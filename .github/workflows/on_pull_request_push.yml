@@ -1,4 +1,4 @@
-name: "Pull Request Push"
+name: "On Pull Request Push"
 
 on:
   # On push on a PR we want to trigger a normal build without publishing anything
