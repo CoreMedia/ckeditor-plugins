@@ -18,6 +18,14 @@ on:
         type: boolean
         required: false
         default: false
+      # doc: Just used to "test the documentation", if it would build.
+      #      Helps to identify, for example, access to yet private API from
+      #      public API.
+      doc:
+        description: "Build Documentation (No Publish)"
+        type: boolean
+        required: false
+        default: false
   workflow_call:
     inputs:
       lint:
@@ -32,6 +40,11 @@ on:
         default: false
       itest:
         description: "Integration Tests"
+        type: boolean
+        required: false
+        default: false
+      doc:
+        description: "Build Documentation (No Publish)"
         type: boolean
         required: false
         default: false
@@ -125,3 +138,8 @@ jobs:
         name: "Integration Tests"
         run: |
           pnpm playwright
+      - id: doc
+        if: ${{ inputs.doc }}
+        name: "Build Documentation"
+        run: |
+          pnpm doc

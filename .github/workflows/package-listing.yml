@@ -45,5 +45,7 @@ jobs:
       itest: true
   doc:
     name: "Generate Documentation"
-    uses: "./.github/workflows/update-documentation.yml"
+    uses: "./.github/workflows/build.yml"
     secrets: inherit
+    with:
+      doc: true
