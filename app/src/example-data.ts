@@ -1,8 +1,5 @@
 // noinspection HttpUrlsUsage
-import {
-  PREDEFINED_MOCK_BLOB_DATA,
-  PREDEFINED_MOCK_LINK_DATA,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
+import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
 import { View } from "@ckeditor/ckeditor5-engine";
 import {
   bbCodeData,
@@ -20,7 +17,6 @@ const exampleData: {
   richtext: {
     ...richTextData,
     "Various Links": PREDEFINED_MOCK_LINK_DATA,
-    "Various Images": PREDEFINED_MOCK_BLOB_DATA,
   },
   bbcode: bbCodeData,
 };

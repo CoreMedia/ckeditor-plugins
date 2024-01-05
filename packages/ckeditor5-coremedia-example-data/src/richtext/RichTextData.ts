@@ -9,6 +9,7 @@ import { simpleData } from "./SimpleData";
 import { welcomeTextData } from "./WelcomeTextData";
 import { ExampleData } from "../ExampleData";
 import { challengingData } from "./ChallengingData";
+import { imageData } from "./ImageData";
 
 export const richTextData: ExampleData = {
   ...contentLinkData,
@@ -21,4 +22,5 @@ export const richTextData: ExampleData = {
   ...simpleData,
   ...welcomeTextData,
   ...challengingData,
+  ...imageData,
 };

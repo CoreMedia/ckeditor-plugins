@@ -248,6 +248,27 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
     embeddable: true,
     blob: PNG_GREEN_240x135,
   },
+  {
+    id: 924,
+    name: "Small Red Image",
+    linkable: true,
+    embeddable: true,
+    blob: PNG_RED_10x10,
+  },
+  {
+    id: 926,
+    name: "Small Green Image",
+    linkable: true,
+    embeddable: true,
+    blob: PNG_GREEN_10x10,
+  },
+  {
+    id: 928,
+    name: "Small Blue Image",
+    linkable: true,
+    embeddable: true,
+    blob: PNG_BLUE_10x10,
+  },
 ];
 
 /**
@@ -261,6 +282,7 @@ const PREDEFINED_MOCK_CONTENTS: PredefinedMockContentConfig[] = [
   ...BLOB_CONTENTS,
 ];
 
+// noinspection HttpUrlsUsage
 const wrapInRichText = (rawData: string): string =>
   // noinspection HttpUrlsUsage
   `<?xml version="1.0" encoding="utf-8"?><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink">${rawData}</div>`;
@@ -302,38 +324,4 @@ const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
     .join(""),
 );
 
-// noinspection HtmlUnknownAttribute
-/**
- * A CoreMedia RichText 1.0 document, which contains all predefined
- * mock blob contents.
- */
-const PREDEFINED_MOCK_BLOB_DATA = wrapInRichText(
-  PREDEFINED_MOCK_CONTENTS
-    // Only use mocks with blob data.
-    .filter((c) => !!c.blob)
-    // Get some useful name and the URI Path for the link.
-    .map((c) => {
-      const { id, name: mockName, type: configType, comment } = c;
-      const type = configType ?? defaultTypeById(id);
-      const uriPath = contentUriPath(id);
-      let name: string;
-      if (comment) {
-        name = comment;
-      } else if (Array.isArray(mockName)) {
-        name = `${capitalize(type)} with name toggle`;
-      } else if (typeof mockName === "string") {
-        name = truncateName(mockName);
-      } else {
-        name = `Some ${capitalize(type)}`;
-      }
-      return { name, uriPath };
-    })
-    // Property is irrelevant for mocking.
-    .map(
-      ({ name, uriPath }) =>
-        `<p>${name}:<br/><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></p><p>${name} with link to self:<br/><a xlink:href="${uriPath}"><img alt="Alternative Text: ${name}" xlink:href="${uriPath}#properties.data"/></a></p>`,
-    )
-    .join(""),
-);
-
-export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA, PREDEFINED_MOCK_BLOB_DATA, PredefinedMockContentConfig };
+export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA, PredefinedMockContentConfig };
