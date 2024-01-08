@@ -10,11 +10,7 @@ import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { FindAndReplace } from "@ckeditor/ckeditor5-find-and-replace";
 import { Heading } from "@ckeditor/ckeditor5-heading";
-// ImageInline: See ckeditor/ckeditor5#12027.
-import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
-// ImageBlockEditing: See ckeditor/ckeditor5#12027.
-import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
-import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
+import { Image, ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import { Indent } from "@ckeditor/ckeditor5-indent";
 import { DocumentList } from "@ckeditor/ckeditor5-list";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
@@ -68,14 +64,7 @@ const {
   objectSizeFull: pageDefaultIcon,
 } = icons;
 
-const imagePlugins: PluginConstructor[] = [
-  ContentImagePlugin,
-  ImageInline,
-  ImageBlockEditing,
-  ImageStyle,
-  ImageToolbar,
-  ImageTextAlternative,
-];
+const imagePlugins: PluginConstructor[] = [ContentImagePlugin, Image, ImageStyle, ImageToolbar, ImageTextAlternative];
 
 /**
  * You may switch the compatibility, for example, by providing
@@ -299,14 +288,14 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
             icon: alignLeftIcon,
             title: "Left-aligned",
             className: "float--left",
-            modelElements: ["imageInline"],
+            modelElements: ["imageBlock"],
           },
           {
             name: "float-right",
             icon: alignRightIcon,
             title: "Right-aligned",
             className: "float--right",
-            modelElements: ["imageInline"],
+            modelElements: ["imageBlock"],
           },
           {
             name: "float-none",
@@ -319,6 +308,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
             name: "inline",
             title: "Page default",
             icon: pageDefaultIcon,
+            isDefault: true,
             modelElements: ["imageInline"],
           },
         ],

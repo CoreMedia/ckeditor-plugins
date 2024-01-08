@@ -2,8 +2,6 @@ import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 // ImageUtils: See ckeditor/ckeditor5#12027.
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
-// ImageInline: See ckeditor/ckeditor5#12027.
-import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
@@ -12,6 +10,7 @@ import {
   openImageInTabCommandName,
   registerOpenImageInTabCommand,
 } from "./contentImageOpenInTab/OpenImageInTabCommand";
+import { Image } from "@ckeditor/ckeditor5-image";
 
 /**
  * Plugin to support images from CoreMedia RichText.
@@ -31,11 +30,12 @@ export default class ContentImageEditingPlugin extends Plugin {
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
 
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
+  static readonly IMAGE_BLOCK_MODEL_ELEMENT_NAME = "imageBlock";
   static readonly IMAGE_INLINE_VIEW_ELEMENT_NAME = "img";
   static readonly XLINK_HREF_MODEL_ATTRIBUTE_NAME = "xlink-href";
   static readonly XLINK_HREF_DATA_ATTRIBUTE_NAME = "data-xlink-href";
 
-  static readonly requires = [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
+  static readonly requires = [Image, ImageUtils, ModelBoundSubscriptionPlugin];
 
   init(): void {
     const editor = this.editor;
@@ -54,9 +54,20 @@ export default class ContentImageEditingPlugin extends Plugin {
    * `BlobDisplayService`
    */
   afterInit(): void {
-    ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(this.editor);
+    const { editor } = this;
+
+    const isBlockPluginLoaded = editor.plugins.has("ImageBlockEditing");
+    const isInlinePluginLoaded = editor.plugins.has("ImageInlineEditing");
+
+    ContentImageEditingPlugin.#initializeModelBoundSubscriptionPlugin(
+      editor,
+      isBlockPluginLoaded,
+      isInlinePluginLoaded,
+    );
     ContentImageEditingPlugin.#setupXlinkHrefConversion(
-      this.editor,
+      editor,
+      isBlockPluginLoaded,
+      isInlinePluginLoaded,
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
       ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME,
     );
@@ -64,13 +75,20 @@ export default class ContentImageEditingPlugin extends Plugin {
     // We have to prevent writing src-attribute to model because we fetch the
     // src attribute for the editing view asynchronously.
     // If not prevented, the src-attribute from GRS would be written to the model.
-    this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
+    editor.conversion.for("upcast").add(preventUpcastImageSrc());
   }
 
-  static #setupXlinkHrefConversion(editor: Editor, modelAttributeName: string, dataAttributeName: string): void {
+  static #setupXlinkHrefConversion(
+    editor: Editor,
+    isBlockPluginLoaded: boolean,
+    isInlinePluginLoaded: boolean,
+    modelAttributeName: string,
+    dataAttributeName: string,
+  ): void {
     ContentImageEditingPlugin.#setupXlinkHrefConversionDowncast(
       editor,
-      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME,
+      isBlockPluginLoaded,
+      isInlinePluginLoaded,
       modelAttributeName,
       dataAttributeName,
     );
@@ -82,36 +100,69 @@ export default class ContentImageEditingPlugin extends Plugin {
 
   static #setupXlinkHrefConversionDowncast(
     editor: Editor,
-    modelElementName: "imageInline",
+    isBlockPluginLoaded: boolean,
+    isInlinePluginLoaded: boolean,
     modelAttributeName: string,
     dataAttributeName: string,
   ): void {
-    editor.model.schema.extend(modelElementName, {
-      allowAttributes: [modelAttributeName],
-    });
-    editor.conversion.for("dataDowncast").attributeToAttribute({
-      model: {
-        name: modelElementName,
-        key: modelAttributeName,
-      },
-      view: dataAttributeName,
-    });
+    const {
+      conversion,
+      model: { schema },
+    } = editor;
 
-    // For editing-view, the xlink-href attribute has to be converted to a src-attribute.
-    editor.conversion
-      .for("editingDowncast")
-      .add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
+    const modelElementNames: string[] = [];
+
+    if (isBlockPluginLoaded) {
+      modelElementNames.push(ContentImageEditingPlugin.IMAGE_BLOCK_MODEL_ELEMENT_NAME);
+    }
+    if (isInlinePluginLoaded) {
+      modelElementNames.push(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME);
+    }
+
+    for (const modelElementName of modelElementNames) {
+      schema.extend(modelElementName, {
+        allowAttributes: [modelAttributeName],
+      });
+
+      conversion.for("dataDowncast").attributeToAttribute({
+        model: {
+          name: modelElementName,
+          key: modelAttributeName,
+        },
+        view: dataAttributeName,
+      });
+
+      // For editing-view, the xlink-href attribute has to be converted to a src-attribute.
+      conversion
+        .for("editingDowncast")
+        .add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
+    }
   }
 
   /**
    * Register `imageInline` model elements for subscription cleanup
    * on model changes.
-   *
-   * @param editor - Editor
    */
-  static #initializeModelBoundSubscriptionPlugin(editor: Editor): void {
-    getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.registerModelElement(
-      ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME,
-    );
+  static #initializeModelBoundSubscriptionPlugin(
+    editor: Editor,
+    isBlockPluginLoaded: boolean,
+    isInlinePluginLoaded: boolean,
+  ): void {
+    const subscriptionPlugin = getOptionalPlugin(editor, ModelBoundSubscriptionPlugin);
+
+    if (!subscriptionPlugin) {
+      return;
+    }
+
+    const modelElementNames: string[] = [];
+
+    if (isBlockPluginLoaded) {
+      modelElementNames.push(ContentImageEditingPlugin.IMAGE_BLOCK_MODEL_ELEMENT_NAME);
+    }
+    if (isInlinePluginLoaded) {
+      modelElementNames.push(ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME);
+    }
+
+    modelElementNames.forEach((modelElementName) => subscriptionPlugin.registerModelElement(modelElementName));
   }
 }
