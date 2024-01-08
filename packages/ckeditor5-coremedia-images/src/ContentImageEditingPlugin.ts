@@ -1,5 +1,5 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
+import { editingDowncastXlinkHref } from "./converters";
 // ImageUtils: See ckeditor/ckeditor5#12027.
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
@@ -71,11 +71,6 @@ export default class ContentImageEditingPlugin extends Plugin {
       ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME,
       ContentImageEditingPlugin.XLINK_HREF_DATA_ATTRIBUTE_NAME,
     );
-
-    // We have to prevent writing src-attribute to model because we fetch the
-    // src attribute for the editing view asynchronously.
-    // If not prevented, the src-attribute from GRS would be written to the model.
-    editor.conversion.for("upcast").add(preventUpcastImageSrc());
   }
 
   static #setupXlinkHrefConversion(

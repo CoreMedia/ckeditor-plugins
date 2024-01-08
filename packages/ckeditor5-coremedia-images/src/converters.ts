@@ -1,6 +1,5 @@
 /* eslint no-null/no-null: off */
 
-import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
 import { DowncastDispatcher, ViewElement, DowncastWriter, Element as ModelElement } from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
@@ -24,48 +23,6 @@ interface DowncastEventData {
   attributeNewValue: string | null;
 }
 export type DowncastConversionHelperFunction = (dispatcher: DowncastDispatcher) => void;
-
-/**
- * A method to prevent the upcast of the src-attribute of an image.
- *
- * The `src` attribute for CoreMedia Images is not stored as a URL but as a
- * reference to a content property in a `xlink:href` attribute. In this case, it
- * does not make sense to work with `src`-attributes in the model and side
- * effects of an existing `src`-attribute (like GHS) have to be prevented.
- *
- * Preventing the `src` attribute to become part of the model means to consume
- * the attribute.
- *
- * Unfortunately, CKEditor 5 does not check if the attribute has already been
- * consumed:
- *
- * * [#11327: image conversion (imageInline and imageBlock) does not test if src is consumed.](https://github.com/ckeditor/ckeditor5/issues/11327)
- *
- * Combined with:
- *
- * * [#11530: The image upcast converter does not consume the `src` attribute](https://github.com/ckeditor/ckeditor5/issues/11530)
- *
- * the `src` attribute will be upcast if the `src` attribute exists as view
- * attribute. To fully prevent the upcast, we have to consume the attribute and
- * remove the `src` from the view node.
- */
-export const preventUpcastImageSrc =
-  () =>
-  (dispatcher: UpcastDispatcher): void => {
-    dispatcher.on(
-      `element:img`,
-      (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
-        // eslint-disable-next-line
-        if (data.viewItem.hasAttribute("data-xlink-href")) {
-          // eslint-disable-next-line
-          conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
-          // eslint-disable-next-line
-          data.viewItem._removeAttribute("src");
-        }
-      },
-      { priority: "highest" },
-    );
-  };
 
 /**
  * Conversion for `modelElementName:xlink-href` to `img:src`.
