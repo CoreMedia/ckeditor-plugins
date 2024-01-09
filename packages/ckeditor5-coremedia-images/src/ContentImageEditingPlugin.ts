@@ -119,6 +119,14 @@ export default class ContentImageEditingPlugin extends Plugin {
         allowAttributes: [modelAttributeName],
       });
 
+      // TODO: This requires the attribute names to be the same in model and views.
+      //       We should align that, as otherwise, we cannot rely on the CKEditor 5 tooling.
+      //       Suggestion is, similar to CKEditor's own plugins, to have some small to-the point
+      //       plugins aligned with the "depending" plugins. See sketches integrations/ImageBlockEditing
+      //       et al.
+      // const imageUtils = editor.plugins.get(ImageUtils);
+      // conversion.for("downcast").add(downcastImageAttribute(imageUtils, modelElementName, dataAttributeName));
+
       conversion.for("dataDowncast").attributeToAttribute({
         model: {
           name: modelElementName,
