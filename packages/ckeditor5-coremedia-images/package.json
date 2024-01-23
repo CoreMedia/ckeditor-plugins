@@ -34,11 +34,11 @@
     "/theme"
   ],
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^39.0.2",
-    "@ckeditor/ckeditor5-engine": "^39.0.2",
-    "@ckeditor/ckeditor5-image": "^39.0.2",
-    "@ckeditor/ckeditor5-ui": "^39.0.2",
-    "@ckeditor/ckeditor5-utils": "^39.0.2",
+    "@ckeditor/ckeditor5-core": "^41.0.0",
+    "@ckeditor/ckeditor5-engine": "^41.0.0",
+    "@ckeditor/ckeditor5-image": "^41.0.0",
+    "@ckeditor/ckeditor5-ui": "^41.0.0",
+    "@ckeditor/ckeditor5-utils": "^41.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.11",
