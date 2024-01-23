@@ -16,7 +16,7 @@ import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
 import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
-import { DocumentList, DocumentListProperties } from "@ckeditor/ckeditor5-list";
+import { List as DocumentList, ListProperties as DocumentListProperties } from "@ckeditor/ckeditor5-list";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
 import { Indent } from "@ckeditor/ckeditor5-indent";

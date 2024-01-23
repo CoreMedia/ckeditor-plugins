@@ -16,7 +16,7 @@ import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
 import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
 import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import { Indent } from "@ckeditor/ckeditor5-indent";
-import { DocumentList } from "@ckeditor/ckeditor5-list";
+import { List as DocumentList } from "@ckeditor/ckeditor5-list";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
