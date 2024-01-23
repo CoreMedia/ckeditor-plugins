@@ -3,7 +3,7 @@ import ButtonViewWrapper from "./ButtonViewWrapper";
 import { type ButtonView, ToolbarView } from "@ckeditor/ckeditor5-ui";
 
 export default class ImageContextualBalloonToolbar {
-  #toolbarViewWrapper: ToolbarViewWrapper;
+  readonly #toolbarViewWrapper: ToolbarViewWrapper;
 
   constructor(toolbarViewWrapper: ToolbarViewWrapper) {
     this.#toolbarViewWrapper = toolbarViewWrapper;

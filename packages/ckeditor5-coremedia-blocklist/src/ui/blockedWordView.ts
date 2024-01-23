@@ -17,12 +17,12 @@ export default class BlockedWordView extends View {
   /**
    * The Remove button view.
    */
-  #removeButtonView: ButtonView;
+  readonly #removeButtonView: ButtonView;
 
   /**
    * The Label, representing the blocked word.
    */
-  #blockedWordLabel: View;
+  readonly #blockedWordLabel: View;
 
   /**
    * A collection of child views in the form.

@@ -39,7 +39,7 @@ export default class ContentClipboardEditing extends Plugin {
    *
    * @private
    */
-  #pendingMarkerNames = new Array<string>();
+  readonly #pendingMarkerNames = new Array<string>();
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);

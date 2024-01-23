@@ -12,7 +12,7 @@ import { Observable, Subject } from "rxjs";
 const isString = (value: unknown): value is string => typeof value === "string";
 
 class MockWorkAreaService implements WorkAreaService {
-  static #LOGGER = LoggerProvider.getLogger("WorkAreaService");
+  static readonly #LOGGER = LoggerProvider.getLogger("WorkAreaService");
   readonly #editor: Editor;
   /**
    * The entities that were triggered to open latest.

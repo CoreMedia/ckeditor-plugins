@@ -31,7 +31,7 @@ export default class ContentLinkView extends ButtonView {
    *
    * @private
    */
-  #editor: Editor;
+  readonly #editor: Editor;
 
   #contentSubscription: Subscription | undefined = undefined;
   readonly #typeIcon: CoreMediaIconView | undefined = undefined;

@@ -1,5 +1,5 @@
 class Config {
-  #config: Map<string, unknown> = new Map<string, unknown>();
+  readonly #config: Map<string, unknown> = new Map<string, unknown>();
 
   get(name: string): unknown {
     return this.#config.get(name);

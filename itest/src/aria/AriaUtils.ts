@@ -59,7 +59,7 @@ export interface HasAriaLabel {
 }
 
 export class LocatorWithAriaLabel implements HasAriaLabel {
-  #locator: Locator;
+  readonly #locator: Locator;
 
   constructor(locator: Locator) {
     this.#locator = locator;

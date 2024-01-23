@@ -61,7 +61,7 @@ const EXTERNAL_CONTENTS: MockExternalContent[] = [
 export default class MockExternalContentPlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
-  #registeredExternalContents: ExternalContentsByUri = new Map<string, MockExternalContent>();
+  readonly #registeredExternalContents: ExternalContentsByUri = new Map<string, MockExternalContent>();
   static readonly requires = [MockContentPlugin];
 
   /**

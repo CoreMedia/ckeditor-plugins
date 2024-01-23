@@ -30,7 +30,7 @@ class RichTextDataFilter extends Plugin {
   static readonly requires = [DataFilter];
 
   #delegate?: DataFilter;
-  #config: ReducedMatcherPattern[] = [];
+  readonly #config: ReducedMatcherPattern[] = [];
 
   init(): Promise<void> | void {
     const logger = RichTextDataFilter.#logger;
