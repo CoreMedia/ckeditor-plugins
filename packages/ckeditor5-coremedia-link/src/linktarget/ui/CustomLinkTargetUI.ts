@@ -204,7 +204,7 @@ export default class CustomLinkTargetUI extends Plugin {
       });
     }
 
-    const commandValue: string = (linkTargetCommand?.value || "") as string;
+    const commandValue: string = (linkTargetCommand?.value ?? "") as string;
     // For 'reserved targets' as current value, we still want to display an empty field.
     const initialValue: string =
       commandValue === OTHER_TARGET_NAME || this.#reservedTargetNames.has(commandValue) ? "" : commandValue;

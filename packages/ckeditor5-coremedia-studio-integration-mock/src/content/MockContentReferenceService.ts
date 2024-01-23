@@ -9,7 +9,7 @@ import MockContentPlugin from "./MockContentPlugin";
 import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 
 export class MockContentReferenceService implements IContentReferenceService {
-  #editor: Editor;
+  readonly #editor: Editor;
 
   constructor(editor: Editor) {
     this.#editor = editor;

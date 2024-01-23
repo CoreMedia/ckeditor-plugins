@@ -28,7 +28,7 @@ export type Mode = "replace" | "append";
 export class FontMapping {
   static readonly #logger = LoggerProvider.getLogger("FontMapper");
   #map: FontMap;
-  #DECODE_ELEMENT_HELP = document.createElement("textarea");
+  readonly #DECODE_ELEMENT_HELP = document.createElement("textarea");
 
   constructor(map: FontMap) {
     this.#map = FontMapping.#mergeFontMaps(htmlEncodingMap, map);

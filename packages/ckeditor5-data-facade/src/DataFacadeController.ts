@@ -81,7 +81,7 @@ import { CKEditorError } from "@ckeditor/ckeditor5-utils";
  * ```
  */
 export class DataFacadeController implements DataApi {
-  static #logger = LoggerProvider.getLogger("DataFacadeController");
+  static readonly #logger = LoggerProvider.getLogger("DataFacadeController");
   #editor?: Editor;
   #cachedData?: CachedData;
   /**

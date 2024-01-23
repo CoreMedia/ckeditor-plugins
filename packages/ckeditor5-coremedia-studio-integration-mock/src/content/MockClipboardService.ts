@@ -9,8 +9,8 @@ export default class MockClipboardService implements ClipboardService {
   static readonly #logger: Logger = LoggerProvider.getLogger("MockClipboardService");
 
   #items: ClipboardItemRepresentation[];
-  #subject: Subject<ClipboardItemRepresentation[]>;
-  #timestamp: number;
+  readonly #subject: Subject<ClipboardItemRepresentation[]>;
+  readonly #timestamp: number;
 
   constructor() {
     this.#items = [];

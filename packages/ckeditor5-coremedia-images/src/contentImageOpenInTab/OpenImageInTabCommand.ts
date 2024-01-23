@@ -14,7 +14,7 @@ export const openImageInTabCommandName = "openImageInTab" as const;
  * available in the current model state.
  */
 export class OpenImageInTabCommand extends OpenInTabCommand {
-  static #logger = LoggerProvider.getLogger("OpenImageInTabCommand");
+  static readonly #logger = LoggerProvider.getLogger("OpenImageInTabCommand");
 
   override refresh() {
     const logger = OpenImageInTabCommand.#logger;
