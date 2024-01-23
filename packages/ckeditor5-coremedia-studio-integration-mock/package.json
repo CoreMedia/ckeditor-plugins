@@ -36,8 +36,8 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.7",
     "@ckeditor/ckeditor5-core": "^39.0.2",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
