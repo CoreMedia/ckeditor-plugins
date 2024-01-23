@@ -63,8 +63,8 @@
     "xml-formatter": "^3.6.2"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-translations": "^38.4.1",
-    "@ckeditor/ckeditor5-dev-utils": "^38.4.1",
+    "@ckeditor/ckeditor5-dev-translations": "^39.5.1",
+    "@ckeditor/ckeditor5-dev-utils": "^39.5.1",
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "@ckeditor/ckeditor5-theme-lark": "39.0.2",
     "@types/node": "^20.11.5",
