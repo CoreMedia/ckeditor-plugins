@@ -1,6 +1,6 @@
 // noinspection HttpUrlsUsage
 import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
-import { View } from "@ckeditor/ckeditor5-engine";
+import { EditingView as View } from "@ckeditor/ckeditor5-engine";
 import {
   bbCodeData,
   ExampleData,

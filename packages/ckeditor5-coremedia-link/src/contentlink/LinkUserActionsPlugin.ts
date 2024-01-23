@@ -1,6 +1,6 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import {
-  View,
+  EditingView as View,
   ViewDocumentFragment,
   ViewElement,
   TextProxy,
