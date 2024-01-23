@@ -7,6 +7,7 @@ import {
   injectCssTransitionDisabler,
   submitHandler,
   InputTextView,
+  FocusableView,
 } from "@ckeditor/ckeditor5-ui";
 import { createLabeledInputText } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
 import { Locale, FocusTracker, KeystrokeHandler } from "@ckeditor/ckeditor5-utils";
@@ -27,7 +28,7 @@ export default class CustomLinkTargetInputFormView extends View {
   readonly labeledInput: LabeledFieldView<InputTextView>;
   readonly saveButtonView: ButtonView;
   readonly cancelButtonView: ButtonView;
-  readonly #focusables: ViewCollection;
+  readonly #focusables: ViewCollection<FocusableView>;
   readonly #focusCycler: FocusCycler;
 
   // declared, because we extend this view by calling {@link injectCssTransitionDisabler} later on

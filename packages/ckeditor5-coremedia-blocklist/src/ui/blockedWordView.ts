@@ -1,4 +1,4 @@
-import { ButtonView, View, ViewCollection, submitHandler } from "@ckeditor/ckeditor5-ui";
+import { ButtonView, View, ViewCollection, submitHandler, FocusableView } from "@ckeditor/ckeditor5-ui";
 import { KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
 import { BindChain } from "@ckeditor/ckeditor5-ui/src/template";
 import trashbinIcon from "../../theme/icons/trashbin.svg";
@@ -11,7 +11,7 @@ import "../lang/blocklist";
  * It shows a single word, that is part of the block list, based on the current selection inside the editor.
  * The word can be removed from the list via the button.
  */
-export default class BlockedWordView extends View {
+export default class BlockedWordView extends View implements FocusableView {
   readonly keystrokes = new KeystrokeHandler();
 
   /**
