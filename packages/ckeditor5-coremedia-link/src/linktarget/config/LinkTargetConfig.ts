@@ -11,6 +11,7 @@ import {
   TargetDefaultRuleDefinitionWithFilter,
 } from "./LinkTargetDefaultRuleDefinition";
 import { getFilterByType } from "./DefaultTargetTypeFilters";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Provides the given targets to select from and a list of rules to
@@ -68,6 +69,8 @@ interface LinkTargetConfig {
   defaultTargets?: TargetDefaultRuleDefinition[];
 }
 
+const logger = LoggerProvider.getLogger("LinkTargetConfig");
+
 /**
  * Parses a possibly existing configuration option as part of CKEditor's
  * link plugin configuration. It expects an entry `defaultTargets` which contains an
@@ -121,8 +124,14 @@ export const computeDefaultLinkTargetForUrl = (url: string, config: Config<Edito
   const defaultTargetConfig = parseDefaultLinkTargetConfig(config);
   let result: string | undefined;
   defaultTargetConfig.forEach((defaultTarget) => {
-    if (defaultTarget.filter(url)) {
-      result = defaultTarget.target;
+    try {
+      if (defaultTarget.filter(url)) {
+        result = defaultTarget.target;
+      }
+    } catch (e) {
+      // We invoked possibly custom code here and should be robust, when the
+      // corresponding configuration contains an error.
+      logger.warn(`Ignoring failure while evaluating default target for URL '${url}'.`, e);
     }
   });
   return result;
