@@ -233,7 +233,8 @@ export default class DataToModelMechanism {
       }
 
       let insertPosition = markerPosition;
-      if (!markerPosition.isAtStart && !contentInputData.itemContext.isInline) {
+      // Parent Check: Required precondition for split().
+      if (!markerPosition.isAtStart && !contentInputData.itemContext.isInline && markerPosition.parent?.parent) {
         insertPosition = writer.split(markerPosition).range.end;
       }
 
@@ -247,7 +248,8 @@ export default class DataToModelMechanism {
       // at the end of a container/document. This prevents empty paragraphs
       // after the inserted element.
       let finalAfterInsertPosition: Position = range.end;
-      if (!range.end.isAtEnd && !contentInputData.itemContext.isInline) {
+      // Parent Check: Required precondition for split().
+      if (!range.end.isAtEnd && !contentInputData.itemContext.isInline && range.end.parent?.parent) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
       }
       MarkerRepositionUtil.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);
