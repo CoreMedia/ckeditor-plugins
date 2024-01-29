@@ -1,6 +1,6 @@
 // noinspection HttpUrlsUsage
 import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
-import { View } from "@ckeditor/ckeditor5-engine";
+import { EditingView } from "@ckeditor/ckeditor5-engine";
 import {
   bbCodeData,
   ExampleData,
@@ -33,7 +33,7 @@ const dumpEditingViewOnRender = (editor: Editor): void => {
     "render",
     (event) => {
       const { source } = event;
-      if (source instanceof View) {
+      if (source instanceof EditingView) {
         console.log("CKEditor's Editing-Controller rendered data.", {
           source,
           innerHtml: source.getDomRoot()?.innerHTML,
