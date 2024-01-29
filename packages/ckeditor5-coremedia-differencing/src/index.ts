@@ -8,4 +8,4 @@ export { ImageElementSupport } from "./integrations/Image";
 export { PluginIntegrationHook } from "./PluginIntegrationHook";
 export { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
 
-import "./augmentation.ts";
+import "./augmentation";
