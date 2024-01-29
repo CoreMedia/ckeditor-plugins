@@ -1,9 +1,9 @@
 import { JSWrapper } from "./JSWrapper";
-import { View } from "@ckeditor/ckeditor5-engine";
+import { EditingView } from "@ckeditor/ckeditor5-engine";
 import { ViewDocumentWrapper } from "./ViewDocumentWrapper";
 import { EditingControllerWrapper } from "./EditingControllerWrapper";
 
-export class ViewWrapper extends JSWrapper<View> {
+export class ViewWrapper extends JSWrapper<EditingView> {
   get document(): ViewDocumentWrapper {
     return ViewDocumentWrapper.fromView(this);
   }
@@ -12,7 +12,7 @@ export class ViewWrapper extends JSWrapper<View> {
    * Focuses the editor in the editing view.
    */
   async focus(): Promise<void> {
-    await this.evaluate((view: View) => {
+    await this.evaluate((view: EditingView) => {
       view.focus();
     });
   }
