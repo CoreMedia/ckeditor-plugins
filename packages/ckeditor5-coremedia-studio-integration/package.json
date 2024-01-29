@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration",
-  "version": "16.1.1-rc.4",
+  "version": "16.1.1-rc.5",
   "description": "CoreMedia Studio: Communication facade for Studio integration",
   "author": {
     "name": "CoreMedia GmbH",
@@ -46,7 +46,7 @@
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "16.1.1-rc.4",
+    "@coremedia/ckeditor5-logging": "16.1.1-rc.5",
     "node-esapi": "^0.0.1",
     "rxjs": "^7.8.1"
   }
