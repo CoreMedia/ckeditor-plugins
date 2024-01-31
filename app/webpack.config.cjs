@@ -22,18 +22,18 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "ckeditor.js",
     libraryTarget: "umd",
-    libraryExport: "default",
+    libraryExport: "default"
   },
 
   optimization: {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          sourceMap: true,
+          sourceMap: true
         },
-        extractComments: false,
-      }),
-    ],
+        extractComments: false
+      })
+    ]
   },
 
   plugins: [
@@ -41,16 +41,16 @@ module.exports = {
       // UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
       // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
       language: "en",
-      additionalLanguages: ["de"],
+      additionalLanguages: ["de"]
     }),
     new webpack.BannerPlugin({
       banner: bundler.getLicenseBanner(),
-      raw: true,
+      raw: true
     }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
-      failOnError: true,
-    }),
+      failOnError: true
+    })
   ],
 
   module: {
@@ -58,13 +58,16 @@ module.exports = {
       loaders.getIconsLoader({ matchExtensionOnly: true }),
       loaders.getStylesLoader({
         themePath: require.resolve("@ckeditor/ckeditor5-theme-lark"),
-        minify: true,
+        minify: true
       }),
-      loaders.getTypeScriptLoader(),
-    ],
+      loaders.getTypeScriptLoader()
+    ]
   },
 
   resolve: {
     extensions: [".ts", ".js", ".json"],
-  },
+    extensionAlias: {
+      ".js": [".js", ".ts"]
+    }
+  }
 };
