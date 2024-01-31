@@ -25,19 +25,16 @@ const reportFailure = (result) => {
   const { packagePath, incompatibleRanges, missingPeerDependencies } = result;
   console.error(`${packagePath}:`);
   if (missingPeerDependencies?.length ?? 0 > 0) {
-    const descriptors = missingPeerDependencies.map(({
-                                                       name,
-                                                       specifiedPeerDependencyRange
-                                                     }) => `${name}:${specifiedPeerDependencyRange}`);
+    const descriptors = missingPeerDependencies.map(
+      ({ name, specifiedPeerDependencyRange }) => `${name}:${specifiedPeerDependencyRange}`,
+    );
     console.error(`  Missing peerDependencies (${missingPeerDependencies.length}):`);
     descriptors.forEach((descriptor) => console.error(`    * ${descriptor}`));
   }
   if (incompatibleRanges?.length ?? 0 > 0) {
-    const descriptors = incompatibleRanges.map(({
-                                                  name,
-                                                  specifiedPeerDependencyRange,
-                                                  version
-                                                }) => `${name}:${specifiedPeerDependencyRange} (is: ${version})`);
+    const descriptors = incompatibleRanges.map(
+      ({ name, specifiedPeerDependencyRange, version }) => `${name}:${specifiedPeerDependencyRange} (is: ${version})`,
+    );
     console.error(`  Incompatible peerDependencies (${incompatibleRanges.length}):`);
     descriptors.forEach((descriptor) => console.error(`    * ${descriptor}`));
   }
@@ -63,17 +60,13 @@ const hasPeerDependencyIssues = (dirName) => {
 
 // Iterates through all `package.json` in `packages/` to scan for issues
 // regarding peerDependencies.
-void getDirectories("packages")
-  .then((dirs) => {
+void getDirectories("packages").then((dirs) => {
+  const packageJsonWithIssues = dirs.map((path) => hasPeerDependencyIssues(path)).filter(Boolean);
 
-    const packageJsonWithIssues = dirs
-      .map((path) => hasPeerDependencyIssues(path))
-      .filter(Boolean);
-
-    if (packageJsonWithIssues.length !== 0) {
-      console.error(`Detected violated peerDependencies: ${packageJsonWithIssues.length})`);
-      process.exit(1);
-    } else {
-      console.info("No peerDependencies violations detected.");
-    }
-  });
+  if (packageJsonWithIssues.length !== 0) {
+    console.error(`Detected violated peerDependencies: ${packageJsonWithIssues.length})`);
+    process.exit(1);
+  } else {
+    console.info("No peerDependencies violations detected.");
+  }
+});
