@@ -17,7 +17,7 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ["**/*.js", "**/*.ts", "**/*.tsx"],
+      files: ["**/*.{js,cjs,mjs,ts,tsx}"],
       extends: [
         // Prettier recommended for formatting rules: https://typescript-eslint.io/docs/linting/configs/#prettier
         "prettier",
@@ -32,14 +32,14 @@ module.exports = {
       extends: ["eslint:recommended"],
     },
     {
-      files: ["**/*.config.js", "**/*.local.js", "**/*rc.js"],
+      files: ["**/*.config.{js,cjs,mjs}", "**/*.local.{js,cjs,mjs}", "**/*rc.{js,cjs,mjs}"],
       rules: {
         "no-undef": "off",
         "no-unused-vars": "off",
       },
     },
     {
-      files: ["**/*.ts", "**/*.tsx"],
+      files: ["**/*.{ts,tsx}"],
       extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -331,14 +331,7 @@ module.exports = {
      * ones.
      */
     {
-      files: [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/itest/**/*.ts",
-        "**/__tests__/**/*.ts",
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-      ],
+      files: ["**/*.test.{ts,tsx}", "**/itest/**/*.{ts,tsx}", "**/__tests__/**/*.{ts,tsx}", "**/*.spec.{ts,tsx}"],
       rules: {
         "no-irregular-whitespace": "off",
         "@typescript-eslint/no-unsafe-argument": "off",
@@ -352,7 +345,7 @@ module.exports = {
      * Overrides for example application.
      */
     {
-      files: ["app/**/*.ts", "app/**/*.tsx"],
+      files: ["app/**/*.{ts,tsx}"],
       rules: {
         "jsdoc/require-jsdoc": "off",
       },
