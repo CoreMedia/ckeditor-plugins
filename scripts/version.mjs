@@ -33,7 +33,7 @@
  * ```
  */
 
-import minimist from 'minimist';
+import minimist from "minimist";
 import fs from "node:fs/promises";
 import semver from "semver";
 
@@ -43,17 +43,8 @@ const cliArguments = process.argv.slice(2);
 let current = cliArguments.length === 0;
 
 const argv = minimist(cliArguments, {
-  boolean: [
-    "help",
-    "current",
-    "release-candidate",
-    "write",
-  ],
-  string: [
-    "pull-request",
-    "release",
-    "run-number",
-  ],
+  boolean: ["help", "current", "release-candidate", "write"],
+  string: ["pull-request", "release", "run-number"],
   alias: {
     "help": ["h", "?"],
     "pull-request": "p",
@@ -68,18 +59,18 @@ const argv = minimist(cliArguments, {
       console.error(`Unknown argument ${unknownArg} passed to "version"!"`);
       process.exit(1);
     }
-  }
+  },
 });
 
 const {
   help = false,
-  current: currentArg = false,
+  "current": currentArg = false,
   "pull-request": pullRequest = "",
   "run-number": runNumber = "",
   release = "",
   "release-candidate": releaseCandidate = false,
   write,
-  _: extraArgs,
+  "_": extraArgs,
 } = argv;
 
 if (help) {
