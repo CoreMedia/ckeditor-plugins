@@ -13,6 +13,7 @@
     "ckeditor",
     "ckeditor5"
   ],
+  "type": "module",
   "main": "./src/index.ts",
   "publishConfig": {
     "main": "./src/index.js",

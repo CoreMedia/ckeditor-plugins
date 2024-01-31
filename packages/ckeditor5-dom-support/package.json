@@ -12,6 +12,7 @@
     "coremedia",
     "dom"
   ],
+  "type": "module",
   "main": "./src/index.ts",
   "publishConfig": {
     "main": "./src/index.js",

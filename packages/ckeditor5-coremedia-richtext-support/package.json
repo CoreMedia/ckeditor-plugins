@@ -38,6 +38,7 @@
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3"
   },
+  "type": "module",
   "main": "./src/index.ts",
   "publishConfig": {
     "main": "./src/index.js",

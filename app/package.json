@@ -13,6 +13,7 @@
     "pnpm": "^8.6"
   },
   "license": "Apache-2.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "41.0.0",

@@ -16,6 +16,7 @@
     "pnpm": "^8.6"
   },
   "license": "Apache-2.0",
+  "type": "module",
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "^41.0.0",
     "@ckeditor/ckeditor5-editor-classic": "^41.0.0",

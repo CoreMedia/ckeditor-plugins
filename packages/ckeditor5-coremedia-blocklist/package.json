@@ -25,6 +25,7 @@
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
+  "type": "module",
   "main": "./src/index.ts",
   "publishConfig": {
     "main": "./src/index.js",
