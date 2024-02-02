@@ -8,10 +8,10 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "lib": [
+      "ES2020",
+      "ESNext",
       "DOM",
-      "DOM.Iterable",
-      "ES5",
-      "ESNext"
+      "DOM.Iterable"
     ],
     "module": "ES6",
     "moduleResolution": "Node",
