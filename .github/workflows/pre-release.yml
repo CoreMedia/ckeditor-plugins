@@ -37,7 +37,7 @@ jobs:
           echo "Allocated Pull Request number ${prnumber}"
           echo "::set-output name=prnumber::${prnumber}"
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Configure NPM
