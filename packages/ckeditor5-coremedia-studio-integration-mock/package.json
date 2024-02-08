@@ -50,7 +50,7 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^41.0.0",
+    "@ckeditor/ckeditor5-core": "^41.1.0",
     "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
