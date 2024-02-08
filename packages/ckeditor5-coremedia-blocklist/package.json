@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-blocklist",
-  "version": "16.1.1-rc.11",
+  "version": "17.0.0",
   "description": "Lets users add and remove words to a list in the editor and highlights them in the text.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -58,8 +58,8 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-find-and-replace": "^41.1.0",
-    "@coremedia/ckeditor5-core-common": "16.1.1-rc.11",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "16.1.1-rc.11",
-    "@coremedia/ckeditor5-logging": "16.1.1-rc.11"
+    "@coremedia/ckeditor5-core-common": "^17.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^17.0.0",
+    "@coremedia/ckeditor5-logging": "^17.0.0"
   }
 }
