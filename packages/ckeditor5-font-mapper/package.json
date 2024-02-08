@@ -18,7 +18,7 @@
     "main": "./src/index.js",
     "types": "./src/index.d.ts"
   },
-  "version": "16.1.1-rc.10",
+  "version": "16.1.1-rc.11",
   "files": [
     "/src"
   ],
@@ -42,9 +42,9 @@
     "@ckeditor/ckeditor5-utils": "^41.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "16.1.1-rc.10",
-    "@coremedia/ckeditor5-core-common": "16.1.1-rc.10",
-    "@coremedia/ckeditor5-logging": "16.1.1-rc.10"
+    "@coremedia/ckeditor5-common": "16.1.1-rc.11",
+    "@coremedia/ckeditor5-core-common": "16.1.1-rc.11",
+    "@coremedia/ckeditor5-logging": "16.1.1-rc.11"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
