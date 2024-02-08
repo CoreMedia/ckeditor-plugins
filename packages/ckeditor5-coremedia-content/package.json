@@ -23,7 +23,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^41.0.0",
+    "@ckeditor/ckeditor5-core": "^41.1.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
