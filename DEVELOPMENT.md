@@ -4,18 +4,18 @@
 
 * Install `pnpm` globally:
 
-    ```text
-    npm install --global pnpm
-    ```
+  ```text
+  npm install --global pnpm
+  ```
 
 ## Typical Build Process
 
 ```text
 pnpm install
-pnpm run build
+pnpm -r build
 ```
 
-### Testing
+## Testing
 
 To run tests use:
 
@@ -23,33 +23,33 @@ To run tests use:
 pnpm run jest
 ```
 
-### Troubleshooting
+## Update Process
+
+If updating CKEditor 5, it is best done in three steps:
+
+```text
+pnpm update:latest:third-party
+pnpm update:latest:ckeditor5-dev
+pnpm update:latest:ckeditor5
+```
+
+The first one will trigger an update of all other third-party packages.
+
+The second one will trigger an update of the CKEditor 5 Development Tooling.
+
+The third one will perform the update of the main CKEditor 5 packages.
+
+**Peer Dependencies:** Note, that `pnpm update` will not update the
+`peerDependencies`. This has to be done in a manual adjustment afterwards.
+
+## Troubleshooting
 
 * **Remove node_modules:**
 
-    In case of problems, you may want to try to remove all `node_modules`
-    folders and re-install artifacts again via `pnpm install`. The recommended way
-    to do so, is using [`npkill`](https://www.npmjs.com/package/npkill). Ensure,
-    to install it globally first:
+  In case of problems, you may want to try to remove all `node_modules`
+  folders and re-install artifacts again via `pnpm install`. Removing
+  `node_modules` can be triggered by:
 
-    ```text
-    npm install --global npkill
-    ```
-
-    And clean up `node_modules` recursively then:
-
-    ```text
-    npx npkill
-    ```
-
-## TypeScript
-
-The CKEditor 5 plugins provided in this repository are developed with
-TypeScript.
-
-Exception up to now: The example application is provided as JavaScript for
-CKEditor initialization.
-
-<!-- ===========================================================[References] -->
-
-[DefinitelyTyped]: <https://github.com/DefinitelyTyped/DefinitelyTyped> "DefinitelyTyped/DefinitelyTyped: The repository for high quality TypeScript type definitions."
+  ```text
+  pnpm clean:node_modules
+  ```

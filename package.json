@@ -52,7 +52,10 @@
     "prettier:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
-    "update-latest": "pnpm update --interactive --latest --recursive",
+    "update:latest": "pnpm update --interactive --latest --recursive '!esbuild-loader'",
+    "update:latest:third-party": "pnpm update --interactive --latest --recursive '!esbuild-loader' '!@ckeditor/*'",
+    "update:latest:ckeditor5": "pnpm update --interactive --latest --recursive '@ckeditor/*' '!@ckeditor/ckeditor5-dev-*'",
+    "update:latest:ckeditor5-dev": "pnpm update --interactive --latest --recursive '@ckeditor/ckeditor5-dev-*'",
     "script:version": "node ./scripts/version.mjs",
     "script:validate-peers": "node ./scripts/validate-peers.mjs"
   },
