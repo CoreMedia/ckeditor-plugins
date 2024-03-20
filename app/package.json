@@ -52,6 +52,7 @@
     "@coremedia/ckeditor5-coremedia-images": "^17.0.0",
     "@coremedia/ckeditor5-coremedia-link": "^17.0.0",
     "@coremedia/ckeditor5-coremedia-richtext": "^17.0.0",
+    "@coremedia/ckeditor5-dialog-visibility": "^17.0.0",
     "@coremedia/ckeditor5-coremedia-studio-essentials": "^17.0.0",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "^17.0.0",
     "@coremedia/ckeditor5-data-facade": "^17.0.0",
