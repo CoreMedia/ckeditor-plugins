@@ -192,6 +192,9 @@ importers:
       '@coremedia/ckeditor5-dataprocessor-support':
         specifier: ^17.0.0
         version: link:../packages/ckeditor5-dataprocessor-support
+      '@coremedia/ckeditor5-dialog-visibility':
+        specifier: ^17.0.0
+        version: link:../packages/ckeditor5-dialog-visibility
       '@coremedia/ckeditor5-dom-converter':
         specifier: ^17.0.0
         version: link:../packages/ckeditor5-dom-converter
@@ -1158,6 +1161,21 @@ importers:
       jest-xml-matcher:
         specifier: ^1.2.0
         version: 1.2.0
+      rimraf:
+        specifier: ^5.0.5
+        version: 5.0.5
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/ckeditor5-dialog-visibility:
+    devDependencies:
+      '@ckeditor/ckeditor5-core':
+        specifier: ^41.1.0
+        version: 41.1.0
+      '@ckeditor/ckeditor5-ui':
+        specifier: ^41.1.0
+        version: 41.1.0
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
