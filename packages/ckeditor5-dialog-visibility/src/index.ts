@@ -7,4 +7,4 @@
  * @module ckeditor5-dialog-visibility
  */
 
-export { default as DialogVisibility } from "./DialogVisibility";
+export { default as DialogVisibility } from "./DialogVisibilityPlugin";
