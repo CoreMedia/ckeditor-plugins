@@ -5,6 +5,10 @@ export default class DialogVisibility extends Plugin {
   public static readonly pluginName = "DialogVisibility" as const;
   static readonly requires = [Dialog];
 
+  intersectionObserver?: IntersectionObserver = undefined;
+
+  isOpen = false;
+
   init(): void {
     const editorElement = this.editor.ui.element;
     if (editorElement) {
@@ -24,16 +28,30 @@ export default class DialogVisibility extends Plugin {
   }
 
   observeEditorVisibility(editorElement: Element) {
-    const observer = new IntersectionObserver((entries) => {
+    this.observeDialogState();
+    this.intersectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const isVisible = entry.intersectionRatio > 0;
-        if (!isVisible) {
+        if (!isVisible && this.isOpen) {
           this.closeDialog();
         }
       });
     }, {});
 
-    observer.observe(editorElement);
+    this.intersectionObserver.observe(editorElement);
+  }
+
+  observeDialogState() {
+    const editor: Editor = this.editor;
+    const dialogPlugin: Dialog = editor.plugins.get("Dialog");
+    if (dialogPlugin) {
+      dialogPlugin.on("change:id", (eventInfo, name, value) => {
+        // The Dialog plugin only changes the id when a dialog is shown or hidden.
+        // On "show", the value is the id string (e.g. "findAndReplace"), on "hide" value is null.
+        // Therefore, we know the dialog was closed when value is null.
+        this.isOpen = !!value;
+      });
+    }
   }
 
   closeDialog() {
@@ -42,5 +60,10 @@ export default class DialogVisibility extends Plugin {
     if (dialogPlugin) {
       dialogPlugin.hide();
     }
+  }
+
+  override destroy() {
+    this.intersectionObserver?.disconnect();
+    super.destroy();
   }
 }
