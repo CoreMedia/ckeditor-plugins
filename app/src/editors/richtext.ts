@@ -24,6 +24,7 @@ import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Highlight } from "@ckeditor/ckeditor5-highlight";
 
+import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
 import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
 import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
@@ -161,6 +162,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       Autosave,
       Blocklist,
       BlockQuote,
+      DialogVisibility,
       Bold,
       Code,
       CodeBlock,

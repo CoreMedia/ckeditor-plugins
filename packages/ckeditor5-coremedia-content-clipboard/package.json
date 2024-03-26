@@ -33,7 +33,7 @@
     "@ckeditor/ckeditor5-undo": "^41.1.0",
     "@ckeditor/ckeditor5-utils": "^41.1.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5",
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",
@@ -59,7 +59,7 @@
     "@ckeditor/ckeditor5-ui": "^41.1.0",
     "@ckeditor/ckeditor5-undo": "^41.1.0",
     "@ckeditor/ckeditor5-utils": "^41.1.0",
-    "@coremedia/service-agent": "^1.1.5"
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "^17.0.0",
