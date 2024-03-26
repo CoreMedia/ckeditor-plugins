@@ -41,7 +41,7 @@
     "@ckeditor/ckeditor5-core": "^41.1.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.0",
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",
@@ -51,7 +51,7 @@
   },
   "peerDependencies": {
     "@ckeditor/ckeditor5-core": "^41.1.0",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.0"
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-core-common": "^17.0.0",
