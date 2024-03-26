@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-link-common",
-  "version": "17.0.0",
+  "version": "17.0.1-rc.0",
   "description": "Assistive Utilities for `@ckeditor/ckeditor5-link`.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -46,9 +46,9 @@
     "@ckeditor/ckeditor5-utils": "^41.1.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "^17.0.0",
-    "@coremedia/ckeditor5-core-common": "^17.0.0",
-    "@coremedia/ckeditor5-logging": "^17.0.0"
+    "@coremedia/ckeditor5-common": "17.0.1-rc.0",
+    "@coremedia/ckeditor5-core-common": "17.0.1-rc.0",
+    "@coremedia/ckeditor5-logging": "17.0.1-rc.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
