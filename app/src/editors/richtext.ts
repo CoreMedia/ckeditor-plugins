@@ -12,7 +12,7 @@ import { FindAndReplace } from "@ckeditor/ckeditor5-find-and-replace";
 import { Heading } from "@ckeditor/ckeditor5-heading";
 import { Image, ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
 import { Indent } from "@ckeditor/ckeditor5-indent";
-import { DocumentList } from "@ckeditor/ckeditor5-list";
+import { List } from "@ckeditor/ckeditor5-list";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
@@ -20,6 +20,7 @@ import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { Highlight } from "@ckeditor/ckeditor5-highlight";
 
+import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
 import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
 import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
@@ -150,6 +151,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       Autosave,
       Blocklist,
       BlockQuote,
+      DialogVisibility,
       Bold,
       Code,
       CodeBlock,
@@ -169,7 +171,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
       LinkImage,
       LinkTarget,
       CoreMediaStudioEssentials,
-      DocumentList,
+      List,
       Paragraph,
       PasteContentPlugin,
       PasteFromOffice,

@@ -20,7 +20,7 @@ import { canBeOpenedInTab, openEntitiesInTabs, OpenEntitiesInTabsResult } from "
  * @augments module:core/command~Command
  */
 export class OpenInTabCommand extends Command {
-  static #logger = LoggerProvider.getLogger("OpenInTabCommand");
+  static readonly #logger = LoggerProvider.getLogger("OpenInTabCommand");
 
   /**
    * Creates an OpenInTabCommand.

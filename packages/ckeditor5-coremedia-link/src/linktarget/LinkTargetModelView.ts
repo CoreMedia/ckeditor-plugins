@@ -110,17 +110,30 @@ export default class LinkTargetModelView extends Plugin {
    * @private
    */
   #computeLinkTarget(diffItem: DiffItem): string | undefined {
+    let url: unknown;
+
     if (this.#isDiffItemAttribute(diffItem)) {
-      // The linkHref attribute was added/changed for this node
-      // This might happen if an existing link gets edited e.g. if the link url gets changed.
-      return computeDefaultLinkTargetForUrl(diffItem.attributeNewValue as string, this.editor.config);
+      // The linkHref attribute was added/changed/deleted for this node.
+      //
+      // This might happen if an existing link gets edited, e.g., if the link
+      // URL gets changed.
+      //
+      // It is the new value, that is relevant for us here. Note, that this
+      // code is also invoked when links get removed, so that the new attribute
+      // value is `null` then.
+      url = diffItem.attributeNewValue;
     }
 
     if (this.#isDiffItemInsert(diffItem)) {
-      // An entry with linkHref attribute was inserted
-      // This applies to links, created via the link balloon and contents dropped into the
-      // editor or into the link balloon
-      return computeDefaultLinkTargetForUrl(diffItem.attributes.get("linkHref") as string, this.editor.config);
+      // An entry with linkHref attribute was inserted.
+      //
+      // This applies to links, created via the link balloon and contents
+      // dropped into the editor or into the link balloon.
+      url = diffItem.attributes.get("linkHref");
+    }
+
+    if (url && typeof url === "string") {
+      return computeDefaultLinkTargetForUrl(url, this.editor.config);
     }
 
     return undefined;

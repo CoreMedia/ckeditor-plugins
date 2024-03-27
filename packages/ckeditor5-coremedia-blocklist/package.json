@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-blocklist",
-  "version": "16.1.1-rc.2",
+  "version": "18.0.0",
   "description": "Lets users add and remove words to a list in the editor and highlights them in the text.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -35,31 +35,31 @@
     "/theme"
   ],
   "devDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^39.0.2",
-    "@ckeditor/ckeditor5-core": "^39.0.2",
-    "@ckeditor/ckeditor5-engine": "^39.0.2",
-    "@ckeditor/ckeditor5-ui": "^39.0.2",
-    "@ckeditor/ckeditor5-utils": "^39.0.2",
+    "@ckeditor/ckeditor5-clipboard": "^41.1.0",
+    "@ckeditor/ckeditor5-core": "^41.1.0",
+    "@ckeditor/ckeditor5-engine": "^41.1.0",
+    "@ckeditor/ckeditor5-ui": "^41.1.0",
+    "@ckeditor/ckeditor5-utils": "^41.1.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5",
-    "@types/jest": "^29.5.4",
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
-    "rimraf": "^5.0.1",
+    "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^39.0.2",
-    "@ckeditor/ckeditor5-core": "^39.0.2",
-    "@ckeditor/ckeditor5-engine": "^39.0.2",
-    "@ckeditor/ckeditor5-ui": "^39.0.2",
-    "@ckeditor/ckeditor5-utils": "^39.0.2",
-    "@coremedia/service-agent": "^1.1.5"
+    "@ckeditor/ckeditor5-clipboard": "^41.1.0",
+    "@ckeditor/ckeditor5-core": "^41.1.0",
+    "@ckeditor/ckeditor5-engine": "^41.1.0",
+    "@ckeditor/ckeditor5-ui": "^41.1.0",
+    "@ckeditor/ckeditor5-utils": "^41.1.0",
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-find-and-replace": "^39.0.2",
-    "@coremedia/ckeditor5-core-common": "16.1.1-rc.2",
-    "@coremedia/ckeditor5-logging": "16.1.1-rc.2",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "16.1.1-rc.2"
+    "@ckeditor/ckeditor5-find-and-replace": "^41.1.0",
+    "@coremedia/ckeditor5-core-common": "^18.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^18.0.0",
+    "@coremedia/ckeditor5-logging": "^18.0.0"
   }
 }

@@ -32,7 +32,7 @@ export default class ContentLinks extends Plugin {
 
   static readonly openLinkInTab = openContentInTabCommandName;
 
-  #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
+  readonly #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
   #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
   #initialized = false;
 

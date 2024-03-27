@@ -1,6 +1,6 @@
 import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import {
-  View,
+  EditingView,
   ViewDocumentFragment,
   ViewElement,
   TextProxy,
@@ -56,7 +56,7 @@ export default class LinkUserActionsPlugin extends Plugin {
     this.listenTo(
       viewDocument,
       "click",
-      (evt, data: { domTarget: Element; preventDefault: () => void; view: View }) => {
+      (evt, data: { domTarget: Element; preventDefault: () => void; view: EditingView }) => {
         if (!editor.isReadOnly) {
           return;
         }
@@ -77,7 +77,7 @@ export default class LinkUserActionsPlugin extends Plugin {
     );
   }
 
-  #onReadOnlyLinkClicked(editor: Editor, view: View, domElement: Element): void {
+  #onReadOnlyLinkClicked(editor: Editor, view: EditingView, domElement: Element): void {
     const modelElement: TextProxy | undefined = this.#resolveAnchorModelElement(editor, view, domElement);
     if (!modelElement) {
       return;
@@ -110,7 +110,7 @@ export default class LinkUserActionsPlugin extends Plugin {
           domEvent: { metaKey: boolean; ctrlKey: boolean };
           domTarget: Element;
           preventDefault: () => void;
-          view: View;
+          view: EditingView;
         },
       ) => {
         if (editor.isReadOnly) {
@@ -171,7 +171,7 @@ export default class LinkUserActionsPlugin extends Plugin {
     );
   }
 
-  #resolveAnchorModelElement(editor: Editor, view: View, domElement: Element): TextProxy | undefined {
+  #resolveAnchorModelElement(editor: Editor, view: EditingView, domElement: Element): TextProxy | undefined {
     //@ts-expect-error bad typings, mapDomToView parameter is typed as model.element, but it should be the typescript element.
     const viewElement: ViewElement | ViewDocumentFragment | undefined = view.domConverter.mapDomToView(domElement);
     if (!viewElement || viewElement instanceof ViewDocumentFragment) {

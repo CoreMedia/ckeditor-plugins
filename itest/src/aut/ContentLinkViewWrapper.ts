@@ -2,7 +2,7 @@ import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
 
 export class ContentLinkViewWrapper implements Locatable {
-  #parent: Locatable;
+  readonly #parent: Locatable;
   constructor(parent: Locatable) {
     this.#parent = parent;
   }

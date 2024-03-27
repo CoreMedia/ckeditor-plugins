@@ -55,7 +55,7 @@ jobs:
           echo "For maintenance branches only patch versions are allowed."
           exit 1
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Configure NPM

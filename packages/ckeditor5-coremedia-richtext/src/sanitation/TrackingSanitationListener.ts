@@ -44,7 +44,7 @@ export type TrackingSanitationListenerConsole = Pick<Console, "debug" | "info" |
  */
 export class TrackingSanitationListener extends SanitationListener {
   #state: TrackingState = new TrackingState();
-  #console: TrackingSanitationListenerConsole;
+  readonly #console: TrackingSanitationListenerConsole;
 
   constructor(con: TrackingSanitationListenerConsole = console) {
     super();

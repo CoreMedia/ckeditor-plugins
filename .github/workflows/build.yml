@@ -113,7 +113,7 @@ jobs:
           run_install: false
       - id: installNodeJs
         name: "Install: Use Node.js ${{ env.nodeVersion }}"
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.nodeVersion }}
           cache: "pnpm"

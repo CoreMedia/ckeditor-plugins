@@ -2,7 +2,7 @@
  * @module blocklist/ui/blocklistactionsview
  */
 
-import { View, ViewCollection, FocusCycler, ListView } from "@ckeditor/ckeditor5-ui";
+import { View, ViewCollection, FocusCycler, ListView, FocusableView } from "@ckeditor/ckeditor5-ui";
 import { FocusTracker, KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import BlocklistInputView from "./blocklistInputView";
@@ -16,7 +16,7 @@ export default class BlocklistActionsView extends View {
   // Focus handling
   readonly focusTracker = new FocusTracker();
   readonly keystrokes = new KeystrokeHandler();
-  readonly #focusables = new ViewCollection();
+  readonly #focusables = new ViewCollection<FocusableView>();
   readonly #focusCycler: FocusCycler;
 
   /**

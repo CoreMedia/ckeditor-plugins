@@ -71,7 +71,7 @@ export default class MarkerRepositionUtil {
     });
   }
 
-  static #markerBeforeFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
+  static readonly #markerBeforeFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
     const insertionId = markerData.insertionId;
 
@@ -87,7 +87,7 @@ export default class MarkerRepositionUtil {
     return otherMarkerData.insertionId > insertionId;
   };
 
-  static #markerAfterFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
+  static readonly #markerAfterFilterPredicate: MarkerFilterFunction = (markerData, otherMarkerData) => {
     const itemIndex = markerData.itemIndex;
     const insertionId = markerData.insertionId;
 

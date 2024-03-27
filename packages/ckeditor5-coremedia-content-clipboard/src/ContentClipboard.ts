@@ -155,7 +155,7 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  #clipboardInputHandler = (
+  readonly #clipboardInputHandler = (
     evt: EventInfo<"clipboardInput">,
     data: DomEventData<ClipboardEvent | DragEvent> & ClipboardInputEventData,
   ): void => {
@@ -196,7 +196,10 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  #inputTransformation = (evt: EventInfo<"inputTransformation">, data: ClipboardInputTransformationData): void => {
+  readonly #inputTransformation = (
+    evt: EventInfo<"inputTransformation">,
+    data: ClipboardInputTransformationData,
+  ): void => {
     const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
     if (!dataTransfer) {
       return;

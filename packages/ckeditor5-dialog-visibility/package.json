@@ -1,0 +1,44 @@
+{
+  "name": "@coremedia/ckeditor5-dialog-visibility",
+  "version": "18.0.0",
+  "description": "Handles dialog visibility when editor is not visible",
+  "author": {
+    "name": "CoreMedia GmbH",
+    "email": "info@coremedia.com",
+    "url": "https://coremedia.com/",
+    "avatar": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2OTguNjY3IiBoZWlnaHQ9IjY5OC42NjciIHZlcnNpb249IjEuMCIgdmlld0JveD0iMCAwIDUyNCA1MjQiPjxwYXRoIGQ9Ik0yODIuNS42QzI0NSA0LjUgMjE1LjEgMTIuOSAxODUgMjcuOSAxMDYuNCA2Ny4yIDUzLjUgMTQyLjEgNDIuNCAyMjkuNWMtMi4xIDE3LjItMi4yIDQ4IDAgNjQuMUM0OCAzMzYuMiA2MS4zIDM3Mi4yIDg0IDQwNi4zYzYxLjkgOTMuMSAxNzUuNCAxMzYuNCAyODUgMTA4LjcgMTkuMi00LjggMzMuNy0xMC4zIDUzLjItMjAuMSAyMS0xMC41IDQyLjUtMjUuMyA1OC4zLTQwLjJsOC03LjYtMjEuNS0yMS42Yy0yMy42LTIzLjgtMjcuMS0yNi43LTM4LjYtMzIuNC0yMi40LTExLjItNDQuNy0xMS42LTcxLjctMS41LTE4LjYgNy0zMC40IDkuNC00OC43IDEwLjEtMTMgLjQtMTcuNS4yLTI3LjgtMS42LTMwLjUtNS4yLTU1LTE3LjgtNzYuOC0zOS41LTMzLjYtMzMuNi00Ny44LTgwLjQtMzguNC0xMjYuNCAxMC4yLTUwLjUgNDYuMi05MC41IDk1LjItMTA2LjEgMzEuNy0xMC4xIDY0LjItOC44IDk2LjYgMy45IDEyLjggNC45IDIyLjcgNyAzNC4xIDcgMTYuNCAwIDMxLjItNC4yIDQ1LjEtMTIuNyA1LjUtMy40IDEzLjYtMTAuNyAzMC40LTI3LjNsMjIuOC0yMi42LTkuMy04LjRjLTM5LjgtMzUuNC04NS42LTU3LTEzOC40LTY1LjEtMTIuNS0yLTQ4LjctMy4zLTU5LTIuM3oiLz48cGF0aCBkPSJNMjk2IDIxOC4xYy0yOC4zIDQuOC00NC4zIDM1LjQtMzIuMSA2MS40IDcuOSAxNyAyNy4yIDI3LjQgNDUuNCAyNC41IDI4LjktNC42IDQ1LjEtMzUuMiAzMi43LTYxLjctOC0xNy4yLTI3LjMtMjcuMy00Ni0yNC4yeiIvPjwvc3ZnPg=="
+  },
+  "keywords": [
+    "coremedia",
+    "ckeditor",
+    "ckeditor5",
+    "dialog",
+    "visibility"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.release.json",
+    "clean": "pnpm clean:src && pnpm clean:dist",
+    "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
+    "clean:dist": "rimraf ./dist",
+    "npm-check-updates": "npm-check-updates --upgrade"
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-core": "^41.1.0",
+    "@ckeditor/ckeditor5-ui": "^41.1.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  },
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./src/index.js",
+    "types": "./src/index.d.ts"
+  },
+  "files": [
+    "/src"
+  ],
+  "peerDependencies": {
+    "@ckeditor/ckeditor5-core": "^41.1.0",
+    "@ckeditor/ckeditor5-ui": "^41.1.0"
+  }
+}
