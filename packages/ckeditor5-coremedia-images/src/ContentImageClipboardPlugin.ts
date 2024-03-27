@@ -24,7 +24,7 @@ const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
 const createImageModelFunction: CreateImageModelFunction =
   (blobUriPath: string): CreateModelFunction =>
   (writer: Writer): Node =>
-    writer.createElement("imageInline", {
+    writer.createElement("imageBlock", {
       "xlink-href": blobUriPath,
     });
 
