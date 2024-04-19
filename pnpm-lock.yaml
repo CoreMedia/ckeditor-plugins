@@ -70,92 +70,92 @@ importers:
   app:
     dependencies:
       '@ckeditor/ckeditor5-alignment':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-autoformat':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-autosave':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-basic-styles':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-block-quote':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-clipboard':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-code-block':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-core':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-editor-classic':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-essentials':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-find-and-replace':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-font':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-heading':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-highlight':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-image':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-indent':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-language':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-link':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-list':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-paragraph':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-paste-from-office':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-remove-format':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-source-editing':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-table':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-typing':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-upload':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
@@ -221,8 +221,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       '@ckeditor/ckeditor5-theme-lark':
-        specifier: 41.1.0
-        version: 41.1.0
+        specifier: 41.3.1
+        version: 41.3.1
       '@types/node':
         specifier: ^20.11.16
         version: 20.11.16
@@ -269,20 +269,20 @@ importers:
   itest:
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-editor-classic':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-link':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
@@ -396,11 +396,11 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -461,8 +461,8 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -485,8 +485,8 @@ importers:
   packages/ckeditor5-coremedia-blocklist:
     dependencies:
       '@ckeditor/ckeditor5-find-and-replace':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia/ckeditor5-core-common':
         specifier: ^18.0.0
         version: link:../ckeditor5-core-common
@@ -498,20 +498,20 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -544,8 +544,8 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -584,26 +584,26 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-html-support':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-undo':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -654,14 +654,14 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
         version: link:../ckeditor5-coremedia-example-data
@@ -734,20 +734,20 @@ importers:
         version: 7.8.1
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-image':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -801,26 +801,26 @@ importers:
         version: 7.8.1
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-link':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-typing':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -871,14 +871,14 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
         version: link:../ckeditor5-coremedia-example-data
@@ -914,17 +914,17 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-html-support':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -957,23 +957,23 @@ importers:
         version: link:../ckeditor5-coremedia-richtext-support
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-link':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-typing':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -1055,8 +1055,8 @@ importers:
         specifier: ^7.23.9
         version: 7.23.9
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-babel-config':
         specifier: ^1.0.0
         version: link:../ckeditor5-babel-config
@@ -1095,20 +1095,20 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-autosave':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -1138,14 +1138,14 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -1171,11 +1171,11 @@ importers:
   packages/ckeditor5-dialog-visibility:
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -1196,8 +1196,8 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -1249,17 +1249,17 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-clipboard':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -1319,23 +1319,23 @@ importers:
         version: link:../ckeditor5-logging
     devDependencies:
       '@ckeditor/ckeditor5-core':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-engine':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-link':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-typing':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-ui':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@ckeditor/ckeditor5-utils':
-        specifier: ^41.1.0
-        version: 41.1.0
+        specifier: ^41.3.1
+        version: 41.3.1
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
         version: link:../ckeditor5-jest-test-helpers
@@ -2757,57 +2757,57 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  /@ckeditor/ckeditor5-alignment@41.1.0:
-    resolution: {integrity: sha512-uJGts0roqsOAlamn26KXCPlv+rNAgVTiBRSxCDgM6/J9CbqVa/VLJe8oOUXnBsWZ4WwYmgQ1Gtoq7CqIEkdmQA==}
+  /@ckeditor/ckeditor5-alignment@41.3.1:
+    resolution: {integrity: sha512-fGkaJGWyr4biahyy2YiRjVqGy9Uqzm4MjkrqDdq99TLr8bM7PjIFOiRkVwz5MZRbs2V87ynmm46v6B/KQ0g8ew==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-autoformat@41.1.0:
-    resolution: {integrity: sha512-aTN1bGrGaYwHAjo0kH35pmRDItTUDNFMzJ570OKVmSF4zSmg5ZjfbcZ//otzz5NLePx/K4FjhrCpZlABGI3MDg==}
+  /@ckeditor/ckeditor5-autoformat@41.3.1:
+    resolution: {integrity: sha512-0QklAfIeUxo/gfuGT9rC0WhDuqTbpcfvinkJOH7fcqcu81TB4WqLjI1qfXL9In6uih8c39te2x74yZZ+f/M4iQ==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-autosave@41.1.0:
-    resolution: {integrity: sha512-aN3kxiO8vz1cajeHYjW/0upuaGhqEgAEmO7EnI4AHTks85PB5/BUjQWtLJGSeErQerWhViuDRlGPG4ZxlffKpA==}
+  /@ckeditor/ckeditor5-autosave@41.3.1:
+    resolution: {integrity: sha512-9Nx0Nl48hGTngiB776GmcXb9au6RqKq/22hSVjKflwh2DUymrOrmUvmTHxACokQ4EffKQT1cGBcvLHb4d2ni6g==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-basic-styles@41.1.0:
-    resolution: {integrity: sha512-yldViSRB9wTU8SNqfndOJqGQCfCZ0+yufAEbhcmQ/ZHNbIRNIXVYcI91WeZFull640c0DPnj7KT4UxsWu3a4OA==}
+  /@ckeditor/ckeditor5-basic-styles@41.3.1:
+    resolution: {integrity: sha512-vr0UR5JdQtHUhXFVF+7yebaQ/iEugmXIH2eC+pC5BNJuBwuFt1Hxt6U6qRh7f7ve4UFBky3MZ84lGuGsheirCA==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-block-quote@41.1.0:
-    resolution: {integrity: sha512-si1WBGTpUhTR18ywoAD0yy6m+PeGwisIblIGbOdPgs+lfMsFECrftvH8qrTZG1D80S3p0jNa74qw7BSMGk/TUg==}
+  /@ckeditor/ckeditor5-block-quote@41.3.1:
+    resolution: {integrity: sha512-iRm6MthhcyRbUpPxjjXhLuZpNGGNnUqp8RurN8rSzX3KcBXKHm/vfxOugk06ebF2FFbP0u5aiL3K7fIniuo2pQ==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-clipboard@41.1.0:
-    resolution: {integrity: sha512-QbXp3ysaeI2dFWKUvd/Lf1kbmZfq+F+Sbg6/mawBqImyHJjwvO0QrA+SepUSYPuWaTqnPJ5Kng020MMj1Iexyg==}
+  /@ckeditor/ckeditor5-clipboard@41.3.1:
+    resolution: {integrity: sha512-6S7tq6FlnHYZmPACeqdf135Jx2bTKHVY8mHQ+CHC8ZZu0XVm62vVeeSLS2IcdtYmHjf4ced1G7suTUBHlfBCLw==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
-      '@ckeditor/ckeditor5-widget': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
+      '@ckeditor/ckeditor5-widget': 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-code-block@41.1.0:
-    resolution: {integrity: sha512-n32AGHCiEzgu1FDmN6sc+y/oqsigjDd27FLBTzjl/iWus42tZuyjwgE+VWj/JOcrMk6BrWIl6gfsKvNfAiNRng==}
+  /@ckeditor/ckeditor5-code-block@41.3.1:
+    resolution: {integrity: sha512-T7krLjLoHanjaW5nYClzGf5TPcSb/Y9B1DWcAmLMUFf8y+1MbYYaK95r7iTyafG0B9bIFafxoKRnMJLVmBWQkA==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-core@41.1.0:
-    resolution: {integrity: sha512-Z23stcZ5lx1jsQa+9jybyz1h/HvIYqpKo2OW9s27KD9oAvbNNYvsNqtCZMDecik/7ofr8wiWC/xnzCk7QRwmuA==}
+  /@ckeditor/ckeditor5-core@41.3.1:
+    resolution: {integrity: sha512-h+PgPtCpS2vjO3HbKMYtddRPW+B3AJx9qpixmHJnUZMiFCmRjUZjXATjpi3j+kSQISs4L2Yghq+lsAQxyGHb+A==}
     dependencies:
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
       lodash-es: 4.17.21
 
   /@ckeditor/ckeditor5-dev-translations@39.6.0:
@@ -2856,75 +2856,75 @@ packages:
       - webpack
     dev: true
 
-  /@ckeditor/ckeditor5-editor-classic@41.1.0:
-    resolution: {integrity: sha512-KMkHPmYalwqDecsMIbNexddhIwe/O0QkD7atJxzwtHWjEWP2bxi0fYPGQvMZXpj1BDXXMyZN6zQZlYfHzrk+7w==}
+  /@ckeditor/ckeditor5-editor-classic@41.3.1:
+    resolution: {integrity: sha512-DBP2F0A50BpDwnbCfsz0DBp+NVW7xrXp4lH5SJHax8B58Z1uY1rw/N6Wf2O91tzo5obcUSpoj8WlzIsxDYPd+A==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-engine@41.1.0:
-    resolution: {integrity: sha512-YYZKXESH6iml9BT3EIlYgKgkH/DqeW2Xe0IzhuC+T7OqemBYp5x/HMP7tQMjsRGImc4+4iyTZ+8pJTAlU5pJyQ==}
+  /@ckeditor/ckeditor5-engine@41.3.1:
+    resolution: {integrity: sha512-Me4cnkCrknDH50db/jPczuhgzaxUhHbkh2gv8N8Ypken9ZnOPvMD9W1gCFFTLaxikpPmBQwk3u1BSjOKk3r6kw==}
     dependencies:
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-utils': 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-enter@41.1.0:
-    resolution: {integrity: sha512-kpESGrUDCuHJbDOXGGYaK4RgwHgyZAY6h2OkXf99yE0Rhm23EOXh09uC07gqzS6q1/4UXM6l0CX/s0jjdD0LuQ==}
+  /@ckeditor/ckeditor5-enter@41.3.1:
+    resolution: {integrity: sha512-iwhvJpfsutqcv/bf8QPMKhMolb7GtShaOT+UIDW3OXjMZaBKZOTyR8OceijwgBmZeillTaXQq9y2e9lbJd46xg==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
 
-  /@ckeditor/ckeditor5-essentials@41.1.0:
-    resolution: {integrity: sha512-zUPbApEGl32Err/hURVDPZpXZHpe9gRQ/3r1xhaxIvB2zILcHAKauB94phzPLywrr0eBNa546ZW8+iXjFEJ7CQ==}
+  /@ckeditor/ckeditor5-essentials@41.3.1:
+    resolution: {integrity: sha512-Tr8fIhRith4OVg5yYm8UbbRUjuj15AQ27H3AiwOzRMRr+EYCI07ni5quqBwOMlkOQQ2H9U21gS8mYKqkqU5osw==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-find-and-replace@41.1.0:
-    resolution: {integrity: sha512-QGBD80gOBuYURxx1jmF1mL3OEO0Wlcz186ktTR/cR3Xt1IDkI9Ee/uP161Clt2xcCpUTrRo9FwfMGzTtVQ7n5Q==}
+  /@ckeditor/ckeditor5-find-and-replace@41.3.1:
+    resolution: {integrity: sha512-AQVX7mrhU0RWZ4plwGLNmROEyE1LHqyqgOM+fm6M5BkUGqcsk6mZoxi65Og4g4+3Ggn3lCCKrv/JD/hzu/SWKQ==}
     dependencies:
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      ckeditor5: 41.1.0
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
     dev: false
 
-  /@ckeditor/ckeditor5-font@41.1.0:
-    resolution: {integrity: sha512-z0OA6GWBP4NCB//73E5Xu8ku42Odhzkby0if+fAMGi/0vWPT3sDOnRbmewRHkVUTT73iriB5FKoMxCrkkJ8FFQ==}
+  /@ckeditor/ckeditor5-font@41.3.1:
+    resolution: {integrity: sha512-qyxtAHccuqCwmeVsddJBe9h82Nvcps69Q1Xe3a5JuM9QNfREeZHgfT290Z97sdHt4d9MrrSdHc52f9inlwNtwg==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-heading@41.1.0:
-    resolution: {integrity: sha512-rOsQ5AIsc5ccsARrs0CsiinoSx5DZrnkHH6PV6wEJcpgvhiJhB7NYG6Maw+vUcaDlY5z012GvAXLvv21ZNpw4w==}
+  /@ckeditor/ckeditor5-heading@41.3.1:
+    resolution: {integrity: sha512-WFu/zYXHqJ4Q6UI/IM7/WwmXCwKFVBDhuOeYnlRY1vgmFciaVtrbJW/tECBr+2TBVR4lANvmivWMFDLpN0fW+g==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-highlight@41.1.0:
-    resolution: {integrity: sha512-Fit2jxPriRORR7nRQlKt57XAkWH1aKZDv+sKQDoLhpFIb6urdGmiQNB0JhyTqyct5J/1aOq/DXSxlAtzrNjrBw==}
+  /@ckeditor/ckeditor5-highlight@41.3.1:
+    resolution: {integrity: sha512-LZBenqyX9BZkBhestu7aSf1sDZ06wI+cab2gEIzyhMNgtZ3/Vu7IN5EzLYtQPhv1ACskPYrW49aE3AXCaLqoUA==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-html-support@41.1.0:
-    resolution: {integrity: sha512-55gNvu1a3hAkIQ4t0fajYqE9sTjqFf1oOrgV0X5uN+5p+XkjafZbTtqEPcaHg4rnoOM5bcQguXWz4PsS4v3gSg==}
+  /@ckeditor/ckeditor5-html-support@41.3.1:
+    resolution: {integrity: sha512-zyYmlSGldxr0NbEWyu0qjltqY3oBsF/Y7h6jX3g6pZUIiziu9f5c+RgT5Nqn+xlUDPVhbK4QCy7Z+ZnmP73ogA==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
     dev: true
 
-  /@ckeditor/ckeditor5-image@41.1.0:
-    resolution: {integrity: sha512-K90Dr3nxE8osBcPImP4VOfw9DgwiCPzGUu3vP+4ylMgJxmRetRCmuryEH5Gh4iw+poDr+JeBeTxT/M6n+hdx5w==}
+  /@ckeditor/ckeditor5-image@41.3.1:
+    resolution: {integrity: sha512-v8lcXET3TDP/yPKhdUCmIcukMQ6GNdTyVAjkTip5JhVKFv8bFWBp5Xn616L6T+8OeQ6DggF9QVGcskmTiGQv7g==}
     dependencies:
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      ckeditor5: 41.1.0
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-indent@41.1.0:
-    resolution: {integrity: sha512-CLEzSf3Y8Ow5W88W2v3znOO5Yo6a3+0//bEWSPyhQ8c7zaWM5gjZ36qGfPhbBnpMy2vYJkSVwW2fZ7rWdRr2cA==}
+  /@ckeditor/ckeditor5-indent@41.3.1:
+    resolution: {integrity: sha512-JYXF/Clfw+j06wt1+qo43n+y3fmVKPSaN5NXzw4a5Rce0dMaWctH53X8KP3tIuOfEzW9xPhsTUQBJI8rsc+f9g==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
   /@ckeditor/ckeditor5-inspector@4.1.0:
@@ -2932,121 +2932,120 @@ packages:
     engines: {node: '>=14.0.0', npm: '>=5.7.1'}
     dev: true
 
-  /@ckeditor/ckeditor5-language@41.1.0:
-    resolution: {integrity: sha512-fJznNz7APxXOO0Eejm2SkjpwoK62NGdVOeKjVXUTMRCmewtWiE9BOZiXNsPCAndLkndy06VY1mwU4lYMXQEn+g==}
+  /@ckeditor/ckeditor5-language@41.3.1:
+    resolution: {integrity: sha512-Q3qVnmsFnQNrj6LQaJzNWi3fgRC8g3Ga/AqP0v5zEQ72Gqrjf/73Wjvzaa7Q3ZB+NbObNLFNXWHxU20I9y/HCQ==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-link@41.1.0:
-    resolution: {integrity: sha512-iTf1J+OGiD6sxsMu3tAvHiFVVYz8qm7DwpZ3M3kvRphx2Tv3bFjNaeCK+tiOeBx2Bpm/EdfGs8Q9XzZLjrIBCA==}
+  /@ckeditor/ckeditor5-link@41.3.1:
+    resolution: {integrity: sha512-tl+vnEWUKP0cK/4g+KkQt1YujklG9aUb2NxkkF0HSo7/0m6JnKf+1LVwY1OP2702FLCJO1vdC09oY0JDXGmkfg==}
     dependencies:
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      ckeditor5: 41.1.0
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-list@41.1.0:
-    resolution: {integrity: sha512-tcvUGMIg+Kg1zF0iWFMWHsikvRxwpReAd/QZp/cVUP6EvoL46bc4H6IzFU5qV3g1JM14wjiSTShHWYW8kS6wYA==}
+  /@ckeditor/ckeditor5-list@41.3.1:
+    resolution: {integrity: sha512-X1PDaqNnQUTlqYgTYASirJuityG25hxthrGlnEvqPZIxivbxDcefWxkBlNXvmnHOy/EUES0cEZ2H0GUr6CPz2g==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-paragraph@41.1.0:
-    resolution: {integrity: sha512-4p7imtnmALVbOykbJXOIpU3lI1nCoiDtCHR5B0MTX2oPjmhjRiZEl5cNIMZ0FTquYvdrswQ7zqmeH/++14pBzQ==}
+  /@ckeditor/ckeditor5-paragraph@41.3.1:
+    resolution: {integrity: sha512-weRPLyO/1Z8PpU9+lET4gYgJ8adDuCjYiREup81URSuS1DDQ8vb3D29xA+4Ov7lwg8BaNAMCpTBdp07GHHzv6w==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
 
-  /@ckeditor/ckeditor5-paste-from-office@41.1.0:
-    resolution: {integrity: sha512-xeB7thvP7ZI/0hWkcpO0+zeDD24MJJ9igdlGNblx8QcBcVRLRCkLDj7XkFlYP9zfzGNZUgjbJjPWyHbeYurHNQ==}
+  /@ckeditor/ckeditor5-paste-from-office@41.3.1:
+    resolution: {integrity: sha512-bvDNGQXIUVCiAgmIcvnOw461XWAG8lscQrJaZFXNfayJJah73zvDbOJDkv5hm/N/jYaPTsTnSv1jg5xM9XqfCw==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-remove-format@41.1.0:
-    resolution: {integrity: sha512-UEgjPkpXYlqXG+/B7yiJac1UdJmsK2ZyHp6yuP2FBQg+KwoMszV68MzPjGLiXCy3jqQSFj9m0O5lu2fiDjpw+A==}
+  /@ckeditor/ckeditor5-remove-format@41.3.1:
+    resolution: {integrity: sha512-37xXgljUgfH9EDpQfMCjJ48LtuNrPtqlO9H1BKIhJqK+su8oEWZJ2lYV3noZDHJ7sE/divJmFaXaD23IfTuW0w==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-select-all@41.1.0:
-    resolution: {integrity: sha512-YGeQZv/VlRzWKwNuJ+qoY50hikcjhjgZlCQeT6ir8RhXBEcSsaTKK+bYYdNnfHoDFGsadosZP6vBpcBTUYrxOw==}
+  /@ckeditor/ckeditor5-select-all@41.3.1:
+    resolution: {integrity: sha512-a/LAPO+O9fwHjQ/8s3UNtyrqQRieAnpnPw2IhLlGqOS7nxPKMR2vkb6WnG2LUdO+wYqkCzxUDpBlfVkjkQEI0w==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
 
-  /@ckeditor/ckeditor5-source-editing@41.1.0:
-    resolution: {integrity: sha512-p1nuelGdceSzAKeCcC67RM0eAS514EyRekCGwNK9yqieqVw1ZbeBTwLSdjtFe0IqoZF8Z922jZeuxg91zVXB5w==}
+  /@ckeditor/ckeditor5-source-editing@41.3.1:
+    resolution: {integrity: sha512-NoFQGZHAIQkJ4W/zJwZmKe5W5zEW72pfaDuX78BpecuUcgg+LWmaGemjOU56Y3o7rUwPoXRONQs3jZM/NuKhSw==}
     dependencies:
-      '@ckeditor/ckeditor5-theme-lark': 41.1.0
-      ckeditor5: 41.1.0
+      '@ckeditor/ckeditor5-theme-lark': 41.3.1
+      ckeditor5: 41.3.1
     dev: false
 
-  /@ckeditor/ckeditor5-table@41.1.0:
-    resolution: {integrity: sha512-MtWPC3DT3Ew3Fm5Tf/aIOqOodzVR/ms1cmB7jKFnJ1IRe0olo8TborMv6UvNWfy5W11vqf33snCEU1ynbJN7zw==}
+  /@ckeditor/ckeditor5-table@41.3.1:
+    resolution: {integrity: sha512-Lx2xnWdeuiekXOuRERjvf1I3zhTZwK/IRna9FgTW/ldj6rBH9fVqhY+z/Y/nIpI1LgWee3R0DWZBGXgj1QNFcQ==}
     dependencies:
-      ckeditor5: 41.1.0
+      ckeditor5: 41.3.1
       lodash-es: 4.17.21
     dev: false
 
-  /@ckeditor/ckeditor5-theme-lark@41.1.0:
-    resolution: {integrity: sha512-idWJ5Tn2ezmWyKBBhMrmZGJVZDCnkF4xct9jqAUEuy1YXyGAktmbAyU/bBOQDp4wCANPQ0LnJxbC/08HuG0Q0Q==}
+  /@ckeditor/ckeditor5-theme-lark@41.3.1:
+    resolution: {integrity: sha512-0LXHU6vmlN3aEYFFnNG1teGdC0t6UbcxcwyTW3db4D6vFDAd1S1bBH/Vz9HdUKGWuEmB3IdKj6fgixt2e3qJmA==}
     dependencies:
-      '@ckeditor/ckeditor5-ui': 41.1.0
+      '@ckeditor/ckeditor5-ui': 41.3.1
 
-  /@ckeditor/ckeditor5-typing@41.1.0:
-    resolution: {integrity: sha512-33XRNa9Z2LTwCWx9GdY7Pyb9ymOaEo+ZarV3hwbD4FOww6CSRB0/29ny+br8WEfJpdM/5EyHNmfLXHpIqP5vtQ==}
+  /@ckeditor/ckeditor5-typing@41.3.1:
+    resolution: {integrity: sha512-4Oeafc3if6fTITOest1ILQ573fnkzE9/tn5eNm3zWnHVYR79mRCYxaha9yUlKVQiqaxZ48EVo2FjHiouXmn9+Q==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-ui@41.1.0:
-    resolution: {integrity: sha512-U3lgwTUNCLuK9lFrYV8ch/4/AQqW6Cv4DJFiKzpEwLB7PQFOZsoaY0yP2XZ7Wj1IGMfsOF3uECrNVATiPPr8ww==}
+  /@ckeditor/ckeditor5-ui@41.3.1:
+    resolution: {integrity: sha512-xN7OAiRp7ALKYXUp6Qe/AjkjrhyLuoz9nxq7Jdsnsyb/XXfsXDloMcOuvNRoUgr4gIFHMOoZZxsIn8qegBvcYA==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
       color-convert: 2.0.1
       color-parse: 1.4.2
       lodash-es: 4.17.21
       vanilla-colorful: 0.7.2
 
-  /@ckeditor/ckeditor5-undo@41.1.0:
-    resolution: {integrity: sha512-nNGOfyZzjK5NRckRApUiP1CKfRJgKIqy5CE8z4aAqu0/4KdnajoV8K7U7yEQwtrWeClB8ye0rLEsSH8X+6UWeg==}
+  /@ckeditor/ckeditor5-undo@41.3.1:
+    resolution: {integrity: sha512-PElWTnlIwuQ94mvdhuH7Mno99oocSnOWPMHi9UuWe6+zVgznQwn0f0diBZvX3l5y8hFgK6q/pQ/CCmbvvYnovA==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-ui': 41.3.1
 
-  /@ckeditor/ckeditor5-upload@41.1.0:
-    resolution: {integrity: sha512-o64mv8zAJiGMI4Ao/fngZSBpNNCb/THPZc224GEdOrUkXhSpUnHIsXvlsUwwSRSEZuK44vk+OPNGbFloYMk5Eg==}
+  /@ckeditor/ckeditor5-upload@41.3.1:
+    resolution: {integrity: sha512-ugTgGEgA9qsSl5+qptTmawdfYaONr6b3uTG4byZ76JMdf0qiniZjBF/TtGAVmBkCipcVWFoaZKteiz0fhQMHjA==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
 
-  /@ckeditor/ckeditor5-utils@41.1.0:
-    resolution: {integrity: sha512-2WtcUHbZ7wJoDVKb1AHeB4OSdf0ZLg1PMemr46yjCHDCf7NunGp/n+suZWloIKPuyG9OPkp9lhIBI4MHeDNHYw==}
+  /@ckeditor/ckeditor5-utils@41.3.1:
+    resolution: {integrity: sha512-jJu9ndn6Y7+ffBYdDCRXX7OnV9Ddgms2HSF1pmhjZN0uoL96XworuUOn8hx3Zs/KBPjJEwbtYWJMjG9aohrgaQ==}
     dependencies:
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-watchdog@41.1.0:
-    resolution: {integrity: sha512-zAKmuUpYW+X80rNFHIZ0cWXZWeXUd86xO+PVfKEmtSt4By4dKA3wDNT0Ub631x+oZQepp2eoG54R7CpLd2WFiw==}
+  /@ckeditor/ckeditor5-watchdog@41.3.1:
+    resolution: {integrity: sha512-iDwdYxC8euSKxfRq4y5vVOX9GVUbEbC9z6glkXpxa1BogqYh39+fywjt+s4o3Ub3b8FJ/EUYuNc+/vK+CzEg4g==}
     dependencies:
       lodash-es: 4.17.21
 
-  /@ckeditor/ckeditor5-widget@41.1.0:
-    resolution: {integrity: sha512-OBJrBM+43fgmahp3W/MNcliW19JAVVIs7bcY4orMk+ltFptHT2v1fDsLkp7YRsxYi/Ipx6ZjWVjG3DQXAaUjwA==}
+  /@ckeditor/ckeditor5-widget@41.3.1:
+    resolution: {integrity: sha512-rdBxGS3bxWNhp+yxyBYkcbRV6/mdTDab+konDVhZ/ME1jVZ5cf8OBZcgHUqAxzuWt4XMEdzKINbo1OnSDwApUg==}
     dependencies:
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-enter': 41.1.0
-      '@ckeditor/ckeditor5-typing': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-enter': 41.3.1
+      '@ckeditor/ckeditor5-typing': 41.3.1
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
       lodash-es: 4.17.21
 
   /@coremedia/service-agent@1.1.5:
@@ -5054,22 +5053,22 @@ packages:
   /cjs-module-lexer@1.2.2:
     resolution: {integrity: sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==}
 
-  /ckeditor5@41.1.0:
-    resolution: {integrity: sha512-ypqC8jtLztWNgCnN7/E9rjhBP80tFnBVd5DyaaA7qZO0SwdlZeQcp3fy610QC36f9GjUWtwm3qLw9eZWXwPnTg==}
+  /ckeditor5@41.3.1:
+    resolution: {integrity: sha512-pBK1YZV9Sy4R53XG70TEeLFOvTFC7tg8AmS6d6zizegtwkH8seblkcERkykcNuvmfzZ/2h9JbafJ4kisZOwiUQ==}
     dependencies:
-      '@ckeditor/ckeditor5-clipboard': 41.1.0
-      '@ckeditor/ckeditor5-core': 41.1.0
-      '@ckeditor/ckeditor5-engine': 41.1.0
-      '@ckeditor/ckeditor5-enter': 41.1.0
-      '@ckeditor/ckeditor5-paragraph': 41.1.0
-      '@ckeditor/ckeditor5-select-all': 41.1.0
-      '@ckeditor/ckeditor5-typing': 41.1.0
-      '@ckeditor/ckeditor5-ui': 41.1.0
-      '@ckeditor/ckeditor5-undo': 41.1.0
-      '@ckeditor/ckeditor5-upload': 41.1.0
-      '@ckeditor/ckeditor5-utils': 41.1.0
-      '@ckeditor/ckeditor5-watchdog': 41.1.0
-      '@ckeditor/ckeditor5-widget': 41.1.0
+      '@ckeditor/ckeditor5-clipboard': 41.3.1
+      '@ckeditor/ckeditor5-core': 41.3.1
+      '@ckeditor/ckeditor5-engine': 41.3.1
+      '@ckeditor/ckeditor5-enter': 41.3.1
+      '@ckeditor/ckeditor5-paragraph': 41.3.1
+      '@ckeditor/ckeditor5-select-all': 41.3.1
+      '@ckeditor/ckeditor5-typing': 41.3.1
+      '@ckeditor/ckeditor5-ui': 41.3.1
+      '@ckeditor/ckeditor5-undo': 41.3.1
+      '@ckeditor/ckeditor5-upload': 41.3.1
+      '@ckeditor/ckeditor5-utils': 41.3.1
+      '@ckeditor/ckeditor5-watchdog': 41.3.1
+      '@ckeditor/ckeditor5-widget': 41.3.1
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
