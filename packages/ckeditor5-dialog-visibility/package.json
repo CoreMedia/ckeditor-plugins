@@ -27,7 +27,7 @@
     "@ckeditor/ckeditor5-core": "^41.3.1",
     "@ckeditor/ckeditor5-ui": "^41.3.1",
     "rimraf": "^5.0.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   },
   "main": "./src/index.ts",
   "publishConfig": {
