@@ -52,4 +52,4 @@ export type ActiveStrictnessKey = Exclude<StrictnessKey, "NONE">;
  *
  * Default changed from `Strictness.STRICT` to `Strictness.LOOSE` in v11.
  */
-export const defaultStrictness = Strictness.LOOSE as const;
+export const defaultStrictness = Strictness.LOOSE;

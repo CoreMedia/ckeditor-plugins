@@ -1,8 +1,8 @@
 import { capitalize } from "@coremedia/ckeditor5-common/src/Strings";
 import { describeAttr } from "@coremedia/ckeditor5-dom-support";
 
-export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink" as const;
-export const xLinkPrefix = "xlink" as const;
+export const xLinkNamespaceUri = "http://www.w3.org/1999/xlink";
+export const xLinkPrefix = "xlink";
 export const xLinkAttributes = ["type", "href", "role", "title", "show", "actuate"];
 export type XLinkAttributeKey = (typeof xLinkAttributes)[number];
 export type XLinkAttributes = Partial<Record<XLinkAttributeKey, string>>;

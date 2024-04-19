@@ -36,7 +36,7 @@ interface HashParameter {
  * @param value - value to validate
  */
 const isAddressInfo = (value: unknown): value is Pick<AddressInfo, "port"> =>
-  typeof value === "object" && value !== null && value.hasOwnProperty("port");
+  typeof value === "object" && !!value?.hasOwnProperty("port");
 
 /**
  * Starts an HTTP server via Express, statically bound to the path of the

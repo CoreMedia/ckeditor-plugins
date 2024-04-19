@@ -7,7 +7,7 @@ import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 /**
  * Default command name used to register at editor instance.
  */
-export const openImageInTabCommandName = "openImageInTab" as const;
+export const openImageInTabCommandName = "openImageInTab";
 
 /**
  * A command to open either a given URI path (on `execute`) or the URI path
@@ -54,7 +54,7 @@ export const registerOpenImageInTabCommand = (editor: Editor, name = openImageIn
  */
 export const requireOpenImageInTabCommand = (
   editor: Editor,
-  name = openImageInTabCommandName,
+  name: typeof openImageInTabCommandName = openImageInTabCommandName,
 ): OpenImageInTabCommand => {
   const command = editor.commands.get(name);
   if (!command) {
@@ -75,5 +75,5 @@ export const requireOpenImageInTabCommand = (
 export const executeOpenImageInTabCommand = (
   editor: Editor,
   uriPaths: UriPath[] = [],
-  name = openImageInTabCommandName,
+  name: typeof openImageInTabCommandName = openImageInTabCommandName,
 ) => editor.commands.get(name)?.execute(...uriPaths);
