@@ -21,4 +21,4 @@ export const suppressedFigure = replaceByChildren({ localName: "figure", directi
  * elements_, these extra rules are meant to prevent possible warnings
  * triggered during the sanitation process.
  */
-export const suppressedElements = [suppressedFigure];
+export const suppressedElements = [];

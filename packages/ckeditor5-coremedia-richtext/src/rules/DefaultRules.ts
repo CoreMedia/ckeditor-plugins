@@ -6,7 +6,7 @@ import { codeElements } from "./CodeElements";
 import { divElements } from "./DivElements";
 import { tableElements } from "./TableElements";
 import { anchorElements } from "./AnchorElements";
-import { imageElements } from "./ImageElements";
+import { imageRules } from "./ImageElements";
 import { suppressedElements } from "./SuppressedElements";
 
 /**
@@ -29,7 +29,7 @@ export const defaultRules: RuleConfig[] = [
   codeElements,
   divElements,
   headingElements,
-  imageElements,
+  ...imageRules,
   languageAttributes,
   ...suppressedElements,
   ...tableElements,
