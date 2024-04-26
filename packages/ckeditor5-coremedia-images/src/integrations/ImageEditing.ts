@@ -1,6 +1,11 @@
 import { Plugin } from "@ckeditor/ckeditor5-core";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
+export const IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
+export const IMAGE_BLOCK_MODEL_ELEMENT_NAME = "imageBlock";
+export const XLINK_HREF_MODEL_ATTRIBUTE_NAME = "xlink-href";
+export const XLINK_HREF_DATA_VIEW_ATTRIBUTE_NAME = "data-xlink-href";
+
 /**
  * Integration to CKEditor 5 `ImageEditing` plugin.
  */
@@ -28,9 +33,9 @@ export class ImageEditing extends Plugin {
     conversion.for("upcast").attributeToAttribute({
       view: {
         name: "img",
-        key: "data-xlink-href",
+        key: XLINK_HREF_DATA_VIEW_ATTRIBUTE_NAME,
       },
-      model: "data-xlink-href",
+      model: XLINK_HREF_MODEL_ATTRIBUTE_NAME,
     });
   }
 }

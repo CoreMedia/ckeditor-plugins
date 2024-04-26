@@ -1,7 +1,14 @@
 /* eslint no-null/no-null: off */
 
 import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import { DowncastDispatcher, ViewElement, DowncastWriter, Element as ModelElement } from "@ckeditor/ckeditor5-engine";
+import {
+  DowncastDispatcher,
+  ViewElement,
+  DowncastWriter,
+  Element as ModelElement,
+  UpcastDispatcher,
+  UpcastConversionApi,
+} from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayServiceDescriptor";
 import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayService";
@@ -164,3 +171,21 @@ const createSpinnerImagePreviewAttributes = (editor: Editor): InlinePreview => {
     isPlaceholder: false,
   };
 };
+
+export const preventUpcastImageSrc =
+  () =>
+  (dispatcher: UpcastDispatcher): void => {
+    dispatcher.on(
+      `element:img`,
+      (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
+        // eslint-disable-next-line
+        if (data.viewItem.hasAttribute("data-xlink-href")) {
+          // eslint-disable-next-line
+          conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
+          // eslint-disable-next-line
+          data.viewItem._removeAttribute("src");
+        }
+      },
+      { priority: "highest" },
+    );
+  };
