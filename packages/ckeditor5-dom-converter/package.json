@@ -22,15 +22,15 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ckeditor/ckeditor5-utils": "^41.1.0",
+    "@ckeditor/ckeditor5-utils": "^41.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
     "rimraf": "^5.0.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-utils": "^41.1.0"
+    "@ckeditor/ckeditor5-utils": "^41.3.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "^18.0.0",

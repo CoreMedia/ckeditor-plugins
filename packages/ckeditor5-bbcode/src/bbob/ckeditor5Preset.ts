@@ -22,7 +22,7 @@ const toNode = TagNode.create;
  * efforts to prevent collisions with same-named tag-nodes within the
  * original BBCode.
  */
-const rootNodeName = "root" as const;
+const rootNodeName = "root";
 
 /**
  * Wraps tree contents into an artificial root-node, that may then respect

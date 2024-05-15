@@ -11,7 +11,7 @@ import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support/src/HTMLAn
 import { ConversionApi } from "@coremedia/ckeditor5-dom-converter/src/ConversionApi";
 import { RequireSelected } from "@coremedia/ckeditor5-common";
 
-export const contentUriPathPrefix = "content" as const;
+export const contentUriPathPrefix = "content";
 
 /**
  * Pattern for extracting ID (group: `id`) from the link as represented in data.

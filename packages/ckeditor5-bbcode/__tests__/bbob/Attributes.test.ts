@@ -50,7 +50,7 @@ describe("Attributes", () => {
 
     it("should ignore invalid attributes, but process others", () => {
       const el = document.createElement("div");
-      const invalidKey = "[invalid key]" as const;
+      const invalidKey = "[invalid key]";
       const attrs: TagAttrs = {
         class: "CLASS",
         [invalidKey]: "INVALID",
@@ -89,7 +89,7 @@ describe("Attributes", () => {
     });
 
     it("should extract unique attribute, if it is the only attribute", () => {
-      const uniqueAttr = "https://example.org/" as const;
+      const uniqueAttr = "https://example.org/";
       const attrs = {
         // Typical representation of a URL, for example, in [url=https://example.org/].
         [uniqueAttr]: uniqueAttr,
@@ -100,7 +100,7 @@ describe("Attributes", () => {
     });
 
     it("should extract unique attribute, and separate from others", () => {
-      const uniqueAttr = "https://example.org/" as const;
+      const uniqueAttr = "https://example.org/";
       const otherAttrs = {
         one: "1",
         two: "2",
@@ -142,7 +142,7 @@ describe("Attributes", () => {
 
     it("should use default unique attribute for empty attributes", () => {
       const autCall = aut.callWithDefaultSupplied;
-      const uniqueKey = "unique" as const;
+      const uniqueKey = "unique";
       const uniqueDefault = "uniqueDefault";
       const result = autCall(uniqueKey, {}, uniqueDefault);
       expect(result).toMatchObject({ [uniqueKey]: uniqueDefault });
@@ -154,9 +154,9 @@ describe("Attributes", () => {
       ${aut.callWithOverrideEnabled} | ${"call with override enabled"}
       ${aut.callWithDefaultSupplied} | ${"call with supplied default"}
     `("[$#] should override from unique attributes: $callType", ({ autCall }: { autCall: AutCall }) => {
-      const uniqueKey = "unique" as const;
+      const uniqueKey = "unique";
       const uniqueValueInAttrs = "uniqueValueInAttrs";
-      const uniqueValue = "uniqueValue" as const;
+      const uniqueValue = "uniqueValue";
       const uniqueDefault = "uniqueDefault";
       const result = autCall(uniqueKey, { [uniqueKey]: uniqueValueInAttrs, [uniqueValue]: uniqueValue }, uniqueDefault);
       expect(result).toMatchObject({ [uniqueKey]: uniqueValue });
@@ -164,9 +164,9 @@ describe("Attributes", () => {
 
     it("should prefer existing attribute, when override is disabled", () => {
       const autCall = aut.callWithOverrideDisabled;
-      const uniqueKey = "unique" as const;
+      const uniqueKey = "unique";
       const uniqueValueInAttrs = "uniqueValueInAttrs";
-      const uniqueValue = "uniqueValue" as const;
+      const uniqueValue = "uniqueValue";
       const result = autCall(uniqueKey, { [uniqueKey]: uniqueValueInAttrs, [uniqueValue]: uniqueValue });
 
       expect(result).toMatchObject({ [uniqueKey]: uniqueValueInAttrs });
