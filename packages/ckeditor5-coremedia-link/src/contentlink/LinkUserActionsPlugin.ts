@@ -198,7 +198,11 @@ export default class LinkUserActionsPlugin extends Plugin {
   #openInWorkAreaTab(uri: string): void {
     serviceAgent
       .fetchService(createWorkAreaServiceDescriptor())
-      .then((workAreaService) => workAreaService.openEntitiesInTabs([requireContentUriPath(uri)]))
+      .then((workAreaService) => workAreaService.openEntitiesInTabs([requireContentUriPath(uri)], false, {
+        additionalOptions: {
+          focusTab: true
+        }
+      }))
       .catch((reason) => {
         LinkUserActionsPlugin.LOG.warn(reason);
       });
