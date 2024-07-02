@@ -10,7 +10,8 @@ export default class ButtonViewWrapper
   // Seems, we cannot make prettier happy here for some reason regarding
   // whitespace before curly brace.
   // eslint-disable-next-line prettier/prettier
-  implements HasVisible, HasToggleable, HasEnabled, HasAriaLabel {
+  implements HasVisible, HasToggleable, HasEnabled, HasAriaLabel
+{
   click(): Promise<void> {
     return this.evaluate((buttonView) => {
       const element = buttonView.element;
