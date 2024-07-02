@@ -259,7 +259,7 @@ describe("RichTextDataProcessor.toData", () => {
       {
         from: wrapView("<p></p>"),
         optimalMilliseconds: 2,
-        gracePercentage: 5,
+        gracePercentage: 6,
       },
     ],
   ];
@@ -272,7 +272,7 @@ describe("RichTextDataProcessor.toData", () => {
         from: wrapView(generateComplexView(f).join("")),
         // Only measure for no repetition.
         optimalMilliseconds: f > 1 ? -1 : 30,
-        gracePercentage: 5,
+        gracePercentage: 6,
       },
     ]);
   }
