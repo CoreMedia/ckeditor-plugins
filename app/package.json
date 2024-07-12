@@ -61,26 +61,26 @@
     "@coremedia/ckeditor5-font-mapper": "19.0.1-rc.0",
     "@coremedia/ckeditor5-link-common": "19.0.1-rc.0",
     "@coremedia/service-agent": "^2.0.1",
-    "xml-formatter": "^3.6.3"
+    "xml-formatter": "^3.6.2"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-translations": "^40.3.1",
     "@ckeditor/ckeditor5-dev-utils": "^40.3.1",
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
     "@ckeditor/ckeditor5-theme-lark": "42.0.1",
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.12.7",
     "circular-dependency-plugin": "^5.2.2",
-    "css-loader": "^7.1.2",
+    "css-loader": "^7.1.1",
     "esbuild-loader": "^3.2.0",
     "http-server": "^14.1.1",
-    "postcss": "^8.4.39",
+    "postcss": "^8.4.38",
     "postcss-loader": "^8.1.1",
     "raw-loader": "^4.0.2",
-    "rimraf": "^6.0.1",
+    "rimraf": "^5.0.5",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.10",
-    "typescript": "^5.5.3",
-    "webpack": "^5.93.0",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
