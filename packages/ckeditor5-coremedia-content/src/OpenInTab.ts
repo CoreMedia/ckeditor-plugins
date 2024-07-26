@@ -62,6 +62,11 @@ export const openEntitiesInTabs = async (...uriPaths: string[]): Promise<OpenEnt
     return emptyOpenEntitiesInTabsResult;
   }
   return fetchWorkAreaService().then(
-    (workAreaService): Promise<OpenEntitiesInTabsResult> => workAreaService.openEntitiesInTabs(uriPaths),
+    (workAreaService): Promise<OpenEntitiesInTabsResult> =>
+      workAreaService.openEntitiesInTabs(uriPaths, false, {
+        additionalOptions: {
+          focusTab: true,
+        },
+      }),
   );
 };
