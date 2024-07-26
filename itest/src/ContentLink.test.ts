@@ -116,7 +116,7 @@ describe("Content Link Feature", () => {
   });
 
   describe("FormView Extension", () => {
-    it("Should be possible to delete content link", async () => {
+    it("Should be not possible to save content link with empty url", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Lorem ipsum";
       const { editor, mockContent } = application;
@@ -161,14 +161,14 @@ describe("Content Link Feature", () => {
       await expect(contentLinkView).not.waitToBeVisible();
 
       await linkFormView.save();
-
-      // The link should have been cleared also in data.
-      // Note, that it is expected behavior, that the anchor element itself
-      // remains. To completely remove it, you have to use the unlink-button.
-      await expect(editor).waitForDataContaining(`xlink:href=""`);
+      // This changed for version 42: The empty link could not be saved. Save fails.
+      // Before it was possible to save an empty link, resulting in xlink:href=""
+      await expect(linkFormView.locator).toHaveText("Link URL must not be empty.");
+      // The link is still there.
+      await expect(editor).waitForDataContaining(`xlink:href="${dataLink}"`);
     });
 
-    it("Should be possible to delete content link with keyboard", async () => {
+    it("Should be not possible to save content link with empty url using keyboard", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Lorem ipsum";
       const { editor, mockContent } = application;
@@ -213,11 +213,11 @@ describe("Content Link Feature", () => {
       await expect(linkFormView).waitToBeVisible();
 
       await linkFormView.save();
-
-      // The link should have been cleared also in data.
-      // Note, that it is expected behavior, that the anchor element itself
-      // remains. To completely remove it, you have to use the unlink-button.
-      await expect(editor).waitForDataContaining(`xlink:href=""`);
+      // This changed for version 42: The empty link could not be saved. Save fails.
+      // Before it was possible to save an empty link, resulting in xlink:href=""
+      await expect(linkFormView.locator).toHaveText("Link URL must not be empty.");
+      // The link is still there.
+      await expect(editor).waitForDataContaining(`xlink:href="${dataLink}"`);
     });
   });
 
