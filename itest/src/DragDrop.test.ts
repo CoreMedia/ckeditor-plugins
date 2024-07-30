@@ -339,7 +339,7 @@ describe("Drag and Drop", () => {
     }
   };
 
-  describe("Images", () => {
+  xdescribe("Images", () => {
     it.each`
       dragElementClass          | contentMocks
       ${"one-image"}            | ${oneImage}

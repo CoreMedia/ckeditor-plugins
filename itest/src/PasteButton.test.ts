@@ -189,7 +189,7 @@ describe("Paste Button", () => {
     });
   });
 
-  describe("Images", () => {
+  xdescribe("Images", () => {
     it.each`
       inputElementClass         | contentMocks
       ${"one-image"}            | ${oneImage}

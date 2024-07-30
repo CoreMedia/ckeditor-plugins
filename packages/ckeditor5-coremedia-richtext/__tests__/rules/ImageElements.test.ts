@@ -7,7 +7,7 @@ import { INLINE_IMG } from "../../src/rules/ImageElements";
 import { RulesTester } from "./RulesTester";
 
 describe("ImageElements", () => {
-  const ruleConfigurations = [aut.imageElements];
+  const ruleConfigurations = [aut.imageRules[0]];
   const imgHref = "content/0#properties.data";
   const someImageUrl = "https://e.org/external.webp";
 
