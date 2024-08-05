@@ -37,6 +37,7 @@ export default class LinkUserActionsPlugin extends Plugin {
   public static readonly pluginName = "LinkUserActionsPlugin" as const;
   static readonly LOG: Logger = LoggerProvider.getLogger(LinkUserActionsPlugin.pluginName);
   static readonly requires = [];
+
   init(): void {
     this.#handleLinkClicksInReadOnly();
     this.#handleContentLinkClicksInReadOnly();
@@ -82,13 +83,14 @@ export default class LinkUserActionsPlugin extends Plugin {
         data.preventDefault();
         this.#onReadOnlyLinkClicked(editor, data.view, clickedElement);
       },
-      //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
       {
         priority: "high",
+        //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
         context: "$capture",
       },
     );
   }
+
   #onReadOnlyLinkClicked(editor: Editor, view: EditingView, domElement: Element): void {
     const modelElement: TextProxy | undefined = this.#resolveAnchorModelElement(editor, view, domElement);
     if (!modelElement) {
@@ -158,9 +160,9 @@ export default class LinkUserActionsPlugin extends Plugin {
           }
         }
       },
-      //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
       {
         priority: "high",
+        //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
         context: "$capture",
       },
     );
@@ -195,6 +197,7 @@ export default class LinkUserActionsPlugin extends Plugin {
       },
     );
   }
+
   #resolveAnchorModelElement(editor: Editor, view: EditingView, domElement: Element): TextProxy | undefined {
     //@ts-expect-error bad typings, mapDomToView parameter is typed as model.element, but it should be the typescript element.
     const viewElement: ViewElement | ViewDocumentFragment | undefined = view.domConverter.mapDomToView(domElement);
@@ -217,6 +220,7 @@ export default class LinkUserActionsPlugin extends Plugin {
     }
     return textProxies[0];
   }
+
   #openInWorkAreaTab(uri: string): void {
     serviceAgent
       .fetchService(createWorkAreaServiceDescriptor())
