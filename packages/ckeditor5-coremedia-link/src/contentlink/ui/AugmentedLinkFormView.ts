@@ -1,7 +1,5 @@
 /* eslint no-null/no-null: off */
 
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
-
 /*
  * DevNote:
  *
@@ -12,6 +10,8 @@ import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
  * For Migrating to CKEditor 5 37.x, we decided to stick to a plain on-demand
  * casting.
  */
+
+import { LinkUI } from "ckeditor5";
 
 /**
  * Augmented properties for `LinkFormView`.
@@ -28,6 +28,8 @@ export interface LinkFormViewAugmentation {
   // Must be non-optional due to: https://github.com/ckeditor/ckeditor5/issues/13965
   contentUriPath: string | null | undefined;
 }
+
+export type LinkFormView = NonNullable<LinkUI["formView"]>;
 
 /**
  * Combined type for augmented `LinkFormView`.

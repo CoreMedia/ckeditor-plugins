@@ -2,7 +2,7 @@ import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { ElementHandle } from "playwright-core";
 // ClassicEditorUI: See ckeditor/ckeditor5#12027.
-import type ClassicEditorUI from "@ckeditor/ckeditor5-editor-classic/src/classiceditorui";
+import { ClassicEditor } from "ckeditor5";
 import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
 import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
@@ -10,7 +10,7 @@ import { Locator } from "playwright";
 /**
  * Wrapper for `EditorUI`.
  */
-export class EditorUIWrapper extends JSWrapper<ClassicEditorUI> implements Locatable {
+export class EditorUIWrapper extends JSWrapper<ClassicEditor["ui"]> implements Locatable {
   readonly #parent: ClassicEditorWrapper;
 
   constructor(parent: ClassicEditorWrapper) {

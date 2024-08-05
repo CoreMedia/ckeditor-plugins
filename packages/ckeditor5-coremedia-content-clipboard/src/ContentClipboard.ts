@@ -3,28 +3,25 @@
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import {
-  Plugin,
-  Editor,
   Clipboard,
   ClipboardContentInsertionEvent,
+  ClipboardEventData,
   ClipboardInputTransformationData,
   ClipboardInputTransformationEvent,
   ClipboardPipeline,
-  ViewDocumentClipboardInputEvent,
-  Range as ModelRange,
-  ViewRange,
   DocumentFragment as ModelDocumentFragment,
-  ViewDocumentFragment,
-  ViewDocument,
-  StylesProcessor,
   DomEventData,
+  Editor,
   EventInfo,
+  GetCallback,
+  Plugin,
+  Range as ModelRange,
+  StylesProcessor,
+  ViewDocument,
+  ViewDocumentClipboardInputEvent,
+  ViewDocumentFragment,
+  ViewRange,
 } from "ckeditor5";
-import {
-  ClipboardEventData,
-  ClipboardInputEventData,
-  ViewDocumentDragOverEvent,
-} from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
 import ContentClipboardEditing from "./ContentClipboardEditing";
 import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
@@ -36,6 +33,7 @@ import {
   IsDroppableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
 import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropServiceWrapper";
+
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
 /**
@@ -61,6 +59,7 @@ export default class ContentClipboard extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
   static readonly requires = [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
+
   init(): void {
     const initInformation: InitInformation = reportInitStart(this);
     this.#initEventListeners();
@@ -77,9 +76,9 @@ export default class ContentClipboard extends Plugin {
     const viewDocument = view.document;
 
     // Processing pasted or dropped content.
-    this.listenTo<ViewDocumentClipboardInputEvent>(viewDocument, "clipboardInput", this.#clipboardInputHandler);
+    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     // Priority `low` required, so that we can control the `dropEffect`.
-    this.listenTo<ViewDocumentDragOverEvent>(viewDocument, "dragover", ContentClipboard.#dragOverHandler, {
+    this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, {
       priority: "low",
     });
     if (editor.plugins.has(ClipboardPipeline)) {
@@ -91,6 +90,7 @@ export default class ContentClipboard extends Plugin {
       );
     }
   }
+
   override destroy(): void {
     const editor = this.editor;
     const view = editor.editing.view;
@@ -107,10 +107,10 @@ export default class ContentClipboard extends Plugin {
    * Drag-over handler to control drop-effect icons, which is, to forbid for
    * any content-sets containing types, which are not allowed to be linked.
    *
-   * @param evt - event information
+   * @param _evt - event information
    * @param data - clipboard data
    */
-  static #dragOverHandler(evt: EventInfo<"dragover">, data: DomEventData<DragEvent> & ClipboardEventData): void {
+  static readonly #dragOverHandler = (_evt: unknown, data: DomEventData<DragEvent> & ClipboardEventData) => {
     // The listener already processed the clipboard content on the
     // higher priority (for example, while pasting into the code block).
     if (isContentEventData(data) && !!data.content) {
@@ -131,7 +131,7 @@ export default class ContentClipboard extends Plugin {
     } else {
       data.dataTransfer.dropEffect = "none";
     }
-  }
+  };
 
   // noinspection JSUnusedLocalSymbols
   /**
@@ -145,10 +145,7 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  readonly #clipboardInputHandler = (
-    evt: EventInfo<"clipboardInput">,
-    data: DomEventData<ClipboardEvent | DragEvent> & ClipboardInputEventData,
-  ): void => {
+  readonly #clipboardInputHandler: GetCallback<ViewDocumentClipboardInputEvent> = (evt, data): void => {
     const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
     if (!dataTransfer) {
       return;

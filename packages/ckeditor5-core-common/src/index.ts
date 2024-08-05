@@ -10,3 +10,4 @@ export {
   type InitInformation,
   type OnMissingPlugin,
 } from "./Plugins";
+export { addTranslations, openLink } from "../../ckeditor5-core-common/src/utils";

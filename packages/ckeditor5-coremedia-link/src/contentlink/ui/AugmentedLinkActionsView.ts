@@ -1,6 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
+import { LinkUI } from "ckeditor5";
 
 /*
  * DevNote:
@@ -23,6 +23,8 @@ export interface LinkActionsViewAugmentation {
   // Must be non-optional due to: https://github.com/ckeditor/ckeditor5/issues/13965
   contentUriPath: string | null | undefined;
 }
+
+export type LinkActionsView = NonNullable<LinkUI["actionsView"]>;
 
 /**
  * Combined type for augmented `LinkActionsView`.

@@ -3,9 +3,9 @@
  *
  * @packageDocumentation
  */
-import { add } from "@ckeditor/ckeditor5-utils/src/translation-service";
+import { addTranslations } from "@coremedia/ckeditor5-core-common";
 
-add("de", {
+addTranslations("de", {
   "Target": "Ziel",
   "Open in Current Tab": "Im aktuellen Tab öffnen",
   "Open in New Tab": "In neuem Tab öffnen",

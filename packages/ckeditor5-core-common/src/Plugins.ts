@@ -1,5 +1,6 @@
 import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Plugin, PluginClassConstructor, PluginConstructor, PluginInterface, Editor, PluginsMap } from "ckeditor5";
+import { Editor, Plugin, PluginConstructor, PluginsMap } from "ckeditor5";
+
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 
 /**
@@ -10,16 +11,20 @@ const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
  * reporting.
  */
 export type OnMissingPlugin = (pluginName: string) => void;
-export function getOptionalPlugin<
-  TConstructor extends PluginClassConstructor<TContext>,
-  TContext extends Editor = Editor,
->(editor: TContext, key: TConstructor, onMissing?: OnMissingPlugin): InstanceType<TConstructor> | undefined;
+
+type PluginClassConstructor = typeof Plugin;
+
+export function getOptionalPlugin<TConstructor extends PluginClassConstructor, TContext extends Editor = Editor>(
+  editor: TContext,
+  key: TConstructor,
+  onMissing?: OnMissingPlugin,
+): InstanceType<TConstructor> | undefined;
+
 export function getOptionalPlugin<TName extends string, TContext extends Editor = Editor>(
   editor: TContext,
   key: TName,
   onMissing?: OnMissingPlugin,
 ): PluginsMap[TName] | undefined;
-
 /**
  * Tries to get the recommended plugin (invokes `has` prior to getting it) and
  * returns it, if available.
@@ -33,15 +38,13 @@ export function getOptionalPlugin<TName extends string, TContext extends Editor 
  * is missing. Defaults to some generic message on not found plugin at debug
  * level.
  */
-export function getOptionalPlugin(
-  editor: Editor,
-  key: PluginClassConstructor | string,
-  onMissing?: OnMissingPlugin,
-): PluginInterface | undefined {
+export function getOptionalPlugin(editor: Editor, key: PluginConstructor | string, onMissing?: OnMissingPlugin) {
   const { plugins } = editor;
   if (plugins.has(key)) {
     if (typeof key === "string") {
       return plugins.get(key);
+    } else if (typeof key === "function") {
+      return undefined;
     } else {
       return plugins.get(key);
     }
@@ -50,7 +53,7 @@ export function getOptionalPlugin(
   if (typeof key === "string") {
     pluginName = key;
   } else {
-    pluginName = (key as PluginConstructor).pluginName ?? key.name;
+    pluginName = key.pluginName ?? key.name;
   }
   if (onMissing) {
     onMissing(pluginName);

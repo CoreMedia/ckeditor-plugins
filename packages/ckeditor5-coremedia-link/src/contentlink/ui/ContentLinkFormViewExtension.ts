@@ -7,7 +7,7 @@ import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { Plugin, Command, LinkUI, LabeledFieldView, View, ContextualBalloon } from "ckeditor5";
+import { Command, ContextualBalloon, LabeledFieldView, LinkUI, Plugin, View } from "ckeditor5";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
@@ -24,9 +24,9 @@ import {
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
-import { AugmentedLinkFormView } from "./AugmentedLinkFormView";
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
+import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common/src/HasFocusables";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -43,6 +43,7 @@ class ContentLinkFormViewExtension extends Plugin {
   static readonly requires = [LinkUI, ContentLinkCommandHook];
   #initialized = false;
   #contentLinkView: LabeledFieldView | undefined = undefined;
+
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
@@ -63,6 +64,7 @@ class ContentLinkFormViewExtension extends Plugin {
     });
     reportInitEnd(initInformation);
   }
+
   initializeFormView(linkUI: LinkUI): void {
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
     const linkCommand = linkUI.editor.commands.get("link") as Command;
@@ -77,6 +79,7 @@ class ContentLinkFormViewExtension extends Plugin {
       );
     this.#extendView(linkUI, formView);
   }
+
   onFormViewGetsActive(linkUI: LinkUI): void {
     const { editor } = linkUI;
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
@@ -181,6 +184,7 @@ class ContentLinkFormViewExtension extends Plugin {
       .bind("isEnabled")
       .to(linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath", enabledHandler);
   }
+
   #extendView(linkUI: LinkUI, formView: AugmentedLinkFormView): void {
     const contentLinkView = createContentLinkView(linkUI, this.editor);
     this.#contentLinkView = contentLinkView;
@@ -201,6 +205,7 @@ class ContentLinkFormViewExtension extends Plugin {
       });
     });
   }
+
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
@@ -224,9 +229,12 @@ class ContentLinkFormViewExtension extends Plugin {
     }
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
-    handleFocusManagement(formView, contentLinkButtons, formView.urlInputView);
+    const { urlInputView } = formView;
+    hasRequiredInternalFocusablesProperty(formView) &&
+      handleFocusManagement(formView, contentLinkButtons, urlInputView);
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
   }
+
   #adaptFormViewFields(formView: LinkFormView): void {
     const t = this.editor.locale.t;
     formView.urlInputView.set({
@@ -258,6 +266,7 @@ class ContentLinkFormViewExtension extends Plugin {
     }
     return buttons;
   }
+
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
@@ -280,6 +289,7 @@ class ContentLinkFormViewExtension extends Plugin {
     );
     logger.debug("Finished adding drag and drop listeners.");
   }
+
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
@@ -321,6 +331,7 @@ class ContentLinkFormViewExtension extends Plugin {
         logger.warn(reason);
       });
   }
+
   static async #toContentUri(uri: string): Promise<string> {
     const contentReferenceService = await serviceAgent.fetchService(createContentReferenceServiceDescriptor());
     const contentReference = await contentReferenceService.getContentReference(uri);
@@ -340,6 +351,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
     return contentImportService.import(contentReference.request);
   }
+
   static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
     if (loading) {
@@ -348,6 +360,7 @@ class ContentLinkFormViewExtension extends Plugin {
       formView.element?.classList.remove("cm-ck-form-view--loading");
     }
   }
+
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
     formView.urlInputView.fieldView.set("value", data);
@@ -356,6 +369,7 @@ class ContentLinkFormViewExtension extends Plugin {
     showContentLinkField(formView, false);
     showContentLinkField(actionsView, false);
   }
+
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
 
@@ -407,4 +421,5 @@ class ContentLinkFormViewExtension extends Plugin {
     dragEvent.dataTransfer.dropEffect = isLinkableEvaluationResult.isLinkable ? "link" : "none";
   }
 }
+
 export default ContentLinkFormViewExtension;

@@ -5,20 +5,37 @@ import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilte
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
-import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
-import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
-import ToDataProcessor from "../../ToDataProcessor";
 import {
-  ViewDocument,
-  ViewDocumentFragment,
-  HtmlDataProcessor,
   DataProcessor,
   DomConverter,
-  MatcherPattern,
   Editor,
+  global,
+  HtmlDataProcessor,
+  MatcherPattern,
   ObservableMixin,
+  ViewDocument,
+  ViewDocumentFragment,
 } from "ckeditor5";
+import ToDataProcessor from "../../ToDataProcessor";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
+
+interface HtmlWriter {
+  getHtml(fragment: DocumentFragment): string;
+}
+
+class BasicHtmlWriter implements HtmlWriter {
+  /**
+   * Returns an HTML string created from the document fragment.
+   * Just copied from ckeditor5-engine/src/dataprocessor/basichtmlwriter.js
+   * The BasicHtmlWriter and HtmlWriter are not exposed anymore.
+   */
+  getHtml(fragment: DocumentFragment) {
+    const doc = global.document.implementation.createHTMLDocument("");
+    const container = doc.createElement("div");
+    container.appendChild(fragment);
+    return container.innerHTML;
+  }
+}
 
 /**
  * Data-Processor for CoreMedia RichText 1.0.
@@ -35,6 +52,7 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
   readonly #richTextSchema: RichTextSchema;
   readonly #domParser: DOMParser;
   readonly #noParserErrorNamespace: boolean;
+
   constructor(editor: Editor) {
     super();
     const document: ViewDocument = editor.data.viewDocument;
@@ -88,10 +106,12 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
       V10RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
       parserErrorDocument.getElementsByTagName("parsererror")[0].namespaceURI;
   }
+
   registerRawContentMatcher(pattern: MatcherPattern): void {
     this.#delegate.registerRawContentMatcher(pattern);
     this.#domConverter.registerRawContentMatcher(pattern);
   }
+
   useFillerType(type: "default" | "marked"): void {
     this.#domConverter.blockFillerMode = type === "marked" ? "markedNbsp" : "nbsp";
   }
@@ -195,6 +215,7 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
     }
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
+
   toView(data: string): ViewDocumentFragment {
     const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();

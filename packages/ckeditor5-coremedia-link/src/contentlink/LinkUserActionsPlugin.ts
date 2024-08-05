@@ -1,6 +1,6 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
-import { openLink } from "@ckeditor/ckeditor5-link/src/utils";
+import { openLink } from "@coremedia/ckeditor5-core-common";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import {

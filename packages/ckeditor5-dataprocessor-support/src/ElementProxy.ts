@@ -202,6 +202,7 @@ class ClassList implements DOMTokenList {
     }
     return true;
   }
+
   [Symbol.iterator](): IterableIterator<string> {
     return this.#classes[Symbol.iterator]();
   }
@@ -268,9 +269,11 @@ class ClassList implements DOMTokenList {
   values(): IterableIterator<string> {
     return this.#classes.values();
   }
+
   toString(): string {
     return this.value;
   }
+
   [index: number]: string;
 }
 
@@ -283,7 +286,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * During processing, we may change our identity. This overrides the previous
    * delegate.
    */
-  #replacement: Element;
+  #replacement: Element | undefined = undefined;
 
   /**
    * Signals either a possibly new name for this element, or that the name
@@ -584,6 +587,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     // processing again for this element.
     return this.continueFrom(newElement.nextSibling);
   }
+
   #replaceByElement(newElement: Element): void {
     this.#applyAttributes(newElement, this.attributes);
     const childrenToMove = this.delegate.childNodes;
@@ -740,6 +744,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     });
   }
 }
+
 type OwnPropertyKey = string | symbol;
 
 /**

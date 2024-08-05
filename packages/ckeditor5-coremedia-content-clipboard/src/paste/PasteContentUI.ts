@@ -1,9 +1,11 @@
-import { Plugin, Editor, ButtonView } from "ckeditor5";
+import { ButtonView, Editor, Plugin } from "ckeditor5";
 import pasteIcon from "../../theme/icons/paste.svg";
 import "../lang/paste";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+
 export default class PasteContentUI extends Plugin {
   static readonly pluginName = "pasteContentUI";
+
   init() {
     const initInformation = reportInitStart(this);
     const editor: Editor = this.editor;
@@ -20,6 +22,7 @@ export default class PasteContentUI extends Plugin {
         pasteContentCommand.execute();
       }
     });
+
     editor.ui.componentFactory.add("pasteContent", () => {
       const button = new ButtonView();
       button.label = t("Paste Content");

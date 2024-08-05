@@ -81,14 +81,14 @@ import { Editor, CKEditorError } from "ckeditor5";
  */
 export class DataFacadeController implements DataApi {
   static readonly #logger = LoggerProvider.getLogger("DataFacadeController");
-  #editor: Editor;
-  #cachedData: CachedData;
+  #editor: Editor | undefined = undefined;
+  #cachedData: CachedData | undefined = undefined;
   /**
    * Possible delegate to controller directly bound to CKEditor 5 via
    * `DataFacade` plugin. Only expect to be set for a `DataFacadeController`
    * used in the standalone mode.
    */
-  #delegate: DataFacadeController;
+  #delegate: DataFacadeController | undefined = undefined;
 
   /**
    * Creates a data controller instance. Outside a plugin context, it is not
@@ -177,6 +177,7 @@ export class DataFacadeController implements DataApi {
 
     this.#initiallyPropagateDataToDelegate(boundDataFacadeController);
   }
+
   #initiallyPropagateDataToDelegate(delegate: DataFacadeController): void {
     const cachedData = this.#cachedData;
     if (!cachedData) {
@@ -296,6 +297,7 @@ export class DataFacadeController implements DataApi {
     );
     return editor.data.get(options);
   }
+
   #pickData(data: SetDataData, options: Pick<NonNullable<GetDataOptions>, "rootName">): string {
     const { rootName = "main" } = options;
     if (typeof data === "string") {
@@ -310,6 +312,7 @@ export class DataFacadeController implements DataApi {
     // does not exist.
     throw new CKEditorError("datacontroller-get-non-existent-root", this.editor?.data);
   }
+
   toString(): string {
     return `DataFacadeController{delegating=${this.delegating}, cache=${this.#cachedData ? "<filled>" : "<empty>"}}`;
   }

@@ -1,5 +1,4 @@
-import { ButtonView, View, ViewCollection, submitHandler, KeystrokeHandler, Locale } from "ckeditor5";
-import { BindChain } from "@ckeditor/ckeditor5-ui/src/template";
+import { ButtonView, KeystrokeHandler, Locale, submitHandler, View, ViewCollection } from "ckeditor5";
 import trashbinIcon from "../../theme/icons/trashbin.svg";
 import "../../theme/blockedwordview.css";
 import "../lang/blocklist";
@@ -37,12 +36,27 @@ export default class BlockedWordView extends View {
    * The label of the header.
    */
   public declare label: string;
+
   constructor(locale: Locale) {
     super(locale);
     const bind = this.bindTemplate;
     this.children = this.createCollection();
     this.#removeButtonView = this.#createRemoveButton(locale);
-    this.#blockedWordLabel = this.#createBlockedWordLabel(locale, bind);
+    this.#blockedWordLabel = (() => {
+      const label = new View(locale);
+      label.setTemplate({
+        tag: "h2",
+        attributes: {
+          class: ["ck", "ck-form__header__label"],
+        },
+        children: [
+          {
+            text: bind.to("label"),
+          },
+        ],
+      });
+      return label;
+    })();
     this.children.add(this.#blockedWordLabel);
     this.children.add(this.#removeButtonView);
     this.setTemplate({
@@ -53,6 +67,7 @@ export default class BlockedWordView extends View {
       children: this.children,
     });
   }
+
   public override render(): void {
     super.render();
     submitHandler({
@@ -104,22 +119,8 @@ export default class BlockedWordView extends View {
     });
     return button;
   }
-  #createBlockedWordLabel(locale: Locale, bind: BindChain<typeof this>): View {
-    const label = new View(locale);
-    label.setTemplate({
-      tag: "h2",
-      attributes: {
-        class: ["ck", "ck-form__header__label"],
-      },
-      children: [
-        {
-          text: bind.to("label"),
-        },
-      ],
-    });
-    return label;
-  }
 }
+
 export interface UnblockEvent {
   name: "unblock";
   args: [string];

@@ -1,5 +1,3 @@
-// LinkActionsView: See ckeditor/ckeditor5#12027.
-import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
@@ -10,6 +8,8 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { requireNonNulls } from "@coremedia/ckeditor5-common/src/RequiredNonNull";
+import { LinkActionsView } from "../contentlink/ui/AugmentedLinkActionsView";
+import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common/src/HasFocusables";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -28,6 +28,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   static readonly requires = [LinkUI, CustomLinkTargetUI];
   static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
   #initialized = false;
+
   init(): void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
@@ -94,8 +95,11 @@ class LinkTargetActionsViewExtension extends Plugin {
     }
     LinkTargetActionsViewExtension.#render(actionsView, buttons);
   }
+
   static #render(actionsView: LinkActionsView, addedButtons: View[]): void {
-    handleFocusManagement(actionsView, addedButtons, actionsView.unlinkButtonView, "before");
+    const { unlinkButtonView } = actionsView;
+    hasRequiredInternalFocusablesProperty(actionsView) &&
+      handleFocusManagement(actionsView, addedButtons, unlinkButtonView, "before");
   }
 
   /**
@@ -166,4 +170,5 @@ class LinkTargetActionsViewExtension extends Plugin {
     });
   }
 }
+
 export default LinkTargetActionsViewExtension;

@@ -1,13 +1,18 @@
-import { ViewCollection } from "ckeditor5";
+import { FocusTracker, ViewCollection } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
  * Internal API of `LinkFormView` and `LinkActionsView` we need to expose
  * in some contexts.
  */
-interface HasFocusables {
+export interface HasFocusables {
   readonly _focusables: ViewCollection;
 }
+
+export interface HasFocusTracker {
+  readonly focusTracker: FocusTracker;
+}
+
 const isHasFocusables = (value: unknown): value is HasFocusables =>
   typeof value === "object" && !!value && "_focusables" in value && value._focusables instanceof ViewCollection;
 

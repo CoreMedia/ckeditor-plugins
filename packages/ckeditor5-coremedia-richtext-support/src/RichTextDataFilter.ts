@@ -26,8 +26,9 @@ class RichTextDataFilter extends Plugin {
   public static readonly pluginName = "GeneralRichTextDataFilter" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(RichTextDataFilter.pluginName);
   static readonly requires = [DataFilter];
-  #delegate: DataFilter;
+  #delegate: DataFilter | undefined = undefined;
   readonly #config: ReducedMatcherPattern[] = [];
+
   init(): Promise<void> | void {
     const logger = RichTextDataFilter.#logger;
     const initInformation = reportInitStart(this);
@@ -120,4 +121,5 @@ class RichTextDataFilter extends Plugin {
     this.#loadAllowedConfig(patterns);
   }
 }
+
 export default RichTextDataFilter;

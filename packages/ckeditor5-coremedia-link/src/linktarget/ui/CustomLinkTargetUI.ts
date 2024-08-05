@@ -29,7 +29,7 @@ export default class CustomLinkTargetUI extends Plugin {
   /**
    * Form View to enter custom target. Initialized during `init`.
    */
-  #form: CustomLinkTargetInputFormView;
+  #form: CustomLinkTargetInputFormView | undefined = undefined;
   /**
    * Names, which are bound to other target-selection buttons, and thus, are
    * perceived as _reserved names_. Such names must not show up in the edit
@@ -42,6 +42,7 @@ export default class CustomLinkTargetUI extends Plugin {
    */
   linkUI!: LinkUI;
   static readonly requires = [ContextualBalloon, LinkUI];
+
   async init(): Promise<void> {
     const editor = this.editor;
     const { otherNames, myConfig } = this.#parseConfig(editor.config);
@@ -149,7 +150,7 @@ export default class CustomLinkTargetUI extends Plugin {
     // Render the form so its #element is available for clickOutsideHandler.
     this.#form.render();
     this.listenTo(this.#form, "submit", () => {
-      const { value } = this.#form.labeledInput.fieldView.element as HTMLInputElement;
+      const { value } = this.#form?.labeledInput.fieldView.element ?? {};
       editor.execute("linkTarget", value);
       this.#hideForm(true);
     });
@@ -158,7 +159,7 @@ export default class CustomLinkTargetUI extends Plugin {
     });
 
     // Close the form on Esc key press.
-    this.#form.keystrokes.set("Esc", (data: unknown, cancel: () => void) => {
+    this.#form.keystrokes.set("Esc", (_data: unknown, cancel: () => void) => {
       this.#hideForm(true);
       cancel();
     });
@@ -181,6 +182,9 @@ export default class CustomLinkTargetUI extends Plugin {
    */
   #showForm(): void {
     if (this.#isVisible) {
+      return;
+    }
+    if (!this.#form) {
       return;
     }
     const editor = this.editor;
@@ -220,10 +224,10 @@ export default class CustomLinkTargetUI extends Plugin {
 
     // Blur the input element before removing it from DOM to prevent issues in some browsers.
     // See https://github.com/ckeditor/ckeditor5/issues/1501.
-    if (this.#form.focusTracker.isFocused) {
+    if (this.#form?.focusTracker.isFocused) {
       this.#form.saveButtonView.focus();
     }
-    this.#balloon?.remove(this.#form);
+    this.#form && this.#balloon?.remove(this.#form);
     if (focusEditable) {
       this.editor.editing.view.focus();
     }
@@ -242,7 +246,7 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns true if the {@link CustomLinkTargetUI.#form} is in the {@link CustomLinkTargetUI.#balloon}
    */
   get #isInBalloon(): boolean {
-    return this.#balloon?.hasView(this.#form) ?? false;
+    return !!this.#form && (this.#balloon?.hasView(this.#form) ?? false);
   }
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
@@ -259,6 +263,7 @@ export default class CustomLinkTargetUI extends Plugin {
 interface HasGetBalloonPositionData {
   _getBalloonPositionData(): Partial<PositionOptions>;
 }
+
 const isHasGetBalloonPositionData = (value: unknown): value is HasGetBalloonPositionData =>
   typeof value === "object" &&
   !!value &&
