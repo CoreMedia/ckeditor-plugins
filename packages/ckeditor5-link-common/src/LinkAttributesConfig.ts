@@ -1,6 +1,5 @@
 import { isRegisterAttributeConfig, RegisterAttributeConfig } from "./RegisterAttributeConfig";
-import { Config } from "@ckeditor/ckeditor5-utils";
-import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
+import { Config, EditorConfig } from "ckeditor5";
 
 /**
  * Configuration, that is expected as part of the CKEditor 5
@@ -63,5 +62,7 @@ export const parseAttributesConfig = (config: Config<EditorConfig>): LinkAttribu
       attributes.push(entry);
     }
   });
-  return { attributes };
+  return {
+    attributes,
+  };
 };

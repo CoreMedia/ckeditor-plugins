@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { Editor } from "ckeditor5";
 import NodeProxy, { PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**
@@ -132,9 +132,7 @@ class ClassList implements DOMTokenList {
     this.#validate(...values);
     const raw: Set<string> = new Set<string>(this.#classes);
     const addValue = (v: string): unknown => !!v && raw.add(v);
-
     values.forEach(addValue);
-
     this.#classes = [...raw];
   }
 
@@ -150,9 +148,7 @@ class ClassList implements DOMTokenList {
     this.#validate(...values);
     const raw: Set<string> = new Set<string>(this.#classes);
     const deleteValue = (v: string): boolean => raw.delete(v);
-
     values.forEach(deleteValue);
-
     this.#classes = [...raw];
   }
 
@@ -193,7 +189,6 @@ class ClassList implements DOMTokenList {
     const valuePosition = raw.indexOf(value);
     const doAdd = force === undefined || force;
     const doRemove = force === undefined || !force;
-
     if (valuePosition < 0) {
       if (doAdd) {
         this.add(value);
@@ -201,14 +196,12 @@ class ClassList implements DOMTokenList {
       }
       return false;
     }
-
     if (doRemove) {
       this.remove(value);
       return false;
     }
     return true;
   }
-
   [Symbol.iterator](): IterableIterator<string> {
     return this.#classes[Symbol.iterator]();
   }
@@ -275,11 +268,9 @@ class ClassList implements DOMTokenList {
   values(): IterableIterator<string> {
     return this.#classes.values();
   }
-
   toString(): string {
     return this.value;
   }
-
   [index: number]: string;
 }
 
@@ -292,7 +283,7 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
    * During processing, we may change our identity. This overrides the previous
    * delegate.
    */
-  #replacement?: Element;
+  #replacement: Element;
 
   /**
    * Signals either a possibly new name for this element, or that the name
@@ -409,7 +400,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     for (const rule of rules) {
       if (rule) {
         rule(this);
-
         const response = this.persistToDom();
         if (response.continueWith) {
           result = response.continueWith || result;
@@ -491,7 +481,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
   #applyAttributes(targetElement: Element, attributes: AttributeMap): void {
     const ownerDocument = targetElement.ownerDocument;
     const attributeNames = Object.keys(attributes);
-
     const handleAttributeWithoutNamespacePrefix = (key: string, value: string | null) => {
       if (value === null) {
         targetElement.removeAttributeNS(null, key);
@@ -499,7 +488,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
         targetElement.setAttributeNS(null, key, value);
       }
     };
-
     const handleAttributeWithNamespacePrefix = (
       uri: string | undefined,
       prefix: string,
@@ -524,7 +512,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
         }
       }
     };
-
     attributeNames
       // Must not set namespace as attribute.
       .filter((key) => key !== "xmlns")
@@ -562,11 +549,8 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     } else {
       newElement = ownerDocument.createElementNS(ownerDocument.documentElement.namespaceURI, newName);
     }
-
     const isRenamed = this.realName !== newName;
-
     this.#replaceByElement(newElement);
-
     if (isRenamed) {
       /*
        * Re-Processing recommended as we have a new element name
@@ -600,16 +584,13 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     // processing again for this element.
     return this.continueFrom(newElement.nextSibling);
   }
-
   #replaceByElement(newElement: Element): void {
     this.#applyAttributes(newElement, this.attributes);
-
     const childrenToMove = this.delegate.childNodes;
     while (childrenToMove.length > 0) {
       // Will also remove it from original parent.
       newElement.append(childrenToMove[0]);
     }
-
     const parentNode = this.delegate.parentNode;
     if (parentNode) {
       parentNode.replaceChild(newElement, this.delegate);
@@ -689,11 +670,9 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
           return {
             configurable: true,
             enumerable: true,
-
             get(): unknown {
               return value;
             },
-
             set(v: unknown): void {
               self.requireMutable();
               Reflect.set(target, attrName, v);
@@ -705,11 +684,9 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
           return {
             configurable: true,
             enumerable: true,
-
             get(): string | null {
               return self.delegate.getAttribute(attrName);
             },
-
             set(v: unknown): void {
               self.requireMutable();
               Reflect.set(target, attrName, v);
@@ -763,7 +740,6 @@ class ElementProxy extends NodeProxy<Element> implements ElementFilterParams {
     });
   }
 }
-
 type OwnPropertyKey = string | symbol;
 
 /**
@@ -818,6 +794,5 @@ const allFilterRules =
   (...rules: ElementFilterRule[]): ElementFilterRule =>
   (params) =>
     rules.forEach((r) => r(params));
-
 export default ElementProxy;
 export { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule, allFilterRules };

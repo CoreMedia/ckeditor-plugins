@@ -1,5 +1,4 @@
 import RichTextSchema, { V10Strictness } from "./RichTextSchema";
-
 import { allFilterRules } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
 import { FilterRuleSet } from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
 import {
@@ -7,7 +6,6 @@ import {
   parseFilterRuleSetConfigurations,
   ToDataAndViewElementConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";
@@ -18,8 +16,7 @@ import { handleImage } from "./rules/Image";
 import { listRules } from "./rules/List";
 import { defaultStrictness, Strictness } from "../../Strictness";
 import { getV10CoreMediaRichTextConfig } from "../../CoreMediaRichTextConfig";
-import { EditorConfig } from "@ckeditor/ckeditor5-core";
-import { Config as CKEditorConfig } from "@ckeditor/ckeditor5-utils";
+import { EditorConfig, Config as CKEditorConfig } from "ckeditor5";
 
 /**
  * Configuration options for CoreMedia RichText Data Processing.
@@ -152,9 +149,7 @@ const defaultRules: FilterRuleSetConfiguration = {
  */
 export const getConfig = (config?: CKEditorConfig<EditorConfig>): ParsedConfig => {
   const customConfig = getV10CoreMediaRichTextConfig(config);
-
   const { toData, toView } = parseFilterRuleSetConfigurations(customConfig.rules, defaultRules);
-
   const { strictness } = customConfig;
   let compatStrictness: V10Strictness;
   if (strictness === undefined) {
@@ -174,7 +169,6 @@ export const getConfig = (config?: CKEditorConfig<EditorConfig>): ParsedConfig =
     }
   }
   const schema = new RichTextSchema(compatStrictness);
-
   return {
     toData,
     toView,

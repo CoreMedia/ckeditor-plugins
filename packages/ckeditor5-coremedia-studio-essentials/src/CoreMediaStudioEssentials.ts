@@ -1,4 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin } from "ckeditor5";
 import CoreMediaRichText from "@coremedia/ckeditor5-coremedia-richtext/src/CoreMediaRichText";
 import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/src/GeneralRichTextSupport";
 
@@ -12,7 +12,6 @@ import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-supp
  */
 export default class CoreMediaStudioEssentials extends Plugin {
   public static readonly pluginName = "CoreMediaStudioEssentials" as const;
-
   static readonly requires = [CoreMediaRichText, GeneralRichTextSupport];
 }
 

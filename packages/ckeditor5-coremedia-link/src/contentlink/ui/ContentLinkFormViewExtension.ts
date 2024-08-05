@@ -1,7 +1,5 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin, Command } from "@ckeditor/ckeditor5-core";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import createContentLinkView from "./ContentLinkViewFactory";
@@ -9,7 +7,7 @@ import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { LabeledFieldView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { Plugin, Command, LinkUI, LabeledFieldView, View, ContextualBalloon } from "ckeditor5";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
@@ -40,19 +38,13 @@ import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 class ContentLinkFormViewExtension extends Plugin {
   public static readonly pluginName = "ContentLinkFormViewExtension" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkFormViewExtension.pluginName);
-
   static readonly #CM_LINK_FORM_CLS = "cm-ck-link-form";
   static readonly #CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
-
   static readonly requires = [LinkUI, ContentLinkCommandHook];
-
   #initialized = false;
-
   #contentLinkView: LabeledFieldView | undefined = undefined;
-
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
-
     const editor = this.editor;
     const linkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
@@ -63,50 +55,40 @@ class ContentLinkFormViewExtension extends Plugin {
         this.#initialized = true;
       }
     });
-
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
       const { formView } = linkUI;
       if (formView && formView === visibleView) {
         this.onFormViewGetsActive(linkUI);
       }
     });
-
     reportInitEnd(initInformation);
   }
-
   initializeFormView(linkUI: LinkUI): void {
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
     const linkCommand = linkUI.editor.commands.get("link") as Command;
-
     formView.set({
       contentUriPath: undefined,
       contentName: undefined,
     });
-
     formView
       .bind("contentUriPath")
       .to(linkCommand, "value", (value: unknown) =>
         typeof value === "string" && CONTENT_CKE_MODEL_URI_REGEXP.test(value) ? value : undefined,
       );
-
     this.#extendView(linkUI, formView);
   }
-
   onFormViewGetsActive(linkUI: LinkUI): void {
     const { editor } = linkUI;
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = editor.commands.get("link") as Command;
-
     formView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
-
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
         showContentLinkField(formView, false);
         return;
       }
-
       const { contentUriPath: value } = source;
 
       // content link value has changed. set urlInputView accordingly
@@ -199,11 +181,9 @@ class ContentLinkFormViewExtension extends Plugin {
       .bind("isEnabled")
       .to(linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath", enabledHandler);
   }
-
   #extendView(linkUI: LinkUI, formView: AugmentedLinkFormView): void {
     const contentLinkView = createContentLinkView(linkUI, this.editor);
     this.#contentLinkView = contentLinkView;
-
     contentLinkView.on("change:contentName", () => {
       if (!this.editor.isReadOnly) {
         const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
@@ -212,7 +192,6 @@ class ContentLinkFormViewExtension extends Plugin {
         }
       }
     });
-
     ContentLinkFormViewExtension.#render(contentLinkView, linkUI, formView);
     this.#adaptFormViewFields(formView);
     formView.on("cancel", () => {
@@ -222,24 +201,19 @@ class ContentLinkFormViewExtension extends Plugin {
       });
     });
   }
-
   static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
-
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
-
     if (!contentLinkView.isRendered) {
       logger.debug(`ContentLinkView not rendered yet. Triggering render().`);
       contentLinkView.render();
     }
-
     const {
       element: formViewElement,
       urlInputView: { element: urlInputViewElement },
     } = formView;
     const { element: contentLinkViewElement } = contentLinkView;
-
     if (!formViewElement || !contentLinkViewElement || !urlInputViewElement) {
       logger.debug("Unexpected state on render: Required elements are missing", {
         formViewElement,
@@ -248,15 +222,11 @@ class ContentLinkFormViewExtension extends Plugin {
       });
       throw new Error("Unexpected state on render: Required elements are missing.");
     }
-
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
-
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     handleFocusManagement(formView, contentLinkButtons, formView.urlInputView);
-
     ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
   }
-
   #adaptFormViewFields(formView: LinkFormView): void {
     const t = this.editor.locale.t;
     formView.urlInputView.set({
@@ -266,7 +236,6 @@ class ContentLinkFormViewExtension extends Plugin {
     formView.urlInputView.fieldView.set({
       placeholder: t("Enter url or drag and drop content onto this area."),
     });
-
     if (!formView.element) {
       ContentLinkFormViewExtension.#logger.error("FormView must be rendered to provide classes");
     }
@@ -289,21 +258,16 @@ class ContentLinkFormViewExtension extends Plugin {
     }
     return buttons;
   }
-
   static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
-
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
-
     if (!contentLinkView.fieldView.element) {
       logger.warn("ContentLinkView not completely rendered. Drag and drop won't work.", contentLinkView);
     }
-
     contentLinkView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
       ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
     contentLinkView.fieldView.element?.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
-
     if (!formView.urlInputView.fieldView.element) {
       logger.warn("FormView.urlInputView not completely rendered. Drag and drop won't work.", formView);
     }
@@ -316,14 +280,12 @@ class ContentLinkFormViewExtension extends Plugin {
     );
     logger.debug("Finished adding drag and drop listeners.");
   }
-
   static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
       return;
     }
     const uris = receiveDraggedItemsFromDataTransfer(dragEvent.dataTransfer);
-
     if (!uris) {
       const data: string | undefined = dragEvent.dataTransfer?.getData("text/plain");
       if (data) {
@@ -332,28 +294,23 @@ class ContentLinkFormViewExtension extends Plugin {
       }
       return;
     }
-
     dragEvent.preventDefault();
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
-
     const linkable = getEvaluationResult(uris);
     if (!linkable || linkable === "PENDING") {
       return;
     }
-
     const contentUris = linkable.uris;
     if (!contentUris) {
       ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
       return;
     }
-
     const uri: string | undefined = contentUris[0];
     if (!uri) {
       logger.warn("Invalid amount of uris dropped.");
       ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
       return;
     }
-
     ContentLinkFormViewExtension.#toContentUri(uri)
       .then((importedUri: string) => {
         const ckeModelUri = requireContentCkeModelUri(importedUri);
@@ -364,20 +321,16 @@ class ContentLinkFormViewExtension extends Plugin {
         logger.warn(reason);
       });
   }
-
   static async #toContentUri(uri: string): Promise<string> {
     const contentReferenceService = await serviceAgent.fetchService(createContentReferenceServiceDescriptor());
     const contentReference = await contentReferenceService.getContentReference(uri);
-
     if (contentReference.contentUri) {
       //The reference uri is a content uri
       return contentReference.contentUri;
     }
-
     if (!contentReference.externalUriInformation) {
       return Promise.reject("No content found and uri is not importable.");
     }
-
     if (contentReference.externalUriInformation.contentUri) {
       //The external content has been imported previously. A content representation already exists.
       return contentReference.externalUriInformation.contentUri;
@@ -387,17 +340,14 @@ class ContentLinkFormViewExtension extends Plugin {
     const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
     return contentImportService.import(contentReference.request);
   }
-
   static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
-
     if (loading) {
       formView.element?.classList.add("cm-ck-form-view--loading");
     } else {
       formView.element?.classList.remove("cm-ck-form-view--loading");
     }
   }
-
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
     formView.urlInputView.fieldView.set("value", data);
@@ -406,7 +356,6 @@ class ContentLinkFormViewExtension extends Plugin {
     showContentLinkField(formView, false);
     showContentLinkField(actionsView, false);
   }
-
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
 
@@ -435,10 +384,8 @@ class ContentLinkFormViewExtension extends Plugin {
     if (!dragEvent.dataTransfer) {
       return;
     }
-
     const logger = ContentLinkFormViewExtension.#logger;
     const isLinkableEvaluationResult: IsLinkableEvaluationResult | undefined = isLinkable();
-
     if (!isLinkableEvaluationResult) {
       logger.debug(
         "DragOverEvent: No URI received from DragDropService. Assuming that is any text (like an url) and allow it.",
@@ -446,12 +393,10 @@ class ContentLinkFormViewExtension extends Plugin {
       dragEvent.dataTransfer.dropEffect = "copy";
       return;
     }
-
     if (isLinkableEvaluationResult === "PENDING") {
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
-
     if (isLinkableEvaluationResult.uris?.length !== 1) {
       logger.debug(
         `DragOverEvent: Received ${isLinkableEvaluationResult.uris?.length} URI-paths, while it is not allowed to drop multiple contents.`,
@@ -459,9 +404,7 @@ class ContentLinkFormViewExtension extends Plugin {
       dragEvent.dataTransfer.dropEffect = "none";
       return;
     }
-
     dragEvent.dataTransfer.dropEffect = isLinkableEvaluationResult.isLinkable ? "link" : "none";
   }
 }
-
 export default ContentLinkFormViewExtension;

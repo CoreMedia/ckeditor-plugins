@@ -1,6 +1,5 @@
-import { Editor, Command } from "@ckeditor/ckeditor5-core";
+import { Editor, Command } from "ckeditor5";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-
 const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 
 /**

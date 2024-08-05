@@ -4,8 +4,7 @@ import {
   GeneralRichTextSupport,
   RichTextDataFilter,
 } from "./index";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface EditorConfig {
     /**
      * The configuration for General Rich Text Support. To be used, especially
@@ -14,7 +13,6 @@ declare module "@ckeditor/ckeditor5-core" {
      */
     [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]?: CoreMediaRichTextSupportConfig;
   }
-
   interface PluginsMap {
     [GeneralRichTextSupport.pluginName]: GeneralRichTextSupport;
     [RichTextDataFilter.pluginName]: RichTextDataFilter;

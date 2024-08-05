@@ -1,10 +1,6 @@
-import { Editor } from "@ckeditor/ckeditor5-core";
-import type { EditorUI } from "@ckeditor/ckeditor5-ui";
-import { Autosave } from "@ckeditor/ckeditor5-autosave";
+import { Editor, EditorUI, Autosave } from "ckeditor5";
 import { DataFacade, SetDataData } from "../src";
-
 jest.mock("@ckeditor/ckeditor5-core");
-
 class DummyEditor extends Editor {
   readonly ui: EditorUI = {} as EditorUI;
 
@@ -28,16 +24,13 @@ class DummyEditor extends Editor {
     this.data.set(data);
   }
 }
-
 describe("DataFacade", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
   it("should forward previously set data once initialized", async () => {
     const dataFixture = "DATA";
     const initDelay = new Promise<void>((resolve) => window.setTimeout(resolve, 1));
-
     const editor = new DummyEditor({
       plugins: [DataFacade, Autosave],
       // @ts-expect-error – Just some mock configuration.
@@ -45,17 +38,13 @@ describe("DataFacade", () => {
         initDelay,
       },
     });
-
     const dataFacade = editor.plugins.get(DataFacade);
     // This will also forward the data to the editor, but we will not know
     // if the editor itself does not override these afterward, e.g., when
     // reading the `initialData` property.
     dataFacade.setData(dataFixture);
-
     editor.data.set("mocking data set from initialData");
-
     expect.assertions(2);
-
     await initDelay.then(() => {
       // After init is done, data should have been forwarded.
       expect(editor.data.get()).toEqual(dataFixture);
@@ -65,14 +54,12 @@ describe("DataFacade", () => {
       expect(dataFacade.getData()).toEqual(dataFixture);
     });
   });
-
   describe("Autosave integration", () => {
     const dataFixture = "DATA";
     let savedData = "";
     let editor: DummyEditor;
     let autosave: Autosave;
     let dataFacade: DataFacade;
-
     beforeEach(() => {
       editor = new DummyEditor({
         plugins: [DataFacade, Autosave],
@@ -83,16 +70,12 @@ describe("DataFacade", () => {
           },
         },
       });
-
       autosave = editor.plugins.get(Autosave);
       dataFacade = editor.plugins.get(DataFacade);
     });
-
     it("should hook into autosave and use custom configuration for saving cached data", async () => {
       dataFacade.setData(dataFixture);
-
       editor.simulateDataReformat(dataFixture.toLowerCase());
-
       expect.assertions(1);
 
       // We do not mock auto-forwarding set data to Autosave. Thus, invoking
@@ -101,12 +84,9 @@ describe("DataFacade", () => {
         expect(savedData).toEqual(dataFixture);
       });
     });
-
     it("should hook into autosave but prefer editorial changes on data facade's save", async () => {
       dataFacade.setData(dataFixture);
-
       editor.simulateEditorialUpdate(dataFixture.toLowerCase());
-
       expect.assertions(1);
 
       // We do not mock auto-forwarding set data to Autosave. Thus, invoking

@@ -1,6 +1,5 @@
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
+import { Editor, ImageUtils } from "ckeditor5";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
@@ -15,7 +14,6 @@ export const openImageInTabCommandName = "openImageInTab";
  */
 export class OpenImageInTabCommand extends OpenInTabCommand {
   static readonly #logger = LoggerProvider.getLogger("OpenImageInTabCommand");
-
   override refresh() {
     const logger = OpenImageInTabCommand.#logger;
     const { editor } = this;

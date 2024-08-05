@@ -1,4 +1,4 @@
-import { uid } from "@ckeditor/ckeditor5-utils";
+import { uid } from "ckeditor5";
 export interface MarkerDetails {
   id: string;
   blockedWord: string | undefined;
@@ -31,7 +31,10 @@ export const createMarkerNameAndStoreWord = (blockedWord: string): string => {
 export const getMarkerDetails = (markerName: string): MarkerDetails => {
   const id = getMarkerId(markerName);
   const blockedWord = markerIdToBlockedWordMap.get(id);
-  return { id, blockedWord };
+  return {
+    id,
+    blockedWord,
+  };
 };
 
 /**

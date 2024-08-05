@@ -1,8 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { Element as ModelElement, Writer } from "@ckeditor/ckeditor5-engine";
-import { DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
+import { Plugin, Element as ModelElement, Writer, DiffItemInsert } from "ckeditor5";
 import SubscriptionCache from "./SubscriptionCache";
 import { Subscription } from "rxjs";
 
@@ -30,7 +28,6 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly ID_MODEL_ATTRIBUTE_NAME = "cmSubscriptionId";
   static readonly #SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
   static readonly PLUGIN_NAME = "ModelBoundSubscriptionPlugin";
-
   static readonly pluginName = ModelBoundSubscriptionPlugin.PLUGIN_NAME;
 
   /**
@@ -91,13 +88,14 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    */
   #unsubscribeOnElementRemoval(): void {
     this.editor.model.document.on("change:data", () => {
-      const changes = this.editor.model.document.differ.getChanges({ includeChangesInGraveyard: true });
+      const changes = this.editor.model.document.differ.getChanges({
+        includeChangesInGraveyard: true,
+      });
       const insertsOnGraveyard = changes
         .filter((change) => change.type === "insert") // an insert on the graveyard means a removal on the root document
         .map((value) => value as DiffItemInsert)
         .filter(ModelBoundSubscriptionPlugin.#isOnGraveyard);
       const allRemovedElementsWithSubscriptions: ModelElement[] = [];
-
       for (const entry of insertsOnGraveyard) {
         const nodeAfter = entry.position.nodeAfter;
         if (nodeAfter?.is("element")) {
@@ -132,16 +130,20 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         .map((diffItem) => diffItem.position.nodeAfter)
         .filter((value) => value?.is("element"))
         .map((value) => value as ModelElement);
-
       const insertedRegisteredElements: ModelElement[] = [];
       for (const insertion of insertions) {
         insertedRegisteredElements.push(...ModelBoundSubscriptionPlugin.#findRegisteredModelElements(insertion));
       }
-      this.editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
-        for (const insertedElement of insertedRegisteredElements) {
-          writer.setAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME, Math.random(), insertedElement);
-        }
-      });
+      this.editor.model.enqueueChange(
+        {
+          isUndoable: false,
+        },
+        (writer: Writer) => {
+          for (const insertedElement of insertedRegisteredElements) {
+            writer.setAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME, Math.random(), insertedElement);
+          }
+        },
+      );
     });
   }
 
@@ -157,7 +159,6 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     }
     return false;
   }
-
   static #recursiveSearch(element: ModelElement): ModelElement[] {
     if (ModelBoundSubscriptionPlugin.#isSubscribedModel(element)) {
       return [element];
@@ -171,7 +172,6 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     }
     return modelElements;
   }
-
   static #findRegisteredModelElements(element: ModelElement): ModelElement[] {
     if (ModelBoundSubscriptionPlugin.#isSubscribedModel(element)) {
       return [element];

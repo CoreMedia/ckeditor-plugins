@@ -1,9 +1,8 @@
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 // ImageUtils: See ckeditor/ckeditor5#12027.
-import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
+
 // ImageInline: See ckeditor/ckeditor5#12027.
-import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import { Plugin, Editor, ImageUtils, ImageInline } from "ckeditor5";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
@@ -29,14 +28,11 @@ export default class ContentImageEditingPlugin extends Plugin {
    */
   static readonly openImageInTab = openImageInTabCommandName;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageEditingPlugin.pluginName);
-
   static readonly IMAGE_INLINE_MODEL_ELEMENT_NAME = "imageInline";
   static readonly IMAGE_INLINE_VIEW_ELEMENT_NAME = "img";
   static readonly XLINK_HREF_MODEL_ATTRIBUTE_NAME = "xlink-href";
   static readonly XLINK_HREF_DATA_ATTRIBUTE_NAME = "data-xlink-href";
-
   static readonly requires = [ImageInline, ImageUtils, ModelBoundSubscriptionPlugin];
-
   init(): void {
     const editor = this.editor;
     const initInformation = reportInitStart(this);
@@ -66,7 +62,6 @@ export default class ContentImageEditingPlugin extends Plugin {
     // If not prevented, the src-attribute from GRS would be written to the model.
     this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
   }
-
   static #setupXlinkHrefConversion(editor: Editor, modelAttributeName: string, dataAttributeName: string): void {
     ContentImageEditingPlugin.#setupXlinkHrefConversionDowncast(
       editor,
@@ -76,10 +71,12 @@ export default class ContentImageEditingPlugin extends Plugin {
     );
     editor.conversion.for("upcast").attributeToAttribute({
       model: modelAttributeName,
-      view: { name: ContentImageEditingPlugin.IMAGE_INLINE_VIEW_ELEMENT_NAME, key: dataAttributeName },
+      view: {
+        name: ContentImageEditingPlugin.IMAGE_INLINE_VIEW_ELEMENT_NAME,
+        key: dataAttributeName,
+      },
     });
   }
-
   static #setupXlinkHrefConversionDowncast(
     editor: Editor,
     modelElementName: "imageInline",

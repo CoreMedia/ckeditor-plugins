@@ -1,4 +1,4 @@
-import { View } from "@ckeditor/ckeditor5-ui";
+import { View } from "ckeditor5";
 // LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 // LinkFormView: See ckeditor/ckeditor5#12027.
@@ -32,15 +32,12 @@ export const handleFocusManagement = (
     if (existingView === anchorView && positionRelativeToAnchorView === "before") {
       addViewsToFocusables(parentView, childViews);
     }
-
     addViewsToFocusables(parentView, [existingView]);
-
     if (existingView === anchorView && positionRelativeToAnchorView === "after") {
       addViewsToFocusables(parentView, childViews);
     }
   });
 };
-
 const addViewsToFocusables = (parentView: LinkActionsView | LinkFormView, childViews: View[]): void => {
   const internalParentView: unknown = parentView;
   if (!hasRequiredInternalFocusablesProperty(internalParentView)) {
@@ -52,7 +49,6 @@ const addViewsToFocusables = (parentView: LinkActionsView | LinkFormView, childV
     }
   });
 };
-
 const addViewsToFocusTracker = (parentView: LinkActionsView | LinkFormView, childViews: View[]): void => {
   childViews.forEach((view: View) => {
     if (view.element) {
@@ -60,14 +56,11 @@ const addViewsToFocusTracker = (parentView: LinkActionsView | LinkFormView, chil
     }
   });
 };
-
 const removeExistingFocusables = (view: LinkActionsView | LinkFormView): View[] => {
   const internalView: unknown = view;
-
   if (!hasRequiredInternalFocusablesProperty(internalView)) {
     return [];
   }
-
   const removedViews: View[] = [];
   const viewArray = Array.from(internalView._focusables);
   viewArray.forEach((childView) => {

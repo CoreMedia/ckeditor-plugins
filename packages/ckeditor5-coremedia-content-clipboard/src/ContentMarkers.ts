@@ -1,12 +1,9 @@
-import { Editor } from "@ckeditor/ckeditor5-core";
-import { Range as ModelRange, Writer } from "@ckeditor/ckeditor5-engine";
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
-import type { Model } from "@ckeditor/ckeditor5-engine";
-
+import type { Editor, Range as ModelRange, Writer, Model } from "ckeditor5";
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
 /**
@@ -25,11 +22,14 @@ const logger = LoggerProvider.getLogger("ContentMarkers");
  */
 export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, contentUris: string[]): void => {
   const { model } = editor;
-
-  model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
-    writer.setSelection(targetRange);
-  });
-
+  model.enqueueChange(
+    {
+      isUndoable: false,
+    },
+    (writer: Writer) => {
+      writer.setSelection(targetRange);
+    },
+  );
   const batch = model.createBatch();
 
   // Save the attributes of the current selection to apply them later on the
@@ -85,9 +85,14 @@ const handleExpandedRange = (model: Model, range: ModelRange): ModelRange => {
   if (range.isCollapsed) {
     return range;
   }
-  model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
-    writer.remove(range);
-  });
+  model.enqueueChange(
+    {
+      isUndoable: false,
+    },
+    (writer: Writer) => {
+      writer.remove(range);
+    },
+  );
   return model.createRange(range.start);
 };
 /**
@@ -129,8 +134,16 @@ const addContentInputMarker = (editor: Editor, markerRange: ModelRange, contentI
     contentInputData.itemContext.itemIndex,
   );
   logger.debug("Adding content-input marker", markerName, contentInputData);
-  editor.model.enqueueChange({ isUndoable: false }, (writer: Writer) => {
-    writer.addMarker(markerName, { usingOperation: true, range: markerRange });
-    ContentInputDataCache.storeData(markerName, contentInputData);
-  });
+  editor.model.enqueueChange(
+    {
+      isUndoable: false,
+    },
+    (writer: Writer) => {
+      writer.addMarker(markerName, {
+        usingOperation: true,
+        range: markerRange,
+      });
+      ContentInputDataCache.storeData(markerName, contentInputData);
+    },
+  );
 };

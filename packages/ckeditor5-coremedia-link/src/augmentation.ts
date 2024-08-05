@@ -15,8 +15,7 @@ import type {
 import DefaultTarget from "./linktarget/config/DefaultTarget";
 import LinkTargetOptionDefinition from "./linktarget/config/LinkTargetOptionDefinition";
 import { TargetDefaultRuleDefinition } from "./linktarget/config/LinkTargetDefaultRuleDefinition";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface PluginsMap {
     [ContentLinkActionsViewExtension.pluginName]: ContentLinkActionsViewExtension;
     [ContentLinkClipboardPlugin.pluginName]: ContentLinkClipboardPlugin;
@@ -29,7 +28,6 @@ declare module "@ckeditor/ckeditor5-core" {
     [LinkTargetModelView.pluginName]: LinkTargetModelView;
     [LinkUserActionsPlugin.pluginName]: LinkUserActionsPlugin;
   }
-
   interface CommandsMap {
     // While part of ckeditor5-coremedia-content, the command is added here
     // within the ContentLinks plugin. Thus, we should declare it here.
@@ -37,8 +35,7 @@ declare module "@ckeditor/ckeditor5-core" {
     linkTarget: LinkTargetCommand;
   }
 }
-
-declare module "@ckeditor/ckeditor5-link" {
+declare module "ckeditor5" {
   interface LinkConfig {
     targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
     defaultTargets?: TargetDefaultRuleDefinition[];

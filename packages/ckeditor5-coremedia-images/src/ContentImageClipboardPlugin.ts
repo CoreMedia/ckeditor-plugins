@@ -1,5 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { Writer, Node } from "@ckeditor/ckeditor5-engine";
+import { Plugin, Writer, Node } from "ckeditor5";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import { serviceAgent } from "@coremedia/service-agent";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
@@ -10,9 +9,7 @@ import {
 } from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentToModelRegistry";
 import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboardEditing";
 import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
-
 const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
   contentUri: string,
 ): Promise<CreateModelFunction> => {
@@ -20,7 +17,6 @@ const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
   const blobUriPath = await configurationService.resolveBlobPropertyReference(contentUri);
   return createImageModelFunction(blobUriPath);
 };
-
 const createImageModelFunction: CreateImageModelFunction =
   (blobUriPath: string): CreateModelFunction =>
   (writer: Writer): Node =>
@@ -42,17 +38,13 @@ const createImageModelFunction: CreateImageModelFunction =
 export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName = "ContentImageClipboardPlugin" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
-
   init(): void {
     const logger = ContentImageClipboardPlugin.#logger;
     const { editor } = this;
-
     const initInformation = reportInitStart(this);
-
     getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
       logger.warn(`Recommended plugin ${pluginName} not found. Creating content images from clipboard not activated.`),
     )?.registerToModelFunction("image", createImageModelFunctionCreator);
-
     reportInitEnd(initInformation);
   }
 }

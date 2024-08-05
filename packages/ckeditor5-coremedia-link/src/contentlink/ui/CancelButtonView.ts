@@ -1,5 +1,4 @@
-import { Locale } from "@ckeditor/ckeditor5-utils";
-import { ButtonView } from "@ckeditor/ckeditor5-ui";
+import { Locale, ButtonView } from "ckeditor5";
 import CoreMediaIconView from "./CoreMediaIconView";
 
 /**
@@ -8,16 +7,13 @@ import CoreMediaIconView from "./CoreMediaIconView";
 export default class CancelButtonView extends ButtonView {
   readonly #cancelIcon: CoreMediaIconView;
   static readonly iconId = "cancelButtonIcon";
-
   constructor(locale?: Locale) {
     super(locale);
-
     this.extendTemplate({
       attributes: {
         class: ["cm-ck-cancel-button"],
       },
     });
-
     this.#cancelIcon = new CoreMediaIconView();
     this.#cancelIcon.set({
       id: CancelButtonView.iconId,

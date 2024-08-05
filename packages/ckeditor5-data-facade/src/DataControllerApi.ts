@@ -1,4 +1,4 @@
-import type { DataController } from "@ckeditor/ckeditor5-engine";
+import type { DataController } from "ckeditor5";
 
 /**
  * Instance type of the DataController.

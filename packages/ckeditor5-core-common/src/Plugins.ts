@@ -1,11 +1,5 @@
 import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import Plugin, {
-  PluginClassConstructor,
-  PluginConstructor,
-  PluginInterface,
-} from "@ckeditor/ckeditor5-core/src/plugin";
-import { Editor, PluginsMap } from "@ckeditor/ckeditor5-core";
-
+import { Plugin, PluginClassConstructor, PluginConstructor, PluginInterface, Editor, PluginsMap } from "ckeditor5";
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 
 /**
@@ -16,12 +10,10 @@ const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
  * reporting.
  */
 export type OnMissingPlugin = (pluginName: string) => void;
-
 export function getOptionalPlugin<
   TConstructor extends PluginClassConstructor<TContext>,
   TContext extends Editor = Editor,
 >(editor: TContext, key: TConstructor, onMissing?: OnMissingPlugin): InstanceType<TConstructor> | undefined;
-
 export function getOptionalPlugin<TName extends string, TContext extends Editor = Editor>(
   editor: TContext,
   key: TName,
@@ -47,7 +39,6 @@ export function getOptionalPlugin(
   onMissing?: OnMissingPlugin,
 ): PluginInterface | undefined {
   const { plugins } = editor;
-
   if (plugins.has(key)) {
     if (typeof key === "string") {
       return plugins.get(key);
@@ -55,21 +46,17 @@ export function getOptionalPlugin(
       return plugins.get(key);
     }
   }
-
   let pluginName: string;
-
   if (typeof key === "string") {
     pluginName = key;
   } else {
     pluginName = (key as PluginConstructor).pluginName ?? key.name;
   }
-
   if (onMissing) {
     onMissing(pluginName);
   } else {
     pluginsLogger.debug(`getOptionalPlugin: Queried plugin ${pluginName} is unavailable.`);
   }
-
   return undefined;
 }
 

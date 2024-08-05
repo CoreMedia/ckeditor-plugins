@@ -1,9 +1,13 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { ClipboardEventData, ClipboardPipeline } from "@ckeditor/ckeditor5-clipboard";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { DataTransfer as ViewDataTransfer, ViewDocumentFragment } from "@ckeditor/ckeditor5-engine";
-import { EventInfo } from "@ckeditor/ckeditor5-utils";
+import {
+  Plugin,
+  ClipboardEventData,
+  ClipboardPipeline,
+  DataTransfer as ViewDataTransfer,
+  ViewDocumentFragment,
+  EventInfo,
+} from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
@@ -45,20 +49,14 @@ import { COREMEDIA_FONT_MAPPER_CONFIG_KEY, FontMapperConfig, FontMapperConfigEnt
  */
 export default class FontMapper extends Plugin {
   public static readonly pluginName = "FontMapper" as const;
-
   static readonly #logger: Logger = LoggerProvider.getLogger(FontMapper.pluginName);
-
-  static readonly #supportedDataFormat: string = "text/html";
-  static readonly #clipboardEventName: string = "inputTransformation";
-
+  static readonly #supportedDataFormat = "text/html";
+  static readonly #clipboardEventName = "inputTransformation";
   static readonly requires = [ClipboardPipeline];
-
   init(): void {
     const initInformation = reportInitStart(this);
-
     const { editor } = this;
     const { config } = editor;
-
     const customFontMapperConfig = config.get(COREMEDIA_FONT_MAPPER_CONFIG_KEY);
     FontMapper.#applyPluginConfig(customFontMapperConfig);
 
@@ -76,7 +74,6 @@ export default class FontMapper extends Plugin {
         priority: "normal",
       },
     );
-
     reportInitEnd(initInformation);
   }
 
@@ -87,12 +84,10 @@ export default class FontMapper extends Plugin {
    */
   static #applyPluginConfig(config: FontMapperConfig | undefined): void {
     const logger = FontMapper.#logger;
-
     if (!config) {
       logger.debug("Configuration: No additional configuration found");
       return;
     }
-
     config.forEach((configEntry: FontMapperConfigEntry) => {
       logger.debug(`Configuration: Register Mapping for ${configEntry.font}`);
       fontMappingRegistry.registerFontMapping(configEntry);
@@ -108,7 +103,6 @@ export default class FontMapper extends Plugin {
       FontMapper.#logger.debug(`No data for supported data Format ${FontMapper.#supportedDataFormat} found.`);
       return;
     }
-
     FontMapper.#logger.debug("Starting to replace fonts.");
     replaceFontInDocumentFragment(eventContent);
     data.content = eventContent;

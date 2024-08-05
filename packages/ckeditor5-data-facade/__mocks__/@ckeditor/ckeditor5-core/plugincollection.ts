@@ -1,7 +1,6 @@
 import { DataFacade } from "../../../src";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { Editor } from "ckeditor5";
 import { Autosave } from "../ckeditor5-autosave";
-
 const byStringKey = (key: string, plugin: unknown): boolean => {
   if (typeof plugin === "function") {
     return plugin.name === key;
@@ -9,7 +8,6 @@ const byStringKey = (key: string, plugin: unknown): boolean => {
   console.debug(`Signal not found searching for ${key} for entry: ${plugin} (${typeof plugin})`);
   return false;
 };
-
 const byConstructor = (key: unknown, plugin: unknown): boolean => {
   if (typeof plugin === "function") {
     return key === plugin;
@@ -17,7 +15,6 @@ const byConstructor = (key: unknown, plugin: unknown): boolean => {
   console.debug(`Signal not found searching for ${key} for entry: ${plugin} (${typeof plugin})`);
   return false;
 };
-
 const pluginPredicate =
   (key: unknown) =>
   (plugin: unknown): boolean => {
@@ -30,36 +27,31 @@ const pluginPredicate =
     console.debug(`Unsupported key ${key} of type ${typeof key}. Will signal: Not found.`);
     return false;
   };
-
 export class PluginCollection {
   readonly #context: unknown;
   readonly #plugins: unknown[];
-  #dataFacade?: DataFacade;
-  #autosave?: Autosave;
-
+  #dataFacade: DataFacade;
+  #autosave: Autosave;
   constructor(context: unknown, availablePlugins: unknown[] = []) {
     this.#context = context;
     this.#plugins = availablePlugins;
   }
-
   mockInitAll() {
     for (const pluginKey of this.#plugins) {
-      const plugin = this.get(pluginKey) as { init?: () => void };
+      const plugin = this.get(pluginKey) as {
+        init?: () => void;
+      };
       plugin.init?.();
     }
   }
-
   has(key: unknown): boolean {
     return this.#plugins.some(pluginPredicate(key));
   }
-
   get(key: unknown): unknown {
     const plugin = this.#plugins.find(pluginPredicate(key));
-
     if (!plugin) {
       throw new Error(`get: No Plugin registered for key "${key}" (${typeof key}).`);
     }
-
     if (typeof plugin === "function") {
       // Lazy initialization required, as at construction time, relevant
       // setup in the editor (here: config) may not be available, yet.

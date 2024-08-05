@@ -1,7 +1,7 @@
 import { Observable, Subject } from "rxjs";
 import BlocklistService from "@coremedia/ckeditor5-coremedia-studio-integration/src/BlocklistService";
 import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/BlocklistServiceDescriptor";
-import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
+import { Editor, Plugin } from "ckeditor5";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
@@ -16,7 +16,6 @@ import { serviceAgent } from "@coremedia/service-agent";
 export class MockBlocklistService extends Plugin implements BlocklistService {
   static readonly pluginName = "MockBlocklistService" as const;
   static readonly requires = [MockServiceAgentPlugin];
-
   #blocklist: string[];
   readonly #blocklistSubject: Subject<string[]>;
 
@@ -25,12 +24,10 @@ export class MockBlocklistService extends Plugin implements BlocklistService {
    */
   constructor(editor: Editor) {
     super(editor);
-
     this.#blocklist = ["studio", "provided"];
     this.#blocklistSubject = new Subject<string[]>();
     this.#addExamples();
   }
-
   init(): void {
     const initInformation = reportInitStart(this);
     serviceAgent.registerService<MockBlocklistService>(this, createBlocklistServiceDescriptor());

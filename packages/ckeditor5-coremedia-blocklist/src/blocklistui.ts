@@ -1,22 +1,23 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
 import blocklistIcon from "../theme/icons/blocklist.svg";
-import { ButtonView, clickOutsideHandler, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import {
+  Plugin,
+  ButtonView,
+  clickOutsideHandler,
+  ContextualBalloon,
   TextProxy,
   ViewAttributeElement,
   ViewDocumentClickEvent,
   ViewDocumentFragment,
   ViewNode,
   ViewPosition,
-} from "@ckeditor/ckeditor5-engine";
-import { PositionOptions } from "@ckeditor/ckeditor5-utils";
+  PositionOptions,
+} from "ckeditor5";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
 import { UnblockEvent } from "./ui/blockedWordView";
 import BlocklistEditing from "./blocklistediting";
-
 const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
 
 /**
@@ -29,17 +30,12 @@ const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
 export default class Blocklistui extends Plugin {
   static readonly pluginName: string = "BlocklistUI";
   static readonly requires = [ContextualBalloon, BlocklistEditing];
-
   blocklistActionsView?: BlocklistActionsView;
-
   blocklistCommand: BlocklistCommand | undefined;
-
   #balloon: ContextualBalloon | undefined = undefined;
-
   async init(): Promise<void> {
     const editor = this.editor;
     this.blocklistCommand = (await ifCommand(editor, BLOCKLIST_COMMAND_NAME)) as BlocklistCommand;
-
     this.#balloon = editor.plugins.get(ContextualBalloon);
 
     // listen to click and key events to open the blocklist balloon
@@ -50,14 +46,12 @@ export default class Blocklistui extends Plugin {
 
     // listen to click and key events while the balloon is open (to navigate or close the balloon)
     this.#initBalloonViewListeners();
-
     this.blocklistActionsView = this.#createBlocklistActionsView();
     this.blocklistActionsView.bind("blockedWords").to(this.blocklistCommand, "value");
 
     // listen to changes in blocklistCommand and refresh the list in the blocklist view accordingly
     this.blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
   }
-
   #getBlocklistActionsView(): BlocklistActionsView {
     if (!this.blocklistActionsView) {
       this.blocklistActionsView = this.#createBlocklistActionsView();
@@ -73,12 +67,9 @@ export default class Blocklistui extends Plugin {
    */
   #createBlocklistActionsView(): BlocklistActionsView {
     const editor = this.editor;
-
     const blocklistActionsView = new BlocklistActionsView(editor);
-
     this.listenTo(blocklistActionsView.blocklistInputView, "submit", () => {
       const blockWordInput = blocklistActionsView.blocklistInputView.getInputElement();
-
       if (!this.blocklistCommand) {
         return;
       }
@@ -92,7 +83,6 @@ export default class Blocklistui extends Plugin {
       // Add markers and sync with service
       const editingPlugin = editor.plugins.get(BlocklistEditing);
       editingPlugin.addBlocklistWord(blockWordInput.value);
-
       const newValue = [...blocklistCommandValue, blockWordInput.value];
       this.blocklistCommand.set("value", newValue);
 
@@ -109,7 +99,6 @@ export default class Blocklistui extends Plugin {
       // Remove markers
       const editingPlugin = editor.plugins.get(BlocklistEditing);
       editingPlugin.removeBlocklistWord(wordToUnblock);
-
       const blocklistCommandValue = this.blocklistCommand.value;
       const index = blocklistCommandValue.indexOf(wordToUnblock);
       blocklistCommandValue.splice(index, 1);
@@ -126,7 +115,6 @@ export default class Blocklistui extends Plugin {
       this.#hideBlocklistBalloon();
       cancel();
     });
-
     return blocklistActionsView;
   }
 
@@ -139,10 +127,8 @@ export default class Blocklistui extends Plugin {
   #createBlocklistToolbarButton(command: BlocklistCommand) {
     const editor = this.editor;
     const t = editor.t;
-
     editor.ui.componentFactory.add("blocklist", (locale) => {
       const button = new ButtonView(locale);
-
       button.isEnabled = true;
       button.label = t("Manage Blocklist");
       button.icon = blocklistIcon;
@@ -159,7 +145,6 @@ export default class Blocklistui extends Plugin {
       this.listenTo(button, "execute", () => {
         this.#showBlocklistBalloonConsideringSelection();
       });
-
       return button;
     });
   }
@@ -197,9 +182,7 @@ export default class Blocklistui extends Plugin {
     // Set the value of the input element in the blocklist balloon to the current selection
     // For clicks on a blocked word, no value is set since the selection is collapsed
     this.#getBlocklistActionsView().blocklistInputView.setInputText(this.#getSelectedText());
-
     this.#addBalloonView();
-
     if (forceFocus) {
       this.#getBlocklistActionsView().focus();
     }
@@ -213,7 +196,6 @@ export default class Blocklistui extends Plugin {
    */
   #hideBlocklistBalloon(): void {
     const editor = this.editor;
-
     this.stopListening(editor.ui, "update");
     this.stopListening(this.#balloon, "change:visibleView");
 
@@ -245,22 +227,18 @@ export default class Blocklistui extends Plugin {
     if (!this.#balloon) {
       return;
     }
-
     this.#balloon.add({
       view: this.#getBlocklistActionsView(),
       position: this.#getBalloonPositionData(),
     });
   }
-
   #getBalloonPositionData(): Partial<PositionOptions> {
     const view = this.editor.editing.view;
     const viewDocument = view.document;
-
     const selection = view.document.selection;
     const selectedElement = selection.getSelectedElement();
     const target: PositionOptions["target"] = () => {
       const targetWord = selectedElement;
-
       if (targetWord) {
         const targetWordViewElement = view.domConverter.mapViewToDom(targetWord);
         if (targetWordViewElement) {
@@ -272,7 +250,9 @@ export default class Blocklistui extends Plugin {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return view.domConverter.viewRangeToDom(viewDocument.selection.getFirstRange()!);
     };
-    return { target };
+    return {
+      target,
+    };
   }
 
   /**
@@ -295,7 +275,6 @@ export default class Blocklistui extends Plugin {
         // is not to open the blocked words balloon even if blocked words are part of the selection.
         return;
       }
-
       const blockedWords = this.#getSelectedBlocklistWords();
       if (!blockedWords || blockedWords.length === 0) {
         return;
@@ -312,7 +291,6 @@ export default class Blocklistui extends Plugin {
     editor.keystrokes.set(BLOCKLIST_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
-
       if (editor.commands.get(BLOCKLIST_COMMAND_NAME)?.isEnabled) {
         this.#showBlocklistBalloonConsideringSelection();
       }
@@ -389,7 +367,6 @@ export default class Blocklistui extends Plugin {
   #getSelectedBlocklistWords(): string[] | undefined {
     const view = this.editor.editing.view;
     const selection = view.document.selection;
-
     const firstRange = selection.getFirstRange();
     if (!firstRange) {
       return undefined;
@@ -411,11 +388,9 @@ export default class Blocklistui extends Plugin {
   #getSelectedText(): string {
     const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
-
     const isTextProxy = (node: unknown): node is TextProxy =>
       // eslint-disable-next-line no-null/no-null
       typeof node === "object" && node !== null && "data" in node;
-
     if (range) {
       return Array.from(range.getItems())
         .filter((item) => isTextProxy(item))

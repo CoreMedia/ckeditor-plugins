@@ -1,7 +1,16 @@
-import { Collection } from "@ckeditor/ckeditor5-utils";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import { DiffItem, DiffItemAttribute, Element, Item, Marker, Model, Node, Range } from "@ckeditor/ckeditor5-engine";
-import { FindAndReplaceUtils } from "@ckeditor/ckeditor5-find-and-replace";
+import {
+  Collection,
+  Editor,
+  DiffItem,
+  DiffItemAttribute,
+  Element,
+  Item,
+  Marker,
+  Model,
+  Node,
+  Range,
+  FindAndReplaceUtils,
+} from "ckeditor5";
 import { createMarkerNameAndStoreWord } from "./blocklistMarkerUtils";
 
 // copied from @ckeditor/ckeditor5-find-and-replace/src/findandreplace.d.ts since not exported in index.js
@@ -20,7 +29,6 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
   const changedNodes = new Set<Node>();
   const removedMarkers = new Set<string>();
   const model = editor.model;
-
   const changes = model.document.differ.getChanges() as Exclude<DiffItem, DiffItemAttribute>[];
 
   // Get nodes in which changes happened to re-run a search callback on them.
@@ -32,7 +40,6 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
     }
     if (change.name === "$text" || (change.position.nodeAfter && model.schema.isInline(change.position.nodeAfter))) {
       changedNodes.add(change.position.parent as Element);
-
       [...model.markers.getMarkersAtPosition(change.position)].forEach((markerAtChange) => {
         removedMarkers.add(markerAtChange.name);
       });
@@ -53,7 +60,6 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
   // Get markers from the updated nodes and remove all (search will be re-run on these nodes).
   changedNodes.forEach((node) => {
     const markersInNode = [...model.markers.getMarkersIntersectingRange(model.createRangeIn(node as Element))];
-
     markersInNode.forEach((marker) => removedMarkers.add(marker.name));
   });
 
@@ -64,7 +70,6 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
       if (results.has(markerName)) {
         results.remove(markerName);
       }
-
       writer.removeMarker(markerName);
     });
   });
@@ -83,7 +88,6 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
     });
   });
 };
-
 export const createSearchCallback = (word: string) => {
   const regexpMatchToFindResult = (matchResult: RegExpMatchArray): ResultType => {
     const lastGroupIndex = matchResult.length - 1;
@@ -94,14 +98,12 @@ export const createSearchCallback = (word: string) => {
     if (matchResult.length === 3) {
       startOffset += matchResult[1].length;
     }
-
     return {
       label: matchResult[lastGroupIndex],
       start: startOffset,
       end: startOffset + matchResult[lastGroupIndex].length,
     };
   };
-
   const regExp = new RegExp(`(${word})`, "gui");
   const searchCallback = ({ text }: { text: string }) => {
     const matches = [...text.matchAll(regExp)];
@@ -109,7 +111,6 @@ export const createSearchCallback = (word: string) => {
   };
   return searchCallback;
 };
-
 export const updateFindResultFromRange = (
   blockedWord: string,
   editor: Editor,
@@ -120,7 +121,6 @@ export const updateFindResultFromRange = (
 ): Collection<ResultType> => {
   const results = startResults ?? new Collection();
   const findAndReplaceUtils = new FindAndReplaceUtils(editor);
-
   model.change((writer) => {
     [...range].forEach(({ type, item }) => {
       if (type === "elementStart") {
@@ -129,11 +129,9 @@ export const updateFindResultFromRange = (
             item,
             text: findAndReplaceUtils.rangeToText(model.createRangeIn(item as Element)),
           });
-
           if (!foundItems) {
             return;
           }
-
           foundItems.forEach((foundItem) => {
             const markerName = createMarkerNameAndStoreWord(blockedWord);
             const marker = writer.addMarker(markerName, {
@@ -144,9 +142,7 @@ export const updateFindResultFromRange = (
                 writer.createPositionAt(item, foundItem.end),
               ),
             });
-
             const index = findInsertIndex(results, marker);
-
             results.add(
               {
                 id: markerName,
@@ -160,7 +156,6 @@ export const updateFindResultFromRange = (
       }
     });
   });
-
   return results;
 };
 

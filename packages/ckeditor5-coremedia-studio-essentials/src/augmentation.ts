@@ -1,6 +1,5 @@
 import { CoreMediaStudioEssentials } from "./index";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface PluginsMap {
     [CoreMediaStudioEssentials.pluginName]: CoreMediaStudioEssentials;
   }

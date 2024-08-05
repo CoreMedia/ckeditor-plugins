@@ -1,4 +1,4 @@
-import { type ContextualBalloon } from "@ckeditor/ckeditor5-ui";
+import { ContextualBalloon } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
@@ -14,16 +14,12 @@ export interface InternalLinkUI {
   _hideUI(): void;
   get _isUIInPanel(): boolean;
 }
-
 const isHasBalloon = (linkUI: object): linkUI is Pick<InternalLinkUI, "_balloon"> =>
   "_balloon" in linkUI && typeof linkUI._balloon === "object";
-
 const isHasHideUI = (linkUI: object): linkUI is Pick<InternalLinkUI, "_hideUI"> =>
   "_hideUI" in linkUI && typeof linkUI._hideUI === "function";
-
 const isHasIsUIInPanel = (linkUI: object): linkUI is Pick<InternalLinkUI, "_isUIInPanel"> =>
   "_isUIInPanel" in linkUI && typeof linkUI._isUIInPanel === "boolean";
-
 const isInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI =>
   typeof linkUI === "object" && !!linkUI && isHasBalloon(linkUI) && isHasHideUI(linkUI) && isHasIsUIInPanel(linkUI);
 

@@ -1,8 +1,7 @@
-import { Editor } from "@ckeditor/ckeditor5-core";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
-import { Writer, Node, Position, Range } from "@ckeditor/ckeditor5-engine";
+import { Editor, Writer, Node, Position, Range } from "ckeditor5";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
@@ -15,7 +14,6 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
 import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
-
 const UTILITY_NAME = "DataToModelMechanism";
 
 /**
@@ -68,7 +66,6 @@ export default class DataToModelMechanism {
    */
   static triggerLoadAndWriteToModel(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
     const logger = DataToModelMechanism.#logger;
-
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
       markerData.insertionId,
       markerData.itemIndex,
@@ -102,7 +99,6 @@ export default class DataToModelMechanism {
         if (!response.externalUriInformation) {
           return Promise.reject("No content found and uri is not importable.");
         }
-
         const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
         if (response.externalUriInformation.contentUri) {
           //The external content has been imported previously. A content representation already exists.
@@ -153,7 +149,6 @@ export default class DataToModelMechanism {
     if (fallbackFunction) {
       return fallbackFunction;
     }
-
     return Promise.reject(new Error(`No function to create the model found for type: ${type}`));
   }
 
@@ -231,13 +226,11 @@ export default class DataToModelMechanism {
         ContentInputDataCache.removeData(marker.name);
         return;
       }
-
       let insertPosition = markerPosition;
       // Parent Check: Required precondition for split().
       if (!markerPosition.isAtStart && !contentInputData.itemContext.isInline && markerPosition.parent?.parent) {
         insertPosition = writer.split(markerPosition).range.end;
       }
-
       const range = writer.model.insertContent(item, insertPosition);
       DataToModelMechanism.#applyAttributes(writer, [range], contentInputData.insertionContext.selectedAttributes);
 
@@ -254,10 +247,14 @@ export default class DataToModelMechanism {
       }
       MarkerRepositionUtil.repositionMarkers(editor, markerData, markerPosition, finalAfterInsertPosition);
     });
-
-    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
-      writer.removeSelectionAttribute("linkHref");
-    });
+    editor.model.enqueueChange(
+      {
+        isUndoable: false,
+      },
+      (writer: Writer): void => {
+        writer.removeSelectionAttribute("linkHref");
+      },
+    );
     DataToModelMechanism.#markerCleanup(editor, pendingMarkerNames, markerData);
   }
 
@@ -270,19 +267,23 @@ export default class DataToModelMechanism {
    * @param markerData - the markerData object
    */
   static #markerCleanup(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
-    editor.model.enqueueChange({ isUndoable: false }, (writer: Writer): void => {
-      const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
-      if (!marker) {
-        return;
-      }
-      writer.removeMarker(marker);
-      const actualIndex = pendingMarkerNames.indexOf(marker.name);
-      if (actualIndex >= 0) {
-        pendingMarkerNames.splice(actualIndex, 1);
-      }
-
-      ContentInputDataCache.removeData(marker.name);
-    });
+    editor.model.enqueueChange(
+      {
+        isUndoable: false,
+      },
+      (writer: Writer): void => {
+        const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
+        if (!marker) {
+          return;
+        }
+        writer.removeMarker(marker);
+        const actualIndex = pendingMarkerNames.indexOf(marker.name);
+        if (actualIndex >= 0) {
+          pendingMarkerNames.splice(actualIndex, 1);
+        }
+        ContentInputDataCache.removeData(marker.name);
+      },
+    );
   }
 
   /**

@@ -1,8 +1,7 @@
 import { JSWrapper } from "./JSWrapper";
-import { EditingView } from "@ckeditor/ckeditor5-engine";
+import { EditingView } from "ckeditor5";
 import { ViewDocumentWrapper } from "./ViewDocumentWrapper";
 import { EditingControllerWrapper } from "./EditingControllerWrapper";
-
 export class ViewWrapper extends JSWrapper<EditingView> {
   get document(): ViewDocumentWrapper {
     return ViewDocumentWrapper.fromView(this);
@@ -16,7 +15,6 @@ export class ViewWrapper extends JSWrapper<EditingView> {
       view.focus();
     });
   }
-
   static fromEditingController(wrapper: EditingControllerWrapper): ViewWrapper {
     return new ViewWrapper(wrapper.evaluateHandle((editingController) => editingController.view));
   }

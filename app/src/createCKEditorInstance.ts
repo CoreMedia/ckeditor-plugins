@@ -1,6 +1,5 @@
 import { ApplicationState } from "./ApplicationState";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
-import { Command, Editor } from "@ckeditor/ckeditor5-core";
+import { ClassicEditor, Command, Editor } from "ckeditor5";
 import { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import { initReadOnlyToggle } from "./ReadOnlySwitch";
@@ -17,21 +16,22 @@ import { initExamplesAndBindTo } from "./example-data";
 // See https://github.com/ckeditor/ckeditor5-inspector/issues/173
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 declare class CKEditorInspector {
-  static attach(editorOrConfig: Editor | Record<string, Editor>, options?: { isCollapsed?: boolean }): string[];
+  static attach(
+    editorOrConfig: Editor | Record<string, Editor>,
+    options?: {
+      isCollapsed?: boolean;
+    },
+  ): string[];
 }
-
 export const editorElementId = "editor";
-
 export interface CKEditorInstanceFactories {
   bbcode: CKEditorInstanceFactory;
   richtext: CKEditorInstanceFactory;
 }
-
 export const ckEditorInstanceFactories: CKEditorInstanceFactories = {
   bbcode: createBBCodeEditor,
   richtext: createRichTextEditor,
 };
-
 const attachInspector = (editor: Editor, { dataType, inspector }: ApplicationState): string[] =>
   CKEditorInspector.attach(
     {
@@ -43,7 +43,6 @@ const attachInspector = (editor: Editor, { dataType, inspector }: ApplicationSta
       isCollapsed: inspector === "collapsed",
     },
   );
-
 const optionallyActivateDifferencing = (editor: Editor): void => {
   if (editor.plugins.has(Differencing)) {
     editor.plugins.get(Differencing).activateDifferencing();
@@ -57,7 +56,6 @@ const optionallyActivateDifferencing = (editor: Editor): void => {
  */
 const registerResetUndo = (editor: Editor): void => {
   const undoCommand: Command | undefined = editor.commands.get("undo");
-
   if (undoCommand) {
     //@ts-expect-error Editor extension, no typing available.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
@@ -98,14 +96,11 @@ const initializePreviewData = (editor: ClassicEditor, { dataType }: ApplicationS
       updatePreview(editor.getData(), "text");
   }
 };
-
 export const createCKEditorInstance = async (state: ApplicationState): Promise<ClassicEditor> => {
   const sourceElement = document.getElementById(editorElementId);
-
   if (!sourceElement) {
     throw new Error(`Required element with id ${editorElementId} not defined in HTML.`);
   }
-
   const { dataType, uiLanguage, readOnlyMode } = state;
   let factory: CKEditorInstanceFactory;
   switch (dataType) {
@@ -118,29 +113,22 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
     default:
       throw new Error(`Unknown data type: ${dataType}`);
   }
-
   const editor = await factory(sourceElement, state);
-
   initExamplesAndBindTo(editor, dataType);
-
   initDataTypeSwitch({
     default: dataType,
     onSwitch(mode): void {
       state.dataType = mode;
     },
   });
-
   initUiLanguageSwitch({
     default: uiLanguage,
     onSwitch(lang): void {
       state.uiLanguage = lang;
     },
   });
-
   attachInspector(editor, state);
-
   optionallyActivateDifferencing(editor);
-
   initReadOnlyToggle({
     default: readOnlyMode,
     onSwitch: (mode) => {
@@ -152,9 +140,7 @@ export const createCKEditorInstance = async (state: ApplicationState): Promise<C
       state.readOnlyMode = mode;
     },
   });
-
   initPreview(state);
-
   registerResetUndo(editor);
   initializePreviewData(editor, state);
   registerGlobalEditor(editor);

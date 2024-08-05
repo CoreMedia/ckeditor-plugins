@@ -1,6 +1,5 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import { PluginIntegrationHook } from "../PluginIntegrationHook";
-import { Model } from "@ckeditor/ckeditor5-engine";
+import { Plugin, Model } from "ckeditor5";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
@@ -16,17 +15,12 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 export class ImageElementSupport extends Plugin {
   static readonly pluginName = "DifferencingImageElementSupport";
   static readonly requires = [PluginIntegrationHook];
-
   static readonly #logger: Logger = LoggerProvider.getLogger(ImageElementSupport.pluginName);
-
   init(): void {
     const initInformation = reportInitStart(this);
-
     this.#init();
-
     reportInitEnd(initInformation);
   }
-
   #init(): void {
     const { editor } = this;
     const { model, plugins } = editor;
@@ -38,11 +32,8 @@ export class ImageElementSupport extends Plugin {
       logger.debug("Skipping Image Element Integration. Corresponding plugins unavailable.");
       return;
     }
-
     const pluginIntegrationHook = plugins.get(PluginIntegrationHook);
-
     logger.debug("Waiting for plugin-integration hook to be ready.");
-
     pluginIntegrationHook.on("plugin-integration:ready", () => {
       ["imageBlock", "imageInline"].forEach((itemName): void => {
         if (schema.isRegistered(itemName)) {

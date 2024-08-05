@@ -1,7 +1,6 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { DataFilter } from "@ckeditor/ckeditor5-html-support";
+import { Plugin, DataFilter } from "ckeditor5";
 import ReducedMatcherPattern, {
   InheritingMatcherPattern,
   resolveInheritance,
@@ -26,20 +25,14 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 class RichTextDataFilter extends Plugin {
   public static readonly pluginName = "GeneralRichTextDataFilter" as const;
   static readonly #logger: Logger = LoggerProvider.getLogger(RichTextDataFilter.pluginName);
-
   static readonly requires = [DataFilter];
-
-  #delegate?: DataFilter;
+  #delegate: DataFilter;
   readonly #config: ReducedMatcherPattern[] = [];
-
   init(): Promise<void> | void {
     const logger = RichTextDataFilter.#logger;
-
     const initInformation = reportInitStart(this);
-
     const editor = this.editor;
     this.#delegate = editor.plugins.get(DataFilter);
-
     this.#loadAllowedConfig(COREMEDIA_RICHTEXT_1_0_CONFIG);
 
     // Add alias elements from default data-processing.
@@ -84,17 +77,18 @@ class RichTextDataFilter extends Plugin {
         inherit: "td",
       },
     ]);
-
     const config = getConfig(editor.config);
     // Doing this as an extra step, allows using previously introduced aliases
     // (see above) as reference. Thus, you may also define an alias for
     // `<h1>` now.
     this.loadAliases(config.aliases ?? []);
-
     if (logger.isDebugEnabled()) {
-      logger.debug("Declared elements and attributes to GHS.", { config: { ...this.#config } });
+      logger.debug("Declared elements and attributes to GHS.", {
+        config: {
+          ...this.#config,
+        },
+      });
     }
-
     reportInitEnd(initInformation);
   }
 
@@ -126,5 +120,4 @@ class RichTextDataFilter extends Plugin {
     this.#loadAllowedConfig(patterns);
   }
 }
-
 export default RichTextDataFilter;

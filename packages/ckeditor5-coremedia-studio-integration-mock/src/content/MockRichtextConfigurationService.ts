@@ -5,9 +5,8 @@ import { defaultMockContentProvider, MockContentProvider } from "./MockContentPl
 import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { Editor } from "ckeditor5";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
-
 class MockRichtextConfigurationService implements RichtextConfigurationService {
   readonly #contentProvider: MockContentProvider;
   readonly #editor: Editor;
@@ -19,13 +18,11 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     this.#contentProvider = contentProvider;
     this.#editor = editor;
   }
-
   async hasLinkableType(uriPath: UriPath): Promise<boolean> {
     const contentReferenceService = serviceAgent.getService(createContentReferenceServiceDescriptor());
     if (!contentReferenceService) {
       return Promise.reject("ContentReferenceService unavailable");
     }
-
     const contentReference = await contentReferenceService.getContentReference(uriPath);
     if (contentReference.contentUri) {
       return this.#contentProvider(contentReference.contentUri).linkable;
@@ -43,7 +40,6 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     }
     return false;
   }
-
   async isEmbeddableType(uriPath: UriPath): Promise<boolean> {
     if (isUriPath(uriPath)) {
       const mockContent = this.#contentProvider(uriPath);
@@ -51,7 +47,6 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     }
     return false;
   }
-
   async resolveBlobPropertyReference(uriPath: UriPath): Promise<string> {
     if (isUriPath(uriPath)) {
       const mockContent = this.#contentProvider(uriPath);
@@ -64,10 +59,8 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     }
     throw new Error(`'${uriPath}' is not a valid URI-path.`);
   }
-
   getName(): string {
     return "richtextConfigurationService";
   }
 }
-
 export default MockRichtextConfigurationService;

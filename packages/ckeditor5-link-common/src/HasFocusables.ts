@@ -1,4 +1,4 @@
-import { ViewCollection } from "@ckeditor/ckeditor5-ui";
+import { ViewCollection } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
 
 /**
@@ -8,7 +8,6 @@ import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/s
 interface HasFocusables {
   readonly _focusables: ViewCollection;
 }
-
 const isHasFocusables = (value: unknown): value is HasFocusables =>
   typeof value === "object" && !!value && "_focusables" in value && value._focusables instanceof ViewCollection;
 

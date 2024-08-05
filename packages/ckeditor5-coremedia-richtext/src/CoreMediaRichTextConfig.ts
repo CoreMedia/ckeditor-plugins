@@ -1,9 +1,7 @@
 import { defaultStrictness, Strictness } from "./Strictness";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-import { Config as CKEditorConfig } from "@ckeditor/ckeditor5-utils";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { EditorConfig } from "@ckeditor/ckeditor5-core";
-
+import { Config as CKEditorConfig, EditorConfig } from "ckeditor5";
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
 /**
@@ -27,26 +25,22 @@ export const compatibilityKeys: readonly string[] = ["latest", "v10"];
  * The type of compatibility keys.
  */
 export type CompatibilityKey = (typeof compatibilityKeys)[number];
-
 export interface CompatibilityConfig {
   /**
    * Compatibility mode of data-processing.
    */
   readonly compatibility?: CompatibilityKey;
 }
-
 export interface CommonCoreMediaRichTextConfig extends CompatibilityConfig {
   /**
    * The strictness when validating against CoreMedia RichText 1.0 DTD.
    */
   readonly strictness?: Strictness;
 }
-
 export interface LatestCoreMediaRichTextConfig extends CommonCoreMediaRichTextConfig {
   readonly compatibility: "latest";
   readonly rules?: RuleConfig[];
 }
-
 const isLatestCoreMediaRichTextConfig = (value: unknown): value is LatestCoreMediaRichTextConfig => {
   if (value && typeof value === "object") {
     if (value.hasOwnProperty("compatibility")) {
@@ -56,7 +50,6 @@ const isLatestCoreMediaRichTextConfig = (value: unknown): value is LatestCoreMed
   }
   return false;
 };
-
 export interface V10CoreMediaRichTextConfig extends CommonCoreMediaRichTextConfig {
   readonly compatibility: "v10";
   /**
@@ -64,7 +57,6 @@ export interface V10CoreMediaRichTextConfig extends CommonCoreMediaRichTextConfi
    */
   readonly rules?: FilterRuleSetConfiguration;
 }
-
 const isV10CoreMediaRichTextConfig = (value: unknown): value is V10CoreMediaRichTextConfig => {
   if (value && typeof value === "object") {
     if (value.hasOwnProperty("compatibility")) {
@@ -80,7 +72,6 @@ const isV10CoreMediaRichTextConfig = (value: unknown): value is V10CoreMediaRich
  */
 type CoreMediaRichTextConfig = Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig;
 export default CoreMediaRichTextConfig;
-
 export type DefaultCoreMediaRichTextConfig = Required<
   Pick<CommonCoreMediaRichTextConfig, "strictness" | "compatibility">
 >;
@@ -88,7 +79,6 @@ export const defaultCoreMediaRichTextConfig: DefaultCoreMediaRichTextConfig = {
   strictness: defaultStrictness,
   compatibility: "latest",
 };
-
 export const getCoreMediaRichTextConfig = (
   config?: CKEditorConfig<EditorConfig>,
 ): CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
@@ -98,7 +88,6 @@ export const getCoreMediaRichTextConfig = (
     ...rawConfig,
   };
   const { compatibility } = withDefaults;
-
   if (isLatestCoreMediaRichTextConfig(withDefaults)) {
     return withDefaults;
   }
@@ -107,7 +96,6 @@ export const getCoreMediaRichTextConfig = (
   }
   throw new Error(`Incompatible configuration: ${compatibility}`);
 };
-
 export const getLatestCoreMediaRichTextConfig = (
   config?: CKEditorConfig<EditorConfig>,
 ): LatestCoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {
@@ -117,7 +105,6 @@ export const getLatestCoreMediaRichTextConfig = (
   }
   return withDefaults;
 };
-
 export const getV10CoreMediaRichTextConfig = (
   config?: CKEditorConfig<EditorConfig>,
 ): V10CoreMediaRichTextConfig & DefaultCoreMediaRichTextConfig => {

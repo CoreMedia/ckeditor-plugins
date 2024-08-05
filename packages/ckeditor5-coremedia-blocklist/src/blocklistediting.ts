@@ -1,6 +1,5 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
-import { Collection } from "@ckeditor/ckeditor5-utils";
+import { Plugin, Collection } from "ckeditor5";
 import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Subscription } from "rxjs";
@@ -35,7 +34,6 @@ export default class BlocklistEditing extends Plugin {
    * @private
    */
   #blocklistServiceSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
-
   init(): void {
     const editor = this.editor;
     editor.commands.add(BLOCKLIST_COMMAND_NAME, new BlocklistCommand(editor));
@@ -52,7 +50,6 @@ export default class BlocklistEditing extends Plugin {
     // Connect to the BlockList Service to retrieve the list of words to highlight
     this.#subscribeToBlocklistService();
   }
-
   #subscribeToBlocklistService(): void {
     const onServiceRegisteredFunction = (services: BlocklistService[]): void => {
       // No BlocklistService registered yet, no need to compute further
@@ -79,7 +76,6 @@ export default class BlocklistEditing extends Plugin {
       .observeServices<BlocklistService>(createBlocklistServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
   }
-
   override destroy() {
     if (this.#blocklistServiceSubscription) {
       this.#blocklistServiceSubscription.unsubscribe();
@@ -98,11 +94,9 @@ export default class BlocklistEditing extends Plugin {
       next: (blockedWords: string[]) => {
         // Get all words that differ from blockedWords and internalBlocklist
         const { addedWords, removedWords } = this.#getAddedAndRemovedWords(blockedWords, this.internalBlocklist);
-
         addedWords.forEach((word) => {
           this.#addMarkersForWord(word);
         });
-
         removedWords.forEach((word) => {
           this.#removeMarkersForWord(word);
         });
@@ -113,7 +107,6 @@ export default class BlocklistEditing extends Plugin {
         }
       },
     });
-
     const initialWords = await blocklistService.getBlocklist();
     initialWords.forEach((word) => {
       this.#addMarkersForWord(word);
@@ -135,10 +128,19 @@ export default class BlocklistEditing extends Plugin {
    * @returns an object, holding information about changes between the lists
    * @private
    */
-  #getAddedAndRemovedWords(newList: string[], oldList: string[]): { addedWords: string[]; removedWords: string[] } {
+  #getAddedAndRemovedWords(
+    newList: string[],
+    oldList: string[],
+  ): {
+    addedWords: string[];
+    removedWords: string[];
+  } {
     const addedWords = newList.filter((word) => !oldList.includes(word));
     const removedWords = oldList.filter((word) => !newList.includes(word));
-    return { addedWords, removedWords };
+    return {
+      addedWords,
+      removedWords,
+    };
   }
 
   /**

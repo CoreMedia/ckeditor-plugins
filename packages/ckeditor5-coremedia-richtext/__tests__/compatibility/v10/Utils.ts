@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import CoreMediaRichTextConfig, { COREMEDIA_RICHTEXT_CONFIG_KEY } from "../../../src/CoreMediaRichTextConfig";
-import { Config as CKEditorConfig } from "@ckeditor/ckeditor5-utils";
+import { Config as CKEditorConfig } from "ckeditor5";
 import { getConfig } from "../../../src/compatibility/v10/V10CoreMediaRichTextConfig";
 
 /**
@@ -34,9 +34,7 @@ export const encodeString = (str: string): string => {
   const chars: string[] = [...text];
   return chars.map((c) => `&#${c.codePointAt(0)};`).join("");
 };
-
 const xmlParser = new DOMParser();
-
 export const parseXml = (xmlData: string): Document => {
   const xmlDocument: Document = xmlParser.parseFromString(xmlData, "text/xml");
   if (xmlDocument.documentElement.outerHTML.includes("parsererror")) {
@@ -44,14 +42,15 @@ export const parseXml = (xmlData: string): Document => {
   }
   return xmlDocument;
 };
-
 const richTextConfig: CoreMediaRichTextConfig = {
   compatibility: "v10",
 };
 // Need to mock `get` as starting with v11 we cannot provide an empty
 // configuration anymore, as we have to set the compatibility explicitly.
 // @ts-expect-error - Requires Generic Type since CKEditor 5 37.x.
-const v10Config: Pick<CKEditorConfig, "get"> & { [COREMEDIA_RICHTEXT_CONFIG_KEY]: CoreMediaRichTextConfig } = {
+const v10Config: Pick<CKEditorConfig, "get"> & {
+  [COREMEDIA_RICHTEXT_CONFIG_KEY]: CoreMediaRichTextConfig;
+} = {
   [COREMEDIA_RICHTEXT_CONFIG_KEY]: richTextConfig,
   // Lightweight mocking only...
   get(name: string): unknown | undefined {
@@ -61,7 +60,6 @@ const v10Config: Pick<CKEditorConfig, "get"> & { [COREMEDIA_RICHTEXT_CONFIG_KEY]
     return this[COREMEDIA_RICHTEXT_CONFIG_KEY];
   },
 };
-
 export const getV10Config = (): ReturnType<typeof getConfig> =>
   // @ts-expect-error - no strict typing here. It is legacy anyway.
   getConfig(v10Config);

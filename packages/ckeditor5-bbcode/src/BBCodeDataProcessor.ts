@@ -5,14 +5,12 @@ import {
   MatcherPattern,
   ViewDocument,
   ViewDocumentFragment,
-} from "@ckeditor/ckeditor5-engine";
-
+} from "ckeditor5";
 import { bbcode2html } from "./bbcode2html";
 import { html2bbcode } from "./html2bbcode";
 import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
 import { bbCodeLogger } from "./BBCodeLogger";
-
 const fragmentToString = (domFragment: Node | DocumentFragment): string =>
   Array.from(domFragment.childNodes)
     .map((cn) => (cn as Element).outerHTML || cn.nodeValue)

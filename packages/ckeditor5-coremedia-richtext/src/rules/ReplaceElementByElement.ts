@@ -1,22 +1,19 @@
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { PriorityString } from "ckeditor5";
 import { Direction, resolveDirectionToConfig } from "./Direction";
 import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
-
 export interface ReplaceElementByElementConfig {
   viewLocalName: string;
   dataLocalName: string;
   direction?: Direction;
   priority?: PriorityString;
 }
-
 export const defaultReplaceElementByElementConfig: Required<
   Omit<ReplaceElementByElementConfig, "viewLocalName" | "dataLocalName">
 > = {
   direction: "bijective",
   priority: "normal",
 };
-
 export const replaceElementByElement = (config: ReplaceElementByElementConfig): RuleConfig => {
   const { viewLocalName, dataLocalName, direction, priority } = {
     ...defaultReplaceElementByElementConfig,

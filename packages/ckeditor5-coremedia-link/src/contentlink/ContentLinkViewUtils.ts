@@ -1,6 +1,5 @@
-import { View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { View, ContextualBalloon, Editor } from "ckeditor5";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
 
 /**

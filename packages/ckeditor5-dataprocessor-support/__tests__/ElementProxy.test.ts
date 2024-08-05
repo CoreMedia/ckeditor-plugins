@@ -1,10 +1,8 @@
 /* eslint no-null/no-null: off */
 
 import ElementProxy, { ElementFilterRule, ElementFilterParams } from "../src/ElementProxy";
-
 import "jest-xml-matcher";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-
+import { Editor } from "ckeditor5";
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
@@ -58,43 +56,36 @@ describe("Should Respecting (Im-)Mutable State", () => {
   const htmlDivElement = window.document.createElement("div");
   htmlDivElement.setAttribute("class", "testClass");
   const immutableElement = new ElementProxy(htmlDivElement, MOCK_EDITOR, {}, false);
-
   test("should not be able to delete element", () => {
     expect(() => (immutableElement.remove = true)).toThrowError();
   });
-
   test("should not be able to replace element by children", () => {
     expect(() => (immutableElement.replaceByChildren = true)).toThrowError();
   });
-
   test("should not be able to change name", () => {
     const getValue = () => immutableElement.name;
     const previousValue = getValue();
     expect(() => (immutableElement.name = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
-
   test("should not be able to change attribute value", () => {
     const getValue = () => immutableElement.attributes.class;
     const previousValue = getValue();
     expect(() => (immutableElement.attributes.class = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
-
   test("should not be able to add additional class", () => {
     const getValue = () => immutableElement.classList;
     const previousValue = getValue();
     expect(() => immutableElement.classList.add("test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
-
   test("should not be able to add attribute", () => {
     const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
     expect(() => (immutableElement.attributes.id = "test")).toThrowError();
     expect(getValue()).toStrictEqual(previousValue);
   });
-
   test("should not be able to delete attribute", () => {
     const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
@@ -156,12 +147,10 @@ describe("ElementProxy.classList", () => {
     // Proxy: Don't change proxied element (yet, will be done on `persist`).
     expect(domElement.getAttribute("class")).toStrictEqual(valueBefore);
   };
-
   beforeEach(() => {
     domElement = window.document.createElement("div");
     proxy = new ElementProxy(domElement, MOCK_EDITOR);
   });
-
   describe("classList.value", () => {
     // noinspection ES6DestructuringVariablesMerge
     describe.each`
@@ -176,7 +165,6 @@ describe("ElementProxy.classList", () => {
         setClass(domClass);
         expect(proxy.classList.value).toStrictEqual(expectedClass);
       });
-
       test("Should not normalize on plain set", () => {
         proxy.classList.value = domClass;
         cmpElement.classList.value = domClass;
@@ -185,7 +173,6 @@ describe("ElementProxy.classList", () => {
       });
     });
   });
-
   describe("classList.add", () => {
     test.each`
       before                 | add                 | after              | count | comment
@@ -202,10 +189,8 @@ describe("ElementProxy.classList", () => {
         proxy.classList.add(...add);
         cmpElement.classList.add(...add);
       }
-
       validate(before, after, count);
     });
-
     test.each`
       add
       ${"new value"}
@@ -228,12 +213,10 @@ describe("ElementProxy.classList", () => {
         proxyFunc = () => proxy.classList.add(...add);
         cmpFunc = () => cmpElement.classList.add(...add);
       }
-
       expect(proxyFunc).toThrow();
       expect(cmpFunc).toThrow();
     });
   });
-
   describe("classList.remove", () => {
     test.each`
       before                         | remove                  | after          | count | comment
@@ -255,11 +238,9 @@ describe("ElementProxy.classList", () => {
           proxy.classList.remove(...remove);
           cmpElement.classList.remove(...remove);
         }
-
         validate(before, after, count);
       },
     );
-
     test.each`
       remove
       ${"new value"}
@@ -282,12 +263,10 @@ describe("ElementProxy.classList", () => {
         proxyFunc = () => proxy.classList.remove(...remove);
         cmpFunc = () => cmpElement.classList.remove(...remove);
       }
-
       expect(proxyFunc).toThrow();
       expect(cmpFunc).toThrow();
     });
   });
-
   describe("classList.replace", () => {
     test.each`
       before                          | replace    | replaceBy  | after                 | count | comment
@@ -306,11 +285,9 @@ describe("ElementProxy.classList", () => {
         setClass(before);
         proxy.classList.replace(replace, replaceBy);
         cmpElement.classList.replace(replace, replaceBy);
-
         validate(before, after, count);
       },
     );
-
     test.each`
       replace        | replaceBy
       ${` \told \t`} | ${"new"}
@@ -321,13 +298,11 @@ describe("ElementProxy.classList", () => {
         setClass("some");
         const proxyFunc = () => proxy.classList.replace(replace, replaceBy);
         const cmpFunc = () => cmpElement.classList.replace(replace, replaceBy);
-
         expect(proxyFunc).toThrow();
         expect(cmpFunc).toThrow();
       },
     );
   });
-
   describe("classList.toggle", () => {
     test.each`
       before                            | toggle        | force        | after                | count | comment
@@ -349,11 +324,9 @@ describe("ElementProxy.classList", () => {
         setClass(before);
         proxy.classList.toggle(toggle, force);
         cmpElement.classList.toggle(toggle, force);
-
         validate(before, after, count);
       },
     );
-
     test.each`
       toggle              | force
       ${" \ttoggling \t"} | ${undefined}
@@ -365,7 +338,6 @@ describe("ElementProxy.classList", () => {
         setClass("some");
         const proxyFunc = () => proxy.classList.toggle(toggle, force);
         const cmpFunc = () => cmpElement.classList.toggle(toggle, force);
-
         expect(proxyFunc).toThrow();
         expect(cmpFunc).toThrow();
       },
@@ -391,7 +363,6 @@ type ApplyRulesData = [
     restart?: string;
   },
 ];
-
 describe("ElementProxy.applyRules()", () => {
   // noinspection XmlUnusedNamespaceDeclaration
   test.each<ApplyRulesData>([
@@ -854,13 +825,10 @@ describe("ElementProxy.applyRules()", () => {
   ])("(%#) %s", (name, testData) => {
     const serializer = new XMLSerializer();
     const xpath = "//el";
-
     const xmlDocument: Document = requireValidXml(testData.from);
     const xmlExpectedDocument: Document = requireValidXml(testData.to);
-
     const xmlElement: Element = xmlDocument.evaluate(xpath, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
       .singleNodeValue as Element;
-
     if (!xmlElement) {
       throw new Error(`Test Setup Issue: Unable resolving XPath '${xpath}' to element under test in: ${testData.from}`);
     }
@@ -873,11 +841,9 @@ describe("ElementProxy.applyRules()", () => {
         `Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`,
       );
     }
-
     const me = new ElementProxy(xmlElement, MOCK_EDITOR);
     const appliedRulesResult = me.applyRules(...testData.rules);
     expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to);
-
     if (testData.restart) {
       const expectedRestart = xmlDocument.evaluate(
         testData.restart,

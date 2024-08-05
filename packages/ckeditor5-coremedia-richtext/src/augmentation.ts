@@ -1,6 +1,5 @@
 import { CoreMediaRichTextConfig, COREMEDIA_RICHTEXT_CONFIG_KEY, CoreMediaRichText, LinkIntegration } from "./index";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface EditorConfig {
     /**
      * The configuration for General Rich Text Support. To be used, especially
@@ -9,7 +8,6 @@ declare module "@ckeditor/ckeditor5-core" {
      */
     [COREMEDIA_RICHTEXT_CONFIG_KEY]?: CoreMediaRichTextConfig;
   }
-
   interface PluginsMap {
     [CoreMediaRichText.pluginName]: CoreMediaRichText;
     [LinkIntegration.pluginName]: LinkIntegration;

@@ -1,11 +1,9 @@
 import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
+import { ClassicEditor } from "ckeditor5";
 import MockInputExamplePlugin, {
   InputExampleElement,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
-
 const INPUT_EXAMPLE_CONTENT_DIV_CLASS = "inputExampleContentDiv";
-
 const initInputExampleContent = (editor: ClassicEditor) => {
   const mockContentPlugin = editor.plugins.get(MockContentPlugin);
   const mockInputExamplePlugin = editor.plugins.get(MockInputExamplePlugin);
@@ -21,7 +19,6 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     name: "Not insertable Content Type",
     linkable: false,
   });
-
   const singleInputDocuments: InputExampleElement[] = [
     {
       label: "Document 1",
@@ -96,7 +93,6 @@ const initInputExampleContent = (editor: ClassicEditor) => {
       items: [requireExplicitContent(906)],
     },
   ];
-
   const singleInputs = [
     {
       label: "Root",
@@ -220,53 +216,82 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     },
     {
       label: `Insertable Documents (incl. Slow)`,
-      tooltip: `${singleInputDocuments.length + slowDocuments.length} including ${
-        slowDocuments.length
-      } documents at the start which load slowly.`,
+      tooltip: `${singleInputDocuments.length + slowDocuments.length} including ${slowDocuments.length} documents at the start which load slowly.`,
       classes: ["linkable", "type-collection"],
       items: slowDocuments.concat(singleInputDocuments).flatMap((item) => item.items),
     },
   ];
-
   const externalContents: InputExampleElement[] = [
     {
       label: "Insertable external content",
       tooltip: "Insertable External Content",
       classes: ["linkable"],
-      items: [{ externalId: 2000 }],
+      items: [
+        {
+          externalId: 2000,
+        },
+      ],
     },
     {
       label: "Already imported external content",
       tooltip: "Already imported external Content",
       classes: ["linkable"],
-      items: [{ externalId: 2002 }],
+      items: [
+        {
+          externalId: 2002,
+        },
+      ],
     },
     {
       label: "Not insertable external content",
       tooltip: "Not droppable external content (Unknown type)",
       classes: ["non-linkable"],
-      items: [{ externalId: 2004 }],
+      items: [
+        {
+          externalId: 2004,
+        },
+      ],
     },
     {
       label: "Multiple insertable external contents",
       tooltip: "Multiple insertable external contents",
       classes: ["linkable"],
-      items: [{ externalId: 2000 }, { externalId: 2002 }],
+      items: [
+        {
+          externalId: 2000,
+        },
+        {
+          externalId: 2002,
+        },
+      ],
     },
     {
       label: "Multiple external contents (including not insertable)",
       tooltip: "Multiple external contents (including not insertable)",
       classes: ["non-linkable"],
-      items: [{ externalId: 2000 }, { externalId: 2002 }, { externalId: 2004 }],
+      items: [
+        {
+          externalId: 2000,
+        },
+        {
+          externalId: 2002,
+        },
+        {
+          externalId: 2004,
+        },
+      ],
     },
     {
       label: "External content - error",
       tooltip: "External content - error",
       classes: ["linkable"],
-      items: [{ externalId: 2006 }],
+      items: [
+        {
+          externalId: 2006,
+        },
+      ],
     },
   ];
-
   const allData: InputExampleElement[] = [
     ...singleInputs,
     ...singleInputsNotInsertable,
@@ -277,25 +302,28 @@ const initInputExampleContent = (editor: ClassicEditor) => {
     ...createBulkOf50Contents(),
     ...externalContents,
   ];
-
   const main = () => {
     const examplesEl = document.getElementById(INPUT_EXAMPLE_CONTENT_DIV_CLASS);
     if (!examplesEl) {
       console.error(`Required element missing: ${INPUT_EXAMPLE_CONTENT_DIV_CLASS}`);
       return;
     }
-
     allData.forEach((data) => {
       const insertDiv: HTMLDivElement = mockInputExamplePlugin.createInsertElement(data);
       examplesEl.appendChild(insertDiv);
     });
     console.log(`Initialized ${allData.length} insert examples.`);
   };
-
   main();
 };
-
-const createBulkOf50Contents = (): [{ classes: string[]; tooltip: string; label: string; items: number[] }] => {
+const createBulkOf50Contents = (): [
+  {
+    classes: string[];
+    tooltip: string;
+    label: string;
+    items: number[];
+  },
+] => {
   const ids = [];
   for (let i = 13000; i < 13100; i = i + 2) {
     ids.push(i);

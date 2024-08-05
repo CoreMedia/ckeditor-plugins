@@ -1,17 +1,14 @@
 /* eslint no-null/no-null: off */
-import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
+
 import ContentInputDataCache from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import { Item as ModelItem, Range as ModelRange } from "@ckeditor/ckeditor5-engine";
-
+import { EventInfo, DowncastConversionApi, Item as ModelItem, Range as ModelRange } from "ckeditor5";
 export interface AddMarkerEventData {
   markerName: string;
   range?: ModelRange;
   markerRange: ModelRange;
   item: ModelItem;
 }
-
 export interface RemoveMarkerEventData {
   markerName: string;
   markerRange: ModelRange;
@@ -61,12 +58,13 @@ export const addContentMarkerConversion =
     if (contentInputData.itemContext.isInline) {
       loadMaskClasses.push("cm-load-mask--inline");
     }
-    const viewContainer = conversionApi.writer.createUIElement("div", { class: loadMaskClasses.join(" ") });
+    const viewContainer = conversionApi.writer.createUIElement("div", {
+      class: loadMaskClasses.join(" "),
+    });
     conversionApi.writer.insert(viewPosition, viewContainer);
     conversionApi.mapper.bindElementToMarker(viewContainer, data.markerName);
     const markerData = ContentClipboardMarkerDataUtils.splitMarkerName(data.markerName);
     callback(markerData);
-
     evt.stop();
   };
 
@@ -95,8 +93,6 @@ export const removeContentMarkerConversion = (
     const range = conversionApi.writer.createRangeOn(element);
     conversionApi.writer.clear(range, element);
   });
-
   conversionApi.writer.clearClonedElementsGroup(data.markerName);
-
   evt.stop();
 };

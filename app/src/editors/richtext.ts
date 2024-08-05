@@ -1,28 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Alignment } from "@ckeditor/ckeditor5-alignment";
-import { AutoLink, Link, LinkImage } from "@ckeditor/ckeditor5-link";
-import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
-import { Autosave } from "@ckeditor/ckeditor5-autosave";
-import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
-import { Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline } from "@ckeditor/ckeditor5-basic-styles";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
-import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
-import { Essentials } from "@ckeditor/ckeditor5-essentials";
-import { FindAndReplace } from "@ckeditor/ckeditor5-find-and-replace";
-import { Heading } from "@ckeditor/ckeditor5-heading";
+
 // ImageInline: See ckeditor/ckeditor5#12027.
-import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.
-import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
-import { ImageStyle, ImageTextAlternative, ImageToolbar } from "@ckeditor/ckeditor5-image";
-import { Indent } from "@ckeditor/ckeditor5-indent";
-import { List } from "@ckeditor/ckeditor5-list";
-import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
-import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
-import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
-import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
-import { Table, TableToolbar } from "@ckeditor/ckeditor5-table";
-import { Highlight } from "@ckeditor/ckeditor5-highlight";
 
 import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
 import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
@@ -30,7 +10,6 @@ import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboa
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
-
 import {
   CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
@@ -39,8 +18,43 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-essentials";
 import { initInputExampleContent } from "../inputExampleContents";
 import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
-
-import { icons, PluginConstructor } from "@ckeditor/ckeditor5-core";
+import {
+  Alignment,
+  AutoLink,
+  Link,
+  LinkImage,
+  Autoformat,
+  Autosave,
+  BlockQuote,
+  Bold,
+  Code,
+  Italic,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  Underline,
+  ClassicEditor,
+  CodeBlock,
+  Essentials,
+  FindAndReplace,
+  Heading,
+  ImageInline,
+  ImageBlockEditing,
+  ImageStyle,
+  ImageTextAlternative,
+  ImageToolbar,
+  Indent,
+  List,
+  Paragraph,
+  PasteFromOffice,
+  RemoveFormat,
+  SourceEditing,
+  Table,
+  TableToolbar,
+  Highlight,
+  icons,
+  PluginConstructor,
+} from "ckeditor5";
 import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
 import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/src/paste/PasteContentPlugin";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
@@ -61,14 +75,12 @@ import { ApplicationState } from "../ApplicationState";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import { updatePreview } from "../preview";
-
 const {
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
   objectSizeFull: pageDefaultIcon,
 } = icons;
-
 const imagePlugins: PluginConstructor[] = [
   ContentImagePlugin,
   ImageInline,
@@ -121,14 +133,21 @@ const v10RichTextRuleConfigurations: FilterRuleSetConfiguration = {
  * via hash parameter `skipLinkAttributes`.
  */
 const linkAttributesConfig: LinkAttributesConfig = getHashParam("skipLinkAttributes")
-  ? { attributes: [] }
+  ? {
+      attributes: [],
+    }
   : {
       attributes: [
-        { view: "title", model: "linkTitle" },
-        { view: "data-xlink-actuate", model: "linkActuate" },
+        {
+          view: "title",
+          model: "linkTitle",
+        },
+        {
+          view: "data-xlink-actuate",
+          model: "linkActuate",
+        },
       ],
     };
-
 const getRichTextConfig = (
   richTextCompatibility: string | true,
 ): Partial<LatestCoreMediaRichTextConfig> | V10CoreMediaRichTextConfig => {
@@ -147,7 +166,6 @@ const getRichTextConfig = (
     rules: richTextRuleConfigurations,
   };
 };
-
 export const createRichTextEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
   state: ApplicationState,
@@ -259,16 +277,49 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
         },
       ],
     },
-
     heading: {
       options: [
-        { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
-        { model: "heading1", view: "h1", title: "Heading 1", class: "ck-heading_heading1" },
-        { model: "heading2", view: "h2", title: "Heading 2", class: "ck-heading_heading2" },
-        { model: "heading3", view: "h3", title: "Heading 3", class: "ck-heading_heading3" },
-        { model: "heading4", view: "h4", title: "Heading 4", class: "ck-heading_heading4" },
-        { model: "heading5", view: "h5", title: "Heading 5", class: "ck-heading_heading5" },
-        { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" },
+        {
+          model: "paragraph",
+          title: "Paragraph",
+          class: "ck-heading_paragraph",
+        },
+        {
+          model: "heading1",
+          view: "h1",
+          title: "Heading 1",
+          class: "ck-heading_heading1",
+        },
+        {
+          model: "heading2",
+          view: "h2",
+          title: "Heading 2",
+          class: "ck-heading_heading2",
+        },
+        {
+          model: "heading3",
+          view: "h3",
+          title: "Heading 3",
+          class: "ck-heading_heading3",
+        },
+        {
+          model: "heading4",
+          view: "h4",
+          title: "Heading 4",
+          class: "ck-heading_heading4",
+        },
+        {
+          model: "heading5",
+          view: "h5",
+          title: "Heading 5",
+          class: "ck-heading_heading5",
+        },
+        {
+          model: "heading6",
+          view: "h6",
+          title: "Heading 6",
+          class: "ck-heading_heading6",
+        },
       ],
     },
     link: {
@@ -365,7 +416,10 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
         // that the same attributes are kept as is from CMS. For example, the
         // dir-attribute, which is valid for `<span>` must not be removed just
         // because CKEditor is not configured to handle it.
-        { name: "mark", inherit: "span" },
+        {
+          name: "mark",
+          inherit: "span",
+        },
       ],
     },
     // @ts-expect-error - TODO: Typing issues as it seems.
@@ -379,7 +433,13 @@ export const createRichTextEditor: CKEditorInstanceFactory = (
     },
     [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
       // Demonstrates, how you may add more contents on the fly.
-      contents: [{ id: 2, name: "Some Example Document", type: "document" }],
+      contents: [
+        {
+          id: 2,
+          name: "Some Example Document",
+          type: "document",
+        },
+      ],
     },
   }).then((newEditor: ClassicEditor) => {
     initInputExampleContent(newEditor);

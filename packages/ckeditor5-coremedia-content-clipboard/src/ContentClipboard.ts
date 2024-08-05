@@ -1,17 +1,16 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import {
+  Plugin,
+  Editor,
   Clipboard,
   ClipboardContentInsertionEvent,
   ClipboardInputTransformationData,
   ClipboardInputTransformationEvent,
   ClipboardPipeline,
   ViewDocumentClipboardInputEvent,
-} from "@ckeditor/ckeditor5-clipboard";
-import {
   Range as ModelRange,
   ViewRange,
   DocumentFragment as ModelDocumentFragment,
@@ -19,8 +18,8 @@ import {
   ViewDocument,
   StylesProcessor,
   DomEventData,
-} from "@ckeditor/ckeditor5-engine";
-import { EventInfo } from "@ckeditor/ckeditor5-utils";
+  EventInfo,
+} from "ckeditor5";
 import {
   ClipboardEventData,
   ClipboardInputEventData,
@@ -37,7 +36,6 @@ import {
   IsDroppableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
 import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropServiceWrapper";
-
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
 /**
@@ -62,9 +60,7 @@ const isContentEventData = <T extends ClipboardEventData>(value: T): value is T 
 export default class ContentClipboard extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
-
   static readonly requires = [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
-
   init(): void {
     const initInformation: InitInformation = reportInitStart(this);
     this.#initEventListeners();
@@ -86,7 +82,6 @@ export default class ContentClipboard extends Plugin {
     this.listenTo<ViewDocumentDragOverEvent>(viewDocument, "dragover", ContentClipboard.#dragOverHandler, {
       priority: "low",
     });
-
     if (editor.plugins.has(ClipboardPipeline)) {
       const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
       this.listenTo<ClipboardInputTransformationEvent>(
@@ -96,12 +91,10 @@ export default class ContentClipboard extends Plugin {
       );
     }
   }
-
   override destroy(): void {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
     if (editor.plugins.has(ClipboardPipeline)) {
@@ -127,15 +120,12 @@ export default class ContentClipboard extends Plugin {
     if (!isDroppableEvaluationResult) {
       return;
     }
-
     data.preventDefault();
-
     if (isDroppableEvaluationResult === "PENDING") {
       ContentClipboard.#logger.debug("Drag over evaluation is currently pending", data);
       data.dataTransfer.dropEffect = "none";
       return;
     }
-
     if (isDroppableEvaluationResult.isDroppable) {
       data.dataTransfer.dropEffect = "link";
     } else {
@@ -163,12 +153,10 @@ export default class ContentClipboard extends Plugin {
     if (!dataTransfer) {
       return;
     }
-
     const uris: string[] | undefined = receiveDraggedItemsFromDataTransfer(dataTransfer);
     if (!uris) {
       return;
     }
-
     const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(uris);
     // Return if this is no CoreMedia content drop.
     if (!isDroppableResult) {
@@ -204,12 +192,10 @@ export default class ContentClipboard extends Plugin {
     if (!dataTransfer) {
       return;
     }
-
     const uris: string[] | undefined = receiveDraggedItemsFromDataTransfer(dataTransfer);
     if (!uris) {
       return;
     }
-
     const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(uris);
     if (!isDroppableResult || isDroppableResult === "PENDING") {
       return;
@@ -219,9 +205,7 @@ export default class ContentClipboard extends Plugin {
     if (!isDroppableResult.uris || isDroppableResult.uris.length === 0) {
       return;
     }
-
     const droppableUris = isDroppableResult.uris;
-
     const { editor } = this;
 
     // Return if no range has been set (usually indicated by a blue cursor
@@ -247,9 +231,7 @@ export default class ContentClipboard extends Plugin {
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterward.
     disableUndo(editor.plugins.get(UndoSupport));
-
     const { model } = editor;
-
     insertContentMarkers(editor, targetRange, droppableUris);
     // Fire content insertion event in a single change block to allow other
     // handlers to run in the same block without post-fixers called in between

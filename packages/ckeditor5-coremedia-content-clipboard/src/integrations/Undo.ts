@@ -1,5 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { UndoEditing } from "@ckeditor/ckeditor5-undo";
+import { Plugin, UndoEditing } from "ckeditor5";
 import {
   CommandHandler,
   disableCommand,
@@ -8,7 +7,6 @@ import {
   optionalCommandNotFound,
 } from "@coremedia/ckeditor5-core-common/src/Commands";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-
 const PLUGIN_NAME = "CoreMediaContentClipboardUndoSupport";
 
 /**
@@ -25,14 +23,10 @@ export class UndoSupport extends Plugin {
    * Flag to signal, if supported plugin is available or not.
    */
   #enabled = false;
-
   init(): void {
     const { editor } = this;
-
     const initInformation = reportInitStart(this);
-
     this.#enabled = editor.plugins.has(UndoEditing);
-
     reportInitEnd(initInformation);
   }
 
@@ -55,7 +49,6 @@ export class UndoSupport extends Plugin {
     }
     this.#applyToCommands(UndoSupport.#enableHandler);
   }
-
   #applyToCommands(handler: CommandHandler): void {
     const { editor } = this;
     const commandNames = UndoSupport.#commandNames;

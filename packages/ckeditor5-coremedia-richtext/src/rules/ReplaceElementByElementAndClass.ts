@@ -1,8 +1,7 @@
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { PriorityString } from "ckeditor5";
 import { Direction, resolveDirectionToConfig } from "./Direction";
 import { isElement, removeClass, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
-
 export interface ReplaceElementByElementAndClassConfig {
   viewLocalName: string;
   dataLocalName: string;
@@ -10,7 +9,6 @@ export interface ReplaceElementByElementAndClassConfig {
   direction?: Direction;
   priority?: PriorityString;
 }
-
 export const applyDefaultReplaceElementByElementAndClassConfig = (
   config: ReplaceElementByElementAndClassConfig,
 ): Required<ReplaceElementByElementAndClassConfig> => ({
@@ -19,7 +17,6 @@ export const applyDefaultReplaceElementByElementAndClassConfig = (
   priority: "normal",
   ...config,
 });
-
 export const replaceElementByElementAndClass = (config: ReplaceElementByElementAndClassConfig): RuleConfig => {
   const { viewLocalName, dataLocalName, dataReservedClass, direction, priority } =
     applyDefaultReplaceElementByElementAndClassConfig(config);

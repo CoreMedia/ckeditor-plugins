@@ -1,24 +1,21 @@
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { PriorityString } from "ckeditor5";
 import { Direction, resolveDirectionToConfig } from "./Direction";
 import { isHTMLTableElement } from "@coremedia/ckeditor5-dom-support/src/HTMLTableElements";
 import { removeClass } from "@coremedia/ckeditor5-dom-support/src/Elements";
 import { copyAttributesFrom } from "@coremedia/ckeditor5-dom-support/src/Attrs";
-
 export interface MergeTableSectionsToTableBodyConfig {
   headerRowClass?: string;
   footerRowClass?: string;
   direction?: Direction;
   priority?: PriorityString;
 }
-
 export const defaultMergeTableSectionsToTableBodyConfig: Required<MergeTableSectionsToTableBodyConfig> = {
   headerRowClass: "tr--header",
   footerRowClass: "tr--footer",
   direction: "bijective",
   priority: "normal",
 };
-
 export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTableBodyConfig): RuleConfig => {
   const { headerRowClass, footerRowClass, direction, priority } = {
     ...defaultMergeTableSectionsToTableBodyConfig,
@@ -33,12 +30,10 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         if (!isHTMLTableElement(node)) {
           return;
         }
-
         const { tHead, tFoot, ownerDocument } = node;
         // Create a snapshot of tBodies before creating a new one.
         const tBodies = [...node.tBodies];
         const targetBody = node.createTBody();
-
         const transferAttributesToTargetBody = (section: HTMLTableSectionElement): void => {
           // We risk overriding here for now, not expecting any collisions.
           // If collisions exist, we may want to prefer those of tbody.
@@ -53,7 +48,6 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         if (tFoot) {
           transferAttributesToTargetBody(tFoot);
         }
-
         if (tHead) {
           transferAttributesToTargetBody(tHead);
         }
@@ -63,18 +57,15 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         [...tBodies].reverse().forEach((tBody) => {
           transferAttributesToTargetBody(tBody);
         });
-
         if (tHead) {
           [...tHead.rows].forEach((row) => {
             row.classList.add(headerRowClass);
           });
-
           const range = ownerDocument.createRange();
           range.selectNodeContents(tHead);
           targetBody.append(range.extractContents());
           node.deleteTHead();
         }
-
         tBodies.forEach((tBody) => {
           // We don't mark the origin of `<tbody>` here, thus, we only support
           // ony `<tbody>`. To change this behavior, we would have to remember
@@ -84,7 +75,6 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
           targetBody.append(range.extractContents());
           tBody.remove();
         });
-
         if (tFoot) {
           [...tFoot.rows].forEach((row) => {
             row.classList.add(footerRowClass);
@@ -111,7 +101,6 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
         const tHead = node.createTHead();
         const tFoot = node.createTFoot();
         const tBody = node.createTBody();
-
         rows.forEach((row) => {
           if (row.classList.contains(headerRowClass)) {
             tHead.append(row);
@@ -124,7 +113,6 @@ export const mergeTableSectionsToTableBody = (config?: MergeTableSectionsToTable
             tBody.append(row);
           }
         });
-
         previousBodies.forEach((previousBody) => {
           for (const attribute of previousBody.attributes) {
             tHead.setAttributeNode(attribute.cloneNode(true) as Attr);

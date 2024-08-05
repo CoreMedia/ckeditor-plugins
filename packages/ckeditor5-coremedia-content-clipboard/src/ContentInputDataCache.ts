@@ -1,4 +1,4 @@
-import { Batch } from "@ckeditor/ckeditor5-engine";
+import { Batch } from "ckeditor5";
 
 /**
  * A cache to store data about content input.
@@ -42,18 +42,15 @@ export default class ContentInputDataCache {
     ContentInputDataCache.#contentInputDataCache.delete(contentInputMarkerName);
   }
 }
-
 export interface ContentInputData {
   insertionContext: InsertionContext;
   itemContext: ItemContext;
 }
-
 export interface ItemContext {
   uri: string;
   isInline: boolean;
   itemIndex: number;
 }
-
 export interface InsertionContext {
   insertionId: number;
   batch: Batch;

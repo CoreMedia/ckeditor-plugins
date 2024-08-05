@@ -1,9 +1,8 @@
 /* eslint-disable no-null/no-null */
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { PriorityString } from "ckeditor5";
 import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
 import { namespaces } from "../Namespaces";
-
 const nsXml = namespaces.xml;
 
 /**
@@ -84,7 +83,6 @@ export const preferLangAttribute = (config?: PreferLangAttributeConfig): RuleCon
     ...defaultPreferLangAttributeConfig,
     ...config,
   };
-
   const preferAttribute = (el: Element, key: string): void => {
     const value = extractLangAttributes(el)?.trim();
     if (value) {
@@ -95,7 +93,6 @@ export const preferLangAttribute = (config?: PreferLangAttributeConfig): RuleCon
       el.setAttributeNS(namespace, key, value);
     }
   };
-
   return {
     id: "prefer-lang-attribute",
     toData: {

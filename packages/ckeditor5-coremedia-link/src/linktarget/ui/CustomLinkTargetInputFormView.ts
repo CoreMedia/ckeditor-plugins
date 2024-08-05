@@ -1,3 +1,4 @@
+import "../../../theme/customlinktargetform.css";
 import {
   View,
   LabeledFieldView,
@@ -8,13 +9,14 @@ import {
   submitHandler,
   InputTextView,
   FocusableView,
-} from "@ckeditor/ckeditor5-ui";
-import { createLabeledInputText } from "@ckeditor/ckeditor5-ui//src/labeledfield/utils";
-import { Locale, FocusTracker, KeystrokeHandler } from "@ckeditor/ckeditor5-utils";
-import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
-import "@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css";
-import "../../../theme/customlinktargetform.css";
-import { icons, Command } from "@ckeditor/ckeditor5-core";
+  createLabeledInputText,
+  Locale,
+  FocusTracker,
+  KeystrokeHandler,
+  Emitter,
+  icons,
+  Command,
+} from "ckeditor5";
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
@@ -34,10 +36,8 @@ export default class CustomLinkTargetInputFormView extends View {
   // declared, because we extend this view by calling {@link injectCssTransitionDisabler} later on
   declare enableCssTransitions: () => void;
   declare disableCssTransitions: () => void;
-
   constructor(linkTargetCommand: Command, locale?: Locale) {
     super(locale);
-
     const t = this.locale?.t;
 
     /**
@@ -94,22 +94,17 @@ export default class CustomLinkTargetInputFormView extends View {
       actions: {
         // Navigate form fields backwards using the Shift + Tab keystroke.
         focusPrevious: "shift + tab",
-
         // Navigate form fields forwards using the Tab key.
         focusNext: "tab",
       },
     });
-
     this.setTemplate({
       tag: "form",
-
       attributes: {
         class: ["ck", "cm-ck-custom-link-target-form", "ck-responsive-form"],
-
         // https://github.com/ckeditor/ckeditor5-image/issues/40
         tabindex: "-1",
       },
-
       children: [this.labeledInput, this.saveButtonView, this.cancelButtonView],
     });
 
@@ -127,12 +122,11 @@ export default class CustomLinkTargetInputFormView extends View {
     // types expect an Emitter here, but listenTo() also works with HTMLElements.
     // We need to cast to unknown first because types are not overlapping sufficiently
     this.keystrokes.listenTo(this.element as unknown as Emitter);
-
-    submitHandler({ view: this });
-
+    submitHandler({
+      view: this,
+    });
     [this.labeledInput, this.saveButtonView, this.cancelButtonView].forEach((v) => {
       const { element } = v;
-
       if (!element) {
         console.debug("Unexpected state. Required 'element' unset.", v);
         throw new Error("Unexpected state. Required 'element' unset.");
@@ -156,23 +150,19 @@ export default class CustomLinkTargetInputFormView extends View {
    */
   #createButton(label: string, icon: string, className: string, eventName?: string): ButtonView {
     const button = new ButtonView(this.locale);
-
     button.set({
       label,
       icon,
       tooltip: true,
     });
-
     button.extendTemplate({
       attributes: {
         class: className,
       },
     });
-
     if (eventName) {
       button.delegate("execute").to(this, eventName);
     }
-
     return button;
   }
 

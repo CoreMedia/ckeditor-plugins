@@ -1,13 +1,19 @@
 /* eslint no-null/no-null: off */
 
-import UpcastDispatcher, { UpcastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/upcastdispatcher";
-import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import { DowncastDispatcher, ViewElement, DowncastWriter, Element as ModelElement } from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayServiceDescriptor";
 import { InlinePreview } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/BlobDisplayService";
 import { requireContentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import {
+  UpcastDispatcher,
+  UpcastConversionApi,
+  EventInfo,
+  DowncastDispatcher,
+  ViewElement,
+  DowncastWriter,
+  Element as ModelElement,
+  Editor,
+} from "ckeditor5";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
@@ -15,9 +21,7 @@ import "../theme/loadmask.css";
 import "./lang/contentimage";
 import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
-
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
-
 interface DowncastEventData {
   item: ModelElement;
   attributeOldValue: string | null;
@@ -56,14 +60,18 @@ export const preventUpcastImageSrc =
       `element:img`,
       (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
         // eslint-disable-next-line
-        if (data.viewItem.hasAttribute("data-xlink-href")) {
+    if (data.viewItem.hasAttribute("data-xlink-href")) {
           // eslint-disable-next-line
-          conversionApi.consumable.consume(data.viewItem, { attributes: "src" });
+      conversionApi.consumable.consume(data.viewItem, {
+            attributes: "src",
+          });
           // eslint-disable-next-line
-          data.viewItem._removeAttribute("src");
+      data.viewItem._removeAttribute("src");
         }
       },
-      { priority: "highest" },
+      {
+        priority: "highest",
+      },
     );
   };
 
@@ -87,7 +95,6 @@ export const editingDowncastXlinkHref =
       onXlinkHrefEditingDowncast(editor, eventInfo, data, logger);
     });
   };
-
 const onXlinkHrefEditingDowncast = (
   editor: Editor,
   eventInfo: EventInfo,
@@ -96,13 +103,10 @@ const onXlinkHrefEditingDowncast = (
 ): void => {
   const spinnerPreviewAttributes = createSpinnerImagePreviewAttributes(editor);
   updateImagePreviewAttributes(editor, data.item, spinnerPreviewAttributes, true);
-
   const xlinkHref = data.item.getAttribute("xlink-href");
-
   if (typeof xlinkHref !== "string") {
     throw new Error(`Unexpected type ${typeof xlinkHref} of attribute xlink-href (value: ${xlinkHref}).`);
   }
-
   let uriPath: UriPath;
   try {
     uriPath = toUriPath(xlinkHref);
@@ -113,7 +117,6 @@ const onXlinkHrefEditingDowncast = (
     logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref);
     return;
   }
-
   const property: string = toProperty(xlinkHref);
   void serviceAgent
     .fetchService(createBlobDisplayServiceDescriptor())
@@ -122,20 +125,16 @@ const onXlinkHrefEditingDowncast = (
       const subscription = inlinePreviewObservable.subscribe((inlinePreview) => {
         updateImagePreviewAttributes(editor, data.item, inlinePreview, false);
       });
-
       getOptionalPlugin(editor, ModelBoundSubscriptionPlugin)?.addSubscription(data.item, subscription);
     });
 };
-
 const findImgTag = (editor: Editor, modelItem: ModelElement): ViewElement | null => {
   const toViewElement = editor.editing.mapper.toViewElement(modelItem);
   if (!toViewElement) {
     return null;
   }
-
   return findViewChild(editor, toViewElement, "img");
 };
-
 const updateImagePreviewAttributes = (
   editor: Editor,
   modelElement: ModelElement,
@@ -158,7 +157,6 @@ const updateImagePreviewAttributes = (
   image.onload = () => writeImageToView(editor, inlinePreview, imgTag, withSpinnerClass);
   image.src = inlinePreview.thumbnailSrc;
 };
-
 const writeImageToView = (
   editor: Editor,
   inlinePreview: InlinePreview,
@@ -176,7 +174,6 @@ const writeImageToView = (
     } else {
       writer.removeStyle("width", imgTag);
     }
-
     if (withSpinnerClass) {
       writer.addClass(IMAGE_SPINNER_CSS_CLASS, imgTag);
     } else {
@@ -184,21 +181,16 @@ const writeImageToView = (
     }
   });
 };
-
 const toUriPath = (xlinkHref: string): string => {
   const contentUriPart = xlinkHref.split("#")[0];
   return requireContentUriPath(contentUriPart);
 };
-
 const toProperty = (xlinkHref: string): string => xlinkHref.split("#")[1];
-
 const findViewChild = (editor: Editor, viewElement: ViewElement, viewElementName: string): ViewElement | null => {
   const rangeInElement = editor.editing.view.createRangeIn(viewElement);
   const viewChildren = Array.from(rangeInElement.getItems());
-
   return viewChildren.find((item) => item.is("element", viewElementName)) as ViewElement;
 };
-
 const createSpinnerImagePreviewAttributes = (editor: Editor): InlinePreview => {
   const t = editor.locale.t;
   return {

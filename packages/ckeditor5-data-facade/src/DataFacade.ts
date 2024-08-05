@@ -1,10 +1,9 @@
-import { type Editor, type EditorReadyEvent, Plugin } from "@ckeditor/ckeditor5-core";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
 import type { DataContextOptions } from "./DataContextOptions";
 import { DataFacadeController } from "./DataFacadeController";
 import type { DataApi } from "./DataApi";
-import { Autosave } from "@ckeditor/ckeditor5-autosave";
+import { Editor, EditorReadyEvent, Plugin, Autosave } from "ckeditor5";
 import type { DataFacadeConfig, Save } from "./DataFacadeConfig";
 
 /**
@@ -46,13 +45,10 @@ export class DataFacade extends Plugin implements DataApi {
   public static get requires() {
     return [Autosave] as const;
   }
-
   constructor(editor: Editor) {
     super(editor);
-
     this.#config = editor.config.get("dataFacade") ?? {};
     this.#saveFn = this.#config.save;
-
     this.#dataController = new DataFacadeController(editor);
   }
 
@@ -62,9 +58,7 @@ export class DataFacade extends Plugin implements DataApi {
   init(): void {
     const initInformation = reportInitStart(this);
     const { editor } = this;
-
     const saveCallback = () => this.#saveFn?.(this) ?? Promise.resolve();
-
     if (saveCallback) {
       // Register as save adapter for `Autosave`.
       editor.plugins.get(Autosave).adapter = {
@@ -80,7 +74,9 @@ export class DataFacade extends Plugin implements DataApi {
         this.#dataController.init();
       },
       // Propagate the state late.
-      { priority: "lowest" },
+      {
+        priority: "lowest",
+      },
     );
     reportInitEnd(initInformation);
   }

@@ -2,9 +2,8 @@ import "jest-xml-matcher";
 import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
 import HtmlFilter from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "ckeditor5";
 import { TextFilterRule } from "../src/TextProxy";
-
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
 /**
@@ -17,17 +16,14 @@ const TEST_SELECTOR = "";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
-
 const parser = new DOMParser();
 const serializer = new XMLSerializer();
-
 interface CommentableTestData {
   /**
    * Some comment, which may help to understand the test case better.
    */
   comment?: string;
 }
-
 interface DisablableTestCase {
   /**
    * If set to `true` or non-empty string this test will be ignored.
@@ -35,7 +31,6 @@ interface DisablableTestCase {
    */
   disabled?: boolean | string;
 }
-
 interface ParseFilterRuleSetConfigurationTestData {
   config: FilterRuleSetConfiguration;
   // The original 'view'
@@ -45,33 +40,27 @@ interface ParseFilterRuleSetConfigurationTestData {
   // The view after re-transforming the previously generated data.
   view: string;
 }
-
 interface WithDefaultsTestData {
   default: FilterRuleSetConfiguration;
 }
-
 const replaceElementByChildren: ElementFilterRule = (p) => {
   p.node.replaceByChildren = true;
 };
-
 const reverseText: TextFilterRule = (p) => {
   p.node.textContent = p.node.textContent.split("").reverse().join("");
 };
-
 describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
   test("Should accept empty configuration.", () => {
     const toDataAndView = parseFilterRuleSetConfigurations({});
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
-
   test("Invariant: Should accept empty custom configuration and empty default.", () => {
     const toDataAndView = parseFilterRuleSetConfigurations({}, {});
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
 });
-
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No Defaults)", () => {
   type TestData = CommentableTestData & DisablableTestCase & ParseFilterRuleSetConfigurationTestData;
   type TestFixture = [string, TestData];
@@ -307,41 +296,29 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
       },
     ],
   ];
-
   describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
     if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
       return;
     }
-
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const config: FilterRuleSetConfiguration = testData.config;
-
     const { toData, toView } = parseFilterRuleSetConfigurations(config);
-
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
-
     toDataFilter.applyTo(from.documentElement);
-
     const dataXml: string = serializer.serializeToString(from.documentElement);
-
     test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
       expect(dataXml).toEqualXML(testData.data);
     });
-
     const data: Document = parser.parseFromString(dataXml, "text/xml");
-
     toViewFilter.applyTo(data.documentElement);
-
     const viewXml: string = serializer.serializeToString(data.documentElement);
-
     test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
       expect(viewXml).toEqualXML(testData.view);
     });
   });
 });
-
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having Defaults)", () => {
   type TestData = CommentableTestData &
     DisablableTestCase &
@@ -517,39 +494,29 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
       },
     ],
   ];
-
   describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
     if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
       return;
     }
-
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const defaultConfig: FilterRuleSetConfiguration = testData.default;
     const config: FilterRuleSetConfiguration = testData.config;
-
     const { toData, toView } = parseFilterRuleSetConfigurations(config, defaultConfig);
-
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
-
     currentStepIdx = 0;
     toDataFilter.applyTo(from.documentElement);
-
     const dataXml: string = serializer.serializeToString(from.documentElement);
-
     test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
       expect(dataXml).toEqualXML(testData.data);
     });
-
     const data: Document = parser.parseFromString(dataXml, "text/xml");
 
     // We continue using currentStepIdx also for view filter, so that we may get
     // a complete overview on processing (when used in test-data).
     toViewFilter.applyTo(data.documentElement);
-
     const viewXml: string = serializer.serializeToString(data.documentElement);
-
     test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
       expect(viewXml).toEqualXML(testData.view);
     });

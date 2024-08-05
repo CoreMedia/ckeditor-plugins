@@ -9,8 +9,7 @@ import type {
   PasteContentUI,
   UndoSupport,
 } from "./index";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface PluginsMap {
     [ContentClipboard.pluginName]: ContentClipboard;
     [ContentClipboardEditing.pluginName]: ContentClipboardEditing;
@@ -19,7 +18,6 @@ declare module "@ckeditor/ckeditor5-core" {
     [PasteContentUI.pluginName]: ContentClipboardEditing;
     [UndoSupport.pluginName]: UndoSupport;
   }
-
   interface CommandsMap {
     [PasteContentEditing.pasteContentCommand]: PasteContentCommand;
   }

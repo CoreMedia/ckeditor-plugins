@@ -1,4 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin } from "ckeditor5";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
@@ -43,13 +43,10 @@ export default class Differencing extends Plugin {
    * can not be deactivated. Activation can not be executed twice.
    */
   #isActivated = false;
-
   init(): void {
     const logger = Differencing.#logger;
     const initInformation = reportInitStart(this);
-
     logger.debug("Differencing plugin available. May be activated by invoking differencing.activateDifferencing().");
-
     reportInitEnd(initInformation);
   }
 
@@ -65,37 +62,29 @@ export default class Differencing extends Plugin {
    */
   activateDifferencing(): void {
     const logger = Differencing.#logger;
-
     if (this.#isActivated) {
       return;
     }
-
     this.#activate();
-
     this.#isActivated = true;
-
     logger.debug("Differencing got activated.");
   }
-
   #activate(): void {
     const editor = this.editor;
     const { model, conversion } = editor;
     const { schema } = model;
-
     schema.register("xdiffSpan", {
       allowWhere: "$inlineObject",
       allowContentOf: ["$block", "$container"],
       allowAttributes: Object.values(XDIFF_ATTRIBUTES),
       isInline: true,
     });
-
     schema.register("xdiffBreak", {
       allowWhere: "softBreak",
       allowChildren: [],
       allowAttributes: Object.values(XDIFF_ATTRIBUTES),
       isInline: true,
     });
-
     conversion.for("upcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
     conversion.for("upcast").elementToElement(XDIFF_BREAK_ELEMENT_CONFIG);
 
@@ -107,7 +96,6 @@ export default class Differencing extends Plugin {
      */
 
     conversion.for("downcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
-
     conversion.for("downcast").elementToElement({
       ...XDIFF_BREAK_ELEMENT_CONFIG,
       // DevNote: Empty Element prevents, for example, filler elements to be
@@ -122,7 +110,10 @@ export default class Differencing extends Plugin {
      * do not require extra clean-up on toData-processing.
      */
     Object.entries(XDIFF_ATTRIBUTES).forEach(([view, model]) => {
-      const config = { view, model };
+      const config = {
+        view,
+        model,
+      };
       conversion.for("upcast").attributeToAttribute(config);
       conversion.for("downcast").attributeToAttribute(config);
     });

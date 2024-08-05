@@ -1,5 +1,4 @@
-import { View } from "@ckeditor/ckeditor5-ui";
-import { Observable, PriorityString, Emitter } from "@ckeditor/ckeditor5-utils";
+import { View, Observable, PriorityString, Emitter } from "ckeditor5";
 
 /**
  * Adds a CSS class, or an array of CSS classes to a view template.
@@ -58,7 +57,6 @@ export const addClass = (view: View, classNames: string[] | string): void => {
   if (!view.element) {
     return;
   }
-
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -76,7 +74,6 @@ export const removeClass = (view: View, classNames: string[] | string): void => 
   if (!view.element) {
     return;
   }
-
   if (!Array.isArray(classNames)) {
     classNames = [classNames];
   }
@@ -99,7 +96,9 @@ export const createDecoratorHook = <O extends Observable>(
   methodName: keyof O & string,
   callback: () => void,
   listenerCmp: Emitter,
-  options?: { priority?: number | PriorityString },
+  options?: {
+    priority?: number | PriorityString;
+  },
 ): void => {
   if (!isDecorated(methodParentCmp, methodName)) {
     methodParentCmp.decorate(methodName);
@@ -109,7 +108,6 @@ export const createDecoratorHook = <O extends Observable>(
       );
     }
   }
-
   listenerCmp.listenTo(methodParentCmp, methodName, callback, options);
 };
 
@@ -120,13 +118,11 @@ export const createDecoratorHook = <O extends Observable>(
 interface EmitterInternal {
   _events: Record<string, unknown>;
 }
-
 const isEmitterInternal = (observable: object): observable is EmitterInternal => {
   if ("_events" in observable) {
     return typeof observable._events === "object";
   }
   return false;
 };
-
 const isDecorated = (observable: Observable, methodName: string): boolean =>
   isEmitterInternal(observable) && observable._events.hasOwnProperty(methodName);

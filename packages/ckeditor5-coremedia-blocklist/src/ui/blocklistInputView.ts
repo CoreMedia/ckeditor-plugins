@@ -5,10 +5,11 @@ import {
   ViewCollection,
   createLabeledInputText,
   submitHandler,
-  type InputTextView,
-} from "@ckeditor/ckeditor5-ui";
-import { KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
-import { icons } from "@ckeditor/ckeditor5-core";
+  InputTextView,
+  KeystrokeHandler,
+  Locale,
+  icons,
+} from "ckeditor5";
 import "../lang/blocklist";
 
 /**
@@ -45,13 +46,10 @@ export default class BlocklistInputView extends View {
    */
   constructor(locale: Locale) {
     super(locale);
-
     this.wordToBlockInputView = this.#createWordToBlockInput(locale);
     this.saveButtonView = this.#createSaveButton(locale);
     this.children = this.#createFormChildren();
-
     this.#addInputEventListener();
-
     this.setTemplate({
       tag: "form",
       attributes: {
@@ -61,10 +59,8 @@ export default class BlocklistInputView extends View {
       children: this.children,
     });
   }
-
   public override render(): void {
     super.render();
-
     submitHandler({
       view: this,
     });
@@ -74,12 +70,10 @@ export default class BlocklistInputView extends View {
       this.keystrokes.listenTo(this.element);
     }
   }
-
   #addInputEventListener(): void {
     const blockWordInput = this.getInputElement();
     blockWordInput.addEventListener("input", this.#validateAfterInputChange.bind(this));
   }
-
   #validateAfterInputChange(): void {
     const blockWordInput = this.getInputElement();
     const saveButton = this.saveButtonView;
@@ -100,7 +94,6 @@ export default class BlocklistInputView extends View {
     const labeledInput = new LabeledFieldView(locale, createLabeledInputText);
     labeledInput.label = locale.t("Block");
     labeledInput.fieldView.placeholder = locale.t("Enter word to block");
-
     return labeledInput;
   }
 
@@ -112,7 +105,6 @@ export default class BlocklistInputView extends View {
    */
   #createSaveButton(locale: Locale): ButtonView {
     const button = new ButtonView(this.locale);
-
     button.set({
       label: locale.t("Add word to blocklist"),
       icon: icons.check,
@@ -120,13 +112,11 @@ export default class BlocklistInputView extends View {
       type: "submit",
       tooltip: true,
     });
-
     button.extendTemplate({
       attributes: {
         class: "ck-button-save",
       },
     });
-
     return button;
   }
 
@@ -137,10 +127,8 @@ export default class BlocklistInputView extends View {
    */
   #createFormChildren(): ViewCollection {
     const children = this.createCollection();
-
     children.add(this.wordToBlockInputView);
     children.add(this.saveButtonView);
-
     return children;
   }
 

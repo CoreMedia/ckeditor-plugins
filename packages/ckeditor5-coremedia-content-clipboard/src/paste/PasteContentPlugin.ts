@@ -1,5 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-
+import { Plugin } from "ckeditor5";
 import PasteContentUI from "./PasteContentUI";
 import PasteContentEditing from "./PasteContentEditing";
 
@@ -10,7 +9,6 @@ import PasteContentEditing from "./PasteContentEditing";
  */
 export default class PasteContentPlugin extends Plugin {
   static readonly pluginName = "pasteContent";
-
   static get requires() {
     return [PasteContentEditing, PasteContentUI];
   }

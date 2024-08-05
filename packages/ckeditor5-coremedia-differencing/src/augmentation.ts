@@ -6,8 +6,7 @@ import type {
   PluginIntegrationHook,
   RichTextDataProcessorIntegration,
 } from "./index";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface PluginsMap {
     [Differencing.pluginName]: Differencing;
     [HtmlImageElementSupport.pluginName]: HtmlImageElementSupport;

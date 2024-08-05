@@ -1,14 +1,11 @@
-import { Plugin, Command } from "@ckeditor/ckeditor5-core";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
 // LinkActionsView: See ckeditor/ckeditor5#12027.
 import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-import { ButtonView, ToolbarSeparatorView, View, ContextualBalloon } from "@ckeditor/ckeditor5-ui";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";
-import { Locale } from "@ckeditor/ckeditor5-utils";
+import { Plugin, Command, LinkUI, ButtonView, ToolbarSeparatorView, View, ContextualBalloon, Locale } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
 import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
 import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
@@ -30,9 +27,7 @@ class LinkTargetActionsViewExtension extends Plugin {
   public static readonly pluginName = "LinkTargetActionsViewExtension" as const;
   static readonly requires = [LinkUI, CustomLinkTargetUI];
   static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
-
   #initialized = false;
-
   init(): void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
@@ -44,7 +39,6 @@ class LinkTargetActionsViewExtension extends Plugin {
         this.#initialized = true;
       }
     });
-
     reportInitEnd(initInformation);
   }
 
@@ -73,9 +67,12 @@ class LinkTargetActionsViewExtension extends Plugin {
         return this.#createTargetButton(linkUI.editor.locale, buttonConfig, linkTargetCommand);
       }
     });
-
-    const separatorLeft: ToolbarSeparatorView & { class?: string } = new ToolbarSeparatorView();
-    separatorLeft.set({ class: "cm-ck-item-separator" });
+    const separatorLeft: ToolbarSeparatorView & {
+      class?: string;
+    } = new ToolbarSeparatorView();
+    separatorLeft.set({
+      class: "cm-ck-item-separator",
+    });
     separatorLeft.extendTemplate({
       attributes: {
         class: ["cm-ck-item-separator", "cm-ck-item-separator--left"],
@@ -95,10 +92,8 @@ class LinkTargetActionsViewExtension extends Plugin {
       // no need to render the buttons manually, just add them to the DOM
       this.#addButtons(actionsView, [separatorLeft, ...buttons, separatorRight]);
     }
-
     LinkTargetActionsViewExtension.#render(actionsView, buttons);
   }
-
   static #render(actionsView: LinkActionsView, addedButtons: View[]): void {
     handleFocusManagement(actionsView, addedButtons, actionsView.unlinkButtonView, "before");
   }
@@ -147,13 +142,10 @@ class LinkTargetActionsViewExtension extends Plugin {
         "value",
         (value: unknown) => value === buttonConfig.name || (value === undefined && buttonConfig.name === "_self"),
       );
-
     view.bind("isEnabled").to(linkTargetCommand);
-
     view.on("execute", () => {
       linkTargetCommand?.execute(buttonConfig.name);
     });
-
     return view;
   }
 
@@ -174,5 +166,4 @@ class LinkTargetActionsViewExtension extends Plugin {
     });
   }
 }
-
 export default LinkTargetActionsViewExtension;

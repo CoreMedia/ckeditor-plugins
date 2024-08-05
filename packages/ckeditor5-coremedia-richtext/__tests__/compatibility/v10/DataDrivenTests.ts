@@ -1,9 +1,8 @@
 import "jest-xml-matcher";
 import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { Editor } from "ckeditor5";
 import { getV10Config, parseXml } from "./Utils";
 import { silenced } from "../../Silenced";
-
 jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
@@ -73,7 +72,6 @@ export interface DirectionRestriction {
    */
   direction?: Direction;
 }
-
 export type DocumentPostProcessor = (document: Document) => void;
 
 /**
@@ -121,7 +119,6 @@ const isOnly = (data: any): data is OnlyTestCase => {
   }
   return typeof data.only === "boolean";
 };
-
 export const ddTest = <T extends NamedTestCase>(
   direction: Direction,
   data: T | (T & SkippableTestCase) | (T & OnlyTestCase) | (T & DirectionRestriction),
@@ -131,14 +128,12 @@ export const ddTest = <T extends NamedTestCase>(
     fn(data);
   };
   const { name } = data;
-
   if (hasDirectionRestriction(data)) {
     if (data.direction !== Direction.both && data.direction !== direction) {
       test.skip(`Not applicable for current data processing direction: ${name}`, testFn);
       return;
     }
   }
-
   if (isSkippable(data)) {
     if (data.skip) {
       let skipName: string;
@@ -170,23 +165,18 @@ export const ddTest = <T extends NamedTestCase>(
  */
 export const testData = <T extends NamedTestCase>(data: T[], generator = (d: T) => d.name): [string, T][] =>
   data.map((d) => [generator(d), d]);
-
 export type DataProcessingTestCase = NamedTestCase &
   SkippableTestCase &
   OnlyTestCase &
   SilentTestCase &
   DataProcessingData &
   DirectionRestriction;
-
 const { toData, toView } = getV10Config();
-
 export const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
 export const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
 const serializer = new XMLSerializer();
-
 export const getFilter = (direction: Direction.toData | Direction.toDataView): HtmlFilter =>
   direction === Direction.toDataView ? toViewFilter : toDataFilter;
-
 export const applyFilter = (
   filter: HtmlFilter,
   input: string,
@@ -198,7 +188,6 @@ export const applyFilter = (
   postProcessor?.(xmlDocument);
   return serializer.serializeToString(xmlDocument);
 };
-
 export const dataProcessingTest = (
   direction: Direction.toData | Direction.toDataView,
   data: DataProcessingTestCase,
@@ -206,7 +195,6 @@ export const dataProcessingTest = (
   const filter: HtmlFilter = getFilter(direction);
   let input: string;
   let output: string;
-
   if (direction === Direction.toDataView) {
     input = data.data;
     output = data.dataView;
@@ -214,13 +202,11 @@ export const dataProcessingTest = (
     input = data.dataView;
     output = data.data;
   }
-
   ddTest(direction, data, () => {
     const actualXml = applyFilter(filter, input, data.silent, data.postProcessActual);
     expect(actualXml).toEqualXML(output);
   });
 };
-
 export const eachDataProcessingTest = (
   direction: Direction.toData | Direction.toDataView,
   testCases: DataProcessingTestCase[],
@@ -231,7 +217,6 @@ export const eachDataProcessingTest = (
     dataProcessingTest(direction, data);
   });
 };
-
 export const allDataProcessingTests = (testCases: DataProcessingTestCase[]): void => {
   describe("Data → Data View", () => {
     eachDataProcessingTest(Direction.toDataView, testCases);
