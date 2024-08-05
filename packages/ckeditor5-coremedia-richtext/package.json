@@ -26,9 +26,7 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "ckeditor5": "^42.0.2",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^29.5.12",
@@ -48,9 +46,7 @@
     "/src"
   ],
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1"
+    "ckeditor5": "^42.0.2"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "^20.1.0",

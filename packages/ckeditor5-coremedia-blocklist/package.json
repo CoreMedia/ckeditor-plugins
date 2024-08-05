@@ -35,29 +35,20 @@
     "/theme"
   ],
   "devDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^42.0.1",
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-ui": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
     "@types/jest": "^29.5.12",
+    "ckeditor5": "^42.0.2",
     "jest": "^29.7.0",
     "rimraf": "^6.0.1",
     "rxjs": "^7.8.1",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^42.0.1",
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-ui": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "ckeditor5": "^42.0.2",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-find-and-replace": "^42.0.1",
     "@coremedia/ckeditor5-core-common": "^20.1.0",
     "@coremedia/ckeditor5-coremedia-studio-integration": "^20.1.0",
     "@coremedia/ckeditor5-logging": "^20.1.0"

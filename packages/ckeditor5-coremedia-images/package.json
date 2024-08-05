@@ -34,11 +34,7 @@
     "/theme"
   ],
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-image": "^42.0.1",
-    "@ckeditor/ckeditor5-ui": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "ckeditor5": "^42.0.2",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
     "@types/jest": "^29.5.12",
@@ -49,11 +45,7 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-image": "^42.0.1",
-    "@ckeditor/ckeditor5-ui": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "ckeditor5": "^42.0.2",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
