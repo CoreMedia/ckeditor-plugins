@@ -11,6 +11,7 @@
     "node": "20",
     "pnpm": "^9.4"
   },
+  "packageManager": "pnpm@9.4.0"
   "private": true,
   "description": "Plugins required or recommended to use CKEditor 5 within CoreMedia Studio.",
   "keywords": [
