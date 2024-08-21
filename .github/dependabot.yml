@@ -9,5 +9,13 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-    ignore:
-      - dependency-name: "@coremedia/*"
+    registries:
+      - coremedia-npm
+      
+registries:
+  coremedia-npm:
+    type: npm-registry
+    url: https://npm.coremedia.io
+    username: ${{ secrets.CM_NPM_USER }}
+    password: ${{ secrets.CM_NPM_READ_ONLY_PASSWORD }}
+    replaces-base: false
