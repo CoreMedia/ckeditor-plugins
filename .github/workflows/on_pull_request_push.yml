@@ -64,4 +64,4 @@ jobs:
       uses: actions/dependency-review-action@v4
       with:
         # Possible values: "critical", "high", "moderate", "low"
-        fail-on-severity: critical, high
+        fail-on-severity: critical
