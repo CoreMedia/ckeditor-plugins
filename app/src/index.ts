@@ -1,6 +1,7 @@
 import { createCKEditorInstance } from "./createCKEditorInstance";
 import { ApplicationState } from "./ApplicationState";
 import { getHashParams } from "./HashParams";
+import "ckeditor5/ckeditor5.css";
 
 // setup input example content IFrame
 const showHideExampleContentButton = document.querySelector("#inputExampleContentButton");

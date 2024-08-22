@@ -13,8 +13,8 @@
       "ES5",
       "ESNext"
     ],
-    "module": "ES6",
-    "moduleResolution": "Node",
+    "module": "es2022",
+    "moduleResolution": "Bundler",
     "newLine": "LF",
     "noImplicitAny": true,
     "noImplicitOverride": true,

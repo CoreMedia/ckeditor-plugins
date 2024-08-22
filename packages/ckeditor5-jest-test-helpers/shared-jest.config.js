@@ -1,5 +1,3 @@
-const babelConfig = require("@coremedia-internal/ckeditor5-babel-config");
-
 module.exports = {
   testEnvironment: require.resolve("jest-environment-jsdom"),
   // Don't detect utility files as tests, i.e. require `test` in name.
@@ -8,20 +6,18 @@ module.exports = {
   moduleNameMapper: {
     // https://www.npmjs.com/package/jest-transform-stub
     "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": require.resolve("jest-transform-stub"),
+    // https://stackoverflow.com/questions/76608600/jest-tests-are-failing-because-of-an-unknown-unexpected-token-export
+    "^blurhash": require.resolve("blurhash"),
   },
+  preset: "ts-jest/presets/default-esm",
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
-    "^.+\\.tsx?$": [
+    "^.+.tsx?$": [
       "ts-jest",
       {
-        // ts-jest configuration goes here
+        useESM: true,
       },
     ],
-    // Required, e.g., for CKEditor 5 Dependencies.
-    "^.+\\.jsx?$": [require.resolve("babel-jest"), babelConfig],
-    // https://www.npmjs.com/package/jest-transform-stub
-    "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": require.resolve("jest-transform-stub"),
   },
-  transformIgnorePatterns: ["node_modules/.pnpm/(?!@ckeditor|@bbob|lodash-es|ckeditor5|rxjs|vanilla-colorful)"],
+  extensionsToTreatAsEsm: [".ts"],
+  transformIgnorePatterns: ["node_modules/.pnpm/(?!@bbob|lodash-es|rxjs|vanilla-colorful)"],
 };
