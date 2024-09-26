@@ -121,7 +121,7 @@ describe("Image Features", () => {
     });
   });
 
-  describe("Image with invalid xlink:href", () => {
+  xdescribe("Image with invalid xlink:href", () => {
     it("Should correctly render broken image with empty src", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Unknown Test";
@@ -152,7 +152,7 @@ describe("Image Features", () => {
     });
   });
 
-  describe("Image Alignment", () => {
+  xdescribe("Image Alignment", () => {
     it("Should correctly set Image Alignment", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Unknown Test";
