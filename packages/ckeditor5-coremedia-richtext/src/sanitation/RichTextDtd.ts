@@ -287,7 +287,7 @@ export const aXLinkShowAttr = parseAttributeDefinitionConfig({
 export const aXLinkActuateAttr = parseAttributeDefinitionConfig({
   localName: "actuate",
   prefix: "xlink",
-  content: acEnum("onRequest", "onLoad"),
+  content: acEnum("onRequest"),
 });
 export const aSpecialAttrs = [
   aXLinkTypeAttr,
