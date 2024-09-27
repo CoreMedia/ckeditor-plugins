@@ -285,13 +285,17 @@ export class ElementConfig {
    */
   #processAttributes(element: Element, strictness: ActiveStrictness, listener: SanitationListener): void {
     const { attributes } = element;
+    const attributesToBeRemoved = [];
     for (const attribute of attributes) {
       if (attribute.localName === "xmlns" || attribute.prefix === "xmlns" || attribute.localName.startsWith("xmlns:")) {
         // Namespaces handled later.
         continue;
       }
-      this.#processAttributeOf(element, attribute, listener, strictness);
+      attributesToBeRemoved.push(this.#processAttributeOf(element, attribute, listener, strictness));
     }
+    attributesToBeRemoved.forEach((attr) => {
+      element.removeAttributeNode(attr);
+    });
     this.#processRequiredAttributes(element);
   }
 
@@ -300,12 +304,12 @@ export class ElementConfig {
     attribute: Attr,
     listener: SanitationListener,
     strictness: ActiveStrictness,
-  ): void {
+  ): Attr {
     const config = this.#getAttributeConfig(attribute);
 
     if (!config) {
       listener.removeInvalidAttr(element, attribute, "invalidAtElement");
-      element.removeAttributeNode(attribute);
+      return attribute;
     } else {
       const { fixed } = config;
       const { value } = attribute;
@@ -313,12 +317,13 @@ export class ElementConfig {
       if (fixed && fixed === value) {
         // Cleanup: We expect a fixed value to be valid by definition and that
         // it is obsolete to forward it to stored data.
-        element.removeAttributeNode(attribute);
+        return attribute;
       } else if (!config.validateValue(value, strictness)) {
         listener.removeInvalidAttr(element, attribute, "invalidValue");
-        element.removeAttributeNode(attribute);
+        return attribute;
       }
 
+      return attribute;
       // We may, as suggested by TSDoc, also remove irrelevant attributes if
       // they match the default values as provided by DTD. Skipped for now.
     }
