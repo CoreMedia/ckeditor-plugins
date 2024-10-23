@@ -18,10 +18,23 @@
   ],
   "private": true,
   "license": "Apache-2.0",
-  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "main": "./dist/src/index.js",
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    }
   },
   "files": [
     "/src"
@@ -40,7 +53,8 @@
     "@babel/core": "^7.24.4",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@coremedia/service-agent": "^1.1.5",
+    "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
     "ckeditor5": "^42.0.2",
     "@ckeditor/ckeditor5-core": "^42.0.2",
@@ -48,11 +62,11 @@
     "jest-each": "^29.7.0",
     "jest-xml-matcher": "^1.2.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
     "ckeditor5": "^42.0.2",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
+    "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
     "@coremedia/ckeditor5-core-common": "^20.1.0",

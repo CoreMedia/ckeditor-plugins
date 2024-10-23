@@ -1,19 +1,22 @@
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
-import { Editor, Writer, Node, Position, Range } from "ckeditor5";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Editor, Node, Position, Range, Writer } from "ckeditor5";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
+import {
+  ContentImportService,
+  ContentReferenceResponse,
+  createContentImportServiceDescriptor,
+  createContentReferenceServiceDescriptor,
+  createRichtextConfigurationServiceDescriptor,
+  IContentReferenceService,
+  RichtextConfigurationService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
-import {
-  ContentReferenceResponse,
-  createContentReferenceServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
+
 const UTILITY_NAME = "DataToModelMechanism";
 
 /**
@@ -89,7 +92,7 @@ export default class DataToModelMechanism {
     // model stuff. Take a promise and execute writeItemToModel.
     const uri = contentInputData.itemContext.uri;
     serviceAgent
-      .fetchService(createContentReferenceServiceDescriptor())
+      .fetchService<IContentReferenceService>(createContentReferenceServiceDescriptor())
       .then((service) => service.getContentReference(uri))
       .then(async (response: ContentReferenceResponse) => {
         if (response.contentUri) {
@@ -99,7 +102,9 @@ export default class DataToModelMechanism {
         if (!response.externalUriInformation) {
           return Promise.reject("No content found and uri is not importable.");
         }
-        const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
+        const contentImportService = await serviceAgent.fetchService<ContentImportService>(
+          createContentImportServiceDescriptor(),
+        );
         if (response.externalUriInformation.contentUri) {
           //The external content has been imported previously. A content representation already exists.
           return Promise.resolve(response.externalUriInformation.contentUri);
@@ -171,7 +176,7 @@ export default class DataToModelMechanism {
     // If the studio response delivers another type, then link or image,
     // it would be possible to provide another model rendering.
     return serviceAgent
-      .fetchService(createRichtextConfigurationServiceDescriptor())
+      .fetchService<RichtextConfigurationService>(createRichtextConfigurationServiceDescriptor())
       .then((service) => service.isEmbeddableType(contentUri))
       .then((isEmbeddable) => (isEmbeddable ? "image" : "link"));
   }
@@ -188,7 +193,7 @@ export default class DataToModelMechanism {
       editor.model.markers.getMarkersGroup(ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX),
     );
     if (markers.length === 0) {
-      const undoSupport = getOptionalPlugin(editor, UndoSupport, (pluginName) =>
+      const undoSupport = getOptionalPlugin(editor, UndoSupport, (pluginName: string) =>
         this.#logger.warn(`Unable to re-enable UndoCommand because plugin ${pluginName} does not exist`),
       );
       if (undoSupport) {

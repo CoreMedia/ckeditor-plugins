@@ -5,17 +5,19 @@ import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import {
+  CONTENT_CKE_MODEL_URI_REGEXP,
+  createWorkAreaServiceDescriptor,
+  WorkAreaService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
 import { Subscription } from "rxjs";
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/WorkAreaService";
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
-import { Plugin, Editor, LinkUI, Link, LinkCommand, ContextualBalloon, Observable } from "ckeditor5";
+import { ContextualBalloon, Editor, Link, LinkCommand, LinkUI, Observable, Plugin } from "ckeditor5";
 import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
 import { openContentInTabCommandName, registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
 
@@ -26,7 +28,7 @@ import { openContentInTabCommandName, registerOpenContentInTabCommand } from "./
 export default class ContentLinks extends Plugin {
   public static readonly pluginName = "ContentLinks" as const;
   static readonly openLinkInTab = openContentInTabCommandName;
-  readonly #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
+  readonly #logger = LoggerProvider.getLogger("ContentLinks");
   #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
   #initialized = false;
 
@@ -59,6 +61,7 @@ export default class ContentLinks extends Plugin {
       linkUI._hideUI();
     }
   }
+
   static readonly requires = [
     Link,
     ContentLinkActionsViewExtension,
@@ -67,6 +70,7 @@ export default class ContentLinks extends Plugin {
     ContentLinkClipboardPlugin,
     LinkUserActionsPlugin,
   ];
+
   init(): void {
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
@@ -94,6 +98,7 @@ export default class ContentLinks extends Plugin {
       .subscribe(onServiceRegisteredFunction);
     registerOpenContentInTabCommand(editor);
   }
+
   initializeLinkBalloonListeners(linkUI: LinkUI): void {
     const { editor } = linkUI;
     removeInitialMouseDownListener(linkUI);
@@ -104,6 +109,7 @@ export default class ContentLinks extends Plugin {
       createDecoratorHook(internalLinkUI, "_hideUI", this.onHideUiCallback(editor), this);
     }
   }
+
   onHideUiCallback(editor: Editor): () => void {
     return () => {
       const linkCommand = editor.commands.get("link") as LinkCommand;

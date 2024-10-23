@@ -1,10 +1,9 @@
 import "jest-xml-matcher";
 import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
-import HtmlFilter from "../src/HtmlFilter";
+import { HtmlFilter } from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
 import { Editor } from "ckeditor5";
 import { TextFilterRule } from "../src/TextProxy";
-jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
 /**
  * Will be checked for "startsWith" for a given Data Driven Testname. Meant
@@ -18,12 +17,14 @@ const TEST_SELECTOR = "";
 const MOCK_EDITOR = new Editor();
 const parser = new DOMParser();
 const serializer = new XMLSerializer();
+
 interface CommentableTestData {
   /**
    * Some comment, which may help to understand the test case better.
    */
   comment?: string;
 }
+
 interface DisablableTestCase {
   /**
    * If set to `true` or non-empty string this test will be ignored.
@@ -31,6 +32,7 @@ interface DisablableTestCase {
    */
   disabled?: boolean | string;
 }
+
 interface ParseFilterRuleSetConfigurationTestData {
   config: FilterRuleSetConfiguration;
   // The original 'view'
@@ -40,9 +42,11 @@ interface ParseFilterRuleSetConfigurationTestData {
   // The view after re-transforming the previously generated data.
   view: string;
 }
+
 interface WithDefaultsTestData {
   default: FilterRuleSetConfiguration;
 }
+
 const replaceElementByChildren: ElementFilterRule = (p) => {
   p.node.replaceByChildren = true;
 };

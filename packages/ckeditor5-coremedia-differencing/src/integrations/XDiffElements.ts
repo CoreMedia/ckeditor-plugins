@@ -1,7 +1,6 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
-import { copyAttributesFrom } from "@coremedia/ckeditor5-dom-support/src/Attrs";
-import { namespaces } from "@coremedia/ckeditor5-coremedia-richtext/src/Namespaces";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import { isElement, copyAttributesFrom } from "@coremedia/ckeditor5-dom-support";
+import { namespaces } from "@coremedia/ckeditor5-coremedia-richtext";
 
 /**
  * Elements of `xdiff` namespace should not make it into data. Thus, on data

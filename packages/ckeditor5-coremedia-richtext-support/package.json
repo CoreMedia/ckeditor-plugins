@@ -33,12 +33,25 @@
     "jest-each": "^29.7.0",
     "jest-xml-matcher": "^1.2.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   },
-  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "main": "./dist/src/index.js",
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    }
   },
   "files": [
     "/src"

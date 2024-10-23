@@ -1,14 +1,13 @@
 import { Command, Editor } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
-import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardService";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardItemRepresentation";
+import { ClipboardService, createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { ClipboardItemRepresentation } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import type { Subscription } from "rxjs";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
+import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { insertContentMarkers } from "../ContentMarkers";
-import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardServiceUtil";
+import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Command to insert Content from the ClipboardService into the document at the actual selection.
@@ -19,6 +18,7 @@ import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration
 export class PasteContentCommand extends Command {
   readonly #logger = LoggerProvider.getLogger("PasteContentCommand");
   readonly #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | null;
+
   constructor(editor: Editor) {
     super(editor);
     this.isEnabled = false;
@@ -42,6 +42,7 @@ export class PasteContentCommand extends Command {
       .observeServices<ClipboardService>(createClipboardServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
   }
+
   async #initializeWithClipboardService(clipboardService: ClipboardService): Promise<void> {
     const initialItems = await clipboardService.getItems();
     // noinspection JSConstantReassignment bad types
@@ -62,6 +63,7 @@ export class PasteContentCommand extends Command {
   // Empty implementation because the overridden implementation always sets isEnabled=true
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   override refresh(): void {}
+
   override execute(): void {
     serviceAgent
       .fetchService(createClipboardServiceDescriptor())
@@ -78,6 +80,7 @@ export class PasteContentCommand extends Command {
         this.#logger.warn("Error occurred during insertion of markers for contents", reason);
       });
   }
+
   static async calculateEnabledState(itemRepresentations: ClipboardItemRepresentation[]): Promise<boolean> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const uris: string[] = await toContentUris(itemRepresentations);
@@ -91,9 +94,10 @@ export class PasteContentCommand extends Command {
     const pastableStates = await PasteContentCommand.resolvePastableStates(uris);
     return pastableStates.every((isPastable) => isPastable);
   }
+
   static async resolvePastableStates(uris: string[]): Promise<boolean[]> {
     const richtextConfigurationService = await serviceAgent.fetchService(
-      createRichtextConfigurationServiceDescriptor(),
+      createRichtextConfigurationServiceDescriptor()
     );
     const pastableStatePromises: Promise<boolean>[] = uris.map(async (uri): Promise<boolean> => {
       const isLinkable = await richtextConfigurationService.hasLinkableType(uri);

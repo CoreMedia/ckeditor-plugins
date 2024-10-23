@@ -14,12 +14,14 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 export class HtmlImageElementSupport extends Plugin {
   static readonly pluginName = "DifferencingHtmlImageElementSupport";
   static readonly requires = [];
-  static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("DifferencingHtmlImageElementSupport");
+
   init(): void {
     const initInformation = reportInitStart(this);
     this.#init();
     reportInitEnd(initInformation);
   }
+
   #init(): void {
     const { editor } = this;
     const { model } = editor;

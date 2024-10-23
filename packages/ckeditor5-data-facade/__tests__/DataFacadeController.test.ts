@@ -1,6 +1,9 @@
 import { ContextMismatchError, DataFacade, DataFacadeController, SetDataData } from "../src";
 import { Editor, EditorUI, CKEditorError, Autosave } from "ckeditor5";
-jest.mock("@ckeditor/ckeditor5-core");
+import { jest } from "@jest/globals";
+
+jest.useFakeTimers();
+
 class DummyEditor extends Editor {
   readonly ui: EditorUI = {} as EditorUI;
 
@@ -24,6 +27,7 @@ class DummyEditor extends Editor {
     this.data.set(data);
   }
 }
+
 describe("DataFacadeController", () => {
   beforeEach(() => {
     jest.clearAllMocks();

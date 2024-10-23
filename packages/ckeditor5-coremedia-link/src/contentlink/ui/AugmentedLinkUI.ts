@@ -1,7 +1,7 @@
 import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 import { AugmentedLinkFormView } from "./AugmentedLinkFormView";
 import { ViewWithCssTransitionDisabler, LinkUI } from "ckeditor5";
-import { RequiredNonNull, requireNonNulls } from "@coremedia/ckeditor5-common/src/RequiredNonNull";
+import { RequiredNonNull, requireNonNulls } from "@coremedia/ckeditor5-common";
 
 /**
  * Augmented properties for `LinkUI`.

@@ -28,7 +28,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
   static readonly ID_MODEL_ATTRIBUTE_NAME = "cmSubscriptionId";
   static readonly #SUBSCRIPTION_CACHE: SubscriptionCache = new SubscriptionCache();
   static readonly PLUGIN_NAME = "ModelBoundSubscriptionPlugin";
-  static readonly pluginName = ModelBoundSubscriptionPlugin.PLUGIN_NAME;
+  static readonly pluginName = "ModelBoundSubscriptionPlugin";
 
   /**
    * Registers `change:data` listeners.
@@ -159,6 +159,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     }
     return false;
   }
+
   static #recursiveSearch(element: ModelElement): ModelElement[] {
     if (ModelBoundSubscriptionPlugin.#isSubscribedModel(element)) {
       return [element];
@@ -172,6 +173,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
     }
     return modelElements;
   }
+
   static #findRegisteredModelElements(element: ModelElement): ModelElement[] {
     if (ModelBoundSubscriptionPlugin.#isSubscribedModel(element)) {
       return [element];

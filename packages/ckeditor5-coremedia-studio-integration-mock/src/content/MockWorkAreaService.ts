@@ -2,13 +2,15 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/WorkAreaService";
+import { WorkAreaService } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Editor } from "ckeditor5";
 import MockContentPlugin from "./MockContentPlugin";
 import MockContent from "./MockContent";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Observable, Subject } from "rxjs";
+
 const isString = (value: unknown): value is string => typeof value === "string";
+
 class MockWorkAreaService implements WorkAreaService {
   static readonly #LOGGER = LoggerProvider.getLogger("WorkAreaService");
   readonly #editor: Editor;
@@ -18,10 +20,12 @@ class MockWorkAreaService implements WorkAreaService {
    */
   lastOpenedEntities: unknown[] = [];
   readonly #activeEntitySubject: Subject<unknown>;
+
   constructor(editor: Editor) {
     this.#editor = editor;
     this.#activeEntitySubject = new Subject<unknown>();
   }
+
   async openEntitiesInTabs(entities: unknown[]): Promise<{
     accepted: string[];
     rejected: string[];
@@ -42,12 +46,14 @@ class MockWorkAreaService implements WorkAreaService {
     this.lastOpenedEntities = entities;
     return {
       accepted,
-      rejected: [],
+      rejected: []
     };
   }
+
   getLastOpenedEntities(): unknown[] {
     return this.lastOpenedEntities;
   }
+
   async canBeOpenedInTab(entityUris: unknown[]): Promise<boolean> {
     const mockContentPlugin = this.#editor.plugins.get(MockContentPlugin.pluginName) as MockContentPlugin;
     const uris = entityUris as string[];
@@ -56,16 +62,19 @@ class MockWorkAreaService implements WorkAreaService {
       .every((mockContent: MockContent): boolean => {
         const allReadable = mockContent.readable.every((isReadable) => isReadable);
         MockWorkAreaService.#LOGGER.debug(
-          `Content ${mockContent.id} is considered ${allReadable ? "" : "un"}readable.`,
+          `Content ${mockContent.id} is considered ${allReadable ? "" : "un"}readable.`
         );
         return allReadable;
       });
   }
+
   getName(): string {
     return "workAreaService";
   }
+
   observe_activeEntity(): Observable<unknown> {
     return this.#activeEntitySubject;
   }
 }
+
 export default MockWorkAreaService;

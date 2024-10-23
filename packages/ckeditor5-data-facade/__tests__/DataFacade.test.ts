@@ -1,6 +1,10 @@
-import { Editor, EditorUI, Autosave } from "ckeditor5";
-import { DataFacade, SetDataData } from "../src";
-jest.mock("@ckeditor/ckeditor5-core");
+import { SetDataData } from "../src/DataControllerApi";
+import { EditorUI, Autosave, Editor } from "ckeditor5";
+import { jest } from "@jest/globals";
+import { DataFacade } from "../src";
+
+jest.useFakeTimers();
+
 class DummyEditor extends Editor {
   readonly ui: EditorUI = {} as EditorUI;
 
@@ -24,6 +28,7 @@ class DummyEditor extends Editor {
     this.data.set(data);
   }
 }
+
 describe("DataFacade", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -58,8 +63,8 @@ describe("DataFacade", () => {
     const dataFixture = "DATA";
     let savedData = "";
     let editor: DummyEditor;
-    let autosave: Autosave;
-    let dataFacade: DataFacade;
+    let autosave: InstanceType<typeof Autosave>;
+    let dataFacade: InstanceType<typeof DataFacade>;
     beforeEach(() => {
       editor = new DummyEditor({
         plugins: [DataFacade, Autosave],

@@ -2,7 +2,7 @@
 
 import { Config } from "ckeditor5";
 import { computeDefaultLinkTargetForUrl } from "../../../src/linktarget/config/LinkTargetConfig";
-jest.mock("@ckeditor/ckeditor5-utils/src/config");
+
 describe("LinkTargetDefaultsConfig", () => {
   describe("computeDefaultLinkTargetForUrl", () => {
     // @ts-expect-error - Requires generic type since CKEditor 37.x.

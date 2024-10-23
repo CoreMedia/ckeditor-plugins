@@ -3,6 +3,7 @@
     "alwaysStrict": true,
     "composite": true,
     "declaration": true,
+    "emitDeclarationOnly": false,
     "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -11,6 +12,7 @@
       "DOM",
       "DOM.Iterable",
       "ES5",
+      "es6",
       "ESNext"
     ],
     "module": "es2022",

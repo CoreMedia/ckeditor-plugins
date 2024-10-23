@@ -1,32 +1,28 @@
 /* eslint no-null/no-null: off */
 
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
+  createContentImportServiceDescriptor,
+  createContentReferenceServiceDescriptor,
+  getEvaluationResult,
+  isLinkable,
+  IsLinkableEvaluationResult,
+  receiveDraggedItemsFromDataTransfer,
   requireContentCkeModelUri,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Command, ContextualBalloon, LabeledFieldView, LinkUI, Plugin, View } from "ckeditor5";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
-import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropServiceWrapper";
-import {
-  getEvaluationResult,
-  isLinkable,
-  IsLinkableEvaluationResult,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
-import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
+import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
-import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common/src/HasFocusables";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -37,7 +33,7 @@ import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link
  */
 class ContentLinkFormViewExtension extends Plugin {
   public static readonly pluginName = "ContentLinkFormViewExtension" as const;
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkFormViewExtension.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("ContentLinkFormViewExtension");
   static readonly #CM_LINK_FORM_CLS = "cm-ck-link-form";
   static readonly #CM_FORM_VIEW_CLS = "cm-ck-link-form-view";
   static readonly requires = [LinkUI, ContentLinkCommandHook];

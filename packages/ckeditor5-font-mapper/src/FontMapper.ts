@@ -1,14 +1,13 @@
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
-  Plugin,
   ClipboardEventData,
   ClipboardPipeline,
   DataTransfer as ViewDataTransfer,
-  ViewDocumentFragment,
   EventInfo,
+  Plugin,
+  ViewDocumentFragment,
 } from "ckeditor5";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
 import { COREMEDIA_FONT_MAPPER_CONFIG_KEY, FontMapperConfig, FontMapperConfigEntry } from "./FontMapperConfig";
@@ -49,10 +48,11 @@ import { COREMEDIA_FONT_MAPPER_CONFIG_KEY, FontMapperConfig, FontMapperConfigEnt
  */
 export default class FontMapper extends Plugin {
   public static readonly pluginName = "FontMapper" as const;
-  static readonly #logger: Logger = LoggerProvider.getLogger(FontMapper.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("FontMapper");
   static readonly #supportedDataFormat = "text/html";
   static readonly #clipboardEventName = "inputTransformation";
   static readonly requires = [ClipboardPipeline];
+
   init(): void {
     const initInformation = reportInitStart(this);
     const { editor } = this;

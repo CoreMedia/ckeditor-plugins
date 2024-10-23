@@ -18,5 +18,4 @@ const DEFAULT_NAMESPACES: Namespaces = {
   },
 };
 
-export default Namespace;
-export { DEFAULT_NAMESPACE_PREFIX, DEFAULT_NAMESPACES, Namespaces };
+export { DEFAULT_NAMESPACE_PREFIX, DEFAULT_NAMESPACES, Namespaces, Namespace };

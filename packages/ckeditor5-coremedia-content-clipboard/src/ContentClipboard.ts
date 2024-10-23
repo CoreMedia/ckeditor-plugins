@@ -1,7 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   Clipboard,
   ClipboardContentInsertionEvent,
@@ -23,16 +22,16 @@ import {
   ViewRange,
 } from "ckeditor5";
 import ContentClipboardEditing from "./ContentClipboardEditing";
-import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
-import { isRaw } from "@coremedia/ckeditor5-common/src/AdvancedTypes";
+import { isRaw } from "@coremedia/ckeditor5-common";
 import { insertContentMarkers } from "./ContentMarkers";
 import {
   getEvaluationResult,
   isDroppable,
   IsDroppableEvaluationResult,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
-import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropServiceWrapper";
+  receiveDraggedItemsFromDataTransfer,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 

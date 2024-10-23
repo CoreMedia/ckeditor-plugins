@@ -3,9 +3,9 @@ import {
   isModelUriPath,
   isUriPath,
   requireContentUriPath,
-  UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+  UriPath
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { canBeOpenedInTab, openEntitiesInTabs, OpenEntitiesInTabsResult } from "../OpenInTab";
 
 // noinspection JSConstantReassignment

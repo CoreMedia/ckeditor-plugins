@@ -5,7 +5,8 @@ import { addContentMarkerConversion, removeContentMarkerConversion } from "./con
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 import { UndoSupport } from "./integrations/Undo";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+
 const PLUGIN_NAME = "ContentClipboardEditing";
 
 /**
@@ -35,11 +36,13 @@ export default class ContentClipboardEditing extends Plugin {
    * @private
    */
   readonly #pendingMarkerNames = new Array<string>();
+
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
     this.#defineConverters();
     reportInitEnd(initInformation);
   }
+
   #defineConverters(): void {
     const editor = this.editor;
     const conversion = editor.conversion;
@@ -48,6 +51,7 @@ export default class ContentClipboardEditing extends Plugin {
       dispatcher.on(ContentClipboardEditing.#CONTENT_INPUT_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
     });
   }
+
   #onAddMarker(editor: Editor) {
     return addContentMarkerConversion(this.#pendingMarkerNames, (markerData: MarkerData): void => {
       DataToModelMechanism.triggerLoadAndWriteToModel(editor, this.#pendingMarkerNames, markerData);

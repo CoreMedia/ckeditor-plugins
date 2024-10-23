@@ -2,7 +2,7 @@ import ViewWrapper from "../ViewWrapper";
 import { JSWrapper } from "../../JSWrapper";
 
 import ContentLinkViewWrapper from "./ContentLinkViewWrapper";
-import { LinkActionsView } from "@coremedia/ckeditor5-coremedia-link/src/contentlink/ui/AugmentedLinkActionsView";
+import { LinkActionsView } from "@coremedia/ckeditor5-coremedia-link";
 
 export default class LinkActionsViewWrapper extends JSWrapper<LinkActionsView> {
   getContentLinkView(): ContentLinkViewWrapper {

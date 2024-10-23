@@ -1,6 +1,6 @@
-import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content/src/commands/OpenInTabCommand";
+import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content";
 import { Editor, ImageUtils } from "ckeditor5";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
@@ -14,6 +14,7 @@ export const openImageInTabCommandName = "openImageInTab";
  */
 export class OpenImageInTabCommand extends OpenInTabCommand {
   static readonly #logger = LoggerProvider.getLogger("OpenImageInTabCommand");
+
   override refresh() {
     const logger = OpenImageInTabCommand.#logger;
     const { editor } = this;
@@ -52,7 +53,7 @@ export const registerOpenImageInTabCommand = (editor: Editor, name = openImageIn
  */
 export const requireOpenImageInTabCommand = (
   editor: Editor,
-  name: typeof openImageInTabCommandName = openImageInTabCommandName,
+  name: typeof openImageInTabCommandName = openImageInTabCommandName
 ): OpenImageInTabCommand => {
   const command = editor.commands.get(name);
   if (!command) {
@@ -73,5 +74,5 @@ export const requireOpenImageInTabCommand = (
 export const executeOpenImageInTabCommand = (
   editor: Editor,
   uriPaths: UriPath[] = [],
-  name: typeof openImageInTabCommandName = openImageInTabCommandName,
+  name: typeof openImageInTabCommandName = openImageInTabCommandName
 ) => editor.commands.get(name)?.execute(...uriPaths);

@@ -1,6 +1,6 @@
 import { Plugin } from "ckeditor5";
-import CoreMediaRichText from "@coremedia/ckeditor5-coremedia-richtext/src/CoreMediaRichText";
-import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/src/GeneralRichTextSupport";
+import { CoreMediaRichText } from "@coremedia/ckeditor5-coremedia-richtext";
+import { GeneralRichTextSupport } from "@coremedia/ckeditor5-coremedia-richtext-support";
 
 /**
  * Essential editing features for CKEditor 5 in the CoreMedia Studio wrapped in one plugin.

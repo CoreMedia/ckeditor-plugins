@@ -7,28 +7,30 @@ import MockWorkAreaService from "./content/MockWorkAreaService";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import MockClipboardService from "./content/MockClipboardService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { MockContentReferenceService } from "./content/MockContentReferenceService";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
+import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
+import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { MockBlocklistService } from "./MockBlocklistService";
+
 const PLUGIN_NAME = "MockStudioIntegration";
 
 /**
  * Plugin to provide mocked CoreMedia Studio Integration.
  */
-class MockStudioIntegration extends Plugin {
+export class MockStudioIntegration extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
   static readonly requires = [
     MockBlocklistService,
     MockContentPlugin,
     MockExternalContentPlugin,
-    MockServiceAgentPlugin,
+    MockServiceAgentPlugin
   ];
+
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
     const contentProvider = this.#initContents();
@@ -47,19 +49,19 @@ class MockStudioIntegration extends Plugin {
     const contentReferenceService = new MockContentReferenceService(this.editor);
     serviceAgent.registerService<MockContentReferenceService>(
       contentReferenceService,
-      createContentReferenceServiceDescriptor(),
+      createContentReferenceServiceDescriptor()
     );
     const contentImportService = new MockContentImportService(this.editor);
     serviceAgent.registerService<MockContentImportService>(
       contentImportService,
-      createContentImportServiceDescriptor(),
+      createContentImportServiceDescriptor()
     );
     reportInitEnd(initInformation);
   }
+
   #initContents(): MockContentProvider {
     const editor = this.editor;
     const contentPlugin = editor.plugins.get(MockContentPlugin);
     return contentPlugin.getContent;
   }
 }
-export default MockStudioIntegration;

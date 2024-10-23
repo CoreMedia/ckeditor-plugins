@@ -1,6 +1,6 @@
 /* eslint no-null/no-null: off */
 
-import NodeProxy, { PersistResponse } from "./NodeProxy";
+import { NodeProxy, PersistResponse } from "./NodeProxy";
 import { Editor } from "ckeditor5";
 
 /**
@@ -142,5 +142,5 @@ interface TextFilterParams {
  * Function interface: `(params: TextFilterParams) => void`.
  */
 type TextFilterRule = (params: TextFilterParams) => void;
-export default TextProxy;
-export { TextFilterParams, TextFilterRule };
+
+export { TextFilterParams, TextFilterRule, TextProxy };

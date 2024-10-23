@@ -1,15 +1,15 @@
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
-import { Plugin, Collection } from "ckeditor5";
+import { Collection, Plugin } from "ckeditor5";
 import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Subscription } from "rxjs";
 import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { getMarkerDetails, removeMarkerDetails } from "./blocklistMarkerUtils";
+
 export default class BlocklistEditing extends Plugin {
   static readonly pluginName: string = "BlocklistEditing";
-  static readonly #logger: Logger = LoggerProvider.getLogger(BlocklistEditing.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("BlocklistEditing");
 
   /**
    * A list of markers, used to highlight blocked words in the editor.
@@ -34,6 +34,7 @@ export default class BlocklistEditing extends Plugin {
    * @private
    */
   #blocklistServiceSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
+
   init(): void {
     const editor = this.editor;
     editor.commands.add(BLOCKLIST_COMMAND_NAME, new BlocklistCommand(editor));
@@ -50,6 +51,7 @@ export default class BlocklistEditing extends Plugin {
     // Connect to the BlockList Service to retrieve the list of words to highlight
     this.#subscribeToBlocklistService();
   }
+
   #subscribeToBlocklistService(): void {
     const onServiceRegisteredFunction = (services: BlocklistService[]): void => {
       // No BlocklistService registered yet, no need to compute further
@@ -76,6 +78,7 @@ export default class BlocklistEditing extends Plugin {
       .observeServices<BlocklistService>(createBlocklistServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
   }
+
   override destroy() {
     if (this.#blocklistServiceSubscription) {
       this.#blocklistServiceSubscription.unsubscribe();

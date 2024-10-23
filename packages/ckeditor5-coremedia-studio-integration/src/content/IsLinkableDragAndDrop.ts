@@ -1,5 +1,5 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { receiveDraggedItemsFromService } from "./studioservices/DragDropServiceWrapper";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
@@ -76,7 +76,7 @@ const evaluateIsLinkable = async (uris: string[]): Promise<IsLinkableEvaluationR
 
 const isLinkableUriInformation = async (uri: string): Promise<boolean> => {
   const richTextConfigurationService: RichtextConfigurationService = await serviceAgent.fetchService(
-    createRichtextConfigurationServiceDescriptor(),
+    createRichtextConfigurationServiceDescriptor()
   );
   return richTextConfigurationService.hasLinkableType(uri);
 };

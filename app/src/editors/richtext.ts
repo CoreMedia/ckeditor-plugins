@@ -5,11 +5,15 @@
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.
 
 import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
-import { LinkTarget, ContentLinks } from "@coremedia/ckeditor5-coremedia-link";
-import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { LinkTarget, ContentLinks, COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link";
+import { ContentClipboard, PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
-import MockStudioIntegration from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/MockStudioIntegration";
+import {
+  MockStudioIntegration,
+  COREMEDIA_MOCK_CONTENT_PLUGIN,
+  MockInputExamplePlugin,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import {
   CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
@@ -17,7 +21,6 @@ import {
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials";
 import { initInputExampleContent } from "../inputExampleContents";
-import { COREMEDIA_MOCK_CONTENT_PLUGIN } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
 import {
   Alignment,
   AutoLink,
@@ -55,16 +58,14 @@ import {
   icons,
   PluginConstructor,
 } from "ckeditor5";
-import MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
-import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/src/paste/PasteContentPlugin";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { replaceElementByElementAndClass } from "@coremedia/ckeditor5-coremedia-richtext/src/rules/ReplaceElementByElementAndClass";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-import { replaceByElementAndClassBackAndForth } from "@coremedia/ckeditor5-coremedia-richtext/src/compatibility/v10/rules/ReplaceBy";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import {
+  replaceElementByElementAndClass,
+  replaceByElementAndClassBackAndForth,
+} from "@coremedia/ckeditor5-coremedia-richtext";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getHashParam } from "../HashParams";
-import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/src/contentlink/LinkBalloonConfig";
-import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/src/LinkAttributesConfig";
-import { LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
+import { LinkAttributesConfig, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import type {
   LatestCoreMediaRichTextConfig,
@@ -75,6 +76,7 @@ import { ApplicationState } from "../ApplicationState";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import { updatePreview } from "../preview";
+
 const {
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,

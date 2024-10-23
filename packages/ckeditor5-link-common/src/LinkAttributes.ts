@@ -3,8 +3,8 @@
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   Plugin,
   Editor,
@@ -95,8 +95,9 @@ const LINK_CUSTOM_PROPERTY = "link";
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
   public static readonly pluginName = "LinkAttributes" as const;
-  static readonly #logger = LoggerProvider.getLogger(LinkAttributes.pluginName);
+  static readonly #logger = LoggerProvider.getLogger("LinkAttributes");
   static readonly requires = [LinkCleanup, TwoStepCaretMovement];
+
   init(): void {
     const initInformation = reportInitStart(this);
     const { editor } = this;

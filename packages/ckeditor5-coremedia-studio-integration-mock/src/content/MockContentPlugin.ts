@@ -1,6 +1,5 @@
 import { Plugin } from "ckeditor5";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import MockContent, {
   asStaticContent,
   isMockContentConfigs,
@@ -9,9 +8,9 @@ import MockContent, {
 } from "./MockContent";
 import Delayed from "./Delayed";
 import { isObject } from "./MockContentUtils";
-import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { PREDEFINED_MOCK_CONTENTS } from "./PredefinedMockContents";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * If states shall change, it will be done with this fixed
@@ -110,7 +109,7 @@ class MockContentPlugin extends Plugin {
    * The pre-defined contents we provide by default.
    */
   static readonly #defaultContents: MockContentConfig[] = [
-    MockContentPlugin.#rootFolderConfig,
+    this.#rootFolderConfig,
     // Easier to prefill some mock contents here.
     ...PREDEFINED_MOCK_CONTENTS,
   ];
@@ -251,5 +250,6 @@ class MockContentPlugin extends Plugin {
     return this.#addDefaults(registeredContents.get(id)) ?? asStaticContent(id);
   };
 }
+
 export default MockContentPlugin;
 export { CONFIG_KEY as COREMEDIA_MOCK_CONTENT_PLUGIN, MockContentProvider, defaultMockContentProvider };

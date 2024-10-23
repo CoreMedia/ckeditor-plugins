@@ -2,8 +2,8 @@
 
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./command/LinkTargetCommand";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
 import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert } from "ckeditor5";
 
@@ -31,7 +31,7 @@ export default class LinkTargetModelView extends Plugin {
     const { editor } = this;
     getLinkAttributes(editor)?.registerAttribute({
       model: LINK_TARGET_MODEL,
-      view: LINK_TARGET_VIEW,
+      view: LINK_TARGET_VIEW
     });
     editor.commands.add("linkTarget", new LinkTargetCommand(editor));
 

@@ -2,9 +2,8 @@ import { Plugin } from "ckeditor5";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
 
 /**
@@ -36,13 +35,14 @@ import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataPro
 export default class Differencing extends Plugin {
   static readonly pluginName = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport, RichTextDataProcessorIntegration];
-  static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("Differencing");
 
   /**
    * Provides information about the current activation state. Once activated it
    * can not be deactivated. Activation can not be executed twice.
    */
   #isActivated = false;
+
   init(): void {
     const logger = Differencing.#logger;
     const initInformation = reportInitStart(this);
@@ -69,6 +69,7 @@ export default class Differencing extends Plugin {
     this.#isActivated = true;
     logger.debug("Differencing got activated.");
   }
+
   #activate(): void {
     const editor = this.editor;
     const { model, conversion } = editor;

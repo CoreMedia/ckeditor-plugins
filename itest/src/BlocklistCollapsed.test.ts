@@ -1,5 +1,5 @@
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
-import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { clickModifiers } from "./aria/KeyboardUtils";
 import "./expect/Expectations";

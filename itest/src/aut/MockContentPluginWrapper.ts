@@ -1,7 +1,6 @@
 import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
-import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
-import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContent";
+import { MockContentPlugin, MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 
 /**
  * Provides access to the `MockContentPlugin`.

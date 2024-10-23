@@ -1,8 +1,12 @@
-import { ToDataAndViewElementConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-import { ElementFilterRulesByName } from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
-import { allFilterRules, ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
-import { asDataFilterRule, AttributeMapper } from "@coremedia/ckeditor5-dataprocessor-support/src/Attributes";
-import { warnOnAmbiguousElementState } from "@coremedia/ckeditor5-dataprocessor-support/src/RulesLogger";
+import {
+  ToDataAndViewElementConfiguration,
+  ElementFilterRulesByName,
+  allFilterRules,
+  ElementFilterRule,
+  asDataFilterRule,
+  AttributeMapper,
+  warnOnAmbiguousElementState,
+} from "@coremedia/ckeditor5-dataprocessor-support";
 
 /**
  * Rule to replace a given element by a new element with an optional

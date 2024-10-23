@@ -4,12 +4,11 @@ import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";
 import { Plugin, Command, LinkUI, ButtonView, ToolbarSeparatorView, View, ContextualBalloon, Locale } from "ckeditor5";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { requireNonNulls } from "@coremedia/ckeditor5-common/src/RequiredNonNull";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { requireNonNulls } from "@coremedia/ckeditor5-common";
 import { LinkActionsView } from "../contentlink/ui/AugmentedLinkActionsView";
-import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common/src/HasFocusables";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:
@@ -26,7 +25,7 @@ import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link
 class LinkTargetActionsViewExtension extends Plugin {
   public static readonly pluginName = "LinkTargetActionsViewExtension" as const;
   static readonly requires = [LinkUI, CustomLinkTargetUI];
-  static readonly #logger = LoggerProvider.getLogger(LinkTargetActionsViewExtension.pluginName);
+  static readonly #logger = LoggerProvider.getLogger("LinkTargetActionsViewExtension");
   #initialized = false;
 
   init(): void {

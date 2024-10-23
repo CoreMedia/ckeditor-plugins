@@ -3,7 +3,7 @@ import { EditorWrapper } from "./EditorWrapper";
 import { ClassicEditor } from "ckeditor5";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import type RichTextDataProcessor from "@coremedia/ckeditor5-coremedia-richtext/src/RichTextDataProcessor";
+import type { RichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
 import { Locatable, visible } from "./Locatable";
 import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 
@@ -14,14 +14,17 @@ import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrap
 export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implements Locatable {
   readonly #elementId: string;
   readonly #page: Page;
+
   constructor(instance: Promise<JSHandle<ClassicEditor>>, page: Page, elementId: string) {
     super(instance);
     this.#page = page;
     this.#elementId = elementId;
   }
+
   get locator(): Locator {
     return this.#page.locator(`#${this.#elementId}`);
   }
+
   get visible(): Promise<boolean> {
     return visible(this);
   }

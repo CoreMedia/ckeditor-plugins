@@ -1,27 +1,30 @@
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import {
-  ViewDocument,
-  ViewDocumentFragment,
-  HtmlDataProcessor,
   DataProcessor,
   DomConverter,
-  MatcherPattern,
   Editor,
+  HtmlDataProcessor,
+  MatcherPattern,
   ObservableMixin,
+  ViewDocument,
+  ViewDocumentFragment,
 } from "ckeditor5";
-import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import {
+  HtmlDomConverter,
+  parseRule,
+  RuleBasedConversionListener,
+  RuleConfig,
+  RuleSection,
+} from "@coremedia/ckeditor5-dom-converter";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { Strictness } from "./Strictness";
-import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/src/Namespaces";
+import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
-import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/src/RuleBasedConversionListener";
-import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/src/HtmlDomConverter";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -124,9 +127,11 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
      */
     this.#delegate.domConverter.preElements.push("xdiff:span");
   }
+
   registerRawContentMatcher(pattern: MatcherPattern): void {
     this.#delegate.registerRawContentMatcher(pattern);
   }
+
   useFillerType(type: "default" | "marked"): void {
     this.#delegate.useFillerType(type);
   }

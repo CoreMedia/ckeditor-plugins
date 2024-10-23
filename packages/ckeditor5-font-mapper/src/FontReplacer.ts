@@ -1,9 +1,9 @@
 import { ViewNode, ViewElement, ViewText, UpcastWriter, ViewDocumentFragment } from "ckeditor5";
 import { FontMapping } from "./FontMapping";
 import { fontMappingRegistry } from "./FontMappingRegistry";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
+
 const FONT_FAMILY_PROPERTY_NAME = "font-family";
 const logger: Logger = LoggerProvider.getLogger("FontMapper");
 /**
@@ -223,6 +223,7 @@ const findTextNodeChildren = (element: ViewElement): ViewText[] =>
 interface HasTextData {
   _textData: string;
 }
+
 const isHasTextData = (value: unknown): value is HasTextData =>
   typeof value === "object" && !!value && "_textData" in value && typeof value._textData === "string";
 const asHasTextData = (value: unknown): HasTextData => {

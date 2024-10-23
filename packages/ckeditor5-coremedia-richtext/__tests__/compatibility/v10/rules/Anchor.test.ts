@@ -1,6 +1,9 @@
 /* eslint @typescript-eslint/naming-convention: off */
 
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
+import { jest } from "@jest/globals";
+
+jest.useFakeTimers();
 
 // noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";
@@ -47,6 +50,7 @@ interface XLinkBehavior {
   show?: string;
   role?: string;
 }
+
 type XlinkBehaviorDefinition = XLinkBehavior & {
   comment?: string;
   non_bijective?: boolean;

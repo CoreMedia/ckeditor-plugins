@@ -1,9 +1,9 @@
-import {
+import CoreMediaRichTextSupportConfig, {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
-  CoreMediaRichTextSupportConfig,
-  GeneralRichTextSupport,
-  RichTextDataFilter,
-} from "./index";
+} from "./CoreMediaRichTextSupportConfig";
+import GeneralRichTextSupport from "./GeneralRichTextSupport";
+import RichTextDataFilter from "./RichTextDataFilter";
+
 declare module "ckeditor5" {
   interface EditorConfig {
     /**
@@ -13,6 +13,7 @@ declare module "ckeditor5" {
      */
     [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]?: CoreMediaRichTextSupportConfig;
   }
+
   interface PluginsMap {
     [GeneralRichTextSupport.pluginName]: GeneralRichTextSupport;
     [RichTextDataFilter.pluginName]: RichTextDataFilter;

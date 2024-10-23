@@ -1,23 +1,22 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
-import { openLink } from "@coremedia/ckeditor5-core-common";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import {
+  createWorkAreaServiceDescriptor,
   isModelUriPath,
   requireContentUriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { openLink } from "@coremedia/ckeditor5-core-common";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
-  Plugin,
-  Editor,
   EditingView,
-  ViewDocumentFragment,
-  ViewElement,
-  TextProxy,
+  Editor,
   Element as ModelElement,
-  Node as ModelNode,
   env,
   keyCodes,
+  Node as ModelNode,
+  Plugin,
+  TextProxy,
+  ViewDocumentFragment,
+  ViewElement,
 } from "ckeditor5";
 
 /**
@@ -35,7 +34,7 @@ import {
  */
 export default class LinkUserActionsPlugin extends Plugin {
   public static readonly pluginName = "LinkUserActionsPlugin" as const;
-  static readonly LOG: Logger = LoggerProvider.getLogger(LinkUserActionsPlugin.pluginName);
+  static readonly LOG: Logger = LoggerProvider.getLogger("LinkUserActionsPlugin");
   static readonly requires = [];
 
   init(): void {

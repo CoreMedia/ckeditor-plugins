@@ -12,6 +12,6 @@ export type {
   PrepareFunction,
 } from "./DomConverterStages";
 export { HtmlDomConverter } from "./HtmlDomConverter";
-export type { RuleConfig, RuleSectionConfig } from "./Rule";
+export { byPriority, parseRule, RuleConfig, RuleSection, RuleSectionConfig } from "./Rule";
 export { RuleBasedConversionListener } from "./RuleBasedConversionListener";
 export { skip, type Skip } from "./Signals";

@@ -1,7 +1,8 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { PriorityString } from "ckeditor5";
 import { Direction, resolveDirectionToConfig } from "./Direction";
-import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import { isElement } from "@coremedia/ckeditor5-dom-support";
+
 export interface ReplaceByChildrenConfig {
   localName: string;
   /**
@@ -11,6 +12,7 @@ export interface ReplaceByChildrenConfig {
   direction?: Exclude<Direction, "bijective">;
   priority?: PriorityString;
 }
+
 export const defaultReplaceByChildrenConfig: Required<Omit<ReplaceByChildrenConfig, "localName">> = {
   // toData is the typical transformation direction, as it provides less
   // valid elements than the data view.

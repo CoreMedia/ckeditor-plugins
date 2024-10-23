@@ -1,7 +1,10 @@
 import * as aut from "../../src/integrations/XDiffElements";
-import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { TestDirection, toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
+import { jest } from "@jest/globals";
+
+jest.useFakeTimers();
 
 describe("XDiffElements", () => {
   const ruleConfigurations = [aut.xDiffElements];

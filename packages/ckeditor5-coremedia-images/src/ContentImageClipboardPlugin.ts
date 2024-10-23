@@ -1,14 +1,14 @@
-import { Plugin, Writer, Node } from "ckeditor5";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
+import { Node, Plugin, Writer } from "ckeditor5";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
+  ContentClipboardEditing,
   CreateModelFunction,
   CreateModelFunctionCreator,
-} from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentToModelRegistry";
-import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboardEditing";
-import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+} from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+
 type CreateImageModelFunction = (blobUriPath: string) => CreateModelFunction;
 const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
   contentUri: string,
@@ -37,7 +37,8 @@ const createImageModelFunction: CreateImageModelFunction =
  */
 export default class ContentImageClipboardPlugin extends Plugin {
   static readonly pluginName = "ContentImageClipboardPlugin" as const;
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageClipboardPlugin.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("ContentImageClipboardPlugin");
+
   init(): void {
     const logger = ContentImageClipboardPlugin.#logger;
     const { editor } = this;

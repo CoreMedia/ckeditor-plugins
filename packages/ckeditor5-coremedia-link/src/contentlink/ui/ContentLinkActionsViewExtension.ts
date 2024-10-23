@@ -3,18 +3,19 @@
 import ContentLinkView from "./ContentLinkView";
 import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { isModelUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
+import { ifCommand, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import {
+  handleFocusManagement,
+  hasRequiredInternalFocusablesProperty,
+  LINK_COMMAND_NAME,
+} from "@coremedia/ckeditor5-link-common";
 import { Command, ContextualBalloon, LinkUI, Plugin } from "ckeditor5";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import { asAugmentedLinkUI, AugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { AugmentedLinkActionsView, LinkActionsView } from "./AugmentedLinkActionsView";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
-import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common/src/HasFocusables";
 
 /**
  * Extends the action view for Content link display. This includes:
@@ -25,7 +26,7 @@ import { hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link
  */
 class ContentLinkActionsViewExtension extends Plugin {
   public static readonly pluginName = "ContentLinkActionsViewExtension" as const;
-  static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
+  static readonly #logger = LoggerProvider.getLogger("ContentLinkActionsViewExtension");
   static readonly requires = [LinkUI, ContextualBalloon];
   contentUriPath: string | undefined | null;
   #initialized = false;

@@ -36,6 +36,7 @@ export default class CustomLinkTargetInputFormView extends View {
   // declared, because we extend this view by calling {@link injectCssTransitionDisabler} later on
   declare enableCssTransitions: () => void;
   declare disableCssTransitions: () => void;
+
   constructor(linkTargetCommand: Command, locale?: Locale) {
     super(locale);
     const t = this.locale?.t;

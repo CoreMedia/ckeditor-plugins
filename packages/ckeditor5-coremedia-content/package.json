@@ -13,10 +13,17 @@
     "ckeditor",
     "ckeditor5"
   ],
-  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "main": "./dist/src/index.js",
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "main": "./dist/src/index.js",
+    "types": "./dist/src/index.d.ts"
   },
   "files": [
     "/src"
@@ -25,12 +32,12 @@
   "devDependencies": {
     "ckeditor5": "^42.0.2",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
     "jest-config": "^29.7.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-studio-integration": "^20.1.0",
@@ -38,7 +45,7 @@
   },
   "peerDependencies": {
     "ckeditor5": "^42.0.2",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
+    "@coremedia/service-agent": "^1.1.5"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

@@ -1,4 +1,4 @@
-import { isRaw } from "@coremedia/ckeditor5-common/src/AdvancedTypes";
+import { isRaw } from "@coremedia/ckeditor5-common";
 
 /**
  * Holds a reference to the UriPath of a content.

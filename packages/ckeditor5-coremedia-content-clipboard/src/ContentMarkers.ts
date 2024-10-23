@@ -1,9 +1,13 @@
 import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
-import type { Editor, Range as ModelRange, Writer, Model } from "ckeditor5";
+import {
+  createRichtextConfigurationServiceDescriptor,
+  RichtextConfigurationService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor, Model, Range as ModelRange, Writer } from "ckeditor5";
+
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
 /**
@@ -54,7 +58,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
   // Add a content marker for each item.
   contentUris.forEach((contentUri: string, index: number): void => {
     serviceAgent
-      .fetchService(createRichtextConfigurationServiceDescriptor())
+      .fetchService<RichtextConfigurationService>(createRichtextConfigurationServiceDescriptor())
       .then(async (value) => {
         const embeddableType = await value.isEmbeddableType(contentUri);
         const contentInputData = createContentInputData(

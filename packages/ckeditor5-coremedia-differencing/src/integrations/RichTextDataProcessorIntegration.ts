@@ -1,5 +1,5 @@
 import { Plugin } from "ckeditor5";
-import { isRichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext/src/RichTextDataProcessor";
+import { isRichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
 import { xDiffElements } from "./XDiffElements";
 
 /**

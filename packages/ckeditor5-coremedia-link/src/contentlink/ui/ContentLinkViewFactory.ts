@@ -2,7 +2,7 @@ import "../../../theme/contentlinkview.css";
 import ContentLinkView from "./ContentLinkView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { LabeledFieldView, Editor, LinkUI } from "ckeditor5";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 

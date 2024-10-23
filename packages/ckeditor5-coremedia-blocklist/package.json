@@ -17,7 +17,7 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc --project ./tsconfig.release.json",
+    "build": "tsc --project ./tsconfig.release.json && copyfiles -u 1 theme/* theme/**/* dist/theme",
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
@@ -25,10 +25,23 @@
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
-  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "main": "./dist/src/index.js",
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    }
   },
   "files": [
     "/src",
@@ -36,17 +49,18 @@
   ],
   "devDependencies": {
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
     "ckeditor5": "^42.0.2",
+    "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "rimraf": "^6.0.1",
     "rxjs": "^7.8.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
     "ckeditor5": "^42.0.2",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
+    "@coremedia/service-agent": "^1.1.5"
   },
   "dependencies": {
     "@coremedia/ckeditor5-core-common": "^20.1.0",

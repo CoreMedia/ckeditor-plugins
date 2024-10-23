@@ -1,21 +1,25 @@
 /* eslint no-null/no-null: off */
 
-import ElementProxy, { ElementFilterRule } from "./ElementProxy";
-import TextProxy, { TextFilterRule } from "./TextProxy";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { ElementFilterRule, ElementProxy } from "./ElementProxy";
+import { TextProxy, TextFilterRule } from "./TextProxy";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Editor } from "ckeditor5";
+
 enum FilterMode {
   toData,
   toView,
 }
+
 type ElementFilterRulesByName = Record<string, ElementFilterRule>;
+
 interface ElementFilterRuleSet {
   elements?: ElementFilterRulesByName;
 }
+
 interface TextFilterRuleSet {
   text?: TextFilterRule;
 }
+
 type FilterRuleSet = ElementFilterRuleSet & TextFilterRuleSet;
 
 /**
@@ -61,10 +65,12 @@ class HtmlFilter {
   static readonly #logger: Logger = LoggerProvider.getLogger("HtmlFilter");
   readonly #ruleSet: FilterRuleSet;
   readonly #editor: Editor;
+
   constructor(ruleSet: FilterRuleSet, editor: Editor) {
     this.#ruleSet = ruleSet;
     this.#editor = editor;
   }
+
   public applyTo(root: Node): void {
     const logger = HtmlFilter.#logger;
     logger.debug(`Applying filter to root node ${root.nodeName}.`, {
@@ -74,6 +80,7 @@ class HtmlFilter {
     // this again, we should do it here.
     this.#applyToChildNodes(root);
   }
+
   #applyToChildNodes(parent: Node): void {
     const logger = HtmlFilter.#logger;
     logger.debug(`Applying filter to child nodes of ${parent.nodeName}.`, {
@@ -148,7 +155,7 @@ class HtmlFilter {
     return newCurrent ?? next;
   }
 }
-export default HtmlFilter;
+
 export {
   AFTER_ELEMENT,
   AFTER_ELEMENT_AND_CHILDREN,
@@ -157,5 +164,6 @@ export {
   ElementFilterRuleSet,
   FilterMode,
   FilterRuleSet,
+  HtmlFilter,
   TextFilterRuleSet,
 };

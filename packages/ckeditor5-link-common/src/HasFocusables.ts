@@ -1,5 +1,5 @@
 import { FocusTracker, ViewCollection } from "ckeditor5";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 
 /**
  * Internal API of `LinkFormView` and `LinkActionsView` we need to expose
@@ -30,10 +30,10 @@ export const hasRequiredInternalFocusablesProperty = (value: unknown): value is 
   if (!result) {
     console.debug(
       "hasRequiredInternalFocusablesProperty: Required internal property _focusables missing or of unexpected type.",
-      value,
+      value
     );
     throw new IncompatibleInternalApiUsageError(
-      "Required internal API property _focusables missing or of unexpected type.",
+      "Required internal API property _focusables missing or of unexpected type."
     );
   }
   return result;

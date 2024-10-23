@@ -1,12 +1,15 @@
 /* eslint no-null/no-null: off */
 
-import { ElementFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
-import { TextFilterParams } from "@coremedia/ckeditor5-dataprocessor-support/src/TextProxy";
+import {
+  ElementFilterParams,
+  TextFilterParams,
+  ElementsFilterRuleSetConfiguration,
+} from "@coremedia/ckeditor5-dataprocessor-support";
 import RichTextSchema from "../RichTextSchema";
-import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
 import { DataProcessor } from "ckeditor5";
 import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";
+
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);
 
 /**

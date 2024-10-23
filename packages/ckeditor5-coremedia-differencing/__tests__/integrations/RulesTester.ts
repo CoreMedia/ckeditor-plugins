@@ -1,6 +1,6 @@
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import { isToData, isToView, TestDirection } from "./TestDirection";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 
 import "jest-xml-matcher";
 
@@ -11,6 +11,7 @@ export class RulesTester {
   readonly factory = new RuleBasedHtmlDomConverterFactory();
   readonly xmlSerializer = new XMLSerializer();
   readonly domParser = new DOMParser();
+
   constructor(
     public readonly rules: RuleConfig[],
     public readonly xmlElementSelector: string,

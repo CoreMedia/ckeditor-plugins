@@ -2,8 +2,7 @@
 
 import "jest-xml-matcher";
 import { Editor } from "ckeditor5";
-import TextProxy, { TextFilterRule } from "../src/TextProxy";
-jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+import { TextProxy, TextFilterRule } from "../src/TextProxy";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
@@ -48,6 +47,7 @@ interface DisablableTestData {
    */
   disabled?: boolean | string | (() => boolean | string);
 }
+
 interface TextFilterTestData extends CommentableTestData, DisablableTestData {
   /**
    * The rules to apply.
@@ -71,6 +71,7 @@ interface TextFilterTestData extends CommentableTestData, DisablableTestData {
    */
   restartPath?: string;
 }
+
 describe("TextProxy.applyRules()", () => {
   type ApplyRulesData = [
     /**

@@ -1,6 +1,6 @@
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
+import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 const logger = LoggerProvider.getLogger("OpenInTab");
 
@@ -22,7 +22,7 @@ export interface OpenEntitiesInTabsResult {
  */
 export const emptyOpenEntitiesInTabsResult: OpenEntitiesInTabsResult = {
   accepted: [],
-  rejected: [],
+  rejected: []
 };
 
 /**
@@ -40,7 +40,7 @@ export const canAllBeOpenedInTab = async (...uriPaths: string[]): Promise<boolea
       workAreaService.canBeOpenedInTab(uriPaths).catch((error): boolean => {
         logger.debug(`Failed to query "canBeOpenedInTab" for ${uriPaths}. Default to false.`, error);
         return false;
-      }),
+      })
   );
 };
 
@@ -65,8 +65,8 @@ export const openEntitiesInTabs = async (...uriPaths: string[]): Promise<OpenEnt
     (workAreaService): Promise<OpenEntitiesInTabsResult> =>
       workAreaService.openEntitiesInTabs(uriPaths, false, {
         additionalOptions: {
-          focusTab: true,
-        },
-      }),
+          focusTab: true
+        }
+      })
   );
 };

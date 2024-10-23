@@ -14,7 +14,8 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  */
 export class PluginIntegrationHook extends Plugin {
   static readonly pluginName = "PluginIntegrationHook";
-  static readonly #logger: Logger = LoggerProvider.getLogger(PluginIntegrationHook.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("PluginIntegrationHook");
+
   init(): void {
     const initInformation = reportInitStart(this);
     this.#registerElementsAfterInit();
@@ -45,6 +46,7 @@ export class PluginIntegrationHook extends Plugin {
       },
     );
   }
+
   #firePluginRegistration(state: string) {
     this.fire(`plugin-integration:${state}`);
   }

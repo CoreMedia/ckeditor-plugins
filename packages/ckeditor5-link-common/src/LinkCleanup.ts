@@ -1,9 +1,9 @@
 /* eslint no-null/no-null: off */
 
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { LINK_HREF_MODEL } from "./Constants";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { Plugin, Editor, DiffItem, DiffItemAttribute, Writer, Range, LinkEditing } from "ckeditor5";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { DiffItem, DiffItemAttribute, Editor, LinkEditing, Plugin, Range, Writer } from "ckeditor5";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -40,9 +40,10 @@ interface LinkCleanupRegistry {
  */
 class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly pluginName: string = "LinkCleanup";
-  static readonly #logger = LoggerProvider.getLogger(LinkCleanup.pluginName);
+  static readonly #logger = LoggerProvider.getLogger("LinkCleanup");
   readonly #watchedAttributes: Set<string> = new Set<string>();
   static readonly requires = [];
+
   init(): void {
     const initInformation = reportInitStart(this);
     const { editor } = this;
@@ -57,13 +58,16 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     document.registerPostFixer(this.#fixOrphanedAttributes);
     reportInitEnd(initInformation);
   }
+
   override destroy(): void {
     // Implicitly disabled post-fixer, as it cannot be disabled explicitly.
     this.#watchedAttributes.clear();
   }
+
   registerDependentAttribute(modelAttributeName: string): void {
     this.#watchedAttributes.add(modelAttributeName);
   }
+
   unregisterDependentAttribute(modelAttributeName: string): boolean {
     return this.#watchedAttributes.delete(modelAttributeName);
   }

@@ -1,7 +1,7 @@
-import { LinkUI, Emitter } from "ckeditor5";
+import { Emitter, LinkUI } from "ckeditor5";
 import { keepOpen } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
-import { requireNonNulls } from "@coremedia/ckeditor5-common/src/RequiredNonNull";
+import { requireNonNulls } from "@coremedia/ckeditor5-common";
 
 /**
  * Whether the mouseDown event occurred on an allow-listed element.
@@ -59,8 +59,8 @@ export const addMouseEventListenerToHideDialog = (linkUI: LinkUI): void => {
   }
   const {
     _balloon: {
-      view: { element },
-    },
+      view: { element }
+    }
   } = internalLinkUI;
   addCustomClickOutsideHandler({
     emitter: formView,
@@ -68,14 +68,14 @@ export const addMouseEventListenerToHideDialog = (linkUI: LinkUI): void => {
     contextElements: element ? [element] : [],
     callback: () => {
       internalLinkUI._hideUI();
-    },
+    }
   });
 };
 const addCustomClickOutsideHandler = ({
   emitter,
   activator,
   callback,
-  contextElements,
+  contextElements
 }: {
   emitter: Emitter;
   activator: () => boolean;
@@ -91,7 +91,7 @@ const addCustomClickOutsideHandler = ({
       domEvt: {
         composedPath: () => Element[];
         target: HTMLElement;
-      },
+      }
     ) => {
       if (!activator()) {
         return;
@@ -124,7 +124,7 @@ const addCustomClickOutsideHandler = ({
         }
       }
       callback();
-    },
+    }
   );
   emitter.listenTo(
     document as unknown as Emitter,
@@ -134,7 +134,7 @@ const addCustomClickOutsideHandler = ({
       domEvt: {
         composedPath: () => Element[];
         target: HTMLElement;
-      },
+      }
     ) => {
       if (mouseDownOnWhiteListedElement) {
         // we already checked that this click (mouseDown) occurred on an allow-listed element
@@ -157,6 +157,6 @@ const addCustomClickOutsideHandler = ({
         }
       }
       callback();
-    },
+    }
   );
 };

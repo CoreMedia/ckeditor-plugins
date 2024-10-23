@@ -1,15 +1,19 @@
 import {
   ModelUri,
   requireContentCkeModelUri,
+  ROOT_NAME,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { Plugin, TextProxy, Range, Writer, Item as ModelItem, DiffItem, DiffItemInsert, LinkEditing } from "ckeditor5";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
-import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/Constants";
-import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { DiffItem, DiffItemInsert, Item as ModelItem, LinkEditing, Plugin, Range, TextProxy, Writer } from "ckeditor5";
+import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
+import {
+  ifCommand,
+  optionalCommandNotFound,
+  recommendCommand,
+  reportInitEnd,
+  reportInitStart,
+} from "@coremedia/ckeditor5-core-common";
 
 /**
  * Alias for easier readable code.
@@ -139,7 +143,7 @@ const getItems = (range: Range): ModelItem[] => [
  */
 class ContentLinkCommandHook extends Plugin {
   public static readonly pluginName = "ContentLinkCommandHook" as const;
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkCommandHook.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("ContentLinkCommandHook");
   readonly #trackingData: TrackingData = new TrackingData();
 
   /**
@@ -361,4 +365,5 @@ class ContentLinkCommandHook extends Plugin {
     return this.#replaceRawLink(writer, textProxy, range);
   }
 }
+
 export default ContentLinkCommandHook;

@@ -1,9 +1,13 @@
 import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
-import type MockInputExamplePlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
-import type { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockInputExamplePlugin";
-import type { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
-import type { IsLinkableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
+import type {
+  InputExampleElement,
+  MockInputExamplePlugin,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import type {
+  IsDroppableEvaluationResult,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Provides access to the `MockInputExamplePlugin`.

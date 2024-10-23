@@ -1,8 +1,11 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayServiceDescriptor";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
 import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
 import { first } from "rxjs/operators";
+import { jest } from "@jest/globals";
+
+jest.useFakeTimers();
 
 describe("MockContentDisplayService", () => {
   describe("serviceAgent Integration", () => {

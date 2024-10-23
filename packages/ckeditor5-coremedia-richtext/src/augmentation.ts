@@ -1,4 +1,7 @@
-import { CoreMediaRichTextConfig, COREMEDIA_RICHTEXT_CONFIG_KEY, CoreMediaRichText, LinkIntegration } from "./index";
+import CoreMediaRichTextConfig, { COREMEDIA_RICHTEXT_CONFIG_KEY } from "./CoreMediaRichTextConfig";
+import CoreMediaRichText from "./CoreMediaRichText";
+import { LinkIntegration } from "./integrations/LinkIntegration";
+
 declare module "ckeditor5" {
   interface EditorConfig {
     /**
@@ -8,6 +11,7 @@ declare module "ckeditor5" {
      */
     [COREMEDIA_RICHTEXT_CONFIG_KEY]?: CoreMediaRichTextConfig;
   }
+
   interface PluginsMap {
     [CoreMediaRichText.pluginName]: CoreMediaRichText;
     [LinkIntegration.pluginName]: LinkIntegration;

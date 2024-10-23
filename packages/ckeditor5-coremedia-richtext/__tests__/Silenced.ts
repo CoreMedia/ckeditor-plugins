@@ -1,3 +1,5 @@
+import { jest as jestGlobal } from "@jest/globals";
+
 /**
  * Suppresses Console Output while executing the given function, if
  * `silent === true`.
@@ -9,11 +11,11 @@ const silenced = <T>(call: () => T, silent = true): T => {
   const consoleOutputs: (keyof Console)[] = ["log", "error", "warn", "info", "debug"];
   const spies: jest.SpyInstance[] = [];
   consoleOutputs.forEach((output) => {
-    const spy = jest.spyOn(console, output);
+    const spy = jestGlobal.spyOn(console, output);
     spies.push(spy);
     if (silent) {
       // eslint-disable-next-line no-null/no-null
-      spy.mockImplementation(() => null);
+      spy.mockImplementation(() => null as unknown as Console);
     }
   });
   try {

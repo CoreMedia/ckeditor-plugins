@@ -1,18 +1,18 @@
 import { Plugin } from "ckeditor5";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   IsDroppableEvaluationResult,
-  isDroppableUris,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
+  isDroppableUris
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   IsLinkableEvaluationResult,
-  isLinkableUris,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
+  isLinkableUris
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -45,6 +45,7 @@ export interface InputExampleElement {
 export interface ExternalContent {
   externalId: number;
 }
+
 export const isAnExternalContent = (obj: number | object): boolean => {
   if (typeof obj === "number") {
     return false;
@@ -59,10 +60,12 @@ const PLUGIN_NAME = "MockInputExamplePlugin";
 class MockInputExamplePlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(this.pluginName);
+
   init(): void {
     const initInformation = reportInitStart(this);
     reportInitEnd(initInformation);
   }
+
   createInsertElement(data: InputExampleElement): HTMLDivElement {
     const insertDiv = document.createElement("div");
     insertDiv.classList.add("input-example", ...(data.classes || []));
@@ -115,6 +118,7 @@ class MockInputExamplePlugin extends Plugin {
   ensureIsDroppableInLinkBalloon(uris: string[]): IsLinkableEvaluationResult | undefined {
     return isLinkableUris(uris);
   }
+
   static async #setClipboardData(event: MouseEvent): Promise<void> {
     const target = event.target as HTMLElement;
     const contentIdCommaSeparated = target.getAttribute("data-uripath");
@@ -124,7 +128,7 @@ class MockInputExamplePlugin extends Plugin {
     const contentIds: string[] = contentIdCommaSeparated.split(",");
     const urilistJSON = JSON.stringify(contentIds);
     const blob = new Blob([urilistJSON], {
-      type: "cm-studio-rest/uri-list",
+      type: "cm-studio-rest/uri-list"
     });
     const data: Record<string, Blob> = {};
     data[blob.type] = blob;
@@ -133,10 +137,10 @@ class MockInputExamplePlugin extends Plugin {
       [
         {
           data,
-          options: "copy",
-        },
+          options: "copy"
+        }
       ],
-      new Date().getTime(),
+      new Date().getTime()
     );
   }
 
@@ -173,13 +177,16 @@ class MockInputExamplePlugin extends Plugin {
   static #removeDropData(): void {
     serviceAgent.unregisterServices("dragDropService");
   }
+
   static #generateUriPath(item: number | ExternalContent): string {
     const prefix: string = isAnExternalContent(item) ? "externalUri" : "content";
     const id: number = isAnExternalContent(item) ? (item as ExternalContent).externalId : (item as number);
     return `${prefix}/${id}`;
   }
+
   static #generateUriPathCsv(items: (number | ExternalContent)[]): string {
     return items.map((item) => MockInputExamplePlugin.#generateUriPath(item)).join(",");
   }
 }
+
 export default MockInputExamplePlugin;

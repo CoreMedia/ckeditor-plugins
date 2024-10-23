@@ -1,4 +1,4 @@
-import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
+import { ifCommand } from "@coremedia/ckeditor5-core-common";
 import blocklistIcon from "../theme/icons/blocklist.svg";
 import {
   Plugin,
@@ -18,6 +18,7 @@ import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
 import { UnblockEvent } from "./ui/blockedWordView";
 import BlocklistEditing from "./blocklistediting";
+
 const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
 
 /**
@@ -33,6 +34,7 @@ export default class Blocklistui extends Plugin {
   blocklistActionsView?: BlocklistActionsView;
   blocklistCommand: BlocklistCommand | undefined;
   #balloon: ContextualBalloon | undefined = undefined;
+
   async init(): Promise<void> {
     const editor = this.editor;
     this.blocklistCommand = (await ifCommand(editor, BLOCKLIST_COMMAND_NAME)) as BlocklistCommand;
@@ -52,6 +54,7 @@ export default class Blocklistui extends Plugin {
     // listen to changes in blocklistCommand and refresh the list in the blocklist view accordingly
     this.blocklistCommand.on("change:value", this.blocklistActionsView.refreshList.bind(this.blocklistActionsView));
   }
+
   #getBlocklistActionsView(): BlocklistActionsView {
     if (!this.blocklistActionsView) {
       this.blocklistActionsView = this.#createBlocklistActionsView();
@@ -232,6 +235,7 @@ export default class Blocklistui extends Plugin {
       position: this.#getBalloonPositionData(),
     });
   }
+
   #getBalloonPositionData(): Partial<PositionOptions> {
     const view = this.editor.editing.view;
     const viewDocument = view.document;

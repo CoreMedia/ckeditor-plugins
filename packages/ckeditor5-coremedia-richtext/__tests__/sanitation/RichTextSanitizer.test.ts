@@ -22,10 +22,13 @@ import {
   td,
   tr,
   ul,
-} from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+} from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { sanitationListener } from "./TestSanitationListener";
 import { parseXml } from "./XmlTestUtils";
 import { expectSanitationResult } from "./ExpectSanitationResult";
+import { jest } from "@jest/globals";
+
+jest.useFakeTimers();
 
 export const createRichTextSanitizer = (strictness: Strictness = defaultStrictness): RichTextSanitizer =>
   new RichTextSanitizer(strictness, sanitationListener);

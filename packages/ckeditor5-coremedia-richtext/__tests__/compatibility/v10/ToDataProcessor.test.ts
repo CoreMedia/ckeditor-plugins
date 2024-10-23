@@ -3,9 +3,12 @@
 import "jest-xml-matcher";
 import ToDataProcessor from "../../../src/ToDataProcessor";
 import { Editor } from "ckeditor5";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
+import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getV10Config } from "./Utils";
-jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+import { jest } from "@jest/globals";
+
+jest.useFakeTimers();
+
 const EXECUTION_REPETITIONS = 100;
 const FIBONACCI_INDEX_FROM = 1;
 /**
@@ -81,12 +84,14 @@ interface PerformanceTestData {
    */
   gracePercentage: number;
 }
+
 interface TestData extends PerformanceTestData {
   /**
    * The DOM we start from.
    */
   from: string;
 }
+
 type NamedTestData = [
   /**
    * A name/description for the test (will be printed to output).

@@ -1,6 +1,5 @@
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { Plugin, DataFilter } from "ckeditor5";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { DataFilter, Plugin } from "ckeditor5";
 import ReducedMatcherPattern, {
   InheritingMatcherPattern,
   resolveInheritance,
@@ -8,7 +7,7 @@ import ReducedMatcherPattern, {
 } from "./ReducedMatcherPattern";
 import { COREMEDIA_RICHTEXT_1_0_CONFIG } from "./CoreMediaRichText10Dtd";
 import { getConfig } from "./CoreMediaRichTextSupportConfig";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * Plugin, which configures CKEditor's General HTML Support, so that
@@ -24,7 +23,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  */
 class RichTextDataFilter extends Plugin {
   public static readonly pluginName = "GeneralRichTextDataFilter" as const;
-  static readonly #logger: Logger = LoggerProvider.getLogger(RichTextDataFilter.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("GeneralRichTextDataFilter");
   static readonly requires = [DataFilter];
   #delegate: DataFilter | undefined = undefined;
   readonly #config: ReducedMatcherPattern[] = [];

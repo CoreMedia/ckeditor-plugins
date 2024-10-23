@@ -1,6 +1,6 @@
 import V10RichTextDataProcessor from "./compatibility/v10/V10RichTextDataProcessor";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { Plugin, DataProcessor } from "ckeditor5";
 import RichTextDataProcessor from "./RichTextDataProcessor";
 import { getCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
@@ -12,6 +12,7 @@ import { LinkIntegration } from "./integrations/LinkIntegration";
 export default class CoreMediaRichText extends Plugin {
   public static readonly pluginName = COREMEDIA_RICHTEXT_PLUGIN_NAME;
   static readonly requires = [LinkIntegration];
+
   init(): void {
     const initInformation = reportInitStart(this);
     const { editor } = this;

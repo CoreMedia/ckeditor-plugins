@@ -24,6 +24,7 @@
     "@coremedia/ckeditor5-coremedia-richtext": "^20.1.0",
     "@coremedia/ckeditor5-coremedia-studio-integration": "^20.1.0",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "^20.1.0",
+    "@jest/globals": "^29.7.0",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.10",
@@ -40,7 +41,7 @@
     "playwright-core": "^1.45.1",
     "rimraf": "^6.0.1",
     "tslib": "^2.6.3",
-    "typescript": "^5.4.5",
+    "typescript": "5.4.5",
     "wait-for-expect": "^3.0.2"
   },
   "scripts": {

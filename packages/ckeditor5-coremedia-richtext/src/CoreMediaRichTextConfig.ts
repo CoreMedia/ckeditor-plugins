@@ -1,7 +1,8 @@
 import { defaultStrictness, Strictness } from "./Strictness";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { Config as CKEditorConfig, EditorConfig } from "ckeditor5";
+
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 
 /**
@@ -25,22 +26,26 @@ export const compatibilityKeys: readonly string[] = ["latest", "v10"];
  * The type of compatibility keys.
  */
 export type CompatibilityKey = (typeof compatibilityKeys)[number];
+
 export interface CompatibilityConfig {
   /**
    * Compatibility mode of data-processing.
    */
   readonly compatibility?: CompatibilityKey;
 }
+
 export interface CommonCoreMediaRichTextConfig extends CompatibilityConfig {
   /**
    * The strictness when validating against CoreMedia RichText 1.0 DTD.
    */
   readonly strictness?: Strictness;
 }
+
 export interface LatestCoreMediaRichTextConfig extends CommonCoreMediaRichTextConfig {
   readonly compatibility: "latest";
   readonly rules?: RuleConfig[];
 }
+
 const isLatestCoreMediaRichTextConfig = (value: unknown): value is LatestCoreMediaRichTextConfig => {
   if (value && typeof value === "object") {
     if (value.hasOwnProperty("compatibility")) {
@@ -50,6 +55,7 @@ const isLatestCoreMediaRichTextConfig = (value: unknown): value is LatestCoreMed
   }
   return false;
 };
+
 export interface V10CoreMediaRichTextConfig extends CommonCoreMediaRichTextConfig {
   readonly compatibility: "v10";
   /**
@@ -57,6 +63,7 @@ export interface V10CoreMediaRichTextConfig extends CommonCoreMediaRichTextConfi
    */
   readonly rules?: FilterRuleSetConfiguration;
 }
+
 const isV10CoreMediaRichTextConfig = (value: unknown): value is V10CoreMediaRichTextConfig => {
   if (value && typeof value === "object") {
     if (value.hasOwnProperty("compatibility")) {

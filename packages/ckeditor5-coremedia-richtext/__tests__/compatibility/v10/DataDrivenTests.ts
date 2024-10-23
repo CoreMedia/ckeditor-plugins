@@ -1,9 +1,8 @@
 import "jest-xml-matcher";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
+import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { Editor } from "ckeditor5";
 import { getV10Config, parseXml } from "./Utils";
 import { silenced } from "../../Silenced";
-jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
 export const MOCK_EDITOR = new Editor();
@@ -72,6 +71,7 @@ export interface DirectionRestriction {
    */
   direction?: Direction;
 }
+
 export type DocumentPostProcessor = (document: Document) => void;
 
 /**

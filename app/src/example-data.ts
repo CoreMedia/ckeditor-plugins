@@ -1,5 +1,5 @@
 // noinspection HttpUrlsUsage
-import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
+import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import {
   bbCodeData,
   ExampleData,
@@ -8,6 +8,7 @@ import {
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { EditingView, Editor } from "ckeditor5";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
+
 const exampleData: {
   richtext: ExampleData;
   bbcode: ExampleData;
@@ -49,7 +50,7 @@ const dumpDataViewOnRender = (editor: Editor): void => {
       console.log("CKEditor's Data-Controller received data via 'set'.", {
         event,
         // eslint-disable-next-line
-    data: details[0]
+        data: details[0]
       }),
     {
       priority: "lowest",

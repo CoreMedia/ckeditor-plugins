@@ -1,11 +1,10 @@
-import { ButtonView, Plugin, Editor } from "ckeditor5";
+import { ButtonView, Editor, Plugin } from "ckeditor5";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 import { executeOpenImageInTabCommand, requireOpenImageInTabCommand } from "./OpenImageInTabCommand";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in
@@ -17,12 +16,14 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvi
 export default class ContentImageOpenInTabUI extends Plugin {
   static readonly pluginName = "ContentImageOpenInTabUI" as const;
   static readonly requires = [ContentImageEditingPlugin];
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageOpenInTabUI.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("ContentImageOpenInTabUI");
+
   init(): void {
     const initInformation = reportInitStart(this);
     this.#createToolbarLinkImageButton(this.editor);
     reportInitEnd(initInformation);
   }
+
   #createToolbarLinkImageButton(editor: Editor): void {
     const logger = ContentImageOpenInTabUI.#logger;
     const { ui } = editor;
