@@ -6,7 +6,7 @@
     "./types"
   ],
   "compilerOptions": {
-    "outDir": "./dist/src",
+    "outDir": "./dist",
     "paths": {
       "@bbob/core/*": [
         "./types/@bbob/core/*"

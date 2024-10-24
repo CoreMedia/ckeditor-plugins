@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  ckeditor5@42.0.2:
+    hash: e3wvqnjogfwavdpitrzg5zqxpm
+    path: patches/ckeditor5@42.0.2.patch
+
 importers:
 
   .:
@@ -134,7 +139,7 @@ importers:
         version: 1.1.5
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       xml-formatter:
         specifier: ^3.6.2
         version: 3.6.3
@@ -237,7 +242,7 @@ importers:
         version: 20.16.5
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       expect-playwright:
         specifier: ^0.8.0
         version: 0.8.0
@@ -337,7 +342,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -362,7 +367,7 @@ importers:
         version: link:../ckeditor5-logging
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -407,7 +412,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -445,7 +450,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
@@ -483,7 +488,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -523,7 +528,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
@@ -582,7 +587,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -664,7 +669,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
@@ -726,7 +731,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
@@ -785,7 +790,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -823,7 +828,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -858,7 +863,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -954,7 +959,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -992,7 +997,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1013,10 +1018,10 @@ importers:
   packages/ckeditor5-dataprocessor-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: ^20.1.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: ^20.1.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1030,7 +1035,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1052,7 +1057,7 @@ importers:
     devDependencies:
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
@@ -1084,7 +1089,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1148,7 +1153,7 @@ importers:
         version: 5.28.5
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1207,7 +1212,7 @@ importers:
         version: 29.5.12
       ckeditor5:
         specifier: ^42.0.2
-        version: 42.0.2
+        version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -7137,14 +7142,14 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-upload': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-alignment@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-autoformat@42.0.2':
     dependencies:
@@ -7152,13 +7157,13 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-autosave@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-basic-styles@42.0.2':
@@ -7166,7 +7171,7 @@ snapshots:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-block-quote@42.0.2':
     dependencies:
@@ -7175,7 +7180,7 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-ckbox@42.0.2':
     dependencies:
@@ -7185,7 +7190,7 @@ snapshots:
       '@ckeditor/ckeditor5-upload': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       blurhash: 2.0.5
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-ckfinder@42.0.2':
@@ -7193,7 +7198,7 @@ snapshots:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-clipboard@42.0.2':
     dependencies:
@@ -7208,7 +7213,7 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-code-block@42.0.2':
     dependencies:
@@ -7217,7 +7222,7 @@ snapshots:
       '@ckeditor/ckeditor5-enter': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-core@42.0.2':
@@ -7272,7 +7277,7 @@ snapshots:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-upload': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-editor-balloon@42.0.2':
     dependencies:
@@ -7280,7 +7285,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-editor-classic@42.0.2':
@@ -7289,7 +7294,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-editor-decoupled@42.0.2':
@@ -7298,7 +7303,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-editor-inline@42.0.2':
@@ -7307,7 +7312,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-editor-multi-root@42.0.2':
@@ -7316,7 +7321,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-engine@42.0.2':
@@ -7339,14 +7344,14 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-undo': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-find-and-replace@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-font@42.0.2':
@@ -7355,7 +7360,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-heading@42.0.2':
     dependencies:
@@ -7364,20 +7369,20 @@ snapshots:
       '@ckeditor/ckeditor5-paragraph': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-highlight@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-horizontal-line@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-html-embed@42.0.2':
     dependencies:
@@ -7385,7 +7390,7 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-html-support@42.0.2':
     dependencies:
@@ -7394,7 +7399,7 @@ snapshots:
       '@ckeditor/ckeditor5-enter': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-image@42.0.2':
@@ -7408,7 +7413,7 @@ snapshots:
       '@ckeditor/ckeditor5-upload': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-indent@42.0.2':
@@ -7417,7 +7422,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
@@ -7426,7 +7431,7 @@ snapshots:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-link@42.0.2':
     dependencies:
@@ -7437,7 +7442,7 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-list@42.0.2':
@@ -7449,14 +7454,14 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-markdown-gfm@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 42.0.2
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-engine': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       marked: 4.0.12
       turndown: 7.2.0
       turndown-plugin-gfm: 1.0.2
@@ -7471,7 +7476,7 @@ snapshots:
       '@ckeditor/ckeditor5-undo': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-mention@42.0.2':
     dependencies:
@@ -7479,7 +7484,7 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-minimap@42.0.2':
@@ -7488,14 +7493,14 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-page-break@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-paragraph@42.0.2':
     dependencies:
@@ -7508,14 +7513,14 @@ snapshots:
       '@ckeditor/ckeditor5-clipboard': 42.0.2
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-engine': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-remove-format@42.0.2':
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-restricted-editing@42.0.2':
     dependencies:
@@ -7523,7 +7528,7 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-select-all@42.0.2':
     dependencies:
@@ -7535,7 +7540,7 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-source-editing@42.0.2':
     dependencies:
@@ -7543,7 +7548,7 @@ snapshots:
       '@ckeditor/ckeditor5-theme-lark': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-special-characters@42.0.2':
     dependencies:
@@ -7551,7 +7556,7 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
 
   '@ckeditor/ckeditor5-style@42.0.2':
     dependencies:
@@ -7559,7 +7564,7 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-table@42.0.2':
@@ -7570,7 +7575,7 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
       '@ckeditor/ckeditor5-widget': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@ckeditor/ckeditor5-theme-lark@42.0.2':
@@ -7627,7 +7632,7 @@ snapshots:
       '@ckeditor/ckeditor5-core': 42.0.2
       '@ckeditor/ckeditor5-ui': 42.0.2
       '@ckeditor/ckeditor5-utils': 42.0.2
-      ckeditor5: 42.0.2
+      ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
 
   '@coremedia/service-agent@1.1.5':
@@ -8841,7 +8846,7 @@ snapshots:
 
   cjs-module-lexer@1.4.1: {}
 
-  ckeditor5@42.0.2:
+  ckeditor5@42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm):
     dependencies:
       '@ckeditor/ckeditor5-adapter-ckfinder': 42.0.2
       '@ckeditor/ckeditor5-alignment': 42.0.2

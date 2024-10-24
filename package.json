@@ -85,5 +85,10 @@
     "typedoc": "^0.25.13",
     "typescript": "5.4.5",
     "validate-peer-dependencies": "^2.2.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "ckeditor5@42.0.2": "patches/ckeditor5@42.0.2.patch"
+    }
   }
 }
