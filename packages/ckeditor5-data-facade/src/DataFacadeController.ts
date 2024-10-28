@@ -174,7 +174,6 @@ export class DataFacadeController implements DataApi {
      * forward to the existing DataFacadeController bound to CKEditor via
      * DataFacade plugin.
      */
-
     this.#initiallyPropagateDataToDelegate(boundDataFacadeController);
   }
 

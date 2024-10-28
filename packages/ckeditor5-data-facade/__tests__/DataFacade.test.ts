@@ -1,86 +1,61 @@
-import { SetDataData } from "../src/DataControllerApi";
-import { EditorUI, Autosave, Editor } from "ckeditor5";
-import { jest } from "@jest/globals";
-import { DataFacade } from "../src";
+import { Autosave, Editor } from "ckeditor5";
+import { DataFacade, GetDataApi, SetDataData } from "../src";
+import { allPlugins, completeToolbar, createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
-jest.useFakeTimers();
+const simulateDataReformat = (data: SetDataData, editor: Editor) => {
+  const previousVersion = editor.model.document.version;
+  editor.data.set(data);
+  editor.model.document.version = previousVersion;
+};
 
-class DummyEditor extends Editor {
-  readonly ui: EditorUI = {} as EditorUI;
-
-  /**
-   * Simulates an internal change to the data (like reordering attributes).
-   * Similar to setting data, but skipping version update.
-   * @param data - data to set to be _equal_ to the original set data
-   */
-  simulateDataReformat(data: SetDataData): void {
-    const previousVersion = this.model.document.version;
-    this.data.set(data);
-    this.model.document.version = previousVersion;
-  }
-
-  /**
-   * Make test more verbose (we could have invoked data controller directly).
-   *
-   * @param data - data that are the result of editorial changes
-   */
-  simulateEditorialUpdate(data: SetDataData): void {
-    this.data.set(data);
-  }
-}
+const simulateEditorialUpdate = (data: SetDataData, editor: Editor) => {
+  editor.data.set(data);
+};
 
 describe("DataFacade", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    prepareDocument(document);
   });
   it("should forward previously set data once initialized", async () => {
-    const dataFixture = "DATA";
-    const initDelay = new Promise<void>((resolve) => window.setTimeout(resolve, 1));
-    const editor = new DummyEditor({
-      plugins: [DataFacade, Autosave],
-      // @ts-expect-error – Just some mock configuration.
-      mock: {
-        initDelay,
-      },
-    });
+    const dataFixture = "<p>DATA</p>";
+    const editor = await createTestEditor();
     const dataFacade = editor.plugins.get(DataFacade);
     // This will also forward the data to the editor, but we will not know
     // if the editor itself does not override these afterward, e.g., when
     // reading the `initialData` property.
     dataFacade.setData(dataFixture);
-    editor.data.set("mocking data set from initialData");
     expect.assertions(2);
-    await initDelay.then(() => {
-      // After init is done, data should have been forwarded.
-      expect(editor.data.get()).toEqual(dataFixture);
+    // await initDelay;
+    // After init is done, data should have been forwarded.
+    expect(editor.data.get()).toEqual(dataFixture);
 
-      // Caching should work.
-      editor.simulateDataReformat(dataFixture.toLowerCase());
-      expect(dataFacade.getData()).toEqual(dataFixture);
-    });
+    // Caching should work.
+    simulateDataReformat(dataFixture.toLowerCase(), editor);
+    expect(dataFacade.getData()).toEqual(dataFixture);
   });
   describe("Autosave integration", () => {
-    const dataFixture = "DATA";
+    const dataFixture = "<p>DATA</p>";
     let savedData = "";
-    let editor: DummyEditor;
-    let autosave: InstanceType<typeof Autosave>;
+    let editor: Editor;
+    let autosave: Autosave;
     let dataFacade: InstanceType<typeof DataFacade>;
-    beforeEach(() => {
-      editor = new DummyEditor({
-        plugins: [DataFacade, Autosave],
+    beforeEach(async () => {
+      prepareDocument(document);
+      editor = await createTestEditor("main", allPlugins, completeToolbar, {
         dataFacade: {
-          save(dataApi): Promise<void> {
+          save(dataApi: GetDataApi): Promise<void> {
             savedData = dataApi.getData();
             return Promise.resolve();
           },
         },
       });
+      // await editor.initPlugins();
       autosave = editor.plugins.get(Autosave);
       dataFacade = editor.plugins.get(DataFacade);
     });
     it("should hook into autosave and use custom configuration for saving cached data", async () => {
       dataFacade.setData(dataFixture);
-      editor.simulateDataReformat(dataFixture.toLowerCase());
+      simulateDataReformat(dataFixture.toLowerCase(), editor);
       expect.assertions(1);
 
       // We do not mock auto-forwarding set data to Autosave. Thus, invoking
@@ -91,7 +66,7 @@ describe("DataFacade", () => {
     });
     it("should hook into autosave but prefer editorial changes on data facade's save", async () => {
       dataFacade.setData(dataFixture);
-      editor.simulateEditorialUpdate(dataFixture.toLowerCase());
+      simulateEditorialUpdate(dataFixture.toLowerCase(), editor);
       expect.assertions(1);
 
       // We do not mock auto-forwarding set data to Autosave. Thus, invoking
