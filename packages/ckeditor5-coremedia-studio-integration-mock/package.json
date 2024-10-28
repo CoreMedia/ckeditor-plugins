@@ -38,7 +38,7 @@
   "devDependencies": {
     "@babel/cli": "^7.24.1",
     "@babel/core": "^7.24.4",
-    "@ckeditor/ckeditor5-core": "^42.0.1",
+    "@ckeditor/ckeditor5-core": "^43.2.0",
     "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
