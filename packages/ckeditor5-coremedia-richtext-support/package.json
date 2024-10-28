@@ -47,10 +47,10 @@
     "/src"
   ],
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-html-support": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1"
+    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "@ckeditor/ckeditor5-engine": "^43.2.0",
+    "@ckeditor/ckeditor5-html-support": "^43.2.0",
+    "@ckeditor/ckeditor5-utils": "^43.2.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-core-common": "20.1.1-rc.5",

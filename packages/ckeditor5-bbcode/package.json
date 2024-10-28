@@ -47,8 +47,8 @@
     "/types"
   ],
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1"
+    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "@ckeditor/ckeditor5-engine": "^43.2.0"
   },
   "dependencies": {
     "@bbob/core": "^3.0.2",
