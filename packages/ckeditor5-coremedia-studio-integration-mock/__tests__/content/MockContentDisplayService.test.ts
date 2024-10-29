@@ -3,9 +3,6 @@ import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-core
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
 import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
 import { first } from "rxjs/operators";
-import { jest } from "@jest/globals";
-
-jest.useFakeTimers();
 
 describe("MockContentDisplayService", () => {
   describe("serviceAgent Integration", () => {

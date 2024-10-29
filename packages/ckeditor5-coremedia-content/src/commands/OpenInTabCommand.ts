@@ -3,7 +3,7 @@ import {
   isModelUriPath,
   isUriPath,
   requireContentUriPath,
-  UriPath
+  UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { canBeOpenedInTab, openEntitiesInTabs, OpenEntitiesInTabsResult } from "../OpenInTab";
