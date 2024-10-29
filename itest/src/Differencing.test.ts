@@ -9,9 +9,6 @@ import {
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import "./expect/Expectations";
 import { PNG_BLUE_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { jest } from "@jest/globals";
-
-jest.useFakeTimers();
 
 const xdiff = new Differencing();
 

@@ -3,8 +3,6 @@ import { CKEditorError, Editor } from "ckeditor5";
 import { jest } from "@jest/globals";
 import { createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
-jest.useFakeTimers();
-
 /**
  * Simulates an internal change to the data (like reordering attributes).
  * Similar to setting data, but skipping version update.

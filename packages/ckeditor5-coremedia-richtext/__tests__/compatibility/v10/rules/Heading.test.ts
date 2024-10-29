@@ -1,8 +1,5 @@
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 import { flatten } from "../Utils";
-import { jest } from "@jest/globals";
-
-jest.useFakeTimers();
 
 // noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";

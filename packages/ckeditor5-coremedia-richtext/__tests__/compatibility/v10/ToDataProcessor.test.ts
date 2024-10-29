@@ -5,9 +5,6 @@ import ToDataProcessor from "../../../src/ToDataProcessor";
 import { Editor } from "ckeditor5";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getV10Config } from "./Utils";
-import { jest } from "@jest/globals";
-
-jest.useFakeTimers();
 
 const EXECUTION_REPETITIONS = 100;
 const FIBONACCI_INDEX_FROM = 1;
