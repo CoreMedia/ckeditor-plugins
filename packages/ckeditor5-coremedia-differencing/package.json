@@ -24,9 +24,9 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "@ckeditor/ckeditor5-engine": "^43.2.0",
+    "@ckeditor/ckeditor5-utils": "^43.2.0",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^29.5.12",
@@ -37,9 +37,9 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1"
+    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "@ckeditor/ckeditor5-engine": "^43.2.0",
+    "@ckeditor/ckeditor5-utils": "^43.2.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "20.1.1-rc.5",

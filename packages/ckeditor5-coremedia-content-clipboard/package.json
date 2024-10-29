@@ -25,13 +25,13 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^42.0.1",
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-html-support": "^42.0.1",
-    "@ckeditor/ckeditor5-ui": "^42.0.1",
-    "@ckeditor/ckeditor5-undo": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "@ckeditor/ckeditor5-clipboard": "^43.2.0",
+    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "@ckeditor/ckeditor5-engine": "^43.2.0",
+    "@ckeditor/ckeditor5-html-support": "^43.2.0",
+    "@ckeditor/ckeditor5-ui": "^43.2.0",
+    "@ckeditor/ckeditor5-undo": "^43.2.0",
+    "@ckeditor/ckeditor5-utils": "^43.2.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
     "@types/jest": "^29.5.12",
@@ -52,13 +52,13 @@
     "/theme"
   ],
   "peerDependencies": {
-    "@ckeditor/ckeditor5-clipboard": "^42.0.1",
-    "@ckeditor/ckeditor5-core": "^42.0.1",
-    "@ckeditor/ckeditor5-engine": "^42.0.1",
-    "@ckeditor/ckeditor5-html-support": "^42.0.1",
-    "@ckeditor/ckeditor5-ui": "^42.0.1",
-    "@ckeditor/ckeditor5-undo": "^42.0.1",
-    "@ckeditor/ckeditor5-utils": "^42.0.1",
+    "@ckeditor/ckeditor5-clipboard": "^43.2.0",
+    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "@ckeditor/ckeditor5-engine": "^43.2.0",
+    "@ckeditor/ckeditor5-html-support": "^43.2.0",
+    "@ckeditor/ckeditor5-ui": "^43.2.0",
+    "@ckeditor/ckeditor5-undo": "^43.2.0",
+    "@ckeditor/ckeditor5-utils": "^43.2.0",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
