@@ -939,9 +939,6 @@ importers:
       '@babel/core':
         specifier: ^7.24.4
         version: 7.25.2
-      '@ckeditor/ckeditor5-core':
-        specifier: ^42.0.2
-        version: 42.0.2
       '@coremedia-internal/ckeditor5-babel-config':
         specifier: ^1.0.0
         version: link:../ckeditor5-babel-config
