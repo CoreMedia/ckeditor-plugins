@@ -224,7 +224,7 @@ importers:
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: ^20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
         specifier: ^20.1.0
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
@@ -326,10 +326,10 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dom-support':
         specifier: ^20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
         specifier: ^20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -364,7 +364,7 @@ importers:
     dependencies:
       '@coremedia/ckeditor5-logging':
         specifier: ^20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
       ckeditor5:
         specifier: ^42.0.2
         version: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
@@ -402,7 +402,7 @@ importers:
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -434,10 +434,10 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: ^20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
         specifier: ^20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -472,10 +472,10 @@ importers:
     dependencies:
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: 20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -512,10 +512,10 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: 20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -568,10 +568,10 @@ importers:
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
@@ -611,8 +611,8 @@ importers:
   packages/ckeditor5-coremedia-example-data:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^21.0.0
-        version: 21.0.0
+        specifier: ^20.1.0
+        version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -650,10 +650,10 @@ importers:
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: 20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
@@ -706,13 +706,13 @@ importers:
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: 20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-link-common':
         specifier: 20.1.0
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
@@ -768,13 +768,13 @@ importers:
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-link-common':
         specifier: 20.1.0
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: ^1.0.0
@@ -818,7 +818,7 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -883,7 +883,7 @@ importers:
   packages/ckeditor5-coremedia-studio-integration:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: ^21.0.0
+        specifier: ^20.1.0
         version: link:../ckeditor5-logging
       node-esapi:
         specifier: ^0.0.1
@@ -925,10 +925,10 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: 20.1.0
-        version: 20.1.0(@coremedia/service-agent@1.1.5)
+        version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
@@ -981,7 +981,7 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -1019,7 +1019,7 @@ importers:
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -1070,10 +1070,10 @@ importers:
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-dom-support':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -1101,8 +1101,8 @@ importers:
   packages/ckeditor5-dom-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^21.0.0
-        version: 21.0.0
+        specifier: ^20.1.0
+        version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -1134,7 +1134,7 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -1199,7 +1199,7 @@ importers:
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
         specifier: 20.1.0
-        version: 20.1.0
+        version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
         specifier: ^1.0.0
@@ -2065,26 +2065,6 @@ packages:
 
   '@ckeditor/ckeditor5-word-count@42.0.2':
     resolution: {integrity: sha512-jtlyA6TXnnRpaTgvYG219z5p+MRZWUBz3r5oHa79lFcMDREZH6gKztiE+hYSmiL2OSAtHi0kYWUAF/oJfpHt3g==}
-
-  '@coremedia/ckeditor5-common@20.1.0':
-    resolution: {integrity: sha512-y+y718mM3gJmjY5PAb93gFwvQ4ApPslciaNcP6xOD/OMWxOgCi8Lgq8bSb2PHms4Cnj5W2qJ+y6g0vlCkEWtxA==}
-
-  '@coremedia/ckeditor5-common@21.0.0':
-    resolution: {integrity: sha512-9+5p4cH/RrORtyy+ue/Oiz5iGt+Ef0It+penA96eXJn+eD2OZsUqFtQeTu+UP7QZUSYVz+DKTH9zA5TT/KBcqQ==}
-
-  '@coremedia/ckeditor5-coremedia-studio-integration@20.1.0':
-    resolution: {integrity: sha512-eOJczihTl/hJfd7DV83Tzbw2qu7TD9f8BOtV8ppfpS9gw0ego8TGgc4ggEq7ubKnhnT7Dbhdt75d6SaUr7H1Hg==}
-    peerDependencies:
-      '@coremedia/service-agent': ^1.1.5 || ^2.0.1
-
-  '@coremedia/ckeditor5-dom-support@20.1.0':
-    resolution: {integrity: sha512-KUXzKIJUWiekxWiotKfSI9ulmnloSn+8hHrrlcLTOSg/ytpnJYAMnSaWGN8mKJewEn2B6v+DiZpqDW+HR2mc/Q==}
-
-  '@coremedia/ckeditor5-logging@20.1.0':
-    resolution: {integrity: sha512-LgjgeTKqbK7OOapFI4wZSx/lv7+8EdAKjYFfhS1s0t1J8RbfTaz0gydaBfREGPZ1ImSTMmEniNY1fPR28BEf3Q==}
-
-  '@coremedia/ckeditor5-logging@21.0.0':
-    resolution: {integrity: sha512-6y0jy1MZ6Um6t8sy8mPkxlSXawqbXMsb8CxtPUx6rKFzETS3/bbzf6CkBUrNN6tF3vbXNC8G+quoB8wPlcUd3Q==}
 
   '@coremedia/service-agent@1.1.5':
     resolution: {integrity: sha512-yPdNaqvpE3W1seg6uZEPgMZSs1Ov1dRbMQxluNaYLCdU736j9j7aN/XqmjZWfDVncfVTLYNCNuIFfMS3dE/I1g==}
@@ -7654,29 +7634,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 42.0.2
       ckeditor5: 42.0.2(patch_hash=e3wvqnjogfwavdpitrzg5zqxpm)
       lodash-es: 4.17.21
-
-  '@coremedia/ckeditor5-common@20.1.0':
-    dependencies:
-      '@coremedia/ckeditor5-logging': 20.1.0
-
-  '@coremedia/ckeditor5-common@21.0.0':
-    dependencies:
-      '@coremedia/ckeditor5-logging': 21.0.0
-
-  '@coremedia/ckeditor5-coremedia-studio-integration@20.1.0(@coremedia/service-agent@1.1.5)':
-    dependencies:
-      '@coremedia/ckeditor5-logging': 20.1.0
-      '@coremedia/service-agent': 1.1.5
-      node-esapi: 0.0.1
-      rxjs: 7.8.1
-
-  '@coremedia/ckeditor5-dom-support@20.1.0':
-    dependencies:
-      '@coremedia/ckeditor5-common': 20.1.0
-
-  '@coremedia/ckeditor5-logging@20.1.0': {}
-
-  '@coremedia/ckeditor5-logging@21.0.0': {}
 
   '@coremedia/service-agent@1.1.5':
     dependencies:
