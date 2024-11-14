@@ -28,7 +28,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
    */
   async validateIsDroppableState(uris: string[]): Promise<IsDroppableEvaluationResult | undefined> {
     return this.evaluate(
-      (plugin: MockInputExamplePlugin, contentIds): IsDroppableEvaluationResult | undefined =>
+      (plugin, contentIds): IsDroppableEvaluationResult | undefined =>
         plugin.ensureIsDroppableInRichTextIsEvaluated(contentIds),
       uris,
     );
@@ -36,8 +36,7 @@ export class MockInputExamplePluginWrapper extends JSWrapper<MockInputExamplePlu
 
   async validateIsDroppableInLinkBalloon(uris: string[]): Promise<IsLinkableEvaluationResult | undefined> {
     return this.evaluate(
-      (plugin: MockInputExamplePlugin, contentIds): IsLinkableEvaluationResult | undefined =>
-        plugin.ensureIsDroppableInLinkBalloon(contentIds),
+      (plugin, contentIds): IsLinkableEvaluationResult | undefined => plugin.ensureIsDroppableInLinkBalloon(contentIds),
       uris,
     );
   }

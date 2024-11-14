@@ -1,9 +1,6 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import {
-  PNG_EMPTY_24x24,
-  PNG_LOCK_24x24,
-  PNG_RED_240x135,
-, MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import type { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { PNG_EMPTY_24x24, PNG_LOCK_24x24, PNG_RED_240x135 } from "./MockFixtures";
 import "./expect/Expectations";
 import { ElementHandle } from "playwright-core";
 import {
@@ -12,7 +9,7 @@ import {
   img,
   p,
   richtext,
-  linkReference
+  linkReference,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";

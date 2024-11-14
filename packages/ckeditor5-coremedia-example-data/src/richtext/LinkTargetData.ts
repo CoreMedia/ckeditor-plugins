@@ -13,7 +13,7 @@ const HELLIP = "\u{2026}";
 const UNSET = MDASH;
 const EXAMPLE_URL = "https://example.org/";
 
-const serializer = new XMLSerializer();
+const serializer = () => new XMLSerializer();
 
 const truncate = (str: string | null, maxLength: number): string | null => {
   if (!!str && str.length > maxLength) {
@@ -33,7 +33,7 @@ const escape = (str: string | null): string | null => {
     return str;
   }
 
-  const el = richTextDocument.createElement("span");
+  const el = richTextDocument().createElement("span");
   el.textContent = str;
   // noinspection InnerHTMLJS
   return el.innerHTML;
@@ -55,12 +55,12 @@ const renderUiEditorValue = (uiEditorValue: string | null): string => {
 // TODO: Move to `RichText` and add this proper attribute escaping to any
 //   generator functions such as `nonEmptyElement`.
 const createLink = (show: string | null | undefined, role: string | null | undefined, href = EXAMPLE_URL): string => {
-  const a = richTextDocument.createElement("a");
+  const a = richTextDocument().createElement("a");
   a.textContent = LINK_TEXT;
   a.setAttribute("xlink:href", href);
   show && a.setAttribute("xlink:show", show);
   role && a.setAttribute("xlink:role", role);
-  return serializer.serializeToString(a);
+  return serializer().serializeToString(a);
 };
 
 interface Scenario {
@@ -332,6 +332,6 @@ const linkTargetExamples = () => {
 };
 
 // noinspection JSUnusedGlobalSymbols Used in Example App
-export const linkTargetData: ExampleData = {
+export const linkTargetData: () => ExampleData = () => ({
   "Link Targets": linkTargetExamples(),
-};
+});

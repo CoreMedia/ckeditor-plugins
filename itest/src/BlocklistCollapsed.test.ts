@@ -1,4 +1,3 @@
-import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { clickModifiers } from "./aria/KeyboardUtils";
@@ -29,7 +28,7 @@ describe("Blocklist", () => {
   describe("Blocklist", () => {
     it("Collapsed selection shows balloon", async () => {
       const blockedWord = "thisisablockedword";
-      const serviceAgent: MockServiceAgentPluginWrapper = application.mockServiceAgent;
+      const serviceAgent = application.mockServiceAgent;
       await serviceAgent.getBlocklistServiceWrapper().addWord(blockedWord);
 
       const data = richtext(`${p("Hello World!")}${p(blockedWord)}${p("This is an example text for test purposes.")}`);

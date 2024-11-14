@@ -8,7 +8,7 @@ import {
   blobReference,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import "./expect/Expectations";
-import { PNG_BLUE_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { PNG_BLUE_240x135 } from "./MockFixtures";
 
 const xdiff = new Differencing();
 
