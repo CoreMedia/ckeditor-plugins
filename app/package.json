@@ -25,7 +25,7 @@
     "@coremedia/ckeditor5-coremedia-link": "^20.1.0",
     "@coremedia/ckeditor5-coremedia-richtext": "^20.1.0",
     "@coremedia/ckeditor5-coremedia-studio-essentials": "^20.1.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "^20.1.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "workspace:*",
     "@coremedia/ckeditor5-data-facade": "^20.1.0",
     "@coremedia/ckeditor5-dataprocessor-support": "^20.1.0",
     "@coremedia/ckeditor5-dialog-visibility": "^20.1.0",
