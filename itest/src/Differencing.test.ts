@@ -156,6 +156,9 @@ describe("Differencing Feature", () => {
       const { ui } = editor;
       const editableHandle = await ui.getEditableElement();
 
+      // Temporarily fix this test
+      await editor.setData("");
+
       // EOD: We mark all diffs as EOD for simpler matching, as we don't struggle
       // with attribute order then.
       const difference = `${xdiff.change("bold ", EOD)}${xdiff.add(" ", EOD)}`;
