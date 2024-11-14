@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./src/index.ts",
       "default": "./dist/src/index.js",
       "import": "./dist/src/index.js"
     }
