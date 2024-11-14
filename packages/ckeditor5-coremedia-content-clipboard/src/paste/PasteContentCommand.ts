@@ -1,13 +1,16 @@
 import { Command, Editor } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
-import { ClipboardService, createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
+  ClipboardItemRepresentation,
+  ClipboardService,
+  createClipboardServiceDescriptor,
+  createRichtextConfigurationServiceDescriptor,
+  isUriPath,
+  toContentUris,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { ClipboardItemRepresentation } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import type { Subscription } from "rxjs";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { insertContentMarkers } from "../ContentMarkers";
-import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Command to insert Content from the ClipboardService into the document at the actual selection.
@@ -97,7 +100,7 @@ export class PasteContentCommand extends Command {
 
   static async resolvePastableStates(uris: string[]): Promise<boolean[]> {
     const richtextConfigurationService = await serviceAgent.fetchService(
-      createRichtextConfigurationServiceDescriptor()
+      createRichtextConfigurationServiceDescriptor(),
     );
     const pastableStatePromises: Promise<boolean>[] = uris.map(async (uri): Promise<boolean> => {
       const isLinkable = await richtextConfigurationService.hasLinkableType(uri);

@@ -5,72 +5,72 @@
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.
 
 import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
-import { LinkTarget, ContentLinks, COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link";
+import { ContentLinks, COREMEDIA_LINK_CONFIG_KEY, LinkTarget } from "@coremedia/ckeditor5-coremedia-link";
 import { ContentClipboard, PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import {
-  MockStudioIntegration,
   COREMEDIA_MOCK_CONTENT_PLUGIN,
   MockInputExamplePlugin,
+  MockStudioIntegration,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import {
-  CoreMediaStudioEssentials,
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
+  CoreMediaStudioEssentials,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials";
 import { initInputExampleContent } from "../inputExampleContents";
 import {
   Alignment,
-  AutoLink,
-  Link,
-  LinkImage,
   Autoformat,
+  AutoLink,
   Autosave,
   BlockQuote,
   Bold,
-  Code,
-  Italic,
-  Strikethrough,
-  Subscript,
-  Superscript,
-  Underline,
   ClassicEditor,
+  Code,
   CodeBlock,
   Essentials,
   FindAndReplace,
   Heading,
-  ImageInline,
+  Highlight,
+  icons,
   ImageBlockEditing,
+  ImageInline,
   ImageStyle,
   ImageTextAlternative,
   ImageToolbar,
   Indent,
+  Italic,
+  Link,
+  LinkImage,
   List,
   Paragraph,
   PasteFromOffice,
+  PluginConstructor,
   RemoveFormat,
   SourceEditing,
+  Strikethrough,
+  Subscript,
+  Superscript,
   Table,
   TableToolbar,
-  Highlight,
-  icons,
-  PluginConstructor,
+  Underline,
 } from "ckeditor5";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
-import {
-  replaceElementByElementAndClass,
-  replaceByElementAndClassBackAndForth,
-} from "@coremedia/ckeditor5-coremedia-richtext";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
-import { getHashParam } from "../HashParams";
-import { LinkAttributesConfig, LinkAttributes } from "@coremedia/ckeditor5-link-common";
-import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import type {
   LatestCoreMediaRichTextConfig,
   V10CoreMediaRichTextConfig,
 } from "@coremedia/ckeditor5-coremedia-richtext";
+import {
+  replaceByElementAndClassBackAndForth,
+  replaceElementByElementAndClass,
+} from "@coremedia/ckeditor5-coremedia-richtext";
+import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
+import { getHashParam } from "../HashParams";
+import { LinkAttributes, LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { ApplicationState } from "../ApplicationState";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
