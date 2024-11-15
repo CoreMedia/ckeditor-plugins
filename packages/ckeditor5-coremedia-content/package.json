@@ -30,7 +30,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "ckeditor5": "^42.0.2",
+    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
@@ -44,7 +44,7 @@
     "@coremedia/ckeditor5-logging": "20.1.0"
   },
   "peerDependencies": {
-    "ckeditor5": "^42.0.2",
+    "ckeditor5": "43.3.1",
     "@coremedia/service-agent": "^1.1.5"
   },
   "scripts": {

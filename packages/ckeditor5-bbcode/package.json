@@ -48,7 +48,7 @@
     "/types"
   ],
   "peerDependencies": {
-    "ckeditor5": "^42.0.2"
+    "ckeditor5": "43.3.1"
   },
   "dependencies": {
     "@bbob/core": "^3.0.2",
@@ -62,7 +62,7 @@
     "@coremedia/ckeditor5-logging": "^20.1.0"
   },
   "devDependencies": {
-    "ckeditor5": "^42.0.2",
+    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",

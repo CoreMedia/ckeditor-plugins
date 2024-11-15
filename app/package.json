@@ -15,7 +15,7 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "ckeditor5": "^42.0.2",
+    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia/ckeditor5-bbcode": "^20.1.0",
     "@coremedia/ckeditor5-coremedia-blocklist": "^20.1.0",
@@ -38,10 +38,10 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-runtime": "^7.25.4",
-    "@ckeditor/ckeditor5-dev-translations": "^42.0.0",
-    "@ckeditor/ckeditor5-dev-utils": "^42.0.0",
+    "@ckeditor/ckeditor5-dev-translations": "^43.0.1",
+    "@ckeditor/ckeditor5-dev-utils": "^43.0.1",
     "@ckeditor/ckeditor5-inspector": "^4.1.0",
-    "@ckeditor/ckeditor5-theme-lark": "42.0.2",
+    "@ckeditor/ckeditor5-theme-lark": "43.3.1",
     "@types/node": "^20.14.10",
     "babel-loader": "^8.3.0",
     "circular-dependency-plugin": "^5.2.2",

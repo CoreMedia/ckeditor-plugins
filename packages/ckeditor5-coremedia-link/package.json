@@ -51,7 +51,7 @@
     "@coremedia/service-agent": "^1.1.5",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
-    "ckeditor5": "^42.0.2",
+    "ckeditor5": "43.3.1",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",
@@ -61,7 +61,7 @@
   },
   "peerDependencies": {
     "@coremedia/service-agent": "^1.1.5",
-    "ckeditor5": "^42.0.2"
+    "ckeditor5": "43.3.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "20.1.0",

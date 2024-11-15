@@ -17,7 +17,7 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "ckeditor5": "^42.0.2",
+    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/ckeditor5-coremedia-link": "^20.1.0",
