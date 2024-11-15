@@ -12,5 +12,5 @@ const german = {
   "Remove word from blocklist": "Begriff aus Blockliste löschen",
   "Enter word to block": "Begriff zur Liste hinzufügen",
 };
-
+addTranslations("en", Object.fromEntries(Object.keys(german).map((k) => [k, k])));
 addTranslations("de", german);
