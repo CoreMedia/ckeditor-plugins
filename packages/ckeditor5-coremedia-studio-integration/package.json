@@ -56,7 +56,7 @@
     "typescript": "5.4.5"
   },
   "peerDependencies": {
-    "@coremedia/service-agent": "^1.1.5"
+    "@coremedia/service-agent": "^1.1.5 | ^2.0.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-logging": "^20.1.0",
