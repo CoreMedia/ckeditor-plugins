@@ -1,12 +1,12 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Subscription } from "rxjs";
 import {
+  createContentDisplayServiceDescriptor,
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentUriPath,
-  UriPath
+  UriPath,
+  ContentAsLink,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { ContentAsLink } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Subscription } from "rxjs";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
 import { ButtonView, Editor } from "ckeditor5";
@@ -47,7 +47,7 @@ export default class ContentLinkView extends ButtonView {
       renderTypeIcon?: boolean;
       renderStatusIcon?: boolean;
       renderCancelButton?: boolean;
-    }
+    },
   ) {
     super(editor.locale);
     const bind = this.bindTemplate;
@@ -115,10 +115,10 @@ export default class ContentLinkView extends ButtonView {
         "class": [
           "cm-ck-content-link-view",
           bind.if("underlined", "cm-ck-button--underlined"),
-          bind.if("renderAsTextLink", "ck-link-actions__preview")
+          bind.if("renderAsTextLink", "ck-link-actions__preview"),
         ],
-        "aria-label": bind.to("ariaLabelText")
-      }
+        "aria-label": bind.to("ariaLabelText"),
+      },
     });
     this.listenTo(this, "executeContentLink", () => {
       // If cancel button is executed, this button also executes
@@ -133,13 +133,13 @@ export default class ContentLinkView extends ButtonView {
       // URI changes, thus contentName, icons and tooltip are not valid anymore for the new URI
       this.set({
         contentName: undefined,
-        tooltip: undefined
+        tooltip: undefined,
       });
       this.#typeIcon?.set({
-        iconClass: undefined
+        iconClass: undefined,
       });
       this.#statusIcon?.set({
-        iconClass: undefined
+        iconClass: undefined,
       });
       this.#endContentSubscription();
       const hasUriPath = this.hasUriPathProperty(evt.source);
@@ -164,7 +164,7 @@ export default class ContentLinkView extends ButtonView {
     if (this.renderOptions?.renderStatusIcon) {
       if (!this.#statusIcon) {
         throw new Error(
-          "Unexpected State: Although render options request rendering a status icon, the required status icon is not available."
+          "Unexpected State: Although render options request rendering a status icon, the required status icon is not available.",
         );
       }
       this.children.add(this.#statusIcon);
@@ -172,7 +172,7 @@ export default class ContentLinkView extends ButtonView {
     if (this.renderOptions?.renderCancelButton) {
       if (!this.#cancelButton) {
         throw new Error(
-          "Unexpected State: Although render options request rendering a cancel icon, the required cancel icon is not available."
+          "Unexpected State: Although render options request rendering a cancel icon, the required cancel icon is not available.",
         );
       }
       this.children.add(this.#cancelButton);
@@ -205,18 +205,18 @@ export default class ContentLinkView extends ButtonView {
           contentDisplayService.observe_asLink(uriPath).subscribe({
             next: (received: ContentAsLink) => {
               this.#typeIcon?.set({
-                iconClass: received.type.classes?.join(" ")
+                iconClass: received.type.classes?.join(" "),
               });
               this.#statusIcon?.set({
-                iconClass: received.state.classes?.join(" ")
+                iconClass: received.state.classes?.join(" "),
               });
               this.set({
                 tooltip: received.content.name,
                 contentName: received.content.name,
-                ariaLabelText: `${received.type.name}: ${received.content.name}`
+                ariaLabelText: `${received.type.name}: ${received.content.name}`,
               });
-            }
-          })
+            },
+          }),
         );
       })
       .catch((reason): void => {

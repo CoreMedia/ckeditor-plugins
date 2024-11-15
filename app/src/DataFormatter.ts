@@ -13,6 +13,6 @@ export const dataFormatter: {
           collapseContent: false,
           whiteSpaceAtEndOfSelfclosingTag: true,
         })
-      : empty ?? "",
-  text: (data, empty) => (data ? data : empty ?? ""),
+      : (empty ?? ""),
+  text: (data, empty) => (data ? data : (empty ?? "")),
 };

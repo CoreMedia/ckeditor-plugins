@@ -1,9 +1,11 @@
 import { Plugin } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
+  createWorkAreaServiceDescriptor,
+  createBlocklistServiceDescriptor,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import MockWorkAreaService from "./MockWorkAreaService";
 import { MockBlocklistService } from "../MockBlocklistService";
-import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 const PLUGIN_NAME = "MockServiceAgent";
 

@@ -12,7 +12,7 @@ export default class PasteContentUI extends Plugin {
     const t = editor.t;
     const pasteContentCommand = editor.commands.get("pasteContentCommand");
     if (!pasteContentCommand) {
-      throw new Error("The command \"pasteContent\" is required.");
+      throw new Error('The command "pasteContent" is required.');
     }
     const PASTE_KEYSTROKE = "Ctrl+Shift+P";
     editor.keystrokes.set(PASTE_KEYSTROKE, (keyEvtData, cancel) => {

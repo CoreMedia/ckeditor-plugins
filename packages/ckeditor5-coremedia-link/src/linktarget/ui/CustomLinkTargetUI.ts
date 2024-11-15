@@ -13,7 +13,7 @@ import {
   Config,
   PositionOptions,
   LinkUI,
-  EditorConfig
+  EditorConfig,
 } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 
@@ -73,11 +73,11 @@ export default class CustomLinkTargetUI extends Plugin {
       // First provide some defaults, in case they don't exist in definition.
       ...requireDefaultTargetDefinition(OTHER_TARGET_NAME),
       // Now override with definition found in config.
-      ...linkTargetDefinitions.find((definition) => definition.name === OTHER_TARGET_NAME)
+      ...linkTargetDefinitions.find((definition) => definition.name === OTHER_TARGET_NAME),
     };
     return {
       otherNames,
-      myConfig
+      myConfig,
     };
   }
 
@@ -97,7 +97,7 @@ export default class CustomLinkTargetUI extends Plugin {
         tooltip: true,
         icon: definition.icon,
         class: "cm-ck-target-button",
-        isToggleable: true
+        isToggleable: true,
       });
       view.bind("isOn").to(linkTargetCommand, "value", (value: unknown) => {
         if (typeof value !== "string") {
@@ -173,7 +173,7 @@ export default class CustomLinkTargetUI extends Plugin {
       emitter: this.#form,
       activator: () => this.#isVisible,
       contextElements: [element],
-      callback: () => this.#hideForm()
+      callback: () => this.#hideForm(),
     });
   }
 
@@ -194,7 +194,7 @@ export default class CustomLinkTargetUI extends Plugin {
     if (!this.#isInBalloon) {
       this.#balloon?.add({
         view: this.#form,
-        position: this.#getBalloonPositionData()
+        position: this.#getBalloonPositionData(),
       });
     }
     const commandValue: string = (linkTargetCommand?.value ?? "") as string;

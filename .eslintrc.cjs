@@ -13,7 +13,7 @@ module.exports = {
     // Ignore compiled JavaScript files, as they are generated automatically.
     "**/src/**/*.js",
     // Also, do not check typing declarations, too.
-    "**/src/**/*.d.ts"
+    "**/src/**/*.d.ts",
   ],
   overrides: [
     {
@@ -21,22 +21,22 @@ module.exports = {
       extends: [
         // Prettier recommended for formatting rules: https://typescript-eslint.io/docs/linting/configs/#prettier
         "prettier",
-        "plugin:prettier/recommended" // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+        "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
       ],
       rules: {
-        "prettier/prettier": "error"
-      }
+        "prettier/prettier": "error",
+      },
     },
     {
       files: ["**/*.js"],
-      extends: ["eslint:recommended"]
+      extends: ["eslint:recommended"],
     },
     {
       files: ["**/*.config.{js,cjs,mjs}", "**/*.local.{js,cjs,mjs}", "**/*rc.{js,cjs,mjs}"],
       rules: {
         "no-undef": "off",
-        "no-unused-vars": "off"
-      }
+        "no-unused-vars": "off",
+      },
     },
     {
       files: ["**/*.{ts,tsx}"],
@@ -45,7 +45,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:@typescript-eslint/strict",
-        "plugin:jsdoc/recommended"
+        "plugin:jsdoc/recommended",
       ],
       rules: {
         /*
@@ -126,16 +126,16 @@ module.exports = {
           { name: "setInterval" },
           { name: "clearInterval" },
           { name: "setImmediate" },
-          { name: "clearImmediate" }
+          { name: "clearImmediate" },
         ],
         // https://github.com/typescript-eslint/typescript-eslint/issues/1391#issuecomment-1124154589
         "no-restricted-syntax": [
           "error",
           {
             // kind="method": Don't apply on constructors.
-            selector: ":matches(PropertyDefinition, MethodDefinition[kind=\"method\"])[accessibility=\"private\"]",
-            message: "Use #private instead"
-          }
+            selector: ':matches(PropertyDefinition, MethodDefinition[kind="method"])[accessibility="private"]',
+            message: "Use #private instead",
+          },
         ],
         "no-sparse-arrays": "error",
         "no-template-curly-in-string": "error",
@@ -171,8 +171,8 @@ module.exports = {
         "jsdoc/check-tag-names": [
           "error",
           {
-            definedTags: ["category", "packageDocumentation", "typeParam"]
-          }
+            definedTags: ["category", "packageDocumentation", "typeParam"],
+          },
         ],
         // allowWhitespace: Must be true not to collide with Markdown.
         "jsdoc/no-multi-asterisks": ["error", { allowWhitespace: true }],
@@ -217,51 +217,51 @@ module.exports = {
           {
             selector: "typeLike",
             format: ["PascalCase"],
-            filter: { regex: "^(__String|[A-Za-z]+_[A-Za-z]+)$", match: false }
+            filter: { regex: "^(__String|[A-Za-z]+_[A-Za-z]+)$", match: false },
           },
           {
             selector: "interface",
             format: ["PascalCase"],
             custom: { regex: "^I[A-Z]", match: false },
-            filter: { regex: "^I(Arguments|TextWriter|O([A-Z][a-z]+[A-Za-z]*)?)$", match: false }
+            filter: { regex: "^I(Arguments|TextWriter|O([A-Z][a-z]+[A-Za-z]*)?)$", match: false },
           },
           {
             selector: "variable",
             format: ["camelCase", "PascalCase", "UPPER_CASE"],
             leadingUnderscore: "allow",
-            filter: { regex: "^(_{1,2}filename|_{1,2}dirname|_+|[A-Za-z]+_[A-Za-z]+)$", match: false }
+            filter: { regex: "^(_{1,2}filename|_{1,2}dirname|_+|[A-Za-z]+_[A-Za-z]+)$", match: false },
           },
           {
             selector: "function",
             format: ["camelCase", "PascalCase"],
             leadingUnderscore: "allow",
-            filter: { regex: "^[A-Za-z]+_[A-Za-z]+$", match: false }
+            filter: { regex: "^[A-Za-z]+_[A-Za-z]+$", match: false },
           },
           {
             selector: "parameter",
             format: ["camelCase"],
             leadingUnderscore: "allow",
-            filter: { regex: "^(_+|[A-Za-z]+_[A-Z][a-z]+)$", match: false }
+            filter: { regex: "^(_+|[A-Za-z]+_[A-Z][a-z]+)$", match: false },
           },
           {
             selector: "method",
             format: ["camelCase", "PascalCase"],
             leadingUnderscore: "allow",
-            filter: { regex: "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", match: false }
+            filter: { regex: "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", match: false },
           },
           {
             selector: "memberLike",
             format: ["camelCase"],
             leadingUnderscore: "allow",
-            filter: { regex: "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", match: false }
+            filter: { regex: "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", match: false },
           },
           {
             selector: "enumMember",
             format: ["camelCase", "PascalCase", "UPPER_CASE"],
             leadingUnderscore: "allow",
-            filter: { regex: "^[A-Za-z]+_[A-Za-z]+$", match: false }
+            filter: { regex: "^[A-Za-z]+_[A-Za-z]+$", match: false },
           },
-          { selector: "property", format: null }
+          { selector: "property", format: null },
         ],
 
         "@typescript-eslint/no-base-to-string": "error",
@@ -314,14 +314,14 @@ module.exports = {
           {
             asyncArrow: "always",
             anonymous: "always",
-            named: "never"
-          }
+            named: "never",
+          },
         ],
 
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
-        "@typescript-eslint/unified-signatures": "error"
-      }
+        "@typescript-eslint/unified-signatures": "error",
+      },
     },
     /*
      * Test-specific overrides.
@@ -338,8 +338,8 @@ module.exports = {
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
-        "jsdoc/require-jsdoc": "off"
-      }
+        "jsdoc/require-jsdoc": "off",
+      },
     },
     /*
      * Overrides for example application.
@@ -347,8 +347,8 @@ module.exports = {
     {
       files: ["app/**/*.{ts,tsx}"],
       rules: {
-        "jsdoc/require-jsdoc": "off"
-      }
-    }
-  ]
+        "jsdoc/require-jsdoc": "off",
+      },
+    },
+  ],
 };

@@ -10,7 +10,7 @@ import {
   Model,
   Writer,
   first,
-  findAttributeRange
+  findAttributeRange,
 } from "ckeditor5";
 
 /**
@@ -170,7 +170,7 @@ class LinkTargetCommand extends Command {
       const linkHrefModel = selection?.getAttribute(LINK_HREF_MODEL);
       if (typeof linkHrefModel !== "string") {
         throw new Error(
-          `Unexpected type for attribute ${LINK_HREF_MODEL}. Expected "string" but value is: ${linkHrefModel}`
+          `Unexpected type for attribute ${LINK_HREF_MODEL}. Expected "string" but value is: ${linkHrefModel}`,
         );
       }
       return findAttributeRanges(selection.getFirstPosition(), LINK_HREF_MODEL, linkHrefModel, model);
@@ -191,7 +191,7 @@ class LinkTargetCommand extends Command {
     position: Position | null | undefined,
     attributeName: string,
     value: string,
-    model: Model
+    model: Model,
   ): Range[] {
     if (!position) {
       return [];

@@ -2,17 +2,14 @@ import { Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger } from "@coremedia/ckeditor5-logging";
-import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
+  createClipboardServiceDescriptor,
   IsDroppableEvaluationResult,
-  isDroppableUris
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
-import {
+  isDroppableUris,
   IsLinkableEvaluationResult,
-  isLinkableUris
+  isLinkableUris,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -128,7 +125,7 @@ class MockInputExamplePlugin extends Plugin {
     const contentIds: string[] = contentIdCommaSeparated.split(",");
     const urilistJSON = JSON.stringify(contentIds);
     const blob = new Blob([urilistJSON], {
-      type: "cm-studio-rest/uri-list"
+      type: "cm-studio-rest/uri-list",
     });
     const data: Record<string, Blob> = {};
     data[blob.type] = blob;
@@ -137,10 +134,10 @@ class MockInputExamplePlugin extends Plugin {
       [
         {
           data,
-          options: "copy"
-        }
+          options: "copy",
+        },
       ],
-      new Date().getTime()
+      new Date().getTime(),
     );
   }
 

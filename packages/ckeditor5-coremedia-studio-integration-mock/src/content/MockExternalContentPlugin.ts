@@ -36,9 +36,9 @@ const EXTERNAL_CONTENTS: MockExternalContent[] = [
     contentAfterImport: {
       id: 2000,
       type: "linkable",
-      name: "External Content #2000"
+      name: "External Content #2000",
     },
-    errorWhileImporting: false
+    errorWhileImporting: false,
   },
   {
     id: 2002,
@@ -46,9 +46,9 @@ const EXTERNAL_CONTENTS: MockExternalContent[] = [
     contentAfterImport: {
       id: 2002,
       type: "linkable",
-      name: "External Content #2002"
+      name: "External Content #2002",
     },
-    errorWhileImporting: false
+    errorWhileImporting: false,
   },
   {
     id: 2004,
@@ -56,9 +56,9 @@ const EXTERNAL_CONTENTS: MockExternalContent[] = [
     contentAfterImport: {
       id: 2004,
       type: "unknown",
-      name: "Must not appear as link, if you see this, it is an error"
+      name: "Must not appear as link, if you see this, it is an error",
     },
-    errorWhileImporting: false
+    errorWhileImporting: false,
   },
   {
     id: 2006,
@@ -66,10 +66,10 @@ const EXTERNAL_CONTENTS: MockExternalContent[] = [
     contentAfterImport: {
       id: 2006,
       type: "linkable",
-      name: "External Content #2006"
+      name: "External Content #2006",
     },
-    errorWhileImporting: true
-  }
+    errorWhileImporting: true,
+  },
 ];
 export default class MockExternalContentPlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;

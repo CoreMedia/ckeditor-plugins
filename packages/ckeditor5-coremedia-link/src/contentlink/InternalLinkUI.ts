@@ -51,7 +51,7 @@ export const hasRequiredInternalLinkUI = (linkUI: unknown): linkUI is InternalLi
   if (!result) {
     console.debug(
       "hasRequiredInternalLinkUI: Required internal properties (_balloon, _hideUI, _isUIInPanel) not available",
-      linkUI
+      linkUI,
     );
     throw new IncompatibleInternalApiUsageError("Required internal API of LinkUI unavailable.");
   }

@@ -31,28 +31,28 @@ export { default as ClipboardItemRepresentation } from "./content/studioservices
 
 export {
   ContentReferenceResponse,
-  createContentReferenceServiceDescriptor
+  createContentReferenceServiceDescriptor,
 } from "./content/studioservices/IContentReferenceService";
 
 export {
-  getEvaluationResult, isDroppable, isDroppableUris, IsDroppableEvaluationResult
+  getEvaluationResult,
+  isDroppable,
+  isDroppableUris,
+  IsDroppableEvaluationResult,
 } from "./content/IsDroppableInRichtext";
 
 export { receiveDraggedItemsFromDataTransfer } from "./content/studioservices/DragDropServiceWrapper";
 export { default as DragDropService } from "./content/studioservices/DragDropService";
 
 export {
-  ContentImportService, createContentImportServiceDescriptor
+  ContentImportService,
+  createContentImportServiceDescriptor,
 } from "./content/studioservices/ContentImportService";
 
 export { createWorkAreaServiceDescriptor } from "./content/WorkAreaServiceDescriptor";
 export { default as WorkAreaService } from "./content/studioservices/WorkAreaService";
 
-export {
-  IsLinkableEvaluationResult,
-  isLinkableUris,
-  isLinkable
-} from "./content/IsLinkableDragAndDrop";
+export { IsLinkableEvaluationResult, isLinkableUris, isLinkable } from "./content/IsLinkableDragAndDrop";
 
 export { ROOT_NAME } from "./content/Constants";
 

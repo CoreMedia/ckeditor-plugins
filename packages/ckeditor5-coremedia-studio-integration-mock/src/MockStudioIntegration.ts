@@ -9,12 +9,14 @@ import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import MockClipboardService from "./content/MockClipboardService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
+  createClipboardServiceDescriptor,
+  createContentReferenceServiceDescriptor,
+  createContentImportServiceDescriptor,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { MockContentReferenceService } from "./content/MockContentReferenceService";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
-import { createContentImportServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { MockBlocklistService } from "./MockBlocklistService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
@@ -28,7 +30,7 @@ export class MockStudioIntegration extends Plugin {
     MockBlocklistService,
     MockContentPlugin,
     MockExternalContentPlugin,
-    MockServiceAgentPlugin
+    MockServiceAgentPlugin,
   ];
 
   init(): Promise<void> | void {
@@ -49,12 +51,12 @@ export class MockStudioIntegration extends Plugin {
     const contentReferenceService = new MockContentReferenceService(this.editor);
     serviceAgent.registerService<MockContentReferenceService>(
       contentReferenceService,
-      createContentReferenceServiceDescriptor()
+      createContentReferenceServiceDescriptor(),
     );
     const contentImportService = new MockContentImportService(this.editor);
     serviceAgent.registerService<MockContentImportService>(
       contentImportService,
-      createContentImportServiceDescriptor()
+      createContentImportServiceDescriptor(),
     );
     reportInitEnd(initInformation);
   }

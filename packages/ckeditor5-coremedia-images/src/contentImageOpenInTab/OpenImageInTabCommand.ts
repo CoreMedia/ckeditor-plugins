@@ -53,7 +53,7 @@ export const registerOpenImageInTabCommand = (editor: Editor, name = openImageIn
  */
 export const requireOpenImageInTabCommand = (
   editor: Editor,
-  name: typeof openImageInTabCommandName = openImageInTabCommandName
+  name: typeof openImageInTabCommandName = openImageInTabCommandName,
 ): OpenImageInTabCommand => {
   const command = editor.commands.get(name);
   if (!command) {
@@ -74,5 +74,5 @@ export const requireOpenImageInTabCommand = (
 export const executeOpenImageInTabCommand = (
   editor: Editor,
   uriPaths: UriPath[] = [],
-  name: typeof openImageInTabCommandName = openImageInTabCommandName
+  name: typeof openImageInTabCommandName = openImageInTabCommandName,
 ) => editor.commands.get(name)?.execute(...uriPaths);

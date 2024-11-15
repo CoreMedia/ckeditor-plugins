@@ -1,9 +1,11 @@
-import { ContentImportService } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
+  ContentImportService,
+  createContentReferenceServiceDescriptor,
+  contentUriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Editor } from "ckeditor5";
 import MockContentPlugin from "./MockContentPlugin";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 export class MockContentImportService implements ContentImportService {
   readonly #editor: Editor;

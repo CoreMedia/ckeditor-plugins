@@ -2,5 +2,5 @@ const jestConfig = require("@coremedia-internal/ckeditor5-jest-test-helpers/shar
 
 module.exports = {
   ...jestConfig,
-  setupFiles: ["<rootDir>/jest.setup.ts"]
+  setupFiles: ["./jest.setup.ts"]
 };

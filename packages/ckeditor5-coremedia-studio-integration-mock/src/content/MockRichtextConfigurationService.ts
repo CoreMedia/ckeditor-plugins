@@ -4,7 +4,7 @@ import {
   createContentReferenceServiceDescriptor,
   isUriPath,
   RichtextConfigurationService,
-  UriPath
+  UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { serviceAgent } from "@coremedia/service-agent";

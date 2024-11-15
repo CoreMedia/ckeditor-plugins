@@ -12,7 +12,7 @@ export {
   PNG_GREEN_240x135,
   PNG_RED_240x135,
   PNG_EMPTY_24x24,
-  PNG_LOCK_24x24
+  PNG_LOCK_24x24,
 } from "./content/MockFixtures";
 export { MockContentConfig } from "./content/MockContent";
 export { default as MockExternalContentPlugin, MockExternalContent } from "./content/MockExternalContentPlugin";

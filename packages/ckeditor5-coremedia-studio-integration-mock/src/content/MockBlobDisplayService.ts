@@ -1,5 +1,9 @@
-import { BlobDisplayService, InlinePreview, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
+  BlobDisplayService,
+  InlinePreview,
+  UriPath,
+  createBlobDisplayServiceDescriptor,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { map } from "rxjs/operators";
 import { combineLatest, Observable } from "rxjs";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
@@ -11,7 +15,7 @@ import { unreadableName } from "./DisplayHints";
  * Represents an unreadable blob-state.
  */
 const unreadableBlob: Pick<BlobData, "value"> = {
-  value: PNG_LOCK_24x24
+  value: PNG_LOCK_24x24,
 };
 
 /**
@@ -19,7 +23,7 @@ const unreadableBlob: Pick<BlobData, "value"> = {
  */
 const unsetBlob: BlobData = {
   value: PNG_EMPTY_24x24,
-  mime: "image/png"
+  mime: "image/png",
 };
 
 export default class MockBlobDisplayService implements BlobDisplayService {
@@ -50,7 +54,7 @@ export default class MockBlobDisplayService implements BlobDisplayService {
           // Set unreadable placeholder icon.
           actualBlob = {
             ...actualBlob,
-            ...unreadableBlob
+            ...unreadableBlob,
           };
           thumbnailTitle = unreadableTitle;
           isPlaceholder = true;
@@ -61,9 +65,9 @@ export default class MockBlobDisplayService implements BlobDisplayService {
         return {
           thumbnailSrc,
           thumbnailTitle,
-          isPlaceholder
+          isPlaceholder,
         };
-      })
+      }),
     );
   }
 

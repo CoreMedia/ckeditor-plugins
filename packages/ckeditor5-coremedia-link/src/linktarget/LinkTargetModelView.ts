@@ -31,7 +31,7 @@ export default class LinkTargetModelView extends Plugin {
     const { editor } = this;
     getLinkAttributes(editor)?.registerAttribute({
       model: LINK_TARGET_MODEL,
-      view: LINK_TARGET_VIEW
+      view: LINK_TARGET_VIEW,
     });
     editor.commands.add("linkTarget", new LinkTargetCommand(editor));
 

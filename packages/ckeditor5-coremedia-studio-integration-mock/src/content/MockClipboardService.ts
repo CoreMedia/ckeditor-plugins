@@ -1,7 +1,7 @@
 import {
   ClipboardItemRepresentation,
   ClipboardService,
-  createClipboardServiceDescriptor
+  createClipboardServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Observable, Subject, Subscriber, TeardownLogic } from "rxjs";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
@@ -40,7 +40,7 @@ export default class MockClipboardService implements ClipboardService {
   observe_items(): Observable<ClipboardItemRepresentation[]> {
     return new Observable((subscriber: Subscriber<ClipboardItemRepresentation[]>): TeardownLogic => {
       const subscription = this.#subject.subscribe((items: ClipboardItemRepresentation[]): void =>
-        subscriber.next(items)
+        subscriber.next(items),
       );
 
       return (): void => subscription.unsubscribe();
