@@ -1,5 +1,5 @@
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
-import { View, ContextualBalloon, Editor } from "ckeditor5";
+import { View, Editor } from "ckeditor5";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 
 /**
@@ -35,7 +35,7 @@ export const showContentLinkField = (view: View, show: boolean): void => {
  * @param editor - the editor
  */
 export const closeContextualBalloon = (editor: Editor): void => {
-  const balloon = getOptionalPlugin(editor, ContextualBalloon);
+  const balloon = getOptionalPlugin(editor, "ContextualBalloon");
   if (balloon) {
     while (balloon.visibleView) {
       // It is not enough to just hide the visibleView, we need to remove it.

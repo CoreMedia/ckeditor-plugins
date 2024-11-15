@@ -38,14 +38,17 @@ export function getOptionalPlugin<TName extends string, TContext extends Editor 
  * is missing. Defaults to some generic message on not found plugin at debug
  * level.
  */
-export function getOptionalPlugin(editor: Editor, key: PluginConstructor | string, onMissing?: OnMissingPlugin) {
+export function getOptionalPlugin(
+  editor: Editor,
+  key: PluginConstructor<Editor> | string,
+  onMissing?: OnMissingPlugin,
+) {
   const { plugins } = editor;
   if (plugins.has(key)) {
     if (typeof key === "string") {
       return plugins.get(key);
-    } else if (typeof key === "function") {
-      return undefined;
     } else {
+      // @ts-expect-error maybe we should change the type of key to string only
       return plugins.get(key);
     }
   }

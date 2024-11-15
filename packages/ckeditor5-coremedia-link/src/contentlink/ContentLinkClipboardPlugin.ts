@@ -5,12 +5,13 @@ import {
   ROOT_NAME,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
+  ContentClipboardEditing,
   CreateModelFunction,
   CreateModelFunctionCreator,
-  ContentToModelRegistry,
 } from "@coremedia/ckeditor5-coremedia-content-clipboard";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
 const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
@@ -41,18 +42,18 @@ const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, na
  */
 export default class ContentLinkClipboardPlugin extends Plugin {
   public static readonly pluginName = "ContentLinkClipboardPlugin" as const;
+  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkClipboardPlugin.pluginName);
 
   init(): void {
+    const logger = ContentLinkClipboardPlugin.#logger;
+    const { editor } = this;
+
     const initInformation = reportInitStart(this);
-    /**
-     const basePlugin = getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
-     logger.warn(`Recommended plugin ${pluginName} not found. Creating content links from clipboard not activated.`),
-     );
-     console.log("basePlugin", basePlugin);
-     basePlugin?.registerToModelFunction("link", createLinkModelFunctionCreator);
-     */
-    // as the base plugin {@link ContentClipboardEditing} may be initialized after this plugin, it is necessary to bypass directly to registerToModelFunction
-    ContentToModelRegistry.registerToModelFunction("link", createLinkModelFunctionCreator);
+
+    getOptionalPlugin(editor, ContentClipboardEditing, (pluginName) =>
+      logger.warn(`Recommended plugin ${pluginName} not found. Creating content links from clipboard not activated.`),
+    )?.registerToModelFunction("link", createLinkModelFunctionCreator);
+
     reportInitEnd(initInformation);
   }
 }

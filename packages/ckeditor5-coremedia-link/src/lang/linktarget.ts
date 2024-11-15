@@ -12,5 +12,5 @@ const german = {
   "Show Embedded": "Eingebettet öffnen",
   "Open in Frame": "Im Frame öffnen",
 };
-addTranslations("en", Object.fromEntries(Object.keys(german).map((k) => [k, k])));
+
 addTranslations("de", german);
