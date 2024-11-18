@@ -53,6 +53,8 @@
 export * as Constants from "./Constants";
 export * as FocusUtils from "./FocusUtils";
 
+export { HasFocusables, HasFocusTracker } from "./HasFocusables";
+
 export * from "./LinkAttributes";
 export * from "./LinkAttributesConfig";
 

@@ -58,4 +58,4 @@ export { ROOT_NAME } from "./content/Constants";
 
 export { toContentUris } from "./content/studioservices/ClipboardServiceUtil";
 
-export { IContentReferenceService } from "./content/studioservices/IContentReferenceService";
+export { ExternalUriInformation, IContentReferenceService } from "./content/studioservices/IContentReferenceService";
