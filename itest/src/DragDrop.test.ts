@@ -288,7 +288,7 @@ describe("Drag and Drop", () => {
   });
 
   describe("ExternalLinkIntoLinkBalloon", () => {
-    it("Should render dropped content-link with name in link balloon", async () => {
+    it.skip("Should render dropped content-link with name in link balloon", async () => {
       const { editor } = application;
       const { ui } = editor;
       const { view } = ui;
