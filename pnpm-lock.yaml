@@ -343,6 +343,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -378,6 +381,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -413,6 +419,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -489,6 +498,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -588,6 +600,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -626,6 +641,9 @@ importers:
       '@types/webpack':
         specifier: ^5.28.5
         version: 5.28.5
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -791,6 +809,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -829,6 +850,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -864,6 +888,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -901,6 +928,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -957,6 +987,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -995,6 +1028,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1033,6 +1069,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1055,6 +1094,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
@@ -1087,6 +1129,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1113,6 +1158,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1151,6 +1199,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1210,6 +1261,9 @@ importers:
       ckeditor5:
         specifier: 43.3.1
         version: 43.3.1(patch_hash=uhdamuh7caehvy56pe7hnexlli)
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -1231,6 +1285,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
