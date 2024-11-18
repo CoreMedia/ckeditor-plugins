@@ -29,8 +29,8 @@
     "linkDirectory": false,
     "exports": {
       ".": {
-        "types": "./dist/src/index.d.ts",
-        "default": "./dist/src/index.js"
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
       }
     }
   },

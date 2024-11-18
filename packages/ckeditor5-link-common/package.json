@@ -23,8 +23,14 @@
   },
   "main": "./dist/src/index.js",
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      }
+    }
   },
   "files": [
     "/src"
