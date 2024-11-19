@@ -501,6 +501,7 @@ importers:
       typescript:
         specifier: 5.4.5
         version: 5.4.5
+    publishDirectory: dist
 
   packages/ckeditor5-coremedia-content-clipboard:
     dependencies:

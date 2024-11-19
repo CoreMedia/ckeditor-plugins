@@ -21,8 +21,14 @@
     }
   },
   "publishConfig": {
-    "default": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      }
+    }
   },
   "files": [
     "/src"
