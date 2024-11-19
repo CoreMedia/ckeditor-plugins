@@ -20,7 +20,6 @@
       "import": "./dist/src/index.js"
     }
   },
-  "main": "./dist/src/index.js",
   "publishConfig": {
     "default": "./src/index.js",
     "types": "./src/index.d.ts"

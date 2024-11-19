@@ -1,5 +1,5 @@
 // CommandCollection: See ckeditor/ckeditor5#12027.
-import { Editor } from "ckeditor5";
+import type { Editor } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
 import { CommandWrapper } from "./CommandWrapper";
 import { EditorWrapper } from "./EditorWrapper";

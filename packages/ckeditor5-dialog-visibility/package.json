@@ -37,7 +37,6 @@
       "import": "./dist/src/index.js"
     }
   },
-  "main": "./dist/src/index.js",
   "publishConfig": {
     "directory": "dist",
     "linkDirectory": false,

@@ -27,10 +27,13 @@
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
-  "main": "./src/index.ts",
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      "default": "./src/index.js",
+      "types": "./src/index.d.ts"
+    }
   },
   "files": [
     "/src"
