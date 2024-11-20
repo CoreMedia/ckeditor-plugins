@@ -5,7 +5,6 @@ if (!global.window.CKEDITOR_TRANSLATIONS) {
 }
 
 // as add is not exposed anymore from the unified package, we need to implement it here
-// TODO: use .po files for own plugins and remove this function
 export const addTranslations = (
   language: string,
   translations: Readonly<Record<string, string | readonly string[]>>,
