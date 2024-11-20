@@ -36,6 +36,7 @@ export {
 
 export {
   getEvaluationResult,
+  getOrEvaluateIsDroppableResult,
   isDroppable,
   isDroppableUris,
   IsDroppableEvaluationResult,

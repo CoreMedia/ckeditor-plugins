@@ -23,6 +23,16 @@ export const getEvaluationResult = (uris: string[]): IsDroppableEvaluationResult
 };
 
 /**
+ * Returns the evaluation result for isDroppable calls or evaluate for the uris
+ * if not already done.
+ *
+ * @param uris - the uris to look up the evaluation result for.
+ * @returns the evaluation result
+ */
+export const getOrEvaluateIsDroppableResult = async (uris: string[]): Promise<IsDroppableEvaluationResult> =>
+  getEvaluationResult(uris) ?? evaluateIsDroppable(uris);
+
+/**
  * Reads the currently dragged items from the DragDropService and triggers an
  * asynchronous evaluation if the dragged items are droppable in rich text.
  *

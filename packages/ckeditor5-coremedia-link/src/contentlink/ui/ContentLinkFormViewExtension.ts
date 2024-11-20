@@ -6,7 +6,8 @@ import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
-  getEvaluationResult,
+  getOrEvaluateIsDroppableResult,
+  IsDroppableEvaluationResult,
   isLinkable,
   IsLinkableEvaluationResult,
   receiveDraggedItemsFromDataTransfer,
@@ -270,14 +271,14 @@ class ContentLinkFormViewExtension extends Plugin {
       logger.warn("ContentLinkView not completely rendered. Drag and drop won't work.", contentLinkView);
     }
     contentLinkView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
     contentLinkView.fieldView.element?.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
     if (!formView.urlInputView.fieldView.element) {
       logger.warn("FormView.urlInputView not completely rendered. Drag and drop won't work.", formView);
     }
     formView.urlInputView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
-      ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
     });
     formView.urlInputView.fieldView.element?.addEventListener(
       "dragover",
@@ -286,7 +287,7 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug("Finished adding drag and drop listeners.");
   }
 
-  static #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): void {
+  static async #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): Promise<void> {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
       return;
@@ -302,7 +303,11 @@ class ContentLinkFormViewExtension extends Plugin {
     }
     dragEvent.preventDefault();
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
-    const linkable = getEvaluationResult(uris);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const linkable: IsDroppableEvaluationResult =
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      await getOrEvaluateIsDroppableResult(uris);
     if (!linkable || linkable === "PENDING") {
       return;
     }
