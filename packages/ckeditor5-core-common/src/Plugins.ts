@@ -1,5 +1,5 @@
 import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Editor, Plugin, PluginConstructor, PluginsMap } from "ckeditor5";
+import { Editor, Plugin, PluginCollection, PluginConstructor, PluginsMap } from "ckeditor5";
 
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 
@@ -12,7 +12,13 @@ const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
  */
 export type OnMissingPlugin = (pluginName: string) => void;
 
+type PluginInterface = ReturnType<PluginCollection<Editor>["get"]>;
+
 type PluginClassConstructor = typeof Plugin;
+
+const hasPluginName = (obj: unknown): obj is { pluginName: string } =>
+  // @ts-expect-error PluginInterface is not exported from ckeditor package anymore
+  obj.pluginName !== undefined;
 
 export function getOptionalPlugin<TConstructor extends PluginClassConstructor, TContext extends Editor = Editor>(
   editor: TContext,
@@ -38,17 +44,16 @@ export function getOptionalPlugin<TName extends string, TContext extends Editor 
  * is missing. Defaults to some generic message on not found plugin at debug
  * level.
  */
-export function getOptionalPlugin(
-  editor: Editor,
-  key: PluginConstructor<Editor> | string,
+export function getOptionalPlugin<TKey, TContext extends Editor = Editor>(
+  editor: TContext,
+  key: TKey extends PluginClassConstructor ? TKey : TKey extends string ? TKey : never,
   onMissing?: OnMissingPlugin,
-) {
+): PluginInterface | undefined {
   const { plugins } = editor;
   if (plugins.has(key)) {
     if (typeof key === "string") {
       return plugins.get(key);
     } else {
-      // @ts-expect-error maybe we should change the type of key to string only
       return plugins.get(key);
     }
   }
@@ -56,7 +61,7 @@ export function getOptionalPlugin(
   if (typeof key === "string") {
     pluginName = key;
   } else {
-    pluginName = key.pluginName ?? key.name;
+    pluginName = hasPluginName(key) ? key.pluginName : key.name;
   }
   if (onMissing) {
     onMissing(pluginName);
