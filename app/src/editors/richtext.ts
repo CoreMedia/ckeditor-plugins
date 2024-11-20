@@ -67,6 +67,7 @@ import {
   replaceByElementAndClassBackAndForth,
   replaceElementByElementAndClass,
 } from "@coremedia/ckeditor5-coremedia-richtext";
+import "ckeditor5/ckeditor5.css";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getHashParam } from "../HashParams";
 import { LinkAttributes, LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";

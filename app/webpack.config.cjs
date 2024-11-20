@@ -57,7 +57,7 @@ module.exports = {
     rules: [
       loaders.getIconsLoader({ matchExtensionOnly: true }),
       loaders.getStylesLoader({
-        themePath: require.resolve("@ckeditor/ckeditor5-theme-lark/dist/index.css"),
+        themePath: require.resolve("@ckeditor/ckeditor5-theme-lark"),
         minify: true,
       }),
       loaders.getTypeScriptLoader(),
