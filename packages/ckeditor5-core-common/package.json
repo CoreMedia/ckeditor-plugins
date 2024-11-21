@@ -57,7 +57,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "build": "tsc --project ./tsconfig.release.json",
-    "postbuild": "node prepare-package.js && copyfiles ./README.md dist && copyfiles -u 1 './src/**/*.ts' ./dist/src",
+    "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist && copyfiles -u 1 './src/**/*.ts' ./dist/src",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "npm-check-updates": "npm-check-updates --upgrade"
