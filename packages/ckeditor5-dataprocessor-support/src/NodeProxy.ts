@@ -459,5 +459,4 @@ enum NodeState {
   REMOVE_CHILDREN,
 }
 
-export default NodeProxy;
-export { ChildPredicate, NodeState, PersistResponse, RESPONSE_ABORT, RESPONSE_CONTINUE };
+export { ChildPredicate, NodeProxy, NodeState, PersistResponse, RESPONSE_ABORT, RESPONSE_CONTINUE };

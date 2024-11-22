@@ -1,22 +1,20 @@
 /* eslint no-null/no-null: off */
 
-import { Command, Plugin } from "@ckeditor/ckeditor5-core";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
-// LinkActionsView: See ckeditor/ckeditor5#12027.
-import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
 import ContentLinkView from "./ContentLinkView";
-import { requireContentUriPath, isModelUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { handleFocusManagement } from "@coremedia/ckeditor5-link-common/src/FocusUtils";
-import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { isModelUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { ifCommand, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import {
+  handleFocusManagement,
+  hasRequiredInternalFocusablesProperty,
+  LINK_COMMAND_NAME,
+} from "@coremedia/ckeditor5-link-common";
+import { Command, ContextualBalloon, LinkUI, Plugin } from "ckeditor5";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import { asAugmentedLinkUI, AugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
-import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
+import { AugmentedLinkActionsView, LinkActionsView } from "./AugmentedLinkActionsView";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
 /**
@@ -28,8 +26,7 @@ import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
  */
 class ContentLinkActionsViewExtension extends Plugin {
   public static readonly pluginName = "ContentLinkActionsViewExtension" as const;
-  static readonly #logger = LoggerProvider.getLogger(ContentLinkActionsViewExtension.pluginName);
-
+  static readonly #logger = LoggerProvider.getLogger("ContentLinkActionsViewExtension");
   static readonly requires = [LinkUI, ContextualBalloon];
   contentUriPath: string | undefined | null;
   #initialized = false;
@@ -64,13 +61,11 @@ class ContentLinkActionsViewExtension extends Plugin {
     actionsView.set({
       contentUriPath: undefined,
     });
-
     const bindContentUriPathTo = (command: Command): void => {
       actionsView
         .bind("contentUriPath")
         .to(command, "value", (value: unknown) => (isModelUriPath(value) ? value : undefined));
     };
-
     ifCommand(editor, LINK_COMMAND_NAME)
       .then((command) => bindContentUriPathTo(command))
       .catch((e) => {
@@ -83,13 +78,11 @@ class ContentLinkActionsViewExtension extends Plugin {
      */
     actionsView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
-
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
         showContentLinkField(actionsView, false);
         return;
       }
-
       const { contentUriPath: value } = source;
 
       // set visibility of url and content field
@@ -101,22 +94,17 @@ class ContentLinkActionsViewExtension extends Plugin {
   #extendView(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
     const logger = ContentLinkActionsViewExtension.#logger;
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
-
     const contentLinkView = new ContentLinkView(this.editor, {
       renderTypeIcon: true,
     });
-
     contentLinkView.set({
       renderAsTextLink: true,
     });
-
     if (!hasContentUriPath(linkUI.actionsView)) {
       logger.warn("ActionsView does not have a property contentUriPath. Is it already bound?", linkUI.actionsView);
       return;
     }
-
     contentLinkView.bind("uriPath").to(actionsView, "contentUriPath");
-
     contentLinkView.on("contentClick", () => {
       const { uriPath } = contentLinkView;
       if (uriPath) {
@@ -131,7 +119,6 @@ class ContentLinkActionsViewExtension extends Plugin {
           });
       }
     });
-
     contentLinkView.on("change:contentName", () => {
       if (!this.editor.isReadOnly) {
         const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
@@ -140,9 +127,7 @@ class ContentLinkActionsViewExtension extends Plugin {
         }
       }
     });
-
     ContentLinkActionsViewExtension.#render(actionsView, contentLinkView);
-
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
       actionsView.set({
@@ -170,10 +155,11 @@ class ContentLinkActionsViewExtension extends Plugin {
       );
       return;
     }
-
     actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
     ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
-    handleFocusManagement(actionsView, [simpleContentLinkView], actionsView.previewButtonView);
+    const buttonView = actionsView.previewButtonView;
+    hasRequiredInternalFocusablesProperty(actionsView) &&
+      handleFocusManagement(actionsView, [simpleContentLinkView], buttonView);
   }
 
   /**
@@ -190,7 +176,6 @@ class ContentLinkActionsViewExtension extends Plugin {
       );
       return;
     }
-
     const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
     const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
     actionsView.element?.classList.add(CM_FORM_VIEW_CLS);

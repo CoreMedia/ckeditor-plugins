@@ -1,16 +1,15 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
-import { Collection } from "@ckeditor/ckeditor5-utils";
+import { Collection, Plugin } from "ckeditor5";
 import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Subscription } from "rxjs";
 import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { getMarkerDetails, removeMarkerDetails } from "./blocklistMarkerUtils";
+
 export default class BlocklistEditing extends Plugin {
   static readonly pluginName: string = "BlocklistEditing";
-  static readonly #logger: Logger = LoggerProvider.getLogger(BlocklistEditing.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("BlocklistEditing");
 
   /**
    * A list of markers, used to highlight blocked words in the editor.
@@ -98,11 +97,9 @@ export default class BlocklistEditing extends Plugin {
       next: (blockedWords: string[]) => {
         // Get all words that differ from blockedWords and internalBlocklist
         const { addedWords, removedWords } = this.#getAddedAndRemovedWords(blockedWords, this.internalBlocklist);
-
         addedWords.forEach((word) => {
           this.#addMarkersForWord(word);
         });
-
         removedWords.forEach((word) => {
           this.#removeMarkersForWord(word);
         });
@@ -113,7 +110,6 @@ export default class BlocklistEditing extends Plugin {
         }
       },
     });
-
     const initialWords = await blocklistService.getBlocklist();
     initialWords.forEach((word) => {
       this.#addMarkersForWord(word);
@@ -135,10 +131,19 @@ export default class BlocklistEditing extends Plugin {
    * @returns an object, holding information about changes between the lists
    * @private
    */
-  #getAddedAndRemovedWords(newList: string[], oldList: string[]): { addedWords: string[]; removedWords: string[] } {
+  #getAddedAndRemovedWords(
+    newList: string[],
+    oldList: string[],
+  ): {
+    addedWords: string[];
+    removedWords: string[];
+  } {
     const addedWords = newList.filter((word) => !oldList.includes(word));
     const removedWords = oldList.filter((word) => !newList.includes(word));
-    return { addedWords, removedWords };
+    return {
+      addedWords,
+      removedWords,
+    };
   }
 
   /**

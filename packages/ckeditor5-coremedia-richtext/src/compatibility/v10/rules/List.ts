@@ -1,5 +1,8 @@
-import { allFilterRules, ElementFilterRule } from "@coremedia/ckeditor5-dataprocessor-support/src/ElementProxy";
-import { ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support/src/Rules";
+import {
+  allFilterRules,
+  ElementFilterRule,
+  ElementsFilterRuleSetConfiguration,
+} from "@coremedia/ckeditor5-dataprocessor-support";
 import { langDataFilterRule, langMapperConfiguration, langViewFilterRule } from "./Lang";
 
 // Workaround/Fix for CMS-10539 (Error while Saving when deleting in Lists, MSIE11)

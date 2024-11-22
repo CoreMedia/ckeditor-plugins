@@ -1,9 +1,14 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { richtext, p, strong } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichText";
-import { Differencing, EOD } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/Differencing";
+import {
+  richtext,
+  p,
+  strong,
+  Differencing,
+  EOD,
+  blobReference,
+} from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import "./expect/Expectations";
-import { PNG_BLUE_240x135 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockFixtures";
-import { blobReference } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/Images";
+import { PNG_BLUE_240x135 } from "./MockFixtures";
 
 const xdiff = new Differencing();
 

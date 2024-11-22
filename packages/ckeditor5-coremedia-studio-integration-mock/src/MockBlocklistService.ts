@@ -1,7 +1,6 @@
 import { Observable, Subject } from "rxjs";
-import BlocklistService from "@coremedia/ckeditor5-coremedia-studio-integration/src/BlocklistService";
-import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/BlocklistServiceDescriptor";
-import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
+import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Editor, Plugin } from "ckeditor5";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
@@ -16,7 +15,6 @@ import { serviceAgent } from "@coremedia/service-agent";
 export class MockBlocklistService extends Plugin implements BlocklistService {
   static readonly pluginName = "MockBlocklistService" as const;
   static readonly requires = [MockServiceAgentPlugin];
-
   #blocklist: string[];
   readonly #blocklistSubject: Subject<string[]>;
 
@@ -25,7 +23,6 @@ export class MockBlocklistService extends Plugin implements BlocklistService {
    */
   constructor(editor: Editor) {
     super(editor);
-
     this.#blocklist = ["studio", "provided"];
     this.#blocklistSubject = new Subject<string[]>();
     this.#addExamples();
@@ -33,7 +30,7 @@ export class MockBlocklistService extends Plugin implements BlocklistService {
 
   init(): void {
     const initInformation = reportInitStart(this);
-    serviceAgent.registerService<MockBlocklistService>(this, createBlocklistServiceDescriptor());
+    serviceAgent.registerService(this, createBlocklistServiceDescriptor());
     reportInitEnd(initInformation);
   }
 
@@ -48,7 +45,7 @@ export class MockBlocklistService extends Plugin implements BlocklistService {
       if (wordsToAdd.length > 0) {
         const word = wordsToAdd.pop();
         if (word) {
-          this.addToBlocklist(word);
+          void this.addToBlocklist(word);
         }
       }
     }, 2000);
@@ -67,7 +64,8 @@ export class MockBlocklistService extends Plugin implements BlocklistService {
    *
    * @param wordToBlock - the word to be added to the blocklist
    */
-  addToBlocklist(wordToBlock: string): void {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async addToBlocklist(wordToBlock: string): Promise<void> {
     const lowerCaseWord = wordToBlock.toLowerCase();
     if (!this.#blocklist.includes(lowerCaseWord)) {
       this.#blocklist.push(lowerCaseWord);
@@ -80,7 +78,8 @@ export class MockBlocklistService extends Plugin implements BlocklistService {
    *
    * @param wordToUnblock - the word to be removed from the blocklist
    */
-  removeFromBlocklist(wordToUnblock: string): void {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async removeFromBlocklist(wordToUnblock: string): Promise<void> {
     const lowerCaseWord = wordToUnblock.toLowerCase();
     if (this.#blocklist.includes(lowerCaseWord)) {
       this.#blocklist = this.#blocklist.filter((word) => word !== lowerCaseWord);

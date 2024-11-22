@@ -1,5 +1,3 @@
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import { LinkUI, Link, LinkCommand } from "@ckeditor/ckeditor5-link";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
@@ -7,19 +5,19 @@ import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
-import { ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { CONTENT_CKE_MODEL_URI_REGEXP } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import {
+  CONTENT_CKE_MODEL_URI_REGEXP,
+  createWorkAreaServiceDescriptor,
+  WorkAreaService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
 import { Subscription } from "rxjs";
-
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/WorkAreaService";
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
-import { Observable } from "@ckeditor/ckeditor5-utils";
+import { ContextualBalloon, Editor, Link, LinkCommand, LinkUI, Observable, Plugin } from "ckeditor5";
 import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
 import { openContentInTabCommandName, registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
 
@@ -29,10 +27,8 @@ import { openContentInTabCommandName, registerOpenContentInTabCommand } from "./
  */
 export default class ContentLinks extends Plugin {
   public static readonly pluginName = "ContentLinks" as const;
-
   static readonly openLinkInTab = openContentInTabCommandName;
-
-  readonly #logger = LoggerProvider.getLogger(ContentLinks.pluginName);
+  readonly #logger = LoggerProvider.getLogger("ContentLinks");
   #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
   #initialized = false;
 
@@ -78,7 +74,6 @@ export default class ContentLinks extends Plugin {
   init(): void {
     const editor = this.editor;
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
-
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
       if (visibleView && visibleView === linkUI.actionsView && !this.#initialized) {
@@ -86,7 +81,6 @@ export default class ContentLinks extends Plugin {
         this.#initialized = true;
       }
     });
-
     const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
       if (services.length === 0) {
         this.#logger.debug("No WorkAreaService registered yet");
@@ -95,7 +89,6 @@ export default class ContentLinks extends Plugin {
       if (this.#serviceRegisteredSubscription) {
         this.#serviceRegisteredSubscription.unsubscribe();
       }
-
       this.#logger.debug("WorkAreaService is registered now, listening for activeEntities will be started");
       const clipboardService = services[0];
       this.#listenForActiveEntityChanges(clipboardService);
@@ -103,7 +96,6 @@ export default class ContentLinks extends Plugin {
     this.#serviceRegisteredSubscription = serviceAgent
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
-
     registerOpenContentInTabCommand(editor);
   }
 
@@ -113,7 +105,6 @@ export default class ContentLinks extends Plugin {
     addMouseEventListenerToHideDialog(linkUI);
     parseLinkBalloonConfig(editor.config);
     const internalLinkUI: Observable = linkUI;
-
     if (hasRequiredInternalLinkUI(internalLinkUI)) {
       createDecoratorHook(internalLinkUI, "_hideUI", this.onHideUiCallback(editor), this);
     }
@@ -127,11 +118,14 @@ export default class ContentLinks extends Plugin {
         return;
       }
       const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
-
       const commandValue: string = linkCommand.value ?? "";
       const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
-      formView.set({ contentUriPath: value });
-      actionsView.set({ contentUriPath: value });
+      formView.set({
+        contentUriPath: value,
+      });
+      actionsView.set({
+        contentUriPath: value,
+      });
     };
   }
 }

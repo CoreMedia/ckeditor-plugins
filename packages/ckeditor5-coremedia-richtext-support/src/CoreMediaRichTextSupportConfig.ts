@@ -1,7 +1,5 @@
 import { InheritingMatcherPattern } from "./ReducedMatcherPattern";
-import { EditorConfig } from "@ckeditor/ckeditor5-core";
-import { Config } from "@ckeditor/ckeditor5-utils";
-
+import { EditorConfig, Config } from "ckeditor5";
 const COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY = "coremedia:richtextSupport";
 
 /**
@@ -39,9 +37,7 @@ interface CoreMediaRichTextSupportConfig {
    */
   aliases?: InheritingMatcherPattern[];
 }
-
 const getConfig = (config: Config<EditorConfig>): CoreMediaRichTextSupportConfig =>
   config.get(COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY) ?? {};
-
 export default CoreMediaRichTextSupportConfig;
 export { COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY, getConfig };

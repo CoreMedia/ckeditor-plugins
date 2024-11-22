@@ -1,12 +1,9 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import { DiffItem, DiffItemAttribute } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import { Writer, Range } from "@ckeditor/ckeditor5-engine";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { LINK_HREF_MODEL } from "./Constants";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { LinkEditing } from "@ckeditor/ckeditor5-link";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { DiffItem, DiffItemAttribute, Editor, LinkEditing, Plugin, Range, Writer } from "ckeditor5";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -43,27 +40,22 @@ interface LinkCleanupRegistry {
  */
 class LinkCleanup extends Plugin implements LinkCleanupRegistry {
   static readonly pluginName: string = "LinkCleanup";
-  static readonly #logger = LoggerProvider.getLogger(LinkCleanup.pluginName);
+  static readonly #logger = LoggerProvider.getLogger("LinkCleanup");
   readonly #watchedAttributes: Set<string> = new Set<string>();
-
   static readonly requires = [];
 
   init(): void {
     const initInformation = reportInitStart(this);
-
     const { editor } = this;
     const { model } = editor;
     const { document } = model;
-
     if (!editor.plugins.has(LinkEditing)) {
       // We are implicitly bound to the UnlinkCommand defined by the
       // LinkEditing plugin.
       const logger = LinkCleanup.#logger;
       logger.info("LinkEditing unavailable. Registered link attributes may not be handled as possibly expected.");
     }
-
     document.registerPostFixer(this.#fixOrphanedAttributes);
-
     reportInitEnd(initInformation);
   }
 
@@ -92,11 +84,9 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     const todoAttributes = [...this.#watchedAttributes];
     const getLinkHrefRemovalRanges = LinkCleanup.#getLinkHrefRemovalRanges;
     const fixOrphanedAttribute = LinkCleanup.#fixOrphanedAttribute;
-
     if (todoAttributes.length === 0) {
       return false;
     }
-
     const ranges = getLinkHrefRemovalRanges(writer);
     // Workaround for missing feature ckeditor/ckeditor5#9627
     const operationsBefore = writer.batch.operations.length;
@@ -123,7 +113,6 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
     const changes = differ.getChanges();
     return changes.filter(isRemoveLinkHrefAttribute).map((c) => (c as DiffItemAttribute).range);
   };
-
   static readonly #fixOrphanedAttribute = (
     writer: Writer,
     relevantRanges: Iterable<Range>,
@@ -162,7 +151,6 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }
-
   const { attributeKey, attributeNewValue } = diffItem;
 
   // We must not simply check for 'falsy' here, as an empty string does not
@@ -171,6 +159,5 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   const isDeleteAttribute = attributeNewValue === null || attributeNewValue === undefined;
   return isDeleteAttribute && attributeKey === LINK_HREF_MODEL;
 };
-
 export { getLinkCleanup, LinkCleanupRegistry };
 export default LinkCleanup;

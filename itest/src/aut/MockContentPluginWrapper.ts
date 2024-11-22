@@ -1,7 +1,8 @@
 import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
-import MockContentPlugin from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContentPlugin";
-import { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/MockContent";
+import type { MockContentConfig, MockContentPlugin } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+
+const PLUGIN_NAME = "MockContent";
 
 /**
  * Provides access to the `MockContentPlugin`.
@@ -33,7 +34,7 @@ export class MockContentPluginWrapper extends JSWrapper<MockContentPlugin> {
         // We need to access the plugin via its name rather than via descriptor,
         // as the descriptor is unknown in remote context.
         return editor.plugins.get(pluginName) as unknown as MockContentPlugin;
-      }, MockContentPlugin.pluginName),
+      }, PLUGIN_NAME),
     );
   }
 }

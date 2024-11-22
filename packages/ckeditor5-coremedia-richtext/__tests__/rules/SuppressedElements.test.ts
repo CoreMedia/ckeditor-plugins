@@ -1,5 +1,5 @@
 import * as aut from "../../src/rules/SuppressedElements";
-import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { TestDirection, toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 

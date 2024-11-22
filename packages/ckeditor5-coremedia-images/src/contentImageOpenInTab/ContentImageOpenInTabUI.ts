@@ -1,13 +1,10 @@
-import { ButtonView } from "@ckeditor/ckeditor5-ui";
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
+import { ButtonView, Editor, Plugin } from "ckeditor5";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
-
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";
 import { executeOpenImageInTabCommand, requireOpenImageInTabCommand } from "./OpenImageInTabCommand";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Plugin that registers a 'contentImageOpenInTab' button in
@@ -18,10 +15,8 @@ import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvi
  */
 export default class ContentImageOpenInTabUI extends Plugin {
   static readonly pluginName = "ContentImageOpenInTabUI" as const;
-
   static readonly requires = [ContentImageEditingPlugin];
-
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentImageOpenInTabUI.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("ContentImageOpenInTabUI");
 
   init(): void {
     const initInformation = reportInitStart(this);
@@ -33,13 +28,10 @@ export default class ContentImageOpenInTabUI extends Plugin {
     const logger = ContentImageOpenInTabUI.#logger;
     const { ui } = editor;
     const t = editor.t;
-
     const OPEN_IN_TAB_KEYSTROKE = "Ctrl+Shift+O";
-
     editor.keystrokes.set(OPEN_IN_TAB_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
-
       void executeOpenImageInTabCommand(editor)
         ?.then((result) => {
           logger.debug("Result for OpenImageInTabCommand by keystroke:", result);
@@ -48,10 +40,8 @@ export default class ContentImageOpenInTabUI extends Plugin {
           logger.warn("Failed executing OpenImageInTabCommand invoked by keystroke:", reason);
         });
     });
-
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
       const button = new ButtonView(locale);
-
       button.set({
         isEnabled: true,
         label: t("Open in tab"),
@@ -59,9 +49,7 @@ export default class ContentImageOpenInTabUI extends Plugin {
         keystroke: OPEN_IN_TAB_KEYSTROKE,
         tooltip: true,
       });
-
       button.bind("isEnabled").to(requireOpenImageInTabCommand(editor), "isEnabled");
-
       this.listenTo(button, "execute", () => {
         void executeOpenImageInTabCommand(editor)
           ?.then((result) => {

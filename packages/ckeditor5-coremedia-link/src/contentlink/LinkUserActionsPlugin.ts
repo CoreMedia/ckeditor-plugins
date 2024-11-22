@@ -1,22 +1,23 @@
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import {
-  EditingView,
-  ViewDocumentFragment,
-  ViewElement,
-  TextProxy,
-  Element as ModelElement,
-  Node as ModelNode,
-} from "@ckeditor/ckeditor5-engine";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createWorkAreaServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/WorkAreaServiceDescriptor";
-import { openLink } from "@ckeditor/ckeditor5-link/src/utils";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
 import {
+  createWorkAreaServiceDescriptor,
   isModelUriPath,
   requireContentUriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { openLink } from "@coremedia/ckeditor5-core-common";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import {
+  EditingView,
+  Editor,
+  Element as ModelElement,
+  env,
+  keyCodes,
+  Node as ModelNode,
+  Plugin,
+  TextProxy,
+  ViewDocumentFragment,
+  ViewElement,
+} from "ckeditor5";
 
 /**
  * A Plugin to override default behavior for user action on links in CKEditor.
@@ -33,7 +34,7 @@ import { env, keyCodes } from "@ckeditor/ckeditor5-utils";
  */
 export default class LinkUserActionsPlugin extends Plugin {
   public static readonly pluginName = "LinkUserActionsPlugin" as const;
-  static readonly LOG: Logger = LoggerProvider.getLogger(LinkUserActionsPlugin.pluginName);
+  static readonly LOG: Logger = LoggerProvider.getLogger("LinkUserActionsPlugin");
   static readonly requires = [];
 
   init(): void {
@@ -52,28 +53,40 @@ export default class LinkUserActionsPlugin extends Plugin {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-
     this.listenTo(
       viewDocument,
       "click",
-      (evt, data: { domTarget: Element; preventDefault: () => void; view: EditingView }) => {
+      (
+        evt,
+        data: {
+          domTarget: Element;
+          preventDefault: () => void;
+          view: EditingView;
+        },
+      ) => {
         if (!editor.isReadOnly) {
           return;
         }
-        let clickedElement: Element | null = (data as { domTarget: Element }).domTarget;
+        let clickedElement: Element | null = (
+          data as {
+            domTarget: Element;
+          }
+        ).domTarget;
         if (clickedElement.tagName.toLowerCase() !== "a") {
           clickedElement = clickedElement.closest("a");
         }
         if (!clickedElement) {
           return;
         }
-
         evt.stop();
         data.preventDefault();
         this.#onReadOnlyLinkClicked(editor, data.view, clickedElement);
       },
-      //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
-      { priority: "high", context: "$capture" },
+      {
+        priority: "high",
+        //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
+        context: "$capture",
+      },
     );
   }
 
@@ -100,14 +113,16 @@ export default class LinkUserActionsPlugin extends Plugin {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-
     this.listenTo(
       viewDocument,
       "click",
       (
         evt,
         data: {
-          domEvent: { metaKey: boolean; ctrlKey: boolean };
+          domEvent: {
+            metaKey: boolean;
+            ctrlKey: boolean;
+          };
           domTarget: Element;
           preventDefault: () => void;
           view: EditingView;
@@ -120,20 +135,21 @@ export default class LinkUserActionsPlugin extends Plugin {
         if (!shouldOpen) {
           return;
         }
-
-        let clickedElement: Element | null = (data as { domTarget: Element }).domTarget;
+        let clickedElement: Element | null = (
+          data as {
+            domTarget: Element;
+          }
+        ).domTarget;
         if (clickedElement.tagName.toLowerCase() !== "a") {
           clickedElement = clickedElement.closest("a");
         }
         if (!clickedElement) {
           return;
         }
-
         const anchorModelElement = this.#resolveAnchorModelElement(editor, view, clickedElement);
         if (!anchorModelElement) {
           return;
         }
-
         if (anchorModelElement.hasAttribute("linkHref")) {
           const linkHref = anchorModelElement.getAttribute("linkHref");
           if (isModelUriPath(linkHref)) {
@@ -143,14 +159,22 @@ export default class LinkUserActionsPlugin extends Plugin {
           }
         }
       },
-      //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
-      { priority: "high", context: "$capture" },
+      {
+        priority: "high",
+        //@ts-expect-error context is not part of the types but in ckeditor5-link/src/linkediting the event is caught in capture phase
+        context: "$capture",
+      },
     );
-
     this.listenTo(
       viewDocument,
       "keydown",
-      (evt, data: { keyCode: number; altKey: boolean }) => {
+      (
+        evt,
+        data: {
+          keyCode: number;
+          altKey: boolean;
+        },
+      ) => {
         if (editor.isReadOnly) {
           return;
         }
@@ -167,7 +191,9 @@ export default class LinkUserActionsPlugin extends Plugin {
           this.#openInWorkAreaTab(requireContentUriPath(url));
         }
       },
-      { priority: "high" },
+      {
+        priority: "high",
+      },
     );
   }
 
@@ -191,7 +217,6 @@ export default class LinkUserActionsPlugin extends Plugin {
     if (textProxies.length > 1) {
       LinkUserActionsPlugin.LOG.debug("Found multiple clicked links, taking the first to open.");
     }
-
     return textProxies[0];
   }
 

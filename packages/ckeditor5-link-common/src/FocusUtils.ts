@@ -1,9 +1,5 @@
-import { View } from "@ckeditor/ckeditor5-ui";
-// LinkActionsView: See ckeditor/ckeditor5#12027.
-import LinkActionsView from "@ckeditor/ckeditor5-link/src/ui/linkactionsview";
-// LinkFormView: See ckeditor/ckeditor5#12027.
-import LinkFormView from "@ckeditor/ckeditor5-link/src/ui/linkformview";
-import { hasRequiredInternalFocusablesProperty } from "./HasFocusables";
+import { View } from "ckeditor5";
+import { HasFocusables, HasFocusTracker, hasRequiredInternalFocusablesProperty } from "./HasFocusables";
 
 /**
  * Utility function to handle focus tracking for extended linkViews.
@@ -21,7 +17,7 @@ import { hasRequiredInternalFocusablesProperty } from "./HasFocusables";
  * @param positionRelativeToAnchorView - defines whether to add the childViews before or after the anchorView in focus order
  */
 export const handleFocusManagement = (
-  parentView: LinkActionsView | LinkFormView,
+  parentView: HasFocusTracker & HasFocusables,
   childViews: View[],
   anchorView: View,
   positionRelativeToAnchorView: "before" | "after" = "after",
@@ -32,16 +28,13 @@ export const handleFocusManagement = (
     if (existingView === anchorView && positionRelativeToAnchorView === "before") {
       addViewsToFocusables(parentView, childViews);
     }
-
     addViewsToFocusables(parentView, [existingView]);
-
     if (existingView === anchorView && positionRelativeToAnchorView === "after") {
       addViewsToFocusables(parentView, childViews);
     }
   });
 };
-
-const addViewsToFocusables = (parentView: LinkActionsView | LinkFormView, childViews: View[]): void => {
+const addViewsToFocusables = (parentView: HasFocusTracker & HasFocusables, childViews: View[]): void => {
   const internalParentView: unknown = parentView;
   if (!hasRequiredInternalFocusablesProperty(internalParentView)) {
     return;
@@ -52,22 +45,18 @@ const addViewsToFocusables = (parentView: LinkActionsView | LinkFormView, childV
     }
   });
 };
-
-const addViewsToFocusTracker = (parentView: LinkActionsView | LinkFormView, childViews: View[]): void => {
+const addViewsToFocusTracker = (parentView: HasFocusTracker & HasFocusables, childViews: View[]): void => {
   childViews.forEach((view: View) => {
     if (view.element) {
       parentView.focusTracker.add(view.element);
     }
   });
 };
-
-const removeExistingFocusables = (view: LinkActionsView | LinkFormView): View[] => {
+const removeExistingFocusables = (view: HasFocusTracker & HasFocusables): View[] => {
   const internalView: unknown = view;
-
   if (!hasRequiredInternalFocusablesProperty(internalView)) {
     return [];
   }
-
   const removedViews: View[] = [];
   const viewArray = Array.from(internalView._focusables);
   viewArray.forEach((childView) => {

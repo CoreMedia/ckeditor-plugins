@@ -1,4 +1,4 @@
-import { View } from "@ckeditor/ckeditor5-ui";
+import { View } from "ckeditor5";
 
 /**
  * The CoreMedia icon view class.
@@ -8,10 +8,8 @@ import { View } from "@ckeditor/ckeditor5-ui";
 export default class CoreMediaIconView extends View {
   declare iconClass: string | undefined;
   declare id: string;
-
   constructor() {
     super();
-
     const bind = this.bindTemplate;
 
     /*
@@ -31,7 +29,6 @@ export default class CoreMediaIconView extends View {
      * @default ""
      */
     this.set("id", "");
-
     this.setTemplate({
       tag: "span",
       attributes: {

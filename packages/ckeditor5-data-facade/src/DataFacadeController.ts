@@ -1,11 +1,10 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
 import type { DataContextOptions } from "./DataContextOptions";
-import type { Editor } from "@ckeditor/ckeditor5-core";
 import { DataApi } from "./DataApi";
 import { CachedData } from "./CachedData";
 import { ContextMismatchError } from "./ContextMismatchError";
-import { CKEditorError } from "@ckeditor/ckeditor5-utils";
+import { Editor, CKEditorError } from "ckeditor5";
 
 /**
  * Controller for getting and setting data. It prefers providing data on get
@@ -82,14 +81,14 @@ import { CKEditorError } from "@ckeditor/ckeditor5-utils";
  */
 export class DataFacadeController implements DataApi {
   static readonly #logger = LoggerProvider.getLogger("DataFacadeController");
-  #editor?: Editor;
-  #cachedData?: CachedData;
+  #editor: Editor | undefined = undefined;
+  #cachedData: CachedData | undefined = undefined;
   /**
    * Possible delegate to controller directly bound to CKEditor 5 via
    * `DataFacade` plugin. Only expect to be set for a `DataFacadeController`
    * used in the standalone mode.
    */
-  #delegate?: DataFacadeController;
+  #delegate: DataFacadeController | undefined = undefined;
 
   /**
    * Creates a data controller instance. Outside a plugin context, it is not
@@ -126,7 +125,6 @@ export class DataFacadeController implements DataApi {
     } else {
       this.#editor = editor;
     }
-
     if (this.editor) {
       this.#initDelegation();
       this.#propagateData();
@@ -144,28 +142,21 @@ export class DataFacadeController implements DataApi {
   #initDelegation(): void {
     const logger = DataFacadeController.#logger;
     const editor = this.#editor;
-
     if (!editor) {
       return;
     }
-
     const { plugins } = editor;
-
     if (!plugins.has("DataFacade")) {
       logger.debug("Running in standalone mode only. No DataFacade available for given at instance.");
       return;
     }
-
     const dataFacade = plugins.get("DataFacade");
-
     const { data: boundDataFacadeController } = dataFacade;
-
     if (boundDataFacadeController === this) {
       // No need to set up the delegation. This instance is already directly
       // bound to the `DataFacade`.
       return;
     }
-
     if (this.delegating) {
       if (this.#delegate !== boundDataFacadeController) {
         throw new Error("Cannot switch delegation.");
@@ -173,7 +164,6 @@ export class DataFacadeController implements DataApi {
       logger.debug("Skipping re-initialization of delegation.");
       return;
     }
-
     this.#delegate = boundDataFacadeController;
 
     /*
@@ -184,22 +174,17 @@ export class DataFacadeController implements DataApi {
      * forward to the existing DataFacadeController bound to CKEditor via
      * DataFacade plugin.
      */
-
     this.#initiallyPropagateDataToDelegate(boundDataFacadeController);
   }
 
   #initiallyPropagateDataToDelegate(delegate: DataFacadeController): void {
     const cachedData = this.#cachedData;
-
     if (!cachedData) {
       // Nothing to propagate.
       return;
     }
-
     const { data, options } = cachedData;
-
     delegate.setData(data, options);
-
     this.#cachedData = undefined;
   }
 
@@ -220,7 +205,6 @@ export class DataFacadeController implements DataApi {
     const logger = DataFacadeController.#logger;
     const { editor } = this;
     const cachedData = this.#cachedData;
-
     if (!editor || !cachedData || this.delegating) {
       /*
        * Do not propagate:
@@ -231,11 +215,8 @@ export class DataFacadeController implements DataApi {
        */
       return;
     }
-
     editor.data.set(cachedData.data, cachedData.options);
-
     cachedData.version = editor.model.document.version;
-
     logger.debug(`Propagated data of length ${cachedData.data.length} as document version ${cachedData.version}:`, {
       data: cachedData,
     });
@@ -254,12 +235,10 @@ export class DataFacadeController implements DataApi {
       this.#delegate.setData(data, options);
       return;
     }
-
     this.#cachedData = {
       data,
       options,
     };
-
     this.#propagateData();
   }
 
@@ -272,56 +251,49 @@ export class DataFacadeController implements DataApi {
    */
   getData(options: GetDataOptions & DataContextOptions = {}): string {
     const logger = DataFacadeController.#logger;
-
     if (this.#delegate) {
       return this.#delegate.getData(options);
     }
-
     const { editor } = this;
     const cachedData = this.#cachedData;
-
     if (!cachedData) {
       logger.debug("getData: No cached data. Retrieving data directly from editor.");
       return editor?.data.get(options) ?? "";
     }
-
     const {
       data,
       options: { context: expectedContext },
       version: cachedVersion,
     } = cachedData;
     const { context: actualContext } = options;
-
     if (expectedContext !== actualContext) {
       throw new ContextMismatchError(`Data Context Mismatch: actual: ${actualContext}, expected: ${expectedContext}`, {
         actual: actualContext,
         expected: expectedContext,
       });
     }
-
     const currentVersion = editor?.model?.document?.version;
-
     if (!editor || cachedVersion === currentVersion) {
       const dataFromCache = this.#pickData(data, options);
-
       if (logger.isDebugEnabled()) {
         if (editor) {
           logger.debug(
             `getData: No editorial updates since last set data for version ${cachedVersion}. Serving data from cache:`,
-            { data: dataFromCache },
+            {
+              data: dataFromCache,
+            },
           );
         } else {
-          logger.debug(`getData: Editor unavailable, yet. Serving data from cache:`, { data: dataFromCache });
+          logger.debug(`getData: Editor unavailable, yet. Serving data from cache:`, {
+            data: dataFromCache,
+          });
         }
       }
-
       return dataFromCache;
     }
-
     logger.debug(
       `getData: Editorial changes applied (last version on set: ${cachedVersion}, current version: ${currentVersion}). Providing data directly from editor.`,
     );
-
     return editor.data.get(options);
   }
 

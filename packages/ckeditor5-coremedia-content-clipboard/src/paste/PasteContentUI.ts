@@ -1,8 +1,7 @@
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import { ButtonView } from "@ckeditor/ckeditor5-ui";
+import { ButtonView, Editor, Plugin } from "ckeditor5";
 import pasteIcon from "../../theme/icons/paste.svg";
 import "../lang/paste";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 export default class PasteContentUI extends Plugin {
   static readonly pluginName = "pasteContentUI";
@@ -15,13 +14,10 @@ export default class PasteContentUI extends Plugin {
     if (!pasteContentCommand) {
       throw new Error('The command "pasteContent" is required.');
     }
-
     const PASTE_KEYSTROKE = "Ctrl+Shift+P";
-
     editor.keystrokes.set(PASTE_KEYSTROKE, (keyEvtData, cancel) => {
       // Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
       cancel();
-
       if (pasteContentCommand.isEnabled) {
         pasteContentCommand.execute();
       }
@@ -35,11 +31,9 @@ export default class PasteContentUI extends Plugin {
       button.keystroke = PASTE_KEYSTROKE;
       button.class = "paste-content-button";
       button.bind("isEnabled").to(pasteContentCommand, "isEnabled");
-
       this.listenTo(button, "execute", () => {
         pasteContentCommand.execute();
       });
-
       return button;
     });
     reportInitEnd(initInformation);

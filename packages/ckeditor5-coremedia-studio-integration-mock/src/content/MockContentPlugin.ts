@@ -1,6 +1,5 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Plugin } from "ckeditor5";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import MockContent, {
   asStaticContent,
   isMockContentConfigs,
@@ -9,23 +8,21 @@ import MockContent, {
 } from "./MockContent";
 import Delayed from "./Delayed";
 import { isObject } from "./MockContentUtils";
-import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
+import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { PREDEFINED_MOCK_CONTENTS } from "./PredefinedMockContents";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**
  * If states shall change, it will be done with this fixed
  * interval (in milliseconds).
  */
 const DEFAULT_CHANGE_DELAY_MS = 10000;
-
 const PLUGIN_NAME = "MockContent";
 const CONFIG_KEY = "coremedia:mock-content";
 const DEFAULTS_CONFIG_KEY = "defaults";
 const DEFAULTS_CONFIG_PATH = `${CONFIG_KEY}.${DEFAULTS_CONFIG_KEY}`;
 const CONTENTS_CONFIG_KEY = "contents";
 const CONTENTS_CONFIG_PATH = `${CONFIG_KEY}.${CONTENTS_CONFIG_KEY}`;
-
 type ContentsById = Map<number, MockContentConfig>;
 
 /**
@@ -112,7 +109,7 @@ class MockContentPlugin extends Plugin {
    * The pre-defined contents we provide by default.
    */
   static readonly #defaultContents: MockContentConfig[] = [
-    MockContentPlugin.#rootFolderConfig,
+    this.#rootFolderConfig,
     // Easier to prefill some mock contents here.
     ...PREDEFINED_MOCK_CONTENTS,
   ];
@@ -131,10 +128,8 @@ class MockContentPlugin extends Plugin {
    */
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
-
     this.#initContents();
     this.#initDefaults();
-
     reportInitEnd(initInformation);
   }
 
@@ -146,7 +141,6 @@ class MockContentPlugin extends Plugin {
     const { editor } = this;
     const config: unknown = editor.config.get(CONTENTS_CONFIG_PATH);
     let combinedConfigs: MockContentConfig[];
-
     if (isMockContentConfigs(config)) {
       // The order is important, as we want to allow overriding default contents by config.
       combinedConfigs = [...MockContentPlugin.#defaultContents, ...config];
@@ -154,14 +148,11 @@ class MockContentPlugin extends Plugin {
       logger.error(`Ignoring invalid configuration at ${CONTENTS_CONFIG_PATH}.`, config);
       combinedConfigs = MockContentPlugin.#defaultContents;
     }
-
     combinedConfigs.forEach((contentConfig: MockContentConfig): void => {
       const { id } = contentConfig;
       this.#registeredContents.set(id, contentConfig);
     });
-
     const pluralize = (term: string, count: number): string => `${term}${count === 1 ? "" : "s"}`;
-
     if (logger.isDebugEnabled()) {
       // Sorted by ID is more convenient to lookup possible IDs to use.
       const sortedMocks = new Map<number, MockContentConfig>(
@@ -186,7 +177,10 @@ class MockContentPlugin extends Plugin {
     if (!isObject(config)) {
       return;
     }
-    this.#defaults = { ...this.#defaults, ...config };
+    this.#defaults = {
+      ...this.#defaults,
+      ...config,
+    };
   }
 
   /**
@@ -199,7 +193,10 @@ class MockContentPlugin extends Plugin {
     if (!config) {
       return undefined;
     }
-    return withContentDefaults({ ...this.#defaults, ...config });
+    return withContentDefaults({
+      ...this.#defaults,
+      ...config,
+    });
   }
 
   /**

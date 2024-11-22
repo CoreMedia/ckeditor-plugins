@@ -1,5 +1,5 @@
 import { JSWrapper } from "./JSWrapper";
-import { Command } from "@ckeditor/ckeditor5-core";
+import { Command } from "ckeditor5";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 
 /**

@@ -27,14 +27,14 @@ interface BlocklistService {
    *
    * @param wordToBlock - the word to be added to the blocklist
    */
-  addToBlocklist(wordToBlock: string): void;
+  addToBlocklist(wordToBlock: string): Promise<void>;
 
   /**
    * Removes a given word from the blocklist.
    *
    * @param wordToUnblock - the word to be removed from the blocklist
    */
-  removeFromBlocklist(wordToUnblock: string): void;
+  removeFromBlocklist(wordToUnblock: string): Promise<void>;
 
   /**
    * Returns all entries of the blocklist.

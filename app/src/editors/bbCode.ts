@@ -1,31 +1,42 @@
-import { Autosave } from "@ckeditor/ckeditor5-autosave";
-import { Bold, Italic, Strikethrough, Underline } from "@ckeditor/ckeditor5-basic-styles";
-import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
-import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { BBCode } from "@coremedia/ckeditor5-bbcode";
-import { Heading } from "@ckeditor/ckeditor5-heading";
-import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
-import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
-
-import { AutoLink, Link, LinkImage } from "@ckeditor/ckeditor5-link";
 import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { ApplicationState } from "../ApplicationState";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import { updatePreview } from "../preview";
-import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
-import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
-import { CodeBlock } from "@ckeditor/ckeditor5-code-block";
-import { List, ListProperties } from "@ckeditor/ckeditor5-list";
-import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
-import { RemoveFormat } from "@ckeditor/ckeditor5-remove-format";
-import { Indent } from "@ckeditor/ckeditor5-indent";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { FontColor, FontSize } from "@ckeditor/ckeditor5-font";
-import { AutoImage, ImageInline, ImageInsert, ImageInsertViaUrl, ImageToolbar } from "@ckeditor/ckeditor5-image";
-import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
-import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
-
+import {
+  Autosave,
+  Bold,
+  Italic,
+  Strikethrough,
+  Underline,
+  ClassicEditor,
+  Essentials,
+  Heading,
+  Paragraph,
+  SourceEditing,
+  AutoLink,
+  Link,
+  LinkImage,
+  Autoformat,
+  BlockQuote,
+  CodeBlock,
+  List,
+  ListProperties,
+  PasteFromOffice,
+  RemoveFormat,
+  Indent,
+  FontColor,
+  FontSize,
+  AutoImage,
+  ImageInline,
+  ImageInsert,
+  ImageInsertViaUrl,
+  ImageToolbar,
+  Base64UploadAdapter,
+  ImageBlockEditing,
+} from "ckeditor5";
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
   state: ApplicationState,
@@ -105,21 +116,67 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     codeBlock: {
       // Mostly defaults, despite new one: BBCode.
       languages: [
-        { language: "plaintext", label: "Plain text" }, // The default language.
-        { language: "bbcode", label: "BBCode" },
-        { language: "c", label: "C" },
-        { language: "cs", label: "C#" },
-        { language: "cpp", label: "C++" },
-        { language: "css", label: "CSS" },
-        { language: "diff", label: "Diff" },
-        { language: "html", label: "HTML" },
-        { language: "java", label: "Java" },
-        { language: "javascript", label: "JavaScript" },
-        { language: "php", label: "PHP" },
-        { language: "python", label: "Python" },
-        { language: "ruby", label: "Ruby" },
-        { language: "typescript", label: "TypeScript" },
-        { language: "xml", label: "XML" },
+        {
+          language: "plaintext",
+          label: "Plain text",
+        },
+        // The default language.
+        {
+          language: "bbcode",
+          label: "BBCode",
+        },
+        {
+          language: "c",
+          label: "C",
+        },
+        {
+          language: "cs",
+          label: "C#",
+        },
+        {
+          language: "cpp",
+          label: "C++",
+        },
+        {
+          language: "css",
+          label: "CSS",
+        },
+        {
+          language: "diff",
+          label: "Diff",
+        },
+        {
+          language: "html",
+          label: "HTML",
+        },
+        {
+          language: "java",
+          label: "Java",
+        },
+        {
+          language: "javascript",
+          label: "JavaScript",
+        },
+        {
+          language: "php",
+          label: "PHP",
+        },
+        {
+          language: "python",
+          label: "Python",
+        },
+        {
+          language: "ruby",
+          label: "Ruby",
+        },
+        {
+          language: "typescript",
+          label: "TypeScript",
+        },
+        {
+          language: "xml",
+          label: "XML",
+        },
       ],
     },
     dataFacade: {
@@ -177,13 +234,47 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     },
     heading: {
       options: [
-        { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
-        { model: "heading1", view: "h1", title: "Heading 1", class: "ck-heading_heading1" },
-        { model: "heading2", view: "h2", title: "Heading 2", class: "ck-heading_heading2" },
-        { model: "heading3", view: "h3", title: "Heading 3", class: "ck-heading_heading3" },
-        { model: "heading4", view: "h4", title: "Heading 4", class: "ck-heading_heading4" },
-        { model: "heading5", view: "h5", title: "Heading 5", class: "ck-heading_heading5" },
-        { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" },
+        {
+          model: "paragraph",
+          title: "Paragraph",
+          class: "ck-heading_paragraph",
+        },
+        {
+          model: "heading1",
+          view: "h1",
+          title: "Heading 1",
+          class: "ck-heading_heading1",
+        },
+        {
+          model: "heading2",
+          view: "h2",
+          title: "Heading 2",
+          class: "ck-heading_heading2",
+        },
+        {
+          model: "heading3",
+          view: "h3",
+          title: "Heading 3",
+          class: "ck-heading_heading3",
+        },
+        {
+          model: "heading4",
+          view: "h4",
+          title: "Heading 4",
+          class: "ck-heading_heading4",
+        },
+        {
+          model: "heading5",
+          view: "h5",
+          title: "Heading 5",
+          class: "ck-heading_heading5",
+        },
+        {
+          model: "heading6",
+          view: "h6",
+          title: "Heading 6",
+          class: "ck-heading_heading6",
+        },
       ],
     },
     image: {

@@ -1,6 +1,5 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import LinkTargetModelView from "./LinkTargetModelView";
-import { Link } from "@ckeditor/ckeditor5-link";
+import { Plugin, Link } from "ckeditor5";
 import LinkTargetActionsViewExtension from "./LinkTargetActionsViewExtension";
 import "../lang/linktarget";
 /**
@@ -11,6 +10,5 @@ import "../lang/linktarget";
  */
 export default class LinkTarget extends Plugin {
   public static readonly pluginName = "LinkTarget" as const;
-
   static readonly requires = [Link, LinkTargetModelView, LinkTargetActionsViewExtension];
 }

@@ -1,4 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin } from "ckeditor5";
 import { XDIFF_ATTRIBUTES } from "../Xdiff";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
@@ -14,14 +14,11 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 export class HtmlImageElementSupport extends Plugin {
   static readonly pluginName = "DifferencingHtmlImageElementSupport";
   static readonly requires = [];
-
-  static readonly #logger: Logger = LoggerProvider.getLogger(HtmlImageElementSupport.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("DifferencingHtmlImageElementSupport");
 
   init(): void {
     const initInformation = reportInitStart(this);
-
     this.#init();
-
     reportInitEnd(initInformation);
   }
 
@@ -30,7 +27,6 @@ export class HtmlImageElementSupport extends Plugin {
     const { model } = editor;
     const { schema } = model;
     const logger = HtmlImageElementSupport.#logger;
-
     if (editor.plugins.has("ImageInlineEditing") || editor.plugins.has("ImageBlockEditing")) {
       logger.debug(`Skipping initialization, as corresponding "real" image plugins are available.`);
       return;
@@ -39,7 +35,6 @@ export class HtmlImageElementSupport extends Plugin {
       logger.debug(`Skipping initialization, as GHS' DataSchema plugin is unavailable.`);
       return;
     }
-
     logger.debug(`Registering "checkAttribute" schema handler to allow "xdiff:changetype" on "htmlImg".`);
 
     /*
@@ -54,7 +49,6 @@ export class HtmlImageElementSupport extends Plugin {
       (evt, args: [string, string]) => {
         const context = args[0];
         const attributeName = args[1];
-
         if (context.endsWith("htmlImg") && attributeName === XDIFF_ATTRIBUTES["xdiff:changetype"]) {
           // Prevent next listeners from being called.
           evt.stop();
@@ -62,7 +56,9 @@ export class HtmlImageElementSupport extends Plugin {
           evt.return = true;
         }
       },
-      { priority: "high" },
+      {
+        priority: "high",
+      },
     );
   }
 }

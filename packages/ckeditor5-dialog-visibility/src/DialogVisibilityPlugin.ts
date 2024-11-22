@@ -1,14 +1,9 @@
-import { Editor, Plugin } from "@ckeditor/ckeditor5-core";
-import { Dialog } from "@ckeditor/ckeditor5-ui";
-
+import { Editor, Plugin, Dialog } from "ckeditor5";
 export default class DialogVisibility extends Plugin {
   public static readonly pluginName = "DialogVisibility" as const;
   static readonly requires = [Dialog];
-
   intersectionObserver?: IntersectionObserver = undefined;
-
   isOpen = false;
-
   init(): void {
     const editorElement = this.editor.ui.element;
     if (editorElement) {
@@ -17,7 +12,6 @@ export default class DialogVisibility extends Plugin {
       this.waitForEditorReadyEvent();
     }
   }
-
   waitForEditorReadyEvent() {
     this.editor.on("ready", () => {
       const editorElement = this.editor.ui.element;
@@ -26,7 +20,6 @@ export default class DialogVisibility extends Plugin {
       }
     });
   }
-
   observeEditorVisibility(editorElement: Element) {
     this.observeDialogState();
     this.intersectionObserver = new IntersectionObserver((entries) => {
@@ -37,10 +30,8 @@ export default class DialogVisibility extends Plugin {
         }
       });
     }, {});
-
     this.intersectionObserver.observe(editorElement);
   }
-
   observeDialogState() {
     const editor: Editor = this.editor;
     const dialogPlugin: Dialog = editor.plugins.get("Dialog");
@@ -53,7 +44,6 @@ export default class DialogVisibility extends Plugin {
       });
     }
   }
-
   closeDialog() {
     const editor: Editor = this.editor;
     const dialogPlugin: Dialog = editor.plugins.get("Dialog");
@@ -61,7 +51,6 @@ export default class DialogVisibility extends Plugin {
       dialogPlugin.hide();
     }
   }
-
   override destroy() {
     this.intersectionObserver?.disconnect();
     super.destroy();

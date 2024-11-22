@@ -9,5 +9,6 @@ export { default as PasteContentEditing } from "./paste/PasteContentEditing";
 export { default as PasteContentPlugin } from "./paste/PasteContentPlugin";
 export { default as PasteContentUI } from "./paste/PasteContentUI";
 export { PasteContentCommand } from "./paste/PasteContentCommand";
+export { CreateModelFunction, CreateModelFunctionCreator } from "./ContentToModelRegistry";
 
 import "./augmentation";

@@ -2,8 +2,7 @@
 
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
-import { Config } from "@ckeditor/ckeditor5-utils";
-import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
+import { Config, EditorConfig } from "ckeditor5";
 import {
   isTargetDefaultRuleDefinitionWithFilter,
   isTargetDefaultRuleDefinitionWithType,
@@ -68,7 +67,6 @@ interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
   defaultTargets?: TargetDefaultRuleDefinition[];
 }
-
 const logger = LoggerProvider.getLogger("LinkTargetConfig");
 
 /**
@@ -81,11 +79,9 @@ const logger = LoggerProvider.getLogger("LinkTargetConfig");
 const parseDefaultLinkTargetConfig = (config: Config<EditorConfig>): TargetDefaultRuleDefinitionWithFilter[] => {
   const fromConfig: unknown = config.get("link.defaultTargets");
   const result: TargetDefaultRuleDefinitionWithFilter[] = [];
-
   if (fromConfig === null || fromConfig === undefined) {
     return [];
   }
-
   if (!Array.isArray(fromConfig)) {
     throw new Error(
       `link.defaultTargets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`,
@@ -96,20 +92,17 @@ const parseDefaultLinkTargetConfig = (config: Config<EditorConfig>): TargetDefau
     if (isTargetDefaultRuleDefinitionWithFilter(entry)) {
       result.push(entry);
     }
-
     if (isTargetDefaultRuleDefinitionWithType(entry)) {
       const filter = getFilterByType(entry.type);
       if (!filter) {
         return;
       }
-
       result.push({
         filter,
         target: entry.target,
       });
     }
   });
-
   return result;
 };
 
@@ -150,11 +143,9 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
   if (fromConfig === null || fromConfig === undefined) {
     return DEFAULT_TARGETS_ARRAY;
   }
-
   if (!Array.isArray(fromConfig)) {
     throw new Error(`link.targets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`);
   }
-
   const targetsArray: unknown[] = fromConfig;
   targetsArray.forEach((entry: unknown): void => {
     if (typeof entry === "string") {
@@ -213,8 +204,6 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
       );
     }
   });
-
   return result;
 };
-
 export default LinkTargetConfig;

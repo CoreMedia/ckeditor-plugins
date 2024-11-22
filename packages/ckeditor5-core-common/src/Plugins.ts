@@ -1,10 +1,5 @@
 import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import Plugin, {
-  PluginClassConstructor,
-  PluginConstructor,
-  PluginInterface,
-} from "@ckeditor/ckeditor5-core/src/plugin";
-import { Editor, PluginsMap } from "@ckeditor/ckeditor5-core";
+import { Editor, Plugin, PluginCollection, PluginConstructor, PluginsMap } from "ckeditor5";
 
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 
@@ -17,17 +12,25 @@ const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
  */
 export type OnMissingPlugin = (pluginName: string) => void;
 
-export function getOptionalPlugin<
-  TConstructor extends PluginClassConstructor<TContext>,
-  TContext extends Editor = Editor,
->(editor: TContext, key: TConstructor, onMissing?: OnMissingPlugin): InstanceType<TConstructor> | undefined;
+type PluginInterface = ReturnType<PluginCollection<Editor>["get"]>;
+
+type PluginClassConstructor = typeof Plugin;
+
+const hasPluginName = (obj: unknown): obj is { pluginName: string } =>
+  // @ts-expect-error PluginInterface is not exported from ckeditor package anymore
+  obj.pluginName !== undefined;
+
+export function getOptionalPlugin<TConstructor extends PluginClassConstructor, TContext extends Editor = Editor>(
+  editor: TContext,
+  key: TConstructor,
+  onMissing?: OnMissingPlugin,
+): InstanceType<TConstructor> | undefined;
 
 export function getOptionalPlugin<TName extends string, TContext extends Editor = Editor>(
   editor: TContext,
   key: TName,
   onMissing?: OnMissingPlugin,
 ): PluginsMap[TName] | undefined;
-
 /**
  * Tries to get the recommended plugin (invokes `has` prior to getting it) and
  * returns it, if available.
@@ -41,13 +44,12 @@ export function getOptionalPlugin<TName extends string, TContext extends Editor 
  * is missing. Defaults to some generic message on not found plugin at debug
  * level.
  */
-export function getOptionalPlugin(
-  editor: Editor,
-  key: PluginClassConstructor | string,
+export function getOptionalPlugin<TKey, TContext extends Editor = Editor>(
+  editor: TContext,
+  key: TKey extends PluginClassConstructor ? TKey : TKey extends string ? TKey : never,
   onMissing?: OnMissingPlugin,
 ): PluginInterface | undefined {
   const { plugins } = editor;
-
   if (plugins.has(key)) {
     if (typeof key === "string") {
       return plugins.get(key);
@@ -55,21 +57,17 @@ export function getOptionalPlugin(
       return plugins.get(key);
     }
   }
-
   let pluginName: string;
-
   if (typeof key === "string") {
     pluginName = key;
   } else {
-    pluginName = (key as PluginConstructor).pluginName ?? key.name;
+    pluginName = hasPluginName(key) ? key.pluginName : key.name;
   }
-
   if (onMissing) {
     onMissing(pluginName);
   } else {
     pluginsLogger.debug(`getOptionalPlugin: Queried plugin ${pluginName} is unavailable.`);
   }
-
   return undefined;
 }
 

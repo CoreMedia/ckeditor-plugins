@@ -2,11 +2,11 @@ import {
   ContentReferenceResponse,
   createContentReferenceServiceDescriptor,
   IContentReferenceService,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
-import { Editor } from "@ckeditor/ckeditor5-core";
+  isUriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Editor } from "ckeditor5";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 import MockContentPlugin from "./MockContentPlugin";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 
 export class MockContentReferenceService implements IContentReferenceService {
   readonly #editor: Editor;
@@ -42,7 +42,6 @@ export class MockContentReferenceService implements IContentReferenceService {
     if (!request) {
       return undefined;
     }
-
     const externalContent = mockExternalContentPlugin.getExternalContent(request);
     if (externalContent) {
       if (externalContent.isAlreadyImported && externalContent.contentAfterImport) {
@@ -57,7 +56,6 @@ export class MockContentReferenceService implements IContentReferenceService {
           };
         }
       }
-
       if (externalContent.contentAfterImport?.type) {
         return {
           request,
@@ -69,7 +67,6 @@ export class MockContentReferenceService implements IContentReferenceService {
         };
       }
     }
-
     const contentExist = mockContentPlugin.hasExplicitContent(request);
     if (contentExist || isUriPath(request)) {
       return {
@@ -78,7 +75,6 @@ export class MockContentReferenceService implements IContentReferenceService {
         externalUriInformation: undefined,
       };
     }
-
     return {
       request,
       contentUri: undefined,

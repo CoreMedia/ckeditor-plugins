@@ -4,9 +4,8 @@ import {
   setXLinkAttributes,
   setXLinkDataSetEntries,
 } from "./XLink";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { isHTMLImageElement } from "@coremedia/ckeditor5-dom-support/src/HTMLImageElements";
-import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import { isHTMLImageElement, isElement } from "@coremedia/ckeditor5-dom-support";
 import { namespaces } from "../Namespaces";
 
 /**

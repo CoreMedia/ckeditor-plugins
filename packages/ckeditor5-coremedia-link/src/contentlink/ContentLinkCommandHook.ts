@@ -1,18 +1,19 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { TextProxy, Range, Writer, Item as ModelItem } from "@ckeditor/ckeditor5-engine";
 import {
   ModelUri,
   requireContentCkeModelUri,
+  ROOT_NAME,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
-import { LinkEditing } from "@ckeditor/ckeditor5-link";
-import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common/src/Constants";
-import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/Constants";
-import { ifCommand, optionalCommandNotFound, recommendCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { DiffItem, DiffItemInsert, Item as ModelItem, LinkEditing, Plugin, Range, TextProxy, Writer } from "ckeditor5";
+import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
+import {
+  ifCommand,
+  optionalCommandNotFound,
+  recommendCommand,
+  reportInitEnd,
+  reportInitStart,
+} from "@coremedia/ckeditor5-core-common";
 
 /**
  * Alias for easier readable code.
@@ -86,7 +87,11 @@ class TrackingData {
  *
  * @param range - range to get included items for
  */
-const getItems = (range: Range): ModelItem[] => [...range.getItems({ shallow: true })];
+const getItems = (range: Range): ModelItem[] => [
+  ...range.getItems({
+    shallow: true,
+  }),
+];
 
 /**
  * LinkCommand has a special handling when inserting links with a collapsed
@@ -138,8 +143,7 @@ const getItems = (range: Range): ModelItem[] => [...range.getItems({ shallow: tr
  */
 class ContentLinkCommandHook extends Plugin {
   public static readonly pluginName = "ContentLinkCommandHook" as const;
-  static readonly #logger: Logger = LoggerProvider.getLogger(ContentLinkCommandHook.pluginName);
-
+  static readonly #logger: Logger = LoggerProvider.getLogger("ContentLinkCommandHook");
   readonly #trackingData: TrackingData = new TrackingData();
 
   /**
@@ -162,7 +166,6 @@ class ContentLinkCommandHook extends Plugin {
     const { editor } = this;
     const { model } = editor;
     const { document } = model;
-
     const initInformation = reportInitStart(this);
 
     /*
@@ -180,7 +183,6 @@ class ContentLinkCommandHook extends Plugin {
      * won't have access to `this` anymore.
      */
     document.registerPostFixer((writer) => this.#postFix(writer));
-
     reportInitEnd(initInformation);
   }
 
@@ -189,11 +191,9 @@ class ContentLinkCommandHook extends Plugin {
    */
   override destroy(): void {
     const { editor } = this;
-
     ifCommand(editor, LINK_COMMAND_NAME)
       .then((command) => command.off("execute", this.#clearTrackingData))
       .catch(optionalCommandNotFound);
-
     this.#trackingData.clear();
   }
 
@@ -261,14 +261,11 @@ class ContentLinkCommandHook extends Plugin {
    */
   #replaceRawLink(writer: Writer, textProxy: TextProxy, range: Range): boolean {
     const logger = ContentLinkCommandHook.#logger;
-
     const replacement: Replacement | undefined = this.#trackingData.clear();
-
     if (!replacement) {
       logger.debug(`Skipped replacement as no replacement was registered.`);
       return false;
     }
-
     const { modelUri: href } = replacement;
 
     /*
@@ -298,10 +295,8 @@ class ContentLinkCommandHook extends Plugin {
       // the next text to add.
       writer.remove(textProxy);
       writer.insertText(name, attrs, position);
-
       return true;
     }
-
     return false;
   }
 
@@ -318,23 +313,18 @@ class ContentLinkCommandHook extends Plugin {
       // adjust raw content-links. Nothing to do.
       return false;
     }
-
     const isTextNodeInsertion = ContentLinkCommandHook.#isTextNodeInsertion;
     const asDiffItemInsert = ContentLinkCommandHook.#asDiffItemInsert;
-
     const model = writer.model;
     const document = model.document;
     const differ = document.differ;
-
     const changes = differ.getChanges();
     const textInsertions: DiffItemInsert[] = changes.filter(isTextNodeInsertion).map(asDiffItemInsert);
     // For the given scenario, we expect at most one matched diff item.
     const matchedDiffItem = textInsertions.find((diffItem) => this.#trackingData.matches(diffItem));
-
     if (matchedDiffItem) {
       return this.#postFixMatchedItem(writer, matchedDiffItem);
     }
-
     return false;
   }
 
@@ -352,10 +342,8 @@ class ContentLinkCommandHook extends Plugin {
       const end = start.getShiftedBy(diffItem.length);
       return writer.createRange(start, end);
     };
-
     const range: Range = toRange(matchedDiffItem);
     const itemsInRange = getItems(range);
-
     if (itemsInRange.length !== 1) {
       /*
        * As we only want to deal with one atomic `insertContent` triggered
@@ -365,9 +353,7 @@ class ContentLinkCommandHook extends Plugin {
        */
       return false;
     }
-
     const onlyItem: ModelItem = itemsInRange[0];
-
     if (!onlyItem.is("model:$textProxy")) {
       /*
        * We only deal with text proxies, which should be the result of the insert operation

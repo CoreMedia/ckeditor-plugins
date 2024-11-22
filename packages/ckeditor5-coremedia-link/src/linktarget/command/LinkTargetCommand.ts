@@ -1,9 +1,17 @@
-import { Command } from "@ckeditor/ckeditor5-core";
-import { Element, Range, Schema, DocumentSelection, Position, Model, Writer } from "@ckeditor/ckeditor5-engine";
 import { LINK_TARGET_MODEL } from "../Constants";
-import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common/src/Constants";
-import { first } from "@ckeditor/ckeditor5-utils";
-import { findAttributeRange } from "@ckeditor/ckeditor5-typing";
+import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common";
+import {
+  Command,
+  Element,
+  Range,
+  Schema,
+  DocumentSelection,
+  Position,
+  Model,
+  Writer,
+  first,
+  findAttributeRange,
+} from "ckeditor5";
 
 /**
  * Signals to delete a target.
@@ -119,7 +127,6 @@ class LinkTargetCommand extends Command {
     const model = editor.model;
     const findCurrentLinkHrefRanges = LinkTargetCommand.#findCurrentLinkHrefRanges;
     const setOrRemoveTarget = LinkTargetCommand.#setOrRemoveTarget;
-
     model.change((writer) => {
       // Get ranges to unlink.
       const rangesToUpdate = findCurrentLinkHrefRanges(model);
@@ -158,20 +165,16 @@ class LinkTargetCommand extends Command {
    */
   static #findCurrentLinkHrefRanges(model: Model): Range[] {
     const selection = model.document.selection;
-
     if (selection.isCollapsed) {
       const findAttributeRanges = LinkTargetCommand.#findAttributeRanges;
       const linkHrefModel = selection?.getAttribute(LINK_HREF_MODEL);
-
       if (typeof linkHrefModel !== "string") {
         throw new Error(
           `Unexpected type for attribute ${LINK_HREF_MODEL}. Expected "string" but value is: ${linkHrefModel}`,
         );
       }
-
       return findAttributeRanges(selection.getFirstPosition(), LINK_HREF_MODEL, linkHrefModel, model);
     }
-
     return [...model.schema.getValidRanges([...selection.getRanges()], LINK_HREF_MODEL)];
   }
 

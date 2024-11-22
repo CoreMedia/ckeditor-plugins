@@ -3,8 +3,10 @@
  *
  * @packageDocumentation
  */
-import { add } from "@ckeditor/ckeditor5-utils/src/translation-service";
+import { addTranslations } from "@coremedia/ckeditor5-core-common";
 
-add("de", {
+const german = {
   "loading...": "Inhalt wird geladen...",
-});
+};
+addTranslations("en", Object.fromEntries(Object.keys(german).map((k) => [k, k])));
+addTranslations("de", german);

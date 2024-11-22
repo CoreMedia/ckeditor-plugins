@@ -1,20 +1,19 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { Writer, Node } from "@ckeditor/ckeditor5-engine";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayServiceDescriptor";
-import { serviceAgent } from "@coremedia/service-agent";
-import { ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/Constants";
-import { requireContentCkeModelUri } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Node, Plugin, Writer } from "ckeditor5";
 import {
+  createContentDisplayServiceDescriptor,
+  requireContentCkeModelUri,
+  ROOT_NAME,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { serviceAgent } from "@coremedia/service-agent";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import {
+  ContentClipboardEditing,
   CreateModelFunction,
   CreateModelFunctionCreator,
-} from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentToModelRegistry";
-import ContentClipboardEditing from "@coremedia/ckeditor5-coremedia-content-clipboard/src/ContentClipboardEditing";
-import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+} from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
-
 const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
   contentUri: string,
 ): Promise<CreateModelFunction> => {
@@ -22,7 +21,6 @@ const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
   const contentName = await contentDisplayService.name(contentUri);
   return createLinkModelFunction(contentUri, contentName);
 };
-
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {
   const nameToPass = name ? name : ROOT_NAME;
   return (writer: Writer): Node =>

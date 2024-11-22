@@ -3,8 +3,10 @@
  *
  * @packageDocumentation
  */
-import { add } from "@ckeditor/ckeditor5-utils/src/translation-service";
+import { addTranslations } from "@coremedia/ckeditor5-core-common";
 
-add("de", {
+const german = {
   "Open in tab": "Im Tab öffnen",
-});
+};
+addTranslations("en", Object.fromEntries(Object.keys(german).map((k) => [k, k])));
+addTranslations("de", german);

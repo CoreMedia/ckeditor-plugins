@@ -1,27 +1,30 @@
-import {
-  ViewDocument,
-  ViewDocumentFragment,
-  HtmlDataProcessor,
-  DataProcessor,
-  DomConverter,
-} from "@ckeditor/ckeditor5-engine";
-import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
-import { parseRule, RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import {
+  DataProcessor,
+  DomConverter,
+  Editor,
+  HtmlDataProcessor,
+  MatcherPattern,
+  ObservableMixin,
+  ViewDocument,
+  ViewDocumentFragment,
+} from "ckeditor5";
+import {
+  HtmlDomConverter,
+  parseRule,
+  RuleBasedConversionListener,
+  RuleConfig,
+  RuleSection,
+} from "@coremedia/ckeditor5-dom-converter";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { Strictness } from "./Strictness";
-import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support/src/Namespaces";
+import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
-import { RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter/src/RuleBasedConversionListener";
-import { HtmlDomConverter } from "@coremedia/ckeditor5-dom-converter/src/HtmlDomConverter";
 
 /**
  * Creates an empty CoreMedia RichText Document with required namespace
@@ -98,21 +101,15 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
    */
   constructor(editor: Editor) {
     super();
-
     const document: ViewDocument = editor.data.viewDocument;
-
     this.#delegate = new HtmlDataProcessor(document);
     // Remember and re-use DOM converter.
     this.#domConverter = this.#delegate.domConverter;
     this.#richTextXmlWriter = new RichTextXmlWriter();
     this.#domParser = new DOMParser();
-
     this.#noParserErrorNamespace = this.#isNoParserErrorNamespace(this.#domParser);
-
     const config = getLatestCoreMediaRichTextConfig(editor.config);
-
     this.#strictness = config.strictness;
-
     this.addRules([...defaultRules, ...(config.rules ?? [])]);
 
     /*
@@ -175,11 +172,8 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
    */
   addRules(configs: RuleConfig[]): void {
     const logger = RichTextDataProcessor.#logger;
-
     configs.forEach((config) => this.#addRule(config));
-
     this.#modifiedRules();
-
     if (logger.isDebugEnabled()) {
       logger.debug(`${configs.length} rule configurations added.`);
       this.dumpRules();
@@ -216,22 +210,15 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
   toView(data: string): ViewDocumentFragment {
     const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
-
     const dataDocument = this.#parseData(data);
     const htmlDocument = createHtmlDocument();
-
     const converter = new HtmlDomConverter(htmlDocument, this.#toViewConversionListener);
-
     const range = dataDocument.createRange();
     range.selectNodeContents(dataDocument.documentElement);
     const dataFragment = range.extractContents();
-
     converter.convertAndAppend(dataFragment, htmlDocument.body);
-
     const { innerHTML: dataView } = htmlDocument.body;
-
     const viewFragment = this.#delegate.toView(dataView);
-
     if (logger.isDebugEnabled()) {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
@@ -247,7 +234,6 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
       data,
       dataView,
     });
-
     return viewFragment;
   }
 
@@ -262,27 +248,21 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
   toData(viewFragment: ViewDocumentFragment): string {
     const logger = RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
-
     const dataDocument = createCoreMediaRichTextDocument();
     const { htmlDomFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
-
     const converter = new HtmlDomConverter(dataDocument, this.#toDataConversionListener);
-
     converter.convertAndAppend(htmlDomFragment, dataDocument.documentElement);
-
     new RichTextSanitizer(this.#strictness, new TrackingSanitationListener(logger)).sanitize(dataDocument);
 
     // We have to do this late, as sanitation may have removed
     // elements/attributes, whose namespace prefixes may otherwise be registered
     // although unused in the end.
     registerNamespacePrefixes(dataDocument);
-
     const xml = this.#richTextXmlWriter.getXml(dataDocument);
     logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: fragmentAsStringForDebugging,
       out: xml,
     });
-
     return xml;
   }
 
@@ -300,10 +280,8 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
   } {
     const htmlDomFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
-
     if (RichTextDataProcessor.#logger.isDebugEnabled()) {
       fragmentAsStringForDebugging = this.#fragmentToString(htmlDomFragment);
-
       RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: htmlDomFragment,
@@ -337,23 +315,23 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
    */
   #parseData(data: string): Document {
     const logger = RichTextDataProcessor.#logger;
-
     if (!data) {
       return createCoreMediaRichTextDocument();
     }
-
     const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
-
     if (this.#isParserError(dataDocument)) {
-      logger.error("Failed parsing data. See debug messages for details.", { data });
+      logger.error("Failed parsing data. See debug messages for details.", {
+        data,
+      });
       if (logger.isDebugEnabled()) {
         // noinspection InnerHTMLJS
         const parsererror = dataDocument.documentElement.innerHTML;
-        logger.debug("Failed parsing data.", { parsererror });
+        logger.debug("Failed parsing data.", {
+          parsererror,
+        });
       }
       return createCoreMediaRichTextDocument();
     }
-
     return dataDocument;
   }
 
@@ -386,7 +364,6 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
       // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
       return parsedDocument.getElementsByTagName("parsererror").length > 0;
     }
-
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
 }

@@ -47,6 +47,7 @@ interface XLinkBehavior {
   show?: string;
   role?: string;
 }
+
 type XlinkBehaviorDefinition = XLinkBehavior & {
   comment?: string;
   non_bijective?: boolean;

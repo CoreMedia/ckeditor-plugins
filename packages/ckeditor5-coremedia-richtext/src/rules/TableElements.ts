@@ -1,6 +1,6 @@
 import { replaceElementByElementAndClass } from "./ReplaceElementByElementAndClass";
 import { mergeTableSectionsToTableBody } from "./MergeTableSectionsToTableBody";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 
 /**
  * Applies bijective mapping for the table header cells element.

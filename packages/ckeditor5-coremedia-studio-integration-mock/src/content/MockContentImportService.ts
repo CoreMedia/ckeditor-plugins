@@ -1,9 +1,11 @@
-import { ContentImportService } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ContentImportService";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import {
+  ContentImportService,
+  createContentReferenceServiceDescriptor,
+  contentUriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Editor } from "ckeditor5";
 import MockContentPlugin from "./MockContentPlugin";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 
 export class MockContentImportService implements ContentImportService {
   readonly #editor: Editor;
@@ -22,15 +24,12 @@ export class MockContentImportService implements ContentImportService {
     if (!externalContent) {
       return Promise.reject("No external content found, has it been defined in the MockExternalContentPlugin?");
     }
-
     if (!externalContent.contentAfterImport) {
       return Promise.reject("A content that would have been created has not been provided.");
     }
-
     if (externalContent.errorWhileImporting) {
       return Promise.reject("An error occurred and is hopefully handled");
     }
-
     const mockContentPlugin = this.#editor.plugins.get(MockContentPlugin);
     mockContentPlugin.addContents(externalContent.contentAfterImport);
     return Promise.resolve(contentUriPath(externalContent.contentAfterImport.id));

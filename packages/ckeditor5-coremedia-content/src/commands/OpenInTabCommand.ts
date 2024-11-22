@@ -1,11 +1,11 @@
-import { Command, Editor } from "@ckeditor/ckeditor5-core";
+import { Command, Editor } from "ckeditor5";
 import {
   isModelUriPath,
   isUriPath,
   requireContentUriPath,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { canBeOpenedInTab, openEntitiesInTabs, OpenEntitiesInTabsResult } from "../OpenInTab";
 
 // noinspection JSConstantReassignment
@@ -70,10 +70,8 @@ export class OpenInTabCommand extends Command {
       logger.debug(`Disabled command, as URI Path is unavailable for: ${valueFromModel}`);
       return;
     }
-
     this.isEnabled = defaultEnabled;
     logger.debug(`Enabled state set to default: ${defaultEnabled}`);
-
     void canBeOpenedInTab(uriPath).then((canBeOpened): void => {
       logger.debug(`Updating enabled state for ${uriPath} to: ${canBeOpened}`);
       this.isEnabled = canBeOpened;
@@ -115,7 +113,6 @@ export class OpenInTabCommand extends Command {
       actualUriPaths.push(actualValue);
       logger.debug(`URI path used from model state: ${actualValue}`);
     }
-
     return openEntitiesInTabs(...actualUriPaths);
   }
 
@@ -138,7 +135,6 @@ export class OpenInTabCommand extends Command {
     if (!isUriPath(contentUriToParse) && !isModelUriPath(contentUriToParse)) {
       return undefined;
     }
-
     const contentUriAndPropertiesPart = contentUriToParse.split("#");
     return requireContentUriPath(contentUriAndPropertiesPart[0]);
   }

@@ -6,5 +6,5 @@
  */
 export * as content from "./content/index-doc";
 
-export { default as MockStudioIntegration } from "./MockStudioIntegration";
+export { MockStudioIntegration } from "./MockStudioIntegration";
 export * from "./MockBlocklistService";

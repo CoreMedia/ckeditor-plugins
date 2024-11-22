@@ -1,8 +1,7 @@
-import { LinkUI } from "@ckeditor/ckeditor5-link";
-import { Emitter } from "@ckeditor/ckeditor5-utils/src/emittermixin";
+import { Emitter, LinkUI } from "ckeditor5";
 import { keepOpen } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
-import { requireNonNulls } from "@coremedia/ckeditor5-common/src/RequiredNonNull";
+import { requireNonNulls } from "@coremedia/ckeditor5-common";
 
 /**
  * Whether the mouseDown event occurred on an allow-listed element.
@@ -54,18 +53,15 @@ export const removeInitialMouseDownListener = (linkUI: LinkUI): void => {
  */
 export const addMouseEventListenerToHideDialog = (linkUI: LinkUI): void => {
   const { formView } = requireNonNulls(linkUI, "formView");
-
   const internalLinkUI: unknown = linkUI;
   if (!hasRequiredInternalLinkUI(internalLinkUI)) {
     return;
   }
-
   const {
     _balloon: {
       view: { element },
     },
   } = internalLinkUI;
-
   addCustomClickOutsideHandler({
     emitter: formView,
     activator: () => internalLinkUI._isUIInPanel,
@@ -75,7 +71,6 @@ export const addMouseEventListenerToHideDialog = (linkUI: LinkUI): void => {
     },
   });
 };
-
 const addCustomClickOutsideHandler = ({
   emitter,
   activator,
@@ -91,7 +86,13 @@ const addCustomClickOutsideHandler = ({
   emitter.listenTo(
     document as unknown as Emitter,
     "mousedown",
-    (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
+    (
+      evt: unknown,
+      domEvt: {
+        composedPath: () => Element[];
+        target: HTMLElement;
+      },
+    ) => {
       if (!activator()) {
         return;
       }
@@ -108,12 +109,10 @@ const addCustomClickOutsideHandler = ({
           pathIncludesAnyEditor = true;
         }
       }
-
       if (keepOpen(path)) {
         mouseDownOnWhiteListedElement = true;
         return;
       }
-
       if (domEvt.target.draggable && !pathIncludesAnyEditor) {
         return;
       }
@@ -124,33 +123,34 @@ const addCustomClickOutsideHandler = ({
           return;
         }
       }
-
       callback();
     },
   );
   emitter.listenTo(
     document as unknown as Emitter,
     "click",
-    (evt: unknown, domEvt: { composedPath: () => Element[]; target: HTMLElement }) => {
+    (
+      evt: unknown,
+      domEvt: {
+        composedPath: () => Element[];
+        target: HTMLElement;
+      },
+    ) => {
       if (mouseDownOnWhiteListedElement) {
         // we already checked that this click (mouseDown) occurred on an allow-listed element
         mouseDownOnWhiteListedElement = false;
         return;
       }
-
       if (!activator()) {
         return;
       }
-
       const path = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
       const editorElements = document.getElementsByClassName(EDITOR_CLASS);
-
       for (const editorElement of editorElements) {
         if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {
           return;
         }
       }
-
       for (const contextElement of contextElements) {
         if (contextElement.contains(domEvt.target) || path.includes(contextElement)) {
           return;

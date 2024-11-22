@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-content",
-  "version": "21.0.0",
+  "version": "20.1.0",
   "description": "CKEditor components and utilities related to CoreMedia content.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -13,31 +13,44 @@
     "ckeditor",
     "ckeditor5"
   ],
-  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      }
+    }
   },
   "files": [
     "/src"
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
+    "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-config": "^29.7.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "^21.0.0",
-    "@coremedia/ckeditor5-logging": "^21.0.0"
+    "@coremedia/ckeditor5-coremedia-studio-integration": "20.1.0",
+    "@coremedia/ckeditor5-logging": "20.1.0"
   },
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^43.2.0",
+    "ckeditor5": "43.3.1",
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "scripts": {
@@ -45,6 +58,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "build": "tsc --project ./tsconfig.release.json",
+    "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
     "npm-check-updates": "npm-check-updates --upgrade"

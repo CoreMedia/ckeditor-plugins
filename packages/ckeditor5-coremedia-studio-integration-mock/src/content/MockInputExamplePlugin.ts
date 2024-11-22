@@ -1,18 +1,15 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { Plugin } from "ckeditor5";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./MockDragDropService";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
 import {
+  createClipboardServiceDescriptor,
   IsDroppableEvaluationResult,
   isDroppableUris,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
-import {
   IsLinkableEvaluationResult,
   isLinkableUris,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsLinkableDragAndDrop";
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Describes a div-element that can be created by this plugin.
@@ -52,7 +49,6 @@ export const isAnExternalContent = (obj: number | object): boolean => {
   }
   return "externalId" in obj;
 };
-
 const PLUGIN_NAME = "MockInputExamplePlugin";
 
 /**
@@ -128,13 +124,21 @@ class MockInputExamplePlugin extends Plugin {
     }
     const contentIds: string[] = contentIdCommaSeparated.split(",");
     const urilistJSON = JSON.stringify(contentIds);
-    const blob = new Blob([urilistJSON], { type: "cm-studio-rest/uri-list" });
+    const blob = new Blob([urilistJSON], {
+      type: "cm-studio-rest/uri-list",
+    });
     const data: Record<string, Blob> = {};
     data[blob.type] = blob;
-
     const clipboardService = await serviceAgent.fetchService(createClipboardServiceDescriptor());
-
-    await clipboardService.setItems([{ data, options: "copy" }], new Date().getTime());
+    await clipboardService.setItems(
+      [
+        {
+          data,
+          options: "copy",
+        },
+      ],
+      new Date().getTime(),
+    );
   }
 
   /**

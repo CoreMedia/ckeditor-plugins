@@ -1,7 +1,7 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import { PriorityString } from "ckeditor5";
 import { Direction, resolveDirectionToConfig } from "./Direction";
-import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support";
 
 const headingRegEx = /^h(?<level>\d)$/;
 
@@ -35,7 +35,6 @@ export const defaultReplaceHeadingsByElementAndClassConfig: Required<ReplaceHead
   direction: "bijective",
   priority: "normal",
 };
-
 export const replaceHeadingsByElementAndClass = (config?: ReplaceHeadingsByElementAndClassConfig): RuleConfig => {
   const { dataLocalName, dataReservedClassPrefix, direction, priority } = {
     ...defaultReplaceHeadingsByElementAndClassConfig,
@@ -49,17 +48,19 @@ export const replaceHeadingsByElementAndClass = (config?: ReplaceHeadingsByEleme
         if (!isElement(node)) {
           return node;
         }
-
         const match = node.localName.match(headingRegEx);
         if (match) {
           // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/32098
-          const { level }: { level: string } = match.groups;
+          const {
+            level,
+          }: {
+            level: string;
+          } = match.groups;
           const dataReservedClass = `${dataReservedClassPrefix}${level}`;
           const result = renameElement(node, dataLocalName);
           result.classList.add(dataReservedClass);
           return result;
         }
-
         return node;
       },
       priority,
@@ -70,12 +71,10 @@ export const replaceHeadingsByElementAndClass = (config?: ReplaceHeadingsByEleme
         if (!isElement(node) || node.localName !== dataLocalName) {
           return node;
         }
-
         const match = [...node.classList].find((value) => value.startsWith(dataReservedClassPrefix));
         if (!match) {
           return node;
         }
-
         const levelClassifier = match.substring(dataReservedClassPrefix.length);
         const level = Number(levelClassifier);
         if (isNaN(level) || level < 1 || level > 6) {

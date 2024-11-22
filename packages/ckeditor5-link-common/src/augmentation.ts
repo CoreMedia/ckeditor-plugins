@@ -1,13 +1,11 @@
 import { LinkAttributes } from "./LinkAttributes";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
-
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface PluginsMap {
     [LinkAttributes.pluginName]: LinkAttributes;
   }
 }
-
-declare module "@ckeditor/ckeditor5-link" {
+declare module "ckeditor5" {
   interface LinkConfig {
     /**
      * Configuration of attributes, that should be handled as belonging to

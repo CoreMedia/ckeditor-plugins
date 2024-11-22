@@ -1,10 +1,13 @@
-import ContentDisplayService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayService";
+import {
+  ContentAsLink,
+  ContentDisplayService,
+  contentUriPath,
+  createContentDisplayServiceDescriptor,
+  DisplayHint,
+  UriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { combineLatest, Observable, OperatorFunction, Subscription } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { contentUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayServiceDescriptor";
-import DisplayHint from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/DisplayHint";
-import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentAsLink";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { observeEditingHint, observeNameHint, observeTypeHint } from "./DisplayHints";
 import { observeName, observeReadable } from "./MutableProperties";

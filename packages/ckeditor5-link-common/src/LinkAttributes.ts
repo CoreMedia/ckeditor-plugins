@@ -1,15 +1,19 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
-import { DowncastConversionApi } from "@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher";
-import { AttributeElement, ViewElement } from "@ckeditor/ckeditor5-engine";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
-import { TwoStepCaretMovement } from "@ckeditor/ckeditor5-typing";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import { LinkEditing } from "@ckeditor/ckeditor5-link";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import {
+  Plugin,
+  Editor,
+  DowncastConversionApi,
+  AttributeElement,
+  ViewElement,
+  TwoStepCaretMovement,
+  LinkEditing,
+} from "ckeditor5";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).
@@ -91,16 +95,13 @@ const LINK_CUSTOM_PROPERTY = "link";
 export class LinkAttributes extends Plugin {
   static readonly #TEXT_NAME = "$text";
   public static readonly pluginName = "LinkAttributes" as const;
-  static readonly #logger = LoggerProvider.getLogger(LinkAttributes.pluginName);
-
+  static readonly #logger = LoggerProvider.getLogger("LinkAttributes");
   static readonly requires = [LinkCleanup, TwoStepCaretMovement];
 
   init(): void {
     const initInformation = reportInitStart(this);
-
     const { editor } = this;
     const { config } = editor;
-
     if (!editor.plugins.has(LinkEditing)) {
       // This plugin will continue to work.
       // It is just that other means should provide some clean-up actions.
@@ -117,7 +118,6 @@ export class LinkAttributes extends Plugin {
     for (const attribute of attributes) {
       this.registerAttribute(attribute);
     }
-
     reportInitEnd(initInformation);
   }
 
@@ -138,8 +138,9 @@ export class LinkAttributes extends Plugin {
     const { model: modelName, view: viewName } = config;
 
     // Allow link attribute on all inline nodes.
-    model.schema.extend(LinkAttributes.#TEXT_NAME, { allowAttributes: modelName });
-
+    model.schema.extend(LinkAttributes.#TEXT_NAME, {
+      allowAttributes: modelName,
+    });
     editor.conversion.for("downcast").attributeToElement({
       model: modelName,
       view: provideDowncastFunction(viewName),
@@ -162,7 +163,6 @@ export class LinkAttributes extends Plugin {
       },
       converterPriority: "low",
     });
-
     getLinkCleanup(editor)?.registerDependentAttribute(modelName);
     this.#registerForTwoStepCaretMovement(modelName);
   }
@@ -203,7 +203,9 @@ const provideDowncastFunction =
       {
         [view]: modelAttributeValue,
       },
-      { priority: LINK_ATTRIBUTE_PRIORITY },
+      {
+        priority: LINK_ATTRIBUTE_PRIORITY,
+      },
     );
     // Signal Link-Plugin, that this is a link, too.
     writer.setCustomProperty(LINK_CUSTOM_PROPERTY, true, element);

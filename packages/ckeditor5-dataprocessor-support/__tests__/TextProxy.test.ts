@@ -1,16 +1,13 @@
 /* eslint no-null/no-null: off */
 
 import "jest-xml-matcher";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-import TextProxy, { TextFilterRule } from "../src/TextProxy";
-
-jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+import { Editor } from "ckeditor5";
+import { TextProxy, TextFilterRule } from "../src/TextProxy";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
 const SERIALIZER = new XMLSerializer();
 const PARSER = new DOMParser();
-
 function parseAndValidate(xmlString: string): Document {
   const xmlDocument = PARSER.parseFromString(xmlString, "text/xml");
   const xPathResult: XPathResult = xmlDocument.evaluate(
@@ -83,10 +80,8 @@ describe("TextProxy.applyRules()", () => {
     string,
     TextFilterTestData,
   ];
-
   const asciiText = "Lorem ipsum dolor sit amet.";
   const otherAsciiText = "Hinter den Wortbergen.";
-
   const testData: ApplyRulesData[] = [
     [
       "NOOP#01: Should do nothing on empty rule set",
@@ -146,7 +141,6 @@ describe("TextProxy.applyRules()", () => {
       },
     ],
   ];
-
   describe.each<ApplyRulesData>(testData)("(%#) %s", (name, testData) => {
     function getTextNode(): Text {
       const textNode: Text | null = inputDocument.evaluate(
@@ -155,7 +149,6 @@ describe("TextProxy.applyRules()", () => {
         null,
         XPathResult.FIRST_ORDERED_NODE_TYPE,
       ).singleNodeValue as Text;
-
       if (!textNode) {
         throw new Error(
           `Test Setup Issue: Unable resolving XPath '${testData.nodePath}' to element under test in: ${testData.from}`,
@@ -163,7 +156,6 @@ describe("TextProxy.applyRules()", () => {
       }
       return textNode;
     }
-
     function getRestartNode(): Node | null {
       if (!testData.restartPath) {
         return null;
@@ -181,10 +173,15 @@ describe("TextProxy.applyRules()", () => {
       }
       return restartNode;
     }
-
-    function parseDisabled(): { disabled: boolean; namePostfix: string } {
+    function parseDisabled(): {
+      disabled: boolean;
+      namePostfix: string;
+    } {
       if (!testData.disabled) {
-        return { disabled: false, namePostfix: "" };
+        return {
+          disabled: false,
+          namePostfix: "",
+        };
       }
       let state: string | boolean;
       if (typeof testData.disabled === "function") {
@@ -193,28 +190,25 @@ describe("TextProxy.applyRules()", () => {
         state = testData.disabled;
       }
       if (!state) {
-        return { disabled: false, namePostfix: "" };
+        return {
+          disabled: false,
+          namePostfix: "",
+        };
       }
       return {
         disabled: true,
         namePostfix: ` (${typeof state === "string" ? state : "disabled"})`,
       };
     }
-
     const inputDocument: Document = parseAndValidate(testData.from);
     const expectedDocument: Document = parseAndValidate(testData.to);
-
     const proxy = new TextProxy(getTextNode(), MOCK_EDITOR, true);
-
     const { disabled, namePostfix } = parseDisabled();
     const testStrategy = !disabled ? test : test.skip;
-
     const result = proxy.applyRules(...testData.rules);
-
     testStrategy(`Should result in expected DOM.${namePostfix}`, () => {
       expect(SERIALIZER.serializeToString(inputDocument)).toEqualXML(testData.to);
     });
-
     testStrategy(`Should provide expected restartFrom-result.${namePostfix}`, () => {
       expect(result).toStrictEqual(getRestartNode());
     });

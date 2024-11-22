@@ -1,7 +1,7 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter/src/Rule";
-import { PriorityString } from "@ckeditor/ckeditor5-utils/src/priorities";
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import { PriorityString } from "ckeditor5";
 import { Direction, resolveDirectionToConfig } from "./Direction";
-import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import { isElement } from "@coremedia/ckeditor5-dom-support";
 
 export interface ReplaceByChildrenConfig {
   localName: string;
@@ -19,7 +19,6 @@ export const defaultReplaceByChildrenConfig: Required<Omit<ReplaceByChildrenConf
   direction: "toData",
   priority: "normal",
 };
-
 export const replaceByChildren = (config: ReplaceByChildrenConfig): RuleConfig => {
   const { localName, direction, priority } = {
     ...defaultReplaceByChildrenConfig,

@@ -1,13 +1,11 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin } from "@ckeditor/ckeditor5-core";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
 import LinkTargetCommand from "./command/LinkTargetCommand";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common/src/LinkAttributes";
-import { DiffItemAttribute, Range, Writer } from "@ckeditor/ckeditor5-engine";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
-import { DiffItem, DiffItemInsert } from "@ckeditor/ckeditor5-engine/src/model/differ";
+import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert } from "ckeditor5";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -30,14 +28,11 @@ export default class LinkTargetModelView extends Plugin {
    */
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
-
     const { editor } = this;
-
     getLinkAttributes(editor)?.registerAttribute({
       model: LINK_TARGET_MODEL,
       view: LINK_TARGET_VIEW,
     });
-
     editor.commands.add("linkTarget", new LinkTargetCommand(editor));
 
     /**
@@ -53,10 +48,8 @@ export default class LinkTargetModelView extends Plugin {
         writer.setAttribute("linkTarget", linkTarget, range);
       });
     };
-
     this.editor.model.document.registerPostFixer((writer) => {
       const changes = this.editor.model.document.differ.getChanges();
-
       for (const entry of changes) {
         const linkTarget = this.#computeLinkTarget(entry);
         if (!linkTarget) {
@@ -67,7 +60,6 @@ export default class LinkTargetModelView extends Plugin {
       }
       return false;
     });
-
     reportInitEnd(initInformation);
   }
 
@@ -111,7 +103,6 @@ export default class LinkTargetModelView extends Plugin {
    */
   #computeLinkTarget(diffItem: DiffItem): string | undefined {
     let url: unknown;
-
     if (this.#isDiffItemAttribute(diffItem)) {
       // The linkHref attribute was added/changed/deleted for this node.
       //
@@ -123,7 +114,6 @@ export default class LinkTargetModelView extends Plugin {
       // value is `null` then.
       url = diffItem.attributeNewValue;
     }
-
     if (this.#isDiffItemInsert(diffItem)) {
       // An entry with linkHref attribute was inserted.
       //
@@ -131,11 +121,9 @@ export default class LinkTargetModelView extends Plugin {
       // dropped into the editor or into the link balloon.
       url = diffItem.attributes.get("linkHref");
     }
-
     if (url && typeof url === "string") {
       return computeDefaultLinkTargetForUrl(url, this.editor.config);
     }
-
     return undefined;
   }
 }

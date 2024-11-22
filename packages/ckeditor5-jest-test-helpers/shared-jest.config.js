@@ -23,5 +23,5 @@ module.exports = {
     // https://www.npmjs.com/package/jest-transform-stub
     "^.+\\.(css|less|sass|scss|gif|png|jpg|ttf|eot|woff|woff2|svg)$": require.resolve("jest-transform-stub"),
   },
-  transformIgnorePatterns: ["node_modules/.pnpm/(?!@ckeditor|@bbob|lodash-es|ckeditor5|rxjs|vanilla-colorful)"],
+  transformIgnorePatterns: ["node_modules/.pnpm/(?!@ckeditor|@bbob|lodash-es|rxjs|ckeditor5|vanilla-colorful)"],
 };

@@ -1,5 +1,5 @@
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { richtext, p } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+import { richtext, p } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import "./expect/Expectations";
 import { ctrlOrMeta } from "./browser/UserAgent";
 import { clickModifiers } from "./aria/KeyboardUtils";

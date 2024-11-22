@@ -1,13 +1,12 @@
 // noinspection HttpUrlsUsage
-import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock/src/content/PredefinedMockContents";
-import { EditingView } from "@ckeditor/ckeditor5-engine";
+import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import {
   bbCodeData,
   ExampleData,
   initExamples,
   richTextData,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { EditingView, Editor } from "ckeditor5";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 
 const exampleData: {
@@ -20,9 +19,7 @@ const exampleData: {
   },
   bbcode: bbCodeData,
 };
-
 export type ExampleDataType = keyof typeof exampleData;
-
 const dumpEditingViewOnRender = (editor: Editor): void => {
   const {
     editing: { view },
@@ -45,7 +42,6 @@ const dumpEditingViewOnRender = (editor: Editor): void => {
     },
   );
 };
-
 const dumpDataViewOnRender = (editor: Editor): void => {
   const { data } = editor;
   data.once(
@@ -54,14 +50,13 @@ const dumpDataViewOnRender = (editor: Editor): void => {
       console.log("CKEditor's Data-Controller received data via 'set'.", {
         event,
         // eslint-disable-next-line
-        data: details[0],
+        data: details[0]
       }),
     {
       priority: "lowest",
     },
   );
 };
-
 export const initExamplesAndBindTo = (editor: Editor, examplesType: ExampleDataType = "richtext"): void => {
   initExamples({
     id: "examples",

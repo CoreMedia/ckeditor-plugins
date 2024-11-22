@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dialog-visibility",
-  "version": "21.0.0",
+  "version": "20.1.0",
   "description": "Handles dialog visibility when editor is not visible",
   "author": {
     "name": "CoreMedia GmbH",
@@ -18,27 +18,39 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
+    "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-core": "^43.2.0",
-    "@ckeditor/ckeditor5-ui": "^43.2.0",
+    "ckeditor5": "43.3.1",
+    "copyfiles": "^2.4.1",
     "rimraf": "^6.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   },
-  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
   "publishConfig": {
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts"
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      }
+    }
   },
   "files": [
     "/src"
   ],
   "peerDependencies": {
-    "@ckeditor/ckeditor5-core": "^43.2.0",
-    "@ckeditor/ckeditor5-ui": "^43.2.0"
+    "ckeditor5": "43.3.1"
   }
 }

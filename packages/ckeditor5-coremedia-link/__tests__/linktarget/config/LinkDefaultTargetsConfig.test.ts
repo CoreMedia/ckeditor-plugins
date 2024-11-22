@@ -1,15 +1,12 @@
 /* eslint no-null/no-null: off */
 
-import Config from "@ckeditor/ckeditor5-utils/src/config";
+import { Config } from "ckeditor5";
 import { computeDefaultLinkTargetForUrl } from "../../../src/linktarget/config/LinkTargetConfig";
-
-jest.mock("@ckeditor/ckeditor5-utils/src/config");
 
 describe("LinkTargetDefaultsConfig", () => {
   describe("computeDefaultLinkTargetForUrl", () => {
     // @ts-expect-error - Requires generic type since CKEditor 37.x.
     let config: Config;
-
     beforeEach(() => {
       config = new Config();
       config.set("link.defaultTargets", [
@@ -27,7 +24,6 @@ describe("LinkTargetDefaultsConfig", () => {
         },
       ]);
     });
-
     test.each`
       url                          | expectedTarget
       ${"content:123"}             | ${"_embed"}

@@ -1,24 +1,40 @@
-import {
-  ViewDocument,
-  ViewDocumentFragment,
-  HtmlDataProcessor,
-  DataProcessor,
-  DomConverter,
-} from "@ckeditor/ckeditor5-engine";
-import { MatcherPattern } from "@ckeditor/ckeditor5-engine/src/view/matcher";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import RichTextXmlWriter from "../../RichTextXmlWriter";
-import HtmlFilter from "@coremedia/ckeditor5-dataprocessor-support/src/HtmlFilter";
+import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import RichTextSchema from "./RichTextSchema";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
-import HtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/htmlwriter";
-import BasicHtmlWriter from "@ckeditor/ckeditor5-engine/src/dataprocessor/basichtmlwriter";
+import {
+  DataProcessor,
+  DomConverter,
+  Editor,
+  global,
+  HtmlDataProcessor,
+  MatcherPattern,
+  ObservableMixin,
+  ViewDocument,
+  ViewDocumentFragment,
+} from "ckeditor5";
 import ToDataProcessor from "../../ToDataProcessor";
-import { ObservableMixin } from "@ckeditor/ckeditor5-utils";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
+
+interface HtmlWriter {
+  getHtml(fragment: DocumentFragment): string;
+}
+
+class BasicHtmlWriter implements HtmlWriter {
+  /**
+   * Returns an HTML string created from the document fragment.
+   * Just copied from ckeditor5-engine/src/dataprocessor/basichtmlwriter.js
+   * The BasicHtmlWriter and HtmlWriter are not exposed anymore.
+   */
+  getHtml(fragment: DocumentFragment) {
+    const doc = global.document.implementation.createHTMLDocument("");
+    const container = doc.createElement("div");
+    container.appendChild(fragment);
+    return container.innerHTML;
+  }
+}
 
 /**
  * Data-Processor for CoreMedia RichText 1.0.
@@ -30,29 +46,24 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
   readonly #domConverter: DomConverter;
   readonly #richTextXmlWriter: RichTextXmlWriter;
   readonly #htmlWriter: HtmlWriter;
-
   readonly #toDataProcessor: ToDataProcessor;
   readonly #toViewFilter: HtmlFilter;
-
   readonly #richTextSchema: RichTextSchema;
-
   readonly #domParser: DOMParser;
   readonly #noParserErrorNamespace: boolean;
 
   constructor(editor: Editor) {
     super();
-
     const document: ViewDocument = editor.data.viewDocument;
-
     const { schema, toData, toView } = getConfig(editor.config);
-
     this.#delegate = new HtmlDataProcessor(document);
     // renderingMode: "data" - Fixes observed issue ckeditor/ckeditor5#11786
-    this.#domConverter = new DomConverter(document, { renderingMode: "data" });
+    this.#domConverter = new DomConverter(document, {
+      renderingMode: "data",
+    });
     this.#richTextXmlWriter = new RichTextXmlWriter();
     this.#htmlWriter = new BasicHtmlWriter();
     this.#domParser = new DOMParser();
-
     this.#richTextSchema = schema;
 
     /*
@@ -89,7 +100,6 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
      */
     this.#toViewFilter = new HtmlFilter(toView, editor);
     this.#toDataProcessor = new ToDataProcessor(new HtmlFilter(toData, editor));
-
     const parserErrorDocument = this.#domParser.parseFromString("<", "text/xml");
     this.#noParserErrorNamespace =
       V10RichTextDataProcessor.#PARSER_ERROR_NAMESPACE !==
@@ -128,14 +138,12 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
   toData(viewFragment: ViewDocumentFragment): string {
     const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
-
     const { richTextDocument, domFragment, fragmentAsStringForDebugging } = this.initToData(viewFragment);
     const xml = this.toDataInternal(domFragment, richTextDocument);
     logger.debug(`Transformed HTML to RichText within ${performance.now() - startTimestamp} ms:`, {
       in: fragmentAsStringForDebugging,
       out: xml,
     });
-
     return xml;
   }
 
@@ -156,10 +164,8 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
     const richTextDocument = ToDataProcessor.createCoreMediaRichTextDocument();
     const domFragment: Node | DocumentFragment = this.#domConverter.viewToDom(viewFragment);
     let fragmentAsStringForDebugging = "uninitialized";
-
     if (V10RichTextDataProcessor.#logger.isDebugEnabled()) {
       fragmentAsStringForDebugging = this.#fragmentToString(domFragment);
-
       V10RichTextDataProcessor.#logger.debug("toData: ViewFragment converted to DOM.", {
         view: viewFragment,
         dom: domFragment,
@@ -206,14 +212,12 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
       // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
       return parsedDocument.getElementsByTagName("parsererror").length > 0;
     }
-
     return parsedDocument.getElementsByTagNameNS(namespace, "parsererror").length > 0;
   }
 
   toView(data: string): ViewDocumentFragment {
     const logger = V10RichTextDataProcessor.#logger;
     const startTimestamp = performance.now();
-
     let dataView = "";
 
     // If data are empty, we expect empty RichText by default, thus, we don't
@@ -222,21 +226,23 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
     if (data) {
       const dataDocument = this.#domParser.parseFromString(declareCoreMediaRichText10Entities(data), "text/xml");
       if (this.#isParserError(dataDocument)) {
-        logger.error("Failed parsing data. See debug messages for details.", { data });
+        logger.error("Failed parsing data. See debug messages for details.", {
+          data,
+        });
         if (logger.isDebugEnabled()) {
           // noinspection InnerHTMLJS
           const parsererror = dataDocument.documentElement.innerHTML;
-          logger.debug("Failed parsing data.", { parsererror });
+          logger.debug("Failed parsing data.", {
+            parsererror,
+          });
         }
       } else {
         // Only apply filters, if we received valid data.
         this.#toViewFilter.applyTo(dataDocument.documentElement);
       }
-
       const documentFragment = dataDocument.createDocumentFragment();
       const nodes: Node[] = Array.from(dataDocument.documentElement.childNodes);
       documentFragment.append(...nodes);
-
       const html: string = this.#htmlWriter.getHtml(documentFragment);
 
       // Workaround for CoreMedia/ckeditor-plugins#40: Remove wrong closing tags
@@ -246,9 +252,7 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
       // for the affected elements.
       dataView = html.replaceAll(/<\/(?:img|br)>/g, "");
     }
-
     const viewFragment = this.#delegate.toView(dataView);
-
     if (logger.isDebugEnabled()) {
       logger.debug(`Transformed RichText to HTML within ${performance.now() - startTimestamp} ms:`, {
         in: data,
@@ -264,7 +268,6 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
       data,
       dataView,
     });
-
     return viewFragment;
   }
 }

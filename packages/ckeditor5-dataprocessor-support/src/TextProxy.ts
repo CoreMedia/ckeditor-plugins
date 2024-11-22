@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
-import NodeProxy, { PersistResponse } from "./NodeProxy";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { NodeProxy, PersistResponse } from "./NodeProxy";
+import { Editor } from "ckeditor5";
 
 /**
  * Proxy to manipulate text nodes. General contract is, that all modifications
@@ -61,7 +61,6 @@ class TextProxy extends NodeProxy<Text> implements TextFilterParams {
       if (rule) {
         rule(this);
       }
-
       const response = this.persistToDom();
       if (response.continueWith) {
         // Implies (or should imply) response.abort === true
@@ -144,5 +143,4 @@ interface TextFilterParams {
  */
 type TextFilterRule = (params: TextFilterParams) => void;
 
-export default TextProxy;
-export { TextFilterParams, TextFilterRule };
+export { TextFilterParams, TextFilterRule, TextProxy };

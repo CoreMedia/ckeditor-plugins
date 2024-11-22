@@ -1,6 +1,6 @@
 import { AttributeCause, ElementCause, severeElementCauses } from "./Causes";
 import { SanitationListener } from "./SanitationListener";
-import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/src/HasNamespaceUris";
+import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support";
 
 class TrackingState {
   removedElements: {

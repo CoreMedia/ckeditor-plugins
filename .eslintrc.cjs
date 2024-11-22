@@ -160,7 +160,7 @@ module.exports = {
          * ESLint Plugin: Import
          * =====================================================================
          */
-        "import/no-extraneous-dependencies": ["error", { optionalDependencies: false }],
+        "import/no-extraneous-dependencies": ["error", { optionalDependencies: false, devDependencies: true }],
         /*
          * =====================================================================
          * ESLint Plugin: JSDoc

@@ -1,11 +1,10 @@
-import {
+import CoreMediaRichTextSupportConfig, {
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
-  CoreMediaRichTextSupportConfig,
-  GeneralRichTextSupport,
-  RichTextDataFilter,
-} from "./index";
+} from "./CoreMediaRichTextSupportConfig";
+import GeneralRichTextSupport from "./GeneralRichTextSupport";
+import RichTextDataFilter from "./RichTextDataFilter";
 
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface EditorConfig {
     /**
      * The configuration for General Rich Text Support. To be used, especially

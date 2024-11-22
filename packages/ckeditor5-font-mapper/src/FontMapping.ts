@@ -1,5 +1,5 @@
 import { htmlEncodingMap } from "./HtmlEncodingMap";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * A mapping table for a certain font.

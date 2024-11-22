@@ -1,13 +1,18 @@
 // noinspection HtmlRequiredLangAttribute,HtmlRequiredTitleElement,HtmlUnknownAttribute,HttpUrlsUsage
 
-import { HtmlDomConverter, skip, Skip, ConversionContext } from "../src";
+import { ConversionContext, HtmlDomConverter, Skip, skip } from "../src";
 import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
-import { documentFromHtml, documentFromXml } from "@coremedia/ckeditor5-dom-support/src/Documents";
-import { extractNodeContents, serializeToXmlString } from "@coremedia/ckeditor5-dom-support/src/Nodes";
+import {
+  documentFromHtml,
+  documentFromXml,
+  extractNodeContents,
+  isElement,
+  renameElement,
+  serializeToXmlString,
+  wrapIfHTMLElement,
+  wrapIfTableElement,
+} from "@coremedia/ckeditor5-dom-support";
 import { toData, toDataView } from "./DataProcessorSimulation";
-import { isElement, renameElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
-import { wrapIfTableElement } from "@coremedia/ckeditor5-dom-support/src/HTMLTableElements";
-import { wrapIfHTMLElement } from "@coremedia/ckeditor5-dom-support/src/HTMLElements";
 
 describe("HtmlDomConverter", () => {
   describe(USE_CASE_NAME, () => {

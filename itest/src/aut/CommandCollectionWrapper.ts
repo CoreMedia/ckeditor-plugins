@@ -1,5 +1,5 @@
 // CommandCollection: See ckeditor/ckeditor5#12027.
-import type CommandCollection from "@ckeditor/ckeditor5-core/src/commandcollection";
+import type { Editor } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
 import { CommandWrapper } from "./CommandWrapper";
 import { EditorWrapper } from "./EditorWrapper";
@@ -7,7 +7,7 @@ import { EditorWrapper } from "./EditorWrapper";
 /**
  * Wrapper for the command collection.
  */
-export class CommandCollectionWrapper extends JSWrapper<CommandCollection> {
+export class CommandCollectionWrapper extends JSWrapper<Editor["commands"]> {
   /**
    * Get a wrapper for the given command name.
    *

@@ -1,14 +1,21 @@
-import { Plugin, Command } from "@ckeditor/ckeditor5-core";
-import { ButtonView, ContextualBalloon, clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
-import { Locale, Config, PositionOptions } from "@ckeditor/ckeditor5-utils";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
-import { LinkUI } from "@ckeditor/ckeditor5-link";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
 import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
-import { ifCommand } from "@coremedia/ckeditor5-core-common/src/Commands";
-import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
+import { ifCommand } from "@coremedia/ckeditor5-core-common";
+import {
+  Plugin,
+  Command,
+  ButtonView,
+  ContextualBalloon,
+  clickOutsideHandler,
+  Locale,
+  Config,
+  PositionOptions,
+  LinkUI,
+  EditorConfig,
+} from "ckeditor5";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if
@@ -17,14 +24,12 @@ import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/s
  */
 export default class CustomLinkTargetUI extends Plugin {
   public static readonly pluginName = "CustomLinkTargetUI" as const;
-
   static readonly customTargetButtonName: string = "customLinkTargetButton";
-
   #balloon: ContextualBalloon | undefined = undefined;
   /**
    * Form View to enter custom target. Initialized during `init`.
    */
-  #form!: CustomLinkTargetInputFormView;
+  #form: CustomLinkTargetInputFormView | undefined = undefined;
   /**
    * Names, which are bound to other target-selection buttons, and thus, are
    * perceived as _reserved names_. Such names must not show up in the edit
@@ -36,7 +41,6 @@ export default class CustomLinkTargetUI extends Plugin {
    * LinkUI Plugin. Initialized on `init`.
    */
   linkUI!: LinkUI;
-
   static readonly requires = [ContextualBalloon, LinkUI];
 
   async init(): Promise<void> {
@@ -44,7 +48,6 @@ export default class CustomLinkTargetUI extends Plugin {
     const { otherNames, myConfig } = this.#parseConfig(editor.config);
     this.linkUI = editor.plugins.get(LinkUI);
     const linkTargetCommand: Command = await ifCommand(editor, "linkTarget");
-
     this.#reservedTargetNames = new Set<string>(otherNames);
     this.#createButton(linkTargetCommand, myConfig);
     this.#createForm(linkTargetCommand);
@@ -58,20 +61,20 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns well-defined attribute values, which should not be handled by `_other` in `otherNames`;
    * button-configuration in `myConfig`
    */
-  #parseConfig(config: Config<EditorConfig>): { otherNames: string[]; myConfig: Required<LinkTargetOptionDefinition> } {
+  #parseConfig(config: Config<EditorConfig>): {
+    otherNames: string[];
+    myConfig: Required<LinkTargetOptionDefinition>;
+  } {
     const linkTargetDefinitions = parseLinkTargetConfig(config);
-
     const otherNames = linkTargetDefinitions
       .map((definition): string => definition.name)
       .filter((name): boolean => name !== OTHER_TARGET_NAME);
-
     const myConfig: Required<LinkTargetOptionDefinition> = {
       // First provide some defaults, in case they don't exist in definition.
       ...requireDefaultTargetDefinition(OTHER_TARGET_NAME),
       // Now override with definition found in config.
       ...linkTargetDefinitions.find((definition) => definition.name === OTHER_TARGET_NAME),
     };
-
     return {
       otherNames,
       myConfig,
@@ -87,10 +90,8 @@ export default class CustomLinkTargetUI extends Plugin {
     const reservedTargetNames = this.#reservedTargetNames;
     const t = editor.locale.t;
     const { ui } = this.editor;
-
     ui.componentFactory.add(CustomLinkTargetUI.customTargetButtonName, (locale: Locale) => {
       const view = new ButtonView(locale);
-
       view.set({
         label: t(definition.title),
         tooltip: true,
@@ -98,7 +99,6 @@ export default class CustomLinkTargetUI extends Plugin {
         class: "cm-ck-target-button",
         isToggleable: true,
       });
-
       view.bind("isOn").to(linkTargetCommand, "value", (value: unknown) => {
         if (typeof value !== "string") {
           return false;
@@ -124,11 +124,9 @@ export default class CustomLinkTargetUI extends Plugin {
         }
         return true;
       });
-
       this.listenTo(view, "execute", () => {
         this.#showForm();
       });
-
       return view;
     });
   }
@@ -151,25 +149,21 @@ export default class CustomLinkTargetUI extends Plugin {
 
     // Render the form so its #element is available for clickOutsideHandler.
     this.#form.render();
-
     this.listenTo(this.#form, "submit", () => {
-      const { value } = this.#form.labeledInput.fieldView.element as HTMLInputElement;
+      const { value } = this.#form?.labeledInput.fieldView.element ?? {};
       editor.execute("linkTarget", value);
       this.#hideForm(true);
     });
-
     this.listenTo(this.#form, "cancel", () => {
       this.#hideForm(true);
     });
 
     // Close the form on Esc key press.
-    this.#form.keystrokes.set("Esc", (data: unknown, cancel: () => void) => {
+    this.#form.keystrokes.set("Esc", (_data: unknown, cancel: () => void) => {
       this.#hideForm(true);
       cancel();
     });
-
     const { element } = this.#balloon.view;
-
     if (!element) {
       throw new Error("Unexpected state. Element of balloon view is unavailable.");
     }
@@ -190,20 +184,19 @@ export default class CustomLinkTargetUI extends Plugin {
     if (this.#isVisible) {
       return;
     }
-
+    if (!this.#form) {
+      return;
+    }
     const editor = this.editor;
     const linkTargetCommand = editor.commands.get("linkTarget");
     const labeledInput = this.#form.labeledInput;
-
     this.#form.disableCssTransitions();
-
     if (!this.#isInBalloon) {
       this.#balloon?.add({
         view: this.#form,
         position: this.#getBalloonPositionData(),
       });
     }
-
     const commandValue: string = (linkTargetCommand?.value ?? "") as string;
     // For 'reserved targets' as current value, we still want to display an empty field.
     const initialValue: string =
@@ -215,9 +208,7 @@ export default class CustomLinkTargetUI extends Plugin {
     // old value instead of the actual value of the command.
     // https://github.com/ckeditor/ckeditor5-image/issues/114
     labeledInput.fieldView.value = (labeledInput.fieldView.element as HTMLInputElement).value = initialValue;
-
     this.#form.labeledInput.fieldView.select();
-
     this.#form.enableCssTransitions();
   }
 
@@ -233,12 +224,10 @@ export default class CustomLinkTargetUI extends Plugin {
 
     // Blur the input element before removing it from DOM to prevent issues in some browsers.
     // See https://github.com/ckeditor/ckeditor5/issues/1501.
-    if (this.#form.focusTracker.isFocused) {
+    if (this.#form?.focusTracker.isFocused) {
       this.#form.saveButtonView.focus();
     }
-
-    this.#balloon?.remove(this.#form);
-
+    this.#form && this.#balloon?.remove(this.#form);
     if (focusEditable) {
       this.editor.editing.view.focus();
     }
@@ -257,7 +246,7 @@ export default class CustomLinkTargetUI extends Plugin {
    * @returns true if the {@link CustomLinkTargetUI.#form} is in the {@link CustomLinkTargetUI.#balloon}
    */
   get #isInBalloon(): boolean {
-    return this.#balloon?.hasView(this.#form) ?? false;
+    return !!this.#form && (this.#balloon?.hasView(this.#form) ?? false);
   }
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
@@ -280,7 +269,6 @@ const isHasGetBalloonPositionData = (value: unknown): value is HasGetBalloonPosi
   !!value &&
   "_getBalloonPositionData" in value &&
   typeof value._getBalloonPositionData === "function";
-
 const asHasGetBalloonPositionData = (value: unknown): HasGetBalloonPositionData => {
   if (isHasGetBalloonPositionData(value)) {
     return value;

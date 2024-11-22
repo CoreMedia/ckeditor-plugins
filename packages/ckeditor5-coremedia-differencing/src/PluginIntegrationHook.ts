@@ -1,5 +1,4 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { priorities } from "@ckeditor/ckeditor5-utils";
+import { Plugin, priorities } from "ckeditor5";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
@@ -15,7 +14,7 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
  */
 export class PluginIntegrationHook extends Plugin {
   static readonly pluginName = "PluginIntegrationHook";
-  static readonly #logger: Logger = LoggerProvider.getLogger(PluginIntegrationHook.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("PluginIntegrationHook");
 
   init(): void {
     const initInformation = reportInitStart(this);

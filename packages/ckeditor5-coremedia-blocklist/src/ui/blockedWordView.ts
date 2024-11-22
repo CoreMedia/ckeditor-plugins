@@ -1,6 +1,4 @@
-import { ButtonView, View, ViewCollection, submitHandler } from "@ckeditor/ckeditor5-ui";
-import { KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
-import { BindChain } from "@ckeditor/ckeditor5-ui/src/template";
+import { ButtonView, KeystrokeHandler, Locale, submitHandler, View, ViewCollection } from "ckeditor5";
 import trashbinIcon from "../../theme/icons/trashbin.svg";
 import "../../theme/blockedwordview.css";
 import "../lang/blocklist";
@@ -41,17 +39,26 @@ export default class BlockedWordView extends View {
 
   constructor(locale: Locale) {
     super(locale);
-
     const bind = this.bindTemplate;
-
     this.children = this.createCollection();
-
     this.#removeButtonView = this.#createRemoveButton(locale);
-    this.#blockedWordLabel = this.#createBlockedWordLabel(locale, bind);
-
+    this.#blockedWordLabel = (() => {
+      const label = new View(locale);
+      label.setTemplate({
+        tag: "h2",
+        attributes: {
+          class: ["ck", "ck-form__header__label"],
+        },
+        children: [
+          {
+            text: bind.to("label"),
+          },
+        ],
+      });
+      return label;
+    })();
     this.children.add(this.#blockedWordLabel);
     this.children.add(this.#removeButtonView);
-
     this.setTemplate({
       tag: "div",
       attributes: {
@@ -63,11 +70,9 @@ export default class BlockedWordView extends View {
 
   public override render(): void {
     super.render();
-
     submitHandler({
       view: this,
     });
-
     this.#focusables.add(this.#removeButtonView);
 
     // Start listening for the keystrokes coming from #element.
@@ -99,38 +104,20 @@ export default class BlockedWordView extends View {
    */
   #createRemoveButton(locale: Locale): ButtonView {
     const button = new ButtonView(this.locale);
-
     button.set({
       label: locale.t("Remove word from blocklist"),
       icon: trashbinIcon,
       tooltip: true,
     });
-
     button.extendTemplate({
       attributes: {
         class: "ck-button-cancel",
       },
     });
-
     button.on("execute", () => {
       this.fire("unblock", this.label);
     });
-
     return button;
-  }
-
-  #createBlockedWordLabel(locale: Locale, bind: BindChain<typeof this>): View {
-    const label = new View(locale);
-
-    label.setTemplate({
-      tag: "h2",
-      attributes: {
-        class: ["ck", "ck-form__header__label"],
-      },
-      children: [{ text: bind.to("label") }],
-    });
-
-    return label;
   }
 }
 

@@ -1,16 +1,15 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentDisplayServiceDescriptor";
-import { Subscription } from "rxjs";
 import {
+  createContentDisplayServiceDescriptor,
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentUriPath,
   UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import ContentAsLink from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ContentAsLink";
-import { ButtonView } from "@ckeditor/ckeditor5-ui";
+  ContentAsLink,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Subscription } from "rxjs";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { ButtonView, Editor } from "ckeditor5";
 
 /**
  * A ContentView that renders a custom template, containing of 2 different components.
@@ -32,12 +31,10 @@ export default class ContentLinkView extends ButtonView {
    * @private
    */
   readonly #editor: Editor;
-
   #contentSubscription: Subscription | undefined = undefined;
   readonly #typeIcon: CoreMediaIconView | undefined = undefined;
   readonly #statusIcon: CoreMediaIconView | undefined = undefined;
   readonly #cancelButton: ButtonView | undefined = undefined;
-
   declare uriPath: string | null | undefined;
   declare contentName: string | undefined;
   declare underlined: boolean;
@@ -53,7 +50,6 @@ export default class ContentLinkView extends ButtonView {
     },
   ) {
     super(editor.locale);
-
     const bind = this.bindTemplate;
     this.renderOptions = renderOptions;
     this.#editor = editor;
@@ -96,9 +92,7 @@ export default class ContentLinkView extends ButtonView {
      * @default empty string
      */
     this.set("ariaLabelText", "");
-
     this.withText = true;
-
     if (renderOptions?.renderTypeIcon) {
       this.#typeIcon = new CoreMediaIconView();
       this.children.add(this.#typeIcon);
@@ -116,7 +110,6 @@ export default class ContentLinkView extends ButtonView {
       this.#cancelButton.delegate("execute").to(this, "executeCancel");
     }
     this.delegate("execute").to(this, "executeContentLink");
-
     this.extendTemplate({
       attributes: {
         "class": [
@@ -127,7 +120,6 @@ export default class ContentLinkView extends ButtonView {
         "aria-label": bind.to("ariaLabelText"),
       },
     });
-
     this.listenTo(this, "executeContentLink", () => {
       // If cancel button is executed, this button also executes
       // We must not fire the contentClick event then. Therefore, check
@@ -136,9 +128,7 @@ export default class ContentLinkView extends ButtonView {
         this.fire("contentClick");
       }
     });
-
     this.bind("label").to(this, "contentName");
-
     this.on("change:uriPath", (evt) => {
       // URI changes, thus contentName, icons and tooltip are not valid anymore for the new URI
       this.set({
@@ -151,9 +141,7 @@ export default class ContentLinkView extends ButtonView {
       this.#statusIcon?.set({
         iconClass: undefined,
       });
-
       this.#endContentSubscription();
-
       const hasUriPath = this.hasUriPathProperty(evt.source);
       if (!hasUriPath) {
         return;
@@ -165,7 +153,9 @@ export default class ContentLinkView extends ButtonView {
     });
   }
 
-  hasUriPathProperty(obj: object): obj is { uriPath: string } {
+  hasUriPathProperty(obj: object): obj is {
+    uriPath: string;
+  } {
     return "uriPath" in obj;
   }
 
@@ -179,7 +169,6 @@ export default class ContentLinkView extends ButtonView {
       }
       this.children.add(this.#statusIcon);
     }
-
     if (this.renderOptions?.renderCancelButton) {
       if (!this.#cancelButton) {
         throw new Error(

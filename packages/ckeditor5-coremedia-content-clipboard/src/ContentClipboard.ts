@@ -1,42 +1,37 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   Clipboard,
   ClipboardContentInsertionEvent,
+  ClipboardEventData,
   ClipboardInputTransformationData,
   ClipboardInputTransformationEvent,
   ClipboardPipeline,
-  ViewDocumentClipboardInputEvent,
-} from "@ckeditor/ckeditor5-clipboard";
-import {
-  Range as ModelRange,
-  ViewRange,
   DocumentFragment as ModelDocumentFragment,
-  ViewDocumentFragment,
-  ViewDocument,
-  StylesProcessor,
   DomEventData,
-} from "@ckeditor/ckeditor5-engine";
-import { EventInfo } from "@ckeditor/ckeditor5-utils";
-import {
-  ClipboardEventData,
-  ClipboardInputEventData,
-  ViewDocumentDragOverEvent,
-} from "@ckeditor/ckeditor5-clipboard/src/clipboardobserver";
+  Editor,
+  EventInfo,
+  GetCallback,
+  Plugin,
+  Range as ModelRange,
+  StylesProcessor,
+  ViewDocument,
+  ViewDocumentClipboardInputEvent,
+  ViewDocumentFragment,
+  ViewRange,
+} from "ckeditor5";
 import ContentClipboardEditing from "./ContentClipboardEditing";
-import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { disableUndo, UndoSupport } from "./integrations/Undo";
-import { isRaw } from "@coremedia/ckeditor5-common/src/AdvancedTypes";
+import { isRaw } from "@coremedia/ckeditor5-common";
 import { insertContentMarkers } from "./ContentMarkers";
 import {
   getEvaluationResult,
   isDroppable,
   IsDroppableEvaluationResult,
-} from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/IsDroppableInRichtext";
-import { receiveDraggedItemsFromDataTransfer } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/DragDropServiceWrapper";
+  receiveDraggedItemsFromDataTransfer,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 
@@ -62,7 +57,6 @@ const isContentEventData = <T extends ClipboardEventData>(value: T): value is T 
 export default class ContentClipboard extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
   static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
-
   static readonly requires = [Clipboard, ClipboardPipeline, ContentClipboardEditing, UndoSupport];
 
   init(): void {
@@ -81,12 +75,11 @@ export default class ContentClipboard extends Plugin {
     const viewDocument = view.document;
 
     // Processing pasted or dropped content.
-    this.listenTo<ViewDocumentClipboardInputEvent>(viewDocument, "clipboardInput", this.#clipboardInputHandler);
+    this.listenTo(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     // Priority `low` required, so that we can control the `dropEffect`.
-    this.listenTo<ViewDocumentDragOverEvent>(viewDocument, "dragover", ContentClipboard.#dragOverHandler, {
+    this.listenTo(viewDocument, "dragover", ContentClipboard.#dragOverHandler, {
       priority: "low",
     });
-
     if (editor.plugins.has(ClipboardPipeline)) {
       const clipboardPipelinePlugin = editor.plugins.get(ClipboardPipeline);
       this.listenTo<ClipboardInputTransformationEvent>(
@@ -101,7 +94,6 @@ export default class ContentClipboard extends Plugin {
     const editor = this.editor;
     const view = editor.editing.view;
     const viewDocument = view.document;
-
     this.stopListening(viewDocument, "clipboardInput", this.#clipboardInputHandler);
     this.stopListening(viewDocument, "dragover", ContentClipboard.#dragOverHandler);
     if (editor.plugins.has(ClipboardPipeline)) {
@@ -114,10 +106,10 @@ export default class ContentClipboard extends Plugin {
    * Drag-over handler to control drop-effect icons, which is, to forbid for
    * any content-sets containing types, which are not allowed to be linked.
    *
-   * @param evt - event information
+   * @param _evt - event information
    * @param data - clipboard data
    */
-  static #dragOverHandler(evt: EventInfo<"dragover">, data: DomEventData<DragEvent> & ClipboardEventData): void {
+  static readonly #dragOverHandler = (_evt: unknown, data: DomEventData<DragEvent> & ClipboardEventData) => {
     // The listener already processed the clipboard content on the
     // higher priority (for example, while pasting into the code block).
     if (isContentEventData(data) && !!data.content) {
@@ -127,21 +119,18 @@ export default class ContentClipboard extends Plugin {
     if (!isDroppableEvaluationResult) {
       return;
     }
-
     data.preventDefault();
-
     if (isDroppableEvaluationResult === "PENDING") {
       ContentClipboard.#logger.debug("Drag over evaluation is currently pending", data);
       data.dataTransfer.dropEffect = "none";
       return;
     }
-
     if (isDroppableEvaluationResult.isDroppable) {
       data.dataTransfer.dropEffect = "link";
     } else {
       data.dataTransfer.dropEffect = "none";
     }
-  }
+  };
 
   // noinspection JSUnusedLocalSymbols
   /**
@@ -155,20 +144,15 @@ export default class ContentClipboard extends Plugin {
    * @param evt - event information
    * @param data - clipboard data
    */
-  readonly #clipboardInputHandler = (
-    evt: EventInfo<"clipboardInput">,
-    data: DomEventData<ClipboardEvent | DragEvent> & ClipboardInputEventData,
-  ): void => {
+  readonly #clipboardInputHandler: GetCallback<ViewDocumentClipboardInputEvent> = (evt, data): void => {
     const dataTransfer: DataTransfer = data.dataTransfer as unknown as DataTransfer;
     if (!dataTransfer) {
       return;
     }
-
     const uris: string[] | undefined = receiveDraggedItemsFromDataTransfer(dataTransfer);
     if (!uris) {
       return;
     }
-
     const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(uris);
     // Return if this is no CoreMedia content drop.
     if (!isDroppableResult) {
@@ -204,12 +188,10 @@ export default class ContentClipboard extends Plugin {
     if (!dataTransfer) {
       return;
     }
-
     const uris: string[] | undefined = receiveDraggedItemsFromDataTransfer(dataTransfer);
     if (!uris) {
       return;
     }
-
     const isDroppableResult: IsDroppableEvaluationResult | undefined = getEvaluationResult(uris);
     if (!isDroppableResult || isDroppableResult === "PENDING") {
       return;
@@ -219,9 +201,7 @@ export default class ContentClipboard extends Plugin {
     if (!isDroppableResult.uris || isDroppableResult.uris.length === 0) {
       return;
     }
-
     const droppableUris = isDroppableResult.uris;
-
     const { editor } = this;
 
     // Return if no range has been set (usually indicated by a blue cursor
@@ -247,9 +227,7 @@ export default class ContentClipboard extends Plugin {
     // The best solution for this seems to disable the undo command before the
     // input and enable it again afterward.
     disableUndo(editor.plugins.get(UndoSupport));
-
     const { model } = editor;
-
     insertContentMarkers(editor, targetRange, droppableUris);
     // Fire content insertion event in a single change block to allow other
     // handlers to run in the same block without post-fixers called in between

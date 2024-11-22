@@ -2,12 +2,14 @@ import { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
 import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 import { ActiveStrictness } from "../Strictness";
 import { SanitationListener } from "./SanitationListener";
-import { isText } from "@coremedia/ckeditor5-dom-support/src/Texts";
-import { isElement } from "@coremedia/ckeditor5-dom-support/src/Elements";
+import {
+  isText,
+  isElement,
+  isParentNode,
+  isHasNamespaceUri,
+  lookupNamespaceURI,
+} from "@coremedia/ckeditor5-dom-support";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
-import { isParentNode } from "@coremedia/ckeditor5-dom-support/src/ParentNodes";
-import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support/src/HasNamespaceUris";
-import { lookupNamespaceURI } from "@coremedia/ckeditor5-dom-support/src/Nodes";
 
 const defaultPrefix = Symbol("default");
 type DefaultPrefix = typeof defaultPrefix;

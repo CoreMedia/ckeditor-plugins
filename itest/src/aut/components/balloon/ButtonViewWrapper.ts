@@ -1,16 +1,15 @@
 import { JSWrapper } from "../../JSWrapper";
-import type { ButtonView } from "@ckeditor/ckeditor5-ui";
+import type { ButtonView } from "ckeditor5";
 import { HasVisible } from "../../../expect/IsVisible/HasVisible";
 import { HasToggleable } from "../../../expect/isToggleable/HasToggleable";
 import { HasEnabled } from "../../../expect/isEnabled/HasEnabled";
 import { HasAriaLabel } from "../../../aria/AriaUtils";
-
 export default class ButtonViewWrapper
   extends JSWrapper<ButtonView>
   // Seems, we cannot make prettier happy here for some reason regarding
   // whitespace before curly brace.
   // eslint-disable-next-line prettier/prettier
-  implements HasVisible, HasToggleable, HasEnabled, HasAriaLabel {
+implements HasVisible, HasToggleable, HasEnabled, HasAriaLabel {
   click(): Promise<void> {
     return this.evaluate((buttonView) => {
       const element = buttonView.element;
@@ -21,23 +20,18 @@ export default class ButtonViewWrapper
       }
     });
   }
-
   get visible(): Promise<boolean> {
     return this.evaluate((buttonView) => buttonView.isVisible);
   }
-
   get toggleable(): Promise<boolean> {
     return this.evaluate((buttonView) => buttonView.isToggleable);
   }
-
   get on(): Promise<boolean> {
     return this.evaluate((buttonView) => buttonView.isOn);
   }
-
   get enabled(): Promise<boolean> {
     return this.evaluate((buttonView) => buttonView.isEnabled);
   }
-
   getAriaLabel(): Promise<string | undefined> {
     return this.evaluate((buttonView) => {
       const element = buttonView.element;
@@ -51,7 +45,6 @@ export default class ButtonViewWrapper
       return Promise.resolve(attribute);
     });
   }
-
   getAriaLabelledBy(): Promise<string | undefined> {
     return this.evaluate((buttonView) => {
       const element = buttonView.element;

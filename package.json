@@ -54,7 +54,7 @@
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
     "update:latest": "pnpm update --interactive --latest --recursive '!esbuild-loader'",
     "update:latest:third-party": "pnpm update --interactive --latest --recursive '!esbuild-loader' '!@ckeditor/*'",
-    "update:latest:ckeditor5": "pnpm update --interactive --latest --recursive '@ckeditor/*' '!@ckeditor/ckeditor5-dev-*'",
+    "update:latest:ckeditor5": "pnpm update --interactive --latest --recursive 'ckeditor5'",
     "update:latest:ckeditor5-dev": "pnpm update --interactive --latest --recursive '@ckeditor/ckeditor5-dev-*'",
     "script:version": "node ./scripts/version.mjs",
     "script:validate-peers": "node ./scripts/validate-peers.mjs"
@@ -79,7 +79,12 @@
     "rimraf": "^6.0.1",
     "semver": "^7.6.2",
     "typedoc": "^0.25.13",
-    "typescript": "^5.4.5",
+    "typescript": "5.4.5",
     "validate-peer-dependencies": "^2.2.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "ckeditor5@43.3.1": "patches/ckeditor5@43.3.1.patch"
+    }
   }
 }

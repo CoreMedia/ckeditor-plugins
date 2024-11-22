@@ -1,8 +1,5 @@
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content";
-import first from "@ckeditor/ckeditor5-utils/src/first";
-import type Schema from "@ckeditor/ckeditor5-engine/src/model/schema";
-import type ModelElement from "@ckeditor/ckeditor5-engine/src/model/element";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
+import { first, Schema, Element as ModelElement, Editor } from "ckeditor5";
 import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
@@ -76,6 +73,5 @@ const isLinkableElement = (element: ModelElement | null, schema: Schema): elemen
   if (!element) {
     return false;
   }
-
   return schema.checkAttribute(element.name, "linkHref");
 };

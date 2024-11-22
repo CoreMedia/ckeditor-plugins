@@ -1,10 +1,9 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
+import { Plugin } from "ckeditor5";
 import { ImageElementSupport } from "./integrations/Image";
 import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
 import { XDIFF_ATTRIBUTES, XDIFF_BREAK_ELEMENT_CONFIG, XDIFF_SPAN_ELEMENT_CONFIG } from "./Xdiff";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
-import Logger from "@coremedia/ckeditor5-logging/src/logging/Logger";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
 
 /**
@@ -36,7 +35,7 @@ import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataPro
 export default class Differencing extends Plugin {
   static readonly pluginName = "Differencing";
   static readonly requires = [HtmlImageElementSupport, ImageElementSupport, RichTextDataProcessorIntegration];
-  static readonly #logger: Logger = LoggerProvider.getLogger(Differencing.pluginName);
+  static readonly #logger: Logger = LoggerProvider.getLogger("Differencing");
 
   /**
    * Provides information about the current activation state. Once activated it
@@ -47,9 +46,7 @@ export default class Differencing extends Plugin {
   init(): void {
     const logger = Differencing.#logger;
     const initInformation = reportInitStart(this);
-
     logger.debug("Differencing plugin available. May be activated by invoking differencing.activateDifferencing().");
-
     reportInitEnd(initInformation);
   }
 
@@ -65,15 +62,11 @@ export default class Differencing extends Plugin {
    */
   activateDifferencing(): void {
     const logger = Differencing.#logger;
-
     if (this.#isActivated) {
       return;
     }
-
     this.#activate();
-
     this.#isActivated = true;
-
     logger.debug("Differencing got activated.");
   }
 
@@ -81,21 +74,18 @@ export default class Differencing extends Plugin {
     const editor = this.editor;
     const { model, conversion } = editor;
     const { schema } = model;
-
     schema.register("xdiffSpan", {
       allowWhere: "$inlineObject",
       allowContentOf: ["$block", "$container"],
       allowAttributes: Object.values(XDIFF_ATTRIBUTES),
       isInline: true,
     });
-
     schema.register("xdiffBreak", {
       allowWhere: "softBreak",
       allowChildren: [],
       allowAttributes: Object.values(XDIFF_ATTRIBUTES),
       isInline: true,
     });
-
     conversion.for("upcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
     conversion.for("upcast").elementToElement(XDIFF_BREAK_ELEMENT_CONFIG);
 
@@ -107,7 +97,6 @@ export default class Differencing extends Plugin {
      */
 
     conversion.for("downcast").elementToElement(XDIFF_SPAN_ELEMENT_CONFIG);
-
     conversion.for("downcast").elementToElement({
       ...XDIFF_BREAK_ELEMENT_CONFIG,
       // DevNote: Empty Element prevents, for example, filler elements to be
@@ -122,7 +111,10 @@ export default class Differencing extends Plugin {
      * do not require extra clean-up on toData-processing.
      */
     Object.entries(XDIFF_ATTRIBUTES).forEach(([view, model]) => {
-      const config = { view, model };
+      const config = {
+        view,
+        model,
+      };
       conversion.for("upcast").attributeToAttribute(config);
       conversion.for("downcast").attributeToAttribute(config);
     });

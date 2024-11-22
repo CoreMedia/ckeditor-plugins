@@ -1,5 +1,5 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 import { receiveDraggedItemsFromService } from "./studioservices/DragDropServiceWrapper";
@@ -21,6 +21,16 @@ export const getEvaluationResult = (uris: string[]): IsDroppableEvaluationResult
   }
   return undefined;
 };
+
+/**
+ * Returns the evaluation result for isDroppable calls or evaluate for the uris
+ * if not already done.
+ *
+ * @param uris - the uris to look up the evaluation result for.
+ * @returns the evaluation result
+ */
+export const getOrEvaluateIsDroppableResult = async (uris: string[]): Promise<IsDroppableEvaluationResult> =>
+  getEvaluationResult(uris) ?? evaluateIsDroppable(uris);
 
 /**
  * Reads the currently dragged items from the DragDropService and triggers an

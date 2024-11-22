@@ -1,11 +1,14 @@
 /* async: Methods require to be asynchronous in production scenario. */
 /* eslint-disable @typescript-eslint/require-await */
-import RichtextConfigurationService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationService";
+import {
+  createContentReferenceServiceDescriptor,
+  isUriPath,
+  RichtextConfigurationService,
+  UriPath,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
-import { isUriPath, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createContentReferenceServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/IContentReferenceService";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { Editor } from "ckeditor5";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
@@ -25,7 +28,6 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
     if (!contentReferenceService) {
       return Promise.reject("ContentReferenceService unavailable");
     }
-
     const contentReference = await contentReferenceService.getContentReference(uriPath);
     if (contentReference.contentUri) {
       return this.#contentProvider(contentReference.contentUri).linkable;

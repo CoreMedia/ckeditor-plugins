@@ -2,10 +2,8 @@
 // noinspection InnerHTMLJS
 
 import "jest-xml-matcher";
-import HtmlFilter, { FilterRuleSet } from "../src/HtmlFilter";
-import Editor from "@ckeditor/ckeditor5-core/src/editor/editor";
-
-jest.mock("@ckeditor/ckeditor5-core/src/editor/editor");
+import { FilterRuleSet, HtmlFilter } from "../src/HtmlFilter";
+import { Editor } from "ckeditor5";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor();
@@ -17,7 +15,6 @@ const MOCK_EDITOR = new Editor();
  * `TEST_SELECTOR = "APPLY#3"`
  */
 const TEST_SELECTOR = "";
-
 type ApplyToData = [
   string,
   {
@@ -27,7 +24,6 @@ type ApplyToData = [
     to: string;
   },
 ];
-
 describe("HtmlFilter.applyTo()", () => {
   describe.each<ApplyToData>([
     [
@@ -132,9 +128,7 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             "^": (params) => {
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }before`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}before`;
             },
             "el": (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
@@ -151,9 +145,7 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             $: (params) => {
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }after`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}after`;
             },
             el: (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
@@ -170,14 +162,10 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             "^": (params) => {
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }before`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}before`;
             },
             "$": (params) => {
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }after`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}after`;
             },
             "el": (params) => {
               params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}el`;
@@ -194,14 +182,10 @@ describe("HtmlFilter.applyTo()", () => {
         rules: {
           elements: {
             "^": (params) => {
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }before`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}before`;
             },
             "$": (params) => {
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }after`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}after`;
             },
             "el": (params) => {
               params.node.name = "replacement";
@@ -209,9 +193,7 @@ describe("HtmlFilter.applyTo()", () => {
             },
             "replacement": (params) => {
               // This should not be triggered.
-              params.node.attributes.name = `${
-                params.node.attributes.name ? params.node.attributes.name + "-" : ""
-              }replacement`;
+              params.node.attributes.name = `${params.node.attributes.name ? params.node.attributes.name + "-" : ""}replacement`;
             },
           },
         },
@@ -234,14 +216,11 @@ describe("HtmlFilter.applyTo()", () => {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
       return;
     }
-
     test(name, () => {
       document.body.innerHTML = testData.from.trim();
       const root: Node = document.body.firstChild as Node;
       const filter = new HtmlFilter(testData.rules, MOCK_EDITOR);
-
       filter.applyTo(root);
-
       expect(document.body.innerHTML).toEqualXML(testData.to);
     });
   });

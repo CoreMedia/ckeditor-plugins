@@ -2,9 +2,17 @@
  * @module blocklist/ui/blocklistactionsview
  */
 
-import { View, ViewCollection, FocusCycler, ListView, FocusableView } from "@ckeditor/ckeditor5-ui";
-import { FocusTracker, KeystrokeHandler, type Locale } from "@ckeditor/ckeditor5-utils";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import {
+  View,
+  ViewCollection,
+  FocusCycler,
+  ListView,
+  FocusableView,
+  FocusTracker,
+  KeystrokeHandler,
+  Locale,
+  Editor,
+} from "ckeditor5";
 import BlocklistInputView from "./blocklistInputView";
 import BlockedWordView from "./blockedWordView";
 
@@ -39,12 +47,9 @@ export default class BlocklistActionsView extends View {
    * Used to create a ViewList, that represents the words in the current selection.
    */
   public declare blockedWords: string[];
-
   constructor(editor: Editor) {
     super(editor.locale);
-
     this.editor = editor;
-
     this.blockedWords = [];
 
     // create all views
@@ -59,7 +64,6 @@ export default class BlocklistActionsView extends View {
       actions: {
         // Navigate fields backwards using the Shift + Tab keystroke.
         focusPrevious: "shift + tab",
-
         // Navigate fields forwards using the Tab key.
         focusNext: "tab",
       },
@@ -75,7 +79,6 @@ export default class BlocklistActionsView extends View {
       children: [this.blockedWordListView, this.blocklistInputView],
     });
   }
-
   refreshList() {
     this.blockedWordListView.items.clear();
     this.blockedWords.forEach((word) => {
@@ -85,22 +88,17 @@ export default class BlocklistActionsView extends View {
       this.blockedWordListView.items.add(view);
     });
   }
-
   public override render(): void {
     super.render();
-
     this.#focusables.add(this.blocklistInputView.wordToBlockInputView);
     this.#focusables.add(this.blocklistInputView.saveButtonView);
     this.#focusables.add(this.blockedWordListView);
-
     if (this.blocklistInputView.wordToBlockInputView.element) {
       this.focusTracker.add(this.blocklistInputView.wordToBlockInputView.element);
     }
-
     if (this.blocklistInputView.saveButtonView.element) {
       this.focusTracker.add(this.blocklistInputView.saveButtonView.element);
     }
-
     if (this.blockedWordListView.element) {
       this.focusTracker.add(this.blockedWordListView.element);
     }
@@ -110,13 +108,11 @@ export default class BlocklistActionsView extends View {
       this.keystrokes.listenTo(this.element);
     }
   }
-
   public override destroy(): void {
     super.destroy();
     this.focusTracker.destroy();
     this.keystrokes.destroy();
   }
-
   public focus(): void {
     this.#focusCycler.focusFirst();
   }

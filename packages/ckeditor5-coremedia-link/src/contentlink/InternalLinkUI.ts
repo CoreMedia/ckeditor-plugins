@@ -1,5 +1,5 @@
-import { type ContextualBalloon } from "@ckeditor/ckeditor5-ui";
-import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/src/IncompatibleInternalApiUsageError";
+import { ContextualBalloon } from "ckeditor5";
+import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 
 /**
  * We require accessing some of the internal properties/methods of `LinkUI`.
@@ -8,22 +8,21 @@ import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common/s
  */
 export interface InternalLinkUI {
   _balloon: ContextualBalloon;
+
   /**
    * Removes the `formView` from the `_balloon`.
    */
   _hideUI(): void;
+
   get _isUIInPanel(): boolean;
 }
 
 const isHasBalloon = (linkUI: object): linkUI is Pick<InternalLinkUI, "_balloon"> =>
   "_balloon" in linkUI && typeof linkUI._balloon === "object";
-
 const isHasHideUI = (linkUI: object): linkUI is Pick<InternalLinkUI, "_hideUI"> =>
   "_hideUI" in linkUI && typeof linkUI._hideUI === "function";
-
 const isHasIsUIInPanel = (linkUI: object): linkUI is Pick<InternalLinkUI, "_isUIInPanel"> =>
   "_isUIInPanel" in linkUI && typeof linkUI._isUIInPanel === "boolean";
-
 const isInternalLinkUI = (linkUI: unknown): linkUI is InternalLinkUI =>
   typeof linkUI === "object" && !!linkUI && isHasBalloon(linkUI) && isHasHideUI(linkUI) && isHasIsUIInPanel(linkUI);
 

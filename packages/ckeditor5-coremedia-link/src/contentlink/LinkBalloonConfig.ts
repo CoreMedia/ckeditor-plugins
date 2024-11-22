@@ -1,6 +1,4 @@
-import { Config } from "@ckeditor/ckeditor5-utils";
-import { EditorConfig } from "@ckeditor/ckeditor5-core/src/editor/editorconfig";
-
+import { Config, EditorConfig } from "ckeditor5";
 export const COREMEDIA_LINK_CONFIG_KEY = "coremedia:link";
 
 /**
@@ -30,11 +28,16 @@ export default interface LinkBalloonConfig {
    *     .catch( ... );
    * ```
    */
-  keepOpen: { ids: string[]; classes: string[] };
+  keepOpen: {
+    ids: string[];
+    classes: string[];
+  };
 }
-
 const linkBalloonConfig: LinkBalloonConfig = {
-  keepOpen: { ids: [], classes: [] },
+  keepOpen: {
+    ids: [],
+    classes: [],
+  },
 };
 
 /**
@@ -86,7 +89,6 @@ export const keepOpen = (elementHierarchy: Element[]): boolean => {
   const idExistInHierarchy = linkBalloonConfig.keepOpen.ids.some((elementId) =>
     elementHierarchyIds.includes(elementId),
   );
-
   const elementHierarchyClassLists: DOMTokenList[] = elementHierarchy
     .map((element) => element.classList)
     .filter((classList) => !!classList);

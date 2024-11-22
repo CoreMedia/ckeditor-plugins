@@ -1,14 +1,16 @@
-import { Command, Editor } from "@ckeditor/ckeditor5-core";
+import { Command, Editor } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
-import { createClipboardServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/ClipboardServiceDesriptor";
-import ClipboardService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardService";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
-import ClipboardItemRepresentation from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardItemRepresentation";
+import {
+  ClipboardItemRepresentation,
+  ClipboardService,
+  createClipboardServiceDescriptor,
+  createRichtextConfigurationServiceDescriptor,
+  isUriPath,
+  toContentUris,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import type { Subscription } from "rxjs";
-import { isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/UriPath";
-import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/RichtextConfigurationServiceDescriptor";
 import { insertContentMarkers } from "../ContentMarkers";
-import { toContentUris } from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/ClipboardServiceUtil";
 
 /**
  * Command to insert Content from the ClipboardService into the document at the actual selection.
@@ -39,7 +41,6 @@ export class PasteContentCommand extends Command {
           this.#logger.warn("Initialization of PasteContentCommand failed. ", reason);
         });
     };
-
     this.#serviceRegisteredSubscription = serviceAgent
       .observeServices<ClipboardService>(createClipboardServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
@@ -49,7 +50,6 @@ export class PasteContentCommand extends Command {
     const initialItems = await clipboardService.getItems();
     // noinspection JSConstantReassignment bad types
     this.isEnabled = await PasteContentCommand.calculateEnabledState(initialItems);
-
     clipboardService.observe_items().subscribe((itemRepresentations: ClipboardItemRepresentation[]) => {
       // noinspection JSConstantReassignment bad types
       PasteContentCommand.calculateEnabledState(itemRepresentations)
@@ -94,7 +94,6 @@ export class PasteContentCommand extends Command {
     if (!everyUriIsValid) {
       return false;
     }
-
     const pastableStates = await PasteContentCommand.resolvePastableStates(uris);
     return pastableStates.every((isPastable) => isPastable);
   }
@@ -106,7 +105,6 @@ export class PasteContentCommand extends Command {
     const pastableStatePromises: Promise<boolean>[] = uris.map(async (uri): Promise<boolean> => {
       const isLinkable = await richtextConfigurationService.hasLinkableType(uri);
       const isEmbeddable = await richtextConfigurationService.isEmbeddableType(uri);
-
       return isLinkable || isEmbeddable;
     });
     return Promise.all(pastableStatePromises);

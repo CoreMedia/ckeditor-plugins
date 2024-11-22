@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
-import WorkAreaService from "@coremedia/ckeditor5-coremedia-studio-integration/src/content/studioservices/WorkAreaService";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import { WorkAreaService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Editor } from "ckeditor5";
 import MockContentPlugin from "./MockContentPlugin";
 import MockContent from "./MockContent";
-import LoggerProvider from "@coremedia/ckeditor5-logging/src/logging/LoggerProvider";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Observable, Subject } from "rxjs";
 
 const isString = (value: unknown): value is string => typeof value === "string";
@@ -19,7 +19,6 @@ class MockWorkAreaService implements WorkAreaService {
    * Used for testing purposes to verify if the openEntitiesInTab has been triggered.
    */
   lastOpenedEntities: unknown[] = [];
-
   readonly #activeEntitySubject: Subject<unknown>;
 
   constructor(editor: Editor) {
@@ -27,7 +26,10 @@ class MockWorkAreaService implements WorkAreaService {
     this.#activeEntitySubject = new Subject<unknown>();
   }
 
-  async openEntitiesInTabs(entities: unknown[]): Promise<{ accepted: string[]; rejected: string[] }> {
+  async openEntitiesInTabs(entities: unknown[]): Promise<{
+    accepted: string[];
+    rejected: string[];
+  }> {
     const accepted: string[] = [];
     entities.filter(isString).forEach((entity: string): void => {
       accepted.push(entity);
@@ -41,9 +43,11 @@ class MockWorkAreaService implements WorkAreaService {
         document.getElementById("notifications")?.removeChild(node);
       }, 4000);
     });
-
     this.lastOpenedEntities = entities;
-    return { accepted, rejected: [] };
+    return {
+      accepted,
+      rejected: [],
+    };
   }
 
   getLastOpenedEntities(): unknown[] {

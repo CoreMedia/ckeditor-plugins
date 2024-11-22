@@ -1,5 +1,5 @@
-import { Plugin } from "@ckeditor/ckeditor5-core";
-import { isRichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext/src/RichTextDataProcessor";
+import { Plugin } from "ckeditor5";
+import { isRichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
 import { xDiffElements } from "./XDiffElements";
 
 /**
@@ -23,7 +23,6 @@ export class RichTextDataProcessorIntegration extends Plugin {
   afterInit(): void {
     const { editor } = this;
     const { processor } = editor.data;
-
     if (isRichTextDataProcessor(processor)) {
       processor.addRule(xDiffElements);
     }

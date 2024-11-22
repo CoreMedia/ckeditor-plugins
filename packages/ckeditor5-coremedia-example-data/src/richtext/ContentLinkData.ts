@@ -6,7 +6,7 @@ const EXAMPLE_URL = "https://example.org/";
 const LINK_TEXT = "Link";
 const CM_RICHTEXT = "http://www.coremedia.com/2003/richtext-1.0";
 const XLINK = "http://www.w3.org/1999/xlink";
-const serializer = new XMLSerializer();
+const serializer = () => new XMLSerializer();
 
 const tableHeader = (...headers: string[]) =>
   `<tr class="tr--header">${headers.map((h) => `<td class="td--header">${h}</td>`).join("")}</tr>`;
@@ -17,12 +17,12 @@ const createContentLinkTableHeading = () => tableHeader("Link", "Comment");
 //   supported. See also: `LinkTargetData.createLink` which is currently a
 //   duplicate.
 const createLink = (show: string, role: string, href = EXAMPLE_URL) => {
-  const a = richTextDocument.createElement("a");
+  const a = richTextDocument().createElement("a");
   a.textContent = LINK_TEXT;
   a.setAttribute("xlink:href", href);
   show && a.setAttribute("xlink:show", show);
   role && a.setAttribute("xlink:role", role);
-  return serializer.serializeToString(a);
+  return serializer().serializeToString(a);
 };
 
 const createContentLinkTableRow = ({ comment, id }: { comment: string; id: number }) =>
@@ -128,6 +128,6 @@ const contentLinkExamples = () => {
   return `<div xmlns="${CM_RICHTEXT}" xmlns:xlink="${XLINK}">${scenarios}</div>`;
 };
 
-export const contentLinkData: ExampleData = {
+export const contentLinkData: () => ExampleData = () => ({
   "Content Links": contentLinkExamples(),
-};
+});

@@ -1,6 +1,8 @@
-import { CoreMediaRichTextConfig, COREMEDIA_RICHTEXT_CONFIG_KEY, CoreMediaRichText, LinkIntegration } from "./index";
+import CoreMediaRichTextConfig, { COREMEDIA_RICHTEXT_CONFIG_KEY } from "./CoreMediaRichTextConfig";
+import CoreMediaRichText from "./CoreMediaRichText";
+import { LinkIntegration } from "./integrations/LinkIntegration";
 
-declare module "@ckeditor/ckeditor5-core" {
+declare module "ckeditor5" {
   interface EditorConfig {
     /**
      * The configuration for General Rich Text Support. To be used, especially

@@ -1,13 +1,11 @@
-import { Plugin, Editor } from "@ckeditor/ckeditor5-core";
 import "../theme/loadmask.css";
-
-import { DowncastDispatcher } from "@ckeditor/ckeditor5-engine";
+import { Plugin, Editor, DowncastDispatcher } from "ckeditor5";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 import { UndoSupport } from "./integrations/Undo";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common/src/Plugins";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 const PLUGIN_NAME = "ContentClipboardEditing";
 
@@ -18,12 +16,10 @@ const PLUGIN_NAME = "ContentClipboardEditing";
  */
 export default class ContentClipboardEditing extends Plugin {
   static readonly pluginName = PLUGIN_NAME;
-
   static readonly #CONTENT_INPUT_ADD_MARKER_EVENT =
     "addMarker:" + ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX;
   static readonly #CONTENT_INPUT_REMOVE_MARKER_EVENT =
     "removeMarker:" + ContentClipboardMarkerDataUtils.CONTENT_INPUT_MARKER_PREFIX;
-
   static readonly requires = [UndoSupport];
 
   /**
@@ -50,7 +46,6 @@ export default class ContentClipboardEditing extends Plugin {
   #defineConverters(): void {
     const editor = this.editor;
     const conversion = editor.conversion;
-
     conversion.for("editingDowncast").add((dispatcher: DowncastDispatcher) => {
       dispatcher.on(ContentClipboardEditing.#CONTENT_INPUT_ADD_MARKER_EVENT, this.#onAddMarker(editor));
       dispatcher.on(ContentClipboardEditing.#CONTENT_INPUT_REMOVE_MARKER_EVENT, removeContentMarkerConversion);
