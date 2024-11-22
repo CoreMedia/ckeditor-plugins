@@ -18,7 +18,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json && copyfiles -u 1 theme/* theme/**/* dist/theme",
-    "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist && copyfiles -u 1 './src/**/*.ts' ./dist/src",
+    "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
