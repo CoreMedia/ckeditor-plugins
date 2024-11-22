@@ -78,49 +78,49 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-bbcode':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-bbcode
       '@coremedia/ckeditor5-coremedia-blocklist':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-blocklist
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-differencing':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-differencing
       '@coremedia/ckeditor5-coremedia-images':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-images
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-essentials':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: workspace:*
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-data-facade':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-data-facade
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dialog-visibility':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-dialog-visibility
       '@coremedia/ckeditor5-dom-converter':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-dom-converter
       '@coremedia/ckeditor5-font-mapper':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-font-mapper
       '@coremedia/ckeditor5-link-common':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-link-common
       '@coremedia/service-agent':
         specifier: ^1.1.5
@@ -143,7 +143,7 @@ importers:
         version: 43.0.1
       '@ckeditor/ckeditor5-dev-utils':
         specifier: ^43.0.1
-        version: 43.0.1(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 43.0.1(webpack@5.94.0)
       '@ckeditor/ckeditor5-inspector':
         specifier: ^4.1.0
         version: 4.1.0
@@ -155,16 +155,16 @@ importers:
         version: 20.16.5
       babel-loader:
         specifier: ^8.3.0
-        version: 8.3.0(@babel/core@7.25.2)(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 8.3.0(@babel/core@7.25.2)(webpack@5.94.0)
       circular-dependency-plugin:
         specifier: ^5.2.2
-        version: 5.2.2(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 5.2.2(webpack@5.94.0)
       css-loader:
         specifier: ^7.1.2
-        version: 7.1.2(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 7.1.2(webpack@5.94.0)
       esbuild-loader:
         specifier: ^3.2.0
-        version: 3.2.0(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 3.2.0(webpack@5.94.0)
       http-server:
         specifier: ^14.1.1
         version: 14.1.1
@@ -173,19 +173,19 @@ importers:
         version: 8.4.45
       postcss-loader:
         specifier: ^8.1.1
-        version: 8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.94.0)
       raw-loader:
         specifier: ^4.0.2
-        version: 4.0.2(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 4.0.2(webpack@5.94.0)
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
       style-loader:
         specifier: ^4.0.0
-        version: 4.0.0(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 4.0.0(webpack@5.94.0)
       terser-webpack-plugin:
         specifier: ^5.3.10
-        version: 5.3.10(webpack@5.94.0(webpack-cli@5.1.4))
+        version: 5.3.10(webpack@5.94.0)
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -205,16 +205,16 @@ importers:
         specifier: ^1.0.0
         version: link:../packages/ckeditor5-jest-test-helpers
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@jest/globals':
         specifier: ^29.7.0
@@ -307,16 +307,16 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       '@coremedia/ckeditor5-common':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dom-support':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -354,7 +354,7 @@ importers:
   packages/ckeditor5-common:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -392,10 +392,10 @@ importers:
   packages/ckeditor5-core-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -427,13 +427,13 @@ importers:
   packages/ckeditor5-coremedia-blocklist:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -468,10 +468,10 @@ importers:
   packages/ckeditor5-coremedia-content:
     dependencies:
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -506,16 +506,16 @@ importers:
   packages/ckeditor5-coremedia-content-clipboard:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -556,22 +556,22 @@ importers:
   packages/ckeditor5-coremedia-differencing:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-dom-converter':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
@@ -615,7 +615,7 @@ importers:
   packages/ckeditor5-coremedia-example-data:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -646,19 +646,19 @@ importers:
   packages/ckeditor5-coremedia-images:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
@@ -699,25 +699,25 @@ importers:
   packages/ckeditor5-coremedia-link:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-link-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
@@ -761,25 +761,25 @@ importers:
   packages/ckeditor5-coremedia-richtext:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-link-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
@@ -823,10 +823,10 @@ importers:
   packages/ckeditor5-coremedia-richtext-support:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -861,10 +861,10 @@ importers:
   packages/ckeditor5-coremedia-studio-essentials:
     dependencies:
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-richtext-support':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-richtext-support
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -899,7 +899,7 @@ importers:
   packages/ckeditor5-coremedia-studio-integration:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
       node-esapi:
         specifier: ^0.0.1
@@ -940,13 +940,13 @@ importers:
   packages/ckeditor5-coremedia-studio-integration-mock:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
       rxjs:
         specifier: ^7.8.1
@@ -999,10 +999,10 @@ importers:
   packages/ckeditor5-data-facade:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1040,10 +1040,10 @@ importers:
   packages/ckeditor5-dataprocessor-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1097,13 +1097,13 @@ importers:
   packages/ckeditor5-dom-converter:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-dom-support':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1135,7 +1135,7 @@ importers:
   packages/ckeditor5-dom-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: ^20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1164,13 +1164,13 @@ importers:
   packages/ckeditor5-font-mapper:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -1232,13 +1232,13 @@ importers:
   packages/ckeditor5-link-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: 20.1.0
+        specifier: 21.0.1-rc.0
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-jest-test-helpers':
@@ -7457,30 +7457,30 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ckeditor/ckeditor5-dev-utils@43.0.1(webpack@5.94.0(webpack-cli@5.1.4))':
+  '@ckeditor/ckeditor5-dev-utils@43.0.1(webpack@5.94.0)':
     dependencies:
       '@ckeditor/ckeditor5-dev-translations': 43.0.1
       chalk: 3.0.0
       cli-cursor: 3.1.0
       cli-spinners: 2.9.2
-      css-loader: 5.2.7(webpack@5.94.0(webpack-cli@5.1.4))
+      css-loader: 5.2.7(webpack@5.94.0)
       cssnano: 6.1.2(postcss@8.4.45)
       del: 5.1.0
-      esbuild-loader: 3.0.1(webpack@5.94.0(webpack-cli@5.1.4))
+      esbuild-loader: 3.0.1(webpack@5.94.0)
       fs-extra: 11.2.0
       is-interactive: 1.0.0
       javascript-stringify: 1.6.0
-      mini-css-extract-plugin: 2.9.1(webpack@5.94.0(webpack-cli@5.1.4))
+      mini-css-extract-plugin: 2.9.1(webpack@5.94.0)
       mocha: 7.2.0
       postcss: 8.4.45
       postcss-import: 14.1.0(postcss@8.4.45)
-      postcss-loader: 4.3.0(postcss@8.4.45)(webpack@5.94.0(webpack-cli@5.1.4))
+      postcss-loader: 4.3.0(postcss@8.4.45)(webpack@5.94.0)
       postcss-mixins: 9.0.4(postcss@8.4.45)
       postcss-nesting: 13.0.1(postcss@8.4.45)
-      raw-loader: 4.0.2(webpack@5.94.0(webpack-cli@5.1.4))
+      raw-loader: 4.0.2(webpack@5.94.0)
       shelljs: 0.8.5
-      style-loader: 2.0.0(webpack@5.94.0(webpack-cli@5.1.4))
-      terser-webpack-plugin: 4.2.3(webpack@5.94.0(webpack-cli@5.1.4))
+      style-loader: 2.0.0(webpack@5.94.0)
+      terser-webpack-plugin: 4.2.3(webpack@5.94.0)
       through2: 3.0.2
     transitivePeerDependencies:
       - bluebird
@@ -8452,7 +8452,7 @@ snapshots:
     dependencies:
       '@types/node': 20.16.5
       tapable: 2.2.1
-      webpack: 5.94.0
+      webpack: 5.94.0(webpack-cli@5.1.4)
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
@@ -8624,17 +8624,17 @@ snapshots:
       '@webassemblyjs/ast': 1.12.1
       '@xtuc/long': 4.2.2
 
-  '@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4(webpack@5.94.0))(webpack@5.94.0(webpack-cli@5.1.4))':
+  '@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4)(webpack@5.94.0)':
     dependencies:
       webpack: 5.94.0(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.94.0)
 
-  '@webpack-cli/info@2.0.2(webpack-cli@5.1.4(webpack@5.94.0))(webpack@5.94.0(webpack-cli@5.1.4))':
+  '@webpack-cli/info@2.0.2(webpack-cli@5.1.4)(webpack@5.94.0)':
     dependencies:
       webpack: 5.94.0(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.94.0)
 
-  '@webpack-cli/serve@2.0.5(webpack-cli@5.1.4(webpack@5.94.0))(webpack@5.94.0(webpack-cli@5.1.4))':
+  '@webpack-cli/serve@2.0.5(webpack-cli@5.1.4)(webpack@5.94.0)':
     dependencies:
       webpack: 5.94.0(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack@5.94.0)
@@ -8849,7 +8849,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-loader@8.3.0(@babel/core@7.25.2)(webpack@5.94.0(webpack-cli@5.1.4)):
+  babel-loader@8.3.0(@babel/core@7.25.2)(webpack@5.94.0):
     dependencies:
       '@babel/core': 7.25.2
       find-cache-dir: 3.3.2
@@ -9093,7 +9093,7 @@ snapshots:
 
   ci-info@3.9.0: {}
 
-  circular-dependency-plugin@5.2.2(webpack@5.94.0(webpack-cli@5.1.4)):
+  circular-dependency-plugin@5.2.2(webpack@5.94.0):
     dependencies:
       webpack: 5.94.0(webpack-cli@5.1.4)
 
@@ -9319,7 +9319,7 @@ snapshots:
     dependencies:
       postcss: 8.4.45
 
-  css-loader@5.2.7(webpack@5.94.0(webpack-cli@5.1.4)):
+  css-loader@5.2.7(webpack@5.94.0):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.45)
       loader-utils: 2.0.4
@@ -9333,7 +9333,7 @@ snapshots:
       semver: 7.6.3
       webpack: 5.94.0(webpack-cli@5.1.4)
 
-  css-loader@7.1.2(webpack@5.94.0(webpack-cli@5.1.4)):
+  css-loader@7.1.2(webpack@5.94.0):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.45)
       postcss: 8.4.45
@@ -9672,7 +9672,7 @@ snapshots:
 
   es6-error@4.1.1: {}
 
-  esbuild-loader@3.0.1(webpack@5.94.0(webpack-cli@5.1.4)):
+  esbuild-loader@3.0.1(webpack@5.94.0):
     dependencies:
       esbuild: 0.17.19
       get-tsconfig: 4.8.0
@@ -9680,7 +9680,7 @@ snapshots:
       webpack: 5.94.0(webpack-cli@5.1.4)
       webpack-sources: 1.4.3
 
-  esbuild-loader@3.2.0(webpack@5.94.0(webpack-cli@5.1.4)):
+  esbuild-loader@3.2.0(webpack@5.94.0):
     dependencies:
       esbuild: 0.19.12
       get-tsconfig: 4.8.0
@@ -11212,7 +11212,7 @@ snapshots:
 
   mimic-fn@2.1.0: {}
 
-  mini-css-extract-plugin@2.9.1(webpack@5.94.0(webpack-cli@5.1.4)):
+  mini-css-extract-plugin@2.9.1(webpack@5.94.0):
     dependencies:
       schema-utils: 4.2.0
       tapable: 2.2.1
@@ -11622,7 +11622,7 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.45
 
-  postcss-loader@4.3.0(postcss@8.4.45)(webpack@5.94.0(webpack-cli@5.1.4)):
+  postcss-loader@4.3.0(postcss@8.4.45)(webpack@5.94.0):
     dependencies:
       cosmiconfig: 7.1.0
       klona: 2.0.6
@@ -11632,7 +11632,7 @@ snapshots:
       semver: 7.6.3
       webpack: 5.94.0(webpack-cli@5.1.4)
 
-  postcss-loader@8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.94.0(webpack-cli@5.1.4)):
+  postcss-loader@8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.94.0):
     dependencies:
       cosmiconfig: 9.0.0(typescript@5.4.5)
       jiti: 1.21.6
@@ -11879,7 +11879,7 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
-  raw-loader@4.0.2(webpack@5.94.0(webpack-cli@5.1.4)):
+  raw-loader@4.0.2(webpack@5.94.0):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
@@ -12316,13 +12316,13 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  style-loader@2.0.0(webpack@5.94.0(webpack-cli@5.1.4)):
+  style-loader@2.0.0(webpack@5.94.0):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
       webpack: 5.94.0(webpack-cli@5.1.4)
 
-  style-loader@4.0.0(webpack@5.94.0(webpack-cli@5.1.4)):
+  style-loader@4.0.0(webpack@5.94.0):
     dependencies:
       webpack: 5.94.0(webpack-cli@5.1.4)
 
@@ -12382,7 +12382,7 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  terser-webpack-plugin@4.2.3(webpack@5.94.0(webpack-cli@5.1.4)):
+  terser-webpack-plugin@4.2.3(webpack@5.94.0):
     dependencies:
       cacache: 15.3.0
       find-cache-dir: 3.3.2
@@ -12397,15 +12397,6 @@ snapshots:
     transitivePeerDependencies:
       - bluebird
 
-  terser-webpack-plugin@5.3.10(webpack@5.94.0(webpack-cli@5.1.4)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      jest-worker: 27.5.1
-      schema-utils: 3.3.0
-      serialize-javascript: 6.0.2
-      terser: 5.31.6
-      webpack: 5.94.0(webpack-cli@5.1.4)
-
   terser-webpack-plugin@5.3.10(webpack@5.94.0):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -12413,7 +12404,7 @@ snapshots:
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.31.6
-      webpack: 5.94.0
+      webpack: 5.94.0(webpack-cli@5.1.4)
 
   terser@5.31.6:
     dependencies:
@@ -12705,9 +12696,9 @@ snapshots:
   webpack-cli@5.1.4(webpack@5.94.0):
     dependencies:
       '@discoveryjs/json-ext': 0.5.7
-      '@webpack-cli/configtest': 2.1.1(webpack-cli@5.1.4(webpack@5.94.0))(webpack@5.94.0(webpack-cli@5.1.4))
-      '@webpack-cli/info': 2.0.2(webpack-cli@5.1.4(webpack@5.94.0))(webpack@5.94.0(webpack-cli@5.1.4))
-      '@webpack-cli/serve': 2.0.5(webpack-cli@5.1.4(webpack@5.94.0))(webpack@5.94.0(webpack-cli@5.1.4))
+      '@webpack-cli/configtest': 2.1.1(webpack-cli@5.1.4)(webpack@5.94.0)
+      '@webpack-cli/info': 2.0.2(webpack-cli@5.1.4)(webpack@5.94.0)
+      '@webpack-cli/serve': 2.0.5(webpack-cli@5.1.4)(webpack@5.94.0)
       colorette: 2.0.20
       commander: 10.0.1
       cross-spawn: 7.0.3
@@ -12737,36 +12728,6 @@ snapshots:
 
   webpack-sources@3.2.3: {}
 
-  webpack@5.94.0:
-    dependencies:
-      '@types/estree': 1.0.5
-      '@webassemblyjs/ast': 1.12.1
-      '@webassemblyjs/wasm-edit': 1.12.1
-      '@webassemblyjs/wasm-parser': 1.12.1
-      acorn: 8.12.1
-      acorn-import-attributes: 1.9.5(acorn@8.12.1)
-      browserslist: 4.23.3
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.17.1
-      es-module-lexer: 1.5.4
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(webpack@5.94.0)
-      watchpack: 2.4.2
-      webpack-sources: 3.2.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-
   webpack@5.94.0(webpack-cli@5.1.4):
     dependencies:
       '@types/estree': 1.0.5
@@ -12789,7 +12750,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(webpack@5.94.0(webpack-cli@5.1.4))
+      terser-webpack-plugin: 5.3.10(webpack@5.94.0)
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     optionalDependencies:
