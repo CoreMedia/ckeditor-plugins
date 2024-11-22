@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-common",
-  "version": "20.1.0",
+  "version": "21.0.1-rc.0",
   "description": "Common Utilities, independent from CKEditor",
   "author": {
     "name": "CoreMedia GmbH",
@@ -48,7 +48,7 @@
     "ckeditor5": "43.3.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "^20.1.0"
+    "@coremedia/ckeditor5-logging": "21.0.1-rc.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
