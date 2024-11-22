@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dom-support",
-  "version": "21.0.1-rc.0",
+  "version": "22.0.0",
   "description": "DOM Support",
   "author": {
     "name": "CoreMedia GmbH",
@@ -43,7 +43,7 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "21.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "^22.0.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
