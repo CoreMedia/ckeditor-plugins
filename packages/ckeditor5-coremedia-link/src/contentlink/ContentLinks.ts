@@ -31,6 +31,8 @@ export default class ContentLinks extends Plugin {
   readonly #logger = LoggerProvider.getLogger("ContentLinks");
   #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
   #initialized = false;
+  #currentWorkAreaService: WorkAreaService | undefined = undefined;
+  #activeEntity: string | undefined = "";
 
   /**
    * Closes the contextual balloon whenever a new active entity is set.
@@ -40,10 +42,14 @@ export default class ContentLinks extends Plugin {
    */
   #listenForActiveEntityChanges(workAreaService: WorkAreaService): void {
     workAreaService.observe_activeEntity().subscribe({
-      next: (activeEntities) => {
-        this.#logger.debug("Closing balloon because active entity changed", activeEntities);
+      next: (activeEntity) => {
+        if (this.#activeEntity === activeEntity) {
+          return;
+        }
+        this.#logger.debug("Closing balloon because active entity changed", activeEntity);
         this.#removeEditorFocusAndSelection();
         closeContextualBalloon(this.editor);
+        this.#activeEntity = typeof activeEntity === "string" ? activeEntity : undefined;
       },
     });
   }
@@ -86,12 +92,15 @@ export default class ContentLinks extends Plugin {
         this.#logger.debug("No WorkAreaService registered yet");
         return;
       }
+      if (this.#currentWorkAreaService && services.includes(this.#currentWorkAreaService)) {
+        return;
+      }
       if (this.#serviceRegisteredSubscription) {
         this.#serviceRegisteredSubscription.unsubscribe();
       }
-      this.#logger.debug("WorkAreaService is registered now, listening for activeEntities will be started");
-      const clipboardService = services[0];
-      this.#listenForActiveEntityChanges(clipboardService);
+      this.#logger.debug("WorkAreaService is registered now, listening for activeEntity will be started");
+      this.#currentWorkAreaService = services[0];
+      this.#listenForActiveEntityChanges(this.#currentWorkAreaService);
     };
     this.#serviceRegisteredSubscription = serviceAgent
       .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())

@@ -2,24 +2,28 @@
 
 /* eslint-env node */
 
-const path = require("path");
-const webpack = require("webpack");
-const { bundler, loaders } = require("@ckeditor/ckeditor5-dev-utils");
-const { CKEditorTranslationsPlugin } = require("@ckeditor/ckeditor5-dev-translations");
-const TerserPlugin = require("terser-webpack-plugin");
-const CircularDependencyPlugin = require("circular-dependency-plugin");
+const { default: path } = await import("path");
+const { default: webpack } = await import("webpack");
+const { bundler, loaders } = await import("@ckeditor/ckeditor5-dev-utils");
+const { CKEditorTranslationsPlugin } = await import("@ckeditor/ckeditor5-dev-translations");
+const { default: TerserPlugin } = await import("terser-webpack-plugin");
+const { default: CircularDependencyPlugin } = await import("circular-dependency-plugin");
+import { fileURLToPath } from "url";
 
-module.exports = {
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+export default {
   devtool: "source-map",
   performance: { hints: false },
 
-  entry: path.resolve(__dirname, "src", "index.ts"),
+  entry: path.resolve(dirname, "src", "index.ts"),
 
   output: {
     // The name under which the editor will be exported.
     library: "ClassicEditor",
 
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(dirname, "dist"),
     filename: "ckeditor.js",
     libraryTarget: "umd",
     libraryExport: "default",
@@ -57,7 +61,7 @@ module.exports = {
     rules: [
       loaders.getIconsLoader({ matchExtensionOnly: true }),
       loaders.getStylesLoader({
-        themePath: require.resolve("@ckeditor/ckeditor5-theme-lark"),
+        themePath: import.meta.resolve("@ckeditor/ckeditor5-theme-lark"),
         minify: true,
       }),
       loaders.getTypeScriptLoader(),
