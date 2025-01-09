@@ -61,11 +61,29 @@ export const extractXLinkDataSetEntries = (element: HTMLElement): XLinkAttribute
     })
     .reduce(mergeXLinkAttributes) ?? {};
 
-export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes): void => {
+/**
+ * Sets attributes of the `xlink` namespace for the given element.
+ *
+ * Attributes already set before will be overwritten.
+ *
+ * @example
+ *
+ * ```typescript
+ * setXLinkAttributes(element, {
+ *   // empty: Ignored by default.
+ *   "title": "",
+ *   "href": "https://example.org/"
+ * });
+ * ```
+ *
+ * @param element - the elemant to set the attributes at
+ * @param attributes - the key-value pairs of attributes to set
+ * @param allowEmpty - if to ignore entries with empty values or not
+ */
+export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes, allowEmpty = false): void => {
   const { ownerDocument } = element;
   Object.entries(attributes).forEach(([key, value]: [XLinkAttributeKey, string | undefined]) => {
-    // We ignore empty values. Thus, only add if non-empty.
-    if (value) {
+    if (value || allowEmpty) {
       const qualifiedName: XLinkAttributeQualifiedName = `${xLinkPrefix}:${key}`;
       const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, qualifiedName);
       xlinkAttribute.value = value;
