@@ -56,7 +56,7 @@ export const imageElements: RuleConfig = {
       if (isHTMLImageElement(node)) {
         // title: Not mapping xlink:title to title yet, as we use the title
         // for generating tooltips regarding the related content.
-        setXLinkDataSetEntries(node, extractXLinkAttributes(node), true);
+        setXLinkDataSetEntries(node, extractXLinkAttributes(node));
         node.src = INLINE_IMG;
       }
       return node;
