@@ -3,10 +3,10 @@ import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
 import { ActiveStrictness } from "../Strictness";
 import { SanitationListener } from "./SanitationListener";
 import {
-  isText,
   isElement,
-  isParentNode,
   isHasNamespaceUri,
+  isParentNode,
+  isText,
   lookupNamespaceURI,
 } from "@coremedia/ckeditor5-dom-support";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
@@ -287,43 +287,35 @@ export class ElementConfig {
    */
   #processAttributes(element: Element, strictness: ActiveStrictness, listener: SanitationListener): void {
     const { attributes } = element;
+    const attributesToRemoveFromElement: Attr[] = [];
+    const attributesToRemoveFromListener: Attr[] = [];
     for (const attribute of attributes) {
       if (attribute.localName === "xmlns" || attribute.prefix === "xmlns" || attribute.localName.startsWith("xmlns:")) {
         // Namespaces handled later.
         continue;
       }
-      this.#processAttributeOf(element, attribute, listener, strictness);
-    }
-    this.#processRequiredAttributes(element);
-  }
+      const config = this.#getAttributeConfig(attribute);
 
-  #processAttributeOf(
-    element: Element,
-    attribute: Attr,
-    listener: SanitationListener,
-    strictness: ActiveStrictness,
-  ): void {
-    const config = this.#getAttributeConfig(attribute);
-
-    if (!config) {
-      listener.removeInvalidAttr(element, attribute, "invalidAtElement");
-      element.removeAttributeNode(attribute);
-    } else {
-      const { fixed } = config;
-      const { value } = attribute;
-      // Cleanup: Remove fixed attributes, that are irrelevant to store.
-      if (fixed && fixed === value) {
-        // Cleanup: We expect a fixed value to be valid by definition and that
-        // it is obsolete to forward it to stored data.
-        element.removeAttributeNode(attribute);
-      } else if (!config.validateValue(value, strictness)) {
-        listener.removeInvalidAttr(element, attribute, "invalidValue");
-        element.removeAttributeNode(attribute);
+      if (!config) {
+        attributesToRemoveFromListener.push(attribute);
+        attributesToRemoveFromElement.push(attribute);
+      } else {
+        const { fixed } = config;
+        const { value } = attribute;
+        // Cleanup: Remove fixed attributes, that are irrelevant to store.
+        if (fixed && fixed === value) {
+          // Cleanup: We expect a fixed value to be valid by definition and that
+          // it is obsolete to forward it to stored data.
+          attributesToRemoveFromElement.push(attribute);
+        } else if (!config.validateValue(value, strictness)) {
+          attributesToRemoveFromListener.push(attribute);
+          attributesToRemoveFromElement.push(attribute);
+        }
       }
-
-      // We may, as suggested by TSDoc, also remove irrelevant attributes if
-      // they match the default values as provided by DTD. Skipped for now.
     }
+    attributesToRemoveFromListener.forEach((attr) => listener.removeInvalidAttr(element, attr, "invalidAtElement"));
+    attributesToRemoveFromElement.forEach((attr) => element.removeAttributeNode(attr));
+    this.#processRequiredAttributes(element);
   }
 
   /**
