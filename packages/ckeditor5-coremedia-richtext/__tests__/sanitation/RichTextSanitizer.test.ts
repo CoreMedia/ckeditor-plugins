@@ -154,10 +154,19 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p());
-            const invalidXml = richtext(p("", { class: "I" })).replace("class", "invalid");
+            const invalidXml = richtext(
+              p("", {
+                class: "I",
+                lang: "A",
+                dir: "ltr",
+              }),
+            )
+              .replace("class", "invalid1")
+              .replace("lang", "invalid2")
+              .replace("dir", "invalid3");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(3);
+              expect(listener.removedInvalidAttrs).toHaveLength(3);
             });
           });
 
