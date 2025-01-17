@@ -12,6 +12,7 @@ export * from "./CodeElements";
 export * from "./DefaultRules";
 export * from "./Direction";
 export * from "./DivElements";
+export * from "./FixedAttributes";
 export * from "./HeadingElements";
 export * from "./ImageElements";
 export * from "./LanguageAttributes";

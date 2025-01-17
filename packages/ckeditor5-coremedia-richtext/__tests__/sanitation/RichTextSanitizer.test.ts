@@ -444,12 +444,9 @@ describe("RichTextSanitizer", () => {
             });
           });
 
-          it("Should remove fixed attribute (silently)", () => {
-            const optimizedXml = richtext(pre());
-            const originalXml = richtext(pre("", { "xml:space": "preserve" }));
-            expectSanitationResult(sanitizer, originalXml, optimizedXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(0);
-            });
+          it("Should keep valid fixed attribute", () => {
+            const validXml = richtext(pre("", { "xml:space": "preserve" }));
+            expectSanitationResult(sanitizer, validXml, validXml);
           });
 
           it.each`
@@ -646,12 +643,9 @@ describe("RichTextSanitizer", () => {
             });
           });
 
-          it("Should remove fixed attribute (silently)", () => {
-            const optimizedXml = richtext(p(a("", { "xlink:href": "" })));
-            const originalXml = richtext(p(a("", { "xlink:href": "", "xlink:type": "simple" })));
-            expectSanitationResult(sanitizer, originalXml, optimizedXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(0);
-            });
+          it("Should keep valid fixed attribute", () => {
+            const validXml = richtext(p(a("", { "xlink:href": "", "xlink:type": "simple" })));
+            expectSanitationResult(sanitizer, validXml, validXml);
           });
 
           it.each`
@@ -862,14 +856,12 @@ describe("RichTextSanitizer", () => {
 
           it.each`
             withFixed
+            ${img({ "alt": "", "xlink:href": "", "xlink:type": "simple" })}
             ${img({ "alt": "", "xlink:href": "", "xlink:show": "embed" })}
             ${img({ "alt": "", "xlink:href": "", "xlink:actuate": "onLoad" })}
-          `("[$#] Should remove fixed attribute (silently): $withFixed", ({ withFixed }: { withFixed: string }) => {
-            const optimizedXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
-            const originalXml = richtext(p(withFixed));
-            expectSanitationResult(sanitizer, originalXml, optimizedXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(0);
-            });
+          `("[$#] Should keep fixed attribute: $withFixed", ({ withFixed }: { withFixed: string }) => {
+            const validXml = richtext(p(withFixed));
+            expectSanitationResult(sanitizer, validXml, validXml);
           });
 
           it("Should add missing required attribute (silently)", () => {
