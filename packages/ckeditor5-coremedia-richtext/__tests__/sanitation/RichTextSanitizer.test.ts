@@ -86,10 +86,10 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext();
-            const invalidXml = validXml.replace("div", `div invalid="true"`);
+            const invalidXml = validXml.replace("div", `div invalid="true" stillinvalid="true"`);
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
         });
@@ -154,25 +154,34 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p());
-            const invalidXml = richtext(p("", { class: "I" })).replace("class", "invalid");
+            const invalidXml = richtext(p("", { class: "I", lang: "en" }))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
+            invalidAttributes                        | invalidAttributesCount
+            ${`xml:lang="in valid"`}                 | ${1}
+            ${`lang="in valid"`}                     | ${1}
+            ${`dir="invalid"`}                       | ${1}
+            ${`xml:lang="in valid" lang="in valid"`} | ${2}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(p());
-              const invalidXml = richtext(`<p ${invalidAttribute}/>`);
+              const invalidXml = richtext(`<p ${invalidAttributes}/>`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -250,25 +259,34 @@ describe("RichTextSanitizer", () => {
 
             it("Should remove invalid attributes", () => {
               const validXml = richtext(factory(li()));
-              const invalidXml = richtext(factory(li(), { class: "I" })).replace("class", "invalid");
+              const invalidXml = richtext(factory(li(), { class: "I", lang: "en" }))
+                .replace("class", "invalid")
+                .replace("lang", "moreinvalid");
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-                expect(listener.totalLength).toStrictEqual(1);
-                expect(listener.removedInvalidAttrs).toHaveLength(1);
+                expect(listener.totalLength).toStrictEqual(2);
+                expect(listener.removedInvalidAttrs).toHaveLength(2);
               });
             });
 
             it.each`
-              invalidAttribute
-              ${`xml:lang="in valid"`}
-              ${`lang="in valid"`}
-              ${`dir="invalid"`}
+              invalidAttributes                      | invalidAttributesCount
+              ${`xml:lang="in valid"`}               | ${1}
+              ${`lang="in valid"`}                   | ${1}
+              ${`dir="invalid"`}                     | ${1}
+              ${`xml:lang="in valid" dir="invalid"`} | ${2}
             `(
-              "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-              ({ invalidAttribute }: { invalidAttribute: string }) => {
+              "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+              ({
+                invalidAttributes,
+                invalidAttributesCount,
+              }: {
+                invalidAttributes: string;
+                invalidAttributesCount: number;
+              }) => {
                 const validXml = richtext(factory(li()));
-                const invalidXml = richtext(`<${element} ${invalidAttribute}>${li()}</${element}>`);
+                const invalidXml = richtext(`<${element} ${invalidAttributes}>${li()}</${element}>`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-                const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+                const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
                 expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                   expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -348,25 +366,34 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(container(li()));
-            const invalidXml = richtext(container(li("", { class: "I" }))).replace("class", "invalid");
+            const invalidXml = richtext(container(li("", { class: "I", lang: "en" })))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
+            invalidAttributes                  | invalidAttributesCount
+            ${`xml:lang="in valid"`}           | ${1}
+            ${`lang="in valid"`}               | ${1}
+            ${`dir="invalid"`}                 | ${1}
+            ${`lang="in valid" dir="invalid"`} | ${2}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(container(li()));
-              const invalidXml = richtext(container(`<li ${invalidAttribute}/>`));
+              const invalidXml = richtext(container(`<li ${invalidAttributes}/>`));
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -437,10 +464,12 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(pre());
-            const invalidXml = richtext(pre("", { class: "I" })).replace("class", "invalid");
+            const invalidXml = richtext(pre("", { class: "I", lang: "en" }))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
@@ -453,18 +482,25 @@ describe("RichTextSanitizer", () => {
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
-            ${`xml:space="invalid"`}
+            invalidAttributes                            | invalidAttributesCount
+            ${`xml:lang="in valid"`}                     | ${1}
+            ${`lang="in valid"`}                         | ${1}
+            ${`dir="invalid"`}                           | ${1}
+            ${`xml:space="invalid"`}                     | ${1}
+            ${`xml:lang="in valid" xml:space="invalid"`} | ${2}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(pre());
-              const invalidXml = richtext(`<pre ${invalidAttribute}/>`);
+              const invalidXml = richtext(`<pre ${invalidAttributes}/>`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -537,25 +573,34 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(blockquote());
-            const invalidXml = richtext(blockquote("", { class: "I" })).replace("class", "invalid");
+            const invalidXml = richtext(blockquote("", { class: "I", lang: "en" }))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
+            invalidAttributes                      | invalidAttributesCount
+            ${`xml:lang="in valid"`}               | ${1}
+            ${`lang="in valid"`}                   | ${1}
+            ${`dir="invalid"`}                     | ${1}
+            ${`xml:lang="in valid" dir="invalid"`} | ${2}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(blockquote());
-              const invalidXml = richtext(`<blockquote ${invalidAttribute}/>`);
+              const invalidXml = richtext(`<blockquote ${invalidAttributes}/>`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -630,10 +675,12 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p(a("", { "xlink:href": "" })));
-            const invalidXml = richtext(p(a("", { "xlink:href": "", "class": "I" }))).replace("class", "invalid");
+            const invalidXml = richtext(p(a("", { "xlink:href": "", "class": "I", "lang": "en" })))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
@@ -655,20 +702,27 @@ describe("RichTextSanitizer", () => {
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
-            ${`xlink:type="invalid"`}
-            ${`xlink:show="invalid"`}
-            ${`xlink:actuate="invalid"`}
+            invalidAttributes                                                                     | invalidAttributesCount
+            ${`xml:lang="in valid"`}                                                              | ${1}
+            ${`lang="in valid"`}                                                                  | ${1}
+            ${`dir="invalid"`}                                                                    | ${1}
+            ${`xlink:type="invalid"`}                                                             | ${1}
+            ${`xlink:show="invalid"`}                                                             | ${1}
+            ${`xlink:actuate="invalid"`}                                                          | ${1}
+            ${`xml:lang="in valid" lang="in valid" xlink:show="invalid" xlink:actuate="invalid"`} | ${4}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(p(a("", { "xlink:href": "" })));
-              const invalidXml = richtext(p(a("", { "xlink:href": "" }))).replace("<a", `<a ${invalidAttribute}`);
+              const invalidXml = richtext(p(a("", { "xlink:href": "" }))).replace("<a", `<a ${invalidAttributes}`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -755,25 +809,34 @@ describe("RichTextSanitizer", () => {
 
             it("Should remove invalid attributes", () => {
               const validXml = richtext(p(factory()));
-              const invalidXml = richtext(p(factory("", { class: "I" }))).replace("class", "invalid");
+              const invalidXml = richtext(p(factory("", { class: "I", lang: "en" })))
+                .replace("class", "invalid")
+                .replace("lang", "moreinvalid");
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-                expect(listener.totalLength).toStrictEqual(1);
-                expect(listener.removedInvalidAttrs).toHaveLength(1);
+                expect(listener.totalLength).toStrictEqual(2);
+                expect(listener.removedInvalidAttrs).toHaveLength(2);
               });
             });
 
             it.each`
-              invalidAttribute
-              ${`xml:lang="in valid"`}
-              ${`lang="in valid"`}
-              ${`dir="invalid"`}
+              invalidAttributes                      | invalidAttributesCount
+              ${`xml:lang="in valid"`}               | ${1}
+              ${`lang="in valid"`}                   | ${1}
+              ${`dir="invalid"`}                     | ${1}
+              ${`xml:lang="in valid" dir="invalid"`} | ${2}
             `(
-              "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-              ({ invalidAttribute }: { invalidAttribute: string }) => {
+              "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+              ({
+                invalidAttributes,
+                invalidAttributesCount,
+              }: {
+                invalidAttributes: string;
+                invalidAttributesCount: number;
+              }) => {
                 const validXml = richtext(p(factory()));
-                const invalidXml = validXml.replace(`<${element}`, `<${element} ${invalidAttribute}`);
+                const invalidXml = validXml.replace(`<${element}`, `<${element} ${invalidAttributes}`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-                const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+                const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
                 expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                   expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -850,13 +913,12 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
-            const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "", "class": "I" }))).replace(
-              "class",
-              "invalid",
-            );
+            const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "", "class": "I", "lang": "en" })))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
@@ -887,23 +949,31 @@ describe("RichTextSanitizer", () => {
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
-            ${`xlink:type="invalid"`}
-            ${`xlink:show="invalid"`}
-            ${`xlink:actuate="invalid"`}
+            invalidAttributes                                                      | invalidAttributesCount
+            ${`xml:lang="in valid"`}                                               | ${1}
+            ${`lang="in valid"`}                                                   | ${1}
+            ${`dir="invalid"`}                                                     | ${1}
+            ${`xml:lang="in valid" lang="in valid"`}                               | ${2}
+            ${`xlink:type="invalid"`}                                              | ${1}
+            ${`xlink:show="invalid"`}                                              | ${1}
+            ${`xlink:actuate="invalid"`}                                           | ${1}
+            ${`xlink:type="invalid" xlink:show="invalid" xlink:actuate="invalid"`} | ${3}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
               const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "" }))).replace(
                 "<img",
-                `<img ${invalidAttribute}`,
+                `<img ${invalidAttributes}`,
               );
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -959,25 +1029,34 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tr(td())));
-            const invalidXml = richtext(table(tr(td()), { class: "I" })).replace("class", "invalid");
+            const invalidXml = richtext(table(tr(td()), { class: "I", lang: "en" }))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
+            invalidAttributes                  | invalidAttributesCount
+            ${`xml:lang="in valid"`}           | ${1}
+            ${`lang="in valid"`}               | ${1}
+            ${`dir="invalid"`}                 | ${1}
+            ${`lang="in valid" dir="invalid"`} | ${2}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(table(tr(td())));
-              const invalidXml = validXml.replace("<table", `<table ${invalidAttribute}`);
+              const invalidXml = validXml.replace("<table", `<table ${invalidAttributes}`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -1049,27 +1128,36 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tbody(tr(td()))));
-            const invalidXml = richtext(table(tbody(tr(td()), { class: "I" }))).replace("class", "invalid");
+            const invalidXml = richtext(table(tbody(tr(td()), { class: "I", lang: "en" })))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
-            ${`align="invalid"`}
-            ${`valign="invalid"`}
+            invalidAttributes                                       | invalidAttributesCount
+            ${`xml:lang="in valid"`}                                | ${1}
+            ${`lang="in valid"`}                                    | ${1}
+            ${`dir="invalid"`}                                      | ${1}
+            ${`align="invalid"`}                                    | ${1}
+            ${`valign="invalid"`}                                   | ${1}
+            ${`xml:lang="in valid" dir="invalid" valign="invalid"`} | ${3}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(table(tbody(tr(td()))));
-              const invalidXml = validXml.replace("<tbody", `<tbody ${invalidAttribute}`);
+              const invalidXml = validXml.replace("<tbody", `<tbody ${invalidAttributes}`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -1144,27 +1232,36 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tr(td())));
-            const invalidXml = richtext(table(tr(td(), { class: "I" }))).replace("class", "invalid");
+            const invalidXml = richtext(table(tr(td(), { class: "I", lang: "en" })))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
-            ${`align="invalid"`}
-            ${`valign="invalid"`}
+            invalidAttributes                     | invalidAttributesCount
+            ${`xml:lang="in valid"`}              | ${1}
+            ${`lang="in valid"`}                  | ${1}
+            ${`dir="invalid"`}                    | ${1}
+            ${`align="invalid"`}                  | ${1}
+            ${`valign="invalid"`}                 | ${1}
+            ${`align="invalid" valign="invalid"`} | ${2}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(table(tr(td())));
-              const invalidXml = validXml.replace("<tr", `<tr ${invalidAttribute}`);
+              const invalidXml = validXml.replace("<tr", `<tr ${invalidAttributes}`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -1242,27 +1339,36 @@ describe("RichTextSanitizer", () => {
 
           it("Should remove invalid attributes", () => {
             const validXml = richtext(table(tr(td(""))));
-            const invalidXml = richtext(table(tr(td("", { class: "I" })))).replace("class", "invalid");
+            const invalidXml = richtext(table(tr(td("", { class: "I", lang: "en" }))))
+              .replace("class", "invalid")
+              .replace("lang", "moreinvalid");
             expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
-              expect(listener.totalLength).toStrictEqual(1);
-              expect(listener.removedInvalidAttrs).toHaveLength(1);
+              expect(listener.totalLength).toStrictEqual(2);
+              expect(listener.removedInvalidAttrs).toHaveLength(2);
             });
           });
 
           it.each`
-            invalidAttribute
-            ${`xml:lang="in valid"`}
-            ${`lang="in valid"`}
-            ${`dir="invalid"`}
-            ${`align="invalid"`}
-            ${`valign="invalid"`}
+            invalidAttributes                                     | invalidAttributesCount
+            ${`xml:lang="in valid"`}                              | ${1}
+            ${`lang="in valid"`}                                  | ${1}
+            ${`dir="invalid"`}                                    | ${1}
+            ${`align="invalid"`}                                  | ${1}
+            ${`valign="invalid"`}                                 | ${1}
+            ${`lang="in valid" align="invalid" valign="invalid"`} | ${3}
           `(
-            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttribute",
-            ({ invalidAttribute }: { invalidAttribute: string }) => {
+            "[$#] Should keep invalid attribute value only in legacy mode for: $invalidAttributes",
+            ({
+              invalidAttributes,
+              invalidAttributesCount,
+            }: {
+              invalidAttributes: string;
+              invalidAttributesCount: number;
+            }) => {
               const validXml = richtext(table(tr(td())));
-              const invalidXml = validXml.replace("<td", `<td ${invalidAttribute}`);
+              const invalidXml = validXml.replace("<td", `<td ${invalidAttributes}`);
               const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : 1;
+              const expectedInvalidAttributes = strictness === Strictness.LEGACY ? 0 : invalidAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
@@ -1272,16 +1378,23 @@ describe("RichTextSanitizer", () => {
           );
 
           it.each`
-            suspiciousAttribute
-            ${`rowspan="invalid"`}
-            ${`colspan="invalid"`}
+            suspiciousAttributes                     | suspiciousAttributesCount
+            ${`rowspan="invalid"`}                   | ${1}
+            ${`colspan="invalid"`}                   | ${1}
+            ${`rowspan="invalid" colspan="invalid"`} | ${2}
           `(
-            "[$#] Should remove suspicious attribute value only in strict mode for: $suspiciousAttribute",
-            ({ suspiciousAttribute }: { suspiciousAttribute: string }) => {
+            "[$#] Should remove suspicious attribute value only in strict mode for: $suspiciousAttributes",
+            ({
+              suspiciousAttributes,
+              suspiciousAttributesCount,
+            }: {
+              suspiciousAttributes: string;
+              suspiciousAttributesCount: number;
+            }) => {
               const validXml = richtext(table(tr(td())));
-              const invalidXml = validXml.replace("<td", `<td ${suspiciousAttribute}`);
+              const invalidXml = validXml.replace("<td", `<td ${suspiciousAttributes}`);
               const expectedXml = strictness !== Strictness.STRICT ? invalidXml : validXml;
-              const expectedInvalidAttributes = strictness !== Strictness.STRICT ? 0 : 1;
+              const expectedInvalidAttributes = strictness !== Strictness.STRICT ? 0 : suspiciousAttributesCount;
 
               expectSanitationResult(sanitizer, invalidXml, expectedXml, (listener) => {
                 expect(listener.totalLength).toStrictEqual(expectedInvalidAttributes);
