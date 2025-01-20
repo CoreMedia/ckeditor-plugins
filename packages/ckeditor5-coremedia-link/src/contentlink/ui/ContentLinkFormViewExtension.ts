@@ -19,11 +19,11 @@ import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
-import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import { createSearchSuggester } from "./dropdown/createSearchSuggester";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -193,7 +193,7 @@ class ContentLinkFormViewExtension extends Plugin {
         }
       }
     });
-    ContentLinkFormViewExtension.#render(contentLinkView, linkUI, formView);
+    this.#render(contentLinkView, linkUI, formView);
     this.#adaptFormViewFields(formView);
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
@@ -203,7 +203,7 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
@@ -225,11 +225,11 @@ class ContentLinkFormViewExtension extends Plugin {
       throw new Error("Unexpected state on render: Required elements are missing.");
     }
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
-    const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
-    const { urlInputView } = formView;
-    hasRequiredInternalFocusablesProperty(formView) &&
-      handleFocusManagement(formView, contentLinkButtons, urlInputView);
-    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
+
+    const suggester = createSearchSuggester(this.editor);
+    if (suggester.element) {
+      formViewElement.insertBefore(suggester.element, urlInputViewElement.nextSibling);
+    }
   }
 
   #adaptFormViewFields(formView: LinkFormView): void {
