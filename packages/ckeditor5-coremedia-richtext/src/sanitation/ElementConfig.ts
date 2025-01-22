@@ -287,7 +287,9 @@ export class ElementConfig {
    */
   #processAttributes(element: Element, strictness: ActiveStrictness, listener: SanitationListener): void {
     const { attributes } = element;
-    for (const attribute of attributes) {
+    // make a copy of the attributes before iterating
+    // lest the iteration gets shifted if an attribute is removed during the iteration
+    for (const attribute of Array.from(attributes)) {
       if (attribute.localName === "xmlns" || attribute.prefix === "xmlns" || attribute.localName.startsWith("xmlns:")) {
         // Namespaces handled later.
         continue;
