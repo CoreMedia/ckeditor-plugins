@@ -237,7 +237,14 @@ export default class DataToModelMechanism {
         insertPosition = writer.split(markerPosition).range.end;
       }
       const range = writer.model.insertContent(item, insertPosition);
-      DataToModelMechanism.#applyAttributes(writer, [range], contentInputData.insertionContext.selectedAttributes);
+      if (range.start.path.length === 2 && range.end.path.length === 2) {
+        // applying attributes for empty rows leads to a bad element structure (e.g. strong tag surrounding a paragraph)
+        // avoid applying the linkHref attribute of the link which ended right before this one
+        const filteredAttributes = contentInputData.insertionContext.selectedAttributes.filter(
+          (arr) => arr[0] !== "linkHref",
+        );
+        DataToModelMechanism.#applyAttributes(writer, [range], filteredAttributes);
+      }
 
       // Evaluate if the container element has to be split after the element has
       // been inserted.
