@@ -238,6 +238,25 @@ here, to reduce the overhead in rule implementation. `renameElement`, for
 example, provides an element of the new name, but with all attributes copied
 from original element.
 
+#### Strict Attributes
+
+Some attributes on HTML elements are `fixed`, according to the `RichTextDtd`.
+You might find those attributes obsolete and want to strip them from the created markup.
+Please use the `stripFixedAttributes` rule in your editor's configuration to remove them:
+
+```typescript
+import { stripFixedAttributes } from "@coremedia/ckeditor5-coremedia-richtext";
+
+ClassicEditor.create(document.querySelector('.editor'), {
+  // ...
+  "coremedia:richtext": {
+    rules: [
+      // ...
+      stripFixedAttributes()],
+  },
+});
+```
+
 #### API Usage
 
 Along with configuration as part of the CKEditor 5 instance creation, you may
