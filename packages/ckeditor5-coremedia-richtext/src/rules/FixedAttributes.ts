@@ -36,4 +36,5 @@ export const stripFixedAttributes = (): RuleConfig => ({
       }
     },
   },
+  priority: "lowest",
 });
