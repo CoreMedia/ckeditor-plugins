@@ -49,5 +49,6 @@ export {
   preProcessAnchorElement,
   type HTMLAnchorElementPreprocessor,
 } from "./rules/AnchorElements";
+export { stripFixedAttributes } from "./rules/FixedAttributes";
 
 import "./augmentation";

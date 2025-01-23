@@ -313,11 +313,10 @@ export class ElementConfig {
     } else {
       const { fixed } = config;
       const { value } = attribute;
-      // Cleanup: Remove fixed attributes, that are irrelevant to store.
       if (fixed && fixed === value) {
-        // Cleanup: We expect a fixed value to be valid by definition and that
-        // it is obsolete to forward it to stored data.
-        element.removeAttributeNode(attribute);
+        // When an attribute with valid fixed value is specified,
+        // we should keep it.
+        // a data processing rule may remove it before if wished.
       } else if (!config.validateValue(value, strictness)) {
         listener.removeInvalidAttr(element, attribute, "invalidValue");
         element.removeAttributeNode(attribute);
