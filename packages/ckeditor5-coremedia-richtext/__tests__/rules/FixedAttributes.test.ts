@@ -10,7 +10,7 @@ describe("FixedAttributes", () => {
 
   describe.each`
     view                                                           | direction | data
-    ${`<pre xml:space="preserve"></pre>`}                          | ${toData} | ${`<pre></pre>)>`}
+    ${`<pre xml:space="preserve"></pre>`}                          | ${toData} | ${`<pre></pre>`}
     ${`<a xlink:type="simple"></a>`}                               | ${toData} | ${`<a></a>`}
     ${`<img xlink:show="embed"/>`}                                 | ${toData} | ${`<img/>`}
     ${`<img xlink:type="simple" xlink:show="embed" />`}            | ${toData} | ${`<img/>`}
