@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext",
-  "version": "22.0.2-rc.2",
+  "version": "22.0.2-rc.3",
   "description": "CoreMedia RichText 1.0 DTD: Data-Processor",
   "author": {
     "name": "CoreMedia GmbH",
@@ -65,12 +65,12 @@
     "ckeditor5": "43.3.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "22.0.2-rc.2",
-    "@coremedia/ckeditor5-core-common": "22.0.2-rc.2",
-    "@coremedia/ckeditor5-dataprocessor-support": "22.0.2-rc.2",
-    "@coremedia/ckeditor5-dom-converter": "22.0.2-rc.2",
-    "@coremedia/ckeditor5-dom-support": "22.0.2-rc.2",
-    "@coremedia/ckeditor5-link-common": "22.0.2-rc.2",
-    "@coremedia/ckeditor5-logging": "22.0.2-rc.2"
+    "@coremedia/ckeditor5-common": "22.0.2-rc.3",
+    "@coremedia/ckeditor5-core-common": "22.0.2-rc.3",
+    "@coremedia/ckeditor5-dataprocessor-support": "22.0.2-rc.3",
+    "@coremedia/ckeditor5-dom-converter": "22.0.2-rc.3",
+    "@coremedia/ckeditor5-dom-support": "22.0.2-rc.3",
+    "@coremedia/ckeditor5-link-common": "22.0.2-rc.3",
+    "@coremedia/ckeditor5-logging": "22.0.2-rc.3"
   }
 }
