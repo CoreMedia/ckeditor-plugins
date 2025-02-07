@@ -61,11 +61,31 @@ export const extractXLinkDataSetEntries = (element: HTMLElement): XLinkAttribute
     })
     .reduce(mergeXLinkAttributes) ?? {};
 
-export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes): void => {
+/**
+ * Sets attributes of the `xlink` namespace for the given element.
+ *
+ * Attributes already set before will be overwritten.
+ *
+ * This method is typically used in `toData` mapping.
+ *
+ * @example
+ *
+ * ```typescript
+ * setXLinkAttributes(element, {
+ *   // empty: Ignored, if allowEmpty=false
+ *   "title": "",
+ *   "href": "https://example.org/"
+ * });
+ * ```
+ *
+ * @param element - the elemant to set the attributes at
+ * @param attributes - the key-value pairs of attributes to set
+ * @param allowEmpty - if to ignore entries with empty values or not; default: `true`
+ */
+export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes, allowEmpty = true): void => {
   const { ownerDocument } = element;
   Object.entries(attributes).forEach(([key, value]: [XLinkAttributeKey, string | undefined]) => {
-    // We ignore empty values. Thus, only add if non-empty.
-    if (value) {
+    if (typeof value === "string" && (value || allowEmpty)) {
       const qualifiedName: XLinkAttributeQualifiedName = `${xLinkPrefix}:${key}`;
       const xlinkAttribute = ownerDocument.createAttributeNS(xLinkNamespaceUri, qualifiedName);
       xlinkAttribute.value = value;
@@ -80,10 +100,29 @@ export const setXLinkAttributes = (element: Element, attributes: XLinkAttributes
   });
 };
 
-export const setXLinkDataSetEntries = (element: HTMLElement, attributes: XLinkAttributes): void => {
+/**
+ * Sets attributes that originate from `xlink` attributes as `dataset` entries
+ * instead. This method is meant to be used in `toView` mapping as a suggestion
+ * how to _secure_ `xlink` attributes that may otherwise get lost outside the
+ * CKEditor 5 data layer (thus, model and editing view).
+ *
+ * @example
+ *
+ * ```typescript
+ * setXLinkDataSetEntries(element, {
+ *   // empty: Ignored, if allowEmpty=false
+ *   "title": "",
+ *   "href": "https://example.org/"
+ * });
+ * ```
+ *
+ * @param element - the elemant to set the attributes at
+ * @param attributes - the key-value pairs of attributes to set
+ * @param allowEmpty - if to ignore entries with empty values or not; default: `true`
+ */
+export const setXLinkDataSetEntries = (element: HTMLElement, attributes: XLinkAttributes, allowEmpty = true): void => {
   Object.entries(attributes).forEach(([localName, value]: [XLinkAttributeKey, string | undefined]) => {
-    // We ignore empty values. Thus, only add if non-empty.
-    if (typeof value === "string") {
+    if (typeof value === "string" && (value || allowEmpty)) {
       const key: XLinkAttributeDataSetKey = `${xLinkPrefix}${capitalize(localName)}`;
       element.dataset[key] = value;
     }
