@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dom-converter",
-  "version": "22.0.2-rc.5",
+  "version": "23.0.0",
   "description": "DOM Converter Utilities",
   "author": {
     "name": "CoreMedia GmbH",
@@ -47,9 +47,9 @@
     "ckeditor5": "43.3.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "22.0.2-rc.5",
-    "@coremedia/ckeditor5-dom-support": "22.0.2-rc.5",
-    "@coremedia/ckeditor5-logging": "22.0.2-rc.5"
+    "@coremedia/ckeditor5-common": "^23.0.0",
+    "@coremedia/ckeditor5-dom-support": "^23.0.0",
+    "@coremedia/ckeditor5-logging": "^23.0.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
