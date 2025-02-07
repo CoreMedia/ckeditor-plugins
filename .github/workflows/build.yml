@@ -61,7 +61,7 @@ env:
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
 
-permissions: {}
+permissions: { }
 
 jobs:
   get-env:
@@ -152,7 +152,7 @@ jobs:
           pnpm doc
       - name: Add Documentation Artifact
         if: ${{ inputs.doc }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: api-doc
           path: docs/
