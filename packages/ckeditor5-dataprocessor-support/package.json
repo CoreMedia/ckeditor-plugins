@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dataprocessor-support",
-  "version": "22.0.2-rc.4",
+  "version": "22.0.2-rc.5",
   "description": "Utilities for providing custom CKEditor 5 DataProcessors",
   "author": {
     "name": "CoreMedia GmbH",
@@ -60,7 +60,7 @@
     "ckeditor5": "43.3.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "22.0.2-rc.4",
-    "@coremedia/ckeditor5-logging": "22.0.2-rc.4"
+    "@coremedia/ckeditor5-common": "22.0.2-rc.5",
+    "@coremedia/ckeditor5-logging": "22.0.2-rc.5"
   }
 }
