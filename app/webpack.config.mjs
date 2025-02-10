@@ -46,6 +46,7 @@ export default {
       // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
       language: "en",
       additionalLanguages: ["de"],
+      sourceFilesPattern: "[/\\]ckeditor5/translations/[a-z]{2}.js",
     }),
     new webpack.BannerPlugin({
       banner: bundler.getLicenseBanner(),
