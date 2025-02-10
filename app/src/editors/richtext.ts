@@ -56,7 +56,6 @@ import {
   Superscript,
   Table,
   TableToolbar,
-  Translations,
   Underline,
 } from "ckeditor5";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
@@ -177,18 +176,6 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
   state: ApplicationState,
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
-  const translations: Translations[] = [];
-  try {
-    const { default: coreTranslations } = await import(`ckeditor5/translations/${uiLanguage}.js`);
-    if (coreTranslations) {
-      translations.push(coreTranslations as Translations);
-    } else {
-      console.error("Unable to load specified uiLanguage: ", uiLanguage);
-    }
-  } catch (error) {
-    console.error("Unable to load specified uiLanguage: ", uiLanguage);
-    console.error("Catched error when loading ", `ckeditor5/translations/${uiLanguage}.js`);
-  }
 
   return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
@@ -416,7 +403,6 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
       // Won't change the language of content.
       content: "en",
     },
-    translations,
     autosave: {
       waitingTime: 1000, // in ms
     },
