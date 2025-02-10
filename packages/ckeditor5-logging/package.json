@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-logging",
-  "version": "23.0.0",
+  "version": "23.0.1-rc.0",
   "description": "Logging Facade",
   "author": {
     "name": "CoreMedia GmbH",
