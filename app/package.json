@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "source-map-loader": "^1.0.0",
     "@babel/plugin-transform-runtime": "^7.25.4",
     "@ckeditor/ckeditor5-dev-translations": "^45.0.8",
     "@ckeditor/ckeditor5-dev-utils": "^45.0.8",
