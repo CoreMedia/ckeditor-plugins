@@ -236,6 +236,7 @@ export default class ContentClipboard extends Plugin {
       this.fire<ClipboardContentInsertionEvent>("contentInsertion", {
         content: new ModelDocumentFragment(),
         method: data.method,
+        sourceEditorId: null,
         dataTransfer: data.dataTransfer,
         targetRanges: data.targetRanges,
       });
