@@ -66,6 +66,11 @@ export default {
         minify: true,
       }),
       loaders.getTypeScriptLoader(),
+      {
+        test: /\.m?js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
     ],
   },
 
