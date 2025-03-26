@@ -5,7 +5,7 @@ import LinkTargetCommand from "./command/LinkTargetCommand";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
-import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert } from "ckeditor5";
+import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert, Element, RootElement } from "ckeditor5";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -44,10 +44,24 @@ export default class LinkTargetModelView extends Plugin {
      * @param range - the range of the changed element
      */
     const addLinkTarget = (linkTarget: string, range: Range) => {
+      let foundImageElement: Element | undefined;
+      for (const value of range.getWalker({ ignoreElementEnd: true })) {
+        if (value.item.is("element") && (value.item.name === "imageInline" || value.item.name === "imageBlock")) {
+          foundImageElement = value.item;
+        }
+      }
+
       this.editor.model.change((writer) => {
-        writer.setAttribute("linkTarget", linkTarget, range);
+        if (foundImageElement) {
+          // link is inside an image element (use element, because range is probably empty so that setAttribute won't work)
+          foundImageElement && writer.setAttribute("linkTarget", linkTarget, foundImageElement);
+        } else {
+          // link is NOT inside an image element, use range instead
+          writer.setAttribute("linkTarget", linkTarget, range);
+        }
       });
     };
+
     this.editor.model.document.registerPostFixer((writer) => {
       const changes = this.editor.model.document.differ.getChanges();
       for (const entry of changes) {
