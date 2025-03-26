@@ -203,7 +203,7 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  #render(contentLinkView: LabeledFieldView, _linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
@@ -229,6 +229,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const suggester = createSearchSuggester(this.editor);
     if (suggester.element) {
       formViewElement.insertBefore(suggester.element, urlInputViewElement.nextSibling);
+      formView.focusTracker.add(suggester.element);
     }
   }
 

@@ -1,28 +1,21 @@
-import { Editor, LabeledFieldView, View } from "ckeditor5";
+import { Editor } from "ckeditor5";
 import ContentLinkView from "../ContentLinkView";
 
-export default class SuggestionView extends View<HTMLDivElement> {}
+export interface ContentLinkSuggestionProps {
+  editor: Editor;
+  uriPath: string;
+  onClick: (uriPath: string) => void;
+}
 
-export const createContentLinkSuggestion = (editor: Editor): ContentLinkView => {
-  //const { t } = editor.locale;
+export const createContentLinkSuggestion: (props: ContentLinkSuggestionProps) => ContentLinkView = ({
+  editor,
+  uriPath,
+  onClick,
+}): ContentLinkView => {
+  const contentLinkView = new ContentLinkView(editor, { renderTypeIcon: true });
 
-  const clv = new ContentLinkView(editor, {
-    renderTypeIcon: true,
-    renderCancelButton: false,
-  });
+  contentLinkView.set("uriPath", uriPath);
+  contentLinkView.on("contentClick", () => onClick(uriPath));
 
-  const contentLinkView = new LabeledFieldView(editor.locale, () => clv);
-  //   contentLinkView.set({
-  //     label: t("Link"),
-  //     isEmpty: false,
-  //     class: "cm-test",
-  //   });
-
-  const { fieldView } = contentLinkView;
-  fieldView.set("uriPath", "content:12345");
-
-  fieldView.on("contentClick", () => {
-    console.log("content clicked");
-  });
-  return clv;
+  return contentLinkView;
 };
