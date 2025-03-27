@@ -92,9 +92,10 @@ export function createSearchSuggester(editor: Editor) {
     }
   });
 
-  labeledFieldView.fieldView.on("focus", () => {
-    if (filterValueObservable.getValue().length >= 3) {
+  labeledFieldView.element?.addEventListener("focusin", () => {
+    if (filterValueObservable.getValue().length >= 3 && !dropdown.isOpen) {
       dropdown.isOpen = true;
+      labeledFieldView.fieldView.focus();
     }
   });
 
