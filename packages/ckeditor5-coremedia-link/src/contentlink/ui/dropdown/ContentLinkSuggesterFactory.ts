@@ -15,7 +15,7 @@ import { createContentLinkSuggestion } from "./createContentLinkSuggestion";
 /**
  *
  */
-export function createSearchSuggester(editor: Editor) {
+export function createContentLinkSuggester(editor: Editor, onClickOnLink: (uriPath: string) => void) {
   const locale = editor.locale;
 
   const labeledFieldView = new LabeledFieldView<InputTextView>(locale, createLabeledInputText);
@@ -28,10 +28,6 @@ export function createSearchSuggester(editor: Editor) {
 
   const uriPathsMap = new Map<View, string>();
   const viewsMap = new Map<string, View>();
-
-  const onClickOnSuggestion = (uriPath: string) => {
-    console.log("clicked on content", uriPath);
-  };
 
   //@ts-expect-error We are using this method with a textField even though it expects a buttonView.
   const dropdown = createDropdown(locale, labeledFieldView);
@@ -58,7 +54,7 @@ export function createSearchSuggester(editor: Editor) {
       });
       toRemove.forEach((view) => toolbarView.items.remove(view));
       toAdd.forEach((uriPath) => {
-        const view = createContentLinkSuggestion({ editor, uriPath, onClick: onClickOnSuggestion });
+        const view = createContentLinkSuggestion({ editor, uriPath, onClick: onClickOnLink });
         toolbarView.items.add(view);
         uriPathsMap.set(view, uriPath);
         viewsMap.set(uriPath, view);
@@ -99,5 +95,5 @@ export function createSearchSuggester(editor: Editor) {
     }
   });
 
-  return dropdown;
+  return [dropdown, labeledFieldView] as const;
 }
