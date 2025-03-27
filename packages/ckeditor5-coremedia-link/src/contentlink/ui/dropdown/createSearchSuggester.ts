@@ -19,7 +19,10 @@ export function createSearchSuggester(editor: Editor) {
   const locale = editor.locale;
 
   const labeledFieldView = new LabeledFieldView<InputTextView>(locale, createLabeledInputText);
-  labeledFieldView.label = "Link (DnD or type)";
+  labeledFieldView.label = locale.t("Link");
+  labeledFieldView.fieldView.set({
+    placeholder: locale.t("Enter url or drag and drop content onto this area."),
+  });
 
   const filterValueObservable = new BehaviorSubject("");
 
@@ -40,6 +43,7 @@ export function createSearchSuggester(editor: Editor) {
     dropdown.toolbarView.element.style.overflowY = "auto";
     dropdown.toolbarView.element.style.alignItems = "flex-start";
   }
+  dropdown.isOpen = false;
 
   const updateItems = (uriPaths: string[]) => {
     const { toolbarView } = dropdown;
@@ -85,6 +89,12 @@ export function createSearchSuggester(editor: Editor) {
       dropdown.isOpen = true;
     } else {
       dropdown.isOpen = false;
+    }
+  });
+
+  labeledFieldView.fieldView.on("focus", () => {
+    if (filterValueObservable.getValue().length >= 3) {
+      dropdown.isOpen = true;
     }
   });
 
