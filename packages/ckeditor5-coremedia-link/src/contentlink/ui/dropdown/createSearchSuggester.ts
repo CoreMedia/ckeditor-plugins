@@ -38,6 +38,7 @@ export function createSearchSuggester(editor: Editor) {
   if (dropdown.toolbarView?.element) {
     dropdown.toolbarView.element.style.maxHeight = "160px";
     dropdown.toolbarView.element.style.overflowY = "auto";
+    dropdown.toolbarView.element.style.alignItems = "flex-start";
   }
 
   const updateItems = (uriPaths: string[]) => {
@@ -59,7 +60,6 @@ export function createSearchSuggester(editor: Editor) {
         viewsMap.set(uriPath, view);
       });
     }
-    dropdown.isOpen = !!uriPaths.length;
     uriPaths.length && dropdown.focus();
   };
 
