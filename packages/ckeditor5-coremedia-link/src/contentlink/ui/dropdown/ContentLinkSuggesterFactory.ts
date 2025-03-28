@@ -97,14 +97,21 @@ export function createContentLinkSuggester(
       filterValueObservable.next(value);
       dropdown.isOpen = true;
     } else {
+      filterValueObservable.next(value);
       dropdown.isOpen = false;
     }
   });
 
   labeledFieldView.element?.addEventListener("focusin", () => {
-    if (filterValueObservable.getValue().length >= 3 && !dropdown.isOpen) {
-      dropdown.isOpen = true;
-      labeledFieldView.fieldView.focus();
+    if (filterValueObservable.getValue().length >= 3) {
+      if (!dropdown.isOpen) {
+        dropdown.isOpen = true;
+        labeledFieldView.fieldView.focus();
+      }
+    } else {
+      if (dropdown.isOpen) {
+        dropdown.isOpen = false;
+      }
     }
   });
 
