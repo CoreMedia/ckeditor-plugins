@@ -235,6 +235,11 @@ class ContentLinkFormViewExtension extends Plugin {
 
     const [linkSuggesterDropdownView, linkSuggesterLabeledFieldView, resetInputValue] = createContentLinkSuggester(
       this.editor,
+      (inputValue) => {
+        formView.urlInputView.fieldView.set({
+          value: inputValue,
+        });
+      },
       (uriPath: string) => {
         this.#setDataAndSwitchToContentLink(linkUI, uriPath);
       },

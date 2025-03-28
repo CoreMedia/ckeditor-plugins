@@ -7,7 +7,7 @@ import {
   LabeledFieldView,
   View,
 } from "ckeditor5";
-import { BehaviorSubject, combineLatest, from, of, switchMap } from "rxjs";
+import { BehaviorSubject, combineLatest, debounce, from, interval, of, switchMap } from "rxjs";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentSearchServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { createContentLinkSuggestion } from "./createContentLinkSuggestion";
@@ -15,8 +15,14 @@ import { createContentLinkSuggestion } from "./createContentLinkSuggestion";
 /**
  *
  */
-export function createContentLinkSuggester(editor: Editor, onClickOnLink: (uriPath: string) => void) {
+export function createContentLinkSuggester(
+  editor: Editor,
+  onChangeInputValue: (value: string) => void,
+  onClickOnLink: (uriPath: string) => void,
+  options?: { debounceInterval?: number },
+) {
   const locale = editor.locale;
+  const debounceInterval = options?.debounceInterval ?? 500;
 
   const labeledFieldView = new LabeledFieldView<InputTextView>(locale, createLabeledInputText);
   labeledFieldView.label = locale.t("Link");
@@ -25,6 +31,8 @@ export function createContentLinkSuggester(editor: Editor, onClickOnLink: (uriPa
   });
 
   const filterValueObservable = new BehaviorSubject("");
+
+  filterValueObservable.subscribe((value) => onChangeInputValue(value));
 
   const resetInputValue = () => filterValueObservable.next("");
 
@@ -65,7 +73,10 @@ export function createContentLinkSuggester(editor: Editor, onClickOnLink: (uriPa
     uriPaths.length && dropdown.focus();
   };
 
-  combineLatest([from(serviceAgent.fetchService(createContentSearchServiceDescriptor())), filterValueObservable])
+  combineLatest([
+    from(serviceAgent.fetchService(createContentSearchServiceDescriptor())),
+    filterValueObservable.pipe(debounce(() => interval(debounceInterval))),
+  ])
     .pipe(
       switchMap(([contentSearchService, filterValue]) =>
         filterValue.length >= 3 ? contentSearchService.observe_contentSuggestions(filterValue) : of([]),
