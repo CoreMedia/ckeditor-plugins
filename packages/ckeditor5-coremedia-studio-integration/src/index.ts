@@ -42,7 +42,10 @@ export {
   IsDroppableEvaluationResult,
 } from "./content/IsDroppableInRichtext";
 
-export { receiveDraggedItemsFromDataTransfer } from "./content/studioservices/DragDropServiceWrapper";
+export {
+  receiveDraggedItemsFromDataTransfer,
+  receiveDraggedItemsFromService,
+} from "./content/studioservices/DragDropServiceWrapper";
 export { default as DragDropService } from "./content/studioservices/DragDropService";
 
 export {
