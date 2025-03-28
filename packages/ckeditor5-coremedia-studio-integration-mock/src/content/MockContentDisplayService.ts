@@ -9,7 +9,13 @@ import {
 import { combineLatest, Observable, OperatorFunction, Subscription } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
-import { observeEditingHint, observeNameHint, observeTypeHint } from "./DisplayHints";
+import {
+  observeEditingHint,
+  observeLocaleNameHint,
+  observeNameHint,
+  observeSiteNameHint,
+  observeTypeHint,
+} from "./DisplayHints";
 import { observeName, observeReadable } from "./MutableProperties";
 
 /**
@@ -86,18 +92,28 @@ class MockContentDisplayService implements ContentDisplayService {
     const nameSubscription = observeNameHint(mockContent);
     const typeSubscription = observeTypeHint(mockContent);
     const stateSubscription = observeEditingHint(mockContent);
+    const siteNameSubscription = observeSiteNameHint(mockContent);
+    const localeNameSubscriptrion = observeLocaleNameHint(mockContent);
 
-    type Hints = readonly [DisplayHint, DisplayHint, DisplayHint];
+    type Hints = readonly [DisplayHint, DisplayHint, DisplayHint, DisplayHint, DisplayHint];
 
     const toContentAsLink: OperatorFunction<Hints, ContentAsLink> = map<Hints, ContentAsLink>(
-      ([nameHint, typeHint, stateHint]: Hints): ContentAsLink => ({
+      ([nameHint, siteNameHint, localeNameHint, typeHint, stateHint]: Hints): ContentAsLink => ({
         content: nameHint,
+        site: siteNameHint,
+        locale: localeNameHint,
         type: typeHint,
         state: stateHint,
       }),
     );
 
-    return combineLatest([nameSubscription, typeSubscription, stateSubscription]).pipe(toContentAsLink);
+    return combineLatest([
+      nameSubscription,
+      siteNameSubscription,
+      localeNameSubscriptrion,
+      typeSubscription,
+      stateSubscription,
+    ]).pipe(toContentAsLink);
   }
 }
 

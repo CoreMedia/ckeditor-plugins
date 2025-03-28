@@ -75,7 +75,7 @@ export function createContentLinkSuggester(
 
   combineLatest([
     from(serviceAgent.fetchService(createContentSearchServiceDescriptor())),
-    filterValueObservable.pipe(debounce(() => interval(debounceInterval))),
+    filterValueObservable.pipe(debounce((filterValue) => interval(filterValue.length >= 3 ? debounceInterval : 0))),
   ])
     .pipe(
       switchMap(([contentSearchService, filterValue]) =>
