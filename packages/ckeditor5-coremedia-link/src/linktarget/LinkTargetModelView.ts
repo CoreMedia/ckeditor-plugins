@@ -5,7 +5,7 @@ import LinkTargetCommand from "./command/LinkTargetCommand";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
-import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert, Element, RootElement } from "ckeditor5";
+import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert, Element, Node } from "ckeditor5";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -67,6 +67,8 @@ export default class LinkTargetModelView extends Plugin {
       for (const entry of changes) {
         const linkTarget = this.#computeLinkTarget(entry);
         if (!linkTarget) {
+          // this diffitem is not a link, but it might be a container with link children
+          this.checkForLinkTargetInChildren(entry, writer);
           continue;
         }
         const range = this.#getLinkRange(entry, writer);
@@ -75,6 +77,36 @@ export default class LinkTargetModelView extends Plugin {
       return false;
     });
     reportInitEnd(initInformation);
+  }
+
+  /**
+   * If a link element is created in the root, a new paragraph (containing the link element as a child) will be created.
+   * This function checks for those children.
+   *
+   * @param diffItem - the original diffItem
+   * @param writer - the writer
+   */
+  checkForLinkTargetInChildren(diffItem: DiffItem, writer: Writer) {
+    if (!(diffItem.type === "insert")) {
+      // this might just be a change diff (e.g. if target is changed manually),
+      // in that case we cannot compute a range and can just return
+      return;
+    }
+    const range = this.#getLinkRange(diffItem, writer);
+    for (const value of range.getWalker({ ignoreElementEnd: true })) {
+      if (value.item.is("element")) {
+        for (const child of value.item.getChildren()) {
+          const linkTarget = this.#computeLinkTargetForNode(child);
+          if (!linkTarget) {
+            // no link child found, continue!
+            continue;
+          }
+          this.editor.model.change((writer) => {
+            writer.setAttribute("linkTarget", linkTarget, child);
+          });
+        }
+      }
+    }
   }
 
   /**
@@ -135,6 +167,20 @@ export default class LinkTargetModelView extends Plugin {
       // dropped into the editor or into the link balloon.
       url = diffItem.attributes.get("linkHref");
     }
+    if (url && typeof url === "string") {
+      return computeDefaultLinkTargetForUrl(url, this.editor.config);
+    }
+    return undefined;
+  }
+
+  /**
+   * Computes a default link target for child nodes of any inserted or edited link elements.
+   * @param child - the link child node
+   * @returns the link target or undefined
+   * @private
+   */
+  #computeLinkTargetForNode(child: Node): string | undefined {
+    const url = child.getAttribute("linkHref");
     if (url && typeof url === "string") {
       return computeDefaultLinkTargetForUrl(url, this.editor.config);
     }
