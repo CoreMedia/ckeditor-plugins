@@ -25,20 +25,28 @@ const hoursInMs = (hours: number): number => hours * 1000 * 60 * 60;
 const FOLDER_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 101,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Some Folder",
   },
   {
     id: 103,
     comment: "Folder, renamed from time to time.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: ["Renaming Folder, It. 1", "Renaming Folder, It. 2"],
   },
   {
     id: 105,
-    name: "Unreadable Folder",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
+    name: "Test-Site",
     readable: false,
   },
   {
     id: 107,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Folder, sometimes Unreadable",
     readable: [false, true],
   },
@@ -46,30 +54,42 @@ const FOLDER_MOCKS: PredefinedMockContentConfig[] = [
 const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 100,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Some Document",
   },
   {
     id: 102,
     comment: "Document, renamed from time to time.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: ["Renaming Document, It. 1", "Renaming Document, It. 2"],
   },
   {
     id: 104,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Unreadable Document",
     readable: false,
   },
   {
     id: 106,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Document, sometimes Unreadable",
     readable: [false, true],
   },
   {
     id: 108,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Edited Document",
     editing: true,
   },
   {
     id: 110,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Document, sometimes edited",
     editing: [true, false],
   },
@@ -77,6 +97,8 @@ const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
     id: 112,
     comment: "Document which is actively edited, renamed, moved.",
     changeDelayMs: 1000,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: Array.from(Array(10).keys()).map((idx) => `Name No. ${idx}`),
     editing: [true, false],
     readable: [true, true, true, false, false, false],
@@ -84,6 +106,8 @@ const DOCUMENT_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 114,
     comment: "Single letter (unicode symbol) name.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "\u{1F54A}",
     editing: [true, false],
   },
@@ -92,42 +116,58 @@ const NAME_CHALLENGE_MOCKS: PredefinedMockContentConfig[] = [
   {
     id: 600,
     comment: "Challenges escaping having entities inside its name.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: CONTENT_NAME_CHALLENGE_ENTITIES,
   },
   {
     id: 602,
     comment: "Challenges name display with different characters inside.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: CONTENT_NAME_CHALLENGE_CHARSETS,
   },
   {
     id: 604,
     comment: "Challenges name display with RTL text.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: CONTENT_NAME_CHALLENGE_RTL,
   },
   {
     id: 606,
     comment: "Challenges name display with a possible XSS attack.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: CONTENT_NAME_CHALLENGE_XSS,
   },
   {
     id: 608,
     comment: "Challenges name display with some lengthy name.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: CONTENT_NAME_CHALLENGE_LENGTH,
   },
   {
     id: 610,
     comment: "Challenge by having a very short and a very long name.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: ["Α", CONTENT_NAME_CHALLENGE_LENGTH, "Ω"],
   },
   {
     id: 612,
     comment: "Fast toggle: Challenge by having a very short and a very long name.",
     changeDelayMs: 1000,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: ["Α", CONTENT_NAME_CHALLENGE_LENGTH, "Ω"],
   },
   {
     id: 614,
     comment: "Challenge, because it toggles from long name display to unreadable state back and forth.",
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: CONTENT_NAME_CHALLENGE_LENGTH,
     readable: [true, false],
   },
@@ -136,22 +176,30 @@ const SLOW_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 800,
     initialDelayMs: 10000,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Slow Loading Content",
   },
   {
     id: 802,
     initialDelayMs: hoursInMs(1),
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Nearly Endless Loading Content",
   },
   {
     id: 804,
     initialDelayMs: 5000,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Not so slow Loading Content",
   },
 ];
 const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 900,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Red Image",
     linkable: true,
     embeddable: true,
@@ -159,6 +207,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 902,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Green Image",
     linkable: true,
     embeddable: true,
@@ -166,6 +216,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 904,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Blue Image",
     linkable: true,
     embeddable: true,
@@ -173,6 +225,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 906,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Red, Green, Blue Updated Image",
     linkable: true,
     embeddable: true,
@@ -181,6 +235,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   {
     id: 908,
     initialDelayMs: 10000,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Slow Loading Red Image Content",
     linkable: true,
     embeddable: true,
@@ -188,6 +244,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 910,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Unset Image Blob",
     readable: true,
     linkable: true,
@@ -196,6 +254,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 912,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Sometimes Unset Image Blob",
     readable: true,
     linkable: true,
@@ -205,6 +265,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 914,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Unreadable Image",
     linkable: true,
     readable: false,
@@ -213,6 +275,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 916,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Sometimes Unreadable Image",
     linkable: true,
     readable: [false, true],
@@ -221,6 +285,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 918,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: Array.from(Array(10).keys()).map((idx) => `Image No. ${idx}`),
     comment: "Frequently Edited Image",
     readable: [false, true, true, true, true],
@@ -232,6 +298,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 920,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Frequently Updated Small Image",
     linkable: true,
     embeddable: true,
@@ -240,6 +308,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 922,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Green Image (not linkable)",
     // In standard setups in Blueprint CoreMedia Studio, image documents are
     // always also linkable. But in theory, this is not required, so that we
@@ -250,6 +320,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 924,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Small Red Image",
     linkable: true,
     embeddable: true,
@@ -257,6 +329,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 926,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Small Green Image",
     linkable: true,
     embeddable: true,
@@ -264,6 +338,8 @@ const BLOB_CONTENTS: PredefinedMockContentConfig[] = [
   },
   {
     id: 928,
+    siteName: "Test-Site",
+    localeName: "English (United States)",
     name: "Small Blue Image",
     linkable: true,
     embeddable: true,

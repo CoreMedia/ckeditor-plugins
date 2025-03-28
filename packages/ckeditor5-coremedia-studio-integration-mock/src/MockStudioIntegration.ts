@@ -18,6 +18,7 @@ import { MockContentReferenceService } from "./content/MockContentReferenceServi
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";
 import { MockBlocklistService } from "./MockBlocklistService";
+import { MockContentSearchService } from "./content/MockContentSearchService";
 
 const PLUGIN_NAME = "MockStudioIntegration";
 
@@ -38,6 +39,8 @@ export class MockStudioIntegration extends Plugin {
     const contentProvider = this.#initContents();
     const contentDisplayService = new MockContentDisplayService(contentProvider);
     serviceAgent.registerService(contentDisplayService);
+    const contentSearchService = new MockContentSearchService(contentProvider);
+    serviceAgent.registerService(contentSearchService);
     const richtextConfigurationService = new MockRichtextConfigurationService(this.editor, contentProvider);
     serviceAgent.registerService(richtextConfigurationService);
     const dragDropService = new MockDragDropService();
