@@ -52,6 +52,7 @@ class ContentLinkFormViewExtension extends Plugin {
   #contentLinkView: LabeledFieldView | undefined = undefined;
   #linkSuggesterDropdownView: DropdownView | undefined = undefined;
   #linkSuggesterLabeledFieldView: LabeledFieldView<InputTextView> | undefined = undefined;
+  #linkSuggesterResetInputValue: (() => void) | undefined = undefined;
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
@@ -207,8 +208,21 @@ class ContentLinkFormViewExtension extends Plugin {
       .to(linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath", enabledHandler);
   }
 
+  #resetValue() {
+    const linkUI = this.editor.plugins.get(LinkUI);
+    const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
+    formView.set({
+      contentUriPath: undefined,
+    });
+    actionsView.set({
+      contentUriPath: undefined,
+    });
+    this.#linkSuggesterResetInputValue?.();
+    this.#linkSuggesterLabeledFieldView?.focus();
+  }
+
   #extendView(linkUI: LinkUI, formView: AugmentedLinkFormView): void {
-    const contentLinkView = createContentLinkView(linkUI, this.editor);
+    const contentLinkView = createContentLinkView(linkUI, this.editor, () => this.#resetValue());
     this.#contentLinkView = contentLinkView;
     contentLinkView.on("change:contentName", () => {
       if (!this.editor.isReadOnly) {
@@ -219,7 +233,7 @@ class ContentLinkFormViewExtension extends Plugin {
       }
     });
 
-    const [linkSuggesterDropdownView, linkSuggesterLabeledFieldView] = createContentLinkSuggester(
+    const [linkSuggesterDropdownView, linkSuggesterLabeledFieldView, resetInputValue] = createContentLinkSuggester(
       this.editor,
       (uriPath: string) => {
         this.#setDataAndSwitchToContentLink(linkUI, uriPath);
@@ -227,6 +241,7 @@ class ContentLinkFormViewExtension extends Plugin {
     );
     this.#linkSuggesterDropdownView = linkSuggesterDropdownView;
     this.#linkSuggesterLabeledFieldView = linkSuggesterLabeledFieldView;
+    this.#linkSuggesterResetInputValue = resetInputValue;
 
     this.#render(contentLinkView, linkSuggesterDropdownView, linkSuggesterLabeledFieldView, linkUI, formView);
 
@@ -258,31 +273,28 @@ class ContentLinkFormViewExtension extends Plugin {
       urlInputView: { element: urlInputViewElement },
     } = formView;
     const { element: contentLinkViewElement } = contentLinkView;
-    if (!formViewElement || !contentLinkViewElement || !urlInputViewElement) {
+    const { element: linkSuggesterDropdownElement } = linkSuggesterDropdownView;
+    if (!formViewElement || !contentLinkViewElement || !urlInputViewElement || !linkSuggesterDropdownElement) {
       logger.debug("Unexpected state on render: Required elements are missing", {
         formViewElement,
         contentLinkViewElement,
         urlInputViewElement,
+        linkSuggesterDropdownElement,
       });
       throw new Error("Unexpected state on render: Required elements are missing.");
     }
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
 
-    if (!linkSuggesterDropdownView?.element) {
-      logger.debug("Unexpected state on render: Required element is missing: linkSuggesterElement");
-      throw new Error("Unexpected state on render: Required element is missing: linkSuggesterElement.");
-    }
-
     formView.registerChild(linkSuggesterDropdownView);
-    formViewElement.insertBefore(linkSuggesterDropdownView.element, urlInputViewElement.nextSibling);
+    formViewElement.insertBefore(linkSuggesterDropdownElement, urlInputViewElement.nextSibling);
 
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     const { urlInputView } = formView;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    hasRequiredInternalFocusablesProperty(formView) &&
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    if (hasRequiredInternalFocusablesProperty(formView)) {
       handleFocusManagement(formView, contentLinkButtons, urlInputView);
+      handleFocusManagement(formView, [linkSuggesterLabeledFieldView], urlInputView);
+    }
 
     this.#addDragAndDropListeners(contentLinkView, linkUI, formView);
     this.#addDragAndDropListeners(linkSuggesterLabeledFieldView, linkUI, formView);

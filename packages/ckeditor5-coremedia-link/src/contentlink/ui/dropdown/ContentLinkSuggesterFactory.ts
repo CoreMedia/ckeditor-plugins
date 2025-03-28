@@ -26,6 +26,8 @@ export function createContentLinkSuggester(editor: Editor, onClickOnLink: (uriPa
 
   const filterValueObservable = new BehaviorSubject("");
 
+  const resetInputValue = () => filterValueObservable.next("");
+
   const uriPathsMap = new Map<View, string>();
   const viewsMap = new Map<string, View>();
 
@@ -95,5 +97,5 @@ export function createContentLinkSuggester(editor: Editor, onClickOnLink: (uriPa
     }
   });
 
-  return [dropdown, labeledFieldView] as const;
+  return [dropdown, labeledFieldView, resetInputValue] as const;
 }
