@@ -2,10 +2,10 @@
 
 import { ElementFilterRule, ElementFilterParams, ElementProxy } from "../src/ElementProxy";
 import "jest-xml-matcher";
-import { Editor } from "ckeditor5";
+import { createEditorWithLicense } from "@coremedia/ckeditor5-common";
 
-//@ts-expect-error We should rather mock ClassicEditor or similar here.
-const MOCK_EDITOR = new Editor();
+const MOCK_EDITOR = createEditorWithLicense({});
+
 
 /*
  * =============================================================================

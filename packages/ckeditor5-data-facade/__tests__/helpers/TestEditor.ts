@@ -5,7 +5,6 @@ import {
   Italic,
   Strikethrough,
   Underline,
-  ClassicEditor,
   Essentials,
   Heading,
   Paragraph,
@@ -27,6 +26,7 @@ import {
   EditorConfig,
 } from "ckeditor5";
 import { DataFacade } from "../../src";
+import { createClassicEditorWithLicense } from "@coremedia/ckeditor5-common";
 
 export const allPlugins = [
   AutoImage,
@@ -79,5 +79,5 @@ export const createTestEditor = async (
 ) => {
   const element = document.getElementById(elementId);
   if (!element) throw new Error(`Element with id '${elementId}' not found.`);
-  return ClassicEditor.create(element, { ...config, plugins, toolbar });
+  return createClassicEditorWithLicense(element, { ...config, plugins, toolbar });
 };

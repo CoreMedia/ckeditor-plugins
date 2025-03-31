@@ -1,11 +1,10 @@
 /* eslint no-null/no-null: off */
 
 import "jest-xml-matcher";
-import { Editor } from "ckeditor5";
 import { TextProxy, TextFilterRule } from "../src/TextProxy";
+import { createEditorWithLicense } from "@coremedia/ckeditor5-common";
 
-//@ts-expect-error We should rather mock ClassicEditor or similar here.
-const MOCK_EDITOR = new Editor();
+export const MOCK_EDITOR = createEditorWithLicense({});
 const SERIALIZER = new XMLSerializer();
 const PARSER = new DOMParser();
 function parseAndValidate(xmlString: string): Document {

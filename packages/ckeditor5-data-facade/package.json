@@ -61,6 +61,7 @@
     "ckeditor5": "44.3.0"
   },
   "dependencies": {
+    "@coremedia/ckeditor5-common": "23.0.1-rc.0",
     "@coremedia/ckeditor5-core-common": "23.0.1-rc.0",
     "@coremedia/ckeditor5-logging": "23.0.1-rc.0"
   }
