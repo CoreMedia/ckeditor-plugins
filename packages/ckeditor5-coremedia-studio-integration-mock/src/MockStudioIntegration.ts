@@ -4,6 +4,7 @@ import MockRichtextConfigurationService from "./content/MockRichtextConfiguratio
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
+import { MockCollectionViewService } from "./content/MockCollectionViewService";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
@@ -11,8 +12,8 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 import MockClipboardService from "./content/MockClipboardService";
 import {
   createClipboardServiceDescriptor,
-  createContentReferenceServiceDescriptor,
   createContentImportServiceDescriptor,
+  createContentReferenceServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { MockContentReferenceService } from "./content/MockContentReferenceService";
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
@@ -41,6 +42,8 @@ export class MockStudioIntegration extends Plugin {
     serviceAgent.registerService(contentDisplayService);
     const contentSearchService = new MockContentSearchService(contentProvider);
     serviceAgent.registerService(contentSearchService);
+    const collectionViewService = new MockCollectionViewService(this.editor);
+    serviceAgent.registerService(collectionViewService);
     const richtextConfigurationService = new MockRichtextConfigurationService(this.editor, contentProvider);
     serviceAgent.registerService(richtextConfigurationService);
     const dragDropService = new MockDragDropService();

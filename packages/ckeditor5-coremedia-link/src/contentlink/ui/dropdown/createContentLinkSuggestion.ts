@@ -12,7 +12,7 @@ export const createContentLinkSuggestion: (props: ContentLinkSuggestionProps) =>
   uriPath,
   onClick,
 }): ContentLinkView => {
-  const contentLinkView = new ContentLinkView(editor, { renderTypeIcon: true });
+  const contentLinkView = new ContentLinkView(editor, { renderTypeIcon: true, renderStatusIcon: true });
 
   contentLinkView.set("uriPath", uriPath);
   contentLinkView.on("contentClick", () => onClick(uriPath));
