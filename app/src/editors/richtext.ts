@@ -66,6 +66,7 @@ import type {
 import {
   replaceByElementAndClassBackAndForth,
   replaceElementByElementAndClass,
+  stripFixedAttributes,
 } from "@coremedia/ckeditor5-coremedia-richtext";
 import "ckeditor5/ckeditor5.css";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
@@ -111,6 +112,7 @@ const richTextRuleConfigurations: RuleConfig[] = [
     // we may skip it here.
     dataReservedClass: "mark",
   }),
+  stripFixedAttributes(),
 ];
 
 /**
@@ -169,11 +171,12 @@ const getRichTextConfig = (
     rules: richTextRuleConfigurations,
   };
 };
-export const createRichTextEditor: CKEditorInstanceFactory = (
+export const createRichTextEditor: CKEditorInstanceFactory = async (
   sourceElement: HTMLElement,
   state: ApplicationState,
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
+
   return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
     plugins: [
