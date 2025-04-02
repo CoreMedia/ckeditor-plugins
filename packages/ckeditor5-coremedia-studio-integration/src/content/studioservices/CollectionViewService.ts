@@ -48,6 +48,8 @@ export interface CollectionViewService {
    *
    * @param content The content to show in the collection view, given as a valid Studio Rest content URI.
    * @param options Additional options.
+   * @param options.additionalOptions Additional but undetermined options that a service implementation might support
+   * @param options.focus Whether the app that opens the form should be focused / brought into the foreground.
    *
    * @returns A promise that resolves to `true` if the content form was shown successfully, or `false` otherwise.
    */
