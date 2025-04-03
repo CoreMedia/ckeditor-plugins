@@ -8,6 +8,9 @@ const { bundler, loaders } = await import("@ckeditor/ckeditor5-dev-utils");
 const { CKEditorTranslationsPlugin } = await import("@ckeditor/ckeditor5-dev-translations");
 const { default: TerserPlugin } = await import("terser-webpack-plugin");
 const { default: CircularDependencyPlugin } = await import("circular-dependency-plugin");
+import dotenv from "dotenv";
+// use root .env file
+dotenv.config({ path: "../.env"});
 import { fileURLToPath } from "url";
 
 const filename = fileURLToPath(import.meta.url);
@@ -55,6 +58,9 @@ export default {
     new CircularDependencyPlugin({
       exclude: /node_modules/,
       failOnError: true,
+    }),
+    new webpack.DefinePlugin({
+      CKEDITOR_LICENSE_KEY: JSON.stringify(process.env.CKEDITOR_LICENSE_KEY),
     }),
   ],
 

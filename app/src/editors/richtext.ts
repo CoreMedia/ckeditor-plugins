@@ -79,6 +79,9 @@ import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import { updatePreview } from "../preview";
 
+export const licenseKeyErrorMessage =
+  "Please provide a valid license key for your CKEditor5 instance. Please create a .env file in the workspace root and make your license as CKEDITOR_LICENSE_KEY variable. Please use 'GPL' if you want to use the GNU General Public License.";
+
 const {
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
@@ -177,278 +180,283 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
 
-  return ClassicEditor.create(sourceElement, {
-    placeholder: "Type your text here...",
-    plugins: [
-      ...imagePlugins,
-      Alignment,
-      Autoformat,
-      Autosave,
-      Blocklist,
-      BlockQuote,
-      DialogVisibility,
-      Bold,
-      Code,
-      CodeBlock,
-      ContentLinks,
-      ContentClipboard,
-      DataFacade,
-      Differencing,
-      Essentials,
-      FindAndReplace,
-      Heading,
-      Highlight,
-      Indent,
-      Italic,
-      AutoLink,
-      Link,
-      LinkAttributes,
-      LinkImage,
-      LinkTarget,
-      CoreMediaStudioEssentials,
-      List,
-      Paragraph,
-      PasteContentPlugin,
-      PasteFromOffice,
-      RemoveFormat,
-      Strikethrough,
-      SourceEditing,
-      Subscript,
-      Superscript,
-      Table,
-      TableToolbar,
-      Underline,
-      CoreMediaFontMapper,
-      MockInputExamplePlugin,
-      MockStudioIntegration,
-    ],
-    toolbar: [
-      "undo",
-      "redo",
-      "|",
-      "heading",
-      "|",
-      "bold",
-      "italic",
-      "underline",
-      {
-        label: "More formatting",
-        icon: "threeVerticalDots",
-        items: ["strikethrough", "subscript", "superscript", "code"],
-      },
-      "highlight",
-      "removeFormat",
-      "|",
-      "link",
-      "|",
-      "alignment",
-      "blockQuote",
-      "codeBlock",
-      "|",
-      "insertTable",
-      "|",
-      "numberedList",
-      "bulletedList",
-      "outdent",
-      "indent",
-      "|",
-      "pasteContent",
-      "findAndReplace",
-      "blocklist",
-      "|",
-      "sourceEditing",
-    ],
-    alignment: {
-      // The following alternative to signal alignment was used in CKEditor 4
-      // of CoreMedia CMCC 10 and before.
-      // Note that in contrast to CKEditor 4 approach, these classes are now
-      // applicable to any block element, while it supported only `<p>` in the
-      // past.
-      options: [
-        {
-          name: "left",
-          className: "align--left",
-        },
-        {
-          name: "right",
-          className: "align--right",
-        },
-        {
-          name: "center",
-          className: "align--center",
-        },
-        {
-          name: "justify",
-          className: "align--justify",
-        },
+  try {
+    return ClassicEditor.create(sourceElement, {
+      licenseKey: CKEDITOR_LICENSE_KEY,
+      placeholder: "Type your text here...",
+      plugins: [
+        ...imagePlugins,
+        Alignment,
+        Autoformat,
+        Autosave,
+        Blocklist,
+        BlockQuote,
+        DialogVisibility,
+        Bold,
+        Code,
+        CodeBlock,
+        ContentLinks,
+        ContentClipboard,
+        DataFacade,
+        Differencing,
+        Essentials,
+        FindAndReplace,
+        Heading,
+        Highlight,
+        Indent,
+        Italic,
+        AutoLink,
+        Link,
+        LinkAttributes,
+        LinkImage,
+        LinkTarget,
+        CoreMediaStudioEssentials,
+        List,
+        Paragraph,
+        PasteContentPlugin,
+        PasteFromOffice,
+        RemoveFormat,
+        Strikethrough,
+        SourceEditing,
+        Subscript,
+        Superscript,
+        Table,
+        TableToolbar,
+        Underline,
+        CoreMediaFontMapper,
+        MockInputExamplePlugin,
+        MockStudioIntegration,
       ],
-    },
-    heading: {
-      options: [
+      toolbar: [
+        "undo",
+        "redo",
+        "|",
+        "heading",
+        "|",
+        "bold",
+        "italic",
+        "underline",
         {
-          model: "paragraph",
-          title: "Paragraph",
-          class: "ck-heading_paragraph",
+          label: "More formatting",
+          icon: "threeVerticalDots",
+          items: ["strikethrough", "subscript", "superscript", "code"],
         },
-        {
-          model: "heading1",
-          view: "h1",
-          title: "Heading 1",
-          class: "ck-heading_heading1",
-        },
-        {
-          model: "heading2",
-          view: "h2",
-          title: "Heading 2",
-          class: "ck-heading_heading2",
-        },
-        {
-          model: "heading3",
-          view: "h3",
-          title: "Heading 3",
-          class: "ck-heading_heading3",
-        },
-        {
-          model: "heading4",
-          view: "h4",
-          title: "Heading 4",
-          class: "ck-heading_heading4",
-        },
-        {
-          model: "heading5",
-          view: "h5",
-          title: "Heading 5",
-          class: "ck-heading_heading5",
-        },
-        {
-          model: "heading6",
-          view: "h6",
-          title: "Heading 6",
-          class: "ck-heading_heading6",
-        },
+        "highlight",
+        "removeFormat",
+        "|",
+        "link",
+        "|",
+        "alignment",
+        "blockQuote",
+        "codeBlock",
+        "|",
+        "insertTable",
+        "|",
+        "numberedList",
+        "bulletedList",
+        "outdent",
+        "indent",
+        "|",
+        "pasteContent",
+        "findAndReplace",
+        "blocklist",
+        "|",
+        "sourceEditing",
       ],
-    },
-    link: {
-      defaultProtocol: "https://",
-      defaultTargets: [
-        {
-          // May be used to experiment with default target selection.
-          filter: (url) => url.endsWith("#newTab"),
-          target: "_blank",
-        },
-      ],
-      ...linkAttributesConfig,
-      /*decorators: {
-        hasTitle: {
-          mode: "manual",
-          label: "Title",
-          attributes: {
-            title:
-              'Example how standard-decorators of the link-plugin works. To enable/disable, just rename the decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
-          },
-        },
-      },*/
-    },
-    image: {
-      styles: {
-        // Defining custom styling options for the images.
+      alignment: {
+        // The following alternative to signal alignment was used in CKEditor 4
+        // of CoreMedia CMCC 10 and before.
+        // Note that in contrast to CKEditor 4 approach, these classes are now
+        // applicable to any block element, while it supported only `<p>` in the
+        // past.
         options: [
           {
-            name: "float-left",
-            icon: alignLeftIcon,
-            title: "Left-aligned",
-            className: "float--left",
-            modelElements: ["imageInline"],
+            name: "left",
+            className: "align--left",
           },
           {
-            name: "float-right",
-            icon: alignRightIcon,
-            title: "Right-aligned",
-            className: "float--right",
-            modelElements: ["imageInline"],
+            name: "right",
+            className: "align--right",
           },
           {
-            name: "float-none",
-            icon: withinTextIcon,
-            title: "Within Text",
-            className: "float--none",
-            modelElements: ["imageInline"],
+            name: "center",
+            className: "align--center",
           },
           {
-            name: "inline",
-            title: "Page default",
-            icon: pageDefaultIcon,
-            modelElements: ["imageInline"],
+            name: "justify",
+            className: "align--justify",
           },
         ],
       },
-      toolbar: [
-        "imageStyle:float-left",
-        "imageStyle:float-right",
-        "imageStyle:float-none",
-        "|",
-        "imageStyle:inline",
-        "|",
-        "linkImage",
-        "imageTextAlternative",
-        "contentImageOpenInTab",
-      ],
-    },
-    table: {
-      contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
-    },
-    language: {
-      // Language switch only applies to editor instance.
-      ui: uiLanguage,
-      // Won't change the language of content.
-      content: "en",
-    },
-    autosave: {
-      waitingTime: 1000, // in ms
-    },
-    dataFacade: {
-      save(dataApi): Promise<void> {
-        console.log("Save triggered...");
-        const start = performance.now();
-        updatePreview(dataApi.getData(), "xml");
-        console.log(`Saved data within ${performance.now() - start} ms.`);
-        return Promise.resolve();
+      heading: {
+        options: [
+          {
+            model: "paragraph",
+            title: "Paragraph",
+            class: "ck-heading_paragraph",
+          },
+          {
+            model: "heading1",
+            view: "h1",
+            title: "Heading 1",
+            class: "ck-heading_heading1",
+          },
+          {
+            model: "heading2",
+            view: "h2",
+            title: "Heading 2",
+            class: "ck-heading_heading2",
+          },
+          {
+            model: "heading3",
+            view: "h3",
+            title: "Heading 3",
+            class: "ck-heading_heading3",
+          },
+          {
+            model: "heading4",
+            view: "h4",
+            title: "Heading 4",
+            class: "ck-heading_heading4",
+          },
+          {
+            model: "heading5",
+            view: "h5",
+            title: "Heading 5",
+            class: "ck-heading_heading5",
+          },
+          {
+            model: "heading6",
+            view: "h6",
+            title: "Heading 6",
+            class: "ck-heading_heading6",
+          },
+        ],
       },
-    },
-    [COREMEDIA_RICHTEXT_CONFIG_KEY]: getRichTextConfig(richTextCompatibility),
-    [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
-      aliases: [
-        // As we represent `<mark>` as `<span class="mark">`, we must ensure,
-        // that the same attributes are kept as is from CMS. For example, the
-        // dir-attribute, which is valid for `<span>` must not be removed just
-        // because CKEditor is not configured to handle it.
-        {
-          name: "mark",
-          inherit: "span",
+      link: {
+        defaultProtocol: "https://",
+        defaultTargets: [
+          {
+            // May be used to experiment with default target selection.
+            filter: (url) => url.endsWith("#newTab"),
+            target: "_blank",
+          },
+        ],
+        ...linkAttributesConfig,
+        /*decorators: {
+          hasTitle: {
+            mode: "manual",
+            label: "Title",
+            attributes: {
+              title:
+                'Example how standard-decorators of the link-plugin works. To enable/disable, just rename the decorators section to "disabled_decorators" and back again to "decorators" to activate it and see the results.',
+            },
+          },
+        },*/
+      },
+      image: {
+        styles: {
+          // Defining custom styling options for the images.
+          options: [
+            {
+              name: "float-left",
+              icon: alignLeftIcon,
+              title: "Left-aligned",
+              className: "float--left",
+              modelElements: ["imageInline"],
+            },
+            {
+              name: "float-right",
+              icon: alignRightIcon,
+              title: "Right-aligned",
+              className: "float--right",
+              modelElements: ["imageInline"],
+            },
+            {
+              name: "float-none",
+              icon: withinTextIcon,
+              title: "Within Text",
+              className: "float--none",
+              modelElements: ["imageInline"],
+            },
+            {
+              name: "inline",
+              title: "Page default",
+              icon: pageDefaultIcon,
+              modelElements: ["imageInline"],
+            },
+          ],
         },
-      ],
-    },
-    // @ts-expect-error - TODO: Typing issues as it seems.
-    [COREMEDIA_LINK_CONFIG_KEY]: {
-      linkBalloon: {
-        keepOpen: {
-          ids: ["example-to-keep-the-link-balloon-open-on-click", "inputExampleContentButton"],
-          classes: ["example-class-to-keep-the-link-balloon-open-on-click"],
+        toolbar: [
+          "imageStyle:float-left",
+          "imageStyle:float-right",
+          "imageStyle:float-none",
+          "|",
+          "imageStyle:inline",
+          "|",
+          "linkImage",
+          "imageTextAlternative",
+          "contentImageOpenInTab",
+        ],
+      },
+      table: {
+        contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
+      },
+      language: {
+        // Language switch only applies to editor instance.
+        ui: uiLanguage,
+        // Won't change the language of content.
+        content: "en",
+      },
+      autosave: {
+        waitingTime: 1000, // in ms
+      },
+      dataFacade: {
+        save(dataApi): Promise<void> {
+          console.log("Save triggered...");
+          const start = performance.now();
+          updatePreview(dataApi.getData(), "xml");
+          console.log(`Saved data within ${performance.now() - start} ms.`);
+          return Promise.resolve();
         },
       },
-    },
-    [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
-      // Demonstrates, how you may add more contents on the fly.
-      contents: [
-        {
-          id: 2,
-          name: "Some Example Document",
-          type: "document",
+      [COREMEDIA_RICHTEXT_CONFIG_KEY]: getRichTextConfig(richTextCompatibility),
+      [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
+        aliases: [
+          // As we represent `<mark>` as `<span class="mark">`, we must ensure,
+          // that the same attributes are kept as is from CMS. For example, the
+          // dir-attribute, which is valid for `<span>` must not be removed just
+          // because CKEditor is not configured to handle it.
+          {
+            name: "mark",
+            inherit: "span",
+          },
+        ],
+      },
+      // @ts-expect-error - TODO: Typing issues as it seems.
+      [COREMEDIA_LINK_CONFIG_KEY]: {
+        linkBalloon: {
+          keepOpen: {
+            ids: ["example-to-keep-the-link-balloon-open-on-click", "inputExampleContentButton"],
+            classes: ["example-class-to-keep-the-link-balloon-open-on-click"],
+          },
         },
-      ],
-    },
-  }).then((newEditor: ClassicEditor) => {
-    initInputExampleContent(newEditor);
-    return newEditor;
-  });
+      },
+      [COREMEDIA_MOCK_CONTENT_PLUGIN]: {
+        // Demonstrates, how you may add more contents on the fly.
+        contents: [
+          {
+            id: 2,
+            name: "Some Example Document",
+            type: "document",
+          },
+        ],
+      },
+    }).then((newEditor: ClassicEditor) => {
+      initInputExampleContent(newEditor);
+      return newEditor;
+    });
+  } catch (e) {
+    throw Error(licenseKeyErrorMessage);
+  }
 };
