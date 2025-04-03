@@ -4,6 +4,7 @@ import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
+  createCollectionViewServiceDescriptor,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
   getOrEvaluateIsDroppableResult,
@@ -19,11 +20,12 @@ import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
-import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
 import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
+import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -40,6 +42,8 @@ class ContentLinkFormViewExtension extends Plugin {
   static readonly requires = [LinkUI, ContentLinkCommandHook];
   #initialized = false;
   #contentLinkView: LabeledFieldView | undefined = undefined;
+
+  #linkSuggesterView: ContentLinkSuggesterView | undefined = undefined;
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
@@ -87,6 +91,7 @@ class ContentLinkFormViewExtension extends Plugin {
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
         showContentLinkField(formView, false);
+        this.#linkSuggesterView?.setVisible(true);
         return;
       }
       const { contentUriPath: value } = source;
@@ -100,11 +105,12 @@ class ContentLinkFormViewExtension extends Plugin {
         });
       }
 
+      this.#linkSuggesterView?.setVisible(!value);
       // set visibility of url and content field
       showContentLinkField(formView, !!value);
 
       // focus contentLinkView when formView is opened and urlInputView is not visible
-      this.#focusContentLinkViewIfVisible(formView);
+      this.#focusContentLinkViewOrLinkSuggester();
     });
     this.#rebindSaveEnabled(linkCommand, formView);
 
@@ -113,11 +119,11 @@ class ContentLinkFormViewExtension extends Plugin {
       formView.element?.classList.add(ContentLinkFormViewExtension.#CM_FORM_VIEW_CLS);
       formView.element?.classList.add(ContentLinkFormViewExtension.#CM_LINK_FORM_CLS);
       const value = formView.contentUriPath;
+      this.#linkSuggesterView?.setVisible(!value);
       showContentLinkField(formView, !!value);
     }
 
-    // focus contentLinkView when formView is opened and urlInputView is not visible
-    this.#focusContentLinkViewIfVisible(formView);
+    this.#focusContentLinkViewOrLinkSuggester();
 
     // We need to propagate the content name prior to the LinkCommand being executed.
     // This is required for collapsed selections, where the LinkCommand wants to
@@ -142,14 +148,14 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   /**
-   * Focus the ContentLinkView if the UrlInputView is hidden.
+   * Focus the ContentLinkView if the LinkSuggester is hidden.
    *
-   * @param formView - the formView
    * @private
    */
-  #focusContentLinkViewIfVisible(formView: LinkFormView): void {
-    if (!formView.urlInputView.element || formView.urlInputView.element.style.visibility === "") {
-      // the urlInput is hidden, focus contentView instead
+  #focusContentLinkViewOrLinkSuggester(): void {
+    if (this.#linkSuggesterView?.isVisible()) {
+      this.#linkSuggesterView.focus();
+    } else {
       if (this.#contentLinkView) {
         this.#contentLinkView.focus();
       }
@@ -182,8 +188,22 @@ class ContentLinkFormViewExtension extends Plugin {
       .to(linkCommand, "isEnabled", formView, "contentName", formView, "contentUriPath", enabledHandler);
   }
 
+  #resetValue() {
+    const linkUI = this.editor.plugins.get(LinkUI);
+    const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
+    formView.set({
+      contentUriPath: undefined,
+    });
+    actionsView.set({
+      contentUriPath: undefined,
+    });
+    this.#linkSuggesterView?.resetInputValue();
+    this.#linkSuggesterView?.resetFilterValue();
+    this.#linkSuggesterView?.focus();
+  }
+
   #extendView(linkUI: LinkUI, formView: AugmentedLinkFormView): void {
-    const contentLinkView = createContentLinkView(linkUI, this.editor);
+    const contentLinkView = createContentLinkView(linkUI, this.editor, () => this.#resetValue());
     this.#contentLinkView = contentLinkView;
     contentLinkView.on("change:contentName", () => {
       if (!this.editor.isReadOnly) {
@@ -193,7 +213,9 @@ class ContentLinkFormViewExtension extends Plugin {
         }
       }
     });
-    ContentLinkFormViewExtension.#render(contentLinkView, linkUI, formView);
+
+    this.#render(contentLinkView, linkUI, formView);
+
     this.#adaptFormViewFields(formView);
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
@@ -203,19 +225,27 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
+
     formView.registerChild(contentLinkView);
     if (!contentLinkView.isRendered) {
       logger.debug(`ContentLinkView not rendered yet. Triggering render().`);
       contentLinkView.render();
     }
+
+    if (this.#linkSuggesterView) {
+      formView.registerChild(this.#linkSuggesterView);
+    }
+
     const {
       element: formViewElement,
       urlInputView: { element: urlInputViewElement },
     } = formView;
+
     const { element: contentLinkViewElement } = contentLinkView;
+
     if (!formViewElement || !contentLinkViewElement || !urlInputViewElement) {
       logger.debug("Unexpected state on render: Required elements are missing", {
         formViewElement,
@@ -224,23 +254,48 @@ class ContentLinkFormViewExtension extends Plugin {
       });
       throw new Error("Unexpected state on render: Required elements are missing.");
     }
+
+    this.#linkSuggesterView = new ContentLinkSuggesterView({
+      editor: this.editor,
+      parent: formView,
+      onChangeInputValue: (inputValue) => {
+        formView.urlInputView.fieldView.set({
+          value: inputValue,
+        });
+      },
+      onClickOnLink: (uriPath: string) => {
+        this.#setDataAndSwitchToContentLink(linkUI, uriPath);
+        this.#linkSuggesterView?.resetInputValue();
+      },
+      onOpenLibrary: () => {
+        const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
+        void serviceAgent
+          .fetchService(createCollectionViewServiceDescriptor())
+          .then((collectionViewService) =>
+            collectionViewService.showContentInCollectionView(formView.contentUriPath ?? ""),
+          );
+      },
+      setupDnD: (view: LabeledFieldView) => this.#addDragAndDropListeners(view, linkUI, formView),
+    });
+
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
+    this.#linkSuggesterView?.setupPositionInParent(urlInputViewElement.nextSibling);
+
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     const { urlInputView } = formView;
-    hasRequiredInternalFocusablesProperty(formView) &&
+
+    if (hasRequiredInternalFocusablesProperty(formView)) {
       handleFocusManagement(formView, contentLinkButtons, urlInputView);
-    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
+      this.#linkSuggesterView?.setupFocusHandling((views) => handleFocusManagement(formView, views, urlInputView));
+    }
+
+    this.#addDragAndDropListeners(contentLinkView, linkUI, formView);
   }
 
   #adaptFormViewFields(formView: LinkFormView): void {
-    const t = this.editor.locale.t;
-    formView.urlInputView.set({
-      label: t("Link"),
-      class: ["cm-ck-external-link-field"],
-    });
-    formView.urlInputView.fieldView.set({
-      placeholder: t("Enter url or drag and drop content onto this area."),
-    });
+    // we use a different field
+    formView.urlInputView.element && (formView.urlInputView.element.style.display = "none");
+
     if (!formView.element) {
       ContentLinkFormViewExtension.#logger.error("FormView must be rendered to provide classes");
     }
@@ -264,21 +319,21 @@ class ContentLinkFormViewExtension extends Plugin {
     return buttons;
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     if (!contentLinkView.fieldView.element) {
       logger.warn("ContentLinkView not completely rendered. Drag and drop won't work.", contentLinkView);
     }
     contentLinkView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
-      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+      void this.#onDropOnLinkField(dragEvent, linkUI);
     });
     contentLinkView.fieldView.element?.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
     if (!formView.urlInputView.fieldView.element) {
       logger.warn("FormView.urlInputView not completely rendered. Drag and drop won't work.", formView);
     }
     formView.urlInputView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
-      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+      void this.#onDropOnLinkField(dragEvent, linkUI);
     });
     formView.urlInputView.fieldView.element?.addEventListener(
       "dragover",
@@ -287,7 +342,7 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug("Finished adding drag and drop listeners.");
   }
 
-  static async #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): Promise<void> {
+  async #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): Promise<void> {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
       return;
@@ -297,7 +352,7 @@ class ContentLinkFormViewExtension extends Plugin {
       const data: string | undefined = dragEvent.dataTransfer?.getData("text/plain");
       if (data) {
         dragEvent.preventDefault();
-        ContentLinkFormViewExtension.#setDataAndSwitchToExternalLink(linkUI, data);
+        this.#setDataAndSwitchToExternalLink(linkUI, data);
       }
       return;
     }
@@ -326,7 +381,7 @@ class ContentLinkFormViewExtension extends Plugin {
       .then((importedUri: string) => {
         const ckeModelUri = requireContentCkeModelUri(importedUri);
         ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
-        ContentLinkFormViewExtension.#setDataAndSwitchToContentLink(linkUI, ckeModelUri);
+        this.#setDataAndSwitchToContentLink(linkUI, ckeModelUri);
       })
       .catch((reason) => {
         logger.warn(reason);
@@ -362,16 +417,17 @@ class ContentLinkFormViewExtension extends Plugin {
     }
   }
 
-  static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
+  #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
     formView.urlInputView.fieldView.set("value", data);
     formView.set("contentUriPath", null);
     actionsView.set("contentUriPath", null);
     showContentLinkField(formView, false);
     showContentLinkField(actionsView, false);
+    this.#linkSuggesterView?.setVisible(true);
   }
 
-  static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
+  #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
 
     // Check if the balloon is visible. If it was closed, while data was loaded, just return.
@@ -384,6 +440,7 @@ class ContentLinkFormViewExtension extends Plugin {
     actionsView.set("contentUriPath", data);
     showContentLinkField(formView, true);
     showContentLinkField(actionsView, true);
+    this.#linkSuggesterView?.setVisible(false);
   }
 
   /**

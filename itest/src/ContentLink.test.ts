@@ -240,6 +240,7 @@ describe("Content Link Feature", () => {
     await page.keyboard.type(`content:${id}`);
 
     await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
 
     const contentLink = view.locator.locator(`a`);

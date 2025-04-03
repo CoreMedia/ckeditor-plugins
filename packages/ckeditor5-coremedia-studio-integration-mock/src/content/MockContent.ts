@@ -85,11 +85,15 @@ const asStaticContent = (id: number): MockContent => {
   // By default, we assume that only documents are linkable.
   const linkable = isDocumentId;
   const name: string[] = [defaultNameSupplier({ id, type })];
+  const siteName = ["Test-Site"];
+  const localeName = ["English (United States)"];
   return {
     id,
     type,
     linkable,
     name,
+    siteName,
+    localeName,
     editing: [false],
     readable: [true],
     embeddable: false,

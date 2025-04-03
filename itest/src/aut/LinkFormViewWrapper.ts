@@ -18,7 +18,7 @@ export class LinkFormViewWrapper implements Locatable {
   }
 
   get urlInputField(): Locator {
-    return this.locator.locator(".ck-input");
+    return this.locator.getByPlaceholder("Type to search content, enter");
   }
 
   get contentLinkView(): ContentLinkViewWrapper {
