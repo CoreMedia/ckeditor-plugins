@@ -378,6 +378,9 @@ importers:
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       jest:
         specifier: ^29.7.0
         version: 29.7.0

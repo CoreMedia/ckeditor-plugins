@@ -1,5 +1,8 @@
 import { ClassicEditor, Editor, type EditorConfig } from "ckeditor5";
+import dotenv from "dotenv";
 
+// use root .env file
+dotenv.config({});
 export const createClassicEditorWithLicense = (element: HTMLElement, config: EditorConfig): Promise<ClassicEditor> =>
   ClassicEditor.create(element, { ...config, licenseKey: "" });
 
