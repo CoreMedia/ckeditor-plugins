@@ -22,6 +22,6 @@ export class MockContentSearchService implements ContentSearchService {
   }
 
   observe_contentSuggestions(filterValue: string): Observable<string[]> {
-    return of(uriPaths.filter((uriPath) => uriPath.match(filterValue)));
+    return of(filterValue.length < 3 ? uriPaths.slice(0, 5) : uriPaths.filter((uriPath) => uriPath.match(filterValue)));
   }
 }

@@ -272,10 +272,13 @@ class ContentLinkFormViewExtension extends Plugin {
         void serviceAgent
           .fetchService(createCollectionViewServiceDescriptor())
           .then((collectionViewService) =>
-            collectionViewService.showContentInCollectionView(formView.contentUriPath ?? ""),
+            formView.contentUriPath
+              ? collectionViewService.showContentInCollectionView(formView.contentUriPath)
+              : collectionViewService.openSearchResult({}),
           );
       },
       setupDnD: (view: LabeledFieldView) => this.#addDragAndDropListeners(view, linkUI, formView),
+      options: { minFilterValueLength: 0 },
     });
 
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);

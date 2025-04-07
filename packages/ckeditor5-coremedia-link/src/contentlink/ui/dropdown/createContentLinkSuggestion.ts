@@ -15,6 +15,7 @@ export const createContentLinkSuggestion: (props: ContentLinkSuggestionProps) =>
   const contentLinkView = new ContentLinkView(editor, { renderTypeIcon: true, renderStatusIcon: true });
 
   contentLinkView.set("uriPath", uriPath);
+  contentLinkView.set("contentName", editor.locale.t("Loading Content..."));
   contentLinkView.on("contentClick", () => onClick(uriPath));
 
   return contentLinkView;

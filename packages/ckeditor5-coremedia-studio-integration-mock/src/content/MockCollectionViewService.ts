@@ -24,6 +24,19 @@ export class MockCollectionViewService implements CollectionViewService {
     return true;
   }
 
+  async openSearchResult() {
+    const node: Element = document.createElement("DIV");
+    node.classList.add("notification");
+    const textNode: Text = document.createTextNode(`Open Library`);
+    node.appendChild(textNode);
+    document.getElementById("notifications")?.appendChild(node);
+    setTimeout(() => {
+      document.getElementById("notifications")?.removeChild(node);
+    }, 4000);
+
+    return true;
+  }
+
   getName(): string {
     return "collectionViewService";
   }

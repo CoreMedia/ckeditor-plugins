@@ -6,7 +6,7 @@ import {
   DisplayHint,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { combineLatest, Observable, OperatorFunction, Subscription } from "rxjs";
+import { combineLatest, delay, Observable, OperatorFunction, Subscription } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import {
@@ -113,7 +113,7 @@ class MockContentDisplayService implements ContentDisplayService {
       localeNameSubscriptrion,
       typeSubscription,
       stateSubscription,
-    ]).pipe(toContentAsLink);
+    ]).pipe(delay(3000), toContentAsLink);
   }
 }
 

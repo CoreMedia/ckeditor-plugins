@@ -69,4 +69,31 @@ export interface CollectionViewService {
       additionalOptions?: Record<string, unknown>;
     },
   ): Promise<boolean>;
+
+  /**
+   * Open a search result in the collection view, given an unknown/unused searchState
+   *
+   * @param searchState the search state.
+   * @param options Additional options.
+   * @param options.additionalOptions Additional but undetermined options that a service implementation might support
+   * @param options.focus Whether the app that opens the form should be focused / brought into the foreground.
+   *
+   * @returns A promise indicating success or failure opening the search result.
+   */
+  openSearchResult(
+    searchState: Record<string, never>,
+    options?: {
+      /**
+       * Whether the app that opens the form should be focused / brought into the foreground.
+       */
+      focus?: boolean;
+
+      /**
+       * Additional but undetermined options that a service implementation might support but is not
+       * obliged to (for example, one implementation might support a 'view' option to open
+       * the content in one specific view or another but other implementations might not).
+       */
+      additionalOptions?: Record<string, unknown>;
+    },
+  ): Promise<boolean>;
 }
