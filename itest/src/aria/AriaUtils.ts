@@ -4,7 +4,7 @@ import { Locator } from "playwright";
 export const expectFocusedElementHasAriaText = async (ariaLabelContent: string): Promise<void> => {
   await waitForExpect(async () => {
     const focusedElement: Locator = await page.locator("*:focus");
-    await expect(new LocatorWithAriaLabel(focusedElement)).waitToHaveAriaLabel(ariaLabelContent);
+    await waitForExpect(() => expect(new LocatorWithAriaLabel(focusedElement)).waitToHaveAriaLabel(ariaLabelContent));
   });
 };
 

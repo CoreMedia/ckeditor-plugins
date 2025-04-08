@@ -25,6 +25,10 @@ export class LinkFormViewWrapper implements Locatable {
     return ContentLinkViewWrapper.fromParent(this);
   }
 
+  get saveButtonLocator(): Locator {
+    return this.locator.locator("button.ck-button-save");
+  }
+
   save(): Promise<void> {
     return this.locator.locator("button.ck-button-save").click();
   }

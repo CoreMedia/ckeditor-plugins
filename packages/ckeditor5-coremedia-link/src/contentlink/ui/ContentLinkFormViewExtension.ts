@@ -44,6 +44,7 @@ class ContentLinkFormViewExtension extends Plugin {
   #contentLinkView: LabeledFieldView | undefined = undefined;
 
   #linkSuggesterView: ContentLinkSuggesterView | undefined = undefined;
+  #suggesterInputValue: string | undefined = undefined;
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
@@ -179,9 +180,7 @@ class ContentLinkFormViewExtension extends Plugin {
       isEnabled: boolean,
       contentName: string | undefined | null,
       contentUriPath: string | undefined | null,
-    ): boolean =>
-      // Either contentUriPath must be unset or contentName must be set.
-      isEnabled && (!contentUriPath || !!contentName);
+    ): boolean => isEnabled && !!this.#suggesterInputValue && (!contentUriPath || !!contentName);
     saveButtonView.unbind("isEnabled");
     saveButtonView
       .bind("isEnabled")
@@ -191,14 +190,14 @@ class ContentLinkFormViewExtension extends Plugin {
   #resetValue() {
     const linkUI = this.editor.plugins.get(LinkUI);
     const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
+    this.#linkSuggesterView?.resetInputValue();
+    this.#linkSuggesterView?.resetFilterValue();
     formView.set({
       contentUriPath: undefined,
     });
     actionsView.set({
       contentUriPath: undefined,
     });
-    this.#linkSuggesterView?.resetInputValue();
-    this.#linkSuggesterView?.resetFilterValue();
     this.#linkSuggesterView?.focus();
   }
 
@@ -214,7 +213,7 @@ class ContentLinkFormViewExtension extends Plugin {
       }
     });
 
-    this.#render(contentLinkView, linkUI, formView);
+    this.#render(contentLinkView, linkUI);
 
     this.#adaptFormViewFields(formView);
     formView.on("cancel", () => {
@@ -225,9 +224,27 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  #onChangeSuggesterInputValue(inputValue: string, linkUI: LinkUI) {
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
+
+    this.#suggesterInputValue = inputValue;
+    // set a different value each time to trigger an update on "isEnabled" of the save button
+    formView.set({
+      contentUriPath: formView.contentUriPath === undefined ? "" : undefined,
+    });
+    formView.urlInputView.fieldView.value = inputValue;
+  }
+
+  #onClickOnLinkSuggestion(uriPath: string, linkUI: LinkUI): void {
+    this.#setDataAndSwitchToContentLink(linkUI, uriPath);
+    this.#linkSuggesterView?.resetInputValue();
+  }
+
+  #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
+
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
 
     formView.registerChild(contentLinkView);
     if (!contentLinkView.isRendered) {
@@ -258,15 +275,8 @@ class ContentLinkFormViewExtension extends Plugin {
     this.#linkSuggesterView = new ContentLinkSuggesterView({
       editor: this.editor,
       parent: formView,
-      onChangeInputValue: (inputValue) => {
-        formView.urlInputView.fieldView.set({
-          value: inputValue,
-        });
-      },
-      onClickOnLink: (uriPath: string) => {
-        this.#setDataAndSwitchToContentLink(linkUI, uriPath);
-        this.#linkSuggesterView?.resetInputValue();
-      },
+      onChangeInputValue: (inputValue) => this.#onChangeSuggesterInputValue(inputValue, linkUI),
+      onClickOnLink: (uriPath: string) => this.#onClickOnLinkSuggestion(uriPath, linkUI),
       onOpenLibrary: () => {
         const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
         void serviceAgent

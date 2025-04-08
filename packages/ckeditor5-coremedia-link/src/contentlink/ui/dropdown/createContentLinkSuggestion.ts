@@ -16,6 +16,7 @@ export const createContentLinkSuggestion: (props: ContentLinkSuggestionProps) =>
 
   contentLinkView.set("uriPath", uriPath);
   contentLinkView.set("contentName", editor.locale.t("Loading Content..."));
+  contentLinkView.set("ariaLabelText", editor.locale.t("Loading Content..."));
   contentLinkView.on("contentClick", () => onClick(uriPath));
 
   return contentLinkView;

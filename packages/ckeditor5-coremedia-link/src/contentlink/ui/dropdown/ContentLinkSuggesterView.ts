@@ -23,7 +23,11 @@ interface ContentLinkSuggesterViewProps {
   onClickOnLink: (uriPath: string) => void;
   onOpenLibrary: () => void;
   setupDnD: (field: LabeledFieldView) => void;
-  options?: { debounceInterval?: number; minFilterValueLength?: number };
+  options?: {
+    debounceInterval?: number;
+    minFilterValueLength?: number;
+    inputAriaLabel?: string;
+  };
 }
 
 export class ContentLinkSuggesterView extends ViewCollection {
@@ -59,6 +63,7 @@ export class ContentLinkSuggesterView extends ViewCollection {
     this.#labeledFieldView.label = locale.t("Link");
     this.#labeledFieldView.fieldView.set({
       placeholder: locale.t("Type to search content, enter url or drag and drop content onto this area."),
+      ariaLabel: options?.inputAriaLabel ?? locale.t("Edit link"),
     });
 
     this.#openLibraryButton = new LibraryButtonView(onOpenLibrary, editor.locale.t("Open Library"), editor.locale);
@@ -112,7 +117,12 @@ export class ContentLinkSuggesterView extends ViewCollection {
             const view = viewsMap.get(uriPath);
             return !view || !toolbarView.items.find((item) => item === view);
           });
-          toRemove.forEach((view) => toolbarView.items.remove(view));
+          toRemove.forEach((view) => {
+            toolbarView.items.remove(view);
+            const uriPath = uriPathsMap.get(view);
+            uriPathsMap.delete(view);
+            uriPath && viewsMap.delete(uriPath);
+          });
           toAdd.forEach((uriPath) => {
             const view = createContentLinkSuggestion({ editor, uriPath, onClick: onClickOnLink });
             toolbarView.items.add(view);
