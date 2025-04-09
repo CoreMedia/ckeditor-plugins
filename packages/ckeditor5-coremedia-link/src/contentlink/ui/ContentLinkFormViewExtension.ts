@@ -292,7 +292,6 @@ class ContentLinkFormViewExtension extends Plugin {
             ? collectionViewService.showContentInCollectionView(formView.contentUriPath)
             : collectionViewService.openSearchResult({
                 searchText: this.#suggesterInputValue,
-                contentType: "CMLinkable",
               }),
         );
       },

@@ -13,12 +13,8 @@ export { createContentDisplayServiceDescriptor } from "./content/ContentDisplayS
 export { default as ContentSearchService } from "./content/ContentSearchService";
 export { createContentSearchServiceDescriptor } from "./content/ContentSearchServiceDescriptor";
 
-export {
-  CollectionViewService,
-  createCollectionViewServiceDescriptor,
-  CollectionViewServiceProps,
-  SearchState,
-} from "./content/studioservices/CollectionViewService";
+export { CollectionViewLinkService, LinkSearchState } from "./content/CollectionViewLinkService";
+export { createCollectionViewServiceDescriptor } from "./content/CollectionViewLinkServiceDescriptor";
 
 export { default as RichtextConfigurationService } from "./content/RichtextConfigurationService";
 export { createRichtextConfigurationServiceDescriptor } from "./content/RichtextConfigurationServiceDescriptor";

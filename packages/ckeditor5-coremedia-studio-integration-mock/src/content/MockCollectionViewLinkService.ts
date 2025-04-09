@@ -2,9 +2,9 @@
 /* eslint no-restricted-globals: off */
 
 import { Editor } from "ckeditor5";
-import { CollectionViewService, SearchState } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { CollectionViewLinkService, LinkSearchState } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
-export class MockCollectionViewService implements CollectionViewService {
+export class MockCollectionViewLinkService implements CollectionViewLinkService {
   readonly #editor: Editor;
 
   constructor(editor: Editor) {
@@ -24,7 +24,7 @@ export class MockCollectionViewService implements CollectionViewService {
     return true;
   }
 
-  async openSearchResult(searchState: SearchState) {
+  async openSearchResult(searchState: LinkSearchState) {
     const node: Element = document.createElement("DIV");
     node.classList.add("notification");
     const textNode: Text = document.createTextNode(`Open Library, searchState: ${JSON.stringify(searchState)}`);
@@ -38,6 +38,6 @@ export class MockCollectionViewService implements CollectionViewService {
   }
 
   getName(): string {
-    return "collectionViewService";
+    return "collectionViewLinkService";
   }
 }

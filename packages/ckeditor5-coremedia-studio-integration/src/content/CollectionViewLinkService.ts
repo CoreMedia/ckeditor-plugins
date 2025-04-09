@@ -1,44 +1,10 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
-
-export interface SearchState {
+export interface LinkSearchState {
   /**
    * The search text that is used for the collection view.
    *
    * Defaults to the empty string.
    */
   searchText?: string;
-
-  /**
-   * The content type that is used in the content type filter. It is given by its content type name.
-   *
-   * Defaults to "Content_".
-   */
-  contentType?: string;
-}
-
-/**
- * Additional properties of the {@link CollectionViewService}.
- *
- * @public
- */
-export interface CollectionViewServiceProps {}
-
-/**
- * Creates a service descriptor for registering and retrieving services of type {@link CollectionViewService} with the `ServiceAgent`.
- *
- * @param props Optional additional properties of the {@link CollectionViewService}.
- *
- * @returns A {@link ServiceDescriptorWithProps} for a {@link CollectionViewService}.
- *
- * @public
- */
-export function createCollectionViewServiceDescriptor(
-  props: CollectionViewServiceProps = {},
-): ServiceDescriptorWithProps<CollectionViewService, CollectionViewServiceProps> {
-  return serviceDescriptorFactory<CollectionViewService, CollectionViewServiceProps>({
-    ...props,
-    name: "collectionViewService",
-  });
 }
 
 /**
@@ -49,7 +15,7 @@ export function createCollectionViewServiceDescriptor(
  *
  * @public
  */
-export interface CollectionViewService {
+export interface CollectionViewLinkService {
   /**
    * Shows a content in the collection view.
    *
@@ -97,7 +63,7 @@ export interface CollectionViewService {
    * @returns A promise indicating success or failure opening the search result.
    */
   openSearchResult(
-    searchState: SearchState,
+    searchState: LinkSearchState,
     options?: {
       /**
        * Whether the app that opens the form should be focused / brought into the foreground.

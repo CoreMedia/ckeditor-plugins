@@ -4,7 +4,7 @@ import MockRichtextConfigurationService from "./content/MockRichtextConfiguratio
 import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./content/MockDragDropService";
 import MockWorkAreaService from "./content/MockWorkAreaService";
-import { MockCollectionViewService } from "./content/MockCollectionViewService";
+import { MockCollectionViewLinkService } from "./content/MockCollectionViewLinkService";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
@@ -42,7 +42,7 @@ export class MockStudioIntegration extends Plugin {
     serviceAgent.registerService(contentDisplayService);
     const contentSearchService = new MockContentSearchService(contentProvider);
     serviceAgent.registerService(contentSearchService);
-    const collectionViewService = new MockCollectionViewService(this.editor);
+    const collectionViewService = new MockCollectionViewLinkService(this.editor);
     serviceAgent.registerService(collectionViewService);
     const richtextConfigurationService = new MockRichtextConfigurationService(this.editor, contentProvider);
     serviceAgent.registerService(richtextConfigurationService);
