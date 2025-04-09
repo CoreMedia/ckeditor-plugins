@@ -38,7 +38,9 @@ export class ContentLinkSuggesterView extends ViewCollection {
   readonly #labeledFieldView: LabeledFieldView<InputTextView>;
   readonly #openLibraryButton: ButtonView;
   readonly #dropdown: DropdownView;
+  #isVisible = false;
   readonly #filterValueSubject: BehaviorSubject<string>;
+  readonly #onChangeInputValue: (value: string) => void;
 
   constructor({
     editor,
@@ -54,6 +56,7 @@ export class ContentLinkSuggesterView extends ViewCollection {
     this.#parent = parent;
     this.#minFilterValueLength = options?.minFilterValueLength ?? 3;
     this.#debounceInterval = options?.debounceInterval ?? 500;
+    this.#onChangeInputValue = onChangeInputValue;
 
     const { locale } = editor;
 
@@ -67,8 +70,6 @@ export class ContentLinkSuggesterView extends ViewCollection {
     });
 
     this.#openLibraryButton = new LibraryButtonView(onOpenLibrary, editor.locale.t("Open Library"), editor.locale);
-
-    this.#filterValueSubject.subscribe((value) => onChangeInputValue(value));
 
     const uriPathsMap = new Map<View, string>();
     const viewsMap = new Map<string, View>();
@@ -91,9 +92,13 @@ export class ContentLinkSuggesterView extends ViewCollection {
     this.#dropdown.isOpen = false;
 
     const updateItems = (filterValue: string, uriPaths: string[]) => {
+      if (!this.#isVisible) {
+        return;
+      }
       const { toolbarView } = this.#dropdown;
       if (toolbarView) {
         if (!uriPaths.length) {
+          toolbarView.items.forEach((view) => view.destroy());
           toolbarView.items.clear();
           if (filterValue.length >= this.#minFilterValueLength) {
             const view = new ButtonView(locale);
@@ -119,6 +124,7 @@ export class ContentLinkSuggesterView extends ViewCollection {
           });
           toRemove.forEach((view) => {
             toolbarView.items.remove(view);
+            view.destroy();
             const uriPath = uriPathsMap.get(view);
             uriPathsMap.delete(view);
             uriPath && viewsMap.delete(uriPath);
@@ -160,11 +166,7 @@ export class ContentLinkSuggesterView extends ViewCollection {
         this.#dropdown.isOpen = true;
         this.#labeledFieldView.fieldView.focus();
       }
-      if (typeof value !== "string") {
-        this.#filterValueSubject.next("");
-        return;
-      }
-      this.#filterValueSubject.next(value);
+      this.#onFieldValueChange(value ?? "");
     });
 
     parent.element && this.setParent(parent.element);
@@ -176,6 +178,11 @@ export class ContentLinkSuggesterView extends ViewCollection {
         this.#filterValueSubject.next(this.#filterValueSubject.getValue());
       }
     });
+  }
+
+  #onFieldValueChange(value: string): void {
+    this.#filterValueSubject.next(value);
+    this.#onChangeInputValue(value);
   }
 
   setupPositionInParent(beforeElement: Node | null) {
@@ -202,11 +209,16 @@ export class ContentLinkSuggesterView extends ViewCollection {
   }
 
   isVisible(): boolean {
-    return this.#dropdown.element?.style.display !== "none";
+    return this.#isVisible;
   }
 
   setVisible(visible: boolean) {
+    this.#isVisible = visible;
     this.#dropdown.element && (this.#dropdown.element.style.display = visible ? "" : "none");
     this.#openLibraryButton.element && (this.#openLibraryButton.element.style.display = visible ? "" : "none");
+    if (!visible) {
+      this.#dropdown.toolbarView?.items.forEach((view) => view.destroy());
+      this.#dropdown.toolbarView?.items.clear();
+    }
   }
 }

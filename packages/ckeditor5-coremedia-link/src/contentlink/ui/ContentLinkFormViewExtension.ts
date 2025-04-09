@@ -60,8 +60,12 @@ class ContentLinkFormViewExtension extends Plugin {
     });
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
       const { formView } = linkUI;
-      if (formView && formView === visibleView) {
-        this.onFormViewGetsActive(linkUI);
+      if (formView) {
+        if (formView === visibleView) {
+          this.onFormViewGetsActive(linkUI);
+        } else {
+          this.onFormViewGetsInactive();
+        }
       }
     });
     reportInitEnd(initInformation);
@@ -82,6 +86,10 @@ class ContentLinkFormViewExtension extends Plugin {
     this.#extendView(linkUI, formView);
   }
 
+  onFormViewGetsInactive(): void {
+    this.#linkSuggesterView?.setVisible(false);
+  }
+
   onFormViewGetsActive(linkUI: LinkUI): void {
     const { editor } = linkUI;
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
@@ -100,7 +108,7 @@ class ContentLinkFormViewExtension extends Plugin {
       // content link value has changed. set urlInputView accordingly
       // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
       // re-trigger a set of utlInputView here
-      if (value !== null) {
+      if (value) {
         formView.urlInputView.fieldView.set({
           value: value ?? "",
         });
@@ -180,7 +188,7 @@ class ContentLinkFormViewExtension extends Plugin {
       isEnabled: boolean,
       contentName: string | undefined | null,
       contentUriPath: string | undefined | null,
-    ): boolean => isEnabled && !!this.#suggesterInputValue && (!contentUriPath || !!contentName);
+    ): boolean => isEnabled && (!!this.#suggesterInputValue || (!!contentUriPath && !!contentName));
     saveButtonView.unbind("isEnabled");
     saveButtonView
       .bind("isEnabled")
@@ -442,7 +450,6 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
     const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
-
     // Check if the balloon is visible. If it was closed, while data was loaded, just return.
     // We can use element.offsetParent to check if the balloon's HTML element is visible.
     if (!formView.element?.offsetParent) {

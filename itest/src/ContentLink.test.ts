@@ -146,15 +146,14 @@ describe("Content Link Feature", () => {
 
       const { linkActionsView, linkFormView } = view.body.balloonPanel;
 
-      await expect(linkActionsView).waitToBeVisible();
+      await linkActionsView.locator.waitFor();
       await linkActionsView.edit();
 
-      await expect(linkFormView).waitToBeVisible();
-
+      await linkFormView.locator.waitFor();
       const { contentLinkView } = linkFormView;
 
       await expect(contentLinkView).waitToBeVisible();
-      await waitForExpect(() => expect(contentLinkView.locator).toHaveText(`Document for`));
+      await contentLinkView.locator.getByText(`Document for`).waitFor();
 
       await contentLinkView.remove();
 
@@ -192,22 +191,21 @@ describe("Content Link Feature", () => {
       });
 
       const { linkActionsView, linkFormView } = view.body.balloonPanel;
-      await expect(linkActionsView).waitToBeVisible();
+      await linkActionsView.locator.waitFor();
 
       await linkActionsView.locator.getByLabel("Edit link").focus();
+      await expectFocusedElementHasAriaText("Edit link");
+
       await page.keyboard.press("Shift+Tab");
       await page.keyboard.press("Tab");
       await page.keyboard.press("Enter");
 
       const { contentLinkView } = linkFormView;
 
-      await expect(contentLinkView).waitToBeVisible();
-      await waitForExpect(() => expect(contentLinkView.locator).toHaveText(`Document for`));
+      await contentLinkView.locator.getByText("Document for").waitFor();
 
       await page.keyboard.press("Tab");
       await page.keyboard.press("Space");
-
-      await expect(linkFormView).waitToBeVisible();
 
       await waitForExpect(() => expect(linkFormView.saveButtonLocator).toBeDisabled());
     });
