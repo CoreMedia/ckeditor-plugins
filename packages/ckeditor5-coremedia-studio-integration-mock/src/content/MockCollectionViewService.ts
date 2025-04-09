@@ -2,7 +2,7 @@
 /* eslint no-restricted-globals: off */
 
 import { Editor } from "ckeditor5";
-import { CollectionViewService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { CollectionViewService, SearchState } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 export class MockCollectionViewService implements CollectionViewService {
   readonly #editor: Editor;
@@ -24,10 +24,10 @@ export class MockCollectionViewService implements CollectionViewService {
     return true;
   }
 
-  async openSearchResult() {
+  async openSearchResult(searchState: SearchState) {
     const node: Element = document.createElement("DIV");
     node.classList.add("notification");
-    const textNode: Text = document.createTextNode(`Open Library`);
+    const textNode: Text = document.createTextNode(`Open Library, searchState: ${JSON.stringify(searchState)}`);
     node.appendChild(textNode);
     document.getElementById("notifications")?.appendChild(node);
     setTimeout(() => {

@@ -17,6 +17,7 @@ export {
   CollectionViewService,
   createCollectionViewServiceDescriptor,
   CollectionViewServiceProps,
+  SearchState,
 } from "./content/studioservices/CollectionViewService";
 
 export { default as RichtextConfigurationService } from "./content/RichtextConfigurationService";

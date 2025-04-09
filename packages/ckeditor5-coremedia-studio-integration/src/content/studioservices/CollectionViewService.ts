@@ -1,5 +1,21 @@
 import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
 
+export interface SearchState {
+  /**
+   * The search text that is used for the collection view.
+   *
+   * Defaults to the empty string.
+   */
+  searchText?: string;
+
+  /**
+   * The content type that is used in the content type filter. It is given by its content type name.
+   *
+   * Defaults to "Content_".
+   */
+  contentType?: string;
+}
+
 /**
  * Additional properties of the {@link CollectionViewService}.
  *
@@ -81,7 +97,7 @@ export interface CollectionViewService {
    * @returns A promise indicating success or failure opening the search result.
    */
   openSearchResult(
-    searchState: Record<string, never>,
+    searchState: SearchState,
     options?: {
       /**
        * Whether the app that opens the form should be focused / brought into the foreground.

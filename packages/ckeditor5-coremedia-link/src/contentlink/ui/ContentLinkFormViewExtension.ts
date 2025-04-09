@@ -287,13 +287,14 @@ class ContentLinkFormViewExtension extends Plugin {
       onClickOnLink: (uriPath: string) => this.#onClickOnLinkSuggestion(uriPath, linkUI),
       onOpenLibrary: () => {
         const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
-        void serviceAgent
-          .fetchService(createCollectionViewServiceDescriptor())
-          .then((collectionViewService) =>
-            formView.contentUriPath
-              ? collectionViewService.showContentInCollectionView(formView.contentUriPath)
-              : collectionViewService.openSearchResult({}),
-          );
+        void serviceAgent.fetchService(createCollectionViewServiceDescriptor()).then((collectionViewService) =>
+          formView.contentUriPath
+            ? collectionViewService.showContentInCollectionView(formView.contentUriPath)
+            : collectionViewService.openSearchResult({
+                searchText: this.#suggesterInputValue,
+                contentType: "CMLinkable",
+              }),
+        );
       },
       setupDnD: (view: LabeledFieldView) => this.#addDragAndDropListeners(view, linkUI, formView),
       options: { minFilterValueLength: 0 },
