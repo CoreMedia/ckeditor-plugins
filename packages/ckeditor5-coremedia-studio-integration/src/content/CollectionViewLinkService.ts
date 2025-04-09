@@ -10,7 +10,7 @@ export interface LinkSearchState {
 /**
  * Studio App service to open a collection view in a specific state.
  *
- * Use {@link createCollectionViewServiceDescriptor} to create a service descriptor for registering
+ * Use {@link createCollectionViewLinkServiceDescriptor} to create a service descriptor for registering
  * and retrieving services of this type with the `ServiceAgent`.
  *
  * @public

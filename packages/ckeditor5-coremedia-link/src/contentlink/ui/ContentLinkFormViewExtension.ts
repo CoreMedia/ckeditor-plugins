@@ -4,7 +4,7 @@ import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
-  createCollectionViewServiceDescriptor,
+  createCollectionViewLinkServiceDescriptor,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
   getOrEvaluateIsDroppableResult,
@@ -287,7 +287,7 @@ class ContentLinkFormViewExtension extends Plugin {
       onClickOnLink: (uriPath: string) => this.#onClickOnLinkSuggestion(uriPath, linkUI),
       onOpenLibrary: () => {
         const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
-        void serviceAgent.fetchService(createCollectionViewServiceDescriptor()).then((collectionViewService) =>
+        void serviceAgent.fetchService(createCollectionViewLinkServiceDescriptor()).then((collectionViewService) =>
           formView.contentUriPath
             ? collectionViewService.showContentInCollectionView(formView.contentUriPath)
             : collectionViewService.openSearchResult({

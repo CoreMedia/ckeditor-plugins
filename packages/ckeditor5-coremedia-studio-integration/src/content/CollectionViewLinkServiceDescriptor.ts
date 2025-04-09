@@ -4,7 +4,7 @@ import { CollectionViewLinkService } from "./CollectionViewLinkService";
 /**
  * Descriptor used to fetch service from service agent.
  */
-export function createCollectionViewServiceDescriptor(): ServiceDescriptorWithProps<CollectionViewLinkService> {
+export function createCollectionViewLinkServiceDescriptor(): ServiceDescriptorWithProps<CollectionViewLinkService> {
   return serviceDescriptorFactory<CollectionViewLinkService>({
     name: "collectionViewLinkService",
   });
