@@ -22,6 +22,6 @@ export default class LibraryButtonView extends ButtonView {
       iconClass: "cm-core-icons--library",
     });
     this.children.add(this.#libraryIcon);
-    this.on("execute", () => onClick());
+    this.on("execute", onClick);
   }
 }

@@ -69,13 +69,8 @@
   background-color: transparent;
 }
 
-.cm-core-icons.cm-core-icons--library:hover {
-  color: black;
-}
-
 .cm-core-icons.cm-core-icons--library::before {
   content: "L";
-  margin-right: 0;
   font-size: 15px;
   font-weight: 400;
   background-color: transparent;
