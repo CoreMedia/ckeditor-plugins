@@ -98,7 +98,7 @@ describe("Content Link Feature", () => {
       });
 
       const { linkActionsView } = view.body.balloonPanel;
-      await expect(linkActionsView).waitToBeVisible();
+      await linkActionsView.locator.waitFor();
       await page.keyboard.press("Tab");
       await expectFocusedElementHasAriaText(`Document: ${contentName}`);
       await page.keyboard.press("Tab");
