@@ -197,7 +197,8 @@ export class ContentLinkSuggesterView extends ViewCollection {
   }
 
   resetInputValue(): void {
-    this.#labeledFieldView.fieldView.value = "";
+    this.#labeledFieldView.fieldView.set({ value: "" });
+    this.#labeledFieldView.fieldView.element && (this.#labeledFieldView.fieldView.element.value = "");
   }
 
   resetFilterValue(): void {

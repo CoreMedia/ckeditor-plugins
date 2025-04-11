@@ -88,6 +88,9 @@ class ContentLinkFormViewExtension extends Plugin {
 
   onFormViewGetsInactive(): void {
     this.#linkSuggesterView?.setVisible(false);
+    this.#linkSuggesterView?.resetInputValue();
+    this.#linkSuggesterView?.resetFilterValue();
+    this.#suggesterInputValue = "";
   }
 
   onFormViewGetsActive(linkUI: LinkUI): void {
@@ -107,7 +110,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
       // content link value has changed. set urlInputView accordingly
       // value is null if it was set by cancelling and reopening the dialog, resetting the dialog should not
-      // re-trigger a set of utlInputView here
+      // re-trigger a set of urlInputView here
       if (value) {
         formView.urlInputView.fieldView.set({
           value: value ?? "",
