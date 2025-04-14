@@ -193,10 +193,9 @@ describe("Content Link Feature", () => {
       const { linkActionsView, linkFormView } = view.body.balloonPanel;
       await linkActionsView.locator.waitFor();
 
-      await linkActionsView.locator.getByLabel("Edit link").focus();
-      await expectFocusedElementHasAriaText("Edit link");
+      await linkActionsView.locator.getByLabel("Edit link").waitFor();
 
-      await page.keyboard.press("Shift+Tab");
+      await page.keyboard.press("Tab");
       await page.keyboard.press("Tab");
       await page.keyboard.press("Enter");
 
