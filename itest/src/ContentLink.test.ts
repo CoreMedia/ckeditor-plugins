@@ -225,7 +225,7 @@ describe("Content Link Feature", () => {
     const modifier: string = await ctrlOrMeta();
     await page.keyboard.press(`${modifier}+k`);
     const { linkFormView } = editor.ui.view.body.balloonPanel;
-    await expect(linkFormView).waitToBeVisible();
+    await linkFormView.locator.waitFor();
     await page.keyboard.type(`content:${id}`);
 
     await page.keyboard.press("Tab");
@@ -233,7 +233,40 @@ describe("Content Link Feature", () => {
     await page.keyboard.press("Enter");
 
     const contentLink = view.locator.locator(`a`);
+
     await expect(contentLink).toHaveText(`content:${id}`);
-    return Promise.resolve();
+  });
+
+  it("Should be possible to select content from suggestions.", async () => {
+    const { editor } = application;
+    const { ui } = editor;
+    const { view } = ui;
+
+    await view.locator.click();
+    const modifier: string = await ctrlOrMeta();
+    await page.keyboard.press(`${modifier}+k`);
+
+    const { linkFormView } = view.body.balloonPanel;
+    await linkFormView.locator.waitFor();
+
+    await linkFormView.locator.locator(".ck-dropdown").waitFor();
+
+    await linkFormView.locator.locator(".ck-dropdown").locator("input.ck-input-text").waitFor();
+    await linkFormView.locator.getByLabel("Document: Some Document").waitFor();
+
+    await page.keyboard.type("101");
+
+    await linkFormView.locator.getByLabel("Document: Document #1010").waitFor();
+    await linkFormView.locator.getByLabel("Folder: Folder #1011").waitFor();
+
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Enter");
+
+    const contentLink = view.locator.locator(`a`);
+    await expect(contentLink).toHaveText("content:101");
   });
 });
