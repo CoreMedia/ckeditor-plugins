@@ -96,6 +96,10 @@ class ContentLinkFormViewExtension extends Plugin {
   onFormViewGetsActive(linkUI: LinkUI): void {
     const { editor } = linkUI;
     const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
+    const { urlInputView } = formView;
+    const value = urlInputView.fieldView.element?.value;
+    this.#suggesterInputValue = value;
+    value && this.#linkSuggesterView?.setValue(value);
     const contentLinkCommandHook: ContentLinkCommandHook = editor.plugins.get(ContentLinkCommandHook);
     const linkCommand = editor.commands.get("link") as Command;
     formView.on("change:contentUriPath", (evt) => {

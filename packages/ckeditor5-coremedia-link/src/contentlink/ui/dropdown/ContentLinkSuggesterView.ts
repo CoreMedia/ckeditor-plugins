@@ -196,6 +196,12 @@ export class ContentLinkSuggesterView extends ViewCollection {
     this.#labeledFieldView && this.#openLibraryButton && setupFocus([this.#labeledFieldView, this.#openLibraryButton]);
   }
 
+  setValue(value: string): void {
+    this.#labeledFieldView.fieldView.set({ value });
+    this.#labeledFieldView.fieldView.element && (this.#labeledFieldView.fieldView.element.value = value);
+    this.#filterValueSubject.next(value);
+  }
+
   resetInputValue(): void {
     this.#labeledFieldView.fieldView.set({ value: "" });
     this.#labeledFieldView.fieldView.element && (this.#labeledFieldView.fieldView.element.value = "");
