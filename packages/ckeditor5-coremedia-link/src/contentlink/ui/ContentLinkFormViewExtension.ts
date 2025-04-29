@@ -7,6 +7,7 @@ import {
   createCollectionViewLinkServiceDescriptor,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
+  createContentSearchServiceDescriptor,
   getOrEvaluateIsDroppableResult,
   IsDroppableEvaluationResult,
   isLinkable,
@@ -26,6 +27,8 @@ import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
 import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
+import { combineLatest, from, of, switchMap } from "rxjs";
+import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -45,10 +48,13 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #linkSuggesterView: ContentLinkSuggesterView | undefined = undefined;
   #suggesterInputValue: string | undefined = undefined;
+  #contextUriPath: string | null = null;
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
     const editor = this.editor;
+    const contextUriPath = editor.config.get(`${COREMEDIA_CONTEXT_KEY}.uriPath`);
+    this.#contextUriPath = typeof contextUriPath === "string" ? contextUriPath : null;
     const linkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
@@ -303,6 +309,12 @@ class ContentLinkFormViewExtension extends Plugin {
         );
       },
       setupDnD: (view: LabeledFieldView) => this.#addDragAndDropListeners(view, linkUI, formView),
+      observeContentSuggestions: (filterValue: string) =>
+        combineLatest([from(serviceAgent.fetchService(createContentSearchServiceDescriptor())), of(filterValue)]).pipe(
+          switchMap(([contentSearchService, filterValue]) =>
+            contentSearchService.observe_contentSuggestions(filterValue, this.#contextUriPath),
+          ),
+        ),
       options: { minFilterValueLength: 0 },
     });
 

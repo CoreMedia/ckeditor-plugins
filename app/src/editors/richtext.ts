@@ -5,7 +5,12 @@
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.
 
 import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
-import { ContentLinks, COREMEDIA_LINK_CONFIG_KEY, LinkTarget } from "@coremedia/ckeditor5-coremedia-link";
+import {
+  ContentLinks,
+  COREMEDIA_CONTEXT_KEY,
+  COREMEDIA_LINK_CONFIG_KEY,
+  LinkTarget,
+} from "@coremedia/ckeditor5-coremedia-link";
 import { ContentClipboard, PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
@@ -176,6 +181,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
   state: ApplicationState,
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
+  const contextUriPath = `content/123`;
 
   return ClassicEditor.create(sourceElement, {
     placeholder: "Type your text here...",
@@ -333,7 +339,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
       defaultTargets: [
         {
           // May be used to experiment with default target selection.
-          filter: (url) => url.endsWith("#newTab"),
+          filter: (url: string) => url.endsWith("#newTab"),
           target: "_blank",
         },
       ],
@@ -415,6 +421,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
         return Promise.resolve();
       },
     },
+    [COREMEDIA_CONTEXT_KEY]: { uriPath: contextUriPath },
     [COREMEDIA_RICHTEXT_CONFIG_KEY]: getRichTextConfig(richTextCompatibility),
     [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
       aliases: [

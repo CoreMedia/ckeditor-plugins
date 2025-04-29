@@ -11,10 +11,8 @@ import {
   ViewCollection,
 } from "ckeditor5";
 import LibraryButtonView from "../LibraryButtonView";
-import { serviceAgent } from "@coremedia/service-agent";
-import { createContentSearchServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { createContentLinkSuggestion } from "./createContentLinkSuggestion";
-import { BehaviorSubject, combineLatest, debounce, from, interval, of, switchMap } from "rxjs";
+import { BehaviorSubject, combineLatest, debounce, interval, Observable, of, switchMap } from "rxjs";
 
 interface ContentLinkSuggesterViewProps {
   editor: Editor;
@@ -23,6 +21,7 @@ interface ContentLinkSuggesterViewProps {
   onClickOnLink: (uriPath: string) => void;
   onOpenLibrary: () => void;
   setupDnD: (field: LabeledFieldView) => void;
+  observeContentSuggestions: (filterValue: string) => Observable<string[]>;
   options?: {
     debounceInterval?: number;
     minFilterValueLength?: number;
@@ -49,6 +48,7 @@ export class ContentLinkSuggesterView extends ViewCollection {
     onClickOnLink,
     onOpenLibrary,
     setupDnD,
+    observeContentSuggestions,
     options,
   }: ContentLinkSuggesterViewProps) {
     super([]);
@@ -140,21 +140,15 @@ export class ContentLinkSuggesterView extends ViewCollection {
       uriPaths.length && this.#dropdown.focus();
     };
 
-    combineLatest([
-      from(serviceAgent.fetchService(createContentSearchServiceDescriptor())),
-      this.#filterValueSubject.pipe(
+    this.#filterValueSubject
+      .pipe(
         debounce((filterValue) =>
           interval(filterValue.length >= this.#minFilterValueLength ? this.#debounceInterval : 0),
         ),
-      ),
-    ])
-      .pipe(
-        switchMap(([contentSearchService, filterValue]) =>
+        switchMap((filterValue) =>
           combineLatest([
             of(filterValue),
-            filterValue.length >= this.#minFilterValueLength
-              ? contentSearchService.observe_contentSuggestions(filterValue)
-              : of([]),
+            filterValue.length >= this.#minFilterValueLength ? observeContentSuggestions(filterValue) : of([]),
           ]),
         ),
       )
