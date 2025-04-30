@@ -61,12 +61,12 @@ describe("Content Link Feature", () => {
       const { linkActionsView } = editor.ui.view.body.balloonPanel;
 
       // The ballon should pop up on click.
-      await expect(linkActionsView).waitToBeVisible();
+      await linkActionsView.locator.waitFor();
 
       const { contentLinkView } = linkActionsView;
 
-      await expect(contentLinkView).waitToBeVisible();
-      await expect(contentLinkView.locator.getByText("Document for")).toBeDefined();
+      await contentLinkView.locator.waitFor();
+      await waitForExpect(() => expect(contentLinkView.locator.getByText("Document for")).toBeDefined());
     });
 
     it("Should be possible to reach all buttons with keyboard", async () => {
@@ -152,13 +152,13 @@ describe("Content Link Feature", () => {
       await linkFormView.locator.waitFor();
       const { contentLinkView } = linkFormView;
 
-      await expect(contentLinkView).waitToBeVisible();
+      await waitForExpect(() => expect(contentLinkView).waitToBeVisible());
       await contentLinkView.locator.getByText(`Document for`).waitFor();
 
       await contentLinkView.remove();
 
       // Content Link View should have been removed.
-      await expect(contentLinkView).not.waitToBeVisible();
+      await waitForExpect(() => expect(contentLinkView).not.waitToBeVisible());
 
       await waitForExpect(() => expect(linkFormView.saveButtonLocator).toBeDisabled());
     });
