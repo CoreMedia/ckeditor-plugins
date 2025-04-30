@@ -213,6 +213,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
     this.#linkSuggesterView?.resetInputValue();
     this.#linkSuggesterView?.resetFilterValue();
+    this.#suggesterInputValue = "";
     formView.set({
       contentUriPath: undefined,
     });
