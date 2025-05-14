@@ -11,8 +11,11 @@ import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
 import { ButtonView, Editor } from "ckeditor5";
 
-const getTooltip = (contentAsLink: ContentAsLink) =>
-  `${contentAsLink.content.name} - ${contentAsLink.site.name} - ${contentAsLink.locale.name}`;
+const getTooltip = (contentAsLink: ContentAsLink) => {
+  const sitePart = contentAsLink.site.name ? ` - ${contentAsLink.site.name}` : "";
+  const localePart = contentAsLink.locale.name ? ` - ${contentAsLink.locale.name}` : "";
+  return `${contentAsLink.content.name}${sitePart}${localePart}`;
+};
 /**
  * A ContentView that renders a custom template, containing of 2 different components.
  * The first element displays the information of a content item (containing title and icons of the content)
