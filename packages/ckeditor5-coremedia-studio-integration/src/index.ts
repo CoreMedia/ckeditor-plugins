@@ -10,7 +10,7 @@ export { createBlobDisplayServiceDescriptor } from "./content/BlobDisplayService
 export { default as ContentDisplayService } from "./content/ContentDisplayService";
 export { createContentDisplayServiceDescriptor } from "./content/ContentDisplayServiceDescriptor";
 
-export { default as ContentSearchService } from "./content/ContentSearchService";
+export { ContentSearchService } from "./content/ContentSearchService";
 export { createContentSearchServiceDescriptor } from "./content/ContentSearchServiceDescriptor";
 
 export { CollectionViewLinkService, LinkSearchState } from "./content/CollectionViewLinkService";
