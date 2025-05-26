@@ -29,6 +29,7 @@ import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@c
 import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
 import { combineLatest, from, of, switchMap } from "rxjs";
 import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
+import LibraryButtonView from "./LibraryButtonView";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -49,6 +50,8 @@ class ContentLinkFormViewExtension extends Plugin {
   #linkSuggesterView: ContentLinkSuggesterView | undefined = undefined;
   #suggesterInputValue: string | undefined = undefined;
   #contextUriPath: string | null = null;
+
+  #libraryButton: LibraryButtonView | undefined = undefined;
 
   init(): Promise<void> | void {
     const initInformation = reportInitStart(this);
@@ -128,6 +131,7 @@ class ContentLinkFormViewExtension extends Plugin {
       }
 
       this.#linkSuggesterView?.setVisible(!value);
+      this.#libraryButton && (this.#libraryButton.isVisible = !!value);
       // set visibility of url and content field
       showContentLinkField(formView, !!value);
 
@@ -143,6 +147,7 @@ class ContentLinkFormViewExtension extends Plugin {
       const value = formView.contentUriPath;
       this.#linkSuggesterView?.setVisible(!value);
       showContentLinkField(formView, !!value);
+      this.#libraryButton && (this.#libraryButton.isVisible = !!value);
     }
 
     this.#focusContentLinkViewOrLinkSuggester();
@@ -262,6 +267,18 @@ class ContentLinkFormViewExtension extends Plugin {
     this.#linkSuggesterView?.resetInputValue();
   }
 
+  async #openLibrary(linkUI: LinkUI): Promise<void> {
+    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
+    const collectionViewService = await serviceAgent.fetchService(createCollectionViewLinkServiceDescriptor());
+    if (formView.contentUriPath) {
+      await collectionViewService.showContentInCollectionView(formView.contentUriPath);
+    } else {
+      await collectionViewService.openSearchResult({
+        searchText: this.#suggesterInputValue,
+      });
+    }
+  }
+
   #render(contentLinkView: LabeledFieldView, linkUI: LinkUI): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
@@ -276,6 +293,9 @@ class ContentLinkFormViewExtension extends Plugin {
 
     if (this.#linkSuggesterView) {
       formView.registerChild(this.#linkSuggesterView);
+    }
+    if (this.#libraryButton) {
+      formView.registerChild(this.#libraryButton);
     }
 
     const {
@@ -294,21 +314,18 @@ class ContentLinkFormViewExtension extends Plugin {
       throw new Error("Unexpected state on render: Required elements are missing.");
     }
 
+    this.#libraryButton = new LibraryButtonView(
+      () => void this.#openLibrary(linkUI),
+      this.editor.locale.t("Open Library"),
+      this.editor.locale,
+    );
+    this.#libraryButton.render();
     this.#linkSuggesterView = new ContentLinkSuggesterView({
       editor: this.editor,
       parent: formView,
       onChangeInputValue: (inputValue) => this.#onChangeSuggesterInputValue(inputValue, linkUI),
       onClickOnLink: (uriPath: string) => this.#onClickOnLinkSuggestion(uriPath, linkUI),
-      onOpenLibrary: () => {
-        const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
-        void serviceAgent.fetchService(createCollectionViewLinkServiceDescriptor()).then((collectionViewService) =>
-          formView.contentUriPath
-            ? collectionViewService.showContentInCollectionView(formView.contentUriPath)
-            : collectionViewService.openSearchResult({
-                searchText: this.#suggesterInputValue,
-              }),
-        );
-      },
+      onOpenLibrary: () => void this.#openLibrary(linkUI),
       setupDnD: (view: LabeledFieldView) => this.#addDragAndDropListeners(view, linkUI, formView),
       observeContentSuggestions: (filterValue: string) =>
         combineLatest([from(serviceAgent.fetchService(createContentSearchServiceDescriptor())), of(filterValue)]).pipe(
@@ -321,6 +338,8 @@ class ContentLinkFormViewExtension extends Plugin {
 
     formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
     this.#linkSuggesterView?.setupPositionInParent(urlInputViewElement.nextSibling);
+    this.#libraryButton.element &&
+      formViewElement.insertBefore(this.#libraryButton.element, contentLinkViewElement.nextSibling);
 
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     const { urlInputView } = formView;

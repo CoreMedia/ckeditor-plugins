@@ -11,6 +11,7 @@ const german = {
   "No results found.": "Keine Ergebnisse gefunden.",
   "Enter at least 3 characters to search.": "Geben Sie mindestens 3 Zeichen für die Suche ein.",
   "Loading Content...": "Lade Inhalt...",
+  "Open Library": "Öffne Bibliothek",
 };
 addTranslations("en", Object.fromEntries(Object.keys(german).map((k) => [k, k])));
 addTranslations("de", german);
