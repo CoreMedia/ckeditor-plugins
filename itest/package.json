@@ -29,7 +29,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.10",
     "expect-playwright": "^0.8.0",
-    "express": "^4.19.2",
+    "express": "^5.1.0",
     "get-port": "^7.1.0",
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
