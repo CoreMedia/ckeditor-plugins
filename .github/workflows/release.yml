@@ -6,8 +6,8 @@ concurrency: ci-${{ github.ref }}
 on:
   push:
     branches:
-     - main
-     - 'maintenance/**'
+      - main
+      - 'maintenance/**'
   workflow_dispatch:
     inputs:
       release_type:
@@ -22,10 +22,10 @@ on:
 permissions:
   contents: write
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^9.4
+  PNPM_VERSION: ^10.9
   NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
 
 jobs:

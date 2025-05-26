@@ -331,7 +331,7 @@ describe("Image Features", () => {
       await expect(linkButton).waitToBeOn();
       await linkButton.click();
       const contentLinkView = getContentLinkView(editor);
-      await expect(contentLinkView).waitToHaveContentName(`Document: ${contentLinkDocumentName}`);
+      await waitForExpect(() => expect(contentLinkView).waitToHaveContentName(`Document: ${contentLinkDocumentName}`));
     });
   });
 });

@@ -2,6 +2,7 @@ import "./expect/Expectations";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import waitForExpect from "wait-for-expect";
 
 describe("Link Balloon", () => {
   let application: ApplicationWrapper;
@@ -13,7 +14,7 @@ describe("Link Balloon", () => {
     application = await ApplicationWrapper.start();
     await application.goto();
     // Wait for CKEditor to be available prior to executing/continuing the tests.
-    await expect(application).waitForCKEditorToBeAvailable();
+    await waitForExpect(() => expect(application).waitForCKEditorToBeAvailable());
     draggableDivId = await injectDraggable();
     configuredClickKeepOpenDivId = await injectKeepOpenWithIdDiv();
     configuredClickKeepOpenDivClass = await injectKeepOpenWithClassDiv();

@@ -10,6 +10,12 @@ export { createBlobDisplayServiceDescriptor } from "./content/BlobDisplayService
 export { default as ContentDisplayService } from "./content/ContentDisplayService";
 export { createContentDisplayServiceDescriptor } from "./content/ContentDisplayServiceDescriptor";
 
+export { ContentSearchService } from "./content/ContentSearchService";
+export { createContentSearchServiceDescriptor } from "./content/ContentSearchServiceDescriptor";
+
+export { CollectionViewLinkService, LinkSearchState } from "./content/CollectionViewLinkService";
+export { createCollectionViewLinkServiceDescriptor } from "./content/CollectionViewLinkServiceDescriptor";
+
 export { default as RichtextConfigurationService } from "./content/RichtextConfigurationService";
 export { createRichtextConfigurationServiceDescriptor } from "./content/RichtextConfigurationServiceDescriptor";
 
