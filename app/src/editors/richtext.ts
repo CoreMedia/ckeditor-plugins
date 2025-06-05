@@ -35,7 +35,10 @@ import {
   FindAndReplace,
   Heading,
   Highlight,
-  icons,
+  IconObjectInline,
+  IconObjectLeft,
+  IconObjectRight,
+  IconObjectSizeFull,
   ImageBlockEditing,
   ImageInline,
   ImageStyle,
@@ -82,12 +85,11 @@ import { updatePreview } from "../preview";
 export const licenseKeyErrorMessage =
   "Please provide a valid license key for your CKEditor5 instance. Please create a .env file in the workspace root and make your license as CKEDITOR_LICENSE_KEY variable. Please use 'GPL' if you want to use the GNU General Public License.";
 
-const {
-  objectInline: withinTextIcon,
-  objectLeft: alignLeftIcon,
-  objectRight: alignRightIcon,
-  objectSizeFull: pageDefaultIcon,
-} = icons;
+const withinTextIcon = IconObjectInline;
+const alignLeftIcon = IconObjectLeft;
+const alignRightIcon = IconObjectRight;
+const pageDefaultIcon = IconObjectSizeFull;
+
 const imagePlugins: PluginConstructor[] = [
   ContentImagePlugin,
   ImageInline,
