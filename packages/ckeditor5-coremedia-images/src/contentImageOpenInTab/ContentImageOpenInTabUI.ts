@@ -40,6 +40,7 @@ export default class ContentImageOpenInTabUI extends Plugin {
           logger.warn("Failed executing OpenImageInTabCommand invoked by keystroke:", reason);
         });
     });
+    //TODO LINK open in tab is added twice now
     ui.componentFactory.add("contentImageOpenInTab", (locale) => {
       const button = new ButtonView(locale);
       button.set({
