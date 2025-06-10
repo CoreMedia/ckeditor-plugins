@@ -336,7 +336,28 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
         ],
       },
       link: {
+        toolbar: [
+          "linkPreview",
+          "editLink",
+          "|",
+          "_self",
+          "_blank",
+          "_embed",
+          "customLinkTargetButton", // TODO LINK _other
+          "|",
+          "unlink",
+        ],
         defaultProtocol: "https://",
+        targets: [
+          {
+            name: "_parent",
+            icon: alignRightIcon,
+            title: "Open at topmost browsing context",
+          },
+          {
+            name: "_lol",
+          },
+        ],
         defaultTargets: [
           {
             // May be used to experiment with default target selection.

@@ -130,6 +130,14 @@ export const computeDefaultLinkTargetForUrl = (url: string, config: Config<Edito
   return result;
 };
 
+const isInLinkToolbar = (config: Config<EditorConfig>, name: string): boolean => {
+  let toolbarButtonsFromConfig: string[] | undefined = config.get("link.toolbar");
+  if (toolbarButtonsFromConfig === undefined) {
+    toolbarButtonsFromConfig = [];
+  }
+  return toolbarButtonsFromConfig.includes(name);
+};
+
 /**
  * Parses a possibly existing configuration option as part of CKEditor's
  * link plugin configuration. It expects an entry `targets` which contains an
@@ -138,15 +146,20 @@ export const computeDefaultLinkTargetForUrl = (url: string, config: Config<Edito
  * @param config - CKEditor configuration to parse
  */
 export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<LinkTargetOptionDefinition>[] => {
-  const fromConfig: unknown = config.get("link.targets");
+  const buttonConfigurationsFromConfig: unknown = config.get("link.targets");
+
   const result: Required<LinkTargetOptionDefinition>[] = [];
-  if (fromConfig === null || fromConfig === undefined) {
-    return DEFAULT_TARGETS_ARRAY;
+  if (buttonConfigurationsFromConfig === null || buttonConfigurationsFromConfig === undefined) {
+    return [];
   }
-  if (!Array.isArray(fromConfig)) {
-    throw new Error(`link.targets: Unexpected configuration. Array expected but is: ${JSON.stringify(fromConfig)}`);
+  if (!Array.isArray(buttonConfigurationsFromConfig)) {
+    throw new Error(
+      `link.targets: Unexpected configuration. Array expected but is: ${JSON.stringify(buttonConfigurationsFromConfig)}`,
+    );
   }
-  const targetsArray: unknown[] = fromConfig;
+
+  const targetsArray: unknown[] = buttonConfigurationsFromConfig.concat(DEFAULT_TARGETS_ARRAY); // TODO remove duplicates?
+
   targetsArray.forEach((entry: unknown): void => {
     if (typeof entry === "string") {
       const name = entry;
@@ -154,6 +167,10 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
         throw new Error("link.targets: Target name must not be empty.");
       }
       const defaultDefinition = getDefaultTargetDefinition(name);
+
+      if (!isInLinkToolbar(config, name)) {
+        return;
+      }
       if (defaultDefinition) {
         result.push(defaultDefinition);
       } else {
@@ -178,6 +195,10 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
         throw new Error("link.targets: Configuration entry misses required non-empty property 'name'");
       }
 
+      if (!isInLinkToolbar(config, definition.name)) {
+        return;
+      }
+
       // Part 2: Provide a merged result with fallbacks, where the custom
       //         configuration always wins.
 
@@ -200,7 +221,7 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
       result.push(mergedDefinition);
     } else {
       throw new Error(
-        `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(fromConfig)}`,
+        `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(buttonConfigurationsFromConfig)}`,
       );
     }
   });
