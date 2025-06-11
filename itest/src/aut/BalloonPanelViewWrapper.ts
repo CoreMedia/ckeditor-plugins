@@ -1,7 +1,7 @@
 // For now, this is only a DOM related wrapper.
 import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
-import { LinkActionsViewWrapper } from "./LinkActionsViewWrapper";
+import { LinkToolbarViewWrapper } from "./LinkToolbarViewWrapper";
 import { LinkFormViewWrapper } from "./LinkFormViewWrapper";
 import { BlocklistActionsViewWrapper } from "./BlocklistActionsViewWrapper";
 
@@ -20,8 +20,8 @@ export class BalloonPanelViewWrapper implements Locatable {
     return visible(this);
   }
 
-  get linkActionsView(): LinkActionsViewWrapper {
-    return LinkActionsViewWrapper.fromParent(this);
+  get linkToolbarView(): LinkToolbarViewWrapper {
+    return LinkToolbarViewWrapper.fromParent(this);
   }
 
   get linkFormView(): LinkFormViewWrapper {

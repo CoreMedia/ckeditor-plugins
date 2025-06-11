@@ -57,12 +57,12 @@ describe("Content Link Feature", () => {
 
       await contentLink.click();
 
-      const { linkActionsView } = editor.ui.view.body.balloonPanel;
+      const { linkToolbarView } = editor.ui.view.body.balloonPanel;
 
       // The ballon should pop up on click.
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
 
-      const { contentLinkView } = linkActionsView;
+      const { contentLinkView } = linkToolbarView;
 
       await expect(contentLinkView).waitToBeVisible();
       await expect(contentLinkView.locator).toHaveText(`Document for`);
@@ -96,8 +96,8 @@ describe("Content Link Feature", () => {
         },
       });
 
-      const { linkActionsView } = view.body.balloonPanel;
-      await expect(linkActionsView).waitToBeVisible();
+      const { linkToolbarView } = view.body.balloonPanel;
+      await expect(linkToolbarView).waitToBeVisible();
       await page.keyboard.press("Tab");
       await expectFocusedElementHasAriaText(`Document: ${contentName}`);
       await page.keyboard.press("Tab");
@@ -143,10 +143,10 @@ describe("Content Link Feature", () => {
         },
       });
 
-      const { linkActionsView, linkFormView } = view.body.balloonPanel;
+      const { linkToolbarView, linkFormView } = view.body.balloonPanel;
 
-      await expect(linkActionsView).waitToBeVisible();
-      await linkActionsView.edit();
+      await expect(linkToolbarView).waitToBeVisible();
+      await linkToolbarView.edit();
 
       await expect(linkFormView).waitToBeVisible();
 
@@ -195,8 +195,8 @@ describe("Content Link Feature", () => {
         },
       });
 
-      const { linkActionsView, linkFormView } = view.body.balloonPanel;
-      await expect(linkActionsView).waitToBeVisible();
+      const { linkToolbarView, linkFormView } = view.body.balloonPanel;
+      await expect(linkToolbarView).waitToBeVisible();
 
       await page.keyboard.press("Tab");
       await tabToAriaLabel("Edit link");
