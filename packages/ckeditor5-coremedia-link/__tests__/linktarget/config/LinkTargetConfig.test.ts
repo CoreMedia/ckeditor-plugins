@@ -18,16 +18,13 @@ describe("LinkTargetConfig", () => {
       config
       ${undefined}
       ${null}
-    `("[$#] should provide defaults for no/empty config: $config", ({ config: emptyConfig }) => {
+      ${[]}
+    `("[$#] should provide no definitiopns for no/empty config: $config", ({ config: emptyConfig }) => {
       config.set("link.targets", emptyConfig);
       const definitions = parseLinkTargetConfig(config);
       const names = definitions.map((definition) => definition.name);
-      expect(names).toEqual(["_self", "_blank", "_embed", "_other"]);
-    });
-    test("should provide no definitions for empty config", () => {
-      config.set("link.targets", []);
-      const definitions = parseLinkTargetConfig(config);
       expect(definitions).toHaveLength(0);
+      expect(names).toEqual([]);
     });
     test.each`
       name        | title
@@ -38,7 +35,23 @@ describe("LinkTargetConfig", () => {
     `(
       "[$#] Should resolve well-known config (referenced as string) to full object for '$name' having title '$title'",
       ({ name, title: expectedTitle }) => {
+        config.set("link.toolbar", [name]);
+        const definitions = parseLinkTargetConfig(config);
+        expect(definitions).toHaveLength(1);
+        expect(definitions[0]?.title).toStrictEqual(expectedTitle);
+      },
+    );
+    test.each`
+      name        | title
+      ${"_self"}  | ${"Open in Current Tab"}
+      ${"_blank"} | ${"Open in New Tab"}
+      ${"_embed"} | ${"Show Embedded"}
+      ${"_other"} | ${"Open in Frame"}
+    `(
+      "[$#] Should resolve well-known config (referenced as string, also defined as string in link.targets) to full object for '$name' having title '$title'",
+      ({ name, title: expectedTitle }) => {
         config.set("link.targets", [name]);
+        config.set("link.toolbar", [name]);
         const definitions = parseLinkTargetConfig(config);
         expect(definitions).toHaveLength(1);
         expect(definitions[0]?.title).toStrictEqual(expectedTitle);
@@ -53,6 +66,7 @@ describe("LinkTargetConfig", () => {
     `(
       "[$#] Should resolve well-known config (referenced as object) to full object for '$name' having title '$title'",
       ({ name, title: expectedTitle }) => {
+        config.set("link.toolbar", [name]);
         config.set("link.targets", [
           {
             name,
@@ -70,6 +84,7 @@ describe("LinkTargetConfig", () => {
       ${["_blank", "_self"]}
       ${["_other", "_embed", "_blank", "_self"]}
     `("[$#] Should respect order for well-known config names: $names", ({ names }) => {
+      config.set("link.toolbar", [...names]);
       config.set("link.targets", [...names]);
       const definitions = parseLinkTargetConfig(config);
       const actualNames = definitions.map((d) => d.name);
@@ -83,6 +98,7 @@ describe("LinkTargetConfig", () => {
       ${"_embed"} | ${"Custom: Show Embedded"}
       ${"_other"} | ${"Custom: Open in Frame"}
     `("[$#] Should be able to override well-known config name `$name` with new title: '$title'", ({ name, title }) => {
+      config.set("link.toolbar", [name]);
       config.set("link.targets", [
         {
           name,
@@ -96,6 +112,7 @@ describe("LinkTargetConfig", () => {
     test("should be able providing an only-name custom configuration with some defaults applied", () => {
       const customName = "custom";
       config.set("link.targets", [customName]);
+      config.set("link.toolbar", [customName]);
       const definitions = parseLinkTargetConfig(config);
       expect(definitions).toHaveLength(1);
       expect(definitions[0]?.name).toStrictEqual(customName);
@@ -104,6 +121,7 @@ describe("LinkTargetConfig", () => {
     test("should be able providing a custom configuration with name and title", () => {
       const customName = "custom";
       const customTitle = "My Custom Title";
+      config.set("link.toolbar", [customName]);
       config.set("link.targets", [
         {
           name: customName,
@@ -121,6 +139,7 @@ describe("LinkTargetConfig", () => {
       ${"string"}
     `("[$#] should provide defaults for custom targets ($mode definition)", ({ mode }) => {
       const customName = "custom";
+      config.set("link.toolbar", [customName]);
       config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
       const definitions = parseLinkTargetConfig(config);
       expect(definitions).toHaveLength(1);
@@ -136,9 +155,10 @@ describe("LinkTargetConfig", () => {
       // any name set. But only testing empty name is fine here, as it should also
       // be forbidden.
       const customName = "";
+      config.set("link.toolbar", [customName]);
       config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
       expect(() => parseLinkTargetConfig(config)).toThrow();
-    });
+    });//TODO
     test.each`
       config
       ${42}
@@ -153,6 +173,7 @@ describe("LinkTargetConfig", () => {
 }}
     `("[$#] should fail on invalid configuration type for link.targets: $config", ({ config: brokenConfig }) => {
       config.set("link.targets", brokenConfig);
+      config.set("link.toolbar", [brokenConfig]);
       expect(() => parseLinkTargetConfig(config)).toThrow();
     });
     test.each`
@@ -164,6 +185,7 @@ describe("LinkTargetConfig", () => {
     `(
       "[$#] should fail on invalid configuration entry types for link.targets array: $entry",
       ({ entry: invalidEntry }) => {
+        config.set("link.toolbar", [invalidEntry]);
         config.set("link.targets", [invalidEntry]);
         expect(() => parseLinkTargetConfig(config)).toThrow();
       },
