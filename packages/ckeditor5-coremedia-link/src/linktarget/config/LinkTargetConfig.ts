@@ -130,73 +130,48 @@ export const computeDefaultLinkTargetForUrl = (url: string, config: Config<Edito
   return result;
 };
 
-const isInLinkToolbar = (config: Config<EditorConfig>, name: string): boolean => {
-  let toolbarButtonsFromConfig: string[] | undefined = config.get("link.toolbar");
-  if (toolbarButtonsFromConfig === undefined) {
-    toolbarButtonsFromConfig = [];
-  }
-  return toolbarButtonsFromConfig.includes(name);
-};
-
-/**
- * Parses a possibly existing configuration option as part of CKEditor's
- * link plugin configuration. It expects an entry `targets` which contains an
- * array of targets to offer to the editors for selection in the UI.
- *
- * @param config - CKEditor configuration to parse
- */
-export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<LinkTargetOptionDefinition>[] => {
-  const buttonConfigurationsFromConfig: unknown = config.get("link.targets");
-
-  const result: Required<LinkTargetOptionDefinition>[] = [];
-  if (buttonConfigurationsFromConfig === null || buttonConfigurationsFromConfig === undefined) {
+const getValidLinkTargetEntries = (linkTargetsConfig: unknown): Required<LinkTargetOptionDefinition>[] => {
+  const validTargets: Required<LinkTargetOptionDefinition>[] = [];
+  if (linkTargetsConfig === undefined) {
     return [];
   }
-  if (!Array.isArray(buttonConfigurationsFromConfig)) {
+  if (!Array.isArray(linkTargetsConfig)) {
     throw new Error(
-      `link.targets: Unexpected configuration. Array expected but is: ${JSON.stringify(buttonConfigurationsFromConfig)}`,
+      `link.targets: Unexpected configuration. Array expected but is: ${JSON.stringify(linkTargetsConfig)}`,
     );
   }
 
-  const targetsArray: unknown[] = buttonConfigurationsFromConfig.concat(DEFAULT_TARGETS_ARRAY); // TODO remove duplicates?
-
-  targetsArray.forEach((entry: unknown): void => {
-    if (typeof entry === "string") {
-      const name = entry;
+  for (const linkTargetsConfigEntry of linkTargetsConfig) {
+    if (typeof linkTargetsConfigEntry === "string") {
+      const name = linkTargetsConfigEntry;
       if (!name) {
         throw new Error("link.targets: Target name must not be empty.");
       }
       const defaultDefinition = getDefaultTargetDefinition(name);
 
-      if (!isInLinkToolbar(config, name)) {
-        return;
-      }
       if (defaultDefinition) {
-        result.push(defaultDefinition);
+        validTargets.push(defaultDefinition);
       } else {
-        result.push({
+        validTargets.push({
           name,
           icon: "",
           title: name,
         });
       }
-    } else if (typeof entry === "object") {
+    } else if (typeof linkTargetsConfigEntry === "object") {
       // Part 1: Check for valid configuration object.
       //
       // Complicated? The following lines are a typesafe approach to validate,
       // if required attributes have been set. It requires no type-checking nor
       // casting, as we "fulfill" the required attributes on our own.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const definition: LinkTargetOptionDefinition = {
         // Provoke a default empty name, which will fail if not set in object.
         name: "",
-        ...entry,
+        ...linkTargetsConfigEntry,
       };
       if (!definition.name) {
         throw new Error("link.targets: Configuration entry misses required non-empty property 'name'");
-      }
-
-      if (!isInLinkToolbar(config, definition.name)) {
-        return;
       }
 
       // Part 2: Provide a merged result with fallbacks, where the custom
@@ -218,11 +193,44 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
         // The actual definition, possibly overriding all, possibly missing some properties such as `title`.
         ...definition,
       };
-      result.push(mergedDefinition);
+      validTargets.push(mergedDefinition);
     } else {
       throw new Error(
-        `link.targets: Unexpected entry ${JSON.stringify(entry)} in configuration ${JSON.stringify(buttonConfigurationsFromConfig)}`,
+        `link.targets: Unexpected entry ${JSON.stringify(linkTargetsConfigEntry)} in configuration ${JSON.stringify(linkTargetsConfig)}`,
       );
+    }
+  }
+  return validTargets;
+};
+
+/**
+ * Parses a possibly existing configuration option as part of CKEditor's
+ * link plugin configuration. It expects an entry `targets` which contains an
+ * array of targets to offer to the editors for selection in the UI.
+ *
+ * @param config - CKEditor configuration to parse
+ */
+export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<LinkTargetOptionDefinition>[] => {
+  const linkTargetsConfig: unknown = config.get("link.targets");
+  const linkToolbarConfig: string[] | undefined = config.get("link.toolbar");
+
+  const result: Required<LinkTargetOptionDefinition>[] = [];
+  if (linkToolbarConfig === undefined) {
+    return [];
+  }
+
+  const validTargets = getValidLinkTargetEntries(linkTargetsConfig);
+  linkToolbarConfig.forEach((entry: string): void => {
+    const foundTarget = validTargets.find((validTarget) => validTarget.name === entry);
+    // is toolbar entry in custom target list?
+    if (foundTarget) {
+      result.push(foundTarget);
+      return;
+    }
+    const foundDefaultTarget = DEFAULT_TARGETS_ARRAY.find((validTarget) => validTarget.name === entry);
+    // is toolbar entry in default target list?
+    if (foundDefaultTarget) {
+      result.push(foundDefaultTarget);
     }
   });
   return result;
