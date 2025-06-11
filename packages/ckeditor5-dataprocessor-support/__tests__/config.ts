@@ -21,6 +21,4 @@ function findEnvFile(startDir: string = process.cwd()): string | undefined {
 
 const envPath = findEnvFile();
 
-console.log("envPath", envPath);
-
 dotenv.config({ path: envPath });
