@@ -4,7 +4,8 @@ import "jest-xml-matcher";
 import ToDataProcessor from "../../../src/ToDataProcessor";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getV10Config } from "./Utils";
-import { createEditorWithLicense } from "@coremedia/ckeditor5-common";
+import { Editor } from "ckeditor5";
+import "../../config";
 
 const EXECUTION_REPETITIONS = 100;
 const FIBONACCI_INDEX_FROM = 1;
@@ -47,7 +48,8 @@ function fib(idx: number, memo?: Map<number, number>): number {
   return result;
 }
 
-export const MOCK_EDITOR = createEditorWithLicense({});
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
+const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 const PARSER = new DOMParser();
 function parseAndValidate(xmlString: string): Document {
   const xmlDocument = PARSER.parseFromString(xmlString, "text/html");

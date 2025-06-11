@@ -24,9 +24,10 @@ import {
   AutoImage,
   Base64UploadAdapter,
   EditorConfig,
+  ClassicEditor,
 } from "ckeditor5";
 import { DataFacade } from "../../src";
-import { createClassicEditorWithLicense } from "@coremedia/ckeditor5-common";
+import "../config";
 
 export const allPlugins = [
   AutoImage,
@@ -71,6 +72,7 @@ export const completeToolbar = [
 export const prepareDocument = (doc: Document) => {
   doc.body.innerHTML = html;
 };
+
 export const createTestEditor = async (
   elementId = "main",
   plugins = allPlugins,
@@ -79,5 +81,5 @@ export const createTestEditor = async (
 ) => {
   const element = document.getElementById(elementId);
   if (!element) throw new Error(`Element with id '${elementId}' not found.`);
-  return createClassicEditorWithLicense(element, { ...config, plugins, toolbar });
+  return ClassicEditor.create(element, { ...config, licenseKey: process.env.CKEDITOR_LICENSE_KEY, plugins, toolbar });
 };

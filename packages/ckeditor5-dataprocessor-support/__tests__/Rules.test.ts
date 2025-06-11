@@ -3,7 +3,8 @@ import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "..
 import { HtmlFilter } from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
 import { TextFilterRule } from "../src/TextProxy";
-import { createEditorWithLicense } from "@coremedia/ckeditor5-common";
+import { Editor } from "ckeditor5";
+import "./config";
 
 /**
  * Will be checked for "startsWith" for a given Data Driven Testname. Meant
@@ -13,7 +14,8 @@ import { createEditorWithLicense } from "@coremedia/ckeditor5-common";
  */
 const TEST_SELECTOR = "";
 
-export const MOCK_EDITOR = createEditorWithLicense({});
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
+const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 const parser = new DOMParser();
 const serializer = new XMLSerializer();
 

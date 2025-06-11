@@ -3,9 +3,11 @@
 
 import "jest-xml-matcher";
 import { FilterRuleSet, HtmlFilter } from "../src/HtmlFilter";
-import { createEditorWithLicense } from "@coremedia/ckeditor5-common";
+import { Editor } from "ckeditor5";
+import "./config";
 
-const MOCK_EDITOR = createEditorWithLicense({});
+//@ts-expect-error We should rather mock ClassicEditor or similar here.
+const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 /**
  * Will be checked for "startsWith" for a given Data Driven Testname. Meant
  * to be used for debugging purpose. Example:
