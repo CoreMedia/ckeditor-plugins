@@ -338,17 +338,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
         ],
       },
       link: {
-        toolbar: [
-          "linkPreview",
-          "editLink",
-          "|",
-          "_self",
-          "_blank",
-          "_embed",
-          "customLinkTargetButton", // TODO LINK _other
-          "|",
-          "unlink",
-        ],
+        toolbar: ["linkPreview", "editLink", "|", "_self", "_blank", "_embed", "_other", "|", "unlink"],
         defaultProtocol: "https://",
         defaultTargets: [
           {

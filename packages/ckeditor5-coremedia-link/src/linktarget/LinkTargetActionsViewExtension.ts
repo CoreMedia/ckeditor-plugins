@@ -1,7 +1,7 @@
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
-import { DEFAULT_TARGETS_ARRAY } from "./config/DefaultTarget";
+import { DEFAULT_TARGETS_ARRAY, OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";
 import { Plugin, Command, LinkUI, ButtonView } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
@@ -43,7 +43,7 @@ class LinkTargetActionsViewExtension extends Plugin {
     const concatArr = linkTargetDefinitions.concat(DEFAULT_TARGETS_ARRAY);
     const buttonConfigs = concatArr.filter((item, idx) => concatArr.indexOf(item) === idx);
     buttonConfigs.forEach((buttonConfig) => {
-      if (buttonConfig.name) {
+      if (buttonConfig.name && buttonConfig.name !== OTHER_TARGET_NAME) {
         this.#addTargetButton(buttonConfig, linkTargetCommand);
       }
     });
