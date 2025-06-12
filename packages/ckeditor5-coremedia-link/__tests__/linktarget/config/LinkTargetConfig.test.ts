@@ -158,7 +158,7 @@ describe("LinkTargetConfig", () => {
       config.set("link.toolbar", [customName]);
       config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
       expect(() => parseLinkTargetConfig(config)).toThrow();
-    });//TODO
+    });
     test.each`
       config
       ${42}
