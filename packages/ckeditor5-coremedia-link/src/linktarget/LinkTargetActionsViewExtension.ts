@@ -1,7 +1,7 @@
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
-import { DEFAULT_TARGETS_ARRAY, OTHER_TARGET_NAME } from "./config/DefaultTarget";
+import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";
 import { Plugin, Command, LinkUI, ButtonView } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
