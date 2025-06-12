@@ -124,13 +124,13 @@ class ContentLinkActionsViewExtension extends Plugin {
           }
         }
       });
-      // TODO LINK move this code somewhere else
-      /*formView.on("cancel", () => {
+
+      linkUI.formView?.on("cancel", () => {
         const initialValue: string = this.editor.commands.get("link")?.value as string;
-        toolbarView.set({
+        linkUI.toolbarView?.set({
           contentUriPath: isModelUriPath(initialValue) ? initialValue : null,
         });
-      });*/
+      });
 
       this.contentLinkView = contentLinkView;
 
