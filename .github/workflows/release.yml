@@ -114,6 +114,8 @@ jobs:
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
       - name: Build
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: |
           pnpm build
       - name: Lint
@@ -123,8 +125,6 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm jest
       - name: Playwright Tests
-        env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm playwright
       - name: TypeDoc
         run: |

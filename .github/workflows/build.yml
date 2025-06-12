@@ -123,6 +123,8 @@ jobs:
           pnpm install --frozen-lockfile
       - id: build
         name: "Build"
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: |
           pnpm -r build
       # To move the below steps to reusable workflow, we would need to be able
@@ -145,8 +147,6 @@ jobs:
       - id: itest
         if: ${{ inputs.itest }}
         name: "Integration Tests"
-        env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: |
           pnpm playwright
       - id: doc

@@ -31,8 +31,6 @@ function findEnvFile(startDir = import.meta.dirname) {
 
 const envPath = findEnvFile();
 
-console.log("envPath", envPath);
-
 dotenv.config({ path: envPath });
 
 import { fileURLToPath } from "url";

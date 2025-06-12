@@ -73,6 +73,8 @@ jobs:
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
           echo "**Pre-Release Version:** ${next_version}" >> $GITHUB_STEP_SUMMARY
       - name: Build
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm build
       - name: Lint
         run: pnpm lint
@@ -81,8 +83,6 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm jest
       - name: Playwright Tests
-        env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm playwright
       - name: TypeDoc
         run: pnpm doc
