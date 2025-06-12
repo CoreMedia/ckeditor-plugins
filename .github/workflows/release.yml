@@ -119,7 +119,9 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Test
-        run: cross-env CKEDITOR_LICENSE_KEY=GPL pnpm jest
+        env:
+          CKEDITOR_LICENSE_KEY: GPL
+        run: pnpm jest
       - name: Playwright Tests
         run: pnpm playwright
       - name: TypeDoc

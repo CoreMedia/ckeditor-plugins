@@ -138,8 +138,10 @@ jobs:
       - id: utest
         if: ${{ inputs.utest }}
         name: "Unit Tests"
+        env:
+          CKEDITOR_LICENSE_KEY: GPL
         run: |
-          cross-env CKEDITOR_LICENSE_KEY=GPL pnpm jest
+          pnpm jest
       - id: itest
         if: ${{ inputs.itest }}
         name: "Integration Tests"
