@@ -43,7 +43,7 @@
     "doc": "typedoc",
     "doc:config": "typedoc --showConfig",
     "playwright": "pnpm --recursive --filter \"@coremedia/ckeditor5-coremedia-itest\" run playwright",
-    "jest": "pnpm --recursive jest",
+    "jest": "cross-env CKEDITOR_LICENSE_KEY=GPL pnpm --recursive jest",
     "jest:windows:workaround:issue:4444": "pnpm --recursive jest --runInBand",
     "jest:coverage": "pnpm --recursive jest:coverage",
     "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
