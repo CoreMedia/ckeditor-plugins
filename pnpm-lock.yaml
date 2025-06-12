@@ -1010,9 +1010,6 @@ importers:
 
   packages/ckeditor5-data-facade:
     dependencies:
-      '@coremedia/ckeditor5-common':
-        specifier: 23.0.1-rc.0
-        version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
         specifier: 23.0.1-rc.0
         version: link:../ckeditor5-core-common
