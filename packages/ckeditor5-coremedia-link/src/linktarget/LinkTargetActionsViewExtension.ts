@@ -39,10 +39,9 @@ class LinkTargetActionsViewExtension extends Plugin {
       return;
     }
 
+    // register all custom and default link target buttons
     const linkTargetDefinitions = parseLinkTargetConfig(this.editor.config);
-    const concatArr = linkTargetDefinitions.concat(DEFAULT_TARGETS_ARRAY);
-    const buttonConfigs = concatArr.filter((item, idx) => concatArr.indexOf(item) === idx);
-    buttonConfigs.forEach((buttonConfig) => {
+    linkTargetDefinitions.forEach((buttonConfig) => {
       if (buttonConfig.name && buttonConfig.name !== OTHER_TARGET_NAME) {
         this.#addTargetButton(buttonConfig, linkTargetCommand);
       }
@@ -50,8 +49,9 @@ class LinkTargetActionsViewExtension extends Plugin {
   }
 
   /**
-   * Creates and returns an instance of a buttonView for link target representation.
-   * The buttons are bound to {@link LinkTargetCommand} to set the target on execute
+   * Creates an instance of a buttonView for link target representation and
+   * registers it in the editor's component factory.
+   * The button is bound to {@link LinkTargetCommand} to set the target on execute
    * and toggle their state accordingly.
    *
    * Buttons created by this method directly set the target value they are bound
