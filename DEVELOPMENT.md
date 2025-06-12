@@ -17,6 +17,13 @@ pnpm -r build
 
 ## Testing
 
+Since Version 44 a license key is necessary to use the CkEditor.
+Create a file named `.env` in the root of this workspace and add a line
+
+```text
+CKEDITOR_LICENSE_KEY=<your-license-key>
+```
+
 To run tests use:
 
 ```text
