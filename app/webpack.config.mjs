@@ -8,9 +8,7 @@ const { bundler, loaders } = await import("@ckeditor/ckeditor5-dev-utils");
 const { CKEditorTranslationsPlugin } = await import("@ckeditor/ckeditor5-dev-translations");
 const { default: TerserPlugin } = await import("terser-webpack-plugin");
 const { default: CircularDependencyPlugin } = await import("circular-dependency-plugin");
-import dotenv from "dotenv";
-// use root .env file
-dotenv.config({ path: "../.env"});
+
 import { fileURLToPath } from "url";
 
 const filename = fileURLToPath(import.meta.url);
@@ -74,8 +72,8 @@ export default {
       loaders.getTypeScriptLoader(),
       {
         test: /\.m?js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
+        enforce: "pre",
+        use: ["source-map-loader"],
       },
     ],
   },

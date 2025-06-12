@@ -37,16 +37,21 @@ import {
   Base64UploadAdapter,
   ImageBlockEditing,
 } from "ckeditor5";
-import { licenseKeyErrorMessage } from "./richtext";
+
+const licenseKeyErrorMessage =
+  "Please provide a valid license key for your CKEditor5 instance. Please create a .env file in the workspace root and make your license as CKEDITOR_LICENSE_KEY variable. Please use 'GPL' if you want to use the GNU General Public License.";
+
 export const createBBCodeEditor: CKEditorInstanceFactory = (
   sourceElement: HTMLElement,
   state: ApplicationState,
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
+  // @ts-expect-error - CKEDITOR_LICENSE_KEY is replaced during build.
+  const licenseKey = CKEDITOR_LICENSE_KEY as string | undefined;
 
   try {
     return ClassicEditor.create(sourceElement, {
-      licenseKey: CKEDITOR_LICENSE_KEY,
+      licenseKey,
       placeholder: "Type your text here...",
       plugins: [
         AutoImage,
@@ -306,7 +311,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
         defaultProtocol: "https://",
       },
     });
-  } catch (e) {
+  } catch (e: unknown) {
     throw Error(licenseKeyErrorMessage);
   }
 };

@@ -182,7 +182,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
 ): Promise<ClassicEditor> => {
   const { uiLanguage } = state;
   // @ts-expect-error - CKEDITOR_LICENSE_KEY is replaced during build.
-  const licenseKey = CKEDITOR_LICENSE_KEY;
+  const licenseKey = CKEDITOR_LICENSE_KEY as string | undefined;
 
   try {
     return ClassicEditor.create(sourceElement, {
