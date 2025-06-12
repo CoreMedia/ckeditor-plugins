@@ -3,7 +3,7 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { ctrlOrMeta } from "./browser/UserAgent";
-import { expectFocusedElementHasAriaText, tabToAriaLabel } from "./aria/AriaUtils";
+import { expectFocusedElementHasAriaText, navigateToAriaLabel } from "./aria/AriaUtils";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -100,17 +100,17 @@ describe("Content Link Feature", () => {
       await expect(linkToolbarView).waitToBeVisible();
       await page.keyboard.press("Tab");
       await expectFocusedElementHasAriaText(`Document: ${contentName}`);
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Edit link");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Open in Current Tab");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Open in New Tab");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Show Embedded");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Open in Frame");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Unlink");
     });
   });
@@ -184,7 +184,6 @@ describe("Content Link Feature", () => {
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
       await editor.setData(data);
-
       // In editing view links are represented with href="#".
       const contentLink = view.locator.locator(`a`, { hasText: name });
 
@@ -199,7 +198,7 @@ describe("Content Link Feature", () => {
       await expect(linkToolbarView).waitToBeVisible();
 
       await page.keyboard.press("Tab");
-      await tabToAriaLabel("Edit link");
+      await navigateToAriaLabel("Edit link");
       await page.keyboard.press("Enter");
 
       const { contentLinkView } = linkFormView;
