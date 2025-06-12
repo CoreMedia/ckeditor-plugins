@@ -265,8 +265,7 @@ ClassicEditor
         "_other"
       ],
       targets: [
-        "_parent",
-        "_top",
+        // ...
       ],
     }
   })
@@ -274,8 +273,6 @@ ClassicEditor
   .catch(...);
 ```
 
-Note, that, as no icons are configured for these targets, the button labels will
-just contain the plain text value.
 
 You may configure custom icons by adding SVGs or referencing SVGs:
 
@@ -318,7 +315,8 @@ by using the function `translation-service.add()`. For more information regardin
 The title defaults to the name of the target option if unset.
 
 **icon:** Icons will be scaled to 20×20. Thus, it is recommended providing SVGs
-having this initial size.
+having this initial size. Note, that, if no icon is configured, the button labels will
+just contain the plain text value.
 
 ### Default-Target Configuration
 
