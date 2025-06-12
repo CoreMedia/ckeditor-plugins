@@ -130,7 +130,12 @@ export const computeDefaultLinkTargetForUrl = (url: string, config: Config<Edito
   return result;
 };
 
-const getValidLinkTargetEntries = (linkTargetsConfig: unknown): Required<LinkTargetOptionDefinition>[] => {
+/**
+ * Parses the `link.targets` configuration and converts string entries to objects of
+ * type LinkTargetOptionDefinition.
+ * @param linkTargetsConfig - the `link.targets` configuration
+ */
+const getLinkTargetDefinitions = (linkTargetsConfig: unknown): Required<LinkTargetOptionDefinition>[] => {
   const validTargets: Required<LinkTargetOptionDefinition>[] = [];
   if (linkTargetsConfig === undefined) {
     return [];
@@ -205,8 +210,12 @@ const getValidLinkTargetEntries = (linkTargetsConfig: unknown): Required<LinkTar
 
 /**
  * Parses a possibly existing configuration option as part of CKEditor's
- * link plugin configuration. It expects an entry `targets` which contains an
+ * link plugin configuration. It expects an entry `toolbar` which probably contains an
  * array of targets to offer to the editors for selection in the UI.
+ * This entry is either set manually or the default in CKEditor's link plugin is used.
+ * It also parses the `targets` entry, which might hold custom linkTargets, which then
+ * might be used in the `toolbar` entry.
+ *
  *
  * @param config - CKEditor configuration to parse
  */
@@ -219,7 +228,7 @@ export const parseLinkTargetConfig = (config: Config<EditorConfig>): Required<Li
     return [];
   }
 
-  const validTargets = getValidLinkTargetEntries(linkTargetsConfig);
+  const validTargets = getLinkTargetDefinitions(linkTargetsConfig);
   linkToolbarConfig.forEach((entry: string): void => {
     const foundTarget = validTargets.find((validTarget) => validTarget.name === entry);
     // is toolbar entry in custom target list?
