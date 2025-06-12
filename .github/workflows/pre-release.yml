@@ -78,7 +78,7 @@ jobs:
         run: pnpm lint
       - name: Test
         env:
-          CKEDITOR_LICENSE_KEY: GPL
+          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm jest
       - name: Playwright Tests
         run: pnpm playwright
