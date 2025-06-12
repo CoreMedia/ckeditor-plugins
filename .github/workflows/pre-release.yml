@@ -81,6 +81,8 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm jest
       - name: Playwright Tests
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: pnpm playwright
       - name: TypeDoc
         run: pnpm doc

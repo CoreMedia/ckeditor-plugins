@@ -145,6 +145,8 @@ jobs:
       - id: itest
         if: ${{ inputs.itest }}
         name: "Integration Tests"
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: |
           pnpm playwright
       - id: doc
