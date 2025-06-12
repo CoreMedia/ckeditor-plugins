@@ -8,6 +8,32 @@ const { bundler, loaders } = await import("@ckeditor/ckeditor5-dev-utils");
 const { CKEditorTranslationsPlugin } = await import("@ckeditor/ckeditor5-dev-translations");
 const { default: TerserPlugin } = await import("terser-webpack-plugin");
 const { default: CircularDependencyPlugin } = await import("circular-dependency-plugin");
+import dotenv from "dotenv";
+import fs from "fs";
+
+function findEnvFile(startDir = import.meta.dirname) {
+  let dir = startDir;
+  let nothingFound = false;
+  while (!nothingFound) {
+    const envPath = path.join(dir, ".env");
+    console.log("envPath", envPath);
+    if (fs.existsSync(envPath)) {
+      return envPath;
+    }
+    const parentDir = path.dirname(dir);
+    if (parentDir === dir) {
+      nothingFound = true;
+    }
+    dir = parentDir;
+  }
+  return undefined;
+}
+
+const envPath = findEnvFile();
+
+console.log("envPath", envPath);
+
+dotenv.config({ path: envPath });
 
 import { fileURLToPath } from "url";
 
