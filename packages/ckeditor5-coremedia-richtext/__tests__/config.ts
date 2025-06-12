@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import * as path from "path";
 import * as fs from "fs";
 
-function findEnvFile(startDir = import.meta.dirname): string | undefined {
+function findEnvFile(startDir = process.cwd()): string | undefined {
   let dir = startDir;
   let nothingFound = false;
   while (!nothingFound) {
