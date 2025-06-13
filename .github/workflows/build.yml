@@ -121,6 +121,10 @@ jobs:
         name: Install
         run: |
           pnpm install --frozen-lockfile
+      - name: Create env file
+        run: |
+          touch .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.TOKEN_COREMEDIA_TEST }} >> .env
       - id: build
         name: "Build ${{ secrets.TOKEN_COREMEDIA_TEST }}"
         env:

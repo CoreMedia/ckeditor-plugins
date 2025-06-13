@@ -72,6 +72,10 @@ jobs:
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
           echo "**Pre-Release Version:** ${next_version}" >> $GITHUB_STEP_SUMMARY
+      - name: Create env file
+        run: |
+          touch .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.TOKEN_COREMEDIA_TEST }} >> .env
       - name: Build ${{ secrets.TOKEN_COREMEDIA_TEST }}
         env:
           CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}

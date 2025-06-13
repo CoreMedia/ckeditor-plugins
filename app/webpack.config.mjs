@@ -37,8 +37,6 @@ if (!envPath) {
 }
 
 dotenv.config({ path: envPath });
-// @ts-expect-error CKEDITOR_LICENCE_KEY is not defined in types
-const licenseKey = CKEDITOR_LICENCE_KEY ?? process.env.CKEDITOR_LICENSE_KEY;
 
 import { fileURLToPath } from "url";
 
@@ -89,7 +87,7 @@ export default {
       failOnError: true,
     }),
     new webpack.DefinePlugin({
-      CKEDITOR_LICENSE_KEY: JSON.stringify(licenseKey),
+      CKEDITOR_LICENSE_KEY: JSON.stringify(process.env.CKEDITOR_LICENSE_KEY),
     }),
   ],
 
