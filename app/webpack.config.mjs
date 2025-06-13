@@ -32,7 +32,7 @@ function findEnvFile(startDir = import.meta.dirname) {
 const envPath = findEnvFile();
 
 if (!envPath) {
-  console.log("No .env file found in the project directory or its parents.", startDir);
+  console.log("No .env file found in the project directory or its parents.", import.meta.dirname);
 } else {
   console.log("Using .env file:", envPath);
 }
