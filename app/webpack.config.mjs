@@ -16,7 +16,6 @@ function findEnvFile(startDir = import.meta.dirname) {
   let nothingFound = false;
   while (!nothingFound) {
     const envPath = path.join(dir, ".env");
-    console.log("envPath", envPath);
     if (fs.existsSync(envPath)) {
       return envPath;
     }
@@ -38,6 +37,7 @@ if (!envPath) {
 }
 
 dotenv.config({ path: envPath });
+const licenseKey = process.env.CKEDITOR_LICENSE_KEY ?? CKEDITOR_LICENCE_KEY;
 
 import { fileURLToPath } from "url";
 
@@ -88,7 +88,7 @@ export default {
       failOnError: true,
     }),
     new webpack.DefinePlugin({
-      CKEDITOR_LICENSE_KEY: JSON.stringify(process.env.CKEDITOR_LICENSE_KEY),
+      CKEDITOR_LICENSE_KEY: JSON.stringify(licenseKey),
     }),
   ],
 
