@@ -31,6 +31,12 @@ function findEnvFile(startDir = import.meta.dirname) {
 
 const envPath = findEnvFile();
 
+if (!envPath) {
+  console.error("No .env file found in the project directory or its parents.", startDir, process.cwd());
+} else {
+  console.log("Using .env file:", envPath, process.cwd());
+}
+
 dotenv.config({ path: envPath });
 
 import { fileURLToPath } from "url";

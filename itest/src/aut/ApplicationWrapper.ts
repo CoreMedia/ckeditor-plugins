@@ -45,6 +45,7 @@ const isAddressInfo = (value: unknown): value is Pick<AddressInfo, "port"> =>
  */
 const startServer = async (hashParams: HashParameter[]): Promise<StartResult> => {
   const applicationFolder = path.resolve("../app");
+  console.log("applicationFolder", applicationFolder);
   const app = express();
   app.use("/", express.static(applicationFolder));
 
