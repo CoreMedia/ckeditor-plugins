@@ -116,7 +116,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo CKEDITOR_LICENSE_KEY=GPL >> .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE}}>> .env
       - name: Build
         run: |
           pnpm build
@@ -124,7 +124,7 @@ jobs:
         run: pnpm lint
       - name: Test
         env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
+          CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: pnpm jest
       - name: Playwright Tests
         run: pnpm playwright

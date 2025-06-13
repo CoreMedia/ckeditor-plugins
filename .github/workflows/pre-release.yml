@@ -76,13 +76,13 @@ jobs:
         run: |
           touch .env
           echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE}}>> .env
-      - name: Build ${{ secrets.NEVER }}
+      - name: Build
         run: pnpm build
       - name: Lint
         run: pnpm lint
       - name: Test
         env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
+          CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: pnpm jest
       - name: Playwright Tests
         run: pnpm playwright

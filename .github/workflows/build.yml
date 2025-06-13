@@ -124,7 +124,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo CKEDITOR_LICENSE_KEY=GPL >> .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE}}>> .env
       - id: build
         name: "Build"
         run: |
@@ -142,7 +142,7 @@ jobs:
         if: ${{ inputs.utest }}
         name: "Unit Tests"
         env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
+          CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: |
           pnpm jest
       - id: itest
