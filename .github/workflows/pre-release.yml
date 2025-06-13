@@ -73,11 +73,9 @@ jobs:
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
           echo "**Pre-Release Version:** ${next_version}" >> $GITHUB_STEP_SUMMARY
       - name: Create env file
-        env:
-          TOKEN_COREMEDIA_TEST: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: |
           touch .env
-          echo CKEDITOR_LICENSE_KEY=${TOKEN_COREMEDIA_TEST// /} >> .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE}}>> .env
       - name: Build ${{ secrets.NEVER }}
         run: pnpm build
       - name: Lint
