@@ -116,10 +116,8 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo CKEDITOR_LICENSE_KEY=${{ secrets.TOKEN_COREMEDIA_TEST }} >> .env
+          echo CKEDITOR_LICENSE_KEY=GPL >> .env
       - name: Build
-        env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
         run: |
           pnpm build
       - name: Lint

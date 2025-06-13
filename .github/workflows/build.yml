@@ -124,11 +124,9 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo CKEDITOR_LICENSE_KEY=${{ secrets.TOKEN_COREMEDIA_TEST }} >> .env
+          echo CKEDITOR_LICENSE_KEY=GPL >> .env
       - id: build
-        name: "Build ${{ secrets.TOKEN_COREMEDIA_TEST }}"
-        env:
-          CKEDITOR_LICENSE_KEY: ${{ secrets.TOKEN_COREMEDIA_TEST }}
+        name: "Build"
         run: |
           pnpm -r build
       # To move the below steps to reusable workflow, we would need to be able
