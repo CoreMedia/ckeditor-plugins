@@ -37,7 +37,8 @@ if (!envPath) {
 }
 
 dotenv.config({ path: envPath });
-const licenseKey = process.env.CKEDITOR_LICENSE_KEY ?? CKEDITOR_LICENCE_KEY;
+// @ts-expect-error CKEDITOR_LICENCE_KEY is not defined in types
+const licenseKey = CKEDITOR_LICENCE_KEY ?? process.env.CKEDITOR_LICENSE_KEY;
 
 import { fileURLToPath } from "url";
 
