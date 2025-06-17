@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-core-common",
-  "version": "23.0.1-rc.3",
+  "version": "24.0.0",
   "description": "Assistive Utilities for `@ckeditor/ckeditor5-core`.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -49,8 +49,8 @@
     "ckeditor5": "45.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "23.0.1-rc.3",
-    "@coremedia/ckeditor5-logging": "23.0.1-rc.3"
+    "@coremedia/ckeditor5-common": "^24.0.0",
+    "@coremedia/ckeditor5-logging": "^24.0.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
