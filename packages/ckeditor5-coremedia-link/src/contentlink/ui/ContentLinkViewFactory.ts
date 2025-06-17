@@ -18,7 +18,7 @@ import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-int
 const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
   const logger = LoggerProvider.getLogger("ContentLinkView");
   const { t } = editor.locale;
-  const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
+  const { toolbarView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "toolbarView", "formView");
   const contentLinkView = new LabeledFieldView(
     editor.locale,
     () =>
@@ -58,7 +58,7 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
     formView.set({
       contentUriPath: undefined,
     });
-    actionsView.set({
+    toolbarView.set({
       contentUriPath: undefined,
     });
     formView.urlInputView.focus();

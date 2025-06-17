@@ -24,7 +24,7 @@ import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
  */
 export default class CustomLinkTargetUI extends Plugin {
   public static readonly pluginName = "CustomLinkTargetUI" as const;
-  static readonly customTargetButtonName: string = "customLinkTargetButton";
+  static readonly customTargetButtonName: string = OTHER_TARGET_NAME;
   #balloon: ContextualBalloon | undefined = undefined;
   /**
    * Form View to enter custom target. Initialized during `init`.

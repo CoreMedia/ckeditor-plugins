@@ -1,11 +1,12 @@
 /* eslint no-null/no-null: off */
 
-import { ElementFilterRule, ElementFilterParams, ElementProxy } from "../src/ElementProxy";
 import "jest-xml-matcher";
+import { ElementFilterParams, ElementFilterRule, ElementProxy } from "../src/ElementProxy";
 import { Editor } from "ckeditor5";
+import "./config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
-const MOCK_EDITOR = new Editor();
+const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 
 /*
  * =============================================================================

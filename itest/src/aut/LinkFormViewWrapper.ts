@@ -18,7 +18,7 @@ export class LinkFormViewWrapper implements Locatable {
   }
 
   get urlInputField(): Locator {
-    return this.locator.locator(".ck-input");
+    return this.locator.locator(".ck-input[placeholder='Enter url or drag and drop content onto this area.']");
   }
 
   get contentLinkView(): ContentLinkViewWrapper {
@@ -26,7 +26,7 @@ export class LinkFormViewWrapper implements Locatable {
   }
 
   save(): Promise<void> {
-    return this.locator.locator("button.ck-button-save").click();
+    return this.locator.locator("button.ck-button-action").click();
   }
 
   static fromParent(wrapper: Locatable): LinkFormViewWrapper {

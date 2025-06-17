@@ -8,7 +8,7 @@ export const expectFocusedElementHasAriaText = async (ariaLabelContent: string):
   });
 };
 
-export const tabToAriaLabel = async (ariaLabelContent: string): Promise<void> => {
+export const navigateToAriaLabel = async (ariaLabelContent: string): Promise<void> => {
   const firstItem = await page.locator("*:focus");
   if (await hasAriaLabel(firstItem, ariaLabelContent)) {
     return;
@@ -18,13 +18,13 @@ export const tabToAriaLabel = async (ariaLabelContent: string): Promise<void> =>
     throw new Error("Failed identifying first aria labeled content.");
   }
 
-  await page.keyboard.press("Tab");
+  await page.keyboard.press("ArrowRight");
 
   while (!(await focusedElementHasAriaText(firstItemAriaLabelContent))) {
     if (await focusedElementHasAriaText(ariaLabelContent)) {
       break;
     }
-    await page.keyboard.press("Tab");
+    await page.keyboard.press("ArrowRight");
   }
 };
 

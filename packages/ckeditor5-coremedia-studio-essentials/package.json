@@ -46,9 +46,9 @@
     "/src"
   ],
   "devDependencies": {
-    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@types/jest": "^29.5.12",
+    "ckeditor5": "45.2.0",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",
@@ -57,7 +57,7 @@
     "typescript": "5.4.5"
   },
   "peerDependencies": {
-    "ckeditor5": "43.3.1"
+    "ckeditor5": "45.2.0"
   },
   "dependencies": {
     "@coremedia/ckeditor5-coremedia-richtext": "23.0.1-rc.2",

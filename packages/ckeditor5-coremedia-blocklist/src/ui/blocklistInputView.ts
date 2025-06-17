@@ -8,7 +8,7 @@ import {
   InputTextView,
   KeystrokeHandler,
   Locale,
-  icons,
+  IconCheck,
 } from "ckeditor5";
 import "../lang/blocklist";
 
@@ -107,7 +107,7 @@ export default class BlocklistInputView extends View {
     const button = new ButtonView(this.locale);
     button.set({
       label: locale.t("Add word to blocklist"),
-      icon: icons.check,
+      icon: IconCheck,
       isEnabled: false,
       type: "submit",
       tooltip: true,

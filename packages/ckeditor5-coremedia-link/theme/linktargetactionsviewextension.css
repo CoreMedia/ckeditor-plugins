@@ -3,17 +3,4 @@
   margin-left: calc(var(--ck-spacing-small) / 2) !important;
 }
 
-.ck.ck-toolbar__separator.cm-ck-item-separator {
-  display: inline-block;
-  width: 1px;
-  background: var(--ck-color-toolbar-border);
-}
 
-.ck.ck-toolbar__separator.cm-ck-item-separator.cm-ck-item-separator--left {
-  margin-left: var(--ck-spacing-standard);
-  margin-right: calc(var(--ck-spacing-small) / 2);
-}
-.ck.ck-toolbar__separator.cm-ck-item-separator.cm-ck-item-separator--right {
-  margin-right: 0;
-  margin-left: calc(var(--ck-spacing-small) / 2);
-}

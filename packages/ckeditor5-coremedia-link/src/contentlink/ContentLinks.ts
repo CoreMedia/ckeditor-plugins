@@ -82,7 +82,7 @@ export default class ContentLinks extends Plugin {
     const linkUI: LinkUI = editor.plugins.get(LinkUI);
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      if (visibleView && visibleView === linkUI.actionsView && !this.#initialized) {
+      if (visibleView && visibleView === linkUI.toolbarView && !this.#initialized) {
         this.initializeLinkBalloonListeners(linkUI);
         this.#initialized = true;
       }
@@ -126,13 +126,13 @@ export default class ContentLinks extends Plugin {
       if (!linkUI || !linkCommand) {
         return;
       }
-      const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
+      const { formView, toolbarView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "toolbarView");
       const commandValue: string = linkCommand.value ?? "";
       const value = CONTENT_CKE_MODEL_URI_REGEXP.test(commandValue) ? commandValue : undefined;
       formView.set({
         contentUriPath: value,
       });
-      actionsView.set({
+      toolbarView.set({
         contentUriPath: value,
       });
     };

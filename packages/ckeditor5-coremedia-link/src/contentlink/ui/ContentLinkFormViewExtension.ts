@@ -24,6 +24,7 @@ import ContentLinkView from "./ContentLinkView";
 import { addClassToTemplate } from "../../utils";
 import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import "../../../theme/linkformviewextension.css";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -211,6 +212,16 @@ class ContentLinkFormViewExtension extends Plugin {
       logger.debug(`ContentLinkView not rendered yet. Triggering render().`);
       contentLinkView.render();
     }
+    this.#insertContentLinkViewToFormView(contentLinkView, formView);
+    const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
+    const { urlInputView } = formView;
+    hasRequiredInternalFocusablesProperty(formView) &&
+      handleFocusManagement(formView, contentLinkButtons, urlInputView);
+    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
+  }
+
+  static #insertContentLinkViewToFormView(contentLinkView: LabeledFieldView, formView: LinkFormView): void {
+    const logger = ContentLinkFormViewExtension.#logger;
     const {
       element: formViewElement,
       urlInputView: { element: urlInputViewElement },
@@ -224,12 +235,9 @@ class ContentLinkFormViewExtension extends Plugin {
       });
       throw new Error("Unexpected state on render: Required elements are missing.");
     }
-    formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
-    const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
-    const { urlInputView } = formView;
-    hasRequiredInternalFocusablesProperty(formView) &&
-      handleFocusManagement(formView, contentLinkButtons, urlInputView);
-    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
+
+    // we assume that the urlInput view is located in the last child of the form element
+    formView.children.last?.element?.insertBefore(contentLinkViewElement, urlInputViewElement);
   }
 
   #adaptFormViewFields(formView: LinkFormView): void {
@@ -363,16 +371,16 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   static #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
-    const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
+    const { formView, toolbarView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "toolbarView");
     formView.urlInputView.fieldView.set("value", data);
     formView.set("contentUriPath", null);
-    actionsView.set("contentUriPath", null);
+    toolbarView.set("contentUriPath", null);
     showContentLinkField(formView, false);
-    showContentLinkField(actionsView, false);
+    showContentLinkField(toolbarView, false);
   }
 
   static #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
-    const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
+    const { formView, toolbarView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "toolbarView");
 
     // Check if the balloon is visible. If it was closed, while data was loaded, just return.
     // We can use element.offsetParent to check if the balloon's HTML element is visible.
@@ -381,9 +389,9 @@ class ContentLinkFormViewExtension extends Plugin {
     }
     formView.urlInputView.fieldView.set("value", undefined);
     formView.set("contentUriPath", data);
-    actionsView.set("contentUriPath", data);
+    toolbarView.set("contentUriPath", data);
     showContentLinkField(formView, true);
-    showContentLinkField(actionsView, true);
+    showContentLinkField(toolbarView, true);
   }
 
   /**

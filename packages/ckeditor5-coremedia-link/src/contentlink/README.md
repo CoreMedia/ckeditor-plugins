@@ -85,7 +85,7 @@ In context of the Content-Links feature, we decided:
 * To use an artificial name/placeholder `<root>` when a name has to be written
   to the text (on drag and drop or for creating links for a collapsed selection)
   .
-* To display an empty name in preview scenarios (`LinkActionsView`,
+* To display an empty name in preview scenarios (`ToolbarView`,
   `LinkFormView`).
 
 If we experience the need to officially support links to root-folder these

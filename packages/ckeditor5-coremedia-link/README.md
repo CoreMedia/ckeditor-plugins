@@ -13,7 +13,7 @@ The plugins provided in `ckeditor5-link` extend the
 * **[LinkTarget Plugin](src/linktarget/README.md):**
 
   Adds a configuration option for the `target` behavior to link editing. It
-  extends the `LinkActionsView` by buttons to toggle between different
+  extends the link balloon's `ToolbarView` by buttons to toggle between different
   behaviors.
 
 * **[ContentLink Plugin](src/contentlink/README.md):**
@@ -33,8 +33,7 @@ pnpm install @coremedia/ckeditor5-coremedia-link
 ```
 
 ```javascript
-import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
-import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
+import { ContentLinks, LinkTarget } from "@coremedia/ckeditor5-coremedia-link";
 
 ClassicEditor.create(document.querySelector('#editor'), {
   plugins: [
