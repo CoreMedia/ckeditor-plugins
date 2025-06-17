@@ -6,6 +6,12 @@
 # Visual Studio Code
 .vscode/
 
+# .env file
+# We need to exclude the env file because we temproally create such a file in our github actions
+# The action would fail if there would still be uncommited files (like the .env file)
+.env
+
+
 # osx
 .DS_Store
 
