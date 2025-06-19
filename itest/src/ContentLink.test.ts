@@ -58,12 +58,12 @@ describe("Content Link Feature", () => {
       await contentLink.waitFor();
       await contentLink.click();
 
-      const { linkActionsView } = editor.ui.view.body.balloonPanel;
+      const { linkToolbarView } = editor.ui.view.body.balloonPanel;
 
       // The ballon should pop up on click.
-      await linkActionsView.locator.waitFor();
+      await linkToolbarView.locator.waitFor();
 
-      const { contentLinkView } = linkActionsView;
+      const { contentLinkView } = linkToolbarView;
 
       await contentLinkView.locator.waitFor();
       await waitForExpect(() => expect(contentLinkView.locator.getByText("Document for")).toBeDefined());
@@ -97,21 +97,21 @@ describe("Content Link Feature", () => {
         },
       });
 
-      const { linkActionsView } = view.body.balloonPanel;
-      await linkActionsView.locator.waitFor();
+      const { linkToolbarView } = view.body.balloonPanel;
+      await linkToolbarView.locator.waitFor();
       await page.keyboard.press("Tab");
       await expectFocusedElementHasAriaText(`Document: ${contentName}`);
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Edit link");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Open in Current Tab");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Open in New Tab");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Show Embedded");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Open in Frame");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await expectFocusedElementHasAriaText("Unlink");
     });
   });
@@ -144,10 +144,10 @@ describe("Content Link Feature", () => {
         },
       });
 
-      const { linkActionsView, linkFormView } = view.body.balloonPanel;
+      const { linkToolbarView, linkFormView } = view.body.balloonPanel;
 
-      await linkActionsView.locator.waitFor();
-      await linkActionsView.edit();
+      await linkToolbarView.locator.waitFor();
+      await linkToolbarView.edit();
 
       await linkFormView.locator.waitFor();
       const { contentLinkView } = linkFormView;
@@ -179,7 +179,6 @@ describe("Content Link Feature", () => {
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
       await editor.setData(data);
-
       // In editing view links are represented with href="#".
       const contentLink = view.locator.getByText(name);
 
@@ -190,10 +189,10 @@ describe("Content Link Feature", () => {
         },
       });
 
-      const { linkActionsView, linkFormView } = view.body.balloonPanel;
-      await linkActionsView.locator.waitFor();
+      const { linkToolbarView, linkFormView } = view.body.balloonPanel;
+      await linkToolbarView.locator.waitFor();
 
-      await linkActionsView.locator.getByLabel("Edit link").waitFor();
+      await linkToolbarView.locator.getByLabel("Edit link").waitFor();
 
       await page.keyboard.press("Tab");
       await page.keyboard.press("Tab");

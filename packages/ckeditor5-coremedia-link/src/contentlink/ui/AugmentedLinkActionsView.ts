@@ -24,7 +24,7 @@ export interface LinkActionsViewAugmentation {
   contentUriPath: string | null | undefined;
 }
 
-export type LinkActionsView = NonNullable<LinkUI["actionsView"]>;
+export type LinkActionsView = NonNullable<LinkUI["toolbarView"]>;
 
 /**
  * Combined type for augmented `LinkActionsView`.

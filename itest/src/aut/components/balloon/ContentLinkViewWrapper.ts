@@ -27,11 +27,10 @@ export default class ContentLinkViewWrapper extends JSWrapper<Element> implement
 
   static fromLinkActionsView(linkActionsWrapper: LinkActionsViewWrapper): ContentLinkViewWrapper {
     const instance = linkActionsWrapper.evaluateHandle((linkActionsView) => {
-      // As we are patching the LinkActionsView we have trouble here to find the child with its correct type.
-      // Easiest way is to assume that it is the second item in the list.
+      // As the order of buttons in the toolbar is part of the editor's configuration, we can't be sure which element is the contentLinkView.
+      // Therefore, just look for the class in all descendants.
       // Unfortunately we can't get a ckeditor view but only the HTMLElement
-      const children = linkActionsView.element?.children;
-      const item = children?.item(1); //currently the first item is the ContentLinkView
+      const item = linkActionsView.element?.querySelectorAll(".cm-ck-content-link-view")[0];
       if (!item) {
         throw new Error();
       }

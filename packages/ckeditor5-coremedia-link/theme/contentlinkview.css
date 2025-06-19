@@ -1,6 +1,11 @@
 @import "contentlinkvisibility.css";
 @import "contentlinkformview.css";
 
+.ck.cm-ck-content-link-suggester {
+  flex: 1;
+  min-width: auto !important;
+}
+
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
   width: var(--ck-input-text-width);

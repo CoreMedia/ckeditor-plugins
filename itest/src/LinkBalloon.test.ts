@@ -53,15 +53,15 @@ describe("Link Balloon", () => {
       const contentLink = view.locator.locator(`a`, { hasText: name });
       await contentLink.click();
 
-      const { linkActionsView } = editor.ui.view.body.balloonPanel;
+      const { linkToolbarView } = editor.ui.view.body.balloonPanel;
       // The ballon should pop up on click.
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
 
       await page.locator(`#${configuredClickKeepOpenDivId}`).click();
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
 
       await page.locator(`.${configuredClickKeepOpenDivClass}`).click();
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
     });
 
     it("Should close when click on draggable element", async () => {
@@ -83,12 +83,12 @@ describe("Link Balloon", () => {
       const contentLink = view.locator.locator(`a`, { hasText: name });
       await contentLink.click();
 
-      const { linkActionsView } = editor.ui.view.body.balloonPanel;
+      const { linkToolbarView } = editor.ui.view.body.balloonPanel;
       // The ballon should pop up on click.
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
 
       await page.locator(`#${draggableDivId}`).click();
-      await expect(linkActionsView).not.waitToBeVisible();
+      await expect(linkToolbarView).not.waitToBeVisible();
     });
 
     it("Should stay open when mousedown on draggable element", async () => {
@@ -110,13 +110,13 @@ describe("Link Balloon", () => {
       const contentLink = view.locator.locator(`a`, { hasText: name });
       await contentLink.click();
 
-      const { linkActionsView } = editor.ui.view.body.balloonPanel;
+      const { linkToolbarView } = editor.ui.view.body.balloonPanel;
       // The ballon should pop up on click.
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
 
       await page.locator(`#${draggableDivId}`).hover();
       await page.mouse.down();
-      await expect(linkActionsView).waitToBeVisible();
+      await expect(linkToolbarView).waitToBeVisible();
     });
   });
 });

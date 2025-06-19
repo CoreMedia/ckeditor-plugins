@@ -13,7 +13,7 @@
     "ckeditor5",
     "clipboard"
   ],
-  "version": "23.0.1-rc.1",
+  "version": "24.0.0",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json && copyfiles -u 1 theme/* theme/**/* dist/theme",
@@ -26,10 +26,10 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
+    "ckeditor5": "45.2.0",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",
@@ -60,13 +60,13 @@
     "/theme"
   ],
   "peerDependencies": {
-    "ckeditor5": "43.3.1",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "ckeditor5": "45.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-core-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-logging": "23.0.1-rc.1"
+    "@coremedia/ckeditor5-common": "^24.0.0",
+    "@coremedia/ckeditor5-core-common": "^24.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^24.0.0",
+    "@coremedia/ckeditor5-logging": "^24.0.0"
   }
 }

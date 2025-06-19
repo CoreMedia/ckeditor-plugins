@@ -4,19 +4,16 @@ import ContentLinkView from "./ContentLinkView";
 import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { isModelUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { ifCommand, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import {
-  handleFocusManagement,
-  hasRequiredInternalFocusablesProperty,
-  LINK_COMMAND_NAME,
-} from "@coremedia/ckeditor5-link-common";
-import { Command, ContextualBalloon, LinkUI, Plugin } from "ckeditor5";
+import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
+import { Command, ContextualBalloon, LinkUI, Plugin, ToolbarView } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
-import { asAugmentedLinkUI, AugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
-import { AugmentedLinkActionsView, LinkActionsView } from "./AugmentedLinkActionsView";
+import { asAugmentedLinkUI, AugmentedLinkUI } from "./AugmentedLinkUI";
+import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
+export const CONTENT_LINK_VIEW_COMPONENT_NAME = "contentLinkView";
 /**
  * Extends the action view for Content link display. This includes:
  *
@@ -30,6 +27,7 @@ class ContentLinkActionsViewExtension extends Plugin {
   static readonly requires = [LinkUI, ContextualBalloon];
   contentUriPath: string | undefined | null;
   #initialized = false;
+  contentLinkView?: ContentLinkView = undefined;
 
   init(): void {
     const initInformation = reportInitStart(this);
@@ -38,31 +36,29 @@ class ContentLinkActionsViewExtension extends Plugin {
     const contextualBalloon: ContextualBalloon = editor.plugins.get(ContextualBalloon);
 
     contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      const { actionsView } = linkUI;
-      if (actionsView && actionsView === visibleView && !this.#initialized) {
-        this.#initialize(linkUI, actionsView);
+      const { toolbarView } = linkUI;
+      if (toolbarView && toolbarView === visibleView) {
+        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(toolbarView);
+      }
+      if (toolbarView && toolbarView === visibleView && !this.#initialized) {
+        this.#initialize(linkUI, toolbarView);
         this.#initialized = true;
       }
     });
 
-    contextualBalloon.on("change:visibleView", (evt, name, visibleView) => {
-      const { actionsView } = linkUI;
-      if (actionsView && actionsView === visibleView) {
-        ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
-      }
-    });
+    this.#registerContentLinkViewButton(linkUI);
 
     reportInitEnd(initInformation);
   }
 
-  #initialize(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
+  #initialize(linkUI: AugmentedLinkUI, toolbarView: AugmentedLinkActionsView): void {
     const { editor } = linkUI;
 
-    actionsView.set({
+    toolbarView.set({
       contentUriPath: undefined,
     });
     const bindContentUriPathTo = (command: Command): void => {
-      actionsView
+      toolbarView
         .bind("contentUriPath")
         .to(command, "value", (value: unknown) => (isModelUriPath(value) ? value : undefined));
     };
@@ -76,110 +72,88 @@ class ContentLinkActionsViewExtension extends Plugin {
      * We need to update the visibility of the inputs when the value of the content link changes
      * If the value was removed: show external link field, otherwise show the content link field
      */
-    actionsView.on("change:contentUriPath", (evt) => {
+    toolbarView.on("change:contentUriPath", (evt) => {
       const { source } = evt;
       if (!hasContentUriPath(source)) {
         // set visibility of url and content field
-        showContentLinkField(actionsView, false);
+        showContentLinkField(toolbarView, false);
         return;
       }
       const { contentUriPath: value } = source;
 
       // set visibility of url and content field
-      showContentLinkField(actionsView, !!value);
+      showContentLinkField(toolbarView, !!value);
     });
-    this.#extendView(linkUI, actionsView);
+
+    if (this.contentLinkView) {
+      // @ts-expect-error should not be stored in toolbarView anymore?!
+      this.contentLinkView.bind("uriPath").to(linkUI.toolbarView, "contentUriPath");
+    }
   }
 
-  #extendView(linkUI: AugmentedLinkUI, actionsView: AugmentedLinkActionsView): void {
+  #registerContentLinkViewButton(linkUI: AugmentedLinkUI): void {
+    const editor = this.editor;
     const logger = ContentLinkActionsViewExtension.#logger;
-    const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
-    const contentLinkView = new ContentLinkView(this.editor, {
-      renderTypeIcon: true,
-    });
-    contentLinkView.set({
-      renderAsTextLink: true,
-    });
-    if (!hasContentUriPath(linkUI.actionsView)) {
-      logger.warn("ActionsView does not have a property contentUriPath. Is it already bound?", linkUI.actionsView);
-      return;
-    }
-    contentLinkView.bind("uriPath").to(actionsView, "contentUriPath");
-    contentLinkView.on("contentClick", () => {
-      const { uriPath } = contentLinkView;
-      if (uriPath) {
-        logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
-        const uriPaths: UriPath[] = [requireContentUriPath(uriPath)];
-        executeOpenContentInTabCommand(this.editor, uriPaths)
-          ?.then((result) => {
-            logger.debug("Result for OpenContentInTabCommand by click:", result);
-          })
-          .catch((reason) => {
-            logger.warn("Failed executing OpenContentInTabCommand invoked by click:", reason);
-          });
-      }
-    });
-    contentLinkView.on("change:contentName", () => {
-      if (!this.editor.isReadOnly) {
-        const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
-        if (contextualBalloon.visibleView && contextualBalloon.visibleView === linkUI.actionsView) {
-          contextualBalloon.updatePosition();
-        }
-      }
-    });
-    ContentLinkActionsViewExtension.#render(actionsView, contentLinkView);
-    formView.on("cancel", () => {
-      const initialValue: string = this.editor.commands.get("link")?.value as string;
-      actionsView.set({
-        contentUriPath: isModelUriPath(initialValue) ? initialValue : null,
-      });
-    });
-  }
 
-  static #render(actionsView: LinkActionsView, simpleContentLinkView: ContentLinkView): void {
-    if (!actionsView.element || !actionsView.editButtonView.element) {
-      ContentLinkActionsViewExtension.#logger.error(
-        "ActionsView or the edit button has no element yet, this indicates the actionsView is not rendered yet. Can't customize.",
-        actionsView,
-      );
-      return;
-    }
-    actionsView.registerChild(simpleContentLinkView);
-    if (!simpleContentLinkView.isRendered) {
-      simpleContentLinkView.render();
-    }
-    if (!simpleContentLinkView.element) {
-      ContentLinkActionsViewExtension.#logger.error(
-        "ContentLinkView is rendered, but element does not exist.",
-        simpleContentLinkView,
-      );
-      return;
-    }
-    actionsView.element.insertBefore(simpleContentLinkView.element, actionsView.editButtonView.element);
-    ContentLinkActionsViewExtension.#addCoreMediaClassesToActionsView(actionsView);
-    const buttonView = actionsView.previewButtonView;
-    hasRequiredInternalFocusablesProperty(actionsView) &&
-      handleFocusManagement(actionsView, [simpleContentLinkView], buttonView);
+    editor.ui.componentFactory.add(CONTENT_LINK_VIEW_COMPONENT_NAME, () => {
+      const contentLinkView = new ContentLinkView(this.editor, {
+        renderTypeIcon: true,
+      });
+      contentLinkView.set({
+        renderAsTextLink: true,
+      });
+      contentLinkView.on("contentClick", () => {
+        const { uriPath } = contentLinkView;
+        if (uriPath) {
+          logger.debug(`Executing OpenContentInTabCommand for: ${uriPath}.`);
+          const uriPaths: UriPath[] = [requireContentUriPath(uriPath)];
+          executeOpenContentInTabCommand(this.editor, uriPaths)
+            ?.then((result) => {
+              logger.debug("Result for OpenContentInTabCommand by click:", result);
+            })
+            .catch((reason) => {
+              logger.warn("Failed executing OpenContentInTabCommand invoked by click:", reason);
+            });
+        }
+      });
+      contentLinkView.on("change:contentName", () => {
+        if (!this.editor.isReadOnly) {
+          const contextualBalloon: ContextualBalloon = this.editor.plugins.get(ContextualBalloon);
+          if (contextualBalloon.visibleView && contextualBalloon.visibleView === linkUI.toolbarView) {
+            contextualBalloon.updatePosition();
+          }
+        }
+      });
+
+      linkUI.formView?.on("cancel", () => {
+        const initialValue: string = this.editor.commands.get("link")?.value as string;
+        linkUI.toolbarView?.set({
+          contentUriPath: isModelUriPath(initialValue) ? initialValue : null,
+        });
+      });
+
+      this.contentLinkView = contentLinkView;
+
+      return contentLinkView;
+    });
   }
 
   /**
-   * Add classes to the actions view that enables to distinguish if the extension is active.
+   * Add classes to the toolbar view that enables to distinguish if the extension is active.
    *
-   * @param actionsView - the rendered actionsView of the linkUI
+   * @param toolbarView - the rendered toolbarView of the linkUI
    * @private
    */
-  static #addCoreMediaClassesToActionsView(actionsView: LinkActionsView): void {
-    if (!actionsView.isRendered) {
+  static #addCoreMediaClassesToActionsView(toolbarView: ToolbarView): void {
+    if (!toolbarView.isRendered) {
       ContentLinkActionsViewExtension.#logger.warn(
-        "ActionsView is not rendered yet, but classes must be added to the rendered actionsView",
-        actionsView,
+        "ToolbarView is not rendered yet, but classes must be added to the rendered toolbarView",
+        toolbarView,
       );
       return;
     }
     const CM_FORM_VIEW_CLS = "cm-ck-link-actions-view";
-    const CM_PREVIEW_BUTTON_VIEW_CLS = "cm-ck-link-actions-preview";
-    actionsView.element?.classList.add(CM_FORM_VIEW_CLS);
-    actionsView.previewButtonView.element?.classList.add(CM_PREVIEW_BUTTON_VIEW_CLS);
+    toolbarView.element?.classList.add(CM_FORM_VIEW_CLS);
   }
 }
 

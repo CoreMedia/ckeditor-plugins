@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-link",
-  "version": "23.0.1-rc.1",
+  "version": "24.0.0",
   "description": "Support for Content Link, Link Target Specification",
   "author": {
     "name": "CoreMedia GmbH",
@@ -51,7 +51,7 @@
     "@coremedia/service-agent": "^1.1.5",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
-    "ckeditor5": "43.3.1",
+    "ckeditor5": "45.2.0",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",
@@ -61,16 +61,16 @@
   },
   "peerDependencies": {
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
-    "ckeditor5": "43.3.1"
+    "ckeditor5": "45.2.0"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-core-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-content": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-link-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-logging": "23.0.1-rc.1",
+    "@coremedia/ckeditor5-common": "^24.0.0",
+    "@coremedia/ckeditor5-core-common": "^24.0.0",
+    "@coremedia/ckeditor5-coremedia-content": "^24.0.0",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "^24.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^24.0.0",
+    "@coremedia/ckeditor5-link-common": "^24.0.0",
+    "@coremedia/ckeditor5-logging": "^24.0.0",
     "rxjs": "^7.8.1"
   }
 }

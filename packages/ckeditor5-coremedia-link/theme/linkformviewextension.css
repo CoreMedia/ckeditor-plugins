@@ -1,0 +1,8 @@
+.ck.cm-ck-link-form-view .ck-form__header {
+  display: none;
+}
+
+.ck.cm-ck-link-form-view .ck-form__header + .ck-form__row {
+  display: none;
+}
+

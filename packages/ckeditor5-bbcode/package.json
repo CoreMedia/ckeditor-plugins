@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-bbcode",
-  "version": "23.0.1-rc.1",
+  "version": "24.0.0",
   "description": "BBCode Data-Processor",
   "author": {
     "name": "CoreMedia GmbH",
@@ -48,7 +48,7 @@
     "/types"
   ],
   "peerDependencies": {
-    "ckeditor5": "43.3.1"
+    "ckeditor5": "45.2.0"
   },
   "dependencies": {
     "@bbob/core": "^3.0.2",
@@ -56,16 +56,16 @@
     "@bbob/plugin-helper": "^3.0.2",
     "@bbob/preset": "^3.0.2",
     "@bbob/preset-html5": "^3.0.2",
-    "@coremedia/ckeditor5-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-core-common": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-dom-support": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-logging": "23.0.1-rc.1"
+    "@coremedia/ckeditor5-common": "^24.0.0",
+    "@coremedia/ckeditor5-core-common": "^24.0.0",
+    "@coremedia/ckeditor5-dom-support": "^24.0.0",
+    "@coremedia/ckeditor5-logging": "^24.0.0"
   },
   "devDependencies": {
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
-    "ckeditor5": "43.3.1",
+    "ckeditor5": "45.2.0",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-each": "^29.7.0",

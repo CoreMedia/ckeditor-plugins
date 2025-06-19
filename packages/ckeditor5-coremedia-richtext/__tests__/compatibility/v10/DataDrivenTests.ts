@@ -1,11 +1,12 @@
 import "jest-xml-matcher";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import { Editor } from "ckeditor5";
 import { getV10Config, parseXml } from "./Utils";
 import { silenced } from "../../Silenced";
+import { Editor } from "ckeditor5";
+import "../../config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
-export const MOCK_EDITOR = new Editor();
+const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 
 /**
  * A test case, which comes with a name.

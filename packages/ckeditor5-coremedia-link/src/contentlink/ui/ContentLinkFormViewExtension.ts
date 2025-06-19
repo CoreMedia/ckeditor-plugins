@@ -30,6 +30,7 @@ import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
 import { combineLatest, from, of, switchMap } from "rxjs";
 import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
 import LibraryButtonView from "./LibraryButtonView";
+import "../../../theme/linkformviewextension.css";
 
 /**
  * Extends the form view for Content link display. This includes:
@@ -215,14 +216,14 @@ class ContentLinkFormViewExtension extends Plugin {
 
   #resetValue() {
     const linkUI = this.editor.plugins.get(LinkUI);
-    const { actionsView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "actionsView", "formView");
+    const { toolbarView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "toolbarView", "formView");
     this.#linkSuggesterView?.resetInputValue();
     this.#linkSuggesterView?.resetFilterValue();
     this.#suggesterInputValue = "";
     formView.set({
       contentUriPath: undefined,
     });
-    actionsView.set({
+    toolbarView.set({
       contentUriPath: undefined,
     });
     this.#linkSuggesterView?.focus();
@@ -336,10 +337,12 @@ class ContentLinkFormViewExtension extends Plugin {
       options: { minFilterValueLength: 0 },
     });
 
-    formViewElement.insertBefore(contentLinkViewElement, urlInputViewElement.nextSibling);
+    formView.children.last?.element?.insertBefore(contentLinkViewElement, urlInputViewElement);
     this.#linkSuggesterView?.setupPositionInParent(urlInputViewElement.nextSibling);
+
+
     this.#libraryButton.element &&
-      formViewElement.insertBefore(this.#libraryButton.element, contentLinkViewElement.nextSibling);
+      formView.children.last?.element?.insertBefore(this.#libraryButton.element, contentLinkViewElement.nextSibling);
 
     const contentLinkButtons = ContentLinkFormViewExtension.#getContentLinkButtons(contentLinkView);
     const { urlInputView } = formView;
@@ -478,17 +481,17 @@ class ContentLinkFormViewExtension extends Plugin {
   }
 
   #setDataAndSwitchToExternalLink(linkUI: LinkUI, data: string): void {
-    const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
+    const { formView, toolbarView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "toolbarView");
     formView.urlInputView.fieldView.set("value", data);
     formView.set("contentUriPath", null);
-    actionsView.set("contentUriPath", null);
+    toolbarView.set("contentUriPath", null);
     showContentLinkField(formView, false);
-    showContentLinkField(actionsView, false);
+    showContentLinkField(toolbarView, false);
     this.#linkSuggesterView?.setVisible(true);
   }
 
   #setDataAndSwitchToContentLink(linkUI: LinkUI, data: string): void {
-    const { formView, actionsView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "actionsView");
+    const { formView, toolbarView } = requireNonNullsAugmentedLinkUI(linkUI, "formView", "toolbarView");
     // Check if the balloon is visible. If it was closed, while data was loaded, just return.
     // We can use element.offsetParent to check if the balloon's HTML element is visible.
     if (!formView.element?.offsetParent) {
@@ -496,9 +499,9 @@ class ContentLinkFormViewExtension extends Plugin {
     }
     formView.urlInputView.fieldView.set("value", undefined);
     formView.set("contentUriPath", data);
-    actionsView.set("contentUriPath", data);
+    toolbarView.set("contentUriPath", data);
     showContentLinkField(formView, true);
-    showContentLinkField(actionsView, true);
+    showContentLinkField(toolbarView, true);
     this.#linkSuggesterView?.setVisible(false);
   }
 

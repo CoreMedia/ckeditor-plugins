@@ -7,6 +7,7 @@ import {
   Editor,
   InputTextView,
   LabeledFieldView,
+  LinkFormView,
   View,
   ViewCollection,
 } from "ckeditor5";
@@ -16,7 +17,7 @@ import { BehaviorSubject, combineLatest, debounce, interval, Observable, of, swi
 
 interface ContentLinkSuggesterViewProps {
   editor: Editor;
-  parent: View;
+  parent: LinkFormView;
   onChangeInputValue: (value: string) => void;
   onClickOnLink: (uriPath: string) => void;
   onOpenLibrary: () => void;
@@ -30,7 +31,7 @@ interface ContentLinkSuggesterViewProps {
 }
 
 export class ContentLinkSuggesterView extends ViewCollection {
-  readonly #parent: View;
+  readonly #parent: LinkFormView;
   readonly #minFilterValueLength: number;
   readonly #debounceInterval: number;
 
@@ -181,9 +182,18 @@ export class ContentLinkSuggesterView extends ViewCollection {
 
   setupPositionInParent(beforeElement: Node | null) {
     this.#parent.registerChild(this.#dropdown);
-    this.#dropdown.element && this.#parent.element?.insertBefore(this.#dropdown.element, beforeElement);
-    this.#openLibraryButton.element &&
-      this.#parent.element?.insertBefore(this.#openLibraryButton.element, beforeElement);
+    if (this.#dropdown.element && this.#parent.element) {
+      this.#parent.children.get(2)?.element?.insertBefore(this.#dropdown.element, beforeElement);
+    }
+
+    if (this.#dropdown.element) {
+      this.#dropdown.element.classList.add("cm-ck-content-link-suggester");
+    }
+
+    if (this.#openLibraryButton.element && this.#parent.element) {
+      this.#parent.children.get(2)?.element?.insertBefore(this.#openLibraryButton.element, beforeElement);
+    }
+
   }
 
   setupFocusHandling(setupFocus: (views: View[]) => void): void {

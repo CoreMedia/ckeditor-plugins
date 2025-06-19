@@ -113,12 +113,18 @@ jobs:
           git commit -am "Set next release-candidate version to: ${next_version}"
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
+      - name: Create env file
+        run: |
+          touch .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE}}>> .env
       - name: Build
         run: |
           pnpm build
       - name: Lint
         run: pnpm lint
       - name: Test
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: pnpm jest
       - name: Playwright Tests
         run: pnpm playwright

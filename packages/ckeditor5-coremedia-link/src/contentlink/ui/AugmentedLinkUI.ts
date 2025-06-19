@@ -7,14 +7,14 @@ import { RequiredNonNull, requireNonNulls } from "@coremedia/ckeditor5-common";
  * Augmented properties for `LinkUI`.
  */
 export interface LinkUIAugmentation {
-  actionsView: AugmentedLinkActionsView | null;
+  toolbarView: AugmentedLinkActionsView | null;
   formView: (AugmentedLinkFormView & ViewWithCssTransitionDisabler) | null;
 }
 
 /**
  * Combined type for augmented `LinkUI`.
  */
-export type AugmentedLinkUI = Omit<LinkUI, "actionsView" | "formView"> & LinkUIAugmentation;
+export type AugmentedLinkUI = Omit<LinkUI, "toolbarView" | "formView"> & LinkUIAugmentation;
 
 /**
  * Cast to `AugmentedLinkUI` without explicit checks applied.

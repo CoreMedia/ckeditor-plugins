@@ -121,6 +121,10 @@ jobs:
         name: Install
         run: |
           pnpm install --frozen-lockfile
+      - name: Create env file
+        run: |
+          touch .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE}}>> .env
       - id: build
         name: "Build"
         run: |
@@ -133,11 +137,12 @@ jobs:
       - id: lint
         if: ${{ inputs.lint }}
         name: "Lint"
-        run: |
-          pnpm -r build
+        run: pnpm lint
       - id: utest
         if: ${{ inputs.utest }}
         name: "Unit Tests"
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: |
           pnpm jest
       - id: itest

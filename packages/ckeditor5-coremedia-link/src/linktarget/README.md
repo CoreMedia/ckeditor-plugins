@@ -40,6 +40,9 @@ ClassicEditor
     },
     // ...
     link: {
+      toolbar: [
+        // ...
+      ],
       targets: [
         // ...
       ],
@@ -58,7 +61,32 @@ ClassicEditor
 
 | [Top][] | [Integration][] | [Configuration][] | [RichText][] |
 
-The plugin can be configured as part of CKEditor's Link Feature configuration.
+The plugin can be configured as part of CKEditor's Link Feature configuration. In
+order to change the link targets, displayed inside the link balloon, they need to be added to
+the corresponding `link.toolbar` configuration. This toolbar usually also consists of a field
+to preview the link, separators and other buttons. This is a configuration that holds two additional
+buttons that set link targets: `_self` and `_blank`:
+
+```typescript
+ClassicEditor
+  .create(document.querySelector("#editor"), {
+    // ...
+    link: {
+      toolbar: [
+        "linkPreview",
+        "editLink",
+        "|",
+        "_self",
+        "_blank",
+        "|",
+        "unlink",
+      ],
+    }
+  })
+  .then(...)
+  .catch(...);
+```
+
 
 * [Default Configuration][]
 * [Advanced Configuration][]
@@ -69,39 +97,20 @@ The plugin can be configured as part of CKEditor's Link Feature configuration.
 
 | [Top][] | [Up][Configuration] | [Default Configuration][] | [Advanced Configuration][] | [Default-Target Configuration][] |
 
-The following example shows the default configuration, which is applied, if no
-configuration is given:
+The default toolbar for the link balloon is configured inside [CKEditor's Link Feature][cke5:docs:link:feature] plugins
+and includes no buttons for link targets. Please add a configuration like shown in the example above to
+configure any buttons that change the `linkTarget`.
 
-```typescript
-ClassicEditor
-  .create(document.querySelector("#editor"), {
-    // ...
-    link: {
-      targets: [
-        "_self",
-        "_blank",
-        "_embed",
-        "_other",
-      ],
-    }
-  })
-  .then(...)
-  .catch(...);
-```
+The following table shows `linkTarget` buttons that can be added to the toolbar:
 
-It will create buttons in the `LinkActionsView` of CKEditor's Link Feature in
-the order as given in the array:
+| Target / Button Name | Label                 |
+|----------------------|-----------------------|
+| `_self`              | _Open in Current Tab_ |
+| `_blank`             | _Open in New Tab_     |
+| `_embed`             | _Show Embedded_       |
+| `_other`             | _Open in Frame_       |
 
-| Target   | Label                 |
-|----------|-----------------------|
-| `_self`  | _Open in Current Tab_ |
-| `_blank` | _Open in New Tab_     |
-| `_embed` | _Show Embedded_       |
-| `_other` | _Open in Frame_       |
 
-The buttons will be added just in front of the _Unlink_ button.
-
-For customization, you may skip or reorder the targets according to your needs.
 
 #### Predefined: _self
 
@@ -241,17 +250,22 @@ mapping from `xlink:show` and `xlink:role` as required for CoreMedia RichText
 
 You may add any custom button for predefined `linkTarget` values. For example to
 support standard HTML option values `_top` and `_parent` you may add them to the
-configuration just as all other options:
+`link.toolbar` configuration just as all other options. There is a prerequisite though:
+Custom targets have to be registered as valid targets by also adding them to the `link.targets`: 
 
 ```typescript
 ClassicEditor
   .create(document.querySelector("#editor"), {
     // ...
     link: {
-      targets: [
+      toolbar: [
+        // ...
         "_parent",
         "_top",
-        "_other",
+        "_other"
+      ],
+      targets: [
+        // ...
       ],
     }
   })
@@ -259,8 +273,6 @@ ClassicEditor
   .catch(...);
 ```
 
-Note, that, as no icons are configured for these targets, the button labels will
-just contain the plain text value.
 
 You may configure custom icons by adding SVGs or referencing SVGs:
 
@@ -271,6 +283,12 @@ ClassicEditor
   .create(document.querySelector("#editor"), {
     // ...
     link: {
+      toolbar: [
+        // ...
+        "_parent",
+        "_top",
+        "_other"
+      ],
       targets: [
         {
           name: "_parent",
@@ -281,7 +299,6 @@ ClassicEditor
           icon: "<svg ...>...</svg>",
           title: "Open at topmost browsing context"
         },
-        "_other",
       ],
     }
   })
@@ -298,7 +315,8 @@ by using the function `translation-service.add()`. For more information regardin
 The title defaults to the name of the target option if unset.
 
 **icon:** Icons will be scaled to 20×20. Thus, it is recommended providing SVGs
-having this initial size.
+having this initial size. Note, that, if no icon is configured, the button labels will
+just contain the plain text value.
 
 ### Default-Target Configuration
 

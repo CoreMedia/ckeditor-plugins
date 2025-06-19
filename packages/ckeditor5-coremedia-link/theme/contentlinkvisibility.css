@@ -10,7 +10,7 @@
   display: block;
 }
 
-.ck.cm-ck-link-actions-view.cm-ck-link-view--show-content-link .cm-ck-link-actions-preview {
+.ck.cm-ck-link-actions-view.cm-ck-link-view--show-content-link .ck-link-toolbar__preview {
   display: none;
 }
 

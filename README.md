@@ -42,6 +42,13 @@ $ pnpm start
 
 Note, that `pnpm install` requires access to `npm.coremedia.io`.
 
+Since Version 44 a license key is necessary to use the CkEditor.
+Create a file named `.env` in the root of this workspace and add a line
+
+```text
+CKEDITOR_LICENSE_KEY=<your-license-key>
+```
+
 The last command will start a lightweight HTTP server and by default opens
 `http://127.0.0.1:8080/sample/` (may vary, if port 8080 is in use) in your
 default browser. It will provide a demo of the features providing by the
@@ -83,7 +90,8 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 
 The subtle difference between `ckeditor5-coremedia-richtext` and
 `ckeditor5-coremedia-richtext-support` is, that the latter one just adds support
-for attributes from CoreMedia RichText for which no editing actions are configured
+for attributes from CoreMedia RichText for which no editing actions are
+configured
 (yet). Simply speaking, `ckeditor5-coremedia-richtext` ensures, that data can be
 read and stored on server, while `ckeditor5-coremedia-richtext-support` ensures,
 that all valid CoreMedia RichText attributes are registered as _valid_ within
@@ -169,45 +177,81 @@ implements the described behavior.
 * **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
 * **[Walk-Through Examples](./examples/README.md):** Some step-by-step guides
   for customizing CKEditor 5.
-* **[Development](./DEVELOPMENT.md):** Hints for developing within this workspace
+* **[Development](./DEVELOPMENT.md):** Hints for developing within this
+  workspace
 * **[License](./LICENSE):** Apache 2.0 License Text
 * **[Versioning](./VERSIONING.md):** Versioning Policy
 
 <!-- ===========================================================[References] -->
 
 [`ckeditor5-babel-config`]: <./packages/ckeditor5-babel-config> "@coremedia-internal/ckeditor5-babel-config"
+
 [`ckeditor5-bbcode`]: <./packages/ckeditor5-bbcode> "@coremedia/ckeditor5-bbcode"
+
 [`ckeditor5-common`]: <./packages/ckeditor5-common> "@coremedia/ckeditor5-common"
+
 [`ckeditor5-core-common`]: <./packages/ckeditor5-core-common> "@coremedia/ckeditor5-core-common"
+
 [`ckeditor5-coremedia-blocklist`]: <./packages/ckeditor5-coremedia-blocklist> "@coremedia/ckeditor5-coremedia-blocklist"
+
 [`ckeditor5-coremedia-content`]: <./packages/ckeditor5-coremedia-content> "@coremedia/ckeditor5-coremedia-content"
+
 [`ckeditor5-coremedia-content-clipboard`]: <./packages/ckeditor5-coremedia-content-clipboard> "@coremedia/ckeditor5-coremedia-content-clipboard"
+
 [`ckeditor5-coremedia-differencing`]: <./packages/ckeditor5-coremedia-differencing> "@coremedia/ckeditor5-coremedia-differencing"
+
 [`ckeditor5-coremedia-example-data`]: <./packages/ckeditor5-coremedia-example-data> "@coremedia-internal/ckeditor5-coremedia-example-data"
+
 [`ckeditor5-coremedia-images`]: <./packages/ckeditor5-coremedia-images> "@coremedia/ckeditor5-coremedia-images"
+
 [`ckeditor5-coremedia-link`]: <./packages/ckeditor5-coremedia-link> "@coremedia/ckeditor5-coremedia-link"
+
 [`ckeditor5-coremedia-richtext`]: <./packages/ckeditor5-coremedia-richtext> "@coremedia/ckeditor5-coremedia-richtext"
+
 [`ckeditor5-coremedia-richtext-support`]: <./packages/ckeditor5-coremedia-richtext-support> "@coremedia/ckeditor5-coremedia-richtext-support"
+
 [`ckeditor5-coremedia-studio-essentials`]: <./packages/ckeditor5-coremedia-studio-essentials> "@coremedia/ckeditor5-coremedia-studio-essentials"
+
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration> "@coremedia/ckeditor5-coremedia-studio-integration"
+
 [`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia/ckeditor5-coremedia-studio-integration-mock"
+
 [`ckeditor5-data-facade`]: <./packages/ckeditor5-data-facade> "@coremedia/ckeditor5-data-facade"
+
 [`ckeditor5-dataprocessor-support`]: <./packages/ckeditor5-dataprocessor-support> "@coremedia/ckeditor5-dataprocessor-support"
+
 [`ckeditor5-dom-converter`]: <./packages/ckeditor5-dom-converter> "@coremedia/ckeditor5-dom-converter"
+
 [`ckeditor5-dom-support`]: <./packages/ckeditor5-dom-support> "@coremedia/ckeditor5-dom-support"
+
 [`ckeditor5-font-mapper`]: <./packages/ckeditor5-font-mapper> "@coremedia/ckeditor5-font-mapper"
+
 [`ckeditor5-jest-test-helpers`]: <./packages/ckeditor5-jest-test-helpers> "@coremedia-internal/ckeditor5-jest-test-helpers"
+
 [`ckeditor5-link-common`]: <./packages/ckeditor5-link-common> "@coremedia/ckeditor5-link-common"
+
 [`ckeditor5-logging`]: <./packages/ckeditor5-logging> "@coremedia/ckeditor5-logging"
+
 [docs:api]: <https://coremedia.github.io/ckeditor-plugins/docs/api/> "CoreMedia CKEditor 5 Plugins – API Documentation"
+
 [docs:api:badge]: <https://img.shields.io/badge/docs-%F0%9F%93%83%20API-informational?style=for-the-badge>
+
 [badge:docs:GHPages]: <https://img.shields.io/badge/docs-%F0%9F%93%9D%20GH%20Pages-informational?style=for-the-badge>
+
 [badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-informational?style=for-the-badge>
+
 [badge:engine:nodejs]: <https://img.shields.io/badge/Node.js-20-informational?style=for-the-badge&logo=node.js&logoColor=white>
+
 [badge:engine:pnpm]: <https://img.shields.io/badge/pnpm-8.6.9-informational?style=for-the-badge&logo=pnpm&logoColor=white>
+
 [badge:lang:typescript]: <https://img.shields.io/badge/TypeScript-5.3.3-informational?style=for-the-badge&logo=typescript&logoColor=white>
+
 [badge:ckeditor]: <https://img.shields.io/badge/CKEditor-41.1.0-informational?style=for-the-badge&logo=ckeditor5&logoColor=white>
+
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
+
 [CKEditor 5]: <https://ckeditor.com/ckeditor-5/> "CKEditor 5 | Powerful Framework with Modular Architecture"
+
 [CoreMedia CMS]: <https://www.coremedia.com/> "Best-of-Breed Digital Experience Platform CoreMedia"
+
 [gp:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/>  "CoreMedia CKEditor 5 Plugins – GitHub Pages"

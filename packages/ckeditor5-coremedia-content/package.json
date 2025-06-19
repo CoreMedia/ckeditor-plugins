@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-content",
-  "version": "23.0.1-rc.1",
+  "version": "24.0.0",
   "description": "CKEditor components and utilities related to CoreMedia content.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -35,10 +35,10 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "ckeditor5": "43.3.1",
     "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/service-agent": "^1.1.5",
     "@types/jest": "^29.5.12",
+    "ckeditor5": "45.2.0",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
     "jest-config": "^29.7.0",
@@ -46,12 +46,12 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "23.0.1-rc.1",
-    "@coremedia/ckeditor5-logging": "23.0.1-rc.1"
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^24.0.0",
+    "@coremedia/ckeditor5-logging": "^24.0.0"
   },
   "peerDependencies": {
-    "ckeditor5": "43.3.1",
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
+    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "ckeditor5": "45.2.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

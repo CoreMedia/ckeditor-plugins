@@ -14,8 +14,9 @@ import {
   FocusTracker,
   KeystrokeHandler,
   Emitter,
-  icons,
+  IconCheck,
   Command,
+  IconCancel,
 } from "ckeditor5";
 
 /**
@@ -63,7 +64,7 @@ export default class CustomLinkTargetInputFormView extends View {
     /**
      * A button used to submit the form.
      */
-    this.saveButtonView = this.#createButton(t?.("Save") ?? "Save", icons.check, "ck-button-save");
+    this.saveButtonView = this.#createButton(t?.("Save") ?? "Save", IconCheck, "ck-button-save");
     this.saveButtonView.type = "submit";
 
     // Required for concurrent editing: If we are at editing a custom target
@@ -73,7 +74,7 @@ export default class CustomLinkTargetInputFormView extends View {
     /**
      * A button used to cancel the form.
      */
-    this.cancelButtonView = this.#createButton(t?.("Cancel") ?? "Cancel", icons.cancel, "ck-button-cancel", "cancel");
+    this.cancelButtonView = this.#createButton(t?.("Cancel") ?? "Cancel", IconCancel, "ck-button-cancel", "cancel");
 
     /**
      * A collection of views, which can be focused in the form.

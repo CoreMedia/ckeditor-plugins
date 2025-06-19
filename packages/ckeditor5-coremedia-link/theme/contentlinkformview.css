@@ -1,3 +1,7 @@
+.cm-ck-external-link-field {
+  flex-grow: 1;
+}
+
 .cm-ck-form-view--loading .cm-ck-content-link-view-wrapper:after,
 .cm-ck-form-view--loading .cm-ck-external-link-field > div:after {
   content: "";
