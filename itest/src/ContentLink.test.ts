@@ -163,7 +163,7 @@ describe("Content Link Feature", () => {
       await waitForExpect(() => expect(linkFormView.saveButtonLocator).toBeDisabled());
     });
 
-    it("Should be not possible to save content link with empty url using keyboard", async () => {
+    it("Should not be possible to save content link with empty url using keyboard", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Lorem ipsum";
       const { editor, mockContent } = application;
@@ -195,7 +195,7 @@ describe("Content Link Feature", () => {
       await linkToolbarView.locator.getByLabel("Edit link").waitFor();
 
       await page.keyboard.press("Tab");
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
       await page.keyboard.press("Enter");
 
       const { contentLinkView } = linkFormView;
