@@ -14,11 +14,12 @@ import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-int
  *
  * @param linkUI - the linkUI plugin
  * @param editor - the editor
+ * @param onCancel - the callback to execute when the cancel button is clicked
  */
-const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView => {
+const createContentLinkView = (linkUI: LinkUI, editor: Editor, onCancel: () => void): LabeledFieldView => {
   const logger = LoggerProvider.getLogger("ContentLinkView");
   const { t } = editor.locale;
-  const { toolbarView, formView } = requireNonNullsAugmentedLinkUI(linkUI, "toolbarView", "formView");
+  const { formView } = requireNonNullsAugmentedLinkUI(linkUI, "formView");
   const contentLinkView = new LabeledFieldView(
     editor.locale,
     () =>
@@ -54,15 +55,7 @@ const createContentLinkView = (linkUI: LinkUI, editor: Editor): LabeledFieldView
         });
     }
   });
-  fieldView.on("executeCancel", () => {
-    formView.set({
-      contentUriPath: undefined,
-    });
-    toolbarView.set({
-      contentUriPath: undefined,
-    });
-    formView.urlInputView.focus();
-  });
+  fieldView.on("executeCancel", onCancel);
   return contentLinkView;
 };
 export default createContentLinkView;

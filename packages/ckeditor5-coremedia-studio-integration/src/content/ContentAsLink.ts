@@ -58,6 +58,22 @@ interface ContentAsLink {
    * leaked, despite some hints on unreadable state.
    */
   state: DisplayHint;
+  /**
+   * General information of the site the content belongs to possibly some
+   * CSS classes to apply on the overall display of the site.
+   *
+   * For unreadable content, it is expected that no site information is
+   * leaked, despite some hints on unreadable placeholder.
+   */
+  site: DisplayHint;
+  /**
+   * General information of the locale of the site the content belongs to possibly some
+   * CSS classes to apply on the overall display of the locale.
+   *
+   * For unreadable content, it is expected that no locale information is
+   * leaked, despite some hints on unreadable placeholder.
+   */
+  locale: DisplayHint;
 }
 
 export default ContentAsLink;

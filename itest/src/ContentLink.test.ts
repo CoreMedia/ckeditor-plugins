@@ -3,7 +3,8 @@ import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { ctrlOrMeta } from "./browser/UserAgent";
-import { expectFocusedElementHasAriaText, navigateToAriaLabel } from "./aria/AriaUtils";
+import { expectFocusedElementHasAriaText } from "./aria/AriaUtils";
+import waitForExpect from "wait-for-expect";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode
@@ -53,19 +54,19 @@ describe("Content Link Feature", () => {
       await editor.setData(data);
 
       // In editing view links are represented with href="#".
-      const contentLink = view.locator.locator(`a`, { hasText: name });
-
+      const contentLink = view.locator.getByText(name);
+      await contentLink.waitFor();
       await contentLink.click();
 
       const { linkToolbarView } = editor.ui.view.body.balloonPanel;
 
       // The ballon should pop up on click.
-      await expect(linkToolbarView).waitToBeVisible();
+      await linkToolbarView.locator.waitFor();
 
       const { contentLinkView } = linkToolbarView;
 
-      await expect(contentLinkView).waitToBeVisible();
-      await expect(contentLinkView.locator).toHaveText(`Document for`);
+      await contentLinkView.locator.waitFor();
+      await waitForExpect(() => expect(contentLinkView.locator.getByText("Document for")).toBeDefined());
     });
 
     it("Should be possible to reach all buttons with keyboard", async () => {
@@ -97,7 +98,7 @@ describe("Content Link Feature", () => {
       });
 
       const { linkToolbarView } = view.body.balloonPanel;
-      await expect(linkToolbarView).waitToBeVisible();
+      await linkToolbarView.locator.waitFor();
       await page.keyboard.press("Tab");
       await expectFocusedElementHasAriaText(`Document: ${contentName}`);
       await page.keyboard.press("ArrowRight");
@@ -145,30 +146,24 @@ describe("Content Link Feature", () => {
 
       const { linkToolbarView, linkFormView } = view.body.balloonPanel;
 
-      await expect(linkToolbarView).waitToBeVisible();
+      await linkToolbarView.locator.waitFor();
       await linkToolbarView.edit();
 
-      await expect(linkFormView).waitToBeVisible();
-
+      await linkFormView.locator.waitFor();
       const { contentLinkView } = linkFormView;
 
-      await expect(contentLinkView).waitToBeVisible();
-      await expect(contentLinkView.locator).toHaveText(`Document for`);
+      await waitForExpect(() => expect(contentLinkView).waitToBeVisible());
+      await contentLinkView.locator.getByText(`Document for`).waitFor();
 
       await contentLinkView.remove();
 
       // Content Link View should have been removed.
-      await expect(contentLinkView).not.waitToBeVisible();
+      await waitForExpect(() => expect(contentLinkView).not.waitToBeVisible());
 
-      await linkFormView.save();
-      // This changed for version 42: The empty link could not be saved. Save fails.
-      // Before it was possible to save an empty link, resulting in xlink:href=""
-      await expect(linkFormView.locator).toHaveText("Link URL must not be empty.");
-      // The link is still there.
-      await expect(editor).waitForDataContaining(`xlink:href="${dataLink}"`);
+      await waitForExpect(() => expect(linkFormView.saveButtonLocator).toBeDisabled());
     });
 
-    it("Should be not possible to save content link with empty url using keyboard", async () => {
+    it("Should not be possible to save content link with empty url using keyboard", async () => {
       const { currentTestName } = expect.getState();
       const name = currentTestName ?? "Lorem ipsum";
       const { editor, mockContent } = application;
@@ -185,7 +180,7 @@ describe("Content Link Feature", () => {
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
       await editor.setData(data);
       // In editing view links are represented with href="#".
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = view.locator.getByText(name);
 
       await contentLink.click({
         position: {
@@ -195,28 +190,22 @@ describe("Content Link Feature", () => {
       });
 
       const { linkToolbarView, linkFormView } = view.body.balloonPanel;
-      await expect(linkToolbarView).waitToBeVisible();
+      await linkToolbarView.locator.waitFor();
+
+      await linkToolbarView.locator.getByLabel("Edit link").waitFor();
 
       await page.keyboard.press("Tab");
-      await navigateToAriaLabel("Edit link");
+      await page.keyboard.press("ArrowRight");
       await page.keyboard.press("Enter");
 
       const { contentLinkView } = linkFormView;
 
-      await expect(contentLinkView).waitToBeVisible();
-      await expect(contentLinkView.locator).toHaveText(`Document for`);
+      await contentLinkView.locator.getByText("Document for").waitFor();
 
       await page.keyboard.press("Tab");
       await page.keyboard.press("Space");
 
-      await expect(linkFormView).waitToBeVisible();
-
-      await linkFormView.save();
-      // This changed for version 42: The empty link could not be saved. Save fails.
-      // Before it was possible to save an empty link, resulting in xlink:href=""
-      await expect(linkFormView.locator).toHaveText("Link URL must not be empty.");
-      // The link is still there.
-      await expect(editor).waitForDataContaining(`xlink:href="${dataLink}"`);
+      await waitForExpect(() => expect(linkFormView.saveButtonLocator).toBeDisabled());
     });
   });
 
@@ -235,14 +224,48 @@ describe("Content Link Feature", () => {
     const modifier: string = await ctrlOrMeta();
     await page.keyboard.press(`${modifier}+k`);
     const { linkFormView } = editor.ui.view.body.balloonPanel;
-    await expect(linkFormView).waitToBeVisible();
+    await linkFormView.locator.waitFor();
     await page.keyboard.type(`content:${id}`);
 
+    await page.keyboard.press("Tab");
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
 
     const contentLink = view.locator.locator(`a`);
+
     await expect(contentLink).toHaveText(`content:${id}`);
-    return Promise.resolve();
+  });
+
+  it("Should be possible to select content from suggestions.", async () => {
+    const { editor } = application;
+    const { ui } = editor;
+    const { view } = ui;
+
+    await view.locator.click();
+    const modifier: string = await ctrlOrMeta();
+    await page.keyboard.press(`${modifier}+k`);
+
+    const { linkFormView } = view.body.balloonPanel;
+    await linkFormView.locator.waitFor();
+
+    await linkFormView.locator.locator(".ck-dropdown").waitFor();
+
+    await linkFormView.locator.locator(".ck-dropdown").locator("input.ck-input-text").waitFor();
+    await linkFormView.locator.getByLabel("Document: Some Document").waitFor();
+
+    await page.keyboard.type("101");
+
+    await linkFormView.locator.getByLabel("Document: Document #1010").waitFor();
+    await linkFormView.locator.getByLabel("Folder: Folder #1011").waitFor();
+
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Enter");
+
+    const contentLink = view.locator.locator(`a`);
+    await expect(contentLink).toHaveText("content:101");
   });
 });

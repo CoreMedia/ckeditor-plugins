@@ -19,6 +19,7 @@
 .cm-core-icons.icon--checked-in::before {
   content: "CI";
 }
+
 .cm-core-icons.icon--checked-out::before {
   content: "CO";
 }
@@ -64,6 +65,13 @@
   content: "x";
   margin-right: 0;
   font-size: 12px;
+  font-weight: 400;
+  background-color: transparent;
+}
+
+.cm-core-icons.cm-core-icons--library::before {
+  content: "L";
+  font-size: 15px;
   font-weight: 400;
   background-color: transparent;
 }

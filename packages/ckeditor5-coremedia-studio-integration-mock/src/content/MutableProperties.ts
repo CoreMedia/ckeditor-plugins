@@ -53,6 +53,14 @@ type EditingType = boolean;
  */
 type NameType = string;
 /**
+ * Type to represent the site name.
+ */
+type SiteNameType = string;
+/**
+ * Type to represent the locale name.
+ */
+type LocaleNameType = string;
+/**
  * Type to represent the readable state.
  */
 type ReadableType = boolean;
@@ -62,6 +70,8 @@ type ReadableType = boolean;
  */
 interface MutableProperties {
   name: NameType[];
+  siteName: SiteNameType[];
+  localeName: LocaleNameType[];
   editing: EditingType[];
   readable: ReadableType[];
   blob: BlobType[];
@@ -73,6 +83,8 @@ interface MutableProperties {
  */
 interface MutablePropertiesConfig {
   name?: AtomicOrArray<NameType>;
+  siteName?: AtomicOrArray<SiteNameType>;
+  localeName?: AtomicOrArray<LocaleNameType>;
   editing?: AtomicOrArray<EditingType>;
   readable?: AtomicOrArray<ReadableType>;
   blob?: AtomicOrArray<BlobTypeConfig>;
@@ -89,6 +101,14 @@ interface MutablePropertiesDefaultProviders<T extends MutablePropertiesConfig = 
    * Provider for default name (or just providing a static name).
    */
   name?: NameType | ((input: Omit<T, "name">) => NameType);
+  /**
+   * Provider for default site name (or just providing a static site name).
+   */
+  siteName?: SiteNameType | ((input: Omit<T, "siteName">) => SiteNameType);
+  /**
+   * Provider for default site name (or just providing a static site name).
+   */
+  localeName?: LocaleNameType | ((input: Omit<T, "localeName">) => LocaleNameType);
   /**
    * Provider for default editing state (or just provided as static value).
    */
@@ -108,6 +128,8 @@ interface MutablePropertiesDefaultProviders<T extends MutablePropertiesConfig = 
  */
 interface InternalMutablePropertiesDefaultProviders<T extends MutablePropertiesConfig = MutablePropertiesConfig> {
   name: (input: Omit<T, "name">) => NameType;
+  siteName: (input: Omit<T, "siteName">) => SiteNameType;
+  localeName: (input: Omit<T, "siteName">) => LocaleNameType;
   editing: (input: Omit<T, "editing">) => EditingType;
   readable: (input: Omit<T, "readable">) => ReadableType;
   blob: (input: Omit<T, "blob">) => BlobTypeConfig;
@@ -118,6 +140,8 @@ interface InternalMutablePropertiesDefaultProviders<T extends MutablePropertiesC
  */
 const MutablePropertiesDefaultDefaultProviders: Required<MutablePropertiesDefaultProviders> = {
   name: () => `Some Name ${Math.random()}`,
+  siteName: "Test-Site",
+  localeName: "English (United States)",
   editing: false,
   readable: true,
   blob: null,
@@ -132,9 +156,18 @@ const transformDefaultProviders = <T extends MutablePropertiesConfig>(
   input: MutablePropertiesDefaultProviders<T>,
 ): InternalMutablePropertiesDefaultProviders<T> => {
   const allSet = { ...MutablePropertiesDefaultDefaultProviders, input };
-  const { name: defaultName, editing: defaultEditing, readable: defaultReadable, blob: defaultBlob } = allSet;
+  const {
+    name: defaultName,
+    siteName: defaultSiteName,
+    localeName: defaultLocaleName,
+    editing: defaultEditing,
+    readable: defaultReadable,
+    blob: defaultBlob,
+  } = allSet;
   return {
     name: typeof defaultName === "string" ? () => defaultName : defaultName,
+    siteName: typeof defaultSiteName === "string" ? () => defaultSiteName : defaultSiteName,
+    localeName: typeof defaultLocaleName === "string" ? () => defaultLocaleName : defaultLocaleName,
     editing: typeof defaultEditing === "boolean" ? () => defaultEditing : defaultEditing,
     readable: typeof defaultReadable === "boolean" ? () => defaultReadable : defaultReadable,
     blob:
@@ -178,9 +211,11 @@ const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
   config: T,
   defaultProviders: MutablePropertiesDefaultProviders<T> = MutablePropertiesDefaultDefaultProviders,
 ): MigrateTo<T, MutableProperties> => {
-  const { name, editing, readable, blob } = config;
+  const { name, siteName, localeName, editing, readable, blob } = config;
   const transformedProviders = transformDefaultProviders(defaultProviders);
   const intermediateName: string[] | string = name ?? transformedProviders.name(config);
+  const intermediateSiteName: string[] | string = siteName ?? transformedProviders.siteName(config);
+  const intermediateLocaleName: string[] | string = localeName ?? transformedProviders.localeName(config);
   const intermediateEditing = editing ?? transformedProviders.editing(config);
   const intermediateReadable = readable ?? transformedProviders.readable(config);
   const intermediateBlob = blob ?? transformedProviders.blob(config);
@@ -188,6 +223,8 @@ const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
   return {
     ...config,
     name: ([] as NameType[]).concat(intermediateName),
+    siteName: ([] as SiteNameType[]).concat(intermediateSiteName),
+    localeName: ([] as LocaleNameType[]).concat(intermediateLocaleName),
     editing: ([] as EditingType[]).concat(intermediateEditing),
     readable: ([] as ReadableType[]).concat(intermediateReadable),
     blob: transformBlobConfig(intermediateBlob),
@@ -203,6 +240,28 @@ const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
 const observeName = (config: Delayed & Pick<MutableProperties, "name">): Observable<string> => {
   const { name } = config;
   return observeMutableProperty(config, name);
+};
+
+/**
+ * Plain observable for site name, not respecting any other properties like
+ * especially `readable`.
+ *
+ * @param config - delay and value configuration
+ */
+const observeSiteName = (config: Delayed & Pick<MutableProperties, "siteName">): Observable<string> => {
+  const { siteName } = config;
+  return observeMutableProperty(config, siteName);
+};
+
+/**
+ * Plain observable for locale name, not respecting any other properties like
+ * especially `readable`.
+ *
+ * @param config - delay and value configuration
+ */
+const observeLocaleName = (config: Delayed & Pick<MutableProperties, "localeName">): Observable<string> => {
+  const { localeName } = config;
+  return observeMutableProperty(config, localeName);
 };
 
 /**
@@ -251,6 +310,8 @@ export {
   observeBlob,
   observeEditing,
   observeName,
+  observeSiteName,
+  observeLocaleName,
   observeReadable,
   withPropertiesDefaults,
 };

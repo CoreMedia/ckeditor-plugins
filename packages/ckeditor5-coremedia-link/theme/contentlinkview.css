@@ -1,9 +1,14 @@
 @import "contentlinkvisibility.css";
 @import "contentlinkformview.css";
 
+.ck.cm-ck-content-link-suggester {
+  flex: 1;
+  min-width: auto !important;
+}
+
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
-  width: var(--ck-input-text-width);
+  width: 100%;
   border: 1px solid var(--ck-color-input-disabled-border);
   border-radius: var(--ck-border-radius);
 }
@@ -20,6 +25,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   user-select: none;
+  max-width: 250px;
 }
 
 /* content link view inner button */
@@ -50,6 +56,8 @@
 .ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
   position: relative;
   margin-left: 0 !important;
+  flex: 1;
+  /*display: inline-block !important;*/
 }
 
 .cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {

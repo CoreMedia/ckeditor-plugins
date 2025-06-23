@@ -1,7 +1,7 @@
 import MockContent from "./MockContent";
 import { map } from "rxjs/operators";
 import { combineLatest, Observable } from "rxjs";
-import { observeEditing, observeName, observeReadable } from "./MutableProperties";
+import { observeEditing, observeLocaleName, observeName, observeReadable, observeSiteName } from "./MutableProperties";
 import { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import Delayed from "./Delayed";
 import { capitalize } from "./MockContentUtils";
@@ -22,9 +22,39 @@ type UnreadableNameHintConfig = Partial<Pick<MockContent, "id" | "type">>;
 type ReadableNameHintConfig = Pick<MockContent, "name" | "readable">;
 
 /**
+ * Configuration required to generate name hints for unreadable state.
+ */
+type UnreadableSiteNameHintConfig = Partial<Pick<MockContent, "id" | "type">>;
+
+/**
+ * Configuration required to generate name hints for readable state.
+ */
+type ReadableSiteNameHintConfig = Pick<MockContent, "siteName" | "readable">;
+
+/**
+ * Configuration required to generate name hints for unreadable state.
+ */
+type UnreadableLocaleNameHintConfig = Partial<Pick<MockContent, "id" | "type">>;
+
+/**
+ * Configuration required to generate name hints for readable state.
+ */
+type ReadableLocaleNameHintConfig = Pick<MockContent, "localeName" | "readable">;
+
+/**
  * Configuration for name hint subscription.
  */
 type NameHintConfig = Delayed & ReadableNameHintConfig & UnreadableNameHintConfig;
+
+/**
+ * Configuration for site name hint subscription.
+ */
+type SiteNameHintConfig = Delayed & ReadableSiteNameHintConfig & UnreadableSiteNameHintConfig;
+
+/**
+ * Configuration for locale name hint subscription.
+ */
+type LocaleNameHintConfig = Delayed & ReadableLocaleNameHintConfig & UnreadableLocaleNameHintConfig;
 
 /**
  * Creates a representation for an unreadable content's name.
@@ -48,6 +78,28 @@ const unreadableNameHint = (config: UnreadableNameHintConfig, classes: string[] 
 });
 
 /**
+ * Generates a site name hint for unreadable state.
+ *
+ * @param config - configuration to create display hint
+ * @param classes - classes to apply
+ */
+const unreadableSiteNameHint = (config: UnreadableSiteNameHintConfig, classes: string[] = []): DisplayHint => ({
+  name: "Unreadable Site",
+  classes,
+});
+
+/**
+ * Generates a site name hint for unreadable state.
+ *
+ * @param config - configuration to create display hint
+ * @param classes - classes to apply
+ */
+const unreadableLocaleNameHint = (config: UnreadableSiteNameHintConfig, classes: string[] = []): DisplayHint => ({
+  name: "Unreadable Locale",
+  classes,
+});
+
+/**
  * Provides an observable for the `DisplayHint` of the content-name. Respects
  * the unreadable state, which triggers an alternative name stating that it is
  * unreadable.
@@ -62,6 +114,64 @@ const observeNameHint = (config: NameHintConfig): Observable<DisplayHint> => {
   const combinedObservable = combineLatest([observableName, observableReadable]);
   const classes: string[] = [];
   const unreadableState = unreadableNameHint(config, classes);
+
+  return combinedObservable.pipe(
+    map(([name, readable]): DisplayHint => {
+      if (!readable) {
+        return unreadableState;
+      }
+      return {
+        name,
+        classes,
+      };
+    }),
+  );
+};
+
+/**
+ * Provides an observable for the `DisplayHint` of the site-name. Respects
+ * the unreadable state, which triggers an alternative name stating that it is
+ * unreadable.
+ *
+ * `id` and `type` are only used in unreadable state.
+ *
+ * @param config - content configuration
+ */
+const observeSiteNameHint = (config: SiteNameHintConfig): Observable<DisplayHint> => {
+  const observableReadable = observeReadable(config);
+  const observableSiteName = observeSiteName(config);
+  const combinedObservable = combineLatest([observableSiteName, observableReadable]);
+  const classes: string[] = [];
+  const unreadableState = unreadableSiteNameHint(config, classes);
+
+  return combinedObservable.pipe(
+    map(([name, readable]): DisplayHint => {
+      if (!readable) {
+        return unreadableState;
+      }
+      return {
+        name,
+        classes,
+      };
+    }),
+  );
+};
+
+/**
+ * Provides an observable for the `DisplayHint` of the locale-name. Respects
+ * the unreadable state, which triggers an alternative name stating that it is
+ * unreadable.
+ *
+ * `id` and `type` are only used in unreadable state.
+ *
+ * @param config - content configuration
+ */
+const observeLocaleNameHint = (config: LocaleNameHintConfig): Observable<DisplayHint> => {
+  const observableReadable = observeReadable(config);
+  const observableLocaleName = observeLocaleName(config);
+  const combinedObservable = combineLatest([observableLocaleName, observableReadable]);
+  const classes: string[] = [];
+  const unreadableState = unreadableLocaleNameHint(config, classes);
 
   return combinedObservable.pipe(
     map(([name, readable]): DisplayHint => {
@@ -163,6 +273,8 @@ export {
   UnreadableNameHintConfig,
   observeEditingHint,
   observeNameHint,
+  observeSiteNameHint,
+  observeLocaleNameHint,
   observeTypeHint,
   unreadableEditingHint,
   unreadableName,
