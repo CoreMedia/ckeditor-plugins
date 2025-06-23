@@ -340,7 +340,6 @@ class ContentLinkFormViewExtension extends Plugin {
     formView.children.last?.element?.insertBefore(contentLinkViewElement, urlInputViewElement);
     this.#linkSuggesterView?.setupPositionInParent(urlInputViewElement.nextSibling);
 
-
     this.#libraryButton.element &&
       formView.children.last?.element?.insertBefore(this.#libraryButton.element, contentLinkViewElement.nextSibling);
 

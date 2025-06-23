@@ -431,7 +431,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
           return Promise.resolve();
         },
       },
-    [COREMEDIA_CONTEXT_KEY]: { uriPath: contextUriPath },
+      [COREMEDIA_CONTEXT_KEY]: { uriPath: contextUriPath },
       [COREMEDIA_RICHTEXT_CONFIG_KEY]: getRichTextConfig(richTextCompatibility),
       [COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY]: {
         aliases: [

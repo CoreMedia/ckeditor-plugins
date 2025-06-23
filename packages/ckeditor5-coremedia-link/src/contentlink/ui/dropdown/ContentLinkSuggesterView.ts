@@ -193,7 +193,6 @@ export class ContentLinkSuggesterView extends ViewCollection {
     if (this.#openLibraryButton.element && this.#parent.element) {
       this.#parent.children.get(2)?.element?.insertBefore(this.#openLibraryButton.element, beforeElement);
     }
-
   }
 
   setupFocusHandling(setupFocus: (views: View[]) => void): void {
