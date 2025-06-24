@@ -1,4 +1,7 @@
 packages:
-  - "packages/*"
-  - "itest"
-  - "app"
+  - packages/*
+  - itest
+  - app
+
+patchedDependencies:
+  ckeditor5: patches/ckeditor5.patch
