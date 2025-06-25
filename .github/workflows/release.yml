@@ -38,11 +38,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Manual workflow trigger precondition check
-        if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' || startsWith(github.ref, 'maintenance/'))
-        env:
-          GITHUB_REF: ${{ github.ref }}
+        if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/heads/maintenance/'))
         run: |
-          echo "github.ref=$GITHUB_REF"
           echo "::error Building a release is only allowed from main- or maintenance- branches!"
           exit 1
       #Make sure the release type is one of the allowed inputs.
@@ -53,7 +50,7 @@ jobs:
           echo "Allowed release types are: major, minor, patch"
           exit 1
       - name: Maintenance release type check
-        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'maintenance/') && !(github.event.inputs.release_type == 'patch')
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/maintenance/') && !(github.event.inputs.release_type == 'patch')
         run: |
           echo "For maintenance branches only patch versions are allowed."
           exit 1
