@@ -40,6 +40,7 @@ jobs:
       - name: Manual workflow trigger precondition check
         if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' || startsWith(github.ref, 'maintenance/'))
         run: |
+          echo "github.ref=$github.ref"
           echo "::error Building a release is only allowed from main- or maintenance- branches!"
           exit 1
       #Make sure the release type is one of the allowed inputs.
