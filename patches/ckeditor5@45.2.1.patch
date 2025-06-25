@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 47c3f625843eab9dc83ec949c4f88709b943fa69..da311cf263da778e4ec780ce40a54252913252c0 100644
+--- a/package.json
++++ b/package.json
+@@ -26,7 +26,8 @@
+   "exports": {
+     ".": {
+       "types": "./src/index.d.ts",
+-      "import": "./dist/ckeditor5.js"
++      "import": "./dist/ckeditor5.js",
++	  "default": "./dist/ckeditor5.js"
+     },
+     "./*": "./dist/*",
+     "./browser/*": null,
