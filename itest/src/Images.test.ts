@@ -228,8 +228,8 @@ describe("Image Features", () => {
       const openInTabButton = imageContextToolbar.getOpenInTabButton();
       await expect(openInTabButton).waitToBeEnabled();
       await openInTabButton.click();
-      const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
+      const mockContentFormService = await serviceAgent.getContentFormServiceWrapper();
+      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
 
     it("Should not be able to trigger open in tab for image from balloon", async () => {

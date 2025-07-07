@@ -59,8 +59,8 @@ export {
   createContentImportServiceDescriptor,
 } from "./content/studioservices/ContentImportService";
 
-export { createWorkAreaServiceDescriptor } from "./content/WorkAreaServiceDescriptor";
-export { default as WorkAreaService } from "./content/studioservices/WorkAreaService";
+export { createContentFormServiceDescriptor } from "./content/ContentFormServiceDescriptor";
+export { default as ContentFormService } from "./content/studioservices/ContentFormService";
 
 export { IsLinkableEvaluationResult, isLinkableUris, isLinkable } from "./content/IsLinkableDragAndDrop";
 

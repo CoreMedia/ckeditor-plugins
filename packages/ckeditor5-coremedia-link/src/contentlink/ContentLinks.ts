@@ -7,8 +7,8 @@ import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
-  createWorkAreaServiceDescriptor,
-  WorkAreaService,
+  createContentFormServiceDescriptor,
+  ContentFormService,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
 import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
@@ -31,17 +31,17 @@ export default class ContentLinks extends Plugin {
   readonly #logger = LoggerProvider.getLogger("ContentLinks");
   #serviceRegisteredSubscription: Pick<Subscription, "unsubscribe"> | undefined = undefined;
   #initialized = false;
-  #currentWorkAreaService: WorkAreaService | undefined = undefined;
+  #currentContentFormService: ContentFormService | undefined = undefined;
   #activeEntity: string | undefined = "";
 
   /**
    * Closes the contextual balloon whenever a new active entity is set.
    *
-   * @param workAreaService - the workAreaService
+   * @param contentFormService - the contentFormService
    * @private
    */
-  #listenForActiveEntityChanges(workAreaService: WorkAreaService): void {
-    workAreaService.observe_activeEntity().subscribe({
+  #listenForActiveEntityChanges(contentFormService: ContentFormService): void {
+    contentFormService.observe_activeContent().subscribe({
       next: (activeEntity) => {
         if (this.#activeEntity === activeEntity) {
           return;
@@ -87,23 +87,23 @@ export default class ContentLinks extends Plugin {
         this.#initialized = true;
       }
     });
-    const onServiceRegisteredFunction = (services: WorkAreaService[]): void => {
+    const onServiceRegisteredFunction = (services: ContentFormService[]): void => {
       if (services.length === 0) {
-        this.#logger.debug("No WorkAreaService registered yet");
+        this.#logger.debug("No ContentFormService registered yet");
         return;
       }
-      if (this.#currentWorkAreaService && services.includes(this.#currentWorkAreaService)) {
+      if (this.#currentContentFormService && services.includes(this.#currentContentFormService)) {
         return;
       }
       if (this.#serviceRegisteredSubscription) {
         this.#serviceRegisteredSubscription.unsubscribe();
       }
-      this.#logger.debug("WorkAreaService is registered now, listening for activeEntity will be started");
-      this.#currentWorkAreaService = services[0];
-      this.#listenForActiveEntityChanges(this.#currentWorkAreaService);
+      this.#logger.debug("ContentFormService is registered now, listening for activeEntity will be started");
+      this.#currentContentFormService = services[0];
+      this.#listenForActiveEntityChanges(this.#currentContentFormService);
     };
     this.#serviceRegisteredSubscription = serviceAgent
-      .observeServices<WorkAreaService>(createWorkAreaServiceDescriptor())
+      .observeServices<ContentFormService>(createContentFormServiceDescriptor())
       .subscribe(onServiceRegisteredFunction);
     registerOpenContentInTabCommand(editor);
   }

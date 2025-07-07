@@ -1,10 +1,10 @@
 import { Plugin } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
 import {
-  createWorkAreaServiceDescriptor,
+  createContentFormServiceDescriptor,
   createBlocklistServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import MockWorkAreaService from "./MockWorkAreaService";
+import MockContentFormService from "./MockContentFormService";
 import { MockBlocklistService } from "../MockBlocklistService";
 
 const PLUGIN_NAME = "MockServiceAgent";
@@ -12,9 +12,9 @@ const PLUGIN_NAME = "MockServiceAgent";
 class MockServiceAgentPlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
 
-  async getMockWorkAreaService(): Promise<MockWorkAreaService> {
-    const workAreaService = await serviceAgent.fetchService(createWorkAreaServiceDescriptor());
-    return workAreaService as MockWorkAreaService;
+  async getContentFormService(): Promise<MockContentFormService> {
+    const contentFormService = await serviceAgent.fetchService(createContentFormServiceDescriptor());
+    return contentFormService as MockContentFormService;
   }
 
   async getMockBlocklistService(): Promise<MockBlocklistService> {
