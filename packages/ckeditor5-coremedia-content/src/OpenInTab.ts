@@ -22,14 +22,15 @@ export interface OpenEntityInTabResult {
  *
  * @param uriPath - URI path to validate
  */
-export const canBeOpenedInTab = async (uriPath: string): Promise<boolean> =>
-  fetchContentFormService().then(
-    (contentFormService): Promise<boolean> =>
-      contentFormService.canBeOpened(uriPath).catch((error): boolean => {
-        logger.debug(`Failed to query "canBeOpenedInTab" for ${uriPath}. Default to false.`, error);
-        return false;
-      }),
-  );
+export const canBeOpenedInTab = async (uriPath: string): Promise<boolean> => {
+  const contentFormService = await fetchContentFormService();
+  try {
+    return contentFormService.canBeOpened(uriPath);
+  } catch (error) {
+    logger.debug(`Failed to query "canBeOpenedInTab" for ${uriPath}. Default to false.`, error);
+    return false;
+  }
+};
 
 /**
  * Open the given entity in content form.
@@ -38,8 +39,6 @@ export const canBeOpenedInTab = async (uriPath: string): Promise<boolean> =>
  */
 export const openEntityInTab = async (uriPath: string): Promise<OpenEntityInTabResult> => {
   logger.debug(`Triggered to open in tab: ${uriPath}`);
-  return fetchContentFormService().then(
-    (contentFormService): Promise<OpenEntityInTabResult> =>
-      contentFormService.openContentForm(uriPath, { additionalOptions: { focusTab: true } }),
-  );
+  const contentFormService = await fetchContentFormService();
+  return contentFormService.openContentForm(uriPath, { additionalOptions: { focusTab: true } });
 };
