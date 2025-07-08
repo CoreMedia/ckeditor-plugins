@@ -1,12 +1,12 @@
 import { JSWrapper } from "../JSWrapper";
 import { ClassicEditorWrapper } from "../ClassicEditorWrapper";
 import type { MockServiceAgentPlugin } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { WorkAreaServiceWrapper } from "./WorkAreaServiceWrapper";
+import { ContentFormServiceWrapper } from "./ContentFormServiceWrapper";
 import { BlocklistServiceWrapper } from "./BlocklistServiceWrapper";
 
 export class MockServiceAgentPluginWrapper extends JSWrapper<MockServiceAgentPlugin> {
-  getWorkAreaServiceWrapper(): WorkAreaServiceWrapper {
-    return WorkAreaServiceWrapper.fromServiceAgentPlugin(this);
+  getContentFormServiceWrapper(): ContentFormServiceWrapper {
+    return ContentFormServiceWrapper.fromServiceAgentPlugin(this);
   }
 
   getBlocklistServiceWrapper(): BlocklistServiceWrapper {

@@ -6,7 +6,7 @@ import {
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { canBeOpenedInTab, openEntitiesInTabs, OpenEntitiesInTabsResult } from "../OpenInTab";
+import { canBeOpenedInTab, openEntityInTab, OpenEntityInTabResult } from "../OpenInTab";
 
 // noinspection JSConstantReassignment
 
@@ -25,7 +25,7 @@ export class OpenInTabCommand extends Command {
   /**
    * Creates an OpenInTabCommand.
    *
-   * The OpenInTabCommand triggers the WorkAreaService.openEntitiesInTab of the current
+   * The OpenInTabCommand triggers the ContentFormService.openEntityInTab of the current
    * selected model element, if it is the element this command is registered for.
    *
    * This command only executes if the selected model element has the given
@@ -99,21 +99,23 @@ export class OpenInTabCommand extends Command {
    * given as parameter. Any `uriPath` set explicitly, overrides `uriPath`
    * derived from model state.
    *
-   * @param uriPaths - optional URI paths; defaults to the URI path from model
+   * @param uriPath - optional URI paths; defaults to the URI path from model
    * state
    * @returns Promise, that denotes result of requested URIs to open
    */
-  override async execute(...uriPaths: string[]): Promise<OpenEntitiesInTabsResult> {
+  override async execute(uriPath?: string): Promise<OpenEntityInTabResult> {
     const logger = OpenInTabCommand.#logger;
-    const actualUriPaths = uriPaths;
-    const actualValue = this.value;
 
-    // Prefer explicitly given uriPaths, use fallback otherwise.
-    if (actualUriPaths.length === 0 && typeof actualValue === "string") {
-      actualUriPaths.push(actualValue);
-      logger.debug(`URI path used from model state: ${actualValue}`);
+    if (uriPath) {
+      return openEntityInTab(uriPath);
     }
-    return openEntitiesInTabs(...actualUriPaths);
+
+    const actualValue = this.value;
+    if (!uriPath && typeof actualValue === "string") {
+      logger.debug(`URI path used from model state: ${actualValue}`);
+      return openEntityInTab(actualValue);
+    }
+    throw new Error("No URI path provided to OpenInTabCommand");
   }
 
   /**

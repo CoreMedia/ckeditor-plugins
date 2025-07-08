@@ -49,8 +49,8 @@ export { default as MockRichtextConfigurationService } from "./MockRichtextConfi
 
 export { default as MockServiceAgentPlugin } from "./MockServiceAgentPlugin";
 
-export * from "./MockWorkAreaService";
-export { default as MockWorkAreaService } from "./MockWorkAreaService";
+export * from "./MockContentFormService";
+export { default as MockContentFormService } from "./MockContentFormService";
 
 export * from "./MutableProperties";
 

@@ -17,4 +17,4 @@ export {
 export { MockContentConfig } from "./content/MockContent";
 export { default as MockExternalContentPlugin, MockExternalContent } from "./content/MockExternalContentPlugin";
 export { default as MockServiceAgentPlugin } from "./content/MockServiceAgentPlugin";
-export { default as MockWorkAreaService } from "./content/MockWorkAreaService";
+export { default as MockContentFormService } from "./content/MockContentFormService";

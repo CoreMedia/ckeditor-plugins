@@ -1,6 +1,6 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import {
-  createWorkAreaServiceDescriptor,
+  createContentFormServiceDescriptor,
   isModelUriPath,
   requireContentUriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
@@ -222,13 +222,9 @@ export default class LinkUserActionsPlugin extends Plugin {
 
   #openInWorkAreaTab(uri: string): void {
     serviceAgent
-      .fetchService(createWorkAreaServiceDescriptor())
-      .then((workAreaService) =>
-        workAreaService.openEntitiesInTabs([requireContentUriPath(uri)], false, {
-          additionalOptions: {
-            focusTab: true,
-          },
-        }),
+      .fetchService(createContentFormServiceDescriptor())
+      .then((contentFormService) =>
+        contentFormService.openContentForm(requireContentUriPath(uri), { additionalOptions: { focusTab: true } }),
       )
       .catch((reason) => {
         LinkUserActionsPlugin.LOG.warn(reason);

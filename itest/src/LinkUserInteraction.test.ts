@@ -147,8 +147,8 @@ describe("Link User Interaction", () => {
       const modifiers = await clickModifiers();
       await contentLink.click({ modifiers });
       const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
-      const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
+      const mockContentFormService = await serviceAgent.getContentFormServiceWrapper();
+      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
     it("Should open in new work area tab on Alt+Enter", async () => {
       const { currentTestName } = expect.getState();
@@ -173,8 +173,8 @@ describe("Link User Interaction", () => {
       await page.keyboard.press("Enter");
 
       const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
-      const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
+      const mockContentFormService = await serviceAgent.getContentFormServiceWrapper();
+      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
 
     it("Read-Only: Should open in new work area tab on click", async () => {
@@ -197,8 +197,8 @@ describe("Link User Interaction", () => {
       const contentLink = view.locator.locator(`a`, { hasText: name });
       await contentLink.click();
       const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
-      const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
+      const mockContentFormService = await serviceAgent.getContentFormServiceWrapper();
+      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
 
     it("Read-Only: Should open in new work area tab on (Ctrl | Meta) + click", async () => {
@@ -222,8 +222,8 @@ describe("Link User Interaction", () => {
       const modifiers = await clickModifiers();
       await contentLink.click({ modifiers });
       const serviceAgent: MockServiceAgentPluginWrapper = await application.mockServiceAgent;
-      const mockWorkAreaService = await serviceAgent.getWorkAreaServiceWrapper();
-      expect(await mockWorkAreaService.getLastOpenedEntities()).toEqual(["content/42"]);
+      const mockContentFormService = await serviceAgent.getContentFormServiceWrapper();
+      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
     });
   });
 });
