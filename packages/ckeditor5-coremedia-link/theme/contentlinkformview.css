@@ -28,6 +28,11 @@
   -moz-animation-timing-function:linear;
 }
 
+/* content view label -  */
+.cm-ck-link-form-view .cm-ck-content-link-view > .ck.ck-button__label {
+  width: 143px;
+}
+
 .cm-ck-form-view--loading .cm-ck-content-link-view,
 .cm-ck-form-view--loading .cm-ck-external-link-field input {
   opacity: var(--ck-disabled-opacity);
