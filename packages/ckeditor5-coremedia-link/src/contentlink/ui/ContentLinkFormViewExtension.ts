@@ -322,7 +322,10 @@ class ContentLinkFormViewExtension extends Plugin {
       ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
       return;
     }
-    ContentLinkFormViewExtension.#toContentUri(uri)
+    ContentLinkFormViewExtension.#toContentUri(
+      uri,
+      this.editor.config.get(`${COREMEDIA_CONTEXT_KEY}.uriPath`) ?? undefined,
+    )
       .then((importedUri: string) => {
         const ckeModelUri = requireContentCkeModelUri(importedUri);
         ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
@@ -333,7 +336,7 @@ class ContentLinkFormViewExtension extends Plugin {
       });
   }
 
-  static async #toContentUri(uri: string): Promise<string> {
+  static async #toContentUri(uri: string, contextUriPath?: string): Promise<string> {
     const contentReferenceService = await serviceAgent.fetchService(createContentReferenceServiceDescriptor());
     const contentReference = await contentReferenceService.getContentReference(uri);
     if (contentReference.contentUri) {
@@ -350,7 +353,7 @@ class ContentLinkFormViewExtension extends Plugin {
 
     //Neither a content nor a content representation found. Let's create a content representation.
     const contentImportService = await serviceAgent.fetchService(createContentImportServiceDescriptor());
-    return contentImportService.import(contentReference.request);
+    return contentImportService.import(contentReference.request, { contextUriPath });
   }
 
   static #toggleUrlInputLoadingState(linkUI: LinkUI, loading: boolean) {

@@ -7,6 +7,7 @@ import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import {
   ContentImportService,
   ContentReferenceResponse,
+  COREMEDIA_CONTEXT_KEY,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
   createRichtextConfigurationServiceDescriptor,
@@ -111,7 +112,10 @@ export default class DataToModelMechanism {
         }
 
         //Neither a content nor a content representation found. Let's create a content representation.
-        const importedContentReference = await contentImportService.import(response.request);
+        const contextUriPath = editor.config.get(`${COREMEDIA_CONTEXT_KEY}.uriPath`);
+        const importedContentReference = await contentImportService.import(response.request, {
+          contextUriPath: typeof contextUriPath === "string" ? contextUriPath : undefined,
+        });
         return Promise.resolve(importedContentReference);
       })
       .then(async (uri: string) => {
