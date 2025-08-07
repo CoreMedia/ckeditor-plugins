@@ -17,3 +17,8 @@ export const ROOT_NAME = "<root>";
  * contained URI-Paths.
  */
 export const URI_LIST_DATA = "cm-studio-rest/uri-list";
+
+/**
+ * Key for the context data in the config of an Editor
+ */
+export const COREMEDIA_CONTEXT_KEY = "coremedia:context";
