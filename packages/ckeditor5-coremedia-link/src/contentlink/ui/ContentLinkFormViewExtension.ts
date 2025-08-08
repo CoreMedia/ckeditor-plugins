@@ -4,6 +4,7 @@ import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
+  COREMEDIA_CONTEXT_KEY,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
   getOrEvaluateIsDroppableResult,
@@ -194,7 +195,12 @@ class ContentLinkFormViewExtension extends Plugin {
         }
       }
     });
-    ContentLinkFormViewExtension.#render(contentLinkView, linkUI, formView);
+    ContentLinkFormViewExtension.#render(
+      contentLinkView,
+      linkUI,
+      formView,
+      this.editor.config.get(`${COREMEDIA_CONTEXT_KEY}.uriPath`),
+    );
     this.#adaptFormViewFields(formView);
     formView.on("cancel", () => {
       const initialValue: string = this.editor.commands.get("link")?.value as string;
@@ -204,7 +210,12 @@ class ContentLinkFormViewExtension extends Plugin {
     });
   }
 
-  static #render(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  static #render(
+    contentLinkView: LabeledFieldView,
+    linkUI: LinkUI,
+    formView: LinkFormView,
+    contextUriPath: string | undefined,
+  ): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Rendering ContentLinkView and registering listeners.");
     formView.registerChild(contentLinkView);
@@ -217,7 +228,7 @@ class ContentLinkFormViewExtension extends Plugin {
     const { urlInputView } = formView;
     hasRequiredInternalFocusablesProperty(formView) &&
       handleFocusManagement(formView, contentLinkButtons, urlInputView);
-    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView);
+    ContentLinkFormViewExtension.#addDragAndDropListeners(contentLinkView, linkUI, formView, contextUriPath);
   }
 
   static #insertContentLinkViewToFormView(contentLinkView: LabeledFieldView, formView: LinkFormView): void {
@@ -272,21 +283,26 @@ class ContentLinkFormViewExtension extends Plugin {
     return buttons;
   }
 
-  static #addDragAndDropListeners(contentLinkView: LabeledFieldView, linkUI: LinkUI, formView: LinkFormView): void {
+  static #addDragAndDropListeners(
+    contentLinkView: LabeledFieldView,
+    linkUI: LinkUI,
+    formView: LinkFormView,
+    contextUriPath: string | undefined,
+  ): void {
     const logger = ContentLinkFormViewExtension.#logger;
     logger.debug("Adding drag and drop listeners to formView and contentLinkView");
     if (!contentLinkView.fieldView.element) {
       logger.warn("ContentLinkView not completely rendered. Drag and drop won't work.", contentLinkView);
     }
     contentLinkView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
-      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI, contextUriPath);
     });
     contentLinkView.fieldView.element?.addEventListener("dragover", ContentLinkFormViewExtension.#onDragOverLinkField);
     if (!formView.urlInputView.fieldView.element) {
       logger.warn("FormView.urlInputView not completely rendered. Drag and drop won't work.", formView);
     }
     formView.urlInputView.fieldView.element?.addEventListener("drop", (dragEvent: DragEvent) => {
-      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI);
+      void ContentLinkFormViewExtension.#onDropOnLinkField(dragEvent, linkUI, contextUriPath);
     });
     formView.urlInputView.fieldView.element?.addEventListener(
       "dragover",
@@ -295,7 +311,11 @@ class ContentLinkFormViewExtension extends Plugin {
     logger.debug("Finished adding drag and drop listeners.");
   }
 
-  static async #onDropOnLinkField(dragEvent: DragEvent, linkUI: LinkUI): Promise<void> {
+  static async #onDropOnLinkField(
+    dragEvent: DragEvent,
+    linkUI: LinkUI,
+    contextUriPath: string | undefined,
+  ): Promise<void> {
     const logger = ContentLinkFormViewExtension.#logger;
     if (!dragEvent.dataTransfer) {
       return;
@@ -330,10 +350,7 @@ class ContentLinkFormViewExtension extends Plugin {
       ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
       return;
     }
-    ContentLinkFormViewExtension.#toContentUri(
-      uri,
-      this.editor.config.get(`${COREMEDIA_CONTEXT_KEY}.uriPath`) ?? undefined,
-    )
+    ContentLinkFormViewExtension.#toContentUri(uri, contextUriPath)
       .then((importedUri: string) => {
         const ckeModelUri = requireContentCkeModelUri(importedUri);
         ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, false);
