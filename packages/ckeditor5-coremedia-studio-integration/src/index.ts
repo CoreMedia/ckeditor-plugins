@@ -63,3 +63,5 @@ export { ROOT_NAME } from "./content/Constants";
 export { toContentUris } from "./content/studioservices/ClipboardServiceUtil";
 
 export { ExternalUriInformation, IContentReferenceService } from "./content/studioservices/IContentReferenceService";
+
+export { COREMEDIA_CONTEXT_KEY } from "./content/Constants";

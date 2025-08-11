@@ -17,6 +17,8 @@ export { OpenContentInTabCommand } from "./contentlink/OpenContentInTabCommand";
 export { default as ContentLinkActionsViewExtension } from "./contentlink/ui/ContentLinkActionsViewExtension";
 export { default as ContentLinkFormViewExtension } from "./contentlink/ui/ContentLinkFormViewExtension";
 export { COREMEDIA_LINK_CONFIG_KEY } from "./contentlink/LinkBalloonConfig";
+export { CoremediaContextConfig } from "./contentlink/ContextConfig";
+export { COREMEDIA_CONTEXT_KEY } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /*
  * =============================================================================
