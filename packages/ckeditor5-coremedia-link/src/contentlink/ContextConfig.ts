@@ -1,4 +1,4 @@
-export const COREMEDIA_CONTEXT_KEY = "coremedia:context";
+export { COREMEDIA_CONTEXT_KEY } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 export interface CoremediaContextConfig {
   /**
