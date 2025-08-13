@@ -120,7 +120,7 @@ export default class DataToModelMechanism {
       }
 
       const type = await this.#getType(contentUri);
-      const createItemFunction = await this.lookupCreateItemFunction(type, uri);
+      const createItemFunction = await this.lookupCreateItemFunction(type, contentUri);
       DataToModelMechanism.#writeItemToModel(
         editor,
         pendingMarkerNames,
