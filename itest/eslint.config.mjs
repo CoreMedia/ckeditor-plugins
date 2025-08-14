@@ -8,17 +8,17 @@ export default defineConfig([
   ...workspaceConfig,
   {
     languageOptions: {
-      parser: tsParser
-    }
+      parser: tsParser,
+    },
   },
   {
     files: ["**/*.ts", "**/*.tsx"],
 
     languageOptions: {
       parserOptions: {
-        tsconfigRootDir: dirname(fileURLToPath(import.meta.url));,
-      project: "./tsconfig.json"
-    }
-  }
-}
+        tsconfigRootDir: dirname(fileURLToPath(import.meta.url)),
+        project: "./tsconfig.json",
+      },
+    },
+  },
 ]);
