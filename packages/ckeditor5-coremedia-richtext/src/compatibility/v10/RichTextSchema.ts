@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 /*
  * =============================================================================
  * This is a straightforward implementation of `coremedia-richtext-1.0.dtd`.

@@ -14,7 +14,6 @@ const silenced = <T>(call: () => T, silent = true): T => {
     const spy = jestGlobal.spyOn(console, output);
     spies.push(spy);
     if (silent) {
-      // eslint-disable-next-line no-null/no-null
       spy.mockImplementation(() => null as unknown as Console);
     }
   });

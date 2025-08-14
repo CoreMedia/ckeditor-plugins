@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import "jest-xml-matcher";
 import RichTextSchema, { V10Strictness } from "../../../src/compatibility/v10/RichTextSchema";
 import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";

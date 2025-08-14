@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 // ImageInline: See ckeditor/ckeditor5#12027.
 
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.

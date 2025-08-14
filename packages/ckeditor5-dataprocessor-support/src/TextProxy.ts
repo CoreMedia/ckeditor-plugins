@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { NodeProxy, PersistResponse } from "./NodeProxy";
 import { Editor } from "ckeditor5";
 

@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import ContentLinkView from "./ContentLinkView";
 import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { isModelUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
@@ -14,6 +12,7 @@ import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 
 export const CONTENT_LINK_VIEW_COMPONENT_NAME = "contentLinkView";
+
 /**
  * Extends the action view for Content link display. This includes:
  *

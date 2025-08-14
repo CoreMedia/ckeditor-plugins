@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { serviceAgent } from "@coremedia/service-agent";
 import {
   createBlobDisplayServiceDescriptor,
@@ -96,7 +94,7 @@ export const editingDowncastXlinkHref =
         // applying the loading spinner and resolving the image src
         return;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
       onXlinkHrefEditingDowncast(editor, eventInfo, data, logger);
     });
   };

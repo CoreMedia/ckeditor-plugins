@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { isRaw } from "../src/AdvancedTypes";
 
 describe("AdvancedTypes", () => {

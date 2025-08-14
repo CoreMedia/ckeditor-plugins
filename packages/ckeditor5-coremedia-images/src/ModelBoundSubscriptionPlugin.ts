@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { Plugin, Element as ModelElement, Writer, DiffItemInsert } from "ckeditor5";
 import SubscriptionCache from "./SubscriptionCache";
 import { Subscription } from "rxjs";

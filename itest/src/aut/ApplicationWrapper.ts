@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import express from "express";
 import path from "path";
 import { Response } from "playwright";

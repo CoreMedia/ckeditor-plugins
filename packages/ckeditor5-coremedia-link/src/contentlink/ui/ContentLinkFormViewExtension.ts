@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import createContentLinkView from "./ContentLinkViewFactory";
 import {
@@ -421,10 +419,7 @@ class ContentLinkFormViewExtension extends Plugin {
     dragEvent.preventDefault();
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const linkable: IsDroppableEvaluationResult =
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      await getOrEvaluateIsDroppableResult(uris);
+    const linkable: IsDroppableEvaluationResult = await getOrEvaluateIsDroppableResult(uris);
     if (!linkable || linkable === "PENDING") {
       return;
     }

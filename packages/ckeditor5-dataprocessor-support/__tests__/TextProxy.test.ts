@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import "jest-xml-matcher";
 import { TextProxy, TextFilterRule } from "../src/TextProxy";
 import { Editor } from "ckeditor5";
@@ -9,6 +7,7 @@ import "./config";
 const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 const SERIALIZER = new XMLSerializer();
 const PARSER = new DOMParser();
+
 function parseAndValidate(xmlString: string): Document {
   const xmlDocument = PARSER.parseFromString(xmlString, "text/xml");
   const xPathResult: XPathResult = xmlDocument.evaluate(
@@ -157,6 +156,7 @@ describe("TextProxy.applyRules()", () => {
       }
       return textNode;
     }
+
     function getRestartNode(): Node | null {
       if (!testData.restartPath) {
         return null;
@@ -174,6 +174,7 @@ describe("TextProxy.applyRules()", () => {
       }
       return restartNode;
     }
+
     function parseDisabled(): {
       disabled: boolean;
       namePostfix: string;
@@ -201,6 +202,7 @@ describe("TextProxy.applyRules()", () => {
         namePostfix: ` (${typeof state === "string" ? state : "disabled"})`,
       };
     }
+
     const inputDocument: Document = parseAndValidate(testData.from);
     const expectedDocument: Document = parseAndValidate(testData.to);
     const proxy = new TextProxy(getTextNode(), MOCK_EDITOR, true);

@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import "jest-xml-matcher";
 import { NodeProxy } from "../src/NodeProxy";
 import { jest } from "@jest/globals";

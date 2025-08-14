@@ -334,7 +334,6 @@ export class ElementConfig {
    */
   #processRequiredAttributes(element: Element) {
     this.#requiredAttributesByPrefixAndLocalName.forEach((byLocalName, prefix) => {
-      // eslint-disable-next-line no-null/no-null
       const actualPrefix = prefix === defaultPrefix ? null : prefix;
       const prefixString = actualPrefix ? `${actualPrefix}:` : "";
       byLocalName.forEach((defaultValue, localName) => {

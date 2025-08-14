@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   Clipboard,

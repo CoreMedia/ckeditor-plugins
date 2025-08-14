@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import CoreMediaRichTextConfig, { COREMEDIA_RICHTEXT_CONFIG_KEY } from "../../../src/CoreMediaRichTextConfig";
 import { Config as CKEditorConfig } from "ckeditor5";
 import { getConfig } from "../../../src/compatibility/v10/V10CoreMediaRichTextConfig";

@@ -17,9 +17,7 @@ export type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_
 
 export default DefaultTarget;
 
-export type DefaultTargetOptions = {
-  [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
-};
+export type DefaultTargetOptions = Record<DefaultTarget, Required<Omit<LinkTargetOptionDefinition, "name">>>;
 
 /**
  * Default targets to choose from.

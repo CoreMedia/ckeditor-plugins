@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";

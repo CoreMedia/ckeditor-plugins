@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
 import { Config, EditorConfig } from "ckeditor5";
@@ -67,6 +65,7 @@ interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
   defaultTargets?: TargetDefaultRuleDefinition[];
 }
+
 const logger = LoggerProvider.getLogger("LinkTargetConfig");
 
 /**

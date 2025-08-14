@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";

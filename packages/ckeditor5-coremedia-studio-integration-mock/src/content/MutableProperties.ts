@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { AtomicOrArray, isObject } from "./MockContentUtils";
 import MigrateTo from "./MigrateTo";
 import { observeMutableProperty } from "./ObservableMutableProperty";

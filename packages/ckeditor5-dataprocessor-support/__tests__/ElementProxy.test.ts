@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import "jest-xml-matcher";
 import { ElementFilterParams, ElementFilterRule, ElementProxy } from "../src/ElementProxy";
 import { Editor } from "ckeditor5";

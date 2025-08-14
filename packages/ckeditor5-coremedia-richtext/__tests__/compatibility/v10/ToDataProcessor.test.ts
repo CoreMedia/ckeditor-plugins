@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import "jest-xml-matcher";
 import ToDataProcessor from "../../../src/ToDataProcessor";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
@@ -51,6 +49,7 @@ function fib(idx: number, memo?: Map<number, number>): number {
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
 const MOCK_EDITOR = new Editor({ licenseKey: process.env.CKEDITOR_LICENSE_KEY });
 const PARSER = new DOMParser();
+
 function parseAndValidate(xmlString: string): Document {
   const xmlDocument = PARSER.parseFromString(xmlString, "text/html");
   const xPathResult: XPathResult = xmlDocument.evaluate(
@@ -108,9 +107,11 @@ const fxLang = "ja-JP-u-ca-japanese-x-lvariant-JP";
 const { toData } = getV10Config();
 const filter: HtmlFilter = new HtmlFilter(toData, MOCK_EDITOR);
 const dataProcessor: ToDataProcessor = new ToDataProcessor(filter);
+
 function wrapView(xml: string): string {
   return `<view>${xml}</view>`;
 }
+
 function median(sequence: number[]): number {
   sequence.sort();
   return sequence[Math.ceil(sequence.length / 2)];
@@ -122,6 +123,7 @@ function standardDeviation(sequence: number[]): number {
   const mean = sequence.reduce((a, b) => a + b) / n;
   return Math.sqrt(sequence.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 }
+
 const blockquoteFixtures: string[] = [
   `<blockquote class="${fxClass}" lang="${fxLang}" dir="ltr">${fxLtrText}</blockquote>`,
   `<blockquote class="${fxClass}" lang="${fxLang}" dir="ltr" cite="https://example.org/">${fxLtrText}</blockquote>`,
@@ -130,6 +132,7 @@ const preFixtures: string[] = [
   `<pre class="${fxClass}" lang="${fxLang}" dir="ltr">${fxLtrText}</pre>`,
   `<pre class="${fxClass}" lang="${fxLang}" dir="ltr" xml:space="preserve">${fxLtrText}</pre>`,
 ];
+
 function generateInlineFixtures(el: string): string[] {
   return [
     `<${el}>${fxLtrText}<br class="${fxClass}"/>${fxLtrText}</${el}>`,
@@ -150,6 +153,7 @@ function generateInlineFixtures(el: string): string[] {
     `<${el}><strike class="${fxClass}" lang="${fxLang}" dir="ltr">${fxLtrText}</strike></${el}>`,
   ];
 }
+
 function generateHeadingFixtures(el: string): string[] {
   return [
     `<${el}>${fxLtrText}</${el}>`,
@@ -158,6 +162,7 @@ function generateHeadingFixtures(el: string): string[] {
     `<${el} class="${fxClass}" lang="${fxLang}" dir="ltr">${fxLtrText}</${el}>`,
   ];
 }
+
 const headingFixtures: string[] = [
   ...generateHeadingFixtures("h1"),
   ...generateHeadingFixtures("h2"),
@@ -172,6 +177,7 @@ const paragraphFixtures: string[] = [
   `<p class="${fxClass}" lang="${fxLang}" dir="ltr">${fxLtrText}</p>`,
   ...generateInlineFixtures("p"),
 ];
+
 function generateSimpleRows(el: string, cells: number, rows = 1): string[] {
   const result: string[] = [];
   const singleRow: string[] = [];
@@ -185,6 +191,7 @@ function generateSimpleRows(el: string, cells: number, rows = 1): string[] {
   }
   return result;
 }
+
 const tableFixtures: string[] = [
   [
     `<table class="${fxClass}" lang="${fxLang}" dir="ltr">`,
@@ -203,12 +210,15 @@ const tableFixtures: string[] = [
     `</table>`,
   ].join(""),
 ];
+
 function generateListFixtures(el: string): string[] {
   return [
     `<${el} class="${fxClass}" lang="${fxLang}" dir="ltr"><li class="${fxClass}" lang="${fxLang}" dir="ltr">${fxLtrText}</li></${el}>`,
   ];
 }
+
 const listFixtures: string[] = [...generateListFixtures("ol"), ...generateListFixtures("ul")];
+
 function generateComplexView(count: number): string[] {
   const result: string[] = [];
   const initial: string[] = [
@@ -224,6 +234,7 @@ function generateComplexView(count: number): string[] {
   }
   return result;
 }
+
 function viewToDom(xml: string): DocumentFragment {
   const view = parseAndValidate(xml);
   const nodes = Array.from(view.documentElement.childNodes);
@@ -231,6 +242,7 @@ function viewToDom(xml: string): DocumentFragment {
   fragment.append(...nodes);
   return fragment;
 }
+
 describe("RichTextDataProcessor.toData", () => {
   const testData: NamedTestData[] = [
     [
@@ -257,6 +269,7 @@ describe("RichTextDataProcessor.toData", () => {
   describe.each<NamedTestData>(testData)("(%#) %s", (name: string, data: TestData) => {
     const { optimalMilliseconds, gracePercentage } = data;
     const maximumMilliseconds = optimalMilliseconds + optimalMilliseconds * gracePercentage;
+
     function performToData(): {
       data: Document;
       elements: number;
@@ -268,6 +281,7 @@ describe("RichTextDataProcessor.toData", () => {
         elements,
       };
     }
+
     test(`Should not have consumed more than ${maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"} ms (median).`, () => {
       const { elements } = performToData();
       const measuredMilliseconds: number[] = [];

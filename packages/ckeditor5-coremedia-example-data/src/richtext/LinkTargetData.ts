@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { lorem } from "../LoremIpsum";
 import { em, h1, richtext } from "../RichText";
 import { richTextDocument } from "../RichTextDOM";
