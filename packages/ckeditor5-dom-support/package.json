@@ -52,6 +52,7 @@
     "build": "tsc --project ./tsconfig.release.json",
     "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
     "jest": "jest --passWithNoTests",
-    "jest:coverage": "jest --collect-coverage"
+    "jest:coverage": "jest --collect-coverage",
+    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\""
   }
 }

@@ -68,6 +68,7 @@
     "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage",
+    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }
