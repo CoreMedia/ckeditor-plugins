@@ -728,7 +728,7 @@ describe("ElementProxy.applyRules()", () => {
                 const descriptor = Object.getOwnPropertyDescriptor(me.node.attributes, key);
                 if (descriptor) {
                   // False positive? Checks assume, that descriptor may be undefined here. But how?
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
                   // @ts-expect-error Possibly false positive.
                   descriptor.set(`prefixed:${descriptor.get()}`);
                 }

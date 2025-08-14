@@ -138,7 +138,8 @@ export type RuleSectionConfig =
 export type TransformPropertyType<Type extends object, Key extends keyof Type, ValueType> = Pick<
   Type,
   keyof Omit<Type, Key>
-> & { [P in Key]: ValueType };
+> &
+  Record<Key, ValueType>;
 
 /**
  * Parsed Rule Section.

@@ -161,7 +161,7 @@ export class HtmlDomConverter {
    *
    * @param originalNode - original (mutable!) node
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   #prepareForImport(originalNode: Node): void {
     this.listener.prepare?.(originalNode);
   }

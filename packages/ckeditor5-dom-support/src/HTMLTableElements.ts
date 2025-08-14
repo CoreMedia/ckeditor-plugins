@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-returns-check,@typescript-eslint/unified-signatures */
 import { isHTMLTableElement } from "./TypeGuards";
 export { isHTMLTableElement } from "./TypeGuards";
 import { createElement, isElement, removeClass } from "./Elements";
