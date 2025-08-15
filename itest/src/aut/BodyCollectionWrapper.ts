@@ -1,8 +1,8 @@
-import { JSWrapper } from "./JSWrapper";
 import type { BodyCollection } from "ckeditor5";
+import { Locator } from "playwright";
+import { JSWrapper } from "./JSWrapper";
 import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
 import { Locatable, visible } from "./Locatable";
-import { Locator } from "playwright";
 import { BalloonPanelViewWrapper } from "./BalloonPanelViewWrapper";
 
 /**

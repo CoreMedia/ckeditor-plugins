@@ -1,7 +1,7 @@
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { PriorityString } from "ckeditor5";
-import { Direction, resolveDirectionToConfig } from "./Direction";
 import { isElement } from "@coremedia/ckeditor5-dom-support";
+import { Direction, resolveDirectionToConfig } from "./Direction";
 
 export interface ReplaceByChildrenConfig {
   localName: string;

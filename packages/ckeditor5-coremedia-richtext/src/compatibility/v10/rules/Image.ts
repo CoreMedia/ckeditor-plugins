@@ -1,4 +1,5 @@
 import { ToDataAndViewElementConfiguration, ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
+import { INLINE_IMG } from "../../../rules/ImageElements";
 import {
   xLinkActuateMapper,
   xLinkHrefMapper,
@@ -8,7 +9,6 @@ import {
   xLinkTypeMapper,
 } from "./XLink";
 import { langMapper } from "./Lang";
-import { INLINE_IMG } from "../../../rules/ImageElements";
 
 /**
  * Valides, if the given element has a `xlink:href` set.

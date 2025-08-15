@@ -1,6 +1,6 @@
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml } from "../src/Documents";
 import { isHasNamespaceUri } from "../src/HasNamespaceUris";
+import { USE_CASE_NAME } from "./Constants";
 
 const htmlDocument = documentFromHtml(`<html lang="aa" id="ID"/>`);
 const langAttribute = htmlDocument.documentElement.getAttributeNode("lang");

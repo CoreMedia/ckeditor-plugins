@@ -1,5 +1,6 @@
 import { LinkAttributes } from "./LinkAttributes";
 import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
+
 declare module "ckeditor5" {
   interface PluginsMap {
     [LinkAttributes.pluginName]: LinkAttributes;

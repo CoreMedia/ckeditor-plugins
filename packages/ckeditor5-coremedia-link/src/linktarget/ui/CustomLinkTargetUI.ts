@@ -1,7 +1,3 @@
-import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
-import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
-import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
-import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
 import {
   Plugin,
@@ -16,6 +12,10 @@ import {
   EditorConfig,
 } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
+import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
+import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
+import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
+import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 
 /**
  * Adds a button to the `LinkUI` for selecting a custom target, i.e., if

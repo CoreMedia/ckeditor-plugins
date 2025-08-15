@@ -1,6 +1,6 @@
 import { ContentSearchService } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { Observable, of } from "rxjs";
+import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 
 const uriPaths: string[] = [];
 for (let i = 0; i < 100; i++) {
@@ -19,6 +19,10 @@ export class MockContentSearchService implements ContentSearchService {
 
   getName(): string {
     return "contentSearchService";
+  }
+
+  getContentProvider(): MockContentProvider {
+    return this.#contentProvider;
   }
 
   observe_contentSuggestions(filterValue: string, contentUriPath: string | null): Observable<string[]> {

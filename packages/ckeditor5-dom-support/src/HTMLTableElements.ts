@@ -1,8 +1,8 @@
-/* eslint-disable jsdoc/require-returns-check,@typescript-eslint/unified-signatures */
-import { isHTMLTableElement } from "./TypeGuards";
-export { isHTMLTableElement } from "./TypeGuards";
 import { createElement, isElement, removeClass } from "./Elements";
 import { querySelectorAllDirectChildren, querySelectorDirectChild } from "./ParentNodes";
+import { isHTMLTableElement } from "./TypeGuards";
+
+export { isHTMLTableElement } from "./TypeGuards";
 
 /**
  * Wraps the given `<table>` element into a wrapper, which provides some

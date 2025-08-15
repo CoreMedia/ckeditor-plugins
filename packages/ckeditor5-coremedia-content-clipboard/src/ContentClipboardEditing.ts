@@ -1,11 +1,11 @@
 import "../theme/loadmask.css";
 import { Plugin, Editor, DowncastDispatcher } from "ckeditor5";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { addContentMarkerConversion, removeContentMarkerConversion } from "./converters";
 import DataToModelMechanism from "./DataToModelMechanism";
 import ContentToModelRegistry, { CreateModelFunctionCreator } from "./ContentToModelRegistry";
 import { UndoSupport } from "./integrations/Undo";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 const PLUGIN_NAME = "ContentClipboardEditing";
 

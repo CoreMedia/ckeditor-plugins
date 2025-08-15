@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeSize } from "../src/rules/BBCodeSize";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeSize", () => {
   describe("Default Configuration", () => {

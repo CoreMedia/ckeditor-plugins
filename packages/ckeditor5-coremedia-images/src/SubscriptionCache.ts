@@ -11,7 +11,7 @@ export default class SubscriptionCache {
 
   addSubscription(cmId: string, subscription: Subscription): void {
     const subscriptions = this.subscriptionCache.get(cmId);
-    const existingSubscription = subscriptions ? subscriptions : [];
+    const existingSubscription = subscriptions ?? [];
     existingSubscription.push(subscription);
     this.subscriptionCache.set(cmId, existingSubscription);
   }

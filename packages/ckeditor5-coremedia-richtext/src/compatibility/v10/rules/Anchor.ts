@@ -1,8 +1,8 @@
 import { ToDataAndViewElementConfiguration, ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
+import { formatTarget, parseTarget } from "../../../rules/AnchorElements";
 import { xLinkActuateMapper, xLinkTitleMapper, xLinkTypeMapper } from "./XLink";
 import { langMapper } from "./Lang";
 import { formatLink } from "./IdHelper";
-import { formatTarget, parseTarget } from "../../../rules/AnchorElements";
 
 const CONTENT_LINK_DATA_REGEXP = /^content\/(?<id>\d+)*/;
 const CONTENT_LINK_DATA_PREFIX = "content/";

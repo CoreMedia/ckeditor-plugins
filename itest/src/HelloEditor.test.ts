@@ -1,7 +1,7 @@
+import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import "./expect/Expectations";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 
 /**
  * Provides some first test mainly for demonstration purpose of the test API.

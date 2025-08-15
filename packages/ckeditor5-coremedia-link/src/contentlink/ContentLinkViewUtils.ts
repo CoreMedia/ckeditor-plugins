@@ -1,6 +1,6 @@
-import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
 import { View, Editor } from "ckeditor5";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
+import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
 
 /**
  * Adds or removes "cm-ck-link-view--show-content-link" to the form view's (and action view's) element or to the corresponding

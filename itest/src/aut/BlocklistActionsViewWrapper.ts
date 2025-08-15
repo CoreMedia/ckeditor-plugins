@@ -1,5 +1,5 @@
-import { Locatable, visible } from "./Locatable";
 import { Locator } from "playwright";
+import { Locatable, visible } from "./Locatable";
 
 export class BlocklistActionsViewWrapper implements Locatable {
   readonly #parent: Locatable;

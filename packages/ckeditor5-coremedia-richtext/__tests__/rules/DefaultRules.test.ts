@@ -1,9 +1,9 @@
 // noinspection HtmlUnknownAttribute
 
-import * as aut from "../../src/rules/DefaultRules";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { bijective, TestDirection, toView } from "./TestDirection";
+import * as aut from "../../src/rules/DefaultRules";
 import { INLINE_IMG } from "../../src/rules/ImageElements";
+import { bijective, TestDirection, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
 /**

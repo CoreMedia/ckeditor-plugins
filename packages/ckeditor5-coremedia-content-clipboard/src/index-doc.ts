@@ -15,7 +15,6 @@ export * as lang from "./lang/index-doc";
 export * from "./ContentClipboard";
 export { default as ContentClipboard } from "./ContentClipboard";
 
-export * from "./ContentClipboardEditing";
 export { default as ContentClipboardEditing } from "./ContentClipboardEditing";
 
 export * from "./ContentClipboardMarkerDataUtils";
@@ -30,8 +29,6 @@ export { default as ContentToModelRegistry } from "./ContentToModelRegistry";
 
 export * from "./converters";
 
-export * from "./DataToModelMechanism";
 export { default as DataToModelMechanism } from "./DataToModelMechanism";
 
-export * from "./MarkerRepositionUtil";
 export { default as MarkerRepositionUtil } from "./MarkerRepositionUtil";

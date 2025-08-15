@@ -8,9 +8,7 @@ export type XDiffAttribute = "class" | "id" | "previous" | "next" | "changetype"
 /**
  * Set of attributes in XDIFF Namespace.
  */
-export type XDiffAttributes = {
-  [key in XDiffAttribute]?: string;
-};
+export type XDiffAttributes = Partial<Record<XDiffAttribute, string>>;
 
 /**
  * Supported difference types.

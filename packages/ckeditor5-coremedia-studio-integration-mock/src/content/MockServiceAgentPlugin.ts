@@ -4,8 +4,8 @@ import {
   createContentFormServiceDescriptor,
   createBlocklistServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import MockContentFormService from "./MockContentFormService";
 import { MockBlocklistService } from "../MockBlocklistService";
+import MockContentFormService from "./MockContentFormService";
 
 const PLUGIN_NAME = "MockServiceAgent";
 

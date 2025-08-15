@@ -1,6 +1,5 @@
 import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface IContentReferenceService {
   getContentReferences(requests: string[]): Promise<ContentReferenceResponse[]>;
 

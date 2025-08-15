@@ -1,3 +1,6 @@
+import { ConversionApi, RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter";
+import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 import {
   extractXLinkAttributes,
   extractXLinkDataSetEntries,
@@ -6,9 +9,6 @@ import {
   XLinkAttributes,
   xLinkNamespaceUri,
 } from "./XLink";
-import { ConversionApi, RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter";
-import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
 
 export const contentUriPathPrefix = "content";
 

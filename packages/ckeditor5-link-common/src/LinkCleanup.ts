@@ -1,9 +1,7 @@
-/* eslint no-null/no-null: off */
-
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { DiffItem, DiffItemAttribute, Editor, LinkEditing, Plugin, Range, Writer } from "ckeditor5";
+import { LINK_HREF_MODEL } from "./Constants";
 
 /**
  * Provides configuration options for attributes, which must not exist without

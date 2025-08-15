@@ -19,6 +19,7 @@ export interface CoreOptions {
   openTag?: string;
   closeTag?: string;
   onError?: (info: { message: string; tagName: string; lineNumber: number; columnNumber: number }) => void;
+
   [key: string]: unknown;
 }
 
@@ -38,10 +39,8 @@ export type CorePlugin = (
   options: { parse: CoreParser; render: CoreRenderer; iterate: CoreIterator; match: CoreMatcher; data: CoreData },
 ) => CoreTree | CoreTree[number] | undefined | null;
 
-export default function bbob(
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  plugs?: Function | Function[],
-): {
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+export default function bbob(plugs?: Function | Function[]): {
   process: (
     input: string | undefined,
     opts?: CoreOptions,

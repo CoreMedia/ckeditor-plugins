@@ -79,7 +79,7 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Lint
-        run: pnpm lint
+        run: pnpm -r lint
       - name: Test
         env:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}

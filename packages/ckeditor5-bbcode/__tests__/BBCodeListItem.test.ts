@@ -1,5 +1,5 @@
-import { asHTMLElement, requireHTMLElement } from "./DOMUtils";
 import { bbCodeListItem } from "../src";
+import { asHTMLElement, requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeListItem", () => {
   describe("Default Configuration", () => {

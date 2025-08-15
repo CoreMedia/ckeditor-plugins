@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { Config } from "ckeditor5";
 import { computeDefaultLinkTargetForUrl } from "../../../src/linktarget/config/LinkTargetConfig";
 

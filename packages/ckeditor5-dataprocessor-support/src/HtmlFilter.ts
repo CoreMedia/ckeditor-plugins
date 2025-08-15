@@ -1,9 +1,7 @@
-/* eslint no-null/no-null: off */
-
-import { ElementFilterRule, ElementProxy } from "./ElementProxy";
-import { TextProxy, TextFilterRule } from "./TextProxy";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Editor } from "ckeditor5";
+import { ElementFilterRule, ElementProxy } from "./ElementProxy";
+import { TextProxy, TextFilterRule } from "./TextProxy";
 
 enum FilterMode {
   toData,

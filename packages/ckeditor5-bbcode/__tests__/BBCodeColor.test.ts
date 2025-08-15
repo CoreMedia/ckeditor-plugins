@@ -1,6 +1,6 @@
-import { requireHTMLElement } from "./DOMUtils";
-import { BBCodeColor, bbCodeColor, ColorMapper } from "../src/rules/BBCodeColor";
 import { RgbColor, w3ExtendedColorNames } from "@coremedia/ckeditor5-dom-support";
+import { BBCodeColor, bbCodeColor, ColorMapper } from "../src/rules/BBCodeColor";
+import { requireHTMLElement } from "./DOMUtils";
 
 const reverseW3CColorMap = Object.fromEntries(Object.entries(w3ExtendedColorNames).map(([key, value]) => [value, key]));
 

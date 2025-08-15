@@ -1,5 +1,5 @@
-import { RgbColor } from "./RgbColor";
 import { RequireSelected } from "@coremedia/ckeditor5-common";
+import { RgbColor } from "./RgbColor";
 
 /**
  * Regular expression for color names: Only alphabetic.

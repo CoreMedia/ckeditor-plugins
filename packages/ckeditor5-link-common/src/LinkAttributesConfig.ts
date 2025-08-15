@@ -1,5 +1,5 @@
-import { isRegisterAttributeConfig, RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { Config, EditorConfig } from "ckeditor5";
+import { isRegisterAttributeConfig, RegisterAttributeConfig } from "./RegisterAttributeConfig";
 
 /**
  * Configuration, that is expected as part of the CKEditor 5

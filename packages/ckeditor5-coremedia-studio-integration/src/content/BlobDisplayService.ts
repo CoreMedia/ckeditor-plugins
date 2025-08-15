@@ -1,5 +1,5 @@
-import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
+import { UriPath } from "./UriPath";
 
 /**
  * Represents data for creating an inline representation of the referenced

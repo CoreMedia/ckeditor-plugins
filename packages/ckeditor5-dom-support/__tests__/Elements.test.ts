@@ -1,7 +1,7 @@
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { ElementDefinition, isElement, removeClass, renameElement } from "../src/Elements";
 import { serializeToXmlString } from "../src/Nodes";
+import { USE_CASE_NAME } from "./Constants";
 
 describe("Elements", () => {
   describe("isElement", () => {

@@ -1,18 +1,18 @@
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import "./expect/Expectations";
+import type {
+  IsDroppableEvaluationResult,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import type {
   InputExampleElement,
   MockContentConfig,
   MockExternalContent,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { PNG_BLUE_240x135, PNG_GREEN_240x135, PNG_RED_240x135 } from "./MockFixtures";
 import waitForExpect from "wait-for-expect";
-import type {
-  IsDroppableEvaluationResult,
-  IsLinkableEvaluationResult,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import WindowBrowserAccessor from "./browser/WindowBrowserAccessor";
+import { PNG_BLUE_240x135, PNG_GREEN_240x135, PNG_RED_240x135 } from "./MockFixtures";
 
 const oneLink: MockContentConfig[] = [
   {

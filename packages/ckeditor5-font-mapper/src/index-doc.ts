@@ -7,7 +7,6 @@
 
 export * from "./ConfigToMapUtil";
 
-export * from "./FontMapper";
 export { default as FontMapper } from "./FontMapper";
 
 export * from "./FontMapperConfig";

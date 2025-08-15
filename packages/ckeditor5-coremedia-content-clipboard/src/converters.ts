@@ -1,8 +1,6 @@
-/* eslint no-null/no-null: off */
-
+import { EventInfo, DowncastConversionApi, Item as ModelItem, Range as ModelRange } from "ckeditor5";
 import ContentInputDataCache from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import { EventInfo, DowncastConversionApi, Item as ModelItem, Range as ModelRange } from "ckeditor5";
 
 export interface AddMarkerEventData {
   markerName: string;

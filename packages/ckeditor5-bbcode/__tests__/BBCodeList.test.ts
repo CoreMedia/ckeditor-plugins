@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeList } from "../src";
+import { requireHTMLElement } from "./DOMUtils";
 
 // No integration test here. Simulate, we already mapped the children.
 const mockListItemsContent = (el: HTMLElement): string =>

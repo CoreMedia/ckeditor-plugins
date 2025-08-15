@@ -1,9 +1,9 @@
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { Editor, EditorReadyEvent, Plugin, Autosave } from "ckeditor5";
 import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
 import type { DataContextOptions } from "./DataContextOptions";
 import { DataFacadeController } from "./DataFacadeController";
 import type { DataApi } from "./DataApi";
-import { Editor, EditorReadyEvent, Plugin, Autosave } from "ckeditor5";
 import type { DataFacadeConfig, Save } from "./DataFacadeConfig";
 
 /**

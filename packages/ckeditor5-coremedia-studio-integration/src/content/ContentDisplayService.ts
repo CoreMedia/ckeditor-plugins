@@ -1,5 +1,5 @@
-import { UriPath } from "./UriPath";
 import { Observable } from "rxjs";
+import { UriPath } from "./UriPath";
 import ContentAsLink from "./ContentAsLink";
 
 /**

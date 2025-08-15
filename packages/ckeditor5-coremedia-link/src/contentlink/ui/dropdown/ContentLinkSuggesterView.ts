@@ -11,9 +11,9 @@ import {
   View,
   ViewCollection,
 } from "ckeditor5";
+import { BehaviorSubject, combineLatest, debounce, interval, Observable, of, switchMap } from "rxjs";
 import LibraryButtonView from "../LibraryButtonView";
 import { createContentLinkSuggestion } from "./createContentLinkSuggestion";
-import { BehaviorSubject, combineLatest, debounce, interval, Observable, of, switchMap } from "rxjs";
 
 interface ContentLinkSuggesterViewProps {
   editor: Editor;

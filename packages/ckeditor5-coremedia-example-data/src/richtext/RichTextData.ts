@@ -1,3 +1,4 @@
+import { ExampleData } from "../ExampleData";
 import { contentLinkData } from "./ContentLinkData";
 import { differencingData } from "./DifferencingData";
 import { entitiesData } from "./EntitiesData";
@@ -7,7 +8,6 @@ import { linkTargetData } from "./LinkTargetData";
 import { loremIpsumData } from "./LoremIpsumData";
 import { simpleData } from "./SimpleData";
 import { welcomeTextData } from "./WelcomeTextData";
-import { ExampleData } from "../ExampleData";
 import { challengingData } from "./ChallengingData";
 import { imageData } from "./ImageData";
 

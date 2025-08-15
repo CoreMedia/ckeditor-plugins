@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeStrikethrough } from "../src";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeStrikethrough", () => {
   describe("Default Configuration", () => {

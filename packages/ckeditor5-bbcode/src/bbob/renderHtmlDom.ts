@@ -1,8 +1,8 @@
 import { render as htmlRender } from "@bbob/html/es";
 import { CoreRenderable, CoreRenderer, CoreRenderNode } from "@bbob/core/es";
 import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
-import { setAttributesFromTagAttrs } from "./Attributes";
 import { bbCodeLogger } from "../BBCodeLogger";
+import { setAttributesFromTagAttrs } from "./Attributes";
 
 const renderDomNode = (node: CoreRenderable, options: Required<HtmlDomRendererOptions>): Node => {
   if (typeof node === "number") {

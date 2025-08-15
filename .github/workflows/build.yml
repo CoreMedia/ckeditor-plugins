@@ -137,7 +137,7 @@ jobs:
       - id: lint
         if: ${{ inputs.lint }}
         name: "Lint"
-        run: pnpm lint
+        run: pnpm -r lint
       - id: utest
         if: ${{ inputs.utest }}
         name: "Unit Tests"

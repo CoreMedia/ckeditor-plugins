@@ -1,7 +1,7 @@
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromXml } from "../src/Documents";
 import { isAttr, copyAttributesFrom } from "../src/Attrs";
 import { serializeToXmlString } from "../src/Nodes";
+import { USE_CASE_NAME } from "./Constants";
 
 const onlyRootXmlDocument = documentFromXml(`<root lang="en" id="ID"/>`);
 const langAttribute = onlyRootXmlDocument.documentElement.getAttributeNode("lang");

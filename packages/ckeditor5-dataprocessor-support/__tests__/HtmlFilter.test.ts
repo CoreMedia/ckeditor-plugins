@@ -2,8 +2,8 @@
 // noinspection InnerHTMLJS
 
 import "jest-xml-matcher";
-import { FilterRuleSet, HtmlFilter } from "../src/HtmlFilter";
 import { Editor } from "ckeditor5";
+import { FilterRuleSet, HtmlFilter } from "../src/HtmlFilter";
 import "./config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.

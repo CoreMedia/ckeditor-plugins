@@ -1,14 +1,11 @@
-// noinspection JSUnusedGlobalSymbols
+import ContentClipboard from "./ContentClipboard";
+import ContentClipboardEditing from "./ContentClipboardEditing";
+import { UndoSupport } from "./integrations/Undo";
+import { PasteContentCommand } from "./paste/PasteContentCommand";
+import PasteContentEditing from "./paste/PasteContentEditing";
+import PasteContentPlugin from "./paste/PasteContentPlugin";
+import PasteContentUI from "./paste/PasteContentUI";
 
-import type {
-  ContentClipboard,
-  ContentClipboardEditing,
-  PasteContentCommand,
-  PasteContentEditing,
-  PasteContentPlugin,
-  PasteContentUI,
-  UndoSupport,
-} from "./index";
 declare module "ckeditor5" {
   interface PluginsMap {
     [ContentClipboard.pluginName]: ContentClipboard;
@@ -18,6 +15,7 @@ declare module "ckeditor5" {
     [PasteContentUI.pluginName]: ContentClipboardEditing;
     [UndoSupport.pluginName]: UndoSupport;
   }
+
   interface CommandsMap {
     [PasteContentEditing.pasteContentCommand]: PasteContentCommand;
   }

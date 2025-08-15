@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { capitalize, increaseUpToAndRestart, isObject } from "../../src/content/MockContentUtils";
 
 const someFunction = () => {

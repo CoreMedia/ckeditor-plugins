@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { RequiredNonNull, RequiredNonNullPropertiesMissingError, requireNonNulls } from "../src/RequiredNonNull";
 
 interface WithOptionalNullableValues {

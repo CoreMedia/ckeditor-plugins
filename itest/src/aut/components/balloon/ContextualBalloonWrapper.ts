@@ -1,7 +1,8 @@
+import type { ContextualBalloon } from "ckeditor5";
 import { ClassicEditorWrapper } from "../../ClassicEditorWrapper";
 import { JSWrapper } from "../../JSWrapper";
-import type { ContextualBalloon } from "ckeditor5";
 import ViewWrapper from "./../ViewWrapper";
+
 export default class ContextualBalloonWrapper extends JSWrapper<ContextualBalloon> {
   get view(): ViewWrapper {
     return ViewWrapper.fromContextualBalloon(this);

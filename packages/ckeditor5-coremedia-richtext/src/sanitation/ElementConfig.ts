@@ -1,7 +1,3 @@
-import { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
-import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
-import { ActiveStrictness } from "../Strictness";
-import { SanitationListener } from "./SanitationListener";
 import {
   isText,
   isElement,
@@ -9,7 +5,11 @@ import {
   isHasNamespaceUri,
   lookupNamespaceURI,
 } from "@coremedia/ckeditor5-dom-support";
+import { ActiveStrictness } from "../Strictness";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
+import { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
+import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
+import { SanitationListener } from "./SanitationListener";
 
 const defaultPrefix = Symbol("default");
 type DefaultPrefix = typeof defaultPrefix;
@@ -334,7 +334,6 @@ export class ElementConfig {
    */
   #processRequiredAttributes(element: Element) {
     this.#requiredAttributesByPrefixAndLocalName.forEach((byLocalName, prefix) => {
-      // eslint-disable-next-line no-null/no-null
       const actualPrefix = prefix === defaultPrefix ? null : prefix;
       const prefixString = actualPrefix ? `${actualPrefix}:` : "";
       byLocalName.forEach((defaultValue, localName) => {

@@ -23,6 +23,7 @@
     "clean:dist": "rimraf ./dist",
     "jest": "jest --passWithNoTests",
     "jest:coverage": "jest --collect-coverage --passWithNoTests",
+    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "exports": {

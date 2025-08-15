@@ -1,5 +1,3 @@
-import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
-import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
 import {
@@ -7,6 +5,8 @@ import {
   RichtextConfigurationService,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import type { Editor, Model, Range as ModelRange, Writer } from "ckeditor5";
+import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
+import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
 

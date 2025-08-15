@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
 import { warnOnAmbiguousAttributeState } from "./RulesLogger";
 
@@ -49,7 +47,7 @@ const renameAttribute = (
       ambiguousAttributeNames.push(n);
     }
     // To fix, we may migrate attributes to Map<> instead.
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
     delete attributes[n];
   });
   if (ambiguousAttributeNames.length > 0) {

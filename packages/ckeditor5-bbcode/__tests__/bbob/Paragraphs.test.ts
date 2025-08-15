@@ -1,5 +1,5 @@
-import { paragraphAwareContent, ParagraphAwareContentOptions } from "../../src/bbob/Paragraphs";
 import { TagNode } from "@bbob/plugin-helper/es";
+import { paragraphAwareContent, ParagraphAwareContentOptions } from "../../src/bbob/Paragraphs";
 
 const toNode = TagNode.create;
 

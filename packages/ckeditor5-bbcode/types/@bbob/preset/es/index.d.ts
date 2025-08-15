@@ -9,6 +9,7 @@ interface Options {
   parser?: unknown;
   render: RenderFn;
   data?: unknown;
+
   [key: string]: unknown;
 }
 
@@ -20,13 +21,12 @@ interface Options {
  */
 declare function createPreset(
   defTags: Record<string, (node: TagNode, core: { render: RenderFn }, options: Options) => string | TagNode>,
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   processor?: Function,
 ): {
   extend: (
     callback: (defTags: Parameters<typeof createPreset>[0], options: object) => Parameters<typeof createPreset>[0],
   ) => ReturnType<typeof createPreset>;
-  // eslint-disable-next-line @typescript-eslint/ban-types
   options?: object;
   // Function signature.
   (options: object = {}): {

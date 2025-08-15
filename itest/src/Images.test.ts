@@ -1,23 +1,23 @@
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import type { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { PNG_EMPTY_24x24, PNG_LOCK_24x24, PNG_RED_240x135 } from "./MockFixtures";
-import "./expect/Expectations";
-import { ElementHandle } from "playwright-core";
 import {
-  blobReference,
   a,
+  blobReference,
   img,
+  linkReference,
   p,
   richtext,
-  linkReference,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
+import type { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { ElementHandle } from "playwright-core";
+import waitForExpect from "wait-for-expect";
+import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";
-import ToolbarViewWrapper from "./aut/components/ToolbarViewWrapper";
+import ContentLinkViewWrapper from "./aut/components/balloon/ContentLinkViewWrapper";
 import ImageContextualBalloonToolbar from "./aut/components/balloon/ImageContextualBalloonToolbar";
 import LinkActionsViewWrapper from "./aut/components/balloon/LinkActionsViewWrapper";
-import ContentLinkViewWrapper from "./aut/components/balloon/ContentLinkViewWrapper";
-import waitForExpect from "wait-for-expect";
+import ToolbarViewWrapper from "./aut/components/ToolbarViewWrapper";
+import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
+import { PNG_EMPTY_24x24, PNG_LOCK_24x24, PNG_RED_240x135 } from "./MockFixtures";
+import "./expect/Expectations";
 
 describe("Image Features", () => {
   let application: ApplicationWrapper;

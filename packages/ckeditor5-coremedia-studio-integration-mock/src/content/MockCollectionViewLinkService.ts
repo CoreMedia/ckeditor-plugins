@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
 import { Editor } from "ckeditor5";
@@ -39,5 +38,9 @@ export class MockCollectionViewLinkService implements CollectionViewLinkService 
 
   getName(): string {
     return "collectionViewLinkService";
+  }
+
+  getEditor(): Editor {
+    return this.#editor;
   }
 }

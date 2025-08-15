@@ -1,11 +1,11 @@
+import { ElementHandle } from "playwright-core";
+import { ClassicEditor } from "ckeditor5";
+import { Locator } from "playwright";
 import { JSWrapper } from "./JSWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
-import { ElementHandle } from "playwright-core";
 // ClassicEditorUI: See ckeditor/ckeditor5#12027.
-import { ClassicEditor } from "ckeditor5";
 import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
 import { Locatable, visible } from "./Locatable";
-import { Locator } from "playwright";
 
 /**
  * Wrapper for `EditorUI`.
@@ -42,7 +42,7 @@ export class EditorUIWrapper extends JSWrapper<ClassicEditor["ui"]> implements L
      * controlled DOM in contrast to Rich Web Applications, which may respond
      * to updates from some server.
      */
-    // eslint-disable-next-line @typescript-eslint/require-await
+
     return this.evaluateHandle(async (ui): Promise<HTMLElement> => {
       const element = ui.getEditableElement();
       if (!element) {

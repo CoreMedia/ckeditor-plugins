@@ -1,6 +1,6 @@
+import { Editor } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
 import { EditingControllerWrapper } from "./EditingControllerWrapper";
-import { Editor } from "ckeditor5";
 
 /**
  * Wrapper for CKEditor instance.

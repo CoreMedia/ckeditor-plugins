@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeHeading } from "../src";
+import { requireHTMLElement } from "./DOMUtils";
 
 const prettyPrintNewlines = "\n\n";
 

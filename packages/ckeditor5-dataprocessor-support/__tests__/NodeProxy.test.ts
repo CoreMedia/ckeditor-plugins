@@ -1,8 +1,6 @@
-/* eslint no-null/no-null: off */
-
 import "jest-xml-matcher";
-import { NodeProxy } from "../src/NodeProxy";
 import { jest } from "@jest/globals";
+import { NodeProxy } from "../src/NodeProxy";
 
 const PARSER = new DOMParser();
 const SERIALIZER = new XMLSerializer();
@@ -363,7 +361,7 @@ describe("NodeProxy.persistToDom", () => {
       "PERSIST#1: Should not modify DOM if no operations got applied.",
       {
         nodeXPath: "//child",
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+
         action: () => {},
         expectedDom: "<parent><child><pair1/><pair2/><pair3/></child></parent>",
         expectedAbort: false,

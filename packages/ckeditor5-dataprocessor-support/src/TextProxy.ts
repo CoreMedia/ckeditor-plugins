@@ -1,7 +1,5 @@
-/* eslint no-null/no-null: off */
-
-import { NodeProxy, PersistResponse } from "./NodeProxy";
 import { Editor } from "ckeditor5";
+import { NodeProxy, PersistResponse } from "./NodeProxy";
 
 /**
  * Proxy to manipulate text nodes. General contract is, that all modifications

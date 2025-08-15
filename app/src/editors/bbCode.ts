@@ -1,8 +1,5 @@
 import { BBCode } from "@coremedia/ckeditor5-bbcode";
-import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
-import { ApplicationState } from "../ApplicationState";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
-import { updatePreview } from "../preview";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import {
@@ -37,6 +34,9 @@ import {
   Base64UploadAdapter,
   ImageBlockEditing,
 } from "ckeditor5";
+import { updatePreview } from "../preview";
+import { ApplicationState } from "../ApplicationState";
+import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 
 const licenseKeyErrorMessage =
   "Please provide a valid license key for your CKEditor5 instance. Please create a .env file in the workspace root and make your license as CKEDITOR_LICENSE_KEY variable. Please use 'GPL' if you want to use the GNU General Public License.";
@@ -312,6 +312,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
       },
     });
   } catch (e: unknown) {
+    console.error("Catched error when creating Editor.", e);
     throw Error(licenseKeyErrorMessage);
   }
 };

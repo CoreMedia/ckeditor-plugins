@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import {
   MutableProperties,
   MutablePropertiesConfig,
@@ -99,12 +97,20 @@ describe("MutableProperties", () => {
     });
 
     test.each`
-      blob                                                                       | expected
-      ${[null]}                                                                  | ${[null]}
-      ${null}                                                                    | ${[null]}
-      ${[]}                                                                      | ${[]}
-      ${"data:image/png;base64,theData"}                                         | ${[{ value: "data:image/png;base64,theData", mime: "image/png" }]}
-      ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"]} | ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"].map((s) => ({ value: s, mime: "image/png" }))}
+      blob      | expected
+      ${[null]} | ${[null]}
+      ${null}   | ${[null]}
+      ${[]}     | ${[]}
+      ${"data:image/png;base64,theData"} | ${[
+  {
+    value: "data:image/png;base64,theData",
+    mime: "image/png",
+  },
+]}
+      ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"]} | ${["data:image/png;base64,firstData", "data:image/png;base64,secondData"].map((s) => ({
+  value: s,
+  mime: "image/png",
+}))}
     `("[$#] Should respect blob value: $blob", (data) => {
       const { blob, expected } = data;
       const config: MutablePropertiesConfig = { blob };

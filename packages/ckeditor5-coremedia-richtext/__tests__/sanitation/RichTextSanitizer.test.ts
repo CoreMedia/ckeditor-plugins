@@ -1,7 +1,5 @@
 // noinspection HtmlRequiredAltAttribute,RequiredAttributes
 
-import { defaultStrictness, Strictness, StrictnessKey } from "../../src/Strictness";
-import { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
 import {
   a,
   blockquote,
@@ -23,6 +21,8 @@ import {
   tr,
   ul,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { defaultStrictness, Strictness, StrictnessKey } from "../../src/Strictness";
+import { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
 import { sanitationListener } from "./TestSanitationListener";
 import { parseXml } from "./XmlTestUtils";
 import { expectSanitationResult } from "./ExpectSanitationResult";

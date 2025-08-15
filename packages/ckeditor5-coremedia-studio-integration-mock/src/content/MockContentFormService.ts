@@ -1,12 +1,12 @@
 /* async: Methods require to be asynchronous in a production scenario. */
-/* eslint-disable @typescript-eslint/require-await */
+
 /* eslint no-restricted-globals: off */
 
 import { ContentFormService } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Editor } from "ckeditor5";
-import MockContentPlugin from "./MockContentPlugin";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Observable, Subject } from "rxjs";
+import MockContentPlugin from "./MockContentPlugin";
 
 class MockContentFormService implements ContentFormService {
   static readonly #LOGGER = LoggerProvider.getLogger("ContentFormService");

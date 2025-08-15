@@ -1,5 +1,5 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
+import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { toBBCodeUrl } from "./EscapeUtils";
 
 /**

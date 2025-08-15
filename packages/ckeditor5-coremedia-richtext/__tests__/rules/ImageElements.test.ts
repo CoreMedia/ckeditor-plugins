@@ -1,9 +1,9 @@
 // noinspection HtmlUnknownAttribute,HtmlRequiredAltAttribute
 
-import * as aut from "../../src/rules/ImageElements";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { bijective, TestDirection, toData } from "./TestDirection";
+import * as aut from "../../src/rules/ImageElements";
 import { INLINE_IMG } from "../../src/rules/ImageElements";
+import { bijective, TestDirection, toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
 describe("ImageElements", () => {

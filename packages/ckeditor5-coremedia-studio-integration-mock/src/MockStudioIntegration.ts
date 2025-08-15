@@ -1,20 +1,20 @@
 import { Plugin } from "ckeditor5";
+import { serviceAgent } from "@coremedia/service-agent";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import {
+  createClipboardServiceDescriptor,
+  createContentImportServiceDescriptor,
+  createContentReferenceServiceDescriptor,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import MockContentDisplayService from "./content/MockContentDisplayService";
 import MockRichtextConfigurationService from "./content/MockRichtextConfigurationService";
-import { serviceAgent } from "@coremedia/service-agent";
 import MockDragDropService from "./content/MockDragDropService";
 import MockContentFormService from "./content/MockContentFormService";
 import { MockCollectionViewLinkService } from "./content/MockCollectionViewLinkService";
 import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import MockClipboardService from "./content/MockClipboardService";
-import {
-  createClipboardServiceDescriptor,
-  createContentImportServiceDescriptor,
-  createContentReferenceServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { MockContentReferenceService } from "./content/MockContentReferenceService";
 import MockExternalContentPlugin from "./content/MockExternalContentPlugin";
 import { MockContentImportService } from "./content/MockContentImportService";

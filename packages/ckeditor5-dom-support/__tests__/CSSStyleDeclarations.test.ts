@@ -1,3 +1,4 @@
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 import { documentFromHtml, isHTMLElement, rgb, RgbColor } from "../src";
 import {
   fontWeightToNumber,
@@ -6,7 +7,6 @@ import {
   getColor,
   getFontWeightNumeric,
 } from "../src/CSSStyleDeclarations";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
 
 const parseFirstElement = (html: string): Element | undefined =>
   documentFromHtml(html).body.firstElementChild ?? undefined;

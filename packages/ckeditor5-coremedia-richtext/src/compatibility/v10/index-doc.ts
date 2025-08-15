@@ -10,7 +10,6 @@ export * as rules from "./rules/index-doc";
 
 export * from "./V10CoreMediaRichTextConfig";
 
-export * from "./V10RichTextDataProcessor";
 export { default as V10RichTextDataProcessor } from "./V10RichTextDataProcessor";
 
 export * from "./RichTextSchema";

@@ -1,5 +1,6 @@
 import { copyAttributesFrom } from "./Attrs";
 import { lookupDocumentDefaultNamespaceURI } from "./Nodes";
+
 export { isElement } from "./TypeGuards";
 
 /**

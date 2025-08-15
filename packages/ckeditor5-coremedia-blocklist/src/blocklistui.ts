@@ -1,5 +1,4 @@
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
-import blocklistIcon from "../theme/icons/blocklist.svg";
 import {
   Plugin,
   ButtonView,
@@ -13,6 +12,7 @@ import {
   ViewPosition,
   PositionOptions,
 } from "ckeditor5";
+import blocklistIcon from "../theme/icons/blocklist.svg";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
@@ -56,10 +56,7 @@ export default class Blocklistui extends Plugin {
   }
 
   #getBlocklistActionsView(): BlocklistActionsView {
-    if (!this.blocklistActionsView) {
-      this.blocklistActionsView = this.#createBlocklistActionsView();
-    }
-    return this.blocklistActionsView;
+    return this.blocklistActionsView ?? (this.blocklistActionsView = this.#createBlocklistActionsView());
   }
 
   /**
@@ -251,7 +248,7 @@ export default class Blocklistui extends Plugin {
       }
 
       // Otherwise attach panel to the selection.
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       return view.domConverter.viewRangeToDom(viewDocument.selection.getFirstRange()!);
     };
     return {
@@ -335,7 +332,7 @@ export default class Blocklistui extends Plugin {
     clickOutsideHandler({
       emitter: this.#getBlocklistActionsView(),
       activator: () => this.#isBlocklistViewInBalloonPanel(),
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       contextElements: () => [this.#balloon!.view.element!],
       callback: () => this.#hideBlocklistBalloon(),
     });
@@ -393,7 +390,6 @@ export default class Blocklistui extends Plugin {
     const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
     const isTextProxy = (node: unknown): node is TextProxy =>
-      // eslint-disable-next-line no-null/no-null
       typeof node === "object" && node !== null && "data" in node;
     if (range) {
       return Array.from(range.getItems())

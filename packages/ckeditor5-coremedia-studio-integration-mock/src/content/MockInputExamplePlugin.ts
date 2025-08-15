@@ -1,7 +1,6 @@
 import { Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
-import MockDragDropService from "./MockDragDropService";
 import {
   createClipboardServiceDescriptor,
   IsDroppableEvaluationResult,
@@ -10,6 +9,7 @@ import {
   isLinkableUris,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import MockDragDropService from "./MockDragDropService";
 
 /**
  * Describes a div-element that can be created by this plugin.
