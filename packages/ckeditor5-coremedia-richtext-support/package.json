@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext-support",
-  "version": "25.0.3",
+  "version": "25.0.4-rc.0",
   "description": "CoreMedia RichText 1.0 DTD: Registers known elements/attributes",
   "author": {
     "name": "CoreMedia GmbH",
@@ -61,7 +61,7 @@
     "ckeditor5": "45.2.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "^25.0.3",
-    "@coremedia/ckeditor5-logging": "^25.0.3"
+    "@coremedia/ckeditor5-core-common": "25.0.4-rc.0",
+    "@coremedia/ckeditor5-logging": "25.0.4-rc.0"
   }
 }
