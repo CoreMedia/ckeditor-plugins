@@ -1,11 +1,8 @@
-// noinspection JSUnusedGlobalSymbols
-import type {
-  Differencing,
-  HtmlImageElementSupport,
-  ImageElementSupport,
-  PluginIntegrationHook,
-  RichTextDataProcessorIntegration,
-} from "./index";
+import Differencing from "./Differencing";
+import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
+import { ImageElementSupport } from "./integrations/Image";
+import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
+import { PluginIntegrationHook } from "./PluginIntegrationHook";
 
 declare module "ckeditor5" {
   interface PluginsMap {

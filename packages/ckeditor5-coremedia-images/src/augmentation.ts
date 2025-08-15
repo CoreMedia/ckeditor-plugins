@@ -1,13 +1,9 @@
-// noinspection JSUnusedGlobalSymbols
-
-import type {
-  ContentImageClipboardPlugin,
-  ContentImageEditingPlugin,
-  ContentImageOpenInTabUI,
-  ContentImagePlugin,
-  ModelBoundSubscriptionPlugin,
-  OpenImageInTabCommand,
-} from "./index";
+import ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
+import ContentImageEditingPlugin from "./ContentImageEditingPlugin";
+import ContentImageOpenInTabUI from "./contentImageOpenInTab/ContentImageOpenInTabUI";
+import { OpenImageInTabCommand } from "./contentImageOpenInTab/OpenImageInTabCommand";
+import ContentImagePlugin from "./ContentImagePlugin";
+import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 
 declare module "ckeditor5" {
   interface PluginsMap {
@@ -17,6 +13,7 @@ declare module "ckeditor5" {
     [ContentImagePlugin.pluginName]: ContentImagePlugin;
     [ModelBoundSubscriptionPlugin.pluginName]: ModelBoundSubscriptionPlugin;
   }
+
   interface CommandsMap {
     [ContentImageEditingPlugin.openImageInTab]: OpenImageInTabCommand;
   }

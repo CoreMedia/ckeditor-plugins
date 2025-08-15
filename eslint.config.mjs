@@ -41,6 +41,13 @@ export const configs = defineConfig([{
     }],
 
     "import/newline-after-import": ["error"],
+
+    "@typescript-eslint/no-unused-expressions": ["error", {
+      "allowShortCircuit": true,
+      "allowTernary": true,
+      "allowTaggedTemplates": true
+    }],
+
     "no-restricted-imports": [
       "error",
       {

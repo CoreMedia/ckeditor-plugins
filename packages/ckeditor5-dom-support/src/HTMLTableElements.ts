@@ -1,8 +1,8 @@
+import { createElement, isElement, removeClass } from "./Elements";
+import { querySelectorAllDirectChildren, querySelectorDirectChild } from "./ParentNodes";
 import { isHTMLTableElement } from "./TypeGuards";
 
 export { isHTMLTableElement } from "./TypeGuards";
-import { createElement, isElement, removeClass } from "./Elements";
-import { querySelectorAllDirectChildren, querySelectorDirectChild } from "./ParentNodes";
 
 /**
  * Wraps the given `<table>` element into a wrapper, which provides some

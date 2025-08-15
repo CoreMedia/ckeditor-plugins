@@ -1,8 +1,8 @@
-import { Plugin, Link, Editor, ToolbarConfig } from "ckeditor5";
-import LinkTargetModelView from "./LinkTargetModelView";
+import { Editor, Link, Plugin, ToolbarConfig } from "ckeditor5";
+import { CONTENT_LINK_VIEW_COMPONENT_NAME } from "../contentlink/ui/ContentLinkActionsViewExtension";
 import LinkTargetActionsViewExtension from "./LinkTargetActionsViewExtension";
 import "../lang/linktarget";
-import { CONTENT_LINK_VIEW_COMPONENT_NAME } from "../contentlink/ui/ContentLinkActionsViewExtension";
+import LinkTargetModelView from "./LinkTargetModelView";
 
 const CKEDITOR_LINK_PREVIEW_COMPONENT_NAME = "linkPreview";
 /**

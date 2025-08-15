@@ -1,25 +1,25 @@
-import { createDecoratorHook } from "../utils";
-import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
-import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
-import ContentLinkCommandHook from "./ContentLinkCommandHook";
-import "../lang/contentlink";
-import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
-import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
-  createContentFormServiceDescriptor,
   ContentFormService,
+  createContentFormServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { serviceAgent } from "@coremedia/service-agent";
-import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
-import { Subscription } from "rxjs";
-import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
-import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
+import { serviceAgent } from "@coremedia/service-agent";
 import { ContextualBalloon, Editor, Link, LinkCommand, LinkUI, Observable, Plugin } from "ckeditor5";
-import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
+import { Subscription } from "rxjs";
+import { createDecoratorHook } from "../utils";
+import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
+import ContentLinkCommandHook from "./ContentLinkCommandHook";
+import "../lang/contentlink";
+import { closeContextualBalloon } from "./ContentLinkViewUtils";
+import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
+import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
+import { addMouseEventListenerToHideDialog, removeInitialMouseDownListener } from "./LinkBalloonEventListenerFix";
+import LinkUserActionsPlugin from "./LinkUserActionsPlugin";
 import { openContentInTabCommandName, registerOpenContentInTabCommand } from "./OpenContentInTabCommand";
+import { asAugmentedLinkUI, requireNonNullsAugmentedLinkUI } from "./ui/AugmentedLinkUI";
+import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
+import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 
 /**
  * This plugin allows content objects to be dropped into the link dialog.

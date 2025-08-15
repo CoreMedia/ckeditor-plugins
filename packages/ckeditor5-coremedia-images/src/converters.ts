@@ -1,10 +1,12 @@
-import { serviceAgent } from "@coremedia/service-agent";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 import {
   createBlobDisplayServiceDescriptor,
   InlinePreview,
   requireContentUriPath,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { serviceAgent } from "@coremedia/service-agent";
 import {
   DowncastDispatcher,
   DowncastWriter,
@@ -15,12 +17,10 @@ import {
   UpcastDispatcher,
   ViewElement,
 } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
