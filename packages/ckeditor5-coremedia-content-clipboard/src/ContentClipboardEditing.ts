@@ -54,7 +54,7 @@ export default class ContentClipboardEditing extends Plugin {
 
   #onAddMarker(editor: Editor) {
     return addContentMarkerConversion(this.#pendingMarkerNames, (markerData: MarkerData): void => {
-      DataToModelMechanism.triggerLoadAndWriteToModel(editor, this.#pendingMarkerNames, markerData);
+      void DataToModelMechanism.triggerLoadAndWriteToModel(editor, this.#pendingMarkerNames, markerData);
     });
   }
 
