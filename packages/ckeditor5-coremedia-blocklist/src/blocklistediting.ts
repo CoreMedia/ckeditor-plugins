@@ -1,10 +1,10 @@
-import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import { Collection, Plugin } from "ckeditor5";
-import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Subscription } from "rxjs";
 import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
+import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import { getMarkerDetails, removeMarkerDetails } from "./blocklistMarkerUtils";
 
 export default class BlocklistEditing extends Plugin {

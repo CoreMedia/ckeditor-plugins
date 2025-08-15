@@ -1,8 +1,8 @@
 import "jest-xml-matcher";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import { getV10Config, parseXml } from "./Utils";
-import { silenced } from "../../Silenced";
 import { Editor } from "ckeditor5";
+import { silenced } from "../../Silenced";
+import { getV10Config, parseXml } from "./Utils";
 import "../../config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.

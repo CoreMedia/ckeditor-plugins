@@ -1,4 +1,3 @@
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import {
   richtext,
   p,
@@ -7,6 +6,7 @@ import {
   EOD,
   blobReference,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import "./expect/Expectations";
 import { PNG_BLUE_240x135 } from "./MockFixtures";
 

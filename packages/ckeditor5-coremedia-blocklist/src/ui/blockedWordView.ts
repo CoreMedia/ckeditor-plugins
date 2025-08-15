@@ -35,7 +35,7 @@ export default class BlockedWordView extends View {
   /**
    * The label of the header.
    */
-  public declare label: string;
+  declare public label: string;
 
   constructor(locale: Locale) {
     super(locale);

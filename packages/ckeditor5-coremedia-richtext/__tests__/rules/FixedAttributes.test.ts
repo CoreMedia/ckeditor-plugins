@@ -1,7 +1,7 @@
 // noinspection HtmlUnknownAttribute,HtmlRequiredAltAttribute
 
-import * as aut from "../../src/rules/FixedAttributes";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
+import * as aut from "../../src/rules/FixedAttributes";
 import { TestDirection, toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 

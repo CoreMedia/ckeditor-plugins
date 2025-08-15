@@ -1,4 +1,5 @@
 import { isHTMLElement } from "./TypeGuards";
+
 export { isHTMLElement } from "./TypeGuards";
 
 export const wrapIfHTMLElement = (delegate: Node | HTMLElement): HTMLElementWrapper | undefined => {
@@ -54,7 +55,7 @@ export class HTMLElementWrapper {
       // no-dynamic-delete: I do not see any better option here to remove
       // the data attribute without mangling with the attribute name, which
       // again may open a door to XSS attacks if not carefully designed.
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
       delete element.dataset[key];
     }
   }

@@ -3,8 +3,8 @@ import {
   TextFilterParams,
   ElementsFilterRuleSetConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support";
-import RichTextSchema from "../RichTextSchema";
 import { DataProcessor } from "ckeditor5";
+import RichTextSchema from "../RichTextSchema";
 import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";
 

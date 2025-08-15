@@ -1,7 +1,7 @@
+import { createDecoratorHook } from "../utils";
 import ContentLinkActionsViewExtension from "./ui/ContentLinkActionsViewExtension";
 import ContentLinkFormViewExtension from "./ui/ContentLinkFormViewExtension";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
-import { createDecoratorHook } from "../utils";
 import "../lang/contentlink";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import LinkUserActionsPlugin from "./LinkUserActionsPlugin";

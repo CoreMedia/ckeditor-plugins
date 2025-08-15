@@ -1,5 +1,5 @@
-import { JSWrapper } from "../../JSWrapper";
 import type { ButtonView } from "ckeditor5";
+import { JSWrapper } from "../../JSWrapper";
 import { HasVisible } from "../../../expect/IsVisible/HasVisible";
 import { HasToggleable } from "../../../expect/isToggleable/HasToggleable";
 import { HasEnabled } from "../../../expect/isEnabled/HasEnabled";

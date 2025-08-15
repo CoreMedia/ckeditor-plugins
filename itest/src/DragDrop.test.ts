@@ -6,12 +6,12 @@ import type {
   MockContentConfig,
   MockExternalContent,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { PNG_BLUE_240x135, PNG_GREEN_240x135, PNG_RED_240x135 } from "./MockFixtures";
 import waitForExpect from "wait-for-expect";
 import type {
   IsDroppableEvaluationResult,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { PNG_BLUE_240x135, PNG_GREEN_240x135, PNG_RED_240x135 } from "./MockFixtures";
 import WindowBrowserAccessor from "./browser/WindowBrowserAccessor";
 
 const oneLink: MockContentConfig[] = [

@@ -1,5 +1,6 @@
-import type { Blocklist } from "./index";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
+import type { Blocklist } from "./index";
+
 declare module "ckeditor5" {
   interface PluginsMap {
     [Blocklist.pluginName]: Blocklist;

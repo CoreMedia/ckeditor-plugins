@@ -1,13 +1,13 @@
-import express from "express";
 import path from "path";
+import { AddressInfo } from "net";
+import http from "http";
+import express from "express";
 import { Response } from "playwright";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
-import { AddressInfo } from "net";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { MockServiceAgentPluginWrapper } from "./services/MockServiceAgentPluginWrapper";
 import { MockInputExamplePluginWrapper } from "./MockInputExamplePluginWrapper";
-import http from "http";
 import { MockExternalContentPluginWrapper } from "./MockExternalContentPluginWrapper";
 
 /**

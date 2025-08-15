@@ -6,6 +6,7 @@ import type {
   PluginIntegrationHook,
   RichTextDataProcessorIntegration,
 } from "./index";
+
 declare module "ckeditor5" {
   interface PluginsMap {
     [Differencing.pluginName]: Differencing;

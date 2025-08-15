@@ -1,6 +1,6 @@
 import "jest-xml-matcher";
-import { ElementFilterParams, ElementFilterRule, ElementProxy } from "../src/ElementProxy";
 import { Editor } from "ckeditor5";
+import { ElementFilterParams, ElementFilterRule, ElementProxy } from "../src/ElementProxy";
 import "./config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
@@ -632,7 +632,7 @@ describe("ElementProxy.applyRules()", () => {
           (me) => {
             Object.keys(me.node.attributes).forEach((key) => {
               // To fix, we may migrate attributes to Map<> instead.
-              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
               delete me.node.attributes[key];
             });
           },
@@ -649,7 +649,7 @@ describe("ElementProxy.applyRules()", () => {
             me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
               // To fix, we may migrate attributes to Map<> instead.
-              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
               delete me.node.attributes[key];
             });
           },

@@ -1,6 +1,6 @@
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import { isToData, isToView, TestDirection } from "./TestDirection";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 
 import "jest-xml-matcher";
 

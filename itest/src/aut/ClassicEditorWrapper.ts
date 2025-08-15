@@ -1,9 +1,9 @@
 import { JSHandle, Locator, Page } from "playwright";
-import { EditorWrapper } from "./EditorWrapper";
 import { ClassicEditor } from "ckeditor5";
+import type { RichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
+import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import type { RichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
 import { Locatable, visible } from "./Locatable";
 import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 

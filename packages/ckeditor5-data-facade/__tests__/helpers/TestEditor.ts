@@ -1,4 +1,3 @@
-import { html } from "./index.html";
 import {
   Autosave,
   Bold,
@@ -27,6 +26,7 @@ import {
   ClassicEditor,
 } from "ckeditor5";
 import { DataFacade } from "../../src";
+import { html } from "./index.html";
 import "../config";
 
 export const allPlugins = [

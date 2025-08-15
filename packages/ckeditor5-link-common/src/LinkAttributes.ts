@@ -1,6 +1,3 @@
-import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
-import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
-import { parseAttributesConfig } from "./LinkAttributesConfig";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
@@ -12,6 +9,9 @@ import {
   TwoStepCaretMovement,
   LinkEditing,
 } from "ckeditor5";
+import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
+import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
+import { parseAttributesConfig } from "./LinkAttributesConfig";
 
 /**
  * Same priority as used for link-downcasting (href and decorators).

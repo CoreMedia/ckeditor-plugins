@@ -1,3 +1,7 @@
+import DefaultTarget from "./linktarget/config/DefaultTarget";
+import LinkTargetOptionDefinition from "./linktarget/config/LinkTargetOptionDefinition";
+import { TargetDefaultRuleDefinition } from "./linktarget/config/LinkTargetDefaultRuleDefinition";
+import { COREMEDIA_CONTEXT_KEY, CoremediaContextConfig } from "./contentlink/ContextConfig";
 import type {
   ContentLinkActionsViewExtension,
   ContentLinkClipboardPlugin,
@@ -12,10 +16,6 @@ import type {
   LinkUserActionsPlugin,
   OpenContentInTabCommand,
 } from "./index";
-import DefaultTarget from "./linktarget/config/DefaultTarget";
-import LinkTargetOptionDefinition from "./linktarget/config/LinkTargetOptionDefinition";
-import { TargetDefaultRuleDefinition } from "./linktarget/config/LinkTargetDefaultRuleDefinition";
-import { COREMEDIA_CONTEXT_KEY, CoremediaContextConfig } from "./contentlink/ContextConfig";
 
 declare module "ckeditor5" {
   interface PluginsMap {

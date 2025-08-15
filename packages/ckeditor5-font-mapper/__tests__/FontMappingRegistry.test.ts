@@ -1,7 +1,7 @@
+import { jest } from "@jest/globals";
 import { FontMappingRegistry } from "../src/FontMappingRegistry";
 import { configToMap } from "../src/ConfigToMapUtil";
 import { Mode } from "../src";
-import { jest } from "@jest/globals";
 
 test("Should return a FontMapper for symbol and ignore case", () => {
   const fontMappingRegistry = new FontMappingRegistry();

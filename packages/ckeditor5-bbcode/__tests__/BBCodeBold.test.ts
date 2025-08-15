@@ -1,6 +1,6 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { BBCodeBold, bbCodeBold } from "../src";
 import { IsBoldFontWeight } from "../src/rules/BBCodeBold";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeBold", () => {
   describe("Default Configuration", () => {

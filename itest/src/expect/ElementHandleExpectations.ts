@@ -1,5 +1,5 @@
-import { extendingWaitForExpect } from "./ExpectationsBase";
 import { ElementHandle } from "playwright-core";
+import { extendingWaitForExpect } from "./ExpectationsBase";
 
 /**
  * JEST Extension: Add matchers for `ClassicEditorWrapper`.

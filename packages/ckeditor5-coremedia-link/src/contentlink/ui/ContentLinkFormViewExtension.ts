@@ -1,5 +1,4 @@
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   createCollectionViewLinkServiceDescriptor,
@@ -14,19 +13,20 @@ import {
   requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Command, ContextualBalloon, LabeledFieldView, LinkUI, Plugin, View } from "ckeditor5";
-import { showContentLinkField } from "../ContentLinkViewUtils";
-import ContentLinkCommandHook from "../ContentLinkCommandHook";
-import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
-import ContentLinkView from "./ContentLinkView";
+import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
+import { combineLatest, from, of, switchMap } from "rxjs";
+import { showContentLinkField } from "../ContentLinkViewUtils";
+import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { addClassToTemplate } from "../../utils";
+import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
+import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
+import ContentLinkView from "./ContentLinkView";
 import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
-import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
 import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
-import { combineLatest, from, of, switchMap } from "rxjs";
-import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
+import createContentLinkView from "./ContentLinkViewFactory";
 import LibraryButtonView from "./LibraryButtonView";
 import "../../../theme/linkformviewextension.css";
 

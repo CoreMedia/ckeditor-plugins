@@ -6,10 +6,10 @@ import {
   fragmentToString,
   isDocumentFragment,
 } from "@coremedia/ckeditor5-dom-support";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { skip, Skip } from "./Signals";
 import { ConversionContext } from "./ConversionContext";
 import { ConversionApi } from "./ConversionApi";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { ConversionListener } from "./ConversionListener";
 
 const nodeToString = (node: Node | null | undefined): string => {

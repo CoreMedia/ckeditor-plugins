@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeImg } from "../src/rules/BBCodeImg";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeImg", () => {
   describe("Default Configuration", () => {

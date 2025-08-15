@@ -2,13 +2,13 @@ import { getUniqAttr, isTagNode, TagAttrs, TagNode } from "@bbob/plugin-helper/e
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
 import { CoreTree } from "@bbob/core/es";
+import { bbCodeLogger } from "../BBCodeLogger";
+import { fontSizes, normalSize } from "../utils/FontSizes";
 import { paragraphAwareContent } from "./Paragraphs";
 import { Core, DefaultTags, Options } from "./types";
-import { bbCodeLogger } from "../BBCodeLogger";
 import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
 import { renderRaw } from "./renderRaw";
 import { trimEOL } from "./TagNodes";
-import { fontSizes, normalSize } from "../utils/FontSizes";
 
 type DefaultTagsRule = DefaultTags[string];
 

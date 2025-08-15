@@ -1,5 +1,5 @@
-import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
 import { Editor } from "ckeditor5";
+import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
 import { NodeProxy, PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**

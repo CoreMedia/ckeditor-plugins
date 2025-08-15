@@ -64,7 +64,7 @@ export class PasteContentCommand extends Command {
   }
 
   // Empty implementation because the overridden implementation always sets isEnabled=true
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   override refresh(): void {}
 
   override execute(): void {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint no-restricted-globals: off */
 
 import { Editor } from "ckeditor5";

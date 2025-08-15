@@ -1,10 +1,10 @@
 import "../../../theme/contentlinkview.css";
-import ContentLinkView from "./ContentLinkView";
-import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { LabeledFieldView, Editor, LinkUI } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
+import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
+import ContentLinkView from "./ContentLinkView";
 
 /**
  * Creates an ContentLinkView that renders content links in the link form-view.

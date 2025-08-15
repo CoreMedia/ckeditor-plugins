@@ -1,4 +1,5 @@
 import { Writer, Node } from "ckeditor5";
+
 export type CreateModelFunction = (writer: Writer) => Node;
 export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
 
@@ -13,7 +14,7 @@ export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateM
  * The ContentToModelRegistry can be accessed by other plugins via the
  * {@link ContentClipboardEditing} plugin.
  */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+
 export default class ContentToModelRegistry {
   static readonly #contentToModel: Map<string, CreateModelFunctionCreator> = new Map<
     string,

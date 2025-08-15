@@ -1,9 +1,9 @@
 import "jest-xml-matcher";
+import { Editor } from "ckeditor5";
 import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
 import { HtmlFilter } from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
 import { TextFilterRule } from "../src/TextProxy";
-import { Editor } from "ckeditor5";
 import "./config";
 
 /**

@@ -1,8 +1,8 @@
-import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import selfIcon from "../../../theme/icons/openInCurrentTab.svg";
 import blankIcon from "../../../theme/icons/openInNewTab.svg";
 import embedIcon from "../../../theme/icons/embed.svg";
 import otherIcon from "../../../theme/icons/openInFrame.svg";
+import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 
 /**
  * Artificial target name for the recommended minimal target configuration to

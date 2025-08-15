@@ -1,8 +1,8 @@
+import { Observable } from "rxjs";
 import { AtomicOrArray, isObject } from "./MockContentUtils";
 import MigrateTo from "./MigrateTo";
 import { observeMutableProperty } from "./ObservableMutableProperty";
 import Delayed from "./Delayed";
-import { Observable } from "rxjs";
 
 /**
  * Represents BLOB data, which are stored as content-property.

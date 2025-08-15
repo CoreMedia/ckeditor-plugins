@@ -1,5 +1,5 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { trimLeadingAndTrailingNewlines } from "../BBCodeUtils";
+import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * The default extracted language by `HTMLElement.classList` that is considered

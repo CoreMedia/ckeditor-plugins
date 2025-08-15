@@ -8,6 +8,7 @@ import type {
   ModelBoundSubscriptionPlugin,
   OpenImageInTabCommand,
 } from "./index";
+
 declare module "ckeditor5" {
   interface PluginsMap {
     [ContentImageClipboardPlugin.pluginName]: ContentImageClipboardPlugin;

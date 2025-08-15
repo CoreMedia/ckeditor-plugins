@@ -727,7 +727,7 @@ export default class RichTextSchema {
         },
       );
       // To fix, we may migrate attributes to Map<> instead.
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
       notAllowedAttributes.forEach((attributeName) => delete element.attributes[attributeName]);
     }
   }
@@ -751,7 +751,7 @@ export default class RichTextSchema {
               `Removing attribute ${attributeName} as its value "${attributeValue}" is invalid for <${element.name}>.`,
             );
             // To fix, we may migrate attributes to Map<> instead.
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
             delete element.attributes[attributeName];
           } else if (suggestedValue !== attributeValue) {
             RichTextSchema.#logger.debug(

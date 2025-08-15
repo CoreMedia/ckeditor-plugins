@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeQuote } from "../src";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeQuote", () => {
   describe("Default Configuration", () => {

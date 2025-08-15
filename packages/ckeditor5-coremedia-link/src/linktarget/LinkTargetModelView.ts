@@ -1,9 +1,9 @@
-import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
-import LinkTargetCommand from "./command/LinkTargetCommand";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
-import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
 import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert, Element, Node } from "ckeditor5";
+import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
+import LinkTargetCommand from "./command/LinkTargetCommand";
+import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented

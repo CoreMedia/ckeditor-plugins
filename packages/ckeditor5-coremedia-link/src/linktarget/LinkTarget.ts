@@ -1,5 +1,5 @@
-import LinkTargetModelView from "./LinkTargetModelView";
 import { Plugin, Link, Editor, ToolbarConfig } from "ckeditor5";
+import LinkTargetModelView from "./LinkTargetModelView";
 import LinkTargetActionsViewExtension from "./LinkTargetActionsViewExtension";
 import "../lang/linktarget";
 import { CONTENT_LINK_VIEW_COMPONENT_NAME } from "../contentlink/ui/ContentLinkActionsViewExtension";
