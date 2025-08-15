@@ -331,7 +331,7 @@ export default class BlocklistEditing extends Plugin {
           attributes: {
             // ...however, adding a unique attribute should be future-proof..
             "data-blocklist-word": markerDetails.id,
-            "data-blocklist-blocked-word": markerDetails.blockedWord ? markerDetails.blockedWord : "",
+            "data-blocklist-blocked-word": markerDetails.blockedWord ?? "",
           },
         };
       },

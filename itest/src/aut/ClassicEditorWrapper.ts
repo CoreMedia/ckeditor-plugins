@@ -69,8 +69,8 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
         new Promise<string>((resolve, reject) => {
           const processor = editor.data.processor as RichTextDataProcessor;
           // Prior to setting data, wait for them being processed.
-          processor.once("richtext:toView", (eventInfo, eventData) => {
-            if ("dataView" in eventData && "data" in eventData) {
+          processor.once("richtext:toView", (eventInfo, eventData: { data?: unknown; dataView?: string }) => {
+            if (typeof eventData.dataView === "string" && "data" in eventData) {
               if (eventData.data !== value) {
                 reject(
                   new Error(
@@ -119,10 +119,10 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
   static fromPage(page: Page, name = "editor"): ClassicEditorWrapper {
     return new ClassicEditorWrapper(
       page.evaluateHandle((name): ClassicEditor => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const editorHolder: any = window;
+        const editorHolder = window as unknown as Record<string, unknown>;
         if (name in editorHolder) {
-          return editorHolder[name] as ClassicEditor;
+          const editor = editorHolder[name];
+          return editor as ClassicEditor;
         }
         throw new Error(`Editor instance not available as ${name}`);
       }, name),

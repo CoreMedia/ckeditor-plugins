@@ -20,5 +20,10 @@ export default defineConfig([
         project: "./tsconfig.json",
       },
     },
+    rules: {
+      // as the typing for some expect() in playwright tests is missing the Promise type
+      // it is necessary to disable this rule
+      "@typescript-eslint/await-thenable": "off",
+    },
   },
 ]);

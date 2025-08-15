@@ -101,7 +101,7 @@ export default class DataToModelMechanism {
           return Promise.resolve(response.contentUri);
         }
         if (!response.externalUriInformation) {
-          return Promise.reject("No content found and uri is not importable.");
+          return Promise.reject(new Error("No content found and uri is not importable."));
         }
         const contentImportService = await serviceAgent.fetchService<ContentImportService>(
           createContentImportServiceDescriptor(),

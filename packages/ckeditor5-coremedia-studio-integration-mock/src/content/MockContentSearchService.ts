@@ -21,6 +21,10 @@ export class MockContentSearchService implements ContentSearchService {
     return "contentSearchService";
   }
 
+  getContentProvider(): MockContentProvider {
+    return this.#contentProvider;
+  }
+
   observe_contentSuggestions(filterValue: string, contentUriPath: string | null): Observable<string[]> {
     return of(
       filterValue.length < 3

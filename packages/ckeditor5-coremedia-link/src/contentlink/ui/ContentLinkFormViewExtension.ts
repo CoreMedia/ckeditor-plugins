@@ -456,7 +456,7 @@ class ContentLinkFormViewExtension extends Plugin {
       return contentReference.contentUri;
     }
     if (!contentReference.externalUriInformation) {
-      return Promise.reject("No content found and uri is not importable.");
+      return Promise.reject(new Error("No content found and uri is not importable."));
     }
     if (contentReference.externalUriInformation.contentUri) {
       //The external content has been imported previously. A content representation already exists.

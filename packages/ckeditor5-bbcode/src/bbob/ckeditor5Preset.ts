@@ -129,7 +129,6 @@ const toHtmlImageAttrs = (node: TagNode): TagAttrs => {
  */
 const code: DefaultTagsRule = (node: TagNode): TagNode => {
   // Using `||` also for possibly empty string.
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const language = getUniqAttr(node.attrs) || "plaintext";
   return toNode("pre", {}, [toNode("htmlCode", { class: `language-${language}` }, node.content)]);
 };

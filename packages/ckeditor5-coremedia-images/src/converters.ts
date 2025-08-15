@@ -113,11 +113,11 @@ const onXlinkHrefEditingDowncast = (
   let uriPath: UriPath;
   try {
     uriPath = toUriPath(xlinkHref);
-  } catch (e) {
+  } catch (e: unknown) {
     // toUriPath() might throw an exception, but an unresolvable
     // uriPath should not result in an error, which would break the editor.
     // Therefore: Return early. An endless loading spinner will be displayed as a result.
-    logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref);
+    logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref, e);
     return;
   }
   const property: string = toProperty(xlinkHref);

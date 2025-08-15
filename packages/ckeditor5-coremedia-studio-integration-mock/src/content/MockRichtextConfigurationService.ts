@@ -26,7 +26,7 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
   async hasLinkableType(uriPath: UriPath): Promise<boolean> {
     const contentReferenceService = serviceAgent.getService(createContentReferenceServiceDescriptor());
     if (!contentReferenceService) {
-      return Promise.reject("ContentReferenceService unavailable");
+      return Promise.reject(new Error("ContentReferenceService unavailable"));
     }
     const contentReference = await contentReferenceService.getContentReference(uriPath);
     if (contentReference.contentUri) {

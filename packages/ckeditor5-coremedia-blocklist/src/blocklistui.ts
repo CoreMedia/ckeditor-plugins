@@ -56,10 +56,7 @@ export default class Blocklistui extends Plugin {
   }
 
   #getBlocklistActionsView(): BlocklistActionsView {
-    if (!this.blocklistActionsView) {
-      this.blocklistActionsView = this.#createBlocklistActionsView();
-    }
-    return this.blocklistActionsView;
+    return this.blocklistActionsView ?? (this.blocklistActionsView = this.#createBlocklistActionsView());
   }
 
   /**

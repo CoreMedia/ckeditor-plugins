@@ -35,11 +35,6 @@ class MutablePropertyObservationHandler<T> {
    */
   readonly #anyValue: boolean;
   /**
-   * Signals, if there is more than one value present, i.e., if we shall loop
-   * or not. Implies `valueLength > 1`.
-   */
-  readonly #iterating: boolean;
-  /**
    * Signals, if values should only be processed once. Typically, only `true`
    * when there is just one value to provide.
    *
@@ -61,7 +56,6 @@ class MutablePropertyObservationHandler<T> {
     // Some convenience on-before calculation.
     this.#valuesLength = this.#values.length;
     this.#anyValue = this.#valuesLength > 0;
-    this.#iterating = this.#valuesLength > 1;
     this.#initialDelayMs = Math.max(initialDelayMs, 0);
     // Change delay for scheduling must not be less than 1 millisecond.
     this.#changeDelayMs = Math.max(changeDelayMs, 1);

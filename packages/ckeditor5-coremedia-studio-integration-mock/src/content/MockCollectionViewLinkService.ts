@@ -40,4 +40,8 @@ export class MockCollectionViewLinkService implements CollectionViewLinkService 
   getName(): string {
     return "collectionViewLinkService";
   }
+
+  getEditor(): Editor {
+    return this.#editor;
+  }
 }

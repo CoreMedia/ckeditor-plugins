@@ -233,6 +233,10 @@ export default class ContentLinkView extends ButtonView {
     return this.#cancelButton;
   }
 
+  getEditor(): Editor {
+    return this.#editor;
+  }
+
   override destroy(): void {
     // Prevent possible asynchronous events from re-triggering subscription.
     this.#acceptSubscriptions = false;
