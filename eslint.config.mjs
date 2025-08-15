@@ -63,12 +63,23 @@ export const configs = defineConfig([{
       "@typescript-eslint/explicit-module-boundary-types": "off"
     } : {})
   }
-}, globalIgnores([
-  // Exclude everywhere, even in sub folders
-  "**/__downloaded__/",
-  "**/__generated__/",
-  // If a glob pattern starts with /, the pattern is relative to the base directory of the config file.
-  "build/",
-  "dist/",
-  "target/"])
+},
+  {
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs"
+    },
+    rules: {
+      // Add your CJS-specific rules here
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-var-requires": "off"
+    }
+  }, globalIgnores([
+    // Exclude everywhere, even in sub folders
+    "**/__downloaded__/",
+    "**/__generated__/",
+    // If a glob pattern starts with /, the pattern is relative to the base directory of the config file.
+    "build/",
+    "dist/",
+    "target/"])
 ]);
