@@ -32,7 +32,7 @@
     "@coremedia/ckeditor5-font-mapper": "25.0.4-rc.1",
     "@coremedia/ckeditor5-link-common": "25.0.4-rc.1",
     "@coremedia/service-agent": "^1.1.5",
-    "ckeditor5": "45.2.1",
+    "ckeditor5": "46.1.1",
     "xml-formatter": "^3.6.2"
   },
   "devDependencies": {
