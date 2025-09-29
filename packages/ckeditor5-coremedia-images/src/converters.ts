@@ -9,9 +9,9 @@ import {
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   DowncastDispatcher,
-  DowncastWriter,
+  ViewDowncastWriter,
   Editor,
-  Element as ModelElement,
+  ModelElement,
   EventInfo,
   UpcastConversionApi,
   UpcastDispatcher,
@@ -168,7 +168,7 @@ const writeImageToView = (
   imgTag: ViewElement,
   withSpinnerClass: boolean,
 ): void => {
-  editor.editing.view.change((writer: DowncastWriter) => {
+  editor.editing.view.change((writer: ViewDowncastWriter) => {
     writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);
     writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
 

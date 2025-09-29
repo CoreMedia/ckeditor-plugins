@@ -1,5 +1,5 @@
 import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import { Editor, Position as ModelPosition, Writer } from "ckeditor5";
+import { Editor, ModelPosition, ModelWriter } from "ckeditor5";
 import ContentInputDataCache from "./ContentInputDataCache";
 type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
 
@@ -59,7 +59,7 @@ export default class MarkerRepositionUtil {
         {
           isUndoable: false,
         },
-        (writer: Writer): void => {
+        (writer: ModelWriter): void => {
           const newRange = writer.createRange(position, position);
           writer.updateMarker(moveMarkerName, {
             range: newRange,

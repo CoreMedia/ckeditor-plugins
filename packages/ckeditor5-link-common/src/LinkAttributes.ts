@@ -9,7 +9,7 @@ import {
   Plugin,
   Editor,
   DowncastConversionApi,
-  AttributeElement,
+  ViewAttributeElement,
   ViewElement,
   TwoStepCaretMovement,
   LinkEditing,
@@ -184,7 +184,7 @@ export class LinkAttributes extends Plugin {
 /**
  * Required type for downcast function.
  */
-type DowncastFunction = (value: string, api: DowncastConversionApi) => AttributeElement;
+type DowncastFunction = (value: string, api: DowncastConversionApi) => ViewAttributeElement;
 
 /**
  * Provides downcast method for given attribute.
@@ -197,7 +197,7 @@ type DowncastFunction = (value: string, api: DowncastConversionApi) => Attribute
  */
 const provideDowncastFunction =
   (view: string): DowncastFunction =>
-  (modelAttributeValue: string, { writer }: DowncastConversionApi): AttributeElement => {
+  (modelAttributeValue: string, { writer }: DowncastConversionApi): ViewAttributeElement => {
     const element = writer.createAttributeElement(
       "a",
       {

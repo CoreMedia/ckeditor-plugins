@@ -5,7 +5,16 @@ import LinkTargetCommand from "./command/LinkTargetCommand";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { computeDefaultLinkTargetForUrl } from "./config/LinkTargetConfig";
-import { Plugin, DiffItemAttribute, Range, Writer, DiffItem, DiffItemInsert, Element, Node } from "ckeditor5";
+import {
+  Plugin,
+  DifferItemAttribute,
+  ModelRange,
+  ModelWriter,
+  DifferItem,
+  DifferItemInsert,
+  ModelElement,
+  ModelNode,
+} from "ckeditor5";
 
 /**
  * Adds an attribute `linkTarget` to the model, which will be represented
@@ -43,8 +52,8 @@ export default class LinkTargetModelView extends Plugin {
      * @param linkTarget - the computed link target
      * @param range - the range of the changed element
      */
-    const addLinkTarget = (linkTarget: string, range: Range) => {
-      let foundImageElement: Element | undefined;
+    const addLinkTarget = (linkTarget: string, range: ModelRange) => {
+      let foundImageElement: ModelElement | undefined;
       for (const value of range.getWalker({ ignoreElementEnd: true })) {
         if (value.item.is("element") && (value.item.name === "imageInline" || value.item.name === "imageBlock")) {
           foundImageElement = value.item;
@@ -86,7 +95,7 @@ export default class LinkTargetModelView extends Plugin {
    * @param diffItem - the original diffItem
    * @param writer - the writer
    */
-  checkForLinkTargetInChildren(diffItem: DiffItem, writer: Writer) {
+  checkForLinkTargetInChildren(diffItem: DifferItem, writer: ModelWriter) {
     if (!(diffItem.type === "insert")) {
       // this might just be a change diff (e.g. if target is changed manually),
       // in that case we cannot compute a range and can just return
@@ -113,7 +122,7 @@ export default class LinkTargetModelView extends Plugin {
    * Type-guard for DiffItemAttribute type
    * @param diffItem - the variable to check
    */
-  #isDiffItemAttribute(diffItem: DiffItem): diffItem is DiffItemAttribute {
+  #isDiffItemAttribute(diffItem: DifferItem): diffItem is DifferItemAttribute {
     return diffItem.type === "attribute" && diffItem.attributeKey === "linkHref";
   }
 
@@ -121,7 +130,7 @@ export default class LinkTargetModelView extends Plugin {
    * Type-guard for DiffItemInsert type
    * @param diffItem - the variable to check
    */
-  #isDiffItemInsert(diffItem: DiffItem): diffItem is DiffItemInsert {
+  #isDiffItemInsert(diffItem: DifferItem): diffItem is DifferItemInsert {
     return diffItem.type === "insert" && diffItem.attributes.has("linkHref");
   }
 
@@ -132,7 +141,7 @@ export default class LinkTargetModelView extends Plugin {
    * @returns the range or undefined
    * @private
    */
-  #getLinkRange(diffItem: DiffItem, writer: Writer): Range {
+  #getLinkRange(diffItem: DifferItem, writer: ModelWriter): ModelRange {
     if (this.#isDiffItemAttribute(diffItem)) {
       return diffItem.range;
     }
@@ -147,7 +156,7 @@ export default class LinkTargetModelView extends Plugin {
    * @returns the link target or undefined
    * @private
    */
-  #computeLinkTarget(diffItem: DiffItem): string | undefined {
+  #computeLinkTarget(diffItem: DifferItem): string | undefined {
     let url: unknown;
     if (this.#isDiffItemAttribute(diffItem)) {
       // The linkHref attribute was added/changed/deleted for this node.
@@ -179,7 +188,7 @@ export default class LinkTargetModelView extends Plugin {
    * @returns the link target or undefined
    * @private
    */
-  #computeLinkTargetForNode(child: Node): string | undefined {
+  #computeLinkTargetForNode(child: ModelNode): string | undefined {
     const url = child.getAttribute("linkHref");
     if (url && typeof url === "string") {
       return computeDefaultLinkTargetForUrl(url, this.editor.config);

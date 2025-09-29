@@ -1,4 +1,4 @@
-import { Range } from "ckeditor5";
+import { ModelRange } from "ckeditor5";
 
 /**
  * Meta-data on drop.
@@ -23,7 +23,7 @@ export class DropCondition {
     /**
      * The target drop ranges, if existing. `null` otherwise.
      */
-    readonly targetRange: Range | null,
+    readonly targetRange: ModelRange | null,
     /**
      * Model attributes at drop position to possibly apply to dropped text.
      */

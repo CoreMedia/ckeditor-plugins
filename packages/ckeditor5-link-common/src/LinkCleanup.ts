@@ -3,7 +3,7 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { DiffItem, DiffItemAttribute, Editor, LinkEditing, Plugin, Range, Writer } from "ckeditor5";
+import { DifferItem, DifferItemAttribute, Editor, LinkEditing, Plugin, ModelRange, ModelWriter } from "ckeditor5";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -80,7 +80,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
    * @returns `true` if changes got applied, and the post-fix chain shall be
    * re-triggered; `false` on no changes
    */
-  readonly #fixOrphanedAttributes = (writer: Writer): boolean => {
+  readonly #fixOrphanedAttributes = (writer: ModelWriter): boolean => {
     const todoAttributes = [...this.#watchedAttributes];
     const getLinkHrefRemovalRanges = LinkCleanup.#getLinkHrefRemovalRanges;
     const fixOrphanedAttribute = LinkCleanup.#fixOrphanedAttribute;
@@ -108,14 +108,14 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
    *
    * @param writer - writer to get relevant diff-items from
    */
-  static readonly #getLinkHrefRemovalRanges = (writer: Writer): Iterable<Range> => {
+  static readonly #getLinkHrefRemovalRanges = (writer: ModelWriter): Iterable<ModelRange> => {
     const { differ } = writer.model.document;
     const changes = differ.getChanges();
-    return changes.filter(isRemoveLinkHrefAttribute).map((c) => (c as DiffItemAttribute).range);
+    return changes.filter(isRemoveLinkHrefAttribute).map((c) => (c as DifferItemAttribute).range);
   };
   static readonly #fixOrphanedAttribute = (
-    writer: Writer,
-    relevantRanges: Iterable<Range>,
+    writer: ModelWriter,
+    relevantRanges: Iterable<ModelRange>,
     modelAttributeName: string,
   ): void => {
     const model = writer.model;
@@ -147,7 +147,7 @@ const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => edit
  *
  * @param diffItem - item to check
  */
-const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
+const isRemoveLinkHrefAttribute = (diffItem: DifferItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }

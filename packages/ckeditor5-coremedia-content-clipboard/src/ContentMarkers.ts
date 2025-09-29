@@ -6,7 +6,7 @@ import {
   createRichtextConfigurationServiceDescriptor,
   RichtextConfigurationService,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import type { Editor, Model, Range as ModelRange, Writer } from "ckeditor5";
+import type { Editor, Model, ModelRange, ModelWriter } from "ckeditor5";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
@@ -30,7 +30,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
     {
       isUndoable: false,
     },
-    (writer: Writer) => {
+    (writer: ModelWriter) => {
       writer.setSelection(targetRange);
     },
   );
@@ -93,7 +93,7 @@ const handleExpandedRange = (model: Model, range: ModelRange): ModelRange => {
     {
       isUndoable: false,
     },
-    (writer: Writer) => {
+    (writer: ModelWriter) => {
       writer.remove(range);
     },
   );
@@ -142,7 +142,7 @@ const addContentInputMarker = (editor: Editor, markerRange: ModelRange, contentI
     {
       isUndoable: false,
     },
-    (writer: Writer) => {
+    (writer: ModelWriter) => {
       writer.addMarker(markerName, {
         usingOperation: true,
         range: markerRange,

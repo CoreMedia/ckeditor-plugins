@@ -2,7 +2,7 @@ import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   ClipboardEventData,
   ClipboardPipeline,
-  DataTransfer as ViewDataTransfer,
+  ViewDataTransfer,
   EventInfo,
   Plugin,
   ViewDocumentFragment,

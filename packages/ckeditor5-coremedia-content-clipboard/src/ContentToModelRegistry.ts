@@ -1,5 +1,5 @@
-import { Writer, Node } from "ckeditor5";
-export type CreateModelFunction = (writer: Writer) => Node;
+import { ModelWriter, ModelNode } from "ckeditor5";
+export type CreateModelFunction = (writer: ModelWriter) => ModelNode;
 export type CreateModelFunctionCreator = (contentUri: string) => Promise<CreateModelFunction>;
 
 /**

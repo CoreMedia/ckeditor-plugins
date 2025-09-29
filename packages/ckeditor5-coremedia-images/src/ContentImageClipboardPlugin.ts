@@ -1,4 +1,4 @@
-import { Node, Plugin, Writer } from "ckeditor5";
+import { ModelNode, Plugin, ModelWriter } from "ckeditor5";
 import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
@@ -19,7 +19,7 @@ const createImageModelFunctionCreator: CreateModelFunctionCreator = async (
 };
 const createImageModelFunction: CreateImageModelFunction =
   (blobUriPath: string): CreateModelFunction =>
-  (writer: Writer): Node =>
+  (writer: ModelWriter): ModelNode =>
     writer.createElement("imageInline", {
       "xlink-href": blobUriPath,
     });

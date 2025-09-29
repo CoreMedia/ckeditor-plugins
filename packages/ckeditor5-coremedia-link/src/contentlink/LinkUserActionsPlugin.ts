@@ -9,12 +9,12 @@ import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   EditingView,
   Editor,
-  Element as ModelElement,
+  ModelElement,
   env,
   keyCodes,
-  Node as ModelNode,
+  ModelNode,
   Plugin,
-  TextProxy,
+  ModelTextProxy,
   ViewDocumentFragment,
   ViewElement,
 } from "ckeditor5";
@@ -91,7 +91,7 @@ export default class LinkUserActionsPlugin extends Plugin {
   }
 
   #onReadOnlyLinkClicked(editor: Editor, view: EditingView, domElement: Element): void {
-    const modelElement: TextProxy | undefined = this.#resolveAnchorModelElement(editor, view, domElement);
+    const modelElement: ModelTextProxy | undefined = this.#resolveAnchorModelElement(editor, view, domElement);
     if (!modelElement) {
       return;
     }
@@ -197,7 +197,7 @@ export default class LinkUserActionsPlugin extends Plugin {
     );
   }
 
-  #resolveAnchorModelElement(editor: Editor, view: EditingView, domElement: Element): TextProxy | undefined {
+  #resolveAnchorModelElement(editor: Editor, view: EditingView, domElement: Element): ModelTextProxy | undefined {
     //@ts-expect-error bad typings, mapDomToView parameter is typed as model.element, but it should be the typescript element.
     const viewElement: ViewElement | ViewDocumentFragment | undefined = view.domConverter.mapDomToView(domElement);
     if (!viewElement || viewElement instanceof ViewDocumentFragment) {
@@ -206,9 +206,9 @@ export default class LinkUserActionsPlugin extends Plugin {
     const viewRange = view.createRangeIn(viewElement);
     const modelRange = editor.editing.mapper.toModelRange(viewRange);
     const modelItemsInRange = Array.from(modelRange.getItems());
-    const textProxies: TextProxy[] = modelItemsInRange
-      .filter((item: ModelNode | ModelElement | Text | TextProxy) => item instanceof TextProxy)
-      .map((textProxy) => textProxy as TextProxy)
+    const textProxies: ModelTextProxy[] = modelItemsInRange
+      .filter((item: ModelNode | ModelElement | Text | ModelTextProxy) => item instanceof ModelTextProxy)
+      .map((textProxy) => textProxy as ModelTextProxy)
       .filter((textProxy) => textProxy.hasAttribute("linkHref"));
     if (textProxies.length < 1) {
       LinkUserActionsPlugin.LOG.debug("No links found after click");

@@ -1,6 +1,6 @@
 import {
   DataProcessor,
-  DomConverter,
+  ViewDomConverter,
   HtmlDataProcessor,
   MatcherPattern,
   ViewDocument,
@@ -32,7 +32,7 @@ export class BBCodeDataProcessor implements DataProcessor {
    * DOM-Converter used to prepare incoming data view in `toData` processing
    * prior to transforming HTML to BBCode.
    */
-  readonly #domConverter: DomConverter;
+  readonly #domConverter: ViewDomConverter;
 
   /**
    * Rules to apply in data processing. Note that, as we use a third party

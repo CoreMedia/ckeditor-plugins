@@ -1,4 +1,4 @@
-import { Node, Plugin, Writer } from "ckeditor5";
+import { ModelNode, Plugin, ModelWriter } from "ckeditor5";
 import {
   createContentDisplayServiceDescriptor,
   requireContentCkeModelUri,
@@ -23,7 +23,7 @@ const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
 };
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {
   const nameToPass = name ? name : ROOT_NAME;
-  return (writer: Writer): Node =>
+  return (writer: ModelWriter): ModelNode =>
     writer.createText(nameToPass, {
       linkHref: requireContentCkeModelUri(contentUri),
     });

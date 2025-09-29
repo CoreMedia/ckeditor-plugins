@@ -3,7 +3,7 @@ import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import {
   DataProcessor,
-  DomConverter,
+  ViewDomConverter,
   Editor,
   HtmlDataProcessor,
   MatcherPattern,
@@ -61,7 +61,7 @@ export default class RichTextDataProcessor extends ObservableMixin() implements 
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
-  readonly #domConverter: DomConverter;
+  readonly #domConverter: ViewDomConverter;
   readonly #richTextXmlWriter: RichTextXmlWriter;
   readonly #domParser: DOMParser;
   readonly #noParserErrorNamespace: boolean;

@@ -8,13 +8,13 @@ import {
   ClipboardInputTransformationData,
   ClipboardInputTransformationEvent,
   ClipboardPipeline,
-  DocumentFragment as ModelDocumentFragment,
-  DomEventData,
+  ModelDocumentFragment,
+  ViewDocumentDomEventData,
   Editor,
   EventInfo,
   GetCallback,
   Plugin,
-  Range as ModelRange,
+  ModelRange,
   StylesProcessor,
   ViewDocument,
   ViewDocumentClipboardInputEvent,
@@ -109,7 +109,7 @@ export default class ContentClipboard extends Plugin {
    * @param _evt - event information
    * @param data - clipboard data
    */
-  static readonly #dragOverHandler = (_evt: unknown, data: DomEventData<DragEvent> & ClipboardEventData) => {
+  static readonly #dragOverHandler = (_evt: unknown, data: ViewDocumentDomEventData<DragEvent> & ClipboardEventData) => {
     // The listener already processed the clipboard content on the
     // higher priority (for example, while pasting into the code block).
     if (isContentEventData(data) && !!data.content) {

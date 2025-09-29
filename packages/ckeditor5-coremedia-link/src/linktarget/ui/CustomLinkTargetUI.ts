@@ -11,7 +11,7 @@ import {
   clickOutsideHandler,
   Locale,
   Config,
-  PositionOptions,
+  DomOptimalPositionOptions,
   LinkUI,
   EditorConfig,
 } from "ckeditor5";
@@ -251,7 +251,7 @@ export default class CustomLinkTargetUI extends Plugin {
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
-  #getBalloonPositionData(): Partial<PositionOptions> {
+  #getBalloonPositionData(): Partial<DomOptimalPositionOptions> {
     const { linkUI } = this;
     return asHasGetBalloonPositionData(linkUI)._getBalloonPositionData();
   }
@@ -261,7 +261,7 @@ export default class CustomLinkTargetUI extends Plugin {
  * Exposes private API of LinkUI.
  */
 interface HasGetBalloonPositionData {
-  _getBalloonPositionData(): Partial<PositionOptions>;
+  _getBalloonPositionData(): Partial<DomOptimalPositionOptions>;
 }
 
 const isHasGetBalloonPositionData = (value: unknown): value is HasGetBalloonPositionData =>

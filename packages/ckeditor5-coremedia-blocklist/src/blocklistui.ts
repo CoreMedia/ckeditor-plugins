@@ -5,13 +5,13 @@ import {
   ButtonView,
   clickOutsideHandler,
   ContextualBalloon,
-  TextProxy,
+  ModelTextProxy,
   ViewAttributeElement,
   ViewDocumentClickEvent,
   ViewDocumentFragment,
   ViewNode,
   ViewPosition,
-  PositionOptions,
+  DomOptimalPositionOptions,
 } from "ckeditor5";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
@@ -236,12 +236,12 @@ export default class Blocklistui extends Plugin {
     });
   }
 
-  #getBalloonPositionData(): Partial<PositionOptions> {
+  #getBalloonPositionData(): Partial<DomOptimalPositionOptions> {
     const view = this.editor.editing.view;
     const viewDocument = view.document;
     const selection = view.document.selection;
     const selectedElement = selection.getSelectedElement();
-    const target: PositionOptions["target"] = () => {
+    const target: DomOptimalPositionOptions["target"] = () => {
       const targetWord = selectedElement;
       if (targetWord) {
         const targetWordViewElement = view.domConverter.mapViewToDom(targetWord);
@@ -392,7 +392,7 @@ export default class Blocklistui extends Plugin {
   #getSelectedText(): string {
     const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
-    const isTextProxy = (node: unknown): node is TextProxy =>
+    const isTextProxy = (node: unknown): node is ModelTextProxy =>
       // eslint-disable-next-line no-null/no-null
       typeof node === "object" && node !== null && "data" in node;
     if (range) {
