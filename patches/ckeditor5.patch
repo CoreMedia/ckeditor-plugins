@@ -1,8 +1,8 @@
 diff --git a/package.json b/package.json
-index 47c3f625843eab9dc83ec949c4f88709b943fa69..b6f0ff514146b5765b6ee335b9364bf6197c4f29 100644
+index e7ab72cc5af3dcadabc4fe03765e8fe27c11d63c..4590f07a80edb3f7b749b9bd1c40a8ef4519e124 100644
 --- a/package.json
 +++ b/package.json
-@@ -26,7 +26,8 @@
+@@ -109,7 +109,8 @@
    "exports": {
      ".": {
        "types": "./src/index.d.ts",
