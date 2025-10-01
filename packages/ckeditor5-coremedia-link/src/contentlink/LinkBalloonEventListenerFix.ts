@@ -27,6 +27,7 @@ let mouseDownOnWhiteListedElement = false;
 export const removeInitialMouseDownListener = (linkUI: LinkUI): void => {
   const { formView } = requireNonNulls(linkUI, "formView");
   formView.stopListening(document as unknown as Emitter, "mousedown");
+  formView.stopListening(document as unknown as Emitter, "click");
 };
 
 /**
