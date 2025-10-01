@@ -4,19 +4,6 @@ import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 import { requireNonNulls } from "@coremedia/ckeditor5-common";
 
 /**
- * Whether the mouseDown event occurred on an allow-listed element.
- * Background: The mouseDown and click events may not always share the same path.
- * (E.g., when dragging elements like the CoreMedia Studio library)
- *
- * This would result in a close of the balloon even though the mouseDown was performed
- * on an element, for which the balloon should stay open.
- *
- * Therefore, this field links both listeners and makes sure the balloon is not closed on mouseUp
- * (click) when the mouseDown happened on the allow-listed element, by exiting the click listener early.
- */
-let mouseDownOnWhiteListedElement = false;
-
-/**
  * Removes the mousedown listener in the linkUI plugin.
  * Context: CKEditor closes contextual balloons when a mousedown outside
  * the editor is detected. If a different behavior is to be implemented,
@@ -84,6 +71,18 @@ const addCustomClickOutsideHandler = ({
   contextElements: HTMLElement[];
 }): void => {
   const EDITOR_CLASS = "ck-editor";
+  /**
+   * Whether the mouseDown event occurred on an allow-listed element.
+   * Background: The mouseDown and click events may not always share the same path.
+   * (E.g., when dragging elements like the CoreMedia Studio library)
+   *
+   * This would result in a close of the balloon even though the mouseDown was performed
+   * on an element, for which the balloon should stay open.
+   *
+   * Therefore, this field links both listeners and makes sure the balloon is not closed on mouseUp
+   * (click) when the mouseDown happened on the allow-listed element, by exiting the click listener early.
+   */
+  let mouseDownOnWhiteListedElement = false;
   emitter.listenTo(
     document as unknown as Emitter,
     "mousedown",
