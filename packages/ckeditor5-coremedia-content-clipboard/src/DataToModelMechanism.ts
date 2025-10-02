@@ -1,9 +1,8 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { Editor, Node, Position, Range, Writer } from "ckeditor5";
+import { Editor, Node, PendingActions, Position, Range, Writer } from "ckeditor5";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   ContentImportService,
-  ContentReferenceResponse,
   COREMEDIA_CONTEXT_KEY,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
@@ -68,7 +67,11 @@ export default class DataToModelMechanism {
    * @param pendingMarkerNames - all markers that are not yet finally inserted.
    * @param markerData - object that holds information about the marker and the associated content insertion
    */
-  static triggerLoadAndWriteToModel(editor: Editor, pendingMarkerNames: string[], markerData: MarkerData): void {
+  static async triggerLoadAndWriteToModel(
+    editor: Editor,
+    pendingMarkerNames: string[],
+    markerData: MarkerData,
+  ): Promise<void> {
     const logger = DataToModelMechanism.#logger;
     const markerName: string = ContentClipboardMarkerDataUtils.toMarkerName(
       markerData.insertionId,
@@ -91,49 +94,47 @@ export default class DataToModelMechanism {
     // images. The only two attributes to distinguish contents are linkable and
     // embeddable. Lookup an extender with the object type, call the `create`
     // model stuff. Take a promise and execute writeItemToModel.
-    const uri = contentInputData.itemContext.uri;
-    serviceAgent
-      .fetchService<IContentReferenceService>(createContentReferenceServiceDescriptor())
-      .then((service) => service.getContentReference(uri))
-      .then(async (response: ContentReferenceResponse) => {
-        if (response.contentUri) {
-          //The reference uri is a content uri
-          return Promise.resolve(response.contentUri);
-        }
-        if (!response.externalUriInformation) {
-          return Promise.reject(new Error("No content found and uri is not importable."));
-        }
-        const contentImportService = await serviceAgent.fetchService<ContentImportService>(
-          createContentImportServiceDescriptor(),
-        );
-        if (response.externalUriInformation.contentUri) {
-          //The external content has been imported previously. A content representation already exists.
-          return Promise.resolve(response.externalUriInformation.contentUri);
-        }
-
-        //Neither a content nor a content representation found. Let's create a content representation.
+    const pendingActionsPlugin = editor.plugins.get(PendingActions);
+    const pendingAction = pendingActionsPlugin?.add("Loading data and maybe importing external Content.");
+    try {
+      const uri = contentInputData.itemContext.uri;
+      const contentReferenceService = await serviceAgent.fetchService<IContentReferenceService>(
+        createContentReferenceServiceDescriptor(),
+      );
+      const contentReferenceResponse = await contentReferenceService.getContentReference(uri);
+      // The reference uri is a content uri
+      // or the external content has been imported previously. A content representation already exists.
+      let contentUri =
+        contentReferenceResponse.contentUri ?? contentReferenceResponse.externalUriInformation?.contentUri;
+      if (!contentUri && !contentReferenceResponse.externalUriInformation) {
+        throw new Error("No content found and uri is not importable.");
+      }
+      const contentImportService = await serviceAgent.fetchService<ContentImportService>(
+        createContentImportServiceDescriptor(),
+      );
+      if (!contentUri) {
         const contextUriPath = editor.config.get(`${COREMEDIA_CONTEXT_KEY}.uriPath`);
-        const importedContentReference = await contentImportService.import(response.request, {
+        contentUri = await contentImportService.import(contentReferenceResponse.request, {
           contextUriPath: typeof contextUriPath === "string" ? contextUriPath : undefined,
         });
-        return Promise.resolve(importedContentReference);
-      })
-      .then(async (uri: string) => {
-        const type = await this.#getType(uri);
-        const createItemFunction = await this.lookupCreateItemFunction(type, uri);
-        return DataToModelMechanism.#writeItemToModel(
-          editor,
-          pendingMarkerNames,
-          contentInputData,
-          markerData,
-          createItemFunction,
-        );
-      })
-      .catch((reason) => {
-        DataToModelMechanism.#markerCleanup(editor, pendingMarkerNames, markerData);
-        logger.error("Error occurred in promise", reason);
-      })
-      .finally(() => DataToModelMechanism.#finishInsertion(editor));
+      }
+
+      const type = await this.#getType(contentUri);
+      const createItemFunction = await this.lookupCreateItemFunction(type, contentUri);
+      DataToModelMechanism.#writeItemToModel(
+        editor,
+        pendingMarkerNames,
+        contentInputData,
+        markerData,
+        createItemFunction,
+      );
+    } catch (error: unknown) {
+      DataToModelMechanism.#markerCleanup(editor, pendingMarkerNames, markerData);
+      logger.error("Error occurred in promise", error);
+    } finally {
+      DataToModelMechanism.#finishInsertion(editor);
+      pendingActionsPlugin?.remove(pendingAction);
+    }
   }
 
   /**
