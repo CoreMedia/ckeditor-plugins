@@ -1,16 +1,17 @@
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
 import { asHTMLElement, requireHTMLElement } from "./DOMUtils";
-import { bbCodeListItem } from "../src";
+import { bbCodeListItem } from "../src/rules/BBCodeListItem";
 
 describe("BBCodeListItem", () => {
-  describe("Default Configuration", () => {
+  test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeListItem;
 
-    it.each`
-      dataView           | expected
-      ${`<li>TEXT</li>`} | ${`[*] TEXT\n`}
-    `(
-      "[$#] Should process '$dataView' to '$expected'",
-      ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
+    const cases: { dataView: string; expected: string }[] = [{ dataView: `<li>TEXT</li>`, expected: `[*] TEXT\n` }];
+
+    for (const { dataView, expected } of cases) {
+      await t.test(`Should process '${dataView}' to '${expected}'`, () => {
         const embeddedInListDataView = `<ul>${dataView}</ul>`;
         const listElement = requireHTMLElement(embeddedInListDataView);
         const element = asHTMLElement(listElement.firstElementChild);
@@ -20,7 +21,7 @@ describe("BBCodeListItem", () => {
         const content = element.textContent ?? "";
         const bbCode = rule.toData(element, content);
         expect(bbCode).toEqual(expected);
-      },
-    );
+      });
+    }
   });
 });

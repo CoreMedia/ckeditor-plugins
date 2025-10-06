@@ -1,24 +1,49 @@
+import "global-jsdom/register";
+import test, { TestContext, describe } from "node:test";
+import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
-import { bbCodeItalic } from "../src";
+import { bbCodeItalic } from "../src/rules/BBCodeItalic";
 
 describe("BBCodeItalic", () => {
   describe("Default Configuration", () => {
     const rule = bbCodeItalic;
 
-    it.each`
-      dataView                                           | expected         | comment
-      ${`<span style="font-style: italic;">TEXT</span>`} | ${`[i]TEXT[/i]`} | ${`BBob HTML 5 Preset Result (toView)`}
-      ${`<i>TEXT</i>`}                                   | ${`[i]TEXT[/i]`} | ${`CKEditor 5 default data view representation`}
-      ${`<em>TEXT</em>`}                                 | ${`[i]TEXT[/i]`} | ${`alternative HTML 5 representation`}
-      ${`<i style="font-style: normal">TEXT</i>`}        | ${undefined}     | ${`vetoed italic tag; undefined, so other rules may kick in`}
-      ${`<b style="font-style: italic;">TEXT</b>`}       | ${`[i]TEXT[/i]`} | ${`Corner case: "<b>" will be handled by outer rules.`}
-    `(
-      "[$#] Should process '$dataView' to '$expected' ($comment)",
-      ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
-        const element = requireHTMLElement(dataView);
-        const bbCode = rule.toData(element, element.textContent ?? "");
-        expect(bbCode).toEqual(expected);
+    const cases = [
+      {
+        dataView: `<span style="font-style: italic;">TEXT</span>`,
+        expected: `[i]TEXT[/i]`,
+        comment: `BBob HTML 5 Preset Result (toView)`,
       },
-    );
+      {
+        dataView: `<i>TEXT</i>`,
+        expected: `[i]TEXT[/i]`,
+        comment: `CKEditor 5 default data view representation`,
+      },
+      {
+        dataView: `<em>TEXT</em>`,
+        expected: `[i]TEXT[/i]`,
+        comment: `alternative HTML 5 representation`,
+      },
+      {
+        dataView: `<i style="font-style: normal">TEXT</i>`,
+        expected: undefined,
+        comment: `vetoed italic tag; undefined, so other rules may kick in`,
+      },
+      {
+        dataView: `<b style="font-style: italic;">TEXT</b>`,
+        expected: `[i]TEXT[/i]`,
+        comment: `Corner case: "<b>" will be handled by outer rules.`,
+      },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { dataView, expected, comment }] of cases.entries()) {
+        await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
+          const element = requireHTMLElement(dataView);
+          const bbCode = rule.toData(element, element.textContent ?? "");
+          expect(bbCode).toEqual(expected);
+        });
+      }
+    });
   });
 });

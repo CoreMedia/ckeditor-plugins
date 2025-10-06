@@ -1,27 +1,30 @@
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
-import { bbCodeHeading } from "../src";
+import { bbCodeHeading } from "../src/rules/BBCodeHeading";
 
 const prettyPrintNewlines = "\n\n";
 
 describe("BBCodeHeading", () => {
-  describe("Default Configuration", () => {
+  test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeHeading;
 
-    it.each`
-      dataView           | expected
-      ${`<h1>TEXT</h1>`} | ${`[h1]TEXT[/h1]${prettyPrintNewlines}`}
-      ${`<h2>TEXT</h2>`} | ${`[h2]TEXT[/h2]${prettyPrintNewlines}`}
-      ${`<h3>TEXT</h3>`} | ${`[h3]TEXT[/h3]${prettyPrintNewlines}`}
-      ${`<h4>TEXT</h4>`} | ${`[h4]TEXT[/h4]${prettyPrintNewlines}`}
-      ${`<h5>TEXT</h5>`} | ${`[h5]TEXT[/h5]${prettyPrintNewlines}`}
-      ${`<h6>TEXT</h6>`} | ${`[h6]TEXT[/h6]${prettyPrintNewlines}`}
-    `(
-      "[$#] Should process '$dataView' to '$expected'",
-      ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
+    const cases: { dataView: string; expected: string }[] = [
+      { dataView: `<h1>TEXT</h1>`, expected: `[h1]TEXT[/h1]${prettyPrintNewlines}` },
+      { dataView: `<h2>TEXT</h2>`, expected: `[h2]TEXT[/h2]${prettyPrintNewlines}` },
+      { dataView: `<h3>TEXT</h3>`, expected: `[h3]TEXT[/h3]${prettyPrintNewlines}` },
+      { dataView: `<h4>TEXT</h4>`, expected: `[h4]TEXT[/h4]${prettyPrintNewlines}` },
+      { dataView: `<h5>TEXT</h5>`, expected: `[h5]TEXT[/h5]${prettyPrintNewlines}` },
+      { dataView: `<h6>TEXT</h6>`, expected: `[h6]TEXT[/h6]${prettyPrintNewlines}` },
+    ];
+
+    for (const { dataView, expected } of cases) {
+      await t.test(`Should process '${dataView}' to '${expected}'`, () => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");
         expect(bbCode).toEqual(expected);
-      },
-    );
+      });
+    }
   });
 });

@@ -1,5 +1,7 @@
 // noinspection HtmlUnknownTarget,SpellCheckingInspection,HtmlRequiredAltAttribute
-
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
 import { bbCodeDefaultRules } from "../src";
 import { bbcode2html, processBBCode } from "../src/bbcode2html";
 import { CoreTree } from "@bbob/core/es";
@@ -54,62 +56,149 @@ const aut = {
 describe("bbcode2html", () => {
   describe("Standard Tag Processing", () => {
     describe("Supported Inline Tags", () => {
-      it.each`
-        data                                                              | expectedDataView
-        ${`[b]T[/b]`}                                                     | ${`<span style="font-weight: bold;">T</span>`}
-        ${`[color=red]T[/color]`}                                         | ${`<span style="color: red;">T</span>`}
-        ${`[size=85]T[/size]`}                                            | ${`<span class="text-small">T</span>`}
-        ${`[i]T[/i]`}                                                     | ${'<span style="font-style: italic;">T</span>'}
-        ${`[s]T[/s]`}                                                     | ${`<span style="text-decoration: line-through;">T</span>`}
-        ${`[u]T[/u]`}                                                     | ${`<span style="text-decoration: underline;">T</span>`}
-        ${`[url=https://example.org/]T[/url]`}                            | ${`<a href="https://example.org/">T</a>`}
-        ${`[url]https://example.org/[/url]`}                              | ${`<a href="https://example.org/">https://example.org/</a>`}
-        ${`[url=/relative]T[/url]`}                                       | ${`<a href="/relative">T</a>`}
-        ${`[url]/relative[/url]`}                                         | ${`<a href="/relative">/relative</a>`}
-        ${`[url=https://example.org/?one=1&two=2]T[/url]`}                | ${`<a href="https://example.org/?one=1&amp;two=2">T</a>`}
-        ${`[url]https://example.org/?one=1&two=2[/url]`}                  | ${`<a href="https://example.org/?one=1&amp;two=2">https://example.org/?one=1&amp;two=2</a>`}
-        ${`[url]https://example.org/?[b]predicate=x%3D42[/b]#_top[/url]`} | ${`<a href="https://example.org/?predicate=x%3D42#_top">https://example.org/?<span style="font-weight: bold;">predicate=x%3D42</span>#_top</a>`}
-        ${`[img]https://example.org/1.png[/img]`}                         | ${`<img src="https://example.org/1.png">`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `[b]T[/b]`,
+          expectedDataView: `<span style="font-weight: bold;">T</span>`,
         },
-      );
+        {
+          data: `[color=red]T[/color]`,
+          expectedDataView: `<span style="color: red;">T</span>`,
+        },
+        {
+          data: `[size=85]T[/size]`,
+          expectedDataView: `<span class="text-small">T</span>`,
+        },
+        {
+          data: `[i]T[/i]`,
+          expectedDataView: `<span style="font-style: italic;">T</span>`,
+        },
+        {
+          data: `[s]T[/s]`,
+          expectedDataView: `<span style="text-decoration: line-through;">T</span>`,
+        },
+        {
+          data: `[u]T[/u]`,
+          expectedDataView: `<span style="text-decoration: underline;">T</span>`,
+        },
+        {
+          data: `[url=https://example.org/]T[/url]`,
+          expectedDataView: `<a href="https://example.org/">T</a>`,
+        },
+        {
+          data: `[url]https://example.org/[/url]`,
+          expectedDataView: `<a href="https://example.org/">https://example.org/</a>`,
+        },
+        {
+          data: `[url=/relative]T[/url]`,
+          expectedDataView: `<a href="/relative">T</a>`,
+        },
+        {
+          data: `[url]/relative[/url]`,
+          expectedDataView: `<a href="/relative">/relative</a>`,
+        },
+        {
+          data: `[url=https://example.org/?one=1&two=2]T[/url]`,
+          expectedDataView: `<a href="https://example.org/?one=1&amp;two=2">T</a>`,
+        },
+        {
+          data: `[url]https://example.org/?one=1&two=2[/url]`,
+          expectedDataView: `<a href="https://example.org/?one=1&amp;two=2">https://example.org/?one=1&amp;two=2</a>`,
+        },
+        {
+          data: `[url]https://example.org/?[b]predicate=x%3D42[/b]#_top[/url]`,
+          expectedDataView: `<a href="https://example.org/?predicate=x%3D42#_top">https://example.org/?<span style="font-weight: bold;">predicate=x%3D42</span>#_top</a>`,
+        },
+        {
+          data: `[img]https://example.org/1.png[/img]`,
+          expectedDataView: `<img src="https://example.org/1.png">`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView}`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
 
     describe("Supported Block Tags", () => {
-      it.each`
-        data                    | expectedDataView
-        ${`[code]T[/code]`}     | ${`<pre><code class="language-plaintext">T</code></pre>`}
-        ${`[h1]T[/h1]`}         | ${`<h1>T</h1>`}
-        ${`[h2]T[/h2]`}         | ${`<h2>T</h2>`}
-        ${`[h3]T[/h3]`}         | ${`<h3>T</h3>`}
-        ${`[h4]T[/h4]`}         | ${`<h4>T</h4>`}
-        ${`[h5]T[/h5]`}         | ${`<h5>T</h5>`}
-        ${`[h6]T[/h6]`}         | ${`<h6>T</h6>`}
-        ${`[list][*] T[/list]`} | ${`<ul><li> T</li></ul>`}
-        ${`[quote]T[/quote]`}   | ${`<blockquote><p>T</p></blockquote>`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `[code]T[/code]`,
+          expectedDataView: `<pre><code class="language-plaintext">T</code></pre>`,
         },
-      );
+        {
+          data: `[h1]T[/h1]`,
+          expectedDataView: `<h1>T</h1>`,
+        },
+        {
+          data: `[h2]T[/h2]`,
+          expectedDataView: `<h2>T</h2>`,
+        },
+        {
+          data: `[h3]T[/h3]`,
+          expectedDataView: `<h3>T</h3>`,
+        },
+        {
+          data: `[h4]T[/h4]`,
+          expectedDataView: `<h4>T</h4>`,
+        },
+        {
+          data: `[h5]T[/h5]`,
+          expectedDataView: `<h5>T</h5>`,
+        },
+        {
+          data: `[h6]T[/h6]`,
+          expectedDataView: `<h6>T</h6>`,
+        },
+        {
+          data: `[list][*] T[/list]`,
+          expectedDataView: `<ul><li> T</li></ul>`,
+        },
+        {
+          data: `[quote]T[/quote]`,
+          expectedDataView: `<blockquote><p>T</p></blockquote>`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView}`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
 
     describe("Escaping", () => {
-      it.each`
-        data                           | expectedDataView              | comment
-        ${`\\[b\\]not bold\\[/b\\]`}   | ${`[b]not bold[/b]`}          | ${`"normal" escape, but design-scope (as it is configurable for BBob)`}
-        ${`\\[i\\]not italic\\[/i\\]`} | ${`[i]not italic[/i]`}        | ${`"normal" escape, but design-scope (as it is configurable for BBob)`}
-        ${`keep\\irrelevant\\escape`}  | ${`keep\\irrelevant\\escape`} | ${`accepting BBob behavior: If irrelevant, BBob ignore an escape character.`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `\\[b\\]not bold\\[/b\\]`,
+          expectedDataView: `[b]not bold[/b]`,
+          comment: `"normal" escape, but design-scope (as it is configurable for BBob)`,
         },
-      );
+        {
+          data: `\\[i\\]not italic\\[/i\\]`,
+          expectedDataView: `[i]not italic[/i]`,
+          comment: `"normal" escape, but design-scope (as it is configurable for BBob)`,
+        },
+        {
+          data: `keep\\irrelevant\\escape`,
+          expectedDataView: `keep\\irrelevant\\escape`,
+          comment: `accepting BBob behavior: If irrelevant, BBob ignore an escape character.`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
   });
 
@@ -143,106 +232,300 @@ describe("bbcode2html", () => {
         openElement: string;
         closeElement: string;
       }) => {
-        it.each`
-          data                               | expectedDataView                           | comment
-          ${`${openTag}T${closeTag}`}        | ${`${openElement}T${closeElement}`}        | ${`default`}
-          ${`${openTag} T${closeTag}`}       | ${`${openElement} T${closeElement}`}       | ${`keep leading blanks`}
-          ${`${openTag}T ${closeTag}`}       | ${`${openElement}T ${closeElement}`}       | ${`keep trailing blanks`}
-          ${`${openTag}\nT${closeTag}`}      | ${`${openElement}\nT${closeElement}`}      | ${`keep leading single newlines`}
-          ${`${openTag}T\n${closeTag}`}      | ${`${openElement}T\n${closeElement}`}      | ${`keep trailing single newlines`}
-          ${`${openTag}T1\n\nT2${closeTag}`} | ${`${openElement}T1\n\nT2${closeElement}`} | ${`do not introduce a paragraph within element`}
-        `(
-          "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-          ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-            aut.expectTransformation({ data, expectedDataView });
+        const cases = [
+          {
+            data: `${openTag}T${closeTag}`,
+            expectedDataView: `${openElement}T${closeElement}`,
+            comment: `default`,
           },
-        );
+          {
+            data: `${openTag} T${closeTag}`,
+            expectedDataView: `${openElement} T${closeElement}`,
+            comment: `keep leading blanks`,
+          },
+          {
+            data: `${openTag}T ${closeTag}`,
+            expectedDataView: `${openElement}T ${closeElement}`,
+            comment: `keep trailing blanks`,
+          },
+          {
+            data: `${openTag}\nT${closeTag}`,
+            expectedDataView: `${openElement}\nT${closeElement}`,
+            comment: `keep leading single newlines`,
+          },
+          {
+            data: `${openTag}T\n${closeTag}`,
+            expectedDataView: `${openElement}T\n${closeElement}`,
+            comment: `keep trailing single newlines`,
+          },
+          {
+            data: `${openTag}T1\n\nT2${closeTag}`,
+            expectedDataView: `${openElement}T1\n\nT2${closeElement}`,
+            comment: `do not introduce a paragraph within element`,
+          },
+        ] as const;
+
+        test("cases", async (t: TestContext) => {
+          for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+            await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+              aut.expectTransformation({ data, expectedDataView });
+            });
+          }
+        });
       },
     );
 
     describe("[code]", () => {
-      it.each`
-        data                                                           | expectedDataView                                                                                   | comment
-        ${`[code]T[/code]`}                                            | ${`<pre><code class="language-plaintext">T</code></pre>`}                                          | ${`Default to "plaintext" language`}
-        ${`[code=css]T[/code]`}                                        | ${`<pre><code class="language-css">T</code></pre>`}                                                | ${`Accept language attribute`}
-        ${`[code=html]<i>T</i>[/code]`}                                | ${`<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`}                            | ${`Properly encode nested HTML`}
-        ${`[code=bbcode]\\[i\\]T\\[/i\\][/code]`}                      | ${`<pre><code class="language-bbcode">[i]T[/i]</code></pre>`}                                      | ${`Strip escapes`}
-        ${`[code=bbcode]\\[code=text\\]T\\[/code\\][/code]`}           | ${`<pre><code class="language-bbcode">[code=text]T[/code]</code></pre>`}                           | ${`Strip escapes`}
-        ${`[code=bbcode]\\[code=bbcode\\]T\\[/code\\][/code]`}         | ${`<pre><code class="language-bbcode">[code=bbcode]T[/code]</code></pre>`}                         | ${`Strip escapes`}
-        ${`[code=bbcode]\n\\[code=bbcode\\]\nT\n\\[/code\\]\n[/code]`} | ${`<pre><code class="language-bbcode">[code=bbcode]\nT\n[/code]</code></pre>`}                     | ${`Strip escapes and keep newlines`}
-        ${`[code][i]T[/i][/code]`}                                     | ${`<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`} | ${`Accept and parse BBCode within "code" tag`}
-        ${`[code][script]javascript:alert("X")[/script][/code]`}       | ${`<pre><code class="language-plaintext">[script]javascript:alert("X")[/script]</code></pre>`}     | ${`Do not transform, e.g., script-tag.`}
-        ${`[code]T1\n\nT2[/code]`}                                     | ${`<pre><code class="language-plaintext">T1\n\nT2</code></pre>`}                                   | ${`Don't handle duplicate newlines as paragraphs.`}
-        ${`[code]  T1\n  T2[/code]`}                                   | ${`<pre><code class="language-plaintext">  T1\n  T2</code></pre>`}                                 | ${`Keep space indents`}
-        ${`[code]\tT1\n\tT2[/code]`}                                   | ${`<pre><code class="language-plaintext">\tT1\n\tT2</code></pre>`}                                 | ${`Keep tab indents`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `[code]T[/code]`,
+          expectedDataView: `<pre><code class="language-plaintext">T</code></pre>`,
+          comment: `Default to "plaintext" language`,
         },
-      );
+        {
+          data: `[code=css]T[/code]`,
+          expectedDataView: `<pre><code class="language-css">T</code></pre>`,
+          comment: `Accept language attribute`,
+        },
+        {
+          data: `[code=html]<i>T</i>[/code]`,
+          expectedDataView: `<pre><code class="language-html">&lt;i&gt;T&lt;/i&gt;</code></pre>`,
+          comment: `Properly encode nested HTML`,
+        },
+        {
+          data: `[code=bbcode]\\[i\\]T\\[/i\\][/code]`,
+          expectedDataView: `<pre><code class="language-bbcode">[i]T[/i]</code></pre>`,
+          comment: `Strip escapes`,
+        },
+        {
+          data: `[code=bbcode]\\[code=text\\]T\\[/code\\][/code]`,
+          expectedDataView: `<pre><code class="language-bbcode">[code=text]T[/code]</code></pre>`,
+          comment: `Strip escapes`,
+        },
+        {
+          data: `[code=bbcode]\\[code=bbcode\\]T\\[/code\\][/code]`,
+          expectedDataView: `<pre><code class="language-bbcode">[code=bbcode]T[/code]</code></pre>`,
+          comment: `Strip escapes`,
+        },
+        {
+          data: `[code=bbcode]\n\\[code=bbcode\\]\nT\n\\[/code\\]\n[/code]`,
+          expectedDataView: `<pre><code class="language-bbcode">[code=bbcode]\nT\n[/code]</code></pre>`,
+          comment: `Strip escapes and keep newlines`,
+        },
+        {
+          data: `[code][i]T[/i][/code]`,
+          expectedDataView: `<pre><code class="language-plaintext"><span style="font-style: italic;">T</span></code></pre>`,
+          comment: `Accept and parse BBCode within "code" tag`,
+        },
+        {
+          data: `[code][script]javascript:alert("X")[/script][/code]`,
+          expectedDataView: `<pre><code class="language-plaintext">[script]javascript:alert("X")[/script]</code></pre>`,
+          comment: `Do not transform, e.g., script-tag.`,
+        },
+        {
+          data: `[code]T1\n\nT2[/code]`,
+          expectedDataView: `<pre><code class="language-plaintext">T1\n\nT2</code></pre>`,
+          comment: `Don't handle duplicate newlines as paragraphs.`,
+        },
+        {
+          data: `[code]  T1\n  T2[/code]`,
+          expectedDataView: `<pre><code class="language-plaintext">  T1\n  T2</code></pre>`,
+          comment: `Keep space indents`,
+        },
+        {
+          data: `[code]\tT1\n\tT2[/code]`,
+          expectedDataView: `<pre><code class="language-plaintext">\tT1\n\tT2</code></pre>`,
+          comment: `Keep tab indents`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
 
     describe("[quote]", () => {
-      it.each`
-        data                                                  | expectedDataView                                                                         | comment
-        ${`[quote]T[/quote]`}                                 | ${`<blockquote><p>T</p></blockquote>`}                                                   | ${`minimal scenario`}
-        ${`[quote=AUTHOR]T[/quote]`}                          | ${`<blockquote><p>T</p></blockquote>`}                                                   | ${`author information not supported`}
-        ${`[quote]\nT\n[/quote]`}                             | ${`<blockquote><p>\nT</p></blockquote>`}                                                 | ${`strip obsolete trailing newlines`}
-        ${`[quote]\nP1\n\nP2\n[/quote]`}                      | ${`<blockquote><p>\nP1</p><p>P2</p></blockquote>`}                                       | ${`paragraphs support`}
-        ${`[quote]\nP1\n[quote]\nP2\n[/quote]\nP3\n[/quote]`} | ${`<blockquote><p>\nP1</p><blockquote><p>\nP2</p></blockquote><p>\nP3</p></blockquote>`} | ${`nested quotes support`}
-        ${`[quote]\n[quote]\nT\n[/quote]\n[/quote]`}          | ${`<blockquote><blockquote><p>\nT</p></blockquote></blockquote>`}                        | ${`directly nested quotes support`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `[quote]T[/quote]`,
+          expectedDataView: `<blockquote><p>T</p></blockquote>`,
+          comment: `minimal scenario`,
         },
-      );
+        {
+          data: `[quote=AUTHOR]T[/quote]`,
+          expectedDataView: `<blockquote><p>T</p></blockquote>`,
+          comment: `author information not supported`,
+        },
+        {
+          data: `[quote]\nT\n[/quote]`,
+          expectedDataView: `<blockquote><p>\nT</p></blockquote>`,
+          comment: `strip obsolete trailing newlines`,
+        },
+        {
+          data: `[quote]\nP1\n\nP2\n[/quote]`,
+          expectedDataView: `<blockquote><p>\nP1</p><p>P2</p></blockquote>`,
+          comment: `paragraphs support`,
+        },
+        {
+          data: `[quote]\nP1\n[quote]\nP2\n[/quote]\nP3\n[/quote]`,
+          expectedDataView: `<blockquote><p>\nP1</p><blockquote><p>\nP2</p></blockquote><p>\nP3</p></blockquote>`,
+          comment: `nested quotes support`,
+        },
+        {
+          data: `[quote]\n[quote]\nT\n[/quote]\n[/quote]`,
+          expectedDataView: `<blockquote><blockquote><p>\nT</p></blockquote></blockquote>`,
+          comment: `directly nested quotes support`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
 
     describe("[img]", () => {
-      it.each`
-        data                                                | expectedDataView                                       | comment
-        ${`[img]https://example.org/1.png[/img]`}           | ${`<img src="https://example.org/1.png">`}             | ${`minimal scenario`}
-        ${`[img alt="ALT"]https://example.org/1.png[/img]`} | ${`<img alt="ALT" src="https://example.org/1.png">`}   | ${`alt text support; order of attributes irrelevant, but set expected as it is now`}
-        ${`[img alt=""]https://example.org/1.png[/img]`}    | ${`<img alt="" src="https://example.org/1.png">`}      | ${`design-scope: may as well strip empty alt; kept for simplicity`}
-        ${`[img alt=1-PNG]https://example.org/1.png[/img]`} | ${`<img alt="1-PNG" src="https://example.org/1.png">`} | ${`alt without quotes (must not use spaces)`}
-        ${`A[img][/img]B`}                                  | ${`A<img src="">B`}                                    | ${`design-scope: May as well strip irrelevant img tag; kept for simplicity`}
-        ${`A [img]https://example.org/1.png[/img] B`}       | ${`A <img src="https://example.org/1.png"> B`}         | ${`images are meant to be inline (all known BBCode interpreters seem to expect that)`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `[img]https://example.org/1.png[/img]`,
+          expectedDataView: `<img src="https://example.org/1.png">`,
+          comment: `minimal scenario`,
         },
-      );
+        {
+          data: `[img alt="ALT"]https://example.org/1.png[/img]`,
+          expectedDataView: `<img alt="ALT" src="https://example.org/1.png">`,
+          comment: `alt text support; order of attributes irrelevant, but set expected as it is now`,
+        },
+        {
+          data: `[img alt=""]https://example.org/1.png[/img]`,
+          expectedDataView: `<img alt="" src="https://example.org/1.png">`,
+          comment: `design-scope: may as well strip empty alt; kept for simplicity`,
+        },
+        {
+          data: `[img alt=1-PNG]https://example.org/1.png[/img]`,
+          expectedDataView: `<img alt="1-PNG" src="https://example.org/1.png">`,
+          comment: `alt without quotes (must not use spaces)`,
+        },
+        {
+          data: `A[img][/img]B`,
+          expectedDataView: `A<img src="">B`,
+          comment: `design-scope: May as well strip irrelevant img tag; kept for simplicity`,
+        },
+        {
+          data: `A [img]https://example.org/1.png[/img] B`,
+          expectedDataView: `A <img src="https://example.org/1.png"> B`,
+          comment: `images are meant to be inline (all known BBCode interpreters seem to expect that)`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
   });
 
   describe("Paragraphs", () => {
-    it.each`
-      data                                | expectedDataView                                                                                         | comment
-      ${`P1\n\nP2`}                       | ${`<p>P1</p><p>P2</p>`}                                                                                  | ${`Standard Paragraph Behavior (Only Text; LF)`}
-      ${`P1\r\n\r\nP2`}                   | ${`<p>P1</p><p>P2</p>`}                                                                                  | ${`Standard Paragraph Behavior (Only Text; CRLF)`}
-      ${`P1\r\rP2`}                       | ${`<p>P1</p><p>P2</p>`}                                                                                  | ${`Standard Paragraph Behavior (Only Text; CR)`}
-      ${`[b]P1[/b]\n\n[i]P2[/i]`}         | ${`<p><span style="font-weight: bold;">P1</span></p><p><span style="font-style: italic;">P2</span></p>`} | ${`Standard Paragraph Behavior (Text with inline formatting)`}
-      ${``}                               | ${``}                                                                                                    | ${`Do not create paragraphs on empty input`}
-      ${`\n`}                             | ${`\n`}                                                                                                  | ${`Do not create paragraphs on only single newline`}
-      ${`\n\n`}                           | ${`\n`}                                                                                                  | ${`Trim irrelevant newlines`}
-      ${`\n\n\n`}                         | ${`\n`}                                                                                                  | ${`Trim irrelevant newlines`}
-      ${`\nP1\n\nP2`}                     | ${`<p>\nP1</p><p>P2</p>`}                                                                                | ${`Design Scope: Keep irrelevant leading newlines; simplifies processing`}
-      ${`P1\n\n\nP2`}                     | ${`<p>P1</p><p>P2</p>`}                                                                                  | ${`Trim obsolete newlines (trailing, 1)`}
-      ${`P1\n\nP2\n`}                     | ${`<p>P1</p><p>P2</p>`}                                                                                  | ${`Trim obsolete newlines (trailing, 2)`}
-      ${`[quote]P1\n\nP2[/quote]`}        | ${`<blockquote><p>P1</p><p>P2</p></blockquote>`}                                                         | ${`Respect paragraphs in quote sections`}
-      ${`P1\n\n[quote]P2[/quote]\n\nP3`}  | ${`<p>P1</p><blockquote><p>P2</p></blockquote><p>P3</p>`}                                                | ${`Do not put blockquotes into paragraphs`}
-      ${`P1\n\n[code]P2[/code]\n\nP3`}    | ${`<p>P1</p><pre><code class="language-plaintext">P2</code></pre><p>P3</p>`}                             | ${`Do not put code blocks into paragraphs`}
-      ${`P1\n\n[h1]P2[/h1]\n\nP3`}        | ${`<p>P1</p><h1>P2</h1><p>P3</p>`}                                                                       | ${`Do not put headings into paragraphs`}
-      ${`P1\n\n[list][*]P2[/list]\n\nP3`} | ${`<p>P1</p><ul><li>P2</li></ul><p>P3</p>`}                                                              | ${`Do not put lists into paragraphs`}
-    `(
-      "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-      ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-        aut.expectTransformation({ data, expectedDataView });
+    const cases = [
+      {
+        data: `P1\n\nP2`,
+        expectedDataView: `<p>P1</p><p>P2</p>`,
+        comment: `Standard Paragraph Behavior (Only Text; LF)`,
       },
-    );
+      {
+        data: `P1\r\n\r\nP2`,
+        expectedDataView: `<p>P1</p><p>P2</p>`,
+        comment: `Standard Paragraph Behavior (Only Text; CRLF)`,
+      },
+      {
+        data: `P1\r\rP2`,
+        expectedDataView: `<p>P1</p><p>P2</p>`,
+        comment: `Standard Paragraph Behavior (Only Text; CR)`,
+      },
+      {
+        data: `[b]P1[/b]\n\n[i]P2[/i]`,
+        expectedDataView: `<p><span style="font-weight: bold;">P1</span></p><p><span style="font-style: italic;">P2</span></p>`,
+        comment: `Standard Paragraph Behavior (Text with inline formatting)`,
+      },
+      {
+        data: ``,
+        expectedDataView: ``,
+        comment: `Do not create paragraphs on empty input`,
+      },
+      {
+        data: `\n`,
+        expectedDataView: `\n`,
+        comment: `Do not create paragraphs on only single newline`,
+      },
+      {
+        data: `\n\n`,
+        expectedDataView: `\n`,
+        comment: `Trim irrelevant newlines`,
+      },
+      {
+        data: `\n\n\n`,
+        expectedDataView: `\n`,
+        comment: `Trim irrelevant newlines`,
+      },
+      {
+        data: `\nP1\n\nP2`,
+        expectedDataView: `<p>\nP1</p><p>P2</p>`,
+        comment: `Design Scope: Keep irrelevant leading newlines; simplifies processing`,
+      },
+      {
+        data: `P1\n\n\nP2`,
+        expectedDataView: `<p>P1</p><p>P2</p>`,
+        comment: `Trim obsolete newlines (trailing, 1)`,
+      },
+      {
+        data: `P1\n\nP2\n`,
+        expectedDataView: `<p>P1</p><p>P2</p>`,
+        comment: `Trim obsolete newlines (trailing, 2)`,
+      },
+      {
+        data: `[quote]P1\n\nP2[/quote]`,
+        expectedDataView: `<blockquote><p>P1</p><p>P2</p></blockquote>`,
+        comment: `Respect paragraphs in quote sections`,
+      },
+      {
+        data: `P1\n\n[quote]P2[/quote]\n\nP3`,
+        expectedDataView: `<p>P1</p><blockquote><p>P2</p></blockquote><p>P3</p>`,
+        comment: `Do not put blockquotes into paragraphs`,
+      },
+      {
+        data: `P1\n\n[code]P2[/code]\n\nP3`,
+        expectedDataView: `<p>P1</p><pre><code class="language-plaintext">P2</code></pre><p>P3</p>`,
+        comment: `Do not put code blocks into paragraphs`,
+      },
+      {
+        data: `P1\n\n[h1]P2[/h1]\n\nP3`,
+        expectedDataView: `<p>P1</p><h1>P2</h1><p>P3</p>`,
+        comment: `Do not put headings into paragraphs`,
+      },
+      {
+        data: `P1\n\n[list][*]P2[/list]\n\nP3`,
+        expectedDataView: `<p>P1</p><ul><li>P2</li></ul><p>P3</p>`,
+        comment: `Do not put lists into paragraphs`,
+      },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+        await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+          aut.expectTransformation({ data, expectedDataView });
+        });
+      }
+    });
   });
 
   describe("Tag Processing Challenges", () => {
@@ -257,54 +540,88 @@ describe("bbcode2html", () => {
      * represents the current behavior of BBob.
      */
     describe("Formatting Errors", () => {
-      it.each`
-        data                   | expectedDataView                                                                          | expectedErrors | comment
-        ${`[b]T`}              | ${`<span style="font-weight: bold;"></span>T`}                                            | ${0}           | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
-        ${`T[/b]`}             | ${`T`}                                                                                    | ${1}           | ${`perfectly fine: Just ignore orphaned close-tag`}
-        ${`[b]T[/i]`}          | ${`<span style="font-weight: bold;"></span>T`}                                            | ${1}           | ${`surprise: creates an empty element. CKEditor 5 would just remove it.`}
-        ${`[b]A[i]B[/b]C[/i]`} | ${`<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`} | ${0}           | ${`surprise: only opening tag seems to control the hierarchy`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({
-          data,
-          expectedDataView,
-          expectedErrors,
-        }: {
-          data: string;
-          expectedDataView: string;
-          expectedErrors: number;
-        }) => {
-          aut.expectTransformation({ data, expectedDataView }, expectedErrors);
+      const cases = [
+        {
+          data: `[b]T`,
+          expectedDataView: `<span style="font-weight: bold;"></span>T`,
+          expectedErrors: 0,
+          comment: `surprise: creates an empty element. CKEditor 5 would just remove it.`,
         },
-      );
+        {
+          data: `T[/b]`,
+          expectedDataView: `T`,
+          expectedErrors: 1,
+          comment: `perfectly fine: Just ignore orphaned close-tag`,
+        },
+        {
+          data: `[b]T[/i]`,
+          expectedDataView: `<span style="font-weight: bold;"></span>T`,
+          expectedErrors: 1,
+          comment: `surprise: creates an empty element. CKEditor 5 would just remove it.`,
+        },
+        {
+          data: `[b]A[i]B[/b]C[/i]`,
+          expectedDataView: `<span style="font-weight: bold;">A<span style="font-style: italic;">B</span>C</span>`,
+          expectedErrors: 0,
+          comment: `surprise: only opening tag seems to control the hierarchy`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, expectedErrors, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView }, expectedErrors);
+          });
+        }
+      });
     });
 
     describe("Attribute Challenges", () => {
-      it.each`
-        data                                     | expectedDataView                            | comment
-        ${`[url=]T[/url]`}                       | ${`<a href="T">T</a>`}                      | ${`BBob: empty unique attribute handled as _not existing_`}
-        ${`[url=\nhttps://example.org/]T[/url]`} | ${`<a href="\nhttps://example.org/">T</a>`} | ${`BBob: ignores newlines within (unique) attributes`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `[url=]T[/url]`,
+          expectedDataView: `<a href="T">T</a>`,
+          comment: "BBob: empty unique attribute handled as _not existing_",
         },
-      );
+        {
+          data: `[url=\nhttps://example.org/]T[/url]`,
+          expectedDataView: `<a href="\nhttps://example.org/">T</a>`,
+          comment: "BBob: ignores newlines within (unique) attributes",
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
   });
 
   describe("Security", () => {
     describe("Raw HTML Injections", () => {
-      it.each`
-        data            | expectedDataView            | comment
-        ${`A <b>B</b>`} | ${`A &lt;b&gt;B&lt;/b&gt;`} | ${`Defaults to not supporting embedded HTML elements.`}
-        ${`A&amp;B`}    | ${`A&amp;amp;B`}            | ${`Defaults to not supporting entities, but to escape them.`}
-      `(
-        "[$#] Should process data '$data' to: $expectedDataView ($comment)",
-        ({ data, expectedDataView }: { data: string; expectedDataView: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          data: `A <b>B</b>`,
+          expectedDataView: `A &lt;b&gt;B&lt;/b&gt;`,
+          comment: `Defaults to not supporting embedded HTML elements.`,
         },
-      );
+        {
+          data: `A&amp;B`,
+          expectedDataView: `A&amp;amp;B`,
+          comment: `Defaults to not supporting entities, but to escape them.`,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
+            aut.expectTransformation({ data, expectedDataView });
+          });
+        }
+      });
     });
 
     /**
@@ -322,21 +639,51 @@ describe("bbcode2html", () => {
      */
     describe("XSS attacks", () => {
       // noinspection CssInvalidPropertyValue
-      it.each`
-        tainted                                                                                                       | expected                                                                                                                                                                                                                                                               | comment
-        ${`[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==]sdfsdf[/url]`}                         | ${`<a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==">sdfsdf</a>`}                                                                                                                                                                               | ${`source: https://security.snyk.io/vuln/SNYK-PYTHON-BBCODE-40502; CKEditor 5 will prohibit clicking on these.`}
-        ${`[url]javascript:alert('XSS');[/url]`}                                                                      | ${`<a href="javascript:alert('XSS');">javascript:alert('XSS');</a>`}                                                                                                                                                                                                   | ${`source: https://github.com/dcwatson/bbcode/issues/4; Will be passed as is to CKEditor 5, which will take care not to make this clickable within the UI.`}
-        ${`[url=javascript:alert('XSS');]TEXT[/url]`}                                                                 | ${`<a href="javascript:alert('XSS');">TEXT</a>`}                                                                                                                                                                                                                       | ${`source: https://github.com/dcwatson/bbcode/issues/4; javascript:-link flavor but as attribute`}
-        ${`[url]javascript:alert("XSS");[/url]`}                                                                      | ${`<a href="javascript:alert(&quot;XSS&quot;);">javascript:alert("XSS");</a>`}                                                                                                                                                                                         | ${`source: https://github.com/dcwatson/bbcode/issues/4; javascript:-link flavor but with double-quotes`}
-        ${`[url]123" onmouseover="alert('Hacked');[/url]`}                                                            | ${`<a href="123&quot; onmouseover=&quot;alert('Hacked');">123" onmouseover="alert('Hacked');</a>`}                                                                                                                                                                     | ${`source: https://github.com/dcwatson/bbcode/issues/4`}
-        ${`[url]https://google.com?[url] onmousemove=javascript:alert(String.fromCharCode(88,83,83));//[/url][/url]`} | ${`<a href="https://google.com? onmousemove=javascript:alert(String.fromCharCode(88,83,83));//">https://google.com?<a href=" onmousemove=javascript:alert(String.fromCharCode(88,83,83));//"> onmousemove=javascript:alert(String.fromCharCode(88,83,83));//</a></a>`} | ${`source: https://github.com/dcwatson/bbcode/issues/4; Slightly corrupted DOM, but attack did not pass through.`}
-        ${`[color="onmouseover=alert(0) style="]dare to move your mouse here[/color]`}                                | ${`<span style="color: null;">dare to move your mouse here</span>`}                                                                                                                                                                                                    | ${`source: https://github.com/friendica/friendica/issues/9611; result of default HTML5 Preset - surprising "null" but no XSS issue: Fine!`}
-      `(
-        "[$#] Should prevent XSS-attack for: $tainted, expected: $expected ($comment)",
-        ({ tainted: data, expected: expectedDataView }: { tainted: string; expected: string }) => {
-          aut.expectTransformation({ data, expectedDataView });
+      const cases = [
+        {
+          tainted: `[url=data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==]sdfsdf[/url]`,
+          expected: `<a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg==">sdfsdf</a>`,
+          comment: `source: https://security.snyk.io/vuln/SNYK-PYTHON-BBCODE-40502; CKEditor 5 will prohibit clicking on these.`,
         },
-      );
+        {
+          tainted: `[url]javascript:alert('XSS');[/url]`,
+          expected: `<a href="javascript:alert('XSS');">javascript:alert('XSS');</a>`,
+          comment: `source: https://github.com/dcwatson/bbcode/issues/4; Will be passed as is to CKEditor 5, which will take care not to make this clickable within the UI.`,
+        },
+        {
+          tainted: `[url=javascript:alert('XSS');]TEXT[/url]`,
+          expected: `<a href="javascript:alert('XSS');">TEXT</a>`,
+          comment: `source: https://github.com/dcwatson/bbcode/issues/4; javascript:-link flavor but as attribute`,
+        },
+        {
+          tainted: `[url]javascript:alert("XSS");[/url]`,
+          expected: `<a href="javascript:alert(&quot;XSS&quot;);">javascript:alert("XSS");</a>`,
+          comment: `source: https://github.com/dcwatson/bbcode/issues/4; javascript:-link flavor but with double-quotes`,
+        },
+        {
+          tainted: `[url]123" onmouseover="alert('Hacked');[/url]`,
+          expected: `<a href="123&quot; onmouseover=&quot;alert('Hacked');">123" onmouseover="alert('Hacked');</a>`,
+          comment: `source: https://github.com/dcwatson/bbcode/issues/4`,
+        },
+        {
+          tainted: `[url]https://google.com?[url] onmousemove=javascript:alert(String.fromCharCode(88,83,83));//[/url][/url]`,
+          expected: `<a href="https://google.com? onmousemove=javascript:alert(String.fromCharCode(88,83,83));//">https://google.com?<a href=" onmousemove=javascript:alert(String.fromCharCode(88,83,83));//"> onmousemove=javascript:alert(String.fromCharCode(88,83,83));//</a></a>`,
+          comment: `source: https://github.com/dcwatson/bbcode/issues/4; Slightly corrupted DOM, but attack did not pass through.`,
+        },
+        {
+          tainted: `[color="onmouseover=alert(0) style="]dare to move your mouse here[/color]`,
+          expected: '<span style="color: null;">dare to move your mouse here</span>',
+          comment: ``,
+        },
+      ] as const;
+
+      test("cases", async (t: TestContext) => {
+        for (const [i, { tainted, expected, comment }] of cases.entries()) {
+          await t.test(`[${i}] Should prevent XSS-attack for: ${tainted}, expected: ${expected} (${comment})`, () => {
+            aut.expectTransformation({ data: tainted, expectedDataView: expected });
+          });
+        }
+      });
     });
   });
 
@@ -351,19 +698,36 @@ describe("bbcode2html", () => {
    * and tries to render the rest at best effort.
    */
   describe("Error Handling", () => {
-    it.each`
-      erred                           | expected                                                 | comment
-      ${`[/]`}                        | ${``}                                                    | ${`for "only invalid BBCode" provide empty text`}
-      ${`Before[/]After`}             | ${`BeforeAfter`}                                         | ${`should just ignore broken BBCode parts`}
-      ${`[c][/c][b]hello[/c][/b][b]`} | ${`[c]<span style="font-weight: bold;">hello</span>[b]`} | ${`example input from BBob tests`}
-    `(
-      "[$#] Should handle BBCode errors with care: $erred, expected: $expected ($comment)",
-      ({ erred: data, expected: expectedDataView }: { erred: string; expected: string }) => {
-        // We expect BBob to raise an error for all the above data. If this
-        // changes, feel free to adapt the number of expected errors.
-        aut.expectTransformation({ data, expectedDataView }, 1);
+    const cases = [
+      {
+        erred: `[/]`,
+        expected: ``,
+        comment: `for "only invalid BBCode" provide empty text`,
       },
-    );
+      {
+        erred: `Before[/]After`,
+        expected: `BeforeAfter`,
+        comment: `should just ignore broken BBCode parts`,
+      },
+      {
+        erred: `[c][/c][b]hello[/c][/b][b]`,
+        expected: `[c]<span style="font-weight: bold;">hello</span>[b]`,
+        comment: `example input from BBob tests`,
+      },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { erred: data, expected: expectedDataView, comment }] of cases.entries()) {
+        await t.test(
+          `[${i}] Should handle BBCode errors with care: ${data}, expected: ${expectedDataView} (${comment})`,
+          () => {
+            // We expect BBob to raise an error for all the above data. If this
+            // changes, feel free to adapt the number of expected errors.
+            aut.expectTransformation({ data, expectedDataView }, 1);
+          },
+        );
+      }
+    });
   });
 
   /**
@@ -381,22 +745,48 @@ describe("bbcode2html", () => {
      *
      * @see <https://github.com/JiLiZART/BBob/issues/212>
      */
-    it.each`
-      newline     | expectedTree          | type
-      ${`\n`}     | ${["\n"]}             | ${`LF (Unix)`}
-      ${`\r\n`}   | ${["\r", "\n"]}       | ${`CRLF (Windows)`}
-      ${`\r`}     | ${["\r"]}             | ${`CR (classic MacOS)`}
-      ${`A\nB`}   | ${["A", "\n", "B"]}   | ${`LF (Unix)`}
-      ${`A\r\nB`} | ${["A\r", "\n", "B"]} | ${`CRLF (Windows)`}
-      ${`A\rB`}   | ${["A\rB"]}           | ${`CR (classic MacOS)`}
-    `(
-      "[$#] Should parse system dependent newline representation for $type as expected.",
-      ({ newline, expectedTree }: { newline: string; expectedTree: CoreTree }) => {
-        // deconstruct to remove extra "candy" like messages from the resulting
-        // array.
-        const tree = [...aut.process(newline).tree];
-        expect(tree).toEqual(expectedTree);
+    const cases = [
+      {
+        newline: `\n`,
+        expectedTree: ["\n"],
+        type: `LF (Unix)`,
       },
-    );
+      {
+        newline: `\r\n`,
+        expectedTree: ["\r", "\n"],
+        type: `CRLF (Windows)`,
+      },
+      {
+        newline: `\r`,
+        expectedTree: ["\r"],
+        type: `CR (classic MacOS)`,
+      },
+      {
+        newline: `A\nB`,
+        expectedTree: ["A", "\n", "B"],
+        type: `LF (Unix)`,
+      },
+      {
+        newline: `A\r\nB`,
+        expectedTree: ["A\r", "\n", "B"],
+        type: `CRLF (Windows)`,
+      },
+      {
+        newline: `A\rB`,
+        expectedTree: ["A\rB"],
+        type: `CR (classic MacOS)`,
+      },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { newline, expectedTree, type }] of cases.entries()) {
+        await t.test(`[${i}] Should parse system dependent newline representation for ${type} as expected.`, () => {
+          // deconstruct to remove extra "candy" like messages from the resulting
+          // array.
+          const tree = [...aut.process(newline).tree];
+          expect(tree).toEqual(expectedTree);
+        });
+      }
+    });
   });
 });

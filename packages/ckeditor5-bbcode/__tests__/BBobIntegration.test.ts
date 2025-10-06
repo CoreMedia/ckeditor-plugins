@@ -1,6 +1,9 @@
 /// <reference lib="dom" />
 
-import { bbCodeDefaultRules } from "../src";
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
+import { bbCodeDefaultRules } from "../src/rules/bbCodeDefaultRules";
 import { html2bbcode } from "../src/html2bbcode";
 import { bbcode2html } from "../src/bbcode2html";
 import { parseAsFragment } from "./DOMUtils";
@@ -80,73 +83,215 @@ describe("BBob Integration", () => {
    * HTML to BBCode mapping is understood by the third-party library when
    * processing the data back to HTML.
    */
-  describe("Important: HTML →[toData]→ BBCode →[toView]→ HTML", () => {
-    it.each`
-      dataViewInput                                                | expectedStoredData               | expectedRestoredDataView                                      | comment
-      ${""}                                                        | ${""}                            | ${""}                                                         | ${"empty data"}
-      ${`<strong>TEXT</strong>`}                                   | ${`[b]TEXT[/b]`}                 | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
-      ${`<b>TEXT</b>`}                                             | ${`[b]TEXT[/b]`}                 | ${`<span style="font-weight: bold;">TEXT</span>`}             | ${"font-weight well understood by CKEditor"}
-      ${`<em>TEXT</em>`}                                           | ${`[i]TEXT[/i]`}                 | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
-      ${`<i>TEXT</i>`}                                             | ${`[i]TEXT[/i]`}                 | ${`<span style="font-style: italic;">TEXT</span>`}            | ${"font-style well understood by CKEditor"}
-      ${`<ins>TEXT</ins>`}                                         | ${`[u]TEXT[/u]`}                 | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
-      ${`<u>TEXT</u>`}                                             | ${`[u]TEXT[/u]`}                 | ${`<span style="text-decoration: underline;">TEXT</span>`}    | ${"text-decoration well understood by CKEditor"}
-      ${`<del>TEXT</del>`}                                         | ${`[s]TEXT[/s]`}                 | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
-      ${`<s>TEXT</s>`}                                             | ${`[s]TEXT[/s]`}                 | ${`<span style="text-decoration: line-through;">TEXT</span>`} | ${"text-decoration well understood by CKEditor"}
-      ${`<span class="text-tiny">TEXT</span>`}                     | ${`[size=70]TEXT[/size]`}        | ${`<span class="text-tiny">TEXT</span>`}                      | ${"none"}
-      ${`<span class="text-small">TEXT</span>`}                    | ${`[size=85]TEXT[/size]`}        | ${`<span class="text-small">TEXT</span>`}                     | ${"none"}
-      ${`<span class="text-big">TEXT</span>`}                      | ${`[size=140]TEXT[/size]`}       | ${`<span class="text-big">TEXT</span>`}                       | ${"none"}
-      ${`<span class="text-huge">TEXT</span>`}                     | ${`[size=180]TEXT[/size]`}       | ${`<span class="text-huge">TEXT</span>`}                      | ${"none"}
-      ${`<a href="${link}">TEXT</a>`}                              | ${`[url="${link}"]TEXT[/url]`}   | ${`<a href="${link}">TEXT</a>`}                               | ${"normal link"}
-      ${`<a href="${link}">${link}</a>`}                           | ${`[url]${link}[/url]`}          | ${`<a href="${link}">${link}</a>`}                            | ${"pretty-print: shorten, if possible, in BBCode"}
-      ${`<a>TEXT</a>`}                                             | ${`TEXT`}                        | ${`TEXT`}                                                     | ${"there is no representation in BBCode for an anchor without href attribute"}
-      ${`<blockquote><p>TEXT</p></blockquote>`}                    | ${`[quote]\nTEXT\n[/quote]`}     | ${`<blockquote><p>\nTEXT</p></blockquote>`}                   | ${"newlines part of minimal pretty-print behavior"}
-      ${`<pre><code class="language-plaintext">TEXT</code></pre>`} | ${`[code]\nTEXT\n[/code]`}       | ${`<pre><code class="language-plaintext">TEXT</code></pre>`}  | ${"adapted to nested pre, code to work in CKEditor 5"}
-      ${`<pre><code class="language-css">TEXT</code></pre>`}       | ${`[code=css]\nTEXT\n[/code]`}   | ${`<pre><code class="language-css">TEXT</code></pre>`}        | ${"adapted to nested pre, code to work in CKEditor 5"}
-      ${`<ul><li>TEXT</li></ul>`}                                  | ${`[list]\n[*] TEXT\n[/list]`}   | ${`<ul>\n<li> TEXT\n</li></ul>`}                              | ${"newlines part of minimal pretty-print behavior"}
-      ${`<ol><li>TEXT</li></ol>`}                                  | ${`[list=1]\n[*] TEXT\n[/list]`} | ${`<ol type="1">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor defaults to _no-type_, but BBob defaults to add it"}
-      ${`<ol type="a"><li>TEXT</li></ol>`}                         | ${`[list=a]\n[*] TEXT\n[/list]`} | ${`<ol type="a">\n<li> TEXT\n</li></ol>`}                     | ${"CKEditor may ignore type, if not configured to support this"}
-      ${`<h1>TEXT</h1>`}                                           | ${`[h1]TEXT[/h1]`}               | ${`<h1>TEXT</h1>`}                                            | ${"none"}
-      ${`<h2>TEXT</h2>`}                                           | ${`[h2]TEXT[/h2]`}               | ${`<h2>TEXT</h2>`}                                            | ${"none"}
-      ${`<h3>TEXT</h3>`}                                           | ${`[h3]TEXT[/h3]`}               | ${`<h3>TEXT</h3>`}                                            | ${"none"}
-      ${`<h4>TEXT</h4>`}                                           | ${`[h4]TEXT[/h4]`}               | ${`<h4>TEXT</h4>`}                                            | ${"none"}
-      ${`<h5>TEXT</h5>`}                                           | ${`[h5]TEXT[/h5]`}               | ${`<h5>TEXT</h5>`}                                            | ${"none"}
-      ${`<h6>TEXT</h6>`}                                           | ${`[h6]TEXT[/h6]`}               | ${`<h6>TEXT</h6>`}                                            | ${"none"}
-      ${`<p>TEXT1</p><p>TEXT2</p>`}                                | ${`TEXT1\n\nTEXT2`}              | ${`<p>TEXT1</p><p>TEXT2</p>`}                                 | ${"none"}
-    `(
-      "[$#] Should transform data view to data, that are well understood by subsequent `toView` mapping for: `$dataViewInput` ($comment)",
-      ({
-        dataViewInput,
-        expectedStoredData,
-        expectedRestoredDataView,
-      }: {
-        dataViewInput: string;
-        expectedStoredData: string;
-        expectedRestoredDataView: string;
-      }) => {
-        const result = aut.html2bbcode2html(dataViewInput);
-        try {
-          // Precondition check: This is not THAT relevant, as the primary
-          // requirement is expressed in subsequent expectation: The stored data
-          // should be well understood when transforming them back to data view.
-          // In other words: If this fails, it may be ok, just to adjust the
-          // expectation.
-          expect(result).toHaveProperty("fromHtml2BBCode", expectedStoredData);
-          // When first written back in 2023, we used the default preset for
-          // HTML 5 for BBob library. This, for example, preferred style
-          // attributes for bold over corresponding tags. This is ok, as
-          // CKEditor's parsing from data view to model also accepts this
-          // to denote a bold style. It may be ok to adapt this expectation
-          // if the resulting HTML again is proven to be well-understood by
-          // CKEditor's processing.
-          expect(result).toHaveProperty("fromBBCode2Html", expectedRestoredDataView);
-        } catch (e) {
-          if (e instanceof Error) {
-            e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
-          }
-          throw e;
-        }
+  describe('Important: HTML →[toData]→ BBCode →[toView]→ HTML"', () => {
+    const cases = [
+      {
+        dataViewInput: ``,
+        expectedStoredData: ``,
+        expectedRestoredDataView: ``,
+        comment: `empty data`,
       },
-    );
+      {
+        dataViewInput: `<strong>TEXT</strong>`,
+        expectedStoredData: `[b]TEXT[/b]`,
+        expectedRestoredDataView: `<span style="font-weight: bold;">TEXT</span>`,
+        comment: `font-weight well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<b>TEXT</b>`,
+        expectedStoredData: `[b]TEXT[/b]`,
+        expectedRestoredDataView: `<span style="font-weight: bold;">TEXT</span>`,
+        comment: `font-weight well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<em>TEXT</em>`,
+        expectedStoredData: `[i]TEXT[/i]`,
+        expectedRestoredDataView: `<span style="font-style: italic;">TEXT</span>`,
+        comment: `font-style well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<i>TEXT</i>`,
+        expectedStoredData: `[i]TEXT[/i]`,
+        expectedRestoredDataView: `<span style="font-style: italic;">TEXT</span>`,
+        comment: `font-style well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<ins>TEXT</ins>`,
+        expectedStoredData: `[u]TEXT[/u]`,
+        expectedRestoredDataView: `<span style="text-decoration: underline;">TEXT</span>`,
+        comment: `text-decoration well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<u>TEXT</u>`,
+        expectedStoredData: `[u]TEXT[/u]`,
+        expectedRestoredDataView: `<span style="text-decoration: underline;">TEXT</span>`,
+        comment: `text-decoration well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<del>TEXT</del>`,
+        expectedStoredData: `[s]TEXT[/s]`,
+        expectedRestoredDataView: `<span style="text-decoration: line-through;">TEXT</span>`,
+        comment: `text-decoration well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<s>TEXT</s>`,
+        expectedStoredData: `[s]TEXT[/s]`,
+        expectedRestoredDataView: `<span style="text-decoration: line-through;">TEXT</span>`,
+        comment: `text-decoration well understood by CKEditor`,
+      },
+      {
+        dataViewInput: `<span class="text-tiny">TEXT</span>`,
+        expectedStoredData: `[size=70]TEXT[/size]`,
+        expectedRestoredDataView: `<span class="text-tiny">TEXT</span>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<span class="text-small">TEXT</span>`,
+        expectedStoredData: `[size=85]TEXT[/size]`,
+        expectedRestoredDataView: `<span class="text-small">TEXT</span>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<span class="text-big">TEXT</span>`,
+        expectedStoredData: `[size=140]TEXT[/size]`,
+        expectedRestoredDataView: `<span class="text-big">TEXT</span>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<span class="text-huge">TEXT</span>`,
+        expectedStoredData: `[size=180]TEXT[/size]`,
+        expectedRestoredDataView: `<span class="text-huge">TEXT</span>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<a href="${link}">TEXT</a>`,
+        expectedStoredData: `[url="${link}"]TEXT[/url]`,
+        expectedRestoredDataView: `<a href="${link}">TEXT</a>`,
+        comment: `normal link`,
+      },
+      {
+        dataViewInput: `<a href="${link}">${link}</a>`,
+        expectedStoredData: `[url]${link}[/url]`,
+        expectedRestoredDataView: `<a href="${link}">${link}</a>`,
+        comment: `pretty-print: shorten, if possible, in BBCode`,
+      },
+      {
+        dataViewInput: `<a>TEXT</a>`,
+        expectedStoredData: `TEXT`,
+        expectedRestoredDataView: `TEXT`,
+        comment: `there is no representation in BBCode for an anchor without href attribute`,
+      },
+      {
+        dataViewInput: `<blockquote><p>TEXT</p></blockquote>`,
+        expectedStoredData: `[quote]\nTEXT\n[/quote]`,
+        expectedRestoredDataView: `<blockquote><p>\nTEXT</p></blockquote>`,
+        comment: `newlines part of minimal pretty-print behavior`,
+      },
+      {
+        dataViewInput: `<pre><code class="language-plaintext">TEXT</code></pre>`,
+        expectedStoredData: `[code]\nTEXT\n[/code]`,
+        expectedRestoredDataView: `<pre><code class="language-plaintext">TEXT</code></pre>`,
+        comment: `adapted to nested pre, code to work in CKEditor 5`,
+      },
+      {
+        dataViewInput: `<pre><code class="language-css">TEXT</code></pre>`,
+        expectedStoredData: `[code=css]\nTEXT\n[/code]`,
+        expectedRestoredDataView: `<pre><code class="language-css">TEXT</code></pre>`,
+        comment: `adapted to nested pre, code to work in CKEditor 5`,
+      },
+      {
+        dataViewInput: `<ul><li>TEXT</li></ul>`,
+        expectedStoredData: `[list]\n[*] TEXT\n[/list]`,
+        expectedRestoredDataView: `<ul>\n<li> TEXT\n</li></ul>`,
+        comment: `newlines part of minimal pretty-print behavior`,
+      },
+      {
+        dataViewInput: `<ol><li>TEXT</li></ol>`,
+        expectedStoredData: `[list=1]\n[*] TEXT\n[/list]`,
+        expectedRestoredDataView: `<ol type="1">\n<li> TEXT\n</li></ol>`,
+        comment: `CKEditor defaults to _no-type_, but BBob defaults to add it`,
+      },
+      {
+        dataViewInput: `<ol type="a"><li>TEXT</li></ol>`,
+        expectedStoredData: `[list=a]\n[*] TEXT\n[/list]`,
+        expectedRestoredDataView: `<ol type="a">\n<li> TEXT\n</li></ol>`,
+        comment: `CKEditor may ignore type, if not configured to support this`,
+      },
+      {
+        dataViewInput: `<h1>TEXT</h1>`,
+        expectedStoredData: `[h1]TEXT[/h1]`,
+        expectedRestoredDataView: `<h1>TEXT</h1>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<h2>TEXT</h2>`,
+        expectedStoredData: `[h2]TEXT[/h2]`,
+        expectedRestoredDataView: `<h2>TEXT</h2>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<h3>TEXT</h3>`,
+        expectedStoredData: `[h3]TEXT[/h3]`,
+        expectedRestoredDataView: `<h3>TEXT</h3>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<h4>TEXT</h4>`,
+        expectedStoredData: `[h4]TEXT[/h4]`,
+        expectedRestoredDataView: `<h4>TEXT</h4>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<h5>TEXT</h5>`,
+        expectedStoredData: `[h5]TEXT[/h5]`,
+        expectedRestoredDataView: `<h5>TEXT</h5>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<h6>TEXT</h6>`,
+        expectedStoredData: `[h6]TEXT[/h6]`,
+        expectedRestoredDataView: `<h6>TEXT</h6>`,
+        comment: `none`,
+      },
+      {
+        dataViewInput: `<p>TEXT1</p><p>TEXT2</p>`,
+        expectedStoredData: `TEXT1\n\nTEXT2`,
+        expectedRestoredDataView: `<p>TEXT1</p><p>TEXT2</p>`,
+        comment: `none`,
+      },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { dataViewInput, expectedStoredData, expectedRestoredDataView, comment }] of cases.entries()) {
+        await t.test(
+          `[${i}] Should transform data view to data, that are well understood by subsequent 'toView' mapping for: ${dataViewInput} (${comment})`,
+          () => {
+            const result = aut.html2bbcode2html(dataViewInput);
+            try {
+              // Precondition check: This is not THAT relevant, as the primary
+              // requirement is expressed in subsequent expectation: The stored data
+              // should be well understood when transforming them back to data view.
+              // In other words: If this fails, it may be ok, just to adjust the
+              // expectation.
+              expect(result).toHaveProperty("fromHtml2BBCode", expectedStoredData);
+              // When first written back in 2023, we used the default preset for
+              // HTML 5 for BBob library. This, for example, preferred style
+              // attributes for bold over corresponding tags. This is ok, as
+              // CKEditor's parsing from data view to model also accepts this
+              // to denote a bold style. It may be ok to adapt this expectation
+              // if the resulting HTML again is proven to be well-understood by
+              // CKEditor's processing.
+              expect(result).toHaveProperty("fromBBCode2Html", expectedRestoredDataView);
+            } catch (e) {
+              if (e instanceof Error) {
+                e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
+              }
+              throw e;
+            }
+          },
+        );
+      }
+    });
   });
 
   /**
@@ -165,62 +310,76 @@ describe("BBob Integration", () => {
    * with results such as: `[code]\n\n\n\nlorem\n\n\n\n[/code]` eventually.
    */
   describe("Less important: BBCode →[toView]→ HTML →[toData]→ BBCode", () => {
-    it.each`
-      bbCode
-      ${``}
-      ${`[b]lorem[/b]`}
-      ${`[i]lorem[/i]`}
-      ${`[u]lorem[/u]`}
-      ${`[s]lorem[/s]`}
-      ${`[url="https://example.org/"]lorem[/url]`}
-      ${`[quote]\nlorem\n[/quote]`}
-      ${`[code]\nlorem\n[/code]`}
-      ${`[list]\n[*] lorem\n[/list]`}
-      ${`[list=1]\n[*] lorem\n[/list]`}
-      ${`[list=a]\n[*] lorem\n[/list]`}
-      ${`[list=I]\n[*] lorem\n[/list]`}
-      ${`[h1]lorem[/h1]`}
-      ${`[h2]lorem[/h2]`}
-      ${`[h3]lorem[/h3]`}
-      ${`[h4]lorem[/h4]`}
-      ${`[h5]lorem[/h5]`}
-      ${`[h6]lorem[/h6]`}
-      ${`[size=70]lorem[/size]`}
-      ${`[size=85]lorem[/size]`}
-      ${`[size=140]lorem[/size]`}
-      ${`[size=180]lorem[/size]`}
-    `("[$#] should process back and forth without change: $bbCode", ({ bbCode }: { bbCode: string }) => {
-      const result = aut.bbcode2html2bbcode(bbCode);
-      try {
-        expect(result).toHaveProperty("fromHtml2BBCode", bbCode);
-      } catch (e) {
-        if (e instanceof Error) {
-          e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
-        }
-        throw e;
+    const cases = [
+      { bbCode: `` },
+      { bbCode: `[b]lorem[/b]` },
+      { bbCode: `[i]lorem[/i]` },
+      { bbCode: `[u]lorem[/u]` },
+      { bbCode: `[s]lorem[/s]` },
+      { bbCode: `[url="https://example.org/"]lorem[/url]` },
+      { bbCode: `[quote]\nlorem\n[/quote]` },
+      { bbCode: `[code]\nlorem\n[/code]` },
+      { bbCode: `[list]\n[*] lorem\n[/list]` },
+      { bbCode: `[list=1]\n[*] lorem\n[/list]` },
+      { bbCode: `[list=a]\n[*] lorem\n[/list]` },
+      { bbCode: `[list=I]\n[*] lorem\n[/list]` },
+      { bbCode: `[h1]lorem[/h1]` },
+      { bbCode: `[h2]lorem[/h2]` },
+      { bbCode: `[h3]lorem[/h3]` },
+      { bbCode: `[h4]lorem[/h4]` },
+      { bbCode: `[h5]lorem[/h5]` },
+      { bbCode: `[h6]lorem[/h6]` },
+      { bbCode: `[size=70]lorem[/size]` },
+      { bbCode: `[size=85]lorem[/size]` },
+      { bbCode: `[size=140]lorem[/size]` },
+      { bbCode: `[size=180]lorem[/size]` },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { bbCode }] of cases.entries()) {
+        await t.test(`[${i}] Should process back and forth without change: ${bbCode}`, () => {
+          const result = aut.bbcode2html2bbcode(bbCode);
+          try {
+            expect(result).toHaveProperty("fromHtml2BBCode", bbCode);
+          } catch (e) {
+            if (e instanceof Error) {
+              e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
+            }
+            throw e;
+          }
+        });
       }
     });
+
+    const backAndForthCases = [
+      {
+        bbCode: "[quote=author]lorem[/quote]",
+        expected: "[quote]\nlorem\n[/quote]",
+        comment: "We have no mapping for author to HTML.",
+      },
+    ] as const;
 
     /**
      * We rate these deviations "acceptable" for now. To change, we may need,
      * for example, to provide a custom preset for bbcode2html.
      */
-    it.each`
-      bbCode                           | expected                      | comment
-      ${"[quote=author]lorem[/quote]"} | ${"[quote]\nlorem\n[/quote]"} | ${"We have no mapping for author to HTML."}
-    `(
-      "[$#] should process back and forth with only minor change: $bbCode → $expected ($comment)",
-      ({ bbCode, expected }: { bbCode: string; expected: string }) => {
-        const result = aut.bbcode2html2bbcode(bbCode);
-        try {
-          expect(result).toHaveProperty("fromHtml2BBCode", expected);
-        } catch (e) {
-          if (e instanceof Error) {
-            e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
-          }
-          throw e;
-        }
-      },
-    );
+    test("cases", async (t: TestContext) => {
+      for (const [i, { bbCode, expected, comment }] of backAndForthCases.entries()) {
+        await t.test(
+          `[${i}] Should process back and forth with only minor change: ${bbCode} → ${expected} (${comment})`,
+          () => {
+            const result = aut.bbcode2html2bbcode(bbCode);
+            try {
+              expect(result).toHaveProperty("fromHtml2BBCode", expected);
+            } catch (e) {
+              if (e instanceof Error) {
+                e.message = `${e.message}\n\nDebugging details:\n${JSON.stringify(result, undefined, 2)}`;
+              }
+              throw e;
+            }
+          },
+        );
+      }
+    });
   });
 });

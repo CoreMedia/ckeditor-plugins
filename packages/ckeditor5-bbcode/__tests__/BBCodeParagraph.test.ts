@@ -1,22 +1,25 @@
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
-import { bbCodeParagraph } from "../src";
+import { bbCodeParagraph } from "../src/rules/BBCodeParagraph";
 
 const prettyPrintNewlines = "\n\n";
 
 describe("BBCodeParagraph", () => {
-  describe("Default Configuration", () => {
+  test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeParagraph;
 
-    it.each`
-      dataView         | expected
-      ${`<p>TEXT</p>`} | ${`TEXT${prettyPrintNewlines}`}
-    `(
-      "[$#] Should process '$dataView' to '$expected'",
-      ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
+    const cases: { dataView: string; expected: string }[] = [
+      { dataView: `<p>TEXT</p>`, expected: `TEXT${prettyPrintNewlines}` },
+    ];
+
+    for (const { dataView, expected } of cases) {
+      await t.test(`Should process '${dataView}' to '${expected}'`, () => {
         const element = requireHTMLElement(dataView);
         const bbCode = rule.toData(element, element.textContent ?? "");
         expect(bbCode).toEqual(expected);
-      },
-    );
+      });
+    }
   });
 });

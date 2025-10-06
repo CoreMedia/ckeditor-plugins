@@ -1,21 +1,30 @@
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
-import { bbCodeQuote } from "../src";
+import { bbCodeQuote } from "../src/rules/BBCodeQuote";
 
 describe("BBCodeQuote", () => {
   describe("Default Configuration", () => {
     const rule = bbCodeQuote;
 
-    it.each`
-      dataView                                  | expected                       | comment
-      ${`<blockquote><p>TEXT</p></blockquote>`} | ${`[quote]\nTEXT\n[/quote]\n`} | ${`newlines for minor pretty-printing`}
-    `(
-      "[$#] Should process '$dataView' to '$expected' ($comment)",
-      ({ dataView, expected }: { dataView: string; expected: string | undefined }) => {
-        const element = requireHTMLElement(dataView);
-        // Simple processing only applies at one level, so nested tests not possible here.
-        const bbCode = rule.toData(element, element.textContent ?? "");
-        expect(bbCode).toEqual(expected);
+    const cases = [
+      {
+        dataView: `<blockquote><p>TEXT</p></blockquote>`,
+        expected: `[quote]\nTEXT\n[/quote]\n`,
+        comment: `newlines for minor pretty-printing`,
       },
-    );
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { dataView, expected, comment }] of cases.entries()) {
+        await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
+          const element = requireHTMLElement(dataView);
+          // Simple processing only applies at one level, so nested tests not possible here.
+          const bbCode = rule.toData(element, element.textContent ?? "");
+          expect(bbCode).toEqual(expected);
+        });
+      }
+    });
   });
 });

@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
 import {
   forEachAttribute,
   setAttributesFromTagAttrs,
@@ -8,13 +11,13 @@ import { TagAttrs } from "@bbob/plugin-helper/es";
 
 describe("Attributes", () => {
   describe("forEachAttribute", () => {
-    it("should do nothing on empty record", () => {
+    test("should do nothing on empty record", () => {
       let called = false;
       forEachAttribute({}, () => (called = true));
       expect(called).toBe(false);
     });
 
-    it("should process expected entries", () => {
+    test("should process expected entries", () => {
       const probe: TagAttrs = {
         src: "SRC",
         otherSrc: "SRC",
@@ -28,14 +31,14 @@ describe("Attributes", () => {
   });
 
   describe("setAttributesFromTagAttrs", () => {
-    it("should not set any attribute on empty attributes", () => {
+    test("should not set any attribute on empty attributes", () => {
       const el = document.createElement("div");
       const originalLength = el.attributes.length;
       setAttributesFromTagAttrs(el, {});
       expect(el.attributes.length).toBe(originalLength);
     });
 
-    it("should set normal attributes as given", () => {
+    test("should set normal attributes as given", () => {
       const el = document.createElement("div");
       const attrs: TagAttrs = {
         class: "CLASS",
@@ -48,7 +51,7 @@ describe("Attributes", () => {
       });
     });
 
-    it("should ignore invalid attributes, but process others", () => {
+    test("should ignore invalid attributes, but process others", () => {
       const el = document.createElement("div");
       const invalidKey = "[invalid key]";
       const attrs: TagAttrs = {
@@ -72,13 +75,13 @@ describe("Attributes", () => {
    * results.
    */
   describe("stripUniqueAttr (BBob integration)", () => {
-    it("should get only 'otherAttrs' for empty attributes", () => {
+    test("should get only 'otherAttrs' for empty attributes", () => {
       const attr = stripUniqueAttr({});
       expect(attr.uniqueAttrValue).toBeUndefined();
       expect(attr.otherAttrs).toMatchObject({});
     });
 
-    it("should get only 'otherAttrs' for attributes not having a unique attribute", () => {
+    test("should get only 'otherAttrs' for attributes not having a unique attribute", () => {
       const attrs = {
         one: "1",
         two: "2",
@@ -88,7 +91,7 @@ describe("Attributes", () => {
       expect(attr.otherAttrs).toMatchObject(attrs);
     });
 
-    it("should extract unique attribute, if it is the only attribute", () => {
+    test("should extract unique attribute, if it is the only attribute", () => {
       const uniqueAttr = "https://example.org/";
       const attrs = {
         // Typical representation of a URL, for example, in [url=https://example.org/].
@@ -99,7 +102,7 @@ describe("Attributes", () => {
       expect(attr.otherAttrs).toMatchObject({});
     });
 
-    it("should extract unique attribute, and separate from others", () => {
+    test("should extract unique attribute, and separate from others", () => {
       const uniqueAttr = "https://example.org/";
       const otherAttrs = {
         one: "1",
@@ -130,17 +133,31 @@ describe("Attributes", () => {
         uniqueAttrToAttr(uniqueAttrName, attrs, true, () => uniqueDefault),
     };
 
-    it.each`
-      autCall                         | callType
-      ${aut.callWithDefaults}         | ${"call with defaults"}
-      ${aut.callWithOverrideEnabled}  | ${"call with override enabled"}
-      ${aut.callWithOverrideDisabled} | ${"call with override disabled"}
-    `("[$#] should return empty attributes unchanged: $callType", ({ autCall }: { autCall: AutCall }) => {
-      const result = autCall("unique", {}, "uniqueDefault");
-      expect(result).toMatchObject({});
+    const emptyAttrCases: { autCall: AutCall; callType: string }[] = [
+      {
+        autCall: aut.callWithDefaults,
+        callType: "call with defaults",
+      },
+      {
+        autCall: aut.callWithOverrideEnabled,
+        callType: "call with override enabled",
+      },
+      {
+        autCall: aut.callWithOverrideDisabled,
+        callType: "call with override disabled",
+      },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { autCall, callType }] of emptyAttrCases.entries()) {
+        await t.test(`[${i}] should return empty attributes unchanged: ${callType}`, () => {
+          const result = autCall("unique", {}, "uniqueDefault");
+          expect(result).toMatchObject({});
+        });
+      }
     });
 
-    it("should use default unique attribute for empty attributes", () => {
+    test("should use default unique attribute for empty attributes", () => {
       const autCall = aut.callWithDefaultSupplied;
       const uniqueKey = "unique";
       const uniqueDefault = "uniqueDefault";
@@ -148,21 +165,39 @@ describe("Attributes", () => {
       expect(result).toMatchObject({ [uniqueKey]: uniqueDefault });
     });
 
-    it.each`
-      autCall                        | callType
-      ${aut.callWithDefaults}        | ${"call with defaults"}
-      ${aut.callWithOverrideEnabled} | ${"call with override enabled"}
-      ${aut.callWithDefaultSupplied} | ${"call with supplied default"}
-    `("[$#] should override from unique attributes: $callType", ({ autCall }: { autCall: AutCall }) => {
-      const uniqueKey = "unique";
-      const uniqueValueInAttrs = "uniqueValueInAttrs";
-      const uniqueValue = "uniqueValue";
-      const uniqueDefault = "uniqueDefault";
-      const result = autCall(uniqueKey, { [uniqueKey]: uniqueValueInAttrs, [uniqueValue]: uniqueValue }, uniqueDefault);
-      expect(result).toMatchObject({ [uniqueKey]: uniqueValue });
+    const uniqueAttrCases = [
+      {
+        autCall: aut.callWithDefaults,
+        callType: "call with defaults",
+      },
+      {
+        autCall: aut.callWithOverrideEnabled,
+        callType: "call with override enabled",
+      },
+      {
+        autCall: aut.callWithDefaultSupplied,
+        callType: "call with supplied default",
+      },
+    ];
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { autCall, callType }] of uniqueAttrCases.entries()) {
+        await t.test(`[${i}] should override from unique attributes: ${callType}`, () => {
+          const uniqueKey = "unique";
+          const uniqueValueInAttrs = "uniqueValueInAttrs";
+          const uniqueValue = "uniqueValue";
+          const uniqueDefault = "uniqueDefault";
+          const result = autCall(
+            uniqueKey,
+            { [uniqueKey]: uniqueValueInAttrs, [uniqueValue]: uniqueValue },
+            uniqueDefault,
+          );
+          expect(result).toMatchObject({ [uniqueKey]: uniqueValue });
+        });
+      }
     });
 
-    it("should prefer existing attribute, when override is disabled", () => {
+    test("should prefer existing attribute, when override is disabled", () => {
       const autCall = aut.callWithOverrideDisabled;
       const uniqueKey = "unique";
       const uniqueValueInAttrs = "uniqueValueInAttrs";
