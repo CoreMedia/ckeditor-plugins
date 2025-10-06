@@ -1,5 +1,7 @@
 /* eslint no-null/no-null: off */
-
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { RequiredNonNull, RequiredNonNullPropertiesMissingError, requireNonNulls } from "../src/RequiredNonNull";
 
 interface WithOptionalNullableValues {
@@ -15,7 +17,7 @@ class WithOptionalNullableValuesImpl implements WithOptionalNullableValues {
 }
 
 describe("RequiredNonNull", () => {
-  it("Use Case: RequiredNonNull", () => {
+  test("Use Case: RequiredNonNull", () => {
     // Only required needs to be set and `null` is a valid option.
     const defaultProbe: WithOptionalNullableValues = {
       requiredNullable: null,
@@ -41,13 +43,13 @@ describe("RequiredNonNull", () => {
   });
 
   describe("requireNonNulls", () => {
-    it("should pass for all unset, but none required to be non-null", () => {
+    test("should pass for all unset, but none required to be non-null", () => {
       const probe: WithOptionalNullableValues = { requiredNullable: null };
       const probeFn = () => requireNonNulls(probe);
       expect(probeFn).not.toThrow();
     });
 
-    it("should fail for unset optional property", () => {
+    test("should fail for unset optional property", () => {
       const probe: WithOptionalNullableValues = new WithOptionalNullableValuesImpl(null);
       const probeFn = () => requireNonNulls(probe, "optionalNullable");
       expect(probeFn).toThrow(RequiredNonNullPropertiesMissingError);
@@ -55,7 +57,7 @@ describe("RequiredNonNull", () => {
       expect(probeFn).toThrow(/property.*WithOptionalNullableValuesImpl.*optionalNullable/);
     });
 
-    it("should fail for optional property set to null", () => {
+    test("should fail for optional property set to null", () => {
       const probe: WithOptionalNullableValues = new WithOptionalNullableValuesImpl(null, null);
       const probeFn = () => requireNonNulls(probe, "optionalNullable");
       expect(probeFn).toThrow(RequiredNonNullPropertiesMissingError);
@@ -63,7 +65,7 @@ describe("RequiredNonNull", () => {
       expect(probeFn).toThrow(/property.*WithOptionalNullableValuesImpl.*optionalNullable/);
     });
 
-    it("should fail for required property set to null", () => {
+    test("should fail for required property set to null", () => {
       const probe: WithOptionalNullableValues = new WithOptionalNullableValuesImpl(null);
       const probeFn = () => requireNonNulls(probe, "requiredNullable");
       expect(probeFn).toThrow(RequiredNonNullPropertiesMissingError);
@@ -71,7 +73,7 @@ describe("RequiredNonNull", () => {
       expect(probeFn).toThrow(/property.*WithOptionalNullableValuesImpl.*requiredNullable/);
     });
 
-    it("should fail for both properties set to null", () => {
+    test("should fail for both properties set to null", () => {
       const probe: WithOptionalNullableValues = new WithOptionalNullableValuesImpl(null);
       const probeFn = () => requireNonNulls(probe, "requiredNullable", "optionalNullable");
       expect(probeFn).toThrow(RequiredNonNullPropertiesMissingError);
@@ -79,7 +81,7 @@ describe("RequiredNonNull", () => {
       expect(probeFn).toThrow(/properties.*WithOptionalNullableValuesImpl.*((requiredNullable|optionalNullable).*){2}/);
     });
 
-    it("should pass for all set to non-null", () => {
+    test("should pass for all set to non-null", () => {
       const probe: WithOptionalNullableValues = new WithOptionalNullableValuesImpl(21, 42);
       const probeFn = () => requireNonNulls(probe);
       expect(probeFn).not.toThrow();
