@@ -4,7 +4,6 @@ import test, { describe, TestContext } from "node:test";
 import expect from "expect";
 import { bbCodeDefaultRules } from "../src";
 import { bbcode2html, processBBCode } from "../src/bbcode2html";
-import { CoreTree } from "@bbob/core/es";
 
 const supportedTags = bbCodeDefaultRules.flatMap((r) => r.tags ?? ([] as string[]));
 
