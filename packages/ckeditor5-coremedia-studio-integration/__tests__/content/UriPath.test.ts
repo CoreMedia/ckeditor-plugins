@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test from "node:test";
+import expect from "expect";
 import { requireContentUriPath, requireContentCkeModelUri } from "../../src/content/UriPath";
 
 test("requireContentCkeModelUri: should replace / with : for a CoreMedia Studio Uri", () => {
@@ -13,13 +16,13 @@ test("requireContentCkeModelUri: should do nothing when it is a cke model uri", 
 test("requireContentCkeModelUri: should throw error when no content-id is part of the CoreMedia Studio Uri", () => {
   expect((): void => {
     requireContentCkeModelUri("content/");
-  }).toThrowError();
+  }).toThrow(Error);
 });
 
 test("requireContentCkeModelUri: should throw error if it is completely other stuff", () => {
   expect((): void => {
     requireContentCkeModelUri("any text might be here");
-  }).toThrowError();
+  }).toThrow(Error);
 });
 
 test("requireContentUriPath: should replace : with / for a CKE Model URI", () => {
@@ -33,9 +36,9 @@ test("requireContentUriPath: should do nothing when it is a CoreMedia Studio URI
 });
 
 test("requireContentUriPath: should throw error when no content-id is part of the CKE Model URI", () => {
-  expect(() => requireContentUriPath("content:")).toThrowError();
+  expect(() => requireContentUriPath("content:")).toThrow(Error);
 });
 
 test("requireContentUriPath: should throw error if it is completely other stuff", () => {
-  expect(() => requireContentUriPath("any text might be here")).toThrowError();
+  expect(() => requireContentUriPath("any text might be here")).toThrow(Error);
 });
