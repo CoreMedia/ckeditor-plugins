@@ -1,25 +1,28 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { Differencing, EOD } from "../src/Differencing";
 
 describe("Differencing", () => {
-  it("should provide empty span", () => {
+  test("should provide empty span", () => {
     const xdiff = new Differencing();
     const actual = xdiff.span("", { type: "added", ...EOD });
     expect(actual).toStrictEqual(`<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0"></xdiff:span>`);
   });
 
-  it("should provide convenience to add HTML", () => {
+  test("should provide convenience to add HTML", () => {
     const xdiff = new Differencing();
     const actual = xdiff.add("Lorem", EOD);
     expect(actual).toStrictEqual(`<xdiff:span xdiff:class="diff-html-added" xdiff:id="diff-0">Lorem</xdiff:span>`);
   });
 
-  it("should provide convenience to remove HTML", () => {
+  test("should provide convenience to remove HTML", () => {
     const xdiff = new Differencing();
     const actual = xdiff.del("Lorem", EOD);
     expect(actual).toStrictEqual(`<xdiff:span xdiff:class="diff-html-removed" xdiff:id="diff-0">Lorem</xdiff:span>`);
   });
 
-  it("should provide added Image along with expected surrounding xdiff:span", () => {
+  test("should provide added Image along with expected surrounding xdiff:span", () => {
     const xdiff = new Differencing();
     const uri = "some:uri";
     const actual = xdiff.simpleImg(uri, { type: "added", ...EOD });
@@ -29,7 +32,7 @@ describe("Differencing", () => {
     );
   });
 
-  it("should automatically track IDs", () => {
+  test("should automatically track IDs", () => {
     const xdiff = new Differencing();
     const actual = [
       xdiff.add("First"),
