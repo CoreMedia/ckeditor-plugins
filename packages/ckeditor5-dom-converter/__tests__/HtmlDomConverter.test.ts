@@ -1,6 +1,11 @@
 // noinspection HtmlRequiredLangAttribute,HtmlRequiredTitleElement,HtmlUnknownAttribute,HttpUrlsUsage
 
-import { ConversionContext, HtmlDomConverter, Skip, skip } from "../src";
+import "global-jsdom/register";
+import test, { describe, TestContext } from "node:test";
+import expect from "expect";
+import { ConversionContext } from "../src/ConversionContext";
+import { HtmlDomConverter } from "../src/HtmlDomConverter";
+import { skip, type Skip } from "../src/Signals";
 import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
 import {
   documentFromHtml,
@@ -17,7 +22,7 @@ import { toData, toDataView } from "./DataProcessorSimulation";
 describe("HtmlDomConverter", () => {
   describe(USE_CASE_NAME, () => {
     describe("toData Transformation", () => {
-      it("should transform simple HTML to Rich Text just by adapting namespaces", () => {
+      test("should transform simple HTML to Rich Text just by adapting namespaces", () => {
         const dataViewDocument = documentFromHtml(`<body><p class="CLASS">TEXT</p></body>`);
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -37,7 +42,7 @@ describe("HtmlDomConverter", () => {
     });
 
     describe("toDataView Transformation", () => {
-      it("should transform simple Rich Text to HTML just by adapting namespaces", () => {
+      test("should transform simple Rich Text to HTML just by adapting namespaces", () => {
         const dataViewDocument = documentFromHtml(`<body/>`);
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"><p class="CLASS">TEXT</p></div>`);
 
@@ -58,7 +63,7 @@ describe("HtmlDomConverter", () => {
   });
 
   describe("Default Behaviors", () => {
-    it("should align default namespace for elements", () => {
+    test("should align default namespace for elements", () => {
       const dataViewDocument = documentFromHtml(`<body><p/></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -69,7 +74,7 @@ describe("HtmlDomConverter", () => {
       expect(serializeToXmlString(dataDocument)).toStrictEqual(`<div xmlns="${dataNs}"><p/></div>`);
     });
 
-    it("should not align namespace for elements different to default namespace", () => {
+    test("should not align namespace for elements different to default namespace", () => {
       const customNs = "https://example.org/custom";
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}" xmlns:c="${customNs}"><c:customEl/></div>`);
@@ -87,7 +92,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("should align default namespace for attributes", () => {
+    test("should align default namespace for attributes", () => {
       const dataViewDocument = documentFromHtml(`<body><p class="CLASS" id="ID" lang="en" dir="ltr"/></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -105,7 +110,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("should not align namespace for attributes of different namespace than the default", () => {
+    test("should not align namespace for attributes of different namespace than the default", () => {
       const customNs = "https://example.org/custom";
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
@@ -126,7 +131,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("should process nested elements", () => {
+    test("should process nested elements", () => {
       const dataViewDocument = documentFromHtml(`<body><p><span class="CLASS">TEXT</span></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -150,7 +155,7 @@ describe("HtmlDomConverter", () => {
    * for example, to replace elements by different elements or structures.
    */
   describe("Override Behaviors", () => {
-    it("Replace element by different element", () => {
+    test("Replace element by different element", () => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>TEXT</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -172,7 +177,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("Remove element along with its children", () => {
+    test("Remove element along with its children", () => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -192,43 +197,42 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it.each`
-      mode
-      ${"atImported"}
-      ${"atImportedWithChildren"}
-    `(
-      "[$#] Replace element by its children, processing stage: $mode",
-      ({ mode }: { mode: "atPrepareForInput" | "atImported" | "atImportedWithChildren" }) => {
-        const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
-        const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
+    const modes = ["atImported", "atImportedWithChildren"];
 
-        const converter = new HtmlDomConverter(dataDocument, {
-          imported(importedNode: Node, { api }: ConversionContext): Node | undefined {
-            if (mode === "atImported" && isElement(importedNode) && importedNode.localName === "mark") {
-              // Benefit: lightweight processing, possibly better performance.
-              // Drawback: No information to forward to children from current node.
-              return api.createDocumentFragment();
-            }
-            return undefined;
-          },
+    test("cases", async (t: TestContext) => {
+      for (const [i, mode] of modes.entries()) {
+        await t.test(`[${i}] Replace element by its children, processing stage: ${mode}`, () => {
+          const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
+          const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
-          importedWithChildren(importedNode: Node): Node | undefined {
-            if (mode === "atImportedWithChildren" && isElement(importedNode) && importedNode.localName === "mark") {
-              // Benefit: full control over children, like forwarding information from parent node to children.
-              // Drawback: More complex operations required.
-              return extractNodeContents(importedNode);
-            }
-            return undefined;
-          },
+          const converter = new HtmlDomConverter(dataDocument, {
+            imported(importedNode: Node, { api }: ConversionContext): Node | undefined {
+              if (mode === "atImported" && isElement(importedNode) && importedNode.localName === "mark") {
+                // Benefit: lightweight processing, possibly better performance.
+                // Drawback: No information to forward to children from current node.
+                return api.createDocumentFragment();
+              }
+              return undefined;
+            },
+
+            importedWithChildren(importedNode: Node): Node | undefined {
+              if (mode === "atImportedWithChildren" && isElement(importedNode) && importedNode.localName === "mark") {
+                // Benefit: full control over children, like forwarding information from parent node to children.
+                // Drawback: More complex operations required.
+                return extractNodeContents(importedNode);
+              }
+              return undefined;
+            },
+          });
+
+          toData(converter, dataViewDocument, dataDocument);
+
+          expect(serializeToXmlString(dataDocument)).toStrictEqual(
+            `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Marked Text</p></div>`,
+          );
         });
-
-        toData(converter, dataViewDocument, dataDocument);
-
-        expect(serializeToXmlString(dataDocument)).toStrictEqual(
-          `<div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p>Marked Text</p></div>`,
-        );
-      },
-    );
+      }
+    });
 
     /**
      * This simulates a typical pattern in CoreMedia Rich Text 1.0
@@ -239,7 +243,7 @@ describe("HtmlDomConverter", () => {
      *
      * This test demonstrates the conversion from data view to data.
      */
-    it("Restructure children for data view to data", () => {
+    test("Restructure children for data view to data", () => {
       const dataViewDocument = documentFromHtml(`<body><table><thead><tr/></thead><tbody><tr/></tbody></table></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -274,7 +278,7 @@ describe("HtmlDomConverter", () => {
      *
      * This test demonstrates the conversion from data to data view.
      */
-    it("Restructure children for data to data view", () => {
+    test("Restructure children for data to data view", () => {
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
         `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`,
@@ -294,7 +298,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("Data View to Data: Convert HTML attribute to artificial element in CoreMedia RichText 1.0", () => {
+    test("Data View to Data: Convert HTML attribute to artificial element in CoreMedia RichText 1.0", () => {
       const dataViewDocument = documentFromHtml(`<body><em data-editor="Peter">Text</em></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"/>`);
 
@@ -311,7 +315,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    it("Data to Data View: Convert artificial element CoreMedia RichText 1.0 to attribute in HTML", () => {
+    test("Data to Data View: Convert artificial element CoreMedia RichText 1.0 to attribute in HTML", () => {
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
         `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`,
