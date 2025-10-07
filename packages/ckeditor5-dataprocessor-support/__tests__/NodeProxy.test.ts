@@ -1,8 +1,10 @@
 /* eslint no-null/no-null: off */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
-import "jest-xml-matcher";
+import "global-jsdom/register";
+import test, { describe, beforeEach, TestContext } from "node:test";
+import expect from "expect";
 import { NodeProxy } from "../src/NodeProxy";
-import { jest } from "@jest/globals";
 
 const PARSER = new DOMParser();
 const SERIALIZER = new XMLSerializer();
@@ -27,10 +29,12 @@ describe("NodeProxy.constructor", () => {
     expect(proxy.mutable).toStrictEqual(true);
   });
 
-  test.each([[true], [false]])("Should respect mutable state %p", (mutable: boolean) => {
-    const proxy = new NodeProxy(rootNode, mutable);
-    expect(proxy.mutable).toStrictEqual(mutable);
-  });
+  for (const mutable of [true, false]) {
+    test(`Should respect mutable state ${mutable}`, () => {
+      const proxy = new NodeProxy(rootNode, mutable);
+      expect(proxy.mutable).toStrictEqual(mutable);
+    });
+  }
 
   test("Should provide access to delegate.", () => {
     const proxy = new NodeProxy(rootNode);
@@ -56,14 +60,25 @@ describe("NodeProxy.wrap", () => {
     expect(proxy?.mutable).toStrictEqual(true);
   });
 
-  test.each([[true], [false]])("Should respect mutable state %p", (mutable: boolean) => {
-    const proxy = NodeProxy.proxy(rootNode, mutable);
-    expect(proxy?.mutable).toStrictEqual(mutable);
+  const mutableCases = [true, false];
+  test("cases", async (t: TestContext) => {
+    for (const [i, mutable] of mutableCases.entries()) {
+      await t.test(`[${i}] Should respect mutable state (${mutable})`, () => {
+        const proxy = NodeProxy.proxy(rootNode, mutable);
+        expect(proxy?.mutable).toStrictEqual(mutable);
+      });
+    }
   });
 
-  test.each([[undefined], [null]])("Should return null when wrapping falsy values like %p.", (value) => {
-    const proxy = NodeProxy.proxy(value);
-    expect(proxy).toStrictEqual(null);
+  const falsyCases = [undefined, null];
+  test("cases", async (t: TestContext) => {
+    for (const [i, value] of falsyCases.entries()) {
+      await t.test(`[${i}] Should return null when wrapping falsy values like (${value})`, () => {
+        // @ts-expect-error the value has an invalid type. tsc already knows this
+        const proxy = NodeProxy.proxy(rootNode, value);
+        expect(proxy?.mutable).toStrictEqual(value);
+      });
+    }
   });
 });
 
@@ -149,13 +164,15 @@ describe("Immutable NodeProxy", () => {
     immutableProxy = new NodeProxy(childNode, false);
   });
 
-  test.each<ImmutableTest>(testData)("(%#) %p", (name, testData) => {
-    if (testData.expectException) {
-      expect(() => testData.action(immutableProxy)).toThrowError();
-    } else {
-      expect(() => testData.action(immutableProxy)).not.toThrowError();
-    }
-  });
+  for (const [index, [name, data]] of testData.entries()) {
+    test(`(${index}) ${name}`, () => {
+      if (data.expectException) {
+        expect(() => data.action(immutableProxy)).toThrow(Error);
+      } else {
+        expect(() => data.action(immutableProxy)).not.toThrow(Error);
+      }
+    });
+  }
 });
 
 describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
@@ -167,19 +184,27 @@ describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
   const emptyProxy: NodeProxy = new NodeProxy(childNode);
   const nonEmptyProxy: NodeProxy = new NodeProxy(rootNode);
 
-  test.each([
+  const emptyCases: [boolean, NodeProxy][] = [
     [true, emptyProxy],
     [false, nonEmptyProxy],
-  ])("(%#) Should provide expected state on proxy.empty: %p for %s", (expected, proxy) => {
-    expect(proxy.empty).toStrictEqual(expected);
-  });
+  ];
 
-  test.each([
+  for (const [index, [expected, proxy]] of emptyCases.entries()) {
+    test(`(${index}) Should provide expected state on proxy.empty: ${expected} for ${proxy}`, () => {
+      expect(proxy.empty).toStrictEqual(expected);
+    });
+  }
+
+  const isEmptyCases: [boolean, NodeProxy][] = [
     [true, emptyProxy],
     [false, nonEmptyProxy],
-  ])("(%#) Should provide expected state on proxy.isEmpty(): %p for %s", (expected, proxy) => {
-    expect(proxy.isEmpty()).toStrictEqual(expected);
-  });
+  ];
+
+  for (const [index, [expected, proxy]] of isEmptyCases.entries()) {
+    test(`(${index}) Should provide expected state on proxy.isEmpty(): ${expected} for ${proxy}`, () => {
+      expect(proxy.isEmpty()).toStrictEqual(expected);
+    });
+  }
 
   test("Should be able to ignore children when testing for isEmpty", () => {
     const actual = nonEmptyProxy.isEmpty((c) => c.nodeName !== "child");
@@ -193,9 +218,13 @@ describe("NodeProxy.ownerDocument", () => {
   const rootNode = documentRootNode.firstChild as Node;
   const childNode = rootNode.firstChild as Node;
 
-  test.each([[rootNode], [childNode]])("(%#) Should provide expected ownerDocument for %s", (node) => {
-    expect(new NodeProxy(node).ownerDocument).toStrictEqual(document);
-  });
+  const nodes = [rootNode, childNode];
+
+  for (const [index, node] of nodes.entries()) {
+    test(`(${index}) Should provide expected ownerDocument for ${node.nodeName}`, () => {
+      expect(new NodeProxy(node).ownerDocument).toStrictEqual(document);
+    });
+  }
 });
 
 describe("NodeProxy.parentNode", () => {
@@ -204,12 +233,16 @@ describe("NodeProxy.parentNode", () => {
   const rootNode = documentRootNode.firstChild as Node;
   const childNode = rootNode.firstChild as Node;
 
-  test.each([
+  const cases = [
     [childNode, rootNode],
     [rootNode, documentRootNode],
-  ])("(%#) Should provide expected parentNode for %s: %s", (childNode, parentNode) => {
-    expect(new NodeProxy(childNode).parentNode?.delegate).toStrictEqual(parentNode);
-  });
+  ];
+
+  for (const [index, [child, parent]] of cases.entries()) {
+    test(`(${index}) Should provide expected parentNode for ${child.nodeName}: ${parent.nodeName}`, () => {
+      expect(new NodeProxy(child).parentNode?.delegate).toStrictEqual(parent);
+    });
+  }
 });
 
 describe("NodeProxy.parentElement", () => {
@@ -217,13 +250,16 @@ describe("NodeProxy.parentElement", () => {
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
   const childNode = rootNode.firstChild as Node;
-
-  test.each([
+  const cases = [
     [childNode, rootNode],
     [rootNode, undefined],
-  ])("(%#) Should provide expected parentElement for %s: %s", (childNode, parentNode) => {
-    expect(new NodeProxy(childNode).parentElement?.delegate).toStrictEqual(parentNode);
-  });
+  ];
+
+  for (const [index, [child, parent]] of cases.entries()) {
+    test(`(${index}) Should provide expected parentElement for ${child}: ${parent}`, () => {
+      expect(new NodeProxy(child as never).parentElement?.delegate).toStrictEqual(parent);
+    });
+  }
 });
 
 describe("NodeProxy.name and NodeProxy.realName", () => {
@@ -232,11 +268,15 @@ describe("NodeProxy.name and NodeProxy.realName", () => {
   const rootNode = documentRootNode.firstChild as Node;
   const childNode = rootNode.firstChild as Node;
 
-  test.each([[childNode], [rootNode]])("(%#) Should provide expected name and realName for %s", (node) => {
-    const { name, realName } = new NodeProxy(node);
-    expect(name).toStrictEqual(node.nodeName.toLowerCase());
-    expect(realName).toStrictEqual(node.nodeName.toLowerCase());
-  });
+  const nodes = [childNode, rootNode];
+
+  for (const [index, node] of nodes.entries()) {
+    test(`(${index}) Should provide expected name and realName for ${node.nodeName}`, () => {
+      const { name, realName } = new NodeProxy(node);
+      expect(name).toStrictEqual(node.nodeName.toLowerCase());
+      expect(realName).toStrictEqual(node.nodeName.toLowerCase());
+    });
+  }
 });
 
 describe("NodeProxy.singleton", () => {
@@ -248,16 +288,20 @@ describe("NodeProxy.singleton", () => {
   const pair2 = pair1.nextSibling as Node;
   const pair3 = pair2.nextSibling as Node;
 
-  test.each([
+  const cases: [Node, boolean][] = [
     [documentRootNode, true],
     [rootNode, true],
     [childNode, true],
     [pair1, false],
     [pair2, false],
     [pair3, false],
-  ])("(%#) Should provide expected singleton state for %s: %p", (node, expected) => {
-    expect(new NodeProxy(node).singleton).toStrictEqual(expected);
-  });
+  ];
+
+  for (const [index, [node, expected]] of cases.entries()) {
+    test(`(${index}) Should provide expected singleton state for ${node.nodeName}: ${expected}`, () => {
+      expect(new NodeProxy(node).singleton).toStrictEqual(expected);
+    });
+  }
 });
 
 describe("NodeProxy.lastNode", () => {
@@ -269,16 +313,20 @@ describe("NodeProxy.lastNode", () => {
   const pair2 = pair1.nextSibling as Node;
   const pair3 = pair2.nextSibling as Node;
 
-  test.each([
+  const cases: [Node, boolean][] = [
     [documentRootNode, true],
     [rootNode, true],
     [childNode, true],
     [pair1, false],
     [pair2, false],
     [pair3, true],
-  ])("(%#) Should provide expected lastNode state for %s: %p", (node, expected) => {
-    expect(new NodeProxy(node).lastNode).toStrictEqual(expected);
-  });
+  ];
+
+  for (const [index, [node, expected]] of cases.entries()) {
+    test(`(${index}) Should provide expected lastNode state for ${node.nodeName}: ${expected}`, () => {
+      expect(new NodeProxy(node).lastNode).toStrictEqual(expected);
+    });
+  }
 });
 
 describe("NodeProxy.findFirst", () => {
@@ -290,22 +338,27 @@ describe("NodeProxy.findFirst", () => {
   const pair2 = pair1.nextSibling as Node;
   const pair3 = pair2.nextSibling as Node;
 
-  test.each([
+  const cases: [Node, Node | null][] = [
     [documentRootNode, rootNode],
     [rootNode, childNode],
     [childNode, pair1],
     [pair1, null],
     [pair2, null],
     [pair3, null],
-  ])("(%#) Should find expected first child node for %s: %s", (node, firstChild) => {
-    if (firstChild === null) {
-      expect(new NodeProxy(node).findFirst()).toStrictEqual(firstChild);
-    } else {
-      expect(new NodeProxy(node).findFirst()?.delegate).toStrictEqual(firstChild);
-    }
-  });
+  ];
 
-  test.each([
+  for (const [index, [node, firstChild]] of cases.entries()) {
+    test(`(${index}) Should find expected first child node for ${node.nodeName}: ${firstChild}`, () => {
+      const result = new NodeProxy(node).findFirst();
+      if (firstChild === null) {
+        expect(result).toStrictEqual(firstChild);
+      } else {
+        expect(result?.delegate).toStrictEqual(firstChild);
+      }
+    });
+  }
+
+  const byChildNameCases: [Node, string, Node | null][] = [
     [documentRootNode, "parent", rootNode],
     [documentRootNode, "child", null],
     [rootNode, "child", childNode],
@@ -316,33 +369,40 @@ describe("NodeProxy.findFirst", () => {
     [pair1, "pair2", null],
     [pair2, "pair3", null],
     [pair3, "child", null],
-  ])("(%#) Should find expected first child node for %s searching for '%s': %s", (node, childName, firstChild) => {
-    if (firstChild === null) {
-      expect(new NodeProxy(node).findFirst(childName)).toStrictEqual(firstChild);
-    } else {
-      expect(new NodeProxy(node).findFirst(childName)?.delegate).toStrictEqual(firstChild);
-    }
-  });
+  ];
 
-  test.each([
+  for (const [index, [node, childName, firstChild]] of byChildNameCases.entries()) {
+    test(`(${index}) Should find expected first child node for ${node.nodeName} searching for '${childName}': ${firstChild}`, () => {
+      const result = new NodeProxy(node).findFirst(childName);
+      if (firstChild === null) {
+        expect(result).toStrictEqual(firstChild);
+      } else {
+        expect(result?.delegate).toStrictEqual(firstChild);
+      }
+    });
+  }
+
+  const byPredicateCases: [Node, (child: Node, index: number, array: ChildNode[]) => boolean, Node | null][] = [
     [documentRootNode, () => true, rootNode],
     [documentRootNode, () => false, null],
     [rootNode, () => true, childNode],
     [rootNode, () => false, null],
     [childNode, () => true, pair1],
     [childNode, () => false, null],
-    [childNode, (child: ChildNode, index: number) => index === 1, pair2],
-    [childNode, (child: ChildNode, index: number, array: ChildNode[]) => index === array.length - 1, pair3],
-  ])(
-    "(%#) Should find expected first child node for %s searching by predicate: %s",
-    (node, childPredicate, firstChild) => {
+    [childNode, (child, index) => index === 1, pair2],
+    [childNode, (child, index, array) => index === array.length - 1, pair3],
+  ];
+
+  for (const [index, [node, childPredicate, firstChild]] of byPredicateCases.entries()) {
+    test(`(${index}) Should find expected first child node for ${node.nodeName} searching by predicate`, () => {
+      const result = new NodeProxy(node).findFirst(childPredicate);
       if (firstChild === null) {
-        expect(new NodeProxy(node).findFirst(childPredicate)).toStrictEqual(firstChild);
+        expect(result).toStrictEqual(firstChild);
       } else {
-        expect(new NodeProxy(node).findFirst(childPredicate)?.delegate).toStrictEqual(firstChild);
+        expect(result?.delegate).toStrictEqual(firstChild);
       }
-    },
-  );
+    });
+  }
 });
 
 describe("NodeProxy.persistToDom", () => {
@@ -444,37 +504,40 @@ describe("NodeProxy.persistToDom", () => {
     ],
   ];
 
-  describe.each<PersistTest>(testData)("(%#) %s", (name, data) => {
-    test.each([[true], [false]])("(%#) has ownerDocument: %s", (hasOwnerDocument: boolean) => {
-      const document = PARSER.parseFromString(dom, "text/xml");
-      const node = document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-        .singleNodeValue as Node;
-      const proxy = new NodeProxy(node);
+  for (const [testIndex, [name, data]] of testData.entries()) {
+    for (const hasOwnerDocument of [true, false]) {
+      test(`(${testIndex}) ${name} - has ownerDocument: ${hasOwnerDocument}`, () => {
+        const document = PARSER.parseFromString(dom, "text/xml");
+        const node = document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+          .singleNodeValue as Node;
+        const proxy = new NodeProxy(node);
 
-      if (!hasOwnerDocument) {
-        // https://stackoverflow.com/questions/43697455/how-to-mock-replace-getter-function-of-object-with-jest
-        Object.defineProperty(proxy, "ownerDocument", {
-          get: jest.fn(() => null),
-        });
-      }
+        if (!hasOwnerDocument) {
+          // Mock the ownerDocument getter
+          Object.defineProperty(proxy, "ownerDocument", {
+            get: () => null,
+          });
+        }
 
-      let expectedRestartFrom: Node | undefined;
-      if (data.expectedRestartFromXPath) {
-        expectedRestartFrom = document.evaluate(
-          data.expectedRestartFromXPath,
-          document,
-          null,
-          XPathResult.FIRST_ORDERED_NODE_TYPE,
-        ).singleNodeValue as Node;
-      }
-      data.action(proxy);
-      const { continueWith, abort } = proxy.persistToDom();
+        let expectedRestartFrom: Node | undefined;
+        if (data.expectedRestartFromXPath) {
+          expectedRestartFrom = document.evaluate(
+            data.expectedRestartFromXPath,
+            document,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+          ).singleNodeValue as Node;
+        }
 
-      expect(continueWith).toStrictEqual(expectedRestartFrom);
-      expect(abort).toStrictEqual(data.expectedAbort);
+        data.action(proxy);
+        const { continueWith, abort } = proxy.persistToDom();
 
-      const newDom = SERIALIZER.serializeToString(document);
-      expect(newDom).toEqualXML(data.expectedDom);
-    });
-  });
+        expect(continueWith).toStrictEqual(expectedRestartFrom);
+        expect(abort).toStrictEqual(data.expectedAbort);
+
+        const newDom = SERIALIZER.serializeToString(document);
+        expect(newDom).toEqual(data.expectedDom);
+      });
+    }
+  }
 });

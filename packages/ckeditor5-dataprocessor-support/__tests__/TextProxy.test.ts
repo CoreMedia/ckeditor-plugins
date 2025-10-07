@@ -1,6 +1,9 @@
 /* eslint no-null/no-null: off */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
-import "jest-xml-matcher";
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { TextProxy, TextFilterRule } from "../src/TextProxy";
 import { Editor } from "ckeditor5";
 import "./config";
@@ -142,34 +145,34 @@ describe("TextProxy.applyRules()", () => {
       },
     ],
   ];
-  describe.each<ApplyRulesData>(testData)("(%#) %s", (name, testData) => {
+  for (const [name, data] of testData) {
     function getTextNode(): Text {
       const textNode: Text | null = inputDocument.evaluate(
-        testData.nodePath,
+        data.nodePath,
         inputDocument,
         null,
         XPathResult.FIRST_ORDERED_NODE_TYPE,
       ).singleNodeValue as Text;
       if (!textNode) {
         throw new Error(
-          `Test Setup Issue: Unable resolving XPath '${testData.nodePath}' to element under test in: ${testData.from}`,
+          `Test Setup Issue: Unable resolving XPath '${data.nodePath}' to element under test in: ${data.from}`,
         );
       }
       return textNode;
     }
     function getRestartNode(): Node | null {
-      if (!testData.restartPath) {
+      if (!data.restartPath) {
         return null;
       }
       const restartNode: Node | null = expectedDocument.evaluate(
-        testData.restartPath,
+        data.restartPath,
         expectedDocument,
         null,
         XPathResult.FIRST_ORDERED_NODE_TYPE,
       ).singleNodeValue as Node;
       if (!restartNode) {
         throw new Error(
-          `Test Setup Issue: Unable resolving XPath '${testData.restartPath}' to expected restart node in: ${testData.to}`,
+          `Test Setup Issue: Unable resolving XPath '${data.restartPath}' to expected restart node in: ${data.to}`,
         );
       }
       return restartNode;
@@ -178,17 +181,17 @@ describe("TextProxy.applyRules()", () => {
       disabled: boolean;
       namePostfix: string;
     } {
-      if (!testData.disabled) {
+      if (!data.disabled) {
         return {
           disabled: false,
           namePostfix: "",
         };
       }
       let state: string | boolean;
-      if (typeof testData.disabled === "function") {
-        state = testData.disabled();
+      if (typeof data.disabled === "function") {
+        state = data.disabled();
       } else {
-        state = testData.disabled;
+        state = data.disabled;
       }
       if (!state) {
         return {
@@ -201,17 +204,17 @@ describe("TextProxy.applyRules()", () => {
         namePostfix: ` (${typeof state === "string" ? state : "disabled"})`,
       };
     }
-    const inputDocument: Document = parseAndValidate(testData.from);
-    const expectedDocument: Document = parseAndValidate(testData.to);
+    const inputDocument: Document = parseAndValidate(data.from);
+    const expectedDocument: Document = parseAndValidate(data.to);
     const proxy = new TextProxy(getTextNode(), MOCK_EDITOR, true);
     const { disabled, namePostfix } = parseDisabled();
     const testStrategy = !disabled ? test : test.skip;
-    const result = proxy.applyRules(...testData.rules);
-    testStrategy(`Should result in expected DOM.${namePostfix}`, () => {
-      expect(SERIALIZER.serializeToString(inputDocument)).toEqualXML(testData.to);
+    const result = proxy.applyRules(...data.rules);
+    testStrategy(`${name} - Should result in expected DOM.${namePostfix}`, () => {
+      expect(SERIALIZER.serializeToString(inputDocument)).toEqual(data.to);
     });
-    testStrategy(`Should provide expected restartFrom-result.${namePostfix}`, () => {
+    testStrategy(`${name} - Should provide expected restartFrom-result.${namePostfix}`, () => {
       expect(result).toStrictEqual(getRestartNode());
     });
-  });
+  }
 });

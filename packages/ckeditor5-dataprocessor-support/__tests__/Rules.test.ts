@@ -1,4 +1,8 @@
-import "jest-xml-matcher";
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
 import { HtmlFilter } from "../src/HtmlFilter";
 import { ElementFilterRule } from "../src/ElementProxy";
@@ -301,28 +305,34 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
       },
     ],
   ];
-  describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
+  for (const [name, testData] of testFixtures) {
     if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
-      return;
+      continue;
     }
+
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const config: FilterRuleSetConfiguration = testData.config;
     const { toData, toView } = parseFilterRuleSetConfigurations(config);
+
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
+
     toDataFilter.applyTo(from.documentElement);
     const dataXml: string = serializer.serializeToString(from.documentElement);
+
     test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
-      expect(dataXml).toEqualXML(testData.data);
+      expect(dataXml).toEqual(testData.data);
     });
+
     const data: Document = parser.parseFromString(dataXml, "text/xml");
     toViewFilter.applyTo(data.documentElement);
     const viewXml: string = serializer.serializeToString(data.documentElement);
+
     test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
-      expect(viewXml).toEqualXML(testData.view);
+      expect(viewXml).toEqual(testData.view);
     });
-  });
+  }
 });
 describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having Defaults)", () => {
   type TestData = CommentableTestData &
@@ -499,31 +509,36 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
       },
     ],
   ];
-  describe.each<TestFixture>(testFixtures)("(%#) %s", (name, testData) => {
+  for (const [name, testData] of testFixtures) {
     if (!!TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {
       test.todo(`${name} (disabled by test selector for debugging purpose)`);
-      return;
+      continue;
     }
+
     const from: Document = parser.parseFromString(testData.from, "text/xml");
     const defaultConfig: FilterRuleSetConfiguration = testData.default;
     const config: FilterRuleSetConfiguration = testData.config;
     const { toData, toView } = parseFilterRuleSetConfigurations(config, defaultConfig);
+
     const toDataFilter = new HtmlFilter(toData, MOCK_EDITOR);
     const toViewFilter = new HtmlFilter(toView, MOCK_EDITOR);
+
     currentStepIdx = 0;
     toDataFilter.applyTo(from.documentElement);
     const dataXml: string = serializer.serializeToString(from.documentElement);
+
     test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
-      expect(dataXml).toEqualXML(testData.data);
+      expect(dataXml).toEqual(testData.data);
     });
+
     const data: Document = parser.parseFromString(dataXml, "text/xml");
 
-    // We continue using currentStepIdx also for view filter, so that we may get
-    // a complete overview on processing (when used in test-data).
+    // Continue using currentStepIdx also for view filter for complete overview
     toViewFilter.applyTo(data.documentElement);
     const viewXml: string = serializer.serializeToString(data.documentElement);
+
     test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
-      expect(viewXml).toEqualXML(testData.view);
+      expect(viewXml).toEqual(testData.view);
     });
-  });
+  }
 });

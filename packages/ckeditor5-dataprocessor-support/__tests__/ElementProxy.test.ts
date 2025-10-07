@@ -1,6 +1,9 @@
 /* eslint no-null/no-null: off */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
-import "jest-xml-matcher";
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { ElementFilterParams, ElementFilterRule, ElementProxy } from "../src/ElementProxy";
 import { Editor } from "ckeditor5";
 import "./config";
@@ -57,39 +60,39 @@ describe("Should Respecting (Im-)Mutable State", () => {
   htmlDivElement.setAttribute("class", "testClass");
   const immutableElement = new ElementProxy(htmlDivElement, MOCK_EDITOR, {}, false);
   test("should not be able to delete element", () => {
-    expect(() => (immutableElement.remove = true)).toThrowError();
+    expect(() => (immutableElement.remove = true)).toThrow(Error);
   });
   test("should not be able to replace element by children", () => {
-    expect(() => (immutableElement.replaceByChildren = true)).toThrowError();
+    expect(() => (immutableElement.replaceByChildren = true)).toThrow(Error);
   });
   test("should not be able to change name", () => {
     const getValue = () => immutableElement.name;
     const previousValue = getValue();
-    expect(() => (immutableElement.name = "test")).toThrowError();
+    expect(() => (immutableElement.name = "test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
   test("should not be able to change attribute value", () => {
     const getValue = () => immutableElement.attributes.class;
     const previousValue = getValue();
-    expect(() => (immutableElement.attributes.class = "test")).toThrowError();
+    expect(() => (immutableElement.attributes.class = "test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
   test("should not be able to add additional class", () => {
     const getValue = () => immutableElement.classList;
     const previousValue = getValue();
-    expect(() => immutableElement.classList.add("test")).toThrowError();
+    expect(() => immutableElement.classList.add("test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
   test("should not be able to add attribute", () => {
     const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
-    expect(() => (immutableElement.attributes.id = "test")).toThrowError();
+    expect(() => (immutableElement.attributes.id = "test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
   test("should not be able to delete attribute", () => {
     const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
-    expect(() => delete immutableElement.attributes.class).toThrowError();
+    expect(() => delete immutableElement.attributes.class).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
 });
@@ -138,7 +141,7 @@ describe("ElementProxy.classList", () => {
   const validate = (valueBefore: string | null, expectedValue: string, expectedCount: number): void => {
     // Proxy: Should represent expected classList.value.
     expect(proxy.classList.value).toStrictEqual(expectedValue);
-    // Proxy: Should represent expected classList.length."
+    // Proxy: Should represent expected classList.length.
     expect(proxy.classList.length).toStrictEqual(expectedCount);
     // Proxy vs. Default: classList.value should be same on proxy and reference DOM element.
     expect(proxy.classList.value).toStrictEqual(cmpElement.classList.value);
@@ -152,84 +155,123 @@ describe("ElementProxy.classList", () => {
     proxy = new ElementProxy(domElement, MOCK_EDITOR);
   });
   describe("classList.value", () => {
-    // noinspection ES6DestructuringVariablesMerge
-    describe.each`
-      class                                | comment
-      ${""}                                | ${"Empty class should stay as is."}
-      ${"some--class"}                     | ${"Plain class should stay as is."}
-      ${" \tsome--class"}                  | ${"Should not normalize leading space characters."}
-      ${"some--class\t "}                  | ${"Should not normalize trailing space characters."}
-      ${"some--class\t some--other-class"} | ${"Should not normalize inner space characters."}
-    `("[$#] classList.value for unmodified state: $comment ", ({ class: domClass, class: expectedClass }) => {
-      test("Should not normalize on plain get", () => {
-        setClass(domClass);
-        expect(proxy.classList.value).toStrictEqual(expectedClass);
+    const classCases = [
+      ["", "Empty class should stay as is."],
+      ["some--class", "Plain class should stay as is."],
+      [" \tsome--class", "Should not normalize leading space characters."],
+      ["some--class\t ", "Should not normalize trailing space characters."],
+      ["some--class\t some--other-class", "Should not normalize inner space characters."],
+    ];
+
+    for (const [domClass, comment] of classCases) {
+      describe(`[${comment}] classList.value for unmodified state`, () => {
+        test("Should not normalize on plain get", () => {
+          setClass(domClass);
+          expect(proxy.classList.value).toStrictEqual(domClass);
+        });
+
+        test("Should not normalize on plain set", () => {
+          proxy.classList.value = domClass;
+          cmpElement.classList.value = domClass;
+          expect(proxy.classList.value).toStrictEqual(domClass);
+          expect(proxy.classList.value).toStrictEqual(cmpElement.classList.value);
+        });
       });
-      test("Should not normalize on plain set", () => {
-        proxy.classList.value = domClass;
-        cmpElement.classList.value = domClass;
-        expect(proxy.classList.value).toStrictEqual(expectedClass);
-        expect(proxy.classList.value).toStrictEqual(cmpElement.classList.value);
-      });
-    });
+    }
   });
   describe("classList.add", () => {
-    test.each`
-      before                 | add                 | after              | count | comment
-      ${null}                | ${"new"}            | ${"new"}           | ${1}  | ${"Should add class if not existing"}
-      ${"old"}               | ${"new"}            | ${"old new"}       | ${2}  | ${"Should add new class after previous"}
-      ${" \told1 \told2 \t"} | ${"new"}            | ${"old1 old2 new"} | ${3}  | ${"Should normalize old data on modification"}
-      ${"old"}               | ${["new1", "new2"]} | ${"old new1 new2"} | ${3}  | ${"Should be able adding multiple values"}
-    `("[$#] classList.add: $comment: [$before] + [$add] = [$after] ($count)", ({ before, add, after, count }) => {
-      setClass(before);
-      if (typeof add === "string") {
-        proxy.classList.add(add);
-        cmpElement.classList.add(add);
-      } else {
-        proxy.classList.add(...add);
-        cmpElement.classList.add(...add);
-      }
-      validate(before, after, count);
-    });
-    test.each`
-      add
-      ${"new value"}
-      ${" new"}
-      ${"new "}
-      ${"new\tvalue"}
-      ${"\tnew"}
-      ${"new\t"}
-      ${""}
-      ${["other", ""]}
-      ${["other", "new value"]}
-    `("[$#] classList.add: Should fail adding invalid token '$add'.", ({ add }) => {
-      setClass("some");
-      let proxyFunc: () => void;
-      let cmpFunc: () => void;
-      if (typeof add === "string") {
-        proxyFunc = () => proxy.classList.add(add);
-        cmpFunc = () => cmpElement.classList.add(add);
-      } else {
-        proxyFunc = () => proxy.classList.add(...add);
-        cmpFunc = () => cmpElement.classList.add(...add);
-      }
-      expect(proxyFunc).toThrow();
-      expect(cmpFunc).toThrow();
-    });
+    const addCases: [string | null, string | string[], string, number, string][] = [
+      [null, "new", "new", 1, "Should add class if not existing"],
+      ["old", "new", "old new", 2, "Should add new class after previous"],
+      [" \told1 \told2 \t", "new", "old1 old2 new", 3, "Should normalize old data on modification"],
+      ["old", ["new1", "new2"], "old new1 new2", 3, "Should be able adding multiple values"],
+    ];
+
+    for (const [before, add, after, count, comment] of addCases) {
+      test(`[${comment}] classList.add: [${before}] + [${add}] = [${after}] (${count})`, () => {
+        setClass(before);
+
+        if (typeof add === "string") {
+          proxy.classList.add(add);
+          cmpElement.classList.add(add);
+        } else {
+          proxy.classList.add(...add);
+          cmpElement.classList.add(...add);
+        }
+
+        validate(before, after, count);
+      });
+    }
+
+    const invalidAddCases = [
+      "new value",
+      " new",
+      "new ",
+      "new\tvalue",
+      "\tnew",
+      "new\t",
+      "",
+      ["other", ""],
+      ["other", "new value"],
+    ];
+
+    for (const add of invalidAddCases) {
+      test(`[classList.add] Should fail adding invalid token '${add}'.`, () => {
+        setClass("some");
+
+        let proxyFunc: () => void;
+        let cmpFunc: () => void;
+
+        if (typeof add === "string") {
+          proxyFunc = () => proxy.classList.add(add);
+          cmpFunc = () => cmpElement.classList.add(add);
+        } else {
+          proxyFunc = () => proxy.classList.add(...add);
+          cmpFunc = () => cmpElement.classList.add(...add);
+        }
+
+        expect(proxyFunc).toThrow();
+        expect(cmpFunc).toThrow();
+      });
+    }
   });
   describe("classList.remove", () => {
-    test.each`
-      before                         | remove                  | after          | count | comment
-      ${null}                        | ${"any"}                | ${""}          | ${0}  | ${"Should not fail on remove from unset"}
-      ${""}                          | ${"any"}                | ${""}          | ${0}  | ${"Should not fail on remove from empty"}
-      ${" \told1 \told2 \t"}         | ${"any"}                | ${"old1 old2"} | ${2}  | ${"Should normalize, even if removed value does not exist"}
-      ${"old trash"}                 | ${"trash"}              | ${"old"}       | ${1}  | ${"Should remove given value"}
-      ${"trash old trash"}           | ${"trash"}              | ${"old"}       | ${1}  | ${"Should completely remove given value, even if it existed multiple times"}
-      ${"trash1 old trash2"}         | ${["trash1", "trash2"]} | ${"old"}       | ${1}  | ${"Should remove all given values"}
-      ${" \told1 \ttrash \told2 \t"} | ${"trash"}              | ${"old1 old2"} | ${2}  | ${"Should normalize old data on modification"}
-    `(
-      "[$#] classList.remove: $comment: [$before] - [$remove] = [$after] ($count)",
-      ({ before, remove, after, count }) => {
+    const removeCases = [
+      { before: null, remove: "any", after: "", count: 0, comment: "Should not fail on remove from unset" },
+      { before: "", remove: "any", after: "", count: 0, comment: "Should not fail on remove from empty" },
+      {
+        before: " \told1 \told2 \t",
+        remove: "any",
+        after: "old1 old2",
+        count: 2,
+        comment: "Should normalize, even if removed value does not exist",
+      },
+      { before: "old trash", remove: "trash", after: "old", count: 1, comment: "Should remove given value" },
+      {
+        before: "trash old trash",
+        remove: "trash",
+        after: "old",
+        count: 1,
+        comment: "Should completely remove given value, even if it existed multiple times",
+      },
+      {
+        before: "trash1 old trash2",
+        remove: ["trash1", "trash2"],
+        after: "old",
+        count: 1,
+        comment: "Should remove all given values",
+      },
+      {
+        before: " \told1 \ttrash \told2 \t",
+        remove: "trash",
+        after: "old1 old2",
+        count: 2,
+        comment: "Should normalize old data on modification",
+      },
+    ];
+
+    for (const { before, remove, after, count, comment } of removeCases) {
+      test(`[classList.remove] ${comment}: [${before}] - [${remove}] = [${after}] (${count})`, () => {
         setClass(before);
         if (typeof remove === "string") {
           proxy.classList.remove(remove);
@@ -239,109 +281,265 @@ describe("ElementProxy.classList", () => {
           cmpElement.classList.remove(...remove);
         }
         validate(before, after, count);
-      },
-    );
-    test.each`
-      remove
-      ${"new value"}
-      ${" new"}
-      ${"new "}
-      ${"new\tvalue"}
-      ${"\tnew"}
-      ${"new\t"}
-      ${""}
-      ${["other", ""]}
-      ${["other", "new value"]}
-    `("[$#] classList.remove: Should fail removing invalid token '$remove'.", ({ remove }) => {
-      setClass("some");
-      let proxyFunc: () => void;
-      let cmpFunc: () => void;
-      if (typeof remove === "string") {
-        proxyFunc = () => proxy.classList.remove(remove);
-        cmpFunc = () => cmpElement.classList.remove(remove);
-      } else {
-        proxyFunc = () => proxy.classList.remove(...remove);
-        cmpFunc = () => cmpElement.classList.remove(...remove);
-      }
-      expect(proxyFunc).toThrow();
-      expect(cmpFunc).toThrow();
-    });
+      });
+    }
+
+    const invalidRemoveCases = [
+      "new value",
+      " new",
+      "new ",
+      "new\tvalue",
+      "\tnew",
+      "new\t",
+      "",
+      ["other", ""],
+      ["other", "new value"],
+    ];
+
+    for (const remove of invalidRemoveCases) {
+      test(`[classList.remove] Should fail removing invalid token '${remove}'`, () => {
+        setClass("some");
+
+        let proxyFunc: () => void;
+        let cmpFunc: () => void;
+
+        if (typeof remove === "string") {
+          proxyFunc = () => proxy.classList.remove(remove);
+          cmpFunc = () => cmpElement.classList.remove(remove);
+        } else {
+          proxyFunc = () => proxy.classList.remove(...remove);
+          cmpFunc = () => cmpElement.classList.remove(...remove);
+        }
+
+        expect(proxyFunc).toThrow();
+        expect(cmpFunc).toThrow();
+      });
+    }
   });
   describe("classList.replace", () => {
-    test.each`
-      before                          | replace    | replaceBy  | after                 | count | comment
-      ${null}                         | ${"any"}   | ${"other"} | ${""}                 | ${0}  | ${"Should not fail on replace on unset"}
-      ${""}                           | ${"any"}   | ${"other"} | ${""}                 | ${0}  | ${"Should not fail on replace on empty"}
-      ${"old"}                        | ${"any"}   | ${"other"} | ${"old"}              | ${1}  | ${"Should not change on no match"}
-      ${"b-value-e"}                  | ${"value"} | ${"new"}   | ${"b-value-e"}        | ${1}  | ${"Should not replace partial matches"}
-      ${"old"}                        | ${"old"}   | ${"new"}   | ${"new"}              | ${1}  | ${"Should replace given class"}
-      ${"old old"}                    | ${"old"}   | ${"new"}   | ${"new"}              | ${1}  | ${"Should replace given class, removing duplicates"}
-      ${"before old after"}           | ${"old"}   | ${"new"}   | ${"before new after"} | ${3}  | ${"Should replace given class at same location"}
-      ${" \tbefore \told \tafter \t"} | ${"old"}   | ${"new"}   | ${"before new after"} | ${3}  | ${"Should normalize on replace"}
-      ${"old value"}                  | ${"old"}   | ${"value"} | ${"value"}            | ${1}  | ${"Should remove duplicates after replacement"}
-    `(
-      "[$#] classList.replace: $comment: [$before]/s/[$replace]/[$replaceBy]/g = [$after] ($count)",
-      ({ before, replace, replaceBy, after, count }) => {
+    const replaceCases = [
+      {
+        before: null,
+        replace: "any",
+        replaceBy: "other",
+        after: "",
+        count: 0,
+        comment: "Should not fail on replace on unset",
+      },
+      {
+        before: "",
+        replace: "any",
+        replaceBy: "other",
+        after: "",
+        count: 0,
+        comment: "Should not fail on replace on empty",
+      },
+      {
+        before: "old",
+        replace: "any",
+        replaceBy: "other",
+        after: "old",
+        count: 1,
+        comment: "Should not change on no match",
+      },
+      {
+        before: "b-value-e",
+        replace: "value",
+        replaceBy: "new",
+        after: "b-value-e",
+        count: 1,
+        comment: "Should not replace partial matches",
+      },
+      {
+        before: "old",
+        replace: "old",
+        replaceBy: "new",
+        after: "new",
+        count: 1,
+        comment: "Should replace given class",
+      },
+      {
+        before: "old old",
+        replace: "old",
+        replaceBy: "new",
+        after: "new",
+        count: 1,
+        comment: "Should replace given class, removing duplicates",
+      },
+      {
+        before: "before old after",
+        replace: "old",
+        replaceBy: "new",
+        after: "before new after",
+        count: 3,
+        comment: "Should replace given class at same location",
+      },
+      {
+        before: " \tbefore \told \tafter \t",
+        replace: "old",
+        replaceBy: "new",
+        after: "before new after",
+        count: 3,
+        comment: "Should normalize on replace",
+      },
+      {
+        before: "old value",
+        replace: "old",
+        replaceBy: "value",
+        after: "value",
+        count: 1,
+        comment: "Should remove duplicates after replacement",
+      },
+    ];
+
+    for (const { before, replace, replaceBy, after, count, comment } of replaceCases) {
+      test(`[classList.replace] ${comment}: [${before}]/s/[${replace}]/[${replaceBy}]/g = [${after}] (${count})`, () => {
         setClass(before);
         proxy.classList.replace(replace, replaceBy);
         cmpElement.classList.replace(replace, replaceBy);
         validate(before, after, count);
-      },
-    );
-    test.each`
-      replace        | replaceBy
-      ${` \told \t`} | ${"new"}
-      ${"old"}       | ${` \tnew \t`}
-    `(
-      "[$#] classList.replace: Should fail replacing with invalid tokens: '$replace' by '$replaceBy'.",
-      ({ replace, replaceBy }) => {
+      });
+    }
+
+    const invalidReplaceCases = [
+      { replace: " \told \t", replaceBy: "new" },
+      { replace: "old", replaceBy: " \tnew \t" },
+    ];
+
+    for (const { replace, replaceBy } of invalidReplaceCases) {
+      test(`[classList.replace] Should fail replacing with invalid tokens: '${replace}' by '${replaceBy}'.`, () => {
         setClass("some");
         const proxyFunc = () => proxy.classList.replace(replace, replaceBy);
         const cmpFunc = () => cmpElement.classList.replace(replace, replaceBy);
         expect(proxyFunc).toThrow();
         expect(cmpFunc).toThrow();
-      },
-    );
+      });
+    }
   });
   describe("classList.toggle", () => {
-    test.each`
-      before                            | toggle        | force        | after                | count | comment
-      ${null}                           | ${"toggled"}  | ${undefined} | ${"toggled"}         | ${1}  | ${"Should add value on unset"}
-      ${""}                             | ${"toggled"}  | ${undefined} | ${"toggled"}         | ${1}  | ${"Should add value on empty"}
-      ${"toggling"}                     | ${"toggling"} | ${undefined} | ${""}                | ${0}  | ${"Should remove value on match"}
-      ${"old1 toggling old2"}           | ${"toggling"} | ${undefined} | ${"old1 old2"}       | ${2}  | ${"Should remove value within others on match"}
-      ${" \told1 \ttoggling \told2 \t"} | ${"toggling"} | ${undefined} | ${"old1 old2"}       | ${2}  | ${"Should normalize original value"}
-      ${"toggling old toggling"}        | ${"toggling"} | ${undefined} | ${"old"}             | ${1}  | ${"Should toggle all matches off"}
-      ${"old"}                          | ${"toggled"}  | ${undefined} | ${"old toggled"}     | ${2}  | ${"Should add toggled last"}
-      ${"b-value-e"}                    | ${"value"}    | ${undefined} | ${"b-value-e value"} | ${2}  | ${"Should ignore partial matches"}
-      ${"old"}                          | ${"toggling"} | ${true}      | ${"old toggling"}    | ${2}  | ${"Should add class enforcing addition if not existing yet"}
-      ${"old toggling"}                 | ${"toggling"} | ${true}      | ${"old toggling"}    | ${2}  | ${"Should not change enforcing toggled class if existing"}
-      ${"old"}                          | ${"toggling"} | ${false}     | ${"old"}             | ${1}  | ${"Should not change enforcing removal of toggled class if not existing"}
-      ${"old toggling"}                 | ${"toggling"} | ${false}     | ${"old"}             | ${1}  | ${"Should remove value class enforcing removal if still existing"}
-    `(
-      "[$#] classList.toggle: $comment: [$before]/toggle/[$toggle]/f=$force = [$after] ($count)",
-      ({ before, toggle, force, after, count }) => {
+    const toggleCases = [
+      {
+        before: null,
+        toggle: "toggled",
+        force: undefined,
+        after: "toggled",
+        count: 1,
+        comment: "Should add value on unset",
+      },
+      {
+        before: "",
+        toggle: "toggled",
+        force: undefined,
+        after: "toggled",
+        count: 1,
+        comment: "Should add value on empty",
+      },
+      {
+        before: "toggling",
+        toggle: "toggling",
+        force: undefined,
+        after: "",
+        count: 0,
+        comment: "Should remove value on match",
+      },
+      {
+        before: "old1 toggling old2",
+        toggle: "toggling",
+        force: undefined,
+        after: "old1 old2",
+        count: 2,
+        comment: "Should remove value within others on match",
+      },
+      {
+        before: " \told1 \ttoggling \told2 \t",
+        toggle: "toggling",
+        force: undefined,
+        after: "old1 old2",
+        count: 2,
+        comment: "Should normalize original value",
+      },
+      {
+        before: "toggling old toggling",
+        toggle: "toggling",
+        force: undefined,
+        after: "old",
+        count: 1,
+        comment: "Should toggle all matches off",
+      },
+      {
+        before: "old",
+        toggle: "toggled",
+        force: undefined,
+        after: "old toggled",
+        count: 2,
+        comment: "Should add toggled last",
+      },
+      {
+        before: "b-value-e",
+        toggle: "value",
+        force: undefined,
+        after: "b-value-e value",
+        count: 2,
+        comment: "Should ignore partial matches",
+      },
+      {
+        before: "old",
+        toggle: "toggling",
+        force: true,
+        after: "old toggling",
+        count: 2,
+        comment: "Should add class enforcing addition if not existing yet",
+      },
+      {
+        before: "old toggling",
+        toggle: "toggling",
+        force: true,
+        after: "old toggling",
+        count: 2,
+        comment: "Should not change enforcing toggled class if existing",
+      },
+      {
+        before: "old",
+        toggle: "toggling",
+        force: false,
+        after: "old",
+        count: 1,
+        comment: "Should not change enforcing removal of toggled class if not existing",
+      },
+      {
+        before: "old toggling",
+        toggle: "toggling",
+        force: false,
+        after: "old",
+        count: 1,
+        comment: "Should remove value class enforcing removal if still existing",
+      },
+    ];
+
+    for (const { before, toggle, force, after, count, comment } of toggleCases) {
+      test(`[classList.toggle] ${comment}: [${before}]/toggle/[${toggle}]/f=${force} = [${after}] (${count})`, () => {
         setClass(before);
         proxy.classList.toggle(toggle, force);
         cmpElement.classList.toggle(toggle, force);
         validate(before, after, count);
-      },
-    );
-    test.each`
-      toggle              | force
-      ${" \ttoggling \t"} | ${undefined}
-      ${" \ttoggling \t"} | ${true}
-      ${" \ttoggling \t"} | ${false}
-    `(
-      "[$#] classList.toggle: Should fail toggling to invalid token '$toggle' (force-mode: $force).",
-      ({ toggle, force }) => {
+      });
+    }
+
+    const invalidToggleCases = [
+      { toggle: " \ttoggling \t", force: undefined },
+      { toggle: " \ttoggling \t", force: true },
+      { toggle: " \ttoggling \t", force: false },
+    ];
+
+    for (const { toggle, force } of invalidToggleCases) {
+      test(`[classList.toggle] Should fail toggling to invalid token '${toggle}' (force-mode: ${force})`, () => {
         setClass("some");
         const proxyFunc = () => proxy.classList.toggle(toggle, force);
         const cmpFunc = () => cmpElement.classList.toggle(toggle, force);
         expect(proxyFunc).toThrow();
         expect(cmpFunc).toThrow();
-      },
-    );
+      });
+    }
   });
 });
 
@@ -364,8 +562,7 @@ type ApplyRulesData = [
   },
 ];
 describe("ElementProxy.applyRules()", () => {
-  // noinspection XmlUnusedNamespaceDeclaration
-  test.each<ApplyRulesData>([
+  const applyRulesTests: ApplyRulesData[] = [
     [
       "should do nothing on empty rule set",
       {
@@ -822,39 +1019,45 @@ describe("ElementProxy.applyRules()", () => {
         restart: "//new",
       },
     ],
-  ])("(%#) %s", (name, testData) => {
-    const serializer = new XMLSerializer();
-    const xpath = "//el";
-    const xmlDocument: Document = requireValidXml(testData.from);
-    const xmlExpectedDocument: Document = requireValidXml(testData.to);
-    const xmlElement: Element = xmlDocument.evaluate(xpath, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-      .singleNodeValue as Element;
-    if (!xmlElement) {
-      throw new Error(`Test Setup Issue: Unable resolving XPath '${xpath}' to element under test in: ${testData.from}`);
-    }
-    if (
-      testData.restart &&
-      !xmlExpectedDocument.evaluate(testData.restart, xmlExpectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
-        .singleNodeValue
-    ) {
-      throw new Error(
-        `Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`,
-      );
-    }
-    const me = new ElementProxy(xmlElement, MOCK_EDITOR);
-    const appliedRulesResult = me.applyRules(...testData.rules);
-    expect(serializer.serializeToString(xmlDocument)).toEqualXML(testData.to);
-    if (testData.restart) {
-      const expectedRestart = xmlDocument.evaluate(
-        testData.restart,
-        xmlDocument,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-      ).singleNodeValue;
-      expect(appliedRulesResult).toStrictEqual(expectedRestart);
-    } else {
-      // We don't expect any restart node to be returned.
-      expect(appliedRulesResult).not.toBeInstanceOf(Node);
-    }
-  });
+  ];
+
+  const serializer = new XMLSerializer();
+  for (const [name, testData] of applyRulesTests) {
+    test(`(${name})`, () => {
+      const xpath = "//el";
+      const xmlDocument: Document = requireValidXml(testData.from);
+      const xmlExpectedDocument: Document = requireValidXml(testData.to);
+      const xmlElement: Element = xmlDocument.evaluate(xpath, xmlDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+        .singleNodeValue as Element;
+      if (!xmlElement) {
+        throw new Error(
+          `Test Setup Issue: Unable resolving XPath '${xpath}' to element under test in: ${testData.from}`,
+        );
+      }
+      if (
+        testData.restart &&
+        !xmlExpectedDocument.evaluate(testData.restart, xmlExpectedDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
+          .singleNodeValue
+      ) {
+        throw new Error(
+          `Test Setup Issue: Unable resolving XPATH '${testData.restart}' to expected restart node in: ${testData.to}`,
+        );
+      }
+      const me = new ElementProxy(xmlElement, MOCK_EDITOR);
+      const appliedRulesResult = me.applyRules(...testData.rules);
+      expect(serializer.serializeToString(xmlDocument)).toEqual(testData.to);
+      if (testData.restart) {
+        const expectedRestart = xmlDocument.evaluate(
+          testData.restart,
+          xmlDocument,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+        ).singleNodeValue;
+        expect(appliedRulesResult).toStrictEqual(expectedRestart);
+      } else {
+        // We don't expect any restart node to be returned.
+        expect(appliedRulesResult).not.toBeInstanceOf(Node);
+      }
+    });
+  }
 });
