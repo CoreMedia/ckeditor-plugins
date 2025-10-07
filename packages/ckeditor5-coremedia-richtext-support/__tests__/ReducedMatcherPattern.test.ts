@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import ReducedMatcherPattern, {
   AttributesType,
   findFirstPattern,
@@ -58,7 +61,7 @@ const inflate = (abbrev: AbbreviatedPattern | undefined): ReducedMatcherPattern 
 };
 
 /**
- * Type Guard to remove undefined entries (and have correct type afterwards).
+ * Type Guard to remove undefined entries (and have correct type afterward).
  *
  * @param pattern - pattern to validate
  */
@@ -67,98 +70,322 @@ const isReducedMatcherPattern = (pattern: ReducedMatcherPattern | undefined): pa
 
 describe("ReducedMatcherPattern", () => {
   describe("mergePatterns", () => {
-    it("should accept empty array", () => {
+    test("should accept empty array", () => {
       const actual = mergePatterns();
       const expected: ReducedMatcherPattern = {};
       expect(actual).toStrictEqual(expected);
     });
 
-    it.each`
-      category        | p1              | p2              | p3              | expected                       | comment
-      ${"all"}        | ${{}}           | ${{}}           | ${{}}           | ${{}}                          | ${"don't set any attribute if all are unset"}
-      ${"all"}        | ${{ a: "a" }}   | ${{ n: "b" }}   | ${{ c: true }}  | ${{ n: "b", a: "a", c: true }} | ${"merge attributes"}
-      ${"classes"}    | ${{ c: true }}  | ${{}}           | ${{}}           | ${{ c: true }}                 | ${"irrelevant order"}
-      ${"classes"}    | ${{}}           | ${{ c: true }}  | ${{}}           | ${{ c: true }}                 | ${"irrelevant order"}
-      ${"classes"}    | ${{}}           | ${{}}           | ${{ c: true }}  | ${{ c: true }}                 | ${"irrelevant order"}
-      ${"classes"}    | ${{ c: true }}  | ${undefined}    | ${undefined}    | ${{ c: true }}                 | ${"works for one entry"}
-      ${"classes"}    | ${{ c: false }} | ${{ c: true }}  | ${{}}           | ${{ c: true }}                 | ${"treat undefined and false as same (there is no veto)"}
-      ${"classes"}    | ${{}}           | ${{ c: true }}  | ${{ c: false }} | ${{ c: true }}                 | ${"treat undefined and false as same (there is no veto)"}
-      ${"name"}       | ${{ n: "#1" }}  | ${{}}           | ${{}}           | ${{ n: "#1" }}                 | ${"last wins"}
-      ${"name"}       | ${{}}           | ${{ n: "#2" }}  | ${{}}           | ${{ n: "#2" }}                 | ${"last wins"}
-      ${"name"}       | ${{}}           | ${{}}           | ${{ n: "#3" }}  | ${{ n: "#3" }}                 | ${"last wins"}
-      ${"name"}       | ${{ n: "#1" }}  | ${{ n: "#2" }}  | ${{ n: "#3" }}  | ${{ n: "#3" }}                 | ${"last wins"}
-      ${"attributes"} | ${{ a: "a" }}   | ${{}}           | ${{}}           | ${{ a: "a" }}                  | ${"handle attributes"}
-      ${"attributes"} | ${{}}           | ${{ a: "b" }}   | ${{}}           | ${{ a: "b" }}                  | ${"handle attributes"}
-      ${"attributes"} | ${{}}           | ${{}}           | ${{ a: "c" }}   | ${{ a: "c" }}                  | ${"handle attributes"}
-      ${"attributes"} | ${{ a: "a" }}   | ${{ a: "b" }}   | ${{ a: "c" }}   | ${{ a: "a,b,c" }}              | ${"merge attributes"}
-      ${"attributes"} | ${{ a: "a=a" }} | ${{ a: "a=b" }} | ${{ a: "a=c" }} | ${{ a: "a=c" }}                | ${"last wins"}
-    `(
-      "[$#] $category - should merge to $expected for: [p1, p2, p3] = [$p1, $p2, $p3] - $comment",
-      ({ p1, p2, p3, expected }) => {
-        const pattern1 = inflate(p1);
-        const pattern2 = inflate(p2);
-        const pattern3 = inflate(p3);
-        const patterns: ReducedMatcherPattern[] = [pattern1, pattern2, pattern3].filter(isReducedMatcherPattern);
-        const iExpected = inflate(expected);
-
-        const actual = mergePatterns(...patterns);
-
-        expect(actual).toStrictEqual(iExpected);
+    const testCases = [
+      {
+        category: "all",
+        p1: {},
+        p2: {},
+        p3: {},
+        expected: {},
+        comment: "don't set any attribute if all are unset",
       },
-    );
+      {
+        category: "all",
+        p1: { a: "a" },
+        p2: { n: "b" },
+        p3: { c: true },
+        expected: { n: "b", a: "a", c: true },
+        comment: "merge attributes",
+      },
+      {
+        category: "classes",
+        p1: { c: true },
+        p2: {},
+        p3: {},
+        expected: { c: true },
+        comment: "irrelevant order",
+      },
+      {
+        category: "classes",
+        p1: {},
+        p2: { c: true },
+        p3: {},
+        expected: { c: true },
+        comment: "irrelevant order",
+      },
+      {
+        category: "classes",
+        p1: {},
+        p2: {},
+        p3: { c: true },
+        expected: { c: true },
+        comment: "irrelevant order",
+      },
+      {
+        category: "classes",
+        p1: { c: true },
+        p2: undefined,
+        p3: undefined,
+        expected: { c: true },
+        comment: "works for one entry",
+      },
+      {
+        category: "classes",
+        p1: { c: false },
+        p2: { c: true },
+        p3: {},
+        expected: { c: true },
+        comment: "treat undefined and false as same (there is no veto)",
+      },
+      {
+        category: "classes",
+        p1: {},
+        p2: { c: true },
+        p3: { c: false },
+        expected: { c: true },
+        comment: "treat undefined and false as same (there is no veto)",
+      },
+      {
+        category: "name",
+        p1: { n: "#1" },
+        p2: {},
+        p3: {},
+        expected: { n: "#1" },
+        comment: "last wins",
+      },
+      {
+        category: "name",
+        p1: {},
+        p2: { n: "#2" },
+        p3: {},
+        expected: { n: "#2" },
+        comment: "last wins",
+      },
+      {
+        category: "name",
+        p1: {},
+        p2: {},
+        p3: { n: "#3" },
+        expected: { n: "#3" },
+        comment: "last wins",
+      },
+      {
+        category: "name",
+        p1: { n: "#1" },
+        p2: { n: "#2" },
+        p3: { n: "#3" },
+        expected: { n: "#3" },
+        comment: "last wins",
+      },
+      {
+        category: "attributes",
+        p1: { a: "a" },
+        p2: {},
+        p3: {},
+        expected: { a: "a" },
+        comment: "handle attributes",
+      },
+      {
+        category: "attributes",
+        p1: {},
+        p2: { a: "b" },
+        p3: {},
+        expected: { a: "b" },
+        comment: "handle attributes",
+      },
+      {
+        category: "attributes",
+        p1: {},
+        p2: {},
+        p3: { a: "c" },
+        expected: { a: "c" },
+        comment: "handle attributes",
+      },
+      {
+        category: "attributes",
+        p1: { a: "a" },
+        p2: { a: "b" },
+        p3: { a: "c" },
+        expected: { a: "a,b,c" },
+        comment: "merge attributes",
+      },
+      {
+        category: "attributes",
+        p1: { a: "a=a" },
+        p2: { a: "a=b" },
+        p3: { a: "a=c" },
+        expected: { a: "a=c" },
+        comment: "last wins",
+      },
+    ];
+
+    describe("mergePatterns()", () => {
+      for (const [i, { category, p1, p2, p3, expected, comment }] of testCases.entries()) {
+        test(`[${i}] ${category} - should merge to ${JSON.stringify(expected)} for: [p1, p2, p3] = [${JSON.stringify(p1)}, ${JSON.stringify(p2)}, ${JSON.stringify(p3)}] - ${comment}`, () => {
+          const pattern1 = inflate(p1);
+          const pattern2 = inflate(p2);
+          const pattern3 = inflate(p3);
+          const patterns = [pattern1, pattern2, pattern3].filter(isReducedMatcherPattern);
+          const iExpected = inflate(expected);
+
+          const actual = mergePatterns(...patterns);
+
+          expect(actual).toStrictEqual(iExpected);
+        });
+      }
+    });
   });
 
   describe("findFirstPattern", () => {
-    it("should accept empty array", () => {
+    test("should accept empty array", () => {
       const actual = findFirstPattern("any");
       expect(actual).toBeUndefined();
     });
 
-    it.each`
-      name   | p1                    | p2                    | expected              | comment
-      ${"a"} | ${{ n: "a", a: "a" }} | ${{ n: "a", a: "b" }} | ${{ n: "a", a: "a" }} | ${"search in string names"}
-      ${"b"} | ${{ n: "a" }}         | ${{ n: "b" }}         | ${{ n: "b" }}         | ${"search in string names"}
-      ${"c"} | ${{ n: "a" }}         | ${{ n: "b" }}         | ${undefined}          | ${"not found in string names"}
-      ${"a"} | ${{ n: "a" }}         | ${undefined}          | ${{ n: "a" }}         | ${"one element only to search in"}
-      ${"a"} | ${{ n: /a/, a: "a" }} | ${{ n: /a/, a: "b" }} | ${{ n: /a/, a: "a" }} | ${"search in pattern names"}
-      ${"b"} | ${{ n: /a/ }}         | ${{ n: /b/ }}         | ${{ n: /b/ }}         | ${"search in pattern names"}
-      ${"c"} | ${{ n: /a/ }}         | ${{ n: /b/ }}         | ${undefined}          | ${"not found in pattern names"}
-      ${"a"} | ${{ n: /a/, a: "a" }} | ${{ n: "a", a: "b" }} | ${{ n: /a/, a: "a" }} | ${"search in mixed names, first matches"}
-      ${"a"} | ${{ n: "a", a: "a" }} | ${{ n: /a/, a: "b" }} | ${{ n: "a", a: "a" }} | ${"search in mixed names, first matches"}
-      ${"b"} | ${{ n: /a/ }}         | ${{ n: "b" }}         | ${{ n: "b" }}         | ${"search in mixed names, second matches"}
-      ${"b"} | ${{ n: "a" }}         | ${{ n: /b/ }}         | ${{ n: /b/ }}         | ${"search in mixed names, second matches"}
-    `("[$#] find first named $name in [$p1, $p2] = $expected", ({ name, p1, p2, expected }) => {
-      const pattern1 = inflate(p1);
-      const pattern2 = inflate(p2);
-      const patterns: ReducedMatcherPattern[] = [pattern1, pattern2].filter(isReducedMatcherPattern);
-      const iExpected = inflate(expected);
+    const testCases = [
+      {
+        name: "a",
+        p1: { n: "a", a: "a" },
+        p2: { n: "a", a: "b" },
+        expected: { n: "a", a: "a" },
+        comment: "search in string names",
+      },
+      {
+        name: "b",
+        p1: { n: "a" },
+        p2: { n: "b" },
+        expected: { n: "b" },
+        comment: "search in string names",
+      },
+      {
+        name: "c",
+        p1: { n: "a" },
+        p2: { n: "b" },
+        expected: undefined,
+        comment: "not found in string names",
+      },
+      {
+        name: "a",
+        p1: { n: "a" },
+        p2: undefined,
+        expected: { n: "a" },
+        comment: "one element only to search in",
+      },
+      {
+        name: "a",
+        p1: { n: /a/, a: "a" },
+        p2: { n: /a/, a: "b" },
+        expected: { n: /a/, a: "a" },
+        comment: "search in pattern names",
+      },
+      {
+        name: "b",
+        p1: { n: /a/ },
+        p2: { n: /b/ },
+        expected: { n: /b/ },
+        comment: "search in pattern names",
+      },
+      {
+        name: "c",
+        p1: { n: /a/ },
+        p2: { n: /b/ },
+        expected: undefined,
+        comment: "not found in pattern names",
+      },
+      {
+        name: "a",
+        p1: { n: /a/, a: "a" },
+        p2: { n: "a", a: "b" },
+        expected: { n: /a/, a: "a" },
+        comment: "search in mixed names, first matches",
+      },
+      {
+        name: "a",
+        p1: { n: "a", a: "a" },
+        p2: { n: /a/, a: "b" },
+        expected: { n: "a", a: "a" },
+        comment: "search in mixed names, first matches",
+      },
+      {
+        name: "b",
+        p1: { n: /a/ },
+        p2: { n: "b" },
+        expected: { n: "b" },
+        comment: "search in mixed names, second matches",
+      },
+      {
+        name: "b",
+        p1: { n: "a" },
+        p2: { n: /b/ },
+        expected: { n: /b/ },
+        comment: "search in mixed names, second matches",
+      },
+    ];
 
-      const actual = findFirstPattern(name, ...patterns);
+    describe("findFirstPattern()", () => {
+      for (const [i, { name, p1, p2, expected, comment }] of testCases.entries()) {
+        test(`[${i}] find first named ${name} in [${JSON.stringify(p1)}, ${JSON.stringify(p2)}] = ${JSON.stringify(expected)} - ${comment}`, () => {
+          const pattern1 = inflate(p1);
+          const pattern2 = inflate(p2);
+          const patterns = [pattern1, pattern2].filter(isReducedMatcherPattern);
+          const iExpected = inflate(expected);
 
-      expect(actual).toStrictEqual(iExpected);
+          const actual = findFirstPattern(name, ...patterns);
+
+          expect(actual).toStrictEqual(iExpected);
+        });
+      }
     });
   });
 
-  describe("toLookupStrategy", () => {
-    // Reduced test set from `findFirstPattern` just to ensure it works in general.
-    it.each`
-      name   | p1                    | p2                    | expected              | comment
-      ${"a"} | ${{ n: "a", a: "a" }} | ${{ n: "a", a: "b" }} | ${{ n: "a", a: "a" }} | ${"search in string names"}
-      ${"a"} | ${{ n: /a/, a: "a" }} | ${{ n: /a/, a: "b" }} | ${{ n: /a/, a: "a" }} | ${"search in pattern names"}
-      ${"b"} | ${{ n: /a/ }}         | ${{ n: /b/ }}         | ${{ n: /b/ }}         | ${"search in pattern names"}
-      ${"a"} | ${{ n: /a/, a: "a" }} | ${{ n: "a", a: "b" }} | ${{ n: /a/, a: "a" }} | ${"search in mixed names, first matches"}
-      ${"b"} | ${{ n: "a" }}         | ${{ n: /b/ }}         | ${{ n: /b/ }}         | ${"search in mixed names, second matches"}
-    `("[$#] find first named $name in [$p1, $p2] = $expected", ({ name, p1, p2, expected }) => {
-      const pattern1 = inflate(p1);
-      const pattern2 = inflate(p2);
-      const patterns: ReducedMatcherPattern[] = [pattern1, pattern2].filter(isReducedMatcherPattern);
-      const iExpected = inflate(expected);
-      const strategy = toLookupStrategy(...patterns);
+  const testCases = [
+    {
+      name: "a",
+      p1: { n: "a", a: "a" },
+      p2: { n: "a", a: "b" },
+      expected: { n: "a", a: "a" },
+      comment: "search in string names",
+    },
+    {
+      name: "a",
+      p1: { n: /a/, a: "a" },
+      p2: { n: /a/, a: "b" },
+      expected: { n: /a/, a: "a" },
+      comment: "search in pattern names",
+    },
+    {
+      name: "b",
+      p1: { n: /a/ },
+      p2: { n: /b/ },
+      expected: { n: /b/ },
+      comment: "search in pattern names",
+    },
+    {
+      name: "a",
+      p1: { n: /a/, a: "a" },
+      p2: { n: "a", a: "b" },
+      expected: { n: /a/, a: "a" },
+      comment: "search in mixed names, first matches",
+    },
+    {
+      name: "b",
+      p1: { n: "a" },
+      p2: { n: /b/ },
+      expected: { n: /b/ },
+      comment: "search in mixed names, second matches",
+    },
+  ];
 
-      const actual = strategy(name);
+  describe("toLookupStrategy()", () => {
+    for (const [i, { name, p1, p2, expected, comment }] of testCases.entries()) {
+      test(`[${i}] find first named ${name} in [${JSON.stringify(p1)}, ${JSON.stringify(p2)}] = ${JSON.stringify(expected)} - ${comment}`, () => {
+        const pattern1 = inflate(p1);
+        const pattern2 = inflate(p2);
+        const patterns = [pattern1, pattern2].filter(isReducedMatcherPattern);
+        const iExpected = inflate(expected);
+        const strategy = toLookupStrategy(...patterns);
 
-      expect(actual).toStrictEqual(iExpected);
-    });
+        const actual = strategy(name);
+
+        expect(actual).toStrictEqual(iExpected);
+      });
+    }
   });
 
   describe("resolveInheritance", () => {
@@ -176,7 +403,7 @@ describe("ReducedMatcherPattern", () => {
     const existingPatterns: ReducedMatcherPattern[] = deflatedPatterns.map(inflate).filter(isReducedMatcherPattern);
     const strategy = toLookupStrategy(...existingPatterns);
 
-    it("should use provided lookup strategy", () => {
+    test("should use provided lookup strategy", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "first",
@@ -192,7 +419,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    it("should dynamically create lookup strategy from existing patterns", () => {
+    test("should dynamically create lookup strategy from existing patterns", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "first",
@@ -208,7 +435,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    it("should use apply attributes from inherited pattern", () => {
+    test("should use apply attributes from inherited pattern", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "second",
@@ -225,7 +452,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    it("should fail, if inherited target not found", () => {
+    test("should fail, if inherited target not found", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "not-existing",
@@ -233,10 +460,10 @@ describe("ReducedMatcherPattern", () => {
       const failing = (): void => {
         resolveInheritance(pattern, strategy);
       };
-      expect(failing).toThrowError();
+      expect(failing).toThrow(Error);
     });
 
-    it("convenience: should accept patterns without inheritance, deleting empty inherit", () => {
+    test("convenience: should accept patterns without inheritance, deleting empty inherit", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "",
@@ -250,7 +477,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    it("convenience: should accept patterns without inheritance", () => {
+    test("convenience: should accept patterns without inheritance", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         classes: true,
