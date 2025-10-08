@@ -1,3 +1,5 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
 import Delayed from "../../src/content/Delayed";
 import { NameHintConfig, observeNameHint, unreadableNameHint } from "../../src/content/DisplayHints";
 import { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
@@ -7,67 +9,84 @@ const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };
 
 describe("DisplayHints", () => {
   describe("observeNameHint", () => {
-    describe.each`
-      names                 | loop
-      ${["Lorem"]}          | ${false}
-      ${["Lorem", "ipsum"]} | ${false}
-      ${["Lorem", "ipsum"]} | ${true}
-    `("[$#] Should retrieve hints for names: $names (loop? $loop)", ({ names, loop }) => {
-      const classes: string[] = [];
+    const testCases = [
+      {
+        names: ["Lorem"],
+        loop: false,
+      },
+      {
+        names: ["Lorem", "ipsum"],
+        loop: false,
+      },
+      {
+        names: ["Lorem", "ipsum"],
+        loop: true,
+      },
+    ];
 
-      const config: NameHintConfig = {
-        ...delays,
-        name: names,
-        readable: [true],
-      };
+    describe("Should retrieve hints for names", () => {
+      for (const [i, { names, loop }] of testCases.entries()) {
+        test(`[${i}] Should retrieve hints for names: ${JSON.stringify(names)} (loop? ${loop})`, () => {
+          const classes: string[] = [];
 
-      const expectedNames = [...names, ...names.slice(0, loop ? 1 : 0)];
-      const expectedValues: DisplayHint[] = expectedNames.map(
-        (name: string): DisplayHint => ({
-          name,
-          classes,
-        }),
-      );
-      testShouldRetrieveValues(observeNameHint(config), expectedValues);
+          const config: NameHintConfig = {
+            ...delays,
+            name: names,
+            readable: [true],
+          };
+
+          const expectedNames = [...names, ...names.slice(0, loop ? 1 : 0)];
+          const expectedValues: DisplayHint[] = expectedNames.map(
+            (name: string): DisplayHint => ({
+              name,
+              classes,
+            }),
+          );
+
+          testShouldRetrieveValues(observeNameHint(config), expectedValues);
+        });
+      }
     });
 
-    describe.each`
-      readableStates          | loop
-      ${[true]}               | ${false}
-      ${[true, false]}        | ${false}
-      ${[true, false]}        | ${true}
-      ${[false, true]}        | ${false}
-      ${[false, true]}        | ${true}
-      ${[true, false, true]}  | ${false}
-      ${[true, false, true]}  | ${true}
-      ${[false, true, false]} | ${false}
-      ${[false, true, false]} | ${true}
-    `(
-      "[$#] Should retrieve name hints respecting readable states: $readableStates (loop? $loop)",
-      ({ readableStates, loop }) => {
-        const name = "Lorem";
-        const classes: string[] = [];
+    const testCases2 = [
+      { readableStates: [true], loop: false },
+      { readableStates: [true, false], loop: false },
+      { readableStates: [true, false], loop: true },
+      { readableStates: [false, true], loop: false },
+      { readableStates: [false, true], loop: true },
+      { readableStates: [true, false, true], loop: false },
+      { readableStates: [true, false, true], loop: true },
+      { readableStates: [false, true, false], loop: false },
+      { readableStates: [false, true, false], loop: true },
+    ];
 
-        const config: NameHintConfig = {
-          ...delays,
-          id: 42,
-          type: "document",
-          name: [name],
-          readable: readableStates,
-        };
+    describe("Should retrieve name hints respecting readable states", () => {
+      for (const [i, { readableStates, loop }] of testCases2.entries()) {
+        test(`[${i}] Should retrieve name hints respecting readable states: ${JSON.stringify(
+          readableStates,
+        )} (loop? ${loop})`, () => {
+          const name = "Lorem";
+          const classes: string[] = [];
 
-        const expectedReadableHint: DisplayHint = {
-          name,
-          classes,
-        };
-        const expectedUnreadableHint: DisplayHint = unreadableNameHint(config, classes);
+          const config: NameHintConfig = {
+            ...delays,
+            id: 42,
+            type: "document",
+            name: [name],
+            readable: readableStates,
+          };
 
-        const expectedReadableStates = [...readableStates, ...readableStates.slice(0, loop ? 1 : 0)];
-        const expectedValues: DisplayHint[] = expectedReadableStates.map(
-          (readable: boolean): DisplayHint => (readable ? expectedReadableHint : expectedUnreadableHint),
-        );
-        testShouldRetrieveValues(observeNameHint(config), expectedValues);
-      },
-    );
+          const expectedReadableHint: DisplayHint = { name, classes };
+          const expectedUnreadableHint: DisplayHint = unreadableNameHint(config, classes);
+
+          const expectedReadableStates = [...readableStates, ...readableStates.slice(0, loop ? 1 : 0)];
+          const expectedValues: DisplayHint[] = expectedReadableStates.map((readable: boolean) =>
+            readable ? expectedReadableHint : expectedUnreadableHint,
+          );
+
+          testShouldRetrieveValues(observeNameHint(config), expectedValues);
+        });
+      }
+    });
   });
 });

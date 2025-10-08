@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe, afterEach } from "node:test";
+import expect from "expect";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
@@ -5,23 +8,29 @@ import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
 import { first } from "rxjs/operators";
 
 describe("MockContentDisplayService", () => {
+  afterEach(() => {
+    serviceAgent.unregisterServices();
+  });
+
   describe("serviceAgent Integration", () => {
     const service = new MockContentDisplayService();
     serviceAgent.registerService(service);
 
     test("Should be able to retrieve mock service.", () => {
       expect.hasAssertions();
-      return expect(serviceAgent.fetchService(createContentDisplayServiceDescriptor())).resolves.toMatchObject(service);
+      return expect(serviceAgent.fetchService(createContentDisplayServiceDescriptor())).resolves.toMatchObject({
+        ...service,
+      });
     });
   });
 
   describe("name(UriPath): Promise<string>", () => {
-    it("should provide some static name by default containing the ID", () => {
+    test("should provide some static name by default containing the ID", async () => {
       const service = new MockContentDisplayService();
-      return expect(service.name("content/42")).resolves.toMatch(/.*42.*/);
+      const result = await service.name("content/42");
+      expect(result).toMatch(/.*42.*/);
     });
   });
-
   describe("observe_asLink(UriPath): Observable<ContentAsLink>", () => {
     const service = new MockContentDisplayService();
     const observable = service.observe_asLink("content/42").pipe(first());

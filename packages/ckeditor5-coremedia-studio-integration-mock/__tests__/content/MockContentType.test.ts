@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import {
   MockContentTypeSpecificProperties,
   MockContentTypeSpecificPropertiesConfig,
