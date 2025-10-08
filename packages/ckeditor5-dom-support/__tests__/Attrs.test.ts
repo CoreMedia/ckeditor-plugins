@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { USE_CASE_NAME } from "./Constants";
 import { documentFromXml } from "../src/Documents";
 import { isAttr, copyAttributesFrom } from "../src/Attrs";
@@ -9,7 +12,7 @@ const idAttribute = onlyRootXmlDocument.documentElement.getAttributeNode("id");
 
 describe("Attrs", () => {
   describe("isAttr", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const value: unknown = langAttribute;
       if (isAttr(value)) {
         // We can now access `value`.
@@ -17,29 +20,25 @@ describe("Attrs", () => {
       }
     });
 
-    it.each`
-      matched
-      ${langAttribute}
-      ${idAttribute}
-    `("[$#] should match any Attribute: $matched", ({ matched }: { matched: unknown }) => {
-      expect(isAttr(matched)).toBeTruthy();
-    });
+    const cases = [langAttribute, idAttribute];
 
-    it.each`
-      unmatched
-      ${undefined}
-      ${null}
-      ${langAttribute?.ownerDocument}
-    `(
-      "[$#] should not match any other objects than Attributes: $unmatched",
-      ({ unmatched }: { unmatched: unknown }) => {
+    for (const [i, matched] of cases.entries()) {
+      test(`[${i}] should match any Attribute: ${matched}`, () => {
+        expect(isAttr(matched)).toBeTruthy();
+      });
+    }
+
+    const cases2 = [undefined, null, langAttribute?.ownerDocument];
+
+    for (const [i, unmatched] of cases2.entries()) {
+      test(`[${i}] should not match any other objects than Attributes: ${unmatched}`, () => {
         expect(isAttr(unmatched)).toBeFalsy();
-      },
-    );
+      });
+    }
   });
 
   describe("copyAttributesFrom", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const { documentElement } = onlyRootXmlDocument;
       const { namespaceURI } = documentElement;
       const targetElement = onlyRootXmlDocument.createElementNS(namespaceURI, "child");

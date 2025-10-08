@@ -1,10 +1,13 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { isParentNode } from "../src/ParentNodes";
 
 describe("ParentNodes", () => {
   describe("isParentNodes", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml("<body/>");
       if (isParentNode(node)) {
         // We can now access `childElementCount`.
@@ -12,26 +15,27 @@ describe("ParentNodes", () => {
       }
     });
 
-    it.each`
-      matched
-      ${new DocumentFragment()}
-      ${documentFromHtml("<body/>")}
-      ${documentFromHtml("<body/>").body}
-      ${documentFromXml("<root><child/></root>").firstElementChild}
-    `("[$#] should match any ParentNode: $matched", ({ matched }: { matched: unknown }) => {
-      expect(isParentNode(matched)).toBeTruthy();
-    });
+    const matchedCases = [
+      new DocumentFragment(),
+      documentFromHtml("<body/>"),
+      documentFromHtml("<body/>").body,
+      documentFromXml("<root><child/></root>").firstElementChild,
+    ];
 
-    it.each`
-      unmatched
-      ${undefined}
-      ${null}
-      ${documentFromHtml("<body>Text</body>").body.firstChild}
-    `(
-      "[$#] should not match any other objects than ParentNodes: $unmatched",
-      ({ unmatched }: { unmatched: unknown }) => {
+    for (const [i, matched] of matchedCases.entries()) {
+      test(`[${i}] should match any ParentNode: ${matched instanceof Node ? matched.nodeName : String(matched)}`, () => {
+        expect(isParentNode(matched)).toBeTruthy();
+      });
+    }
+
+    const unmatchedCases = [undefined, null, documentFromHtml("<body>Text</body>").body.firstChild];
+
+    for (const [i, unmatched] of unmatchedCases.entries()) {
+      test(`[${i}] should not match any other objects than ParentNodes: ${
+        unmatched instanceof Node ? unmatched.nodeName : String(unmatched)
+      }`, () => {
         expect(isParentNode(unmatched)).toBeFalsy();
-      },
-    );
+      });
+    }
   });
 });

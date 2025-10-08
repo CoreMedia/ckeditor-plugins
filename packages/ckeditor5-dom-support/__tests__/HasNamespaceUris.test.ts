@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml } from "../src/Documents";
 import { isHasNamespaceUri } from "../src/HasNamespaceUris";
@@ -7,7 +10,7 @@ const langAttribute = htmlDocument.documentElement.getAttributeNode("lang");
 
 describe("HasNamespaceUris", () => {
   describe("isHasNamespaceUri", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const value: unknown = htmlDocument;
       if (isHasNamespaceUri(value)) {
         // We can now access `value`.
@@ -15,23 +18,20 @@ describe("HasNamespaceUris", () => {
       }
     });
 
-    it.each`
-      matched
-      ${langAttribute}
-      ${htmlDocument.documentElement}
-    `("[$#] should match any node providing namespaceURI: $matched", ({ matched }: { matched: unknown }) => {
-      expect(isHasNamespaceUri(matched)).toBeTruthy();
-    });
+    const matchedCases = [langAttribute, htmlDocument.documentElement];
 
-    it.each`
-      unmatched
-      ${undefined}
-      ${null}
-    `(
-      "[$#] should not match any other objects than HasNamespaceUris: $unmatched",
-      ({ unmatched }: { unmatched: unknown }) => {
+    for (const [i, matched] of matchedCases.entries()) {
+      test(`[${i}] should match any node providing namespaceURI: ${String(matched)}`, () => {
+        expect(isHasNamespaceUri(matched)).toBeTruthy();
+      });
+    }
+
+    const unmatchedCases = [undefined, null];
+
+    for (const [i, unmatched] of unmatchedCases.entries()) {
+      test(`[${i}] should not match any other objects than HasNamespaceUris: ${String(unmatched)}`, () => {
         expect(isHasNamespaceUri(unmatched)).toBeFalsy();
-      },
-    );
+      });
+    }
   });
 });

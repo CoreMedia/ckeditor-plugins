@@ -1,10 +1,13 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { USE_CASE_NAME } from "./Constants";
 import { fragmentFromNodeContents, isDocumentFragment } from "../src/DocumentFragments";
 import { documentFromHtml } from "../src/Documents";
 
 describe("DocumentFragments", () => {
   describe("fragmentFromNodeContents", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const htmlDocument = documentFromHtml("<body><p>1</p><p>2</p></body>");
       const fragment = fragmentFromNodeContents(htmlDocument.body);
       expect(fragment.childElementCount).toStrictEqual(2);
@@ -12,7 +15,7 @@ describe("DocumentFragments", () => {
   });
 
   describe("isDocumentFragment", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const node: Node = new DocumentFragment();
       if (isDocumentFragment(node)) {
         // We can now access `ownerDocument`.
@@ -20,24 +23,27 @@ describe("DocumentFragments", () => {
       }
     });
 
-    it.each`
-      matched
-      ${new DocumentFragment()}
-      ${fragmentFromNodeContents(documentFromHtml("<body/>").body)}
-    `("[$#] should match any DocumentFragment: $matched", ({ matched }: { matched: unknown }) => {
-      expect(isDocumentFragment(matched)).toBeTruthy();
-    });
+    const cases = [
+      { matched: new DocumentFragment() },
+      { matched: fragmentFromNodeContents(documentFromHtml("<body/>").body) },
+    ];
 
-    it.each`
-      unmatched
-      ${undefined}
-      ${null}
-      ${documentFromHtml("<body/>")}
-    `(
-      "[$#] should not match any other objects than DocumentFragments: $unmatched",
-      ({ unmatched }: { unmatched: unknown }) => {
+    for (const [i, { matched }] of cases.entries()) {
+      test(`[${i}] should match DocumentFragment`, () => {
+        expect(isDocumentFragment(matched)).toBeTruthy();
+      });
+    }
+
+    const cases2: { unmatched: unknown }[] = [
+      { unmatched: undefined },
+      { unmatched: null },
+      { unmatched: documentFromHtml("<body/>") },
+    ];
+
+    for (const [i, { unmatched }] of cases2.entries()) {
+      test(`[${i}] should not match any other objects than DocumentFragments`, () => {
         expect(isDocumentFragment(unmatched)).toBeFalsy();
-      },
-    );
+      });
+    }
   });
 });

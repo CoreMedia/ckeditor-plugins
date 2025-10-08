@@ -1,10 +1,13 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { HTMLTableElementWrapper, isHTMLTableElement, wrapIfTableElement } from "../src/HTMLTableElements";
 
 describe("HTMLTableElements", () => {
   describe("isHTMLTableElement", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const node: Node | null = documentFromHtml("<body><table/></body>").body.firstElementChild;
       if (isHTMLTableElement(node)) {
         // We can now use convenience API.
@@ -12,27 +15,27 @@ describe("HTMLTableElements", () => {
       }
     });
 
-    it("should match HTML table elements", () => {
+    test("should match HTML table elements", () => {
       const node: Node | null = documentFromHtml("<body><table/></body>").body.firstElementChild;
       expect(isHTMLTableElement(node)).toBeTruthy();
     });
 
-    it.each`
-      unmatched
-      ${undefined}
-      ${null}
-      ${documentFromHtml("<body/>")}
-      ${documentFromXml("<root><table/></root>").documentElement.firstElementChild}
-    `(
-      "[$#] should not match any other objects than HTMLTableElement: $unmatched",
-      ({ unmatched }: { unmatched: unknown }) => {
+    const unmatchedCases = [
+      undefined,
+      null,
+      documentFromHtml("<body/>"),
+      documentFromXml("<root><table/></root>").documentElement.firstElementChild,
+    ];
+
+    for (const [i, unmatched] of unmatchedCases.entries()) {
+      test(`[${i}] should not match any other objects than HTMLTableElement: ${String(unmatched)}`, () => {
         expect(isHTMLTableElement(unmatched)).toBeFalsy();
-      },
-    );
+      });
+    }
   });
 
   describe("wrapIfTableElement", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const element: Element | null = documentFromHtml("<body><table/></body>").body.firstElementChild;
       if (element) {
         // Provides ability for small one-liners.
@@ -40,15 +43,20 @@ describe("HTMLTableElements", () => {
       }
     });
 
-    it.each`
-      matched
-      ${documentFromHtml("<body><table/></body>").body.firstElementChild}
-      ${documentFromXml("<root><table/></root>").documentElement.firstElementChild}
-    `("[$#] should wrap HTML table (alike) element: $matched", ({ matched }: { matched: Element }) => {
-      expect(wrapIfTableElement(matched)).toBeDefined();
-    });
+    const matchedCases = [
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      documentFromHtml("<body><table/></body>").body.firstElementChild!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      documentFromXml("<root><table/></root>").documentElement.firstElementChild!,
+    ];
 
-    it("should skip wrapping, if no HTML table (alike) element", () => {
+    for (const [i, matched] of matchedCases.entries()) {
+      test(`[${i}] should wrap HTML table (alike) element: ${matched.localName}`, () => {
+        expect(wrapIfTableElement(matched)).toBeDefined();
+      });
+    }
+
+    test("should skip wrapping, if no HTML table (alike) element", () => {
       const element = documentFromHtml("<body><table/></body>").body;
       expect(wrapIfTableElement(element)).toBeUndefined();
     });
@@ -56,7 +64,7 @@ describe("HTMLTableElements", () => {
 
   describe("HTMLTableElementWrapper", () => {
     describe("constructor", () => {
-      it("should successfully create wrapper for native HTMLTableElement", () => {
+      test("should successfully create wrapper for native HTMLTableElement", () => {
         const element = documentFromHtml("<body><table/></body>").body.firstElementChild;
         if (element) {
           const wrapper = new HTMLTableElementWrapper(element);
@@ -64,7 +72,7 @@ describe("HTMLTableElements", () => {
         }
       });
 
-      it("should successfully create wrapper for non-native HTMLTableElement", () => {
+      test("should successfully create wrapper for non-native HTMLTableElement", () => {
         const element = documentFromXml("<root><table/></root>").documentElement.firstElementChild;
         if (element) {
           const wrapper = new HTMLTableElementWrapper(element);
@@ -72,9 +80,9 @@ describe("HTMLTableElements", () => {
         }
       });
 
-      it("should fail to create wrapper for unmatched elements", () => {
+      test("should fail to create wrapper for unmatched elements", () => {
         const element = documentFromXml("<root><table/></root>").documentElement;
-        expect(() => new HTMLTableElementWrapper(element)).toThrowError();
+        expect(() => new HTMLTableElementWrapper(element)).toThrow(Error);
       });
     });
 

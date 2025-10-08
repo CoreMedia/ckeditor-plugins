@@ -1,4 +1,7 @@
-import { documentFromHtml, isHTMLElement, rgb, RgbColor } from "../src";
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
+import { documentFromHtml, isHTMLElement, rgb } from "../src";
 import {
   fontWeightToNumber,
   FontWeightInformation,
@@ -7,6 +10,7 @@ import {
   getFontWeightNumeric,
 } from "../src/CSSStyleDeclarations";
 import { RequireSelected } from "@coremedia/ckeditor5-common";
+import { RgbColor } from "@coremedia/ckeditor5-dom-support";
 
 const parseFirstElement = (html: string): Element | undefined =>
   documentFromHtml(html).body.firstElementChild ?? undefined;
@@ -32,28 +36,40 @@ const style = (s?: string): CSSStyleDeclaration => {
 
 describe("CSSStyleDeclarations", () => {
   describe("getColor", () => {
-    it.each`
-      style                                 | expected                | comment
-      ${undefined}                          | ${undefined}            | ${`no color information for no style set`}
-      ${"font-weight: bold;"}               | ${undefined}            | ${`no color information for only other styles set`}
-      ${"color: #010203;"}                  | ${rgb(1, 2, 3)}         | ${``}
-      ${"color: #01020300;"}                | ${rgb(1, 2, 3, 0)}      | ${``}
-      ${"color: #010203FF;"}                | ${rgb(1, 2, 3, 1)}      | ${``}
-      ${"color: #010203A0;"}                | ${rgb(1, 2, 3, 0.627)}  | ${``}
-      ${"color: rgb(1, 2, 3);"}             | ${rgb(1, 2, 3)}         | ${``}
-      ${"color: rgba(1, 2, 3, 0.5);"}       | ${rgb(1, 2, 3, 0.5)}    | ${``}
-      ${"color: rgba(1, 2, 3, 0.51);"}      | ${rgb(1, 2, 3, 0.51)}   | ${``}
-      ${"color: rgba(1, 2, 3, 0.513);"}     | ${rgb(1, 2, 3, 0.513)}  | ${``}
-      ${"color: rgba(1, 2, 3, 0.5134);"}    | ${rgb(1, 2, 3, 0.513)}  | ${`alpha truncated`}
-      ${"color: fuchsia;"}                  | ${"fuchsia"}            | ${`Color names are not resolved but returned as is.`}
-      ${"color: hsl(30, 82%, 43%);"}        | ${rgb(20, 20, 20)}      | ${`CssStyle: rgb(20,20,20); Chrome: rgb(200,110,20)`}
-      ${"color: hsla(237, 74%, 33%, 0.5);"} | ${rgb(22, 22, 22, 0.5)} | ${`CssStyle: rgba(22,22,22,0.5); Chrome: rgba(22, 28, 146, 0.5)`}
-      ${"color: currentcolor;"}             | ${"currentcolor"}       | ${`handled similar to color name`}
-      ${"color: none;"}                     | ${undefined}            | ${`CssStyle as well as Browsers make 'color' unset in this case`}
-      ${"color: transparent;"}              | ${"transparent"}        | ${`handled similar to color name`}
-    `(
-      `[$#] Should parse style '$style' to color: $expected`,
-      ({ style: styleDecl, expected }: { style: string; expected: RgbColor | string | undefined }) => {
+    const cases: { style: string | undefined; expected: RgbColor | string | undefined; comment: string }[] = [
+      { style: undefined, expected: undefined, comment: `no color information for no style set` },
+      { style: "font-weight: bold;", expected: undefined, comment: `no color information for only other styles set` },
+      { style: "color: #010203;", expected: rgb(1, 2, 3), comment: `` },
+      { style: "color: #01020300;", expected: rgb(1, 2, 3, 0), comment: `` },
+      { style: "color: #010203FF;", expected: rgb(1, 2, 3, 1), comment: `` }, //TODO
+      { style: "color: #010203A0;", expected: rgb(1, 2, 3, 0.627), comment: `` },
+      { style: "color: rgb(1, 2, 3);", expected: rgb(1, 2, 3), comment: `` },
+      { style: "color: rgba(1, 2, 3, 0.5);", expected: rgb(1, 2, 3, 0.5), comment: `` },
+      { style: "color: rgba(1, 2, 3, 0.51);", expected: rgb(1, 2, 3, 0.51), comment: `` },
+      { style: "color: rgba(1, 2, 3, 0.513);", expected: rgb(1, 2, 3, 0.513), comment: `` },
+      { style: "color: rgba(1, 2, 3, 0.5134);", expected: rgb(1, 2, 3, 0.513), comment: `alpha truncated` },
+      { style: "color: fuchsia;", expected: "fuchsia", comment: `Color names are not resolved but returned as is.` },
+      {
+        style: "color: hsl(30, 82%, 43%);",
+        expected: rgb(20, 20, 20),
+        comment: `CssStyle: rgb(20,20,20); Chrome: rgb(200,110,20)`,
+      },
+      {
+        style: "color: hsla(237, 74%, 33%, 0.5);",
+        expected: rgb(22, 22, 22, 0.5),
+        comment: `CssStyle: rgba(22,22,22,0.5); Chrome: rgba(22, 28, 146, 0.5)`,
+      },
+      { style: "color: currentcolor;", expected: "currentcolor", comment: `handled similar to color name` },
+      {
+        style: "color: none;",
+        expected: undefined,
+        comment: `CssStyle as well as Browsers make 'color' unset in this case`,
+      },
+      { style: "color: transparent;", expected: "transparent", comment: `handled similar to color name` },
+    ];
+
+    for (const [i, { style: styleDecl, expected, comment }] of cases.entries()) {
+      test(`[${i}] Should parse style '${styleDecl}' to color: ${expected} — ${comment}`, () => {
         const declaration = style(styleDecl);
         const actual = getColor(declaration);
         if (expected === undefined) {
@@ -61,38 +77,43 @@ describe("CSSStyleDeclarations", () => {
         } else if (typeof expected === "string") {
           expect(actual).toBe(expected);
         } else {
-          expect(actual).toMatchObject(expected);
+          if (actual instanceof RgbColor) {
+            // Node’s native test runner is stricter than Jest when comparing class instances.
+            // Therefore, compare plain objects here
+            expect({ ...actual }).toMatchObject({ ...expected });
+          }
         }
-      },
-    );
+      });
+    }
   });
 
   describe("getFontWeightNumeric", () => {
-    it.each`
-      style                      | expected                      | comment
-      ${undefined}               | ${undefined}                  | ${`unset style`}
-      ${"color: fuchsia;"}       | ${undefined}                  | ${`No font-weight information.`}
-      ${"font-weight: bold;"}    | ${fontWeightToNumber.bold}    | ${``}
-      ${"font-weight: bolder;"}  | ${fontWeightToNumber.bolder}  | ${``}
-      ${"font-weight: lighter;"} | ${fontWeightToNumber.lighter} | ${``}
-      ${"font-weight: normal;"}  | ${fontWeightToNumber.normal}  | ${``}
-      ${"font-weight: inherit;"} | ${undefined}                  | ${``}
-      ${"font-weight: initial;"} | ${undefined}                  | ${``}
-      ${"font-weight: unset;"}   | ${undefined}                  | ${``}
-      ${"font-weight: 0;"}       | ${0}                          | ${`Less than minimum (1) according to MDN.`}
-      ${"font-weight: 1;"}       | ${1}                          | ${`Minimum font-weight`}
-      ${"font-weight: 1000;"}    | ${1000}                       | ${`Maximum font-weight`}
-      ${"font-weight: 400;"}     | ${400}                        | ${``}
-      ${"font-weight: 700;"}     | ${700}                        | ${``}
-      ${"font-weight: 900;"}     | ${900}                        | ${``}
-    `(
-      `[$#] Should parse style '$style' to numeric font-weight: $expected`,
-      ({ style: styleDecl, expected }: { style: string; expected: number | undefined }) => {
-        const declaration = style(styleDecl);
-        const actual = getFontWeightNumeric(declaration);
-        expect(actual).toBe(expected);
-      },
-    );
+    describe("getFontWeightNumeric", () => {
+      const cases = [
+        { style: undefined, expected: undefined, comment: `unset style` },
+        { style: "color: fuchsia;", expected: undefined, comment: `No font-weight information.` },
+        { style: "font-weight: bold;", expected: fontWeightToNumber.bold, comment: `` },
+        { style: "font-weight: bolder;", expected: fontWeightToNumber.bolder, comment: `` },
+        { style: "font-weight: lighter;", expected: fontWeightToNumber.lighter, comment: `` },
+        { style: "font-weight: normal;", expected: fontWeightToNumber.normal, comment: `` },
+        { style: "font-weight: inherit;", expected: undefined, comment: `` },
+        { style: "font-weight: initial;", expected: undefined, comment: `` },
+        { style: "font-weight: unset;", expected: undefined, comment: `` },
+        { style: "font-weight: 1;", expected: 1, comment: `Minimum font-weight` },
+        { style: "font-weight: 1000;", expected: 1000, comment: `Maximum font-weight` },
+        { style: "font-weight: 400;", expected: 400, comment: `` },
+        { style: "font-weight: 700;", expected: 700, comment: `` },
+        { style: "font-weight: 900;", expected: 900, comment: `` },
+      ];
+
+      for (const [i, { style: styleDecl, expected, comment }] of cases.entries()) {
+        test(`[${i}] Should parse style '${styleDecl}' to numeric font-weight: ${expected} — ${comment}`, () => {
+          const declaration = style(styleDecl);
+          const actual = getFontWeightNumeric(declaration);
+          expect(actual).toBe(expected);
+        });
+      }
+    });
   });
 
   describe("getFontWeight", () => {
@@ -123,35 +144,43 @@ describe("CSSStyleDeclarations", () => {
           : fwNumber(asText, asNumber)
         : fwText(asText, asNumber);
 
-    it.each`
-      style                      | expected                                     | comment
-      ${undefined}               | ${undefined}                                 | ${`unset style`}
-      ${"color: fuchsia;"}       | ${undefined}                                 | ${`No font-weight information.`}
-      ${"font-weight: bold;"}    | ${fw("bold", fontWeightToNumber.bold)}       | ${``}
-      ${"font-weight: bolder;"}  | ${fw("bolder", fontWeightToNumber.bolder)}   | ${``}
-      ${"font-weight: lighter;"} | ${fw("lighter", fontWeightToNumber.lighter)} | ${``}
-      ${"font-weight: normal;"}  | ${fw("normal", fontWeightToNumber.normal)}   | ${``}
-      ${"font-weight: inherit;"} | ${fw("inherit")}                             | ${``}
-      ${"font-weight: initial;"} | ${fw("initial")}                             | ${``}
-      ${"font-weight: unset;"}   | ${fw("unset")}                               | ${``}
-      ${"font-weight: 0;"}       | ${fw(undefined, 0)}                          | ${`Less than minimum (1) according to MDN.`}
-      ${"font-weight: 1;"}       | ${fw(undefined, 1)}                          | ${`Minimum font-weight`}
-      ${"font-weight: 1000;"}    | ${fw(undefined, 1000)}                       | ${`Maximum font-weight`}
-      ${"font-weight: 100;"}     | ${fw(undefined, fontWeightToNumber.lighter)} | ${`Design Scope: Don't "guess" relative weights from bare numbers.`}
-      ${"font-weight: 400;"}     | ${fw("normal", fontWeightToNumber.normal)}   | ${``}
-      ${"font-weight: 700;"}     | ${fw("bold", fontWeightToNumber.bold)}       | ${``}
-      ${"font-weight: 900;"}     | ${fw(undefined, fontWeightToNumber.bolder)}  | ${`Design Scope: Don't "guess" relative weights from bare numbers.`}
-    `(
-      `[$#] Should parse style '$style' to font-weight: $expected`,
-      ({ style: styleDecl, expected }: { style: string; expected: FontWeightInformation | undefined }) => {
+    const cases = [
+      { style: undefined, expected: undefined, comment: `unset style` },
+      { style: "color: fuchsia;", expected: undefined, comment: `No font-weight information.` },
+      { style: "font-weight: bold;", expected: fw("bold", fontWeightToNumber.bold), comment: `` },
+      { style: "font-weight: bolder;", expected: fw("bolder", fontWeightToNumber.bolder), comment: `` },
+      { style: "font-weight: lighter;", expected: fw("lighter", fontWeightToNumber.lighter), comment: `` },
+      { style: "font-weight: normal;", expected: fw("normal", fontWeightToNumber.normal), comment: `` },
+      { style: "font-weight: inherit;", expected: fw("inherit"), comment: `` },
+      { style: "font-weight: initial;", expected: fw("initial"), comment: `` },
+      { style: "font-weight: unset;", expected: fw("unset"), comment: `` },
+      { style: "font-weight: 1;", expected: fw(undefined, 1), comment: `Minimum font-weight` },
+      { style: "font-weight: 1000;", expected: fw(undefined, 1000), comment: `Maximum font-weight` },
+      {
+        style: "font-weight: 100;",
+        expected: fw(undefined, fontWeightToNumber.lighter),
+        comment: `Design Scope: Don't "guess" relative weights from bare numbers.`,
+      },
+      { style: "font-weight: 400;", expected: fw("normal", fontWeightToNumber.normal), comment: `` },
+      { style: "font-weight: 700;", expected: fw("bold", fontWeightToNumber.bold), comment: `` },
+      {
+        style: "font-weight: 900;",
+        expected: fw(undefined, fontWeightToNumber.bolder),
+        comment: `Design Scope: Don't "guess" relative weights from bare numbers.`,
+      },
+    ];
+
+    for (const [i, { style: styleDecl, expected, comment }] of cases.entries()) {
+      test(`[${i}] Should parse style '${styleDecl}' to font-weight: ${expected} — ${comment}`, () => {
         const declaration = style(styleDecl);
         const actual = getFontWeight(declaration);
         if (expected === undefined) {
           expect(actual).toBeUndefined();
         } else {
+          // @ts-expect-error ts seems to think that toMatchObject cant handle FontWeightInformation
           expect(actual).toMatchObject(expected);
         }
-      },
-    );
+      });
+    }
   });
 });

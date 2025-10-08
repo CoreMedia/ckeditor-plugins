@@ -1,3 +1,6 @@
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { ElementDefinition, isElement, removeClass, renameElement } from "../src/Elements";
@@ -5,7 +8,7 @@ import { serializeToXmlString } from "../src/Nodes";
 
 describe("Elements", () => {
   describe("isElement", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml("<body/>").body;
       if (isElement(node)) {
         // We can now access `outerHTML`.
@@ -13,26 +16,25 @@ describe("Elements", () => {
       }
     });
 
-    it.each`
-      matched
-      ${documentFromHtml("<body/>").body}
-      ${documentFromXml("<root><child/></root>").firstElementChild}
-    `("[$#] should match any Element: $matched", ({ matched }: { matched: unknown }) => {
-      expect(isElement(matched)).toBeTruthy();
-    });
+    const matchedCases = [documentFromHtml("<body/>").body, documentFromXml("<root><child/></root>").firstElementChild];
 
-    it.each`
-      unmatched
-      ${undefined}
-      ${null}
-      ${documentFromHtml("<body/>")}
-    `("[$#] should not match any other objects than Elements: $unmatched", ({ unmatched }: { unmatched: unknown }) => {
-      expect(isElement(unmatched)).toBeFalsy();
-    });
+    for (const [i, matched] of matchedCases.entries()) {
+      test(`[${i}] should match any Element: ${matched}`, () => {
+        expect(isElement(matched)).toBeTruthy();
+      });
+    }
+
+    const unmatchedCases = [undefined, null, documentFromHtml("<body/>")];
+
+    for (const [i, unmatched] of unmatchedCases.entries()) {
+      test(`[${i}] should not match any other objects than Elements: ${String(unmatched)}`, () => {
+        expect(isElement(unmatched)).toBeFalsy();
+      });
+    }
   });
 
   describe("renameElement", () => {
-    it(USE_CASE_NAME, () => {
+    test(USE_CASE_NAME, () => {
       const xmlDocument = documentFromXml(`<root lang="en" id="ID"><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -41,7 +43,7 @@ describe("Elements", () => {
       expect(serializeToXmlString(xmlDocument)).toStrictEqual(`<renamed lang="en" id="ID"><child/></renamed>`);
     });
 
-    it("should be possible to rename element just by providing its qualified name", () => {
+    test("should be possible to rename element just by providing its qualified name", () => {
       const xmlDocument = documentFromXml(`<root/>`);
       const { documentElement: originalElement } = xmlDocument;
       const newName = "renamed";
@@ -56,7 +58,7 @@ describe("Elements", () => {
       expect(tagName).toStrictEqual(newName);
     });
 
-    it("should be possible to rename element by providing its full definition", () => {
+    test("should be possible to rename element by providing its full definition", () => {
       const xmlDocument = documentFromXml(`<root/>`);
       const { documentElement: originalElement } = xmlDocument;
       const newPrefix = "c";
@@ -78,7 +80,7 @@ describe("Elements", () => {
       expect(tagName).toStrictEqual(qualifiedName);
     });
 
-    it("should move children, if requested by `deep=true` (default)", () => {
+    test("should move children, if requested by `deep=true` (default)", () => {
       const xmlDocument = documentFromXml(`<root><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -87,7 +89,7 @@ describe("Elements", () => {
       expect(serializeToXmlString(xmlDocument)).toStrictEqual(`<renamed><child/></renamed>`);
     });
 
-    it("should not move children, if requested by `deep=false`", () => {
+    test("should not move children, if requested by `deep=false`", () => {
       const xmlDocument = documentFromXml(`<root><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -96,7 +98,7 @@ describe("Elements", () => {
       expect(serializeToXmlString(xmlDocument)).toStrictEqual(`<renamed/>`);
     });
 
-    it("should copy all attributes to new element", () => {
+    test("should copy all attributes to new element", () => {
       const xmlDocument = documentFromXml(`<root lang="en" id="ID"/>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -107,7 +109,7 @@ describe("Elements", () => {
   });
 
   describe("removeClass", () => {
-    it("should be able to clean up class attribute (optional corner case)", () => {
+    test("should be able to clean up class attribute (optional corner case)", () => {
       const xmlDocument = documentFromXml(`<root class="CLASS"/>`);
       const element = xmlDocument.documentElement;
       element.classList.remove("CLASS");
@@ -117,14 +119,14 @@ describe("Elements", () => {
       expect(element.hasAttribute("class")).toStrictEqual(false);
     });
 
-    it("should remove class 'without traces'", () => {
+    test("should remove class 'without traces'", () => {
       const xmlDocument = documentFromXml(`<root class="CLASS"/>`);
       const element = xmlDocument.documentElement;
       removeClass(element, "CLASS");
       expect(element.hasAttribute("class")).toStrictEqual(false);
     });
 
-    it("should keep other classes", () => {
+    test("should keep other classes", () => {
       const xmlDocument = documentFromXml(`<root class="CLASS1 CLASS2"/>`);
       const element = xmlDocument.documentElement;
       removeClass(element, "CLASS1");
