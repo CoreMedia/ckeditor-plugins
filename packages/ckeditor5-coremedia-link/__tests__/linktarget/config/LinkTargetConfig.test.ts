@@ -1,5 +1,8 @@
 /* eslint no-null/no-null: off */
 
+import "global-jsdom/register";
+import test, { describe, beforeEach, TestContext } from "node:test";
+import expect from "expect";
 import { Config } from "ckeditor5";
 import { parseLinkTargetConfig } from "../../../src/linktarget/config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";
@@ -14,101 +17,122 @@ describe("LinkTargetConfig", () => {
     beforeEach(() => {
       config = new Config();
     });
-    test.each`
-      config
-      ${undefined}
-      ${null}
-      ${[]}
-    `("[$#] should provide no definitiopns for no/empty config: $config", ({ config: emptyConfig }) => {
-      config.set("link.targets", emptyConfig);
-      const definitions = parseLinkTargetConfig(config);
-      const names = definitions.map((definition) => definition.name);
-      expect(definitions).toHaveLength(0);
-      expect(names).toEqual([]);
+    const cases = [undefined, null, []];
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, emptyConfig] of cases.entries()) {
+        await t.test(`[${i}] should provide no definitiopns for no/empty config: ${emptyConfig}`, () => {
+          config.set("link.targets", emptyConfig);
+          const definitions = parseLinkTargetConfig(config);
+          const names = definitions.map((definition) => definition.name);
+          expect(definitions).toHaveLength(0);
+          expect(names).toEqual([]);
+        });
+      }
     });
-    test.each`
-      name        | title
-      ${"_self"}  | ${"Open in Current Tab"}
-      ${"_blank"} | ${"Open in New Tab"}
-      ${"_embed"} | ${"Show Embedded"}
-      ${"_other"} | ${"Open in Frame"}
-    `(
-      "[$#] Should resolve well-known config (referenced as string) to full object for '$name' having title '$title'",
-      ({ name, title: expectedTitle }) => {
-        config.set("link.toolbar", [name]);
-        const definitions = parseLinkTargetConfig(config);
-        expect(definitions).toHaveLength(1);
-        expect(definitions[0]?.title).toStrictEqual(expectedTitle);
-      },
-    );
-    test.each`
-      name        | title
-      ${"_self"}  | ${"Open in Current Tab"}
-      ${"_blank"} | ${"Open in New Tab"}
-      ${"_embed"} | ${"Show Embedded"}
-      ${"_other"} | ${"Open in Frame"}
-    `(
-      "[$#] Should resolve well-known config (referenced as string, also defined as string in link.targets) to full object for '$name' having title '$title'",
-      ({ name, title: expectedTitle }) => {
-        config.set("link.targets", [name]);
-        config.set("link.toolbar", [name]);
-        const definitions = parseLinkTargetConfig(config);
-        expect(definitions).toHaveLength(1);
-        expect(definitions[0]?.title).toStrictEqual(expectedTitle);
-      },
-    );
-    test.each`
-      name        | title
-      ${"_self"}  | ${"Open in Current Tab"}
-      ${"_blank"} | ${"Open in New Tab"}
-      ${"_embed"} | ${"Show Embedded"}
-      ${"_other"} | ${"Open in Frame"}
-    `(
-      "[$#] Should resolve well-known config (referenced as object) to full object for '$name' having title '$title'",
-      ({ name, title: expectedTitle }) => {
-        config.set("link.toolbar", [name]);
-        config.set("link.targets", [
-          {
-            name,
+
+    const wellKnownCases = [
+      { name: "_self", title: "Open in Current Tab" },
+      { name: "_blank", title: "Open in New Tab" },
+      { name: "_embed", title: "Show Embedded" },
+      { name: "_other", title: "Open in Frame" },
+    ];
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { name, title: expectedTitle }] of wellKnownCases.entries()) {
+        await t.test(
+          `[${i}] Should resolve well-known config (referenced as string) to full object for '${name}' having title ${expectedTitle}`,
+          () => {
+            config.set("link.toolbar", [name]);
+            const definitions = parseLinkTargetConfig(config);
+            expect(definitions).toHaveLength(1);
+            expect(definitions[0]?.title).toStrictEqual(expectedTitle);
           },
-        ]);
-        const definitions = parseLinkTargetConfig(config);
-        expect(definitions).toHaveLength(1);
-        // This also tests for "auto-completing object".
-        expect(definitions[0]?.title).toStrictEqual(expectedTitle);
-      },
-    );
-    test.each`
-      names
-      ${["_self", "_blank"]}
-      ${["_blank", "_self"]}
-      ${["_other", "_embed", "_blank", "_self"]}
-    `("[$#] Should respect order for well-known config names: $names", ({ names }) => {
-      config.set("link.toolbar", [...names]);
-      config.set("link.targets", [...names]);
-      const definitions = parseLinkTargetConfig(config);
-      const actualNames = definitions.map((d) => d.name);
-      expect(definitions).toHaveLength(names.length);
-      expect(actualNames).toStrictEqual(names);
+        );
+      }
     });
-    test.each`
-      name        | title
-      ${"_self"}  | ${"Custom: Open in Current Tab"}
-      ${"_blank"} | ${"Custom: Open in New Tab"}
-      ${"_embed"} | ${"Custom: Show Embedded"}
-      ${"_other"} | ${"Custom: Open in Frame"}
-    `("[$#] Should be able to override well-known config name `$name` with new title: '$title'", ({ name, title }) => {
-      config.set("link.toolbar", [name]);
-      config.set("link.targets", [
-        {
-          name,
-          title,
-        },
-      ]);
-      const definitions = parseLinkTargetConfig(config);
-      expect(definitions).toHaveLength(1);
-      expect(definitions[0]?.title).toStrictEqual(title);
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { name, title: expectedTitle }] of wellKnownCases.entries()) {
+        await t.test(
+          `[${i}] Should resolve well-known config (referenced as string, also defined as string in link.targets) to full object for '${name}' having title ${expectedTitle}`,
+          () => {
+            config.set("link.targets", [name]);
+            config.set("link.toolbar", [name]);
+            const definitions = parseLinkTargetConfig(config);
+            expect(definitions).toHaveLength(1);
+            expect(definitions[0]?.title).toStrictEqual(expectedTitle);
+          },
+        );
+      }
     });
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { name, title: expectedTitle }] of wellKnownCases.entries()) {
+        await t.test(
+          `[${i}] Should resolve well-known config (referenced as object) to full object for '${name}' having title ${expectedTitle}`,
+          () => {
+            config.set("link.toolbar", [name]);
+            config.set("link.targets", [
+              {
+                name,
+              },
+            ]);
+            const definitions = parseLinkTargetConfig(config);
+            expect(definitions).toHaveLength(1);
+            // This also tests for "auto-completing object".
+            expect(definitions[0]?.title).toStrictEqual(expectedTitle);
+          },
+        );
+      }
+    });
+
+    const namesCases = [
+      { names: ["_self", "_blank"] },
+      { names: ["_blank", "_self"] },
+      { names: ["_other", "_embed", "_blank", "_self"] },
+    ];
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { names }] of namesCases.entries()) {
+        await t.test(`[${i}] Should respect order for well-known config names: ${names}`, () => {
+          config.set("link.toolbar", [...names]);
+          config.set("link.targets", [...names]);
+          const definitions = parseLinkTargetConfig(config);
+          const actualNames = definitions.map((d) => d.name);
+          expect(definitions).toHaveLength(names.length);
+          expect(actualNames).toStrictEqual(names);
+        });
+      }
+    });
+
+    const customCases = [
+      { name: "_self", title: "Custom: Open in Current Tab" },
+      { name: "_blank", title: "Custom: Open in New Tab" },
+      { name: "_embed", title: "Custom: Show Embedded" },
+      { name: "_other", title: "Custom: Open in Frame" },
+    ];
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { name, title }] of customCases.entries()) {
+        await t.test(
+          `[${i}] Should be able to override well-known config name '${name}' with new title: '${title}'`,
+          () => {
+            config.set("link.toolbar", [name]);
+            config.set("link.targets", [
+              {
+                name,
+                title,
+              },
+            ]);
+            const definitions = parseLinkTargetConfig(config);
+            expect(definitions).toHaveLength(1);
+            expect(definitions[0]?.title).toStrictEqual(title);
+          },
+        );
+      }
+    });
+
     test("should be able providing an only-name custom configuration with some defaults applied", () => {
       const customName = "custom";
       config.set("link.targets", [customName]);
@@ -133,63 +157,73 @@ describe("LinkTargetConfig", () => {
       expect(definitions[0]?.name).toStrictEqual(customName);
       expect(definitions[0]?.title).toStrictEqual(customTitle);
     });
-    test.each`
-      mode
-      ${"object"}
-      ${"string"}
-    `("[$#] should provide defaults for custom targets ($mode definition)", ({ mode }) => {
-      const customName = "custom";
-      config.set("link.toolbar", [customName]);
-      config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
-      const definitions = parseLinkTargetConfig(config);
-      expect(definitions).toHaveLength(1);
-      expect(definitions[0]?.name).toStrictEqual(customName);
-      expect(definitions[0]?.title).toStrictEqual(customName);
+
+    const modeCases = [{ mode: "object" }, { mode: "string" }] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { mode }] of modeCases.entries()) {
+        await t.test(`[${i}] should provide defaults for custom targets (${mode} definition)`, () => {
+          const customName = "custom";
+          config.set("link.toolbar", [customName]);
+          config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
+          const definitions = parseLinkTargetConfig(config);
+          expect(definitions).toHaveLength(1);
+          expect(definitions[0]?.name).toStrictEqual(customName);
+          expect(definitions[0]?.title).toStrictEqual(customName);
+        });
+      }
     });
-    test.each`
-      mode
-      ${"object"}
-      ${"string"}
-    `("[$#] should fail for invalid custom names ($mode definition)", ({ mode }) => {
-      // Knowing the code (white-box), this also tests for a target not having
-      // any name set. But only testing empty name is fine here, as it should also
-      // be forbidden.
-      const customName = "";
-      config.set("link.toolbar", [customName]);
-      config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
-      expect(() => parseLinkTargetConfig(config)).toThrow();
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { mode }] of modeCases.entries()) {
+        await t.test(`[${i}] should fail for invalid custom names (${mode} definition)`, () => {
+          // Knowing the code (white-box), this also tests for a target not having
+          // any name set. But only testing empty name is fine here, as it should also
+          // be forbidden.
+          const customName = "";
+          config.set("link.toolbar", [customName]);
+          config.set("link.targets", [createCustomNamedTarget(customName, mode)]);
+          expect(() => parseLinkTargetConfig(config)).toThrow();
+        });
+      }
     });
-    test.each`
-      config
-      ${42}
-      ${someFunction}
-      ${"lorem ipsum"}
-      ${""}
-      ${true}
-      ${false}
-      ${{}}
-      ${{
-  lorem: "ipsum",
-}}
-    `("[$#] should fail on invalid configuration type for link.targets: $config", ({ config: brokenConfig }) => {
-      config.set("link.targets", brokenConfig);
-      config.set("link.toolbar", [brokenConfig]);
-      expect(() => parseLinkTargetConfig(config)).toThrow();
+
+    const configCases = [
+      { config: 42 },
+      { config: someFunction },
+      { config: "lorem ipsum" },
+      { config: "" },
+      { config: true },
+      { config: false },
+      { config: {} },
+      { config: { lorem: "ipsum" } },
+    ] as const;
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { config: brokenConfig }] of configCases.entries()) {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        await t.test(`[${i}] should fail on invalid configuration type for link.targets: ${brokenConfig})`, () => {
+          config.set("link.targets", brokenConfig);
+          config.set("link.toolbar", [brokenConfig]);
+          expect(() => parseLinkTargetConfig(config)).toThrow();
+        });
+      }
     });
-    test.each`
-      entry
-      ${42}
-      ${someFunction}
-      ${true}
-      ${false}
-    `(
-      "[$#] should fail on invalid configuration entry types for link.targets array: $entry",
-      ({ entry: invalidEntry }) => {
-        config.set("link.toolbar", [invalidEntry]);
-        config.set("link.targets", [invalidEntry]);
-        expect(() => parseLinkTargetConfig(config)).toThrow();
-      },
-    );
+
+    const entryCases = [{ entry: 42 }, { entry: someFunction }, { entry: true }, { entry: false }];
+
+    test("cases", async (t: TestContext) => {
+      for (const [i, { entry: invalidEntry }] of entryCases.entries()) {
+        await t.test(
+          `[${i}] should fail on invalid configuration entry types for link.targets array: ${invalidEntry})`,
+          () => {
+            config.set("link.toolbar", [invalidEntry]);
+            config.set("link.targets", [invalidEntry]);
+            expect(() => parseLinkTargetConfig(config)).toThrow();
+          },
+        );
+      }
+    });
   });
 });
 const createCustomNamedTarget = (name: string, mode: "object" | "string"): LinkTargetOptionDefinition | string => {
