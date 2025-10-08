@@ -1,6 +1,9 @@
-import { escapeFontFamily } from "../src/FontReplacer";
+import "global-jsdom/register";
+import test, { TestContext } from "node:test";
+import assert from "node:assert";
+import { escapeFontFamily } from "../src/FontReplacer.js";
 
-it.each([
+const cases: [string, string][] = [
   [",Symbol", "Symbol"],
   ["Symbol", "Symbol"],
   ["Georgia, serif", "Georgia"],
@@ -8,10 +11,16 @@ it.each([
   ["sans-serif", "sans-serif"],
   [" cursive", "cursive"],
   ["system-ui ,serif", "system-ui"],
-])(
-  "Should '%s' parse to the first font-family '%s' without leading and trailing special characters.",
-  (input: string, expected: string) => {
-    const actual = escapeFontFamily(input);
-    expect(actual).toBe(expected);
-  },
-);
+];
+
+void test("escapeFontFamily parses correctly", async (t: TestContext) => {
+  for (const [input, expected] of cases) {
+    await t.test(
+      `Should '${input}' parse to the first font-family '${expected}' without leading and trailing special characters.`,
+      () => {
+        const actual = escapeFontFamily(input);
+        assert.strictEqual(actual, expected);
+      },
+    );
+  }
+});
