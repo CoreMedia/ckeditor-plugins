@@ -1,16 +1,23 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import test, { describe } from "node:test";
 import { formatLink } from "../../../../src/compatibility/v10/rules/IdHelper";
 
 describe("IdHelper", () => {
-  test.each`
-    href                                      | expected
-    ${""}                                     | ${""}
-    ${"https://example.org/"}                 | ${"https://example.org/"}
-    ${"content/2"}                            | ${"content/2"}
-    ${"coremedia:///cap/content/2"}           | ${"content/2"}
-    ${"content/2#properties.data"}            | ${"content/2#properties.data"}
-    ${"coremedia:///cap/blob/content/2#data"} | ${"content/2#properties.data"}
-  `("[$#] `$href` -> `$expected`", ({ href, expected }) => {
-    const actual = formatLink(href);
-    expect(actual).toStrictEqual(expected);
-  });
+  const cases = [
+    { href: "", expected: "" },
+    { href: "https://example.org/", expected: "https://example.org/" },
+    { href: "content/2", expected: "content/2" },
+    { href: "coremedia:///cap/content/2", expected: "content/2" },
+    { href: "content/2#properties.data", expected: "content/2#properties.data" },
+    { href: "coremedia:///cap/blob/content/2#data", expected: "content/2#properties.data" },
+  ];
+
+  for (const [index, { href, expected }] of cases.entries()) {
+    test(`[${index}] \`${href}\` -> \`${expected}\``, () => {
+      const actual = formatLink(href);
+      expect(actual).toStrictEqual(expected);
+    });
+  }
 });

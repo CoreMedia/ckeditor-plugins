@@ -1,6 +1,9 @@
 /* eslint no-null/no-null: off */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
-import "jest-xml-matcher";
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import RichTextSchema, { V10Strictness } from "../../../src/compatibility/v10/RichTextSchema";
 import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
 import { Strictness } from "../../../src/Strictness";
@@ -797,9 +800,8 @@ describe("RichTextSchema.adjustAttributes", () => {
 
   const strictnessKeys = Object.keys(Strictness).filter((x) => !(parseInt(x) >= 0));
 
-  describe.each<TransformAttributesTestFixture>(testFixtures)(
-    "(%#) %s",
-    (name: string, testData: TransformAttributesTestData) => {
+  for (const [index, [name, testData]] of testFixtures.entries()) {
+    describe(`(${index}) ${name}`, () => {
       for (const strictness of testData.strictness) {
         const schema = new RichTextSchema(strictness);
 
@@ -811,8 +813,8 @@ describe("RichTextSchema.adjustAttributes", () => {
             null,
             XPathResult.FIRST_ORDERED_NODE_TYPE,
           );
-          const element: Element = xPathResult.singleNodeValue as Element;
-          const mutableElement = ElementProxy.instantiateForTest(element);
+
+          const element: Element | null = xPathResult.singleNodeValue as Element | null;
 
           if (element === null) {
             throw new Error(
@@ -822,17 +824,18 @@ describe("RichTextSchema.adjustAttributes", () => {
             );
           }
 
-          schema.adjustAttributes(mutableElement);
+          const mutableElement = ElementProxy.instantiateForTest(element);
 
+          schema.adjustAttributes(mutableElement);
           mutableElement.persist();
 
-          // Cannot use outerHtml here, as it will/may cause a DOMException for JSDom.
+          // Cannot use outerHTML in JSDOM.
           const actualXml = serializer.serializeToString(xmlDocument.documentElement);
-          expect(actualXml).toEqualXML(testData.expected);
+          expect(actualXml).toEqual(testData.expected);
         });
       }
-    },
-  );
+    });
+  }
 });
 
 /*
@@ -1509,27 +1512,35 @@ describe("RichTextSchema.isAllowedAtParent", () => {
     ],
   ];
 
-  describe.each<ValidateTestFixture>(testFixtures)("(%#) %s", (name: string, testData: ValidateParentData) => {
-    const xmlDocument: Document = parser.parseFromString(testData.input.trim(), "text/xml");
-    const xPathResult = xmlDocument.evaluate(testData.xpath, xmlDocument, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
-    const schema = new RichTextSchema(Strictness.STRICT);
+  for (const [index, [name, testData]] of testFixtures.entries()) {
+    describe(`(${index}) ${name}`, () => {
+      const xmlDocument: Document = parser.parseFromString(testData.input.trim(), "text/xml");
+      const xPathResult = xmlDocument.evaluate(
+        testData.xpath,
+        xmlDocument,
+        null,
+        XPathResult.ORDERED_NODE_ITERATOR_TYPE,
+      );
+      const schema = new RichTextSchema(Strictness.STRICT);
 
-    let validatedAtLeastOnce = false;
-    let element: Element | null;
-    while ((element = xPathResult.iterateNext() as Element | null)) {
-      validatedAtLeastOnce = true;
-      const mutableElement = ElementProxy.instantiateForTest(element);
-      test(`<${element?.parentElement?.tagName ?? "#document"}>, ${
-        testData.expected ? "allowed" : "forbidden"
-      }: Validating <${element?.tagName}> if allowed as child of <${
-        element?.parentElement?.tagName ?? "#document"
-      }>, expected response: ${testData.expected}.`, () => {
-        expect(schema.isElementAllowedAtParent(mutableElement)).toStrictEqual(testData.expected);
-      });
-    }
+      let validatedAtLeastOnce = false;
+      let element: Element | null;
 
-    if (!validatedAtLeastOnce) {
-      throw new Error(`No elements tested, XPath may be wrong. xpath: ${testData.xpath}, input: ${testData.input}`);
-    }
-  });
+      while ((element = xPathResult.iterateNext() as Element | null)) {
+        validatedAtLeastOnce = true;
+
+        const mutableElement = ElementProxy.instantiateForTest(element);
+        const parentTag = element?.parentElement?.tagName ?? "#document";
+        const tag = element?.tagName ?? "unknown";
+
+        test(`<${parentTag}>, ${testData.expected ? "allowed" : "forbidden"}: Validating <${tag}> if allowed as child of <${parentTag}>, expected response: ${testData.expected}.`, () => {
+          expect(schema.isElementAllowedAtParent(mutableElement)).toStrictEqual(testData.expected);
+        });
+      }
+
+      if (!validatedAtLeastOnce) {
+        throw new Error(`No elements tested, XPath may be wrong. xpath: ${testData.xpath}, input: ${testData.input}`);
+      }
+    });
+  }
 });

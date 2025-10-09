@@ -1,5 +1,6 @@
 import { SanitationListener } from "../../src/sanitation/SanitationListener";
 import { AttributeCause, ElementCause } from "../../src/sanitation/Causes";
+import expect from "expect";
 
 /**
  * An artificial listener providing some details to validate in tests.

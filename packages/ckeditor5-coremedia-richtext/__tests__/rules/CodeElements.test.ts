@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import "global-jsdom/register";
+import test, { describe } from "node:test";
 import * as aut from "../../src/rules/CodeElements";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { bijective, TestDirection } from "./TestDirection";
@@ -7,14 +10,22 @@ describe("CodeElements", () => {
   const ruleConfigurations = [aut.codeElements];
   const text = "T";
 
-  describe.each`
-    data                                             | direction    | view
-    ${`<span class="code">${text}</span>`}           | ${bijective} | ${`<code>${text}</code>`}
-    ${`<span class="CLASS code">${text}</span>`}     | ${bijective} | ${`<code class="CLASS">${text}</code>`}
-    ${`<span dir="ltr" class="code">${text}</span>`} | ${bijective} | ${`<code dir="ltr">${text}</code>`}
-  `(
-    "[$#] Should provide mapping from data $direction view: $data $direction $view",
-    ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
+  const codeMappingTestCases: { data: string; direction: TestDirection; view: string }[] = [
+    { data: `<span class="code">${text}</span>`, direction: bijective, view: `<code>${text}</code>` },
+    {
+      data: `<span class="CLASS code">${text}</span>`,
+      direction: bijective,
+      view: `<code class="CLASS">${text}</code>`,
+    },
+    {
+      data: `<span dir="ltr" class="code">${text}</span>`,
+      direction: bijective,
+      view: `<code dir="ltr">${text}</code>`,
+    },
+  ];
+
+  for (const [index, { data, direction, view }] of codeMappingTestCases.entries()) {
+    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(p(data));
       const htmlString = `<body><p>${view}</p></body>`;
       const tester = new RulesTester(ruleConfigurations, "p > *");
@@ -24,6 +35,6 @@ describe("CodeElements", () => {
         direction,
         htmlString,
       });
-    },
-  );
+    });
+  }
 });

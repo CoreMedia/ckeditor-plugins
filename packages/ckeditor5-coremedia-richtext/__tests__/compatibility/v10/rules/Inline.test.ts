@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { allDataProcessingTests, applyFilter, DataProcessingTestCase, Direction, getFilter } from "../DataDrivenTests";
 import { flatten } from "../Utils";
 
@@ -236,17 +241,17 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
   allDataProcessingTests(data);
 
   describe("Ambiguous States", () => {
-    it.each`
-      classes                        | remainingClasses
-      ${"strike underline"}          | ${[]}
-      ${"underline strike"}          | ${[]}
-      ${"underline strike custom"}   | ${["custom"]}
-      ${"underline custom strike"}   | ${["custom"]}
-      ${"custom underline strike"}   | ${["custom"]}
-      ${"c1 underline c2 strike c3"} | ${["c1", "c2", "c3"]}
-    `(
-      `[$#] Should map ambiguous <span class="$classes"> to either <u> or <s> keeping possibly remaining classes.`,
-      ({ classes, remainingClasses }) => {
+    const cases = [
+      { classes: "strike underline", remainingClasses: [] },
+      { classes: "underline strike", remainingClasses: [] },
+      { classes: "underline strike custom", remainingClasses: ["custom"] },
+      { classes: "underline custom strike", remainingClasses: ["custom"] },
+      { classes: "custom underline strike", remainingClasses: ["custom"] },
+      { classes: "c1 underline c2 strike c3", remainingClasses: ["c1", "c2", "c3"] },
+    ];
+
+    for (const [index, { classes, remainingClasses }] of cases.entries()) {
+      test(`[${index}] Should map ambiguous <span class="${classes}"> to either <u> or <s> keeping possibly remaining classes.`, () => {
         const filter = getFilter(Direction.toDataView);
         const input = wrapContent(`<p><span class="${classes}">${text}</span></p>`);
         // silent: We expect a warning here. Don't show it in tests.
@@ -260,7 +265,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
           // Either <u> or <s>
           expect(actual).toMatch(/<([us])>[^<]*<\/\1>/);
         }
-      },
-    );
+      });
+    }
   });
 });

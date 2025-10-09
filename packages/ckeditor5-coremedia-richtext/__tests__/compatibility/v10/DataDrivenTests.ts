@@ -1,7 +1,10 @@
-import "jest-xml-matcher";
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getV10Config, parseXml } from "./Utils";
-import { silenced } from "../../Silenced";
 import { Editor } from "ckeditor5";
 import "../../config";
 
@@ -185,7 +188,8 @@ export const applyFilter = (
   postProcessor?: DocumentPostProcessor,
 ): string => {
   const xmlDocument: Document = parseXml(input);
-  silenced(() => filter.applyTo(xmlDocument.documentElement), silent);
+  // TODO[ntr] silenced(() => filter.applyTo(xmlDocument.documentElement), silent);
+  filter.applyTo(xmlDocument.documentElement);
   postProcessor?.(xmlDocument);
   return serializer.serializeToString(xmlDocument);
 };
@@ -205,18 +209,19 @@ export const dataProcessingTest = (
   }
   ddTest(direction, data, () => {
     const actualXml = applyFilter(filter, input, data.silent, data.postProcessActual);
-    expect(actualXml).toEqualXML(output);
+    expect(actualXml).toEqual(output);
   });
 };
 export const eachDataProcessingTest = (
   direction: Direction.toData | Direction.toDataView,
   testCases: DataProcessingTestCase[],
 ): void => {
-  const name = `[%#] %s`;
   const data = testData(testCases);
-  describe.each<[string, DataProcessingTestCase]>(data)(name, (name, data) => {
-    dataProcessingTest(direction, data);
-  });
+  for (const [i, [caseName, testCase]] of data.entries()) {
+    describe(`[${i}] ${caseName}`, () => {
+      dataProcessingTest(direction, testCase);
+    });
+  }
 };
 export const allDataProcessingTests = (testCases: DataProcessingTestCase[]): void => {
   describe("Data → Data View", () => {

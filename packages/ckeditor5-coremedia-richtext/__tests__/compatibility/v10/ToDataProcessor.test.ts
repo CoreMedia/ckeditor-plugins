@@ -1,6 +1,9 @@
 /* eslint no-null/no-null: off */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
-import "jest-xml-matcher";
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import ToDataProcessor from "../../../src/ToDataProcessor";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { getV10Config } from "./Utils";
@@ -254,40 +257,43 @@ describe("RichTextDataProcessor.toData", () => {
       },
     ]);
   }
-  describe.each<NamedTestData>(testData)("(%#) %s", (name: string, data: TestData) => {
-    const { optimalMilliseconds, gracePercentage } = data;
-    const maximumMilliseconds = optimalMilliseconds + optimalMilliseconds * gracePercentage;
-    function performToData(): {
-      data: Document;
-      elements: number;
-    } {
-      const viewData: DocumentFragment = viewToDom(data.from);
-      const elements = viewData.querySelectorAll("*").length;
-      return {
-        data: dataProcessor.toData(viewData),
-        elements,
-      };
-    }
-    test(`Should not have consumed more than ${maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"} ms (median).`, () => {
-      const { elements } = performToData();
-      const measuredMilliseconds: number[] = [];
-      for (let i = 0; i < EXECUTION_REPETITIONS; i++) {
-        const startMilliseconds = performance.now();
-        performToData();
-        const endMilliseconds = performance.now();
-        measuredMilliseconds.push(endMilliseconds - startMilliseconds);
+
+  for (const [index, [name, data]] of testData.entries()) {
+    describe(`(${index}) ${name}`, () => {
+      const { optimalMilliseconds, gracePercentage } = data;
+      const maximumMilliseconds = optimalMilliseconds + optimalMilliseconds * gracePercentage;
+      function performToData(): {
+        data: Document;
+        elements: number;
+      } {
+        const viewData: DocumentFragment = viewToDom(data.from);
+        const elements = viewData.querySelectorAll("*").length;
+        return {
+          data: dataProcessor.toData(viewData),
+          elements,
+        };
       }
-      const actualTime = median(measuredMilliseconds);
-      const stddev = standardDeviation(measuredMilliseconds);
-      const minTime = Math.min(...measuredMilliseconds);
-      const maxTime = Math.max(...measuredMilliseconds);
-      console.log(
-        `${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(1)} ms vs. allowed ${maximumMilliseconds > 0 ? maximumMilliseconds.toFixed(1) : "<unlimited>"} ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`,
-      );
-      if (maximumMilliseconds >= 0) {
-        // Otherwise, we just measure.
-        expect(actualTime).toBeLessThanOrEqual(maximumMilliseconds);
-      }
+      test(`Should not have consumed more than ${maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"} ms (median).`, () => {
+        const { elements } = performToData();
+        const measuredMilliseconds: number[] = [];
+        for (let i = 0; i < EXECUTION_REPETITIONS; i++) {
+          const startMilliseconds = performance.now();
+          performToData();
+          const endMilliseconds = performance.now();
+          measuredMilliseconds.push(endMilliseconds - startMilliseconds);
+        }
+        const actualTime = median(measuredMilliseconds);
+        const stddev = standardDeviation(measuredMilliseconds);
+        const minTime = Math.min(...measuredMilliseconds);
+        const maxTime = Math.max(...measuredMilliseconds);
+        console.log(
+          `${data.from.length} characters, ${elements} elements: Actual median time: ${actualTime.toFixed(1)} ms vs. allowed ${maximumMilliseconds > 0 ? maximumMilliseconds.toFixed(1) : "<unlimited>"} ms. (std. deviation: ${stddev.toFixed(1)} ms, min: ${minTime.toFixed(1)} ms, max: ${maxTime.toFixed(1)} ms)`,
+        );
+        if (maximumMilliseconds >= 0) {
+          // Otherwise, we just measure.
+          expect(actualTime).toBeLessThanOrEqual(maximumMilliseconds);
+        }
+      });
     });
-  });
+  }
 });

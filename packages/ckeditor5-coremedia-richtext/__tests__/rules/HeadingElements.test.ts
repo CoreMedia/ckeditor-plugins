@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import "global-jsdom/register";
+import test, { describe } from "node:test";
 import * as aut from "../../src/rules/HeadingElements";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { bijective, TestDirection } from "./TestDirection";
@@ -8,18 +11,18 @@ describe("HeadingElements", () => {
 
   const text = "T";
 
-  describe.each`
-    data                                           | direction    | view
-    ${`<p class="p--heading-1">${text}</p>`}       | ${bijective} | ${`<h1>${text}</h1>`}
-    ${`<p class="p--heading-2">${text}</p>`}       | ${bijective} | ${`<h2>${text}</h2>`}
-    ${`<p class="p--heading-3">${text}</p>`}       | ${bijective} | ${`<h3>${text}</h3>`}
-    ${`<p class="p--heading-4">${text}</p>`}       | ${bijective} | ${`<h4>${text}</h4>`}
-    ${`<p class="p--heading-5">${text}</p>`}       | ${bijective} | ${`<h5>${text}</h5>`}
-    ${`<p class="p--heading-6">${text}</p>`}       | ${bijective} | ${`<h6>${text}</h6>`}
-    ${`<p class="CLASS p--heading-1">${text}</p>`} | ${bijective} | ${`<h1 class="CLASS">${text}</h1>`}
-  `(
-    "[$#] Should provide mapping from data $direction view: $data $direction $view",
-    ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
+  const headingTestCases: { data: string; direction: TestDirection; view: string }[] = [
+    { data: `<p class="p--heading-1">${text}</p>`, direction: bijective, view: `<h1>${text}</h1>` },
+    { data: `<p class="p--heading-2">${text}</p>`, direction: bijective, view: `<h2>${text}</h2>` },
+    { data: `<p class="p--heading-3">${text}</p>`, direction: bijective, view: `<h3>${text}</h3>` },
+    { data: `<p class="p--heading-4">${text}</p>`, direction: bijective, view: `<h4>${text}</h4>` },
+    { data: `<p class="p--heading-5">${text}</p>`, direction: bijective, view: `<h5>${text}</h5>` },
+    { data: `<p class="p--heading-6">${text}</p>`, direction: bijective, view: `<h6>${text}</h6>` },
+    { data: `<p class="CLASS p--heading-1">${text}</p>`, direction: bijective, view: `<h1 class="CLASS">${text}</h1>` },
+  ];
+
+  for (const [index, { data, direction, view }] of headingTestCases.entries()) {
+    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");
@@ -29,6 +32,6 @@ describe("HeadingElements", () => {
         direction,
         htmlString,
       });
-    },
-  );
+    });
+  }
 });

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import { describe } from "node:test";
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 import { flatten } from "../Utils";
 

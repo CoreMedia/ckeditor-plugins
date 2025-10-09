@@ -1,162 +1,172 @@
 // noinspection HtmlUnknownAttribute
-
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import "global-jsdom/register";
+import test, { describe } from "node:test";
+import expect from "expect";
 import * as aut from "../../src/rules/AnchorElements";
-import { silenced } from "../Silenced";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { RulesTester } from "./RulesTester";
 import { bijective, TestDirection } from "./TestDirection";
 
 describe("AnchorElement", () => {
   describe("parseDataContentLink", () => {
-    it.each`
-      data                                                     | expectedId
-      ${``}                                                    | ${undefined}
-      ${`https://example.org/`}                                | ${undefined}
-      ${`content/42`}                                          | ${42}
-      ${`content/0`}                                           | ${0}
-      ${`content/${Number.MAX_SAFE_INTEGER}`}                  | ${Number.MAX_SAFE_INTEGER}
-      ${`content/42#postfix`}                                  | ${undefined}
-      ${`content/-1`}                                          | ${undefined}
-      ${`content/${Number.MIN_SAFE_INTEGER}`}                  | ${undefined}
-      ${`content/example`}                                     | ${undefined}
-      ${`coremedia:///cap/content/42`}                         | ${42}
-      ${`coremedia:///cap/content/0`}                          | ${0}
-      ${`coremedia:///cap/content/${Number.MAX_SAFE_INTEGER}`} | ${Number.MAX_SAFE_INTEGER}
-      ${`coremedia:///cap/content/42#postfix`}                 | ${undefined}
-      ${`coremedia:///cap/content/-1`}                         | ${undefined}
-      ${`coremedia:///cap/content/${Number.MIN_SAFE_INTEGER}`} | ${undefined}
-      ${`coremedia:///cap/content/example`}                    | ${undefined}
-    `(
-      "[$#] Should parse $data to $expectedId",
-      ({ data, expectedId }: { data: string; expectedId: number | undefined }) => {
+    const cases: { data: string; expectedId: number | undefined }[] = [
+      { data: ``, expectedId: undefined },
+      { data: `https://example.org/`, expectedId: undefined },
+      { data: `content/42`, expectedId: 42 },
+      { data: `content/0`, expectedId: 0 },
+      { data: `content/${Number.MAX_SAFE_INTEGER}`, expectedId: Number.MAX_SAFE_INTEGER },
+      { data: `content/42#postfix`, expectedId: undefined },
+      { data: `content/-1`, expectedId: undefined },
+      { data: `content/${Number.MIN_SAFE_INTEGER}`, expectedId: undefined },
+      { data: `content/example`, expectedId: undefined },
+      { data: `coremedia:///cap/content/42`, expectedId: 42 },
+      { data: `coremedia:///cap/content/0`, expectedId: 0 },
+      { data: `coremedia:///cap/content/${Number.MAX_SAFE_INTEGER}`, expectedId: Number.MAX_SAFE_INTEGER },
+      { data: `coremedia:///cap/content/42#postfix`, expectedId: undefined },
+      { data: `coremedia:///cap/content/-1`, expectedId: undefined },
+      { data: `coremedia:///cap/content/${Number.MIN_SAFE_INTEGER}`, expectedId: undefined },
+      { data: `coremedia:///cap/content/example`, expectedId: undefined },
+    ];
+
+    for (const { data, expectedId } of cases) {
+      test(`Should parse "${data}" to ${expectedId}`, () => {
         expect(aut.parseDataContentLink(data)).toStrictEqual(expectedId);
-      },
-    );
+      });
+    }
   });
 
   describe("parseViewContentLink", () => {
-    it.each`
-      view                                    | expectedId
-      ${`https://example.org/`}               | ${undefined}
-      ${`content:42`}                         | ${42}
-      ${`content:0`}                          | ${0}
-      ${`content:${Number.MAX_SAFE_INTEGER}`} | ${Number.MAX_SAFE_INTEGER}
-      ${`content:-1`}                         | ${undefined}
-      ${`content:${Number.MIN_SAFE_INTEGER}`} | ${undefined}
-      ${`content:example`}                    | ${undefined}
-    `(
-      "[$#] Should parse $view to $expectedId",
-      ({ view, expectedId }: { view: string; expectedId: number | undefined }) => {
+    const testCases: { view: string; expectedId: number | undefined }[] = [
+      { view: `https://example.org/`, expectedId: undefined },
+      { view: `content:42`, expectedId: 42 },
+      { view: `content:0`, expectedId: 0 },
+      { view: `content:${Number.MAX_SAFE_INTEGER}`, expectedId: Number.MAX_SAFE_INTEGER },
+      { view: `content:-1`, expectedId: undefined },
+      { view: `content:${Number.MIN_SAFE_INTEGER}`, expectedId: undefined },
+      { view: `content:example`, expectedId: undefined },
+    ];
+
+    for (const { view, expectedId } of testCases) {
+      test(`Should parse "${view}" to ${expectedId}`, () => {
         expect(aut.parseViewContentLink(view)).toStrictEqual(expectedId);
-      },
-    );
+      });
+    }
   });
 
   describe("toDataContentLink", () => {
-    it.each`
-      id                         | expectedLink
-      ${0}                       | ${`content/0`}
-      ${42}                      | ${`content/42`}
-      ${Number.MAX_SAFE_INTEGER} | ${`content/${Number.MAX_SAFE_INTEGER}`}
-    `("[$#] Should format $id to $expectedLink", ({ id, expectedLink }: { id: number; expectedLink: string }) => {
-      expect(aut.toDataContentLink(id)).toStrictEqual(expectedLink);
-    });
+    const testCases: { id: number; expectedLink: string }[] = [
+      { id: 0, expectedLink: `content/0` },
+      { id: 42, expectedLink: `content/42` },
+      { id: Number.MAX_SAFE_INTEGER, expectedLink: `content/${Number.MAX_SAFE_INTEGER}` },
+    ];
+
+    for (const { id, expectedLink } of testCases) {
+      test(`Should format ${id} to ${expectedLink}`, () => {
+        expect(aut.toDataContentLink(id)).toStrictEqual(expectedLink);
+      });
+    }
   });
 
   describe("toViewContentLink", () => {
-    it.each`
-      id                         | expectedLink
-      ${0}                       | ${`content:0`}
-      ${42}                      | ${`content:42`}
-      ${Number.MAX_SAFE_INTEGER} | ${`content:${Number.MAX_SAFE_INTEGER}`}
-    `("[$#] Should format $id to $expectedLink", ({ id, expectedLink }: { id: number; expectedLink: string }) => {
-      expect(aut.toViewContentLink(id)).toStrictEqual(expectedLink);
-    });
+    const testCases: { id: number; expectedLink: string }[] = [
+      { id: 0, expectedLink: `content:0` },
+      { id: 42, expectedLink: `content:42` },
+      { id: Number.MAX_SAFE_INTEGER, expectedLink: `content:${Number.MAX_SAFE_INTEGER}` },
+    ];
+
+    for (const [index, { id, expectedLink }] of testCases.entries()) {
+      test(`[${index}] Should format ${id} to ${expectedLink}`, () => {
+        expect(aut.toViewContentLink(id)).toStrictEqual(expectedLink);
+      });
+    }
   });
 
   describe("formatHrefForData", () => {
-    it.each`
-      view                                    | expectedHref
-      ${``}                                   | ${``}
-      ${`https://example.org/`}               | ${`https://example.org/`}
-      ${`content:42`}                         | ${`content/42`}
-      ${`content:0`}                          | ${`content/0`}
-      ${`content:${Number.MAX_SAFE_INTEGER}`} | ${`content/${Number.MAX_SAFE_INTEGER}`}
-      ${`content:-1`}                         | ${`content:-1`}
-      ${`content:${Number.MIN_SAFE_INTEGER}`} | ${`content:${Number.MIN_SAFE_INTEGER}`}
-      ${`content:example`}                    | ${`content:example`}
-    `(
-      "[$#] Should format data view representation $view to HREF for data: $expectedHref",
-      ({ view, expectedHref }: { view: string; expectedHref: string }) => {
+    const testCases: { view: string; expectedHref: string }[] = [
+      { view: ``, expectedHref: `` },
+      { view: `https://example.org/`, expectedHref: `https://example.org/` },
+      { view: `content:42`, expectedHref: `content/42` },
+      { view: `content:0`, expectedHref: `content/0` },
+      { view: `content:${Number.MAX_SAFE_INTEGER}`, expectedHref: `content/${Number.MAX_SAFE_INTEGER}` },
+      { view: `content:-1`, expectedHref: `content:-1` },
+      { view: `content:${Number.MIN_SAFE_INTEGER}`, expectedHref: `content:${Number.MIN_SAFE_INTEGER}` },
+      { view: `content:example`, expectedHref: `content:example` },
+    ];
+
+    for (const [index, { view, expectedHref }] of testCases.entries()) {
+      test(`[${index}] Should format data view representation ${view} to HREF for data: ${expectedHref}`, () => {
         expect(aut.formatHrefForData(view)).toStrictEqual(expectedHref);
-      },
-    );
+      });
+    }
   });
 
   describe("formatHrefForView", () => {
-    it.each`
-      data                                                     | expectedHref
-      ${`https://example.org/`}                                | ${`https://example.org/`}
-      ${`content/42`}                                          | ${`content:42`}
-      ${`content/0`}                                           | ${`content:0`}
-      ${`content/${Number.MAX_SAFE_INTEGER}`}                  | ${`content:${Number.MAX_SAFE_INTEGER}`}
-      ${`content/42#postfix`}                                  | ${`content/42#postfix`}
-      ${`content/-1`}                                          | ${`content/-1`}
-      ${`content/${Number.MIN_SAFE_INTEGER}`}                  | ${`content/${Number.MIN_SAFE_INTEGER}`}
-      ${`content/example`}                                     | ${`content/example`}
-      ${`coremedia:///cap/content/42`}                         | ${`content:42`}
-      ${`coremedia:///cap/content/0`}                          | ${`content:0`}
-      ${`coremedia:///cap/content/${Number.MAX_SAFE_INTEGER}`} | ${`content:${Number.MAX_SAFE_INTEGER}`}
-      ${`coremedia:///cap/content/42#postfix`}                 | ${`coremedia:///cap/content/42#postfix`}
-      ${`coremedia:///cap/content/-1`}                         | ${`coremedia:///cap/content/-1`}
-      ${`coremedia:///cap/content/${Number.MIN_SAFE_INTEGER}`} | ${`coremedia:///cap/content/${Number.MIN_SAFE_INTEGER}`}
-      ${`coremedia:///cap/content/example`}                    | ${`coremedia:///cap/content/example`}
-    `(
-      "[$#] Should format data representation $data to HREF well supported by CKEditor 5 Link Feature: $expectedHref",
-      ({ data, expectedHref }: { data: string; expectedHref: number | undefined }) => {
-        expect(aut.formatHrefForView(data)).toStrictEqual(expectedHref);
+    const testCases: { data: string; expectedHref: string }[] = [
+      { data: `https://example.org/`, expectedHref: `https://example.org/` },
+      { data: `content/42`, expectedHref: `content:42` },
+      { data: `content/0`, expectedHref: `content:0` },
+      { data: `content/${Number.MAX_SAFE_INTEGER}`, expectedHref: `content:${Number.MAX_SAFE_INTEGER}` },
+      { data: `content/42#postfix`, expectedHref: `content/42#postfix` },
+      { data: `content/-1`, expectedHref: `content/-1` },
+      { data: `content/${Number.MIN_SAFE_INTEGER}`, expectedHref: `content/${Number.MIN_SAFE_INTEGER}` },
+      { data: `content/example`, expectedHref: `content/example` },
+      { data: `coremedia:///cap/content/42`, expectedHref: `content:42` },
+      { data: `coremedia:///cap/content/0`, expectedHref: `content:0` },
+      {
+        data: `coremedia:///cap/content/${Number.MAX_SAFE_INTEGER}`,
+        expectedHref: `content:${Number.MAX_SAFE_INTEGER}`,
       },
-    );
+      { data: `coremedia:///cap/content/42#postfix`, expectedHref: `coremedia:///cap/content/42#postfix` },
+      { data: `coremedia:///cap/content/-1`, expectedHref: `coremedia:///cap/content/-1` },
+      {
+        data: `coremedia:///cap/content/${Number.MIN_SAFE_INTEGER}`,
+        expectedHref: `coremedia:///cap/content/${Number.MIN_SAFE_INTEGER}`,
+      },
+      { data: `coremedia:///cap/content/example`, expectedHref: `coremedia:///cap/content/example` },
+    ];
+
+    for (const [index, { data, expectedHref }] of testCases.entries()) {
+      test(`[${index}] Should format data representation ${data} to HREF well supported by CKEditor 5 Link Feature: ${expectedHref}`, () => {
+        expect(aut.formatHrefForView(data)).toStrictEqual(expectedHref);
+      });
+    }
   });
 
   describe("formatTarget & parseTarget", () => {
-    describe.each`
-      show         | role         | target           | bijective
-      ${undefined} | ${undefined} | ${""}            | ${true}
-      ${"replace"} | ${undefined} | ${"_self"}       | ${true}
-      ${"new"}     | ${undefined} | ${"_blank"}      | ${true}
-      ${"embed"}   | ${undefined} | ${"_embed"}      | ${true}
-      ${"none"}    | ${undefined} | ${"_none"}       | ${true}
-      ${"other"}   | ${undefined} | ${"_other"}      | ${true}
-      ${"unknown"} | ${undefined} | ${""}            | ${false}
-      ${undefined} | ${"ROLE"}    | ${"_role_ROLE"}  | ${true}
-      ${"replace"} | ${"ROLE"}    | ${"_self_ROLE"}  | ${true}
-      ${"new"}     | ${"ROLE"}    | ${"_blank_ROLE"} | ${true}
-      ${"embed"}   | ${"ROLE"}    | ${"_embed_ROLE"} | ${true}
-      ${"none"}    | ${"ROLE"}    | ${"_none_ROLE"}  | ${true}
-      ${"other"}   | ${"ROLE"}    | ${"ROLE"}        | ${true}
-      ${"unknown"} | ${"ROLE"}    | ${"_role_ROLE"}  | ${false}
-    `(
-      "[$#] Should format xlink:show=$show and xlink:role=$role to target '$target' and vice versa (if bijective? $bijective)",
-      ({
-        show,
-        role,
-        target,
-        bijective,
-      }: {
-        show: string | undefined;
-        role: string | undefined;
-        target: string;
-        bijective: boolean;
-      }) => {
-        it("formatTarget", () => {
+    const testCases: {
+      show?: string;
+      role?: string;
+      target: string;
+      bijective: boolean;
+    }[] = [
+      { show: undefined, role: undefined, target: "", bijective: true },
+      { show: "replace", role: undefined, target: "_self", bijective: true },
+      { show: "new", role: undefined, target: "_blank", bijective: true },
+      { show: "embed", role: undefined, target: "_embed", bijective: true },
+      { show: "none", role: undefined, target: "_none", bijective: true },
+      { show: "other", role: undefined, target: "_other", bijective: true },
+      { show: "unknown", role: undefined, target: "", bijective: false },
+      { show: undefined, role: "ROLE", target: "_role_ROLE", bijective: true },
+      { show: "replace", role: "ROLE", target: "_self_ROLE", bijective: true },
+      { show: "new", role: "ROLE", target: "_blank_ROLE", bijective: true },
+      { show: "embed", role: "ROLE", target: "_embed_ROLE", bijective: true },
+      { show: "none", role: "ROLE", target: "_none_ROLE", bijective: true },
+      { show: "other", role: "ROLE", target: "ROLE", bijective: true },
+      { show: "unknown", role: "ROLE", target: "_role_ROLE", bijective: false },
+    ];
+
+    for (const [index, { show, role, target, bijective }] of testCases.entries()) {
+      describe(`[${index}] Should format xlink:show=${show} and xlink:role=${role} to target '${target}' and vice versa (if bijective? ${bijective})`, () => {
+        test("formatTarget", () => {
           // We expect some warnings and info logs. Thus, suppressing.
-          const actual = silenced(() => aut.formatTarget({ show, role }));
+          // TODO[ntr] const actual = silenced(() => aut.formatTarget({ show, role }));
+          const actual = aut.formatTarget({ show, role });
           expect(actual).toStrictEqual(target);
         });
 
         if (bijective) {
-          it("parseTarget", () => {
+          test("parseTarget", () => {
             // Validates the counterpart to formatTarget, that it is able to
             // parse the attributes again.
             // No strict check, as implementation may/will not set irrelevant
@@ -164,8 +174,8 @@ describe("AnchorElement", () => {
             expect(aut.parseTarget(target)).toEqual({ show, role });
           });
         }
-      },
-    );
+      });
+    }
   });
 
   describe("Data Processing", () => {
@@ -176,28 +186,54 @@ describe("AnchorElement", () => {
     const contentUrl = aut.toViewContentLink(42);
     const text = "T";
 
-    describe.each`
-      data                                                                         | direction    | view
-      ${`<a xlink:href="${url}">${text}</a>`}                                      | ${bijective} | ${`<a href="${url}">${text}</a>`}
-      ${`<a xlink:href="${contentUriPath}">${text}</a>`}                           | ${bijective} | ${`<a href="${contentUrl}">${text}</a>`}
-      ${`<a xlink:show="replace" xlink:href="${url}">${text}</a>`}                 | ${bijective} | ${`<a href="${url}" target="_self">${text}</a>`}
-      ${`<a xlink:show="other" xlink:role="ROLE" xlink:href="${url}">${text}</a>`} | ${bijective} | ${`<a href="${url}" target="ROLE">${text}</a>`}
-      ${`<a xlink:type="simple" xlink:href="${url}">${text}</a>`}                  | ${bijective} | ${`<a href="${url}" data-xlink-type="simple">${text}</a>`}
-      ${`<a xlink:actuate="onRequest" xlink:href="${url}">${text}</a>`}            | ${bijective} | ${`<a href="${url}" data-xlink-actuate="onRequest">${text}</a>`}
-    `(
-      "[$#] Should transform data to view and vice versa: data: $data, view: $view",
-      ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
-        const dataString = richtext(p(data));
-        const htmlString = `<body><p>${view}</p></body>`;
-        const tester = new RulesTester(ruleConfigurations, "p > *");
-
-        tester.executeTests({
-          dataString,
-          direction,
-          htmlString,
-        });
+    const testCases: {
+      data: string;
+      direction: TestDirection;
+      view: string;
+    }[] = [
+      { data: `<a xlink:href="${url}">${text}</a>`, direction: bijective, view: `<a href="${url}">${text}</a>` },
+      {
+        data: `<a xlink:href="${contentUriPath}">${text}</a>`,
+        direction: bijective,
+        view: `<a href="${contentUrl}">${text}</a>`,
       },
-    );
+      {
+        data: `<a xlink:show="replace" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a href="${url}" target="_self">${text}</a>`,
+      },
+      {
+        data: `<a xlink:show="other" xlink:role="ROLE" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a href="${url}" target="ROLE">${text}</a>`,
+      },
+      {
+        data: `<a xlink:type="simple" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a href="${url}" data-xlink-type="simple">${text}</a>`,
+      },
+      {
+        data: `<a xlink:actuate="onRequest" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a href="${url}" data-xlink-actuate="onRequest">${text}</a>`,
+      },
+    ];
+
+    for (const [index, { data, direction, view }] of testCases.entries()) {
+      describe(`[${index}] Should transform data to view and vice versa: data: ${data}, view: ${view}`, () => {
+        test("executeTests", () => {
+          const dataString = richtext(p(data));
+          const htmlString = `<body><p>${view}</p></body>`;
+          const tester = new RulesTester(ruleConfigurations, "p > *");
+
+          tester.executeTests({
+            dataString,
+            direction,
+            htmlString,
+          });
+        });
+      });
+    }
   });
 
   describe("Data Processing (Artificial Role Mapping)", () => {
@@ -242,27 +278,53 @@ describe("AnchorElement", () => {
     const url = "https://e.org/";
     const text = "T";
 
-    describe.each`
-      data                                                                                         | direction    | view
-      ${`<a xlink:role="ROLE" xlink:show="replace" xlink:href="${url}">${text}</a>`}               | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_self">${text}</a>`}
-      ${`<a xlink:role="ROLE" xlink:show="new" xlink:href="${url}">${text}</a>`}                   | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_blank">${text}</a>`}
-      ${`<a xlink:role="ROLE" xlink:show="embed" xlink:href="${url}">${text}</a>`}                 | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_embed">${text}</a>`}
-      ${`<a xlink:role="ROLE" xlink:show="none" xlink:href="${url}">${text}</a>`}                  | ${bijective} | ${`<a class="role_ROLE" href="${url}" target="_none">${text}</a>`}
-      ${`<a class="CLASS" xlink:role="ROLE" xlink:show="replace" xlink:href="${url}">${text}</a>`} | ${bijective} | ${`<a class="CLASS role_ROLE" href="${url}" target="_self">${text}</a>`}
-      ${`<a xlink:show="other" xlink:role="ROLE" xlink:href="${url}">${text}</a>`}                 | ${bijective} | ${`<a href="${url}" target="ROLE">${text}</a>`}
-    `(
-      "[$#] Should transform data to view and vice versa: data: $data, view: $view",
-      ({ data, direction, view }: { data: string; direction: TestDirection; view: string }) => {
-        const dataString = richtext(p(data));
-        const htmlString = `<body><p>${view}</p></body>`;
-        const tester = new RulesTester(ruleConfigurations, "p > *");
-
-        tester.executeTests({
-          dataString,
-          direction,
-          htmlString,
-        });
+    const testCases: { data: string; direction: TestDirection; view: string }[] = [
+      {
+        data: `<a xlink:role="ROLE" xlink:show="replace" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a class="role_ROLE" href="${url}" target="_self">${text}</a>`,
       },
-    );
+      {
+        data: `<a xlink:role="ROLE" xlink:show="new" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a class="role_ROLE" href="${url}" target="_blank">${text}</a>`,
+      },
+      {
+        data: `<a xlink:role="ROLE" xlink:show="embed" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a class="role_ROLE" href="${url}" target="_embed">${text}</a>`,
+      },
+      {
+        data: `<a xlink:role="ROLE" xlink:show="none" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a class="role_ROLE" href="${url}" target="_none">${text}</a>`,
+      },
+      {
+        data: `<a class="CLASS" xlink:role="ROLE" xlink:show="replace" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a class="CLASS role_ROLE" href="${url}" target="_self">${text}</a>`,
+      },
+      {
+        data: `<a xlink:show="other" xlink:role="ROLE" xlink:href="${url}">${text}</a>`,
+        direction: bijective,
+        view: `<a href="${url}" target="ROLE">${text}</a>`,
+      },
+    ];
+
+    for (const [index, { data, direction, view }] of testCases.entries()) {
+      describe(`[${index}] Should transform data to view and vice versa: data: ${data}, view: ${view}`, () => {
+        test("executeTests", () => {
+          const dataString = richtext(p(data));
+          const htmlString = `<body><p>${view}</p></body>`;
+          const tester = new RulesTester(ruleConfigurations, "p > *");
+
+          tester.executeTests({
+            dataString,
+            direction,
+            htmlString,
+          });
+        });
+      });
+    }
   });
 });

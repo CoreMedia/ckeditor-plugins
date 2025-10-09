@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import { describe } from "node:test";
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 // noinspection HttpUrlsUsage
 const ns_richtext = "http://www.coremedia.com/2003/richtext-1.0";

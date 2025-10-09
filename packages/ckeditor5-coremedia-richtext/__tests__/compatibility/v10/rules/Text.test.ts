@@ -1,5 +1,8 @@
 /* eslint @typescript-eslint/naming-convention: off */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
+import "global-jsdom/register";
+import { describe } from "node:test";
 import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
 import { decodeEntity, encodeString, flatten } from "../Utils";
 
