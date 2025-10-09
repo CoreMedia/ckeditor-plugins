@@ -1,12 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "include": [
-    "./__tests__",
+    "./test",
     "./src",
     "./types"
   ],
   "compilerOptions": {
     "outDir": "./dist",
+    "types": [
+      "node"
+    ],
     "paths": {
       "@bbob/core/*": [
         "./types/@bbob/core/*"
