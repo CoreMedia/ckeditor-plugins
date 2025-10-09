@@ -1,17 +1,19 @@
-"use strict";
-
 /* eslint-env node */
 
-const { default: path } = await import("path");
-const { default: webpack } = await import("webpack");
-const { bundler, loaders } = await import("@ckeditor/ckeditor5-dev-utils");
-const { CKEditorTranslationsPlugin } = await import("@ckeditor/ckeditor5-dev-translations");
-const { default: TerserPlugin } = await import("terser-webpack-plugin");
-const { default: CircularDependencyPlugin } = await import("circular-dependency-plugin");
+import path from "path";
+import webpack from "webpack";
+import { bundler, loaders } from "@ckeditor/ckeditor5-dev-utils";
+import { CKEditorTranslationsPlugin } from "@ckeditor/ckeditor5-dev-translations";
+import TerserPlugin from "terser-webpack-plugin";
+import CircularDependencyPlugin from "circular-dependency-plugin";
 import dotenv from "dotenv";
 import fs from "fs";
+import { fileURLToPath } from "url";
 
-function findEnvFile(startDir = import.meta.dirname) {
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+function findEnvFile(startDir = dirname) {
   let dir = startDir;
   let nothingFound = false;
   while (!nothingFound) {
@@ -38,11 +40,6 @@ if (!envPath) {
 
 dotenv.config({ path: envPath });
 
-import { fileURLToPath } from "url";
-
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
 export default {
   devtool: "source-map",
   performance: { hints: false },
@@ -52,7 +49,6 @@ export default {
   output: {
     // The name under which the editor will be exported.
     library: "ClassicEditor",
-
     path: path.resolve(dirname, "dist"),
     filename: "ckeditor.js",
     libraryTarget: "umd",
@@ -104,10 +100,20 @@ export default {
         enforce: "pre",
         use: ["source-map-loader"],
       },
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
     ],
   },
 
   resolve: {
     extensions: [".ts", ".js", ".json"],
+    extensionAlias: {
+      ".js": [".js", ".ts"],
+    },
+    fullySpecified: false,
   },
 };
