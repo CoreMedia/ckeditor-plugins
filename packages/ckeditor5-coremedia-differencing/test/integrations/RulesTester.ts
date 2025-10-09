@@ -48,7 +48,7 @@ export class RulesTester {
     };
 
     if (isToView(direction)) {
-      test("toView", () => {
+      void test("toView", () => {
         const { toViewConverter, xmlElement, htmlElementSerialized } = setUp();
         const result = toViewConverter.convert(xmlElement) as HTMLElement;
         // Unfortunately, does not ignore order of attributes. If we struggle
