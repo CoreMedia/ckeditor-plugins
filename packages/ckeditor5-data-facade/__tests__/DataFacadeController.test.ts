@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import test, { describe, beforeEach } from "node:test";
+import expect from "expect";
 import { ContextMismatchError, DataFacade, DataFacadeController, SetDataData } from "../src";
 import { CKEditorError, Editor } from "ckeditor5";
-import { jest } from "@jest/globals";
 import { createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
 /**
@@ -32,7 +36,7 @@ describe("DataFacadeController", () => {
   // ========================================================[ Delegating Mode ]
 
   describe("Delegating Mode", () => {
-    it("should retrieve data from delegate controller when in delegating mode", async () => {
+    test("should retrieve data from delegate controller when in delegating mode", async () => {
       const dataFixture = "<p>DATA</p>";
       const controller = new DataFacadeController();
       const editor = await createTestEditor();
@@ -50,7 +54,7 @@ describe("DataFacadeController", () => {
       // the data-controller we delegate to.
       expect(controller.getData()).toEqual(dataFixture);
     });
-    it("should propagate data to delegate and editor subsequently when delegation gets initialized", async () => {
+    test("should propagate data to delegate and editor subsequently when delegation gets initialized", async () => {
       const dataFixture = "<p>DATA</p>";
       const controller = new DataFacadeController();
       const editor = await createTestEditor();
@@ -69,7 +73,7 @@ describe("DataFacadeController", () => {
       simulateDataReformat(dataFixture.toLowerCase(), editor);
       expect(dataFacade.getData()).toEqual(dataFixture);
     });
-    it("should forward data set to delegate directly", async () => {
+    test("should forward data set to delegate directly", async () => {
       const dataFixture = "<p>DATA</p>";
       const controller = new DataFacadeController();
       const editor = await createTestEditor();
@@ -93,7 +97,7 @@ describe("DataFacadeController", () => {
     // ----------------------------------------------------------[ Constructor ]
 
     describe("constructor", () => {
-      it("should be possible creating an instance without editor reference", () => {
+      test("should be possible creating an instance without editor reference", () => {
         const controller = new DataFacadeController();
         expect(controller).toHaveProperty("editor", undefined);
       });
@@ -102,13 +106,13 @@ describe("DataFacadeController", () => {
     // -----------------------------------------------------------------[ Init ]
 
     describe("init", () => {
-      it("should be possible to bind to editor even without DataFacade plugin installed", async () => {
+      test("should be possible to bind to editor even without DataFacade plugin installed", async () => {
         const controller = new DataFacadeController();
         const editor = await createTestEditor();
         controller.init(editor);
         expect(controller).toHaveProperty("editor", editor);
       });
-      it("should propagate any already set data", async () => {
+      test("should propagate any already set data", async () => {
         const dataFixture = "<p>DATA</p>";
         const controller = new DataFacadeController();
         const editor = await createTestEditor();
@@ -123,13 +127,13 @@ describe("DataFacadeController", () => {
 
     describe("getData/setData", () => {
       describe("General Use Cases", () => {
-        it("should cache data if not bound to editor instance already", () => {
+        test("should cache data if not bound to editor instance already", () => {
           const dataFixture = "<p>DATA</p>";
           const controller = new DataFacadeController();
           controller.setData(dataFixture);
           expect(controller.getData()).toEqual(dataFixture);
         });
-        it("should propagate data set if bound to editor instance", async () => {
+        test("should propagate data set if bound to editor instance", async () => {
           const dataFixture = "<p>DATA</p>";
           const editor = await createTestEditor();
           const controller = new DataFacadeController(editor);
@@ -138,7 +142,7 @@ describe("DataFacadeController", () => {
           expect(controller.getData()).toEqual(dataFixture);
           expect(editor.data.set).toHaveBeenCalledWith(dataFixture, {});
         });
-        it("should read data directly, if none cached", async () => {
+        test("should read data directly, if none cached", async () => {
           const dataFixture = "<p>Some text.</p>";
           const editor = await createTestEditor();
           const controller = new DataFacadeController(editor);
@@ -148,46 +152,39 @@ describe("DataFacadeController", () => {
           expect(editor.data.get()).toEqual(dataFixture);
         });
         describe("Options on get support", () => {
-          it.each`
-            trim       | data        | expected
-            ${"empty"} | ${" DATA "} | ${" DATA "}
-            ${"none"}  | ${" DATA "} | ${" DATA "}
-          `(
-            "[$#] should ignore options in bound mode but without editorial actions applied (trim = $trim)",
-            async ({ trim, data, expected }: { trim: "empty" | "none"; data: string; expected: string }) => {
+          const cases = [
+            { trim: "empty" as const, data: " DATA ", expected: " DATA " },
+            { trim: "none" as const, data: " DATA ", expected: " DATA " },
+          ];
+
+          for (const [i, { trim, data, expected }] of cases.entries()) {
+            it(`[${i}] should ignore options in bound mode but without editorial actions applied (trim = ${trim})`, async () => {
               const editor = await createTestEditor();
               const controller = new DataFacadeController(editor);
               controller.setData(data);
-              expect(
-                controller.getData({
-                  trim,
-                }),
-              ).toEqual(expected);
-            },
-          );
-          it.each`
-            trim       | data               | expected
-            ${"empty"} | ${" <p>DATA</p> "} | ${"<p>DATA</p>"}
-            ${"empty"} | ${"<p>&nbsp;</p>"} | ${""}
-            ${"none"}  | ${"<p>&nbsp;</p>"} | ${"<p>&nbsp;</p>"}
-          `(
-            "[$#] should forward options in bound mode when editorial changes got applied (trim = $trim)",
-            async ({ trim, data, expected }: { trim: "empty" | "none"; data: string; expected: string }) => {
+              expect(controller.getData({ trim })).toEqual(expected);
+            });
+          }
+
+          const cases2 = [
+            { trim: "empty" as const, data: " <p>DATA</p> ", expected: "<p>DATA</p>" },
+            { trim: "empty" as const, data: "<p>&nbsp;</p>", expected: "" },
+            { trim: "none" as const, data: "<p>&nbsp;</p>", expected: "<p>&nbsp;</p>" },
+          ];
+
+          for (const [i, { trim, data, expected }] of cases2.entries()) {
+            it(`[${i}] should forward options in bound mode when editorial changes got applied (trim = ${trim})`, async () => {
               const dataSet = "originalData";
               const editor = await createTestEditor();
               const controller = new DataFacadeController(editor);
               controller.setData(dataSet);
               simulateEditorialUpdate(data, editor);
-              expect(
-                controller.getData({
-                  trim,
-                }),
-              ).toEqual(expected);
-            },
-          );
+              expect(controller.getData({ trim })).toEqual(expected);
+            });
+          }
         });
         describe("Multi-Root Support", () => {
-          it("should respect available rootName in unbound mode", () => {
+          test("should respect available rootName in unbound mode", () => {
             const dataFixture = "<p>DATA</p>";
             const rootName = "ROOT";
             const controller = new DataFacadeController();
@@ -219,7 +216,7 @@ describe("DataFacadeController", () => {
            * This decision may/should be revisited once we actively use
            * multi-root-editing.
            */
-          it("should simulate data retrieval failure on unavailable rootName in cache", () => {
+          test("should simulate data retrieval failure on unavailable rootName in cache", () => {
             const dataFixture = "<p>DATA</p>";
             const rootName = "ROOT";
             const controller = new DataFacadeController();
@@ -249,7 +246,7 @@ describe("DataFacadeController", () => {
            * This decision may/should be revisited once we actively use
            * multi-root-editing.
            */
-          it("should not fail on unavailable rootName but empty cache", () => {
+          test("should not fail on unavailable rootName but empty cache", () => {
             const rootName = "ROOT";
             const controller = new DataFacadeController();
             const callToFail = () =>
@@ -261,7 +258,7 @@ describe("DataFacadeController", () => {
         });
       });
       describe("Main Use Cases", () => {
-        it("should prefer original data on no editorial change (main use case)", async () => {
+        test("should prefer original data on no editorial change (main use case)", async () => {
           const dataFixture = "<p>DATA</p>";
           const internallyNormalizedData = dataFixture.toLowerCase();
           const editor = await createTestEditor();
@@ -275,7 +272,7 @@ describe("DataFacadeController", () => {
           // No version change? Provide the original data.
           expect(controller.getData()).toEqual(dataFixture);
         });
-        it("should prefer data as result from editing (main use case)", async () => {
+        test("should prefer data as result from editing (main use case)", async () => {
           const dataFixture = "<p>DATA</p>";
           const editorialData = dataFixture.toLowerCase();
           const editor = await createTestEditor();
@@ -292,100 +289,100 @@ describe("DataFacadeController", () => {
         });
       });
       describe("Feature: Context Awareness", () => {
-        describe.each`
-          editorBinding
-          ${"unbound"}
-          ${"bound"}
-        `("[$#] Editor Binding: $editorBinding", ({ editorBinding }: { editorBinding: "unbound" | "bound" }) => {
-          let editor: Editor | undefined;
-          beforeEach(async () => {
-            if (editorBinding === "bound") {
-              editor = await createTestEditor();
-            }
-          });
-          it("should provide data on context match", () => {
-            const dataFixture = "<p>DATA</p>";
-            const contextOnSet = "document/1";
-            const contextOnGet = contextOnSet;
-            const controller = new DataFacadeController(editor);
-            controller.setData(dataFixture, {
-              context: contextOnSet,
+        const bindings: ("unbound" | "bound")[] = ["unbound", "bound"];
+
+        for (const [i, editorBinding] of bindings.entries()) {
+          describe(`[${i}] Editor Binding: ${editorBinding}`, () => {
+            let editor: Editor | undefined;
+            beforeEach(async () => {
+              if (editorBinding === "bound") {
+                editor = await createTestEditor();
+              }
             });
-            expect(
-              controller.getData({
-                context: contextOnGet,
-              }),
-            ).toEqual(dataFixture);
-          });
-          it("should fail providing data if not specified when setting data", () => {
-            const dataFixture = "<p>DATA</p>";
-            const contextOnGet = "document/1";
-            const controller = new DataFacadeController(editor);
-            controller.setData(dataFixture);
-            expect(() =>
-              controller.getData({
-                context: contextOnGet,
-              }),
-            ).toThrow(ContextMismatchError);
-          });
-          it("should fail providing data if not specified when getting data", () => {
-            const dataFixture = "<p>DATA</p>";
-            const contextOnSet = "document/1";
-            const controller = new DataFacadeController(editor);
-            controller.setData(dataFixture, {
-              context: contextOnSet,
-            });
-            expect(() => controller.getData()).toThrow(ContextMismatchError);
-          });
-          it("should fail providing data if contexts on set and get do not match", () => {
-            const dataFixture = "<p>DATA</p>";
-            const contextOnSet = "document/1";
-            const contextOnGet = "document/2";
-            const controller = new DataFacadeController(editor);
-            controller.setData(dataFixture, {
-              context: contextOnSet,
-            });
-            expect(() =>
-              controller.getData({
-                context: contextOnGet,
-              }),
-            ).toThrow(ContextMismatchError);
-          });
-          (editorBinding === "bound" ? describe : describe.skip)("Bound Mode", () => {
-            it("should respect context also when getting data as result of editorial changes (same context scenario)", () => {
+            test("should provide data on context match", () => {
               const dataFixture = "<p>DATA</p>";
-              const editedDataFixture = dataFixture.toLowerCase();
               const contextOnSet = "document/1";
               const contextOnGet = contextOnSet;
               const controller = new DataFacadeController(editor);
               controller.setData(dataFixture, {
                 context: contextOnSet,
               });
-              editor && simulateEditorialUpdate(editedDataFixture, editor);
               expect(
                 controller.getData({
                   context: contextOnGet,
                 }),
-              ).toEqual(editedDataFixture);
+              ).toEqual(dataFixture);
             });
-            it("should respect context also when getting data as result of editorial changes (expected failure due to different context)", () => {
+            test("should fail providing data if not specified when setting data", () => {
               const dataFixture = "<p>DATA</p>";
-              const editedDataFixture = dataFixture.toLowerCase();
-              const contextOnSet = "document/1";
-              const contextOnGet = "document/2";
+              const contextOnGet = "document/1";
               const controller = new DataFacadeController(editor);
-              controller.setData(dataFixture, {
-                context: contextOnSet,
-              });
-              editor && simulateEditorialUpdate(editedDataFixture, editor);
+              controller.setData(dataFixture);
               expect(() =>
                 controller.getData({
                   context: contextOnGet,
                 }),
               ).toThrow(ContextMismatchError);
             });
+            test("should fail providing data if not specified when getting data", () => {
+              const dataFixture = "<p>DATA</p>";
+              const contextOnSet = "document/1";
+              const controller = new DataFacadeController(editor);
+              controller.setData(dataFixture, {
+                context: contextOnSet,
+              });
+              expect(() => controller.getData()).toThrow(ContextMismatchError);
+            });
+            test("should fail providing data if contexts on set and get do not match", () => {
+              const dataFixture = "<p>DATA</p>";
+              const contextOnSet = "document/1";
+              const contextOnGet = "document/2";
+              const controller = new DataFacadeController(editor);
+              controller.setData(dataFixture, {
+                context: contextOnSet,
+              });
+              expect(() =>
+                controller.getData({
+                  context: contextOnGet,
+                }),
+              ).toThrow(ContextMismatchError);
+            });
+            (editorBinding === "bound" ? describe : describe.skip)("Bound Mode", () => {
+              test("should respect context also when getting data as result of editorial changes (same context scenario)", () => {
+                const dataFixture = "<p>DATA</p>";
+                const editedDataFixture = dataFixture.toLowerCase();
+                const contextOnSet = "document/1";
+                const contextOnGet = contextOnSet;
+                const controller = new DataFacadeController(editor);
+                controller.setData(dataFixture, {
+                  context: contextOnSet,
+                });
+                editor && simulateEditorialUpdate(editedDataFixture, editor);
+                expect(
+                  controller.getData({
+                    context: contextOnGet,
+                  }),
+                ).toEqual(editedDataFixture);
+              });
+              test("should respect context also when getting data as result of editorial changes (expected failure due to different context)", () => {
+                const dataFixture = "<p>DATA</p>";
+                const editedDataFixture = dataFixture.toLowerCase();
+                const contextOnSet = "document/1";
+                const contextOnGet = "document/2";
+                const controller = new DataFacadeController(editor);
+                controller.setData(dataFixture, {
+                  context: contextOnSet,
+                });
+                editor && simulateEditorialUpdate(editedDataFixture, editor);
+                expect(() =>
+                  controller.getData({
+                    context: contextOnGet,
+                  }),
+                ).toThrow(ContextMismatchError);
+              });
+            });
           });
-        });
+        }
       });
     });
   });

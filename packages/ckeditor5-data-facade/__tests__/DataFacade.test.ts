@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import "global-jsdom/register";
+import test, { describe, beforeEach } from "node:test";
+import expect from "expect";
 import { Autosave, Editor } from "ckeditor5";
-import { DataFacade, GetDataApi, SetDataData } from "../src";
+import { DataFacade } from "../src/DataFacade";
+import { GetDataApi } from "../src/DataApi";
+import { SetDataData } from "../src/DataControllerApi";
 import { allPlugins, completeToolbar, createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
 const simulateDataReformat = (data: SetDataData, editor: Editor) => {
@@ -16,7 +23,7 @@ describe("DataFacade", () => {
   beforeEach(() => {
     prepareDocument(document);
   });
-  it("should forward previously set data once initialized", async () => {
+  test("should forward previously set data once initialized", async () => {
     const dataFixture = "<p>DATA</p>";
     const editor = await createTestEditor();
     const dataFacade = editor.plugins.get(DataFacade);
@@ -53,7 +60,7 @@ describe("DataFacade", () => {
       autosave = editor.plugins.get(Autosave);
       dataFacade = editor.plugins.get(DataFacade);
     });
-    it("should hook into autosave and use custom configuration for saving cached data", async () => {
+    test("should hook into autosave and use custom configuration for saving cached data", async () => {
       dataFacade.setData(dataFixture);
       simulateDataReformat(dataFixture.toLowerCase(), editor);
       expect.assertions(1);
@@ -64,7 +71,7 @@ describe("DataFacade", () => {
         expect(savedData).toEqual(dataFixture);
       });
     });
-    it("should hook into autosave but prefer editorial changes on data facade's save", async () => {
+    test("should hook into autosave but prefer editorial changes on data facade's save", async () => {
       dataFacade.setData(dataFixture);
       simulateEditorialUpdate(dataFixture.toLowerCase(), editor);
       expect.assertions(1);
