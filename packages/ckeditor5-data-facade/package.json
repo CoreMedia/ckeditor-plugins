@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-data-facade",
   "version": "25.0.4-rc.1",
+  "type": "module",
   "description": "Facade to normalize data in uninterrupted flow data > data view > model > data view > data', so that data === data'.",
   "author": {
     "name": "CoreMedia GmbH",

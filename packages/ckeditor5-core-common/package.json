@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-core-common",
   "version": "25.0.4-rc.1",
+  "type": "module",
   "description": "Assistive Utilities for `@ckeditor/ckeditor5-core`.",
   "author": {
     "name": "CoreMedia GmbH",

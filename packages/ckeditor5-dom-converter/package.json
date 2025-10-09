@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-dom-converter",
   "version": "25.0.4-rc.1",
+  "type": "module",
   "description": "DOM Converter Utilities",
   "author": {
     "name": "CoreMedia GmbH",

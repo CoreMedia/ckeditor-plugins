@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-essentials",
   "version": "25.0.4-rc.1",
+  "type": "module",
   "description": "CoreMedia Studio: Aggregator Plugin for essential plugins",
   "author": {
     "name": "CoreMedia GmbH",

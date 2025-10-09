@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-itest",
   "version": "25.0.4-rc.1",
+  "type": "module",
   "description": "Integration Tests for CKEditor 5",
   "author": {
     "name": "CoreMedia GmbH",

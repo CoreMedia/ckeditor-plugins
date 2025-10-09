@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-link",
   "version": "25.0.4-rc.1",
+  "type": "module",
   "description": "Support for Content Link, Link Target Specification",
   "author": {
     "name": "CoreMedia GmbH",
@@ -22,7 +23,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade",
-    "test": "node --import tsx --test __tests__/**/*.test.ts"
+    "test": "test-runner-react"
   },
   "exports": {
     ".": {
@@ -47,7 +48,8 @@
   ],
   "devDependencies": {
     "@coremedia/service-agent": "^1.1.5",
-    "@types/node": "^20.16.5",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
     "expect": "^30.2.0",
