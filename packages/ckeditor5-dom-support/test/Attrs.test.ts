@@ -12,7 +12,7 @@ const idAttribute = onlyRootXmlDocument.documentElement.getAttributeNode("id");
 
 void describe("Attrs", () => {
   void describe("isAttr", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const value: unknown = langAttribute;
       if (isAttr(value)) {
         // We can now access `value`.
@@ -38,7 +38,7 @@ void describe("Attrs", () => {
   });
 
   void describe("copyAttributesFrom", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const { documentElement } = onlyRootXmlDocument;
       const { namespaceURI } = documentElement;
       const targetElement = onlyRootXmlDocument.createElementNS(namespaceURI, "child");

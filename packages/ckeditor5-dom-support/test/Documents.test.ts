@@ -6,7 +6,7 @@ import { USE_CASE_NAME } from "./Constants";
 
 void describe("Documents", () => {
   void describe("documentFromHtml", () => {
-    test(USE_CASE_NAME, () => {
+    void void test(USE_CASE_NAME, () => {
       const document = documentFromHtml(`<body><p/></body>`);
       expect(document).toBeDefined();
     });
@@ -34,7 +34,7 @@ void describe("Documents", () => {
   });
 
   void describe("documentFromXml", () => {
-    test(USE_CASE_NAME, () => {
+    void void test(USE_CASE_NAME, () => {
       const document = documentFromXml(`<root><child/></root>`);
       expect(document).toBeDefined();
     });
@@ -63,7 +63,7 @@ void describe("Documents", () => {
   });
 
   void describe("isDocument", () => {
-    test(USE_CASE_NAME, () => {
+    void void test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml(`<body><p/></body>`);
       if (isDocument(node)) {
         // We can now access `documentElement`.

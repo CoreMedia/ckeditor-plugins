@@ -10,7 +10,7 @@ const langAttribute = htmlDocument.documentElement.getAttributeNode("lang");
 
 void describe("HasNamespaceUris", () => {
   void describe("isHasNamespaceUri", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const value: unknown = htmlDocument;
       if (isHasNamespaceUri(value)) {
         // We can now access `value`.

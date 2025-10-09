@@ -7,7 +7,7 @@ import { documentFromHtml } from "../src/Documents";
 
 void describe("DocumentFragments", () => {
   void describe("fragmentFromNodeContents", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const htmlDocument = documentFromHtml("<body><p>1</p><p>2</p></body>");
       const fragment = fragmentFromNodeContents(htmlDocument.body);
       expect(fragment.childElementCount).toStrictEqual(2);
@@ -15,7 +15,7 @@ void describe("DocumentFragments", () => {
   });
 
   void describe("isDocumentFragment", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const node: Node = new DocumentFragment();
       if (isDocumentFragment(node)) {
         // We can now access `ownerDocument`.

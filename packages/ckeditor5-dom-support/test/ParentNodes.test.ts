@@ -7,7 +7,7 @@ import { isParentNode } from "../src/ParentNodes";
 
 void describe("ParentNodes", () => {
   void describe("isParentNodes", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml("<body/>");
       if (isParentNode(node)) {
         // We can now access `childElementCount`.

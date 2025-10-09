@@ -7,7 +7,7 @@ import { HTMLTableElementWrapper, isHTMLTableElement, wrapIfTableElement } from 
 
 void describe("HTMLTableElements", () => {
   void describe("isHTMLTableElement", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const node: Node | null = documentFromHtml("<body><table/></body>").body.firstElementChild;
       if (isHTMLTableElement(node)) {
         // We can now use convenience API.
@@ -35,7 +35,7 @@ void describe("HTMLTableElements", () => {
   });
 
   void describe("wrapIfTableElement", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const element: Element | null = documentFromHtml("<body><table/></body>").body.firstElementChild;
       if (element) {
         // Provides ability for small one-liners.

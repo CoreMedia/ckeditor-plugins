@@ -8,7 +8,7 @@ import { fragmentFromNodeContents } from "../src/DocumentFragments";
 
 void describe("Nodes", () => {
   void describe("serializeToXmlString", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const document = documentFromHtml("<body/>");
       const xmlString = serializeToXmlString(document);
       expect(xmlString).toBeDefined();
@@ -37,7 +37,7 @@ void describe("Nodes", () => {
   });
 
   void describe("extractNodeContents", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const xmlDocument = documentFromXml("<root><child/></root>");
       const { documentElement } = xmlDocument;
 
@@ -179,9 +179,9 @@ void describe("Nodes", () => {
     ];
 
     for (const [forceIndex, force] of forces.entries()) {
-      describe(`[${forceIndex}] Forced mode: ${force}`, () => {
+      void describe(`[${forceIndex}] Forced mode: ${force}`, () => {
         for (const [inputIndex, input] of inputs.entries()) {
-          describe(`[${inputIndex}] For input node: ${input} (force: ${force})`, () => {
+          void describe(`[${inputIndex}] For input node: ${input} (force: ${force})`, () => {
             for (const [caseIndex, testCase] of testCases.entries()) {
               void test(`[${caseIndex}] Parsing ${testCase.toParse} as ${testCase.type} and lookup for prefix ${
                 testCase.prefix

@@ -8,7 +8,7 @@ import { serializeToXmlString } from "../src/Nodes";
 
 void describe("Elements", () => {
   void describe("isElement", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml("<body/>").body;
       if (isElement(node)) {
         // We can now access `outerHTML`.
@@ -34,7 +34,7 @@ void describe("Elements", () => {
   });
 
   void describe("renameElement", () => {
-    test(USE_CASE_NAME, () => {
+    void test(USE_CASE_NAME, () => {
       const xmlDocument = documentFromXml(`<root lang="en" id="ID"><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
 
