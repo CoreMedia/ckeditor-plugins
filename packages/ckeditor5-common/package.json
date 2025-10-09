@@ -58,6 +58,6 @@
     "build": "tsc --project ./tsconfig.release.json",
     "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
     "npm-check-updates": "npm-check-updates --upgrade",
-    "test": "node --import tsx --test __tests__/**/*.test.ts"
+    "test": "test-runner-react"
   }
 }

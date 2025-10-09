@@ -37,7 +37,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
     "@types/node": "^22.0.0",
     "copyfiles": "^2.4.1",
     "jest": "^29.7.0",
@@ -50,8 +50,7 @@
     "clean:dist": "rimraf ./dist",
     "build": "tsc --project ./tsconfig.release.json",
     "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
-    "jest": "jest",
-    "jest:coverage": "jest --collect-coverage",
+    "test": "test-runner-react",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

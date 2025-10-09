@@ -1,6 +1,7 @@
 {
   "name": "@coremedia-internal/ckeditor5-coremedia-example-data",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "Example Data for Testing",
   "author": {
@@ -47,6 +48,6 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade",
-    "test": "node --import tsx --test __tests__/**/*.test.ts"
+    "test": "test-runner-react"
   }
 }

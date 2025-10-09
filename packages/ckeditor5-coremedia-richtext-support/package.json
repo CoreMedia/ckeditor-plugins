@@ -24,7 +24,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade",
-    "test": "node --import tsx --test __tests__/**/*.test.ts"
+    "test": "test-runner-react"
   },
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
