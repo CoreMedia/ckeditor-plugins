@@ -1,6 +1,5 @@
 /* eslint no-null/no-null: off */
 
-import "global-jsdom/register";
 import test, { describe, beforeEach, TestContext } from "node:test";
 import expect from "expect";
 import { Config } from "ckeditor5";
@@ -10,8 +9,8 @@ import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTarge
 const someFunction = () => {
   // irrelevant, only type required
 };
-describe("LinkTargetConfig", () => {
-  describe("parseLinkTargetConfig", () => {
+void describe("LinkTargetConfig", () => {
+  void describe("parseLinkTargetConfig", () => {
     // @ts-expect-error - Requires generic type since CKEditor 37.x.
     let config: Config;
     beforeEach(() => {
@@ -19,7 +18,7 @@ describe("LinkTargetConfig", () => {
     });
     const cases = [undefined, null, []];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, emptyConfig] of cases.entries()) {
         await t.test(`[${i}] should provide no definitiopns for no/empty config: ${emptyConfig}`, () => {
           config.set("link.targets", emptyConfig);
@@ -38,7 +37,7 @@ describe("LinkTargetConfig", () => {
       { name: "_other", title: "Open in Frame" },
     ];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { name, title: expectedTitle }] of wellKnownCases.entries()) {
         await t.test(
           `[${i}] Should resolve well-known config (referenced as string) to full object for '${name}' having title ${expectedTitle}`,
@@ -52,7 +51,7 @@ describe("LinkTargetConfig", () => {
       }
     });
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { name, title: expectedTitle }] of wellKnownCases.entries()) {
         await t.test(
           `[${i}] Should resolve well-known config (referenced as string, also defined as string in link.targets) to full object for '${name}' having title ${expectedTitle}`,
@@ -67,7 +66,7 @@ describe("LinkTargetConfig", () => {
       }
     });
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { name, title: expectedTitle }] of wellKnownCases.entries()) {
         await t.test(
           `[${i}] Should resolve well-known config (referenced as object) to full object for '${name}' having title ${expectedTitle}`,
@@ -93,7 +92,7 @@ describe("LinkTargetConfig", () => {
       { names: ["_other", "_embed", "_blank", "_self"] },
     ];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { names }] of namesCases.entries()) {
         await t.test(`[${i}] Should respect order for well-known config names: ${names}`, () => {
           config.set("link.toolbar", [...names]);
@@ -113,7 +112,7 @@ describe("LinkTargetConfig", () => {
       { name: "_other", title: "Custom: Open in Frame" },
     ];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { name, title }] of customCases.entries()) {
         await t.test(
           `[${i}] Should be able to override well-known config name '${name}' with new title: '${title}'`,
@@ -133,7 +132,7 @@ describe("LinkTargetConfig", () => {
       }
     });
 
-    test("should be able providing an only-name custom configuration with some defaults applied", () => {
+    void test("should be able providing an only-name custom configuration with some defaults applied", () => {
       const customName = "custom";
       config.set("link.targets", [customName]);
       config.set("link.toolbar", [customName]);
@@ -142,7 +141,7 @@ describe("LinkTargetConfig", () => {
       expect(definitions[0]?.name).toStrictEqual(customName);
       expect(definitions[0]?.title).toStrictEqual(customName);
     });
-    test("should be able providing a custom configuration with name and title", () => {
+    void test("should be able providing a custom configuration with name and title", () => {
       const customName = "custom";
       const customTitle = "My Custom Title";
       config.set("link.toolbar", [customName]);
@@ -160,7 +159,7 @@ describe("LinkTargetConfig", () => {
 
     const modeCases = [{ mode: "object" }, { mode: "string" }] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { mode }] of modeCases.entries()) {
         await t.test(`[${i}] should provide defaults for custom targets (${mode} definition)`, () => {
           const customName = "custom";
@@ -174,7 +173,7 @@ describe("LinkTargetConfig", () => {
       }
     });
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { mode }] of modeCases.entries()) {
         await t.test(`[${i}] should fail for invalid custom names (${mode} definition)`, () => {
           // Knowing the code (white-box), this also tests for a target not having
@@ -199,7 +198,7 @@ describe("LinkTargetConfig", () => {
       { config: { lorem: "ipsum" } },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { config: brokenConfig }] of configCases.entries()) {
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         await t.test(`[${i}] should fail on invalid configuration type for link.targets: ${brokenConfig})`, () => {
@@ -212,7 +211,7 @@ describe("LinkTargetConfig", () => {
 
     const entryCases = [{ entry: 42 }, { entry: someFunction }, { entry: true }, { entry: false }];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { entry: invalidEntry }] of entryCases.entries()) {
         await t.test(
           `[${i}] should fail on invalid configuration entry types for link.targets array: ${invalidEntry})`,

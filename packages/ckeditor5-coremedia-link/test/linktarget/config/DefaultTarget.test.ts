@@ -1,4 +1,3 @@
-import "global-jsdom/register";
 import test, { describe, TestContext } from "node:test";
 import expect from "expect";
 import {
@@ -30,16 +29,16 @@ const definitionExistsCases = [
   { name: "custom", exists: false, comment: "Any custom target is not expected to be defined by default" },
 ];
 
-describe("DefaultTarget", () => {
-  describe("DEFAULT_TARGETS_ARRAY", () => {
-    test("should contain entries in expected order", () => {
+void describe("DefaultTarget", () => {
+  void describe("DEFAULT_TARGETS_ARRAY", () => {
+    void test("should contain entries in expected order", () => {
       const names = DEFAULT_TARGETS_ARRAY.map((definition) => definition.name);
       // These are the buttons we want to see in the given order by default,
       // if no other configuration got provided.
       expect(names).toEqual(["_self", "_blank", "_embed", "_other"]);
     });
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { name, title: expectedTitle }] of defaultTargetCases.entries()) {
         await t.test(`[${i}] Should provide expected title for ${name}: ${expectedTitle}`, () => {
           const options = DEFAULT_TARGETS_ARRAY.find((definition) => name === definition.name);
@@ -51,7 +50,7 @@ describe("DefaultTarget", () => {
       }
     });
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { name }] of defaultTargetCases.entries()) {
         await t.test(`[${i}] Should provide an icon ${name}`, () => {
           const options = DEFAULT_TARGETS_ARRAY.find((definition) => name === definition.name);
@@ -64,8 +63,8 @@ describe("DefaultTarget", () => {
       }
     });
 
-    describe("getDefaultTargetDefinition", () => {
-      test("cases", async (t: TestContext) => {
+    void describe("getDefaultTargetDefinition", () => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { name, exists, comment }] of definitionExistsCases.entries()) {
           await t.test(`[${i}] Expecting default definition for ${name}? ${exists} (${comment})`, () => {
             const definition = getDefaultTargetDefinition(name);
@@ -78,7 +77,7 @@ describe("DefaultTarget", () => {
         }
       });
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { name, title: expectedTitle }] of defaultTargetCases.entries()) {
           await t.test(`[${i}] Should provide expected title for ${name}: ${expectedTitle}`, () => {
             const options = getDefaultTargetDefinition(name);
@@ -90,8 +89,8 @@ describe("DefaultTarget", () => {
         }
       });
 
-      describe("requireDefaultTargetDefinition", () => {
-        test("cases", async (t: TestContext) => {
+      void describe("requireDefaultTargetDefinition", () => {
+        void test("cases", async (t: TestContext) => {
           for (const [i, { name, exists, comment }] of definitionExistsCases.entries()) {
             await t.test(`[${i}] Expecting default definition for ${name}? ${exists} (${comment})`, () => {
               const definitionCallback = () => requireDefaultTargetDefinition(name);
